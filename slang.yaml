@@ -1,0 +1,4 @@
+namespaces: true # to able to split translation file into smaller scope
+output_directory: lib/i18n
+output_file_name: i18n.g.dart
+fallback_strategy: base_locale

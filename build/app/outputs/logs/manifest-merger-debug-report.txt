@@ -1,0 +1,225 @@
+-- Merging decision tree log ---
+application
+INJECTED from /Users/mthinh/Projects/lemonade/lemonade-flutter/android/app/src/main/AndroidManifest.xml:2:5-56:19
+MERGED from [:url_launcher_android] /Users/mthinh/Projects/lemonade/lemonade-flutter/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:9:5-14:19
+MERGED from [:url_launcher_android] /Users/mthinh/Projects/lemonade/lemonade-flutter/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:9:5-14:19
+MERGED from [androidx.window:window:1.0.0-beta04] /Users/mthinh/.gradle/caches/transforms-3/25cee5f028ac2a6b79fd6278ff5b59e2/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:24:5-31:19
+MERGED from [androidx.window:window:1.0.0-beta04] /Users/mthinh/.gradle/caches/transforms-3/25cee5f028ac2a6b79fd6278ff5b59e2/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:24:5-31:19
+MERGED from [net.openid:appauth:0.11.1] /Users/mthinh/.gradle/caches/transforms-3/19deaa66d9e1722516104537b5b630f6/transformed/jetified-appauth-0.11.1/AndroidManifest.xml:34:5-53:19
+MERGED from [net.openid:appauth:0.11.1] /Users/mthinh/.gradle/caches/transforms-3/19deaa66d9e1722516104537b5b630f6/transformed/jetified-appauth-0.11.1/AndroidManifest.xml:34:5-53:19
+MERGED from [androidx.core:core:1.6.0] /Users/mthinh/.gradle/caches/transforms-3/7e9df2ac2213a6bd3cef0f2f27870d79/transformed/core-1.6.0/AndroidManifest.xml:24:5-89
+MERGED from [androidx.core:core:1.6.0] /Users/mthinh/.gradle/caches/transforms-3/7e9df2ac2213a6bd3cef0f2f27870d79/transformed/core-1.6.0/AndroidManifest.xml:24:5-89
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /Users/mthinh/.gradle/caches/transforms-3/47ecd4e588b99ef3b772f04d5aa6c9b7/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:24:5-25:19
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /Users/mthinh/.gradle/caches/transforms-3/47ecd4e588b99ef3b772f04d5aa6c9b7/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:24:5-25:19
+	android:appComponentFactory
+		ADDED from [androidx.core:core:1.6.0] /Users/mthinh/.gradle/caches/transforms-3/7e9df2ac2213a6bd3cef0f2f27870d79/transformed/core-1.6.0/AndroidManifest.xml:24:18-86
+	android:name
+		INJECTED from /Users/mthinh/Projects/lemonade/lemonade-flutter/android/app/src/main/AndroidManifest.xml
+manifest
+ADDED from /Users/mthinh/Projects/lemonade/lemonade-flutter/android/app/src/main/AndroidManifest.xml:1:1-57:12
+INJECTED from /Users/mthinh/Projects/lemonade/lemonade-flutter/android/app/src/main/AndroidManifest.xml:1:1-57:12
+INJECTED from /Users/mthinh/Projects/lemonade/lemonade-flutter/android/app/src/main/AndroidManifest.xml:1:1-57:12
+INJECTED from /Users/mthinh/Projects/lemonade/lemonade-flutter/android/app/src/main/AndroidManifest.xml:1:1-57:12
+MERGED from /Users/mthinh/Projects/lemonade/lemonade-flutter/android/app/src/main/AndroidManifest.xml:1:1-57:12
+MERGED from [:flutter_appauth] /Users/mthinh/Projects/lemonade/lemonade-flutter/build/flutter_appauth/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
+MERGED from [:flutter_web_auth_2] /Users/mthinh/Projects/lemonade/lemonade-flutter/build/flutter_web_auth_2/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
+MERGED from [:url_launcher_android] /Users/mthinh/Projects/lemonade/lemonade-flutter/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-16:12
+MERGED from [:path_provider_android] /Users/mthinh/Projects/lemonade/lemonade-flutter/build/path_provider_android/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
+MERGED from [:flutter_secure_storage] /Users/mthinh/Projects/lemonade/lemonade-flutter/build/flutter_secure_storage/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-11:12
+MERGED from [:connectivity_plus] /Users/mthinh/Projects/lemonade/lemonade-flutter/build/connectivity_plus/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-11:12
+MERGED from [androidx.window:window-java:1.0.0-beta04] /Users/mthinh/.gradle/caches/transforms-3/ae81e06d24c799147c26814497a2a305/transformed/jetified-window-java-1.0.0-beta04/AndroidManifest.xml:17:1-23:12
+MERGED from [androidx.window:window:1.0.0-beta04] /Users/mthinh/.gradle/caches/transforms-3/25cee5f028ac2a6b79fd6278ff5b59e2/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:17:1-33:12
+MERGED from [net.openid:appauth:0.11.1] /Users/mthinh/.gradle/caches/transforms-3/19deaa66d9e1722516104537b5b630f6/transformed/jetified-appauth-0.11.1/AndroidManifest.xml:15:1-55:12
+MERGED from [androidx.browser:browser:1.5.0] /Users/mthinh/.gradle/caches/transforms-3/d12883dde0390e08dd2a1192741cec1b/transformed/browser-1.5.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.security:security-crypto:1.1.0-alpha04] /Users/mthinh/.gradle/caches/transforms-3/b08fac1db78e2ffe83daac0315fc754d/transformed/jetified-security-crypto-1.1.0-alpha04/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.appcompat:appcompat:1.3.0] /Users/mthinh/.gradle/caches/transforms-3/16ebf2a47dcc79736b2a320aca799cf7/transformed/appcompat-1.3.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.fragment:fragment:1.3.4] /Users/mthinh/.gradle/caches/transforms-3/029e2d5938949211a382750f8f553015/transformed/fragment-1.3.4/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.activity:activity:1.2.3] /Users/mthinh/.gradle/caches/transforms-3/064ff13157cfadf5dcd60b5e7134feb1/transformed/jetified-activity-1.2.3/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.tracing:tracing:1.0.0] /Users/mthinh/.gradle/caches/transforms-3/cda2a1ca4d3bd6aae60d8d586ec4f3ff/transformed/jetified-tracing-1.0.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.appcompat:appcompat-resources:1.3.0] /Users/mthinh/.gradle/caches/transforms-3/8403f286379693ce5929244860d88949/transformed/jetified-appcompat-resources-1.3.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.drawerlayout:drawerlayout:1.0.0] /Users/mthinh/.gradle/caches/transforms-3/a4afa9096b82840215b23d4f1814b051/transformed/drawerlayout-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.viewpager:viewpager:1.0.0] /Users/mthinh/.gradle/caches/transforms-3/83543b509ea72d197642ff197da2edd7/transformed/viewpager-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.loader:loader:1.0.0] /Users/mthinh/.gradle/caches/transforms-3/ff65482bd388a984f10ca7f5c3c41d0d/transformed/loader-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] /Users/mthinh/.gradle/caches/transforms-3/8cf10340b5c141cf7f9392e7078a9af8/transformed/vectordrawable-animated-1.1.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] /Users/mthinh/.gradle/caches/transforms-3/411e2414b15f0c4ede14d2c515ddc895/transformed/vectordrawable-1.1.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.customview:customview:1.0.0] /Users/mthinh/.gradle/caches/transforms-3/1d2f11a7d5de7a531a69c65e1d8a2026/transformed/customview-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.core:core:1.6.0] /Users/mthinh/.gradle/caches/transforms-3/7e9df2ac2213a6bd3cef0f2f27870d79/transformed/core-1.6.0/AndroidManifest.xml:17:1-26:12
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /Users/mthinh/.gradle/caches/transforms-3/47ecd4e588b99ef3b772f04d5aa6c9b7/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:17:1-27:12
+MERGED from [androidx.interpolator:interpolator:1.0.0] /Users/mthinh/.gradle/caches/transforms-3/860a920bd188d8e467960610e541a595/transformed/interpolator-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.3.1] /Users/mthinh/.gradle/caches/transforms-3/9a249567dcb8025899915ed9a2426636/transformed/lifecycle-runtime-2.3.1/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /Users/mthinh/.gradle/caches/transforms-3/9cc12674340416d986d3f85facb4cb0b/transformed/cursoradapter-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.3.1] /Users/mthinh/.gradle/caches/transforms-3/0a61235ee85b784b47df8fe711b7ca78/transformed/jetified-lifecycle-viewmodel-savedstate-2.3.1/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.savedstate:savedstate:1.1.0] /Users/mthinh/.gradle/caches/transforms-3/5210929c6bf1b640a57ff02b8ff864f4/transformed/jetified-savedstate-1.1.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.3.1] /Users/mthinh/.gradle/caches/transforms-3/d486eee418567504419697de2b3eb487/transformed/lifecycle-viewmodel-2.3.1/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] /Users/mthinh/.gradle/caches/transforms-3/7fcad9088319f1ebd7850d62df4bcaf7/transformed/lifecycle-livedata-2.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.3.1] /Users/mthinh/.gradle/caches/transforms-3/0606c11eaf6fcfaa1820871094c24aae/transformed/lifecycle-livedata-core-2.3.1/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.arch.core:core-runtime:2.1.0] /Users/mthinh/.gradle/caches/transforms-3/d67fb65d423f69a271e62fa0f5833fa6/transformed/core-runtime-2.1.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.annotation:annotation-experimental:1.1.0] /Users/mthinh/.gradle/caches/transforms-3/6c0c163cc77ae6c91f9f7dfcd179c29c/transformed/jetified-annotation-experimental-1.1.0/AndroidManifest.xml:17:1-24:12
+INJECTED from /Users/mthinh/Projects/lemonade/lemonade-flutter/android/app/src/debug/AndroidManifest.xml:1:1-7:12
+INJECTED from /Users/mthinh/Projects/lemonade/lemonade-flutter/android/app/src/debug/AndroidManifest.xml:1:1-7:12
+INJECTED from /Users/mthinh/Projects/lemonade/lemonade-flutter/android/app/src/debug/AndroidManifest.xml:1:1-7:12
+	package
+		INJECTED from /Users/mthinh/Projects/lemonade/lemonade-flutter/android/app/src/main/AndroidManifest.xml
+		ADDED from /Users/mthinh/Projects/lemonade/lemonade-flutter/android/app/src/main/AndroidManifest.xml:1:1-57:12
+		INJECTED from /Users/mthinh/Projects/lemonade/lemonade-flutter/android/app/src/debug/AndroidManifest.xml
+	android:versionName
+		INJECTED from /Users/mthinh/Projects/lemonade/lemonade-flutter/android/app/src/main/AndroidManifest.xml
+		ADDED from /Users/mthinh/Projects/lemonade/lemonade-flutter/android/app/src/main/AndroidManifest.xml:1:1-57:12
+		INJECTED from /Users/mthinh/Projects/lemonade/lemonade-flutter/android/app/src/debug/AndroidManifest.xml
+	android:versionCode
+		INJECTED from /Users/mthinh/Projects/lemonade/lemonade-flutter/android/app/src/main/AndroidManifest.xml
+		ADDED from /Users/mthinh/Projects/lemonade/lemonade-flutter/android/app/src/main/AndroidManifest.xml:1:1-57:12
+		INJECTED from /Users/mthinh/Projects/lemonade/lemonade-flutter/android/app/src/debug/AndroidManifest.xml
+	xmlns:android
+		ADDED from /Users/mthinh/Projects/lemonade/lemonade-flutter/android/app/src/main/AndroidManifest.xml:1:11-69
+uses-sdk
+INJECTED from /Users/mthinh/Projects/lemonade/lemonade-flutter/android/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /Users/mthinh/Projects/lemonade/lemonade-flutter/android/app/src/main/AndroidManifest.xml
+INJECTED from /Users/mthinh/Projects/lemonade/lemonade-flutter/android/app/src/main/AndroidManifest.xml
+MERGED from [:flutter_appauth] /Users/mthinh/Projects/lemonade/lemonade-flutter/build/flutter_appauth/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:flutter_appauth] /Users/mthinh/Projects/lemonade/lemonade-flutter/build/flutter_appauth/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:flutter_web_auth_2] /Users/mthinh/Projects/lemonade/lemonade-flutter/build/flutter_web_auth_2/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:flutter_web_auth_2] /Users/mthinh/Projects/lemonade/lemonade-flutter/build/flutter_web_auth_2/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:url_launcher_android] /Users/mthinh/Projects/lemonade/lemonade-flutter/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:url_launcher_android] /Users/mthinh/Projects/lemonade/lemonade-flutter/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:path_provider_android] /Users/mthinh/Projects/lemonade/lemonade-flutter/build/path_provider_android/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:path_provider_android] /Users/mthinh/Projects/lemonade/lemonade-flutter/build/path_provider_android/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:flutter_secure_storage] /Users/mthinh/Projects/lemonade/lemonade-flutter/build/flutter_secure_storage/intermediates/merged_manifest/debug/AndroidManifest.xml:6:5-9:53
+MERGED from [:flutter_secure_storage] /Users/mthinh/Projects/lemonade/lemonade-flutter/build/flutter_secure_storage/intermediates/merged_manifest/debug/AndroidManifest.xml:6:5-9:53
+MERGED from [:connectivity_plus] /Users/mthinh/Projects/lemonade/lemonade-flutter/build/connectivity_plus/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:connectivity_plus] /Users/mthinh/Projects/lemonade/lemonade-flutter/build/connectivity_plus/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [androidx.window:window-java:1.0.0-beta04] /Users/mthinh/.gradle/caches/transforms-3/ae81e06d24c799147c26814497a2a305/transformed/jetified-window-java-1.0.0-beta04/AndroidManifest.xml:19:5-21:41
+MERGED from [androidx.window:window-java:1.0.0-beta04] /Users/mthinh/.gradle/caches/transforms-3/ae81e06d24c799147c26814497a2a305/transformed/jetified-window-java-1.0.0-beta04/AndroidManifest.xml:19:5-21:41
+MERGED from [androidx.window:window:1.0.0-beta04] /Users/mthinh/.gradle/caches/transforms-3/25cee5f028ac2a6b79fd6278ff5b59e2/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.window:window:1.0.0-beta04] /Users/mthinh/.gradle/caches/transforms-3/25cee5f028ac2a6b79fd6278ff5b59e2/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:20:5-22:41
+MERGED from [net.openid:appauth:0.11.1] /Users/mthinh/.gradle/caches/transforms-3/19deaa66d9e1722516104537b5b630f6/transformed/jetified-appauth-0.11.1/AndroidManifest.xml:18:5-20:41
+MERGED from [net.openid:appauth:0.11.1] /Users/mthinh/.gradle/caches/transforms-3/19deaa66d9e1722516104537b5b630f6/transformed/jetified-appauth-0.11.1/AndroidManifest.xml:18:5-20:41
+MERGED from [androidx.browser:browser:1.5.0] /Users/mthinh/.gradle/caches/transforms-3/d12883dde0390e08dd2a1192741cec1b/transformed/browser-1.5.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.browser:browser:1.5.0] /Users/mthinh/.gradle/caches/transforms-3/d12883dde0390e08dd2a1192741cec1b/transformed/browser-1.5.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.security:security-crypto:1.1.0-alpha04] /Users/mthinh/.gradle/caches/transforms-3/b08fac1db78e2ffe83daac0315fc754d/transformed/jetified-security-crypto-1.1.0-alpha04/AndroidManifest.xml:20:5-44
+MERGED from [androidx.security:security-crypto:1.1.0-alpha04] /Users/mthinh/.gradle/caches/transforms-3/b08fac1db78e2ffe83daac0315fc754d/transformed/jetified-security-crypto-1.1.0-alpha04/AndroidManifest.xml:20:5-44
+MERGED from [androidx.appcompat:appcompat:1.3.0] /Users/mthinh/.gradle/caches/transforms-3/16ebf2a47dcc79736b2a320aca799cf7/transformed/appcompat-1.3.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.appcompat:appcompat:1.3.0] /Users/mthinh/.gradle/caches/transforms-3/16ebf2a47dcc79736b2a320aca799cf7/transformed/appcompat-1.3.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.fragment:fragment:1.3.4] /Users/mthinh/.gradle/caches/transforms-3/029e2d5938949211a382750f8f553015/transformed/fragment-1.3.4/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.fragment:fragment:1.3.4] /Users/mthinh/.gradle/caches/transforms-3/029e2d5938949211a382750f8f553015/transformed/fragment-1.3.4/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.activity:activity:1.2.3] /Users/mthinh/.gradle/caches/transforms-3/064ff13157cfadf5dcd60b5e7134feb1/transformed/jetified-activity-1.2.3/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.activity:activity:1.2.3] /Users/mthinh/.gradle/caches/transforms-3/064ff13157cfadf5dcd60b5e7134feb1/transformed/jetified-activity-1.2.3/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.tracing:tracing:1.0.0] /Users/mthinh/.gradle/caches/transforms-3/cda2a1ca4d3bd6aae60d8d586ec4f3ff/transformed/jetified-tracing-1.0.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.tracing:tracing:1.0.0] /Users/mthinh/.gradle/caches/transforms-3/cda2a1ca4d3bd6aae60d8d586ec4f3ff/transformed/jetified-tracing-1.0.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.appcompat:appcompat-resources:1.3.0] /Users/mthinh/.gradle/caches/transforms-3/8403f286379693ce5929244860d88949/transformed/jetified-appcompat-resources-1.3.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.appcompat:appcompat-resources:1.3.0] /Users/mthinh/.gradle/caches/transforms-3/8403f286379693ce5929244860d88949/transformed/jetified-appcompat-resources-1.3.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.drawerlayout:drawerlayout:1.0.0] /Users/mthinh/.gradle/caches/transforms-3/a4afa9096b82840215b23d4f1814b051/transformed/drawerlayout-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.drawerlayout:drawerlayout:1.0.0] /Users/mthinh/.gradle/caches/transforms-3/a4afa9096b82840215b23d4f1814b051/transformed/drawerlayout-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.viewpager:viewpager:1.0.0] /Users/mthinh/.gradle/caches/transforms-3/83543b509ea72d197642ff197da2edd7/transformed/viewpager-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.viewpager:viewpager:1.0.0] /Users/mthinh/.gradle/caches/transforms-3/83543b509ea72d197642ff197da2edd7/transformed/viewpager-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0] /Users/mthinh/.gradle/caches/transforms-3/ff65482bd388a984f10ca7f5c3c41d0d/transformed/loader-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0] /Users/mthinh/.gradle/caches/transforms-3/ff65482bd388a984f10ca7f5c3c41d0d/transformed/loader-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] /Users/mthinh/.gradle/caches/transforms-3/8cf10340b5c141cf7f9392e7078a9af8/transformed/vectordrawable-animated-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] /Users/mthinh/.gradle/caches/transforms-3/8cf10340b5c141cf7f9392e7078a9af8/transformed/vectordrawable-animated-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] /Users/mthinh/.gradle/caches/transforms-3/411e2414b15f0c4ede14d2c515ddc895/transformed/vectordrawable-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] /Users/mthinh/.gradle/caches/transforms-3/411e2414b15f0c4ede14d2c515ddc895/transformed/vectordrawable-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.customview:customview:1.0.0] /Users/mthinh/.gradle/caches/transforms-3/1d2f11a7d5de7a531a69c65e1d8a2026/transformed/customview-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.customview:customview:1.0.0] /Users/mthinh/.gradle/caches/transforms-3/1d2f11a7d5de7a531a69c65e1d8a2026/transformed/customview-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core:1.6.0] /Users/mthinh/.gradle/caches/transforms-3/7e9df2ac2213a6bd3cef0f2f27870d79/transformed/core-1.6.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.core:core:1.6.0] /Users/mthinh/.gradle/caches/transforms-3/7e9df2ac2213a6bd3cef0f2f27870d79/transformed/core-1.6.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /Users/mthinh/.gradle/caches/transforms-3/47ecd4e588b99ef3b772f04d5aa6c9b7/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /Users/mthinh/.gradle/caches/transforms-3/47ecd4e588b99ef3b772f04d5aa6c9b7/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.interpolator:interpolator:1.0.0] /Users/mthinh/.gradle/caches/transforms-3/860a920bd188d8e467960610e541a595/transformed/interpolator-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.interpolator:interpolator:1.0.0] /Users/mthinh/.gradle/caches/transforms-3/860a920bd188d8e467960610e541a595/transformed/interpolator-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.3.1] /Users/mthinh/.gradle/caches/transforms-3/9a249567dcb8025899915ed9a2426636/transformed/lifecycle-runtime-2.3.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.3.1] /Users/mthinh/.gradle/caches/transforms-3/9a249567dcb8025899915ed9a2426636/transformed/lifecycle-runtime-2.3.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /Users/mthinh/.gradle/caches/transforms-3/9cc12674340416d986d3f85facb4cb0b/transformed/cursoradapter-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /Users/mthinh/.gradle/caches/transforms-3/9cc12674340416d986d3f85facb4cb0b/transformed/cursoradapter-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.3.1] /Users/mthinh/.gradle/caches/transforms-3/0a61235ee85b784b47df8fe711b7ca78/transformed/jetified-lifecycle-viewmodel-savedstate-2.3.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.3.1] /Users/mthinh/.gradle/caches/transforms-3/0a61235ee85b784b47df8fe711b7ca78/transformed/jetified-lifecycle-viewmodel-savedstate-2.3.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.savedstate:savedstate:1.1.0] /Users/mthinh/.gradle/caches/transforms-3/5210929c6bf1b640a57ff02b8ff864f4/transformed/jetified-savedstate-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.savedstate:savedstate:1.1.0] /Users/mthinh/.gradle/caches/transforms-3/5210929c6bf1b640a57ff02b8ff864f4/transformed/jetified-savedstate-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.3.1] /Users/mthinh/.gradle/caches/transforms-3/d486eee418567504419697de2b3eb487/transformed/lifecycle-viewmodel-2.3.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.3.1] /Users/mthinh/.gradle/caches/transforms-3/d486eee418567504419697de2b3eb487/transformed/lifecycle-viewmodel-2.3.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] /Users/mthinh/.gradle/caches/transforms-3/7fcad9088319f1ebd7850d62df4bcaf7/transformed/lifecycle-livedata-2.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] /Users/mthinh/.gradle/caches/transforms-3/7fcad9088319f1ebd7850d62df4bcaf7/transformed/lifecycle-livedata-2.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.3.1] /Users/mthinh/.gradle/caches/transforms-3/0606c11eaf6fcfaa1820871094c24aae/transformed/lifecycle-livedata-core-2.3.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.3.1] /Users/mthinh/.gradle/caches/transforms-3/0606c11eaf6fcfaa1820871094c24aae/transformed/lifecycle-livedata-core-2.3.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.arch.core:core-runtime:2.1.0] /Users/mthinh/.gradle/caches/transforms-3/d67fb65d423f69a271e62fa0f5833fa6/transformed/core-runtime-2.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.arch.core:core-runtime:2.1.0] /Users/mthinh/.gradle/caches/transforms-3/d67fb65d423f69a271e62fa0f5833fa6/transformed/core-runtime-2.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.annotation:annotation-experimental:1.1.0] /Users/mthinh/.gradle/caches/transforms-3/6c0c163cc77ae6c91f9f7dfcd179c29c/transformed/jetified-annotation-experimental-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.annotation:annotation-experimental:1.1.0] /Users/mthinh/.gradle/caches/transforms-3/6c0c163cc77ae6c91f9f7dfcd179c29c/transformed/jetified-annotation-experimental-1.1.0/AndroidManifest.xml:20:5-22:41
+INJECTED from /Users/mthinh/Projects/lemonade/lemonade-flutter/android/app/src/debug/AndroidManifest.xml
+INJECTED from /Users/mthinh/Projects/lemonade/lemonade-flutter/android/app/src/debug/AndroidManifest.xml
+	tools:overrideLibrary
+		ADDED from [:flutter_secure_storage] /Users/mthinh/Projects/lemonade/lemonade-flutter/build/flutter_secure_storage/intermediates/merged_manifest/debug/AndroidManifest.xml:9:9-50
+	android:targetSdkVersion
+		INJECTED from /Users/mthinh/Projects/lemonade/lemonade-flutter/android/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/mthinh/Projects/lemonade/lemonade-flutter/android/app/src/debug/AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from /Users/mthinh/Projects/lemonade/lemonade-flutter/android/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/mthinh/Projects/lemonade/lemonade-flutter/android/app/src/debug/AndroidManifest.xml
+uses-permission#android.permission.INTERNET
+ADDED from /Users/mthinh/Projects/lemonade/lemonade-flutter/android/app/src/debug/AndroidManifest.xml:6:5-66
+MERGED from [net.openid:appauth:0.11.1] /Users/mthinh/.gradle/caches/transforms-3/19deaa66d9e1722516104537b5b630f6/transformed/jetified-appauth-0.11.1/AndroidManifest.xml:22:5-67
+MERGED from [net.openid:appauth:0.11.1] /Users/mthinh/.gradle/caches/transforms-3/19deaa66d9e1722516104537b5b630f6/transformed/jetified-appauth-0.11.1/AndroidManifest.xml:22:5-67
+	android:name
+		ADDED from /Users/mthinh/Projects/lemonade/lemonade-flutter/android/app/src/debug/AndroidManifest.xml:6:22-64
+activity#io.flutter.plugins.urllauncher.WebViewActivity
+ADDED from [:url_launcher_android] /Users/mthinh/Projects/lemonade/lemonade-flutter/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:10:9-13:74
+	android:exported
+		ADDED from [:url_launcher_android] /Users/mthinh/Projects/lemonade/lemonade-flutter/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:12:13-37
+	android:theme
+		ADDED from [:url_launcher_android] /Users/mthinh/Projects/lemonade/lemonade-flutter/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:13:13-71
+	android:name
+		ADDED from [:url_launcher_android] /Users/mthinh/Projects/lemonade/lemonade-flutter/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:11:13-74
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from [:connectivity_plus] /Users/mthinh/Projects/lemonade/lemonade-flutter/build/connectivity_plus/intermediates/merged_manifest/debug/AndroidManifest.xml:9:5-79
+	android:name
+		ADDED from [:connectivity_plus] /Users/mthinh/Projects/lemonade/lemonade-flutter/build/connectivity_plus/intermediates/merged_manifest/debug/AndroidManifest.xml:9:22-76
+uses-library#androidx.window.extensions
+ADDED from [androidx.window:window:1.0.0-beta04] /Users/mthinh/.gradle/caches/transforms-3/25cee5f028ac2a6b79fd6278ff5b59e2/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:25:9-27:40
+	android:required
+		ADDED from [androidx.window:window:1.0.0-beta04] /Users/mthinh/.gradle/caches/transforms-3/25cee5f028ac2a6b79fd6278ff5b59e2/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:27:13-37
+	android:name
+		ADDED from [androidx.window:window:1.0.0-beta04] /Users/mthinh/.gradle/caches/transforms-3/25cee5f028ac2a6b79fd6278ff5b59e2/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:26:13-54
+uses-library#androidx.window.sidecar
+ADDED from [androidx.window:window:1.0.0-beta04] /Users/mthinh/.gradle/caches/transforms-3/25cee5f028ac2a6b79fd6278ff5b59e2/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:28:9-30:40
+	android:required
+		ADDED from [androidx.window:window:1.0.0-beta04] /Users/mthinh/.gradle/caches/transforms-3/25cee5f028ac2a6b79fd6278ff5b59e2/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:30:13-37
+	android:name
+		ADDED from [androidx.window:window:1.0.0-beta04] /Users/mthinh/.gradle/caches/transforms-3/25cee5f028ac2a6b79fd6278ff5b59e2/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:29:13-51
+queries
+ADDED from [net.openid:appauth:0.11.1] /Users/mthinh/.gradle/caches/transforms-3/19deaa66d9e1722516104537b5b630f6/transformed/jetified-appauth-0.11.1/AndroidManifest.xml:24:5-32:15
+intent#action:name:android.intent.action.VIEW+category:name:android.intent.category.BROWSABLE+data:scheme:https
+ADDED from [net.openid:appauth:0.11.1] /Users/mthinh/.gradle/caches/transforms-3/19deaa66d9e1722516104537b5b630f6/transformed/jetified-appauth-0.11.1/AndroidManifest.xml:25:9-31:18
+action#android.intent.action.VIEW
+ADDED from [net.openid:appauth:0.11.1] /Users/mthinh/.gradle/caches/transforms-3/19deaa66d9e1722516104537b5b630f6/transformed/jetified-appauth-0.11.1/AndroidManifest.xml:26:13-65
+	android:name
+		ADDED from [net.openid:appauth:0.11.1] /Users/mthinh/.gradle/caches/transforms-3/19deaa66d9e1722516104537b5b630f6/transformed/jetified-appauth-0.11.1/AndroidManifest.xml:26:21-62
+category#android.intent.category.BROWSABLE
+ADDED from [net.openid:appauth:0.11.1] /Users/mthinh/.gradle/caches/transforms-3/19deaa66d9e1722516104537b5b630f6/transformed/jetified-appauth-0.11.1/AndroidManifest.xml:28:13-74
+	android:name
+		ADDED from [net.openid:appauth:0.11.1] /Users/mthinh/.gradle/caches/transforms-3/19deaa66d9e1722516104537b5b630f6/transformed/jetified-appauth-0.11.1/AndroidManifest.xml:28:23-71
+data
+ADDED from [net.openid:appauth:0.11.1] /Users/mthinh/.gradle/caches/transforms-3/19deaa66d9e1722516104537b5b630f6/transformed/jetified-appauth-0.11.1/AndroidManifest.xml:30:13-44
+	android:scheme
+		ADDED from [net.openid:appauth:0.11.1] /Users/mthinh/.gradle/caches/transforms-3/19deaa66d9e1722516104537b5b630f6/transformed/jetified-appauth-0.11.1/AndroidManifest.xml:30:19-41
+activity#net.openid.appauth.AuthorizationManagementActivity
+ADDED from [net.openid:appauth:0.11.1] /Users/mthinh/.gradle/caches/transforms-3/19deaa66d9e1722516104537b5b630f6/transformed/jetified-appauth-0.11.1/AndroidManifest.xml:35:9-40:77
+	android:launchMode
+		ADDED from [net.openid:appauth:0.11.1] /Users/mthinh/.gradle/caches/transforms-3/19deaa66d9e1722516104537b5b630f6/transformed/jetified-appauth-0.11.1/AndroidManifest.xml:39:13-44
+	android:exported
+		ADDED from [net.openid:appauth:0.11.1] /Users/mthinh/.gradle/caches/transforms-3/19deaa66d9e1722516104537b5b630f6/transformed/jetified-appauth-0.11.1/AndroidManifest.xml:38:13-37
+	android:configChanges
+		ADDED from [net.openid:appauth:0.11.1] /Users/mthinh/.gradle/caches/transforms-3/19deaa66d9e1722516104537b5b630f6/transformed/jetified-appauth-0.11.1/AndroidManifest.xml:37:13-115
+	android:theme
+		ADDED from [net.openid:appauth:0.11.1] /Users/mthinh/.gradle/caches/transforms-3/19deaa66d9e1722516104537b5b630f6/transformed/jetified-appauth-0.11.1/AndroidManifest.xml:40:13-74
+	android:name
+		ADDED from [net.openid:appauth:0.11.1] /Users/mthinh/.gradle/caches/transforms-3/19deaa66d9e1722516104537b5b630f6/transformed/jetified-appauth-0.11.1/AndroidManifest.xml:36:13-78
+activity#net.openid.appauth.RedirectUriReceiverActivity
+MERGED from [net.openid:appauth:0.11.1] /Users/mthinh/.gradle/caches/transforms-3/19deaa66d9e1722516104537b5b630f6/transformed/jetified-appauth-0.11.1/AndroidManifest.xml:41:9-52:20
+MERGED from [net.openid:appauth:0.11.1] /Users/mthinh/.gradle/caches/transforms-3/19deaa66d9e1722516104537b5b630f6/transformed/jetified-appauth-0.11.1/AndroidManifest.xml:41:9-52:20
+intent-filter#action:name:android.intent.action.VIEW+category:name:android.intent.category.BROWSABLE+category:name:android.intent.category.DEFAULT+data:scheme:${appAuthRedirectScheme}
+ADDED from [net.openid:appauth:0.11.1] /Users/mthinh/.gradle/caches/transforms-3/19deaa66d9e1722516104537b5b630f6/transformed/jetified-appauth-0.11.1/AndroidManifest.xml:44:13-51:29
+intent-filter#action:name:android.intent.action.VIEW+category:name:android.intent.category.BROWSABLE+category:name:android.intent.category.DEFAULT+data:scheme:lemonadesocial://oauth2/logout
+ADDED from [net.openid:appauth:0.11.1] /Users/mthinh/.gradle/caches/transforms-3/19deaa66d9e1722516104537b5b630f6/transformed/jetified-appauth-0.11.1/AndroidManifest.xml:44:13-51:29
+category#android.intent.category.DEFAULT
+ADDED from [net.openid:appauth:0.11.1] /Users/mthinh/.gradle/caches/transforms-3/19deaa66d9e1722516104537b5b630f6/transformed/jetified-appauth-0.11.1/AndroidManifest.xml:47:17-76
+	android:name
+		ADDED from [net.openid:appauth:0.11.1] /Users/mthinh/.gradle/caches/transforms-3/19deaa66d9e1722516104537b5b630f6/transformed/jetified-appauth-0.11.1/AndroidManifest.xml:47:27-73

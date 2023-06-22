@@ -1,0 +1,30 @@
+[
+    {
+        "merged": "com.lemonadesocial.app-merged_res-20:/mipmap-mdpi_ic_launcher.png.flat",
+        "source": "com.lemonadesocial.app-main-14:/mipmap-mdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.lemonadesocial.app-merged_res-20:/drawable-v21_launch_background.xml.flat",
+        "source": "com.lemonadesocial.app-main-14:/drawable-v21/launch_background.xml"
+    },
+    {
+        "merged": "com.lemonadesocial.app-merged_res-20:/drawable_launch_background.xml.flat",
+        "source": "com.lemonadesocial.app-main-14:/drawable/launch_background.xml"
+    },
+    {
+        "merged": "com.lemonadesocial.app-merged_res-20:/mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "com.lemonadesocial.app-main-14:/mipmap-xhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.lemonadesocial.app-merged_res-20:/mipmap-hdpi_ic_launcher.png.flat",
+        "source": "com.lemonadesocial.app-main-14:/mipmap-hdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.lemonadesocial.app-merged_res-20:/mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "com.lemonadesocial.app-main-14:/mipmap-xxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.lemonadesocial.app-merged_res-20:/mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "com.lemonadesocial.app-main-14:/mipmap-xxxhdpi/ic_launcher.png"
+    }
+]
