@@ -1,6 +1,0 @@
-framework module flutter_appauth {
-  umbrella header "flutter_appauth-umbrella.h"
-
-  export *
-  module * { export * }
-}
