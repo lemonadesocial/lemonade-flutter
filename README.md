@@ -1,16 +1,24 @@
-# app
+# Lemonade Flutter App
 
-A new Flutter project.
+## Introduction
 
-## Getting Started
+## Installation Guide
 
-This project is a starting point for a Flutter application.
+To run the Lemonade Flutter app, you need to set up a `.env` configuration file containing the required variables. Follow the steps below:
 
-A few resources to get you started if this is your first Flutter project:
+1. Create a `.env` file in the root directory of the project.
+2. Add the following variables to the file and replace `<OAUTH_URL>` and `<CLIENT_ID>` with your credentials:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+```env
+OAUTH2_BASE_URL=<OAUTH_URL>
+OAUTH2_CLIENT_ID=<CLIENT_ID>
+```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Build and run the app with Flutter
+
+1. Open a terminal or command prompt and navigate to the project directory.
+2. If you haven't enabled Flutter on your machine, visit the [Flutter installation guide](https://flutter.dev/docs/get-started/install) and follow the instructions for your operating system.
+3. Ensure you have the appropriate Flutter devices set up by running `flutter devices`. If no devices are found or configured, follow the [device setup instructions](https://flutter.dev/docs/get-started/install).
+4. Run the app by executing `flutter run`.
+
+With the `.env` file configured and the app built and run via Flutter, you can now successfully use the Lemonade Flutter app.

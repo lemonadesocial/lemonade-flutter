@@ -1,3 +1,4 @@
+import 'package:app/core/config.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
@@ -8,12 +9,12 @@ import 'package:oauth2_client/oauth2_helper.dart';
 
 @lazySingleton
 class AppOauth {
-  final baseOAuthUrl = 'https://oauth2.staging.lemonade.social/oauth2';
-  final clientId = "4a0846d5-2b06-4d61-821f-907fc2545b31";
-  final scopes = ['openid', 'offline_access'];
-  final appUriScheme = 'lemonadesocial';
+  final baseOAuthUrl = AppConfig.oauth2BaseUrl;
+  final clientId = AppConfig.oauth2ClientId;
+  final appUriScheme = AppConfig.oauthRedirectScheme;
   late final redirectUri = '$appUriScheme://oauth2/callback';
   late final logoutRedirectUri = '$appUriScheme://oauth2/logout';
+  final scopes = ['openid', 'offline_access'];
 
   late final OAuth2Client client = OAuth2Client(
     authorizeUrl: '$baseOAuthUrl/auth',
