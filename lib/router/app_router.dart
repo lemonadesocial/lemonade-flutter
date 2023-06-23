@@ -11,7 +11,7 @@ class AppRouter extends $AppRouter {
         ),
         AutoRoute(
           path: '/',
-          page: RootTabNavigator.page,
+          page: RootRoute.page,
           children: [
             AutoRoute(
               path: '',
@@ -24,6 +24,10 @@ class AppRouter extends $AppRouter {
             AutoRoute(
               path: 'notification',
               page: NotificationRoute.page,
+            ),
+            AutoRoute(
+              path: 'wallet',
+              page: WalletRoute.page,
             ),
             AutoRoute(
               path: 'profile',

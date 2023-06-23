@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class LemonadeTypo {
+class Typo {
   static const large = TextStyle(
     fontSize: 21,
     height: 27 / 21,
@@ -21,10 +21,10 @@ class LemonadeTypo {
 }
 
 const lemonadeTextTheme = TextTheme(
-  titleLarge: LemonadeTypo.large,
-  titleSmall: LemonadeTypo.medium,
-  bodyMedium: LemonadeTypo.medium,
-  bodySmall: LemonadeTypo.small, 
-  labelLarge: LemonadeTypo.medium,
-  labelMedium: LemonadeTypo.small,
+  titleLarge: Typo.large,
+  titleSmall: Typo.medium,
+  bodyMedium: Typo.medium,
+  bodySmall: Typo.small, 
+  labelLarge: Typo.medium,
+  labelMedium: Typo.small,
 );

@@ -1,9 +1,9 @@
 /// Generated file. Do not edit.
 ///
 /// Locales: 1
-/// Strings: 4
+/// Strings: 14
 ///
-/// Built on 2023-06-18 at 03:27 UTC
+/// Built on 2023-06-23 at 06:48 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -148,6 +148,7 @@ class _I18nEn implements BaseTranslations<AppLocale, _I18nEn> {
 	// Translations
 	late final _I18nAuthEn auth = _I18nAuthEn._(_root);
 	late final _I18nCommonEn common = _I18nCommonEn._(_root);
+	late final _I18nEventEn event = _I18nEventEn._(_root);
 }
 
 // Path: auth
@@ -167,8 +168,27 @@ class _I18nCommonEn {
 	final _I18nEn _root; // ignore: unused_field
 
 	// Translations
-	String hello({required Object name}) => 'Hello ${name}';
-	String get save => 'Save';
+	String get today => 'today';
+	String get tomorrow => 'tomorrow';
+	String get thisWeek => 'this week';
+	String get thisWeekend => 'this weekend';
+	String get nextWeek => 'next week';
+	String get nextWeekend => 'next weekend';
+	String get nextMonth => 'next month';
+}
+
+// Path: event
+class _I18nEventEn {
+	_I18nEventEn._(this._root);
+
+	final _I18nEn _root; // ignore: unused_field
+
+	// Translations
+	String get events => 'Events';
+	String get all => 'all';
+	String get attending => 'attending';
+	String get hosting => 'hosting';
+	String get buy => 'buy';
 }
 
 // Path: auth.login
@@ -190,8 +210,18 @@ extension on _I18nEn {
 		switch (path) {
 			case 'auth.login.success': return 'Logged in successfully';
 			case 'auth.login.fail': return 'Logged in failed';
-			case 'common.hello': return ({required Object name}) => 'Hello ${name}';
-			case 'common.save': return 'Save';
+			case 'common.today': return 'today';
+			case 'common.tomorrow': return 'tomorrow';
+			case 'common.thisWeek': return 'this week';
+			case 'common.thisWeekend': return 'this weekend';
+			case 'common.nextWeek': return 'next week';
+			case 'common.nextWeekend': return 'next weekend';
+			case 'common.nextMonth': return 'next month';
+			case 'event.events': return 'Events';
+			case 'event.all': return 'all';
+			case 'event.attending': return 'attending';
+			case 'event.hosting': return 'hosting';
+			case 'event.buy': return 'buy';
 			default: return null;
 		}
 	}

@@ -1,4 +1,9 @@
 {
-    "hello": "Hello $name",
-    "save": "Save"
+    "today": "today",
+    "tomorrow": "tomorrow",
+    "thisWeek": "this week",
+    "thisWeekend": "this weekend",
+    "nextWeek": "next week",
+    "nextWeekend": "next weekend",
+    "nextMonth": "next month"
 }

@@ -1,5 +1,5 @@
-import 'package:app/theme/lemonade_color.dart';
-import 'package:app/theme/lemonade_typo.dart';
+import 'package:app/theme/color.dart';
+import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 
 final lemonadeAppLightThemeData = ThemeData(
@@ -9,13 +9,17 @@ final lemonadeAppLightThemeData = ThemeData(
 );
 
 final lemonadeAppDarkThemeData = ThemeData(
+  splashColor: Colors.red,
+  fontFamily: 'CircularStd',
   brightness: Brightness.dark,
   textTheme: lemonadeTextTheme,
   colorScheme: lemonadeDarkThemeColorScheme,
+  // ignore: deprecated_member_use
+  backgroundColor: Colors.black,
   appBarTheme: AppBarTheme(
     elevation: 0,
     centerTitle: false,
-    color: LemonadeColor.black,
-    titleTextStyle: LemonadeTypo.large,
+    color: LemonColor.black,
+    titleTextStyle: Typo.large,
   ),
 );

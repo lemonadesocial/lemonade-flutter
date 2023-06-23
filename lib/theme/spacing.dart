@@ -1,0 +1,19 @@
+class Spacing {
+  static double superExtraSmall = 6.0;
+
+  static double extraSmall = 8.0;
+
+  static double xSmall = 12.0;
+
+  static double small = 16.0;
+
+  static double medium = 24.0;
+
+  static double large = 32.0;
+
+  static double xLarge = 32.0;
+}
+
+class LemonRadius {
+  static double normal = 18;
+}

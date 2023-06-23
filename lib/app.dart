@@ -3,6 +3,7 @@ import 'package:app/router/app_router.dart';
 import 'package:app/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_portal/flutter_portal.dart';
 
 class LemonadeApp extends StatelessWidget {
   LemonadeApp({super.key});
@@ -11,9 +12,15 @@ class LemonadeApp extends StatelessWidget {
 
   Widget _translationProviderBuilder(Widget child) => TranslationProvider(child: child);
 
+  Widget _portalBuilder(Widget child) => Portal(child: child);
+
   @override
   Widget build(BuildContext context) {
-    return _translationProviderBuilder(_App(_appRouter));
+    return _translationProviderBuilder(
+      _portalBuilder(
+        _App(_appRouter),
+      ),
+    );
   }
 }
 
@@ -34,8 +41,6 @@ class _App extends StatelessWidget {
       routeInformationParser: router.defaultRouteParser(includePrefixMatches: true),
     );
   }
-
-  
 
   get _supportedLocales => AppLocaleUtils.supportedLocales;
 
