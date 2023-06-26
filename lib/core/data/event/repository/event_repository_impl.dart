@@ -35,7 +35,7 @@ class EventRepositoryImpl implements EventRepository {
 
   @override
   Future<Either<Failure, List<Event>>> getHomeEvents({
-    required GetHomeEventsInput input
+    required GetHomeEventsInput input,
   }) async {
     final result = await client.query<List<Event>>(
       QueryOptions(

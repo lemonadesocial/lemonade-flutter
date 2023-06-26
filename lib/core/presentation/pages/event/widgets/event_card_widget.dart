@@ -1,4 +1,5 @@
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
 import 'package:app/core/utils/number_utils.dart';
@@ -52,6 +53,8 @@ class EventCard extends StatelessWidget {
         child: CachedNetworkImage(
           width: double.infinity,
           fit: BoxFit.cover,
+          placeholder: (_, __) => ImagePlaceholder.eventCard(),
+          errorWidget: (_, __, ___) => ImagePlaceholder.eventCard(),
           imageUrl:
               ImageUtils.generateUrl(file: event.newNewPhotosExpanded?.first, imageConfig: ImageConfig.eventPhoto),
         ),

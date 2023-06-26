@@ -17,6 +17,8 @@ class EventsListingBloc extends Bloc<EventsListingEvent, EventsListingState> {
   }
 
   _onFetch(EventsListingEventFetch blocEvent, Emitter emit) async {
+    emit(EventsListingState.loading());
+
     final listingType = blocEvent.eventListingType ?? EventListingType.all;
     final timeFilterType = blocEvent.eventTimeFilter;
     final userId = blocEvent.userId;

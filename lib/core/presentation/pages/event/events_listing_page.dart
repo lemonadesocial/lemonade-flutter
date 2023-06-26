@@ -12,6 +12,7 @@ import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -138,11 +139,12 @@ class _EventsListingViewState extends State<_EventsListingView> {
   _buildEventsListing() {
     return BlocBuilder<EventsListingBloc, EventsListingState>(
       builder: (context, eventsListingState) {
+        final colorScheme = Theme.of(context).colorScheme;
         return eventsListingState.when(
           loading: () {
             return Expanded(
                 child: Center(
-              child: CircularProgressIndicator(color: Colors.red),
+              child: CupertinoActivityIndicator(color: colorScheme.onSecondary),
             ));
           },
           fetched: (_, filteredEvents) {
@@ -191,7 +193,7 @@ class _EventsListingViewState extends State<_EventsListingView> {
 
     return Expanded(
       child: Center(
-        child: Text(emptyText),
+        child: Text(emptyText, textAlign: TextAlign.center,),
       ),
     );
   }
