@@ -40,14 +40,14 @@ final getEventsQuery = gql('''
   ${eventFragment}
   query(
     \$highlight: Boolean
-    \$query: String
+    \$search: String
     \$accepted: MongoID
     \$limit: Int
     \$skip: Int
   ) {
     getEvents(
       highlight: \$highlight
-      search: \$query
+      search: \$search
       accepted: \$accepted
       limit: \$limit
       skip: \$skip
