@@ -31,6 +31,15 @@ class AppOauth {
       },
       scopes: scopes);
 
+  Future<Either<Exception, bool>> login() async {
+    try {
+      var res = await helper.fetchToken();
+      return Right(res.accessToken != null);
+    } on PlatformException catch (e) {
+      return Left(e);
+    }
+  }
+
   Future<bool> logout() async {
     try {
       final tknRes = await getToken();
@@ -57,12 +66,13 @@ class AppOauth {
     return await helper.getToken();
   }
 
-  Future<Either<Exception, bool>> login() async {
-    try {
-      var res = await helper.fetchToken();
-      return Right(res.accessToken != null);
-    } on PlatformException catch (e) {
-      return Left(e);
-    }
+  Future<String> getTokenForGql() async {
+    AccessTokenResponse? tokenRes;
+    tokenRes = await getTokenFromStorage();
+    if (tokenRes == null) return '';
+
+    tokenRes = await getToken();
+
+    return tokenRes?.accessToken != null ? 'Bearer ${tokenRes?.accessToken}' : '';
   }
 }

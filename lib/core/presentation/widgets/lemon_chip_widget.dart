@@ -18,6 +18,7 @@ class LemonChip extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeColor = Theme.of(context).colorScheme;
     return GestureDetector(
+      onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(
           horizontal: Spacing.xSmall,

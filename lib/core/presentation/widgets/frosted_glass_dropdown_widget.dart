@@ -1,8 +1,8 @@
 import 'dart:ui';
 
 import 'package:app/gen/assets.gen.dart';
-import 'package:app/presentation/dpos/common/dropdown_item_dpo.dart';
-import 'package:app/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/presentation/dpos/common/dropdown_item_dpo.dart';
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +11,7 @@ class FrostedGlassDropdown<T> extends StatefulWidget {
   final List<DropdownItemDpo<T>> items;
   final Widget Function(BuildContext ctx, int index)? itemBuilder;
   final bool Function(DropdownItemDpo<T> a, DropdownItemDpo<T> b)? isEqual;
-  final Function(DropdownItemDpo<T> item)? onItemPressed;
+  final Function(DropdownItemDpo<T>? item)? onItemPressed;
 
   const FrostedGlassDropdown({
     super.key,
@@ -42,8 +42,8 @@ class _FrostedGlassDropdownController<T> extends State<FrostedGlassDropdown<T>> 
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
-              children: List.generate(widget.items.length,
-                  (index) => _buildItem(context, index, item: widget.items[index])),
+              children:
+                  List.generate(widget.items.length, (index) => _buildItem(context, index, item: widget.items[index])),
             ),
           ),
         ),
@@ -59,12 +59,14 @@ class _FrostedGlassDropdownController<T> extends State<FrostedGlassDropdown<T>> 
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
-        widget.onItemPressed?.call(item);
+        var newItem = isSelected ? null : item;
+        widget.onItemPressed?.call(newItem);
         setState(() {
-          selectedItem = item;
+          selectedItem = newItem;
         });
       },
       child: Container(
+        color: isSelected ? Colors.white.withOpacity(6/100) : Colors.transparent,
         padding: EdgeInsets.symmetric(horizontal: Spacing.small, vertical: Spacing.small),
         child: Row(
           mainAxisSize: MainAxisSize.max,

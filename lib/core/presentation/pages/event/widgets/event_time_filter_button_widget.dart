@@ -1,16 +1,18 @@
+import 'package:app/core/domain/event/event_enums.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/presentation/dpos/common/dropdown_item_dpo.dart';
-import 'package:app/presentation/enums/events/event_time_filter_enums.dart';
-import 'package:app/presentation/widgets/frosted_glass_dropdown_widget.dart';
+import 'package:app/core/presentation/dpos/common/dropdown_item_dpo.dart';
+import 'package:app/core/presentation/widgets/frosted_glass_dropdown_widget.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_portal/flutter_portal.dart';
 
 class EventTimeFilterButton extends StatefulWidget {
+  final Function(EventTimeFilter? eventTimeFilter)? onSelect;
   const EventTimeFilterButton({
     super.key,
+    this.onSelect,
   });
 
   @override
@@ -89,7 +91,10 @@ class _EventTimeFilterButtonState extends State<EventTimeFilterButton> with Tick
                         value: filter,
                       ))
                   .toList(),
-                onItemPressed: (filterItem) => _hide(),
+              onItemPressed: (filterItem) {
+                widget.onSelect?.call(filterItem?.value);
+                _hide();
+              },
             ),
           ),
         )

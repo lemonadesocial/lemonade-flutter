@@ -1,4 +1,4 @@
-import 'package:app/domain/auth/auth_repository.dart';
+import 'package:app/core/service/auth/auth_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
@@ -7,15 +7,15 @@ part 'auth_bloc.freezed.dart';
 
 @lazySingleton
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  final AuthRepository authRepository;
-  AuthBloc({required this.authRepository}) : super(const AuthState.unknown()) {
+  final AuthService authService;
+  AuthBloc({required this.authService}) : super(const AuthState.unknown()) {
     on<AuthEventCheckAuthenticated>(_onCheckAuthenticated);
     on<AuthEventLogin>(_onLogin);
     on<AuthEventLogout>(_onLogout);
   }
 
   _onCheckAuthenticated(AuthEventCheckAuthenticated event, Emitter emit) async {
-    var isAuthenticated = await authRepository.checkAuthenticated();
+    var isAuthenticated = await authService.checkAuthenticated();
     emit(
       isAuthenticated ? const AuthState.authenticated() : const AuthState.unauthenticated(isChecking: false),
     );
@@ -23,7 +23,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   _onLogin(AuthEventLogin event, Emitter emit) async {
     emit(const AuthState.unauthenticated(isChecking: true));
-    var result = await authRepository.login();
+    var result = await authService.login();
     result.fold((failure) {
       emit(const AuthState.unauthenticated(isChecking: false));
     }, (success) {
@@ -32,7 +32,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   _onLogout(AuthEventLogout event, Emitter emit) async {
-    final result = await authRepository.logout();
+    final result = await authService.logout();
     if (result.isRight()) emit(const AuthState.unauthenticated(isChecking: false));
   }
 }

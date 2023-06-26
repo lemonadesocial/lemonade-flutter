@@ -1,9 +1,9 @@
-import 'package:app/application/auth/auth_bloc.dart';
-import 'package:app/presentation/guard/auth_guard.dart';
-import 'package:app/presentation/pages/auth/login_page.dart';
+import 'package:app/core/oauth.dart';
+import 'package:app/core/presentation/guard/auth_guard.dart';
+import 'package:app/core/presentation/pages/auth/login_page.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 @RoutePage()
 class ProfilePage extends StatelessWidget {
@@ -29,9 +29,10 @@ class ProfilePageView extends StatelessWidget {
       ),
       body: Center(
           child: ElevatedButton(
-        child: const Text('Logout'),
-        onPressed: () {
-          context.read<AuthBloc>().add(const AuthEventLogout());
+        child: const Text('TestEvent'),
+        onPressed: () async {
+          final result = await getIt<AppOauth>().getTokenFromStorage();
+          print(result);
         },
       )),
     );
