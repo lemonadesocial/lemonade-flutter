@@ -16,6 +16,8 @@ class AppOauth {
   late final logoutRedirectUri = '$appUriScheme://oauth2/logout';
   final scopes = ['openid', 'offline_access'];
 
+  Future<String>? refreshTokenFuture;
+
   late final OAuth2Client client = OAuth2Client(
     authorizeUrl: '$baseOAuthUrl/auth',
     tokenUrl: '$baseOAuthUrl/token',
@@ -70,7 +72,15 @@ class AppOauth {
     AccessTokenResponse? tokenRes;
     tokenRes = await getTokenFromStorage();
     if (tokenRes == null) return '';
-
+    if (tokenRes.isExpired()) {
+      // if token is expired, all coming request have to wait only one refresh token request
+      // prevent duplicate call refresh token
+      refreshTokenFuture ??= getToken().then((_tokenRes) {
+        refreshTokenFuture = null;
+        return _tokenRes?.accessToken != null ? 'Bearer ${tokenRes?.accessToken}' : '';
+      });
+      return refreshTokenFuture!;
+    }
     tokenRes = await getToken();
 
     return tokenRes?.accessToken != null ? 'Bearer ${tokenRes?.accessToken}' : '';

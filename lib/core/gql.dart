@@ -23,6 +23,10 @@ class AppGQL {
       },
     );
     _client = GraphQLClient(
+      defaultPolicies: DefaultPolicies(
+          query: Policies(
+        fetch: FetchPolicy.cacheAndNetwork,
+      )),
       link: _authLink.concat(_httpLink),
       cache: GraphQLCache(store: HiveStore()),
     );
