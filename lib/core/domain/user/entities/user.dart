@@ -3,6 +3,18 @@ import 'package:app/core/data/user/user_enums.dart';
 import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/payment/payment_enums.dart';
 
+class AuthUser {
+  String id;
+
+  AuthUser({
+    required this.id,
+  });
+
+  factory AuthUser.fromDto(UserDto dto) {
+    return AuthUser(id: dto.id!);
+  }
+}
+
 class User {
   String? id;
   DateTime? createdAt;

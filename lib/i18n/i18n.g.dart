@@ -1,9 +1,9 @@
 /// Generated file. Do not edit.
 ///
 /// Locales: 1
-/// Strings: 15
+/// Strings: 19
 ///
-/// Built on 2023-06-25 at 02:08 UTC
+/// Built on 2023-06-26 at 06:38 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -175,6 +175,7 @@ class _I18nCommonEn {
 	String get nextWeek => 'next week';
 	String get nextWeekend => 'next weekend';
 	String get nextMonth => 'next month';
+	String get somethingWrong => 'There\'s something wrong';
 }
 
 // Path: event
@@ -190,6 +191,9 @@ class _I18nEventEn {
 	String get hosting => 'hosting';
 	String get buy => 'buy';
 	String get free => 'free';
+	String empty_home_events({required Object time}) => 'There\'s no events ${time}';
+	String empty_attending_events({required Object time}) => 'You are currently not attending any events ${time}';
+	String empty_hosting_events({required Object time}) => 'You are currently not hosting any events ${time}';
 }
 
 // Path: auth.login
@@ -218,12 +222,16 @@ extension on _I18nEn {
 			case 'common.nextWeek': return 'next week';
 			case 'common.nextWeekend': return 'next weekend';
 			case 'common.nextMonth': return 'next month';
+			case 'common.somethingWrong': return 'There\'s something wrong';
 			case 'event.events': return 'Events';
 			case 'event.all': return 'all';
 			case 'event.attending': return 'attending';
 			case 'event.hosting': return 'hosting';
 			case 'event.buy': return 'buy';
 			case 'event.free': return 'free';
+			case 'event.empty_home_events': return ({required Object time}) => 'There\'s no events ${time}';
+			case 'event.empty_attending_events': return ({required Object time}) => 'You are currently not attending any events ${time}';
+			case 'event.empty_hosting_events': return ({required Object time}) => 'You are currently not hosting any events ${time}';
 			default: return null;
 		}
 	}

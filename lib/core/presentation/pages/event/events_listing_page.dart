@@ -46,12 +46,20 @@ class _EventsListingViewState extends State<_EventsListingView> {
   EventTimeFilter? eventTimeFilter;
 
   _selectEventListingType(EventListingType _eventListingType) {
+    final userId = context.read<AuthBloc>().state.maybeWhen(
+          authenticated: (session) => session.userId,
+          orElse: () => null,
+        );
     setState(() {
       eventListingType = _eventListingType;
-      context
-          .read<EventsListingBloc>()
-          .add(EventsListingEvent.fetch(eventListingType: _eventListingType, eventTimeFilter: eventTimeFilter));
     });
+    context.read<EventsListingBloc>().add(
+          EventsListingEvent.fetch(
+            eventListingType: _eventListingType,
+            eventTimeFilter: eventTimeFilter,
+            userId: userId,
+          ),
+        );
   }
 
   _selectEventTimeFilter(EventTimeFilter? _eventTimeFilter) {
@@ -101,7 +109,7 @@ class _EventsListingViewState extends State<_EventsListingView> {
         ),
         BlocBuilder<AuthBloc, AuthState>(builder: (context, authState) {
           return authState.maybeWhen(
-              authenticated: () => Row(
+              authenticated: (_) => Row(
                     children: [
                       SizedBox(width: Spacing.superExtraSmall),
                       LemonChip(
@@ -138,6 +146,7 @@ class _EventsListingViewState extends State<_EventsListingView> {
             ));
           },
           fetched: (_, filteredEvents) {
+            if (filteredEvents.isEmpty) return _buildEmptyEvents(context);
             return Expanded(
               child: ListView.separated(
                 itemBuilder: (ctx, index) => index == filteredEvents.length
@@ -151,11 +160,39 @@ class _EventsListingViewState extends State<_EventsListingView> {
               ),
             );
           },
-          failure: () => Center(
-            child: Text('error'),
+          failure: () => Expanded(
+            child: Center(
+              child: Text(t.common.somethingWrong),
+            ),
           ),
         );
       },
+    );
+  }
+
+  _buildEmptyEvents(BuildContext context) {
+    final t = Translations.of(context);
+    String timeFilterText = eventTimeFilter != null ? t['common.${eventTimeFilter!.labelKey}'] : '';
+
+    String emptyText;
+
+    switch (eventListingType) {
+      case EventListingType.all:
+        emptyText = t.event.empty_home_events(time: timeFilterText);
+      case EventListingType.attending:
+        emptyText = t.event.empty_attending_events(time: timeFilterText);
+        break;
+      case EventListingType.hosting:
+        emptyText = t.event.empty_hosting_events(time: timeFilterText);
+        break;
+      default:
+        emptyText = '';
+    }
+
+    return Expanded(
+      child: Center(
+        child: Text(emptyText),
+      ),
     );
   }
 }

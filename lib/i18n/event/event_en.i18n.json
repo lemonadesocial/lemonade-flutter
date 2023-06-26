@@ -4,5 +4,8 @@
     "attending": "attending",
     "hosting": "hosting",
     "buy": "buy",
-    "free": "free"
+    "free": "free",
+    "empty_home_events": "There's no events $time",
+    "empty_attending_events": "You are currently not attending any events $time",
+    "empty_hosting_events": "You are currently not hosting any events $time"
 }

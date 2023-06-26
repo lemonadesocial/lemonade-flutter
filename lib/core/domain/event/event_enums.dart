@@ -10,6 +10,13 @@ enum EventListingType {
   hosting,
 }
 
+enum EventState {
+  created,
+  started,
+  ended,
+  cancelled,
+}
+
 enum EventTimeFilter {
   today(labelKey: 'today', value: 'today'),
   tomorrow(labelKey: 'tomorrow', value: 'tomorrow'),

@@ -485,7 +485,7 @@ mixin _$EventsListingEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(EventListingType? eventListingType,
-            EventTimeFilter? eventTimeFilter)
+            EventTimeFilter? eventTimeFilter, String? userId)
         fetch,
     required TResult Function(EventTimeFilter? eventTimeFilter) filter,
   }) =>
@@ -493,7 +493,7 @@ mixin _$EventsListingEvent {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(EventListingType? eventListingType,
-            EventTimeFilter? eventTimeFilter)?
+            EventTimeFilter? eventTimeFilter, String? userId)?
         fetch,
     TResult? Function(EventTimeFilter? eventTimeFilter)? filter,
   }) =>
@@ -501,7 +501,7 @@ mixin _$EventsListingEvent {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(EventListingType? eventListingType,
-            EventTimeFilter? eventTimeFilter)?
+            EventTimeFilter? eventTimeFilter, String? userId)?
         fetch,
     TResult Function(EventTimeFilter? eventTimeFilter)? filter,
     required TResult orElse(),
@@ -574,7 +574,9 @@ abstract class _$$EventsListingEventFetchCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {EventListingType? eventListingType, EventTimeFilter? eventTimeFilter});
+      {EventListingType? eventListingType,
+      EventTimeFilter? eventTimeFilter,
+      String? userId});
 }
 
 /// @nodoc
@@ -590,6 +592,7 @@ class __$$EventsListingEventFetchCopyWithImpl<$Res>
   $Res call({
     Object? eventListingType = freezed,
     Object? eventTimeFilter = freezed,
+    Object? userId = freezed,
   }) {
     return _then(_$EventsListingEventFetch(
       eventListingType: freezed == eventListingType
@@ -600,6 +603,10 @@ class __$$EventsListingEventFetchCopyWithImpl<$Res>
           ? _value.eventTimeFilter
           : eventTimeFilter // ignore: cast_nullable_to_non_nullable
               as EventTimeFilter?,
+      userId: freezed == userId
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -607,16 +614,19 @@ class __$$EventsListingEventFetchCopyWithImpl<$Res>
 /// @nodoc
 
 class _$EventsListingEventFetch implements EventsListingEventFetch {
-  _$EventsListingEventFetch({this.eventListingType, this.eventTimeFilter});
+  _$EventsListingEventFetch(
+      {this.eventListingType, this.eventTimeFilter, this.userId});
 
   @override
   final EventListingType? eventListingType;
   @override
   final EventTimeFilter? eventTimeFilter;
+  @override
+  final String? userId;
 
   @override
   String toString() {
-    return 'EventsListingEvent.fetch(eventListingType: $eventListingType, eventTimeFilter: $eventTimeFilter)';
+    return 'EventsListingEvent.fetch(eventListingType: $eventListingType, eventTimeFilter: $eventTimeFilter, userId: $userId)';
   }
 
   @override
@@ -627,12 +637,13 @@ class _$EventsListingEventFetch implements EventsListingEventFetch {
             (identical(other.eventListingType, eventListingType) ||
                 other.eventListingType == eventListingType) &&
             (identical(other.eventTimeFilter, eventTimeFilter) ||
-                other.eventTimeFilter == eventTimeFilter));
+                other.eventTimeFilter == eventTimeFilter) &&
+            (identical(other.userId, userId) || other.userId == userId));
   }
 
   @override
   int get hashCode =>
-      Object.hash(runtimeType, eventListingType, eventTimeFilter);
+      Object.hash(runtimeType, eventListingType, eventTimeFilter, userId);
 
   @JsonKey(ignore: true)
   @override
@@ -645,35 +656,35 @@ class _$EventsListingEventFetch implements EventsListingEventFetch {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(EventListingType? eventListingType,
-            EventTimeFilter? eventTimeFilter)
+            EventTimeFilter? eventTimeFilter, String? userId)
         fetch,
     required TResult Function(EventTimeFilter? eventTimeFilter) filter,
   }) {
-    return fetch(eventListingType, eventTimeFilter);
+    return fetch(eventListingType, eventTimeFilter, userId);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(EventListingType? eventListingType,
-            EventTimeFilter? eventTimeFilter)?
+            EventTimeFilter? eventTimeFilter, String? userId)?
         fetch,
     TResult? Function(EventTimeFilter? eventTimeFilter)? filter,
   }) {
-    return fetch?.call(eventListingType, eventTimeFilter);
+    return fetch?.call(eventListingType, eventTimeFilter, userId);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(EventListingType? eventListingType,
-            EventTimeFilter? eventTimeFilter)?
+            EventTimeFilter? eventTimeFilter, String? userId)?
         fetch,
     TResult Function(EventTimeFilter? eventTimeFilter)? filter,
     required TResult orElse(),
   }) {
     if (fetch != null) {
-      return fetch(eventListingType, eventTimeFilter);
+      return fetch(eventListingType, eventTimeFilter, userId);
     }
     return orElse();
   }
@@ -713,11 +724,13 @@ class _$EventsListingEventFetch implements EventsListingEventFetch {
 abstract class EventsListingEventFetch implements EventsListingEvent {
   factory EventsListingEventFetch(
       {final EventListingType? eventListingType,
-      final EventTimeFilter? eventTimeFilter}) = _$EventsListingEventFetch;
+      final EventTimeFilter? eventTimeFilter,
+      final String? userId}) = _$EventsListingEventFetch;
 
   EventListingType? get eventListingType;
   @override
   EventTimeFilter? get eventTimeFilter;
+  String? get userId;
   @override
   @JsonKey(ignore: true)
   _$$EventsListingEventFetchCopyWith<_$EventsListingEventFetch> get copyWith =>
@@ -794,7 +807,7 @@ class _$EventsListingEventFilter implements EventsListingEventFilter {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(EventListingType? eventListingType,
-            EventTimeFilter? eventTimeFilter)
+            EventTimeFilter? eventTimeFilter, String? userId)
         fetch,
     required TResult Function(EventTimeFilter? eventTimeFilter) filter,
   }) {
@@ -805,7 +818,7 @@ class _$EventsListingEventFilter implements EventsListingEventFilter {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(EventListingType? eventListingType,
-            EventTimeFilter? eventTimeFilter)?
+            EventTimeFilter? eventTimeFilter, String? userId)?
         fetch,
     TResult? Function(EventTimeFilter? eventTimeFilter)? filter,
   }) {
@@ -816,7 +829,7 @@ class _$EventsListingEventFilter implements EventsListingEventFilter {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(EventListingType? eventListingType,
-            EventTimeFilter? eventTimeFilter)?
+            EventTimeFilter? eventTimeFilter, String? userId)?
         fetch,
     TResult Function(EventTimeFilter? eventTimeFilter)? filter,
     required TResult orElse(),

@@ -16,8 +16,8 @@ class AuthGuard extends StatelessWidget {
     return BlocBuilder<AuthBloc, AuthState>(builder: (context, state) {
       return state.when(
         unknown: () => const AuthLoadingView(),
-        authenticated: () => authenticatedBuilder(context),
-        unauthenticated: (isValidating) => unauthenticatedBuilder(context),
+        authenticated: (_) => authenticatedBuilder(context),
+        unauthenticated: (_) => unauthenticatedBuilder(context),
       );
     });
   }

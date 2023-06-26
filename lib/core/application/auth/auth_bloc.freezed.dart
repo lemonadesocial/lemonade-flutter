@@ -416,21 +416,21 @@ mixin _$AuthState {
   TResult when<TResult extends Object?>({
     required TResult Function() unknown,
     required TResult Function(bool isChecking) unauthenticated,
-    required TResult Function() authenticated,
+    required TResult Function(AuthSession authSession) authenticated,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? unknown,
     TResult? Function(bool isChecking)? unauthenticated,
-    TResult? Function()? authenticated,
+    TResult? Function(AuthSession authSession)? authenticated,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? unknown,
     TResult Function(bool isChecking)? unauthenticated,
-    TResult Function()? authenticated,
+    TResult Function(AuthSession authSession)? authenticated,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -515,7 +515,7 @@ class _$AuthStateUnknown implements AuthStateUnknown {
   TResult when<TResult extends Object?>({
     required TResult Function() unknown,
     required TResult Function(bool isChecking) unauthenticated,
-    required TResult Function() authenticated,
+    required TResult Function(AuthSession authSession) authenticated,
   }) {
     return unknown();
   }
@@ -525,7 +525,7 @@ class _$AuthStateUnknown implements AuthStateUnknown {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? unknown,
     TResult? Function(bool isChecking)? unauthenticated,
-    TResult? Function()? authenticated,
+    TResult? Function(AuthSession authSession)? authenticated,
   }) {
     return unknown?.call();
   }
@@ -535,7 +535,7 @@ class _$AuthStateUnknown implements AuthStateUnknown {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? unknown,
     TResult Function(bool isChecking)? unauthenticated,
-    TResult Function()? authenticated,
+    TResult Function(AuthSession authSession)? authenticated,
     required TResult orElse(),
   }) {
     if (unknown != null) {
@@ -652,7 +652,7 @@ class _$AuthStateUnauthenticated implements AuthStateUnauthenticated {
   TResult when<TResult extends Object?>({
     required TResult Function() unknown,
     required TResult Function(bool isChecking) unauthenticated,
-    required TResult Function() authenticated,
+    required TResult Function(AuthSession authSession) authenticated,
   }) {
     return unauthenticated(isChecking);
   }
@@ -662,7 +662,7 @@ class _$AuthStateUnauthenticated implements AuthStateUnauthenticated {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? unknown,
     TResult? Function(bool isChecking)? unauthenticated,
-    TResult? Function()? authenticated,
+    TResult? Function(AuthSession authSession)? authenticated,
   }) {
     return unauthenticated?.call(isChecking);
   }
@@ -672,7 +672,7 @@ class _$AuthStateUnauthenticated implements AuthStateUnauthenticated {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? unknown,
     TResult Function(bool isChecking)? unauthenticated,
-    TResult Function()? authenticated,
+    TResult Function(AuthSession authSession)? authenticated,
     required TResult orElse(),
   }) {
     if (unauthenticated != null) {
@@ -731,6 +731,8 @@ abstract class _$$AuthStateAuthenticatedCopyWith<$Res> {
   factory _$$AuthStateAuthenticatedCopyWith(_$AuthStateAuthenticated value,
           $Res Function(_$AuthStateAuthenticated) then) =
       __$$AuthStateAuthenticatedCopyWithImpl<$Res>;
+  @useResult
+  $Res call({AuthSession authSession});
 }
 
 /// @nodoc
@@ -740,35 +742,61 @@ class __$$AuthStateAuthenticatedCopyWithImpl<$Res>
   __$$AuthStateAuthenticatedCopyWithImpl(_$AuthStateAuthenticated _value,
       $Res Function(_$AuthStateAuthenticated) _then)
       : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? authSession = null,
+  }) {
+    return _then(_$AuthStateAuthenticated(
+      authSession: null == authSession
+          ? _value.authSession
+          : authSession // ignore: cast_nullable_to_non_nullable
+              as AuthSession,
+    ));
+  }
 }
 
 /// @nodoc
 
 class _$AuthStateAuthenticated implements AuthStateAuthenticated {
-  const _$AuthStateAuthenticated();
+  const _$AuthStateAuthenticated({required this.authSession});
+
+  @override
+  final AuthSession authSession;
 
   @override
   String toString() {
-    return 'AuthState.authenticated()';
+    return 'AuthState.authenticated(authSession: $authSession)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$AuthStateAuthenticated);
+        (other.runtimeType == runtimeType &&
+            other is _$AuthStateAuthenticated &&
+            (identical(other.authSession, authSession) ||
+                other.authSession == authSession));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => Object.hash(runtimeType, authSession);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$AuthStateAuthenticatedCopyWith<_$AuthStateAuthenticated> get copyWith =>
+      __$$AuthStateAuthenticatedCopyWithImpl<_$AuthStateAuthenticated>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() unknown,
     required TResult Function(bool isChecking) unauthenticated,
-    required TResult Function() authenticated,
+    required TResult Function(AuthSession authSession) authenticated,
   }) {
-    return authenticated();
+    return authenticated(authSession);
   }
 
   @override
@@ -776,9 +804,9 @@ class _$AuthStateAuthenticated implements AuthStateAuthenticated {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? unknown,
     TResult? Function(bool isChecking)? unauthenticated,
-    TResult? Function()? authenticated,
+    TResult? Function(AuthSession authSession)? authenticated,
   }) {
-    return authenticated?.call();
+    return authenticated?.call(authSession);
   }
 
   @override
@@ -786,11 +814,11 @@ class _$AuthStateAuthenticated implements AuthStateAuthenticated {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? unknown,
     TResult Function(bool isChecking)? unauthenticated,
-    TResult Function()? authenticated,
+    TResult Function(AuthSession authSession)? authenticated,
     required TResult orElse(),
   }) {
     if (authenticated != null) {
-      return authenticated();
+      return authenticated(authSession);
     }
     return orElse();
   }
@@ -831,5 +859,11 @@ class _$AuthStateAuthenticated implements AuthStateAuthenticated {
 }
 
 abstract class AuthStateAuthenticated implements AuthState {
-  const factory AuthStateAuthenticated() = _$AuthStateAuthenticated;
+  const factory AuthStateAuthenticated(
+      {required final AuthSession authSession}) = _$AuthStateAuthenticated;
+
+  AuthSession get authSession;
+  @JsonKey(ignore: true)
+  _$$AuthStateAuthenticatedCopyWith<_$AuthStateAuthenticated> get copyWith =>
+      throw _privateConstructorUsedError;
 }

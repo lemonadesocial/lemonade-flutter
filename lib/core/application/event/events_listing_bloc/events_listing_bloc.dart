@@ -1,5 +1,6 @@
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/event_enums.dart';
+import 'package:app/core/domain/event/input/get_events_listing_input.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/core/service/event/event_service.dart';
 import 'package:dartz/dartz.dart';
@@ -18,23 +19,28 @@ class EventsListingBloc extends Bloc<EventsListingEvent, EventsListingState> {
   _onFetch(EventsListingEventFetch blocEvent, Emitter emit) async {
     final listingType = blocEvent.eventListingType ?? EventListingType.all;
     final timeFilterType = blocEvent.eventTimeFilter;
-
+    final userId = blocEvent.userId;
     Either<Failure, List<Event>>? result;
+
+    if (listingType != EventListingType.all && userId == null) {
+      emit(EventsListingState.failure());
+      return;
+    }
 
     switch (listingType) {
       case EventListingType.all:
         result = await eventService.getHomeEvents();
         break;
       case EventListingType.attending:
-        // TODO get attending event
+        result = await eventService.getEvents(input: GetEventsInput(accepted: userId!));
         break;
       case EventListingType.hosting:
-        // TODO get hosting event
+        result = await eventService.getHostingEvents(input: GetHostingEventsInput(id: userId!));
         break;
       default:
         result = await eventService.getHomeEvents();
     }
-    if (result == null) return;
+
     result.fold(
       (l) => emit(EventsListingState.failure()),
       (events) => emit(
@@ -73,6 +79,7 @@ class EventsListingEvent with _$EventsListingEvent {
   factory EventsListingEvent.fetch({
     EventListingType? eventListingType,
     EventTimeFilter? eventTimeFilter,
+    String? userId,
   }) = EventsListingEventFetch;
   factory EventsListingEvent.filter({EventTimeFilter? eventTimeFilter}) = EventsListingEventFilter;
 }

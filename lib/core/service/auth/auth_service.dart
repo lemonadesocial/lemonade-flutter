@@ -1,3 +1,5 @@
+import 'package:app/core/domain/auth/entities/auth_session.dart';
+import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/core/oauth.dart';
 import 'package:app/injection/register_module.dart';
@@ -31,5 +33,9 @@ class AuthService {
       return const Right(true);
     }
     return Left(Failure());
+  }
+
+  AuthSession createSession(AuthUser user) {
+    return AuthSession(userId: user.id);
   }
 }
