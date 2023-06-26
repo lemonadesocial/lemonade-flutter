@@ -1,6 +1,6 @@
 import 'package:app/application/auth/auth_bloc.dart';
-import 'package:app/presentation/auth/pages/login_page.dart';
 import 'package:app/presentation/guard/auth_guard.dart';
+import 'package:app/presentation/pages/auth/login_page.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

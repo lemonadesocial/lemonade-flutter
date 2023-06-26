@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class LemonadeColor {
+class LemonColor {
   static Color black = const Color(0xff000000);
   static Color black50 = const Color.fromRGBO(0, 0, 0, 0.5);
   static Color raisinBlack = const Color(0xff212121);
@@ -20,26 +20,34 @@ class LemonadeColor {
   static Color paleViolet12 = const Color(0xffC69DF7).withOpacity(0.12);
   static Color paleViolet18 = const Color(0xffC69DF7).withOpacity(0.18);
   static Color paleViolet36 = const Color(0xffC69DF7).withOpacity(0.36);
+
+  // UI specific
+  static Color dropdownBackground = const Color.fromARGB(221, 32, 32, 32);
 }
 
 final ColorScheme lemonadeLightThemeColorScheme = ColorScheme.light(
-  primary: LemonadeColor.white,
-  onPrimary: LemonadeColor.black,
-  secondary: LemonadeColor.white54,
-  onSecondary: LemonadeColor.raisinBlack,
-  background: LemonadeColor.white,
-  onBackground: LemonadeColor.black,
-  tertiary: LemonadeColor.paleViolet,
-  onTertiary: LemonadeColor.lavender,
+  primary: LemonColor.white,
+  onPrimary: LemonColor.black,
+  secondary: LemonColor.white54,
+  onSecondary: LemonColor.raisinBlack,
+  background: LemonColor.white,
+  onBackground: LemonColor.black,
+  tertiary: LemonColor.paleViolet,
+  onTertiary: LemonColor.lavender,
+  surface: LemonColor.white72,
+  onSurface: LemonColor.raisinBlack
 );
 
 final ColorScheme lemonadeDarkThemeColorScheme = ColorScheme.dark(
-  primary: LemonadeColor.black,
-  onPrimary: LemonadeColor.white,
-  secondary: LemonadeColor.raisinBlack,
-  onSecondary: LemonadeColor.white54,
-  background: LemonadeColor.black,
-  onBackground: LemonadeColor.white,
-  tertiary: LemonadeColor.paleViolet,
-  onTertiary: LemonadeColor.lavender,
+  primary: LemonColor.black,
+  onPrimary: LemonColor.white,
+  secondary: LemonColor.raisinBlack,
+  onSecondary: LemonColor.white54,
+  tertiary: LemonColor.paleViolet,
+  onTertiary: LemonColor.lavender,
+  background: LemonColor.black,
+  onBackground: LemonColor.white,
+  surface: LemonColor.raisinBlack,
+  onSurface: LemonColor.white72,
+  outline: LemonColor.white12,
 );
