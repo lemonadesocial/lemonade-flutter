@@ -37,6 +37,7 @@ workflows:
             --build-name=1.0.0 \
             --build-number=$(($(app-store-connect get-latest-app-store-build-number "$APP_ID") + 1)) \
             --export-options-plist=/Users/builder/export_options.plist
+            --flavor="staging"
     artifacts:
       - build/ios/ipa/*.ipa
       - /tmp/xcodebuild_logs/*.log
