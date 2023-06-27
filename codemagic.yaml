@@ -4,12 +4,15 @@ workflows:
     instance_type: mac_mini_m1
     max_build_duration: 75
     integrations:
-      app_store_connect: codemagic
+      app_store_connect: NUFT44CUCW
     environment:
       groups:
         - env_values
       vars:
         APP_ID: 6450680676
+      ios_signing:
+        distribution_type: app_store 
+        bundle_identifier: social.lemonade.app.staging
       flutter: stable
       xcode: latest
       cocoapods: default
