@@ -15,6 +15,11 @@ workflows:
       xcode: latest
       cocoapods: default
     scripts:
+      - name: Pre-build script
+        script: |
+          #!/bin/sh
+          set -e # exit on first failed command
+          echo $ENV_STAGING | base64 --decode > $CM_BUILD_DIR/.env.staging
       - name: Set up code signing settings on Xcode project
         script: |
           xcode-project use-profiles
