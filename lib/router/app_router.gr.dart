@@ -8,15 +8,17 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:app/presentation/pages/auth/login_page.dart' as _i2;
-import 'package:app/presentation/pages/event/event_detail_page.dart' as _i8;
-import 'package:app/presentation/pages/event/events_listing_page.dart' as _i7;
-import 'package:app/presentation/pages/home/home_page.dart' as _i1;
-import 'package:app/presentation/pages/notification/notification_page.dart'
+import 'package:app/core/presentation/pages/auth/login_page.dart' as _i2;
+import 'package:app/core/presentation/pages/event/event_detail_page.dart'
+    as _i8;
+import 'package:app/core/presentation/pages/event/events_listing_page.dart'
+    as _i7;
+import 'package:app/core/presentation/pages/home/home_page.dart' as _i1;
+import 'package:app/core/presentation/pages/notification/notification_page.dart'
     as _i3;
-import 'package:app/presentation/pages/profile/profile_page.dart' as _i4;
-import 'package:app/presentation/pages/root/root_page.dart' as _i6;
-import 'package:app/presentation/pages/wallet/wallet_page.dart' as _i5;
+import 'package:app/core/presentation/pages/profile/profile_page.dart' as _i4;
+import 'package:app/core/presentation/pages/root/root_page.dart' as _i6;
+import 'package:app/core/presentation/pages/wallet/wallet_page.dart' as _i5;
 import 'package:auto_route/auto_route.dart' as _i9;
 
 abstract class $AppRouter extends _i9.RootStackRouter {
@@ -63,7 +65,7 @@ abstract class $AppRouter extends _i9.RootStackRouter {
     EventsListingRoute.name: (routeData) {
       return _i9.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i7.EventsListingPage(),
+        child: _i7.EventsListingPage(),
       );
     },
     EventDetailRoute.name: (routeData) {

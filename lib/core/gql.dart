@@ -13,17 +13,20 @@ class AppGQL {
   final HttpLink _httpLink = HttpLink(
     'https://backend.staging.lemonade.social/graphql',
   );
-  
+
   GraphQLClient get client => _client;
 
   AppGQL() {
     _authLink = AuthLink(
-    getToken: () async {
-      var res = await appOauth.getToken();
-      return 'Bearer ${res?.accessToken}';
-    },
-  );
+      getToken: () async {
+        return await appOauth.getTokenForGql();
+      },
+    );
     _client = GraphQLClient(
+      defaultPolicies: DefaultPolicies(
+          query: Policies(
+        fetch: FetchPolicy.cacheAndNetwork,
+      )),
       link: _authLink.concat(_httpLink),
       cache: GraphQLCache(store: HiveStore()),
     );
