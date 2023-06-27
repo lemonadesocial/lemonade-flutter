@@ -38,6 +38,7 @@ workflows:
             --build-number=$(($(app-store-connect get-latest-app-store-build-number "$APP_ID") + 1)) \
             --export-options-plist=/Users/builder/export_options.plist
             --flavor="staging"
+            -t "lib/main_staging.dart"
     artifacts:
       - build/ios/ipa/*.ipa
       - /tmp/xcodebuild_logs/*.log
