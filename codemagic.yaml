@@ -6,9 +6,8 @@ workflows:
     integrations:
       app_store_connect: codemagic
     environment:
-      ios_signing:
-        distribution_type: app_store
-        bundle_identifier: social.lemonade.app.staging
+      groups:
+        - env_values
       vars:
         APP_ID: 6450680676
       flutter: stable
@@ -19,6 +18,8 @@ workflows:
         script: |
           #!/bin/sh
           set -e # exit on first failed command
+          echo "ENV Staging"
+          echo $ENV_STAGING
           echo $ENV_STAGING | base64 --decode > $CM_BUILD_DIR/.env.staging
       - name: Set up code signing settings on Xcode project
         script: |
