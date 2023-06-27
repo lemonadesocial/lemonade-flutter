@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.lemonadesocial" "\0"
-            VALUE "FileDescription", "Lemonade" "\0"
+            VALUE "FileDescription", "Lemonade Social" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "Lemonade" "\0"
+            VALUE "InternalName", "Lemonade Social" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2023 com.lemonadesocial. All rights reserved." "\0"
             VALUE "OriginalFilename", "app.exe" "\0"
-            VALUE "ProductName", "Lemonade" "\0"
+            VALUE "ProductName", "Lemonade Social" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
