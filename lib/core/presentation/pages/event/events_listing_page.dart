@@ -70,6 +70,22 @@ class _EventsListingViewState extends State<_EventsListingView> {
     context.read<EventsListingBloc>().add(EventsListingEvent.filter(eventTimeFilter: eventTimeFilter));
   }
 
+  _onAuthStateChanged(AuthState authState) {
+    authState.maybeWhen(
+        unauthenticated: (_) {
+          setState(() {
+            eventListingType = EventListingType.all;
+          });
+          context.read<EventsListingBloc>().add(
+                EventsListingEvent.fetch(
+                  eventListingType: eventListingType,
+                  eventTimeFilter: eventTimeFilter,
+                ),
+              );
+        },
+        orElse: () {});
+  }
+
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
@@ -108,26 +124,31 @@ class _EventsListingViewState extends State<_EventsListingView> {
           isActive: eventListingType == EventListingType.all,
           onTap: () => _selectEventListingType(EventListingType.all),
         ),
-        BlocBuilder<AuthBloc, AuthState>(builder: (context, authState) {
-          return authState.maybeWhen(
-              authenticated: (_) => Row(
-                    children: [
-                      SizedBox(width: Spacing.superExtraSmall),
-                      LemonChip(
-                        label: t.event.attending,
-                        isActive: eventListingType == EventListingType.attending,
-                        onTap: () => _selectEventListingType(EventListingType.attending),
-                      ),
-                      SizedBox(width: Spacing.superExtraSmall),
-                      LemonChip(
-                        label: t.event.hosting,
-                        isActive: eventListingType == EventListingType.hosting,
-                        onTap: () => _selectEventListingType(EventListingType.hosting),
-                      ),
-                    ],
-                  ),
-              orElse: () => SizedBox.shrink());
-        }),
+        BlocConsumer<AuthBloc, AuthState>(
+          listener: (context, authState) {
+            _onAuthStateChanged(authState);
+          },
+          builder: (context, authState) {
+            return authState.maybeWhen(
+                authenticated: (_) => Row(
+                      children: [
+                        SizedBox(width: Spacing.superExtraSmall),
+                        LemonChip(
+                          label: t.event.attending,
+                          isActive: eventListingType == EventListingType.attending,
+                          onTap: () => _selectEventListingType(EventListingType.attending),
+                        ),
+                        SizedBox(width: Spacing.superExtraSmall),
+                        LemonChip(
+                          label: t.event.hosting,
+                          isActive: eventListingType == EventListingType.hosting,
+                          onTap: () => _selectEventListingType(EventListingType.hosting),
+                        ),
+                      ],
+                    ),
+                orElse: () => SizedBox.shrink());
+          },
+        ),
         const Spacer(),
         EventTimeFilterButton(
           onSelect: (filter) => _selectEventTimeFilter(filter),
