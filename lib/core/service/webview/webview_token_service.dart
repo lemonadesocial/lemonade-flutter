@@ -24,7 +24,7 @@ class WebviewTokenService {
   }
 
   Future<Map<String, String>> generateHeaderWithToken() async {
-    final tokenRes = await _appOauth.getTokenFromStorage();
+    final tokenRes = await _getCurrentOrNewToken();
     if (tokenRes != null && !tokenRes.isExpired()) {
       return {'x-token': 'Bearer ${tokenRes.accessToken}'};
     }
@@ -37,7 +37,7 @@ class WebviewTokenService {
     }
 
     try {
-      AccessTokenResponse? tokenRes = await _refreshToken();
+      AccessTokenResponse? tokenRes = await _getCurrentOrNewToken();
 
       if (tokenRes == null) {
         _stopTokenRefresher();
@@ -72,7 +72,7 @@ class WebviewTokenService {
   }
 
   // refresh brand new token
-  Future<AccessTokenResponse?> _refreshToken() async {
+  Future<AccessTokenResponse?> _getCurrentOrNewToken() async {
     AccessTokenResponse? curToken;
 
     curToken = await _appOauth.getTokenFromStorage();
