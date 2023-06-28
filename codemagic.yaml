@@ -89,8 +89,8 @@ workflows:
                     },
                   ]
                 }
-            ]
-          }'
+              ]
+            }'
       email:
         recipients:
           - sieu@coderpush.com
