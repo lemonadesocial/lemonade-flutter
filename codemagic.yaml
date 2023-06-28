@@ -21,7 +21,9 @@ workflows:
         script: |
           #!/bin/sh
           set -e # exit on first failed command
+          echo $ENV | base64 --decode > $CM_BUILD_DIR/.env
           echo $ENV_STAGING | base64 --decode > $CM_BUILD_DIR/.env.staging
+          echo $ENV_PRODUCTION | base64 --decode > $CM_BUILD_DIR/.env.production
       - name: Set up code signing settings on Xcode project
         script: |
           xcode-project use-profiles
