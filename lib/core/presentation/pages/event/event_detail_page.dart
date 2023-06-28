@@ -76,11 +76,7 @@ class _EventDetailPageState extends State<EventDetailPage> with WidgetsBindingOb
       ..setNavigationDelegate(NavigationDelegate(onProgress: (progress) {
         if (progress >= 100) {
           webviewLoadedStreamCtrl.add(true);
-          print('Page loaded');
         }
-      }, onPageFinished: (url) {
-        // webviewLoadedStreamCtrl.add(true);
-
       }));
   }
 
@@ -92,8 +88,11 @@ class _EventDetailPageState extends State<EventDetailPage> with WidgetsBindingOb
   }
 
   _loadWebview() async {
-    // await ctrl.loadFlutterAsset('assets/index.html');
-    await ctrl.loadRequest(Uri.parse(_getEventWebUrl()));
+    try {
+      var headers = await webviewTokenService.generateHeaderWithToken();
+      // await ctrl.loadFlutterAsset('assets/index.html');
+      await ctrl.loadRequest(Uri.parse(_getEventWebUrl()), headers: headers);
+    } catch (e) {}
   }
 
   String _getEventWebUrl() {

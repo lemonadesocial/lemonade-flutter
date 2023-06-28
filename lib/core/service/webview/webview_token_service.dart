@@ -23,6 +23,14 @@ class WebviewTokenService {
     _stopTokenRefresher();
   }
 
+  Future<Map<String, String>> generateHeaderWithToken() async {
+    final tokenRes = await _appOauth.getTokenFromStorage();
+    if (tokenRes != null && !tokenRes.isExpired()) {
+      return {'x-token': 'Bearer ${tokenRes.accessToken}'};
+    }
+    return {};
+  }
+
   Future<void> _getToken() async {
     if (_timer != null) {
       throw new Exception('Waiting for next refresh');
