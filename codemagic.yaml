@@ -4,7 +4,7 @@ workflows:
     instance_type: mac_mini_m1
     max_build_duration: 75
     integrations:
-      app_store_connect: NUFT44CUCW
+      app_store_connect: Lemonade
     environment:
       ios_signing:
         distribution_type: app_store
