@@ -27,12 +27,8 @@ class AuthService {
     );
   }
 
-  Future<Either<Failure, bool>> logout() async {
-    var logOutSuccess = await appOAuth.logout();
-    if (logOutSuccess) {
-      return const Right(true);
-    }
-    return Left(Failure());
+  Future<void> logout() async {
+    await appOAuth.logout();
   }
 
   AuthSession createSession(AuthUser user) {

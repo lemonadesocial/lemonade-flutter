@@ -44,7 +44,7 @@ class AppOauth {
 
   Future<bool> logout() async {
     try {
-      final tknRes = await getToken();
+      final tknRes = await getTokenFromStorage();
       await const FlutterAppAuth().endSession(EndSessionRequest(
           idTokenHint: tknRes?.getRespField('id_token'),
           postLogoutRedirectUrl: logoutRedirectUri,
@@ -56,6 +56,7 @@ class AppOauth {
       await helper.removeAllTokens();
       return true;
     } catch (e) {
+      await helper.removeAllTokens();
       return false;
     }
   }
