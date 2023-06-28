@@ -8,7 +8,7 @@ workflows:
     environment:
       ios_signing:
         distribution_type: app_store
-        bundle_identifier: com.example.id
+        bundle_identifier: social.lemonade.app.staging
       groups:
         - env_values
       vars:
@@ -57,7 +57,7 @@ workflows:
           - sieu@coderpush.com
         notify:
           success: true
-          failure: true
+          failure: false
       app_store_connect:
         auth: integration
         submit_to_testflight: true
