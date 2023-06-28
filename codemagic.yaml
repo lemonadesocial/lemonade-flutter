@@ -48,7 +48,7 @@ workflows:
       - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
     publishing:
       slack:
-        channel: '#lemonade-coderpush'
+        channel: '#p-festival-heads-test'
         notify_on_build_start: true
         notify:
           success: true 
