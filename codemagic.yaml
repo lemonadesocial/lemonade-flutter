@@ -47,6 +47,9 @@ workflows:
       - flutter_drive.log
       - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
     publishing:
+      slack:
+        channel: '@mobile'
+        notify_on_build_start: true
       email:
         recipients:
           - sieu@coderpush.com
@@ -56,4 +59,4 @@ workflows:
       app_store_connect:
         auth: integration
         submit_to_testflight: true
-        submit_to_app_store: false
+        submit_to_app_store: falseworkflows:
