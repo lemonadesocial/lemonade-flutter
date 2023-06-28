@@ -48,8 +48,11 @@ workflows:
       - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
     publishing:
       slack:
-        channel: '@mobile'
+        channel: '#lemonade-coderpush'
         notify_on_build_start: true
+        notify:
+          success: true 
+          failure: false 
       email:
         recipients:
           - sieu@coderpush.com
