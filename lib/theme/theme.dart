@@ -9,7 +9,7 @@ final lemonadeAppLightThemeData = ThemeData(
 );
 
 final lemonadeAppDarkThemeData = ThemeData(
-  splashColor: Colors.red,
+  splashColor: Colors.transparent,
   fontFamily: 'CircularStd',
   brightness: Brightness.dark,
   textTheme: lemonadeTextTheme,

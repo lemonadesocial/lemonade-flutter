@@ -56,6 +56,9 @@ dependencies:
   flutter_portal: ^1.1.4
   intl: ^0.18.0
 
+  # Webview
+  webview_flutter: ^4.2.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -87,6 +90,7 @@ flutter:
     - assets/icons/
     - assets/fonts/
     - assets/images/
+    - assets/index.html
     - .env
 
   fonts:

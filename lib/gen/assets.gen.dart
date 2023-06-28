@@ -46,6 +46,9 @@ class $AssetsFontsGen {
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
+  /// File path: assets/icons/ic_back.svg
+  SvgGenImage get icBack => const SvgGenImage('assets/icons/ic_back.svg');
+
   /// File path: assets/icons/ic_chat.svg
   SvgGenImage get icChat => const SvgGenImage('assets/icons/ic_chat.svg');
 
@@ -77,6 +80,7 @@ class $AssetsIconsGen {
 
   /// List of all assets
   List<SvgGenImage> get values => [
+        icBack,
         icChat,
         icDone,
         icFilter,
@@ -94,6 +98,10 @@ class Assets {
 
   static const $AssetsFontsGen fonts = $AssetsFontsGen();
   static const $AssetsIconsGen icons = $AssetsIconsGen();
+  static const String index = 'assets/index.html';
+
+  /// List of all assets
+  List<String> get values => [index];
 }
 
 class AssetGenImage {
