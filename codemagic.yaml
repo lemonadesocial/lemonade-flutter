@@ -1,0 +1,116 @@
+workflows:
+  staging-workflow:
+    name: Staging Workflow
+    instance_type: mac_mini_m1
+    max_build_duration: 75
+    triggering:
+      events:
+        - push
+      branch_patterns: 
+        - pattern: master
+          include: false
+      cancel_previous_builds: true
+    integrations:
+      app_store_connect: Lemonade
+    environment:
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: social.lemonade.app.staging
+      groups:
+        - env_values
+      vars:
+        APP_ID: 6450680676
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+    scripts:
+      - name: Pre-build script
+        script: |
+          #!/bin/sh
+          set -e # exit on first failed command
+          echo $ENV | base64 --decode > $CM_BUILD_DIR/.env
+          echo $ENV_STAGING | base64 --decode > $CM_BUILD_DIR/.env.staging
+          echo $ENV_PRODUCTION | base64 --decode > $CM_BUILD_DIR/.env.production
+      - name: Set up code signing settings on Xcode project
+        script: |
+          xcode-project use-profiles
+      - name: Get Flutter packages
+        script: |
+          flutter packages pub get
+      - name: Install pods
+        script: |
+          find . -name "Podfile" -execdir pod install \;
+      - name: Flutter build ipa and automatic versioning
+        script: |
+          flutter build ipa --release \
+            --build-name=1.0.0 \
+            --build-number=$(($(app-store-connect get-latest-testflight-build-number "$APP_ID") + 1)) \
+            --export-options-plist=/Users/builder/export_options.plist \
+            --flavor="staging" \
+            -t "lib/main_staging.dart"
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+      - flutter_drive.log
+      - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
+    publishing:
+      scripts: 
+        - name: Publish to Slack
+          script: | 
+            ARTIFACT_URL=$(echo $CM_ARTIFACT_LINKS | jq -r '.[] | select(.name | endswith("'".apk"'")) | .url')
+            curl -0 -v -X POST $SLACK_WEBHOOK_URL \
+            -H 'Content-type: application/json' \
+            --data-raw '
+            {
+              "attachments": [
+                {
+                  "blocks": [
+                    {
+                      "type": "section",
+                      "text": {
+                        "type": "mrkdwn",
+                        "text": "Build with build id <https://codemagic.io/app/'"$CM_PROJECT_ID"'/build/'"$CM_BUILD_ID"'>"
+                      }
+                    },
+                    {
+                      "type": "divider"
+                    },
+                    {
+                      "type": "section",
+                      "block_id": "section567",
+                      "text": {
+                        "type": "mrkdwn",
+                        "text": "<https://github.com/'"$CM_REPO_SLUG"'> Merge pull request"
+                      }
+                    },
+                    {
+                      "type": "divider"
+                    },
+                    {
+                      "type": "section",
+                      "text": {
+                        "type": "mrkdwn",
+                        "text": "*Android Artifact Link* <'"$ARTIFACT_URL"'|Download>"
+                      }
+                    },
+                  ]
+                }
+              ]
+            }'
+      email:
+        recipients:
+          - sieu@coderpush.com
+          - thinh@coderpush.com
+          - kc@lemonade.social
+          - chris@lemonade.social
+          - jakob@lemonade.social
+          - pranoti@lemonade.social
+          - rishi@lemonade.social
+          - david@lemonade.social
+        notify:
+          success: true
+          failure: false
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
+        submit_to_app_store: false

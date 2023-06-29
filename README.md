@@ -1,5 +1,7 @@
 # Lemonade Flutter App
 
+[![Codemagic build status](https://api.codemagic.io/apps/6493f698db20b1801c5e821b/staging-workflow/status_badge.svg)](https://codemagic.io/apps/6493f698db20b1801c5e821b/staging-workflow/latest_build)
+
 ## Introduction
 
 ## Installation Guide

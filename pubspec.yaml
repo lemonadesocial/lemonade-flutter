@@ -88,6 +88,8 @@ flutter:
     - assets/fonts/
     - assets/images/
     - .env
+    - .env.staging
+    - .env.production
 
   fonts:
     - family: CircularStd
