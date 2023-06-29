@@ -25,7 +25,7 @@ class WebviewTokenService {
 
   Future<Map<String, String>> generateHeaderWithToken() async {
     final tokenRes = await _getCurrentOrNewToken();
-    if (tokenRes != null && !tokenRes.isExpired()) {
+    if (tokenRes != null && tokenRes.isValid()) {
       return {'x-token': 'Bearer ${tokenRes.accessToken}'};
     }
     return {};
@@ -39,7 +39,7 @@ class WebviewTokenService {
     try {
       AccessTokenResponse? tokenRes = await _getCurrentOrNewToken();
 
-      if (tokenRes == null) {
+      if (tokenRes == null || !tokenRes.isValid()) {
         _stopTokenRefresher();
         throw new Exception('Refresh token failed');
       }
