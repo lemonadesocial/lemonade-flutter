@@ -16,9 +16,9 @@ class UserRepositoryImpl implements UserRepository {
   @override
   Future<Either<Failure, AuthUser>> getMe() async {
     final result = await _gqlClient.query(QueryOptions(
-      document: getUserQuery,
+      document: getMeQuery,
       parserFn: (data) {
-        return AuthUser.fromDto(UserDto.fromJson(data['getUser']));
+        return AuthUser.fromDto(UserDto.fromJson(data['getMe']));
       },
     ));
 

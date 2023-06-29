@@ -10,10 +10,10 @@ final baseUserFragment = '''
 }
 ''';
 
-final getUserQuery = gql('''
+final getMeQuery = gql('''
   ${baseUserFragment}
-  query(\$id: MongoID, \$username: String, \$matrix_localpart: String) {
-    getUser(_id: \$id, username: \$username, matrix_localpart: \$matrix_localpart) {
+  query() {
+    getMe() {
       ...baseUserFragment
     }
 }
