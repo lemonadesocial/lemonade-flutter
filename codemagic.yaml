@@ -3,6 +3,13 @@ workflows:
     name: Staging Workflow
     instance_type: mac_mini_m1
     max_build_duration: 75
+    triggering:
+      events:
+        - push
+      branch_patterns: 
+        - pattern: master
+          include: false
+      cancel_previous_builds: true
     integrations:
       app_store_connect: Lemonade
     environment:
