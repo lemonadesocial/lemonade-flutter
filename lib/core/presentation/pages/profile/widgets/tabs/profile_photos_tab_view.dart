@@ -1,4 +1,5 @@
 import 'package:app/core/presentation/pages/profile/widgets/tabs/base_sliver_tab_view.dart';
+import 'package:app/theme/spacing.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
@@ -7,28 +8,34 @@ class ProfilePhotosTabView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BaseSliverTabView(name: "profile", children: [
-      SliverToBoxAdapter(
-        child: SizedBox(height: 3),
-      ),
-      SliverGrid(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          crossAxisSpacing: 3,
-          mainAxisSpacing: 3,
+    return BaseSliverTabView(
+      name: "profile",
+      children: [
+        SliverToBoxAdapter(
+          child: SizedBox(height: 3),
         ),
-        delegate: SliverChildBuilderDelegate(
-          (context, index) {
-            return Container(
-                child: CachedNetworkImage(
-              imageUrl: images[index],
-              fit: BoxFit.cover,
-            ));
-          },
-          childCount: 12,
-        ),
-      )
-    ]);
+        SliverPadding(
+          padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
+          sliver: SliverGrid(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              crossAxisSpacing: 3,
+              mainAxisSpacing: 3,
+            ),
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                return Container(
+                    child: CachedNetworkImage(
+                  imageUrl: images[index],
+                  fit: BoxFit.cover,
+                ));
+              },
+              childCount: 12,
+            ),
+          ),
+        )
+      ],
+    );
   }
 }
 
