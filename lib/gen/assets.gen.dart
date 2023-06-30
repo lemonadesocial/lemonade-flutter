@@ -46,11 +46,26 @@ class $AssetsFontsGen {
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
+  /// File path: assets/icons/ic_back.svg
+  SvgGenImage get icBack => const SvgGenImage('assets/icons/ic_back.svg');
+
+  /// File path: assets/icons/ic_badge.svg
+  SvgGenImage get icBadge => const SvgGenImage('assets/icons/ic_badge.svg');
+
+  /// File path: assets/icons/ic_camera.svg
+  SvgGenImage get icCamera => const SvgGenImage('assets/icons/ic_camera.svg');
+
   /// File path: assets/icons/ic_chat.svg
   SvgGenImage get icChat => const SvgGenImage('assets/icons/ic_chat.svg');
 
+  /// File path: assets/icons/ic_crystal.svg
+  SvgGenImage get icCrystal => const SvgGenImage('assets/icons/ic_crystal.svg');
+
   /// File path: assets/icons/ic_done.svg
   SvgGenImage get icDone => const SvgGenImage('assets/icons/ic_done.svg');
+
+  /// File path: assets/icons/ic_edit.svg
+  SvgGenImage get icEdit => const SvgGenImage('assets/icons/ic_edit.svg');
 
   /// File path: assets/icons/ic_filter.svg
   SvgGenImage get icFilter => const SvgGenImage('assets/icons/ic_filter.svg');
@@ -65,9 +80,25 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_inbox.svg
   SvgGenImage get icInbox => const SvgGenImage('assets/icons/ic_inbox.svg');
 
+  /// File path: assets/icons/ic_info.svg
+  SvgGenImage get icInfo => const SvgGenImage('assets/icons/ic_info.svg');
+
   /// File path: assets/icons/ic_lemon_outline.svg
   SvgGenImage get icLemonOutline =>
       const SvgGenImage('assets/icons/ic_lemon_outline.svg');
+
+  /// File path: assets/icons/ic_menu.svg
+  SvgGenImage get icMenu => const SvgGenImage('assets/icons/ic_menu.svg');
+
+  /// File path: assets/icons/ic_more_horiz.svg
+  SvgGenImage get icMoreHoriz =>
+      const SvgGenImage('assets/icons/ic_more_horiz.svg');
+
+  /// File path: assets/icons/ic_share.svg
+  SvgGenImage get icShare => const SvgGenImage('assets/icons/ic_share.svg');
+
+  /// File path: assets/icons/ic_store.svg
+  SvgGenImage get icStore => const SvgGenImage('assets/icons/ic_store.svg');
 
   /// File path: assets/icons/ic_ticket.svg
   SvgGenImage get icTicket => const SvgGenImage('assets/icons/ic_ticket.svg');
@@ -77,13 +108,23 @@ class $AssetsIconsGen {
 
   /// List of all assets
   List<SvgGenImage> get values => [
+        icBack,
+        icBadge,
+        icCamera,
         icChat,
+        icCrystal,
         icDone,
+        icEdit,
         icFilter,
         icHouse,
         icHouseParty,
         icInbox,
+        icInfo,
         icLemonOutline,
+        icMenu,
+        icMoreHoriz,
+        icShare,
+        icStore,
         icTicket,
         icWallet
       ];
