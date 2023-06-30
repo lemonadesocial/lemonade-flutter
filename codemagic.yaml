@@ -8,7 +8,6 @@ workflows:
         - push
       branch_patterns: 
         - pattern: master
-          include: false
       cancel_previous_builds: true
     integrations:
       app_store_connect: Lemonade
@@ -57,7 +56,14 @@ workflows:
       scripts: 
         - name: Publish to Slack
           script: | 
-            ARTIFACT_URL=$(echo $CM_ARTIFACT_LINKS | jq -r '.[] | select(.name | endswith("'".apk"'")) | .url')
+            echo $CM_BUILD_ID 
+            echo $CM_BRANCH 
+            echo $CM_REPO_SLUG
+            echo $CM_COMMIT
+            echo $CM_PROJECT_ID 
+            echo $ARTIFACT_URL
+
+            ARTIFACT_URL=$(echo $CM_ARTIFACT_LINKS | jq -r '.[] | select(.name | endswith("'".ipa"'")) | .url')
             curl -0 -v -X POST $SLACK_WEBHOOK_URL \
             -H 'Content-type: application/json' \
             --data-raw '
