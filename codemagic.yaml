@@ -27,9 +27,7 @@ workflows:
         script: |
           #!/bin/sh
           set -e # exit on first failed command
-          echo $ENV | base64 --decode > $CM_BUILD_DIR/.env
-          echo $ENV_STAGING | base64 --decode > $CM_BUILD_DIR/.env.staging
-          echo $ENV_PRODUCTION | base64 --decode > $CM_BUILD_DIR/.env.production
+          echo $ENV_STAGING | base64 --decode > $CM_BUILD_DIR/.env
       - name: Set up code signing settings on Xcode project
         script: |
           xcode-project use-profiles
@@ -45,8 +43,7 @@ workflows:
             --build-name=1.0.0 \
             --build-number=$(($(app-store-connect get-latest-testflight-build-number "$APP_ID") + 1)) \
             --export-options-plist=/Users/builder/export_options.plist \
-            --flavor="staging" \
-            -t "lib/main_staging.dart"
+            --flavor="staging"
     artifacts:
       - build/ios/ipa/*.ipa
       - /tmp/xcodebuild_logs/*.log
