@@ -27,47 +27,64 @@ class ProfilePage extends StatelessWidget {
   }
 }
 
-class ProfilePageView extends StatelessWidget {
+class ProfilePageView extends StatefulWidget {
   const ProfilePageView({super.key});
 
+  @override
+  State<ProfilePageView> createState() => _ProfilePageViewState();
+}
+
+class _ProfilePageViewState extends State<ProfilePageView> with SingleTickerProviderStateMixin {
   double get _headerHeight => 230;
 
   int get _tabCount => 6;
 
+  late final TabController _tabCtrl = TabController(
+    length: _tabCount,
+    vsync: this,
+    initialIndex: 0,
+  );
+
+  @override
+  void dispose() {
+    _tabCtrl.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    return DefaultTabController(
-      length: _tabCount,
-      child: Scaffold(
-        backgroundColor: colorScheme.primary,
-        appBar: _appBar(colorScheme),
-        body: NestedScrollView(
-          headerSliverBuilder: (context, innerBoxIsScrolled) => [
-            SliverAppBar(
-              floating: true,
-              expandedHeight: _headerHeight,
-              collapsedHeight: _headerHeight,
-              flexibleSpace: ProfilePageHeader(),
-              forceElevated: innerBoxIsScrolled,
+    return Scaffold(
+      backgroundColor: colorScheme.primary,
+      appBar: _appBar(colorScheme),
+      body: NestedScrollView(
+        headerSliverBuilder: (context, innerBoxIsScrolled) => [
+          SliverAppBar(
+            floating: true,
+            expandedHeight: _headerHeight,
+            collapsedHeight: _headerHeight,
+            flexibleSpace: ProfilePageHeader(),
+            forceElevated: innerBoxIsScrolled,
+          ),
+          SliverOverlapAbsorber(
+            handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+            sliver: SliverPersistentHeader(
+              pinned: true,
+              floating: false,
+              delegate: ProfileTabBarDelegate(controller: _tabCtrl),
             ),
-            SliverOverlapAbsorber(
-              handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-              sliver: SliverPersistentHeader(
-                pinned: true,
-                floating: false,
-                delegate: ProfileTabBarDelegate(),
-              ),
-            ),
-          ],
-          body: TabBarView(children: [
+          ),
+        ],
+        body: TabBarView(
+          controller: _tabCtrl,
+          children: [
             EmptyTabView(),
             ProfileCollectibleTabView(),
             ProfileEventTabView(),
             ProfilePhotosTabView(),
             EmptyTabView(),
             ProfileInfoTabView(),
-          ]),
+          ],
         ),
       ),
     );
