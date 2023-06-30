@@ -36,27 +36,39 @@ class _ActionButtons extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: Spacing.small),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
         mainAxisSize: MainAxisSize.max,
         children: [
-          LemonButton(
+          Expanded(
+            child: LemonButton(
               label: t.common.actions.edit,
               icon: ThemeSvgIcon(
                 color: onSurfaceColor,
                 builder: (filter) => Assets.icons.icEdit.svg(colorFilter: filter),
-              )),
-          LemonButton(
+              ),
+            ),
+          ),
+          SizedBox(width: Spacing.superExtraSmall),
+          Expanded(
+            child: LemonButton(
               label: t.common.ticket(n: 0),
               icon: ThemeSvgIcon(
                 color: onSurfaceColor,
                 builder: (filter) => Assets.icons.icTicket.svg(colorFilter: filter),
-              )),
-          LemonButton(
+              ),
+            ),
+          ),
+          SizedBox(width: Spacing.superExtraSmall),
+          Expanded(
+            child: LemonButton(
               label: t.common.actions.connect,
               icon: ThemeSvgIcon(
                 color: onSurfaceColor,
                 builder: (filter) => Assets.icons.icWallet.svg(colorFilter: filter),
-              ))
+              ),
+            ),
+          ),
+          SizedBox(width: Spacing.superExtraSmall),
         ],
       ),
     );
