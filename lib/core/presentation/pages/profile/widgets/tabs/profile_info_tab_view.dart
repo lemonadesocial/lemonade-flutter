@@ -1,3 +1,4 @@
+import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/presentation/pages/profile/widgets/tabs/base_sliver_tab_view.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/date_format_utils.dart';
@@ -7,6 +8,7 @@ import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProfileInfoTabView extends StatelessWidget {
   const ProfileInfoTabView({super.key});
@@ -62,6 +64,12 @@ class ProfileInfoTabView extends StatelessWidget {
                     t.common.joinedOn(date: DateFormatUtils.monthYearOnly(DateTime.now())),
                   ),
                   style: Typo.small.copyWith(color: colorScheme.onSurface),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    context.read<AuthBloc>().add(AuthEvent.logout());
+                  },
+                  child: Text("Logout"),
                 )
               ],
             ),

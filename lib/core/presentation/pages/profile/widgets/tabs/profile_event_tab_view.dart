@@ -1,4 +1,5 @@
 import 'package:app/core/presentation/pages/profile/widgets/tabs/base_sliver_tab_view.dart';
+import 'package:app/core/presentation/widgets/hero_image_viewer_widget.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/theme/spacing.dart';
@@ -27,8 +28,12 @@ class ProfileEventTabView extends StatelessWidget {
             ),
             delegate: SliverChildBuilderDelegate(
               (context, index) {
-                return _EventItem(
+                return HeroImageViewer(
+                  tag: images[index],
                   imageUrl: images[index],
+                  child: _EventItem(
+                    imageUrl: images[index],
+                  ),
                 );
               },
               childCount: images.length,
@@ -92,7 +97,6 @@ final images = [
   'https://images.unsplash.com/photo-1679678691006-0ad24fecb769?ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxzZWFyY2h8MjJ8fG5hdHVyZXxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60',
   'https://images.unsplash.com/photo-1662010021854-e67c538ea7a9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxzZWFyY2h8MXx8Y2FyfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60',
   'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y2F0fGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60',
-  'https://images.unsplash.com/photo-1616394158624-a2ba9cfe2994?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8aG9uZyUyMGtvbmd8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60',
   'https://images.unsplash.com/photo-1616394158624-a2ba9cfe2994?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8aG9uZyUyMGtvbmd8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60',
   'https://images.unsplash.com/photo-1674574124976-a56d9052c2f8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxlZGl0b3JpYWwtZmVlZHwxNnx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
   'https://plus.unsplash.com/premium_photo-1673548917477-4c0c8889b439?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyMHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
