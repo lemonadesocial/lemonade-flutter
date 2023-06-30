@@ -67,8 +67,15 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_edit.svg
   SvgGenImage get icEdit => const SvgGenImage('assets/icons/ic_edit.svg');
 
+  /// File path: assets/icons/ic_facebook.svg
+  SvgGenImage get icFacebook =>
+      const SvgGenImage('assets/icons/ic_facebook.svg');
+
   /// File path: assets/icons/ic_filter.svg
   SvgGenImage get icFilter => const SvgGenImage('assets/icons/ic_filter.svg');
+
+  /// File path: assets/icons/ic_grid.svg
+  SvgGenImage get icGrid => const SvgGenImage('assets/icons/ic_grid.svg');
 
   /// File path: assets/icons/ic_house.svg
   SvgGenImage get icHouse => const SvgGenImage('assets/icons/ic_house.svg');
@@ -83,9 +90,17 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_info.svg
   SvgGenImage get icInfo => const SvgGenImage('assets/icons/ic_info.svg');
 
+  /// File path: assets/icons/ic_instagram.svg
+  SvgGenImage get icInstagram =>
+      const SvgGenImage('assets/icons/ic_instagram.svg');
+
   /// File path: assets/icons/ic_lemon_outline.svg
   SvgGenImage get icLemonOutline =>
       const SvgGenImage('assets/icons/ic_lemon_outline.svg');
+
+  /// File path: assets/icons/ic_linkedin.svg
+  SvgGenImage get icLinkedin =>
+      const SvgGenImage('assets/icons/ic_linkedin.svg');
 
   /// File path: assets/icons/ic_menu.svg
   SvgGenImage get icMenu => const SvgGenImage('assets/icons/ic_menu.svg');
@@ -103,6 +118,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_ticket.svg
   SvgGenImage get icTicket => const SvgGenImage('assets/icons/ic_ticket.svg');
 
+  /// File path: assets/icons/ic_twitter.svg
+  SvgGenImage get icTwitter => const SvgGenImage('assets/icons/ic_twitter.svg');
+
   /// File path: assets/icons/ic_wallet.svg
   SvgGenImage get icWallet => const SvgGenImage('assets/icons/ic_wallet.svg');
 
@@ -115,17 +133,22 @@ class $AssetsIconsGen {
         icCrystal,
         icDone,
         icEdit,
+        icFacebook,
         icFilter,
+        icGrid,
         icHouse,
         icHouseParty,
         icInbox,
         icInfo,
+        icInstagram,
         icLemonOutline,
+        icLinkedin,
         icMenu,
         icMoreHoriz,
         icShare,
         icStore,
         icTicket,
+        icTwitter,
         icWallet
       ];
 }

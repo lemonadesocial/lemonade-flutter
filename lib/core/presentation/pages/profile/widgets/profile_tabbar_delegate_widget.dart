@@ -7,22 +7,34 @@ class _ProfileTabBar extends StatelessWidget {
   List<Widget> get tabs {
     return [
       Tab(
-        child: ThemeSvgIcon(builder: (filter) => Assets.icons.icMenu.svg(colorFilter: filter)),
+        child: ThemeSvgIcon(
+          builder: (filter) => Assets.icons.icGrid.svg(colorFilter: filter),
+        ),
       ),
       Tab(
-        child: ThemeSvgIcon(builder: (filter) => Assets.icons.icCrystal.svg(colorFilter: filter)),
+        child: ThemeSvgIcon(
+          builder: (filter) => Assets.icons.icCrystal.svg(colorFilter: filter),
+        ),
       ),
       Tab(
-        child: ThemeSvgIcon(builder: (filter) => Assets.icons.icHouseParty.svg(colorFilter: filter)),
+        child: ThemeSvgIcon(
+          builder: (filter) => Assets.icons.icHouseParty.svg(colorFilter: filter),
+        ),
       ),
       Tab(
-        child: ThemeSvgIcon(builder: (filter) => Assets.icons.icCamera.svg(colorFilter: filter)),
+        child: ThemeSvgIcon(
+          builder: (filter) => Assets.icons.icCamera.svg(colorFilter: filter),
+        ),
       ),
       Tab(
-        child: ThemeSvgIcon(builder: (filter) => Assets.icons.icStore.svg(colorFilter: filter)),
+        child: ThemeSvgIcon(
+          builder: (filter) => Assets.icons.icStore.svg(colorFilter: filter),
+        ),
       ),
       Tab(
-        child: ThemeSvgIcon(builder: (filter) => Assets.icons.icInfo.svg(colorFilter: filter)),
+        child: ThemeSvgIcon(
+          builder: (filter) => Assets.icons.icInfo.svg(colorFilter: filter),
+        ),
       )
     ];
   }

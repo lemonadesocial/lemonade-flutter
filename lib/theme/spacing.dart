@@ -17,6 +17,9 @@ class Spacing {
 }
 
 class LemonRadius {
+
+  static double small = 12;
+
   static double normal = 18;
 
   static double button = 21;

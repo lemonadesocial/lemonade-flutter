@@ -1,5 +1,7 @@
+import 'package:app/core/presentation/widgets/sliver_pinned_overlap_injector.dart';
 import 'package:flutter/material.dart';
 
+/// @children should always be slivers
 class BaseSliverTabView extends StatelessWidget {
   final String name;
   final List<Widget> children;
@@ -32,7 +34,7 @@ class BaseSliverTabView extends StatelessWidget {
             // the tab view is not on the screen.
             key: PageStorageKey<String>(name.toString()),
             slivers: <Widget>[
-              SliverOverlapInjector(
+              SliverPinnedOverlapInjector(
                 handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
               ),
               ...children
