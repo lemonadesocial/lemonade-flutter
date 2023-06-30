@@ -69,6 +69,26 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
+    flavorDimensions "default"
+
+    productFlavors {
+        development {
+            dimension "default"
+            resValue "string", "app_name", "Lemonade Social Development"
+            applicationId "social.lemonade.app.development"
+        }
+        staging {
+            dimension "default"
+            resValue "string", "app_name", "Lemonade Social Staging"
+            applicationId "social.lemonade.app.staging"
+        }
+        production {
+            dimension "default"
+            resValue "string", "app_name", "Lemonade Social"
+            applicationId "social.lemonade.app"
+        }
+    }
 }
 
 flutter {
