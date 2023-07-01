@@ -93,70 +93,70 @@ definitions:
           --build-name=1.0.$BUILD_NUMBER \
           --build-number=$BUILD_NUMBER \
           --flavor="production"
-    email_staging: &email_staging
-      email:
-        recipients:
-          - sieu@coderpush.com
-          - thinh@coderpush.com
-          - kc@lemonade.social
-          - chris@lemonade.social
-          - jakob@lemonade.social
-          - pranoti@lemonade.social
-          - rishi@lemonade.social
-          - david@lemonade.social
-        notify:
-          success: true
-          failure: false
-    ios_app_store_publish: &ios_app_store_publish
-      app_store_connect:
-        auth: integration
-        submit_to_testflight: true
-        submit_to_app_store: false
-    slack_publish_ios: &slack_publish_ios
-      scripts:
-        - name: Publish ipa to Slack
-          script: | 
-            ARTIFACT_URL=$(echo $CM_ARTIFACT_LINKS | jq -r '.[] | select(.name | endswith("'".ipa"'")) | .url')
-            curl -0 -v -X POST $SLACK_WEBHOOK_URL \
-            -H 'Content-type: application/json' \
-            --data-raw '
-            {
-              "attachments": [
-                {
-                  "blocks": [
-                    {
-                      "type": "section",
-                      "text": {
-                        "type": "mrkdwn",
-                        "text": "Build with build id <https://codemagic.io/app/'"$CM_PROJECT_ID"'/build/'"$CM_BUILD_ID"'>"
-                      }
-                    },
-                    {
-                      "type": "divider"
-                    },
-                    {
-                      "type": "section",
-                      "block_id": "section567",
-                      "text": {
-                        "type": "mrkdwn",
-                        "text": "<https://github.com/'"$CM_REPO_SLUG"'> Merge pull request"
-                      }
-                    },
-                    {
-                      "type": "divider"
-                    },
-                    {
-                      "type": "section",
-                      "text": {
-                        "type": "mrkdwn",
-                        "text": "*iOS Artifact Link* <'"$ARTIFACT_URL"'|Download>"
-                      }
-                    },
-                  ]
-                }
-              ]
-            }'
-    slack_publish_android: &slack_publish_android
+  email_staging: &email_staging
+    email:
+      recipients:
+        - sieu@coderpush.com
+        - thinh@coderpush.com
+        - kc@lemonade.social
+        - chris@lemonade.social
+        - jakob@lemonade.social
+        - pranoti@lemonade.social
+        - rishi@lemonade.social
+        - david@lemonade.social
+      notify:
+        success: true
+        failure: false
+  ios_app_store_publish: &ios_app_store_publish
+    app_store_connect:
+      auth: integration
+      submit_to_testflight: true
+      submit_to_app_store: false
+  slack_publish_ios: &slack_publish_ios
+    scripts:
+      - name: Publish ipa to Slack
+        script: | 
+          ARTIFACT_URL=$(echo $CM_ARTIFACT_LINKS | jq -r '.[] | select(.name | endswith("'".ipa"'")) | .url')
+          curl -0 -v -X POST $SLACK_WEBHOOK_URL \
+          -H 'Content-type: application/json' \
+          --data-raw '
+          {
+            "attachments": [
+              {
+                "blocks": [
+                  {
+                    "type": "section",
+                    "text": {
+                      "type": "mrkdwn",
+                      "text": "Build with build id <https://codemagic.io/app/'"$CM_PROJECT_ID"'/build/'"$CM_BUILD_ID"'>"
+                    }
+                  },
+                  {
+                    "type": "divider"
+                  },
+                  {
+                    "type": "section",
+                    "block_id": "section567",
+                    "text": {
+                      "type": "mrkdwn",
+                      "text": "<https://github.com/'"$CM_REPO_SLUG"'> Merge pull request"
+                    }
+                  },
+                  {
+                    "type": "divider"
+                  },
+                  {
+                    "type": "section",
+                    "text": {
+                      "type": "mrkdwn",
+                      "text": "*iOS Artifact Link* <'"$ARTIFACT_URL"'|Download>"
+                    }
+                  },
+                ]
+              }
+            ]
+          }'
+  slack_publish_android: &slack_publish_android
       scripts:
         - name: Publish Android to Slack
           script: | 
@@ -200,56 +200,56 @@ definitions:
                 }
               ]
             }'
-  workflows:
-    # Build iOS Staging 
-    ios-staging:
-      name: iOS Staging
-      <<: *instance_mac_pro
-      environment:
-        <<: *ios_signing_staging
-        <<: *env_versions
-      triggering:
-        events:
-          - push
-        branch_patterns: 
-          - pattern: master
-        cancel_previous_builds: true
-      scripts:
-        - *setup_staging_env
-        - *use_profiles
-        - *get_flutter_packages
-        - *install_pods
-        - *build_ipa_staging
-      artifacts:
-        - *ipa
-        - *xcode_log
-        - *dsym
-        - *app
-      publishing:
-        <<: *ios_app_store_publish
-        <<: *email_staging
-        <<: *slack_publish_ios
-    # Build Android Staging
-    android-staging:
-      name: Android Staging
-      <<: *instance_mac_pro
-      environment:
-        <<: *env_versions
-      triggering:
-        events:
-          - push
-        branch_patterns: 
-          - pattern: master
-        cancel_previous_builds: true
-      scripts:
-        - *setup_staging_env
-        - *setup_local_properties
-        - *get_flutter_packages
-        - *build_apk_staging
-      artifacts:
-        - *apk
-        - *android_log
-        - *flutter_log
-      publishing:
-        <<: *email_staging
-        <<: *slack_publish_android
+workflows:
+  # Build iOS Staging 
+  ios-staging:
+    name: iOS Staging
+    <<: *instance_mac_pro
+    environment:
+      <<: *ios_signing_staging
+      <<: *env_versions
+    triggering:
+      events:
+        - push
+      branch_patterns: 
+        - pattern: master
+      cancel_previous_builds: true
+    scripts:
+      - *setup_staging_env
+      - *use_profiles
+      - *get_flutter_packages
+      - *install_pods
+      - *build_ipa_staging
+    artifacts:
+      - *ipa
+      - *xcode_log
+      - *dsym
+      - *app
+    publishing:
+      <<: *ios_app_store_publish
+      <<: *email_staging
+      <<: *slack_publish_ios
+  # Build Android Staging
+  android-staging:
+    name: Android Staging
+    <<: *instance_mac_pro
+    environment:
+      <<: *env_versions
+    triggering:
+      events:
+        - push
+      branch_patterns: 
+        - pattern: master
+      cancel_previous_builds: true
+    scripts:
+      - *setup_staging_env
+      - *setup_local_properties
+      - *get_flutter_packages
+      - *build_apk_staging
+    artifacts:
+      - *apk
+      - *android_log
+      - *flutter_log
+    publishing:
+      <<: *email_staging
+      <<: *slack_publish_android
