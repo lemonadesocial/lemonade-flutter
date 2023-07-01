@@ -10,20 +10,19 @@ definitions:
     app_store_connect_integrations: &app_store_connect_integrations
       app_store_connect: Lemonade
   environment:
+    groups_environment_values: &groups_environment_values
+      groups:
+        - env_values
     ios_signing_staging: &ios_signing_staging
       ios_signing:
         distribution_type: app_store
         bundle_identifier: social.lemonade.app.staging
-      groups:
-        - env_values
       vars:
         APP_ID: 6450680676
     ios_signing_production: &ios_signing_production
       ios_signing:
         distribution_type: app_store
         bundle_identifier: social.lemonade.app
-      groups:
-        - env_values
       vars:
         APP_ID: 6450694884
   artifacts:
@@ -211,6 +210,7 @@ workflows:
     integrations:
       <<: *app_store_connect_integrations
     environment:
+      <<: *groups_environment_values
       <<: *ios_signing_staging
       <<: *env_versions
     triggering:
@@ -239,6 +239,7 @@ workflows:
     name: Android Staging
     <<: *instance_mac_pro
     environment:
+      <<: *groups_environment_values
       <<: *env_versions
     triggering:
       events:
