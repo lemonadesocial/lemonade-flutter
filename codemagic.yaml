@@ -8,8 +8,7 @@ definitions:
     cocoapods: default
   integrations:
     app_store_connect_integrations: &app_store_connect_integrations
-      integrations:
-        app_store_connect: Lemonade
+      app_store_connect: Lemonade
   environment:
     ios_signing_staging: &ios_signing_staging
       ios_signing:
