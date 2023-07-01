@@ -2,6 +2,8 @@ import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/event/events_listing_bloc/events_listing_bloc.dart';
 import 'package:app/core/domain/event/event_enums.dart';
 import 'package:app/core/domain/event/event_repository.dart';
+import 'package:app/core/presentation/widgets/burger_menu_widget.dart';
+import 'package:app/core/presentation/widgets/lemon_appbar_widget.dart';
 import 'package:app/core/service/event/event_service.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -91,12 +93,11 @@ class _EventsListingViewState extends State<_EventsListingView> {
     final t = Translations.of(context);
     final themeColor = Theme.of(context).colorScheme;
     return Scaffold(
-      appBar: AppBar(
-        title: Text(t.event.events),
-        leading: const Icon(Icons.menu_rounded),
+      appBar: LemonAppBar(
+        title: t.event.events,
+        leading: BurgerMenu(),
         actions: [
           ThemeSvgIcon(color: themeColor.onSurface, builder: (filter) => Assets.icons.icChat.svg(colorFilter: filter)),
-          SizedBox(width: Spacing.medium),
         ],
       ),
       backgroundColor: themeColor.primary,

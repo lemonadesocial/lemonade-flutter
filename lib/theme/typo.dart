@@ -7,6 +7,12 @@ class Typo {
     fontWeight: FontWeight.w500,
   );
 
+  static const extraMedium = TextStyle(
+    fontSize: 18,
+    height: 25 / 18,
+    fontWeight: FontWeight.w500,
+  );
+
   static const medium = TextStyle(
     fontSize: 14,
     height: 18 / 14,

@@ -6,5 +6,24 @@
     "nextWeek": "next week",
     "nextWeekend": "next weekend",
     "nextMonth": "next month",
-    "somethingWrong": "There's something wrong"
+    "somethingWrong": "There's something wrong",
+    "following": "following",
+    "description": "description",
+    "joinedOn": "joined on $date",
+    "follower(ordinal)": {
+        "one": "follower",
+        "other": "followers" 
+    },
+    "friends(ordinal)": {
+        "one": "follower",
+        "other": "followers" 
+    },
+    "ticket(ordinal)": {
+        "one": "ticket",
+        "other": "tickets" 
+    },
+    "actions": {
+        "edit": "edit",
+        "connect": "connect"
+    }
 }

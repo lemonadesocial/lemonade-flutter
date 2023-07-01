@@ -7,6 +7,8 @@ class Spacing {
 
   static double small = 16.0;
 
+  static double smMedium = 18.0;
+
   static double medium = 24.0;
 
   static double large = 32.0;
@@ -15,5 +17,10 @@ class Spacing {
 }
 
 class LemonRadius {
+
+  static double small = 12;
+
   static double normal = 18;
+
+  static double button = 21;
 }
