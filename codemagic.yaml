@@ -253,8 +253,8 @@ workflows:
       - *build_apk_staging
     artifacts:
       - *apk
+      - *aab
       - *android_log
-      - *flutter_log
     publishing:
       <<: *email_staging
       <<: *slack_publish_android
