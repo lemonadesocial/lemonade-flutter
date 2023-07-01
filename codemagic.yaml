@@ -6,6 +6,11 @@ workflows:
     environment:
       flutter: stable
     scripts:
+      - name: Setup environment
+        script: |
+          #!/bin/sh
+          set -e # exit on first failed command
+          echo $ENV_STAGING | base64 --decode > $CM_BUILD_DIR/.env
       - name: Set up local.properties
         script: | 
           echo "flutter.sdk=$HOME/programs/flutter" > "$CM_BUILD_DIR/android/local.properties"
@@ -54,7 +59,7 @@ workflows:
       xcode: latest
       cocoapods: default
     scripts:
-      - name: Pre-build script
+      - name: Setup environment
         script: |
           #!/bin/sh
           set -e # exit on first failed command
