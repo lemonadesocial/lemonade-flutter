@@ -163,6 +163,13 @@ definitions:
       scripts:
         - name: Publish Android to Slack
           script: | 
+            echo $CM_BUILD_ID 
+            echo $CM_BRANCH 
+            echo $CM_REPO_SLUG
+            echo $CM_COMMIT
+            echo $CM_PROJECT_ID 
+            echo $ARTIFACT_URL
+            
             ARTIFACT_URL=$(echo $CM_ARTIFACT_LINKS | jq -r '.[] | select(.name | endswith("'".apk"'")) | .url')
             curl -0 -v -X POST $SLACK_WEBHOOK_URL \
             -H 'Content-type: application/json' \
