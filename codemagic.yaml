@@ -1,4 +1,35 @@
 workflows:
+  android-workflow:
+    name: Android Workflow
+    instance_type: mac_mini_m1
+    max_build_duration: 75
+    environment:
+      flutter: stable
+    scripts:
+      - name: Set up local.properties
+        script: | 
+          echo "flutter.sdk=$HOME/programs/flutter" > "$CM_BUILD_DIR/android/local.properties"
+      - name: Get Flutter packages
+        script: | 
+          flutter packages pub get
+      - name: Build APK with Flutter
+        script: | 
+          BUILD_NUMBER=1      
+          flutter build apk --release \
+            --build-name=1.0.$BUILD_NUMBER \
+            --build-number=$BUILD_NUMBER \
+            --flavor="staging"
+    artifacts:
+      - build/**/outputs/**/*.apk
+      - build/**/outputs/**/mapping.txt
+      - flutter_drive.log
+    publishing:
+      email:
+        recipients:
+          - sieu@coderpush.com
+        notify:
+          success: true
+          failure: false
   staging-workflow:
     name: Staging Workflow
     instance_type: mac_mini_m1
