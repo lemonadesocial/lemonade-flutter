@@ -6,6 +6,10 @@ definitions:
     flutter: stable
     xcode: latest
     cocoapods: default
+  integrations:
+    app_store_connect_integrations: &app_store_connect_integrations
+      integrations:
+        app_store_connect: Lemonade
   environment:
     ios_signing_staging: &ios_signing_staging
       ios_signing:
@@ -97,13 +101,13 @@ definitions:
     email:
       recipients:
         - sieu@coderpush.com
-        - thinh@coderpush.com
-        - kc@lemonade.social
-        - chris@lemonade.social
-        - jakob@lemonade.social
-        - pranoti@lemonade.social
-        - rishi@lemonade.social
-        - david@lemonade.social
+        # - thinh@coderpush.com
+        # - kc@lemonade.social
+        # - chris@lemonade.social
+        # - jakob@lemonade.social
+        # - pranoti@lemonade.social
+        # - rishi@lemonade.social
+        # - david@lemonade.social
       notify:
         success: true
         failure: false
@@ -205,6 +209,8 @@ workflows:
   ios-staging:
     name: iOS Staging
     <<: *instance_mac_pro
+    integrations:
+      <<: *app_store_connect_integrations
     environment:
       <<: *ios_signing_staging
       <<: *env_versions
