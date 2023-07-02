@@ -143,11 +143,11 @@ definitions:
                     "fields": [
                       {
                         "type": "mrkdwn",
-                        "text": "*Branch*:\n$CM_BRANCH"
+                        "text": "*Branch*\n'"$CM_BRANCH"'"
                       },
                       {
                         "type": "mrkdwn",
-                        "text": "*Commit*:\n$CM_COMMIT"
+                        "text": "*Commit*\n'"$CM_COMMIT"'"
                       }
                     ]
                   },
@@ -158,9 +158,9 @@ definitions:
                         "type": "button",
                         "text": {
                           "type": "plain_text",
-                          "text": "Download on TestFlight"
+                          "text": "Download Staging App on TestFlight"
                         },
-                        "url": "itms-beta://"
+                        "url": "itms-beta://beta.itunes.apple.com/v1/app/6450680676"
                       }
                     ]
                   }
@@ -205,11 +205,11 @@ definitions:
                     "fields": [
                       {
                         "type": "mrkdwn",
-                        "text": "*Branch*:\n$CM_BRANCH"
+                        "text": "*Branch*\n'"$CM_BRANCH"'"
                       },
                       {
                         "type": "mrkdwn",
-                        "text": "*Commit*:\n$CM_COMMIT"
+                        "text": "*Commit*\n'"$CM_COMMIT"'"
                       }
                     ]
                   },
@@ -222,7 +222,7 @@ definitions:
                           "type": "plain_text",
                           "text": "Download APK"
                         },
-                        "url": "${ARTIFACT_URL}"
+                        "url": "'${ARTIFACT_URL}'"
                       }
                     ]
                   }
