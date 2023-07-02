@@ -2,6 +2,9 @@ definitions:
   instance_mac_pro: &instance_mac_pro
     instance_type: mac_mini_m1
     max_build_duration: 75
+  instance_linux: &instance_linux
+    instance_type: linux_x2
+    max_build_duration: 75
   env_versions: &env_versions
     flutter: stable
     xcode: latest
@@ -82,7 +85,11 @@ definitions:
     - &build_apk_staging
       name: Build apk staging
       script: |
-        flutter build apk --release --flavor="staging"
+        BUILD_NUMBER=1      
+        flutter build apk --release \
+          --build-name=1.0.$BUILD_NUMBER \
+          --build-number=$BUILD_NUMBER \
+          --flavor="staging"
   email_staging: &email_staging
     email:
       recipients:
@@ -225,7 +232,7 @@ workflows:
   # Build Android Staging
   android-staging:
     name: Android Staging
-    <<: *instance_mac_pro
+    <<: *instance_linux
     environment:
       <<: *groups_environment_values
       <<: *env_versions
@@ -242,6 +249,7 @@ workflows:
       - *build_apk_staging
     artifacts:
       - *apk
+      - *android_log
     publishing:
       <<: *email_staging
       <<: *slack_publish_android
