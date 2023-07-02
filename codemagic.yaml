@@ -91,13 +91,13 @@ definitions:
     email:
       recipients:
         - sieu@coderpush.com
-        # - thinh@coderpush.com
-        # - kc@lemonade.social
-        # - chris@lemonade.social
-        # - jakob@lemonade.social
-        # - pranoti@lemonade.social
-        # - rishi@lemonade.social
-        # - david@lemonade.social
+        - thinh@coderpush.com
+        - kc@lemonade.social
+        - chris@lemonade.social
+        - jakob@lemonade.social
+        - pranoti@lemonade.social
+        - rishi@lemonade.social
+        - david@lemonade.social
       notify:
         success: true
         failure: false
