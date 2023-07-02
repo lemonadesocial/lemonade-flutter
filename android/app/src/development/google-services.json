@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "610594530625",
+    "project_id": "lemonade-staging-88d1c",
+    "storage_bucket": "lemonade-staging-88d1c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:610594530625:android:0f12542abff71d4197adc0",
+        "android_client_info": {
+          "package_name": "social.lemonade.app.staging"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "610594530625-5sl0cu9meuhvgcp6cl25r6bjn9c3p8qt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAMBCtv1jY9lNe2jK8OYzUbD6StR7uYFFU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "610594530625-5sl0cu9meuhvgcp6cl25r6bjn9c3p8qt.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "610594530625-6e57fkboqk4l6fi28cvvmqml8sloel4d.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "social.lemonade.app.staging",
+                "app_store_id": "6450680676"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
