@@ -1,9 +1,6 @@
 definitions:
-  instance_mac_pro: &instance_mac_pro
+  instance_mac_mini: &instance_mac_mini
     instance_type: mac_mini_m1
-    max_build_duration: 75
-  instance_linux: &instance_linux
-    instance_type: linux_x2
     max_build_duration: 75
   env_versions: &env_versions
     flutter: stable
@@ -33,7 +30,7 @@ definitions:
     - &xcode_log /tmp/xcodebuild_logs/*.log
     - &dsym $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
     - &app $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.app
-    - &apk build/**/outputs/**/*.apk
+    - &apk build/**/outputs/**/app-staging-release.apk
     - &aab build/**/outputs/**/*.aab
     - &android_log build/**/outputs/**/mapping.txt
     - &flutter_log flutter_drive.log
@@ -201,7 +198,7 @@ workflows:
   # Build iOS Staging 
   ios-staging:
     name: iOS Staging
-    <<: *instance_mac_pro
+    <<: *instance_mac_mini
     integrations:
       <<: *app_store_connect_integrations
     environment:
@@ -232,7 +229,7 @@ workflows:
   # Build Android Staging
   android-staging:
     name: Android Staging
-    <<: *instance_linux
+    <<: *instance_mac_mini
     environment:
       <<: *groups_environment_values
       <<: *env_versions
