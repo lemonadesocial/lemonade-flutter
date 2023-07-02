@@ -158,7 +158,7 @@ definitions:
                         "type": "button",
                         "text": {
                           "type": "plain_text",
-                          "text": "Download "
+                          "text": "Download on TestFlight"
                         },
                         "url": "itms-beta://"
                       }
@@ -220,7 +220,7 @@ definitions:
                         "type": "button",
                         "text": {
                           "type": "plain_text",
-                          "text": "Download "
+                          "text": "Download APK"
                         },
                         "url": "${ARTIFACT_URL}"
                       }
