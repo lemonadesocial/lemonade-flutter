@@ -143,11 +143,11 @@ definitions:
                     "fields": [
                       {
                         "type": "mrkdwn",
-                        "text": "*Branch*\n$CM_BRANCH"
+                        "text": "*Branch*:\n$CM_BRANCH"
                       },
                       {
                         "type": "mrkdwn",
-                        "text": "*Commit*\n$CM_COMMIT"
+                        "text": "*Commit*:\n$CM_COMMIT"
                       }
                     ]
                   },
@@ -205,11 +205,11 @@ definitions:
                     "fields": [
                       {
                         "type": "mrkdwn",
-                        "text": "*Branch*\n$CM_BRANCH"
+                        "text": "*Branch*:\n$CM_BRANCH"
                       },
                       {
                         "type": "mrkdwn",
-                        "text": "*Commit*\n$CM_COMMIT"
+                        "text": "*Commit*:\n$CM_COMMIT"
                       }
                     ]
                   },
@@ -220,7 +220,7 @@ definitions:
                         "type": "button",
                         "text": {
                           "type": "plain_text",
-                          "text": "Download Apk"
+                          "text": "Download APK"
                         },
                         "url": "${ARTIFACT_URL}"
                       }
