@@ -178,7 +178,7 @@ definitions:
                       },
                       {
                         "type": "mrkdwn",
-                        "text": "*Pull Request*:\n<https://github.com/'"$CM_REPO_SLUG"'/pull/$CM_PULL_REQUEST_NUMBER|$CM_PULL_REQUEST_NUMBER>"
+                        "text": "*Pull Request*:\n<https://github.com/'"$CM_REPO_SLUG"'/pull/'"$CM_PULL_REQUEST_NUMBER"'|Open pull request>"
                       }
                     ]
                   },
@@ -202,9 +202,9 @@ definitions:
                         "type": "button",
                         "text": {
                           "type": "plain_text",
-                          "text": "Download APK"
+                          "text": "Download "
                         },
-                        "url": "$ARTIFACT_URL"
+                        "url": "http://google.com"
                       }
                     ]
                   }
