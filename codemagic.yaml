@@ -187,11 +187,11 @@ definitions:
                     "fields": [
                       {
                         "type": "mrkdwn",
-                        "text": "*Branch*:\n$CM_BRANCH"
+                        "text": "*Branch*:\n'"$CM_BRANCH"'"
                       },
                       {
                         "type": "mrkdwn",
-                        "text": "*Commit*:\n$CM_COMMIT"
+                        "text": "*Commit*:\n'"$CM_COMMIT"'"
                       }
                     ]
                   },
@@ -202,9 +202,9 @@ definitions:
                         "type": "button",
                         "text": {
                           "type": "plain_text",
-                          "text": "Download "
+                          "text": "Download Apk"
                         },
-                        "url": "http://google.com"
+                        "url": "${ARTIFACT_URL}"
                       }
                     ]
                   }
