@@ -122,51 +122,7 @@ definitions:
                     "type": "section",
                     "text": {
                       "type": "mrkdwn",
-                      "text": "Build with build id <https://codemagic.io/app/'"$CM_PROJECT_ID"'/build/'"$CM_BUILD_ID"'>"
-                    }
-                  },
-                  {
-                    "type": "divider"
-                  },
-                  {
-                    "type": "section",
-                    "block_id": "section567",
-                    "text": {
-                      "type": "mrkdwn",
-                      "text": "<https://github.com/'"$CM_REPO_SLUG"'> Merge pull request"
-                    }
-                  },
-                  {
-                    "type": "divider"
-                  },
-                  {
-                    "type": "section",
-                    "text": {
-                      "type": "mrkdwn",
-                      "text": "*iOS Artifact Link* <'"$ARTIFACT_URL"'|Download>"
-                    }
-                  },
-                ]
-              }
-            ]
-          }'
-  slack_publish_android: &slack_publish_android
-    scripts:
-      - name: Publish apk to Slack
-        script: | 
-          ARTIFACT_URL=$(echo $CM_ARTIFACT_LINKS | jq -r '.[] | select(.name | endswith("'".apk"'")) | .url')
-          curl -0 -v -X POST $SLACK_WEBHOOK_URL \
-          -H 'Content-type: application/json' \
-          --data-raw '
-          {
-            "attachments": [
-              {
-                "blocks": [
-                  {
-                    "type": "section",
-                    "text": {
-                      "type": "mrkdwn",
-                      "text": ":white_check_mark: Staging app build successful"
+                      "text": ":white_check_mark: Staging app build successful for iOS"
                     }
                   },
                   {
@@ -187,11 +143,73 @@ definitions:
                     "fields": [
                       {
                         "type": "mrkdwn",
-                        "text": "*Branch*\n'"$CM_BUILD_ID"'"
+                        "text": "*Branch*\n'$CM_BUILD_ID'"
                       },
                       {
                         "type": "mrkdwn",
-                        "text": "*Commit*\n'"$CM_BUILD_ID"'"
+                        "text": "*Commit*\n'$CM_BUILD_ID'"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "actions",
+                    "elements": [
+                      {
+                        "type": "button",
+                        "text": {
+                          "type": "plain_text",
+                          "text": "Download on TestFlight"
+                        },
+                        "url": "itms-beta://"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }'
+  slack_publish_android: &slack_publish_android
+    scripts:
+      - name: Publish apk to Slack
+        script: | 
+          ARTIFACT_URL=$(echo $CM_ARTIFACT_LINKS | jq -r '.[] | select(.name | endswith("'".apk"'")) | .url')
+          curl -0 -v -X POST $SLACK_WEBHOOK_URL \
+          -H 'Content-type: application/json' \
+          --data-raw '
+          {
+            "attachments": [
+              {
+                "blocks": [
+                  {
+                    "type": "section",
+                    "text": {
+                      "type": "mrkdwn",
+                      "text": ":white_check_mark: Staging app build successful for Android"
+                    }
+                  },
+                  {
+                    "type": "section",
+                    "fields": [
+                      {
+                        "type": "mrkdwn",
+                        "text": "*Build Link*:\n<https://codemagic.io/app/'"$CM_PROJECT_ID"'/build/'"$CM_BUILD_ID"'|Click here>"
+                      },
+                      {
+                        "type": "mrkdwn",
+                        "text": "*Pull Request*:\n<https://github.com/'"$CM_REPO_SLUG"'/pull/'"$CM_PULL_REQUEST_NUMBER"'|Open pull request>"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "section",
+                    "fields": [
+                      {
+                        "type": "mrkdwn",
+                        "text": "*Branch*\n'$CM_BUILD_ID'"
+                      },
+                      {
+                        "type": "mrkdwn",
+                        "text": "*Commit*\n'$CM_BUILD_ID'"
                       }
                     ]
                   },
