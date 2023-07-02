@@ -87,14 +87,6 @@ definitions:
           --build-name=1.0.$BUILD_NUMBER \
           --build-number=$BUILD_NUMBER \
           --flavor="staging"
-    - &build_apk_production
-      name: Build apk production
-      script: |
-        BUILD_NUMBER=1      
-        flutter build apk --release \
-          --build-name=1.0.$BUILD_NUMBER \
-          --build-number=$BUILD_NUMBER \
-          --flavor="production"
   email_staging: &email_staging
     email:
       recipients:
@@ -253,8 +245,9 @@ workflows:
       - *get_flutter_packages
       - *build_apk_staging
     artifacts:
-      - *apk
-      - *android_log
+      - build/**/outputs/**/*.apk
+      - build/**/outputs/**/mapping.txt
+      - flutter_drive.log
     publishing:
       <<: *email_staging
       <<: *slack_publish_android
