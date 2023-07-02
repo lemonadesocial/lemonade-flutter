@@ -187,11 +187,11 @@ definitions:
                     "fields": [
                       {
                         "type": "mrkdwn",
-                        "text": "*Branch*:\n${CM_BRANCH}"
+                        "text": "*Branch*\n'"$CM_BUILD_ID"'"
                       },
                       {
                         "type": "mrkdwn",
-                        "text": "*Commit*:\n${CM_COMMIT}"
+                        "text": "*Commit*\n'"$CM_BUILD_ID"'"
                       }
                     ]
                   },
