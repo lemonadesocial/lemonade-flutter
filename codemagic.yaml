@@ -1,0 +1,288 @@
+definitions:
+  instance_mac_mini: &instance_mac_mini
+    instance_type: mac_mini_m1
+    max_build_duration: 75
+  env_versions: &env_versions
+    flutter: stable
+    xcode: latest
+    cocoapods: default
+  integrations:
+    app_store_connect_integrations: &app_store_connect_integrations
+      app_store_connect: Lemonade
+  environment:
+    groups_environment_values: &groups_environment_values
+      groups:
+        - env_values
+    ios_signing_staging: &ios_signing_staging
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: social.lemonade.app.staging
+      vars:
+        APP_ID: 6450680676
+    ios_signing_production: &ios_signing_production
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: social.lemonade.app
+      vars:
+        APP_ID: 6450694884
+  artifacts:
+    - &ipa build/ios/ipa/*.ipa
+    - &xcode_log /tmp/xcodebuild_logs/*.log
+    - &dsym $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
+    - &app $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.app
+    - &apk build/**/outputs/apk/**/*.apk
+    - &aab build/**/outputs/aab/**/*.aab
+    - &android_log build/**/outputs/**/mapping.txt
+    - &flutter_log flutter_drive.log
+  scripts:
+    - &setup_staging_env
+      name: Setup Staging ENV
+      script: |
+        #!/bin/sh
+        set -e # exit on first failed command
+        echo $ENV_STAGING | base64 --decode > $CM_BUILD_DIR/.env
+    - &setup_production_env
+      name: Setup Production ENV
+      script: |
+        #!/bin/sh
+        set -e # exit on first failed command
+        echo $ENV_PRODUCTION | base64 --decode > $CM_BUILD_DIR/.env
+    - &use_profiles
+      name: Set up code signing settings on Xcode project
+      script: |
+        xcode-project use-profiles  
+    - &get_flutter_packages
+      name: Get Flutter packages
+      script: |
+        flutter packages pub get
+    - &setup_local_properties
+      name: Set up local properties
+      script: |
+        echo "flutter.sdk=$HOME/programs/flutter" > "$CM_BUILD_DIR/android/local.properties"
+    - &install_pods
+      name: Install pods
+      script: |
+        find . -name "Podfile" -execdir pod install \;
+    - &build_ipa_staging
+      name: Build ipa staging
+      script: |
+        flutter build ipa --release \
+          --build-name=1.0.0 \
+          --build-number=$(($(app-store-connect get-latest-testflight-build-number "$APP_ID") + 1)) \
+          --export-options-plist=/Users/builder/export_options.plist \
+          --flavor="staging"
+    - &build_ipa_production
+      name: Build ipa production
+      script: |
+        flutter build ipa --release \
+          --build-name=1.0.0 \
+          --build-number=$(($(app-store-connect get-latest-testflight-build-number "$APP_ID") + 1)) \
+          --export-options-plist=/Users/builder/export_options.plist \
+          --flavor="production"
+    - &build_apk_staging
+      name: Build apk staging
+      script: |
+        BUILD_NUMBER=1      
+        flutter build apk --release \
+          --build-name=1.0.$BUILD_NUMBER \
+          --build-number=$BUILD_NUMBER \
+          --flavor="staging"
+  email_staging: &email_staging
+    email:
+      recipients:
+        - sieu@coderpush.com
+        - thinh@coderpush.com
+        - kc@lemonade.social
+        - chris@lemonade.social
+        - jakob@lemonade.social
+        - pranoti@lemonade.social
+        - rishi@lemonade.social
+        - david@lemonade.social
+      notify:
+        success: true
+        failure: false
+  ios_app_store_publish: &ios_app_store_publish
+    app_store_connect:
+      auth: integration
+      submit_to_testflight: true
+      submit_to_app_store: false
+  slack_publish_ios: &slack_publish_ios
+    scripts:
+      - name: Publish ipa to Slack
+        script: | 
+          ARTIFACT_URL=$(echo $CM_ARTIFACT_LINKS | jq -r '.[] | select(.name | endswith("'".ipa"'")) | .url')
+          curl -0 -v -X POST $SLACK_WEBHOOK_URL \
+          -H 'Content-type: application/json' \
+          --data-raw '
+          {
+            "attachments": [
+              {
+                "blocks": [
+                  {
+                    "type": "section",
+                    "text": {
+                      "type": "mrkdwn",
+                      "text": ":white_check_mark: Staging app build successful for iOS"
+                    }
+                  },
+                  {
+                    "type": "section",
+                    "fields": [
+                      {
+                        "type": "mrkdwn",
+                        "text": "*Build Link*:\n<https://codemagic.io/app/'"$CM_PROJECT_ID"'/build/'"$CM_BUILD_ID"'|Click here>"
+                      },
+                      {
+                        "type": "mrkdwn",
+                        "text": "*Pull Request*:\n<https://github.com/'"$CM_REPO_SLUG"'/pull/'"$CM_PULL_REQUEST_NUMBER"'|Open pull request>"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "section",
+                    "fields": [
+                      {
+                        "type": "mrkdwn",
+                        "text": "*Branch*\n'"$CM_BRANCH"'"
+                      },
+                      {
+                        "type": "mrkdwn",
+                        "text": "*Commit*\n'"$CM_COMMIT"'"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "actions",
+                    "elements": [
+                      {
+                        "type": "button",
+                        "text": {
+                          "type": "plain_text",
+                          "text": "Download Staging App on TestFlight"
+                        },
+                        "url": "itms-beta://beta.itunes.apple.com/v1/app/6450680676"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }'
+  slack_publish_android: &slack_publish_android
+    scripts:
+      - name: Publish apk to Slack
+        script: | 
+          ARTIFACT_URL=$(echo $CM_ARTIFACT_LINKS | jq -r '.[] | select(.name | endswith("'".apk"'")) | .url')
+          curl -0 -v -X POST $SLACK_WEBHOOK_URL \
+          -H 'Content-type: application/json' \
+          --data-raw '
+          {
+            "attachments": [
+              {
+                "blocks": [
+                  {
+                    "type": "section",
+                    "text": {
+                      "type": "mrkdwn",
+                      "text": ":white_check_mark: Staging app build successful for Android"
+                    }
+                  },
+                  {
+                    "type": "section",
+                    "fields": [
+                      {
+                        "type": "mrkdwn",
+                        "text": "*Build Link*:\n<https://codemagic.io/app/'"$CM_PROJECT_ID"'/build/'"$CM_BUILD_ID"'|Click here>"
+                      },
+                      {
+                        "type": "mrkdwn",
+                        "text": "*Pull Request*:\n<https://github.com/'"$CM_REPO_SLUG"'/pull/'"$CM_PULL_REQUEST_NUMBER"'|Open pull request>"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "section",
+                    "fields": [
+                      {
+                        "type": "mrkdwn",
+                        "text": "*Branch*\n'"$CM_BRANCH"'"
+                      },
+                      {
+                        "type": "mrkdwn",
+                        "text": "*Commit*\n'"$CM_COMMIT"'"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "actions",
+                    "elements": [
+                      {
+                        "type": "button",
+                        "text": {
+                          "type": "plain_text",
+                          "text": "Download APK"
+                        },
+                        "url": "'${ARTIFACT_URL}'"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }'
+workflows:
+  # Build iOS Staging 
+  ios-staging:
+    name: iOS Staging
+    <<: *instance_mac_mini
+    integrations:
+      <<: *app_store_connect_integrations
+    environment:
+      <<: *groups_environment_values
+      <<: *ios_signing_staging
+      <<: *env_versions
+    triggering:
+      events:
+        - push
+      branch_patterns: 
+        - pattern: master
+      cancel_previous_builds: true
+    scripts:
+      - *setup_staging_env
+      - *use_profiles
+      - *get_flutter_packages
+      - *install_pods
+      - *build_ipa_staging
+    artifacts:
+      - *ipa
+      - *xcode_log
+      - *dsym
+      - *app
+    publishing:
+      <<: *ios_app_store_publish
+      <<: *email_staging
+      <<: *slack_publish_ios
+  # Build Android Staging
+  android-staging:
+    name: Android Staging
+    <<: *instance_mac_mini
+    environment:
+      <<: *groups_environment_values
+      <<: *env_versions
+    triggering:
+      events:
+        - push
+      branch_patterns: 
+        - pattern: master
+      cancel_previous_builds: true
+    scripts:
+      - *setup_staging_env
+      - *setup_local_properties
+      - *get_flutter_packages
+      - *build_apk_staging
+    artifacts:
+      - *apk
+      - *android_log
+    publishing:
+      <<: *email_staging
+      <<: *slack_publish_android

@@ -53,18 +53,20 @@ class EventCard extends StatelessWidget {
         ),
       );
 
-  _buildCardBody() => SizedBox(
-        width: double.infinity,
-        // height: 200,
-        child: CachedNetworkImage(
+  _buildCardBody() => event.newNewPhotosExpanded?.isNotEmpty == true
+      ? SizedBox(
           width: double.infinity,
-          fit: BoxFit.cover,
-          placeholder: (_, __) => ImagePlaceholder.eventCard(),
-          errorWidget: (_, __, ___) => ImagePlaceholder.eventCard(),
-          imageUrl:
-              ImageUtils.generateUrl(file: event.newNewPhotosExpanded?.first, imageConfig: ImageConfig.eventPhoto),
-        ),
-      );
+          // height: 200,
+          child: CachedNetworkImage(
+            width: double.infinity,
+            fit: BoxFit.cover,
+            placeholder: (_, __) => ImagePlaceholder.eventCard(),
+            errorWidget: (_, __, ___) => ImagePlaceholder.eventCard(),
+            imageUrl:
+                ImageUtils.generateUrl(file: event.newNewPhotosExpanded?.first, imageConfig: ImageConfig.eventPhoto),
+          ),
+        )
+      : ImagePlaceholder.eventCard();
 
   _buildCardFooter(BuildContext context, ColorScheme colorScheme) => Padding(
         padding: EdgeInsets.symmetric(horizontal: Spacing.small, vertical: Spacing.small),
@@ -75,7 +77,7 @@ class EventCard extends StatelessWidget {
               children: [
                 Text(event.title ?? ''),
                 SizedBox(height: Spacing.superExtraSmall),
-                Text(DateFormatUtils.fullDateWithTime(event.end),
+                Text(DateFormatUtils.fullDateWithTime(event.start),
                     style: Typo.small.copyWith(color: colorScheme.onSecondary)),
               ],
             ),

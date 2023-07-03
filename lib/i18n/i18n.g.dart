@@ -1,9 +1,9 @@
 /// Generated file. Do not edit.
 ///
 /// Locales: 1
-/// Strings: 19
+/// Strings: 34
 ///
-/// Built on 2023-06-26 at 08:07 UTC
+/// Built on 2023-06-30 at 03:57 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -146,9 +146,23 @@ class _I18nEn implements BaseTranslations<AppLocale, _I18nEn> {
 	late final _I18nEn _root = this; // ignore: unused_field
 
 	// Translations
+	late final _I18nNftEn nft = _I18nNftEn._(_root);
 	late final _I18nAuthEn auth = _I18nAuthEn._(_root);
 	late final _I18nCommonEn common = _I18nCommonEn._(_root);
 	late final _I18nEventEn event = _I18nEventEn._(_root);
+}
+
+// Path: nft
+class _I18nNftEn {
+	_I18nNftEn._(this._root);
+
+	final _I18nEn _root; // ignore: unused_field
+
+	// Translations
+	String get onSale => 'on sale';
+	String get created => 'created';
+	String get collected => 'collected';
+	String get sold => 'sold';
 }
 
 // Path: auth
@@ -176,6 +190,22 @@ class _I18nCommonEn {
 	String get nextWeekend => 'next weekend';
 	String get nextMonth => 'next month';
 	String get somethingWrong => 'There\'s something wrong';
+	String get following => 'following';
+	String get description => 'description';
+	String joinedOn({required Object date}) => 'joined on ${date}';
+	String follower({required num n}) => (_root.$meta.ordinalResolver ?? PluralResolvers.ordinal('en'))(n,
+		one: 'follower',
+		other: 'followers',
+	);
+	String friends({required num n}) => (_root.$meta.ordinalResolver ?? PluralResolvers.ordinal('en'))(n,
+		one: 'follower',
+		other: 'followers',
+	);
+	String ticket({required num n}) => (_root.$meta.ordinalResolver ?? PluralResolvers.ordinal('en'))(n,
+		one: 'ticket',
+		other: 'tickets',
+	);
+	late final _I18nCommonActionsEn actions = _I18nCommonActionsEn._(_root);
 }
 
 // Path: event
@@ -207,12 +237,27 @@ class _I18nAuthLoginEn {
 	String get fail => 'Logged in failed';
 }
 
+// Path: common.actions
+class _I18nCommonActionsEn {
+	_I18nCommonActionsEn._(this._root);
+
+	final _I18nEn _root; // ignore: unused_field
+
+	// Translations
+	String get edit => 'edit';
+	String get connect => 'connect';
+}
+
 /// Flat map(s) containing all translations.
 /// Only for edge cases! For simple maps, use the map function of this library.
 
 extension on _I18nEn {
 	dynamic _flatMapFunction(String path) {
 		switch (path) {
+			case 'nft.onSale': return 'on sale';
+			case 'nft.created': return 'created';
+			case 'nft.collected': return 'collected';
+			case 'nft.sold': return 'sold';
 			case 'auth.login.success': return 'Logged in successfully';
 			case 'auth.login.fail': return 'Logged in failed';
 			case 'common.today': return 'today';
@@ -223,6 +268,23 @@ extension on _I18nEn {
 			case 'common.nextWeekend': return 'next weekend';
 			case 'common.nextMonth': return 'next month';
 			case 'common.somethingWrong': return 'There\'s something wrong';
+			case 'common.following': return 'following';
+			case 'common.description': return 'description';
+			case 'common.joinedOn': return ({required Object date}) => 'joined on ${date}';
+			case 'common.follower': return ({required num n}) => (_root.$meta.ordinalResolver ?? PluralResolvers.ordinal('en'))(n,
+				one: 'follower',
+				other: 'followers',
+			);
+			case 'common.friends': return ({required num n}) => (_root.$meta.ordinalResolver ?? PluralResolvers.ordinal('en'))(n,
+				one: 'follower',
+				other: 'followers',
+			);
+			case 'common.ticket': return ({required num n}) => (_root.$meta.ordinalResolver ?? PluralResolvers.ordinal('en'))(n,
+				one: 'ticket',
+				other: 'tickets',
+			);
+			case 'common.actions.edit': return 'edit';
+			case 'common.actions.connect': return 'connect';
 			case 'event.events': return 'Events';
 			case 'event.all': return 'all';
 			case 'event.attending': return 'attending';

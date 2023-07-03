@@ -46,8 +46,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   _onLogout(AuthEventLogout event, Emitter emit) async {
-    final result = await authService.logout();
-    if (result.isRight()) emit(const AuthState.unauthenticated(isChecking: false));
+    await authService.logout();
+    emit(const AuthState.unauthenticated(isChecking: false));
   }
 
   Future<AuthSession?> _createSession() async {

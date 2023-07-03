@@ -2,6 +2,8 @@ import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/event/events_listing_bloc/events_listing_bloc.dart';
 import 'package:app/core/domain/event/event_enums.dart';
 import 'package:app/core/domain/event/event_repository.dart';
+import 'package:app/core/presentation/widgets/burger_menu_widget.dart';
+import 'package:app/core/presentation/widgets/lemon_appbar_widget.dart';
 import 'package:app/core/service/event/event_service.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -71,17 +73,32 @@ class _EventsListingViewState extends State<_EventsListingView> {
     context.read<EventsListingBloc>().add(EventsListingEvent.filter(eventTimeFilter: eventTimeFilter));
   }
 
+  _onAuthStateChanged(AuthState authState) {
+    authState.maybeWhen(
+        unauthenticated: (_) {
+          setState(() {
+            eventListingType = EventListingType.all;
+          });
+          context.read<EventsListingBloc>().add(
+                EventsListingEvent.fetch(
+                  eventListingType: eventListingType,
+                  eventTimeFilter: eventTimeFilter,
+                ),
+              );
+        },
+        orElse: () {});
+  }
+
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final themeColor = Theme.of(context).colorScheme;
     return Scaffold(
-      appBar: AppBar(
-        title: Text(t.event.events),
-        leading: const Icon(Icons.menu_rounded),
+      appBar: LemonAppBar(
+        title: t.event.events,
+        leading: BurgerMenu(),
         actions: [
           ThemeSvgIcon(color: themeColor.onSurface, builder: (filter) => Assets.icons.icChat.svg(colorFilter: filter)),
-          SizedBox(width: Spacing.medium),
         ],
       ),
       backgroundColor: themeColor.primary,
@@ -109,26 +126,31 @@ class _EventsListingViewState extends State<_EventsListingView> {
           isActive: eventListingType == EventListingType.all,
           onTap: () => _selectEventListingType(EventListingType.all),
         ),
-        BlocBuilder<AuthBloc, AuthState>(builder: (context, authState) {
-          return authState.maybeWhen(
-              authenticated: (_) => Row(
-                    children: [
-                      SizedBox(width: Spacing.superExtraSmall),
-                      LemonChip(
-                        label: t.event.attending,
-                        isActive: eventListingType == EventListingType.attending,
-                        onTap: () => _selectEventListingType(EventListingType.attending),
-                      ),
-                      SizedBox(width: Spacing.superExtraSmall),
-                      LemonChip(
-                        label: t.event.hosting,
-                        isActive: eventListingType == EventListingType.hosting,
-                        onTap: () => _selectEventListingType(EventListingType.hosting),
-                      ),
-                    ],
-                  ),
-              orElse: () => SizedBox.shrink());
-        }),
+        BlocConsumer<AuthBloc, AuthState>(
+          listener: (context, authState) {
+            _onAuthStateChanged(authState);
+          },
+          builder: (context, authState) {
+            return authState.maybeWhen(
+                authenticated: (_) => Row(
+                      children: [
+                        SizedBox(width: Spacing.superExtraSmall),
+                        LemonChip(
+                          label: t.event.attending,
+                          isActive: eventListingType == EventListingType.attending,
+                          onTap: () => _selectEventListingType(EventListingType.attending),
+                        ),
+                        SizedBox(width: Spacing.superExtraSmall),
+                        LemonChip(
+                          label: t.event.hosting,
+                          isActive: eventListingType == EventListingType.hosting,
+                          onTap: () => _selectEventListingType(EventListingType.hosting),
+                        ),
+                      ],
+                    ),
+                orElse: () => SizedBox.shrink());
+          },
+        ),
         const Spacer(),
         EventTimeFilterButton(
           onSelect: (filter) => _selectEventTimeFilter(filter),

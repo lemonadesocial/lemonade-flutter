@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/theme/color.dart';
@@ -48,13 +49,9 @@ class BottomBar extends StatelessWidget {
                         ),
                         path: '/wallet'),
                     _buildItem(context,
-                        icon: Container(
-                          width: 24,
-                          height: 24,
-                          decoration: BoxDecoration(
-                            color: themeColor.onPrimary,
-                            borderRadius: BorderRadius.circular(24),
-                          ),
+                        icon: LemonCircleAvatar(
+                          size: 24,
+                          url: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8YXZhdGFyfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60',
                         ),
                         path: '/profile')
                   ],
