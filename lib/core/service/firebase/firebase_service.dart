@@ -1,3 +1,4 @@
+import 'package:app/core/config.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -47,7 +48,7 @@ class FirebaseService {
   Future<String?> registerToken() async {
     final messaging = FirebaseMessaging.instance;
     if (DefaultFirebaseOptions.currentPlatform == DefaultFirebaseOptions.web) {
-      final vapidKey = "BOic26rzOPU81pV-YvshEW0zBwKmpPzbRBPugPGruPioOZm5S4eN5W0p9R4hXRdLMCLBQpHWyC7f8pK9d_BKsPA";
+      final vapidKey = AppConfig.firebaseVapidKey;
       final token = await messaging.getToken(vapidKey: vapidKey);
       if (kDebugMode) {
         print('Registration Token: $token');
