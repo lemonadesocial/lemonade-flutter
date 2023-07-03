@@ -13,7 +13,7 @@ if (flutterRoot == null) {
 
 def flutterMinSdk = localProperties.getProperty('flutter.minSdk')
 if (flutterMinSdk == null) {
-    flutterMinSdk = 18
+    flutterMinSdk = 19
 }
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
@@ -27,6 +27,9 @@ if (flutterVersionName == null) {
 }
 
 apply plugin: 'com.android.application'
+// START: FlutterFire Configuration
+apply plugin: 'com.google.gms.google-services'
+// END: FlutterFire Configuration
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
