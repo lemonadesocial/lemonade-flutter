@@ -23,12 +23,12 @@ class WebviewTokenService {
     _stopTokenRefresher();
   }
 
-  Future<Map<String, String>> generateHeaderWithToken() async {
+  Future<Map<String, String>?> generateHeaderWithToken() async {
     final tokenRes = await _getCurrentOrNewToken();
     if (tokenRes != null && tokenRes.isValid()) {
-      return {'x-token': 'Bearer ${tokenRes.accessToken}'};
+      return {'x-token': '${tokenRes.accessToken}'};
     }
-    return {};
+    return null;
   }
 
   Future<void> _getToken() async {

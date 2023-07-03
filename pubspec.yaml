@@ -57,7 +57,7 @@ dependencies:
   intl: ^0.18.0
 
   # Webview
-  webview_flutter: ^4.2.2
+  flutter_inappwebview: ^5.7.2+3
 
 dev_dependencies:
   flutter_test:
