@@ -1,3 +1,4 @@
+import 'package:app/core/presentation/widgets/app_limit_layout_builder_widget.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.dart';
 import 'package:app/theme/theme.dart';
@@ -14,11 +15,17 @@ class LemonadeApp extends StatelessWidget {
 
   Widget _portalBuilder(Widget child) => Portal(child: child);
 
+  Widget _limitAppLayoutBuilder(Widget child) => AppLimitLayoutBuilder(
+        child: child,
+      );
+
   @override
   Widget build(BuildContext context) {
-    return _translationProviderBuilder(
-      _portalBuilder(
-        _App(_appRouter),
+    return _limitAppLayoutBuilder(
+      _translationProviderBuilder(
+        _portalBuilder(
+          _App(_appRouter),
+        ),
       ),
     );
   }
