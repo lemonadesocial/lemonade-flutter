@@ -14,4 +14,16 @@ class ImagePlaceholder {
       ),
     );
   }
+
+  static Widget defaultPlaceholder() {
+    return Container(
+      width: double.infinity,
+      color: Colors.black,
+      child: Center(
+        child: ThemeSvgIcon(
+          builder: (filter) => Assets.icons.icLemonOutline.svg(colorFilter: filter, width: 50, height: 50),
+        ),
+      ),
+    );
+  }
 }

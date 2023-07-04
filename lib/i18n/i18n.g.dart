@@ -1,9 +1,9 @@
 /// Generated file. Do not edit.
 ///
 /// Locales: 1
-/// Strings: 35
+/// Strings: 37
 ///
-/// Built on 2023-07-04 at 06:38 UTC
+/// Built on 2023-07-04 at 08:54 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -219,6 +219,8 @@ class _I18nEventEn {
 	String get events => 'Events';
 	String get all => 'all';
 	String get attending => 'attending';
+	String get attended => 'attended';
+	String get created => 'created';
 	String get hosting => 'hosting';
 	String get buy => 'buy';
 	String get free => 'free';
@@ -290,6 +292,8 @@ extension on _I18nEn {
 			case 'event.events': return 'Events';
 			case 'event.all': return 'all';
 			case 'event.attending': return 'attending';
+			case 'event.attended': return 'attended';
+			case 'event.created': return 'created';
 			case 'event.hosting': return 'hosting';
 			case 'event.buy': return 'buy';
 			case 'event.free': return 'free';
