@@ -40,7 +40,9 @@ definitions:
       script: |
         #!/bin/sh
         set -e # exit on first failed command
-        echo $ENV_STAGING | base64 --decode > $CM_BUILD_DIR/.env
+        echo $ENV | base64 --decode > $CM_BUILD_DIR/.env
+        echo $ENV_STAGING | base64 --decode > $CM_BUILD_DIR/.env.staging
+        echo $ENV_PRODUCTION | base64 --decode > $CM_BUILD_DIR/.env.production
     - &setup_production_env
       name: Setup Production ENV
       script: |
