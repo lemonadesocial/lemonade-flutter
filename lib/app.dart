@@ -1,4 +1,5 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
+import 'package:app/core/presentation/widgets/app_limit_layout_builder_widget.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.dart';
@@ -22,12 +23,16 @@ class LemonadeApp extends StatelessWidget {
         child: child,
       );
 
+  Widget _limitAppLayoutBuilder(Widget child) => AppLimitLayoutBuilder(
+        child: child,
+      );
+
   @override
   Widget build(BuildContext context) {
-    return _translationProviderBuilder(
-      _portalBuilder(
-        _globalBlocProviderBuilder(
-          _App(_appRouter),
+    return _limitAppLayoutBuilder(
+      _translationProviderBuilder(
+        _portalBuilder(
+          _globalBlocProviderBuilder(_App(_appRouter)),
         ),
       ),
     );

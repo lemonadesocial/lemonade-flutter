@@ -222,7 +222,10 @@ class _EventsListingViewState extends State<_EventsListingView> {
 
     return Expanded(
       child: Center(
-        child: Text(emptyText, textAlign: TextAlign.center),
+        child: Text(
+          emptyText,
+          textAlign: TextAlign.center,
+        ),
       ),
     );
   }

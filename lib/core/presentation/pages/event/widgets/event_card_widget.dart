@@ -54,7 +54,8 @@ class EventCard extends StatelessWidget {
       );
 
   _buildCardBody() => event.newNewPhotosExpanded?.isNotEmpty == true
-      ? SizedBox(
+      ? Container(
+          constraints: BoxConstraints(maxHeight: 300),
           width: double.infinity,
           height: 200,
           child: CachedNetworkImage(
