@@ -7,38 +7,20 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1008216646580:android:ff5e13d8139d8a144888e1",
+        "mobilesdk_app_id": "1:1008216646580:android:44583057043f72104888e1",
         "android_client_info": {
-          "package_name": "lemonade.social"
+          "package_name": "social.lemonade.app"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "1008216646580-2upicm9i3272te15nfnoacgi8pga7uv4.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAjMBooOKunkAnkIYs31w9vs6qSXzjkcGk"
+          "current_key": "AIzaSyAqb8E-TPed4CGE-ubDYgEQhiq1Xyqi90Y"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "1008216646580-2upicm9i3272te15nfnoacgi8pga7uv4.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "1008216646580-encq1d39oj7u2fud3it0otsh60ppq8gs.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "social.lemonade.app",
-                "app_store_id": "6450694884"
-              }
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

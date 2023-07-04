@@ -79,17 +79,17 @@ android {
         development {
             dimension "default"
             resValue "string", "app_name", "Lemonade Social Development"
-            applicationId "social.lemonade.app.development"
+            applicationIdSuffix ".development"
         }
         staging {
             dimension "default"
             resValue "string", "app_name", "Lemonade Social Staging"
-            applicationId "social.lemonade.app.staging"
+            applicationIdSuffix ".staging"
         }
         production {
             dimension "default"
             resValue "string", "app_name", "Lemonade Social"
-            applicationId "social.lemonade.app"
+            applicationIdSuffix ""
         }
     }
 }
