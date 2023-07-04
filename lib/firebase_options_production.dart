@@ -8,7 +8,7 @@ import 'package:flutter/foundation.dart'
 ///
 /// Example:
 /// ```dart
-/// import 'firebase_options_staging.dart';
+/// import 'firebase_options_production.dart';
 /// // ...
 /// await Firebase.initializeApp(
 ///   options: DefaultFirebaseOptions.currentPlatform,
@@ -44,38 +44,39 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyDhb2HsAIaYblDY_Kg2F15RUT8L0_OfgeY',
-    appId: '1:610594530625:web:4846ab413bc943b997adc0',
-    messagingSenderId: '610594530625',
-    projectId: 'lemonade-staging-88d1c',
-    authDomain: 'lemonade-staging-88d1c.firebaseapp.com',
-    storageBucket: 'lemonade-staging-88d1c.appspot.com',
-    measurementId: 'G-CJ2PDGK7DV',
+    apiKey: 'AIzaSyA61EgHIslmv8VOI_DW1uzFNqhST6lSSiE',
+    appId: '1:1008216646580:web:03b585463050278e4888e1',
+    messagingSenderId: '1008216646580',
+    projectId: 'lemonade-53666233',
+    authDomain: 'lemonade-53666233.firebaseapp.com',
+    storageBucket: 'lemonade-53666233.appspot.com',
+    measurementId: 'G-42WNLGXYKX',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCWBUsTim5_Sc-yqm82L4f9IgoawK2G5lw',
-    appId: '1:610594530625:android:0f12542abff71d4197adc0',
-    messagingSenderId: '610594530625',
-    projectId: 'lemonade-staging-88d1c',
-    storageBucket: 'lemonade-staging-88d1c.appspot.com',
+    apiKey: 'AIzaSyAqb8E-TPed4CGE-ubDYgEQhiq1Xyqi90Y',
+    appId: '1:1008216646580:android:44583057043f72104888e1',
+    messagingSenderId: '1008216646580',
+    projectId: 'lemonade-53666233',
+    storageBucket: 'lemonade-53666233.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyADvjzYyT3Wl1Zfud4gJKSHQTQA_DwJBu8',
-    appId: '1:610594530625:ios:f5524cdc2292c7c497adc0',
-    messagingSenderId: '610594530625',
-    projectId: 'lemonade-staging-88d1c',
-    storageBucket: 'lemonade-staging-88d1c.appspot.com',
-    iosBundleId: 'social.lemonade.app.staging',
+    apiKey: 'AIzaSyDqOm2sNgYMv9sRnl3rtzChvycfctfKUIU',
+    appId: '1:1008216646580:ios:5564067f544e45ac4888e1',
+    messagingSenderId: '1008216646580',
+    projectId: 'lemonade-53666233',
+    storageBucket: 'lemonade-53666233.appspot.com',
+    iosBundleId: 'social.lemonade.app',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyADvjzYyT3Wl1Zfud4gJKSHQTQA_DwJBu8',
-    appId: '1:610594530625:ios:1a6c5dfa33638d0c97adc0',
-    messagingSenderId: '610594530625',
-    projectId: 'lemonade-staging-88d1c',
-    storageBucket: 'lemonade-staging-88d1c.appspot.com',
+    apiKey: 'AIzaSyDqOm2sNgYMv9sRnl3rtzChvycfctfKUIU',
+    appId: '1:1008216646580:ios:8ab39d7cbdea19ef4888e1',
+    messagingSenderId: '1008216646580',
+    projectId: 'lemonade-53666233',
+    storageBucket: 'lemonade-53666233.appspot.com',
+    iosClientId: '1008216646580-io8v8hadot7ltla3lk84fa5429ktlq4r.apps.googleusercontent.com',
     iosBundleId: 'com.lemonadesocial.app.RunnerTests',
   );
 }

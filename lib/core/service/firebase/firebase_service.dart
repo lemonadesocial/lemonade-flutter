@@ -4,10 +4,10 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:rxdart/rxdart.dart';
 
-import '../../../firebase_options_staging.dart';
+import '../../../firebase_options_staging.dart' as FirebaseOptionsStaging;
+import '../../../firebase_options_production.dart' as FirebaseOptionsProduction;
 
-Future<void> _firebaseMessagingBackgroundHandler(
-    RemoteMessage message) async {
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   if (kDebugMode) {
     print("Handling a background message: ${message.messageId}");
     print('Message data: ${message.data}');
@@ -21,7 +21,9 @@ class FirebaseService {
 
   Future<void> initialize() async {
     await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
+      options: AppConfig.env == 'production'
+          ? FirebaseOptionsProduction.DefaultFirebaseOptions.currentPlatform
+          : FirebaseOptionsStaging.DefaultFirebaseOptions.currentPlatform,
     );
     await _requestPermission();
     await registerToken();
@@ -47,20 +49,11 @@ class FirebaseService {
 
   Future<String?> registerToken() async {
     final messaging = FirebaseMessaging.instance;
-    if (DefaultFirebaseOptions.currentPlatform == DefaultFirebaseOptions.web) {
-      final vapidKey = AppConfig.firebaseVapidKey;
-      final token = await messaging.getToken(vapidKey: vapidKey);
-      if (kDebugMode) {
-        print('Registration Token: $token');
-      }
-      return token;
-    } else {
-      final token = await messaging.getToken();
-      if (kDebugMode) {
-        print('Registration Token: $token');
-      }
-      return token;
+    final token = await messaging.getToken();
+    if (kDebugMode) {
+      print('Registration Token: $token');
     }
+    return token;
   }
 
   void _setUpMessageHandlers() {
@@ -76,7 +69,6 @@ class FirebaseService {
 
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   }
-
 
   Stream<RemoteMessage> get messageStream => _messageStreamController.stream;
 
