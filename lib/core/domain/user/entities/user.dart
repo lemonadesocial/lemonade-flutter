@@ -50,6 +50,11 @@ class User {
   String? jobTitle;
   String? tagline;
 
+  String? handleTwitter;
+  String? handleInstagram;
+  String? handleFacebook;
+  String? handleLinkedin;
+
   User({
     this.id,
     this.createdAt,
@@ -83,6 +88,10 @@ class User {
     this.currency,
     this.jobTitle,
     this.tagline,
+    this.handleTwitter,
+    this.handleInstagram,
+    this.handleFacebook,
+    this.handleLinkedin,
   });
 
   factory User.fromDto(UserDto dto) {
@@ -121,6 +130,10 @@ class User {
       currency: dto.currency,
       jobTitle: dto.jobTitle,
       tagline: dto.tagline,
+      handleTwitter: dto.handleTwitter,
+      handleInstagram: dto.handleInstagram,
+      handleFacebook: dto.handleFacebook,
+      handleLinkedin: dto.handleLinkedin,
     );
   }
 }

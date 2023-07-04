@@ -99,7 +99,7 @@ class _ProfilePageViewState extends State<ProfilePageView> with SingleTickerProv
                       ProfileEventTabView(),
                       ProfilePhotosTabView(),
                       EmptyTabView(),
-                      ProfileInfoTabView(),
+                      ProfileInfoTabView(user: userProfile),
                     ],
                   ),
                 ),

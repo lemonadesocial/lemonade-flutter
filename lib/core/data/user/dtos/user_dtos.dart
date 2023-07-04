@@ -24,6 +24,11 @@ class UserDto with _$UserDto {
     @JsonKey(name: 'twitch_user_info', includeIfNull: false) TwitchUserInfoDto? twitchUserInfo,
     @JsonKey(name: 'zoom_user_info', includeIfNull: false) ZoomUserInfoDto? zoomUserInfo,
     
+    @JsonKey(name: 'handle_twitter') String? handleTwitter,
+    @JsonKey(name: 'handle_instagram') String? handleInstagram,
+    @JsonKey(name: 'handle_facebook') String? handleFacebook,
+    @JsonKey(name: 'handle_linkedin') String? handleLinkedin,
+
     String? name,
     String? username,
     String? phone,

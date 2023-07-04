@@ -43,6 +43,10 @@ _$_UserDto _$$_UserDtoFromJson(Map<String, dynamic> json) => _$_UserDto(
           ? null
           : ZoomUserInfoDto.fromJson(
               json['zoom_user_info'] as Map<String, dynamic>),
+      handleTwitter: json['handle_twitter'] as String?,
+      handleInstagram: json['handle_instagram'] as String?,
+      handleFacebook: json['handle_facebook'] as String?,
+      handleLinkedin: json['handle_linkedin'] as String?,
       name: json['name'] as String?,
       username: json['username'] as String?,
       phone: json['phone'] as String?,
@@ -90,6 +94,10 @@ Map<String, dynamic> _$$_UserDtoToJson(_$_UserDto instance) {
   writeNotNull('shopify_user_info', instance.shopifyUserInfo);
   writeNotNull('twitch_user_info', instance.twitchUserInfo);
   writeNotNull('zoom_user_info', instance.zoomUserInfo);
+  val['handle_twitter'] = instance.handleTwitter;
+  val['handle_instagram'] = instance.handleInstagram;
+  val['handle_facebook'] = instance.handleFacebook;
+  val['handle_linkedin'] = instance.handleLinkedin;
   val['name'] = instance.name;
   val['username'] = instance.username;
   val['phone'] = instance.phone;

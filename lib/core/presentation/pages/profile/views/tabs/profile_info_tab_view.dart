@@ -1,23 +1,37 @@
-import 'package:app/core/application/auth/auth_bloc.dart';
+import 'package:app/core/config.dart';
+import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/pages/profile/views/tabs/base_sliver_tab_view.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProfileInfoTabView extends StatelessWidget {
-  const ProfileInfoTabView({super.key});
+  final User user;
+
+  ProfileInfoTabView({
+    super.key,
+    required this.user,
+  });
 
   List<SvgGenImage> get _socialIconsSvg => [
         Assets.icons.icTwitter,
         Assets.icons.icInstagram,
         Assets.icons.icFacebook,
         Assets.icons.icLinkedin,
+      ];
+
+  List<String> get _socialUrls => [
+        AppConfig.twitterUrl,
+        AppConfig.instagramUrl,
+        AppConfig.facebookUrl,
+        AppConfig.linkedinUrl,
       ];
 
   @override
@@ -33,49 +47,62 @@ class ProfileInfoTabView extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Typical creator. Bacon guru. Zombie advocate.\nGamer.'),
-                SizedBox(height: Spacing.smMedium),
+                if (user.tagline != null && user.tagline?.isNotEmpty == true) ...[
+                  Text(user.tagline!),
+                  SizedBox(height: Spacing.smMedium),
+                ],
                 Text(StringUtils.capitalize(t.common.description),
                     style: Typo.small.copyWith(color: colorScheme.onSurface)),
                 SizedBox(height: Spacing.superExtraSmall),
                 Text(
-                    'I\'ve previously worked on cloud computing products at Google in San Francisco. Recently I relocated to Boulder and am open to remote roles.'),
-                SizedBox(height: Spacing.smMedium),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: _socialIconsSvg
-                      .map((icon) => Container(
-                            width: 42,
-                            height: 42,
-                            margin: EdgeInsets.only(right: Spacing.xSmall),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: colorScheme.outline),
-                              borderRadius: BorderRadius.circular(42),
-                            ),
-                            child: Center(
-                                child: ThemeSvgIcon(
-                                    color: colorScheme.onSurface, builder: (filter) => icon.svg(colorFilter: filter))),
-                          ))
-                      .toList(),
+                  (user.description != null && user.description?.isNotEmpty == true) ? user.description! : '...',
                 ),
+                SizedBox(height: Spacing.smMedium),
+                _renderSocials(context, colorScheme),
                 SizedBox(height: Spacing.smMedium),
                 Text(
                   StringUtils.capitalize(
-                    t.common.joinedOn(date: DateFormatUtils.monthYearOnly(DateTime.now())),
+                    t.common.joinedOn(date: DateFormatUtils.monthYearOnly(user.createdAt)),
                   ),
                   style: Typo.small.copyWith(color: colorScheme.onSurface),
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    context.read<AuthBloc>().add(AuthEvent.logout());
-                  },
-                  child: Text("Logout"),
-                )
               ],
             ),
           ),
         ),
       ],
+    );
+  }
+
+  Row _renderSocials(BuildContext context, ColorScheme colorScheme) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [user.handleTwitter, user.handleInstagram, user.handleFacebook, user.handleLinkedin]
+          .asMap()
+          .entries
+          .map((entry) {
+        if (entry.value == null || entry.value?.isEmpty == true) return SizedBox.shrink();
+        return GestureDetector(
+          onTap: () async {
+            AutoRouter.of(context).navigate(WebviewRoute(uri: Uri.parse('${_socialUrls[entry.key]}/${entry.value}}')));
+          },
+          child: Container(
+            width: 42,
+            height: 42,
+            margin: EdgeInsets.only(right: Spacing.xSmall),
+            decoration: BoxDecoration(
+              border: Border.all(color: colorScheme.outline),
+              borderRadius: BorderRadius.circular(42),
+            ),
+            child: Center(
+              child: ThemeSvgIcon(
+                color: colorScheme.onSurface,
+                builder: (filter) => _socialIconsSvg[entry.key].svg(colorFilter: filter),
+              ),
+            ),
+          ),
+        );
+      }).toList(),
     );
   }
 }

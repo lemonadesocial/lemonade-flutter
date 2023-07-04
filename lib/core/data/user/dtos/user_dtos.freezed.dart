@@ -50,6 +50,14 @@ mixin _$UserDto {
   TwitchUserInfoDto? get twitchUserInfo => throw _privateConstructorUsedError;
   @JsonKey(name: 'zoom_user_info', includeIfNull: false)
   ZoomUserInfoDto? get zoomUserInfo => throw _privateConstructorUsedError;
+  @JsonKey(name: 'handle_twitter')
+  String? get handleTwitter => throw _privateConstructorUsedError;
+  @JsonKey(name: 'handle_instagram')
+  String? get handleInstagram => throw _privateConstructorUsedError;
+  @JsonKey(name: 'handle_facebook')
+  String? get handleFacebook => throw _privateConstructorUsedError;
+  @JsonKey(name: 'handle_linkedin')
+  String? get handleLinkedin => throw _privateConstructorUsedError;
   String? get name => throw _privateConstructorUsedError;
   String? get username => throw _privateConstructorUsedError;
   String? get phone => throw _privateConstructorUsedError;
@@ -111,6 +119,14 @@ abstract class $UserDtoCopyWith<$Res> {
           TwitchUserInfoDto? twitchUserInfo,
       @JsonKey(name: 'zoom_user_info', includeIfNull: false)
           ZoomUserInfoDto? zoomUserInfo,
+      @JsonKey(name: 'handle_twitter')
+          String? handleTwitter,
+      @JsonKey(name: 'handle_instagram')
+          String? handleInstagram,
+      @JsonKey(name: 'handle_facebook')
+          String? handleFacebook,
+      @JsonKey(name: 'handle_linkedin')
+          String? handleLinkedin,
       String? name,
       String? username,
       String? phone,
@@ -166,6 +182,10 @@ class _$UserDtoCopyWithImpl<$Res, $Val extends UserDto>
     Object? shopifyUserInfo = freezed,
     Object? twitchUserInfo = freezed,
     Object? zoomUserInfo = freezed,
+    Object? handleTwitter = freezed,
+    Object? handleInstagram = freezed,
+    Object? handleFacebook = freezed,
+    Object? handleLinkedin = freezed,
     Object? name = freezed,
     Object? username = freezed,
     Object? phone = freezed,
@@ -246,6 +266,22 @@ class _$UserDtoCopyWithImpl<$Res, $Val extends UserDto>
           ? _value.zoomUserInfo
           : zoomUserInfo // ignore: cast_nullable_to_non_nullable
               as ZoomUserInfoDto?,
+      handleTwitter: freezed == handleTwitter
+          ? _value.handleTwitter
+          : handleTwitter // ignore: cast_nullable_to_non_nullable
+              as String?,
+      handleInstagram: freezed == handleInstagram
+          ? _value.handleInstagram
+          : handleInstagram // ignore: cast_nullable_to_non_nullable
+              as String?,
+      handleFacebook: freezed == handleFacebook
+          ? _value.handleFacebook
+          : handleFacebook // ignore: cast_nullable_to_non_nullable
+              as String?,
+      handleLinkedin: freezed == handleLinkedin
+          ? _value.handleLinkedin
+          : handleLinkedin // ignore: cast_nullable_to_non_nullable
+              as String?,
       name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -420,6 +456,14 @@ abstract class _$$_UserDtoCopyWith<$Res> implements $UserDtoCopyWith<$Res> {
           TwitchUserInfoDto? twitchUserInfo,
       @JsonKey(name: 'zoom_user_info', includeIfNull: false)
           ZoomUserInfoDto? zoomUserInfo,
+      @JsonKey(name: 'handle_twitter')
+          String? handleTwitter,
+      @JsonKey(name: 'handle_instagram')
+          String? handleInstagram,
+      @JsonKey(name: 'handle_facebook')
+          String? handleFacebook,
+      @JsonKey(name: 'handle_linkedin')
+          String? handleLinkedin,
       String? name,
       String? username,
       String? phone,
@@ -477,6 +521,10 @@ class __$$_UserDtoCopyWithImpl<$Res>
     Object? shopifyUserInfo = freezed,
     Object? twitchUserInfo = freezed,
     Object? zoomUserInfo = freezed,
+    Object? handleTwitter = freezed,
+    Object? handleInstagram = freezed,
+    Object? handleFacebook = freezed,
+    Object? handleLinkedin = freezed,
     Object? name = freezed,
     Object? username = freezed,
     Object? phone = freezed,
@@ -557,6 +605,22 @@ class __$$_UserDtoCopyWithImpl<$Res>
           ? _value.zoomUserInfo
           : zoomUserInfo // ignore: cast_nullable_to_non_nullable
               as ZoomUserInfoDto?,
+      handleTwitter: freezed == handleTwitter
+          ? _value.handleTwitter
+          : handleTwitter // ignore: cast_nullable_to_non_nullable
+              as String?,
+      handleInstagram: freezed == handleInstagram
+          ? _value.handleInstagram
+          : handleInstagram // ignore: cast_nullable_to_non_nullable
+              as String?,
+      handleFacebook: freezed == handleFacebook
+          ? _value.handleFacebook
+          : handleFacebook // ignore: cast_nullable_to_non_nullable
+              as String?,
+      handleLinkedin: freezed == handleLinkedin
+          ? _value.handleLinkedin
+          : handleLinkedin // ignore: cast_nullable_to_non_nullable
+              as String?,
       name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -667,6 +731,14 @@ class _$_UserDto implements _UserDto {
           this.twitchUserInfo,
       @JsonKey(name: 'zoom_user_info', includeIfNull: false)
           this.zoomUserInfo,
+      @JsonKey(name: 'handle_twitter')
+          this.handleTwitter,
+      @JsonKey(name: 'handle_instagram')
+          this.handleInstagram,
+      @JsonKey(name: 'handle_facebook')
+          this.handleFacebook,
+      @JsonKey(name: 'handle_linkedin')
+          this.handleLinkedin,
       this.name,
       this.username,
       this.phone,
@@ -747,6 +819,18 @@ class _$_UserDto implements _UserDto {
   @JsonKey(name: 'zoom_user_info', includeIfNull: false)
   final ZoomUserInfoDto? zoomUserInfo;
   @override
+  @JsonKey(name: 'handle_twitter')
+  final String? handleTwitter;
+  @override
+  @JsonKey(name: 'handle_instagram')
+  final String? handleInstagram;
+  @override
+  @JsonKey(name: 'handle_facebook')
+  final String? handleFacebook;
+  @override
+  @JsonKey(name: 'handle_linkedin')
+  final String? handleLinkedin;
+  @override
   final String? name;
   @override
   final String? username;
@@ -794,7 +878,7 @@ class _$_UserDto implements _UserDto {
 
   @override
   String toString() {
-    return 'UserDto(id: $id, createdAt: $createdAt, userName: $userName, displayName: $displayName, firstName: $firstName, lastName: $lastName, imageAvatar: $imageAvatar, newPhotosExpanded: $newPhotosExpanded, dateOfBirth: $dateOfBirth, phoneVerified: $phoneVerified, googleUserInfo: $googleUserInfo, discordUserInfo: $discordUserInfo, shopifyUserInfo: $shopifyUserInfo, twitchUserInfo: $twitchUserInfo, zoomUserInfo: $zoomUserInfo, name: $name, username: $username, phone: $phone, email: $email, description: $description, active: $active, cover: $cover, type: $type, industry: $industry, addresses: $addresses, hosted: $hosted, attended: $attended, friends: $friends, following: $following, followers: $followers, jobTitle: $jobTitle, tagline: $tagline, currency: $currency)';
+    return 'UserDto(id: $id, createdAt: $createdAt, userName: $userName, displayName: $displayName, firstName: $firstName, lastName: $lastName, imageAvatar: $imageAvatar, newPhotosExpanded: $newPhotosExpanded, dateOfBirth: $dateOfBirth, phoneVerified: $phoneVerified, googleUserInfo: $googleUserInfo, discordUserInfo: $discordUserInfo, shopifyUserInfo: $shopifyUserInfo, twitchUserInfo: $twitchUserInfo, zoomUserInfo: $zoomUserInfo, handleTwitter: $handleTwitter, handleInstagram: $handleInstagram, handleFacebook: $handleFacebook, handleLinkedin: $handleLinkedin, name: $name, username: $username, phone: $phone, email: $email, description: $description, active: $active, cover: $cover, type: $type, industry: $industry, addresses: $addresses, hosted: $hosted, attended: $attended, friends: $friends, following: $following, followers: $followers, jobTitle: $jobTitle, tagline: $tagline, currency: $currency)';
   }
 
   @override
@@ -831,6 +915,14 @@ class _$_UserDto implements _UserDto {
                 other.twitchUserInfo == twitchUserInfo) &&
             (identical(other.zoomUserInfo, zoomUserInfo) ||
                 other.zoomUserInfo == zoomUserInfo) &&
+            (identical(other.handleTwitter, handleTwitter) ||
+                other.handleTwitter == handleTwitter) &&
+            (identical(other.handleInstagram, handleInstagram) ||
+                other.handleInstagram == handleInstagram) &&
+            (identical(other.handleFacebook, handleFacebook) ||
+                other.handleFacebook == handleFacebook) &&
+            (identical(other.handleLinkedin, handleLinkedin) ||
+                other.handleLinkedin == handleLinkedin) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.username, username) ||
                 other.username == username) &&
@@ -879,6 +971,10 @@ class _$_UserDto implements _UserDto {
         shopifyUserInfo,
         twitchUserInfo,
         zoomUserInfo,
+        handleTwitter,
+        handleInstagram,
+        handleFacebook,
+        handleLinkedin,
         name,
         username,
         phone,
@@ -945,6 +1041,14 @@ abstract class _UserDto implements UserDto {
           final TwitchUserInfoDto? twitchUserInfo,
       @JsonKey(name: 'zoom_user_info', includeIfNull: false)
           final ZoomUserInfoDto? zoomUserInfo,
+      @JsonKey(name: 'handle_twitter')
+          final String? handleTwitter,
+      @JsonKey(name: 'handle_instagram')
+          final String? handleInstagram,
+      @JsonKey(name: 'handle_facebook')
+          final String? handleFacebook,
+      @JsonKey(name: 'handle_linkedin')
+          final String? handleLinkedin,
       final String? name,
       final String? username,
       final String? phone,
@@ -1012,6 +1116,18 @@ abstract class _UserDto implements UserDto {
   @override
   @JsonKey(name: 'zoom_user_info', includeIfNull: false)
   ZoomUserInfoDto? get zoomUserInfo;
+  @override
+  @JsonKey(name: 'handle_twitter')
+  String? get handleTwitter;
+  @override
+  @JsonKey(name: 'handle_instagram')
+  String? get handleInstagram;
+  @override
+  @JsonKey(name: 'handle_facebook')
+  String? get handleFacebook;
+  @override
+  @JsonKey(name: 'handle_linkedin')
+  String? get handleLinkedin;
   @override
   String? get name;
   @override

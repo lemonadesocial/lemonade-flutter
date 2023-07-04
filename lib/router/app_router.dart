@@ -51,6 +51,11 @@ class AppRouter extends $AppRouter {
         AutoRoute(
           path: '/404',
           page: EmptyRoute.page,
-        )
+        ),
+        AutoRoute(
+          path: '/browser',
+          page: WebviewRoute.page,
+          fullscreenDialog: true,
+        ),
       ];
 }
