@@ -72,11 +72,10 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyDqOm2sNgYMv9sRnl3rtzChvycfctfKUIU',
-    appId: '1:1008216646580:ios:8ab39d7cbdea19ef4888e1',
+    appId: '1:1008216646580:ios:5564067f544e45ac4888e1',
     messagingSenderId: '1008216646580',
     projectId: 'lemonade-53666233',
     storageBucket: 'lemonade-53666233.appspot.com',
-    iosClientId: '1008216646580-io8v8hadot7ltla3lk84fa5429ktlq4r.apps.googleusercontent.com',
-    iosBundleId: 'com.lemonadesocial.app.RunnerTests',
+    iosBundleId: 'social.lemonade.app',
   );
 }

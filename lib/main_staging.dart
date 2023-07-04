@@ -14,7 +14,7 @@ void main() async {
   
   final firebaseService = FirebaseService();
   await firebaseService.initialize();
-  final token = await firebaseService.registerToken();
+  final token = await firebaseService.getToken();
   
   print('FCM Token: $token');
   

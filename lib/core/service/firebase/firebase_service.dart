@@ -26,7 +26,6 @@ class FirebaseService {
           : FirebaseOptionsStaging.DefaultFirebaseOptions.currentPlatform,
     );
     await _requestPermission();
-    await registerToken();
     _setUpMessageHandlers();
   }
 
@@ -47,7 +46,7 @@ class FirebaseService {
     }
   }
 
-  Future<String?> registerToken() async {
+  Future<String?> getToken() async {
     final messaging = FirebaseMessaging.instance;
     final token = await messaging.getToken();
     if (kDebugMode) {
