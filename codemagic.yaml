@@ -70,7 +70,8 @@ definitions:
           --build-name=1.0.0 \
           --build-number=$(($(app-store-connect get-latest-testflight-build-number "$APP_ID") + 1)) \
           --export-options-plist=/Users/builder/export_options.plist \
-          --flavor="staging"
+          --flavor="staging" \
+          -t "lib/main_staging.dart"
     - &build_ipa_production
       name: Build ipa production
       script: |
@@ -78,7 +79,8 @@ definitions:
           --build-name=1.0.0 \
           --build-number=$(($(app-store-connect get-latest-testflight-build-number "$APP_ID") + 1)) \
           --export-options-plist=/Users/builder/export_options.plist \
-          --flavor="production"
+          --flavor="production" \
+          -t "lib/main_production.dart"
     - &build_apk_staging
       name: Build apk staging
       script: |
@@ -86,7 +88,8 @@ definitions:
         flutter build apk --release \
           --build-name=1.0.$BUILD_NUMBER \
           --build-number=$BUILD_NUMBER \
-          --flavor="staging"
+          --flavor="staging" \
+          -t "lib/main_staging.dart"
   email_staging: &email_staging
     email:
       recipients:
