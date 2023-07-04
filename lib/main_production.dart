@@ -5,8 +5,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:graphql_flutter/graphql_flutter.dart' as gql_flutter;
 import 'package:app/injection/register_module.dart';
 
-// import './firebase_options_production.dart';
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: '.env.production');
@@ -16,7 +14,7 @@ void main() async {
   await firebaseService.initialize();
   final token = await firebaseService.getToken();
   
-  print('FCM Token: $token');
+  debugPrint('FCM Token: $token');
   
   registerModule();
 

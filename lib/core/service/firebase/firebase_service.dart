@@ -40,7 +40,6 @@ class FirebaseService {
       provisional: false,
       sound: true,
     );
-
     if (kDebugMode) {
       print('Permission granted: ${settings.authorizationStatus}');
     }
