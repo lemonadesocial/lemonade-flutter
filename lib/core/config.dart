@@ -4,4 +4,5 @@ class AppConfig {
   static get oauth2BaseUrl => dotenv.env['OAUTH2_BASE_URL'];
   static get oauth2ClientId => dotenv.env['OAUTH2_CLIENT_ID'];
   static get oauthRedirectScheme => 'lemonadesocial';
+  static get webUrl => dotenv.env['WEB_URL'];
 }

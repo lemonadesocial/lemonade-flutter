@@ -20,6 +20,7 @@ import 'package:app/core/presentation/pages/profile/profile_page.dart' as _i4;
 import 'package:app/core/presentation/pages/root/root_page.dart' as _i6;
 import 'package:app/core/presentation/pages/wallet/wallet_page.dart' as _i5;
 import 'package:auto_route/auto_route.dart' as _i9;
+import 'package:flutter/cupertino.dart' as _i10;
 
 abstract class $AppRouter extends _i9.RootStackRouter {
   $AppRouter({super.navigatorKey});
@@ -59,7 +60,7 @@ abstract class $AppRouter extends _i9.RootStackRouter {
     RootRoute.name: (routeData) {
       return _i9.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i9.WrappedRoute(child: const _i6.RootPage()),
+        child: const _i6.RootPage(),
       );
     },
     EventsListingRoute.name: (routeData) {
@@ -69,9 +70,19 @@ abstract class $AppRouter extends _i9.RootStackRouter {
       );
     },
     EventDetailRoute.name: (routeData) {
+      final pathParams = routeData.inheritedPathParams;
+      final args = routeData.argsAs<EventDetailRouteArgs>(
+          orElse: () => EventDetailRouteArgs(
+                eventId: pathParams.getString('id'),
+                eventName: pathParams.getString('name'),
+              ));
       return _i9.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i8.EventDetailPage(),
+        child: _i8.EventDetailPage(
+          key: args.key,
+          eventId: args.eventId,
+          eventName: args.eventName,
+        ),
       );
     },
   };
@@ -177,14 +188,47 @@ class EventsListingRoute extends _i9.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i8.EventDetailPage]
-class EventDetailRoute extends _i9.PageRouteInfo<void> {
-  const EventDetailRoute({List<_i9.PageRouteInfo>? children})
-      : super(
+class EventDetailRoute extends _i9.PageRouteInfo<EventDetailRouteArgs> {
+  EventDetailRoute({
+    _i10.Key? key,
+    required String eventId,
+    required String eventName,
+    List<_i9.PageRouteInfo>? children,
+  }) : super(
           EventDetailRoute.name,
+          args: EventDetailRouteArgs(
+            key: key,
+            eventId: eventId,
+            eventName: eventName,
+          ),
+          rawPathParams: {
+            'id': eventId,
+            'name': eventName,
+          },
           initialChildren: children,
         );
 
   static const String name = 'EventDetailRoute';
 
-  static const _i9.PageInfo<void> page = _i9.PageInfo<void>(name);
+  static const _i9.PageInfo<EventDetailRouteArgs> page =
+      _i9.PageInfo<EventDetailRouteArgs>(name);
+}
+
+class EventDetailRouteArgs {
+  const EventDetailRouteArgs({
+    this.key,
+    required this.eventId,
+    required this.eventName,
+  });
+
+  final _i10.Key? key;
+
+  final String eventId;
+
+  final String eventName;
+
+  @override
+  String toString() {
+    return 'EventDetailRouteArgs{key: $key, eventId: $eventId, eventName: $eventName}';
+  }
 }

@@ -12,6 +12,7 @@ import 'package:app/core/presentation/pages/event/widgets/event_time_filter_butt
 import 'package:app/core/presentation/widgets/lemon_chip_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/injection/register_module.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
@@ -178,6 +179,12 @@ class _EventsListingViewState extends State<_EventsListingView> {
                     : EventCard(
                         key: Key(filteredEvents[index].id ?? ''),
                         event: filteredEvents[index],
+                        onTap: () {
+                          AutoRouter.of(context).navigate(
+                            EventDetailRoute(
+                                eventId: filteredEvents[index].id!, eventName: filteredEvents[index].title ?? ''),
+                          );
+                        },
                       ),
                 separatorBuilder: (ctx, index) => SizedBox(height: Spacing.extraSmall),
                 itemCount: filteredEvents.length + 1,

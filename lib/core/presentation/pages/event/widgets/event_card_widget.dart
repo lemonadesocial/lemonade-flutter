@@ -15,25 +15,31 @@ import 'package:flutter/material.dart';
 
 class EventCard extends StatelessWidget {
   final Event event;
+  final Function()? onTap;
+
   const EventCard({
     super.key,
     required this.event,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: colorScheme.outline),
-      ),
-      child: Column(
-        children: [
-          _buildCardHeader(),
-          _buildCardBody(),
-          _buildCardFooter(context, colorScheme),
-        ],
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          border: Border.all(color: colorScheme.outline),
+        ),
+        child: Column(
+          children: [
+            _buildCardHeader(),
+            _buildCardBody(),
+            _buildCardFooter(context, colorScheme),
+          ],
+        ),
       ),
     );
   }
@@ -51,6 +57,7 @@ class EventCard extends StatelessWidget {
       ? Container(
           constraints: BoxConstraints(maxHeight: 300),
           width: double.infinity,
+          height: 200,
           child: CachedNetworkImage(
             width: double.infinity,
             fit: BoxFit.cover,
