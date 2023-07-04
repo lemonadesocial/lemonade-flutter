@@ -47,6 +47,9 @@ class User {
   int? followers;
   Currency? currency;
 
+  String? jobTitle;
+  String? tagline;
+
   User({
     this.id,
     this.createdAt,
@@ -78,6 +81,8 @@ class User {
     this.following,
     this.followers,
     this.currency,
+    this.jobTitle,
+    this.tagline,
   });
 
   factory User.fromDto(UserDto dto) {
@@ -114,6 +119,8 @@ class User {
       following: dto.following,
       followers: dto.followers,
       currency: dto.currency,
+      jobTitle: dto.jobTitle,
+      tagline: dto.tagline,
     );
   }
 }

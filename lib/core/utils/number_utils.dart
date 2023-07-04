@@ -26,4 +26,10 @@ class NumberUtils {
       return '$prefix$formattedAmount';
     }
   }
+
+  static String formatCompact({
+    num? amount, 
+  }) {
+    return NumberFormat.compact().format(amount ?? 0);
+  }
 }

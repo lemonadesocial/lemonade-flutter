@@ -1,4 +1,4 @@
-import 'package:app/core/presentation/pages/profile/widgets/tabs/base_sliver_tab_view.dart';
+import 'package:app/core/presentation/pages/profile/views/tabs/base_sliver_tab_view.dart';
 import 'package:app/core/presentation/widgets/hero_image_viewer_widget.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/utils/date_format_utils.dart';

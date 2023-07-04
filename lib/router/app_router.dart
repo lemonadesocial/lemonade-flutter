@@ -8,6 +8,7 @@ class AppRouter extends $AppRouter {
         AutoRoute(
           path: '/login',
           page: LoginRoute.page,
+          fullscreenDialog: true,
         ),
         AutoRoute(
           path: '/',
@@ -30,14 +31,26 @@ class AppRouter extends $AppRouter {
               page: WalletRoute.page,
             ),
             AutoRoute(
-              path: 'profile',
-              page: ProfileRoute.page,
+              path: 'me',
+              page: MyProfileRoute.page,
             ),
+            AutoRoute(
+              path: '404',
+              page: EmptyRoute.page,
+            )
           ],
         ),
         AutoRoute(
           path: '/events/:id/:name',
           page: EventDetailRoute.page,
         ),
+        AutoRoute(
+          path: '/profile/:id',
+          page: ProfileRoute.page,
+        ),
+        AutoRoute(
+          path: '/404',
+          page: EmptyRoute.page,
+        )
       ];
 }

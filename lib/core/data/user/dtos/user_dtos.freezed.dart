@@ -24,6 +24,8 @@ mixin _$UserDto {
   String? get id => throw _privateConstructorUsedError;
   @JsonKey(name: 'created_at', includeIfNull: false)
   DateTime? get createdAt => throw _privateConstructorUsedError;
+  @JsonKey(name: 'user_name', includeIfNull: false)
+  String? get userName => throw _privateConstructorUsedError;
   @JsonKey(name: 'display_name', includeIfNull: false)
   String? get displayName => throw _privateConstructorUsedError;
   @JsonKey(name: 'first_name', includeIfNull: false)
@@ -63,6 +65,9 @@ mixin _$UserDto {
   int? get friends => throw _privateConstructorUsedError;
   int? get following => throw _privateConstructorUsedError;
   int? get followers => throw _privateConstructorUsedError;
+  @JsonKey(name: 'job_title')
+  String? get jobTitle => throw _privateConstructorUsedError;
+  String? get tagline => throw _privateConstructorUsedError;
   Currency? get currency => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -80,6 +85,8 @@ abstract class $UserDtoCopyWith<$Res> {
           String? id,
       @JsonKey(name: 'created_at', includeIfNull: false)
           DateTime? createdAt,
+      @JsonKey(name: 'user_name', includeIfNull: false)
+          String? userName,
       @JsonKey(name: 'display_name', includeIfNull: false)
           String? displayName,
       @JsonKey(name: 'first_name', includeIfNull: false)
@@ -119,6 +126,9 @@ abstract class $UserDtoCopyWith<$Res> {
       int? friends,
       int? following,
       int? followers,
+      @JsonKey(name: 'job_title')
+          String? jobTitle,
+      String? tagline,
       Currency? currency});
 
   $GoogleUserInfoDtoCopyWith<$Res>? get googleUserInfo;
@@ -143,6 +153,7 @@ class _$UserDtoCopyWithImpl<$Res, $Val extends UserDto>
   $Res call({
     Object? id = freezed,
     Object? createdAt = freezed,
+    Object? userName = freezed,
     Object? displayName = freezed,
     Object? firstName = freezed,
     Object? lastName = freezed,
@@ -170,6 +181,8 @@ class _$UserDtoCopyWithImpl<$Res, $Val extends UserDto>
     Object? friends = freezed,
     Object? following = freezed,
     Object? followers = freezed,
+    Object? jobTitle = freezed,
+    Object? tagline = freezed,
     Object? currency = freezed,
   }) {
     return _then(_value.copyWith(
@@ -181,6 +194,10 @@ class _$UserDtoCopyWithImpl<$Res, $Val extends UserDto>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      userName: freezed == userName
+          ? _value.userName
+          : userName // ignore: cast_nullable_to_non_nullable
+              as String?,
       displayName: freezed == displayName
           ? _value.displayName
           : displayName // ignore: cast_nullable_to_non_nullable
@@ -289,6 +306,14 @@ class _$UserDtoCopyWithImpl<$Res, $Val extends UserDto>
           ? _value.followers
           : followers // ignore: cast_nullable_to_non_nullable
               as int?,
+      jobTitle: freezed == jobTitle
+          ? _value.jobTitle
+          : jobTitle // ignore: cast_nullable_to_non_nullable
+              as String?,
+      tagline: freezed == tagline
+          ? _value.tagline
+          : tagline // ignore: cast_nullable_to_non_nullable
+              as String?,
       currency: freezed == currency
           ? _value.currency
           : currency // ignore: cast_nullable_to_non_nullable
@@ -369,6 +394,8 @@ abstract class _$$_UserDtoCopyWith<$Res> implements $UserDtoCopyWith<$Res> {
           String? id,
       @JsonKey(name: 'created_at', includeIfNull: false)
           DateTime? createdAt,
+      @JsonKey(name: 'user_name', includeIfNull: false)
+          String? userName,
       @JsonKey(name: 'display_name', includeIfNull: false)
           String? displayName,
       @JsonKey(name: 'first_name', includeIfNull: false)
@@ -408,6 +435,9 @@ abstract class _$$_UserDtoCopyWith<$Res> implements $UserDtoCopyWith<$Res> {
       int? friends,
       int? following,
       int? followers,
+      @JsonKey(name: 'job_title')
+          String? jobTitle,
+      String? tagline,
       Currency? currency});
 
   @override
@@ -434,6 +464,7 @@ class __$$_UserDtoCopyWithImpl<$Res>
   $Res call({
     Object? id = freezed,
     Object? createdAt = freezed,
+    Object? userName = freezed,
     Object? displayName = freezed,
     Object? firstName = freezed,
     Object? lastName = freezed,
@@ -461,6 +492,8 @@ class __$$_UserDtoCopyWithImpl<$Res>
     Object? friends = freezed,
     Object? following = freezed,
     Object? followers = freezed,
+    Object? jobTitle = freezed,
+    Object? tagline = freezed,
     Object? currency = freezed,
   }) {
     return _then(_$_UserDto(
@@ -472,6 +505,10 @@ class __$$_UserDtoCopyWithImpl<$Res>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      userName: freezed == userName
+          ? _value.userName
+          : userName // ignore: cast_nullable_to_non_nullable
+              as String?,
       displayName: freezed == displayName
           ? _value.displayName
           : displayName // ignore: cast_nullable_to_non_nullable
@@ -580,6 +617,14 @@ class __$$_UserDtoCopyWithImpl<$Res>
           ? _value.followers
           : followers // ignore: cast_nullable_to_non_nullable
               as int?,
+      jobTitle: freezed == jobTitle
+          ? _value.jobTitle
+          : jobTitle // ignore: cast_nullable_to_non_nullable
+              as String?,
+      tagline: freezed == tagline
+          ? _value.tagline
+          : tagline // ignore: cast_nullable_to_non_nullable
+              as String?,
       currency: freezed == currency
           ? _value.currency
           : currency // ignore: cast_nullable_to_non_nullable
@@ -596,6 +641,8 @@ class _$_UserDto implements _UserDto {
           this.id,
       @JsonKey(name: 'created_at', includeIfNull: false)
           this.createdAt,
+      @JsonKey(name: 'user_name', includeIfNull: false)
+          this.userName,
       @JsonKey(name: 'display_name', includeIfNull: false)
           this.displayName,
       @JsonKey(name: 'first_name', includeIfNull: false)
@@ -635,6 +682,9 @@ class _$_UserDto implements _UserDto {
       this.friends,
       this.following,
       this.followers,
+      @JsonKey(name: 'job_title')
+          this.jobTitle,
+      this.tagline,
       this.currency})
       : _newPhotosExpanded = newPhotosExpanded,
         _addresses = addresses;
@@ -648,6 +698,9 @@ class _$_UserDto implements _UserDto {
   @override
   @JsonKey(name: 'created_at', includeIfNull: false)
   final DateTime? createdAt;
+  @override
+  @JsonKey(name: 'user_name', includeIfNull: false)
+  final String? userName;
   @override
   @JsonKey(name: 'display_name', includeIfNull: false)
   final String? displayName;
@@ -732,11 +785,16 @@ class _$_UserDto implements _UserDto {
   @override
   final int? followers;
   @override
+  @JsonKey(name: 'job_title')
+  final String? jobTitle;
+  @override
+  final String? tagline;
+  @override
   final Currency? currency;
 
   @override
   String toString() {
-    return 'UserDto(id: $id, createdAt: $createdAt, displayName: $displayName, firstName: $firstName, lastName: $lastName, imageAvatar: $imageAvatar, newPhotosExpanded: $newPhotosExpanded, dateOfBirth: $dateOfBirth, phoneVerified: $phoneVerified, googleUserInfo: $googleUserInfo, discordUserInfo: $discordUserInfo, shopifyUserInfo: $shopifyUserInfo, twitchUserInfo: $twitchUserInfo, zoomUserInfo: $zoomUserInfo, name: $name, username: $username, phone: $phone, email: $email, description: $description, active: $active, cover: $cover, type: $type, industry: $industry, addresses: $addresses, hosted: $hosted, attended: $attended, friends: $friends, following: $following, followers: $followers, currency: $currency)';
+    return 'UserDto(id: $id, createdAt: $createdAt, userName: $userName, displayName: $displayName, firstName: $firstName, lastName: $lastName, imageAvatar: $imageAvatar, newPhotosExpanded: $newPhotosExpanded, dateOfBirth: $dateOfBirth, phoneVerified: $phoneVerified, googleUserInfo: $googleUserInfo, discordUserInfo: $discordUserInfo, shopifyUserInfo: $shopifyUserInfo, twitchUserInfo: $twitchUserInfo, zoomUserInfo: $zoomUserInfo, name: $name, username: $username, phone: $phone, email: $email, description: $description, active: $active, cover: $cover, type: $type, industry: $industry, addresses: $addresses, hosted: $hosted, attended: $attended, friends: $friends, following: $following, followers: $followers, jobTitle: $jobTitle, tagline: $tagline, currency: $currency)';
   }
 
   @override
@@ -747,6 +805,8 @@ class _$_UserDto implements _UserDto {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
+            (identical(other.userName, userName) ||
+                other.userName == userName) &&
             (identical(other.displayName, displayName) ||
                 other.displayName == displayName) &&
             (identical(other.firstName, firstName) ||
@@ -793,6 +853,9 @@ class _$_UserDto implements _UserDto {
                 other.following == following) &&
             (identical(other.followers, followers) ||
                 other.followers == followers) &&
+            (identical(other.jobTitle, jobTitle) ||
+                other.jobTitle == jobTitle) &&
+            (identical(other.tagline, tagline) || other.tagline == tagline) &&
             (identical(other.currency, currency) ||
                 other.currency == currency));
   }
@@ -803,6 +866,7 @@ class _$_UserDto implements _UserDto {
         runtimeType,
         id,
         createdAt,
+        userName,
         displayName,
         firstName,
         lastName,
@@ -830,6 +894,8 @@ class _$_UserDto implements _UserDto {
         friends,
         following,
         followers,
+        jobTitle,
+        tagline,
         currency
       ]);
 
@@ -853,6 +919,8 @@ abstract class _UserDto implements UserDto {
           final String? id,
       @JsonKey(name: 'created_at', includeIfNull: false)
           final DateTime? createdAt,
+      @JsonKey(name: 'user_name', includeIfNull: false)
+          final String? userName,
       @JsonKey(name: 'display_name', includeIfNull: false)
           final String? displayName,
       @JsonKey(name: 'first_name', includeIfNull: false)
@@ -892,6 +960,9 @@ abstract class _UserDto implements UserDto {
       final int? friends,
       final int? following,
       final int? followers,
+      @JsonKey(name: 'job_title')
+          final String? jobTitle,
+      final String? tagline,
       final Currency? currency}) = _$_UserDto;
 
   factory _UserDto.fromJson(Map<String, dynamic> json) = _$_UserDto.fromJson;
@@ -902,6 +973,9 @@ abstract class _UserDto implements UserDto {
   @override
   @JsonKey(name: 'created_at', includeIfNull: false)
   DateTime? get createdAt;
+  @override
+  @JsonKey(name: 'user_name', includeIfNull: false)
+  String? get userName;
   @override
   @JsonKey(name: 'display_name', includeIfNull: false)
   String? get displayName;
@@ -968,6 +1042,11 @@ abstract class _UserDto implements UserDto {
   int? get following;
   @override
   int? get followers;
+  @override
+  @JsonKey(name: 'job_title')
+  String? get jobTitle;
+  @override
+  String? get tagline;
   @override
   Currency? get currency;
   @override

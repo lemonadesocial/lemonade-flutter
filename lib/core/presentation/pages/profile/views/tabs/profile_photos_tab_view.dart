@@ -1,5 +1,5 @@
 
-import 'package:app/core/presentation/pages/profile/widgets/tabs/base_sliver_tab_view.dart';
+import 'package:app/core/presentation/pages/profile/views/tabs/base_sliver_tab_view.dart';
 import 'package:app/core/presentation/widgets/hero_image_viewer_widget.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:cached_network_image/cached_network_image.dart';

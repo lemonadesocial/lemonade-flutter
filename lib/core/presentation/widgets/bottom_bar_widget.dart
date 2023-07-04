@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
@@ -7,6 +8,7 @@ import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BottomBar extends StatelessWidget {
   const BottomBar({
@@ -48,12 +50,19 @@ class BottomBar extends StatelessWidget {
                           builder: (filter) => Assets.icons.icWallet.svg(colorFilter: filter),
                         ),
                         path: '/wallet'),
-                    _buildItem(context,
-                        icon: LemonCircleAvatar(
-                          size: 24,
-                          url: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8YXZhdGFyfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60',
-                        ),
-                        path: '/profile')
+                    _AuthGuardItem(
+                      authenticatedChild: _buildItem(context,
+                          icon: LemonCircleAvatar(
+                            size: 24,
+                            url:
+                                'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8YXZhdGFyfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60',
+                          ),
+                          path: '/me'),
+                      unauthenticatedChild: Container(
+                        padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall, vertical: Spacing.xSmall),
+                        child: Icon(Icons.person, color: themeColor.onPrimary, size: 24),
+                      ),
+                    )
                   ],
                 )
               ],
@@ -70,6 +79,36 @@ class BottomBar extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall, vertical: Spacing.xSmall),
         child: icon,
       ),
+    );
+  }
+}
+
+class _AuthGuardItem extends StatelessWidget {
+  final Widget authenticatedChild;
+  final Widget unauthenticatedChild;
+  const _AuthGuardItem({
+    required this.authenticatedChild,
+    required this.unauthenticatedChild,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AuthBloc, AuthState>(
+      builder: (context, authState) {
+        return authState.maybeWhen(
+            authenticated: (_) {
+              return authenticatedChild;
+            },
+            unauthenticated: (_) {
+              return GestureDetector(
+                onTap: () {
+                  AutoRouter.of(context).navigateNamed('/login', includePrefixMatches: true);
+                },
+                child: unauthenticatedChild,
+              );
+            },
+            orElse: () => SizedBox.shrink());
+      },
     );
   }
 }

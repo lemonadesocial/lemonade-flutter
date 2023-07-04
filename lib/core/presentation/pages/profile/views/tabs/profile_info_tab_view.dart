@@ -1,5 +1,5 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
-import 'package:app/core/presentation/pages/profile/widgets/tabs/base_sliver_tab_view.dart';
+import 'package:app/core/presentation/pages/profile/views/tabs/base_sliver_tab_view.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/string_utils.dart';

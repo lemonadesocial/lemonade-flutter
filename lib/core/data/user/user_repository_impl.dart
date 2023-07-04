@@ -25,4 +25,22 @@ class UserRepositoryImpl implements UserRepository {
     if (result.hasException) return Left(Failure());
     return Right(result.parsedData!);
   }
+
+  @override
+  Future<Either<Failure, User>> getUserProfile({ String? userId, String? username }) async {
+    assert(userId != null || username != null);
+    final result = await _gqlClient.query(QueryOptions(
+      document: getUserQuery,
+      parserFn: (data) {
+        return User.fromDto(UserDto.fromJson(data['getUser']));
+      },
+      variables: {
+        'id': userId,
+        'username': username
+      }
+    ));
+
+    if (result.hasException) return Left(Failure());
+    return Right(result.parsedData!);
+  }
 }

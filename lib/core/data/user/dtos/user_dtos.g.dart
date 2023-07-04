@@ -11,6 +11,7 @@ _$_UserDto _$$_UserDtoFromJson(Map<String, dynamic> json) => _$_UserDto(
       createdAt: json['created_at'] == null
           ? null
           : DateTime.parse(json['created_at'] as String),
+      userName: json['user_name'] as String?,
       displayName: json['display_name'] as String?,
       firstName: json['first_name'] as String?,
       lastName: json['last_name'] as String?,
@@ -59,6 +60,8 @@ _$_UserDto _$$_UserDtoFromJson(Map<String, dynamic> json) => _$_UserDto(
       friends: json['friends'] as int?,
       following: json['following'] as int?,
       followers: json['followers'] as int?,
+      jobTitle: json['job_title'] as String?,
+      tagline: json['tagline'] as String?,
       currency: $enumDecodeNullable(_$CurrencyEnumMap, json['currency']),
     );
 
@@ -74,6 +77,7 @@ Map<String, dynamic> _$$_UserDtoToJson(_$_UserDto instance) {
   }
 
   writeNotNull('created_at', instance.createdAt?.toIso8601String());
+  writeNotNull('user_name', instance.userName);
   writeNotNull('display_name', instance.displayName);
   writeNotNull('first_name', instance.firstName);
   writeNotNull('last_name', instance.lastName);
@@ -101,6 +105,8 @@ Map<String, dynamic> _$$_UserDtoToJson(_$_UserDto instance) {
   val['friends'] = instance.friends;
   val['following'] = instance.following;
   val['followers'] = instance.followers;
+  val['job_title'] = instance.jobTitle;
+  val['tagline'] = instance.tagline;
   val['currency'] = _$CurrencyEnumMap[instance.currency];
   return val;
 }
