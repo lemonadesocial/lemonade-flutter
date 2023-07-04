@@ -61,6 +61,17 @@ class AppOauth {
     }
   }
 
+  Future<AccessTokenResponse?> manuallyRefreshToken() async {
+    AccessTokenResponse? tokenRes;
+    var curTokenRes = await getTokenFromStorage();
+
+    if (curTokenRes == null) return null;
+
+    tokenRes = await helper.refreshToken(curTokenRes);
+
+    return tokenRes;
+  }
+
   Future<AccessTokenResponse?> getTokenFromStorage() async {
     return await helper.getTokenFromStorage();
   }

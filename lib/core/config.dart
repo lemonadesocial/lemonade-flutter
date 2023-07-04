@@ -6,4 +6,5 @@ class AppConfig {
   static get oauth2ClientId => dotenv.env['OAUTH2_CLIENT_ID'];
   static get oauthRedirectScheme => 'lemonadesocial';
   static get firebaseVapidKey => dotenv.env['FIREBASE_VAPID_KEY'];
+  static get webUrl => dotenv.env['WEB_URL'];
 }

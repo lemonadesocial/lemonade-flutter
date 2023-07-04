@@ -158,6 +158,10 @@ class Assets {
 
   static const $AssetsFontsGen fonts = $AssetsFontsGen();
   static const $AssetsIconsGen icons = $AssetsIconsGen();
+  static const String index = 'assets/index.html';
+
+  /// List of all assets
+  List<String> get values => [index];
 }
 
 class AssetGenImage {

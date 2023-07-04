@@ -1,7 +1,11 @@
+import 'package:app/core/application/auth/auth_bloc.dart';
+import 'package:app/core/presentation/widgets/app_limit_layout_builder_widget.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.dart';
 import 'package:app/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_portal/flutter_portal.dart';
 
@@ -14,11 +18,22 @@ class LemonadeApp extends StatelessWidget {
 
   Widget _portalBuilder(Widget child) => Portal(child: child);
 
+  Widget _globalBlocProviderBuilder(Widget child) => BlocProvider.value(
+        value: getIt<AuthBloc>()..add(const AuthEvent.checkAuthenticated()),
+        child: child,
+      );
+
+  Widget _limitAppLayoutBuilder(Widget child) => AppLimitLayoutBuilder(
+        child: child,
+      );
+
   @override
   Widget build(BuildContext context) {
-    return _translationProviderBuilder(
-      _portalBuilder(
-        _App(_appRouter),
+    return _limitAppLayoutBuilder(
+      _translationProviderBuilder(
+        _portalBuilder(
+          _globalBlocProviderBuilder(_App(_appRouter)),
+        ),
       ),
     );
   }
