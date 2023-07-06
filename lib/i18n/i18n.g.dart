@@ -1,9 +1,9 @@
 /// Generated file. Do not edit.
 ///
 /// Locales: 1
-/// Strings: 37
+/// Strings: 38
 ///
-/// Built on 2023-07-04 at 08:54 UTC
+/// Built on 2023-07-06 at 02:25 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -163,6 +163,7 @@ class _I18nNftEn {
 	String get created => 'created';
 	String get collected => 'collected';
 	String get sold => 'sold';
+	String get emptyCreatedNfts => 'You have not created any NFTs yet';
 }
 
 // Path: auth
@@ -261,6 +262,7 @@ extension on _I18nEn {
 			case 'nft.created': return 'created';
 			case 'nft.collected': return 'collected';
 			case 'nft.sold': return 'sold';
+			case 'nft.emptyCreatedNfts': return 'You have not created any NFTs yet';
 			case 'auth.login.success': return 'Logged in successfully';
 			case 'auth.login.fail': return 'Logged in failed';
 			case 'common.today': return 'today';

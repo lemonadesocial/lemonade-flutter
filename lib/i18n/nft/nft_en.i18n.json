@@ -2,5 +2,6 @@
     "onSale": "on sale",
     "created": "created",
     "collected": "collected",
-    "sold": "sold"
+    "sold": "sold",
+    "emptyCreatedNfts": "You have not created any NFTs yet"
 }

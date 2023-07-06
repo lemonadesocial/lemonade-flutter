@@ -23,22 +23,33 @@ class BaseSliverTabView extends StatelessWidget {
         // sliverOverlapAbsorberHandleFor() can find the
         // NestedScrollView.
         builder: (BuildContext context) {
-          return CustomScrollView(
-            // The "controller" and "primary" members should be left
-            // unset, so that the NestedScrollView can control this
-            // inner scroll view.
-            // If the "controller" property is set, then this scroll
-            // view will not be associated with the NestedScrollView.
-            // The PageStorageKey should be unique to this ScrollView;
-            // it allows the list to remember its scroll position when
-            // the tab view is not on the screen.
-            key: PageStorageKey<String>(name.toString()),
-            slivers: <Widget>[
-              SliverPinnedOverlapInjector(
-                handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-              ),
-              ...children
-            ],
+          return NotificationListener(
+            onNotification: (notification) {
+              if (notification is ScrollEndNotification) {
+                if (notification.metrics.pixels == notification.metrics.maxScrollExtent) {
+                  // TODO: will handle load more here for each tab
+                  return true;
+                }
+              }
+              return true;
+            },
+            child: CustomScrollView(
+              // The "controller" and "primary" members should be left
+              // unset, so that the NestedScrollView can control this
+              // inner scroll view.
+              // If the "controller" property is set, then this scroll
+              // view will not be associated with the NestedScrollView.
+              // The PageStorageKey should be unique to this ScrollView;
+              // it allows the list to remember its scroll position when
+              // the tab view is not on the screen.
+              key: PageStorageKey<String>(name.toString()),
+              slivers: <Widget>[
+                SliverPinnedOverlapInjector(
+                  handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                ),
+                ...children
+              ],
+            ),
           );
         },
       ),
