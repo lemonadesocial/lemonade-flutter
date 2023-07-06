@@ -96,20 +96,6 @@ definitions:
           --build-number=$BUILD_NUMBER \
           --flavor="staging" \
           -t "lib/main_staging.dart"
-    - &upload_dsym_to_firebase
-      name: Upload debug symbols to Firebase Crashlytics
-      script: |
-        echo "Find build artifacts"
-        dsymPath=$(find $CM_BUILD_DIR/build/ios/archive/Runner.xcarchive -name "*.dSYM" | head -1)
-        if [[ -z ${dsymPath} ]]
-        then
-          echo "No debug symbols were found, skip publishing to Firebase Crashlytics"
-        else
-          echo "Publishing debug symbols from $dsymPath to Firebase Crashlytics"
-          ls -d -- ios/Pods/*
-          $CM_BUILD_DIR/ios/Pods/FirebaseCrashlytics/upload-symbols \
-            -gsp ios/Runner/GoogleService-Info.plist -p ios $dsymPath
-        fi
   email_staging: &email_staging
     email:
       recipients:
@@ -129,6 +115,21 @@ definitions:
       auth: integration
       submit_to_testflight: true
       submit_to_app_store: false
+  upload_dsym_to_firebase: &upload_dsym_to_firebase
+    scripts:
+      name: Upload debug symbols to Firebase Crashlytics
+      script: | 
+        echo "Find build artifacts"
+        dsymPath=$(find $CM_BUILD_DIR/build/ios/archive/Runner.xcarchive -name "*.dSYM" | head -1)
+        if [[ -z ${dsymPath} ]]
+        then
+          echo "No debug symbols were found, skip publishing to Firebase Crashlytics"
+        else
+          echo "Publishing debug symbols from $dsymPath to Firebase Crashlytics"
+          ls -d -- ios/Pods/*
+          $CM_BUILD_DIR/ios/Pods/FirebaseCrashlytics/upload-symbols \
+            -gsp ios/Runner/GoogleService-Info.plist -p ios $dsymPath
+        fi
   slack_publish_ios: &slack_publish_ios
     scripts:
       - name: Publish ipa to Slack
@@ -282,9 +283,8 @@ workflows:
       - *xcode_log
       - *dsym
       - *app
-    scripts:
-      - *upload_dsym_to_firebase
     publishing:
+      <<: *upload_dsym_to_firebase
       <<: *ios_app_store_publish
       <<: *email_staging
       <<: *slack_publish_ios
