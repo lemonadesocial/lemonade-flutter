@@ -87,36 +87,7 @@ definitions:
           --export-options-plist=/Users/builder/export_options.plist \
           --flavor="production" \
           -t "lib/main_production.dart"
-    - &build_apk_staging
-      name: Build apk staging
-      script: |
-        BUILD_NUMBER=1      
-        flutter build apk --release \
-          --build-name=1.0.$BUILD_NUMBER \
-          --build-number=$BUILD_NUMBER \
-          --flavor="staging" \
-          -t "lib/main_staging.dart"
-  email_staging: &email_staging
-    email:
-      recipients:
-        - sieu@coderpush.com
-        - thinh@coderpush.com
-        - kc@lemonade.social
-        - chris@lemonade.social
-        - jakob@lemonade.social
-        - pranoti@lemonade.social
-        - rishi@lemonade.social
-        - david@lemonade.social
-      notify:
-        success: true
-        failure: false
-  ios_app_store_publish: &ios_app_store_publish
-    app_store_connect:
-      auth: integration
-      submit_to_testflight: true
-      submit_to_app_store: false
-  upload_dsym_to_firebase: &upload_dsym_to_firebase
-    scripts:
+    - &upload_dsym_to_firebase
       name: Upload debug symbols to Firebase Crashlytics
       script: | 
         echo "Find build artifacts"
@@ -130,73 +101,80 @@ definitions:
           $CM_BUILD_DIR/ios/Pods/FirebaseCrashlytics/upload-symbols \
             -gsp ios/Runner/GoogleService-Info.plist -p ios $dsymPath
         fi
-  slack_publish_ios: &slack_publish_ios
-    scripts:
-      - name: Publish ipa to Slack
-        script: | 
-          ARTIFACT_URL=$(echo $CM_ARTIFACT_LINKS | jq -r '.[] | select(.name | endswith("'".ipa"'")) | .url')
-          curl -0 -v -X POST $SLACK_WEBHOOK_URL \
-          -H 'Content-type: application/json' \
-          --data-raw '
-          {
-            "attachments": [
-              {
-                "blocks": [
-                  {
-                    "type": "section",
-                    "text": {
-                      "type": "mrkdwn",
-                      "text": ":white_check_mark: Staging app build successful for iOS"
-                    }
-                  },
-                  {
-                    "type": "section",
-                    "fields": [
-                      {
-                        "type": "mrkdwn",
-                        "text": "*Build Link*:\n<https://codemagic.io/app/'"$CM_PROJECT_ID"'/build/'"$CM_BUILD_ID"'|Click here>"
-                      },
-                      {
-                        "type": "mrkdwn",
-                        "text": "*Pull Request*:\n<https://github.com/'"$CM_REPO_SLUG"'/pull/'"$CM_PULL_REQUEST_NUMBER"'|Open pull request>"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "section",
-                    "fields": [
-                      {
-                        "type": "mrkdwn",
-                        "text": "*Branch*\n'"$CM_BRANCH"'"
-                      },
-                      {
-                        "type": "mrkdwn",
-                        "text": "*Commit*\n'"$CM_COMMIT"'"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "actions",
-                    "elements": [
-                      {
-                        "type": "button",
-                        "text": {
-                          "type": "plain_text",
-                          "text": "Download Staging App on TestFlight"
-                        },
-                        "url": "itms-beta://beta.itunes.apple.com/v1/app/6450680676"
-                      }
-                    ]
+    - &build_apk_staging
+      name: Build apk staging
+      script: |
+        BUILD_NUMBER=1      
+        flutter build apk --release \
+          --build-name=1.0.$BUILD_NUMBER \
+          --build-number=$BUILD_NUMBER \
+          --flavor="staging" \
+          -t "lib/main_staging.dart"
+    - &notify_ios_staging_to_slack
+      name: Notify iOS Staging app to slack
+      script: | 
+        ARTIFACT_URL=$(echo $CM_ARTIFACT_LINKS | jq -r '.[] | select(.name | endswith("'".ipa"'")) | .url')
+        curl -0 -v -X POST $SLACK_WEBHOOK_URL \
+        -H 'Content-type: application/json' \
+        --data-raw '
+        {
+          "attachments": [
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": ":white_check_mark: Staging app build successful for iOS"
                   }
-                ]
-              }
-            ]
-          }'
-  slack_publish_android: &slack_publish_android
-    scripts:
-      - name: Publish apk to Slack
-        script: | 
-          ARTIFACT_URL=$(echo $CM_ARTIFACT_LINKS | jq -r '.[] | select(.name | endswith("'".apk"'")) | .url')
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Build Link*:\n<https://codemagic.io/app/'"$CM_PROJECT_ID"'/build/'"$CM_BUILD_ID"'|Click here>"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Pull Request*:\n<https://github.com/'"$CM_REPO_SLUG"'/pull/'"$CM_PULL_REQUEST_NUMBER"'|Open pull request>"
+                    }
+                  ]
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Branch*\n'"$CM_BRANCH"'"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Commit*\n'"$CM_COMMIT"'"
+                    }
+                  ]
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "Download Staging App on TestFlight"
+                      },
+                      "url": "itms-beta://beta.itunes.apple.com/v1/app/6450680676"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }'
+    - &notify_android_staging_to_slack
+      name: Notify Android Staging app to slack
+      script: | 
+        ARTIFACT_URL=$(echo $CM_ARTIFACT_LINKS | jq -r '.[] | select(.name | endswith("'".apk"'")) | .url')
           curl -0 -v -X POST $SLACK_WEBHOOK_URL \
           -H 'Content-type: application/json' \
           --data-raw '
@@ -254,6 +232,25 @@ definitions:
               }
             ]
           }'
+  email_staging: &email_staging
+    email:
+      recipients:
+        - sieu@coderpush.com
+        - thinh@coderpush.com
+        - kc@lemonade.social
+        - chris@lemonade.social
+        - jakob@lemonade.social
+        - pranoti@lemonade.social
+        - rishi@lemonade.social
+        - david@lemonade.social
+      notify:
+        success: true
+        failure: false
+  ios_app_store_publish: &ios_app_store_publish
+    app_store_connect:
+      auth: integration
+      submit_to_testflight: true
+      submit_to_app_store: false
 workflows:
   # Build iOS Staging 
   ios-staging:
@@ -284,10 +281,11 @@ workflows:
       - *dsym
       - *app
     publishing:
-      <<: *upload_dsym_to_firebase
       <<: *ios_app_store_publish
       <<: *email_staging
-      <<: *slack_publish_ios
+      scripts:
+        - *upload_dsym_to_firebase
+        - *notify_ios_staging_to_slack
   # Build Android Staging
   android-staging:
     name: Android Staging
@@ -311,4 +309,5 @@ workflows:
       - *android_log
     publishing:
       <<: *email_staging
-      <<: *slack_publish_android
+      scripts:
+        - *notify_android_staging_to_slack
