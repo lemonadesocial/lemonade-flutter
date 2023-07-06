@@ -60,6 +60,7 @@ dependencies:
 
   # Webview
   flutter_inappwebview: ^5.7.2+3
+  firebase_crashlytics: ^3.3.3
 
 dev_dependencies:
   flutter_test:
