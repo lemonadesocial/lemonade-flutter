@@ -58,6 +58,9 @@ mixin _$UserDto {
   String? get handleFacebook => throw _privateConstructorUsedError;
   @JsonKey(name: 'handle_linkedin')
   String? get handleLinkedin => throw _privateConstructorUsedError;
+  List<String>? get wallets => throw _privateConstructorUsedError;
+  @JsonKey(name: 'wallet_custodial')
+  String? get walletCustodial => throw _privateConstructorUsedError;
   String? get name => throw _privateConstructorUsedError;
   String? get username => throw _privateConstructorUsedError;
   String? get phone => throw _privateConstructorUsedError;
@@ -127,6 +130,9 @@ abstract class $UserDtoCopyWith<$Res> {
           String? handleFacebook,
       @JsonKey(name: 'handle_linkedin')
           String? handleLinkedin,
+      List<String>? wallets,
+      @JsonKey(name: 'wallet_custodial')
+          String? walletCustodial,
       String? name,
       String? username,
       String? phone,
@@ -186,6 +192,8 @@ class _$UserDtoCopyWithImpl<$Res, $Val extends UserDto>
     Object? handleInstagram = freezed,
     Object? handleFacebook = freezed,
     Object? handleLinkedin = freezed,
+    Object? wallets = freezed,
+    Object? walletCustodial = freezed,
     Object? name = freezed,
     Object? username = freezed,
     Object? phone = freezed,
@@ -281,6 +289,14 @@ class _$UserDtoCopyWithImpl<$Res, $Val extends UserDto>
       handleLinkedin: freezed == handleLinkedin
           ? _value.handleLinkedin
           : handleLinkedin // ignore: cast_nullable_to_non_nullable
+              as String?,
+      wallets: freezed == wallets
+          ? _value.wallets
+          : wallets // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
+      walletCustodial: freezed == walletCustodial
+          ? _value.walletCustodial
+          : walletCustodial // ignore: cast_nullable_to_non_nullable
               as String?,
       name: freezed == name
           ? _value.name
@@ -464,6 +480,9 @@ abstract class _$$_UserDtoCopyWith<$Res> implements $UserDtoCopyWith<$Res> {
           String? handleFacebook,
       @JsonKey(name: 'handle_linkedin')
           String? handleLinkedin,
+      List<String>? wallets,
+      @JsonKey(name: 'wallet_custodial')
+          String? walletCustodial,
       String? name,
       String? username,
       String? phone,
@@ -525,6 +544,8 @@ class __$$_UserDtoCopyWithImpl<$Res>
     Object? handleInstagram = freezed,
     Object? handleFacebook = freezed,
     Object? handleLinkedin = freezed,
+    Object? wallets = freezed,
+    Object? walletCustodial = freezed,
     Object? name = freezed,
     Object? username = freezed,
     Object? phone = freezed,
@@ -620,6 +641,14 @@ class __$$_UserDtoCopyWithImpl<$Res>
       handleLinkedin: freezed == handleLinkedin
           ? _value.handleLinkedin
           : handleLinkedin // ignore: cast_nullable_to_non_nullable
+              as String?,
+      wallets: freezed == wallets
+          ? _value._wallets
+          : wallets // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
+      walletCustodial: freezed == walletCustodial
+          ? _value.walletCustodial
+          : walletCustodial // ignore: cast_nullable_to_non_nullable
               as String?,
       name: freezed == name
           ? _value.name
@@ -739,6 +768,9 @@ class _$_UserDto implements _UserDto {
           this.handleFacebook,
       @JsonKey(name: 'handle_linkedin')
           this.handleLinkedin,
+      final List<String>? wallets,
+      @JsonKey(name: 'wallet_custodial')
+          this.walletCustodial,
       this.name,
       this.username,
       this.phone,
@@ -759,6 +791,7 @@ class _$_UserDto implements _UserDto {
       this.tagline,
       this.currency})
       : _newPhotosExpanded = newPhotosExpanded,
+        _wallets = wallets,
         _addresses = addresses;
 
   factory _$_UserDto.fromJson(Map<String, dynamic> json) =>
@@ -830,6 +863,19 @@ class _$_UserDto implements _UserDto {
   @override
   @JsonKey(name: 'handle_linkedin')
   final String? handleLinkedin;
+  final List<String>? _wallets;
+  @override
+  List<String>? get wallets {
+    final value = _wallets;
+    if (value == null) return null;
+    if (_wallets is EqualUnmodifiableListView) return _wallets;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  @override
+  @JsonKey(name: 'wallet_custodial')
+  final String? walletCustodial;
   @override
   final String? name;
   @override
@@ -878,7 +924,7 @@ class _$_UserDto implements _UserDto {
 
   @override
   String toString() {
-    return 'UserDto(id: $id, createdAt: $createdAt, userName: $userName, displayName: $displayName, firstName: $firstName, lastName: $lastName, imageAvatar: $imageAvatar, newPhotosExpanded: $newPhotosExpanded, dateOfBirth: $dateOfBirth, phoneVerified: $phoneVerified, googleUserInfo: $googleUserInfo, discordUserInfo: $discordUserInfo, shopifyUserInfo: $shopifyUserInfo, twitchUserInfo: $twitchUserInfo, zoomUserInfo: $zoomUserInfo, handleTwitter: $handleTwitter, handleInstagram: $handleInstagram, handleFacebook: $handleFacebook, handleLinkedin: $handleLinkedin, name: $name, username: $username, phone: $phone, email: $email, description: $description, active: $active, cover: $cover, type: $type, industry: $industry, addresses: $addresses, hosted: $hosted, attended: $attended, friends: $friends, following: $following, followers: $followers, jobTitle: $jobTitle, tagline: $tagline, currency: $currency)';
+    return 'UserDto(id: $id, createdAt: $createdAt, userName: $userName, displayName: $displayName, firstName: $firstName, lastName: $lastName, imageAvatar: $imageAvatar, newPhotosExpanded: $newPhotosExpanded, dateOfBirth: $dateOfBirth, phoneVerified: $phoneVerified, googleUserInfo: $googleUserInfo, discordUserInfo: $discordUserInfo, shopifyUserInfo: $shopifyUserInfo, twitchUserInfo: $twitchUserInfo, zoomUserInfo: $zoomUserInfo, handleTwitter: $handleTwitter, handleInstagram: $handleInstagram, handleFacebook: $handleFacebook, handleLinkedin: $handleLinkedin, wallets: $wallets, walletCustodial: $walletCustodial, name: $name, username: $username, phone: $phone, email: $email, description: $description, active: $active, cover: $cover, type: $type, industry: $industry, addresses: $addresses, hosted: $hosted, attended: $attended, friends: $friends, following: $following, followers: $followers, jobTitle: $jobTitle, tagline: $tagline, currency: $currency)';
   }
 
   @override
@@ -923,6 +969,9 @@ class _$_UserDto implements _UserDto {
                 other.handleFacebook == handleFacebook) &&
             (identical(other.handleLinkedin, handleLinkedin) ||
                 other.handleLinkedin == handleLinkedin) &&
+            const DeepCollectionEquality().equals(other._wallets, _wallets) &&
+            (identical(other.walletCustodial, walletCustodial) ||
+                other.walletCustodial == walletCustodial) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.username, username) ||
                 other.username == username) &&
@@ -975,6 +1024,8 @@ class _$_UserDto implements _UserDto {
         handleInstagram,
         handleFacebook,
         handleLinkedin,
+        const DeepCollectionEquality().hash(_wallets),
+        walletCustodial,
         name,
         username,
         phone,
@@ -1049,6 +1100,9 @@ abstract class _UserDto implements UserDto {
           final String? handleFacebook,
       @JsonKey(name: 'handle_linkedin')
           final String? handleLinkedin,
+      final List<String>? wallets,
+      @JsonKey(name: 'wallet_custodial')
+          final String? walletCustodial,
       final String? name,
       final String? username,
       final String? phone,
@@ -1128,6 +1182,11 @@ abstract class _UserDto implements UserDto {
   @override
   @JsonKey(name: 'handle_linkedin')
   String? get handleLinkedin;
+  @override
+  List<String>? get wallets;
+  @override
+  @JsonKey(name: 'wallet_custodial')
+  String? get walletCustodial;
   @override
   String? get name;
   @override

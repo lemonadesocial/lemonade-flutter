@@ -29,6 +29,9 @@ class UserDto with _$UserDto {
     @JsonKey(name: 'handle_facebook') String? handleFacebook,
     @JsonKey(name: 'handle_linkedin') String? handleLinkedin,
 
+    List<String>? wallets,
+    @JsonKey(name: 'wallet_custodial') String? walletCustodial,
+
     String? name,
     String? username,
     String? phone,

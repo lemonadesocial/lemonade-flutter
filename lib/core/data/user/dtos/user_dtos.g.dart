@@ -47,6 +47,9 @@ _$_UserDto _$$_UserDtoFromJson(Map<String, dynamic> json) => _$_UserDto(
       handleInstagram: json['handle_instagram'] as String?,
       handleFacebook: json['handle_facebook'] as String?,
       handleLinkedin: json['handle_linkedin'] as String?,
+      wallets:
+          (json['wallets'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      walletCustodial: json['wallet_custodial'] as String?,
       name: json['name'] as String?,
       username: json['username'] as String?,
       phone: json['phone'] as String?,
@@ -98,6 +101,8 @@ Map<String, dynamic> _$$_UserDtoToJson(_$_UserDto instance) {
   val['handle_instagram'] = instance.handleInstagram;
   val['handle_facebook'] = instance.handleFacebook;
   val['handle_linkedin'] = instance.handleLinkedin;
+  val['wallets'] = instance.wallets;
+  val['wallet_custodial'] = instance.walletCustodial;
   val['name'] = instance.name;
   val['username'] = instance.username;
   val['phone'] = instance.phone;
