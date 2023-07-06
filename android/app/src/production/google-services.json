@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1008216646580",
+    "project_id": "lemonade-53666233",
+    "storage_bucket": "lemonade-53666233.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1008216646580:android:44583057043f72104888e1",
+        "android_client_info": {
+          "package_name": "social.lemonade.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAqb8E-TPed4CGE-ubDYgEQhiq1Xyqi90Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

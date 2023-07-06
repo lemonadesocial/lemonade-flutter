@@ -55,6 +55,8 @@ dependencies:
   # UI
   flutter_portal: ^1.1.4
   intl: ^0.18.0
+  firebase_core: ^2.14.0
+  firebase_messaging: ^14.6.4
 
   # Webview
   flutter_inappwebview: ^5.7.2+3
@@ -92,6 +94,8 @@ flutter:
     - assets/images/
     - assets/index.html
     - .env
+    - .env.staging
+    - .env.production
 
   fonts:
     - family: CircularStd
