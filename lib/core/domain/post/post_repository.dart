@@ -1,5 +1,5 @@
 import 'package:app/core/domain/post/entities/post_entities.dart';
-import 'package:app/core/domain/post/input/post_input.dart';
+import 'package:app/core/domain/post/input/get_posts_input.dart';
 import 'package:app/core/failure.dart';
 import 'package:dartz/dartz.dart';
 

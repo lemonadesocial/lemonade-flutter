@@ -1,6 +1,7 @@
 import 'package:app/core/application/event/events_listing_bloc/events_listing_bloc.dart';
 import 'package:app/core/application/profile/user_profile_bloc/user_profile_bloc.dart';
 import 'package:app/core/domain/event/event_repository.dart';
+import 'package:app/core/presentation/pages/profile/views/tabs/profile_posts_tab_view.dart';
 import 'package:app/core/presentation/pages/profile/widgets/profile_page_header_widget.dart';
 import 'package:app/core/presentation/pages/profile/widgets/profile_tabbar_delegate_widget.dart';
 import 'package:app/core/presentation/pages/profile/views/tabs/empty_tab_view.dart';
@@ -107,7 +108,7 @@ class _ProfilePageViewState extends State<ProfilePageView> with SingleTickerProv
                   child: TabBarView(
                     controller: _tabCtrl,
                     children: [
-                      EmptyTabView(),
+                      ProfilePostsTabView(user: userProfile),
                       ProfileCollectibleTabView(user: userProfile),
                       ProfileEventTabView(user: userProfile),
                       ProfilePhotosTabView(user: userProfile),

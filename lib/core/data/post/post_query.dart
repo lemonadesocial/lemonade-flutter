@@ -1,6 +1,9 @@
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:app/core/data/event/event_query.dart';
 
-const postFragment = ''' 
+const postFragment = '''
+  ${eventHostExpandedFragment}
+
   fragment postFragment on Post {
   _id
   created_at
@@ -14,6 +17,7 @@ const postFragment = '''
   user_expanded {
     _id
     name
+    username
     new_photos_expanded(limit: 1) {
       _id
       key
@@ -34,13 +38,10 @@ const postFragment = '''
     currency
     host
     host_expanded {
-      _id
-      name
-      new_photos_expanded(limit: 1) {
-        _id
-        key
-        bucket
-      }
+      ...eventHostExpandedFragment
+    }
+    cohosts_expanded(limit: 3) {
+      ...eventHostExpandedFragment
     }
     slug
     latitude

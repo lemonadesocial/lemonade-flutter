@@ -10,7 +10,7 @@ part 'post_dtos.g.dart';
 @freezed
 class PostDto with _$PostDto {
   const factory PostDto({
-    required String id,
+    @JsonKey(name: '_id') required String id,
     @JsonKey(name: 'created_at') required DateTime createdAt,
     required String user,
     required PostVisibility visibility,

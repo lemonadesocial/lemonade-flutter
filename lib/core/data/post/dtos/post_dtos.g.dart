@@ -7,7 +7,7 @@ part of 'post_dtos.dart';
 // **************************************************************************
 
 _$_PostDto _$$_PostDtoFromJson(Map<String, dynamic> json) => _$_PostDto(
-      id: json['id'] as String,
+      id: json['_id'] as String,
       createdAt: DateTime.parse(json['created_at'] as String),
       user: json['user'] as String,
       visibility: $enumDecode(_$PostVisibilityEnumMap, json['visibility']),
@@ -31,7 +31,7 @@ _$_PostDto _$$_PostDtoFromJson(Map<String, dynamic> json) => _$_PostDto(
 
 Map<String, dynamic> _$$_PostDtoToJson(_$_PostDto instance) =>
     <String, dynamic>{
-      'id': instance.id,
+      '_id': instance.id,
       'created_at': instance.createdAt.toIso8601String(),
       'user': instance.user,
       'visibility': _$PostVisibilityEnumMap[instance.visibility]!,

@@ -6,6 +6,7 @@ import 'package:app/core/domain/user/entities/user.dart';
 class Event {
   String? id;
   User? hostExpanded;
+  List<User?>? cohostsExpanded;
   List<DbFile>? newNewPhotosExpanded;
   String? title;
   String? slug;
@@ -20,6 +21,7 @@ class Event {
   Event({
     this.id,
     this.hostExpanded,
+    this.cohostsExpanded,
     this.title,
     this.slug,
     this.host,
@@ -36,6 +38,8 @@ class Event {
     return Event(
       id: dto.id,
       hostExpanded: dto.hostExpanded != null ? User.fromDto(dto.hostExpanded!) : null,
+      cohostsExpanded:
+          List.from(dto.cohostsExpanded ?? []).map((item) => item != null ? User.fromDto(item) : null).toList(),
       newNewPhotosExpanded: List.from(dto.newNewPhotosExpanded ?? []).map((i) => DbFile.fromDto(i)).toList(),
       title: dto.title,
       slug: dto.slug,

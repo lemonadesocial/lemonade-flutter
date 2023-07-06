@@ -1,19 +1,30 @@
 import 'package:graphql_flutter/graphql_flutter.dart';
 
+const eventHostExpandedFragment = '''
+  fragment eventHostExpandedFragment on User {
+    _id
+    name
+    display_name
+    username
+    new_photos_expanded(limit: 1) {
+      _id
+      key
+      bucket
+    }
+    __typename
+  }
+''';
+
 final eventFragment = '''
+  ${eventHostExpandedFragment}
+
   fragment eventFields on Event {
   _id
   title
   slug
   host
   host_expanded {
-    _id
-    name
-    new_photos_expanded(limit: 1) {
-      _id
-      key
-      bucket
-    }
+    ...eventHostExpandedFragment
   }
   new_new_photos_expanded(limit: 1) {
     key

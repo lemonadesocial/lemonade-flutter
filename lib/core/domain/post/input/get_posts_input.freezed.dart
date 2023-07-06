@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'post_input.dart';
+part of 'get_posts_input.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -20,8 +20,14 @@ GetPostsInput _$GetPostsInputFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$GetPostsInput {
+  @JsonKey(name: '_id', includeIfNull: false)
+  String? get id => throw _privateConstructorUsedError;
   @JsonKey(includeIfNull: false)
-  FilterPostsInput? get input => throw _privateConstructorUsedError;
+  String? get user => throw _privateConstructorUsedError;
+  @JsonKey(includeIfNull: false)
+  bool? get published => throw _privateConstructorUsedError;
+  @JsonKey(name: 'created_at', includeIfNull: false)
+  GetPostCreatedAtInput? get createdAt => throw _privateConstructorUsedError;
   @JsonKey(includeIfNull: false)
   int? get skip => throw _privateConstructorUsedError;
   @JsonKey(includeIfNull: false)
@@ -40,11 +46,20 @@ abstract class $GetPostsInputCopyWith<$Res> {
       _$GetPostsInputCopyWithImpl<$Res, GetPostsInput>;
   @useResult
   $Res call(
-      {@JsonKey(includeIfNull: false) FilterPostsInput? input,
-      @JsonKey(includeIfNull: false) int? skip,
-      @JsonKey(includeIfNull: false) int? limit});
+      {@JsonKey(name: '_id', includeIfNull: false)
+          String? id,
+      @JsonKey(includeIfNull: false)
+          String? user,
+      @JsonKey(includeIfNull: false)
+          bool? published,
+      @JsonKey(name: 'created_at', includeIfNull: false)
+          GetPostCreatedAtInput? createdAt,
+      @JsonKey(includeIfNull: false)
+          int? skip,
+      @JsonKey(includeIfNull: false)
+          int? limit});
 
-  $FilterPostsInputCopyWith<$Res>? get input;
+  $GetPostCreatedAtInputCopyWith<$Res>? get createdAt;
 }
 
 /// @nodoc
@@ -60,224 +75,12 @@ class _$GetPostsInputCopyWithImpl<$Res, $Val extends GetPostsInput>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? input = freezed,
-    Object? skip = freezed,
-    Object? limit = freezed,
-  }) {
-    return _then(_value.copyWith(
-      input: freezed == input
-          ? _value.input
-          : input // ignore: cast_nullable_to_non_nullable
-              as FilterPostsInput?,
-      skip: freezed == skip
-          ? _value.skip
-          : skip // ignore: cast_nullable_to_non_nullable
-              as int?,
-      limit: freezed == limit
-          ? _value.limit
-          : limit // ignore: cast_nullable_to_non_nullable
-              as int?,
-    ) as $Val);
-  }
-
-  @override
-  @pragma('vm:prefer-inline')
-  $FilterPostsInputCopyWith<$Res>? get input {
-    if (_value.input == null) {
-      return null;
-    }
-
-    return $FilterPostsInputCopyWith<$Res>(_value.input!, (value) {
-      return _then(_value.copyWith(input: value) as $Val);
-    });
-  }
-}
-
-/// @nodoc
-abstract class _$$_GetPostsInputCopyWith<$Res>
-    implements $GetPostsInputCopyWith<$Res> {
-  factory _$$_GetPostsInputCopyWith(
-          _$_GetPostsInput value, $Res Function(_$_GetPostsInput) then) =
-      __$$_GetPostsInputCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call(
-      {@JsonKey(includeIfNull: false) FilterPostsInput? input,
-      @JsonKey(includeIfNull: false) int? skip,
-      @JsonKey(includeIfNull: false) int? limit});
-
-  @override
-  $FilterPostsInputCopyWith<$Res>? get input;
-}
-
-/// @nodoc
-class __$$_GetPostsInputCopyWithImpl<$Res>
-    extends _$GetPostsInputCopyWithImpl<$Res, _$_GetPostsInput>
-    implements _$$_GetPostsInputCopyWith<$Res> {
-  __$$_GetPostsInputCopyWithImpl(
-      _$_GetPostsInput _value, $Res Function(_$_GetPostsInput) _then)
-      : super(_value, _then);
-
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? input = freezed,
-    Object? skip = freezed,
-    Object? limit = freezed,
-  }) {
-    return _then(_$_GetPostsInput(
-      input: freezed == input
-          ? _value.input
-          : input // ignore: cast_nullable_to_non_nullable
-              as FilterPostsInput?,
-      skip: freezed == skip
-          ? _value.skip
-          : skip // ignore: cast_nullable_to_non_nullable
-              as int?,
-      limit: freezed == limit
-          ? _value.limit
-          : limit // ignore: cast_nullable_to_non_nullable
-              as int?,
-    ));
-  }
-}
-
-/// @nodoc
-
-@JsonSerializable(explicitToJson: true)
-class _$_GetPostsInput implements _GetPostsInput {
-  const _$_GetPostsInput(
-      {@JsonKey(includeIfNull: false) this.input,
-      @JsonKey(includeIfNull: false) this.skip,
-      @JsonKey(includeIfNull: false) this.limit});
-
-  factory _$_GetPostsInput.fromJson(Map<String, dynamic> json) =>
-      _$$_GetPostsInputFromJson(json);
-
-  @override
-  @JsonKey(includeIfNull: false)
-  final FilterPostsInput? input;
-  @override
-  @JsonKey(includeIfNull: false)
-  final int? skip;
-  @override
-  @JsonKey(includeIfNull: false)
-  final int? limit;
-
-  @override
-  String toString() {
-    return 'GetPostsInput(input: $input, skip: $skip, limit: $limit)';
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$_GetPostsInput &&
-            (identical(other.input, input) || other.input == input) &&
-            (identical(other.skip, skip) || other.skip == skip) &&
-            (identical(other.limit, limit) || other.limit == limit));
-  }
-
-  @JsonKey(ignore: true)
-  @override
-  int get hashCode => Object.hash(runtimeType, input, skip, limit);
-
-  @JsonKey(ignore: true)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$_GetPostsInputCopyWith<_$_GetPostsInput> get copyWith =>
-      __$$_GetPostsInputCopyWithImpl<_$_GetPostsInput>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$_GetPostsInputToJson(
-      this,
-    );
-  }
-}
-
-abstract class _GetPostsInput implements GetPostsInput {
-  const factory _GetPostsInput(
-      {@JsonKey(includeIfNull: false) final FilterPostsInput? input,
-      @JsonKey(includeIfNull: false) final int? skip,
-      @JsonKey(includeIfNull: false) final int? limit}) = _$_GetPostsInput;
-
-  factory _GetPostsInput.fromJson(Map<String, dynamic> json) =
-      _$_GetPostsInput.fromJson;
-
-  @override
-  @JsonKey(includeIfNull: false)
-  FilterPostsInput? get input;
-  @override
-  @JsonKey(includeIfNull: false)
-  int? get skip;
-  @override
-  @JsonKey(includeIfNull: false)
-  int? get limit;
-  @override
-  @JsonKey(ignore: true)
-  _$$_GetPostsInputCopyWith<_$_GetPostsInput> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-FilterPostsInput _$FilterPostsInputFromJson(Map<String, dynamic> json) {
-  return _FilterPostsInput.fromJson(json);
-}
-
-/// @nodoc
-mixin _$FilterPostsInput {
-  @JsonKey(name: '_id', includeIfNull: false)
-  String? get id => throw _privateConstructorUsedError;
-  @JsonKey(includeIfNull: false)
-  String? get user => throw _privateConstructorUsedError;
-  @JsonKey(includeIfNull: false)
-  bool? get published => throw _privateConstructorUsedError;
-  @JsonKey(name: 'created_at', includeIfNull: false)
-  GetPostCreatedAtInput? get createdAt => throw _privateConstructorUsedError;
-
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
-  $FilterPostsInputCopyWith<FilterPostsInput> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $FilterPostsInputCopyWith<$Res> {
-  factory $FilterPostsInputCopyWith(
-          FilterPostsInput value, $Res Function(FilterPostsInput) then) =
-      _$FilterPostsInputCopyWithImpl<$Res, FilterPostsInput>;
-  @useResult
-  $Res call(
-      {@JsonKey(name: '_id', includeIfNull: false)
-          String? id,
-      @JsonKey(includeIfNull: false)
-          String? user,
-      @JsonKey(includeIfNull: false)
-          bool? published,
-      @JsonKey(name: 'created_at', includeIfNull: false)
-          GetPostCreatedAtInput? createdAt});
-
-  $GetPostCreatedAtInputCopyWith<$Res>? get createdAt;
-}
-
-/// @nodoc
-class _$FilterPostsInputCopyWithImpl<$Res, $Val extends FilterPostsInput>
-    implements $FilterPostsInputCopyWith<$Res> {
-  _$FilterPostsInputCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
     Object? id = freezed,
     Object? user = freezed,
     Object? published = freezed,
     Object? createdAt = freezed,
+    Object? skip = freezed,
+    Object? limit = freezed,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -296,6 +99,14 @@ class _$FilterPostsInputCopyWithImpl<$Res, $Val extends FilterPostsInput>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as GetPostCreatedAtInput?,
+      skip: freezed == skip
+          ? _value.skip
+          : skip // ignore: cast_nullable_to_non_nullable
+              as int?,
+      limit: freezed == limit
+          ? _value.limit
+          : limit // ignore: cast_nullable_to_non_nullable
+              as int?,
     ) as $Val);
   }
 
@@ -313,11 +124,11 @@ class _$FilterPostsInputCopyWithImpl<$Res, $Val extends FilterPostsInput>
 }
 
 /// @nodoc
-abstract class _$$_FilterPostsInputCopyWith<$Res>
-    implements $FilterPostsInputCopyWith<$Res> {
-  factory _$$_FilterPostsInputCopyWith(
-          _$_FilterPostsInput value, $Res Function(_$_FilterPostsInput) then) =
-      __$$_FilterPostsInputCopyWithImpl<$Res>;
+abstract class _$$_GetPostsInputCopyWith<$Res>
+    implements $GetPostsInputCopyWith<$Res> {
+  factory _$$_GetPostsInputCopyWith(
+          _$_GetPostsInput value, $Res Function(_$_GetPostsInput) then) =
+      __$$_GetPostsInputCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -328,18 +139,22 @@ abstract class _$$_FilterPostsInputCopyWith<$Res>
       @JsonKey(includeIfNull: false)
           bool? published,
       @JsonKey(name: 'created_at', includeIfNull: false)
-          GetPostCreatedAtInput? createdAt});
+          GetPostCreatedAtInput? createdAt,
+      @JsonKey(includeIfNull: false)
+          int? skip,
+      @JsonKey(includeIfNull: false)
+          int? limit});
 
   @override
   $GetPostCreatedAtInputCopyWith<$Res>? get createdAt;
 }
 
 /// @nodoc
-class __$$_FilterPostsInputCopyWithImpl<$Res>
-    extends _$FilterPostsInputCopyWithImpl<$Res, _$_FilterPostsInput>
-    implements _$$_FilterPostsInputCopyWith<$Res> {
-  __$$_FilterPostsInputCopyWithImpl(
-      _$_FilterPostsInput _value, $Res Function(_$_FilterPostsInput) _then)
+class __$$_GetPostsInputCopyWithImpl<$Res>
+    extends _$GetPostsInputCopyWithImpl<$Res, _$_GetPostsInput>
+    implements _$$_GetPostsInputCopyWith<$Res> {
+  __$$_GetPostsInputCopyWithImpl(
+      _$_GetPostsInput _value, $Res Function(_$_GetPostsInput) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -349,8 +164,10 @@ class __$$_FilterPostsInputCopyWithImpl<$Res>
     Object? user = freezed,
     Object? published = freezed,
     Object? createdAt = freezed,
+    Object? skip = freezed,
+    Object? limit = freezed,
   }) {
-    return _then(_$_FilterPostsInput(
+    return _then(_$_GetPostsInput(
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -367,6 +184,14 @@ class __$$_FilterPostsInputCopyWithImpl<$Res>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as GetPostCreatedAtInput?,
+      skip: freezed == skip
+          ? _value.skip
+          : skip // ignore: cast_nullable_to_non_nullable
+              as int?,
+      limit: freezed == limit
+          ? _value.limit
+          : limit // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -374,15 +199,17 @@ class __$$_FilterPostsInputCopyWithImpl<$Res>
 /// @nodoc
 
 @JsonSerializable(explicitToJson: true)
-class _$_FilterPostsInput implements _FilterPostsInput {
-  const _$_FilterPostsInput(
+class _$_GetPostsInput implements _GetPostsInput {
+  const _$_GetPostsInput(
       {@JsonKey(name: '_id', includeIfNull: false) this.id,
       @JsonKey(includeIfNull: false) this.user,
       @JsonKey(includeIfNull: false) this.published,
-      @JsonKey(name: 'created_at', includeIfNull: false) this.createdAt});
+      @JsonKey(name: 'created_at', includeIfNull: false) this.createdAt,
+      @JsonKey(includeIfNull: false) this.skip,
+      @JsonKey(includeIfNull: false) this.limit});
 
-  factory _$_FilterPostsInput.fromJson(Map<String, dynamic> json) =>
-      _$$_FilterPostsInputFromJson(json);
+  factory _$_GetPostsInput.fromJson(Map<String, dynamic> json) =>
+      _$$_GetPostsInputFromJson(json);
 
   @override
   @JsonKey(name: '_id', includeIfNull: false)
@@ -396,45 +223,54 @@ class _$_FilterPostsInput implements _FilterPostsInput {
   @override
   @JsonKey(name: 'created_at', includeIfNull: false)
   final GetPostCreatedAtInput? createdAt;
+  @override
+  @JsonKey(includeIfNull: false)
+  final int? skip;
+  @override
+  @JsonKey(includeIfNull: false)
+  final int? limit;
 
   @override
   String toString() {
-    return 'FilterPostsInput(id: $id, user: $user, published: $published, createdAt: $createdAt)';
+    return 'GetPostsInput(id: $id, user: $user, published: $published, createdAt: $createdAt, skip: $skip, limit: $limit)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_FilterPostsInput &&
+            other is _$_GetPostsInput &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.user, user) || other.user == user) &&
             (identical(other.published, published) ||
                 other.published == published) &&
             (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
+                other.createdAt == createdAt) &&
+            (identical(other.skip, skip) || other.skip == skip) &&
+            (identical(other.limit, limit) || other.limit == limit));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, user, published, createdAt);
+  int get hashCode =>
+      Object.hash(runtimeType, id, user, published, createdAt, skip, limit);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_FilterPostsInputCopyWith<_$_FilterPostsInput> get copyWith =>
-      __$$_FilterPostsInputCopyWithImpl<_$_FilterPostsInput>(this, _$identity);
+  _$$_GetPostsInputCopyWith<_$_GetPostsInput> get copyWith =>
+      __$$_GetPostsInputCopyWithImpl<_$_GetPostsInput>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_FilterPostsInputToJson(
+    return _$$_GetPostsInputToJson(
       this,
     );
   }
 }
 
-abstract class _FilterPostsInput implements FilterPostsInput {
-  const factory _FilterPostsInput(
+abstract class _GetPostsInput implements GetPostsInput {
+  const factory _GetPostsInput(
       {@JsonKey(name: '_id', includeIfNull: false)
           final String? id,
       @JsonKey(includeIfNull: false)
@@ -442,10 +278,14 @@ abstract class _FilterPostsInput implements FilterPostsInput {
       @JsonKey(includeIfNull: false)
           final bool? published,
       @JsonKey(name: 'created_at', includeIfNull: false)
-          final GetPostCreatedAtInput? createdAt}) = _$_FilterPostsInput;
+          final GetPostCreatedAtInput? createdAt,
+      @JsonKey(includeIfNull: false)
+          final int? skip,
+      @JsonKey(includeIfNull: false)
+          final int? limit}) = _$_GetPostsInput;
 
-  factory _FilterPostsInput.fromJson(Map<String, dynamic> json) =
-      _$_FilterPostsInput.fromJson;
+  factory _GetPostsInput.fromJson(Map<String, dynamic> json) =
+      _$_GetPostsInput.fromJson;
 
   @override
   @JsonKey(name: '_id', includeIfNull: false)
@@ -460,8 +300,14 @@ abstract class _FilterPostsInput implements FilterPostsInput {
   @JsonKey(name: 'created_at', includeIfNull: false)
   GetPostCreatedAtInput? get createdAt;
   @override
+  @JsonKey(includeIfNull: false)
+  int? get skip;
+  @override
+  @JsonKey(includeIfNull: false)
+  int? get limit;
+  @override
   @JsonKey(ignore: true)
-  _$$_FilterPostsInputCopyWith<_$_FilterPostsInput> get copyWith =>
+  _$$_GetPostsInputCopyWith<_$_GetPostsInput> get copyWith =>
       throw _privateConstructorUsedError;
 }
 

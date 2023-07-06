@@ -20,6 +20,7 @@ PostDto _$PostDtoFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$PostDto {
+  @JsonKey(name: '_id')
   String get id => throw _privateConstructorUsedError;
   @JsonKey(name: 'created_at')
   DateTime get createdAt => throw _privateConstructorUsedError;
@@ -53,7 +54,7 @@ abstract class $PostDtoCopyWith<$Res> {
       _$PostDtoCopyWithImpl<$Res, PostDto>;
   @useResult
   $Res call(
-      {String id,
+      {@JsonKey(name: '_id') String id,
       @JsonKey(name: 'created_at') DateTime createdAt,
       String user,
       PostVisibility visibility,
@@ -206,7 +207,7 @@ abstract class _$$_PostDtoCopyWith<$Res> implements $PostDtoCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {String id,
+      {@JsonKey(name: '_id') String id,
       @JsonKey(name: 'created_at') DateTime createdAt,
       String user,
       PostVisibility visibility,
@@ -319,7 +320,7 @@ class __$$_PostDtoCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_PostDto implements _PostDto {
   const _$_PostDto(
-      {required this.id,
+      {@JsonKey(name: '_id') required this.id,
       @JsonKey(name: 'created_at') required this.createdAt,
       required this.user,
       required this.visibility,
@@ -338,6 +339,7 @@ class _$_PostDto implements _PostDto {
       _$$_PostDtoFromJson(json);
 
   @override
+  @JsonKey(name: '_id')
   final String id;
   @override
   @JsonKey(name: 'created_at')
@@ -442,7 +444,7 @@ class _$_PostDto implements _PostDto {
 
 abstract class _PostDto implements PostDto {
   const factory _PostDto(
-      {required final String id,
+      {@JsonKey(name: '_id') required final String id,
       @JsonKey(name: 'created_at') required final DateTime createdAt,
       required final String user,
       required final PostVisibility visibility,
@@ -460,6 +462,7 @@ abstract class _PostDto implements PostDto {
   factory _PostDto.fromJson(Map<String, dynamic> json) = _$_PostDto.fromJson;
 
   @override
+  @JsonKey(name: '_id')
   String get id;
   @override
   @JsonKey(name: 'created_at')

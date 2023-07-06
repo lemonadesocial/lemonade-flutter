@@ -1,5 +1,5 @@
 import 'package:app/core/domain/post/entities/post_entities.dart';
-import 'package:app/core/domain/post/input/post_input.dart';
+import 'package:app/core/domain/post/input/get_posts_input.dart';
 import 'package:app/core/service/post/post_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';

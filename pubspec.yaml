@@ -58,6 +58,7 @@ dependencies:
 
   # Webview
   flutter_inappwebview: ^5.7.2+3
+  timeago: ^3.5.0
 
 dev_dependencies:
   flutter_test:

@@ -202,7 +202,7 @@ class _EventItem extends StatelessWidget {
                     TextSpan(
                       style: Typo.small.copyWith(color: colorScheme.onSurface),
                       text: DateFormatUtils.dateOnly(
-                        DateTime.now(),
+                        event.start
                       ),
                     )
                   ],
