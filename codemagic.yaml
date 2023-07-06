@@ -87,7 +87,7 @@ definitions:
           --export-options-plist=/Users/builder/export_options.plist \
           --flavor="production" \
           -t "lib/main_production.dart"
-    - &upload_dsym_to_firebase
+    - &upload_staging_dsym_to_firebase
       name: Upload debug symbols to Firebase Crashlytics
       script: | 
         echo "Find build artifacts"
@@ -99,7 +99,7 @@ definitions:
           echo "Publishing debug symbols from $dsymPath to Firebase Crashlytics"
           ls -d -- ios/Pods/*
           $CM_BUILD_DIR/ios/Pods/FirebaseCrashlytics/upload-symbols \
-            -gsp ios/Runner/GoogleService-Info.plist -p ios $dsymPath
+            -gsp ios/config/staging/GoogleService-Info.plist -p ios $dsymPath
         fi
     - &build_apk_staging
       name: Build apk staging
@@ -284,7 +284,7 @@ workflows:
       <<: *ios_app_store_publish
       <<: *email_staging
       scripts:
-        - *upload_dsym_to_firebase
+        - *upload_staging_dsym_to_firebase
         - *notify_ios_staging_to_slack
   # Build Android Staging
   android-staging:
