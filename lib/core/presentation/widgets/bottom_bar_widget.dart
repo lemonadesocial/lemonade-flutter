@@ -52,10 +52,12 @@ class BottomBar extends StatelessWidget {
                         path: '/wallet'),
                     _AuthGuardItem(
                       authenticatedChild: _buildItem(context,
-                          icon: LemonCircleAvatar(
-                            size: 24,
-                            url:
-                                'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8YXZhdGFyfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60',
+                          icon: BlocBuilder<AuthBloc, AuthState>(
+                            builder: (context, authState) => LemonCircleAvatar(
+                              size: 24,
+                              url: authState.maybeWhen(
+                                  authenticated: (authSession) => authSession.userAvatar ?? '', orElse: () => ''),
+                            ),
                           ),
                           path: '/me'),
                       unauthenticatedChild: Container(

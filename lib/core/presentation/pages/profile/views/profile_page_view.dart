@@ -10,6 +10,7 @@ import 'package:app/core/presentation/pages/profile/views/tabs/profile_info_tab_
 import 'package:app/core/presentation/pages/profile/views/tabs/profile_photos_tab_view.dart';
 import 'package:app/core/presentation/widgets/burger_menu_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_appbar_widget.dart';
+import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/service/event/event_service.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -57,7 +58,7 @@ class _ProfilePageViewState extends State<ProfilePageView> with SingleTickerProv
     final t = Translations.of(context);
     return BlocBuilder<UserProfileBloc, UserProfileState>(
       builder: (context, state) {
-        return state.maybeWhen(
+        return state.when(
           fetched: (userProfile) {
             return Scaffold(
               backgroundColor: colorScheme.primary,
@@ -97,15 +98,19 @@ class _ProfilePageViewState extends State<ProfilePageView> with SingleTickerProv
                 ],
                 body: MultiBlocProvider(
                   providers: [
-                    BlocProvider(create: (context) => EventsListingBloc(EventService(getIt<EventRepository>()))),
+                    BlocProvider(
+                      create: (context) => EventsListingBloc(
+                        EventService(getIt<EventRepository>()),
+                      ),
+                    ),
                   ],
                   child: TabBarView(
                     controller: _tabCtrl,
                     children: [
                       EmptyTabView(),
-                      ProfileCollectibleTabView(),
+                      ProfileCollectibleTabView(user: userProfile),
                       ProfileEventTabView(user: userProfile),
-                      ProfilePhotosTabView(),
+                      ProfilePhotosTabView(user: userProfile),
                       EmptyTabView(),
                       ProfileInfoTabView(user: userProfile),
                     ],
@@ -117,8 +122,8 @@ class _ProfilePageViewState extends State<ProfilePageView> with SingleTickerProv
           failure: () => Center(
             child: Text(t.common.somethingWrong),
           ),
-          orElse: () => Center(
-            child: Text('else'),
+          loading: () => Center(
+            child: Loading.defaultLoading(context),
           ),
         );
       },

@@ -3,16 +3,17 @@ import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/event_enums.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/pages/profile/views/tabs/base_sliver_tab_view.dart';
-import 'package:app/core/presentation/widgets/hero_image_viewer_widget.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_chip_widget.dart';
+import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -71,26 +72,32 @@ class _ProfileEventTabViewState extends State<ProfileEventTabView> {
             expandedHeight: _filterBarHeight,
             flexibleSpace: Container(
               color: colorScheme.primary,
-              child: Column(
-                children: [
-                  SizedBox(height: Spacing.smMedium),
-                  Row(
+              child: GestureDetector(
+                onTap: () {},
+                child: Container(
+                  color: colorScheme.primary,
+                  child: Column(
                     children: [
-                      LemonChip(
-                        label: t.event.attended,
-                        onTap: () => setEventListingType(EventListingType.attending),
-                        isActive: type == EventListingType.attending,
+                      SizedBox(height: Spacing.smMedium),
+                      Row(
+                        children: [
+                          LemonChip(
+                            label: t.event.attended,
+                            onTap: () => setEventListingType(EventListingType.attending),
+                            isActive: type == EventListingType.attending,
+                          ),
+                          SizedBox(width: Spacing.superExtraSmall),
+                          LemonChip(
+                            label: t.event.created,
+                            onTap: () => setEventListingType(EventListingType.hosting),
+                            isActive: type == EventListingType.hosting,
+                          ),
+                        ],
                       ),
-                      SizedBox(width: Spacing.superExtraSmall),
-                      LemonChip(
-                        label: t.event.created,
-                        onTap: () => setEventListingType(EventListingType.hosting),
-                        isActive: type == EventListingType.hosting,
-                      ),
+                      SizedBox(height: Spacing.smMedium),
                     ],
                   ),
-                  SizedBox(height: Spacing.smMedium),
-                ],
+                ),
               ),
             ),
           ),
@@ -104,11 +111,8 @@ class _ProfileEventTabViewState extends State<ProfileEventTabView> {
               ));
             }, loading: () {
               return SliverToBoxAdapter(
-                  child: Center(
-                child: CupertinoActivityIndicator(
-                  color: colorScheme.onPrimary,
-                ),
-              ));
+                child: Loading.defaultLoading(context),
+              );
             }, fetched: (events, filterEvents) {
               if(events.isEmpty) {
                 return SliverToBoxAdapter(
@@ -133,15 +137,8 @@ class _ProfileEventTabViewState extends State<ProfileEventTabView> {
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
                       var event = events[index];
-                      return HeroImageViewer(
-                        tag: event.id ?? '',
-                        imageUrl: event.newNewPhotosExpanded?.isNotEmpty == true
-                            ? ImageUtils.generateUrl(
-                                file: event.newNewPhotosExpanded!.first, imageConfig: ImageConfig.eventPhoto)
-                            : '',
-                        child: _EventItem(
-                          event: event,
-                        ),
+                      return _EventItem(
+                        event: event,
                       );
                     },
                     childCount: events.length,
@@ -168,45 +165,52 @@ class _EventItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    return Container(
-      decoration: BoxDecoration(
-        border: Border.all(color: colorScheme.outline),
-        borderRadius: BorderRadius.circular(LemonRadius.small),
-      ),
-      child: Stack(
-        children: [
-          Positioned.fill(
-            child: (event.newNewPhotosExpanded?.isNotEmpty == true)
-                ? ClipRRect(
-                    borderRadius: BorderRadius.circular(LemonRadius.small),
-                    child: CachedNetworkImage(
-                      imageUrl: ImageUtils.generateUrl(
-                          file: event.newNewPhotosExpanded!.first, imageConfig: ImageConfig.eventPhoto),
-                      fit: BoxFit.cover,
-                      errorWidget: (ctx, _, __) => ImagePlaceholder.eventCard(),
-                    ),
-                  )
-                : ImagePlaceholder.eventCard(),
-          ),
-          Positioned(
-            bottom: Spacing.xSmall,
-            left: Spacing.xSmall,
-            child: Text.rich(
-              TextSpan(
-                text: "${event.title}\n",
-                style: Typo.small.copyWith(fontWeight: FontWeight.w700),
-                children: [
-                  TextSpan(
-                    style: Typo.small.copyWith(color: colorScheme.onSurface),
-                    text: DateFormatUtils.dateOnly(
-                      DateTime.now(),
-                    ),
-                  )
-                ],
-              ),
+    return GestureDetector(
+      onTap: () {
+        AutoRouter.of(context).navigate(
+          EventDetailRoute(eventId: event.id ?? '', eventName: event.title ?? ''),
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: colorScheme.outline),
+          borderRadius: BorderRadius.circular(LemonRadius.small),
+        ),
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: (event.newNewPhotosExpanded?.isNotEmpty == true)
+                  ? ClipRRect(
+                      borderRadius: BorderRadius.circular(LemonRadius.small),
+                      child: CachedNetworkImage(
+                        imageUrl: ImageUtils.generateUrl(
+                            file: event.newNewPhotosExpanded!.first, imageConfig: ImageConfig.eventPhoto),
+                        fit: BoxFit.cover,
+                        errorWidget: (ctx, _, __) => ImagePlaceholder.eventCard(),
+                      ),
+                    )
+                  : ImagePlaceholder.eventCard(),
             ),
-          )
-        ],
+            Positioned(
+              bottom: Spacing.xSmall,
+              left: Spacing.xSmall,
+              child: Text.rich(
+                TextSpan(
+                  text: "${event.title}\n",
+                  style: Typo.small.copyWith(fontWeight: FontWeight.w700),
+                  children: [
+                    TextSpan(
+                      style: Typo.small.copyWith(color: colorScheme.onSurface),
+                      text: DateFormatUtils.dateOnly(
+                        DateTime.now(),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

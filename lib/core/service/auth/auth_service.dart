@@ -27,11 +27,14 @@ class AuthService {
     );
   }
 
-  Future<void> logout() async {
-    await appOAuth.logout();
+  Future<bool> logout() async {
+    return await appOAuth.logout();
   }
 
   AuthSession createSession(AuthUser user) {
-    return AuthSession(userId: user.id);
+    return AuthSession(
+      userId: user.id,
+      userAvatar: user.imageAvatar,
+    );
   }
 }
