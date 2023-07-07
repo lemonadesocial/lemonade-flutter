@@ -1,6 +1,9 @@
 import 'package:app/core/domain/post/entities/post_entities.dart';
 import 'package:app/core/domain/post/input/get_posts_input.dart';
+import 'package:app/core/failure.dart';
+import 'package:app/core/service/pagination/pagination_service.dart';
 import 'package:app/core/service/post/post_service.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -8,13 +11,24 @@ part 'posts_listing_bloc.freezed.dart';
 
 class PostsListingBloc extends Bloc<PostsListingEvent, PostsListingState> {
   final PostService postService;
-  PostsListingBloc(this.postService) : super(PostsListingState.loading()) {
+  late final PaginationService<Post, GetPostsInput> paginationService = PaginationService(
+    getDataFuture: _getPosts,
+  );
+  GetPostsInput? defaultInput;
+
+  PostsListingBloc(this.postService, {
+    this.defaultInput,
+  }) : super(PostsListingState.loading()) {
     on<PostsListingEventFetch>(_onFetch);
+  }
+
+  Future<Either<Failure, List<Post>>> _getPosts(int skip, bool endReached, { GetPostsInput? input }) async {
+    return postService.getPosts(input: input?.copyWith(skip: skip));
   }
 
   _onFetch(PostsListingEventFetch event, Emitter emit) async {
     emit(PostsListingState.loading());
-    final result = await postService.getPosts(input: event.input);
+    final result = await paginationService.fetch(event.input ?? defaultInput);
     result.fold(
       (l) => emit(PostsListingState.failure()),
       (posts) => emit(
