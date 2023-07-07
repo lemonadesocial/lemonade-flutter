@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -97,8 +98,10 @@ class _ImageViewerPage extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(LemonRadius.small),
       child: CachedNetworkImage(
-        imageUrl: heroTag,
+        imageUrl: imageUrl,
         fit: BoxFit.cover,
+        errorWidget: (_, __, ___) => ImagePlaceholder.defaultPlaceholder(),
+        placeholder: (_, __) => ImagePlaceholder.defaultPlaceholder(),
       ),
     );
   }

@@ -46,7 +46,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   _onLogout(AuthEventLogout event, Emitter emit) async {
-    await authService.logout();
+    var success = await authService.logout();
+    if(!success) return;
     emit(const AuthState.unauthenticated(isChecking: false));
   }
 

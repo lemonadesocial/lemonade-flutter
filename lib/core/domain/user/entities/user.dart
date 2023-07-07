@@ -5,47 +5,63 @@ import 'package:app/core/domain/payment/payment_enums.dart';
 
 class AuthUser {
   String id;
+  String? imageAvatar;
 
   AuthUser({
     required this.id,
+    this.imageAvatar,
   });
 
   factory AuthUser.fromDto(UserDto dto) {
-    return AuthUser(id: dto.id!);
+    return AuthUser(
+      id: dto.id!,
+      imageAvatar: dto.imageAvatar,
+    );
   }
 }
 
 class User {
-  String? id;
-  DateTime? createdAt;
-  String? displayName;
-  String? firstName;
-  String? lastName;
-  String? imageAvatar;
-  List<DbFile>? newPhotosExpanded;
-  DateTime? dateOfBirth;
-  bool? phoneVerified;
-  GoogleUserInfo? googleUserInfo;
-  DiscordUserInfo? discordUserInfo;
-  ShopifyUserInfo? shopifyUserInfo;
-  TwitchUserInfo? twitchUserInfo;
-  ZoomUserInfo? zoomUserInfo;
-  String? name;
-  String? username;
-  String? phone;
-  String? email;
-  String? description;
-  bool? active;
-  String? cover;
-  UserType? type;
-  String? industry;
-  List<Address>? addresses;
-  int? hosted;
-  int? attended;
-  int? friends;
-  int? following;
-  int? followers;
-  Currency? currency;
+  final String? id;
+  final DateTime? createdAt;
+  final String? displayName;
+  final String? firstName;
+  final String? lastName;
+  final String? imageAvatar;
+  final List<DbFile>? newPhotosExpanded;
+  final DateTime? dateOfBirth;
+  final bool? phoneVerified;
+  final GoogleUserInfo? googleUserInfo;
+  final DiscordUserInfo? discordUserInfo;
+  final ShopifyUserInfo? shopifyUserInfo;
+  final TwitchUserInfo? twitchUserInfo;
+  final ZoomUserInfo? zoomUserInfo;
+  final String? name;
+  final String? username;
+  final String? phone;
+  final String? email;
+  final String? description;
+  final bool? active;
+  final String? cover;
+  final UserType? type;
+  final String? industry;
+  final List<Address>? addresses;
+  final int? hosted;
+  final int? attended;
+  final int? friends;
+  final int? following;
+  final int? followers;
+  final Currency? currency;
+
+  final String? jobTitle;
+  final String? tagline;
+
+  final String? handleTwitter;
+  final String? handleInstagram;
+  final String? handleFacebook;
+  final String? handleLinkedin;
+
+  final List<String>? wallets;
+  final String? walletCustodial;
 
   User({
     this.id,
@@ -78,6 +94,14 @@ class User {
     this.following,
     this.followers,
     this.currency,
+    this.jobTitle,
+    this.tagline,
+    this.handleTwitter,
+    this.handleInstagram,
+    this.handleFacebook,
+    this.handleLinkedin,
+    this.wallets,
+    this.walletCustodial,
   });
 
   factory User.fromDto(UserDto dto) {
@@ -114,6 +138,14 @@ class User {
       following: dto.following,
       followers: dto.followers,
       currency: dto.currency,
+      jobTitle: dto.jobTitle,
+      tagline: dto.tagline,
+      handleTwitter: dto.handleTwitter,
+      handleInstagram: dto.handleInstagram,
+      handleFacebook: dto.handleFacebook,
+      handleLinkedin: dto.handleLinkedin,
+      wallets: dto.wallets,
+      walletCustodial: dto.walletCustodial,
     );
   }
 }

@@ -1,9 +1,9 @@
 /// Generated file. Do not edit.
 ///
 /// Locales: 1
-/// Strings: 34
+/// Strings: 38
 ///
-/// Built on 2023-06-30 at 03:57 UTC
+/// Built on 2023-07-06 at 02:25 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -163,6 +163,7 @@ class _I18nNftEn {
 	String get created => 'created';
 	String get collected => 'collected';
 	String get sold => 'sold';
+	String get emptyCreatedNfts => 'You have not created any NFTs yet';
 }
 
 // Path: auth
@@ -206,6 +207,7 @@ class _I18nCommonEn {
 		other: 'tickets',
 	);
 	late final _I18nCommonActionsEn actions = _I18nCommonActionsEn._(_root);
+	String get anonymous => 'anonymous';
 }
 
 // Path: event
@@ -218,6 +220,8 @@ class _I18nEventEn {
 	String get events => 'Events';
 	String get all => 'all';
 	String get attending => 'attending';
+	String get attended => 'attended';
+	String get created => 'created';
 	String get hosting => 'hosting';
 	String get buy => 'buy';
 	String get free => 'free';
@@ -258,6 +262,7 @@ extension on _I18nEn {
 			case 'nft.created': return 'created';
 			case 'nft.collected': return 'collected';
 			case 'nft.sold': return 'sold';
+			case 'nft.emptyCreatedNfts': return 'You have not created any NFTs yet';
 			case 'auth.login.success': return 'Logged in successfully';
 			case 'auth.login.fail': return 'Logged in failed';
 			case 'common.today': return 'today';
@@ -285,9 +290,12 @@ extension on _I18nEn {
 			);
 			case 'common.actions.edit': return 'edit';
 			case 'common.actions.connect': return 'connect';
+			case 'common.anonymous': return 'anonymous';
 			case 'event.events': return 'Events';
 			case 'event.all': return 'all';
 			case 'event.attending': return 'attending';
+			case 'event.attended': return 'attended';
+			case 'event.created': return 'created';
 			case 'event.hosting': return 'hosting';
 			case 'event.buy': return 'buy';
 			case 'event.free': return 'free';

@@ -14,6 +14,10 @@ _$_EventDto _$$_EventDtoFromJson(Map<String, dynamic> json) => _$_EventDto(
       newNewPhotosExpanded: (json['new_new_photos_expanded'] as List<dynamic>?)
           ?.map((e) => DbFileDto.fromJson(e as Map<String, dynamic>))
           .toList(),
+      cohostsExpanded: (json['cohosts_expanded'] as List<dynamic>?)
+          ?.map((e) =>
+              e == null ? null : UserDto.fromJson(e as Map<String, dynamic>))
+          .toList(),
       title: json['title'] as String?,
       slug: json['slug'] as String?,
       host: json['host'] as String?,
@@ -29,30 +33,24 @@ _$_EventDto _$$_EventDtoFromJson(Map<String, dynamic> json) => _$_EventDto(
       currency: $enumDecodeNullable(_$CurrencyEnumMap, json['currency']),
     );
 
-Map<String, dynamic> _$$_EventDtoToJson(_$_EventDto instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('_id', instance.id);
-  writeNotNull('host_expanded', instance.hostExpanded?.toJson());
-  writeNotNull('new_new_photos_expanded',
-      instance.newNewPhotosExpanded?.map((e) => e.toJson()).toList());
-  val['title'] = instance.title;
-  val['slug'] = instance.slug;
-  val['host'] = instance.host;
-  val['broadcasts'] = instance.broadcasts?.map((e) => e.toJson()).toList();
-  val['description'] = instance.description;
-  val['start'] = instance.start?.toIso8601String();
-  val['end'] = instance.end?.toIso8601String();
-  val['cost'] = instance.cost;
-  val['currency'] = _$CurrencyEnumMap[instance.currency];
-  return val;
-}
+Map<String, dynamic> _$$_EventDtoToJson(_$_EventDto instance) =>
+    <String, dynamic>{
+      '_id': instance.id,
+      'host_expanded': instance.hostExpanded?.toJson(),
+      'new_new_photos_expanded':
+          instance.newNewPhotosExpanded?.map((e) => e.toJson()).toList(),
+      'cohosts_expanded':
+          instance.cohostsExpanded?.map((e) => e?.toJson()).toList(),
+      'title': instance.title,
+      'slug': instance.slug,
+      'host': instance.host,
+      'broadcasts': instance.broadcasts?.map((e) => e.toJson()).toList(),
+      'description': instance.description,
+      'start': instance.start?.toIso8601String(),
+      'end': instance.end?.toIso8601String(),
+      'cost': instance.cost,
+      'currency': _$CurrencyEnumMap[instance.currency],
+    };
 
 const _$CurrencyEnumMap = {
   Currency.AUD: 'AUD',

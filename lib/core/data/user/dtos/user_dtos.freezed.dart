@@ -24,6 +24,8 @@ mixin _$UserDto {
   String? get id => throw _privateConstructorUsedError;
   @JsonKey(name: 'created_at', includeIfNull: false)
   DateTime? get createdAt => throw _privateConstructorUsedError;
+  @JsonKey(name: 'user_name', includeIfNull: false)
+  String? get userName => throw _privateConstructorUsedError;
   @JsonKey(name: 'display_name', includeIfNull: false)
   String? get displayName => throw _privateConstructorUsedError;
   @JsonKey(name: 'first_name', includeIfNull: false)
@@ -48,6 +50,17 @@ mixin _$UserDto {
   TwitchUserInfoDto? get twitchUserInfo => throw _privateConstructorUsedError;
   @JsonKey(name: 'zoom_user_info', includeIfNull: false)
   ZoomUserInfoDto? get zoomUserInfo => throw _privateConstructorUsedError;
+  @JsonKey(name: 'handle_twitter')
+  String? get handleTwitter => throw _privateConstructorUsedError;
+  @JsonKey(name: 'handle_instagram')
+  String? get handleInstagram => throw _privateConstructorUsedError;
+  @JsonKey(name: 'handle_facebook')
+  String? get handleFacebook => throw _privateConstructorUsedError;
+  @JsonKey(name: 'handle_linkedin')
+  String? get handleLinkedin => throw _privateConstructorUsedError;
+  List<String>? get wallets => throw _privateConstructorUsedError;
+  @JsonKey(name: 'wallet_custodial')
+  String? get walletCustodial => throw _privateConstructorUsedError;
   String? get name => throw _privateConstructorUsedError;
   String? get username => throw _privateConstructorUsedError;
   String? get phone => throw _privateConstructorUsedError;
@@ -63,6 +76,9 @@ mixin _$UserDto {
   int? get friends => throw _privateConstructorUsedError;
   int? get following => throw _privateConstructorUsedError;
   int? get followers => throw _privateConstructorUsedError;
+  @JsonKey(name: 'job_title')
+  String? get jobTitle => throw _privateConstructorUsedError;
+  String? get tagline => throw _privateConstructorUsedError;
   Currency? get currency => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -80,6 +96,8 @@ abstract class $UserDtoCopyWith<$Res> {
           String? id,
       @JsonKey(name: 'created_at', includeIfNull: false)
           DateTime? createdAt,
+      @JsonKey(name: 'user_name', includeIfNull: false)
+          String? userName,
       @JsonKey(name: 'display_name', includeIfNull: false)
           String? displayName,
       @JsonKey(name: 'first_name', includeIfNull: false)
@@ -104,6 +122,17 @@ abstract class $UserDtoCopyWith<$Res> {
           TwitchUserInfoDto? twitchUserInfo,
       @JsonKey(name: 'zoom_user_info', includeIfNull: false)
           ZoomUserInfoDto? zoomUserInfo,
+      @JsonKey(name: 'handle_twitter')
+          String? handleTwitter,
+      @JsonKey(name: 'handle_instagram')
+          String? handleInstagram,
+      @JsonKey(name: 'handle_facebook')
+          String? handleFacebook,
+      @JsonKey(name: 'handle_linkedin')
+          String? handleLinkedin,
+      List<String>? wallets,
+      @JsonKey(name: 'wallet_custodial')
+          String? walletCustodial,
       String? name,
       String? username,
       String? phone,
@@ -119,6 +148,9 @@ abstract class $UserDtoCopyWith<$Res> {
       int? friends,
       int? following,
       int? followers,
+      @JsonKey(name: 'job_title')
+          String? jobTitle,
+      String? tagline,
       Currency? currency});
 
   $GoogleUserInfoDtoCopyWith<$Res>? get googleUserInfo;
@@ -143,6 +175,7 @@ class _$UserDtoCopyWithImpl<$Res, $Val extends UserDto>
   $Res call({
     Object? id = freezed,
     Object? createdAt = freezed,
+    Object? userName = freezed,
     Object? displayName = freezed,
     Object? firstName = freezed,
     Object? lastName = freezed,
@@ -155,6 +188,12 @@ class _$UserDtoCopyWithImpl<$Res, $Val extends UserDto>
     Object? shopifyUserInfo = freezed,
     Object? twitchUserInfo = freezed,
     Object? zoomUserInfo = freezed,
+    Object? handleTwitter = freezed,
+    Object? handleInstagram = freezed,
+    Object? handleFacebook = freezed,
+    Object? handleLinkedin = freezed,
+    Object? wallets = freezed,
+    Object? walletCustodial = freezed,
     Object? name = freezed,
     Object? username = freezed,
     Object? phone = freezed,
@@ -170,6 +209,8 @@ class _$UserDtoCopyWithImpl<$Res, $Val extends UserDto>
     Object? friends = freezed,
     Object? following = freezed,
     Object? followers = freezed,
+    Object? jobTitle = freezed,
+    Object? tagline = freezed,
     Object? currency = freezed,
   }) {
     return _then(_value.copyWith(
@@ -181,6 +222,10 @@ class _$UserDtoCopyWithImpl<$Res, $Val extends UserDto>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      userName: freezed == userName
+          ? _value.userName
+          : userName // ignore: cast_nullable_to_non_nullable
+              as String?,
       displayName: freezed == displayName
           ? _value.displayName
           : displayName // ignore: cast_nullable_to_non_nullable
@@ -229,6 +274,30 @@ class _$UserDtoCopyWithImpl<$Res, $Val extends UserDto>
           ? _value.zoomUserInfo
           : zoomUserInfo // ignore: cast_nullable_to_non_nullable
               as ZoomUserInfoDto?,
+      handleTwitter: freezed == handleTwitter
+          ? _value.handleTwitter
+          : handleTwitter // ignore: cast_nullable_to_non_nullable
+              as String?,
+      handleInstagram: freezed == handleInstagram
+          ? _value.handleInstagram
+          : handleInstagram // ignore: cast_nullable_to_non_nullable
+              as String?,
+      handleFacebook: freezed == handleFacebook
+          ? _value.handleFacebook
+          : handleFacebook // ignore: cast_nullable_to_non_nullable
+              as String?,
+      handleLinkedin: freezed == handleLinkedin
+          ? _value.handleLinkedin
+          : handleLinkedin // ignore: cast_nullable_to_non_nullable
+              as String?,
+      wallets: freezed == wallets
+          ? _value.wallets
+          : wallets // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
+      walletCustodial: freezed == walletCustodial
+          ? _value.walletCustodial
+          : walletCustodial // ignore: cast_nullable_to_non_nullable
+              as String?,
       name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -289,6 +358,14 @@ class _$UserDtoCopyWithImpl<$Res, $Val extends UserDto>
           ? _value.followers
           : followers // ignore: cast_nullable_to_non_nullable
               as int?,
+      jobTitle: freezed == jobTitle
+          ? _value.jobTitle
+          : jobTitle // ignore: cast_nullable_to_non_nullable
+              as String?,
+      tagline: freezed == tagline
+          ? _value.tagline
+          : tagline // ignore: cast_nullable_to_non_nullable
+              as String?,
       currency: freezed == currency
           ? _value.currency
           : currency // ignore: cast_nullable_to_non_nullable
@@ -369,6 +446,8 @@ abstract class _$$_UserDtoCopyWith<$Res> implements $UserDtoCopyWith<$Res> {
           String? id,
       @JsonKey(name: 'created_at', includeIfNull: false)
           DateTime? createdAt,
+      @JsonKey(name: 'user_name', includeIfNull: false)
+          String? userName,
       @JsonKey(name: 'display_name', includeIfNull: false)
           String? displayName,
       @JsonKey(name: 'first_name', includeIfNull: false)
@@ -393,6 +472,17 @@ abstract class _$$_UserDtoCopyWith<$Res> implements $UserDtoCopyWith<$Res> {
           TwitchUserInfoDto? twitchUserInfo,
       @JsonKey(name: 'zoom_user_info', includeIfNull: false)
           ZoomUserInfoDto? zoomUserInfo,
+      @JsonKey(name: 'handle_twitter')
+          String? handleTwitter,
+      @JsonKey(name: 'handle_instagram')
+          String? handleInstagram,
+      @JsonKey(name: 'handle_facebook')
+          String? handleFacebook,
+      @JsonKey(name: 'handle_linkedin')
+          String? handleLinkedin,
+      List<String>? wallets,
+      @JsonKey(name: 'wallet_custodial')
+          String? walletCustodial,
       String? name,
       String? username,
       String? phone,
@@ -408,6 +498,9 @@ abstract class _$$_UserDtoCopyWith<$Res> implements $UserDtoCopyWith<$Res> {
       int? friends,
       int? following,
       int? followers,
+      @JsonKey(name: 'job_title')
+          String? jobTitle,
+      String? tagline,
       Currency? currency});
 
   @override
@@ -434,6 +527,7 @@ class __$$_UserDtoCopyWithImpl<$Res>
   $Res call({
     Object? id = freezed,
     Object? createdAt = freezed,
+    Object? userName = freezed,
     Object? displayName = freezed,
     Object? firstName = freezed,
     Object? lastName = freezed,
@@ -446,6 +540,12 @@ class __$$_UserDtoCopyWithImpl<$Res>
     Object? shopifyUserInfo = freezed,
     Object? twitchUserInfo = freezed,
     Object? zoomUserInfo = freezed,
+    Object? handleTwitter = freezed,
+    Object? handleInstagram = freezed,
+    Object? handleFacebook = freezed,
+    Object? handleLinkedin = freezed,
+    Object? wallets = freezed,
+    Object? walletCustodial = freezed,
     Object? name = freezed,
     Object? username = freezed,
     Object? phone = freezed,
@@ -461,6 +561,8 @@ class __$$_UserDtoCopyWithImpl<$Res>
     Object? friends = freezed,
     Object? following = freezed,
     Object? followers = freezed,
+    Object? jobTitle = freezed,
+    Object? tagline = freezed,
     Object? currency = freezed,
   }) {
     return _then(_$_UserDto(
@@ -472,6 +574,10 @@ class __$$_UserDtoCopyWithImpl<$Res>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      userName: freezed == userName
+          ? _value.userName
+          : userName // ignore: cast_nullable_to_non_nullable
+              as String?,
       displayName: freezed == displayName
           ? _value.displayName
           : displayName // ignore: cast_nullable_to_non_nullable
@@ -520,6 +626,30 @@ class __$$_UserDtoCopyWithImpl<$Res>
           ? _value.zoomUserInfo
           : zoomUserInfo // ignore: cast_nullable_to_non_nullable
               as ZoomUserInfoDto?,
+      handleTwitter: freezed == handleTwitter
+          ? _value.handleTwitter
+          : handleTwitter // ignore: cast_nullable_to_non_nullable
+              as String?,
+      handleInstagram: freezed == handleInstagram
+          ? _value.handleInstagram
+          : handleInstagram // ignore: cast_nullable_to_non_nullable
+              as String?,
+      handleFacebook: freezed == handleFacebook
+          ? _value.handleFacebook
+          : handleFacebook // ignore: cast_nullable_to_non_nullable
+              as String?,
+      handleLinkedin: freezed == handleLinkedin
+          ? _value.handleLinkedin
+          : handleLinkedin // ignore: cast_nullable_to_non_nullable
+              as String?,
+      wallets: freezed == wallets
+          ? _value._wallets
+          : wallets // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
+      walletCustodial: freezed == walletCustodial
+          ? _value.walletCustodial
+          : walletCustodial // ignore: cast_nullable_to_non_nullable
+              as String?,
       name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -580,6 +710,14 @@ class __$$_UserDtoCopyWithImpl<$Res>
           ? _value.followers
           : followers // ignore: cast_nullable_to_non_nullable
               as int?,
+      jobTitle: freezed == jobTitle
+          ? _value.jobTitle
+          : jobTitle // ignore: cast_nullable_to_non_nullable
+              as String?,
+      tagline: freezed == tagline
+          ? _value.tagline
+          : tagline // ignore: cast_nullable_to_non_nullable
+              as String?,
       currency: freezed == currency
           ? _value.currency
           : currency // ignore: cast_nullable_to_non_nullable
@@ -596,6 +734,8 @@ class _$_UserDto implements _UserDto {
           this.id,
       @JsonKey(name: 'created_at', includeIfNull: false)
           this.createdAt,
+      @JsonKey(name: 'user_name', includeIfNull: false)
+          this.userName,
       @JsonKey(name: 'display_name', includeIfNull: false)
           this.displayName,
       @JsonKey(name: 'first_name', includeIfNull: false)
@@ -620,6 +760,17 @@ class _$_UserDto implements _UserDto {
           this.twitchUserInfo,
       @JsonKey(name: 'zoom_user_info', includeIfNull: false)
           this.zoomUserInfo,
+      @JsonKey(name: 'handle_twitter')
+          this.handleTwitter,
+      @JsonKey(name: 'handle_instagram')
+          this.handleInstagram,
+      @JsonKey(name: 'handle_facebook')
+          this.handleFacebook,
+      @JsonKey(name: 'handle_linkedin')
+          this.handleLinkedin,
+      final List<String>? wallets,
+      @JsonKey(name: 'wallet_custodial')
+          this.walletCustodial,
       this.name,
       this.username,
       this.phone,
@@ -635,8 +786,12 @@ class _$_UserDto implements _UserDto {
       this.friends,
       this.following,
       this.followers,
+      @JsonKey(name: 'job_title')
+          this.jobTitle,
+      this.tagline,
       this.currency})
       : _newPhotosExpanded = newPhotosExpanded,
+        _wallets = wallets,
         _addresses = addresses;
 
   factory _$_UserDto.fromJson(Map<String, dynamic> json) =>
@@ -648,6 +803,9 @@ class _$_UserDto implements _UserDto {
   @override
   @JsonKey(name: 'created_at', includeIfNull: false)
   final DateTime? createdAt;
+  @override
+  @JsonKey(name: 'user_name', includeIfNull: false)
+  final String? userName;
   @override
   @JsonKey(name: 'display_name', includeIfNull: false)
   final String? displayName;
@@ -694,6 +852,31 @@ class _$_UserDto implements _UserDto {
   @JsonKey(name: 'zoom_user_info', includeIfNull: false)
   final ZoomUserInfoDto? zoomUserInfo;
   @override
+  @JsonKey(name: 'handle_twitter')
+  final String? handleTwitter;
+  @override
+  @JsonKey(name: 'handle_instagram')
+  final String? handleInstagram;
+  @override
+  @JsonKey(name: 'handle_facebook')
+  final String? handleFacebook;
+  @override
+  @JsonKey(name: 'handle_linkedin')
+  final String? handleLinkedin;
+  final List<String>? _wallets;
+  @override
+  List<String>? get wallets {
+    final value = _wallets;
+    if (value == null) return null;
+    if (_wallets is EqualUnmodifiableListView) return _wallets;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  @override
+  @JsonKey(name: 'wallet_custodial')
+  final String? walletCustodial;
+  @override
   final String? name;
   @override
   final String? username;
@@ -732,11 +915,16 @@ class _$_UserDto implements _UserDto {
   @override
   final int? followers;
   @override
+  @JsonKey(name: 'job_title')
+  final String? jobTitle;
+  @override
+  final String? tagline;
+  @override
   final Currency? currency;
 
   @override
   String toString() {
-    return 'UserDto(id: $id, createdAt: $createdAt, displayName: $displayName, firstName: $firstName, lastName: $lastName, imageAvatar: $imageAvatar, newPhotosExpanded: $newPhotosExpanded, dateOfBirth: $dateOfBirth, phoneVerified: $phoneVerified, googleUserInfo: $googleUserInfo, discordUserInfo: $discordUserInfo, shopifyUserInfo: $shopifyUserInfo, twitchUserInfo: $twitchUserInfo, zoomUserInfo: $zoomUserInfo, name: $name, username: $username, phone: $phone, email: $email, description: $description, active: $active, cover: $cover, type: $type, industry: $industry, addresses: $addresses, hosted: $hosted, attended: $attended, friends: $friends, following: $following, followers: $followers, currency: $currency)';
+    return 'UserDto(id: $id, createdAt: $createdAt, userName: $userName, displayName: $displayName, firstName: $firstName, lastName: $lastName, imageAvatar: $imageAvatar, newPhotosExpanded: $newPhotosExpanded, dateOfBirth: $dateOfBirth, phoneVerified: $phoneVerified, googleUserInfo: $googleUserInfo, discordUserInfo: $discordUserInfo, shopifyUserInfo: $shopifyUserInfo, twitchUserInfo: $twitchUserInfo, zoomUserInfo: $zoomUserInfo, handleTwitter: $handleTwitter, handleInstagram: $handleInstagram, handleFacebook: $handleFacebook, handleLinkedin: $handleLinkedin, wallets: $wallets, walletCustodial: $walletCustodial, name: $name, username: $username, phone: $phone, email: $email, description: $description, active: $active, cover: $cover, type: $type, industry: $industry, addresses: $addresses, hosted: $hosted, attended: $attended, friends: $friends, following: $following, followers: $followers, jobTitle: $jobTitle, tagline: $tagline, currency: $currency)';
   }
 
   @override
@@ -747,6 +935,8 @@ class _$_UserDto implements _UserDto {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
+            (identical(other.userName, userName) ||
+                other.userName == userName) &&
             (identical(other.displayName, displayName) ||
                 other.displayName == displayName) &&
             (identical(other.firstName, firstName) ||
@@ -771,6 +961,17 @@ class _$_UserDto implements _UserDto {
                 other.twitchUserInfo == twitchUserInfo) &&
             (identical(other.zoomUserInfo, zoomUserInfo) ||
                 other.zoomUserInfo == zoomUserInfo) &&
+            (identical(other.handleTwitter, handleTwitter) ||
+                other.handleTwitter == handleTwitter) &&
+            (identical(other.handleInstagram, handleInstagram) ||
+                other.handleInstagram == handleInstagram) &&
+            (identical(other.handleFacebook, handleFacebook) ||
+                other.handleFacebook == handleFacebook) &&
+            (identical(other.handleLinkedin, handleLinkedin) ||
+                other.handleLinkedin == handleLinkedin) &&
+            const DeepCollectionEquality().equals(other._wallets, _wallets) &&
+            (identical(other.walletCustodial, walletCustodial) ||
+                other.walletCustodial == walletCustodial) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.username, username) ||
                 other.username == username) &&
@@ -793,6 +994,9 @@ class _$_UserDto implements _UserDto {
                 other.following == following) &&
             (identical(other.followers, followers) ||
                 other.followers == followers) &&
+            (identical(other.jobTitle, jobTitle) ||
+                other.jobTitle == jobTitle) &&
+            (identical(other.tagline, tagline) || other.tagline == tagline) &&
             (identical(other.currency, currency) ||
                 other.currency == currency));
   }
@@ -803,6 +1007,7 @@ class _$_UserDto implements _UserDto {
         runtimeType,
         id,
         createdAt,
+        userName,
         displayName,
         firstName,
         lastName,
@@ -815,6 +1020,12 @@ class _$_UserDto implements _UserDto {
         shopifyUserInfo,
         twitchUserInfo,
         zoomUserInfo,
+        handleTwitter,
+        handleInstagram,
+        handleFacebook,
+        handleLinkedin,
+        const DeepCollectionEquality().hash(_wallets),
+        walletCustodial,
         name,
         username,
         phone,
@@ -830,6 +1041,8 @@ class _$_UserDto implements _UserDto {
         friends,
         following,
         followers,
+        jobTitle,
+        tagline,
         currency
       ]);
 
@@ -853,6 +1066,8 @@ abstract class _UserDto implements UserDto {
           final String? id,
       @JsonKey(name: 'created_at', includeIfNull: false)
           final DateTime? createdAt,
+      @JsonKey(name: 'user_name', includeIfNull: false)
+          final String? userName,
       @JsonKey(name: 'display_name', includeIfNull: false)
           final String? displayName,
       @JsonKey(name: 'first_name', includeIfNull: false)
@@ -877,6 +1092,17 @@ abstract class _UserDto implements UserDto {
           final TwitchUserInfoDto? twitchUserInfo,
       @JsonKey(name: 'zoom_user_info', includeIfNull: false)
           final ZoomUserInfoDto? zoomUserInfo,
+      @JsonKey(name: 'handle_twitter')
+          final String? handleTwitter,
+      @JsonKey(name: 'handle_instagram')
+          final String? handleInstagram,
+      @JsonKey(name: 'handle_facebook')
+          final String? handleFacebook,
+      @JsonKey(name: 'handle_linkedin')
+          final String? handleLinkedin,
+      final List<String>? wallets,
+      @JsonKey(name: 'wallet_custodial')
+          final String? walletCustodial,
       final String? name,
       final String? username,
       final String? phone,
@@ -892,6 +1118,9 @@ abstract class _UserDto implements UserDto {
       final int? friends,
       final int? following,
       final int? followers,
+      @JsonKey(name: 'job_title')
+          final String? jobTitle,
+      final String? tagline,
       final Currency? currency}) = _$_UserDto;
 
   factory _UserDto.fromJson(Map<String, dynamic> json) = _$_UserDto.fromJson;
@@ -902,6 +1131,9 @@ abstract class _UserDto implements UserDto {
   @override
   @JsonKey(name: 'created_at', includeIfNull: false)
   DateTime? get createdAt;
+  @override
+  @JsonKey(name: 'user_name', includeIfNull: false)
+  String? get userName;
   @override
   @JsonKey(name: 'display_name', includeIfNull: false)
   String? get displayName;
@@ -939,6 +1171,23 @@ abstract class _UserDto implements UserDto {
   @JsonKey(name: 'zoom_user_info', includeIfNull: false)
   ZoomUserInfoDto? get zoomUserInfo;
   @override
+  @JsonKey(name: 'handle_twitter')
+  String? get handleTwitter;
+  @override
+  @JsonKey(name: 'handle_instagram')
+  String? get handleInstagram;
+  @override
+  @JsonKey(name: 'handle_facebook')
+  String? get handleFacebook;
+  @override
+  @JsonKey(name: 'handle_linkedin')
+  String? get handleLinkedin;
+  @override
+  List<String>? get wallets;
+  @override
+  @JsonKey(name: 'wallet_custodial')
+  String? get walletCustodial;
+  @override
   String? get name;
   @override
   String? get username;
@@ -968,6 +1217,11 @@ abstract class _UserDto implements UserDto {
   int? get following;
   @override
   int? get followers;
+  @override
+  @JsonKey(name: 'job_title')
+  String? get jobTitle;
+  @override
+  String? get tagline;
   @override
   Currency? get currency;
   @override
