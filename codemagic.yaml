@@ -91,7 +91,7 @@ definitions:
       name: Upload debug symbols to Firebase Crashlytics
       script: | 
         echo "Find build artifacts"
-        dsymPath=$(find $CM_BUILD_DIR/build/ios/archive/Runner.xcarchive -name "*.dSYM" | head -1)
+        dsymPath=$(find $CM_BUILD_DIR/build/ios/archive/Runner.xcarchive -name "*.dSYM")
         if [[ -z ${dsymPath} ]]
         then
           echo "No debug symbols were found, skip publishing to Firebase Crashlytics"
@@ -281,11 +281,11 @@ workflows:
       - *dsym
       - *app
     publishing:
-      <<: *ios_app_store_publish
-      <<: *email_staging
+      # <<: *ios_app_store_publish
+      # <<: *email_staging
       scripts:
         - *upload_staging_dsym_to_firebase
-        - *notify_ios_staging_to_slack
+        # - *notify_ios_staging_to_slack
   # Build Android Staging
   android-staging:
     name: Android Staging
