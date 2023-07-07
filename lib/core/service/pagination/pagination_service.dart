@@ -1,47 +1,83 @@
+import 'package:app/core/failure.dart';
+import 'package:dartz/dartz.dart';
+
 class PaginationService<T, I> {
   List<T> _items = [];
-  int _currentPage = 1;
   bool _reachedEnd = false;
-  
-  Future<List<T>> Function(int skip, bool reachedEnd, {I? input}) getDataFn;
-  int limit;
+  int _skip = 0;
 
-  PaginationService({
-    required this.getDataFn,
-    this.limit = 100,
-  });
+  Future<Either<Failure, List<T>>> Function(int skip, bool reachedEnd, {I? input})? getDataFuture;
+  Stream<Either<Failure, List<T>>> Function(int skip, bool reachedEnd, {I? input})? getDataStream;
+
+  PaginationService({this.getDataFuture, this.getDataStream});
 
   List<T> get items => _items;
 
-  int get currentPage => _currentPage;
-
-  int get skip => (currentPage - 1) * 30;
+  int get skip => _skip;
 
   bool get reachedEnd => _reachedEnd;
 
-  Future<List<T>> fetch(I? input) async {
-    if (_reachedEnd) {
-      return _items;
-    }
-
-    final newItems = await getDataFn(skip, _reachedEnd, input: input);
-
-    if (newItems.isEmpty) {
-      _reachedEnd = true;
-    } else {
-      _currentPage++;
-      _items = [..._items, ...newItems];
-    }
-    return _items;
+  Future<Either<Failure, List<T>>> fetch(I? input) async {
+    return _processGetDataFuture(input);
   }
 
-  Future<List<T>> refresh(I? input) async {
-    _currentPage = 1;
+  Future<Either<Failure, List<T>>> refresh(I? input) async {
     _reachedEnd = false;
-    
-    final newItems = await getDataFn(skip, _reachedEnd, input: input);
-    _items = newItems;
+    _skip = 0;
+    return _processGetDataFuture(input);
+  }
 
+  Stream<Either<Failure, List<T>>> fetchStream(I? input) {
+    return _processGetDataStream(input);
+  }
+
+  Stream<Either<Failure, List<T>>> refreshStream(I? input) {
+    _reachedEnd = false;
+    _skip = 0;
+    return _processGetDataStream(input);
+  }
+
+  Future<Either<Failure, List<T>>> _processGetDataFuture(I? input) async {
+    if (getDataFuture == null) throw Exception("getDataFuture is required");
+
+    if (reachedEnd) {
+      return Right(_items);
+    }
+
+    final result = await getDataFuture!.call(skip, reachedEnd, input: input);
+
+    return result.fold(
+      (failure) {
+        return Left(Failure());
+      },
+      (newItems) => Right(_onReceiveNewItems(newItems)),
+    );
+  }
+
+  Stream<Either<Failure, List<T>>> _processGetDataStream(I? input) {
+    if (getDataStream == null) throw Exception("getDataStream is required");
+
+    return getDataStream!.call(skip, reachedEnd, input: input).asyncMap((streamEvent) {
+      
+      if (reachedEnd) {
+        return Right(_items);
+      }
+
+      return streamEvent.fold(
+        (failure) {
+          return Left(Failure());
+        },
+        (newItems) => Right(_onReceiveNewItems(newItems)),
+      );
+    });
+  }
+
+  List<T> _onReceiveNewItems(List<T> newItems) {
+    if (newItems.isEmpty) {
+      _reachedEnd = true;
+    }
+    _items = [..._items, ...newItems];
+    _skip = items.length;
     return _items;
   }
 }

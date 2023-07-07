@@ -5,7 +5,6 @@ import 'package:app/core/domain/token/input/watch_orders_input.dart';
 import 'package:app/core/domain/token/token_repository.dart';
 import 'package:app/core/failure.dart';
 import 'package:dartz/dartz.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
 
 class TokenService {
   final TokenRepository tokenRepository;
@@ -15,7 +14,7 @@ class TokenService {
     return tokenRepository.getTokens(input: input);
   }
 
-  Stream<Either<Failure, QueryResult<List<OrderComplex>>>> watchOrders({WatchOrdersInput? input}) {
+  Stream<Either<Failure, List<OrderComplex>>> watchOrders({WatchOrdersInput? input}) {
     return tokenRepository.watchOrders(input: input);
   }
 }

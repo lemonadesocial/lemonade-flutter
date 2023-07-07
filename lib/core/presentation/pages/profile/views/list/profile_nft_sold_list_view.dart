@@ -1,3 +1,4 @@
+import 'package:app/core/application/common/scroll_notification_bloc/scroll_notification_bloc.dart';
 import 'package:app/core/application/token/orders_listing_subscription_bloc/orders_listing_subscription_bloc.dart';
 import 'package:app/core/domain/common/common_enums.dart';
 import 'package:app/core/domain/token/input/watch_orders_input.dart';
@@ -16,44 +17,49 @@ import 'package:dartz/dartz.dart' as dartz;
 
 class ProfileNftSoldListView extends StatelessWidget {
   final User user;
-  const ProfileNftSoldListView({
+  late final ordersListingBloc = OrdersListingSubscriptionBloc(
+    TokenService(
+      getIt<TokenRepository>(),
+    ),
+    defaultInput: WatchOrdersInput(
+      where: OrderWhereComplex(
+        makerIn: user.wallets,
+        takerExists: true,
+      ),
+      sort: OrderSort(
+        by: OrderSortBy.createdAt,
+        direction: SortDirection.DESC,
+      ),
+    ),
+  )..add(OrdersListingSubscriptionEvent.start());
+
+  ProfileNftSoldListView({
     super.key,
     required this.user,
   });
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => OrdersListingSubscriptionBloc(
-        TokenService(
-          getIt<TokenRepository>(),
-        ),
-      )..add(OrdersListingSubscriptionEvent.start(
-          input: WatchOrdersInput(
-            where: OrderWhereComplex(
-              makerIn: user.wallets,
-              takerExists: true,
-            ),
-            sort: OrderSort(
-              by: OrderSortBy.createdAt,
-              direction: SortDirection.DESC,
-            ),
-            limit: 50,
-          ),
-        )),
-      child: _ProfileNftCollectedList(),
+    return BlocProvider.value(
+      value: ordersListingBloc,
+      child: BlocListener<ScrollNotificationBloc, ScrollNotificationState>(
+        listener: (context, scrollState) {
+          scrollState.maybeWhen(
+            endReached: () {
+              ordersListingBloc.add(OrdersListingSubscriptionEvent.start());
+            },
+            orElse: () {},
+          );
+        },
+        child: _ProfileNftSoldList(),
+      ),
     );
   }
 }
 
-class _ProfileNftCollectedList extends StatefulWidget {
-  const _ProfileNftCollectedList();
+class _ProfileNftSoldList extends StatelessWidget {
+  const _ProfileNftSoldList();
 
-  @override
-  State<_ProfileNftCollectedList> createState() => _ProfileNftCreatedListViewState();
-}
-
-class _ProfileNftCreatedListViewState extends State<_ProfileNftCollectedList> {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
@@ -65,7 +71,7 @@ class _ProfileNftCreatedListViewState extends State<_ProfileNftCollectedList> {
               loading: () => SliverFillRemaining(child: Center(child: Loading.defaultLoading(context))),
               failure: () => SliverToBoxAdapter(child: Center(child: Text(t.common.somethingWrong))),
               fetched: (orders) {
-                if(orders.isEmpty) {
+                if (orders.isEmpty) {
                   return SliverToBoxAdapter(
                     child: Center(child: Text(t.nft.emptyCreatedNfts)),
                   );

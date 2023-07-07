@@ -38,7 +38,7 @@ class TokenRepositoryImpl implements TokenRepository {
     return Right(result.parsedData ?? []);
   }
 
-  Stream<Either<Failure, QueryResult<List<OrderComplex>>>> watchOrders({WatchOrdersInput? input}) {
+  Stream<Either<Failure, List<OrderComplex>>> watchOrders({WatchOrdersInput? input}) {
     final stream = _metaverseClient.subscribe(
       SubscriptionOptions(
         document: watchOrdersSubscription,
@@ -51,7 +51,7 @@ class TokenRepositoryImpl implements TokenRepository {
 
     return stream.asyncMap((result) {
       if (result.hasException) return Left(Failure());
-      return Right(result);
+      return Right(result.parsedData ?? []);
     });
   }
 }

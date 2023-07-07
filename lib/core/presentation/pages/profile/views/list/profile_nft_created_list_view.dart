@@ -1,3 +1,4 @@
+import 'package:app/core/application/common/scroll_notification_bloc/scroll_notification_bloc.dart';
 import 'package:app/core/application/token/tokens_listing_bloc/tokens_listing_bloc.dart';
 import 'package:app/core/domain/token/input/get_tokens_input.dart';
 import 'package:app/core/domain/token/token_repository.dart';
@@ -14,22 +15,34 @@ import 'package:dartz/dartz.dart' as dartz;
 
 class ProfileNftCreatedListView extends StatelessWidget {
   final User user;
-  const ProfileNftCreatedListView({
+  late final tokensListingBloc = TokensListingBloc(
+      TokenService(
+        getIt<TokenRepository>(),
+      ),
+      defaultInput: GetTokensInput(creator: user.wallets?[0]))
+    ..add(TokensListingEvent.fetch());
+    
+  ProfileNftCreatedListView({
     super.key,
     required this.user,
   });
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => TokensListingBloc(
-        TokenService(
-          getIt<TokenRepository>(),
-        ),
-      )..add(
-          TokensListingEvent.fetch(input: GetTokensInput(creator: user.wallets?[0])),
-        ),
-      child: _ProfileNftCreatedList(),
+    return BlocProvider.value(
+      value: tokensListingBloc,
+      child: BlocListener<ScrollNotificationBloc, ScrollNotificationState>(
+        listener: (context, scrollState) {
+          scrollState.maybeWhen(
+              endReached: () {
+                tokensListingBloc.add(
+                  TokensListingEvent.fetch(),
+                );
+              },
+              orElse: () {});
+        },
+        child: _ProfileNftCreatedList(),
+      ),
     );
   }
 }
