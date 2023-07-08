@@ -282,10 +282,10 @@ workflows:
       - *app
     publishing:
       <<: *ios_app_store_publish
-      # <<: *email_staging
+      <<: *email_staging
       scripts:
         - *upload_staging_dsym_to_firebase
-        # - *notify_ios_staging_to_slack
+        - *notify_ios_staging_to_slack
   # Build Android Staging
   android-staging:
     name: Android Staging
