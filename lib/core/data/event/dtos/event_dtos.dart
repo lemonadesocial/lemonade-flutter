@@ -10,9 +10,10 @@ part 'event_dtos.g.dart';
 class EventDto with _$EventDto {
   @JsonSerializable(explicitToJson: true)
   factory EventDto({
-    @JsonKey(name: '_id', includeIfNull: false) String? id,
-    @JsonKey(name: 'host_expanded', includeIfNull: false) UserDto? hostExpanded,
-    @JsonKey(name: 'new_new_photos_expanded', includeIfNull: false) List<DbFileDto>? newNewPhotosExpanded,
+    @JsonKey(name: '_id') String? id,
+    @JsonKey(name: 'host_expanded') UserDto? hostExpanded,
+    @JsonKey(name: 'new_new_photos_expanded') List<DbFileDto>? newNewPhotosExpanded,
+    @JsonKey(name: 'cohosts_expanded') List<UserDto?>? cohostsExpanded,
 
     String? title,
     String? slug,

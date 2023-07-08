@@ -77,6 +77,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_grid.svg
   SvgGenImage get icGrid => const SvgGenImage('assets/icons/ic_grid.svg');
 
+  /// File path: assets/icons/ic_host_filled.svg
+  SvgGenImage get icHostFilled =>
+      const SvgGenImage('assets/icons/ic_host_filled.svg');
+
   /// File path: assets/icons/ic_house.svg
   SvgGenImage get icHouse => const SvgGenImage('assets/icons/ic_house.svg');
 
@@ -136,6 +140,7 @@ class $AssetsIconsGen {
         icFacebook,
         icFilter,
         icGrid,
+        icHostFilled,
         icHouse,
         icHouseParty,
         icInbox,

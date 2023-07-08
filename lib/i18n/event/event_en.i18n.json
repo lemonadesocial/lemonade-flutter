@@ -2,6 +2,8 @@
     "events": "Events",
     "all": "all",
     "attending": "attending",
+    "attended": "attended",
+    "created": "created",
     "hosting": "hosting",
     "buy": "buy",
     "free": "free",

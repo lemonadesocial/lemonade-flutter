@@ -7,6 +7,10 @@ import 'package:oauth2_client/access_token_response.dart';
 import 'package:oauth2_client/oauth2_client.dart';
 import 'package:oauth2_client/oauth2_helper.dart';
 
+class OauthError {
+  static String userCancelled = 'org.openid.appauth.general error -3';
+}
+
 @lazySingleton
 class AppOauth {
   final baseOAuthUrl = AppConfig.oauth2BaseUrl;
@@ -55,9 +59,15 @@ class AppOauth {
           )));
       await helper.removeAllTokens();
       return true;
-    } catch (e) {
+    } on PlatformException catch (e) {
+      if(e.message?.contains(OauthError.userCancelled) == true) {
+        return false;
+      }
       await helper.removeAllTokens();
-      return false;
+      return true;
+    } catch(error) {
+      await helper.removeAllTokens();
+      return true;
     }
   }
 

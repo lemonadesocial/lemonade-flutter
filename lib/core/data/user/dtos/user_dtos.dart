@@ -10,6 +10,7 @@ class UserDto with _$UserDto {
   const factory UserDto({
     @JsonKey(name: '_id') String? id,
     @JsonKey(name: 'created_at', includeIfNull: false) DateTime? createdAt,
+    @JsonKey(name: 'user_name', includeIfNull: false) String? userName,
     @JsonKey(name: 'display_name', includeIfNull: false) String? displayName,
     @JsonKey(name: 'first_name', includeIfNull: false) String? firstName,
     @JsonKey(name: 'last_name', includeIfNull: false) String? lastName,
@@ -22,6 +23,14 @@ class UserDto with _$UserDto {
     @JsonKey(name: 'shopify_user_info', includeIfNull: false) ShopifyUserInfoDto? shopifyUserInfo,
     @JsonKey(name: 'twitch_user_info', includeIfNull: false) TwitchUserInfoDto? twitchUserInfo,
     @JsonKey(name: 'zoom_user_info', includeIfNull: false) ZoomUserInfoDto? zoomUserInfo,
+    
+    @JsonKey(name: 'handle_twitter') String? handleTwitter,
+    @JsonKey(name: 'handle_instagram') String? handleInstagram,
+    @JsonKey(name: 'handle_facebook') String? handleFacebook,
+    @JsonKey(name: 'handle_linkedin') String? handleLinkedin,
+
+    List<String>? wallets,
+    @JsonKey(name: 'wallet_custodial') String? walletCustodial,
 
     String? name,
     String? username,
@@ -39,6 +48,9 @@ class UserDto with _$UserDto {
     int? following,
     int? followers,
     
+    @JsonKey(name: 'job_title') String? jobTitle,
+    String? tagline,
+
     Currency? currency,
   }) = _UserDto;
 

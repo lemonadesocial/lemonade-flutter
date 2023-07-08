@@ -11,6 +11,7 @@ _$_UserDto _$$_UserDtoFromJson(Map<String, dynamic> json) => _$_UserDto(
       createdAt: json['created_at'] == null
           ? null
           : DateTime.parse(json['created_at'] as String),
+      userName: json['user_name'] as String?,
       displayName: json['display_name'] as String?,
       firstName: json['first_name'] as String?,
       lastName: json['last_name'] as String?,
@@ -42,6 +43,13 @@ _$_UserDto _$$_UserDtoFromJson(Map<String, dynamic> json) => _$_UserDto(
           ? null
           : ZoomUserInfoDto.fromJson(
               json['zoom_user_info'] as Map<String, dynamic>),
+      handleTwitter: json['handle_twitter'] as String?,
+      handleInstagram: json['handle_instagram'] as String?,
+      handleFacebook: json['handle_facebook'] as String?,
+      handleLinkedin: json['handle_linkedin'] as String?,
+      wallets:
+          (json['wallets'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      walletCustodial: json['wallet_custodial'] as String?,
       name: json['name'] as String?,
       username: json['username'] as String?,
       phone: json['phone'] as String?,
@@ -59,6 +67,8 @@ _$_UserDto _$$_UserDtoFromJson(Map<String, dynamic> json) => _$_UserDto(
       friends: json['friends'] as int?,
       following: json['following'] as int?,
       followers: json['followers'] as int?,
+      jobTitle: json['job_title'] as String?,
+      tagline: json['tagline'] as String?,
       currency: $enumDecodeNullable(_$CurrencyEnumMap, json['currency']),
     );
 
@@ -74,6 +84,7 @@ Map<String, dynamic> _$$_UserDtoToJson(_$_UserDto instance) {
   }
 
   writeNotNull('created_at', instance.createdAt?.toIso8601String());
+  writeNotNull('user_name', instance.userName);
   writeNotNull('display_name', instance.displayName);
   writeNotNull('first_name', instance.firstName);
   writeNotNull('last_name', instance.lastName);
@@ -86,6 +97,12 @@ Map<String, dynamic> _$$_UserDtoToJson(_$_UserDto instance) {
   writeNotNull('shopify_user_info', instance.shopifyUserInfo);
   writeNotNull('twitch_user_info', instance.twitchUserInfo);
   writeNotNull('zoom_user_info', instance.zoomUserInfo);
+  val['handle_twitter'] = instance.handleTwitter;
+  val['handle_instagram'] = instance.handleInstagram;
+  val['handle_facebook'] = instance.handleFacebook;
+  val['handle_linkedin'] = instance.handleLinkedin;
+  val['wallets'] = instance.wallets;
+  val['wallet_custodial'] = instance.walletCustodial;
   val['name'] = instance.name;
   val['username'] = instance.username;
   val['phone'] = instance.phone;
@@ -101,6 +118,8 @@ Map<String, dynamic> _$$_UserDtoToJson(_$_UserDto instance) {
   val['friends'] = instance.friends;
   val['following'] = instance.following;
   val['followers'] = instance.followers;
+  val['job_title'] = instance.jobTitle;
+  val['tagline'] = instance.tagline;
   val['currency'] = _$CurrencyEnumMap[instance.currency];
   return val;
 }
