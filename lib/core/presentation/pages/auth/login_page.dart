@@ -30,8 +30,7 @@ class _LoginPageState extends State<LoginPage> {
           child: Center(
             child: ElevatedButton(
                 onPressed: () {
-                  // context.read<AuthBloc>().add(const AuthEvent.login());
-                  throw Exception("Test crash");
+                  context.read<AuthBloc>().add(const AuthEvent.login());
                 },
                 child: const Text(
                   "Login",
