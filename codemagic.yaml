@@ -281,7 +281,7 @@ workflows:
       - *dsym
       - *app
     publishing:
-      # <<: *ios_app_store_publish
+      <<: *ios_app_store_publish
       # <<: *email_staging
       scripts:
         - *upload_staging_dsym_to_firebase
