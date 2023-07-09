@@ -75,6 +75,7 @@ final getHomeEventsQuery = gql('''
         \$latitude: Float,
         \$longitude: Float,
         \$query: String = "",
+        \$skip: Int
     ) {
         getHomeEvents(
             tense: \$tense,
@@ -82,6 +83,7 @@ final getHomeEventsQuery = gql('''
             latitude: \$latitude,
             longitude: \$longitude,
             search: \$query,
+            skip: \$skip
         ) {
            ...eventFields
         }

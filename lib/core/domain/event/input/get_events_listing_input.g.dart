@@ -11,8 +11,8 @@ _$_GetEventsInput _$$_GetEventsInputFromJson(Map<String, dynamic> json) =>
       search: json['search'] as String?,
       highlight: json['highlight'] as bool?,
       accepted: json['accepted'] as String?,
-      limit: json['limit'] as int? ?? 100,
-      skip: json['skip'] as int? ?? 0,
+      skip: json['skip'] as int?,
+      limit: json['limit'] as int?,
     );
 
 Map<String, dynamic> _$$_GetEventsInputToJson(_$_GetEventsInput instance) {
@@ -27,8 +27,8 @@ Map<String, dynamic> _$$_GetEventsInputToJson(_$_GetEventsInput instance) {
   writeNotNull('search', instance.search);
   writeNotNull('highlight', instance.highlight);
   writeNotNull('accepted', instance.accepted);
-  val['limit'] = instance.limit;
-  val['skip'] = instance.skip;
+  writeNotNull('skip', instance.skip);
+  writeNotNull('limit', instance.limit);
   return val;
 }
 
@@ -36,7 +36,8 @@ _$_GetHomeEventsInput _$$_GetHomeEventsInputFromJson(
         Map<String, dynamic> json) =>
     _$_GetHomeEventsInput(
       query: json['query'] as String?,
-      limit: json['limit'] as int? ?? 100,
+      skip: json['skip'] as int?,
+      limit: json['limit'] as int?,
       latitude: (json['latitude'] as num?)?.toDouble() ?? 0,
       longitude: (json['longitude'] as num?)?.toDouble() ?? 0,
       tense: $enumDecodeNullable(_$EventTenseEnumMap, json['tense']) ??
@@ -54,9 +55,10 @@ Map<String, dynamic> _$$_GetHomeEventsInputToJson(
   }
 
   writeNotNull('query', instance.query);
-  val['limit'] = instance.limit;
-  val['latitude'] = instance.latitude;
-  val['longitude'] = instance.longitude;
+  writeNotNull('skip', instance.skip);
+  writeNotNull('limit', instance.limit);
+  writeNotNull('latitude', instance.latitude);
+  writeNotNull('longitude', instance.longitude);
   val['tense'] = _$EventTenseEnumMap[instance.tense]!;
   return val;
 }
@@ -70,20 +72,18 @@ const _$EventTenseEnumMap = {
 _$_GetHostingEventsInput _$$_GetHostingEventsInputFromJson(
         Map<String, dynamic> json) =>
     _$_GetHostingEventsInput(
-      id: json['id'] as String,
+      id: json['id'] as String?,
       state: json['state'] == null
           ? null
           : FilterEventInput.fromJson(json['state'] as Map<String, dynamic>),
-      limit: json['limit'] as int? ?? 100,
-      skip: json['skip'] ?? 0,
+      skip: json['skip'] as int?,
+      limit: json['limit'] as int?,
       order: json['order'] ?? -1,
     );
 
 Map<String, dynamic> _$$_GetHostingEventsInputToJson(
     _$_GetHostingEventsInput instance) {
-  final val = <String, dynamic>{
-    'id': instance.id,
-  };
+  final val = <String, dynamic>{};
 
   void writeNotNull(String key, dynamic value) {
     if (value != null) {
@@ -91,9 +91,10 @@ Map<String, dynamic> _$$_GetHostingEventsInputToJson(
     }
   }
 
+  writeNotNull('id', instance.id);
   writeNotNull('state', instance.state);
-  val['limit'] = instance.limit;
-  val['skip'] = instance.skip;
+  writeNotNull('skip', instance.skip);
+  writeNotNull('limit', instance.limit);
   val['order'] = instance.order;
   return val;
 }
