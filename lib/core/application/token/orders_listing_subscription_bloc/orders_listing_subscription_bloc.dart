@@ -14,11 +14,11 @@ class OrdersListingSubscriptionBloc extends Bloc<OrdersListingSubscriptionEvent,
   late final PaginationService<OrderComplex, WatchOrdersInput> paginationService =
       PaginationService(getDataStream: _watchOrders);
 
-  final WatchOrdersInput? defaultInput;
+  final WatchOrdersInput defaultInput;
 
   OrdersListingSubscriptionBloc(
     this.tokenService, {
-    this.defaultInput,
+    required this.defaultInput,
   }) : super(OrdersListingSubscriptionState.loading()) {
     on<OrdersListingSubscriptionEventStart>(_onStartSubscription);
   }
@@ -32,7 +32,7 @@ class OrdersListingSubscriptionBloc extends Bloc<OrdersListingSubscriptionEvent,
   }
 
   _onStartSubscription(OrdersListingSubscriptionEventStart event, Emitter emit) async {
-    await emit.forEach(paginationService.fetchStream(defaultInput ?? event.input), onData: (streamEvent) {
+    await emit.forEach(paginationService.fetchStream(defaultInput), onData: (streamEvent) {
       return streamEvent.fold(
         (l) {
           return OrdersListingSubscriptionState.failure();

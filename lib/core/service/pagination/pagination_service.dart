@@ -6,8 +6,8 @@ class PaginationService<T, I> {
   bool _reachedEnd = false;
   int _skip = 0;
 
-  Future<Either<Failure, List<T>>> Function(int skip, bool reachedEnd, {I? input})? getDataFuture;
-  Stream<Either<Failure, List<T>>> Function(int skip, bool reachedEnd, {I? input})? getDataStream;
+  Future<Either<Failure, List<T>>> Function(int skip, bool reachedEnd, {required I input})? getDataFuture;
+  Stream<Either<Failure, List<T>>> Function(int skip, bool reachedEnd, {required I input})? getDataStream;
 
   PaginationService({this.getDataFuture, this.getDataStream});
 
@@ -17,27 +17,27 @@ class PaginationService<T, I> {
 
   bool get reachedEnd => _reachedEnd;
 
-  Future<Either<Failure, List<T>>> fetch(I? input) async {
+  Future<Either<Failure, List<T>>> fetch(I input) async {
     return _processGetDataFuture(input);
   }
 
-  Future<Either<Failure, List<T>>> refresh(I? input) async {
+  Future<Either<Failure, List<T>>> refresh(I input) async {
     _reachedEnd = false;
     _skip = 0;
     return _processGetDataFuture(input);
   }
 
-  Stream<Either<Failure, List<T>>> fetchStream(I? input) {
+  Stream<Either<Failure, List<T>>> fetchStream(I input) {
     return _processGetDataStream(input);
   }
 
-  Stream<Either<Failure, List<T>>> refreshStream(I? input) {
+  Stream<Either<Failure, List<T>>> refreshStream(I input) {
     _reachedEnd = false;
     _skip = 0;
     return _processGetDataStream(input);
   }
 
-  Future<Either<Failure, List<T>>> _processGetDataFuture(I? input) async {
+  Future<Either<Failure, List<T>>> _processGetDataFuture(I input) async {
     if (getDataFuture == null) throw Exception("getDataFuture is required");
 
     if (reachedEnd) {
@@ -54,7 +54,7 @@ class PaginationService<T, I> {
     );
   }
 
-  Stream<Either<Failure, List<T>>> _processGetDataStream(I? input) {
+  Stream<Either<Failure, List<T>>> _processGetDataStream(I input) {
     if (getDataStream == null) throw Exception("getDataStream is required");
 
     return getDataStream!.call(skip, reachedEnd, input: input).asyncMap((streamEvent) {

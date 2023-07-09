@@ -14,10 +14,10 @@ class PostsListingBloc extends Bloc<PostsListingEvent, PostsListingState> {
   late final PaginationService<Post, GetPostsInput> paginationService = PaginationService(
     getDataFuture: _getPosts,
   );
-  GetPostsInput? defaultInput;
+  final GetPostsInput defaultInput;
 
   PostsListingBloc(this.postService, {
-    this.defaultInput,
+    required this.defaultInput,
   }) : super(PostsListingState.loading()) {
     on<PostsListingEventFetch>(_onFetch);
   }
@@ -28,7 +28,7 @@ class PostsListingBloc extends Bloc<PostsListingEvent, PostsListingState> {
 
   _onFetch(PostsListingEventFetch event, Emitter emit) async {
     emit(PostsListingState.loading());
-    final result = await paginationService.fetch(event.input ?? defaultInput);
+    final result = await paginationService.fetch(defaultInput);
     result.fold(
       (l) => emit(PostsListingState.failure()),
       (posts) => emit(

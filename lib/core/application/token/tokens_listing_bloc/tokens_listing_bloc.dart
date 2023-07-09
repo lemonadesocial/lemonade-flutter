@@ -12,13 +12,13 @@ part 'tokens_listing_bloc.freezed.dart';
 
 class TokensListingBloc extends Bloc<TokensListingEvent, TokensListingState> {
   final TokenService tokenService;
-  final GetTokensInput? defaultInput;
+  final GetTokensInput defaultInput;
   late final PaginationService<TokenComplex, GetTokensInput> paginationService =
       PaginationService(getDataFuture: _getTokens);
 
   TokensListingBloc(
     this.tokenService, {
-    this.defaultInput,
+    required this.defaultInput,
   }) : super(TokensListingState.loading()) {
     on<TokensListingEventFetch>(_onFetch, transformer: droppable());
   }
@@ -28,7 +28,7 @@ class TokensListingBloc extends Bloc<TokensListingEvent, TokensListingState> {
   }
 
   _onFetch(TokensListingEventFetch event, Emitter emit) async {
-    final result = await paginationService.fetch(defaultInput ?? event.input);
+    final result = await paginationService.fetch(defaultInput);
 
     result.fold((l) {
       emit(TokensListingState.failure());
