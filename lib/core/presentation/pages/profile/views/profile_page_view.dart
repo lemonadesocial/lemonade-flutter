@@ -1,4 +1,6 @@
 import 'package:app/core/application/profile/user_profile_bloc/user_profile_bloc.dart';
+import 'package:app/core/application/auth/auth_bloc.dart';
+import 'package:app/core/presentation/dpos/common/dropdown_item_dpo.dart';
 import 'package:app/core/presentation/pages/profile/views/tabs/profile_posts_tab_view.dart';
 import 'package:app/core/presentation/pages/profile/widgets/profile_page_header_widget.dart';
 import 'package:app/core/presentation/pages/profile/widgets/profile_tabbar_delegate_widget.dart';
@@ -8,6 +10,7 @@ import 'package:app/core/presentation/pages/profile/views/tabs/profile_event_tab
 import 'package:app/core/presentation/pages/profile/views/tabs/profile_info_tab_view.dart';
 import 'package:app/core/presentation/pages/profile/views/tabs/profile_photos_tab_view.dart';
 import 'package:app/core/presentation/widgets/burger_menu_widget.dart';
+import 'package:app/core/presentation/widgets/floating_frosted_glass_dropdown_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
@@ -67,9 +70,19 @@ class _ProfilePageViewState extends State<ProfilePageView> with SingleTickerProv
                     color: colorScheme.onSurface,
                     builder: (filter) => Assets.icons.icShare.svg(colorFilter: filter),
                   ),
-                  ThemeSvgIcon(
-                    color: colorScheme.onSurface,
-                    builder: (filter) => Assets.icons.icMoreHoriz.svg(colorFilter: filter),
+                  FloatingFrostedGlassDropdown(
+                    items: [
+                      DropdownItemDpo(
+                        label: "Logout",
+                      ),
+                    ],
+                    onItemPressed: (item) {
+                      context.read<AuthBloc>().add(AuthEvent.logout());
+                    },
+                    child: ThemeSvgIcon(
+                      color: colorScheme.onSurface,
+                      builder: (filter) => Assets.icons.icMoreHoriz.svg(colorFilter: filter),
+                    ),
                   ),
                 ],
               ),
