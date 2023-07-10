@@ -17,6 +17,7 @@ class EventsListingBloc extends Bloc<EventsListingEvent, EventsListingState> {
   }
 
   _onFetch(EventsListingEventFetch blocEvent, Emitter emit) async {
+    print("EventsListingBloc _onFetch");
     emit(EventsListingState.loading());
 
     final listingType = blocEvent.eventListingType ?? EventListingType.all;
