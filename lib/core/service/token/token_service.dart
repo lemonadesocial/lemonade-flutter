@@ -10,11 +10,11 @@ class TokenService {
   final TokenRepository tokenRepository;
   TokenService(this.tokenRepository);
 
-  Future<Either<Failure, List<TokenComplex>>> getTokens({GetTokensInput? input}) {
+  Future<Either<Failure, List<TokenComplex>>> getTokens({required GetTokensInput input}) {
     return tokenRepository.getTokens(input: input);
   }
 
-  Stream<Either<Failure, List<OrderComplex>>> watchOrders({WatchOrdersInput? input}) {
+  Stream<Either<Failure, List<OrderComplex>>> watchOrders({required WatchOrdersInput input}) {
     return tokenRepository.watchOrders(input: input);
   }
 }

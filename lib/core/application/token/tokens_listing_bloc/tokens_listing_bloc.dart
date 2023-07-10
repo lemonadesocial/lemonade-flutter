@@ -23,8 +23,12 @@ class TokensListingBloc extends Bloc<TokensListingEvent, TokensListingState> {
     on<TokensListingEventFetch>(_onFetch, transformer: droppable());
   }
 
-  Future<Either<Failure, List<TokenComplex>>> _getTokens(int skip, endReached, {GetTokensInput? input}) async {
-    return await tokenService.getTokens(input: input?.copyWith(skip: skip));
+  Future<Either<Failure, List<TokenComplex>>> _getTokens(
+    int skip,
+    endReached, {
+    required GetTokensInput input,
+  }) async {
+    return await tokenService.getTokens(input: input.copyWith(skip: skip));
   }
 
   _onFetch(TokensListingEventFetch event, Emitter emit) async {

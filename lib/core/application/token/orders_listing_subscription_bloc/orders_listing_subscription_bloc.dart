@@ -26,9 +26,9 @@ class OrdersListingSubscriptionBloc extends Bloc<OrdersListingSubscriptionEvent,
   Stream<Either<Failure, List<OrderComplex>>> _watchOrders(
     int skip,
     bool endReached, {
-    WatchOrdersInput? input,
+    required WatchOrdersInput input,
   }) {
-    return tokenService.watchOrders(input: input?.copyWith(skip: skip));
+    return tokenService.watchOrders(input: input.copyWith(skip: skip));
   }
 
   _onStartSubscription(OrdersListingSubscriptionEventStart event, Emitter emit) async {

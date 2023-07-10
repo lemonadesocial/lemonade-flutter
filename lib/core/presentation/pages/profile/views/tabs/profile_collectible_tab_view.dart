@@ -43,25 +43,28 @@ class _ProfileCollectibleTabViewState extends State<ProfileCollectibleTabView> {
             pinned: true,
             collapsedHeight: _filterBarHeight,
             expandedHeight: _filterBarHeight,
-            flexibleSpace: Container(
-              color: colorScheme.primary,
-              child: Column(
-                children: [
-                  SizedBox(height: Spacing.smMedium),
-                  Row(
-                    children: TokensListingType.values.map((item) {
-                      return Container(
-                        margin: EdgeInsets.only(right: Spacing.superExtraSmall),
-                        child: LemonChip(
-                          onTap: () => _selectTokenListingType(item),
-                          label: t['nft.${item.name}'],
-                          isActive: tokensListingType == item,
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                  SizedBox(height: Spacing.smMedium),
-                ],
+            flexibleSpace: GestureDetector(
+              onTap: () {},
+              child: Container(
+                color: colorScheme.primary,
+                child: Column(
+                  children: [
+                    SizedBox(height: Spacing.smMedium),
+                    Row(
+                      children: TokensListingType.values.map((item) {
+                        return Container(
+                          margin: EdgeInsets.only(right: Spacing.superExtraSmall),
+                          child: LemonChip(
+                            onTap: () => _selectTokenListingType(item),
+                            label: t['nft.${item.name}'],
+                            isActive: tokensListingType == item,
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                    SizedBox(height: Spacing.smMedium),
+                  ],
+                ),
               ),
             ),
           ),
