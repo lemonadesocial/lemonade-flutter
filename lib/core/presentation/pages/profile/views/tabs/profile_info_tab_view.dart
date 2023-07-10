@@ -68,14 +68,6 @@ class ProfileInfoTabView extends StatelessWidget {
                   ),
                   style: Typo.small.copyWith(color: colorScheme.onSurface),
                 ),
-                Center(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      context.read<AuthBloc>().add(AuthEvent.logout());
-                    },
-                    child: Text("Logout"),
-                  ),
-                )
               ],
             ),
           ),

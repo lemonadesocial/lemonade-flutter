@@ -1,9 +1,9 @@
 /// Generated file. Do not edit.
 ///
 /// Locales: 1
-/// Strings: 38
+/// Strings: 40
 ///
-/// Built on 2023-07-06 at 02:25 UTC
+/// Built on 2023-07-10 at 09:13 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -174,6 +174,7 @@ class _I18nAuthEn {
 
 	// Translations
 	late final _I18nAuthLoginEn login = _I18nAuthLoginEn._(_root);
+	String get logout => 'Logout';
 }
 
 // Path: common
@@ -208,6 +209,7 @@ class _I18nCommonEn {
 	);
 	late final _I18nCommonActionsEn actions = _I18nCommonActionsEn._(_root);
 	String get anonymous => 'anonymous';
+	String get profileUrlCopied => 'Profile\'s URL copied to clipboard';
 }
 
 // Path: event
@@ -265,6 +267,7 @@ extension on _I18nEn {
 			case 'nft.emptyCreatedNfts': return 'You have not created any NFTs yet';
 			case 'auth.login.success': return 'Logged in successfully';
 			case 'auth.login.fail': return 'Logged in failed';
+			case 'auth.logout': return 'Logout';
 			case 'common.today': return 'today';
 			case 'common.tomorrow': return 'tomorrow';
 			case 'common.thisWeek': return 'this week';
@@ -291,6 +294,7 @@ extension on _I18nEn {
 			case 'common.actions.edit': return 'edit';
 			case 'common.actions.connect': return 'connect';
 			case 'common.anonymous': return 'anonymous';
+			case 'common.profileUrlCopied': return 'Profile\'s URL copied to clipboard';
 			case 'event.events': return 'Events';
 			case 'event.all': return 'all';
 			case 'event.attending': return 'attending';
