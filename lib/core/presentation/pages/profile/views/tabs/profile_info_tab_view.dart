@@ -1,3 +1,4 @@
+import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/config.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/pages/profile/views/tabs/base_sliver_tab_view.dart';
@@ -11,6 +12,7 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProfileInfoTabView extends StatelessWidget {
   final User user;
@@ -66,6 +68,14 @@ class ProfileInfoTabView extends StatelessWidget {
                   ),
                   style: Typo.small.copyWith(color: colorScheme.onSurface),
                 ),
+                Center(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      context.read<AuthBloc>().add(AuthEvent.logout());
+                    },
+                    child: Text("Logout"),
+                  ),
+                )
               ],
             ),
           ),
