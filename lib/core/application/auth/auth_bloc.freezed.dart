@@ -21,6 +21,8 @@ mixin _$AuthEvent {
     required TResult Function() login,
     required TResult Function() logout,
     required TResult Function() checkAuthenticated,
+    required TResult Function() authenticated,
+    required TResult Function() unauthenticated,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -28,6 +30,8 @@ mixin _$AuthEvent {
     TResult? Function()? login,
     TResult? Function()? logout,
     TResult? Function()? checkAuthenticated,
+    TResult? Function()? authenticated,
+    TResult? Function()? unauthenticated,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -35,6 +39,8 @@ mixin _$AuthEvent {
     TResult Function()? login,
     TResult Function()? logout,
     TResult Function()? checkAuthenticated,
+    TResult Function()? authenticated,
+    TResult Function()? unauthenticated,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -44,6 +50,8 @@ mixin _$AuthEvent {
     required TResult Function(AuthEventLogout value) logout,
     required TResult Function(AuthEventCheckAuthenticated value)
         checkAuthenticated,
+    required TResult Function(AuthEventAuthenticated value) authenticated,
+    required TResult Function(AuthEventUnAuthenticated value) unauthenticated,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -51,6 +59,8 @@ mixin _$AuthEvent {
     TResult? Function(AuthEventLogin value)? login,
     TResult? Function(AuthEventLogout value)? logout,
     TResult? Function(AuthEventCheckAuthenticated value)? checkAuthenticated,
+    TResult? Function(AuthEventAuthenticated value)? authenticated,
+    TResult? Function(AuthEventUnAuthenticated value)? unauthenticated,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -58,6 +68,8 @@ mixin _$AuthEvent {
     TResult Function(AuthEventLogin value)? login,
     TResult Function(AuthEventLogout value)? logout,
     TResult Function(AuthEventCheckAuthenticated value)? checkAuthenticated,
+    TResult Function(AuthEventAuthenticated value)? authenticated,
+    TResult Function(AuthEventUnAuthenticated value)? unauthenticated,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -121,6 +133,8 @@ class _$AuthEventLogin implements AuthEventLogin {
     required TResult Function() login,
     required TResult Function() logout,
     required TResult Function() checkAuthenticated,
+    required TResult Function() authenticated,
+    required TResult Function() unauthenticated,
   }) {
     return login();
   }
@@ -131,6 +145,8 @@ class _$AuthEventLogin implements AuthEventLogin {
     TResult? Function()? login,
     TResult? Function()? logout,
     TResult? Function()? checkAuthenticated,
+    TResult? Function()? authenticated,
+    TResult? Function()? unauthenticated,
   }) {
     return login?.call();
   }
@@ -141,6 +157,8 @@ class _$AuthEventLogin implements AuthEventLogin {
     TResult Function()? login,
     TResult Function()? logout,
     TResult Function()? checkAuthenticated,
+    TResult Function()? authenticated,
+    TResult Function()? unauthenticated,
     required TResult orElse(),
   }) {
     if (login != null) {
@@ -156,6 +174,8 @@ class _$AuthEventLogin implements AuthEventLogin {
     required TResult Function(AuthEventLogout value) logout,
     required TResult Function(AuthEventCheckAuthenticated value)
         checkAuthenticated,
+    required TResult Function(AuthEventAuthenticated value) authenticated,
+    required TResult Function(AuthEventUnAuthenticated value) unauthenticated,
   }) {
     return login(this);
   }
@@ -166,6 +186,8 @@ class _$AuthEventLogin implements AuthEventLogin {
     TResult? Function(AuthEventLogin value)? login,
     TResult? Function(AuthEventLogout value)? logout,
     TResult? Function(AuthEventCheckAuthenticated value)? checkAuthenticated,
+    TResult? Function(AuthEventAuthenticated value)? authenticated,
+    TResult? Function(AuthEventUnAuthenticated value)? unauthenticated,
   }) {
     return login?.call(this);
   }
@@ -176,6 +198,8 @@ class _$AuthEventLogin implements AuthEventLogin {
     TResult Function(AuthEventLogin value)? login,
     TResult Function(AuthEventLogout value)? logout,
     TResult Function(AuthEventCheckAuthenticated value)? checkAuthenticated,
+    TResult Function(AuthEventAuthenticated value)? authenticated,
+    TResult Function(AuthEventUnAuthenticated value)? unauthenticated,
     required TResult orElse(),
   }) {
     if (login != null) {
@@ -230,6 +254,8 @@ class _$AuthEventLogout implements AuthEventLogout {
     required TResult Function() login,
     required TResult Function() logout,
     required TResult Function() checkAuthenticated,
+    required TResult Function() authenticated,
+    required TResult Function() unauthenticated,
   }) {
     return logout();
   }
@@ -240,6 +266,8 @@ class _$AuthEventLogout implements AuthEventLogout {
     TResult? Function()? login,
     TResult? Function()? logout,
     TResult? Function()? checkAuthenticated,
+    TResult? Function()? authenticated,
+    TResult? Function()? unauthenticated,
   }) {
     return logout?.call();
   }
@@ -250,6 +278,8 @@ class _$AuthEventLogout implements AuthEventLogout {
     TResult Function()? login,
     TResult Function()? logout,
     TResult Function()? checkAuthenticated,
+    TResult Function()? authenticated,
+    TResult Function()? unauthenticated,
     required TResult orElse(),
   }) {
     if (logout != null) {
@@ -265,6 +295,8 @@ class _$AuthEventLogout implements AuthEventLogout {
     required TResult Function(AuthEventLogout value) logout,
     required TResult Function(AuthEventCheckAuthenticated value)
         checkAuthenticated,
+    required TResult Function(AuthEventAuthenticated value) authenticated,
+    required TResult Function(AuthEventUnAuthenticated value) unauthenticated,
   }) {
     return logout(this);
   }
@@ -275,6 +307,8 @@ class _$AuthEventLogout implements AuthEventLogout {
     TResult? Function(AuthEventLogin value)? login,
     TResult? Function(AuthEventLogout value)? logout,
     TResult? Function(AuthEventCheckAuthenticated value)? checkAuthenticated,
+    TResult? Function(AuthEventAuthenticated value)? authenticated,
+    TResult? Function(AuthEventUnAuthenticated value)? unauthenticated,
   }) {
     return logout?.call(this);
   }
@@ -285,6 +319,8 @@ class _$AuthEventLogout implements AuthEventLogout {
     TResult Function(AuthEventLogin value)? login,
     TResult Function(AuthEventLogout value)? logout,
     TResult Function(AuthEventCheckAuthenticated value)? checkAuthenticated,
+    TResult Function(AuthEventAuthenticated value)? authenticated,
+    TResult Function(AuthEventUnAuthenticated value)? unauthenticated,
     required TResult orElse(),
   }) {
     if (logout != null) {
@@ -342,6 +378,8 @@ class _$AuthEventCheckAuthenticated implements AuthEventCheckAuthenticated {
     required TResult Function() login,
     required TResult Function() logout,
     required TResult Function() checkAuthenticated,
+    required TResult Function() authenticated,
+    required TResult Function() unauthenticated,
   }) {
     return checkAuthenticated();
   }
@@ -352,6 +390,8 @@ class _$AuthEventCheckAuthenticated implements AuthEventCheckAuthenticated {
     TResult? Function()? login,
     TResult? Function()? logout,
     TResult? Function()? checkAuthenticated,
+    TResult? Function()? authenticated,
+    TResult? Function()? unauthenticated,
   }) {
     return checkAuthenticated?.call();
   }
@@ -362,6 +402,8 @@ class _$AuthEventCheckAuthenticated implements AuthEventCheckAuthenticated {
     TResult Function()? login,
     TResult Function()? logout,
     TResult Function()? checkAuthenticated,
+    TResult Function()? authenticated,
+    TResult Function()? unauthenticated,
     required TResult orElse(),
   }) {
     if (checkAuthenticated != null) {
@@ -377,6 +419,8 @@ class _$AuthEventCheckAuthenticated implements AuthEventCheckAuthenticated {
     required TResult Function(AuthEventLogout value) logout,
     required TResult Function(AuthEventCheckAuthenticated value)
         checkAuthenticated,
+    required TResult Function(AuthEventAuthenticated value) authenticated,
+    required TResult Function(AuthEventUnAuthenticated value) unauthenticated,
   }) {
     return checkAuthenticated(this);
   }
@@ -387,6 +431,8 @@ class _$AuthEventCheckAuthenticated implements AuthEventCheckAuthenticated {
     TResult? Function(AuthEventLogin value)? login,
     TResult? Function(AuthEventLogout value)? logout,
     TResult? Function(AuthEventCheckAuthenticated value)? checkAuthenticated,
+    TResult? Function(AuthEventAuthenticated value)? authenticated,
+    TResult? Function(AuthEventUnAuthenticated value)? unauthenticated,
   }) {
     return checkAuthenticated?.call(this);
   }
@@ -397,6 +443,8 @@ class _$AuthEventCheckAuthenticated implements AuthEventCheckAuthenticated {
     TResult Function(AuthEventLogin value)? login,
     TResult Function(AuthEventLogout value)? logout,
     TResult Function(AuthEventCheckAuthenticated value)? checkAuthenticated,
+    TResult Function(AuthEventAuthenticated value)? authenticated,
+    TResult Function(AuthEventUnAuthenticated value)? unauthenticated,
     required TResult orElse(),
   }) {
     if (checkAuthenticated != null) {
@@ -408,6 +456,249 @@ class _$AuthEventCheckAuthenticated implements AuthEventCheckAuthenticated {
 
 abstract class AuthEventCheckAuthenticated implements AuthEvent {
   const factory AuthEventCheckAuthenticated() = _$AuthEventCheckAuthenticated;
+}
+
+/// @nodoc
+abstract class _$$AuthEventAuthenticatedCopyWith<$Res> {
+  factory _$$AuthEventAuthenticatedCopyWith(_$AuthEventAuthenticated value,
+          $Res Function(_$AuthEventAuthenticated) then) =
+      __$$AuthEventAuthenticatedCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$AuthEventAuthenticatedCopyWithImpl<$Res>
+    extends _$AuthEventCopyWithImpl<$Res, _$AuthEventAuthenticated>
+    implements _$$AuthEventAuthenticatedCopyWith<$Res> {
+  __$$AuthEventAuthenticatedCopyWithImpl(_$AuthEventAuthenticated _value,
+      $Res Function(_$AuthEventAuthenticated) _then)
+      : super(_value, _then);
+}
+
+/// @nodoc
+
+class _$AuthEventAuthenticated implements AuthEventAuthenticated {
+  const _$AuthEventAuthenticated();
+
+  @override
+  String toString() {
+    return 'AuthEvent.authenticated()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$AuthEventAuthenticated);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() login,
+    required TResult Function() logout,
+    required TResult Function() checkAuthenticated,
+    required TResult Function() authenticated,
+    required TResult Function() unauthenticated,
+  }) {
+    return authenticated();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? login,
+    TResult? Function()? logout,
+    TResult? Function()? checkAuthenticated,
+    TResult? Function()? authenticated,
+    TResult? Function()? unauthenticated,
+  }) {
+    return authenticated?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? login,
+    TResult Function()? logout,
+    TResult Function()? checkAuthenticated,
+    TResult Function()? authenticated,
+    TResult Function()? unauthenticated,
+    required TResult orElse(),
+  }) {
+    if (authenticated != null) {
+      return authenticated();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(AuthEventLogin value) login,
+    required TResult Function(AuthEventLogout value) logout,
+    required TResult Function(AuthEventCheckAuthenticated value)
+        checkAuthenticated,
+    required TResult Function(AuthEventAuthenticated value) authenticated,
+    required TResult Function(AuthEventUnAuthenticated value) unauthenticated,
+  }) {
+    return authenticated(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(AuthEventLogin value)? login,
+    TResult? Function(AuthEventLogout value)? logout,
+    TResult? Function(AuthEventCheckAuthenticated value)? checkAuthenticated,
+    TResult? Function(AuthEventAuthenticated value)? authenticated,
+    TResult? Function(AuthEventUnAuthenticated value)? unauthenticated,
+  }) {
+    return authenticated?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(AuthEventLogin value)? login,
+    TResult Function(AuthEventLogout value)? logout,
+    TResult Function(AuthEventCheckAuthenticated value)? checkAuthenticated,
+    TResult Function(AuthEventAuthenticated value)? authenticated,
+    TResult Function(AuthEventUnAuthenticated value)? unauthenticated,
+    required TResult orElse(),
+  }) {
+    if (authenticated != null) {
+      return authenticated(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class AuthEventAuthenticated implements AuthEvent {
+  const factory AuthEventAuthenticated() = _$AuthEventAuthenticated;
+}
+
+/// @nodoc
+abstract class _$$AuthEventUnAuthenticatedCopyWith<$Res> {
+  factory _$$AuthEventUnAuthenticatedCopyWith(_$AuthEventUnAuthenticated value,
+          $Res Function(_$AuthEventUnAuthenticated) then) =
+      __$$AuthEventUnAuthenticatedCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$AuthEventUnAuthenticatedCopyWithImpl<$Res>
+    extends _$AuthEventCopyWithImpl<$Res, _$AuthEventUnAuthenticated>
+    implements _$$AuthEventUnAuthenticatedCopyWith<$Res> {
+  __$$AuthEventUnAuthenticatedCopyWithImpl(_$AuthEventUnAuthenticated _value,
+      $Res Function(_$AuthEventUnAuthenticated) _then)
+      : super(_value, _then);
+}
+
+/// @nodoc
+
+class _$AuthEventUnAuthenticated implements AuthEventUnAuthenticated {
+  const _$AuthEventUnAuthenticated();
+
+  @override
+  String toString() {
+    return 'AuthEvent.unauthenticated()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$AuthEventUnAuthenticated);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() login,
+    required TResult Function() logout,
+    required TResult Function() checkAuthenticated,
+    required TResult Function() authenticated,
+    required TResult Function() unauthenticated,
+  }) {
+    return unauthenticated();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? login,
+    TResult? Function()? logout,
+    TResult? Function()? checkAuthenticated,
+    TResult? Function()? authenticated,
+    TResult? Function()? unauthenticated,
+  }) {
+    return unauthenticated?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? login,
+    TResult Function()? logout,
+    TResult Function()? checkAuthenticated,
+    TResult Function()? authenticated,
+    TResult Function()? unauthenticated,
+    required TResult orElse(),
+  }) {
+    if (unauthenticated != null) {
+      return unauthenticated();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(AuthEventLogin value) login,
+    required TResult Function(AuthEventLogout value) logout,
+    required TResult Function(AuthEventCheckAuthenticated value)
+        checkAuthenticated,
+    required TResult Function(AuthEventAuthenticated value) authenticated,
+    required TResult Function(AuthEventUnAuthenticated value) unauthenticated,
+  }) {
+    return unauthenticated(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(AuthEventLogin value)? login,
+    TResult? Function(AuthEventLogout value)? logout,
+    TResult? Function(AuthEventCheckAuthenticated value)? checkAuthenticated,
+    TResult? Function(AuthEventAuthenticated value)? authenticated,
+    TResult? Function(AuthEventUnAuthenticated value)? unauthenticated,
+  }) {
+    return unauthenticated?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(AuthEventLogin value)? login,
+    TResult Function(AuthEventLogout value)? logout,
+    TResult Function(AuthEventCheckAuthenticated value)? checkAuthenticated,
+    TResult Function(AuthEventAuthenticated value)? authenticated,
+    TResult Function(AuthEventUnAuthenticated value)? unauthenticated,
+    required TResult orElse(),
+  }) {
+    if (unauthenticated != null) {
+      return unauthenticated(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class AuthEventUnAuthenticated implements AuthEvent {
+  const factory AuthEventUnAuthenticated() = _$AuthEventUnAuthenticated;
 }
 
 /// @nodoc

@@ -11,15 +11,15 @@ class EventService {
   EventService(this.eventRepository);
 
   Future<Either<Failure, List<Event>>> getEvents({
-    GetEventsInput? input,
+    required GetEventsInput input,
   }) async {
-    return await eventRepository.getEvents(input: input ?? GetEventsInput());
+    return await eventRepository.getEvents(input: input);
   }
 
   Future<Either<Failure, List<Event>>> getHomeEvents({
-    GetHomeEventsInput? input,
+    required GetHomeEventsInput input,
   }) async {
-    return await eventRepository.getHomeEvents(input: input ?? GetHomeEventsInput());
+    return await eventRepository.getHomeEvents(input: input);
   }
 
   Future<Either<Failure, List<Event>>> getHostingEvents({

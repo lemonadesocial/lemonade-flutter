@@ -1,4 +1,5 @@
 import 'package:app/core/domain/auth/entities/auth_session.dart';
+import 'package:app/core/oauth.dart';
 import 'package:app/core/service/auth/auth_service.dart';
 import 'package:app/core/service/user/user_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,46 +10,54 @@ part 'auth_bloc.freezed.dart';
 
 @lazySingleton
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  final AuthService authService;
+  late final AuthService authService = AuthService(onTokenStateChanged: _onTokenStateChange);
   final UserService userService;
-  AuthBloc({required this.authService, required this.userService}) : super(const AuthState.unknown()) {
+  AuthBloc({required this.userService}) : super(const AuthState.unknown()) {
     on<AuthEventCheckAuthenticated>(_onCheckAuthenticated);
     on<AuthEventLogin>(_onLogin);
     on<AuthEventLogout>(_onLogout);
+    on<AuthEventAuthenticated>(_onAuthenticated);
+    on<AuthEventUnAuthenticated>(_onUnAuthenticated);
   }
 
-  _onCheckAuthenticated(AuthEventCheckAuthenticated event, Emitter emit) async {
-    var isAuthenticated = await authService.checkAuthenticated();
-    if (isAuthenticated) {
-      final session = await _createSession();
-      if (session != null) {
-        emit(AuthState.authenticated(authSession: session));
-        return;
-      }
-      emit(const AuthState.unauthenticated(isChecking: false));
+  @override 
+  Future<void> close() async {
+    await authService.close();
+    super.close();
+  }
+
+  _onTokenStateChange(OAuthTokenState tokenState) {
+    if (tokenState == OAuthTokenState.valid) {
+      add(AuthEvent.authenticated());
+    } else {
+      add(AuthEvent.unauthenticated());
+    }
+  }
+
+  _onAuthenticated(AuthEventAuthenticated event, Emitter emit) async {
+    emit(const AuthState.unauthenticated(isChecking: true));
+    final session = await _createSession();
+    if (session != null) {
+      emit(AuthState.authenticated(authSession: session));
       return;
     }
     emit(const AuthState.unauthenticated(isChecking: false));
   }
 
-  _onLogin(AuthEventLogin event, Emitter emit) async {
-    emit(const AuthState.unauthenticated(isChecking: true));
-    var result = await authService.login();
-    if (result.isRight()) {
-      final session = await _createSession();
-      if (session != null) {
-        emit(AuthState.authenticated(authSession: session));
-        return;
-      }
-      emit(const AuthState.unauthenticated(isChecking: false));
-    }
+  _onUnAuthenticated(AuthEventUnAuthenticated event, Emitter emit) {
     emit(const AuthState.unauthenticated(isChecking: false));
   }
 
+  _onCheckAuthenticated(AuthEventCheckAuthenticated event, Emitter emit) async {
+    await authService.checkAuthenticated();
+  }
+
+  _onLogin(AuthEventLogin event, Emitter emit) async {
+    await authService.login();
+  }
+
   _onLogout(AuthEventLogout event, Emitter emit) async {
-    var success = await authService.logout();
-    if(!success) return;
-    emit(const AuthState.unauthenticated(isChecking: false));
+    await authService.logout();
   }
 
   Future<AuthSession?> _createSession() async {
@@ -62,6 +71,8 @@ class AuthEvent with _$AuthEvent {
   const factory AuthEvent.login() = AuthEventLogin;
   const factory AuthEvent.logout() = AuthEventLogout;
   const factory AuthEvent.checkAuthenticated() = AuthEventCheckAuthenticated;
+  const factory AuthEvent.authenticated() = AuthEventAuthenticated;
+  const factory AuthEvent.unauthenticated() = AuthEventUnAuthenticated;
 }
 
 @freezed

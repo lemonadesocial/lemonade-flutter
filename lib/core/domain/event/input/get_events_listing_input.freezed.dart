@@ -26,8 +26,10 @@ mixin _$GetEventsInput {
   bool? get highlight => throw _privateConstructorUsedError;
   @JsonKey(includeIfNull: false)
   String? get accepted => throw _privateConstructorUsedError;
-  int get limit => throw _privateConstructorUsedError;
-  int get skip => throw _privateConstructorUsedError;
+  @JsonKey(includeIfNull: false)
+  int? get skip => throw _privateConstructorUsedError;
+  @JsonKey(includeIfNull: false)
+  int? get limit => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -45,8 +47,8 @@ abstract class $GetEventsInputCopyWith<$Res> {
       {@JsonKey(includeIfNull: false) String? search,
       @JsonKey(includeIfNull: false) bool? highlight,
       @JsonKey(includeIfNull: false) String? accepted,
-      int limit,
-      int skip});
+      @JsonKey(includeIfNull: false) int? skip,
+      @JsonKey(includeIfNull: false) int? limit});
 }
 
 /// @nodoc
@@ -65,8 +67,8 @@ class _$GetEventsInputCopyWithImpl<$Res, $Val extends GetEventsInput>
     Object? search = freezed,
     Object? highlight = freezed,
     Object? accepted = freezed,
-    Object? limit = null,
-    Object? skip = null,
+    Object? skip = freezed,
+    Object? limit = freezed,
   }) {
     return _then(_value.copyWith(
       search: freezed == search
@@ -81,14 +83,14 @@ class _$GetEventsInputCopyWithImpl<$Res, $Val extends GetEventsInput>
           ? _value.accepted
           : accepted // ignore: cast_nullable_to_non_nullable
               as String?,
-      limit: null == limit
-          ? _value.limit
-          : limit // ignore: cast_nullable_to_non_nullable
-              as int,
-      skip: null == skip
+      skip: freezed == skip
           ? _value.skip
           : skip // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
+      limit: freezed == limit
+          ? _value.limit
+          : limit // ignore: cast_nullable_to_non_nullable
+              as int?,
     ) as $Val);
   }
 }
@@ -105,8 +107,8 @@ abstract class _$$_GetEventsInputCopyWith<$Res>
       {@JsonKey(includeIfNull: false) String? search,
       @JsonKey(includeIfNull: false) bool? highlight,
       @JsonKey(includeIfNull: false) String? accepted,
-      int limit,
-      int skip});
+      @JsonKey(includeIfNull: false) int? skip,
+      @JsonKey(includeIfNull: false) int? limit});
 }
 
 /// @nodoc
@@ -123,8 +125,8 @@ class __$$_GetEventsInputCopyWithImpl<$Res>
     Object? search = freezed,
     Object? highlight = freezed,
     Object? accepted = freezed,
-    Object? limit = null,
-    Object? skip = null,
+    Object? skip = freezed,
+    Object? limit = freezed,
   }) {
     return _then(_$_GetEventsInput(
       search: freezed == search
@@ -139,14 +141,14 @@ class __$$_GetEventsInputCopyWithImpl<$Res>
           ? _value.accepted
           : accepted // ignore: cast_nullable_to_non_nullable
               as String?,
-      limit: null == limit
-          ? _value.limit
-          : limit // ignore: cast_nullable_to_non_nullable
-              as int,
-      skip: null == skip
+      skip: freezed == skip
           ? _value.skip
           : skip // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
+      limit: freezed == limit
+          ? _value.limit
+          : limit // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -158,8 +160,8 @@ class _$_GetEventsInput implements _GetEventsInput {
       {@JsonKey(includeIfNull: false) this.search,
       @JsonKey(includeIfNull: false) this.highlight,
       @JsonKey(includeIfNull: false) this.accepted,
-      this.limit = 100,
-      this.skip = 0});
+      @JsonKey(includeIfNull: false) this.skip,
+      @JsonKey(includeIfNull: false) this.limit});
 
   factory _$_GetEventsInput.fromJson(Map<String, dynamic> json) =>
       _$$_GetEventsInputFromJson(json);
@@ -174,15 +176,15 @@ class _$_GetEventsInput implements _GetEventsInput {
   @JsonKey(includeIfNull: false)
   final String? accepted;
   @override
-  @JsonKey()
-  final int limit;
+  @JsonKey(includeIfNull: false)
+  final int? skip;
   @override
-  @JsonKey()
-  final int skip;
+  @JsonKey(includeIfNull: false)
+  final int? limit;
 
   @override
   String toString() {
-    return 'GetEventsInput(search: $search, highlight: $highlight, accepted: $accepted, limit: $limit, skip: $skip)';
+    return 'GetEventsInput(search: $search, highlight: $highlight, accepted: $accepted, skip: $skip, limit: $limit)';
   }
 
   @override
@@ -195,14 +197,14 @@ class _$_GetEventsInput implements _GetEventsInput {
                 other.highlight == highlight) &&
             (identical(other.accepted, accepted) ||
                 other.accepted == accepted) &&
-            (identical(other.limit, limit) || other.limit == limit) &&
-            (identical(other.skip, skip) || other.skip == skip));
+            (identical(other.skip, skip) || other.skip == skip) &&
+            (identical(other.limit, limit) || other.limit == limit));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, search, highlight, accepted, limit, skip);
+      Object.hash(runtimeType, search, highlight, accepted, skip, limit);
 
   @JsonKey(ignore: true)
   @override
@@ -223,8 +225,8 @@ abstract class _GetEventsInput implements GetEventsInput {
       {@JsonKey(includeIfNull: false) final String? search,
       @JsonKey(includeIfNull: false) final bool? highlight,
       @JsonKey(includeIfNull: false) final String? accepted,
-      final int limit,
-      final int skip}) = _$_GetEventsInput;
+      @JsonKey(includeIfNull: false) final int? skip,
+      @JsonKey(includeIfNull: false) final int? limit}) = _$_GetEventsInput;
 
   factory _GetEventsInput.fromJson(Map<String, dynamic> json) =
       _$_GetEventsInput.fromJson;
@@ -239,9 +241,11 @@ abstract class _GetEventsInput implements GetEventsInput {
   @JsonKey(includeIfNull: false)
   String? get accepted;
   @override
-  int get limit;
+  @JsonKey(includeIfNull: false)
+  int? get skip;
   @override
-  int get skip;
+  @JsonKey(includeIfNull: false)
+  int? get limit;
   @override
   @JsonKey(ignore: true)
   _$$_GetEventsInputCopyWith<_$_GetEventsInput> get copyWith =>
@@ -256,9 +260,14 @@ GetHomeEventsInput _$GetHomeEventsInputFromJson(Map<String, dynamic> json) {
 mixin _$GetHomeEventsInput {
   @JsonKey(includeIfNull: false)
   String? get query => throw _privateConstructorUsedError;
-  int get limit => throw _privateConstructorUsedError;
-  double get latitude => throw _privateConstructorUsedError;
-  double get longitude => throw _privateConstructorUsedError;
+  @JsonKey(includeIfNull: false)
+  int? get skip => throw _privateConstructorUsedError;
+  @JsonKey(includeIfNull: false)
+  int? get limit => throw _privateConstructorUsedError;
+  @JsonKey(includeIfNull: false)
+  double? get latitude => throw _privateConstructorUsedError;
+  @JsonKey(includeIfNull: false)
+  double? get longitude => throw _privateConstructorUsedError;
   EventTense get tense => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -275,9 +284,10 @@ abstract class $GetHomeEventsInputCopyWith<$Res> {
   @useResult
   $Res call(
       {@JsonKey(includeIfNull: false) String? query,
-      int limit,
-      double latitude,
-      double longitude,
+      @JsonKey(includeIfNull: false) int? skip,
+      @JsonKey(includeIfNull: false) int? limit,
+      @JsonKey(includeIfNull: false) double? latitude,
+      @JsonKey(includeIfNull: false) double? longitude,
       EventTense tense});
 }
 
@@ -295,9 +305,10 @@ class _$GetHomeEventsInputCopyWithImpl<$Res, $Val extends GetHomeEventsInput>
   @override
   $Res call({
     Object? query = freezed,
-    Object? limit = null,
-    Object? latitude = null,
-    Object? longitude = null,
+    Object? skip = freezed,
+    Object? limit = freezed,
+    Object? latitude = freezed,
+    Object? longitude = freezed,
     Object? tense = null,
   }) {
     return _then(_value.copyWith(
@@ -305,18 +316,22 @@ class _$GetHomeEventsInputCopyWithImpl<$Res, $Val extends GetHomeEventsInput>
           ? _value.query
           : query // ignore: cast_nullable_to_non_nullable
               as String?,
-      limit: null == limit
+      skip: freezed == skip
+          ? _value.skip
+          : skip // ignore: cast_nullable_to_non_nullable
+              as int?,
+      limit: freezed == limit
           ? _value.limit
           : limit // ignore: cast_nullable_to_non_nullable
-              as int,
-      latitude: null == latitude
+              as int?,
+      latitude: freezed == latitude
           ? _value.latitude
           : latitude // ignore: cast_nullable_to_non_nullable
-              as double,
-      longitude: null == longitude
+              as double?,
+      longitude: freezed == longitude
           ? _value.longitude
           : longitude // ignore: cast_nullable_to_non_nullable
-              as double,
+              as double?,
       tense: null == tense
           ? _value.tense
           : tense // ignore: cast_nullable_to_non_nullable
@@ -335,9 +350,10 @@ abstract class _$$_GetHomeEventsInputCopyWith<$Res>
   @useResult
   $Res call(
       {@JsonKey(includeIfNull: false) String? query,
-      int limit,
-      double latitude,
-      double longitude,
+      @JsonKey(includeIfNull: false) int? skip,
+      @JsonKey(includeIfNull: false) int? limit,
+      @JsonKey(includeIfNull: false) double? latitude,
+      @JsonKey(includeIfNull: false) double? longitude,
       EventTense tense});
 }
 
@@ -353,9 +369,10 @@ class __$$_GetHomeEventsInputCopyWithImpl<$Res>
   @override
   $Res call({
     Object? query = freezed,
-    Object? limit = null,
-    Object? latitude = null,
-    Object? longitude = null,
+    Object? skip = freezed,
+    Object? limit = freezed,
+    Object? latitude = freezed,
+    Object? longitude = freezed,
     Object? tense = null,
   }) {
     return _then(_$_GetHomeEventsInput(
@@ -363,18 +380,22 @@ class __$$_GetHomeEventsInputCopyWithImpl<$Res>
           ? _value.query
           : query // ignore: cast_nullable_to_non_nullable
               as String?,
-      limit: null == limit
+      skip: freezed == skip
+          ? _value.skip
+          : skip // ignore: cast_nullable_to_non_nullable
+              as int?,
+      limit: freezed == limit
           ? _value.limit
           : limit // ignore: cast_nullable_to_non_nullable
-              as int,
-      latitude: null == latitude
+              as int?,
+      latitude: freezed == latitude
           ? _value.latitude
           : latitude // ignore: cast_nullable_to_non_nullable
-              as double,
-      longitude: null == longitude
+              as double?,
+      longitude: freezed == longitude
           ? _value.longitude
           : longitude // ignore: cast_nullable_to_non_nullable
-              as double,
+              as double?,
       tense: null == tense
           ? _value.tense
           : tense // ignore: cast_nullable_to_non_nullable
@@ -388,9 +409,10 @@ class __$$_GetHomeEventsInputCopyWithImpl<$Res>
 class _$_GetHomeEventsInput implements _GetHomeEventsInput {
   const _$_GetHomeEventsInput(
       {@JsonKey(includeIfNull: false) this.query,
-      this.limit = 100,
-      this.latitude = 0,
-      this.longitude = 0,
+      @JsonKey(includeIfNull: false) this.skip,
+      @JsonKey(includeIfNull: false) this.limit,
+      @JsonKey(includeIfNull: false) this.latitude = 0,
+      @JsonKey(includeIfNull: false) this.longitude = 0,
       this.tense = EventTense.Future});
 
   factory _$_GetHomeEventsInput.fromJson(Map<String, dynamic> json) =>
@@ -400,21 +422,24 @@ class _$_GetHomeEventsInput implements _GetHomeEventsInput {
   @JsonKey(includeIfNull: false)
   final String? query;
   @override
-  @JsonKey()
-  final int limit;
+  @JsonKey(includeIfNull: false)
+  final int? skip;
   @override
-  @JsonKey()
-  final double latitude;
+  @JsonKey(includeIfNull: false)
+  final int? limit;
   @override
-  @JsonKey()
-  final double longitude;
+  @JsonKey(includeIfNull: false)
+  final double? latitude;
+  @override
+  @JsonKey(includeIfNull: false)
+  final double? longitude;
   @override
   @JsonKey()
   final EventTense tense;
 
   @override
   String toString() {
-    return 'GetHomeEventsInput(query: $query, limit: $limit, latitude: $latitude, longitude: $longitude, tense: $tense)';
+    return 'GetHomeEventsInput(query: $query, skip: $skip, limit: $limit, latitude: $latitude, longitude: $longitude, tense: $tense)';
   }
 
   @override
@@ -423,6 +448,7 @@ class _$_GetHomeEventsInput implements _GetHomeEventsInput {
         (other.runtimeType == runtimeType &&
             other is _$_GetHomeEventsInput &&
             (identical(other.query, query) || other.query == query) &&
+            (identical(other.skip, skip) || other.skip == skip) &&
             (identical(other.limit, limit) || other.limit == limit) &&
             (identical(other.latitude, latitude) ||
                 other.latitude == latitude) &&
@@ -434,7 +460,7 @@ class _$_GetHomeEventsInput implements _GetHomeEventsInput {
   @JsonKey(ignore: true)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, query, limit, latitude, longitude, tense);
+      Object.hash(runtimeType, query, skip, limit, latitude, longitude, tense);
 
   @JsonKey(ignore: true)
   @override
@@ -454,9 +480,10 @@ class _$_GetHomeEventsInput implements _GetHomeEventsInput {
 abstract class _GetHomeEventsInput implements GetHomeEventsInput {
   const factory _GetHomeEventsInput(
       {@JsonKey(includeIfNull: false) final String? query,
-      final int limit,
-      final double latitude,
-      final double longitude,
+      @JsonKey(includeIfNull: false) final int? skip,
+      @JsonKey(includeIfNull: false) final int? limit,
+      @JsonKey(includeIfNull: false) final double? latitude,
+      @JsonKey(includeIfNull: false) final double? longitude,
       final EventTense tense}) = _$_GetHomeEventsInput;
 
   factory _GetHomeEventsInput.fromJson(Map<String, dynamic> json) =
@@ -466,11 +493,17 @@ abstract class _GetHomeEventsInput implements GetHomeEventsInput {
   @JsonKey(includeIfNull: false)
   String? get query;
   @override
-  int get limit;
+  @JsonKey(includeIfNull: false)
+  int? get skip;
   @override
-  double get latitude;
+  @JsonKey(includeIfNull: false)
+  int? get limit;
   @override
-  double get longitude;
+  @JsonKey(includeIfNull: false)
+  double? get latitude;
+  @override
+  @JsonKey(includeIfNull: false)
+  double? get longitude;
   @override
   EventTense get tense;
   @override
@@ -486,11 +519,14 @@ GetHostingEventsInput _$GetHostingEventsInputFromJson(
 
 /// @nodoc
 mixin _$GetHostingEventsInput {
-  String get id => throw _privateConstructorUsedError;
+  @JsonKey(includeIfNull: false)
+  String? get id => throw _privateConstructorUsedError;
   @JsonKey(includeIfNull: false)
   FilterEventInput? get state => throw _privateConstructorUsedError;
-  int get limit => throw _privateConstructorUsedError;
-  dynamic get skip => throw _privateConstructorUsedError;
+  @JsonKey(includeIfNull: false)
+  int? get skip => throw _privateConstructorUsedError;
+  @JsonKey(includeIfNull: false)
+  int? get limit => throw _privateConstructorUsedError;
   dynamic get order => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -506,10 +542,10 @@ abstract class $GetHostingEventsInputCopyWith<$Res> {
       _$GetHostingEventsInputCopyWithImpl<$Res, GetHostingEventsInput>;
   @useResult
   $Res call(
-      {String id,
+      {@JsonKey(includeIfNull: false) String? id,
       @JsonKey(includeIfNull: false) FilterEventInput? state,
-      int limit,
-      dynamic skip,
+      @JsonKey(includeIfNull: false) int? skip,
+      @JsonKey(includeIfNull: false) int? limit,
       dynamic order});
 
   $FilterEventInputCopyWith<$Res>? get state;
@@ -529,29 +565,29 @@ class _$GetHostingEventsInputCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
+    Object? id = freezed,
     Object? state = freezed,
-    Object? limit = null,
     Object? skip = freezed,
+    Object? limit = freezed,
     Object? order = freezed,
   }) {
     return _then(_value.copyWith(
-      id: null == id
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       state: freezed == state
           ? _value.state
           : state // ignore: cast_nullable_to_non_nullable
               as FilterEventInput?,
-      limit: null == limit
-          ? _value.limit
-          : limit // ignore: cast_nullable_to_non_nullable
-              as int,
       skip: freezed == skip
           ? _value.skip
           : skip // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as int?,
+      limit: freezed == limit
+          ? _value.limit
+          : limit // ignore: cast_nullable_to_non_nullable
+              as int?,
       order: freezed == order
           ? _value.order
           : order // ignore: cast_nullable_to_non_nullable
@@ -581,10 +617,10 @@ abstract class _$$_GetHostingEventsInputCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String id,
+      {@JsonKey(includeIfNull: false) String? id,
       @JsonKey(includeIfNull: false) FilterEventInput? state,
-      int limit,
-      dynamic skip,
+      @JsonKey(includeIfNull: false) int? skip,
+      @JsonKey(includeIfNull: false) int? limit,
       dynamic order});
 
   @override
@@ -602,26 +638,29 @@ class __$$_GetHostingEventsInputCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
+    Object? id = freezed,
     Object? state = freezed,
-    Object? limit = null,
     Object? skip = freezed,
+    Object? limit = freezed,
     Object? order = freezed,
   }) {
     return _then(_$_GetHostingEventsInput(
-      id: null == id
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       state: freezed == state
           ? _value.state
           : state // ignore: cast_nullable_to_non_nullable
               as FilterEventInput?,
-      limit: null == limit
+      skip: freezed == skip
+          ? _value.skip
+          : skip // ignore: cast_nullable_to_non_nullable
+              as int?,
+      limit: freezed == limit
           ? _value.limit
           : limit // ignore: cast_nullable_to_non_nullable
-              as int,
-      skip: freezed == skip ? _value.skip! : skip,
+              as int?,
       order: freezed == order ? _value.order! : order,
     ));
   }
@@ -631,33 +670,34 @@ class __$$_GetHostingEventsInputCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_GetHostingEventsInput implements _GetHostingEventsInput {
   const _$_GetHostingEventsInput(
-      {required this.id,
+      {@JsonKey(includeIfNull: false) this.id,
       @JsonKey(includeIfNull: false) this.state,
-      this.limit = 100,
-      this.skip = 0,
+      @JsonKey(includeIfNull: false) this.skip,
+      @JsonKey(includeIfNull: false) this.limit,
       this.order = -1});
 
   factory _$_GetHostingEventsInput.fromJson(Map<String, dynamic> json) =>
       _$$_GetHostingEventsInputFromJson(json);
 
   @override
-  final String id;
+  @JsonKey(includeIfNull: false)
+  final String? id;
   @override
   @JsonKey(includeIfNull: false)
   final FilterEventInput? state;
   @override
-  @JsonKey()
-  final int limit;
+  @JsonKey(includeIfNull: false)
+  final int? skip;
   @override
-  @JsonKey()
-  final dynamic skip;
+  @JsonKey(includeIfNull: false)
+  final int? limit;
   @override
   @JsonKey()
   final dynamic order;
 
   @override
   String toString() {
-    return 'GetHostingEventsInput(id: $id, state: $state, limit: $limit, skip: $skip, order: $order)';
+    return 'GetHostingEventsInput(id: $id, state: $state, skip: $skip, limit: $limit, order: $order)';
   }
 
   @override
@@ -667,19 +707,14 @@ class _$_GetHostingEventsInput implements _GetHostingEventsInput {
             other is _$_GetHostingEventsInput &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.state, state) || other.state == state) &&
+            (identical(other.skip, skip) || other.skip == skip) &&
             (identical(other.limit, limit) || other.limit == limit) &&
-            const DeepCollectionEquality().equals(other.skip, skip) &&
             const DeepCollectionEquality().equals(other.order, order));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      state,
-      limit,
-      const DeepCollectionEquality().hash(skip),
+  int get hashCode => Object.hash(runtimeType, id, state, skip, limit,
       const DeepCollectionEquality().hash(order));
 
   @JsonKey(ignore: true)
@@ -699,24 +734,27 @@ class _$_GetHostingEventsInput implements _GetHostingEventsInput {
 
 abstract class _GetHostingEventsInput implements GetHostingEventsInput {
   const factory _GetHostingEventsInput(
-      {required final String id,
+      {@JsonKey(includeIfNull: false) final String? id,
       @JsonKey(includeIfNull: false) final FilterEventInput? state,
-      final int limit,
-      final dynamic skip,
+      @JsonKey(includeIfNull: false) final int? skip,
+      @JsonKey(includeIfNull: false) final int? limit,
       final dynamic order}) = _$_GetHostingEventsInput;
 
   factory _GetHostingEventsInput.fromJson(Map<String, dynamic> json) =
       _$_GetHostingEventsInput.fromJson;
 
   @override
-  String get id;
+  @JsonKey(includeIfNull: false)
+  String? get id;
   @override
   @JsonKey(includeIfNull: false)
   FilterEventInput? get state;
   @override
-  int get limit;
+  @JsonKey(includeIfNull: false)
+  int? get skip;
   @override
-  dynamic get skip;
+  @JsonKey(includeIfNull: false)
+  int? get limit;
   @override
   dynamic get order;
   @override

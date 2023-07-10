@@ -1,14 +1,20 @@
-import 'package:app/core/application/event/events_listing_bloc/events_listing_bloc.dart';
+import 'package:app/core/application/event/events_listing_bloc/attending_events_listing_bloc.dart';
+import 'package:app/core/application/event/events_listing_bloc/base_events_listing_bloc.dart';
+import 'package:app/core/application/event/events_listing_bloc/hosting_events_listing_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/event_enums.dart';
+import 'package:app/core/domain/event/event_repository.dart';
+import 'package:app/core/domain/event/input/get_events_listing_input.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/pages/profile/views/tabs/base_sliver_tab_view.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_chip_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
+import 'package:app/core/service/event/event_service.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -32,29 +38,29 @@ class _ProfileEventTabViewState extends State<ProfileEventTabView> {
   double get _filterBarHeight => 72;
   EventListingType type = EventListingType.attending;
 
+  late final attendingEventsBloc = AttendingEventListingBloc(
+    EventService(
+      getIt<EventRepository>(),
+    ),
+    defaultInput: GetEventsInput(accepted: widget.user.id),
+  )..add(BaseEventsListingEvent.fetch());
+
+  late final hostingEventsBloc = HostingEventsListingBloc(
+    EventService(
+      getIt<EventRepository>(),
+    ),
+    defaultInput: GetHostingEventsInput(id: widget.user.id),
+  )..add(BaseEventsListingEvent.fetch());
+
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      context.read<EventsListingBloc>().add(
-            EventsListingEvent.fetch(
-              eventListingType: type,
-              userId: widget.user.id,
-            ),
-          );
-    });
   }
 
   setEventListingType(EventListingType _type) {
     setState(() {
       type = _type;
     });
-    context.read<EventsListingBloc>().add(
-          EventsListingEvent.fetch(
-            eventListingType: _type,
-            userId: widget.user.id,
-          ),
-        );
   }
 
   @override
@@ -102,56 +108,73 @@ class _ProfileEventTabViewState extends State<ProfileEventTabView> {
             ),
           ),
         ),
-        BlocBuilder<EventsListingBloc, EventsListingState>(
-          builder: (context, state) {
-            return state.when(failure: () {
-              return SliverToBoxAdapter(
-                  child: Center(
-                child: Text(t.common.somethingWrong),
-              ));
-            }, loading: () {
-              return SliverToBoxAdapter(
-                child: Loading.defaultLoading(context),
-              );
-            }, fetched: (events, filterEvents) {
-              if(events.isEmpty) {
-                return SliverToBoxAdapter(
-                  // hasScrollBody: false,
-                  child: Container(
-                    height: 250,
-                    // color: Colors.red,
-                    child: Center(
-                      child: Text(t.event.empty_home_events(time: '')),
-                    ),
-                  ),
-                );
-              }
-              return SliverPadding(
-                padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
-                sliver: SliverGrid(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: Spacing.xSmall,
-                    mainAxisSpacing: Spacing.xSmall,
-                  ),
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      var event = events[index];
-                      return _EventItem(
-                        event: event,
-                      );
-                    },
-                    childCount: events.length,
-                  ),
-                ),
-              );
-            });
-          },
-        ),
+        if (type == EventListingType.attending)
+          BlocProvider.value(
+            value: attendingEventsBloc,
+            child: _EventList<AttendingEventListingBloc>(),
+          ),
+        if (type == EventListingType.hosting)
+          BlocProvider.value(
+            value: hostingEventsBloc,
+            child: _EventList<HostingEventsListingBloc>(),
+          ),
         SliverToBoxAdapter(
           child: SizedBox(height: 92),
         )
       ],
+    );
+  }
+}
+
+class _EventList<T extends BaseEventListingBloc> extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final t = Translations.of(context);
+    return BlocBuilder<T, BaseEventsListingState>(
+      builder: (context, state) {
+        return state.when(failure: () {
+          return SliverToBoxAdapter(
+              child: Center(
+            child: Text(t.common.somethingWrong),
+          ));
+        }, loading: () {
+          return SliverToBoxAdapter(
+            child: Loading.defaultLoading(context),
+          );
+        }, fetched: (events, filterEvents) {
+          if (events.isEmpty) {
+            return SliverToBoxAdapter(
+              // hasScrollBody: false,
+              child: Container(
+                height: 250,
+                // color: Colors.red,
+                child: Center(
+                  child: Text(t.event.empty_home_events(time: '')),
+                ),
+              ),
+            );
+          }
+          return SliverPadding(
+            padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
+            sliver: SliverGrid(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: Spacing.xSmall,
+                mainAxisSpacing: Spacing.xSmall,
+              ),
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  var event = events[index];
+                  return _EventItem(
+                    event: event,
+                  );
+                },
+                childCount: events.length,
+              ),
+            ),
+          );
+        });
+      },
     );
   }
 }
@@ -201,9 +224,7 @@ class _EventItem extends StatelessWidget {
                   children: [
                     TextSpan(
                       style: Typo.small.copyWith(color: colorScheme.onSurface),
-                      text: DateFormatUtils.dateOnly(
-                        event.start
-                      ),
+                      text: DateFormatUtils.dateOnly(event.start),
                     )
                   ],
                 ),

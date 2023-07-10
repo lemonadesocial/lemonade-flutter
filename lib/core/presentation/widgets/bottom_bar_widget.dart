@@ -50,7 +50,7 @@ class BottomBar extends StatelessWidget {
                           builder: (filter) => Assets.icons.icWallet.svg(colorFilter: filter),
                         ),
                         path: '/wallet'),
-                    _AuthGuardItem(
+                    _ProfileAuthGuardItem(
                       authenticatedChild: _buildItem(context,
                           icon: BlocBuilder<AuthBloc, AuthState>(
                             builder: (context, authState) => LemonCircleAvatar(
@@ -85,31 +85,34 @@ class BottomBar extends StatelessWidget {
   }
 }
 
-class _AuthGuardItem extends StatelessWidget {
+class _ProfileAuthGuardItem extends StatelessWidget {
   final Widget authenticatedChild;
   final Widget unauthenticatedChild;
-  const _AuthGuardItem({
+  const _ProfileAuthGuardItem({
     required this.authenticatedChild,
     required this.unauthenticatedChild,
   });
+
+  _buildNotLoggedIn(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        AutoRouter.of(context).navigateNamed('/login', includePrefixMatches: true);
+      },
+      child: unauthenticatedChild,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, authState) {
-        return authState.maybeWhen(
-            authenticated: (_) {
-              return authenticatedChild;
-            },
-            unauthenticated: (_) {
-              return GestureDetector(
-                onTap: () {
-                  AutoRouter.of(context).navigateNamed('/login', includePrefixMatches: true);
-                },
-                child: unauthenticatedChild,
-              );
-            },
-            orElse: () => SizedBox.shrink());
+        return authState.when(
+          authenticated: (_) {
+            return authenticatedChild;
+          },
+          unauthenticated: (_) => _buildNotLoggedIn(context),
+          unknown: () => _buildNotLoggedIn(context),
+        );
       },
     );
   }

@@ -2,5 +2,6 @@
     "login": {
         "success": "Logged in successfully",
         "fail": "Logged in failed"
-    }
+    },
+    "logout": "Logout"
 }
