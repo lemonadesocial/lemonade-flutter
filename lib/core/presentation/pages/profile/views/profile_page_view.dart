@@ -1,5 +1,7 @@
 import 'package:app/core/application/profile/user_profile_bloc/user_profile_bloc.dart';
 import 'package:app/core/application/auth/auth_bloc.dart';
+import 'package:app/core/config.dart';
+import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/dpos/common/dropdown_item_dpo.dart';
 import 'package:app/core/presentation/pages/profile/views/tabs/profile_posts_tab_view.dart';
 import 'package:app/core/presentation/pages/profile/widgets/profile_page_header_widget.dart';
@@ -18,6 +20,7 @@ import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:share_plus/share_plus.dart';
 
 class ProfilePageView extends StatefulWidget {
   final String userId;
@@ -52,6 +55,16 @@ class _ProfilePageViewState extends State<ProfilePageView> with SingleTickerProv
     super.dispose();
   }
 
+  _shareProfileLink(User userProfile) async {
+    try {
+      final box = context.findRenderObject() as RenderBox?;
+      await Share.share(
+        '${AppConfig.webUrl}/${userProfile.username}',
+        sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
+      );
+    } catch (e) {}
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -66,14 +79,17 @@ class _ProfilePageViewState extends State<ProfilePageView> with SingleTickerProv
                 title: '@${userProfile.username ?? t.common.anonymous}',
                 leading: BurgerMenu(),
                 actions: [
-                  ThemeSvgIcon(
-                    color: colorScheme.onSurface,
-                    builder: (filter) => Assets.icons.icShare.svg(colorFilter: filter),
+                  GestureDetector(
+                    onTap: () => _shareProfileLink(userProfile),
+                    child: ThemeSvgIcon(
+                      color: colorScheme.onSurface,
+                      builder: (filter) => Assets.icons.icShare.svg(colorFilter: filter),
+                    ),
                   ),
                   FloatingFrostedGlassDropdown(
                     items: [
                       DropdownItemDpo(
-                        label: "Logout",
+                        label: t.auth.logout,
                       ),
                     ],
                     onItemPressed: (item) {

@@ -26,5 +26,6 @@
         "edit": "edit",
         "connect": "connect"
     },
-    "anonymous": "anonymous"
+    "anonymous": "anonymous",
+    "profileUrlCopied": "Profile's URL copied to clipboard"
 }
