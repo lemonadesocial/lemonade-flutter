@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'events_listing_bloc.dart';
+part of 'base_events_listing_bloc.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -15,7 +15,7 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
-mixin _$EventsListingState {
+mixin _$BaseEventsListingState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
@@ -41,39 +41,40 @@ mixin _$EventsListingState {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(EventsListingStateLoading value) loading,
-    required TResult Function(EventsListingStateFetched value) fetched,
-    required TResult Function(EventsListingStateFailure value) failure,
+    required TResult Function(BaseEventsListingStateLoading value) loading,
+    required TResult Function(BaseEventsListingStateFetched value) fetched,
+    required TResult Function(BaseEventsListingStateFailure value) failure,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(EventsListingStateLoading value)? loading,
-    TResult? Function(EventsListingStateFetched value)? fetched,
-    TResult? Function(EventsListingStateFailure value)? failure,
+    TResult? Function(BaseEventsListingStateLoading value)? loading,
+    TResult? Function(BaseEventsListingStateFetched value)? fetched,
+    TResult? Function(BaseEventsListingStateFailure value)? failure,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(EventsListingStateLoading value)? loading,
-    TResult Function(EventsListingStateFetched value)? fetched,
-    TResult Function(EventsListingStateFailure value)? failure,
+    TResult Function(BaseEventsListingStateLoading value)? loading,
+    TResult Function(BaseEventsListingStateFetched value)? fetched,
+    TResult Function(BaseEventsListingStateFailure value)? failure,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $EventsListingStateCopyWith<$Res> {
-  factory $EventsListingStateCopyWith(
-          EventsListingState value, $Res Function(EventsListingState) then) =
-      _$EventsListingStateCopyWithImpl<$Res, EventsListingState>;
+abstract class $BaseEventsListingStateCopyWith<$Res> {
+  factory $BaseEventsListingStateCopyWith(BaseEventsListingState value,
+          $Res Function(BaseEventsListingState) then) =
+      _$BaseEventsListingStateCopyWithImpl<$Res, BaseEventsListingState>;
 }
 
 /// @nodoc
-class _$EventsListingStateCopyWithImpl<$Res, $Val extends EventsListingState>
-    implements $EventsListingStateCopyWith<$Res> {
-  _$EventsListingStateCopyWithImpl(this._value, this._then);
+class _$BaseEventsListingStateCopyWithImpl<$Res,
+        $Val extends BaseEventsListingState>
+    implements $BaseEventsListingStateCopyWith<$Res> {
+  _$BaseEventsListingStateCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -82,37 +83,39 @@ class _$EventsListingStateCopyWithImpl<$Res, $Val extends EventsListingState>
 }
 
 /// @nodoc
-abstract class _$$EventsListingStateLoadingCopyWith<$Res> {
-  factory _$$EventsListingStateLoadingCopyWith(
-          _$EventsListingStateLoading value,
-          $Res Function(_$EventsListingStateLoading) then) =
-      __$$EventsListingStateLoadingCopyWithImpl<$Res>;
+abstract class _$$BaseEventsListingStateLoadingCopyWith<$Res> {
+  factory _$$BaseEventsListingStateLoadingCopyWith(
+          _$BaseEventsListingStateLoading value,
+          $Res Function(_$BaseEventsListingStateLoading) then) =
+      __$$BaseEventsListingStateLoadingCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$EventsListingStateLoadingCopyWithImpl<$Res>
-    extends _$EventsListingStateCopyWithImpl<$Res, _$EventsListingStateLoading>
-    implements _$$EventsListingStateLoadingCopyWith<$Res> {
-  __$$EventsListingStateLoadingCopyWithImpl(_$EventsListingStateLoading _value,
-      $Res Function(_$EventsListingStateLoading) _then)
+class __$$BaseEventsListingStateLoadingCopyWithImpl<$Res>
+    extends _$BaseEventsListingStateCopyWithImpl<$Res,
+        _$BaseEventsListingStateLoading>
+    implements _$$BaseEventsListingStateLoadingCopyWith<$Res> {
+  __$$BaseEventsListingStateLoadingCopyWithImpl(
+      _$BaseEventsListingStateLoading _value,
+      $Res Function(_$BaseEventsListingStateLoading) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$EventsListingStateLoading extends EventsListingStateLoading {
-  _$EventsListingStateLoading() : super._();
+class _$BaseEventsListingStateLoading extends BaseEventsListingStateLoading {
+  _$BaseEventsListingStateLoading() : super._();
 
   @override
   String toString() {
-    return 'EventsListingState.loading()';
+    return 'BaseEventsListingState.loading()';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$EventsListingStateLoading);
+            other is _$BaseEventsListingStateLoading);
   }
 
   @override
@@ -156,9 +159,9 @@ class _$EventsListingStateLoading extends EventsListingStateLoading {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(EventsListingStateLoading value) loading,
-    required TResult Function(EventsListingStateFetched value) fetched,
-    required TResult Function(EventsListingStateFailure value) failure,
+    required TResult Function(BaseEventsListingStateLoading value) loading,
+    required TResult Function(BaseEventsListingStateFetched value) fetched,
+    required TResult Function(BaseEventsListingStateFailure value) failure,
   }) {
     return loading(this);
   }
@@ -166,9 +169,9 @@ class _$EventsListingStateLoading extends EventsListingStateLoading {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(EventsListingStateLoading value)? loading,
-    TResult? Function(EventsListingStateFetched value)? fetched,
-    TResult? Function(EventsListingStateFailure value)? failure,
+    TResult? Function(BaseEventsListingStateLoading value)? loading,
+    TResult? Function(BaseEventsListingStateFetched value)? fetched,
+    TResult? Function(BaseEventsListingStateFailure value)? failure,
   }) {
     return loading?.call(this);
   }
@@ -176,9 +179,9 @@ class _$EventsListingStateLoading extends EventsListingStateLoading {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(EventsListingStateLoading value)? loading,
-    TResult Function(EventsListingStateFetched value)? fetched,
-    TResult Function(EventsListingStateFailure value)? failure,
+    TResult Function(BaseEventsListingStateLoading value)? loading,
+    TResult Function(BaseEventsListingStateFetched value)? fetched,
+    TResult Function(BaseEventsListingStateFailure value)? failure,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -188,27 +191,29 @@ class _$EventsListingStateLoading extends EventsListingStateLoading {
   }
 }
 
-abstract class EventsListingStateLoading extends EventsListingState {
-  factory EventsListingStateLoading() = _$EventsListingStateLoading;
-  EventsListingStateLoading._() : super._();
+abstract class BaseEventsListingStateLoading extends BaseEventsListingState {
+  factory BaseEventsListingStateLoading() = _$BaseEventsListingStateLoading;
+  BaseEventsListingStateLoading._() : super._();
 }
 
 /// @nodoc
-abstract class _$$EventsListingStateFetchedCopyWith<$Res> {
-  factory _$$EventsListingStateFetchedCopyWith(
-          _$EventsListingStateFetched value,
-          $Res Function(_$EventsListingStateFetched) then) =
-      __$$EventsListingStateFetchedCopyWithImpl<$Res>;
+abstract class _$$BaseEventsListingStateFetchedCopyWith<$Res> {
+  factory _$$BaseEventsListingStateFetchedCopyWith(
+          _$BaseEventsListingStateFetched value,
+          $Res Function(_$BaseEventsListingStateFetched) then) =
+      __$$BaseEventsListingStateFetchedCopyWithImpl<$Res>;
   @useResult
   $Res call({List<Event> events, List<Event> filteredEvents});
 }
 
 /// @nodoc
-class __$$EventsListingStateFetchedCopyWithImpl<$Res>
-    extends _$EventsListingStateCopyWithImpl<$Res, _$EventsListingStateFetched>
-    implements _$$EventsListingStateFetchedCopyWith<$Res> {
-  __$$EventsListingStateFetchedCopyWithImpl(_$EventsListingStateFetched _value,
-      $Res Function(_$EventsListingStateFetched) _then)
+class __$$BaseEventsListingStateFetchedCopyWithImpl<$Res>
+    extends _$BaseEventsListingStateCopyWithImpl<$Res,
+        _$BaseEventsListingStateFetched>
+    implements _$$BaseEventsListingStateFetchedCopyWith<$Res> {
+  __$$BaseEventsListingStateFetchedCopyWithImpl(
+      _$BaseEventsListingStateFetched _value,
+      $Res Function(_$BaseEventsListingStateFetched) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -217,7 +222,7 @@ class __$$EventsListingStateFetchedCopyWithImpl<$Res>
     Object? events = null,
     Object? filteredEvents = null,
   }) {
-    return _then(_$EventsListingStateFetched(
+    return _then(_$BaseEventsListingStateFetched(
       events: null == events
           ? _value._events
           : events // ignore: cast_nullable_to_non_nullable
@@ -232,8 +237,8 @@ class __$$EventsListingStateFetchedCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$EventsListingStateFetched extends EventsListingStateFetched {
-  _$EventsListingStateFetched(
+class _$BaseEventsListingStateFetched extends BaseEventsListingStateFetched {
+  _$BaseEventsListingStateFetched(
       {required final List<Event> events,
       required final List<Event> filteredEvents})
       : _events = events,
@@ -258,14 +263,14 @@ class _$EventsListingStateFetched extends EventsListingStateFetched {
 
   @override
   String toString() {
-    return 'EventsListingState.fetched(events: $events, filteredEvents: $filteredEvents)';
+    return 'BaseEventsListingState.fetched(events: $events, filteredEvents: $filteredEvents)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$EventsListingStateFetched &&
+            other is _$BaseEventsListingStateFetched &&
             const DeepCollectionEquality().equals(other._events, _events) &&
             const DeepCollectionEquality()
                 .equals(other._filteredEvents, _filteredEvents));
@@ -280,9 +285,9 @@ class _$EventsListingStateFetched extends EventsListingStateFetched {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$EventsListingStateFetchedCopyWith<_$EventsListingStateFetched>
-      get copyWith => __$$EventsListingStateFetchedCopyWithImpl<
-          _$EventsListingStateFetched>(this, _$identity);
+  _$$BaseEventsListingStateFetchedCopyWith<_$BaseEventsListingStateFetched>
+      get copyWith => __$$BaseEventsListingStateFetchedCopyWithImpl<
+          _$BaseEventsListingStateFetched>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -322,9 +327,9 @@ class _$EventsListingStateFetched extends EventsListingStateFetched {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(EventsListingStateLoading value) loading,
-    required TResult Function(EventsListingStateFetched value) fetched,
-    required TResult Function(EventsListingStateFailure value) failure,
+    required TResult Function(BaseEventsListingStateLoading value) loading,
+    required TResult Function(BaseEventsListingStateFetched value) fetched,
+    required TResult Function(BaseEventsListingStateFailure value) failure,
   }) {
     return fetched(this);
   }
@@ -332,9 +337,9 @@ class _$EventsListingStateFetched extends EventsListingStateFetched {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(EventsListingStateLoading value)? loading,
-    TResult? Function(EventsListingStateFetched value)? fetched,
-    TResult? Function(EventsListingStateFailure value)? failure,
+    TResult? Function(BaseEventsListingStateLoading value)? loading,
+    TResult? Function(BaseEventsListingStateFetched value)? fetched,
+    TResult? Function(BaseEventsListingStateFailure value)? failure,
   }) {
     return fetched?.call(this);
   }
@@ -342,9 +347,9 @@ class _$EventsListingStateFetched extends EventsListingStateFetched {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(EventsListingStateLoading value)? loading,
-    TResult Function(EventsListingStateFetched value)? fetched,
-    TResult Function(EventsListingStateFailure value)? failure,
+    TResult Function(BaseEventsListingStateLoading value)? loading,
+    TResult Function(BaseEventsListingStateFetched value)? fetched,
+    TResult Function(BaseEventsListingStateFailure value)? failure,
     required TResult orElse(),
   }) {
     if (fetched != null) {
@@ -354,51 +359,54 @@ class _$EventsListingStateFetched extends EventsListingStateFetched {
   }
 }
 
-abstract class EventsListingStateFetched extends EventsListingState {
-  factory EventsListingStateFetched(
-      {required final List<Event> events,
-      required final List<Event> filteredEvents}) = _$EventsListingStateFetched;
-  EventsListingStateFetched._() : super._();
+abstract class BaseEventsListingStateFetched extends BaseEventsListingState {
+  factory BaseEventsListingStateFetched(
+          {required final List<Event> events,
+          required final List<Event> filteredEvents}) =
+      _$BaseEventsListingStateFetched;
+  BaseEventsListingStateFetched._() : super._();
 
   List<Event> get events;
   List<Event> get filteredEvents;
   @JsonKey(ignore: true)
-  _$$EventsListingStateFetchedCopyWith<_$EventsListingStateFetched>
+  _$$BaseEventsListingStateFetchedCopyWith<_$BaseEventsListingStateFetched>
       get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$EventsListingStateFailureCopyWith<$Res> {
-  factory _$$EventsListingStateFailureCopyWith(
-          _$EventsListingStateFailure value,
-          $Res Function(_$EventsListingStateFailure) then) =
-      __$$EventsListingStateFailureCopyWithImpl<$Res>;
+abstract class _$$BaseEventsListingStateFailureCopyWith<$Res> {
+  factory _$$BaseEventsListingStateFailureCopyWith(
+          _$BaseEventsListingStateFailure value,
+          $Res Function(_$BaseEventsListingStateFailure) then) =
+      __$$BaseEventsListingStateFailureCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$EventsListingStateFailureCopyWithImpl<$Res>
-    extends _$EventsListingStateCopyWithImpl<$Res, _$EventsListingStateFailure>
-    implements _$$EventsListingStateFailureCopyWith<$Res> {
-  __$$EventsListingStateFailureCopyWithImpl(_$EventsListingStateFailure _value,
-      $Res Function(_$EventsListingStateFailure) _then)
+class __$$BaseEventsListingStateFailureCopyWithImpl<$Res>
+    extends _$BaseEventsListingStateCopyWithImpl<$Res,
+        _$BaseEventsListingStateFailure>
+    implements _$$BaseEventsListingStateFailureCopyWith<$Res> {
+  __$$BaseEventsListingStateFailureCopyWithImpl(
+      _$BaseEventsListingStateFailure _value,
+      $Res Function(_$BaseEventsListingStateFailure) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$EventsListingStateFailure extends EventsListingStateFailure {
-  _$EventsListingStateFailure() : super._();
+class _$BaseEventsListingStateFailure extends BaseEventsListingStateFailure {
+  _$BaseEventsListingStateFailure() : super._();
 
   @override
   String toString() {
-    return 'EventsListingState.failure()';
+    return 'BaseEventsListingState.failure()';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$EventsListingStateFailure);
+            other is _$BaseEventsListingStateFailure);
   }
 
   @override
@@ -442,9 +450,9 @@ class _$EventsListingStateFailure extends EventsListingStateFailure {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(EventsListingStateLoading value) loading,
-    required TResult Function(EventsListingStateFetched value) fetched,
-    required TResult Function(EventsListingStateFailure value) failure,
+    required TResult Function(BaseEventsListingStateLoading value) loading,
+    required TResult Function(BaseEventsListingStateFetched value) fetched,
+    required TResult Function(BaseEventsListingStateFailure value) failure,
   }) {
     return failure(this);
   }
@@ -452,9 +460,9 @@ class _$EventsListingStateFailure extends EventsListingStateFailure {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(EventsListingStateLoading value)? loading,
-    TResult? Function(EventsListingStateFetched value)? fetched,
-    TResult? Function(EventsListingStateFailure value)? failure,
+    TResult? Function(BaseEventsListingStateLoading value)? loading,
+    TResult? Function(BaseEventsListingStateFetched value)? fetched,
+    TResult? Function(BaseEventsListingStateFailure value)? failure,
   }) {
     return failure?.call(this);
   }
@@ -462,9 +470,9 @@ class _$EventsListingStateFailure extends EventsListingStateFailure {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(EventsListingStateLoading value)? loading,
-    TResult Function(EventsListingStateFetched value)? fetched,
-    TResult Function(EventsListingStateFailure value)? failure,
+    TResult Function(BaseEventsListingStateLoading value)? loading,
+    TResult Function(BaseEventsListingStateFetched value)? fetched,
+    TResult Function(BaseEventsListingStateFailure value)? failure,
     required TResult orElse(),
   }) {
     if (failure != null) {
@@ -474,77 +482,72 @@ class _$EventsListingStateFailure extends EventsListingStateFailure {
   }
 }
 
-abstract class EventsListingStateFailure extends EventsListingState {
-  factory EventsListingStateFailure() = _$EventsListingStateFailure;
-  EventsListingStateFailure._() : super._();
+abstract class BaseEventsListingStateFailure extends BaseEventsListingState {
+  factory BaseEventsListingStateFailure() = _$BaseEventsListingStateFailure;
+  BaseEventsListingStateFailure._() : super._();
 }
 
 /// @nodoc
-mixin _$EventsListingEvent {
+mixin _$BaseEventsListingEvent {
   EventTimeFilter? get eventTimeFilter => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(EventListingType? eventListingType,
-            EventTimeFilter? eventTimeFilter, String? userId)
-        fetch,
+    required TResult Function(EventTimeFilter? eventTimeFilter) fetch,
     required TResult Function(EventTimeFilter? eventTimeFilter) filter,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(EventListingType? eventListingType,
-            EventTimeFilter? eventTimeFilter, String? userId)?
-        fetch,
+    TResult? Function(EventTimeFilter? eventTimeFilter)? fetch,
     TResult? Function(EventTimeFilter? eventTimeFilter)? filter,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(EventListingType? eventListingType,
-            EventTimeFilter? eventTimeFilter, String? userId)?
-        fetch,
+    TResult Function(EventTimeFilter? eventTimeFilter)? fetch,
     TResult Function(EventTimeFilter? eventTimeFilter)? filter,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(EventsListingEventFetch value) fetch,
-    required TResult Function(EventsListingEventFilter value) filter,
+    required TResult Function(BaseEventsListingEventFetch value) fetch,
+    required TResult Function(BaseEventsListingEventFilter value) filter,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(EventsListingEventFetch value)? fetch,
-    TResult? Function(EventsListingEventFilter value)? filter,
+    TResult? Function(BaseEventsListingEventFetch value)? fetch,
+    TResult? Function(BaseEventsListingEventFilter value)? filter,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(EventsListingEventFetch value)? fetch,
-    TResult Function(EventsListingEventFilter value)? filter,
+    TResult Function(BaseEventsListingEventFetch value)? fetch,
+    TResult Function(BaseEventsListingEventFilter value)? filter,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
-  $EventsListingEventCopyWith<EventsListingEvent> get copyWith =>
+  $BaseEventsListingEventCopyWith<BaseEventsListingEvent> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $EventsListingEventCopyWith<$Res> {
-  factory $EventsListingEventCopyWith(
-          EventsListingEvent value, $Res Function(EventsListingEvent) then) =
-      _$EventsListingEventCopyWithImpl<$Res, EventsListingEvent>;
+abstract class $BaseEventsListingEventCopyWith<$Res> {
+  factory $BaseEventsListingEventCopyWith(BaseEventsListingEvent value,
+          $Res Function(BaseEventsListingEvent) then) =
+      _$BaseEventsListingEventCopyWithImpl<$Res, BaseEventsListingEvent>;
   @useResult
   $Res call({EventTimeFilter? eventTimeFilter});
 }
 
 /// @nodoc
-class _$EventsListingEventCopyWithImpl<$Res, $Val extends EventsListingEvent>
-    implements $EventsListingEventCopyWith<$Res> {
-  _$EventsListingEventCopyWithImpl(this._value, this._then);
+class _$BaseEventsListingEventCopyWithImpl<$Res,
+        $Val extends BaseEventsListingEvent>
+    implements $BaseEventsListingEventCopyWith<$Res> {
+  _$BaseEventsListingEventCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -566,194 +569,25 @@ class _$EventsListingEventCopyWithImpl<$Res, $Val extends EventsListingEvent>
 }
 
 /// @nodoc
-abstract class _$$EventsListingEventFetchCopyWith<$Res>
-    implements $EventsListingEventCopyWith<$Res> {
-  factory _$$EventsListingEventFetchCopyWith(_$EventsListingEventFetch value,
-          $Res Function(_$EventsListingEventFetch) then) =
-      __$$EventsListingEventFetchCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call(
-      {EventListingType? eventListingType,
-      EventTimeFilter? eventTimeFilter,
-      String? userId});
-}
-
-/// @nodoc
-class __$$EventsListingEventFetchCopyWithImpl<$Res>
-    extends _$EventsListingEventCopyWithImpl<$Res, _$EventsListingEventFetch>
-    implements _$$EventsListingEventFetchCopyWith<$Res> {
-  __$$EventsListingEventFetchCopyWithImpl(_$EventsListingEventFetch _value,
-      $Res Function(_$EventsListingEventFetch) _then)
-      : super(_value, _then);
-
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? eventListingType = freezed,
-    Object? eventTimeFilter = freezed,
-    Object? userId = freezed,
-  }) {
-    return _then(_$EventsListingEventFetch(
-      eventListingType: freezed == eventListingType
-          ? _value.eventListingType
-          : eventListingType // ignore: cast_nullable_to_non_nullable
-              as EventListingType?,
-      eventTimeFilter: freezed == eventTimeFilter
-          ? _value.eventTimeFilter
-          : eventTimeFilter // ignore: cast_nullable_to_non_nullable
-              as EventTimeFilter?,
-      userId: freezed == userId
-          ? _value.userId
-          : userId // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
-  }
-}
-
-/// @nodoc
-
-class _$EventsListingEventFetch implements EventsListingEventFetch {
-  _$EventsListingEventFetch(
-      {this.eventListingType, this.eventTimeFilter, this.userId});
-
-  @override
-  final EventListingType? eventListingType;
-  @override
-  final EventTimeFilter? eventTimeFilter;
-  @override
-  final String? userId;
-
-  @override
-  String toString() {
-    return 'EventsListingEvent.fetch(eventListingType: $eventListingType, eventTimeFilter: $eventTimeFilter, userId: $userId)';
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$EventsListingEventFetch &&
-            (identical(other.eventListingType, eventListingType) ||
-                other.eventListingType == eventListingType) &&
-            (identical(other.eventTimeFilter, eventTimeFilter) ||
-                other.eventTimeFilter == eventTimeFilter) &&
-            (identical(other.userId, userId) || other.userId == userId));
-  }
-
-  @override
-  int get hashCode =>
-      Object.hash(runtimeType, eventListingType, eventTimeFilter, userId);
-
-  @JsonKey(ignore: true)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$EventsListingEventFetchCopyWith<_$EventsListingEventFetch> get copyWith =>
-      __$$EventsListingEventFetchCopyWithImpl<_$EventsListingEventFetch>(
-          this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(EventListingType? eventListingType,
-            EventTimeFilter? eventTimeFilter, String? userId)
-        fetch,
-    required TResult Function(EventTimeFilter? eventTimeFilter) filter,
-  }) {
-    return fetch(eventListingType, eventTimeFilter, userId);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(EventListingType? eventListingType,
-            EventTimeFilter? eventTimeFilter, String? userId)?
-        fetch,
-    TResult? Function(EventTimeFilter? eventTimeFilter)? filter,
-  }) {
-    return fetch?.call(eventListingType, eventTimeFilter, userId);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(EventListingType? eventListingType,
-            EventTimeFilter? eventTimeFilter, String? userId)?
-        fetch,
-    TResult Function(EventTimeFilter? eventTimeFilter)? filter,
-    required TResult orElse(),
-  }) {
-    if (fetch != null) {
-      return fetch(eventListingType, eventTimeFilter, userId);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(EventsListingEventFetch value) fetch,
-    required TResult Function(EventsListingEventFilter value) filter,
-  }) {
-    return fetch(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(EventsListingEventFetch value)? fetch,
-    TResult? Function(EventsListingEventFilter value)? filter,
-  }) {
-    return fetch?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(EventsListingEventFetch value)? fetch,
-    TResult Function(EventsListingEventFilter value)? filter,
-    required TResult orElse(),
-  }) {
-    if (fetch != null) {
-      return fetch(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class EventsListingEventFetch implements EventsListingEvent {
-  factory EventsListingEventFetch(
-      {final EventListingType? eventListingType,
-      final EventTimeFilter? eventTimeFilter,
-      final String? userId}) = _$EventsListingEventFetch;
-
-  EventListingType? get eventListingType;
-  @override
-  EventTimeFilter? get eventTimeFilter;
-  String? get userId;
-  @override
-  @JsonKey(ignore: true)
-  _$$EventsListingEventFetchCopyWith<_$EventsListingEventFetch> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class _$$EventsListingEventFilterCopyWith<$Res>
-    implements $EventsListingEventCopyWith<$Res> {
-  factory _$$EventsListingEventFilterCopyWith(_$EventsListingEventFilter value,
-          $Res Function(_$EventsListingEventFilter) then) =
-      __$$EventsListingEventFilterCopyWithImpl<$Res>;
+abstract class _$$BaseEventsListingEventFetchCopyWith<$Res>
+    implements $BaseEventsListingEventCopyWith<$Res> {
+  factory _$$BaseEventsListingEventFetchCopyWith(
+          _$BaseEventsListingEventFetch value,
+          $Res Function(_$BaseEventsListingEventFetch) then) =
+      __$$BaseEventsListingEventFetchCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({EventTimeFilter? eventTimeFilter});
 }
 
 /// @nodoc
-class __$$EventsListingEventFilterCopyWithImpl<$Res>
-    extends _$EventsListingEventCopyWithImpl<$Res, _$EventsListingEventFilter>
-    implements _$$EventsListingEventFilterCopyWith<$Res> {
-  __$$EventsListingEventFilterCopyWithImpl(_$EventsListingEventFilter _value,
-      $Res Function(_$EventsListingEventFilter) _then)
+class __$$BaseEventsListingEventFetchCopyWithImpl<$Res>
+    extends _$BaseEventsListingEventCopyWithImpl<$Res,
+        _$BaseEventsListingEventFetch>
+    implements _$$BaseEventsListingEventFetchCopyWith<$Res> {
+  __$$BaseEventsListingEventFetchCopyWithImpl(
+      _$BaseEventsListingEventFetch _value,
+      $Res Function(_$BaseEventsListingEventFetch) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -761,7 +595,7 @@ class __$$EventsListingEventFilterCopyWithImpl<$Res>
   $Res call({
     Object? eventTimeFilter = freezed,
   }) {
-    return _then(_$EventsListingEventFilter(
+    return _then(_$BaseEventsListingEventFetch(
       eventTimeFilter: freezed == eventTimeFilter
           ? _value.eventTimeFilter
           : eventTimeFilter // ignore: cast_nullable_to_non_nullable
@@ -772,22 +606,22 @@ class __$$EventsListingEventFilterCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$EventsListingEventFilter implements EventsListingEventFilter {
-  _$EventsListingEventFilter({this.eventTimeFilter});
+class _$BaseEventsListingEventFetch implements BaseEventsListingEventFetch {
+  _$BaseEventsListingEventFetch({this.eventTimeFilter});
 
   @override
   final EventTimeFilter? eventTimeFilter;
 
   @override
   String toString() {
-    return 'EventsListingEvent.filter(eventTimeFilter: $eventTimeFilter)';
+    return 'BaseEventsListingEvent.fetch(eventTimeFilter: $eventTimeFilter)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$EventsListingEventFilter &&
+            other is _$BaseEventsListingEventFetch &&
             (identical(other.eventTimeFilter, eventTimeFilter) ||
                 other.eventTimeFilter == eventTimeFilter));
   }
@@ -798,17 +632,157 @@ class _$EventsListingEventFilter implements EventsListingEventFilter {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$EventsListingEventFilterCopyWith<_$EventsListingEventFilter>
-      get copyWith =>
-          __$$EventsListingEventFilterCopyWithImpl<_$EventsListingEventFilter>(
-              this, _$identity);
+  _$$BaseEventsListingEventFetchCopyWith<_$BaseEventsListingEventFetch>
+      get copyWith => __$$BaseEventsListingEventFetchCopyWithImpl<
+          _$BaseEventsListingEventFetch>(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(EventListingType? eventListingType,
-            EventTimeFilter? eventTimeFilter, String? userId)
-        fetch,
+    required TResult Function(EventTimeFilter? eventTimeFilter) fetch,
+    required TResult Function(EventTimeFilter? eventTimeFilter) filter,
+  }) {
+    return fetch(eventTimeFilter);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(EventTimeFilter? eventTimeFilter)? fetch,
+    TResult? Function(EventTimeFilter? eventTimeFilter)? filter,
+  }) {
+    return fetch?.call(eventTimeFilter);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(EventTimeFilter? eventTimeFilter)? fetch,
+    TResult Function(EventTimeFilter? eventTimeFilter)? filter,
+    required TResult orElse(),
+  }) {
+    if (fetch != null) {
+      return fetch(eventTimeFilter);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(BaseEventsListingEventFetch value) fetch,
+    required TResult Function(BaseEventsListingEventFilter value) filter,
+  }) {
+    return fetch(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(BaseEventsListingEventFetch value)? fetch,
+    TResult? Function(BaseEventsListingEventFilter value)? filter,
+  }) {
+    return fetch?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(BaseEventsListingEventFetch value)? fetch,
+    TResult Function(BaseEventsListingEventFilter value)? filter,
+    required TResult orElse(),
+  }) {
+    if (fetch != null) {
+      return fetch(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class BaseEventsListingEventFetch implements BaseEventsListingEvent {
+  factory BaseEventsListingEventFetch(
+      {final EventTimeFilter? eventTimeFilter}) = _$BaseEventsListingEventFetch;
+
+  @override
+  EventTimeFilter? get eventTimeFilter;
+  @override
+  @JsonKey(ignore: true)
+  _$$BaseEventsListingEventFetchCopyWith<_$BaseEventsListingEventFetch>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$BaseEventsListingEventFilterCopyWith<$Res>
+    implements $BaseEventsListingEventCopyWith<$Res> {
+  factory _$$BaseEventsListingEventFilterCopyWith(
+          _$BaseEventsListingEventFilter value,
+          $Res Function(_$BaseEventsListingEventFilter) then) =
+      __$$BaseEventsListingEventFilterCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({EventTimeFilter? eventTimeFilter});
+}
+
+/// @nodoc
+class __$$BaseEventsListingEventFilterCopyWithImpl<$Res>
+    extends _$BaseEventsListingEventCopyWithImpl<$Res,
+        _$BaseEventsListingEventFilter>
+    implements _$$BaseEventsListingEventFilterCopyWith<$Res> {
+  __$$BaseEventsListingEventFilterCopyWithImpl(
+      _$BaseEventsListingEventFilter _value,
+      $Res Function(_$BaseEventsListingEventFilter) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? eventTimeFilter = freezed,
+  }) {
+    return _then(_$BaseEventsListingEventFilter(
+      eventTimeFilter: freezed == eventTimeFilter
+          ? _value.eventTimeFilter
+          : eventTimeFilter // ignore: cast_nullable_to_non_nullable
+              as EventTimeFilter?,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$BaseEventsListingEventFilter implements BaseEventsListingEventFilter {
+  _$BaseEventsListingEventFilter({this.eventTimeFilter});
+
+  @override
+  final EventTimeFilter? eventTimeFilter;
+
+  @override
+  String toString() {
+    return 'BaseEventsListingEvent.filter(eventTimeFilter: $eventTimeFilter)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$BaseEventsListingEventFilter &&
+            (identical(other.eventTimeFilter, eventTimeFilter) ||
+                other.eventTimeFilter == eventTimeFilter));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, eventTimeFilter);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$BaseEventsListingEventFilterCopyWith<_$BaseEventsListingEventFilter>
+      get copyWith => __$$BaseEventsListingEventFilterCopyWithImpl<
+          _$BaseEventsListingEventFilter>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(EventTimeFilter? eventTimeFilter) fetch,
     required TResult Function(EventTimeFilter? eventTimeFilter) filter,
   }) {
     return filter(eventTimeFilter);
@@ -817,9 +791,7 @@ class _$EventsListingEventFilter implements EventsListingEventFilter {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(EventListingType? eventListingType,
-            EventTimeFilter? eventTimeFilter, String? userId)?
-        fetch,
+    TResult? Function(EventTimeFilter? eventTimeFilter)? fetch,
     TResult? Function(EventTimeFilter? eventTimeFilter)? filter,
   }) {
     return filter?.call(eventTimeFilter);
@@ -828,9 +800,7 @@ class _$EventsListingEventFilter implements EventsListingEventFilter {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(EventListingType? eventListingType,
-            EventTimeFilter? eventTimeFilter, String? userId)?
-        fetch,
+    TResult Function(EventTimeFilter? eventTimeFilter)? fetch,
     TResult Function(EventTimeFilter? eventTimeFilter)? filter,
     required TResult orElse(),
   }) {
@@ -843,8 +813,8 @@ class _$EventsListingEventFilter implements EventsListingEventFilter {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(EventsListingEventFetch value) fetch,
-    required TResult Function(EventsListingEventFilter value) filter,
+    required TResult Function(BaseEventsListingEventFetch value) fetch,
+    required TResult Function(BaseEventsListingEventFilter value) filter,
   }) {
     return filter(this);
   }
@@ -852,8 +822,8 @@ class _$EventsListingEventFilter implements EventsListingEventFilter {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(EventsListingEventFetch value)? fetch,
-    TResult? Function(EventsListingEventFilter value)? filter,
+    TResult? Function(BaseEventsListingEventFetch value)? fetch,
+    TResult? Function(BaseEventsListingEventFilter value)? filter,
   }) {
     return filter?.call(this);
   }
@@ -861,8 +831,8 @@ class _$EventsListingEventFilter implements EventsListingEventFilter {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(EventsListingEventFetch value)? fetch,
-    TResult Function(EventsListingEventFilter value)? filter,
+    TResult Function(BaseEventsListingEventFetch value)? fetch,
+    TResult Function(BaseEventsListingEventFilter value)? filter,
     required TResult orElse(),
   }) {
     if (filter != null) {
@@ -872,14 +842,15 @@ class _$EventsListingEventFilter implements EventsListingEventFilter {
   }
 }
 
-abstract class EventsListingEventFilter implements EventsListingEvent {
-  factory EventsListingEventFilter({final EventTimeFilter? eventTimeFilter}) =
-      _$EventsListingEventFilter;
+abstract class BaseEventsListingEventFilter implements BaseEventsListingEvent {
+  factory BaseEventsListingEventFilter(
+          {final EventTimeFilter? eventTimeFilter}) =
+      _$BaseEventsListingEventFilter;
 
   @override
   EventTimeFilter? get eventTimeFilter;
   @override
   @JsonKey(ignore: true)
-  _$$EventsListingEventFilterCopyWith<_$EventsListingEventFilter>
+  _$$BaseEventsListingEventFilterCopyWith<_$BaseEventsListingEventFilter>
       get copyWith => throw _privateConstructorUsedError;
 }

@@ -1,3 +1,4 @@
+import 'package:app/core/application/common/scroll_notification_bloc/scroll_notification_bloc.dart';
 import 'package:app/core/application/token/tokens_listing_bloc/tokens_listing_bloc.dart';
 import 'package:app/core/domain/token/input/get_tokens_input.dart';
 import 'package:app/core/domain/token/token_repository.dart';
@@ -10,29 +11,38 @@ import 'package:app/injection/register_module.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:dartz/dartz.dart' as dartz; 
+import 'package:dartz/dartz.dart' as dartz;
 
 class ProfileNftCollectedListView extends StatelessWidget {
   final User user;
-  const ProfileNftCollectedListView({
+  late final tokensListingBloc = TokensListingBloc(
+      TokenService(
+        getIt<TokenRepository>(),
+      ),
+      defaultInput: GetTokensInput(ownerIn: user.wallets))
+    ..add(TokensListingEvent.fetch());
+
+  ProfileNftCollectedListView({
     super.key,
     required this.user,
   });
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => TokensListingBloc(
-        TokenService(
-          getIt<TokenRepository>(),
-        ),
-      )..add(
-          TokensListingEvent.fetch(
-            input: GetTokensInput(ownerIn: user.wallets),
-          ),
-        ),
-      child: _ProfileNftCollectedList(),
-    );
+    return BlocProvider.value(
+        value: tokensListingBloc,
+        child: BlocListener<ScrollNotificationBloc, ScrollNotificationState>(
+          listener: (context, scrollState) {
+            scrollState.maybeWhen(
+                endReached: () {
+                  tokensListingBloc.add(
+                    TokensListingEvent.fetch(),
+                  );
+                },
+                orElse: () {});
+          },
+          child: _ProfileNftCollectedList(),
+        ));
   }
 }
 
@@ -55,7 +65,7 @@ class _ProfileNftCreatedListViewState extends State<_ProfileNftCollectedList> {
               loading: () => SliverFillRemaining(child: Center(child: Loading.defaultLoading(context))),
               failure: () => SliverToBoxAdapter(child: Center(child: Text(t.common.somethingWrong))),
               fetched: (tokens) {
-                if(tokens.isEmpty) {
+                if (tokens.isEmpty) {
                   return SliverToBoxAdapter(
                     child: Center(child: Text(t.nft.emptyCreatedNfts)),
                   );

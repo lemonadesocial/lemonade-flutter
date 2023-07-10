@@ -18,7 +18,9 @@ class TokenRepositoryImpl implements TokenRepository {
   final _metaverseClient = getIt<MetaverseGQL>().client;
 
   @override
-  Future<Either<Failure, List<TokenComplex>>> getTokens({GetTokensInput? input}) async {
+  Future<Either<Failure, List<TokenComplex>>> getTokens({
+    required GetTokensInput input,
+  }) async {
     final result = await _metaverseClient.query(
       QueryOptions(
         operationName: 'getTokens',
@@ -38,11 +40,13 @@ class TokenRepositoryImpl implements TokenRepository {
     return Right(result.parsedData ?? []);
   }
 
-  Stream<Either<Failure, QueryResult<List<OrderComplex>>>> watchOrders({WatchOrdersInput? input}) {
+  Stream<Either<Failure, List<OrderComplex>>> watchOrders({
+    required WatchOrdersInput input,
+  }) {
     final stream = _metaverseClient.subscribe(
       SubscriptionOptions(
         document: watchOrdersSubscription,
-        variables: input?.toJson() ?? {},
+        variables: input.toJson() ?? {},
         parserFn: (data) => List.from(data['orders'] ?? [])
             .map((item) => OrderComplex.fromDto(OrderComplexDto.fromJson(item)))
             .toList(),
@@ -51,7 +55,7 @@ class TokenRepositoryImpl implements TokenRepository {
 
     return stream.asyncMap((result) {
       if (result.hasException) return Left(Failure());
-      return Right(result);
+      return Right(result.parsedData ?? []);
     });
   }
 }

@@ -10,8 +10,8 @@ abstract class GetEventsInput with _$GetEventsInput {
     @JsonKey(includeIfNull: false) String? search,
     @JsonKey(includeIfNull: false) bool? highlight,
     @JsonKey(includeIfNull: false) String? accepted,
-    @Default(100) int limit,
-    @Default(0) int skip,
+    @JsonKey(includeIfNull: false) int? skip,
+    @JsonKey(includeIfNull: false) int? limit,
   }) = _GetEventsInput;
 
   factory GetEventsInput.fromJson(Map<String, dynamic> json) => _$GetEventsInputFromJson(json);
@@ -21,9 +21,10 @@ abstract class GetEventsInput with _$GetEventsInput {
 abstract class GetHomeEventsInput with _$GetHomeEventsInput {
   const factory GetHomeEventsInput({
     @JsonKey(includeIfNull: false) String? query,
-    @Default(100) int limit,
-    @Default(0) double latitude,
-    @Default(0) double longitude,
+    @JsonKey(includeIfNull: false) int? skip,
+    @JsonKey(includeIfNull: false) int? limit,
+    @Default(0) @JsonKey(includeIfNull: false) double? latitude,
+    @Default(0) @JsonKey(includeIfNull: false) double? longitude,
     @Default(EventTense.Future) EventTense tense,
   }) = _GetHomeEventsInput;
 
@@ -33,10 +34,10 @@ abstract class GetHomeEventsInput with _$GetHomeEventsInput {
 @freezed
 abstract class GetHostingEventsInput with _$GetHostingEventsInput {
   const factory GetHostingEventsInput({
-    required String id,
+    @JsonKey(includeIfNull: false) String? id,
     @JsonKey(includeIfNull: false) FilterEventInput? state,
-    @Default(100) int limit,
-    @Default(0) skip,
+    @JsonKey(includeIfNull: false) int? skip,
+    @JsonKey(includeIfNull: false) int? limit,
     @Default(-1) order,
   }) = _GetHostingEventsInput;
 
