@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:app/core/config.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/services.dart';
@@ -11,6 +13,8 @@ class OauthError {
   static String userCancelled = 'org.openid.appauth.general error -3';
 }
 
+enum OAuthTokenState { valid, invalidOrEmpty }
+
 @lazySingleton
 class AppOauth {
   final baseOAuthUrl = AppConfig.oauth2BaseUrl;
@@ -20,7 +24,12 @@ class AppOauth {
   late final logoutRedirectUri = '$appUriScheme://oauth2/logout';
   final scopes = ['openid', 'offline_access'];
 
+  final StreamController<OAuthTokenState> _tokenStateStreamCtrl = StreamController();
+  OAuthTokenState _tokenState = OAuthTokenState.invalidOrEmpty;
+
   Future<String>? refreshTokenFuture;
+
+  Stream<OAuthTokenState> get tokenStateStream => _tokenStateStreamCtrl.stream;
 
   late final OAuth2Client client = OAuth2Client(
     authorizeUrl: '$baseOAuthUrl/auth',
@@ -39,9 +48,10 @@ class AppOauth {
 
   Future<Either<Exception, bool>> login() async {
     try {
-      var res = await helper.fetchToken();
-      return Right(res.accessToken != null);
+      var res = _processTokenState(await helper.fetchToken());
+      return Right(res?.accessToken != null);
     } on PlatformException catch (e) {
+      _reset();
       return Left(e);
     }
   }
@@ -57,16 +67,16 @@ class AppOauth {
             tokenEndpoint: client.tokenUrl,
             endSessionEndpoint: client.revokeUrl,
           )));
-      await helper.removeAllTokens();
+      await _reset();
       return true;
     } on PlatformException catch (e) {
-      if(e.message?.contains(OauthError.userCancelled) == true) {
+      if (e.message?.contains(OauthError.userCancelled) == true) {
         return false;
       }
-      await helper.removeAllTokens();
+      await _reset();
       return true;
-    } catch(error) {
-      await helper.removeAllTokens();
+    } catch (error) {
+      await _reset();
       return true;
     }
   }
@@ -79,15 +89,15 @@ class AppOauth {
 
     tokenRes = await helper.refreshToken(curTokenRes);
 
-    return tokenRes;
+    return _processTokenState(tokenRes);
   }
 
   Future<AccessTokenResponse?> getTokenFromStorage() async {
-    return await helper.getTokenFromStorage();
+    return _processTokenState(await helper.getTokenFromStorage());
   }
 
   Future<AccessTokenResponse?> getToken() async {
-    return await helper.getToken();
+    return _processTokenState(await helper.getToken());
   }
 
   Future<String> getTokenForGql() async {
@@ -106,5 +116,32 @@ class AppOauth {
     tokenRes = await getToken();
 
     return tokenRes?.accessToken != null ? 'Bearer ${tokenRes?.accessToken}' : '';
+  }
+
+  Future<void> dispose() async {
+    await _tokenStateStreamCtrl.close();
+  }
+
+  Future<void> _reset() async {
+    if (_tokenState == OAuthTokenState.invalidOrEmpty) return;
+    await helper.removeAllTokens();
+    _updateTokenState(OAuthTokenState.invalidOrEmpty);
+  }
+
+
+  AccessTokenResponse? _processTokenState(AccessTokenResponse? token) {
+    if (token == null || !token.isValid()) {
+      _reset();
+    } else {
+      _updateTokenState(OAuthTokenState.valid);
+    }
+    return token;
+  }
+
+  void _updateTokenState(OAuthTokenState newState) {
+    if (_tokenState != newState) {
+      _tokenState = newState;
+      _tokenStateStreamCtrl.add(newState);
+    }
   }
 }
