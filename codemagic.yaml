@@ -110,10 +110,19 @@ definitions:
             -gsp ios/config/staging/GoogleService-Info.plist -p ios $dsymPath
         fi
     - &build_apk_staging
-      name: Build apk staging
+      name: Build Android apk staging
       script: |
         BUILD_NUMBER=1      
         flutter build apk --release \
+          --build-name=1.0.$BUILD_NUMBER \
+          --build-number=$BUILD_NUMBER \
+          --flavor="staging" \
+          -t "lib/main_staging.dart"
+    - &build_aab_staging
+      name: Build Android appbundle staging
+      script: |
+        BUILD_NUMBER=1      
+        flutter build appbundle --release \
           --build-name=1.0.$BUILD_NUMBER \
           --build-number=$BUILD_NUMBER \
           --flavor="staging" \
@@ -326,8 +335,10 @@ workflows:
       - *setup_local_properties
       - *get_flutter_packages
       - *build_apk_staging
+      - *build_aab_staging
     artifacts:
       - *apk
+      - *aab
       - *android_log
     publishing:
       <<: *android_staging_publish
