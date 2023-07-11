@@ -237,6 +237,14 @@ definitions:
       recipients:
         - sieu@coderpush.com
         - thinh@coderpush.com
+      notify:
+        success: true
+        failure: false
+  email_production: &email_production
+    email:
+      recipients:
+        - sieu@coderpush.com
+        - thinh@coderpush.com
         - kc@lemonade.social
         - chris@lemonade.social
         - jakob@lemonade.social
