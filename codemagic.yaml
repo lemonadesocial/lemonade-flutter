@@ -28,7 +28,11 @@ definitions:
     android_signing_staging: &android_signing_staging
       android_signing:
         - Lemonade
-    
+      groups:
+        - google_credentials 
+      vars:
+        PACKAGE_NAME: "social.lemonade.app.staging"
+        GOOGLE_PLAY_TRACK: "internal"
   artifacts:
     - &ipa build/ios/ipa/*.ipa
     - &xcode_log /tmp/xcodebuild_logs/*.log
@@ -263,6 +267,11 @@ definitions:
       auth: integration
       submit_to_testflight: true
       submit_to_app_store: false
+  android_staging_publish: &android_staging_publish
+    google_play:
+      credentials: $GCLOUD_SERVICE_ACCOUNT_CREDENTIALS
+      track: $GOOGLE_PLAY_TRACK
+      submit_as_draft: true
 workflows:
   # Build iOS Staging 
   ios-staging:
@@ -320,6 +329,7 @@ workflows:
       - *apk
       - *android_log
     publishing:
+      <<: *android_staging_publish
       <<: *email_staging
       scripts:
         - *notify_android_staging_to_slack
