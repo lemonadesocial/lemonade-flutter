@@ -12,15 +12,25 @@
           "package_name": "social.lemonade.app.staging"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "610594530625-4130b5km9ee1id42iuvt1v9kv8ctb22p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyCWBUsTim5_Sc-yqm82L4f9IgoawK2G5lw"
+          "current_key": "AIzaSyBLRF7hDdmeZ0pghV9-PuR0muRAl-gvfXs"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "610594530625-4130b5km9ee1id42iuvt1v9kv8ctb22p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
