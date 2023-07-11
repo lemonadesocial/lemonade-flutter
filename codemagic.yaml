@@ -113,7 +113,6 @@ definitions:
       name: Build Android apk staging
       script: |
         BUILD_NUMBER=$(($(google-play get-latest-build-number --package-name "$PACKAGE_NAME" --tracks="$GOOGLE_PLAY_TRACK") + 1))      
-        echo $BUILD_NUMBER
         flutter build apk --release \
           --build-name=1.0.$BUILD_NUMBER \
           --build-number=$BUILD_NUMBER \
@@ -123,7 +122,6 @@ definitions:
       name: Build Android appbundle staging
       script: |
         BUILD_NUMBER=$(($(google-play get-latest-build-number --package-name "$PACKAGE_NAME" --tracks="$GOOGLE_PLAY_TRACK") + 1))      
-        echo $BUILD_NUMBER
         flutter build appbundle --release \
           --build-name=1.0.$BUILD_NUMBER \
           --build-number=$BUILD_NUMBER \
@@ -282,7 +280,7 @@ definitions:
     google_play:
       credentials: $GCLOUD_SERVICE_ACCOUNT_CREDENTIALS
       track: $GOOGLE_PLAY_TRACK
-      submit_as_draft: true
+      submit_as_draft: false
 workflows:
   # Build iOS Staging 
   ios-staging:
@@ -291,9 +289,9 @@ workflows:
     integrations:
       <<: *app_store_connect_integrations
     environment:
+      <<: *env_versions
       <<: *groups_environment_values
       <<: *ios_signing_staging
-      <<: *env_versions
     triggering:
       events:
         - push
@@ -323,8 +321,8 @@ workflows:
     name: Android Staging
     <<: *instance_mac_mini
     environment:
-      <<: *groups_environment_values
       <<: *env_versions
+      <<: *groups_environment_values
       <<: *android_signing_staging
     triggering:
       events:
