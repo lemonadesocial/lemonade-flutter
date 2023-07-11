@@ -314,6 +314,7 @@ workflows:
     environment:
       <<: *groups_environment_values
       <<: *env_versions
+      <<: *android_signing_staging
     triggering:
       events:
         - push
