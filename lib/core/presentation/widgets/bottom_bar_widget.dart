@@ -22,64 +22,73 @@ class BottomBar extends StatelessWidget {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 3.0, sigmaY: 3.0),
         child: Container(
-            padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
-            height: 80,
-            decoration:
-                BoxDecoration(color: LemonColor.black50, border: Border(top: BorderSide(color: themeColor.secondary))),
-            child: Column(
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _buildItem(context,
-                        icon: ThemeSvgIcon(builder: (filter) => Assets.icons.icHouse.svg(colorFilter: filter)),
-                        path: '/'),
-                    _buildItem(context,
-                        icon: ThemeSvgIcon(
-                          builder: (filter) => Assets.icons.icHouseParty.svg(colorFilter: filter),
-                        ),
-                        path: '/events'),
-                    _buildItem(context,
-                        icon: ThemeSvgIcon(
-                          builder: (filter) => Assets.icons.icInbox.svg(colorFilter: filter),
-                        ),
-                        path: '/notification'),
-                    _buildItem(context,
-                        icon: ThemeSvgIcon(
-                          builder: (filter) => Assets.icons.icWallet.svg(colorFilter: filter),
-                        ),
-                        path: '/wallet'),
-                    _ProfileAuthGuardItem(
-                      authenticatedChild: _buildItem(context,
-                          icon: BlocBuilder<AuthBloc, AuthState>(
-                            builder: (context, authState) => LemonCircleAvatar(
-                              size: 24,
-                              url: authState.maybeWhen(
-                                  authenticated: (authSession) => authSession.userAvatar ?? '', orElse: () => ''),
-                            ),
-                          ),
-                          path: '/me'),
-                      unauthenticatedChild: Container(
-                        padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall, vertical: Spacing.xSmall),
-                        child: Icon(Icons.person, color: themeColor.onPrimary, size: 24),
+          height: 80,
+          decoration:
+              BoxDecoration(color: LemonColor.black50, border: Border(top: BorderSide(color: themeColor.secondary))),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _buildItem(context,
+                      icon: ThemeSvgIcon(builder: (filter) => Assets.icons.icHouse.svg(colorFilter: filter)),
+                      path: '/'),
+                  _buildItem(context,
+                      icon: ThemeSvgIcon(
+                        builder: (filter) => Assets.icons.icHouseParty.svg(colorFilter: filter),
                       ),
-                    )
-                  ],
-                )
-              ],
-            )),
+                      path: '/events'),
+                  _buildItem(context,
+                      icon: ThemeSvgIcon(
+                        builder: (filter) => Assets.icons.icInbox.svg(colorFilter: filter),
+                      ),
+                      path: '/notification'),
+                  _buildItem(context,
+                      icon: ThemeSvgIcon(
+                        builder: (filter) => Assets.icons.icWallet.svg(colorFilter: filter),
+                      ),
+                      path: '/wallet'),
+                  _ProfileAuthGuardItem(
+                    authenticatedChild: BlocBuilder<AuthBloc, AuthState>(
+                      builder: (context, authState) => _buildItem(
+                        context,
+                        path: '/me',
+                        icon: Center(
+                          child: LemonCircleAvatar(
+                            size: 24,
+                            url: authState.maybeWhen(
+                                authenticated: (authSession) => authSession.userAvatar ?? '', orElse: () => ''),
+                          ),
+                        ),
+                      ),
+                    ),
+                    unauthenticatedChild: _buildItem(
+                      context,
+                      path: '/login',
+                      icon: Icon(Icons.person, color: themeColor.onPrimary, size: 24),
+                      ),
+                    ),
+                ],
+              )
+            ],
+          ),
+        ),
       ),
     );
   }
 
   Widget _buildItem(BuildContext context, {required Widget icon, required String path}) {
-    return GestureDetector(
-      onTap: () => AutoRouter.of(context).navigateNamed(path, includePrefixMatches: true),
-      child: Container(
-        color: Colors.transparent,
-        padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall, vertical: Spacing.xSmall),
-        child: icon,
+    return Expanded(
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () => AutoRouter.of(context).navigateNamed(path, includePrefixMatches: true),
+        child: Container(
+          color: Colors.transparent,
+          padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall, vertical: Spacing.xSmall),
+          child: icon,
+        ),
       ),
     );
   }
@@ -93,15 +102,6 @@ class _ProfileAuthGuardItem extends StatelessWidget {
     required this.unauthenticatedChild,
   });
 
-  _buildNotLoggedIn(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        AutoRouter.of(context).navigateNamed('/login', includePrefixMatches: true);
-      },
-      child: unauthenticatedChild,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthBloc, AuthState>(
@@ -110,8 +110,8 @@ class _ProfileAuthGuardItem extends StatelessWidget {
           authenticated: (_) {
             return authenticatedChild;
           },
-          unauthenticated: (_) => _buildNotLoggedIn(context),
-          unknown: () => _buildNotLoggedIn(context),
+          unauthenticated: (_) => unauthenticatedChild,
+          unknown: () => unauthenticatedChild,
         );
       },
     );
