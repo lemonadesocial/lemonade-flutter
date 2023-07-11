@@ -39,7 +39,7 @@ definitions:
     - &dsym $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
     - &app $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.app
     - &apk build/**/outputs/apk/**/*.apk
-    - &aab build/**/outputs/aab/**/*.aab
+    - &aab build/**/outputs/bundle/**/*.aab
     - &android_log build/**/outputs/**/mapping.txt
     - &flutter_log flutter_drive.log
   scripts:
