@@ -25,6 +25,10 @@ definitions:
         bundle_identifier: social.lemonade.app
       vars:
         APP_ID: 6450694884
+    android_signing_staging: &android_signing_staging
+      android_signing:
+        - Lemonade
+    
   artifacts:
     - &ipa build/ios/ipa/*.ipa
     - &xcode_log /tmp/xcodebuild_logs/*.log
