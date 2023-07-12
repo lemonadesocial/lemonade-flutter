@@ -191,6 +191,8 @@ definitions:
     - &notify_android_staging_to_slack
       name: Notify Android Staging app to slack
       script: | 
+        echo "Print $CM_ARTIFACT_LINKS"
+        echo $CM_ARTIFACT_LINKS
         ARTIFACT_URL=$(echo $CM_ARTIFACT_LINKS | jq -r '.[] | select(.name | endswith("'".apk"'")) | .url')
           curl -0 -v -X POST $SLACK_WEBHOOK_URL \
           -H 'Content-type: application/json' \
@@ -280,7 +282,7 @@ definitions:
     google_play:
       credentials: $GCLOUD_SERVICE_ACCOUNT_CREDENTIALS
       track: $GOOGLE_PLAY_TRACK
-      submit_as_draft: false
+      submit_as_draft: true
 workflows:
   # Build iOS Staging 
   ios-staging:
