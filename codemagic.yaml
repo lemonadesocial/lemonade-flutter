@@ -194,6 +194,7 @@ definitions:
         echo $CM_ARTIFACT_LINKS
         ARTIFACT_APK_URL=$(echo $CM_ARTIFACT_LINKS | jq -r '.[] | select(.name | endswith("'".apk"'")) | .url')
         echo $ARTIFACT_APK_URL
+        echo $SLACK_WEBHOOK_URL
         curl -0 -v -X POST $SLACK_WEBHOOK_URL \
         -H 'Content-type: application/json' \
         --data-raw '
