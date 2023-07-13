@@ -10,8 +10,9 @@ definitions:
     app_store_connect_integrations: &app_store_connect_integrations
       app_store_connect: Lemonade
   environment:
-    groups_environment_values: &groups_environment_values
+    load_environment_values: &load_environment_values
       groups:
+        - google_credentials 
         - env_values
     ios_signing_staging: &ios_signing_staging
       ios_signing:
@@ -28,8 +29,6 @@ definitions:
     android_signing_staging: &android_signing_staging
       android_signing:
         - Lemonade
-      groups:
-        - google_credentials 
       vars:
         PACKAGE_NAME: "social.lemonade.app.staging"
         GOOGLE_PLAY_TRACK: "internal"
@@ -293,7 +292,7 @@ workflows:
       <<: *app_store_connect_integrations
     environment:
       <<: *env_versions
-      <<: *groups_environment_values
+      <<: *load_environment_values
       <<: *ios_signing_staging
     triggering:
       events:
@@ -325,7 +324,7 @@ workflows:
     <<: *instance_mac_mini
     environment:
       <<: *env_versions
-      <<: *groups_environment_values
+      <<: *load_environment_values
       <<: *android_signing_staging
     triggering:
       events:
