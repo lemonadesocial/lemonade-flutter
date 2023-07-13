@@ -10,8 +10,9 @@ definitions:
     app_store_connect_integrations: &app_store_connect_integrations
       app_store_connect: Lemonade
   environment:
-    groups_environment_values: &groups_environment_values
+    load_environment_values: &load_environment_values
       groups:
+        - google_credentials 
         - env_values
     ios_signing_staging: &ios_signing_staging
       ios_signing:
@@ -25,13 +26,19 @@ definitions:
         bundle_identifier: social.lemonade.app
       vars:
         APP_ID: 6450694884
+    android_signing_staging: &android_signing_staging
+      android_signing:
+        - Lemonade
+      vars:
+        PACKAGE_NAME: "social.lemonade.app.staging"
+        GOOGLE_PLAY_TRACK: "internal"
   artifacts:
     - &ipa build/ios/ipa/*.ipa
     - &xcode_log /tmp/xcodebuild_logs/*.log
     - &dsym $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
     - &app $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.app
     - &apk build/**/outputs/apk/**/*.apk
-    - &aab build/**/outputs/aab/**/*.aab
+    - &aab build/**/outputs/bundle/**/*.aab
     - &android_log build/**/outputs/**/mapping.txt
     - &flutter_log flutter_drive.log
   scripts:
@@ -102,10 +109,19 @@ definitions:
             -gsp ios/config/staging/GoogleService-Info.plist -p ios $dsymPath
         fi
     - &build_apk_staging
-      name: Build apk staging
+      name: Build Android apk staging
       script: |
-        BUILD_NUMBER=1      
+        BUILD_NUMBER=$(($(google-play get-latest-build-number --package-name "$PACKAGE_NAME" --tracks="$GOOGLE_PLAY_TRACK") + 1))      
         flutter build apk --release \
+          --build-name=1.0.$BUILD_NUMBER \
+          --build-number=$BUILD_NUMBER \
+          --flavor="staging" \
+          -t "lib/main_staging.dart"
+    - &build_aab_staging
+      name: Build Android appbundle staging
+      script: |
+        BUILD_NUMBER=$(($(google-play get-latest-build-number --package-name "$PACKAGE_NAME" --tracks="$GOOGLE_PLAY_TRACK") + 1))      
+        flutter build appbundle --release \
           --build-name=1.0.$BUILD_NUMBER \
           --build-number=$BUILD_NUMBER \
           --flavor="staging" \
@@ -174,64 +190,67 @@ definitions:
     - &notify_android_staging_to_slack
       name: Notify Android Staging app to slack
       script: | 
-        ARTIFACT_URL=$(echo $CM_ARTIFACT_LINKS | jq -r '.[] | select(.name | endswith("'".apk"'")) | .url')
-          curl -0 -v -X POST $SLACK_WEBHOOK_URL \
-          -H 'Content-type: application/json' \
-          --data-raw '
-          {
-            "attachments": [
-              {
-                "blocks": [
-                  {
-                    "type": "section",
-                    "text": {
-                      "type": "mrkdwn",
-                      "text": ":white_check_mark: Staging app build successful for Android"
-                    }
-                  },
-                  {
-                    "type": "section",
-                    "fields": [
-                      {
-                        "type": "mrkdwn",
-                        "text": "*Build Link*:\n<https://codemagic.io/app/'"$CM_PROJECT_ID"'/build/'"$CM_BUILD_ID"'|Click here>"
-                      },
-                      {
-                        "type": "mrkdwn",
-                        "text": "*Pull Request*:\n<https://github.com/'"$CM_REPO_SLUG"'/pull/'"$CM_PULL_REQUEST_NUMBER"'|Open pull request>"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "section",
-                    "fields": [
-                      {
-                        "type": "mrkdwn",
-                        "text": "*Branch*\n'"$CM_BRANCH"'"
-                      },
-                      {
-                        "type": "mrkdwn",
-                        "text": "*Commit*\n'"$CM_COMMIT"'"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "actions",
-                    "elements": [
-                      {
-                        "type": "button",
-                        "text": {
-                          "type": "plain_text",
-                          "text": "Download APK"
-                        },
-                        "url": "'${ARTIFACT_URL}'"
-                      }
-                    ]
+        echo $CM_ARTIFACT_LINKS
+        ARTIFACT_APK_URL=$(echo $CM_ARTIFACT_LINKS | jq -r '.[] | select(.name | endswith("'".apk"'")) | .url')
+        echo $ARTIFACT_APK_URL
+        echo $SLACK_WEBHOOK_URL
+        curl -0 -v -X POST $SLACK_WEBHOOK_URL \
+        -H 'Content-type: application/json' \
+        --data-raw '
+        {
+          "attachments": [
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": ":white_check_mark: Staging app build successful for Android"
                   }
-                ]
-              }
-            ]
-          }'
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Build Link*:\n<https://codemagic.io/app/'"$CM_PROJECT_ID"'/build/'"$CM_BUILD_ID"'|Click here>"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Pull Request*:\n<https://github.com/'"$CM_REPO_SLUG"'/pull/'"$CM_PULL_REQUEST_NUMBER"'|Open pull request>"
+                    }
+                  ]
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Branch*\n'"$CM_BRANCH"'"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Commit*\n'"$CM_COMMIT"'"
+                    }
+                  ]
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "Download APK"
+                      },
+                      "url": "'${ARTIFACT_APK_URL}'"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }'
   email_staging: &email_staging
     email:
       recipients:
@@ -259,6 +278,11 @@ definitions:
       auth: integration
       submit_to_testflight: true
       submit_to_app_store: false
+  android_staging_publish: &android_staging_publish
+    google_play:
+      credentials: $GCLOUD_SERVICE_ACCOUNT_CREDENTIALS
+      track: $GOOGLE_PLAY_TRACK
+      submit_as_draft: true
 workflows:
   # Build iOS Staging 
   ios-staging:
@@ -267,9 +291,9 @@ workflows:
     integrations:
       <<: *app_store_connect_integrations
     environment:
-      <<: *groups_environment_values
-      <<: *ios_signing_staging
       <<: *env_versions
+      <<: *load_environment_values
+      <<: *ios_signing_staging
     triggering:
       events:
         - push
@@ -299,8 +323,9 @@ workflows:
     name: Android Staging
     <<: *instance_mac_mini
     environment:
-      <<: *groups_environment_values
       <<: *env_versions
+      <<: *load_environment_values
+      <<: *android_signing_staging
     triggering:
       events:
         - push
@@ -312,10 +337,13 @@ workflows:
       - *setup_local_properties
       - *get_flutter_packages
       - *build_apk_staging
+      - *build_aab_staging
     artifacts:
       - *apk
+      - *aab
       - *android_log
     publishing:
+      <<: *android_staging_publish
       <<: *email_staging
       scripts:
         - *notify_android_staging_to_slack
