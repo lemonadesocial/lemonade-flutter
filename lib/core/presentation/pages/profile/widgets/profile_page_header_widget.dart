@@ -2,6 +2,7 @@ import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/widgets/lemon_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/presentation/widgets/wallet/connect_wallet_profile_button.dart';
 import 'package:app/core/utils/number_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -27,7 +28,7 @@ class ProfilePageHeader extends StatelessWidget {
         SizedBox(height: Spacing.xSmall),
         _ProfileUserNameAndTitle(user: user),
         SizedBox(height: Spacing.medium),
-        _ActionButtons(),
+        _ActionButtons(user: user),
         Container(height: Spacing.xSmall)
       ],
     );
@@ -35,6 +36,12 @@ class ProfilePageHeader extends StatelessWidget {
 }
 
 class _ActionButtons extends StatelessWidget {
+  final User user;
+
+  _ActionButtons({
+    required this.user,
+  });
+
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
@@ -66,13 +73,7 @@ class _ActionButtons extends StatelessWidget {
           ),
           SizedBox(width: Spacing.superExtraSmall),
           Expanded(
-            child: LemonButton(
-              label: t.common.actions.connect,
-              icon: ThemeSvgIcon(
-                color: onSurfaceColor,
-                builder: (filter) => Assets.icons.icWallet.svg(colorFilter: filter),
-              ),
-            ),
+            child: ConnectWalletProfileButton(user: user),
           ),
           SizedBox(width: Spacing.superExtraSmall),
         ],
@@ -156,7 +157,7 @@ class _ProfileUserNameAndTitle extends StatelessWidget {
   });
 
   String? get displayName {
-    return  user.displayName ?? user.username ?? null;
+    return user.displayName ?? user.username ?? null;
   }
 
   @override
