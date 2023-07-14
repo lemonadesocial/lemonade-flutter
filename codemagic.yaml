@@ -95,29 +95,29 @@ definitions:
           --flavor="production" \
           -t "lib/main_production.dart"
     - &upload_staging_dsym_to_firebase
-      name: Upload debug symbols to Firebase Crashlytics
+      name: Upload staging debug symbols to Firebase Crashlytics
       script: | 
         echo "Find build artifacts"
         dsymPath=$(find $CM_BUILD_DIR/build/ios/archive/Runner.xcarchive -name "*.dSYM")
         if [[ -z ${dsymPath} ]]
         then
-          echo "No debug symbols were found, skip publishing to Firebase Crashlytics"
+          echo "No Staging debug symbols were found, skip publishing to Firebase Crashlytics"
         else
-          echo "Publishing debug symbols from $dsymPath to Firebase Crashlytics"
+          echo "Publishing Staging debug symbols from $dsymPath to Firebase Crashlytics"
           ls -d -- ios/Pods/*
           $CM_BUILD_DIR/ios/Pods/FirebaseCrashlytics/upload-symbols \
             -gsp ios/config/staging/GoogleService-Info.plist -p ios $dsymPath
         fi
     - &upload_production_dsym_to_firebase
-      name: Upload debug symbols to Firebase Crashlytics
+      name: Upload production debug symbols to Firebase Crashlytics
       script: | 
         echo "Find build artifacts"
         dsymPath=$(find $CM_BUILD_DIR/build/ios/archive/Runner.xcarchive -name "*.dSYM")
         if [[ -z ${dsymPath} ]]
         then
-          echo "No debug symbols were found, skip publishing to Firebase Crashlytics"
+          echo "No Production debug symbols were found, skip publishing to Firebase Crashlytics"
         else
-          echo "Publishing debug symbols from $dsymPath to Firebase Crashlytics"
+          echo "Publishing Production debug symbols from $dsymPath to Firebase Crashlytics"
           ls -d -- ios/Pods/*
           $CM_BUILD_DIR/ios/Pods/FirebaseCrashlytics/upload-symbols \
             -gsp ios/config/production/GoogleService-Info.plist -p ios $dsymPath
@@ -173,7 +173,7 @@ definitions:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": ":white_check_mark: Build iOS Staging app successfully"
+                    "text": "🚀 Build iOS Staging app successfully"
                   }
                 },
                 {
@@ -234,7 +234,7 @@ definitions:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": ":white_check_mark: Build iOS Production app successfully"
+                    "text": "🚀 Build iOS Production app successfully"
                   }
                 },
                 {
@@ -295,7 +295,7 @@ definitions:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": ":white_check_mark: Build Android Staging app successfully"
+                    "text": "🚀 Build Android Staging app successfully"
                   }
                 },
                 {
@@ -356,7 +356,7 @@ definitions:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": ":white_check_mark: Build Android Production app successfully"
+                    "text": "🚀 Build Android Production app successfully"
                   }
                 },
                 {
