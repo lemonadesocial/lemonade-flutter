@@ -1,7 +1,5 @@
-import 'package:app/core/application/profile/user_profile_bloc/user_profile_bloc.dart';
 import 'package:app/core/application/auth/auth_bloc.dart';
-import 'package:app/core/config.dart';
-import 'package:app/core/domain/user/entities/user.dart';
+import 'package:app/core/application/profile/user_profile_bloc/user_profile_bloc.dart';
 import 'package:app/core/presentation/dpos/common/dropdown_item_dpo.dart';
 import 'package:app/core/presentation/pages/profile/views/tabs/profile_posts_tab_view.dart';
 import 'package:app/core/presentation/pages/profile/widgets/profile_page_header_widget.dart';
@@ -12,15 +10,14 @@ import 'package:app/core/presentation/pages/profile/views/tabs/profile_event_tab
 import 'package:app/core/presentation/pages/profile/views/tabs/profile_info_tab_view.dart';
 import 'package:app/core/presentation/pages/profile/views/tabs/profile_photos_tab_view.dart';
 import 'package:app/core/presentation/widgets/burger_menu_widget.dart';
+import 'package:app/core/presentation/widgets/common/appbar/profile_animated_appbar_widget.dart';
+import 'package:app/core/presentation/widgets/common/appbar_logo.dart';
+import 'package:app/core/presentation/widgets/common/sliver/dynamic_sliver_appbar.dart';
 import 'package:app/core/presentation/widgets/floating_frosted_glass_dropdown_widget.dart';
-import 'package:app/core/presentation/widgets/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
-import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
-import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:share_plus/share_plus.dart';
 
 class ProfilePageView extends StatefulWidget {
   final String userId;
@@ -34,8 +31,6 @@ class ProfilePageView extends StatefulWidget {
 }
 
 class _ProfilePageViewState extends State<ProfilePageView> with SingleTickerProviderStateMixin {
-  double get _headerHeight => 230;
-
   int get _tabCount => 6;
 
   late final TabController _tabCtrl = TabController(
@@ -55,16 +50,6 @@ class _ProfilePageViewState extends State<ProfilePageView> with SingleTickerProv
     super.dispose();
   }
 
-  _shareProfileLink(User userProfile) async {
-    try {
-      final box = context.findRenderObject() as RenderBox?;
-      await Share.share(
-        '${AppConfig.webUrl}/${userProfile.username}',
-        sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
-      );
-    } catch (e) {}
-  }
-
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -75,63 +60,54 @@ class _ProfilePageViewState extends State<ProfilePageView> with SingleTickerProv
           fetched: (userProfile) {
             return Scaffold(
               backgroundColor: colorScheme.primary,
-              appBar: LemonAppBar(
-                title: '@${userProfile.username ?? t.common.anonymous}',
-                leading: BurgerMenu(),
-                actions: [
-                  GestureDetector(
-                    onTap: () => _shareProfileLink(userProfile),
-                    child: ThemeSvgIcon(
-                      color: colorScheme.onSurface,
-                      builder: (filter) => Assets.icons.icShare.svg(colorFilter: filter),
+              body: SafeArea(
+                child: NestedScrollView(
+                  headerSliverBuilder: (context, innerBoxIsScrolled) => [
+                    SliverPersistentHeader(
+                        pinned: true,
+                        delegate: ProfileAnimatedAppBar(
+                          title: '@${userProfile.username ?? t.common.anonymous}',
+                          leading: AppBarLogo(),
+                          actions: [
+                            FloatingFrostedGlassDropdown(
+                              items: [
+                                DropdownItemDpo(
+                                  label: t.auth.logout,
+                                ),
+                              ],
+                              onItemPressed: (item) {
+                                context.read<AuthBloc>().add(AuthEvent.logout());
+                              },
+                              child: BurgerMenu(),
+                            ),
+                          ],
+                        )),
+                    DynamicSliverAppBar(
+                      child: ProfilePageHeader(user: userProfile),
+                      maxHeight: 210,
+                      floating: true,
+                      forceElevated: innerBoxIsScrolled,
                     ),
-                  ),
-                  FloatingFrostedGlassDropdown(
-                    items: [
-                      DropdownItemDpo(
-                        label: t.auth.logout,
+                    SliverOverlapAbsorber(
+                      handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                      sliver: SliverPersistentHeader(
+                        pinned: true,
+                        floating: false,
+                        delegate: ProfileTabBarDelegate(controller: _tabCtrl),
                       ),
-                    ],
-                    onItemPressed: (item) {
-                      context.read<AuthBloc>().add(AuthEvent.logout());
-                    },
-                    child: ThemeSvgIcon(
-                      color: colorScheme.onSurface,
-                      builder: (filter) => Assets.icons.icMoreHoriz.svg(colorFilter: filter),
                     ),
-                  ),
-                ],
-              ),
-              body: NestedScrollView(
-                headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                  SliverAppBar(
-                    floating: true,
-                    expandedHeight: _headerHeight,
-                    collapsedHeight: _headerHeight,
-                    flexibleSpace: ProfilePageHeader(
-                      user: userProfile,
-                    ),
-                    forceElevated: innerBoxIsScrolled,
-                  ),
-                  SliverOverlapAbsorber(
-                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-                    sliver: SliverPersistentHeader(
-                      pinned: true,
-                      floating: false,
-                      delegate: ProfileTabBarDelegate(controller: _tabCtrl),
-                    ),
-                  ),
-                ],
-                body: TabBarView(
-                  controller: _tabCtrl,
-                  children: [
-                    ProfilePostsTabView(user: userProfile),
-                    ProfileCollectibleTabView(user: userProfile),
-                    ProfileEventTabView(user: userProfile),
-                    ProfilePhotosTabView(user: userProfile),
-                    EmptyTabView(),
-                    ProfileInfoTabView(user: userProfile),
                   ],
+                  body: TabBarView(
+                    controller: _tabCtrl,
+                    children: [
+                      ProfilePostsTabView(user: userProfile),
+                      ProfileCollectibleTabView(user: userProfile),
+                      ProfileEventTabView(user: userProfile),
+                      ProfilePhotosTabView(user: userProfile),
+                      EmptyTabView(),
+                      ProfileInfoTabView(user: userProfile),
+                    ],
+                  ),
                 ),
               ),
             );

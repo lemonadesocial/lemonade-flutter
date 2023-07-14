@@ -20,10 +20,16 @@ class LemonColor {
   static Color paleViolet12 = const Color(0xffC69DF7).withOpacity(0.12);
   static Color paleViolet18 = const Color(0xffC69DF7).withOpacity(0.18);
   static Color paleViolet36 = const Color(0xffC69DF7).withOpacity(0.36);
-
+  
   // UI specific
   static Color dropdownBackground = const Color.fromARGB(221, 32, 32, 32);
-}
+
+  // Button
+  static Color arsenic = Color(0xff424242);
+  static Color charlestonGreen = Color(0xff2c2c2c);
+  static Color grape = Color(0xff6f3faa);
+  static Color shadow = Color.fromARGB(91, 0, 0, 0);
+} 
 
 final ColorScheme lemonadeLightThemeColorScheme = ColorScheme.light(
   primary: LemonColor.white,
@@ -35,7 +41,9 @@ final ColorScheme lemonadeLightThemeColorScheme = ColorScheme.light(
   tertiary: LemonColor.paleViolet,
   onTertiary: LemonColor.lavender,
   surface: LemonColor.white72,
-  onSurface: LemonColor.raisinBlack
+  onSurface: LemonColor.raisinBlack,
+  onSurfaceVariant: LemonColor.raisinBlack,
+  outline: LemonColor.oliveBlack,
 );
 
 final ColorScheme lemonadeDarkThemeColorScheme = ColorScheme.dark(
@@ -49,5 +57,6 @@ final ColorScheme lemonadeDarkThemeColorScheme = ColorScheme.dark(
   onBackground: LemonColor.white,
   surface: LemonColor.raisinBlack,
   onSurface: LemonColor.white72,
+  onSurfaceVariant: LemonColor.white36,
   outline: LemonColor.white12,
 );

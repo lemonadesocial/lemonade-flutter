@@ -24,7 +24,9 @@
     },
     "actions": {
         "edit": "edit",
-        "connect": "connect"
+        "connect": "connect",
+        "editProfile": "Edit profile",
+        "shareProfile": "Share profile"
     },
     "anonymous": "anonymous",
     "profileUrlCopied": "Profile's URL copied to clipboard"

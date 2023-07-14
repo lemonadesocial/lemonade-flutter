@@ -43,7 +43,7 @@ class _ProfileTabBarState extends State<_ProfileTabBar> {
       var svgIcon = item.value;
       return Tab(
         child: ThemeSvgIcon(
-          color: !isSelected ? colorScheme.onSurface : null,
+          color: !isSelected ? colorScheme.onSurfaceVariant : null,
           builder: (filter) => svgIcon.svg(colorFilter: filter),
         ),
       );

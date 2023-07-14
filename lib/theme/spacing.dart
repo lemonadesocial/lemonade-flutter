@@ -18,6 +18,8 @@ class Spacing {
 
 class LemonRadius {
 
+  static double xSmall = 9;
+
   static double small = 12;
 
   static double normal = 18;

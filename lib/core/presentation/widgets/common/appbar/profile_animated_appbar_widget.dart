@@ -4,57 +4,63 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 
-class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
+class ProfileAnimatedAppBar extends SliverPersistentHeaderDelegate {
   final Widget? leading;
   final String? title;
   final List<Widget>? actions;
 
-  const LemonAppBar({
-    super.key,
+  const ProfileAnimatedAppBar({
     this.title,
     this.leading,
     this.actions,
   });
 
   @override
-  Size get preferredSize => Size.fromHeight(60);
+  double get maxExtent => 60;
 
   @override
-  Widget build(BuildContext context) {
+  double get minExtent => 60;
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) => false;
+
+  @override
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
     final primary = Theme.of(context).colorScheme.primary;
-    return Container(
-      color: primary,
-      child: SafeArea(
-        child: PreferredSize(
-          child: Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _leading,
-                Text(
+    return ClipRect(
+      child: Container(
+        color: primary,
+        height: maxExtent,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            buildLeading(),
+            Container(
+              child: Transform.translate(
+                offset: Offset(0, maxExtent - shrinkOffset),
+                child: Text(
                   title ?? '',
                   style: Typo.large,
                 ),
-                Spacer(),
-                _actions,
-              ],
+              ),
             ),
-          ),
-          preferredSize: Size.fromHeight(preferredSize.height),
+            // Spacer(),
+            buildActions()
+          ],
         ),
       ),
     );
   }
 
-  Widget get _leading {
+  Widget buildLeading() {
     return Container(
-      height: double.infinity,
-      width: preferredSize.height,
+      height: maxExtent,
+      width: maxExtent,
       child: leading ?? LemonBackButton(),
     );
   }
 
-  Widget get _actions {
+  Widget buildActions() {
     return Container(
         padding: EdgeInsets.only(right: 18),
         child: Row(
@@ -63,7 +69,7 @@ class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
                 (item) => Container(
                   margin: EdgeInsets.only(left: Spacing.medium),
                   width: Sizing.small,
-                  height: preferredSize.height,
+                  height: maxExtent,
                   child: item,
                 ),
               )

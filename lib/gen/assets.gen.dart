@@ -98,6 +98,14 @@ class $AssetsIconsGen {
   SvgGenImage get icInstagram =>
       const SvgGenImage('assets/icons/ic_instagram.svg');
 
+  /// File path: assets/icons/ic_lemon_filled_background.png
+  AssetGenImage get icLemonFilledBackground =>
+      const AssetGenImage('assets/icons/ic_lemon_filled_background.png');
+
+  /// File path: assets/icons/ic_lemon_filled_start.svg
+  SvgGenImage get icLemonFilledStart =>
+      const SvgGenImage('assets/icons/ic_lemon_filled_start.svg');
+
   /// File path: assets/icons/ic_lemon_outline.svg
   SvgGenImage get icLemonOutline =>
       const SvgGenImage('assets/icons/ic_lemon_outline.svg');
@@ -129,7 +137,7 @@ class $AssetsIconsGen {
   SvgGenImage get icWallet => const SvgGenImage('assets/icons/ic_wallet.svg');
 
   /// List of all assets
-  List<SvgGenImage> get values => [
+  List<dynamic> get values => [
         icBack,
         icBadge,
         icCamera,
@@ -146,6 +154,8 @@ class $AssetsIconsGen {
         icInbox,
         icInfo,
         icInstagram,
+        icLemonFilledBackground,
+        icLemonFilledStart,
         icLemonOutline,
         icLinkedin,
         icMenu,

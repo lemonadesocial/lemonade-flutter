@@ -1,9 +1,9 @@
 /// Generated file. Do not edit.
 ///
 /// Locales: 1
-/// Strings: 40
+/// Strings: 42
 ///
-/// Built on 2023-07-10 at 09:13 UTC
+/// Built on 2023-07-14 at 03:19 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -252,6 +252,8 @@ class _I18nCommonActionsEn {
 	// Translations
 	String get edit => 'edit';
 	String get connect => 'connect';
+	String get editProfile => 'Edit profile';
+	String get shareProfile => 'Share profile';
 }
 
 /// Flat map(s) containing all translations.
@@ -293,6 +295,8 @@ extension on _I18nEn {
 			);
 			case 'common.actions.edit': return 'edit';
 			case 'common.actions.connect': return 'connect';
+			case 'common.actions.editProfile': return 'Edit profile';
+			case 'common.actions.shareProfile': return 'Share profile';
 			case 'common.anonymous': return 'anonymous';
 			case 'common.profileUrlCopied': return 'Profile\'s URL copied to clipboard';
 			case 'event.events': return 'Events';

@@ -24,6 +24,11 @@ class Typo {
     height: 15 / 14,
     fontWeight: FontWeight.w500,
   );
+
+  static const xSmall = TextStyle(
+    fontSize: 10,
+    fontWeight: FontWeight.w500,
+  );
 }
 
 const lemonadeTextTheme = TextTheme(
