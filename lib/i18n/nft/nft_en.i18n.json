@@ -3,5 +3,6 @@
     "created": "created",
     "collected": "collected",
     "sold": "sold",
-    "emptyCreatedNfts": "You have not created any NFTs yet"
+    "emptyCreatedNfts": "You have not created any NFTs yet",
+    "noCollectible": "No collectible yet"
 }

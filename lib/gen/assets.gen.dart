@@ -121,6 +121,9 @@ class $AssetsIconsGen {
   SvgGenImage get icMoreHoriz =>
       const SvgGenImage('assets/icons/ic_more_horiz.svg');
 
+  /// File path: assets/icons/ic_news.svg
+  SvgGenImage get icNews => const SvgGenImage('assets/icons/ic_news.svg');
+
   /// File path: assets/icons/ic_share.svg
   SvgGenImage get icShare => const SvgGenImage('assets/icons/ic_share.svg');
 
@@ -135,6 +138,10 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/ic_wallet.svg
   SvgGenImage get icWallet => const SvgGenImage('assets/icons/ic_wallet.svg');
+
+  /// File path: assets/icons/no_collectible.svg
+  SvgGenImage get noCollectible =>
+      const SvgGenImage('assets/icons/no_collectible.svg');
 
   /// List of all assets
   List<dynamic> get values => [
@@ -160,11 +167,13 @@ class $AssetsIconsGen {
         icLinkedin,
         icMenu,
         icMoreHoriz,
+        icNews,
         icShare,
         icStore,
         icTicket,
         icTwitter,
-        icWallet
+        icWallet,
+        noCollectible
       ];
 }
 

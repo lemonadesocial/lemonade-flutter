@@ -28,7 +28,7 @@ class _ProfileTabBarState extends State<_ProfileTabBar> {
   }
 
   List<SvgGenImage> get _tabIcons => [
-        Assets.icons.icGrid,
+        Assets.icons.icNews,
         Assets.icons.icCrystal,
         Assets.icons.icHouseParty,
         Assets.icons.icCamera,
@@ -42,9 +42,11 @@ class _ProfileTabBarState extends State<_ProfileTabBar> {
       var isSelected = item.key == currentIndex;
       var svgIcon = item.value;
       return Tab(
-        child: ThemeSvgIcon(
-          color: !isSelected ? colorScheme.onSurfaceVariant : null,
-          builder: (filter) => svgIcon.svg(colorFilter: filter),
+        child: SizedBox(
+          child: ThemeSvgIcon(
+            color: !isSelected ? colorScheme.onSurfaceVariant : colorScheme.onPrimary,
+            builder: (filter) => svgIcon.svg(colorFilter: filter),
+          ),
         ),
       );
     }).toList();

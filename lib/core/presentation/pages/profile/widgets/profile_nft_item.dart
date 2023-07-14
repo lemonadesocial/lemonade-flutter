@@ -47,10 +47,10 @@ class ProfileNftItem extends StatelessWidget {
                     child: Container(
                       decoration: BoxDecoration(
                         border: Border.all(color: colorScheme.outline),
-                        borderRadius: BorderRadius.circular(LemonRadius.small),
+                        borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
                       ),
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(LemonRadius.small),
+                        borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
                         child: CachedNetworkImage(
                           imageUrl: media.url ?? '',
                           fit: BoxFit.cover,
@@ -65,18 +65,18 @@ class ProfileNftItem extends StatelessWidget {
               return Container(
                 decoration: BoxDecoration(
                   border: Border.all(color: colorScheme.outline),
-                  borderRadius: BorderRadius.circular(LemonRadius.small),
+                  borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
                 ),
                 child: ImagePlaceholder.defaultPlaceholder(),
               );
             },
           ),
         ),
-        Positioned(
-          bottom: Spacing.xSmall,
-          left: Spacing.xSmall,
-          child: Text(tokenName ?? ''),
-        ),
+        // Positioned(
+        //   bottom: Spacing.xSmall,
+        //   left: Spacing.xSmall,
+        //   child: Text(tokenName ?? ''),
+        // ),
       ],
     );
   }

@@ -159,8 +159,9 @@ class _EventList<T extends BaseEventListingBloc> extends StatelessWidget {
             sliver: SliverGrid(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                crossAxisSpacing: Spacing.xSmall,
-                mainAxisSpacing: Spacing.xSmall,
+                crossAxisSpacing: Spacing.superExtraSmall,
+                mainAxisSpacing: Spacing.superExtraSmall,
+                childAspectRatio: 1.8,
               ),
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
@@ -204,7 +205,7 @@ class _EventItem extends StatelessWidget {
             Positioned.fill(
               child: (event.newNewPhotosExpanded?.isNotEmpty == true)
                   ? ClipRRect(
-                      borderRadius: BorderRadius.circular(LemonRadius.small),
+                      borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
                       child: CachedNetworkImage(
                         imageUrl: ImageUtils.generateUrl(
                             file: event.newNewPhotosExpanded!.first, imageConfig: ImageConfig.eventPhoto),
