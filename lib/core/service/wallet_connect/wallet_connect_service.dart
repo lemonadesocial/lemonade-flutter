@@ -35,6 +35,8 @@ class WalletConnectService {
     "eth_signTypedData",
     "eth_sendTransaction",
     "eth_signTransaction",
+    "eth_chainId",
+    "eth_accounts",
   ];
   static const defaultEvents = SupportedSessionEvent.values;
 
