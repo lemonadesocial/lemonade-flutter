@@ -32,6 +32,12 @@ definitions:
       vars:
         PACKAGE_NAME: "social.lemonade.app.staging"
         GOOGLE_PLAY_TRACK: "internal"
+    android_signing_production: &android_signing_production
+      android_signing:
+        - Lemonade
+      vars:
+        PACKAGE_NAME: "social.lemonade.app"
+        GOOGLE_PLAY_TRACK: "internal"
   artifacts:
     - &ipa build/ios/ipa/*.ipa
     - &xcode_log /tmp/xcodebuild_logs/*.log
@@ -42,7 +48,7 @@ definitions:
     - &android_log build/**/outputs/**/mapping.txt
     - &flutter_log flutter_drive.log
   scripts:
-    - &setup_staging_env
+    - &load_env_files
       name: Setup Staging ENV
       script: |
         #!/bin/sh
@@ -50,12 +56,6 @@ definitions:
         echo $ENV | base64 --decode > $CM_BUILD_DIR/.env
         echo $ENV_STAGING | base64 --decode > $CM_BUILD_DIR/.env.staging
         echo $ENV_PRODUCTION | base64 --decode > $CM_BUILD_DIR/.env.production
-    - &setup_production_env
-      name: Setup Production ENV
-      script: |
-        #!/bin/sh
-        set -e # exit on first failed command
-        echo $ENV_PRODUCTION | base64 --decode > $CM_BUILD_DIR/.env
     - &use_profiles
       name: Set up code signing settings on Xcode project
       script: |
@@ -108,6 +108,20 @@ definitions:
           $CM_BUILD_DIR/ios/Pods/FirebaseCrashlytics/upload-symbols \
             -gsp ios/config/staging/GoogleService-Info.plist -p ios $dsymPath
         fi
+    - &upload_production_dsym_to_firebase
+      name: Upload debug symbols to Firebase Crashlytics
+      script: | 
+        echo "Find build artifacts"
+        dsymPath=$(find $CM_BUILD_DIR/build/ios/archive/Runner.xcarchive -name "*.dSYM")
+        if [[ -z ${dsymPath} ]]
+        then
+          echo "No debug symbols were found, skip publishing to Firebase Crashlytics"
+        else
+          echo "Publishing debug symbols from $dsymPath to Firebase Crashlytics"
+          ls -d -- ios/Pods/*
+          $CM_BUILD_DIR/ios/Pods/FirebaseCrashlytics/upload-symbols \
+            -gsp ios/config/production/GoogleService-Info.plist -p ios $dsymPath
+        fi
     - &build_apk_staging
       name: Build Android apk staging
       script: |
@@ -126,6 +140,24 @@ definitions:
           --build-number=$BUILD_NUMBER \
           --flavor="staging" \
           -t "lib/main_staging.dart"
+    - &build_apk_production
+      name: Build Android apk production
+      script: |
+        BUILD_NUMBER=$(($(google-play get-latest-build-number --package-name "$PACKAGE_NAME" --tracks="$GOOGLE_PLAY_TRACK") + 1))      
+        flutter build apk --release \
+          --build-name=1.0.$BUILD_NUMBER \
+          --build-number=$BUILD_NUMBER \
+          --flavor="production" \
+          -t "lib/main_production.dart"
+    - &build_aab_production
+      name: Build Android appbundle production
+      script: |
+        BUILD_NUMBER=$(($(google-play get-latest-build-number --package-name "$PACKAGE_NAME" --tracks="$GOOGLE_PLAY_TRACK") + 1))      
+        flutter build appbundle --release \
+          --build-name=1.0.$BUILD_NUMBER \
+          --build-number=$BUILD_NUMBER \
+          --flavor="production" \
+          -t "lib/main_production.dart"
     - &notify_ios_staging_to_slack
       name: Notify iOS Staging app to slack
       script: | 
@@ -141,7 +173,7 @@ definitions:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": ":white_check_mark: Staging app build successful for iOS"
+                    "text": ":white_check_mark: Build iOS Staging app successfully"
                   }
                 },
                 {
@@ -187,6 +219,67 @@ definitions:
             }
           ]
         }'
+    - &notify_ios_production_to_slack
+      name: Notify iOS Production app to slack
+      script: | 
+        ARTIFACT_URL=$(echo $CM_ARTIFACT_LINKS | jq -r '.[] | select(.name | endswith("'".ipa"'")) | .url')
+        curl -0 -v -X POST $SLACK_WEBHOOK_URL \
+        -H 'Content-type: application/json' \
+        --data-raw '
+        {
+          "attachments": [
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": ":white_check_mark: Build iOS Production app successfully"
+                  }
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Build Link*:\n<https://codemagic.io/app/'"$CM_PROJECT_ID"'/build/'"$CM_BUILD_ID"'|Click here>"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Pull Request*:\n<https://github.com/'"$CM_REPO_SLUG"'/pull/'"$CM_PULL_REQUEST_NUMBER"'|Open pull request>"
+                    }
+                  ]
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Branch*\n'"$CM_BRANCH"'"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Commit*\n'"$CM_COMMIT"'"
+                    }
+                  ]
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "Download on TestFlight"
+                      },
+                      "url": "itms-beta://beta.itunes.apple.com/v1/app/6450694884"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }'
     - &notify_android_staging_to_slack
       name: Notify Android Staging app to slack
       script: | 
@@ -202,7 +295,68 @@ definitions:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": ":white_check_mark: Staging app build successful for Android"
+                    "text": ":white_check_mark: Build Android Staging app successfully"
+                  }
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Build Link*:\n<https://codemagic.io/app/'"$CM_PROJECT_ID"'/build/'"$CM_BUILD_ID"'|Click here>"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Pull Request*:\n<https://github.com/'"$CM_REPO_SLUG"'/pull/'"$CM_PULL_REQUEST_NUMBER"'|Open pull request>"
+                    }
+                  ]
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Branch*\n'"$CM_BRANCH"'"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Commit*\n'"$CM_COMMIT"'"
+                    }
+                  ]
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "Download APK"
+                      },
+                      "url": "'${ARTIFACT_APK_URL}'"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }'
+    - &notify_android_production_to_slack
+      name: Notify Android Production app to slack
+      script: | 
+        ARTIFACT_APK_URL=$(echo $CM_ARTIFACT_LINKS | jq -r '.[] | select(.name | endswith("'".apk"'")) | .url')
+        curl -0 -v -X POST $SLACK_WEBHOOK_URL \
+        -H 'Content-type: application/json' \
+        --data-raw '
+        {
+          "attachments": [
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": ":white_check_mark: Build Android Production app successfully"
                   }
                 },
                 {
@@ -261,12 +415,12 @@ definitions:
       recipients:
         - sieu@coderpush.com
         - thinh@coderpush.com
-        - kc@lemonade.social
-        - chris@lemonade.social
-        - jakob@lemonade.social
-        - pranoti@lemonade.social
-        - rishi@lemonade.social
-        - david@lemonade.social
+        # - kc@lemonade.social
+        # - chris@lemonade.social
+        # - jakob@lemonade.social
+        # - pranoti@lemonade.social
+        # - rishi@lemonade.social
+        # - david@lemonade.social
       notify:
         success: true
         failure: false
@@ -275,7 +429,7 @@ definitions:
       auth: integration
       submit_to_testflight: true
       submit_to_app_store: false
-  android_staging_publish: &android_staging_publish
+  android_publish: &android_publish
     google_play:
       credentials: $GCLOUD_SERVICE_ACCOUNT_CREDENTIALS
       track: $GOOGLE_PLAY_TRACK
@@ -298,7 +452,7 @@ workflows:
         - pattern: master
       cancel_previous_builds: true
     scripts:
-      - *setup_staging_env
+      - *load_env_files
       - *use_profiles
       - *get_flutter_packages
       - *install_firebase_crashlytics
@@ -330,7 +484,7 @@ workflows:
         - pattern: master
       cancel_previous_builds: true
     scripts:
-      - *setup_staging_env
+      - *load_env_files
       - *setup_local_properties
       - *get_flutter_packages
       - *build_apk_staging
@@ -340,7 +494,75 @@ workflows:
       - *aab
       - *android_log
     publishing:
-      <<: *android_staging_publish
+      <<: *android_publish
       <<: *email_staging
       scripts:
         - *notify_android_staging_to_slack
+  # Build iOS Production
+  ios-production:
+    name: iOS Production
+    <<: *instance_mac_mini
+    integrations:
+      <<: *app_store_connect_integrations
+    environment:
+      <<: *env_versions
+      <<: *load_environment_values
+      <<: *ios_signing_production
+    triggering:
+      events:
+        - push
+      branch_patterns: 
+        - pattern: release/*
+          include: true
+          source: true
+      cancel_previous_builds: true
+    scripts:
+      - *load_env_files
+      - *use_profiles
+      - *get_flutter_packages
+      - *install_firebase_crashlytics
+      - *install_pods
+      - *build_ipa_production
+    artifacts:
+      - *ipa
+      - *xcode_log
+      - *dsym
+      - *app
+    publishing:
+      <<: *ios_app_store_publish
+      <<: *email_production
+      scripts:
+        - *upload_production_dsym_to_firebase
+        - *notify_ios_production_to_slack
+
+  # Build Android Production
+  android-production:
+    name: Android Production
+    <<: *instance_mac_mini
+    environment:
+      <<: *env_versions
+      <<: *load_environment_values
+      <<: *android_signing_production
+    triggering:
+      events:
+        - push
+      branch_patterns: 
+        - pattern: release/*
+          include: true
+          source: true
+      cancel_previous_builds: true
+    scripts:
+      - *load_env_files
+      - *setup_local_properties
+      - *get_flutter_packages
+      - *build_apk_production
+      - *build_aab_production
+    artifacts:
+      - *apk
+      - *aab
+      - *android_log
+    publishing:
+      <<: *android_publish
+      <<: *email_production
+      scripts:
+        - *notify_android_production_to_slack
