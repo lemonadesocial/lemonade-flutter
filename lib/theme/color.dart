@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class LemonColor {
   static Color black = const Color(0xff000000);
   static Color black50 = const Color.fromRGBO(0, 0, 0, 0.5);
+  static Color black87 = const Color(0x0f0f0f).withOpacity(0.87);
   static Color raisinBlack = const Color(0xff212121);
   static Color raisinBlack0 = const Color(0xff212121).withOpacity(0);
   static Color oliveBlack = const Color(0xff404040);
@@ -41,6 +42,7 @@ final ColorScheme lemonadeLightThemeColorScheme = ColorScheme.light(
   tertiary: LemonColor.paleViolet,
   onTertiary: LemonColor.lavender,
   surface: LemonColor.white72,
+  surfaceVariant: LemonColor.white72,
   onSurface: LemonColor.raisinBlack,
   onSurfaceVariant: LemonColor.raisinBlack,
   outline: LemonColor.oliveBlack,
@@ -56,6 +58,7 @@ final ColorScheme lemonadeDarkThemeColorScheme = ColorScheme.dark(
   background: LemonColor.black,
   onBackground: LemonColor.white,
   surface: LemonColor.raisinBlack,
+  surfaceVariant: LemonColor.black87,
   onSurface: LemonColor.white72,
   onSurfaceVariant: LemonColor.white36,
   outline: LemonColor.white12,

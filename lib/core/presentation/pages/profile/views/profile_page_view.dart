@@ -10,14 +10,15 @@ import 'package:app/core/presentation/pages/profile/views/tabs/profile_event_tab
 import 'package:app/core/presentation/pages/profile/views/tabs/profile_info_tab_view.dart';
 import 'package:app/core/presentation/pages/profile/views/tabs/profile_photos_tab_view.dart';
 import 'package:app/core/presentation/widgets/burger_menu_widget.dart';
+import 'package:app/core/presentation/widgets/common/appbar/appbar_logo.dart';
 import 'package:app/core/presentation/widgets/common/appbar/profile_animated_appbar_widget.dart';
-import 'package:app/core/presentation/widgets/common/appbar_logo.dart';
 import 'package:app/core/presentation/widgets/common/sliver/dynamic_sliver_appbar.dart';
 import 'package:app/core/presentation/widgets/floating_frosted_glass_dropdown_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sliver_tools/sliver_tools.dart';
 
 class ProfilePageView extends StatefulWidget {
   final String userId;
@@ -63,37 +64,42 @@ class _ProfilePageViewState extends State<ProfilePageView> with SingleTickerProv
               body: SafeArea(
                 child: NestedScrollView(
                   headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                    SliverPersistentHeader(
-                        pinned: true,
-                        delegate: ProfileAnimatedAppBar(
-                          title: '@${userProfile.username ?? t.common.anonymous}',
-                          leading: AppBarLogo(),
-                          actions: [
-                            FloatingFrostedGlassDropdown(
-                              items: [
-                                DropdownItemDpo(
-                                  label: t.auth.logout,
-                                ),
-                              ],
-                              onItemPressed: (item) {
-                                context.read<AuthBloc>().add(AuthEvent.logout());
-                              },
-                              child: BurgerMenu(),
-                            ),
-                          ],
-                        )),
-                    DynamicSliverAppBar(
-                      child: ProfilePageHeader(user: userProfile),
-                      maxHeight: 210,
-                      floating: true,
-                      forceElevated: innerBoxIsScrolled,
-                    ),
                     SliverOverlapAbsorber(
                       handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-                      sliver: SliverPersistentHeader(
-                        pinned: true,
-                        floating: false,
-                        delegate: ProfileTabBarDelegate(controller: _tabCtrl),
+                      sliver: MultiSliver(
+                        children: [
+                          SliverPersistentHeader(
+                              pinned: true,
+                              floating: false,
+                              delegate: ProfileAnimatedAppBar(
+                                title: '@${userProfile.username ?? t.common.anonymous}',
+                                leading: AppBarLogo(),
+                                actions: [
+                                  FloatingFrostedGlassDropdown(
+                                    items: [
+                                      DropdownItemDpo(
+                                        label: t.auth.logout,
+                                      ),
+                                    ],
+                                    onItemPressed: (item) {
+                                      context.read<AuthBloc>().add(AuthEvent.logout());
+                                    },
+                                    child: BurgerMenu(),
+                                  ),
+                                ],
+                              )),
+                          DynamicSliverAppBar(
+                            child: ProfilePageHeader(user: userProfile),
+                            maxHeight: 250,
+                            floating: true,
+                            forceElevated: innerBoxIsScrolled,
+                          ),
+                           SliverPersistentHeader(
+                              pinned: true,
+                              floating: false,
+                              delegate: ProfileTabBarDelegate(controller: _tabCtrl),
+                            ),
+                        ],
                       ),
                     ),
                   ],

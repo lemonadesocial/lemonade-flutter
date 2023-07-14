@@ -46,7 +46,7 @@ class ProfilePageHeader extends StatelessWidget {
 
 class _ActionButtons extends StatelessWidget {
   final User user;
-  
+
   _ActionButtons({required this.user});
 
   _shareProfileLink(context, {required User user}) async {
@@ -113,8 +113,9 @@ class _ProfileUserFollow extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (user.tagline?.isNotEmpty == true)...[
-          Text('${user.tagline}', style: Typo.medium.copyWith(color: LemonColor.lavender, fontWeight: FontWeight.w400)),
+        if (user.tagline?.isNotEmpty == true) ...[
+          Text('${user.tagline}',
+              style: Typo.medium.copyWith(color: LemonColor.paleViolet, fontWeight: FontWeight.w400)),
           SizedBox(height: Spacing.superExtraSmall),
         ],
         Row(
@@ -151,9 +152,18 @@ class _ProfileUserNameAndTitle extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
+          mainAxisSize: MainAxisSize.max,
           children: [
-            Text(displayName ?? t.common.anonymous, style: Typo.large),
-            SizedBox(width: Spacing.extraSmall),
+            ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: 200),
+              child: Text(
+                displayName ?? t.common.anonymous,
+                style: Typo.large,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
+              ),
+            ),
+            SizedBox(width: Spacing.superExtraSmall),
             TextBadge(label: '@${user.username}'),
           ],
         ),

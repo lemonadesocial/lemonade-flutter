@@ -22,7 +22,7 @@ class ProfileAnimatedAppBar extends SliverPersistentHeaderDelegate {
   double get minExtent => 60;
 
   @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) => false;
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) => true;
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {

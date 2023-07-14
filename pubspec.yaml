@@ -57,6 +57,7 @@ dependencies:
   flutter_portal: ^1.1.4
   intl: ^0.18.0
   timeago: ^3.5.0
+  sliver_tools: ^0.2.10
 
   # Webview
   flutter_inappwebview: ^5.7.2+3
