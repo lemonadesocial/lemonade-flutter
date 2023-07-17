@@ -146,7 +146,10 @@ class EventPostCard extends StatelessWidget {
       height: 170,
       width: double.infinity,
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(LemonRadius.normal),
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(LemonRadius.normal),
+          topLeft: Radius.circular(LemonRadius.normal),
+        ),
         child: CachedNetworkImage(
           imageUrl: ImageUtils.generateUrl(
             file: eventPhoto,

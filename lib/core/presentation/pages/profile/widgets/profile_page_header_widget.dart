@@ -2,9 +2,13 @@ import 'package:app/core/config.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/widgets/common/badge/username_badge_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
+import 'package:app/core/presentation/widgets/common/button/outline_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/core/utils/number_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
+import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
@@ -59,8 +63,7 @@ class _ActionButtons extends StatelessWidget {
     } catch (e) {}
   }
 
-  @override
-  Widget build(BuildContext context) {
+  _buildMyActionsButton(BuildContext context) {
     final t = Translations.of(context);
     return Row(
       mainAxisSize: MainAxisSize.max,
@@ -80,6 +83,32 @@ class _ActionButtons extends StatelessWidget {
         SizedBox(width: Spacing.superExtraSmall),
       ],
     );
+  }
+
+  _buildOtherActionsButton(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final t = Translations.of(context);
+    // TODO: follow feature not implemented
+    var isFollowed = false;
+    return isFollowed
+        ? OutlineButton(
+            label: t.common.followed,
+            leading: ThemeSvgIcon(
+              color: colorScheme.onSecondary,
+              builder: (filter) => Assets.icons.icDone.svg(colorFilter: filter),
+            ),
+          )
+        : LinearGradientButton(label: t.common.actions.follow, mode: GradientButtonMode.lavenderMode);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final isMe = AuthUtils.isMe(context, user: user);
+    return isMe
+        ? _buildMyActionsButton(context)
+        : _buildOtherActionsButton(
+            context,
+          );
   }
 }
 

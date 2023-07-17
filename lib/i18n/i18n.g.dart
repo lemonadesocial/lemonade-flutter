@@ -1,9 +1,9 @@
 /// Generated file. Do not edit.
 ///
 /// Locales: 1
-/// Strings: 43
+/// Strings: 45
 ///
-/// Built on 2023-07-14 at 09:40 UTC
+/// Built on 2023-07-17 at 02:34 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -209,6 +209,7 @@ class _I18nCommonEn {
 		other: 'tickets',
 	);
 	late final _I18nCommonActionsEn actions = _I18nCommonActionsEn._(_root);
+	String get followed => 'Followed';
 	String get anonymous => 'anonymous';
 	String get profileUrlCopied => 'Profile\'s URL copied to clipboard';
 }
@@ -255,6 +256,7 @@ class _I18nCommonActionsEn {
 	String get connect => 'connect';
 	String get editProfile => 'Edit profile';
 	String get shareProfile => 'Share profile';
+	String get follow => 'Follow';
 }
 
 /// Flat map(s) containing all translations.
@@ -299,6 +301,8 @@ extension on _I18nEn {
 			case 'common.actions.connect': return 'connect';
 			case 'common.actions.editProfile': return 'Edit profile';
 			case 'common.actions.shareProfile': return 'Share profile';
+			case 'common.actions.follow': return 'Follow';
+			case 'common.followed': return 'Followed';
 			case 'common.anonymous': return 'anonymous';
 			case 'common.profileUrlCopied': return 'Profile\'s URL copied to clipboard';
 			case 'event.events': return 'Events';

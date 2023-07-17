@@ -26,8 +26,10 @@
         "edit": "edit",
         "connect": "connect",
         "editProfile": "Edit profile",
-        "shareProfile": "Share profile"
+        "shareProfile": "Share profile",
+        "follow": "Follow"
     },
+    "followed": "Followed",
     "anonymous": "anonymous",
     "profileUrlCopied": "Profile's URL copied to clipboard"
 }
