@@ -12,7 +12,6 @@ class NotificationsListingBloc extends Bloc<NotificationsListingEvent, Notificat
   }
 
   _onFetch(NotificationsListingEventFetch event, Emitter emit) async {
-    print("NotificationsListingBloc _onFetch");
     emit(NotificationsListingState.loading());
     await Future.delayed(Duration(seconds: 1));
     final result = await notificationService.getNotifications();
