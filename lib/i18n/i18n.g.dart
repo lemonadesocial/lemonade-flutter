@@ -1,9 +1,9 @@
 /// Generated file. Do not edit.
 ///
 /// Locales: 1
-/// Strings: 40
+/// Strings: 41
 ///
-/// Built on 2023-07-10 at 09:13 UTC
+/// Built on 2023-07-15 at 23:36 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -148,6 +148,7 @@ class _I18nEn implements BaseTranslations<AppLocale, _I18nEn> {
 	// Translations
 	late final _I18nNftEn nft = _I18nNftEn._(_root);
 	late final _I18nAuthEn auth = _I18nAuthEn._(_root);
+	late final _I18nNotificationEn notification = _I18nNotificationEn._(_root);
 	late final _I18nCommonEn common = _I18nCommonEn._(_root);
 	late final _I18nEventEn event = _I18nEventEn._(_root);
 }
@@ -175,6 +176,16 @@ class _I18nAuthEn {
 	// Translations
 	late final _I18nAuthLoginEn login = _I18nAuthLoginEn._(_root);
 	String get logout => 'Logout';
+}
+
+// Path: notification
+class _I18nNotificationEn {
+	_I18nNotificationEn._(this._root);
+
+	final _I18nEn _root; // ignore: unused_field
+
+	// Translations
+	String get notifications => 'Notifications';
 }
 
 // Path: common
@@ -268,6 +279,7 @@ extension on _I18nEn {
 			case 'auth.login.success': return 'Logged in successfully';
 			case 'auth.login.fail': return 'Logged in failed';
 			case 'auth.logout': return 'Logout';
+			case 'notification.notifications': return 'Notifications';
 			case 'common.today': return 'today';
 			case 'common.tomorrow': return 'tomorrow';
 			case 'common.thisWeek': return 'this week';

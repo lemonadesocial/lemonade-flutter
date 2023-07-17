@@ -106,6 +106,9 @@ class $AssetsIconsGen {
   SvgGenImage get icLinkedin =>
       const SvgGenImage('assets/icons/ic_linkedin.svg');
 
+  /// File path: assets/icons/ic_matches.svg
+  SvgGenImage get icMatches => const SvgGenImage('assets/icons/ic_matches.svg');
+
   /// File path: assets/icons/ic_menu.svg
   SvgGenImage get icMenu => const SvgGenImage('assets/icons/ic_menu.svg');
 
@@ -148,6 +151,7 @@ class $AssetsIconsGen {
         icInstagram,
         icLemonOutline,
         icLinkedin,
+        icMatches,
         icMenu,
         icMoreHoriz,
         icShare,
