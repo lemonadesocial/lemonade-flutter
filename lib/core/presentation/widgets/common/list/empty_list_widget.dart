@@ -4,8 +4,12 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 
-class EmptyCollectibles extends StatelessWidget {
-  const EmptyCollectibles({super.key});
+class EmptyList extends StatelessWidget {
+  final String? emptyText;
+  const EmptyList({
+    super.key,
+    this.emptyText,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -14,12 +18,14 @@ class EmptyCollectibles extends StatelessWidget {
     return Center(
       child: Column(
         children: [
-          Assets.icons.noCollectible.svg(),
-          SizedBox(height: Spacing.smMedium),
-          Text(
-            t.nft.noCollectible,
-            style: Typo.small.copyWith(color: colorScheme.onSurfaceVariant),
-          ),
+          Assets.icons.icEmptyList.svg(),
+          if (emptyText != null) ...[
+            SizedBox(height: Spacing.smMedium),
+            Text(
+              emptyText!,
+              style: Typo.small.copyWith(color: colorScheme.onSurfaceVariant),
+            ),
+          ]
         ],
       ),
     );

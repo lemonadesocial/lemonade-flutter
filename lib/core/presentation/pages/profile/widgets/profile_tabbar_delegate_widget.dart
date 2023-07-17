@@ -32,7 +32,7 @@ class _ProfileTabBarState extends State<_ProfileTabBar> {
         Assets.icons.icCrystal,
         Assets.icons.icHouseParty,
         Assets.icons.icCamera,
-        Assets.icons.icStore,
+        // Assets.icons.icStore,
         Assets.icons.icInfo,
       ];
 

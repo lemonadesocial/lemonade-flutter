@@ -67,6 +67,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_edit.svg
   SvgGenImage get icEdit => const SvgGenImage('assets/icons/ic_edit.svg');
 
+  /// File path: assets/icons/ic_empty_list.svg
+  SvgGenImage get icEmptyList =>
+      const SvgGenImage('assets/icons/ic_empty_list.svg');
+
   /// File path: assets/icons/ic_facebook.svg
   SvgGenImage get icFacebook =>
       const SvgGenImage('assets/icons/ic_facebook.svg');
@@ -139,10 +143,6 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_wallet.svg
   SvgGenImage get icWallet => const SvgGenImage('assets/icons/ic_wallet.svg');
 
-  /// File path: assets/icons/no_collectible.svg
-  SvgGenImage get noCollectible =>
-      const SvgGenImage('assets/icons/no_collectible.svg');
-
   /// List of all assets
   List<dynamic> get values => [
         icBack,
@@ -152,6 +152,7 @@ class $AssetsIconsGen {
         icCrystal,
         icDone,
         icEdit,
+        icEmptyList,
         icFacebook,
         icFilter,
         icGrid,
@@ -172,8 +173,7 @@ class $AssetsIconsGen {
         icStore,
         icTicket,
         icTwitter,
-        icWallet,
-        noCollectible
+        icWallet
       ];
 }
 

@@ -31,5 +31,8 @@
     },
     "followed": "Followed",
     "anonymous": "anonymous",
-    "profileUrlCopied": "Profile's URL copied to clipboard"
+    "profileUrlCopied": "Profile's URL copied to clipboard",
+    "upcoming": "Upcoming",
+    "past": "Past",
+    "noPhotos": "No photos yet"
 }

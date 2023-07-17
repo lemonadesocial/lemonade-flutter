@@ -7,7 +7,7 @@ import 'package:app/core/domain/token/token_repository.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/pages/profile/widgets/profile_nft_item.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
-import 'package:app/core/presentation/widgets/nft/empty_collectibles_widget.dart';
+import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/service/token/token_service.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
@@ -76,7 +76,8 @@ class _ProfileNftCreatedListViewState extends State<_ProfileNftOnSaleList> {
               fetched: (orders) {
                 if (orders.isEmpty) {
                   return SliverFillRemaining(
-                    child: EmptyCollectibles(),
+                    hasScrollBody: false,
+                    child: EmptyList(emptyText: t.nft.noCollectible),
                   );
                 }
                 return SliverGrid(

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/widgets/event/event_buy_ticket_button_widget.dart';
@@ -44,22 +46,30 @@ class EventPostCard extends StatelessWidget {
           color: colorScheme.surfaceVariant,
           borderRadius: BorderRadius.circular(LemonRadius.normal),
         ),
-        child: Column(
+        child: Stack(
           children: [
-            _buildEventPhoto(),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                vertical: Spacing.small,
-                horizontal: Spacing.small,
-              ),
-              child: Column(
-                children: [
-                  _buildEventTitleAndTime(colorScheme),
-                  SizedBox(height: Spacing.xSmall),
-                  _buildEventHost(colorScheme)
-                ],
-              ),
-            )
+            Column(
+              children: [
+                _buildEventPhoto(),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    vertical: Spacing.small,
+                    horizontal: Spacing.small,
+                  ),
+                  child: Column(
+                    children: [
+                      _buildEventTitleAndTime(colorScheme),
+                      SizedBox(height: Spacing.xSmall),
+                      _buildEventHost(colorScheme),
+                    ],
+                  ),
+                )
+              ],
+            ),
+            Positioned(
+              top: Spacing.extraSmall,
+              right: Spacing.extraSmall,
+              child: _buildEventBadge(colorScheme))
           ],
         ),
       ),
@@ -96,7 +106,7 @@ class EventPostCard extends StatelessWidget {
     );
   }
 
-  _buildHostsAvatars(ColorScheme colorScheme) {
+  Widget _buildHostsAvatars(ColorScheme colorScheme) {
     final hosts = [...(event.cohostsExpanded ?? []), event.hostExpanded];
     return Container(
       width: (1 + 1 / 2 * (hosts.length - 1)) * Sizing.small,
@@ -158,6 +168,28 @@ class EventPostCard extends StatelessWidget {
           errorWidget: (_, __, ___) => ImagePlaceholder.defaultPlaceholder(),
           placeholder: (_, __) => ImagePlaceholder.defaultPlaceholder(),
           fit: BoxFit.cover,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEventBadge(ColorScheme colorScheme) {
+    return ClipRRect(
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 3.0, sigmaY: 3.0),
+        child: Container(
+          width: Sizing.regular,
+          height: Sizing.regular,
+          decoration: ShapeDecoration(
+            shape: CircleBorder(side: BorderSide(color: colorScheme.outline)),
+            color: Colors.transparent,
+          ),
+          child: Center(
+            child: Assets.icons.icHouseParty.svg(
+              width: Sizing.xSmall,
+              height: Sizing.xSmall,
+            ),
+          ),
         ),
       ),
     );

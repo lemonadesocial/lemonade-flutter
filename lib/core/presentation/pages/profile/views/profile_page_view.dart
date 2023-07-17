@@ -4,7 +4,6 @@ import 'package:app/core/presentation/dpos/common/dropdown_item_dpo.dart';
 import 'package:app/core/presentation/pages/profile/views/tabs/profile_posts_tab_view.dart';
 import 'package:app/core/presentation/pages/profile/widgets/profile_page_header_widget.dart';
 import 'package:app/core/presentation/pages/profile/widgets/profile_tabbar_delegate_widget.dart';
-import 'package:app/core/presentation/pages/profile/views/tabs/empty_tab_view.dart';
 import 'package:app/core/presentation/pages/profile/views/tabs/profile_collectible_tab_view.dart';
 import 'package:app/core/presentation/pages/profile/views/tabs/profile_event_tab_view.dart';
 import 'package:app/core/presentation/pages/profile/views/tabs/profile_info_tab_view.dart';
@@ -36,7 +35,7 @@ class ProfilePageView extends StatefulWidget {
 }
 
 class _ProfilePageViewState extends State<ProfilePageView> with SingleTickerProviderStateMixin {
-  int get _tabCount => 6;
+  int get _tabCount => 5;
 
   late final TabController _tabCtrl = TabController(
     length: _tabCount,
@@ -126,7 +125,7 @@ class _ProfilePageViewState extends State<ProfilePageView> with SingleTickerProv
                       ProfileCollectibleTabView(user: userProfile),
                       ProfileEventTabView(user: userProfile),
                       ProfilePhotosTabView(user: userProfile),
-                      EmptyTabView(),
+                      // EmptyTabView(),
                       ProfileInfoTabView(user: userProfile),
                     ],
                   ),
