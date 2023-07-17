@@ -5,6 +5,7 @@ const baseUserFragment = '''
   _id
   name
   username
+  display_name
   new_photos
   image_avatar
 }

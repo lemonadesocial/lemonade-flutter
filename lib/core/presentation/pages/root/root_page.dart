@@ -1,5 +1,6 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/presentation/widgets/bottom_bar_widget.dart';
+import 'package:app/core/presentation/widgets/common/drawer/lemon_drawer.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +26,7 @@ class RootPage extends StatelessWidget {
             orElse: () => EmptyRoute(),
           )
         ],
+        drawer: LemonDrawer(),
         bottomNavigationBuilder: (_, tabsRouter) {
           return BottomBar();
         },
