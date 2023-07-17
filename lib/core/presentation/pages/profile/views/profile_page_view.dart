@@ -58,14 +58,14 @@ class _ProfilePageViewState extends State<ProfilePageView> with SingleTickerProv
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
-    return BlocBuilder<UserProfileBloc, UserProfileState>(
-      builder: (context, state) {
-        return state.when(
-          fetched: (userProfile) {
-            final isMe = AuthUtils.isMe(context, user: userProfile);
-            return Scaffold(
-              backgroundColor: colorScheme.primary,
-              body: SafeArea(
+    return Scaffold(
+      backgroundColor: colorScheme.primary,
+      body: BlocBuilder<UserProfileBloc, UserProfileState>(
+        builder: (context, state) {
+          return state.when(
+            fetched: (userProfile) {
+              final isMe = AuthUtils.isMe(context, user: userProfile);
+              return SafeArea(
                 child: NestedScrollView(
                   headerSliverBuilder: (context, innerBoxIsScrolled) => [
                     SliverOverlapAbsorber(
@@ -79,28 +79,29 @@ class _ProfilePageViewState extends State<ProfilePageView> with SingleTickerProv
                                 title: '@${userProfile.username ?? t.common.anonymous}',
                                 leading: isMe ? AppBarLogo() : LemonBackButton(),
                                 actions: [
-                                  if(isMe) FloatingFrostedGlassDropdown(
-                                    items: [
-                                      DropdownItemDpo(
-                                        label: t.auth.logout,
-                                      ),
-                                    ],
-                                    onItemPressed: (item) {
-                                      context.read<AuthBloc>().add(AuthEvent.logout());
-                                    },
-                                    child: BurgerMenu(),
-                                  ),
-                                  if(!isMe) GestureDetector(
-                                    behavior: HitTestBehavior.translucent,
-                                    onTap: () {},
-                                    child: Container(
-                                      // color: Colors.rtraed,
-                                      child: ThemeSvgIcon(
-                                        color: colorScheme.onPrimary,
-                                        builder: (filter) => Assets.icons.icMoreHoriz.svg(colorFilter: filter),
+                                  if (isMe)
+                                    FloatingFrostedGlassDropdown(
+                                      items: [
+                                        DropdownItemDpo(
+                                          label: t.auth.logout,
+                                        ),
+                                      ],
+                                      onItemPressed: (item) {
+                                        context.read<AuthBloc>().add(AuthEvent.logout());
+                                      },
+                                      child: BurgerMenu(),
+                                    ),
+                                  if (!isMe)
+                                    GestureDetector(
+                                      behavior: HitTestBehavior.translucent,
+                                      onTap: () {},
+                                      child: Container(
+                                        child: ThemeSvgIcon(
+                                          color: colorScheme.onPrimary,
+                                          builder: (filter) => Assets.icons.icMoreHoriz.svg(colorFilter: filter),
+                                        ),
                                       ),
                                     ),
-                                  ),
                                 ],
                               )),
                           DynamicSliverAppBar(
@@ -130,17 +131,17 @@ class _ProfilePageViewState extends State<ProfilePageView> with SingleTickerProv
                     ],
                   ),
                 ),
-              ),
-            );
-          },
-          failure: () => Center(
-            child: Text(t.common.somethingWrong),
-          ),
-          loading: () => Center(
-            child: Loading.defaultLoading(context),
-          ),
-        );
-      },
+              );
+            },
+            failure: () => Center(
+              child: Text(t.common.somethingWrong),
+            ),
+            loading: () => Center(
+              child: Loading.defaultLoading(context),
+            ),
+          );
+        },
+      ),
     );
   }
 }
