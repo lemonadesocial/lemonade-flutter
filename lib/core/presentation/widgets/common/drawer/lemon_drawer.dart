@@ -1,6 +1,7 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/utils/drawer_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -32,15 +33,27 @@ class LemonDrawer extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
+            GestureDetector(
+              onTap: () {
+                DrawerUtils.closeDrawer();
+              },
+              child: Container(
+                color: Colors.transparent,
                 padding: EdgeInsets.symmetric(
                   vertical: Spacing.small,
                   horizontal: Spacing.smMedium,
                 ),
-                child: ThemeSvgIcon(
-                  color: colorScheme.onSecondary,
-                  builder: (filter) => Assets.icons.icBack.svg(colorFilter: filter),
-                )),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    ThemeSvgIcon(
+                      color: colorScheme.onSecondary,
+                      builder: (filter) => Assets.icons.icBack.svg(colorFilter: filter),
+                    )
+                  ],
+                ),
+              ),
+            ),
             ...[
               DrawerItem(icon: Assets.icons.icPeopleAlt, label: t.common.community),
               DrawerItem(icon: Assets.icons.icTicket, label: t.common.ticket(n: 2)),
