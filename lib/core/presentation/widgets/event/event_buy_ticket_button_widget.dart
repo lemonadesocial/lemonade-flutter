@@ -1,4 +1,5 @@
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/number_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -22,17 +23,31 @@ class EventBuyTicketButton extends StatelessWidget {
     return GestureDetector(
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall, vertical: Spacing.extraSmall),
-        decoration: BoxDecoration(
-          border: Border.all(color: colorScheme.outline),
-          borderRadius: BorderRadius.circular(LemonRadius.normal),
-          color: LemonColor.lavender18,
+        decoration: ShapeDecoration(
+          gradient: LinearGradient(
+            begin: Alignment(0.00, -1.00),
+            end: Alignment(0, 1),
+            colors: [LemonColor.arsenic, LemonColor.charlestonGreen],
+          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(LemonRadius.normal)),
+          shadows: [
+            BoxShadow(
+              color: LemonColor.shadow,
+              blurRadius: 4,
+              offset: Offset(0, 2),
+              spreadRadius: 0,
+            )
+          ],
         ),
         child: Row(
           children: [
-            Assets.icons.icTicket.svg(
-              width: Sizing.xSmall,
-              height: Sizing.xSmall,
-              colorFilter: ColorFilter.mode(LemonColor.paleViolet, BlendMode.srcIn),
+            ThemeSvgIcon(
+              color: colorScheme.onPrimary,
+              builder: (filter) => Assets.icons.icTicket.svg(
+                width: Sizing.xSmall,
+                height: Sizing.xSmall,
+                colorFilter: filter,
+              ),
             ),
             SizedBox(width: Spacing.superExtraSmall),
             Text(
@@ -44,7 +59,7 @@ class EventBuyTicketButton extends StatelessWidget {
                       prefix: '${t.event.buy} • ',
                     )}'
                   : '${t.event.free}',
-              style: Typo.small.copyWith(color: LemonColor.paleViolet),
+              style: Typo.small.copyWith(color: colorScheme.onPrimary),
             )
           ],
         ),

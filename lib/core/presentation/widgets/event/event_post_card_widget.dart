@@ -42,7 +42,6 @@ class EventPostCard extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: colorScheme.surfaceVariant,
-          border: Border.all(color: colorScheme.outline),
           borderRadius: BorderRadius.circular(LemonRadius.normal),
         ),
         child: Column(

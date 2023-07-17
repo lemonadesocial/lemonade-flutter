@@ -100,7 +100,6 @@ class PostProfileCard extends StatelessWidget {
       height: 270,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(LemonRadius.normal),
-        border: Border.all(color: colorScheme.outline),
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(LemonRadius.normal),
