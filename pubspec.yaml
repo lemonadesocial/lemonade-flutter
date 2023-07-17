@@ -121,3 +121,7 @@ flutter:
           weight: 400
         - asset: assets/fonts/SpaceGrotesk-SemiBold.ttf
           weight: 600
+    - family: SwitzerVariable
+      fonts:
+        - asset: assets/fonts/Switzer-Variable.ttf
+

@@ -1,3 +1,4 @@
+import 'package:app/gen/fonts.gen.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,7 @@ final lemonadeAppLightThemeData = ThemeData(
 final lemonadeAppDarkThemeData = ThemeData(
   splashColor: Colors.transparent,
   highlightColor: Colors.transparent,
-  fontFamily: 'CircularStd',
+  fontFamily: FontFamily.switzerVariable,
   brightness: Brightness.dark,
   textTheme: lemonadeTextTheme,
   colorScheme: lemonadeDarkThemeColorScheme,

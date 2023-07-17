@@ -34,7 +34,7 @@ class OutlineButton extends StatelessWidget {
               ],
               Text(
                 label,
-                style: Typo.small.copyWith(color: colorScheme.onSecondary),
+                style: Typo.small.copyWith(color: colorScheme.onSecondary, fontWeight: FontWeight.w600),
               ),
             ],
           ),

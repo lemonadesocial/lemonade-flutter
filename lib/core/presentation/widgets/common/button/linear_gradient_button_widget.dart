@@ -57,7 +57,7 @@ class LinearGradientButton extends StatelessWidget {
         child: Center(
           child: Text(
             label,
-            style: Typo.small,
+            style: Typo.small.copyWith(fontWeight: FontWeight.w600),
           ),
         ),
       ),

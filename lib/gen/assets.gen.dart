@@ -32,6 +32,9 @@ class $AssetsFontsGen {
   /// File path: assets/fonts/SpaceGrotesk-SemiBold.ttf
   String get spaceGroteskSemiBold => 'assets/fonts/SpaceGrotesk-SemiBold.ttf';
 
+  /// File path: assets/fonts/Switzer-Variable.ttf
+  String get switzerVariable => 'assets/fonts/Switzer-Variable.ttf';
+
   /// List of all assets
   List<String> get values => [
         circularStdBlack,
@@ -39,7 +42,8 @@ class $AssetsFontsGen {
         circularStdBook,
         circularStdMedium,
         spaceGroteskRegular,
-        spaceGroteskSemiBold
+        spaceGroteskSemiBold,
+        switzerVariable
       ];
 }
 
