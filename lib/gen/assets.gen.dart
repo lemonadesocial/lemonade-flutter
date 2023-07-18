@@ -32,6 +32,9 @@ class $AssetsFontsGen {
   /// File path: assets/fonts/SpaceGrotesk-SemiBold.ttf
   String get spaceGroteskSemiBold => 'assets/fonts/SpaceGrotesk-SemiBold.ttf';
 
+  /// File path: assets/fonts/Switzer-Variable.ttf
+  String get switzerVariable => 'assets/fonts/Switzer-Variable.ttf';
+
   /// List of all assets
   List<String> get values => [
         circularStdBlack,
@@ -39,7 +42,8 @@ class $AssetsFontsGen {
         circularStdBook,
         circularStdMedium,
         spaceGroteskRegular,
-        spaceGroteskSemiBold
+        spaceGroteskSemiBold,
+        switzerVariable
       ];
 }
 
@@ -66,6 +70,10 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/ic_edit.svg
   SvgGenImage get icEdit => const SvgGenImage('assets/icons/ic_edit.svg');
+
+  /// File path: assets/icons/ic_empty_list.svg
+  SvgGenImage get icEmptyList =>
+      const SvgGenImage('assets/icons/ic_empty_list.svg');
 
   /// File path: assets/icons/ic_facebook.svg
   SvgGenImage get icFacebook =>
@@ -98,6 +106,14 @@ class $AssetsIconsGen {
   SvgGenImage get icInstagram =>
       const SvgGenImage('assets/icons/ic_instagram.svg');
 
+  /// File path: assets/icons/ic_lemon_filled_background.png
+  AssetGenImage get icLemonFilledBackground =>
+      const AssetGenImage('assets/icons/ic_lemon_filled_background.png');
+
+  /// File path: assets/icons/ic_lemon_filled_start.svg
+  SvgGenImage get icLemonFilledStart =>
+      const SvgGenImage('assets/icons/ic_lemon_filled_start.svg');
+
   /// File path: assets/icons/ic_lemon_outline.svg
   SvgGenImage get icLemonOutline =>
       const SvgGenImage('assets/icons/ic_lemon_outline.svg');
@@ -112,6 +128,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_more_horiz.svg
   SvgGenImage get icMoreHoriz =>
       const SvgGenImage('assets/icons/ic_more_horiz.svg');
+
+  /// File path: assets/icons/ic_news.svg
+  SvgGenImage get icNews => const SvgGenImage('assets/icons/ic_news.svg');
 
   /// File path: assets/icons/ic_share.svg
   SvgGenImage get icShare => const SvgGenImage('assets/icons/ic_share.svg');
@@ -129,7 +148,7 @@ class $AssetsIconsGen {
   SvgGenImage get icWallet => const SvgGenImage('assets/icons/ic_wallet.svg');
 
   /// List of all assets
-  List<SvgGenImage> get values => [
+  List<dynamic> get values => [
         icBack,
         icBadge,
         icCamera,
@@ -137,6 +156,7 @@ class $AssetsIconsGen {
         icCrystal,
         icDone,
         icEdit,
+        icEmptyList,
         icFacebook,
         icFilter,
         icGrid,
@@ -146,10 +166,13 @@ class $AssetsIconsGen {
         icInbox,
         icInfo,
         icInstagram,
+        icLemonFilledBackground,
+        icLemonFilledStart,
         icLemonOutline,
         icLinkedin,
         icMenu,
         icMoreHoriz,
+        icNews,
         icShare,
         icStore,
         icTicket,

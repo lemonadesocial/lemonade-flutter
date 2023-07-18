@@ -1,9 +1,9 @@
 /// Generated file. Do not edit.
 ///
 /// Locales: 1
-/// Strings: 40
+/// Strings: 50
 ///
-/// Built on 2023-07-10 at 09:13 UTC
+/// Built on 2023-07-17 at 03:56 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -146,10 +146,21 @@ class _I18nEn implements BaseTranslations<AppLocale, _I18nEn> {
 	late final _I18nEn _root = this; // ignore: unused_field
 
 	// Translations
+	late final _I18nPostEn post = _I18nPostEn._(_root);
 	late final _I18nNftEn nft = _I18nNftEn._(_root);
 	late final _I18nAuthEn auth = _I18nAuthEn._(_root);
 	late final _I18nCommonEn common = _I18nCommonEn._(_root);
 	late final _I18nEventEn event = _I18nEventEn._(_root);
+}
+
+// Path: post
+class _I18nPostEn {
+	_I18nPostEn._(this._root);
+
+	final _I18nEn _root; // ignore: unused_field
+
+	// Translations
+	String get noPost => 'No posts yet';
 }
 
 // Path: nft
@@ -164,6 +175,7 @@ class _I18nNftEn {
 	String get collected => 'collected';
 	String get sold => 'sold';
 	String get emptyCreatedNfts => 'You have not created any NFTs yet';
+	String get noCollectible => 'No collectibles yet';
 }
 
 // Path: auth
@@ -208,8 +220,12 @@ class _I18nCommonEn {
 		other: 'tickets',
 	);
 	late final _I18nCommonActionsEn actions = _I18nCommonActionsEn._(_root);
+	String get followed => 'Followed';
 	String get anonymous => 'anonymous';
 	String get profileUrlCopied => 'Profile\'s URL copied to clipboard';
+	String get upcoming => 'Upcoming';
+	String get past => 'Past';
+	String get noPhotos => 'No photos yet';
 }
 
 // Path: event
@@ -230,6 +246,7 @@ class _I18nEventEn {
 	String empty_home_events({required Object time}) => 'There\'s no events ${time}';
 	String empty_attending_events({required Object time}) => 'You are currently not attending any events ${time}';
 	String empty_hosting_events({required Object time}) => 'You are currently not hosting any events ${time}';
+	String get noEvents => 'No events yet';
 }
 
 // Path: auth.login
@@ -252,6 +269,9 @@ class _I18nCommonActionsEn {
 	// Translations
 	String get edit => 'edit';
 	String get connect => 'connect';
+	String get editProfile => 'Edit profile';
+	String get shareProfile => 'Share profile';
+	String get follow => 'Follow';
 }
 
 /// Flat map(s) containing all translations.
@@ -260,11 +280,13 @@ class _I18nCommonActionsEn {
 extension on _I18nEn {
 	dynamic _flatMapFunction(String path) {
 		switch (path) {
+			case 'post.noPost': return 'No posts yet';
 			case 'nft.onSale': return 'on sale';
 			case 'nft.created': return 'created';
 			case 'nft.collected': return 'collected';
 			case 'nft.sold': return 'sold';
 			case 'nft.emptyCreatedNfts': return 'You have not created any NFTs yet';
+			case 'nft.noCollectible': return 'No collectibles yet';
 			case 'auth.login.success': return 'Logged in successfully';
 			case 'auth.login.fail': return 'Logged in failed';
 			case 'auth.logout': return 'Logout';
@@ -293,8 +315,15 @@ extension on _I18nEn {
 			);
 			case 'common.actions.edit': return 'edit';
 			case 'common.actions.connect': return 'connect';
+			case 'common.actions.editProfile': return 'Edit profile';
+			case 'common.actions.shareProfile': return 'Share profile';
+			case 'common.actions.follow': return 'Follow';
+			case 'common.followed': return 'Followed';
 			case 'common.anonymous': return 'anonymous';
 			case 'common.profileUrlCopied': return 'Profile\'s URL copied to clipboard';
+			case 'common.upcoming': return 'Upcoming';
+			case 'common.past': return 'Past';
+			case 'common.noPhotos': return 'No photos yet';
 			case 'event.events': return 'Events';
 			case 'event.all': return 'all';
 			case 'event.attending': return 'attending';
@@ -306,6 +335,7 @@ extension on _I18nEn {
 			case 'event.empty_home_events': return ({required Object time}) => 'There\'s no events ${time}';
 			case 'event.empty_attending_events': return ({required Object time}) => 'You are currently not attending any events ${time}';
 			case 'event.empty_hosting_events': return ({required Object time}) => 'You are currently not hosting any events ${time}';
+			case 'event.noEvents': return 'No events yet';
 			default: return null;
 		}
 	}

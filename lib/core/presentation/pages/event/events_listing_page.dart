@@ -7,7 +7,7 @@ import 'package:app/core/domain/event/event_enums.dart';
 import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/core/domain/event/input/get_events_listing_input.dart';
 import 'package:app/core/presentation/widgets/burger_menu_widget.dart';
-import 'package:app/core/presentation/widgets/lemon_appbar_widget.dart';
+import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/service/event/event_service.dart';
 import 'package:app/gen/assets.gen.dart';

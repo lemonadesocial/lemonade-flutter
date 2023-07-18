@@ -92,4 +92,10 @@ class DateUtils {
 
     return date.isAfter(start) && date.isBefore(end);
   }
+
+  static bool isPast(DateTime? date) {
+    if(date == null) return false;
+    final originToday = new DateTime(today.year, today.month, today.day);
+    return date.isBefore(originToday);
+  }
 }

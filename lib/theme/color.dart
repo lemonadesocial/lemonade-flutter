@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class LemonColor {
   static Color black = const Color(0xff000000);
   static Color black50 = const Color.fromRGBO(0, 0, 0, 0.5);
+  static Color black87 = const Color(0x0f0f0f).withOpacity(0.87);
   static Color raisinBlack = const Color(0xff212121);
   static Color raisinBlack0 = const Color(0xff212121).withOpacity(0);
   static Color oliveBlack = const Color(0xff404040);
@@ -20,10 +21,16 @@ class LemonColor {
   static Color paleViolet12 = const Color(0xffC69DF7).withOpacity(0.12);
   static Color paleViolet18 = const Color(0xffC69DF7).withOpacity(0.18);
   static Color paleViolet36 = const Color(0xffC69DF7).withOpacity(0.36);
-
+  
   // UI specific
   static Color dropdownBackground = const Color.fromARGB(221, 32, 32, 32);
-}
+
+  // Button
+  static Color arsenic = Color(0xff424242);
+  static Color charlestonGreen = Color(0xff2c2c2c);
+  static Color grape = Color(0xff6f3faa);
+  static Color shadow = Color.fromARGB(91, 0, 0, 0);
+} 
 
 final ColorScheme lemonadeLightThemeColorScheme = ColorScheme.light(
   primary: LemonColor.white,
@@ -35,7 +42,10 @@ final ColorScheme lemonadeLightThemeColorScheme = ColorScheme.light(
   tertiary: LemonColor.paleViolet,
   onTertiary: LemonColor.lavender,
   surface: LemonColor.white72,
-  onSurface: LemonColor.raisinBlack
+  surfaceVariant: LemonColor.white72,
+  onSurface: LemonColor.raisinBlack,
+  onSurfaceVariant: LemonColor.raisinBlack,
+  outline: LemonColor.oliveBlack,
 );
 
 final ColorScheme lemonadeDarkThemeColorScheme = ColorScheme.dark(
@@ -48,6 +58,8 @@ final ColorScheme lemonadeDarkThemeColorScheme = ColorScheme.dark(
   background: LemonColor.black,
   onBackground: LemonColor.white,
   surface: LemonColor.raisinBlack,
+  surfaceVariant: LemonColor.black87,
   onSurface: LemonColor.white72,
+  onSurfaceVariant: LemonColor.white36,
   outline: LemonColor.white12,
 );
