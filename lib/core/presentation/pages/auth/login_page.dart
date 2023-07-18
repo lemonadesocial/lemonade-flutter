@@ -1,6 +1,7 @@
 // import 'package:app/application/auth/auth_bloc.dart';
 import 'package:app/core/application/auth/auth_bloc.dart';
-import 'package:app/core/presentation/widgets/lemon_appbar_widget.dart';
+import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
+import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,13 +29,31 @@ class _LoginPageState extends State<LoginPage> {
                 orElse: () {});
           },
           child: Center(
-            child: ElevatedButton(
-                onPressed: () {
-                  context.read<AuthBloc>().add(const AuthEvent.login());
-                },
-                child: const Text(
-                  "Login",
-                )),
+            child: BlocBuilder<AuthBloc, AuthState>(
+              builder: (context, state) {
+                return state.maybeWhen(
+                  unauthenticated: (isChecking) {
+                    if (isChecking) return Loading.defaultLoading(context);
+
+                    return ElevatedButton(
+                        onPressed: () {
+                          context.read<AuthBloc>().add(const AuthEvent.login());
+                        },
+                        child: const Text(
+                          "Login",
+                        ));
+                  },
+                  unknown: () => ElevatedButton(
+                        onPressed: () {
+                          context.read<AuthBloc>().add(const AuthEvent.login());
+                        },
+                        child: const Text(
+                          "Login",
+                        )),
+                  orElse: () => SizedBox.shrink()
+                );
+              },
+            ),
           ),
         ));
   }
