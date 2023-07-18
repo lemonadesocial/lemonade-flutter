@@ -37,6 +37,7 @@ dependencies:
   # other
   path_provider: ^2.0.15
   dartz: ^0.10.1
+  share_plus: ^7.0.2
 
   # navigation
   auto_route: ^7.4.0
@@ -66,7 +67,10 @@ dependencies:
   firebase_core: ^2.14.0
   firebase_messaging: ^14.6.4
   firebase_crashlytics: ^3.3.3
-  share_plus: ^7.0.2
+
+  # location tracking
+  location: ^5.0.0
+  app_settings: ^5.0.0
 
 dev_dependencies:
   flutter_test:
