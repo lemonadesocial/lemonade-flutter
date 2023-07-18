@@ -72,11 +72,6 @@ class ProfileNftItem extends StatelessWidget {
             },
           ),
         ),
-        // Positioned(
-        //   bottom: Spacing.xSmall,
-        //   left: Spacing.xSmall,
-        //   child: Text(tokenName ?? ''),
-        // ),
       ],
     );
   }
