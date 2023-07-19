@@ -4,5 +4,7 @@
     "collected": "collected",
     "sold": "sold",
     "emptyCreatedNfts": "You have not created any NFTs yet",
-    "noCollectible": "No collectibles yet"
+    "noCollectible": "No collectibles yet",
+    "claimed": "claimed",
+    "claim": "claim"
 }

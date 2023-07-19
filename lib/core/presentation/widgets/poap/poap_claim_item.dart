@@ -3,6 +3,7 @@ import 'package:app/core/presentation/widgets/common/button/linear_gradient_butt
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
+import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
@@ -37,9 +38,9 @@ class POAPClaimItem extends StatelessWidget {
               children: [
                 _buildPoapInfo(colorScheme),
                 SizedBox(height: Spacing.xSmall),
-                _buildPoapQuantityBar(colorScheme),
+                _buildPoapQuantityBar(context),
                 SizedBox(height: Spacing.small),
-                _buildButtons(colorScheme),
+                _buildButtons(context),
               ],
             ),
           )
@@ -94,7 +95,9 @@ class POAPClaimItem extends StatelessWidget {
     );
   }
 
-  Widget _buildPoapQuantityBar(ColorScheme colorScheme) {
+  Widget _buildPoapQuantityBar(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final t = Translations.of(context);
     final smallTextStyle = Typo.small.copyWith(color: colorScheme.onSurfaceVariant);
     return Column(
       children: [
@@ -112,7 +115,7 @@ class POAPClaimItem extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           mainAxisSize: MainAxisSize.max,
           children: [
-            Text("12 claimed", style: smallTextStyle),
+            Text("12 ${t.nft.claimed}", style: smallTextStyle),
             Text("100", style: smallTextStyle),
           ],
         ),
@@ -120,7 +123,9 @@ class POAPClaimItem extends StatelessWidget {
     );
   }
 
-  Widget _buildButtons(ColorScheme colorScheme) {
+  Widget _buildButtons(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final t = Translations.of(context);
     return SizedBox(
       height: 30,
       child: Row(
@@ -145,13 +150,13 @@ class POAPClaimItem extends StatelessWidget {
               color: colorScheme.onSecondary,
               builder: (filter) => Assets.icons.icNavigationLine.svg(colorFilter: filter),
             ),
-            label: "1.2km",
+            label: "1.2${t.common.unit.km}",
             radius: BorderRadius.circular(LemonRadius.extraSmall),
             padding: EdgeInsets.symmetric(horizontal: Spacing.extraSmall, vertical: Spacing.superExtraSmall),
           ),
           Spacer(),
           LinearGradientButton(
-            label: "claim",
+            label: t.nft.claim,
             leading: Assets.icons.icDownload.svg(),
             padding: EdgeInsets.symmetric(horizontal: Spacing.extraSmall, vertical: Spacing.extraSmall),
             radius: BorderRadius.circular(LemonRadius.extraSmall),

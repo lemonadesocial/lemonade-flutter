@@ -34,5 +34,8 @@
     "profileUrlCopied": "Profile's URL copied to clipboard",
     "upcoming": "Upcoming",
     "past": "Past",
-    "noPhotos": "No photos yet"
+    "noPhotos": "No photos yet",
+    "unit": {
+        "km": "km"
+    }
 }

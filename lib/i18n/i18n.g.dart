@@ -1,9 +1,9 @@
 /// Generated file. Do not edit.
 ///
 /// Locales: 1
-/// Strings: 50
+/// Strings: 53
 ///
-/// Built on 2023-07-17 at 03:56 UTC
+/// Built on 2023-07-19 at 08:39 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -176,6 +176,8 @@ class _I18nNftEn {
 	String get sold => 'sold';
 	String get emptyCreatedNfts => 'You have not created any NFTs yet';
 	String get noCollectible => 'No collectibles yet';
+	String get claimed => 'claimed';
+	String get claim => 'claim';
 }
 
 // Path: auth
@@ -226,6 +228,7 @@ class _I18nCommonEn {
 	String get upcoming => 'Upcoming';
 	String get past => 'Past';
 	String get noPhotos => 'No photos yet';
+	late final _I18nCommonUnitEn unit = _I18nCommonUnitEn._(_root);
 }
 
 // Path: event
@@ -274,6 +277,16 @@ class _I18nCommonActionsEn {
 	String get follow => 'Follow';
 }
 
+// Path: common.unit
+class _I18nCommonUnitEn {
+	_I18nCommonUnitEn._(this._root);
+
+	final _I18nEn _root; // ignore: unused_field
+
+	// Translations
+	String get km => 'km';
+}
+
 /// Flat map(s) containing all translations.
 /// Only for edge cases! For simple maps, use the map function of this library.
 
@@ -287,6 +300,8 @@ extension on _I18nEn {
 			case 'nft.sold': return 'sold';
 			case 'nft.emptyCreatedNfts': return 'You have not created any NFTs yet';
 			case 'nft.noCollectible': return 'No collectibles yet';
+			case 'nft.claimed': return 'claimed';
+			case 'nft.claim': return 'claim';
 			case 'auth.login.success': return 'Logged in successfully';
 			case 'auth.login.fail': return 'Logged in failed';
 			case 'auth.logout': return 'Logout';
@@ -324,6 +339,7 @@ extension on _I18nEn {
 			case 'common.upcoming': return 'Upcoming';
 			case 'common.past': return 'Past';
 			case 'common.noPhotos': return 'No photos yet';
+			case 'common.unit.km': return 'km';
 			case 'event.events': return 'Events';
 			case 'event.all': return 'all';
 			case 'event.attending': return 'attending';
