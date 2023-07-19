@@ -6,16 +6,22 @@ import 'package:app/core/domain/payment/payment_enums.dart';
 class AuthUser {
   String id;
   String? imageAvatar;
+  String? displayName;
+  String? username;
 
   AuthUser({
     required this.id,
     this.imageAvatar,
+    this.displayName,
+    this.username,
   });
 
   factory AuthUser.fromDto(UserDto dto) {
     return AuthUser(
       id: dto.id!,
       imageAvatar: dto.imageAvatar,
+      displayName: dto.displayName,
+      username: dto.username
     );
   }
 }

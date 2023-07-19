@@ -102,6 +102,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_info.svg
   SvgGenImage get icInfo => const SvgGenImage('assets/icons/ic_info.svg');
 
+  /// File path: assets/icons/ic_insights.svg
+  SvgGenImage get icInsights =>
+      const SvgGenImage('assets/icons/ic_insights.svg');
+
   /// File path: assets/icons/ic_instagram.svg
   SvgGenImage get icInstagram =>
       const SvgGenImage('assets/icons/ic_instagram.svg');
@@ -135,11 +139,21 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_news.svg
   SvgGenImage get icNews => const SvgGenImage('assets/icons/ic_news.svg');
 
+  /// File path: assets/icons/ic_people_alt.svg
+  SvgGenImage get icPeopleAlt =>
+      const SvgGenImage('assets/icons/ic_people_alt.svg');
+
+  /// File path: assets/icons/ic_qr.svg
+  SvgGenImage get icQr => const SvgGenImage('assets/icons/ic_qr.svg');
+
   /// File path: assets/icons/ic_share.svg
   SvgGenImage get icShare => const SvgGenImage('assets/icons/ic_share.svg');
 
   /// File path: assets/icons/ic_store.svg
   SvgGenImage get icStore => const SvgGenImage('assets/icons/ic_store.svg');
+
+  /// File path: assets/icons/ic_support.svg
+  SvgGenImage get icSupport => const SvgGenImage('assets/icons/ic_support.svg');
 
   /// File path: assets/icons/ic_ticket.svg
   SvgGenImage get icTicket => const SvgGenImage('assets/icons/ic_ticket.svg');
@@ -168,6 +182,7 @@ class $AssetsIconsGen {
         icHouseParty,
         icInbox,
         icInfo,
+        icInsights,
         icInstagram,
         icLemonFilledBackground,
         icLemonFilledStart,
@@ -177,8 +192,11 @@ class $AssetsIconsGen {
         icMenu,
         icMoreHoriz,
         icNews,
+        icPeopleAlt,
+        icQr,
         icShare,
         icStore,
+        icSupport,
         icTicket,
         icTwitter,
         icWallet

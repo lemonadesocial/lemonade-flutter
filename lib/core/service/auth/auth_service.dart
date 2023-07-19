@@ -7,7 +7,6 @@ import 'package:app/core/oauth.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:dartz/dartz.dart';
 
-
 typedef OnTokenChangeHandler = void Function(OAuthTokenState tokenState);
 
 class AuthService {
@@ -51,6 +50,8 @@ class AuthService {
     return AuthSession(
       userId: user.id,
       userAvatar: user.imageAvatar,
+      userDisplayName: user.displayName,
+      username: user.username,
     );
   }
 }
