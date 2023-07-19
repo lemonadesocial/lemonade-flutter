@@ -1,9 +1,9 @@
 /// Generated file. Do not edit.
 ///
 /// Locales: 1
-/// Strings: 50
+/// Strings: 54
 ///
-/// Built on 2023-07-17 at 03:56 UTC
+/// Built on 2023-07-18 at 06:00 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -226,6 +226,10 @@ class _I18nCommonEn {
 	String get upcoming => 'Upcoming';
 	String get past => 'Past';
 	String get noPhotos => 'No photos yet';
+	String get community => 'community';
+	String get dashboard => 'dashboard';
+	String get qrCode => 'qrCode';
+	String get support => 'support';
 }
 
 // Path: event
@@ -324,6 +328,10 @@ extension on _I18nEn {
 			case 'common.upcoming': return 'Upcoming';
 			case 'common.past': return 'Past';
 			case 'common.noPhotos': return 'No photos yet';
+			case 'common.community': return 'community';
+			case 'common.dashboard': return 'dashboard';
+			case 'common.qrCode': return 'qrCode';
+			case 'common.support': return 'support';
 			case 'event.events': return 'Events';
 			case 'event.all': return 'all';
 			case 'event.attending': return 'attending';

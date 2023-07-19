@@ -12,15 +12,15 @@
     "joinedOn": "joined on $date",
     "follower(ordinal)": {
         "one": "follower",
-        "other": "followers" 
+        "other": "followers"
     },
     "friends(ordinal)": {
         "one": "follower",
-        "other": "followers" 
+        "other": "followers"
     },
     "ticket(ordinal)": {
         "one": "ticket",
-        "other": "tickets" 
+        "other": "tickets"
     },
     "actions": {
         "edit": "edit",
@@ -34,5 +34,9 @@
     "profileUrlCopied": "Profile's URL copied to clipboard",
     "upcoming": "Upcoming",
     "past": "Past",
-    "noPhotos": "No photos yet"
+    "noPhotos": "No photos yet",
+    "community": "community",
+    "dashboard": "dashboard",
+    "qrCode": "qrCode",
+    "support": "support"
 }
