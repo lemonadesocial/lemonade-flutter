@@ -79,18 +79,18 @@ definitions:
     - &build_ipa_staging
       name: Build ipa staging
       script: |
+        BUILD_NUMBER=$(($(app-store-connect get-latest-testflight-build-number "$APP_ID") + 1))
         flutter build ipa --release \
-          --build-name=1.0.0 \
-          --build-number=$(($(app-store-connect get-latest-testflight-build-number "$APP_ID") + 1)) \
+          --build-number=$BUILD_NUMBER \
           --export-options-plist=/Users/builder/export_options.plist \
           --flavor="staging" \
           -t "lib/main_staging.dart"
     - &build_ipa_production
       name: Build ipa production
       script: |
+        BUILD_NUMBER=$(($(app-store-connect get-latest-testflight-build-number "$APP_ID") + 1))
         flutter build ipa --release \
-          --build-name=1.0.0 \
-          --build-number=$(($(app-store-connect get-latest-testflight-build-number "$APP_ID") + 1)) \
+          --build-number=$BUILD_NUMBER \
           --export-options-plist=/Users/builder/export_options.plist \
           --flavor="production" \
           -t "lib/main_production.dart"
@@ -127,7 +127,6 @@ definitions:
       script: |
         BUILD_NUMBER=$(($(google-play get-latest-build-number --package-name "$PACKAGE_NAME" --tracks="$GOOGLE_PLAY_TRACK") + 1))      
         flutter build apk --release \
-          --build-name=1.0.$BUILD_NUMBER \
           --build-number=$BUILD_NUMBER \
           --flavor="staging" \
           -t "lib/main_staging.dart"
@@ -136,7 +135,6 @@ definitions:
       script: |
         BUILD_NUMBER=$(($(google-play get-latest-build-number --package-name "$PACKAGE_NAME" --tracks="$GOOGLE_PLAY_TRACK") + 1))      
         flutter build appbundle --release \
-          --build-name=1.0.$BUILD_NUMBER \
           --build-number=$BUILD_NUMBER \
           --flavor="staging" \
           -t "lib/main_staging.dart"
@@ -145,7 +143,6 @@ definitions:
       script: |
         BUILD_NUMBER=$(($(google-play get-latest-build-number --package-name "$PACKAGE_NAME" --tracks="$GOOGLE_PLAY_TRACK") + 1))      
         flutter build apk --release \
-          --build-name=1.0.$BUILD_NUMBER \
           --build-number=$BUILD_NUMBER \
           --flavor="production" \
           -t "lib/main_production.dart"
@@ -154,7 +151,6 @@ definitions:
       script: |
         BUILD_NUMBER=$(($(google-play get-latest-build-number --package-name "$PACKAGE_NAME" --tracks="$GOOGLE_PLAY_TRACK") + 1))      
         flutter build appbundle --release \
-          --build-name=1.0.$BUILD_NUMBER \
           --build-number=$BUILD_NUMBER \
           --flavor="production" \
           -t "lib/main_production.dart"
@@ -538,9 +534,9 @@ workflows:
       <<: *ios_signing_production
     triggering:
       events:
-        - push
-      branch_patterns: 
-        - pattern: release/*
+        - tag
+      branch_patterns:
+        - pattern: '*'
           include: true
           source: true
       cancel_previous_builds: true
@@ -573,9 +569,9 @@ workflows:
       <<: *android_signing_production
     triggering:
       events:
-        - push
-      branch_patterns: 
-        - pattern: release/*
+        - tag
+      branch_patterns:
+        - pattern: '*'
           include: true
           source: true
       cancel_previous_builds: true
