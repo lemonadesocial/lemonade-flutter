@@ -64,7 +64,7 @@ dependencies:
   
   # Firebase
   firebase_core: ^2.14.0
-  firebase_messaging: ^14.6.4
+  firebase_messaging: ^14.6.5
   firebase_crashlytics: ^3.3.3
   share_plus: ^7.0.2
 
