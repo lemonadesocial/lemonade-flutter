@@ -30,6 +30,10 @@ class LemonColor {
   static Color charlestonGreen = Color(0xff2c2c2c);
   static Color grape = Color(0xff6f3faa);
   static Color shadow = Color.fromARGB(91, 0, 0, 0);
+
+  // Slider 
+  static Color sunrise = Color(0xffFFDB00);
+  static Color sunrise18 = Color(0xffFFDB00).withOpacity(0.18);
 } 
 
 final ColorScheme lemonadeLightThemeColorScheme = ColorScheme.light(
