@@ -143,8 +143,12 @@ class _ProfileUserFollow extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (user.tagline?.isNotEmpty == true) ...[
-          Text('${user.tagline}',
-              style: Typo.medium.copyWith(color: LemonColor.paleViolet, fontWeight: FontWeight.w400)),
+          Text(
+            '${user.tagline}',
+            style: Typo.medium.copyWith(color: LemonColor.paleViolet, fontWeight: FontWeight.w400),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
           SizedBox(height: Spacing.superExtraSmall),
         ],
         Row(
@@ -177,31 +181,34 @@ class _ProfileUserNameAndTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: 200),
-              child: Text(
-                displayName ?? t.common.anonymous,
-                style: Typo.large,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 2,
+    return Flexible(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: 200),
+                child: Text(
+                  displayName ?? t.common.anonymous,
+                  style: Typo.large,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                ),
               ),
-            ),
-            SizedBox(width: Spacing.superExtraSmall),
-            TextBadge(label: '@${user.username}'),
-          ],
-        ),
-        Text(
-          user.jobTitle ?? user.tagline ?? '...',
-          style: Typo.medium.copyWith(color: colorScheme.onSecondary),
-          maxLines: 2,
-        )
-      ],
+              SizedBox(width: Spacing.superExtraSmall),
+              TextBadge(label: '@${user.username}'),
+            ],
+          ),
+          Text(
+            user.jobTitle ?? user.tagline ?? '...',
+            style: Typo.medium.copyWith(color: colorScheme.onSecondary),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          )
+        ],
+      ),
     );
   }
 }
