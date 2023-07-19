@@ -161,247 +161,275 @@ definitions:
     - &notify_ios_staging_to_slack
       name: Notify iOS Staging app to slack
       script: | 
-        ARTIFACT_URL=$(echo $CM_ARTIFACT_LINKS | jq -r '.[] | select(.name | endswith("'".ipa"'")) | .url')
-        curl -0 -v -X POST $SLACK_WEBHOOK_URL \
-        -H 'Content-type: application/json' \
-        --data-raw '
-        {
-          "attachments": [
-            {
-              "blocks": [
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "🚀 Build iOS Staging app successfully"
-                  }
-                },
-                {
-                  "type": "section",
-                  "fields": [
-                    {
+        ipaPath=$(find build -name "*.ipa" | head -1)
+        if [[ -z ${ipaPath} ]]
+        then
+          echo "No .ipa were found"
+        else
+          echo "Publishing .ipa artifacts"
+          ARTIFACT_URL=$(echo $CM_ARTIFACT_LINKS | jq -r '.[] | select(.name | endswith("'".ipa"'")) | .url')
+          curl -0 -v -X POST $SLACK_WEBHOOK_URL \
+          -H 'Content-type: application/json' \
+          --data-raw '
+          {
+            "attachments": [
+              {
+                "blocks": [
+                  {
+                    "type": "section",
+                    "text": {
                       "type": "mrkdwn",
-                      "text": "*Build Link*:\n<https://codemagic.io/app/'"$CM_PROJECT_ID"'/build/'"$CM_BUILD_ID"'|Click here>"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Pull Request*:\n<https://github.com/'"$CM_REPO_SLUG"'/pull/'"$CM_PULL_REQUEST_NUMBER"'|Open pull request>"
+                      "text": "🚀 Build iOS Staging app successfully"
                     }
-                  ]
-                },
-                {
-                  "type": "section",
-                  "fields": [
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Branch*\n'"$CM_BRANCH"'"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Commit*\n'"$CM_COMMIT"'"
-                    }
-                  ]
-                },
-                {
-                  "type": "actions",
-                  "elements": [
-                    {
-                      "type": "button",
-                      "text": {
-                        "type": "plain_text",
-                        "text": "Download Staging App on TestFlight"
+                  },
+                  {
+                    "type": "section",
+                    "fields": [
+                      {
+                        "type": "mrkdwn",
+                        "text": "*Build Link*:\n<https://codemagic.io/app/'"$CM_PROJECT_ID"'/build/'"$CM_BUILD_ID"'|Click here>"
                       },
-                      "url": "itms-beta://beta.itunes.apple.com/v1/app/6450680676"
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }'
+                      {
+                        "type": "mrkdwn",
+                        "text": "*Pull Request*:\n<https://github.com/'"$CM_REPO_SLUG"'/pull/'"$CM_PULL_REQUEST_NUMBER"'|Open pull request>"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "section",
+                    "fields": [
+                      {
+                        "type": "mrkdwn",
+                        "text": "*Branch*\n'"$CM_BRANCH"'"
+                      },
+                      {
+                        "type": "mrkdwn",
+                        "text": "*Commit*\n'"$CM_COMMIT"'"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "actions",
+                    "elements": [
+                      {
+                        "type": "button",
+                        "text": {
+                          "type": "plain_text",
+                          "text": "Download Staging App on TestFlight"
+                        },
+                        "url": "itms-beta://beta.itunes.apple.com/v1/app/6450680676"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }'
+        fi
     - &notify_ios_production_to_slack
       name: Notify iOS Production app to slack
       script: | 
-        ARTIFACT_URL=$(echo $CM_ARTIFACT_LINKS | jq -r '.[] | select(.name | endswith("'".ipa"'")) | .url')
-        curl -0 -v -X POST $SLACK_WEBHOOK_URL \
-        -H 'Content-type: application/json' \
-        --data-raw '
-        {
-          "attachments": [
-            {
-              "blocks": [
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "🚀 Build iOS Production app successfully"
-                  }
-                },
-                {
-                  "type": "section",
-                  "fields": [
-                    {
+        ipaPath=$(find build -name "*.ipa" | head -1)
+        if [[ -z ${ipaPath} ]]
+        then
+          echo "No .ipa were found"
+        else
+          echo "Publishing .ipa artifacts"
+          ARTIFACT_URL=$(echo $CM_ARTIFACT_LINKS | jq -r '.[] | select(.name | endswith("'".ipa"'")) | .url')
+          curl -0 -v -X POST $SLACK_WEBHOOK_URL \
+          -H 'Content-type: application/json' \
+          --data-raw '
+          {
+            "attachments": [
+              {
+                "blocks": [
+                  {
+                    "type": "section",
+                    "text": {
                       "type": "mrkdwn",
-                      "text": "*Build Link*:\n<https://codemagic.io/app/'"$CM_PROJECT_ID"'/build/'"$CM_BUILD_ID"'|Click here>"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Pull Request*:\n<https://github.com/'"$CM_REPO_SLUG"'/pull/'"$CM_PULL_REQUEST_NUMBER"'|Open pull request>"
+                      "text": "🚀 Build iOS Production app successfully"
                     }
-                  ]
-                },
-                {
-                  "type": "section",
-                  "fields": [
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Branch*\n'"$CM_BRANCH"'"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Commit*\n'"$CM_COMMIT"'"
-                    }
-                  ]
-                },
-                {
-                  "type": "actions",
-                  "elements": [
-                    {
-                      "type": "button",
-                      "text": {
-                        "type": "plain_text",
-                        "text": "Download on TestFlight"
+                  },
+                  {
+                    "type": "section",
+                    "fields": [
+                      {
+                        "type": "mrkdwn",
+                        "text": "*Build Link*:\n<https://codemagic.io/app/'"$CM_PROJECT_ID"'/build/'"$CM_BUILD_ID"'|Click here>"
                       },
-                      "url": "itms-beta://beta.itunes.apple.com/v1/app/6450694884"
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }'
+                      {
+                        "type": "mrkdwn",
+                        "text": "*Pull Request*:\n<https://github.com/'"$CM_REPO_SLUG"'/pull/'"$CM_PULL_REQUEST_NUMBER"'|Open pull request>"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "section",
+                    "fields": [
+                      {
+                        "type": "mrkdwn",
+                        "text": "*Branch*\n'"$CM_BRANCH"'"
+                      },
+                      {
+                        "type": "mrkdwn",
+                        "text": "*Commit*\n'"$CM_COMMIT"'"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "actions",
+                    "elements": [
+                      {
+                        "type": "button",
+                        "text": {
+                          "type": "plain_text",
+                          "text": "Download on TestFlight"
+                        },
+                        "url": "itms-beta://beta.itunes.apple.com/v1/app/6450694884"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }'
+        fi
     - &notify_android_staging_to_slack
       name: Notify Android Staging app to slack
       script: | 
-        ARTIFACT_APK_URL=$(echo $CM_ARTIFACT_LINKS | jq -r '.[] | select(.name | endswith("'".apk"'")) | .url')
-        curl -0 -v -X POST $SLACK_WEBHOOK_URL \
-        -H 'Content-type: application/json' \
-        --data-raw '
-        {
-          "attachments": [
-            {
-              "blocks": [
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "🚀 Build Android Staging app successfully"
-                  }
-                },
-                {
-                  "type": "section",
-                  "fields": [
-                    {
+        apkPath=$(find build -name "*.apk" | head -1)
+        if [[ -z ${apkPath} ]]
+        then
+          echo "No .apk were found"
+        else
+          echo "Publishing .apk artifacts"
+          ARTIFACT_APK_URL=$(echo $CM_ARTIFACT_LINKS | jq -r '.[] | select(.name | endswith("'".apk"'")) | .url')
+          curl -0 -v -X POST $SLACK_WEBHOOK_URL \
+          -H 'Content-type: application/json' \
+          --data-raw '
+          {
+            "attachments": [
+              {
+                "blocks": [
+                  {
+                    "type": "section",
+                    "text": {
                       "type": "mrkdwn",
-                      "text": "*Build Link*:\n<https://codemagic.io/app/'"$CM_PROJECT_ID"'/build/'"$CM_BUILD_ID"'|Click here>"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Pull Request*:\n<https://github.com/'"$CM_REPO_SLUG"'/pull/'"$CM_PULL_REQUEST_NUMBER"'|Open pull request>"
+                      "text": "🚀 Build Android Staging app successfully"
                     }
-                  ]
-                },
-                {
-                  "type": "section",
-                  "fields": [
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Branch*\n'"$CM_BRANCH"'"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Commit*\n'"$CM_COMMIT"'"
-                    }
-                  ]
-                },
-                {
-                  "type": "actions",
-                  "elements": [
-                    {
-                      "type": "button",
-                      "text": {
-                        "type": "plain_text",
-                        "text": "Download APK"
+                  },
+                  {
+                    "type": "section",
+                    "fields": [
+                      {
+                        "type": "mrkdwn",
+                        "text": "*Build Link*:\n<https://codemagic.io/app/'"$CM_PROJECT_ID"'/build/'"$CM_BUILD_ID"'|Click here>"
                       },
-                      "url": "'${ARTIFACT_APK_URL}'"
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }'
+                      {
+                        "type": "mrkdwn",
+                        "text": "*Pull Request*:\n<https://github.com/'"$CM_REPO_SLUG"'/pull/'"$CM_PULL_REQUEST_NUMBER"'|Open pull request>"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "section",
+                    "fields": [
+                      {
+                        "type": "mrkdwn",
+                        "text": "*Branch*\n'"$CM_BRANCH"'"
+                      },
+                      {
+                        "type": "mrkdwn",
+                        "text": "*Commit*\n'"$CM_COMMIT"'"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "actions",
+                    "elements": [
+                      {
+                        "type": "button",
+                        "text": {
+                          "type": "plain_text",
+                          "text": "Download APK"
+                        },
+                        "url": "'${ARTIFACT_APK_URL}'"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }'
+        fi
     - &notify_android_production_to_slack
       name: Notify Android Production app to slack
       script: | 
-        ARTIFACT_APK_URL=$(echo $CM_ARTIFACT_LINKS | jq -r '.[] | select(.name | endswith("'".apk"'")) | .url')
-        curl -0 -v -X POST $SLACK_WEBHOOK_URL \
-        -H 'Content-type: application/json' \
-        --data-raw '
-        {
-          "attachments": [
-            {
-              "blocks": [
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "🚀 Build Android Production app successfully"
-                  }
-                },
-                {
-                  "type": "section",
-                  "fields": [
-                    {
+        apkPath=$(find build -name "*.apk" | head -1)
+        if [[ -z ${apkPath} ]]
+        then
+          echo "No .apk were found"
+        else
+          echo "Publishing .apk artifacts"
+          ARTIFACT_APK_URL=$(echo $CM_ARTIFACT_LINKS | jq -r '.[] | select(.name | endswith("'".apk"'")) | .url')
+          curl -0 -v -X POST $SLACK_WEBHOOK_URL \
+          -H 'Content-type: application/json' \
+          --data-raw '
+          {
+            "attachments": [
+              {
+                "blocks": [
+                  {
+                    "type": "section",
+                    "text": {
                       "type": "mrkdwn",
-                      "text": "*Build Link*:\n<https://codemagic.io/app/'"$CM_PROJECT_ID"'/build/'"$CM_BUILD_ID"'|Click here>"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Pull Request*:\n<https://github.com/'"$CM_REPO_SLUG"'/pull/'"$CM_PULL_REQUEST_NUMBER"'|Open pull request>"
+                      "text": "🚀 Build Android Production app successfully"
                     }
-                  ]
-                },
-                {
-                  "type": "section",
-                  "fields": [
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Branch*\n'"$CM_BRANCH"'"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Commit*\n'"$CM_COMMIT"'"
-                    }
-                  ]
-                },
-                {
-                  "type": "actions",
-                  "elements": [
-                    {
-                      "type": "button",
-                      "text": {
-                        "type": "plain_text",
-                        "text": "Download APK"
+                  },
+                  {
+                    "type": "section",
+                    "fields": [
+                      {
+                        "type": "mrkdwn",
+                        "text": "*Build Link*:\n<https://codemagic.io/app/'"$CM_PROJECT_ID"'/build/'"$CM_BUILD_ID"'|Click here>"
                       },
-                      "url": "'${ARTIFACT_APK_URL}'"
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }'
+                      {
+                        "type": "mrkdwn",
+                        "text": "*Pull Request*:\n<https://github.com/'"$CM_REPO_SLUG"'/pull/'"$CM_PULL_REQUEST_NUMBER"'|Open pull request>"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "section",
+                    "fields": [
+                      {
+                        "type": "mrkdwn",
+                        "text": "*Branch*\n'"$CM_BRANCH"'"
+                      },
+                      {
+                        "type": "mrkdwn",
+                        "text": "*Commit*\n'"$CM_COMMIT"'"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "actions",
+                    "elements": [
+                      {
+                        "type": "button",
+                        "text": {
+                          "type": "plain_text",
+                          "text": "Download APK"
+                        },
+                        "url": "'${ARTIFACT_APK_URL}'"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }'
+        fi
   email_staging: &email_staging
     email:
       recipients:
