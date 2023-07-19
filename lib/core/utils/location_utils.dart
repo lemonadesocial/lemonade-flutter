@@ -1,45 +1,43 @@
-import 'package:location/location.dart';
+import 'package:geolocator/geolocator.dart';
 
 class LocationUtils {
-  Location _location = Location();
-  PermissionStatus _permissionStatus = PermissionStatus.denied;
+  LocationPermission _permissionStatus = LocationPermission.denied;
   final Function()? onPermissionDeniedForever;
 
   LocationUtils({
     this.onPermissionDeniedForever,
   });
 
-  PermissionStatus get permissionStatus => _permissionStatus;
+  LocationPermission get permissionStatus => _permissionStatus;
 
-  Future<LocationData> getCurrentLocation() async {
-    if (!(await _location.serviceEnabled()) && !(await _location.requestService())) {
+  Future<Position> getCurrentLocation() async {
+    if (!(await Geolocator.isLocationServiceEnabled())) {
       throw LocationServiceNotEnabledException();
     }
-
+    
     if (!await _checkAndRequestPermission()) {
       throw PermissionNotGrantedException();
     }
 
-    return await _location.getLocation();
+    return await Geolocator.getCurrentPosition();
   }
 
   Future<bool> _checkAndRequestPermission() async {
-    PermissionStatus _status = await _location.hasPermission();
+    LocationPermission _status = await Geolocator.checkPermission();
 
-    if (_status == PermissionStatus.denied) {
-      _status = await _location.requestPermission();
+    if (_status == LocationPermission.denied) {
+      _status = await Geolocator.requestPermission();
     }
 
-    if (_status == PermissionStatus.deniedForever) {
+    if (_status == LocationPermission.deniedForever) {
       onPermissionDeniedForever?.call();
     }
 
     _permissionStatus = _status;
 
-    return _permissionStatus == PermissionStatus.granted;
+    return _permissionStatus == LocationPermission.always || _permissionStatus == LocationPermission.whileInUse;
   }
 }
-
 
 class LocationServiceNotEnabledException implements Exception {
   @override
