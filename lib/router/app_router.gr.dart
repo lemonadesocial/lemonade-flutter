@@ -14,7 +14,7 @@ import 'package:app/core/presentation/pages/event/event_detail_page.dart'
 import 'package:app/core/presentation/pages/event/events_listing_page.dart'
     as _i10;
 import 'package:app/core/presentation/pages/home/home_page.dart' as _i1;
-import 'package:app/core/presentation/pages/notification/notification_page.dart'
+import 'package:app/core/presentation/pages/notification/notifications_listing_page.dart'
     as _i3;
 import 'package:app/core/presentation/pages/profile/my_profile_page.dart'
     as _i5;
@@ -47,7 +47,7 @@ abstract class $AppRouter extends _i12.RootStackRouter {
     NotificationRoute.name: (routeData) {
       return _i12.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i3.NotificationPage(),
+        child: _i3.NotificationPage(),
       );
     },
     WebviewRoute.name: (routeData) {
