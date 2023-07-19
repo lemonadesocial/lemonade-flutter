@@ -7,11 +7,12 @@ import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/core/domain/event/input/get_events_listing_input.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/pages/profile/views/tabs/base_sliver_tab_view.dart';
+import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
-import 'package:app/core/presentation/widgets/lemon_chip_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/service/event/event_service.dart';
 import 'package:app/core/utils/date_format_utils.dart';
+import 'package:app/core/utils/date_utils.dart' as core_date_utils;
 import 'package:app/core/utils/image_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
@@ -22,6 +23,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sliver_tools/sliver_tools.dart';
 
 class ProfileEventTabView extends StatefulWidget {
   final User user;
@@ -35,8 +37,8 @@ class ProfileEventTabView extends StatefulWidget {
 }
 
 class _ProfileEventTabViewState extends State<ProfileEventTabView> {
-  double get _filterBarHeight => 72;
-  EventListingType type = EventListingType.attending;
+  // double get _filterBarHeight => 72;
+  EventListingType type = EventListingType.hosting;
 
   late final attendingEventsBloc = AttendingEventListingBloc(
     EventService(
@@ -65,59 +67,57 @@ class _ProfileEventTabViewState extends State<ProfileEventTabView> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final t = Translations.of(context);
     return BaseSliverTabView(
       name: "event",
       children: [
-        SliverPadding(
-          padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
-          sliver: SliverAppBar(
-            pinned: true,
-            collapsedHeight: _filterBarHeight,
-            expandedHeight: _filterBarHeight,
-            flexibleSpace: Container(
-              color: colorScheme.primary,
-              child: GestureDetector(
-                onTap: () {},
-                child: Container(
-                  color: colorScheme.primary,
-                  child: Column(
-                    children: [
-                      SizedBox(height: Spacing.smMedium),
-                      Row(
-                        children: [
-                          LemonChip(
-                            label: t.event.attended,
-                            onTap: () => setEventListingType(EventListingType.attending),
-                            isActive: type == EventListingType.attending,
-                          ),
-                          SizedBox(width: Spacing.superExtraSmall),
-                          LemonChip(
-                            label: t.event.created,
-                            onTap: () => setEventListingType(EventListingType.hosting),
-                            isActive: type == EventListingType.hosting,
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: Spacing.smMedium),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
+        // TODO: temporary hide the filter bar
+        // SliverPadding(
+        //   padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
+        //   sliver: SliverAppBar(
+        //     pinned: true,
+        //     collapsedHeight: _filterBarHeight,
+        //     expandedHeight: _filterBarHeight,
+        //     flexibleSpace: Container(
+        //       color: colorScheme.primary,
+        //       child: GestureDetector(
+        //         onTap: () {},
+        //         child: Container(
+        //           color: colorScheme.primary,
+        //           child: Column(
+        //             children: [
+        //               SizedBox(height: Spacing.smMedium),
+        //               Row(
+        //                 children: [
+        //                   LemonChip(
+        //                     label: t.event.attended,
+        //                     onTap: () => setEventListingType(EventListingType.attending),
+        //                     isActive: type == EventListingType.attending,
+        //                   ),
+        //                   SizedBox(width: Spacing.superExtraSmall),
+        //                   LemonChip(
+        //                     label: t.event.created,
+        //                     onTap: () => setEventListingType(EventListingType.hosting),
+        //                     isActive: type == EventListingType.hosting,
+        //                   ),
+        //                 ],
+        //               ),
+        //               SizedBox(height: Spacing.smMedium),
+        //             ],
+        //           ),
+        //         ),
+        //       ),
+        //     ),
+        //   ),
+        // ),
+        // if (type == EventListingType.attending)
+        //   BlocProvider.value(
+        //     value: attendingEventsBloc,
+        //     child: _EventList<AttendingEventListingBloc>(),
+        //   ),
+        BlocProvider.value(
+          value: hostingEventsBloc,
+          child: _EventList<HostingEventsListingBloc>(),
         ),
-        if (type == EventListingType.attending)
-          BlocProvider.value(
-            value: attendingEventsBloc,
-            child: _EventList<AttendingEventListingBloc>(),
-          ),
-        if (type == EventListingType.hosting)
-          BlocProvider.value(
-            value: hostingEventsBloc,
-            child: _EventList<HostingEventsListingBloc>(),
-          ),
         SliverToBoxAdapter(
           child: SizedBox(height: 92),
         )
@@ -132,48 +132,91 @@ class _EventList<T extends BaseEventListingBloc> extends StatelessWidget {
     final t = Translations.of(context);
     return BlocBuilder<T, BaseEventsListingState>(
       builder: (context, state) {
-        return state.when(failure: () {
-          return SliverToBoxAdapter(
-              child: Center(
-            child: Text(t.common.somethingWrong),
-          ));
-        }, loading: () {
-          return SliverToBoxAdapter(
-            child: Loading.defaultLoading(context),
-          );
-        }, fetched: (events, filterEvents) {
-          if (events.isEmpty) {
+        return state.when(
+          failure: () {
             return SliverToBoxAdapter(
-              // hasScrollBody: false,
-              child: Container(
-                height: 250,
-                // color: Colors.red,
                 child: Center(
-                  child: Text(t.event.empty_home_events(time: '')),
-                ),
-              ),
+              child: Text(t.common.somethingWrong),
+            ));
+          },
+          loading: () {
+            return SliverToBoxAdapter(
+              child: Loading.defaultLoading(context),
             );
-          }
-          return SliverPadding(
-            padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
-            sliver: SliverGrid(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: Spacing.xSmall,
-                mainAxisSpacing: Spacing.xSmall,
-              ),
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  var event = events[index];
-                  return _EventItem(
-                    event: event,
-                  );
-                },
-                childCount: events.length,
-              ),
-            ),
-          );
-        });
+          },
+          fetched: (events, _) {
+            if (events.isEmpty) {
+              return SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: EmptyList(emptyText: t.event.noEvents),
+              );
+            }
+
+            final upcomingEvents = events.where((event) => !core_date_utils.DateUtils.isPast(event.start)).toList();
+            final pastEvents = events.where((event) => core_date_utils.DateUtils.isPast(event.start)).toList();
+
+            return MultiSliver(
+              children: [
+                if (upcomingEvents.isNotEmpty) ...[
+                  SliverToBoxAdapter(
+                    child: Container(
+                      padding: EdgeInsets.all(16),
+                      child: Text(t.common.upcoming),
+                    ),
+                  ),
+                  SliverPadding(
+                    padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
+                    sliver: SliverGrid(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: Spacing.superExtraSmall,
+                        mainAxisSpacing: Spacing.superExtraSmall,
+                        childAspectRatio: 1.8,
+                      ),
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          var event = upcomingEvents[index];
+                          return _EventItem(
+                            event: event,
+                          );
+                        },
+                        childCount: upcomingEvents.length,
+                      ),
+                    ),
+                  ),
+                ],
+                if (pastEvents.isNotEmpty) ...[
+                  SliverToBoxAdapter(
+                    child: Container(
+                      padding: EdgeInsets.all(16),
+                      child: Text("Past"),
+                    ),
+                  ),
+                  SliverPadding(
+                    padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
+                    sliver: SliverGrid(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: Spacing.superExtraSmall,
+                        mainAxisSpacing: Spacing.superExtraSmall,
+                        childAspectRatio: 1.8,
+                      ),
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          var event = pastEvents[index];
+                          return _EventItem(
+                            event: event,
+                          );
+                        },
+                        childCount: pastEvents.length,
+                      ),
+                    ),
+                  )
+                ],
+              ],
+            );
+          },
+        );
       },
     );
   }
@@ -204,7 +247,7 @@ class _EventItem extends StatelessWidget {
             Positioned.fill(
               child: (event.newNewPhotosExpanded?.isNotEmpty == true)
                   ? ClipRRect(
-                      borderRadius: BorderRadius.circular(LemonRadius.small),
+                      borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
                       child: CachedNetworkImage(
                         imageUrl: ImageUtils.generateUrl(
                             file: event.newNewPhotosExpanded!.first, imageConfig: ImageConfig.eventPhoto),

@@ -22,19 +22,20 @@ class NotificationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return GestureDetector(
         onTap: onTap,
         child: Container(
           padding: EdgeInsets.symmetric(vertical: Spacing.small),
           decoration: BoxDecoration(
             border: Border(
-                bottom: BorderSide(color: Color.fromRGBO(255, 255, 255, 0.12))),
+                bottom: BorderSide(color: colorScheme.outline)),
           ),
           child: Row(
             children: [
               _buildAvatar(),
-              Expanded(child: _buildMessage()),
-              _buildOptionsButton(),
+              Expanded(child: _buildMessage(colorScheme)),
+              _buildOptionsButton(colorScheme),
             ],
           ),
         ));
@@ -65,29 +66,28 @@ class NotificationCard extends StatelessWidget {
     return Container();
   }
 
-  Widget _buildMessage() {
+  Widget _buildMessage(ColorScheme colorScheme) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(notification.message ?? '',
-            style: Typo.extraMedium.copyWith(
-              color: Colors.white,
+            style: Typo.medium.copyWith(
+              color: colorScheme.onPrimary,
               fontWeight: FontWeight.w700,
-              fontSize: 14,
             )),
         Text(timeago.format(notification.stamp!, locale: 'en_short'),
             style: Typo.medium.copyWith(
-              color: Colors.white.withOpacity(0.36),
+              color: colorScheme.onSurfaceVariant,
               fontWeight: FontWeight.w700,
             ))
       ],
     );
   }
 
-  Widget _buildOptionsButton() {
+  Widget _buildOptionsButton(ColorScheme colorScheme) {
     return IconButton(
       icon: ThemeSvgIcon(
-        color: Colors.white.withOpacity(0.23),
+        color: colorScheme.onSurfaceVariant,
         builder: (filter) => Assets.icons.icMoreHoriz.svg(
           colorFilter: filter,
         ),

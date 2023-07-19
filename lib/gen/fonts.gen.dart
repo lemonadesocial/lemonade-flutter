@@ -15,4 +15,7 @@ class FontFamily {
 
   /// Font family: SpaceGrotesk
   static const String spaceGrotesk = 'SpaceGrotesk';
+
+  /// Font family: SwitzerVariable
+  static const String switzerVariable = 'SwitzerVariable';
 }

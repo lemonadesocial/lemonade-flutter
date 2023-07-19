@@ -54,7 +54,7 @@ class ProfileInfoTabView extends StatelessWidget {
                   SizedBox(height: Spacing.smMedium),
                 ],
                 Text(StringUtils.capitalize(t.common.description),
-                    style: Typo.small.copyWith(color: colorScheme.onSurface)),
+                    style: Typo.small.copyWith(color: colorScheme.onSurfaceVariant)),
                 SizedBox(height: Spacing.superExtraSmall),
                 Text(
                   (user.description != null && user.description?.isNotEmpty == true) ? user.description! : '...',
@@ -66,7 +66,7 @@ class ProfileInfoTabView extends StatelessWidget {
                   StringUtils.capitalize(
                     t.common.joinedOn(date: DateFormatUtils.monthYearOnly(user.createdAt)),
                   ),
-                  style: Typo.small.copyWith(color: colorScheme.onSurface),
+                  style: Typo.small.copyWith(color: colorScheme.onSurfaceVariant),
                 ),
               ],
             ),
@@ -98,8 +98,8 @@ class ProfileInfoTabView extends StatelessWidget {
             height: 42,
             margin: EdgeInsets.only(right: Spacing.xSmall),
             decoration: BoxDecoration(
-              border: Border.all(color: colorScheme.outline),
-              borderRadius: BorderRadius.circular(42),
+              color: colorScheme.surfaceVariant,
+              borderRadius: BorderRadius.circular(LemonRadius.xSmall),
             ),
             child: Center(
               child: ThemeSvgIcon(

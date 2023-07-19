@@ -5,6 +5,7 @@ import 'package:app/core/domain/token/token_repository.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/pages/profile/widgets/profile_nft_item.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
+import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/service/token/token_service.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
@@ -21,7 +22,7 @@ class ProfileNftCreatedListView extends StatelessWidget {
       ),
       defaultInput: GetTokensInput(creator: user.wallets?[0]))
     ..add(TokensListingEvent.fetch());
-    
+
   ProfileNftCreatedListView({
     super.key,
     required this.user,
@@ -67,15 +68,16 @@ class _ProfileNftCreatedListViewState extends State<_ProfileNftCreatedList> {
             failure: () => SliverToBoxAdapter(child: Center(child: Text(t.common.somethingWrong))),
             fetched: (tokens) {
               if (tokens.isEmpty) {
-                return SliverToBoxAdapter(
-                  child: Center(child: Text(t.nft.emptyCreatedNfts)),
+                return SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: EmptyList(emptyText: t.nft.noCollectible),
                 );
               }
               return SliverGrid(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  crossAxisSpacing: Spacing.xSmall,
-                  mainAxisSpacing: Spacing.xSmall,
+                  crossAxisSpacing: Spacing.superExtraSmall,
+                  mainAxisSpacing: Spacing.superExtraSmall,
                 ),
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {

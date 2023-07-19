@@ -1,5 +1,6 @@
 import 'package:app/core/application/post/posts_listing_bloc/posts_listing_bloc.dart';
 import 'package:app/core/domain/user/entities/user.dart';
+import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/post/post_profile_card_widget.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -24,8 +25,9 @@ class ProfilePostsListView extends StatelessWidget {
           failure: () => SliverToBoxAdapter(child: Center(child: Text(t.common.somethingWrong))),
           fetched: (posts) {
             if (posts.isEmpty) {
-              return SliverToBoxAdapter(
-                child: Center(child: Text(t.nft.emptyCreatedNfts)),
+              return SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: EmptyList(emptyText: t.post.noPost),
               );
             }
             return SliverPadding(

@@ -12,31 +12,23 @@ class RootPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).colorScheme.primary;
-    return Stack(
-      children: [
-        BlocBuilder<AuthBloc, AuthState>(
-          builder: (context, authState) => AutoTabsScaffold(
-            backgroundColor: primaryColor,
-            routes: [
-              HomeRoute(),
-              EventsListingRoute(),
-              WalletRoute(),
-              NotificationRoute(),
-              authState.maybeWhen(
-                authenticated: (session) => MyProfileRoute(),
-                orElse: () => EmptyRoute(),
-              )
-            ],
-            bottomNavigationBuilder: (_, tabsRouter) {
-              return const SizedBox();
-            },
-          ),
-        ),
-        const Align(
-          alignment: Alignment.bottomCenter,
-          child: BottomBar(),
-        )
-      ],
+    return BlocBuilder<AuthBloc, AuthState>(
+      builder: (context, authState) => AutoTabsScaffold(
+        backgroundColor: primaryColor,
+        routes: [
+          HomeRoute(),
+          EventsListingRoute(),
+          WalletRoute(),
+          NotificationRoute(),
+          authState.maybeWhen(
+            authenticated: (session) => MyProfileRoute(),
+            orElse: () => EmptyRoute(),
+          )
+        ],
+        bottomNavigationBuilder: (_, tabsRouter) {
+          return BottomBar();
+        },
+      ),
     );
   }
 }

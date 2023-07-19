@@ -16,11 +16,13 @@ import 'package:app/core/utils/navigation_utils.dart';
 
 @RoutePage()
 class NotificationPage extends StatelessWidget {
-  late final NotificationService notificationService = NotificationService(NotificationRepositoryImpl());
+  late final NotificationService notificationService =
+      NotificationService(NotificationRepositoryImpl());
 
   Widget _notificationsListingBlocProvider(Widget child) {
     return BlocProvider<NotificationsListingBloc>(
-      create: (context) => NotificationsListingBloc(notificationService)..add(NotificationsListingEvent.fetch()),
+      create: (context) => NotificationsListingBloc(notificationService)
+        ..add(NotificationsListingEvent.fetch()),
       child: child,
     );
   }
@@ -37,7 +39,8 @@ class _NotificationsListingView extends StatefulWidget {
   const _NotificationsListingView();
 
   @override
-  State<_NotificationsListingView> createState() => _NotificationsListingViewState();
+  State<_NotificationsListingView> createState() =>
+      _NotificationsListingViewState();
 }
 
 class _NotificationsListingViewState extends State<_NotificationsListingView> {
@@ -50,7 +53,10 @@ class _NotificationsListingViewState extends State<_NotificationsListingView> {
         title: t.notification.notifications,
         leading: BurgerMenu(),
         actions: [
-          ThemeSvgIcon(color: themeColor.onSurface, builder: (filter) => Assets.icons.icChat.svg(colorFilter: filter)),
+          ThemeSvgIcon(
+              color: themeColor.onSurface,
+              builder: (filter) =>
+                  Assets.icons.icChat.svg(colorFilter: filter)),
         ],
       ),
       backgroundColor: themeColor.primary,
@@ -58,20 +64,19 @@ class _NotificationsListingViewState extends State<_NotificationsListingView> {
         builder: (context, state) {
           return state.when(
             loading: () => Loading.defaultLoading(context),
-            fetched: (filteredNotifications) {
+            fetched: (notifications) {
               return ListView.separated(
-                itemBuilder: (ctx, index) => index == filteredNotifications.length
-                    ? const SizedBox(height: 80)
-                    : NotificationCard(
-                        key: Key(filteredNotifications[index].id ?? ''),
-                        notification: filteredNotifications[index],
-                        onTap: () {
-                          NavigationUtils.handleNotificationNavigate(context, filteredNotifications[index]);
-                        },
-                      ),
+                itemBuilder: (ctx, index) => NotificationCard(
+                  key: Key(notifications[index].id ?? ''),
+                  notification: notifications[index],
+                  onTap: () {
+                    NavigationUtils.handleNotificationNavigate(
+                        context, notifications[index]);
+                  },
+                ),
                 separatorBuilder: (ctx, index) =>
                     SizedBox(height: Spacing.extraSmall),
-                itemCount: filteredNotifications.length + 1,
+                itemCount: notifications.length + 1,
               );
             },
             failure: () => Center(

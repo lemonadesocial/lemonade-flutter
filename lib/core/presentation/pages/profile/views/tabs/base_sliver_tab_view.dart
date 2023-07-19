@@ -1,5 +1,5 @@
 import 'package:app/core/application/common/scroll_notification_bloc/scroll_notification_bloc.dart';
-import 'package:app/core/presentation/widgets/sliver_pinned_overlap_injector.dart';
+import 'package:app/core/presentation/widgets/common/sliver/sliver_pinned_overlap_injector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -52,7 +52,7 @@ class BaseSliverTabView extends StatelessWidget {
                 key: PageStorageKey<String>(name.toString()),
                 slivers: <Widget>[
                   SliverPinnedOverlapInjector(
-                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context)
                   ),
                   ...children
                 ],
