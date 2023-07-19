@@ -2,7 +2,7 @@ import 'package:app/core/application/notification/notifications_listing_bloc.dar
 import 'package:app/core/data/notification/repository/notification_repository_impl.dart';
 import 'package:app/core/presentation/pages/notification/widgets/notification_card_widget.dart';
 import 'package:app/core/presentation/widgets/burger_menu_widget.dart';
-import 'package:app/core/presentation/widgets/lemon_appbar_widget.dart';
+import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/service/notification/notification_service.dart';
@@ -66,14 +66,15 @@ class _NotificationsListingViewState extends State<_NotificationsListingView> {
             loading: () => Loading.defaultLoading(context),
             fetched: (notifications) {
               return ListView.separated(
-                itemBuilder: (ctx, index) => NotificationCard(
-                  key: Key(notifications[index].id ?? ''),
-                  notification: notifications[index],
-                  onTap: () {
-                    NavigationUtils.handleNotificationNavigate(
-                        context, notifications[index]);
-                  },
-                ),
+                itemBuilder: (ctx, index) => index == notifications.length
+                    ? const SizedBox(height: 80)
+                    : NotificationCard(
+                        key: Key(notifications[index].id ?? ''),
+                        notification: notifications[index],
+                        onTap: () {
+                          NavigationUtils.handleNotificationNavigate(context, notifications[index]);
+                        },
+                      ),
                 separatorBuilder: (ctx, index) =>
                     SizedBox(height: Spacing.extraSmall),
                 itemCount: notifications.length + 1,
