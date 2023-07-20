@@ -24,3 +24,9 @@ OAUTH2_CLIENT_ID=<CLIENT_ID>
 4. Run the app by executing `flutter run`.
 
 With the `.env` file configured and the app built and run via Flutter, you can now successfully use the Lemonade Flutter app.
+
+## How to obtain the debug.keystore
+
+The debug.keystore is a crucial file required for Android app development and debugging in Flutter projects. To ensure security, this file should not be publicly shared or included in version control.
+
+If you need access to the debug.keystore for this project, please contact the engineering team responsible for project management. They will provide you with the necessary file for your development purposes.
