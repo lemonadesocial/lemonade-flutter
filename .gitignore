@@ -46,3 +46,5 @@ app.*.map.json
 .env
 .env.staging
 .env.production
+
+*.keystore
