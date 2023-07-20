@@ -34,6 +34,9 @@ class LemonColor {
   // Slider 
   static Color sunrise = Color(0xffFFDB00);
   static Color sunrise18 = Color(0xffFFDB00).withOpacity(0.18);
+
+  // Textfield
+  static Color darkCharcoal = Color(0xff2e2e2e);
 } 
 
 final ColorScheme lemonadeLightThemeColorScheme = ColorScheme.light(

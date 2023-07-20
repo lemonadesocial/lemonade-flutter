@@ -1,9 +1,9 @@
 /// Generated file. Do not edit.
 ///
 /// Locales: 1
-/// Strings: 53
+/// Strings: 54
 ///
-/// Built on 2023-07-19 at 08:39 UTC
+/// Built on 2023-07-20 at 06:19 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -229,6 +229,7 @@ class _I18nCommonEn {
 	String get past => 'Past';
 	String get noPhotos => 'No photos yet';
 	late final _I18nCommonUnitEn unit = _I18nCommonUnitEn._(_root);
+	String get search => 'search';
 }
 
 // Path: event
@@ -340,6 +341,7 @@ extension on _I18nEn {
 			case 'common.past': return 'Past';
 			case 'common.noPhotos': return 'No photos yet';
 			case 'common.unit.km': return 'km';
+			case 'common.search': return 'search';
 			case 'event.events': return 'Events';
 			case 'event.all': return 'all';
 			case 'event.attending': return 'attending';

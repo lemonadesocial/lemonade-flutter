@@ -140,6 +140,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_news.svg
   SvgGenImage get icNews => const SvgGenImage('assets/icons/ic_news.svg');
 
+  /// File path: assets/icons/ic_search.svg
+  SvgGenImage get icSearch => const SvgGenImage('assets/icons/ic_search.svg');
+
   /// File path: assets/icons/ic_share.svg
   SvgGenImage get icShare => const SvgGenImage('assets/icons/ic_share.svg');
 
@@ -183,6 +186,7 @@ class $AssetsIconsGen {
         icMoreHoriz,
         icNavigationLine,
         icNews,
+        icSearch,
         icShare,
         icStore,
         icTicket,
