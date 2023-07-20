@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
@@ -26,42 +24,34 @@ class LemonSnapBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    return GestureDetector(
-      behavior: HitTestBehavior.translucent,
-      onTap: () => Navigator.of(context).pop(),
-      child: GestureDetector(
-        onTap: () {},
-        child: DraggableScrollableSheet(
-          initialChildSize: defaultSnapSize ?? 0.5,
-          minChildSize: minSnapSize ?? 0.25,
-          maxChildSize: maxSnapSize ?? 1.0,
-          snap: true,
-          snapSizes: snapSizes,
-          controller: controller,
-          builder: (BuildContext context, ScrollController scrollController) {
-            return BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 1.0, sigmaY: 1.0),
-              child: ClipRRect(
-                child: Container(
-                  decoration: ShapeDecoration(
-                      color: colorScheme.secondary.withOpacity(0.99),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(LemonRadius.small),
-                          topLeft: Radius.circular(LemonRadius.small),
-                        ),
-                      )),
-                  child: Column(
-                    children: [
-                      _buildIndicator(),
-                      if (child != null) child!,
-                    ],
+    return Padding(
+      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+      child: DraggableScrollableSheet(
+        initialChildSize: defaultSnapSize ?? 0.5,
+        minChildSize: minSnapSize ?? 0.25,
+        maxChildSize: maxSnapSize ?? 1.0,
+        snap: true,
+        snapSizes: snapSizes,
+        controller: controller,
+        expand: false,
+        builder: (BuildContext context, ScrollController scrollController) {
+          return Container(
+            decoration: ShapeDecoration(
+                color: colorScheme.secondary,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(LemonRadius.small),
+                    topLeft: Radius.circular(LemonRadius.small),
                   ),
-                ),
-              ),
-            );
-          },
-        ),
+                )),
+            child: Column(
+              children: [
+                _buildIndicator(),
+                if (child != null) child!,
+              ],
+            ),
+          );
+        },
       ),
     );
   }

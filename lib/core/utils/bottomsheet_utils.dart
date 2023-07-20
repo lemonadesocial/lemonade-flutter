@@ -11,9 +11,13 @@ class BottomSheetUtils {
     double? defaultSnapSize,
     DraggableScrollableController? controller,
   }) {
-    return showBottomSheet(
+    return showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      isDismissible: true,
+      useSafeArea: true,
+      barrierColor: Colors.black.withOpacity(0.5),
       builder: (context) {
         return LemonSnapBottomSheet(
           child: child,
