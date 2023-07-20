@@ -4,21 +4,23 @@ import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 
 class LemonSnapBottomSheet extends StatelessWidget {
-  final Widget? child;
+  final Widget Function(ScrollController scrollController) builder;
   final List<double>? snapSizes;
   final double? maxSnapSize;
   final double? minSnapSize;
   final double? defaultSnapSize;
   final DraggableScrollableController? controller;
+  final Color? backgroundColor;
 
   const LemonSnapBottomSheet({
     super.key,
-    this.child,
+    required this.builder,
     this.snapSizes,
     this.maxSnapSize,
     this.minSnapSize,
     this.defaultSnapSize,
     this.controller,
+    this.backgroundColor,
   });
 
   @override
@@ -37,7 +39,7 @@ class LemonSnapBottomSheet extends StatelessWidget {
         builder: (BuildContext context, ScrollController scrollController) {
           return Container(
             decoration: ShapeDecoration(
-                color: colorScheme.secondary,
+                color: backgroundColor ?? colorScheme.secondary,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(
                     topRight: Radius.circular(LemonRadius.small),
@@ -47,7 +49,7 @@ class LemonSnapBottomSheet extends StatelessWidget {
             child: Column(
               children: [
                 _buildIndicator(),
-                if (child != null) child!,
+                builder(scrollController),
               ],
             ),
           );

@@ -1,15 +1,10 @@
-import 'package:app/core/presentation/widgets/common/bottomsheet/lemon_snap_bottom_sheet_widget.dart';
 import 'package:flutter/material.dart';
 
 class BottomSheetUtils {
   static showSnapBottomSheet(
     BuildContext context, {
+    required Widget Function(BuildContext) builder,
     Widget? child,
-    List<double>? snapSizes,
-    double? maxSnapSize,
-    double? minSnapSize,
-    double? defaultSnapSize,
-    DraggableScrollableController? controller,
   }) {
     return showModalBottomSheet(
       context: context,
@@ -18,15 +13,7 @@ class BottomSheetUtils {
       isDismissible: true,
       useSafeArea: true,
       barrierColor: Colors.black.withOpacity(0.5),
-      builder: (context) {
-        return LemonSnapBottomSheet(
-          child: child,
-          snapSizes: snapSizes,
-          minSnapSize: minSnapSize,
-          maxSnapSize: maxSnapSize,
-          controller: controller,
-        );
-      },
+      builder: builder,
     );
   }
 }

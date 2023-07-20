@@ -38,5 +38,7 @@
     "unit": {
         "km": "km"
     },
-    "search": "search"
+    "search": "search",
+    "viewRequirements": "view requirements",
+    "grantAccess": "grant access"
 }

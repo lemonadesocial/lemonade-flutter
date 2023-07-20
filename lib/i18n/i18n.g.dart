@@ -1,9 +1,9 @@
 /// Generated file. Do not edit.
 ///
 /// Locales: 1
-/// Strings: 54
+/// Strings: 59
 ///
-/// Built on 2023-07-20 at 06:19 UTC
+/// Built on 2023-07-20 at 08:05 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -178,6 +178,9 @@ class _I18nNftEn {
 	String get noCollectible => 'No collectibles yet';
 	String get claimed => 'claimed';
 	String get claim => 'claim';
+	String get needLocationToClaimPoap => 'We need to access your location to check eligibility...';
+	String get ineligibleToClaimPoap => 'Uh oh! 🙁 You are ineligible to claim this badge...';
+	String get ableToClaimPoap => 'Congrats! 🥳 You meet all requirements to claim this badge';
 }
 
 // Path: auth
@@ -230,6 +233,8 @@ class _I18nCommonEn {
 	String get noPhotos => 'No photos yet';
 	late final _I18nCommonUnitEn unit = _I18nCommonUnitEn._(_root);
 	String get search => 'search';
+	String get viewRequirements => 'view requirements';
+	String get grantAccess => 'grant access';
 }
 
 // Path: event
@@ -303,6 +308,9 @@ extension on _I18nEn {
 			case 'nft.noCollectible': return 'No collectibles yet';
 			case 'nft.claimed': return 'claimed';
 			case 'nft.claim': return 'claim';
+			case 'nft.needLocationToClaimPoap': return 'We need to access your location to check eligibility...';
+			case 'nft.ineligibleToClaimPoap': return 'Uh oh! 🙁 You are ineligible to claim this badge...';
+			case 'nft.ableToClaimPoap': return 'Congrats! 🥳 You meet all requirements to claim this badge';
 			case 'auth.login.success': return 'Logged in successfully';
 			case 'auth.login.fail': return 'Logged in failed';
 			case 'auth.logout': return 'Logout';
@@ -342,6 +350,8 @@ extension on _I18nEn {
 			case 'common.noPhotos': return 'No photos yet';
 			case 'common.unit.km': return 'km';
 			case 'common.search': return 'search';
+			case 'common.viewRequirements': return 'view requirements';
+			case 'common.grantAccess': return 'grant access';
 			case 'event.events': return 'Events';
 			case 'event.all': return 'all';
 			case 'event.attending': return 'attending';
