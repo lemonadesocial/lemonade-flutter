@@ -1,9 +1,9 @@
 /// Generated file. Do not edit.
 ///
 /// Locales: 1
-/// Strings: 62
+/// Strings: 67
 ///
-/// Built on 2023-07-21 at 09:44 UTC
+/// Built on 2023-07-21 at 09:53 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -149,6 +149,7 @@ class _I18nEn implements BaseTranslations<AppLocale, _I18nEn> {
 	late final _I18nPostEn post = _I18nPostEn._(_root);
 	late final _I18nNftEn nft = _I18nNftEn._(_root);
 	late final _I18nAuthEn auth = _I18nAuthEn._(_root);
+	late final _I18nNotificationEn notification = _I18nNotificationEn._(_root);
 	late final _I18nCommonEn common = _I18nCommonEn._(_root);
 	late final _I18nEventEn event = _I18nEventEn._(_root);
 }
@@ -195,6 +196,16 @@ class _I18nAuthEn {
 	String get logout => 'Logout';
 }
 
+// Path: notification
+class _I18nNotificationEn {
+	_I18nNotificationEn._(this._root);
+
+	final _I18nEn _root; // ignore: unused_field
+
+	// Translations
+	String get notifications => 'Notifications';
+}
+
 // Path: common
 class _I18nCommonEn {
 	_I18nCommonEn._(this._root);
@@ -238,6 +249,10 @@ class _I18nCommonEn {
 	String get grantAccess => 'grant access';
 	String get nearMe => 'Near me';
 	String get maximumDistance => 'Maximum distance';
+	String get community => 'community';
+	String get dashboard => 'dashboard';
+	String get qrCode => 'qrCode';
+	String get support => 'support';
 }
 
 // Path: event
@@ -318,6 +333,7 @@ extension on _I18nEn {
 			case 'auth.login.success': return 'Logged in successfully';
 			case 'auth.login.fail': return 'Logged in failed';
 			case 'auth.logout': return 'Logout';
+			case 'notification.notifications': return 'Notifications';
 			case 'common.today': return 'today';
 			case 'common.tomorrow': return 'tomorrow';
 			case 'common.thisWeek': return 'this week';
@@ -358,6 +374,10 @@ extension on _I18nEn {
 			case 'common.grantAccess': return 'grant access';
 			case 'common.nearMe': return 'Near me';
 			case 'common.maximumDistance': return 'Maximum distance';
+			case 'common.community': return 'community';
+			case 'common.dashboard': return 'dashboard';
+			case 'common.qrCode': return 'qrCode';
+			case 'common.support': return 'support';
 			case 'event.events': return 'Events';
 			case 'event.all': return 'all';
 			case 'event.attending': return 'attending';

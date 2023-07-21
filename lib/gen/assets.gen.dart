@@ -110,6 +110,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_info.svg
   SvgGenImage get icInfo => const SvgGenImage('assets/icons/ic_info.svg');
 
+  /// File path: assets/icons/ic_insights.svg
+  SvgGenImage get icInsights =>
+      const SvgGenImage('assets/icons/ic_insights.svg');
+
   /// File path: assets/icons/ic_instagram.svg
   SvgGenImage get icInstagram =>
       const SvgGenImage('assets/icons/ic_instagram.svg');
@@ -130,6 +134,9 @@ class $AssetsIconsGen {
   SvgGenImage get icLinkedin =>
       const SvgGenImage('assets/icons/ic_linkedin.svg');
 
+  /// File path: assets/icons/ic_matches.svg
+  SvgGenImage get icMatches => const SvgGenImage('assets/icons/ic_matches.svg');
+
   /// File path: assets/icons/ic_menu.svg
   SvgGenImage get icMenu => const SvgGenImage('assets/icons/ic_menu.svg');
 
@@ -148,6 +155,13 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_news.svg
   SvgGenImage get icNews => const SvgGenImage('assets/icons/ic_news.svg');
 
+  /// File path: assets/icons/ic_people_alt.svg
+  SvgGenImage get icPeopleAlt =>
+      const SvgGenImage('assets/icons/ic_people_alt.svg');
+
+  /// File path: assets/icons/ic_qr.svg
+  SvgGenImage get icQr => const SvgGenImage('assets/icons/ic_qr.svg');
+
   /// File path: assets/icons/ic_search.svg
   SvgGenImage get icSearch => const SvgGenImage('assets/icons/ic_search.svg');
 
@@ -156,6 +170,9 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/ic_store.svg
   SvgGenImage get icStore => const SvgGenImage('assets/icons/ic_store.svg');
+
+  /// File path: assets/icons/ic_support.svg
+  SvgGenImage get icSupport => const SvgGenImage('assets/icons/ic_support.svg');
 
   /// File path: assets/icons/ic_ticket.svg
   SvgGenImage get icTicket => const SvgGenImage('assets/icons/ic_ticket.svg');
@@ -186,19 +203,24 @@ class $AssetsIconsGen {
         icHouseParty,
         icInbox,
         icInfo,
+        icInsights,
         icInstagram,
         icLemonFilledBackground,
         icLemonFilledStart,
         icLemonOutline,
         icLinkedin,
+        icMatches,
         icMenu,
         icMoreHoriz,
         icMyLocation,
         icNavigationLine,
         icNews,
+        icPeopleAlt,
+        icQr,
         icSearch,
         icShare,
         icStore,
+        icSupport,
         icTicket,
         icTwitter,
         icWallet

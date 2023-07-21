@@ -12,15 +12,15 @@
     "joinedOn": "joined on $date",
     "follower(ordinal)": {
         "one": "follower",
-        "other": "followers" 
+        "other": "followers"
     },
     "friends(ordinal)": {
         "one": "follower",
-        "other": "followers" 
+        "other": "followers"
     },
     "ticket(ordinal)": {
         "one": "ticket",
-        "other": "tickets" 
+        "other": "tickets"
     },
     "actions": {
         "edit": "edit",
@@ -42,5 +42,9 @@
     "viewRequirements": "view requirements",
     "grantAccess": "grant access",
     "nearMe": "Near me",
-    "maximumDistance": "Maximum distance"
+    "maximumDistance": "Maximum distance",
+    "community": "community",
+    "dashboard": "dashboard",
+    "qrCode": "qrCode",
+    "support": "support"
 }

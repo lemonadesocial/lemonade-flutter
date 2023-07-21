@@ -54,7 +54,7 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBzBUA3AK8aCgfzPYHRlMlbC-2t3ddmO9k',
+    apiKey: 'AIzaSyAa6SbBX30d2xsl-opo_jvavt22cj3wN2Y',
     appId: '1:610594530625:android:0f12542abff71d4197adc0',
     messagingSenderId: '610594530625',
     projectId: 'lemonade-staging-88d1c',
