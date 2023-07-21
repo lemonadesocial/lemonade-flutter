@@ -40,5 +40,7 @@
     },
     "search": "search",
     "viewRequirements": "view requirements",
-    "grantAccess": "grant access"
+    "grantAccess": "grant access",
+    "nearMe": "Near me",
+    "maximumDistance": "Maximum distance"
 }

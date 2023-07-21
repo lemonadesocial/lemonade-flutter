@@ -1,9 +1,9 @@
 /// Generated file. Do not edit.
 ///
 /// Locales: 1
-/// Strings: 59
+/// Strings: 62
 ///
-/// Built on 2023-07-20 at 08:05 UTC
+/// Built on 2023-07-21 at 09:44 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -181,6 +181,7 @@ class _I18nNftEn {
 	String get needLocationToClaimPoap => 'We need to access your location to check eligibility...';
 	String get ineligibleToClaimPoap => 'Uh oh! 🙁 You are ineligible to claim this badge...';
 	String get ableToClaimPoap => 'Congrats! 🥳 You meet all requirements to claim this badge';
+	String get badges => 'badges';
 }
 
 // Path: auth
@@ -235,6 +236,8 @@ class _I18nCommonEn {
 	String get search => 'search';
 	String get viewRequirements => 'view requirements';
 	String get grantAccess => 'grant access';
+	String get nearMe => 'Near me';
+	String get maximumDistance => 'Maximum distance';
 }
 
 // Path: event
@@ -311,6 +314,7 @@ extension on _I18nEn {
 			case 'nft.needLocationToClaimPoap': return 'We need to access your location to check eligibility...';
 			case 'nft.ineligibleToClaimPoap': return 'Uh oh! 🙁 You are ineligible to claim this badge...';
 			case 'nft.ableToClaimPoap': return 'Congrats! 🥳 You meet all requirements to claim this badge';
+			case 'nft.badges': return 'badges';
 			case 'auth.login.success': return 'Logged in successfully';
 			case 'auth.login.fail': return 'Logged in failed';
 			case 'auth.logout': return 'Logout';
@@ -352,6 +356,8 @@ extension on _I18nEn {
 			case 'common.search': return 'search';
 			case 'common.viewRequirements': return 'view requirements';
 			case 'common.grantAccess': return 'grant access';
+			case 'common.nearMe': return 'Near me';
+			case 'common.maximumDistance': return 'Maximum distance';
 			case 'event.events': return 'Events';
 			case 'event.all': return 'all';
 			case 'event.attending': return 'attending';

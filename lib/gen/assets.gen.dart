@@ -86,6 +86,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_filter.svg
   SvgGenImage get icFilter => const SvgGenImage('assets/icons/ic_filter.svg');
 
+  /// File path: assets/icons/ic_filter_outline.svg
+  SvgGenImage get icFilterOutline =>
+      const SvgGenImage('assets/icons/ic_filter_outline.svg');
+
   /// File path: assets/icons/ic_grid.svg
   SvgGenImage get icGrid => const SvgGenImage('assets/icons/ic_grid.svg');
 
@@ -133,6 +137,10 @@ class $AssetsIconsGen {
   SvgGenImage get icMoreHoriz =>
       const SvgGenImage('assets/icons/ic_more_horiz.svg');
 
+  /// File path: assets/icons/ic_my_location.svg
+  SvgGenImage get icMyLocation =>
+      const SvgGenImage('assets/icons/ic_my_location.svg');
+
   /// File path: assets/icons/ic_navigation_line.svg
   SvgGenImage get icNavigationLine =>
       const SvgGenImage('assets/icons/ic_navigation_line.svg');
@@ -171,6 +179,7 @@ class $AssetsIconsGen {
         icEmptyList,
         icFacebook,
         icFilter,
+        icFilterOutline,
         icGrid,
         icHostFilled,
         icHouse,
@@ -184,6 +193,7 @@ class $AssetsIconsGen {
         icLinkedin,
         icMenu,
         icMoreHoriz,
+        icMyLocation,
         icNavigationLine,
         icNews,
         icSearch,
