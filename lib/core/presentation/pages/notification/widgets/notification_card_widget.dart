@@ -26,10 +26,11 @@ class NotificationCard extends StatelessWidget {
     return GestureDetector(
         onTap: onTap,
         child: Container(
-          padding: EdgeInsets.symmetric(vertical: Spacing.small),
+          padding: EdgeInsets.all(Spacing.small),
           decoration: BoxDecoration(
             border: Border(
-                bottom: BorderSide(color: colorScheme.outline)),
+                bottom: BorderSide(color: colorScheme.outline)
+            ),
           ),
           child: Row(
             children: [
