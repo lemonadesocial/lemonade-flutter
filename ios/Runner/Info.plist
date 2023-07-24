@@ -73,7 +73,7 @@
 	<false/>
 	<key>UIStatusBarHidden</key>
 	<false/>
-	<key>NSLocationWhenInUseUsageDescription</key>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>We require your location information to accurately show nearby badges. This data will only be used when you use this feature and confidentiality will be maintained.</string>
 </dict>
 </plist>
