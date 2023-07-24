@@ -15,13 +15,14 @@ class PoapListingPage extends StatelessWidget {
   PoapListingPage({super.key});
 
   final DraggableScrollableController dragController = DraggableScrollableController();
-  final List<double> snapSizes = [.2, .8, 1];
+  final List<double> snapSizes = [.2, .77, 1];
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: colorScheme.primary,
       body: Padding(
         padding: EdgeInsets.symmetric(

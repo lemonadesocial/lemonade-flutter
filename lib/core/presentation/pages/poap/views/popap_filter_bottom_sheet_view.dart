@@ -7,6 +7,7 @@ import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/animation_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
@@ -43,7 +44,7 @@ class _PoapFilterBottomSheetViewState extends State<PoapFilterBottomSheetView> w
 
   bool get _visibleWhenExpanded => animation.value > 0.4;
 
-  List<int> get _mockPoapList => List.generate(12, (index) => index);
+  List<int> get _mockPoapList => List.generate(10, (index) => index);
 
   @override
   void initState() {
@@ -77,10 +78,10 @@ class _PoapFilterBottomSheetViewState extends State<PoapFilterBottomSheetView> w
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     return Container(
       height: MediaQuery.of(context).size.height,
       child: LemonSnapBottomSheet(
+        resizeToAvoidBottomInset: false,
         controller: widget.dragController,
         minSnapSize: snapSizes[0],
         maxSnapSize: snapSizes[2],
@@ -88,41 +89,36 @@ class _PoapFilterBottomSheetViewState extends State<PoapFilterBottomSheetView> w
         defaultSnapSize: snapSizes[0],
         builder: (scrollController) {
           return Expanded(
-            child: CustomScrollView(
-              controller: scrollController,
-              slivers: [
-                SliverPadding(
-                  padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-                  sliver: AnimatedBuilder(
-                    animation: animation,
-                    builder: (context, child) {
-                      return SliverVisibility(
+            child: Stack(
+              children: [
+                CustomScrollView(
+                  controller: scrollController,
+                  slivers: [
+                    SliverPadding(
+                      padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+                      sliver: AnimatedBuilder(
+                        animation: animation,
+                        builder: (context, child) {
+                          return SliverVisibility(
+                            visible: _visibleWhenExpanded,
+                            replacementSliver: _buildSearchBarReplacement(),
+                            sliver: _buildSearchBar(),
+                          );
+                        },
+                      ),
+                    ),
+                    SliverToBoxAdapter(
+                      child: SizedBox(height: Spacing.xSmall),
+                    ),
+                    AnimatedBuilder(
+                      animation: animation,
+                      builder: (context, child) => SliverVisibility(
                         visible: _visibleWhenExpanded,
-                        replacementSliver: _buildSearchBarReplacement(),
-                        sliver: _buildSearchBar(),
-                      );
-                    },
-                  ),
-                ),
-                SliverToBoxAdapter(
-                  child: SizedBox(height: Spacing.xSmall),
-                ),
-                AnimatedBuilder(
-                  animation: animation,
-                  builder: (context, child) => SliverVisibility(
-                    visible: _visibleWhenExpanded,
-                    replacementSliver: _buildHorizontalList(),
-                    sliver: _buildGridList(),
-                  ),
-                ),
-                SliverToBoxAdapter(
-                  child: Column(
-                    children: [
-                      SizedBox(height: Spacing.medium),
-                      Divider(color: colorScheme.outline),
-                      SizedBox(height: Spacing.medium)
-                    ],
-                  ),
+                        replacementSliver: _buildHorizontalList(),
+                        sliver: _buildGridList(),
+                      ),
+                    ),
+                  ],
                 ),
                 _buildLocationFilter(context)
               ],
@@ -163,8 +159,8 @@ class _PoapFilterBottomSheetViewState extends State<PoapFilterBottomSheetView> w
     return SliverToBoxAdapter(
       child: LayoutBuilder(
         builder: (context, constraints) {
-          return SizedBox(
-            height: 100,
+          return Container(
+            constraints: BoxConstraints(maxHeight: 150),
             child: ListView.separated(
               padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
               separatorBuilder: (context, index) => SizedBox(width: Spacing.extraSmall),
@@ -196,8 +192,15 @@ class _PoapFilterBottomSheetViewState extends State<PoapFilterBottomSheetView> w
           );
           return SliverList.separated(
             separatorBuilder: (context, item) => SizedBox(height: Spacing.xSmall),
-            itemCount: chunkListResult.length,
+            itemCount: chunkListResult.length + 1,
             itemBuilder: (context, index) {
+              // Render bottom space for list
+              if (index == chunkListResult.length)
+                return Container(
+                  height: 220,
+                  color: Colors.transparent,
+                );
+
               final chunkPortion = chunkListResult[index];
               final isNotFullRow = chunkPortion.length < numOfItems;
               return AnimatedBuilder(
@@ -234,19 +237,17 @@ class _PoapFilterBottomSheetViewState extends State<PoapFilterBottomSheetView> w
   _buildLocationFilter(BuildContext context) {
     return AnimatedBuilder(
       animation: animation,
-      builder: (context, child) {
-        return SliverToBoxAdapter(
-          child: AnimatedOpacity(
-            opacity: animation.value,
-            duration: _animationDuration,
-            child: Transform.translate(
-              offset: Offset(0, (1 - animation.value) * 500),
-              child: child,
-            ),
-          ),
-        );
-      },
-      child: LocationFilter(),
+      child: Align(
+        alignment: Alignment.bottomCenter,
+        child: LocationFilter(),
+      ),
+      builder: (context, child) => Transform.translate(
+        offset: Offset(
+          0,
+          (1 - animation.value) * 200,
+        ),
+        child: child,
+      ),
     );
   }
 }
@@ -261,66 +262,80 @@ class LocationFilter extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
     return Container(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            height: 36,
-            child: ListView.separated(
-              padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) {
-                if (index == 0) {
+      color: colorScheme.secondary,
+      child: SingleChildScrollView(
+        physics: NeverScrollableScrollPhysics(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Divider(color: colorScheme.outline, height: 1),
+            SizedBox(height: Spacing.medium),
+            Container(
+              height: Sizing.medium,
+              child: ListView.separated(
+                padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  if (index == 0) {
+                    return LemonOutlineButton(
+                      leading: ThemeSvgIcon(
+                        color: colorScheme.onSecondary,
+                        builder: (filter) => Assets.icons.icMyLocation.svg(colorFilter: filter),
+                      ),
+                      label: t.common.nearMe,
+                    );
+                  }
                   return LemonOutlineButton(
-                    leading: ThemeSvgIcon(
-                      color: colorScheme.onSecondary,
-                      builder: (filter) => Assets.icons.icMyLocation.svg(colorFilter: filter),
-                    ),
-                    label: t.common.nearMe,
+                    label: _mockLocations[index - 1],
                   );
-                }
-                return LemonOutlineButton(
-                  label: _mockLocations[index - 1],
-                );
-              },
-              separatorBuilder: (context, index) => SizedBox(
-                width: Spacing.superExtraSmall,
+                },
+                separatorBuilder: (context, index) => SizedBox(
+                  width: Spacing.superExtraSmall,
+                ),
+                itemCount: _mockLocations.length + 1,
               ),
-              itemCount: _mockLocations.length + 1,
             ),
-          ),
-          SizedBox(height: Spacing.medium),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  t.common.maximumDistance,
-                  style: Typo.medium.copyWith(color: colorScheme.onSurface),
-                ),
-                SizedBox(height: Spacing.superExtraSmall),
-                LemonSlider(min: 1, max: 100),
-                SizedBox(height: 2),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      '1${t.common.unit.km}',
-                      style: Typo.small.copyWith(color: colorScheme.onSurfaceVariant),
-                    ),
-                    Text(
-                      '100${t.common.unit.km}',
-                      style: Typo.small.copyWith(color: colorScheme.onSurfaceVariant),
-                    ),
-                  ],
-                ),
-              ],
+            SizedBox(height: Spacing.medium),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        t.common.maximumDistance,
+                        style: Typo.medium.copyWith(color: colorScheme.onSurface),
+                      ),
+                      Text(
+                        '50',
+                        style: Typo.medium.copyWith(color: colorScheme.onSurface),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: Spacing.superExtraSmall),
+                  LemonSlider(min: 1, max: 100),
+                  SizedBox(height: 2),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '1${t.common.unit.km}',
+                        style: Typo.small.copyWith(color: colorScheme.onSurfaceVariant),
+                      ),
+                      Text(
+                        '100${t.common.unit.km}',
+                        style: Typo.small.copyWith(color: colorScheme.onSurfaceVariant),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-          SizedBox(height: 2 * Spacing.medium),
-        ],
+            SizedBox(height: 2 * Spacing.medium),
+          ],
+        ),
       ),
     );
   }

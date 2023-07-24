@@ -11,6 +11,7 @@ class LemonSnapBottomSheet extends StatelessWidget {
   final double? defaultSnapSize;
   final DraggableScrollableController? controller;
   final Color? backgroundColor;
+  final bool? resizeToAvoidBottomInset;
 
   const LemonSnapBottomSheet({
     super.key,
@@ -21,13 +22,14 @@ class LemonSnapBottomSheet extends StatelessWidget {
     this.defaultSnapSize,
     this.controller,
     this.backgroundColor,
+    this.resizeToAvoidBottomInset = true,
   });
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return Padding(
-      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+      padding: EdgeInsets.only(bottom: resizeToAvoidBottomInset == true ? MediaQuery.of(context).viewInsets.bottom : 0),
       child: DraggableScrollableSheet(
         snapAnimationDuration: Duration(milliseconds: 300),
         initialChildSize: defaultSnapSize ?? 0.5,
