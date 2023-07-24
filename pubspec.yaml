@@ -37,6 +37,9 @@ dependencies:
   # other
   path_provider: ^2.0.15
   dartz: ^0.10.1
+  share_plus: ^7.0.2
+  shake: ^2.2.0
+  flutter_native_splash: ^2.3.1
 
   # navigation
   auto_route: ^7.4.0
@@ -66,8 +69,9 @@ dependencies:
   firebase_core: ^2.15.0
   firebase_messaging: ^14.6.5
   firebase_crashlytics: ^3.3.3
-  share_plus: ^7.0.2
-  shake: ^2.2.0
+  
+  # location tracking
+  geolocator: 9.0.2
 
 dev_dependencies:
   flutter_test:
@@ -125,4 +129,3 @@ flutter:
     - family: SwitzerVariable
       fonts:
         - asset: assets/fonts/Switzer-Variable.ttf
-
