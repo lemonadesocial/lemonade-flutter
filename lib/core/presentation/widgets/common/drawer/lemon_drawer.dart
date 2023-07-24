@@ -142,6 +142,7 @@ class LemonDrawer extends StatelessWidget {
             ),
           );
         },
+        processing: () => SizedBox.shrink(),
         unknown: () => SizedBox.shrink(),
         unauthenticated: (_) => SizedBox.shrink(),
       );

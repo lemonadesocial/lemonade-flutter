@@ -23,12 +23,21 @@ enum GradientButtonMode {
 class LinearGradientButton extends StatelessWidget {
   final GradientButtonMode mode;
   final String label;
+  final Widget? leading;
   final Function()? onTap;
+  final double? height;
+  final EdgeInsets? padding;
+  final BorderRadius? radius;
+
   const LinearGradientButton({
     super.key,
     required this.label,
+    this.leading,
     this.mode = GradientButtonMode.defaultMode,
-    this.onTap
+    this.onTap,
+    this.height,
+    this.padding,
+    this.radius,
   });
 
   @override
@@ -36,15 +45,15 @@ class LinearGradientButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: Sizing.medium,
-        padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall, vertical: Spacing.extraSmall),
+        height: height ?? Sizing.medium,
+        padding: padding ?? EdgeInsets.symmetric(horizontal: Spacing.xSmall, vertical: Spacing.extraSmall),
         decoration: ShapeDecoration(
           gradient: LinearGradient(
             begin: Alignment(0.00, -1.00),
             end: Alignment(0, 1),
             colors: mode.gradients,
           ),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(LemonRadius.xSmall)),
+          shape: RoundedRectangleBorder(borderRadius: radius ?? BorderRadius.circular(LemonRadius.xSmall)),
           shadows: [
             BoxShadow(
               color: LemonColor.shadow,
@@ -55,9 +64,16 @@ class LinearGradientButton extends StatelessWidget {
           ],
         ),
         child: Center(
-          child: Text(
-            label,
-            style: Typo.small.copyWith(fontWeight: FontWeight.w600),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              if (leading != null) ...[leading!, SizedBox(width: Spacing.extraSmall)],
+              Text(
+                label,
+                style: Typo.small.copyWith(fontWeight: FontWeight.w600),
+              )
+            ],
           ),
         ),
       ),

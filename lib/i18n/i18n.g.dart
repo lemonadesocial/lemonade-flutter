@@ -1,9 +1,9 @@
 /// Generated file. Do not edit.
 ///
 /// Locales: 1
-/// Strings: 54
+/// Strings: 67
 ///
-/// Built on 2023-07-18 at 06:00 UTC
+/// Built on 2023-07-21 at 09:53 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -177,6 +177,12 @@ class _I18nNftEn {
 	String get sold => 'sold';
 	String get emptyCreatedNfts => 'You have not created any NFTs yet';
 	String get noCollectible => 'No collectibles yet';
+	String get claimed => 'claimed';
+	String get claim => 'claim';
+	String get needLocationToClaimPoap => 'We need to access your location to check eligibility...';
+	String get ineligibleToClaimPoap => 'Uh oh! 🙁 You are ineligible to claim this badge...';
+	String get ableToClaimPoap => 'Congrats! 🥳 You meet all requirements to claim this badge';
+	String get badges => 'badges';
 }
 
 // Path: auth
@@ -237,6 +243,12 @@ class _I18nCommonEn {
 	String get upcoming => 'Upcoming';
 	String get past => 'Past';
 	String get noPhotos => 'No photos yet';
+	late final _I18nCommonUnitEn unit = _I18nCommonUnitEn._(_root);
+	String get search => 'search';
+	String get viewRequirements => 'view requirements';
+	String get grantAccess => 'grant access';
+	String get nearMe => 'Near me';
+	String get maximumDistance => 'Maximum distance';
 	String get community => 'community';
 	String get dashboard => 'dashboard';
 	String get qrCode => 'qrCode';
@@ -289,6 +301,16 @@ class _I18nCommonActionsEn {
 	String get follow => 'Follow';
 }
 
+// Path: common.unit
+class _I18nCommonUnitEn {
+	_I18nCommonUnitEn._(this._root);
+
+	final _I18nEn _root; // ignore: unused_field
+
+	// Translations
+	String get km => 'km';
+}
+
 /// Flat map(s) containing all translations.
 /// Only for edge cases! For simple maps, use the map function of this library.
 
@@ -302,6 +324,12 @@ extension on _I18nEn {
 			case 'nft.sold': return 'sold';
 			case 'nft.emptyCreatedNfts': return 'You have not created any NFTs yet';
 			case 'nft.noCollectible': return 'No collectibles yet';
+			case 'nft.claimed': return 'claimed';
+			case 'nft.claim': return 'claim';
+			case 'nft.needLocationToClaimPoap': return 'We need to access your location to check eligibility...';
+			case 'nft.ineligibleToClaimPoap': return 'Uh oh! 🙁 You are ineligible to claim this badge...';
+			case 'nft.ableToClaimPoap': return 'Congrats! 🥳 You meet all requirements to claim this badge';
+			case 'nft.badges': return 'badges';
 			case 'auth.login.success': return 'Logged in successfully';
 			case 'auth.login.fail': return 'Logged in failed';
 			case 'auth.logout': return 'Logout';
@@ -340,6 +368,12 @@ extension on _I18nEn {
 			case 'common.upcoming': return 'Upcoming';
 			case 'common.past': return 'Past';
 			case 'common.noPhotos': return 'No photos yet';
+			case 'common.unit.km': return 'km';
+			case 'common.search': return 'search';
+			case 'common.viewRequirements': return 'view requirements';
+			case 'common.grantAccess': return 'grant access';
+			case 'common.nearMe': return 'Near me';
+			case 'common.maximumDistance': return 'Maximum distance';
 			case 'common.community': return 'community';
 			case 'common.dashboard': return 'dashboard';
 			case 'common.qrCode': return 'qrCode';

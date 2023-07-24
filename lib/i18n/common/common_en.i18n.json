@@ -35,6 +35,14 @@
     "upcoming": "Upcoming",
     "past": "Past",
     "noPhotos": "No photos yet",
+    "unit": {
+        "km": "km"
+    },
+    "search": "search",
+    "viewRequirements": "view requirements",
+    "grantAccess": "grant access",
+    "nearMe": "Near me",
+    "maximumDistance": "Maximum distance",
     "community": "community",
     "dashboard": "dashboard",
     "qrCode": "qrCode",

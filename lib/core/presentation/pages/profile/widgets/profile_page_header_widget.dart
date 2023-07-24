@@ -1,8 +1,8 @@
 import 'package:app/core/config.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/widgets/common/badge/username_badge_widget.dart';
+import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
-import 'package:app/core/presentation/widgets/common/button/outline_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/auth_utils.dart';
@@ -91,7 +91,7 @@ class _ActionButtons extends StatelessWidget {
     // TODO: follow feature not implemented
     var isFollowed = false;
     return isFollowed
-        ? OutlineButton(
+        ? LemonOutlineButton(
             label: t.common.followed,
             leading: ThemeSvgIcon(
               color: colorScheme.onSecondary,
