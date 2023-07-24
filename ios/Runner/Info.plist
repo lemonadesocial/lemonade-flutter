@@ -74,6 +74,6 @@
 	<key>UIStatusBarHidden</key>
 	<false/>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>We need to access your location to show available POAPs in your area</string>
+	<string>We require your location information to accurately show nearby badges. This data will only be used when you use this feature and confidentiality will be maintained.</string>
 </dict>
 </plist>

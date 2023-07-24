@@ -16,12 +16,12 @@ class ImagePlaceholder {
     );
   }
 
-  static Widget defaultPlaceholder() {
+  static Widget defaultPlaceholder({ BorderRadius? radius }) {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
         color: Colors.black,
-        borderRadius: BorderRadius.circular(LemonRadius.small),
+        borderRadius: radius ?? BorderRadius.circular(LemonRadius.small),
       ),
       child: Center(
         child: ThemeSvgIcon(
