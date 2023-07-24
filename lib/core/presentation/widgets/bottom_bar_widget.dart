@@ -107,6 +107,7 @@ class _ProfileAuthGuardItem extends StatelessWidget {
           },
           unauthenticated: (_) => unauthenticatedChild,
           unknown: () => unauthenticatedChild,
+          processing: () => unauthenticatedChild
         );
       },
     );
