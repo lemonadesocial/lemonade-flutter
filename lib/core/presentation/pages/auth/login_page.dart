@@ -32,26 +32,25 @@ class _LoginPageState extends State<LoginPage> {
             child: BlocBuilder<AuthBloc, AuthState>(
               builder: (context, state) {
                 return state.maybeWhen(
-                  unauthenticated: (isChecking) {
-                    if (isChecking) return Loading.defaultLoading(context);
-
-                    return ElevatedButton(
-                        onPressed: () {
-                          context.read<AuthBloc>().add(const AuthEvent.login());
-                        },
-                        child: const Text(
-                          "Login",
-                        ));
-                  },
-                  unknown: () => ElevatedButton(
-                        onPressed: () {
-                          context.read<AuthBloc>().add(const AuthEvent.login());
-                        },
-                        child: const Text(
-                          "Login",
-                        )),
-                  orElse: () => SizedBox.shrink()
-                );
+                    processing: () => Loading.defaultLoading(context),
+                    unauthenticated: (_) {
+                      return ElevatedButton(
+                          onPressed: () {
+                            context.read<AuthBloc>().add(const AuthEvent.login());
+                          },
+                          child: const Text(
+                            "Login",
+                          ));
+                    },
+                    unknown: () => ElevatedButton(
+                          onPressed: () {
+                            context.read<AuthBloc>().add(const AuthEvent.login());
+                          },
+                          child: const Text(
+                            "Login",
+                          ),
+                        ),
+                    orElse: () => SizedBox.shrink());
               },
             ),
           ),
