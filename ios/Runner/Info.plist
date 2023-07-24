@@ -71,6 +71,8 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>UIStatusBarHidden</key>
+	<false/>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>We need to access your location to show available POAPs in your area</string>
 </dict>
