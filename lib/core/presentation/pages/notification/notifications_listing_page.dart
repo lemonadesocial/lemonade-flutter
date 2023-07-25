@@ -46,22 +46,34 @@ class _NotificationsListingView extends StatefulWidget {
 class _NotificationsListingViewState extends State<_NotificationsListingView> {
   GlobalKey<AnimatedListState> _notificationList = GlobalKey<AnimatedListState>();
 
-  removeItem(int index, {required entities.Notification notification}) {
+  removeItem(
+    int index, {
+    required entities.Notification notification,
+    bool isDismiss = false,
+  }) {
+    context.read<NotificationsListingBloc>().add(
+          NotificationsListingEvent.removeItem(
+            index: index,
+            notification: notification,
+          ),
+        );
     _notificationList.currentState?.removeItem(
       index,
       (context, animation) {
-        return SizeTransition(
-          sizeFactor: animation,
-          child: AnimatedBuilder(
-            animation: animation,
-            builder: (context, child) => AnimatedOpacity(
-              opacity: animation.value,
-              duration: Duration(milliseconds: 300),
-              child: child,
-            ),
-            child: NotificationCard(notification: notification),
-          ),
-        );
+        return isDismiss
+            ? Container()
+            : SizeTransition(
+                sizeFactor: animation,
+                child: AnimatedBuilder(
+                  animation: animation,
+                  builder: (context, child) => AnimatedOpacity(
+                    opacity: animation.value,
+                    duration: Duration(milliseconds: 300),
+                    child: child,
+                  ),
+                  child: NotificationCard(notification: notification),
+                ),
+              );
       },
     );
   }
@@ -99,15 +111,16 @@ class _NotificationsListingViewState extends State<_NotificationsListingView> {
                     : _NotificationSlidable(
                         id: notifications[index].id ?? '',
                         onRemove: () {
-                          context.read<NotificationsListingBloc>().add(
-                                NotificationsListingEvent.removeItem(
-                                  index: index,
-                                  notification: notifications[index],
-                                ),
-                              );
                           removeItem(
                             index,
                             notification: notifications[index],
+                          );
+                        },
+                        onDismissed: () {
+                          removeItem(
+                            index,
+                            notification: notifications[index],
+                            isDismiss: true,
                           );
                         },
                         child: NotificationCard(
@@ -138,10 +151,13 @@ class _NotificationSlidable extends StatelessWidget {
   final Widget child;
   final String id;
   final void Function()? onRemove;
+  final void Function()? onDismissed;
   const _NotificationSlidable({
     required this.id,
     required this.child,
     this.onRemove,
+    // ignore: unused_element
+    this.onDismissed,
   });
   @override
   Widget build(BuildContext context) {
@@ -149,7 +165,17 @@ class _NotificationSlidable extends StatelessWidget {
     return Slidable(
       key: ValueKey(id),
       endActionPane: ActionPane(
-        motion: const ScrollMotion(),
+        dismissible: DismissiblePane(
+          closeOnCancel: true,
+          confirmDismiss: () async {
+            return true;
+          },
+          onDismissed: () {
+            onDismissed?.call();
+          },
+        ),
+        extentRatio: 0.2,
+        motion: ScrollMotion(),
         children: [
           SlidableAction(
             onPressed: (context) {
