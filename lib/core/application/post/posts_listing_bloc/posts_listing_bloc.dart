@@ -27,7 +27,6 @@ class PostsListingBloc extends Bloc<PostsListingEvent, PostsListingState> {
   }
 
   _onFetch(PostsListingEventFetch event, Emitter emit) async {
-    emit(PostsListingState.loading());
     final result = await paginationService.fetch(defaultInput);
     result.fold(
       (l) => emit(PostsListingState.failure()),

@@ -1,3 +1,4 @@
 {
-    "notifications": "Notifications"
+    "notifications": "Notifications",
+    "emptyNotifications": "No notifications yet"
 }

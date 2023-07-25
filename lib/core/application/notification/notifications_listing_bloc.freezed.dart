@@ -474,32 +474,39 @@ mixin _$NotificationsListingEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() fetch,
+    required TResult Function(int index, Notification notification) removeItem,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? fetch,
+    TResult? Function(int index, Notification notification)? removeItem,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? fetch,
+    TResult Function(int index, Notification notification)? removeItem,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(NotificationsListingEventFetch value) fetch,
+    required TResult Function(NotificationsListingEventRemoveItem value)
+        removeItem,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(NotificationsListingEventFetch value)? fetch,
+    TResult? Function(NotificationsListingEventRemoveItem value)? removeItem,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(NotificationsListingEventFetch value)? fetch,
+    TResult Function(NotificationsListingEventRemoveItem value)? removeItem,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -568,6 +575,7 @@ class _$NotificationsListingEventFetch
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() fetch,
+    required TResult Function(int index, Notification notification) removeItem,
   }) {
     return fetch();
   }
@@ -576,6 +584,7 @@ class _$NotificationsListingEventFetch
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? fetch,
+    TResult? Function(int index, Notification notification)? removeItem,
   }) {
     return fetch?.call();
   }
@@ -584,6 +593,7 @@ class _$NotificationsListingEventFetch
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? fetch,
+    TResult Function(int index, Notification notification)? removeItem,
     required TResult orElse(),
   }) {
     if (fetch != null) {
@@ -596,6 +606,8 @@ class _$NotificationsListingEventFetch
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(NotificationsListingEventFetch value) fetch,
+    required TResult Function(NotificationsListingEventRemoveItem value)
+        removeItem,
   }) {
     return fetch(this);
   }
@@ -604,6 +616,7 @@ class _$NotificationsListingEventFetch
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(NotificationsListingEventFetch value)? fetch,
+    TResult? Function(NotificationsListingEventRemoveItem value)? removeItem,
   }) {
     return fetch?.call(this);
   }
@@ -612,6 +625,7 @@ class _$NotificationsListingEventFetch
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(NotificationsListingEventFetch value)? fetch,
+    TResult Function(NotificationsListingEventRemoveItem value)? removeItem,
     required TResult orElse(),
   }) {
     if (fetch != null) {
@@ -624,4 +638,160 @@ class _$NotificationsListingEventFetch
 abstract class NotificationsListingEventFetch
     implements NotificationsListingEvent {
   factory NotificationsListingEventFetch() = _$NotificationsListingEventFetch;
+}
+
+/// @nodoc
+abstract class _$$NotificationsListingEventRemoveItemCopyWith<$Res> {
+  factory _$$NotificationsListingEventRemoveItemCopyWith(
+          _$NotificationsListingEventRemoveItem value,
+          $Res Function(_$NotificationsListingEventRemoveItem) then) =
+      __$$NotificationsListingEventRemoveItemCopyWithImpl<$Res>;
+  @useResult
+  $Res call({int index, Notification notification});
+}
+
+/// @nodoc
+class __$$NotificationsListingEventRemoveItemCopyWithImpl<$Res>
+    extends _$NotificationsListingEventCopyWithImpl<$Res,
+        _$NotificationsListingEventRemoveItem>
+    implements _$$NotificationsListingEventRemoveItemCopyWith<$Res> {
+  __$$NotificationsListingEventRemoveItemCopyWithImpl(
+      _$NotificationsListingEventRemoveItem _value,
+      $Res Function(_$NotificationsListingEventRemoveItem) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? index = null,
+    Object? notification = null,
+  }) {
+    return _then(_$NotificationsListingEventRemoveItem(
+      index: null == index
+          ? _value.index
+          : index // ignore: cast_nullable_to_non_nullable
+              as int,
+      notification: null == notification
+          ? _value.notification
+          : notification // ignore: cast_nullable_to_non_nullable
+              as Notification,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$NotificationsListingEventRemoveItem
+    implements NotificationsListingEventRemoveItem {
+  _$NotificationsListingEventRemoveItem(
+      {required this.index, required this.notification});
+
+  @override
+  final int index;
+  @override
+  final Notification notification;
+
+  @override
+  String toString() {
+    return 'NotificationsListingEvent.removeItem(index: $index, notification: $notification)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$NotificationsListingEventRemoveItem &&
+            (identical(other.index, index) || other.index == index) &&
+            (identical(other.notification, notification) ||
+                other.notification == notification));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, index, notification);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$NotificationsListingEventRemoveItemCopyWith<
+          _$NotificationsListingEventRemoveItem>
+      get copyWith => __$$NotificationsListingEventRemoveItemCopyWithImpl<
+          _$NotificationsListingEventRemoveItem>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() fetch,
+    required TResult Function(int index, Notification notification) removeItem,
+  }) {
+    return removeItem(index, notification);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? fetch,
+    TResult? Function(int index, Notification notification)? removeItem,
+  }) {
+    return removeItem?.call(index, notification);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? fetch,
+    TResult Function(int index, Notification notification)? removeItem,
+    required TResult orElse(),
+  }) {
+    if (removeItem != null) {
+      return removeItem(index, notification);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(NotificationsListingEventFetch value) fetch,
+    required TResult Function(NotificationsListingEventRemoveItem value)
+        removeItem,
+  }) {
+    return removeItem(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(NotificationsListingEventFetch value)? fetch,
+    TResult? Function(NotificationsListingEventRemoveItem value)? removeItem,
+  }) {
+    return removeItem?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(NotificationsListingEventFetch value)? fetch,
+    TResult Function(NotificationsListingEventRemoveItem value)? removeItem,
+    required TResult orElse(),
+  }) {
+    if (removeItem != null) {
+      return removeItem(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class NotificationsListingEventRemoveItem
+    implements NotificationsListingEvent {
+  factory NotificationsListingEventRemoveItem(
+          {required final int index,
+          required final Notification notification}) =
+      _$NotificationsListingEventRemoveItem;
+
+  int get index;
+  Notification get notification;
+  @JsonKey(ignore: true)
+  _$$NotificationsListingEventRemoveItemCopyWith<
+          _$NotificationsListingEventRemoveItem>
+      get copyWith => throw _privateConstructorUsedError;
 }

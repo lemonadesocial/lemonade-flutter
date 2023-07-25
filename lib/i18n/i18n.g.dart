@@ -1,9 +1,9 @@
 /// Generated file. Do not edit.
 ///
 /// Locales: 1
-/// Strings: 67
+/// Strings: 69
 ///
-/// Built on 2023-07-21 at 09:53 UTC
+/// Built on 2023-07-25 at 09:12 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -204,6 +204,7 @@ class _I18nNotificationEn {
 
 	// Translations
 	String get notifications => 'Notifications';
+	String get emptyNotifications => 'No notifications yet';
 }
 
 // Path: common
@@ -253,6 +254,7 @@ class _I18nCommonEn {
 	String get dashboard => 'dashboard';
 	String get qrCode => 'qrCode';
 	String get support => 'support';
+	String get delete => 'delete';
 }
 
 // Path: event
@@ -334,6 +336,7 @@ extension on _I18nEn {
 			case 'auth.login.fail': return 'Logged in failed';
 			case 'auth.logout': return 'Logout';
 			case 'notification.notifications': return 'Notifications';
+			case 'notification.emptyNotifications': return 'No notifications yet';
 			case 'common.today': return 'today';
 			case 'common.tomorrow': return 'tomorrow';
 			case 'common.thisWeek': return 'this week';
@@ -378,6 +381,7 @@ extension on _I18nEn {
 			case 'common.dashboard': return 'dashboard';
 			case 'common.qrCode': return 'qrCode';
 			case 'common.support': return 'support';
+			case 'common.delete': return 'delete';
 			case 'event.events': return 'Events';
 			case 'event.all': return 'all';
 			case 'event.attending': return 'attending';

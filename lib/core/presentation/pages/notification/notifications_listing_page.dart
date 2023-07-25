@@ -3,26 +3,27 @@ import 'package:app/core/data/notification/repository/notification_repository_im
 import 'package:app/core/presentation/pages/notification/widgets/notification_card_widget.dart';
 import 'package:app/core/presentation/widgets/burger_menu_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
+import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/service/notification/notification_service.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/theme/spacing.dart';
+import 'package:app/theme/color.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:app/core/utils/navigation_utils.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:app/core/domain/notification/entities/notification.dart' as entities;
 
 @RoutePage()
 class NotificationPage extends StatelessWidget {
-  late final NotificationService notificationService =
-      NotificationService(NotificationRepositoryImpl());
+  late final NotificationService notificationService = NotificationService(NotificationRepositoryImpl());
 
   Widget _notificationsListingBlocProvider(Widget child) {
     return BlocProvider<NotificationsListingBloc>(
-      create: (context) => NotificationsListingBloc(notificationService)
-        ..add(NotificationsListingEvent.fetch()),
+      create: (context) => NotificationsListingBloc(notificationService)..add(NotificationsListingEvent.fetch()),
       child: child,
     );
   }
@@ -39,11 +40,32 @@ class _NotificationsListingView extends StatefulWidget {
   const _NotificationsListingView();
 
   @override
-  State<_NotificationsListingView> createState() =>
-      _NotificationsListingViewState();
+  State<_NotificationsListingView> createState() => _NotificationsListingViewState();
 }
 
 class _NotificationsListingViewState extends State<_NotificationsListingView> {
+  GlobalKey<AnimatedListState> _notificationList = GlobalKey<AnimatedListState>();
+
+  removeItem(int index, {required entities.Notification notification}) {
+    _notificationList.currentState?.removeItem(
+      index,
+      (context, animation) {
+        return SizeTransition(
+          sizeFactor: animation,
+          child: AnimatedBuilder(
+            animation: animation,
+            builder: (context, child) => AnimatedOpacity(
+              opacity: animation.value,
+              duration: Duration(milliseconds: 300),
+              child: child,
+            ),
+            child: NotificationCard(notification: notification),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
@@ -54,9 +76,9 @@ class _NotificationsListingViewState extends State<_NotificationsListingView> {
         leading: BurgerMenu(),
         actions: [
           ThemeSvgIcon(
-              color: themeColor.onSurface,
-              builder: (filter) =>
-                  Assets.icons.icChat.svg(colorFilter: filter)),
+            color: themeColor.onSurface,
+            builder: (filter) => Assets.icons.icChat.svg(colorFilter: filter),
+          ),
         ],
       ),
       backgroundColor: themeColor.primary,
@@ -65,19 +87,41 @@ class _NotificationsListingViewState extends State<_NotificationsListingView> {
           return state.when(
             loading: () => Loading.defaultLoading(context),
             fetched: (notifications) {
-              return ListView.separated(
-                itemBuilder: (ctx, index) => index == notifications.length
+              if (notifications.isEmpty) {
+                return Center(
+                  child: EmptyList(emptyText: t.notification.emptyNotifications),
+                );
+              }
+              return AnimatedList(
+                key: _notificationList,
+                itemBuilder: (ctx, index, animation) => index == notifications.length
                     ? const SizedBox(height: 80)
-                    : NotificationCard(
-                        key: Key(notifications[index].id ?? ''),
-                        notification: notifications[index],
-                        onTap: () {
-                          NavigationUtils.handleNotificationNavigate(context, notifications[index]);
+                    : _NotificationSlidable(
+                        id: notifications[index].id ?? '',
+                        onRemove: () {
+                          context.read<NotificationsListingBloc>().add(
+                                NotificationsListingEvent.removeItem(
+                                  index: index,
+                                  notification: notifications[index],
+                                ),
+                              );
+                          removeItem(
+                            index,
+                            notification: notifications[index],
+                          );
                         },
+                        child: NotificationCard(
+                          key: Key(notifications[index].id ?? ''),
+                          notification: notifications[index],
+                          onTap: () {
+                            NavigationUtils.handleNotificationNavigate(
+                              context,
+                              notifications[index],
+                            );
+                          },
+                        ),
                       ),
-                separatorBuilder: (ctx, index) =>
-                    SizedBox(height: Spacing.extraSmall),
-                itemCount: notifications.length + 1,
+                initialItemCount: notifications.length,
               );
             },
             failure: () => Center(
@@ -86,6 +130,39 @@ class _NotificationsListingViewState extends State<_NotificationsListingView> {
           );
         },
       ),
+    );
+  }
+}
+
+class _NotificationSlidable extends StatelessWidget {
+  final Widget child;
+  final String id;
+  final void Function()? onRemove;
+  const _NotificationSlidable({
+    required this.id,
+    required this.child,
+    this.onRemove,
+  });
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Slidable(
+      key: ValueKey(id),
+      endActionPane: ActionPane(
+        motion: const ScrollMotion(),
+        children: [
+          SlidableAction(
+            onPressed: (context) {
+              onRemove?.call();
+            },
+            backgroundColor: LemonColor.red,
+            foregroundColor: colorScheme.onPrimary,
+            icon: Icons.delete,
+            label: t.common.delete,
+          ),
+        ],
+      ),
+      child: child,
     );
   }
 }
