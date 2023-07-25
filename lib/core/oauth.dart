@@ -134,7 +134,7 @@ class AppOauth {
 
 
   AccessTokenResponse? _processTokenState(AccessTokenResponse? token) {
-    if (token == null || !token.isValid()) {
+    if (token == null || !token.isValid() || token.isExpired())  {
       _reset();
     } else {
       _updateTokenState(OAuthTokenState.valid);
