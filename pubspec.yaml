@@ -72,6 +72,7 @@ dependencies:
   
   # location tracking
   geolocator: 9.0.2
+  rxdart: ^0.27.7
 
 dev_dependencies:
   flutter_test:
