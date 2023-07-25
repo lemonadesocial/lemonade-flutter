@@ -6,22 +6,14 @@ import 'package:app/core/failure.dart';
 import 'package:app/core/oauth.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:dartz/dartz.dart';
+import 'package:injectable/injectable.dart';
 
-typedef OnTokenChangeHandler = void Function(OAuthTokenState tokenState);
-
+@LazySingleton()
 class AuthService {
   final appOAuth = getIt<AppOauth>();
-  final OnTokenChangeHandler? onTokenStateChanged;
-  late final StreamSubscription<OAuthTokenState> tokenStateSubscription;
-
-  AuthService({this.onTokenStateChanged}) {
-    tokenStateSubscription = appOAuth.tokenStateStream.listen((tokenState) {
-      onTokenStateChanged?.call(tokenState);
-    });
-  }
+  Stream<OAuthTokenState> get tokenStateStream => appOAuth.tokenStateStream;
 
   Future<void> close() async {
-    await tokenStateSubscription.cancel();
     await appOAuth.dispose();
   }
 

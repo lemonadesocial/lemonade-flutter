@@ -8,12 +8,17 @@ import 'package:injectable/injectable.dart';
 import 'package:oauth2_client/access_token_response.dart';
 import 'package:oauth2_client/oauth2_client.dart';
 import 'package:oauth2_client/oauth2_helper.dart';
+import 'package:rxdart/rxdart.dart';
 
 class OauthError {
   static String userCancelled = 'org.openid.appauth.general error -3';
 }
 
-enum OAuthTokenState { valid, invalidOrEmpty }
+enum OAuthTokenState {
+  unknown,
+  valid,
+  invalid,
+}
 
 @lazySingleton
 class AppOauth {
@@ -24,8 +29,8 @@ class AppOauth {
   late final logoutRedirectUri = '$appUriScheme://oauth2/logout';
   final scopes = ['openid', 'offline_access'];
 
-  final StreamController<OAuthTokenState> _tokenStateStreamCtrl = StreamController();
-  OAuthTokenState _tokenState = OAuthTokenState.invalidOrEmpty;
+  final BehaviorSubject<OAuthTokenState> _tokenStateStreamCtrl = BehaviorSubject();
+  OAuthTokenState _tokenState = OAuthTokenState.unknown;
 
   Future<String>? refreshTokenFuture;
 
@@ -123,9 +128,8 @@ class AppOauth {
   }
 
   Future<void> _reset() async {
-    if (_tokenState == OAuthTokenState.invalidOrEmpty) return;
     await helper.removeAllTokens();
-    _updateTokenState(OAuthTokenState.invalidOrEmpty);
+    _updateTokenState(OAuthTokenState.invalid);
   }
 
 

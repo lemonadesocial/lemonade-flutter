@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:app/core/domain/auth/entities/auth_session.dart';
 import 'package:app/core/oauth.dart';
 import 'package:app/core/service/auth/auth_service.dart';
@@ -10,9 +12,14 @@ part 'auth_bloc.freezed.dart';
 
 @lazySingleton
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  late final AuthService authService = AuthService(onTokenStateChanged: _onTokenStateChange);
+  final AuthService authService;
   final UserService userService;
-  AuthBloc({required this.userService}) : super(const AuthState.unknown()) {
+  late StreamSubscription? _tokenStateSubscription;
+  AuthBloc({
+    required this.userService,
+    required this.authService,
+  }) : super(const AuthState.unknown()) {
+    _tokenStateSubscription = authService.tokenStateStream.listen(_onTokenStateChange);
     on<AuthEventCheckAuthenticated>(_onCheckAuthenticated);
     on<AuthEventLogin>(_onLogin);
     on<AuthEventLogout>(_onLogout);
@@ -22,6 +29,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   @override
   Future<void> close() async {
+    await _tokenStateSubscription?.cancel();
     await authService.close();
     super.close();
   }
