@@ -13,10 +13,6 @@ class AuthService {
   final appOAuth = getIt<AppOauth>();
   Stream<OAuthTokenState> get tokenStateStream => appOAuth.tokenStateStream;
 
-  Future<void> close() async {
-    await appOAuth.dispose();
-  }
-
   Future<bool> checkAuthenticated() async {
     var res = await appOAuth.getTokenFromStorage();
     return res?.accessToken != null;

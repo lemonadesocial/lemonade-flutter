@@ -30,7 +30,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   @override
   Future<void> close() async {
     await _tokenStateSubscription?.cancel();
-    await authService.close();
     super.close();
   }
 
