@@ -53,29 +53,28 @@ class ProfileInfoTabView extends StatelessWidget {
                   Text(user.tagline!),
                   SizedBox(height: Spacing.smMedium),
                 ],
-                Text(StringUtils.capitalize(t.common.description),
-                    style: Typo.small.copyWith(color: colorScheme.onSurface)),
-                SizedBox(height: Spacing.superExtraSmall),
-                Text(
-                  (user.description != null && user.description?.isNotEmpty == true) ? user.description! : '...',
-                ),
-                SizedBox(height: Spacing.smMedium),
+                if (user.description != null && user.description?.isNotEmpty == true) ...[
+                  Text(StringUtils.capitalize(t.common.description),
+                      style: Typo.small.copyWith(color: colorScheme.onSurfaceVariant)),
+                  SizedBox(height: Spacing.superExtraSmall),
+                  Text(user.description!),
+                  SizedBox(height: Spacing.smMedium),
+                ],
                 _renderSocials(context, colorScheme),
                 SizedBox(height: Spacing.smMedium),
                 Text(
                   StringUtils.capitalize(
                     t.common.joinedOn(date: DateFormatUtils.monthYearOnly(user.createdAt)),
                   ),
-                  style: Typo.small.copyWith(color: colorScheme.onSurface),
+                  style: Typo.small.copyWith(color: colorScheme.onSurfaceVariant),
                 ),
               ],
             ),
           ),
         ),
         SliverToBoxAdapter(
-          child: ElevatedButton(
-            onPressed: () => context.read<AuthBloc>().add(AuthEvent.logout()),
-            child: Text("Logout")),
+          child:
+              ElevatedButton(onPressed: () => context.read<AuthBloc>().add(AuthEvent.logout()), child: Text("Logout")),
         )
       ],
     );
@@ -98,8 +97,8 @@ class ProfileInfoTabView extends StatelessWidget {
             height: 42,
             margin: EdgeInsets.only(right: Spacing.xSmall),
             decoration: BoxDecoration(
-              border: Border.all(color: colorScheme.outline),
-              borderRadius: BorderRadius.circular(42),
+              color: colorScheme.surfaceVariant,
+              borderRadius: BorderRadius.circular(LemonRadius.xSmall),
             ),
             child: Center(
               child: ThemeSvgIcon(

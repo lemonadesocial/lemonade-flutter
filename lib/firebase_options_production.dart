@@ -54,7 +54,7 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAqb8E-TPed4CGE-ubDYgEQhiq1Xyqi90Y',
+    apiKey: 'AIzaSyDqbYBuoZCvFCttjdbS1WzJCC72wFFiBDA',
     appId: '1:1008216646580:android:44583057043f72104888e1',
     messagingSenderId: '1008216646580',
     projectId: 'lemonade-53666233',
@@ -62,7 +62,7 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDqOm2sNgYMv9sRnl3rtzChvycfctfKUIU',
+    apiKey: 'AIzaSyAliG_RWzEnlR-kJ8Ro--6AfuTT46UP-b4',
     appId: '1:1008216646580:ios:5564067f544e45ac4888e1',
     messagingSenderId: '1008216646580',
     projectId: 'lemonade-53666233',
@@ -71,7 +71,7 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyDqOm2sNgYMv9sRnl3rtzChvycfctfKUIU',
+    apiKey: 'AIzaSyAliG_RWzEnlR-kJ8Ro--6AfuTT46UP-b4',
     appId: '1:1008216646580:ios:5564067f544e45ac4888e1',
     messagingSenderId: '1008216646580',
     projectId: 'lemonade-53666233',

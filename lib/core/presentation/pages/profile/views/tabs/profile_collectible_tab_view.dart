@@ -34,6 +34,7 @@ class _ProfileCollectibleTabViewState extends State<ProfileCollectibleTabView> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final t = Translations.of(context);
     return BaseSliverTabView(
       name: "collectible",
       children: [
@@ -41,6 +42,7 @@ class _ProfileCollectibleTabViewState extends State<ProfileCollectibleTabView> {
           padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
           sliver: SliverAppBar(
             pinned: true,
+            leading: SizedBox.shrink(),
             collapsedHeight: _filterBarHeight,
             expandedHeight: _filterBarHeight,
             flexibleSpace: GestureDetector(

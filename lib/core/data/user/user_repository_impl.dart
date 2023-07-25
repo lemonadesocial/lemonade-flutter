@@ -20,6 +20,7 @@ class UserRepositoryImpl implements UserRepository {
       parserFn: (data) {
         return AuthUser.fromDto(UserDto.fromJson(data['getMe']));
       },
+      fetchPolicy: FetchPolicy.networkOnly,
     ));
 
     if (result.hasException) return Left(Failure());

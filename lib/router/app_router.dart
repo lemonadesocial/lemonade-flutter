@@ -49,6 +49,10 @@ class AppRouter extends $AppRouter {
           page: ProfileRoute.page,
         ),
         AutoRoute(
+          path: '/poap',
+          page: PoapListingRoute.page,
+        ),
+        AutoRoute(
           path: '/404',
           page: EmptyRoute.page,
         ),

@@ -20,7 +20,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthEventUnAuthenticated>(_onUnAuthenticated);
   }
 
-  @override 
+  @override
   Future<void> close() async {
     await authService.close();
     super.close();
@@ -35,7 +35,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   _onAuthenticated(AuthEventAuthenticated event, Emitter emit) async {
-    emit(const AuthState.unauthenticated(isChecking: true));
+    emit(const AuthState.processing());
+    await Future.delayed(Duration(milliseconds: 500));
     final session = await _createSession();
     if (session != null) {
       emit(AuthState.authenticated(authSession: session));
@@ -78,6 +79,7 @@ class AuthEvent with _$AuthEvent {
 @freezed
 class AuthState with _$AuthState {
   const factory AuthState.unknown() = AuthStateUnknown;
+  const factory AuthState.processing() = AuthStateProcessing;
   const factory AuthState.unauthenticated({required bool isChecking}) = AuthStateUnauthenticated;
   const factory AuthState.authenticated({
     required AuthSession authSession,

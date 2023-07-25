@@ -1,5 +1,7 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/presentation/widgets/bottom_bar_widget.dart';
+import 'package:app/core/presentation/widgets/common/drawer/lemon_drawer.dart';
+import 'package:app/core/utils/drawer_utils.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -12,31 +14,25 @@ class RootPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).colorScheme.primary;
-    return Stack(
-      children: [
-        BlocBuilder<AuthBloc, AuthState>(
-          builder: (context, authState) => AutoTabsScaffold(
-            backgroundColor: primaryColor,
-            routes: [
-              HomeRoute(),
-              EventsListingRoute(),
-              WalletRoute(),
-              NotificationRoute(),
-              authState.maybeWhen(
-                authenticated: (session) => MyProfileRoute(),
-                orElse: () => EmptyRoute(),
-              )
-            ],
-            bottomNavigationBuilder: (_, tabsRouter) {
-              return const SizedBox();
-            },
-          ),
-        ),
-        const Align(
-          alignment: Alignment.bottomCenter,
-          child: BottomBar(),
-        )
-      ],
+    return BlocBuilder<AuthBloc, AuthState>(
+      builder: (context, authState) => AutoTabsScaffold(
+        scaffoldKey: DrawerUtils.drawerGlobalKey,
+        backgroundColor: primaryColor,
+        routes: [
+          HomeRoute(),
+          EventsListingRoute(),
+          WalletRoute(),
+          NotificationRoute(),
+          authState.maybeWhen(
+            authenticated: (session) => MyProfileRoute(),
+            orElse: () => EmptyRoute(),
+          )
+        ],
+        drawer: LemonDrawer(),
+        bottomNavigationBuilder: (_, tabsRouter) {
+          return BottomBar();
+        },
+      ),
     );
   }
 }

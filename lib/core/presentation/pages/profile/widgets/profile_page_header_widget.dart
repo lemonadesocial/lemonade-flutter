@@ -1,8 +1,11 @@
+import 'package:app/core/config.dart';
 import 'package:app/core/domain/user/entities/user.dart';
-import 'package:app/core/presentation/widgets/lemon_button_widget.dart';
+import 'package:app/core/presentation/widgets/common/badge/username_badge_widget.dart';
+import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
+import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
-import 'package:app/core/presentation/widgets/wallet/connect_wallet_profile_button.dart';
+import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/core/utils/number_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -11,6 +14,7 @@ import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
 
 class ProfilePageHeader extends StatelessWidget {
   final User user;
@@ -21,16 +25,25 @@ class ProfilePageHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(height: Spacing.xSmall),
-        _ProfileAvatarAndFollow(user: user),
-        SizedBox(height: Spacing.xSmall),
-        _ProfileUserNameAndTitle(user: user),
-        SizedBox(height: Spacing.medium),
-        _ActionButtons(user: user),
-        Container(height: Spacing.xSmall)
-      ],
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
+      child: Column(
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              _ProfileAvatar(user: user),
+              SizedBox(width: Spacing.small),
+              _ProfileUserNameAndTitle(user: user),
+            ],
+          ),
+          SizedBox(height: Spacing.smMedium),
+          _ProfileUserFollow(user: user),
+          SizedBox(height: Spacing.smMedium),
+          _ActionButtons(user: user),
+          SizedBox(height: Spacing.smMedium),
+        ],
+      ),
     );
   }
 }
@@ -38,114 +51,119 @@ class ProfilePageHeader extends StatelessWidget {
 class _ActionButtons extends StatelessWidget {
   final User user;
 
-  _ActionButtons({
+  _ActionButtons({required this.user});
+
+  _shareProfileLink(context, {required User user}) async {
+    try {
+      final box = context.findRenderObject() as RenderBox?;
+      await Share.share(
+        '${AppConfig.webUrl}/${user.username}',
+        sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
+      );
+    } catch (e) {}
+  }
+
+  _buildMyActionsButton(BuildContext context) {
+    final t = Translations.of(context);
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        Expanded(
+          child: LinearGradientButton(
+            label: t.common.actions.editProfile,
+          ),
+        ),
+        SizedBox(width: Spacing.superExtraSmall),
+        Expanded(
+          child: LinearGradientButton(
+            onTap: () => _shareProfileLink(context, user: user),
+            label: t.common.actions.shareProfile,
+          ),
+        ),
+        SizedBox(width: Spacing.superExtraSmall),
+      ],
+    );
+  }
+
+  _buildOtherActionsButton(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final t = Translations.of(context);
+    // TODO: follow feature not implemented
+    var isFollowed = false;
+    return isFollowed
+        ? LemonOutlineButton(
+            label: t.common.followed,
+            leading: ThemeSvgIcon(
+              color: colorScheme.onSecondary,
+              builder: (filter) => Assets.icons.icDone.svg(colorFilter: filter),
+            ),
+          )
+        : LinearGradientButton(label: t.common.actions.follow, mode: GradientButtonMode.lavenderMode);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final isMe = AuthUtils.isMe(context, user: user);
+    return isMe
+        ? _buildMyActionsButton(context)
+        : _buildOtherActionsButton(
+            context,
+          );
+  }
+}
+
+class _ProfileAvatar extends StatelessWidget {
+  final User user;
+  _ProfileAvatar({required this.user});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        LemonCircleAvatar(
+          url: user.imageAvatar ?? '',
+          size: 72,
+        ),
+      ],
+    );
+  }
+}
+
+class _ProfileUserFollow extends StatelessWidget {
+  final User user;
+  const _ProfileUserFollow({
     required this.user,
   });
 
   @override
   Widget build(BuildContext context) {
-    final t = Translations.of(context);
-    final onSurfaceColor = Theme.of(context).colorScheme.onSurface;
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: Spacing.small),
-      child: Row(
-        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          Expanded(
-            child: LemonButton(
-              label: t.common.actions.edit,
-              icon: ThemeSvgIcon(
-                color: onSurfaceColor,
-                builder: (filter) => Assets.icons.icEdit.svg(colorFilter: filter),
-              ),
-            ),
+    final colorScheme = Theme.of(context).colorScheme;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (user.tagline?.isNotEmpty == true) ...[
+          Text(
+            '${user.tagline}',
+            style: Typo.medium.copyWith(color: LemonColor.paleViolet, fontWeight: FontWeight.w400),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
           ),
-          SizedBox(width: Spacing.superExtraSmall),
-          Expanded(
-            child: LemonButton(
-              label: t.common.ticket(n: 0),
-              icon: ThemeSvgIcon(
-                color: onSurfaceColor,
-                builder: (filter) => Assets.icons.icTicket.svg(colorFilter: filter),
-              ),
-            ),
-          ),
-          SizedBox(width: Spacing.superExtraSmall),
-          Expanded(
-            child: ConnectWalletProfileButton(user: user),
-          ),
-          SizedBox(width: Spacing.superExtraSmall),
+          SizedBox(height: Spacing.superExtraSmall),
         ],
-      ),
-    );
-  }
-}
-
-class _ProfileAvatarAndFollow extends StatelessWidget {
-  final User user;
-  _ProfileAvatarAndFollow({required this.user});
-
-  @override
-  Widget build(BuildContext context) {
-    final t = Translations.of(context);
-    final ColorScheme colorScheme = Theme.of(context).colorScheme;
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: Spacing.small),
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          LemonCircleAvatar(
-            url: user.imageAvatar ?? '',
-            size: 80,
-          ),
-          SizedBox(width: Spacing.medium * 1.5),
-          Expanded(
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  children: [
-                    Text(
-                      NumberUtils.formatCompact(amount: user.following),
-                      style: Typo.extraMedium,
-                    ),
-                    Text(
-                      StringUtils.capitalize(t.common.following),
-                      style: Typo.medium.copyWith(color: colorScheme.onSecondary),
-                    ),
-                  ],
-                ),
-                Column(
-                  children: [
-                    Text(
-                      NumberUtils.formatCompact(amount: user.followers),
-                      style: Typo.extraMedium,
-                    ),
-                    Text(
-                      StringUtils.capitalize(t.common.follower(n: user.followers ?? 0)),
-                      style: Typo.medium.copyWith(color: colorScheme.onSecondary),
-                    ),
-                  ],
-                ),
-                Column(
-                  children: [
-                    Text(
-                      NumberUtils.formatCompact(amount: user.friends),
-                      style: Typo.extraMedium,
-                    ),
-                    Text(
-                      StringUtils.capitalize(t.common.friends(n: user.friends ?? 0)),
-                      style: Typo.medium.copyWith(color: colorScheme.onSecondary),
-                    ),
-                  ],
-                )
-              ],
+        Row(
+          children: [
+            Text(
+              '${NumberUtils.formatCompact(amount: user.followers)} ${StringUtils.capitalize(t.common.follower(n: user.followers ?? 0))}',
+              style: Typo.medium.copyWith(color: colorScheme.onSurfaceVariant),
             ),
-          )
-        ],
-      ),
+            Text(
+              '  •  ${NumberUtils.formatCompact(amount: user.following)} ${StringUtils.capitalize(t.common.following)}',
+              style: Typo.medium.copyWith(color: colorScheme.onSurfaceVariant),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
@@ -163,23 +181,31 @@ class _ProfileUserNameAndTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: Spacing.small),
+    return Flexible(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
+            mainAxisSize: MainAxisSize.max,
             children: [
-              Text(displayName ?? t.common.anonymous, style: Typo.large),
-              SizedBox(width: Spacing.extraSmall),
-              Assets.icons.icBadge.svg(
-                colorFilter: ColorFilter.mode(LemonColor.lavender, BlendMode.srcIn),
+              ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: 200),
+                child: Text(
+                  displayName ?? t.common.anonymous,
+                  style: Typo.large,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                ),
               ),
+              SizedBox(width: Spacing.superExtraSmall),
+              TextBadge(label: '@${user.username}'),
             ],
           ),
           Text(
             user.jobTitle ?? user.tagline ?? '...',
             style: Typo.medium.copyWith(color: colorScheme.onSecondary),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
           )
         ],
       ),

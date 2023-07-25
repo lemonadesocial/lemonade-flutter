@@ -4,13 +4,13 @@ class Typo {
   static const large = TextStyle(
     fontSize: 21,
     height: 27 / 21,
-    fontWeight: FontWeight.w500,
+    fontWeight: FontWeight.w700,
   );
 
   static const extraMedium = TextStyle(
     fontSize: 18,
     height: 25 / 18,
-    fontWeight: FontWeight.w500,
+    fontWeight: FontWeight.w700,
   );
 
   static const medium = TextStyle(
@@ -22,6 +22,11 @@ class Typo {
   static const small = TextStyle(
     fontSize: 12,
     height: 15 / 14,
+    fontWeight: FontWeight.w500,
+  );
+
+  static const xSmall = TextStyle(
+    fontSize: 10,
     fontWeight: FontWeight.w500,
   );
 }
