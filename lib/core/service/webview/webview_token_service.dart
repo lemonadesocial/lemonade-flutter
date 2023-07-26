@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:app/core/oauth.dart';
+import 'package:app/core/oauth/oauth.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:flutter/material.dart';
 import 'package:oauth2_client/access_token_response.dart';
@@ -39,7 +39,7 @@ class WebviewTokenService {
     try {
       AccessTokenResponse? tokenRes = await _getCurrentOrNewToken();
 
-      if (tokenRes == null || !tokenRes.isValid()) {
+      if (tokenRes == null || !tokenRes.isValid() || tokenRes.isExpired()) {
         _stopTokenRefresher();
         throw new Exception('Refresh token failed');
       }
@@ -49,7 +49,7 @@ class WebviewTokenService {
       _onTokenChanged(accessToken);
 
       // here we can be sure that token expiration date is greater than now;
-      int timeUntilRefresh = _getTimeUntilExpired(tokenRes.expirationDate!) - 30;
+      int timeUntilRefresh = _getTimeUntilExpired(tokenRes) - 30;
 
       if (timeUntilRefresh <= 0) {
         _stopTokenRefresher();
@@ -78,23 +78,26 @@ class WebviewTokenService {
     curToken = await _appOauth.getTokenFromStorage();
     if (curToken == null) return null;
 
-    final timeUntilExpired = _getTimeUntilExpired(curToken.expirationDate!);
+    final timeUntilExpired = _getTimeUntilExpired(curToken);
 
     //if token already expired, refresh token
     if (timeUntilExpired == -1) {
-      return await _appOauth.manuallyRefreshToken();
+      return await _appOauth.manuallyRefreshToken(curToken);
     }
 
     // if token is about to expired within 30s, refresh token
     if (timeUntilExpired <= 30) {
-      return await _appOauth.manuallyRefreshToken();
+      return await _appOauth.manuallyRefreshToken(curToken);
     }
 
     return curToken;
   }
 
-  int _getTimeUntilExpired(DateTime expirationDate) {
+  int _getTimeUntilExpired(AccessTokenResponse tokenResponse) {
+    if (tokenResponse.isExpired()) return -1;
+
     final now = DateTime.now();
+    final expirationDate = tokenResponse.expirationDate!;
 
     if (now.isBefore(expirationDate)) {
       final durationInSecs = expirationDate.difference(now).inSeconds;

@@ -28,7 +28,7 @@ class WalletPageView extends StatelessWidget {
     return Scaffold(
       backgroundColor: LemonColor.black,
       body: Center(
-        child: Column(children: [ConnectWalletButton()]),
+        child: ConnectWalletButton(),
       ),
     );
   }
