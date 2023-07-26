@@ -1,6 +1,9 @@
 import 'package:app/core/config.dart';
+import 'package:app/core/oauth/oauth.dart';
 import 'package:app/core/service/firebase/firebase_service.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:flutter/services.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shake/shake.dart';
 import 'package:flutter/material.dart';
 
@@ -84,6 +87,23 @@ class ShakeService {
                         style: TextStyle(color: Colors.green),
                       ),
                     ),
+                  SizedBox(height: 16.0),
+                  FutureBuilder<PackageInfo>(
+                    future: PackageInfo.fromPlatform(),
+                    builder: (context, snapshot) {
+                      return Text('App version: ${snapshot.data?.version}\nBuild number: ${snapshot.data?.buildNumber}');
+                    }),
+                  SizedBox(height: 16.0),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        getIt<AppOauth>().forceLogout();
+                        Navigator.pop(context);
+                      },
+                      child: Text("Force logout"),
+                    ),
+                  ),
                   SizedBox(height: 16.0),
                   Container(
                     // Use Container to set button width to full

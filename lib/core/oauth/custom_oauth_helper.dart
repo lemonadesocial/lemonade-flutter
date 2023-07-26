@@ -19,6 +19,9 @@ class CustomOAuth2Helper extends OAuth2Helper {
           accessTokenHeaders: {
             "Content-Type": "application/x-www-form-urlencoded",
           },
+          webAuthOpts: {
+            'preferEphemeral': true,
+          }
         );
 
   @override

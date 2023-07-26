@@ -99,6 +99,10 @@ class AppOauth {
     }
   }
 
+  Future<void> forceLogout() async {
+    _reset();
+  }
+
   Future<AccessTokenResponse?> manuallyRefreshToken(AccessTokenResponse tokenResponse) async =>
       helper.refreshToken(tokenResponse);
 
