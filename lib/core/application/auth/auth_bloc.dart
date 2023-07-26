@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:app/core/domain/auth/entities/auth_session.dart';
-import 'package:app/core/oauth.dart';
+import 'package:app/core/oauth/oauth.dart';
 import 'package:app/core/service/auth/auth_service.dart';
 import 'package:app/core/service/user/user_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,7 +20,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     required this.authService,
   }) : super(const AuthState.unknown()) {
     _tokenStateSubscription = authService.tokenStateStream.listen(_onTokenStateChange);
-    on<AuthEventCheckAuthenticated>(_onCheckAuthenticated);
     on<AuthEventLogin>(_onLogin);
     on<AuthEventLogout>(_onLogout);
     on<AuthEventAuthenticated>(_onAuthenticated);
@@ -56,10 +55,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(const AuthState.unauthenticated(isChecking: false));
   }
 
-  _onCheckAuthenticated(AuthEventCheckAuthenticated event, Emitter emit) async {
-    await authService.checkAuthenticated();
-  }
-
   _onLogin(AuthEventLogin event, Emitter emit) async {
     await authService.login();
   }
@@ -78,7 +73,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 class AuthEvent with _$AuthEvent {
   const factory AuthEvent.login() = AuthEventLogin;
   const factory AuthEvent.logout() = AuthEventLogout;
-  const factory AuthEvent.checkAuthenticated() = AuthEventCheckAuthenticated;
   const factory AuthEvent.authenticated() = AuthEventAuthenticated;
   const factory AuthEvent.unauthenticated() = AuthEventUnAuthenticated;
 }

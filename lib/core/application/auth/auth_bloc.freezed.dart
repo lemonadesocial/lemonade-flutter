@@ -20,7 +20,6 @@ mixin _$AuthEvent {
   TResult when<TResult extends Object?>({
     required TResult Function() login,
     required TResult Function() logout,
-    required TResult Function() checkAuthenticated,
     required TResult Function() authenticated,
     required TResult Function() unauthenticated,
   }) =>
@@ -29,7 +28,6 @@ mixin _$AuthEvent {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? login,
     TResult? Function()? logout,
-    TResult? Function()? checkAuthenticated,
     TResult? Function()? authenticated,
     TResult? Function()? unauthenticated,
   }) =>
@@ -38,7 +36,6 @@ mixin _$AuthEvent {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? login,
     TResult Function()? logout,
-    TResult Function()? checkAuthenticated,
     TResult Function()? authenticated,
     TResult Function()? unauthenticated,
     required TResult orElse(),
@@ -48,8 +45,6 @@ mixin _$AuthEvent {
   TResult map<TResult extends Object?>({
     required TResult Function(AuthEventLogin value) login,
     required TResult Function(AuthEventLogout value) logout,
-    required TResult Function(AuthEventCheckAuthenticated value)
-        checkAuthenticated,
     required TResult Function(AuthEventAuthenticated value) authenticated,
     required TResult Function(AuthEventUnAuthenticated value) unauthenticated,
   }) =>
@@ -58,7 +53,6 @@ mixin _$AuthEvent {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(AuthEventLogin value)? login,
     TResult? Function(AuthEventLogout value)? logout,
-    TResult? Function(AuthEventCheckAuthenticated value)? checkAuthenticated,
     TResult? Function(AuthEventAuthenticated value)? authenticated,
     TResult? Function(AuthEventUnAuthenticated value)? unauthenticated,
   }) =>
@@ -67,7 +61,6 @@ mixin _$AuthEvent {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(AuthEventLogin value)? login,
     TResult Function(AuthEventLogout value)? logout,
-    TResult Function(AuthEventCheckAuthenticated value)? checkAuthenticated,
     TResult Function(AuthEventAuthenticated value)? authenticated,
     TResult Function(AuthEventUnAuthenticated value)? unauthenticated,
     required TResult orElse(),
@@ -132,7 +125,6 @@ class _$AuthEventLogin implements AuthEventLogin {
   TResult when<TResult extends Object?>({
     required TResult Function() login,
     required TResult Function() logout,
-    required TResult Function() checkAuthenticated,
     required TResult Function() authenticated,
     required TResult Function() unauthenticated,
   }) {
@@ -144,7 +136,6 @@ class _$AuthEventLogin implements AuthEventLogin {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? login,
     TResult? Function()? logout,
-    TResult? Function()? checkAuthenticated,
     TResult? Function()? authenticated,
     TResult? Function()? unauthenticated,
   }) {
@@ -156,7 +147,6 @@ class _$AuthEventLogin implements AuthEventLogin {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? login,
     TResult Function()? logout,
-    TResult Function()? checkAuthenticated,
     TResult Function()? authenticated,
     TResult Function()? unauthenticated,
     required TResult orElse(),
@@ -172,8 +162,6 @@ class _$AuthEventLogin implements AuthEventLogin {
   TResult map<TResult extends Object?>({
     required TResult Function(AuthEventLogin value) login,
     required TResult Function(AuthEventLogout value) logout,
-    required TResult Function(AuthEventCheckAuthenticated value)
-        checkAuthenticated,
     required TResult Function(AuthEventAuthenticated value) authenticated,
     required TResult Function(AuthEventUnAuthenticated value) unauthenticated,
   }) {
@@ -185,7 +173,6 @@ class _$AuthEventLogin implements AuthEventLogin {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(AuthEventLogin value)? login,
     TResult? Function(AuthEventLogout value)? logout,
-    TResult? Function(AuthEventCheckAuthenticated value)? checkAuthenticated,
     TResult? Function(AuthEventAuthenticated value)? authenticated,
     TResult? Function(AuthEventUnAuthenticated value)? unauthenticated,
   }) {
@@ -197,7 +184,6 @@ class _$AuthEventLogin implements AuthEventLogin {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(AuthEventLogin value)? login,
     TResult Function(AuthEventLogout value)? logout,
-    TResult Function(AuthEventCheckAuthenticated value)? checkAuthenticated,
     TResult Function(AuthEventAuthenticated value)? authenticated,
     TResult Function(AuthEventUnAuthenticated value)? unauthenticated,
     required TResult orElse(),
@@ -253,7 +239,6 @@ class _$AuthEventLogout implements AuthEventLogout {
   TResult when<TResult extends Object?>({
     required TResult Function() login,
     required TResult Function() logout,
-    required TResult Function() checkAuthenticated,
     required TResult Function() authenticated,
     required TResult Function() unauthenticated,
   }) {
@@ -265,7 +250,6 @@ class _$AuthEventLogout implements AuthEventLogout {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? login,
     TResult? Function()? logout,
-    TResult? Function()? checkAuthenticated,
     TResult? Function()? authenticated,
     TResult? Function()? unauthenticated,
   }) {
@@ -277,7 +261,6 @@ class _$AuthEventLogout implements AuthEventLogout {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? login,
     TResult Function()? logout,
-    TResult Function()? checkAuthenticated,
     TResult Function()? authenticated,
     TResult Function()? unauthenticated,
     required TResult orElse(),
@@ -293,8 +276,6 @@ class _$AuthEventLogout implements AuthEventLogout {
   TResult map<TResult extends Object?>({
     required TResult Function(AuthEventLogin value) login,
     required TResult Function(AuthEventLogout value) logout,
-    required TResult Function(AuthEventCheckAuthenticated value)
-        checkAuthenticated,
     required TResult Function(AuthEventAuthenticated value) authenticated,
     required TResult Function(AuthEventUnAuthenticated value) unauthenticated,
   }) {
@@ -306,7 +287,6 @@ class _$AuthEventLogout implements AuthEventLogout {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(AuthEventLogin value)? login,
     TResult? Function(AuthEventLogout value)? logout,
-    TResult? Function(AuthEventCheckAuthenticated value)? checkAuthenticated,
     TResult? Function(AuthEventAuthenticated value)? authenticated,
     TResult? Function(AuthEventUnAuthenticated value)? unauthenticated,
   }) {
@@ -318,7 +298,6 @@ class _$AuthEventLogout implements AuthEventLogout {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(AuthEventLogin value)? login,
     TResult Function(AuthEventLogout value)? logout,
-    TResult Function(AuthEventCheckAuthenticated value)? checkAuthenticated,
     TResult Function(AuthEventAuthenticated value)? authenticated,
     TResult Function(AuthEventUnAuthenticated value)? unauthenticated,
     required TResult orElse(),
@@ -332,130 +311,6 @@ class _$AuthEventLogout implements AuthEventLogout {
 
 abstract class AuthEventLogout implements AuthEvent {
   const factory AuthEventLogout() = _$AuthEventLogout;
-}
-
-/// @nodoc
-abstract class _$$AuthEventCheckAuthenticatedCopyWith<$Res> {
-  factory _$$AuthEventCheckAuthenticatedCopyWith(
-          _$AuthEventCheckAuthenticated value,
-          $Res Function(_$AuthEventCheckAuthenticated) then) =
-      __$$AuthEventCheckAuthenticatedCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$AuthEventCheckAuthenticatedCopyWithImpl<$Res>
-    extends _$AuthEventCopyWithImpl<$Res, _$AuthEventCheckAuthenticated>
-    implements _$$AuthEventCheckAuthenticatedCopyWith<$Res> {
-  __$$AuthEventCheckAuthenticatedCopyWithImpl(
-      _$AuthEventCheckAuthenticated _value,
-      $Res Function(_$AuthEventCheckAuthenticated) _then)
-      : super(_value, _then);
-}
-
-/// @nodoc
-
-class _$AuthEventCheckAuthenticated implements AuthEventCheckAuthenticated {
-  const _$AuthEventCheckAuthenticated();
-
-  @override
-  String toString() {
-    return 'AuthEvent.checkAuthenticated()';
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$AuthEventCheckAuthenticated);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() login,
-    required TResult Function() logout,
-    required TResult Function() checkAuthenticated,
-    required TResult Function() authenticated,
-    required TResult Function() unauthenticated,
-  }) {
-    return checkAuthenticated();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? login,
-    TResult? Function()? logout,
-    TResult? Function()? checkAuthenticated,
-    TResult? Function()? authenticated,
-    TResult? Function()? unauthenticated,
-  }) {
-    return checkAuthenticated?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? login,
-    TResult Function()? logout,
-    TResult Function()? checkAuthenticated,
-    TResult Function()? authenticated,
-    TResult Function()? unauthenticated,
-    required TResult orElse(),
-  }) {
-    if (checkAuthenticated != null) {
-      return checkAuthenticated();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(AuthEventLogin value) login,
-    required TResult Function(AuthEventLogout value) logout,
-    required TResult Function(AuthEventCheckAuthenticated value)
-        checkAuthenticated,
-    required TResult Function(AuthEventAuthenticated value) authenticated,
-    required TResult Function(AuthEventUnAuthenticated value) unauthenticated,
-  }) {
-    return checkAuthenticated(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(AuthEventLogin value)? login,
-    TResult? Function(AuthEventLogout value)? logout,
-    TResult? Function(AuthEventCheckAuthenticated value)? checkAuthenticated,
-    TResult? Function(AuthEventAuthenticated value)? authenticated,
-    TResult? Function(AuthEventUnAuthenticated value)? unauthenticated,
-  }) {
-    return checkAuthenticated?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(AuthEventLogin value)? login,
-    TResult Function(AuthEventLogout value)? logout,
-    TResult Function(AuthEventCheckAuthenticated value)? checkAuthenticated,
-    TResult Function(AuthEventAuthenticated value)? authenticated,
-    TResult Function(AuthEventUnAuthenticated value)? unauthenticated,
-    required TResult orElse(),
-  }) {
-    if (checkAuthenticated != null) {
-      return checkAuthenticated(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class AuthEventCheckAuthenticated implements AuthEvent {
-  const factory AuthEventCheckAuthenticated() = _$AuthEventCheckAuthenticated;
 }
 
 /// @nodoc
@@ -498,7 +353,6 @@ class _$AuthEventAuthenticated implements AuthEventAuthenticated {
   TResult when<TResult extends Object?>({
     required TResult Function() login,
     required TResult Function() logout,
-    required TResult Function() checkAuthenticated,
     required TResult Function() authenticated,
     required TResult Function() unauthenticated,
   }) {
@@ -510,7 +364,6 @@ class _$AuthEventAuthenticated implements AuthEventAuthenticated {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? login,
     TResult? Function()? logout,
-    TResult? Function()? checkAuthenticated,
     TResult? Function()? authenticated,
     TResult? Function()? unauthenticated,
   }) {
@@ -522,7 +375,6 @@ class _$AuthEventAuthenticated implements AuthEventAuthenticated {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? login,
     TResult Function()? logout,
-    TResult Function()? checkAuthenticated,
     TResult Function()? authenticated,
     TResult Function()? unauthenticated,
     required TResult orElse(),
@@ -538,8 +390,6 @@ class _$AuthEventAuthenticated implements AuthEventAuthenticated {
   TResult map<TResult extends Object?>({
     required TResult Function(AuthEventLogin value) login,
     required TResult Function(AuthEventLogout value) logout,
-    required TResult Function(AuthEventCheckAuthenticated value)
-        checkAuthenticated,
     required TResult Function(AuthEventAuthenticated value) authenticated,
     required TResult Function(AuthEventUnAuthenticated value) unauthenticated,
   }) {
@@ -551,7 +401,6 @@ class _$AuthEventAuthenticated implements AuthEventAuthenticated {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(AuthEventLogin value)? login,
     TResult? Function(AuthEventLogout value)? logout,
-    TResult? Function(AuthEventCheckAuthenticated value)? checkAuthenticated,
     TResult? Function(AuthEventAuthenticated value)? authenticated,
     TResult? Function(AuthEventUnAuthenticated value)? unauthenticated,
   }) {
@@ -563,7 +412,6 @@ class _$AuthEventAuthenticated implements AuthEventAuthenticated {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(AuthEventLogin value)? login,
     TResult Function(AuthEventLogout value)? logout,
-    TResult Function(AuthEventCheckAuthenticated value)? checkAuthenticated,
     TResult Function(AuthEventAuthenticated value)? authenticated,
     TResult Function(AuthEventUnAuthenticated value)? unauthenticated,
     required TResult orElse(),
@@ -620,7 +468,6 @@ class _$AuthEventUnAuthenticated implements AuthEventUnAuthenticated {
   TResult when<TResult extends Object?>({
     required TResult Function() login,
     required TResult Function() logout,
-    required TResult Function() checkAuthenticated,
     required TResult Function() authenticated,
     required TResult Function() unauthenticated,
   }) {
@@ -632,7 +479,6 @@ class _$AuthEventUnAuthenticated implements AuthEventUnAuthenticated {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? login,
     TResult? Function()? logout,
-    TResult? Function()? checkAuthenticated,
     TResult? Function()? authenticated,
     TResult? Function()? unauthenticated,
   }) {
@@ -644,7 +490,6 @@ class _$AuthEventUnAuthenticated implements AuthEventUnAuthenticated {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? login,
     TResult Function()? logout,
-    TResult Function()? checkAuthenticated,
     TResult Function()? authenticated,
     TResult Function()? unauthenticated,
     required TResult orElse(),
@@ -660,8 +505,6 @@ class _$AuthEventUnAuthenticated implements AuthEventUnAuthenticated {
   TResult map<TResult extends Object?>({
     required TResult Function(AuthEventLogin value) login,
     required TResult Function(AuthEventLogout value) logout,
-    required TResult Function(AuthEventCheckAuthenticated value)
-        checkAuthenticated,
     required TResult Function(AuthEventAuthenticated value) authenticated,
     required TResult Function(AuthEventUnAuthenticated value) unauthenticated,
   }) {
@@ -673,7 +516,6 @@ class _$AuthEventUnAuthenticated implements AuthEventUnAuthenticated {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(AuthEventLogin value)? login,
     TResult? Function(AuthEventLogout value)? logout,
-    TResult? Function(AuthEventCheckAuthenticated value)? checkAuthenticated,
     TResult? Function(AuthEventAuthenticated value)? authenticated,
     TResult? Function(AuthEventUnAuthenticated value)? unauthenticated,
   }) {
@@ -685,7 +527,6 @@ class _$AuthEventUnAuthenticated implements AuthEventUnAuthenticated {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(AuthEventLogin value)? login,
     TResult Function(AuthEventLogout value)? logout,
-    TResult Function(AuthEventCheckAuthenticated value)? checkAuthenticated,
     TResult Function(AuthEventAuthenticated value)? authenticated,
     TResult Function(AuthEventUnAuthenticated value)? unauthenticated,
     required TResult orElse(),

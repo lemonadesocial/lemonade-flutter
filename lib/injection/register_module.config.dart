@@ -20,7 +20,7 @@ import 'package:app/core/domain/post/post_repository.dart' as _i8;
 import 'package:app/core/domain/token/token_repository.dart' as _i10;
 import 'package:app/core/domain/user/user_repository.dart' as _i12;
 import 'package:app/core/gql.dart' as _i3;
-import 'package:app/core/oauth.dart' as _i4;
+import 'package:app/core/oauth/oauth.dart' as _i4;
 import 'package:app/core/service/auth/auth_service.dart' as _i5;
 import 'package:app/core/service/user/user_service.dart' as _i14;
 import 'package:get_it/get_it.dart' as _i1;

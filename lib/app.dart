@@ -19,10 +19,7 @@ class LemonadeApp extends StatelessWidget {
   Widget _portalBuilder(Widget child) => Portal(child: child);
 
   Widget _globalBlocProviderBuilder(Widget child) => BlocProvider.value(
-        value: getIt<AuthBloc>()
-          ..add(
-            const AuthEvent.checkAuthenticated(),
-          ),
+        value: getIt<AuthBloc>(),
         child: child,
       );
 
