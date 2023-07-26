@@ -40,12 +40,12 @@ dependencies:
   share_plus: ^7.0.2
   shake: ^2.2.0
   flutter_native_splash: ^2.3.1
+  package_info_plus: ^4.0.2
 
   # navigation
   auto_route: ^7.4.0
 
   # oauth
-  flutter_web_auth_2: ^2.1.4
   oauth2_client: ^3.2.1
   flutter_appauth: ^5.0.0
 
@@ -72,6 +72,7 @@ dependencies:
   
   # location tracking
   geolocator: 9.0.2
+  rxdart: ^0.27.7
 
 dev_dependencies:
   flutter_test:

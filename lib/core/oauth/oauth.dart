@@ -1,19 +1,24 @@
 import 'dart:async';
 
 import 'package:app/core/config.dart';
+import 'package:app/core/oauth/custom_oauth_helper.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:injectable/injectable.dart';
 import 'package:oauth2_client/access_token_response.dart';
 import 'package:oauth2_client/oauth2_client.dart';
-import 'package:oauth2_client/oauth2_helper.dart';
+import 'package:rxdart/rxdart.dart';
 
 class OauthError {
   static String userCancelled = 'org.openid.appauth.general error -3';
 }
 
-enum OAuthTokenState { valid, invalidOrEmpty }
+enum OAuthTokenState {
+  unknown,
+  valid,
+  invalid,
+}
 
 @lazySingleton
 class AppOauth {
@@ -24,8 +29,8 @@ class AppOauth {
   late final logoutRedirectUri = '$appUriScheme://oauth2/logout';
   final scopes = ['openid', 'offline_access'];
 
-  final StreamController<OAuthTokenState> _tokenStateStreamCtrl = StreamController();
-  OAuthTokenState _tokenState = OAuthTokenState.invalidOrEmpty;
+  final BehaviorSubject<OAuthTokenState> _tokenStateStreamCtrl = BehaviorSubject();
+  OAuthTokenState _tokenState = OAuthTokenState.unknown;
 
   Future<String>? refreshTokenFuture;
 
@@ -39,103 +44,115 @@ class AppOauth {
     customUriScheme: appUriScheme,
   );
 
-  late final OAuth2Helper helper = OAuth2Helper(client,
-      clientId: clientId,
-      accessTokenHeaders: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      scopes: scopes);
+  late final CustomOAuth2Helper helper = CustomOAuth2Helper(
+    client,
+    clientId: clientId,
+    scopes: scopes,
+  );
+
+  AppOauth() {
+    init();
+  }
+
+  init() async {
+    await _checkTokenState();
+  }
 
   Future<Either<Exception, bool>> login() async {
     try {
-      var res = _processTokenState(await helper.fetchToken());
-      return Right(res?.accessToken != null);
+      var res = await _processTokenState(helper.fetchToken());
+      if (res?.isValid() == true) {
+        return Right(true);
+      }
+      return Left(Exception(res?.error));
     } on PlatformException catch (e) {
       _reset();
       return Left(e);
     }
   }
 
-  Future<bool> logout() async {
+  Future<Either<Exception, bool>> logout() async {
     try {
-      final tknRes = await getTokenFromStorage();
-      await const FlutterAppAuth().endSession(EndSessionRequest(
+      final tknRes = await helper.getTokenFromStorage();
+      await const FlutterAppAuth().endSession(
+        EndSessionRequest(
           idTokenHint: tknRes?.getRespField('id_token'),
           postLogoutRedirectUrl: logoutRedirectUri,
           serviceConfiguration: AuthorizationServiceConfiguration(
             authorizationEndpoint: client.authorizeUrl,
             tokenEndpoint: client.tokenUrl,
             endSessionEndpoint: client.revokeUrl,
-          )));
+          ),
+        ),
+      );
       await _reset();
-      return true;
+      return Right(true);
     } on PlatformException catch (e) {
       if (e.message?.contains(OauthError.userCancelled) == true) {
-        return false;
+        return Left(e);
       }
       await _reset();
-      return true;
+      return Right(true);
     } catch (error) {
       await _reset();
-      return true;
+      return Right(true);
     }
   }
 
-  Future<AccessTokenResponse?> manuallyRefreshToken() async {
-    AccessTokenResponse? tokenRes;
-    var curTokenRes = await getTokenFromStorage();
-
-    if (curTokenRes == null) return null;
-
-    tokenRes = await helper.refreshToken(curTokenRes);
-
-    return _processTokenState(tokenRes);
+  Future<void> forceLogout() async {
+    _reset();
   }
 
-  Future<AccessTokenResponse?> getTokenFromStorage() async {
-    return _processTokenState(await helper.getTokenFromStorage());
-  }
+  Future<AccessTokenResponse?> manuallyRefreshToken(AccessTokenResponse tokenResponse) async =>
+      helper.refreshToken(tokenResponse);
 
-  Future<AccessTokenResponse?> getToken() async {
-    return _processTokenState(await helper.getToken());
-  }
+  Future<AccessTokenResponse?> getTokenFromStorage() => helper.getTokenFromStorage();
+
+  Future<AccessTokenResponse?> getToken() async => helper.getToken();
 
   Future<String> getTokenForGql() async {
     AccessTokenResponse? tokenRes;
     tokenRes = await getTokenFromStorage();
     if (tokenRes == null) return '';
-    if (tokenRes.isExpired()) {
+    if (tokenRes.refreshNeeded() || tokenRes.isExpired()) {
       // if token is expired, all coming request have to wait only one refresh token request
       // prevent duplicate call refresh token
-      refreshTokenFuture ??= getToken().then((_tokenRes) {
+      refreshTokenFuture ??= getToken().then((_tokenRes) async {
+        _processTokenState(Future.value(_tokenRes));
         refreshTokenFuture = null;
         return _tokenRes?.accessToken != null ? 'Bearer ${tokenRes?.accessToken}' : '';
+      }).catchError((e) {
+        _reset();
+        return '';
       });
       return refreshTokenFuture!;
     }
-    tokenRes = await getToken();
-
-    return tokenRes?.accessToken != null ? 'Bearer ${tokenRes?.accessToken}' : '';
+    _processTokenState(Future.value(tokenRes));
+    return tokenRes.accessToken != null ? 'Bearer ${tokenRes.accessToken}' : '';
   }
 
-  Future<void> dispose() async {
-    await _tokenStateStreamCtrl.close();
+  _checkTokenState() async {
+    await _processTokenState(getToken());
+  }
+
+  Future<AccessTokenResponse?> _processTokenState(Future<AccessTokenResponse?> future) async {
+    try {
+      final token = await future;
+      if (token == null || !token.isValid() || token.isExpired()) {
+        _reset();
+      } else {
+        _updateTokenState(OAuthTokenState.valid);
+      }
+      return token;
+    } catch (e) {
+      _reset();
+      return null;
+    }
   }
 
   Future<void> _reset() async {
-    if (_tokenState == OAuthTokenState.invalidOrEmpty) return;
     await helper.removeAllTokens();
-    _updateTokenState(OAuthTokenState.invalidOrEmpty);
-  }
-
-
-  AccessTokenResponse? _processTokenState(AccessTokenResponse? token) {
-    if (token == null || !token.isValid()) {
-      _reset();
-    } else {
-      _updateTokenState(OAuthTokenState.valid);
-    }
-    return token;
+    _updateTokenState(OAuthTokenState.invalid);
   }
 
   void _updateTokenState(OAuthTokenState newState) {
