@@ -21,7 +21,7 @@ class AuthService {
       (l) => Left(Failure()),
       (success) {
         if (success) {
-          firebaseService.removeFcmToken();
+          firebaseService.addFcmToken();
           return const Right(true);
         }
         return Left(Failure());
