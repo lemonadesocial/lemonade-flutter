@@ -37,6 +37,7 @@ dependencies:
   # other
   path_provider: ^2.0.15
   dartz: ^0.10.1
+  url_launcher: ^6.1.12
   share_plus: ^7.0.2
   shake: ^2.2.0
   flutter_native_splash: ^2.3.1
@@ -73,6 +74,9 @@ dependencies:
   # location tracking
   geolocator: 9.0.2
   rxdart: ^0.27.7
+
+  # wallet
+  walletconnect_flutter_v2: ^2.0.12
 
 dev_dependencies:
   flutter_test:
