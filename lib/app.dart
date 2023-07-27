@@ -2,6 +2,7 @@ import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/presentation/widgets/app_limit_layout_builder_widget.dart';
 import 'package:app/core/service/firebase/firebase_service.dart';
 import 'package:app/core/utils/navigation_utils.dart';
+import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.dart';
@@ -79,7 +80,9 @@ class _App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SnackBarUtils.init(lemonadeAppDarkThemeData.colorScheme);
     return MaterialApp.router(
+      scaffoldMessengerKey: SnackBarUtils.rootScaffoldMessengerKey,
       locale: _getCurrentLocale(context), // use provider
       supportedLocales: _supportedLocales,
       localizationsDelegates: _localizationsDelegates,
