@@ -28,15 +28,16 @@ class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
         child: PreferredSize(
           child: Container(
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 buildLeading(),
-                Text(
-                  title ?? '',
-                  style: Typo.large,
+                Center(
+                  child: Text(
+                    title ?? '',
+                    style: Typo.large,
+                  ),
                 ),
-                Spacer(),
-                buildActions()
+                buildActions(),
               ],
             ),
           ),
@@ -56,18 +57,25 @@ class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   Widget buildActions() {
     return Container(
-        padding: EdgeInsets.only(right: 18),
-        child: Row(
-          children: List.from(actions ?? [])
-              .map(
-                (item) => Container(
-                  margin: EdgeInsets.only(left: Spacing.medium),
-                  width: Sizing.small,
-                  height: preferredSize.height,
-                  child: item,
-                ),
-              )
-              .toList(),
-        ));
+      padding: EdgeInsets.only(right: 18),
+      child: actions?.isNotEmpty == true
+          ? Row(
+              children: List.from(actions ?? [])
+                  .map(
+                    (item) => Container(
+                      margin: EdgeInsets.only(left: Spacing.medium),
+                      width: Sizing.small,
+                      height: preferredSize.height,
+                      child: item,
+                    ),
+                  )
+                  .toList(),
+            )
+          : Container(
+              margin: EdgeInsets.only(left: Spacing.medium),
+              width: Sizing.small,
+              height: preferredSize.height,
+            ),
+    );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
+import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/theme/spacing.dart';
@@ -66,6 +67,11 @@ class BottomBar extends StatelessWidget {
                   path: '/login',
                   icon: Icon(Icons.person, color: colorScheme.onPrimary, size: 24),
                 ),
+                processingChild: _buildItem(
+                  context,
+                  path: '',
+                  icon: Loading.defaultLoading(context),
+                ),
               ),
             ],
           )
@@ -74,7 +80,11 @@ class BottomBar extends StatelessWidget {
     );
   }
 
-  Widget _buildItem(BuildContext context, {required Widget icon, required String path}) {
+  Widget _buildItem(
+    BuildContext context, {
+    required Widget icon,
+    required String path,
+  }) {
     return Expanded(
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
@@ -92,9 +102,11 @@ class BottomBar extends StatelessWidget {
 class _ProfileAuthGuardItem extends StatelessWidget {
   final Widget authenticatedChild;
   final Widget unauthenticatedChild;
+  final Widget processingChild;
   const _ProfileAuthGuardItem({
     required this.authenticatedChild,
     required this.unauthenticatedChild,
+    required this.processingChild,
   });
 
   @override
@@ -107,6 +119,7 @@ class _ProfileAuthGuardItem extends StatelessWidget {
           },
           unauthenticated: (_) => unauthenticatedChild,
           unknown: () => unauthenticatedChild,
+          processing: () => processingChild
         );
       },
     );

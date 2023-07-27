@@ -1,5 +1,7 @@
+import 'dart:async';
+
 import 'package:app/core/domain/auth/entities/auth_session.dart';
-import 'package:app/core/oauth.dart';
+import 'package:app/core/oauth/oauth.dart';
 import 'package:app/core/service/auth/auth_service.dart';
 import 'package:app/core/service/user/user_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,19 +12,23 @@ part 'auth_bloc.freezed.dart';
 
 @lazySingleton
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  late final AuthService authService = AuthService(onTokenStateChanged: _onTokenStateChange);
+  final AuthService authService;
   final UserService userService;
-  AuthBloc({required this.userService}) : super(const AuthState.unknown()) {
-    on<AuthEventCheckAuthenticated>(_onCheckAuthenticated);
+  late StreamSubscription? _tokenStateSubscription;
+  AuthBloc({
+    required this.userService,
+    required this.authService,
+  }) : super(const AuthState.unknown()) {
+    _tokenStateSubscription = authService.tokenStateStream.listen(_onTokenStateChange);
     on<AuthEventLogin>(_onLogin);
     on<AuthEventLogout>(_onLogout);
     on<AuthEventAuthenticated>(_onAuthenticated);
     on<AuthEventUnAuthenticated>(_onUnAuthenticated);
   }
 
-  @override 
+  @override
   Future<void> close() async {
-    await authService.close();
+    await _tokenStateSubscription?.cancel();
     super.close();
   }
 
@@ -35,7 +41,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   _onAuthenticated(AuthEventAuthenticated event, Emitter emit) async {
-    emit(const AuthState.unauthenticated(isChecking: true));
+    emit(const AuthState.processing());
+    await Future.delayed(Duration(milliseconds: 500));
     final session = await _createSession();
     if (session != null) {
       emit(AuthState.authenticated(authSession: session));
@@ -46,10 +53,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   _onUnAuthenticated(AuthEventUnAuthenticated event, Emitter emit) {
     emit(const AuthState.unauthenticated(isChecking: false));
-  }
-
-  _onCheckAuthenticated(AuthEventCheckAuthenticated event, Emitter emit) async {
-    await authService.checkAuthenticated();
   }
 
   _onLogin(AuthEventLogin event, Emitter emit) async {
@@ -70,7 +73,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 class AuthEvent with _$AuthEvent {
   const factory AuthEvent.login() = AuthEventLogin;
   const factory AuthEvent.logout() = AuthEventLogout;
-  const factory AuthEvent.checkAuthenticated() = AuthEventCheckAuthenticated;
   const factory AuthEvent.authenticated() = AuthEventAuthenticated;
   const factory AuthEvent.unauthenticated() = AuthEventUnAuthenticated;
 }
@@ -78,6 +80,7 @@ class AuthEvent with _$AuthEvent {
 @freezed
 class AuthState with _$AuthState {
   const factory AuthState.unknown() = AuthStateUnknown;
+  const factory AuthState.processing() = AuthStateProcessing;
   const factory AuthState.unauthenticated({required bool isChecking}) = AuthStateUnauthenticated;
   const factory AuthState.authenticated({
     required AuthSession authSession,

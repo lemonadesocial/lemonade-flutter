@@ -154,6 +154,20 @@ definitions:
           --build-number=$BUILD_NUMBER \
           --flavor="production" \
           -t "lib/main_production.dart"
+    - &github_release
+      name: Github release
+      script: | 
+        # Publish only for tag builds
+        if [ -z ${CM_TAG} ]; then
+          echo "Not a tag build, will not publish GitHub release"
+          exit 0
+        fi
+        gh release create "${CM_TAG}" \
+          --title "Lemonade ${CM_TAG}" \
+          --generate-notes
+          build/ios/ipa/*.ipa \
+          build/**/outputs/apk/**/*.apk \
+          build/**/outputs/bundle/**/*.aab
     - &notify_ios_staging_to_slack
       name: Notify iOS Staging app to slack
       script: | 
@@ -522,9 +536,10 @@ workflows:
       <<: *email_staging
       scripts:
         - *notify_android_staging_to_slack
-  # Build iOS Production
-  ios-production:
-    name: iOS Production
+  
+  # Build iOS & Android Production
+  ios-android-production:
+    name: Build iOS & Android Production
     <<: *instance_mac_mini
     integrations:
       <<: *app_store_connect_integrations
@@ -532,6 +547,7 @@ workflows:
       <<: *env_versions
       <<: *load_environment_values
       <<: *ios_signing_production
+      <<: *android_signing_production
     triggering:
       events:
         - tag
@@ -547,46 +563,24 @@ workflows:
       - *install_firebase_crashlytics
       - *install_pods
       - *build_ipa_production
+
+      - *setup_local_properties
+      - *build_apk_production
+      - *build_aab_production
     artifacts:
       - *ipa
       - *xcode_log
       - *dsym
       - *app
-    publishing:
-      <<: *ios_app_store_publish
-      <<: *email_production
-      scripts:
-        - *upload_production_dsym_to_firebase
-        - *notify_ios_production_to_slack
-
-  # Build Android Production
-  android-production:
-    name: Android Production
-    <<: *instance_mac_mini
-    environment:
-      <<: *env_versions
-      <<: *load_environment_values
-      <<: *android_signing_production
-    triggering:
-      events:
-        - tag
-      branch_patterns:
-        - pattern: '*'
-          include: true
-          source: true
-      cancel_previous_builds: true
-    scripts:
-      - *load_env_files
-      - *setup_local_properties
-      - *get_flutter_packages
-      - *build_apk_production
-      - *build_aab_production
-    artifacts:
       - *apk
       - *aab
       - *android_log
     publishing:
+      <<: *ios_app_store_publish
       <<: *android_publish
       <<: *email_production
       scripts:
+        - *upload_production_dsym_to_firebase
+        - *github_release
+        - *notify_ios_production_to_slack
         - *notify_android_production_to_slack

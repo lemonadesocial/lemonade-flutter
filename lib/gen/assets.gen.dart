@@ -68,6 +68,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_done.svg
   SvgGenImage get icDone => const SvgGenImage('assets/icons/ic_done.svg');
 
+  /// File path: assets/icons/ic_download.svg
+  SvgGenImage get icDownload =>
+      const SvgGenImage('assets/icons/ic_download.svg');
+
   /// File path: assets/icons/ic_edit.svg
   SvgGenImage get icEdit => const SvgGenImage('assets/icons/ic_edit.svg');
 
@@ -81,6 +85,10 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/ic_filter.svg
   SvgGenImage get icFilter => const SvgGenImage('assets/icons/ic_filter.svg');
+
+  /// File path: assets/icons/ic_filter_outline.svg
+  SvgGenImage get icFilterOutline =>
+      const SvgGenImage('assets/icons/ic_filter_outline.svg');
 
   /// File path: assets/icons/ic_grid.svg
   SvgGenImage get icGrid => const SvgGenImage('assets/icons/ic_grid.svg');
@@ -136,6 +144,14 @@ class $AssetsIconsGen {
   SvgGenImage get icMoreHoriz =>
       const SvgGenImage('assets/icons/ic_more_horiz.svg');
 
+  /// File path: assets/icons/ic_my_location.svg
+  SvgGenImage get icMyLocation =>
+      const SvgGenImage('assets/icons/ic_my_location.svg');
+
+  /// File path: assets/icons/ic_navigation_line.svg
+  SvgGenImage get icNavigationLine =>
+      const SvgGenImage('assets/icons/ic_navigation_line.svg');
+
   /// File path: assets/icons/ic_news.svg
   SvgGenImage get icNews => const SvgGenImage('assets/icons/ic_news.svg');
 
@@ -145,6 +161,9 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/ic_qr.svg
   SvgGenImage get icQr => const SvgGenImage('assets/icons/ic_qr.svg');
+
+  /// File path: assets/icons/ic_search.svg
+  SvgGenImage get icSearch => const SvgGenImage('assets/icons/ic_search.svg');
 
   /// File path: assets/icons/ic_share.svg
   SvgGenImage get icShare => const SvgGenImage('assets/icons/ic_share.svg');
@@ -172,10 +191,12 @@ class $AssetsIconsGen {
         icChat,
         icCrystal,
         icDone,
+        icDownload,
         icEdit,
         icEmptyList,
         icFacebook,
         icFilter,
+        icFilterOutline,
         icGrid,
         icHostFilled,
         icHouse,
@@ -191,9 +212,12 @@ class $AssetsIconsGen {
         icMatches,
         icMenu,
         icMoreHoriz,
+        icMyLocation,
+        icNavigationLine,
         icNews,
         icPeopleAlt,
         icQr,
+        icSearch,
         icShare,
         icStore,
         icSupport,

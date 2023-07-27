@@ -72,5 +72,9 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>UIStatusBarHidden</key>
+	<false/>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>We require your location information to accurately show nearby badges. This data will only be used when you use this feature and confidentiality will be maintained.</string>
 </dict>
 </plist>
