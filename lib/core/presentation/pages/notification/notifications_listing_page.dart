@@ -72,7 +72,7 @@ class _NotificationsListingViewState extends State<_NotificationsListingView> {
                         key: Key(notifications[index].id ?? ''),
                         notification: notifications[index],
                         onTap: () {
-                          NavigationUtils.handleNotificationNavigate(context, notifications[index]);
+                          NavigationUtils.handleNotificationNavigate(context, notifications[index].type, notifications[index].object_type, notifications[index].object_id);
                         },
                       ),
                 separatorBuilder: (ctx, index) =>
