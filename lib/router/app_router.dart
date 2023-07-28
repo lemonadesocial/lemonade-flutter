@@ -61,5 +61,26 @@ class AppRouter extends $AppRouter {
           page: WebviewRoute.page,
           fullscreenDialog: true,
         ),
+        chatRoutes,
       ];
 }
+
+final chatRoutes = AutoRoute(
+  page: ChatStackRoute.page,
+  path: '/chat',
+  children: [
+    AutoRoute(
+      initial: true,
+      path: '',
+      page: ChatListRoute.page,
+    ),
+    AutoRoute(
+      path: 'detail/:id',
+      page: ChatDetailRoute.page,
+    ),
+    AutoRoute(
+      path: 'setting/:id',
+      page: ChatSettingRoute.page,
+    ),
+  ],
+);
