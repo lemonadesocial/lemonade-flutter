@@ -9,11 +9,10 @@ class NotificationsListingBloc extends Bloc<NotificationsListingEvent, Notificat
   final NotificationService notificationService;
   NotificationsListingBloc(this.notificationService) : super(NotificationsListingState.loading()) {
     on<NotificationsListingEventFetch>(_onFetch);
+    on<NotificationsListingEventRemoveItem>(_onRemoveItem);
   }
 
   _onFetch(NotificationsListingEventFetch event, Emitter emit) async {
-    emit(NotificationsListingState.loading());
-    await Future.delayed(Duration(seconds: 1));
     final result = await notificationService.getNotifications();
     result.fold(
       (l) => emit(NotificationsListingState.failure()),
@@ -23,6 +22,15 @@ class NotificationsListingBloc extends Bloc<NotificationsListingEvent, Notificat
         ),
       ),
     );
+  }
+
+  _onRemoveItem(NotificationsListingEventRemoveItem event, Emitter emit) async {
+    List<Notification> currentList = state.maybeWhen(
+      fetched: (notifications) => notifications,
+      orElse: () => [],
+    );
+    List<Notification> newList = currentList.where((item) => item.id != event.notification.id).toList();
+    emit(NotificationsListingState.fetched(notifications: newList));
   }
 }
 
@@ -38,4 +46,8 @@ class NotificationsListingState with _$NotificationsListingState {
 @freezed
 class NotificationsListingEvent with _$NotificationsListingEvent {
   factory NotificationsListingEvent.fetch() = NotificationsListingEventFetch;
+  factory NotificationsListingEvent.removeItem({
+    required int index,
+    required Notification notification,
+  }) = NotificationsListingEventRemoveItem;
 }

@@ -130,7 +130,15 @@ class _EventsListingViewState extends State<_EventsListingView> {
         title: t.event.events,
         leading: BurgerMenu(),
         actions: [
-          ThemeSvgIcon(color: themeColor.onSurface, builder: (filter) => Assets.icons.icChat.svg(colorFilter: filter)),
+          GestureDetector(
+            onTap: () {
+              AutoRouter.of(context).navigateNamed('/chat');
+            },
+            child: ThemeSvgIcon(
+              color: themeColor.onSurface,
+              builder: (filter) => Assets.icons.icChat.svg(colorFilter: filter),
+            ),
+          ),
         ],
       ),
       backgroundColor: themeColor.primary,

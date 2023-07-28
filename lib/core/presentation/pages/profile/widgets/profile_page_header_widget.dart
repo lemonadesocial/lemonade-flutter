@@ -198,7 +198,7 @@ class _ProfileUserNameAndTitle extends StatelessWidget {
                 ),
               ),
               SizedBox(width: Spacing.superExtraSmall),
-              TextBadge(label: '@${user.username}'),
+              if (user.username?.isNotEmpty == true) TextBadge(label: '@${user.username}'),
             ],
           ),
           Text(

@@ -3,6 +3,7 @@ import 'package:app/core/config.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/pages/profile/views/tabs/base_sliver_tab_view.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -72,10 +73,13 @@ class ProfileInfoTabView extends StatelessWidget {
             ),
           ),
         ),
-        SliverToBoxAdapter(
-          child:
-              ElevatedButton(onPressed: () => context.read<AuthBloc>().add(AuthEvent.logout()), child: Text("Logout")),
-        )
+        if (AuthUtils.isMe(context, user: user))
+          SliverToBoxAdapter(
+            child: ElevatedButton(
+              onPressed: () => context.read<AuthBloc>().add(AuthEvent.logout()),
+              child: Text("Logout"),
+            ),
+          )
       ],
     );
   }
