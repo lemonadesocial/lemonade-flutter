@@ -10,17 +10,12 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: '.env.staging');
   await gql_flutter.initHiveForFlutter();
-
-  final firebaseService = FirebaseService();
-  await firebaseService.initialize();
-  final token = await firebaseService.getToken();
-  
-  debugPrint('FCM Token: $token');
   
   registerModule();
 
   await getIt<AppOauth>().init();
-
+  await getIt<FirebaseService>().initialize();
+  
   runApp(LemonadeApp());
 
   debugPrint('App is ready!!! ✅');
