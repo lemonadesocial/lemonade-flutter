@@ -18,4 +18,9 @@ class AppConfig {
   static get instagramUrl => 'https://www.instagram.com';
   static get facebookUrl => 'https://www.facebook.com';
   static get linkedinUrl => 'https://www.linkedin.com/in';
+
+  // Wallet connect
+  static get walletConnectProjectId => dotenv.env["WALLET_CONNECT_PROJECT_ID"];
+
+  static get isProduction => dotenv.env['ENV'] == 'PROD';
 }

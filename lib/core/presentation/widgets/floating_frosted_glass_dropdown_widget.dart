@@ -9,12 +9,14 @@ class FloatingFrostedGlassDropdown<T> extends StatefulWidget {
   final Widget child;
   final List<DropdownItemDpo<T>> items;
   final Function(DropdownItemDpo<T>? item)? onItemPressed;
+  final Offset? offset;
 
   const FloatingFrostedGlassDropdown({
     super.key,
     required this.items,
     required this.child,
     this.onItemPressed,
+    this.offset,
   });
 
   @override
@@ -65,7 +67,7 @@ class _FloatingFrostedGlassDropdown<T> extends State<FloatingFrostedGlassDropdow
         _buildBackDrop(),
         Positioned(
           right: Spacing.small,
-          top: y + Sizing.medium,
+          top: y + Sizing.medium + (widget.offset?.dy ?? 0),
           child: ScaleTransition(
             alignment: Alignment.topRight,
             scale: _animation,

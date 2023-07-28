@@ -129,7 +129,9 @@ class _NotificationsListingViewState extends State<_NotificationsListingView> {
                           onTap: () {
                             NavigationUtils.handleNotificationNavigate(
                               context,
-                              notifications[index],
+                              notifications[index].type,
+                              notifications[index].object_type,
+                              notifications[index].object_id,
                             );
                           },
                         ),
