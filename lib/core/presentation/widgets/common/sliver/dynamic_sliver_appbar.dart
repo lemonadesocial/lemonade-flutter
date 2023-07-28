@@ -34,6 +34,7 @@ class _DynamicSliverAppBarState extends State<DynamicSliverAppBar> {
     });
 
     return SliverAppBar(
+      leading: SizedBox.shrink(),
       floating: widget.floating,
       forceElevated: widget.forceElevated,
       expandedHeight: isHeightCalculated ? height : widget.maxHeight,

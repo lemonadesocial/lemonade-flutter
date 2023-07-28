@@ -1,14 +1,10 @@
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/presentation/widgets/event/event_buy_ticket_button_widget.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
-import 'package:app/core/utils/number_utils.dart';
-import 'package:app/gen/assets.gen.dart';
-import 'package:app/i18n/i18n.g.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/typo.dart';
-import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -72,48 +68,30 @@ class EventCard extends StatelessWidget {
   _buildCardFooter(BuildContext context, ColorScheme colorScheme) => Padding(
         padding: EdgeInsets.symmetric(horizontal: Spacing.small, vertical: Spacing.small),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisSize: MainAxisSize.max,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(event.title ?? ''),
-                SizedBox(height: Spacing.superExtraSmall),
-                Text(DateFormatUtils.fullDateWithTime(event.start),
-                    style: Typo.small.copyWith(color: colorScheme.onSecondary)),
-              ],
+            Flexible(
+              flex: 10,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    event.title ?? '',
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  SizedBox(height: Spacing.superExtraSmall),
+                  Text(
+                    DateFormatUtils.fullDateWithTime(event.start),
+                    style: Typo.small.copyWith(color: colorScheme.onSecondary),
+                  ),
+                ],
+              ),
             ),
-            const Spacer(),
-            _buildBuyTicketButton(context, colorScheme)
+            Spacer(),
+            EventBuyTicketButton(event: event),
           ],
         ),
       );
-
-  _buildBuyTicketButton(BuildContext ctx, ColorScheme colorScheme) {
-    return GestureDetector(
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall, vertical: Spacing.extraSmall),
-        decoration: BoxDecoration(
-          border: Border.all(color: colorScheme.outline),
-          borderRadius: BorderRadius.circular(LemonRadius.normal),
-          color: LemonColor.lavender18,
-        ),
-        child: Row(
-          children: [
-            Assets.icons.icTicket.svg(
-              width: Sizing.xSmall,
-              height: Sizing.xSmall,
-              colorFilter: ColorFilter.mode(LemonColor.paleViolet, BlendMode.srcIn),
-            ),
-            SizedBox(width: Spacing.superExtraSmall),
-            Text(
-              event.cost != null
-                  ? '${NumberUtils.formatCurrency(amount: event.cost!, currency: event.currency, freeText: t.event.free, prefix: '${t.event.buy} • ')}'
-                  : '${t.event.free}',
-              style: Typo.small.copyWith(color: LemonColor.paleViolet),
-            )
-          ],
-        ),
-      ),
-    );
-  }
 }
