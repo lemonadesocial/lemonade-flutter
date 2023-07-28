@@ -11,14 +11,12 @@ void main() async {
   await dotenv.load(fileName: '.env.production');
   await gql_flutter.initHiveForFlutter();
   
-  final firebaseService = FirebaseService();
-  await firebaseService.initialize();
-  final token = await firebaseService.getToken();
-  debugPrint('FCM Token: $token');
-  
   registerModule();
   
   await getIt<AppOauth>().init();
+  
+  final firebaseService = FirebaseService();
+  await firebaseService.initialize();
 
   runApp(LemonadeApp());
 
