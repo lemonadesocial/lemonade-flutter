@@ -14,9 +14,7 @@ void main() async {
   registerModule();
   
   await getIt<AppOauth>().init();
-  
-  final firebaseService = FirebaseService();
-  await firebaseService.initialize();
+  await getIt<FirebaseService>().initialize();
 
   runApp(LemonadeApp());
 
