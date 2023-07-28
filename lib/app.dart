@@ -70,7 +70,6 @@ class _LemonadeAppViewState extends State<LemonadeApp> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       FirebaseService.setContext(context);
     });
-    FirebaseService().addFcmToken();
     setupInteractedMessage();
   }
 }
