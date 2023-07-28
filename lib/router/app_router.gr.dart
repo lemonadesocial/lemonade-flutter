@@ -10,12 +10,12 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:app/core/presentation/pages/auth/login_page.dart' as _i2;
 import 'package:app/core/presentation/pages/chat/chat_detail/chat_detail_page.dart'
-    as _i15;
+    as _i16;
 import 'package:app/core/presentation/pages/chat/chat_list/chat_list_page.dart'
     as _i14;
 import 'package:app/core/presentation/pages/chat/chat_setting/chat_setting_page.dart'
     as _i13;
-import 'package:app/core/presentation/pages/chat/chat_stack_page.dart' as _i16;
+import 'package:app/core/presentation/pages/chat/chat_stack_page.dart' as _i15;
 import 'package:app/core/presentation/pages/event/event_detail_page.dart'
     as _i12;
 import 'package:app/core/presentation/pages/event/events_listing_page.dart'
@@ -147,16 +147,16 @@ abstract class $AppRouter extends _i17.RootStackRouter {
         child: const _i14.ChatListPage(),
       );
     },
-    ChatDetailRoute.name: (routeData) {
-      return _i17.AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const _i15.ChatDetailPage(),
-      );
-    },
     ChatStackRoute.name: (routeData) {
       return _i17.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i16.ChatStackPage(),
+        child: const _i15.ChatStackPage(),
+      );
+    },
+    ChatDetailRoute.name: (routeData) {
+      return _i17.AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const _i16.ChatDetailPage(),
       );
     },
   };
@@ -456,21 +456,7 @@ class ChatListRoute extends _i17.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i15.ChatDetailPage]
-class ChatDetailRoute extends _i17.PageRouteInfo<void> {
-  const ChatDetailRoute({List<_i17.PageRouteInfo>? children})
-      : super(
-          ChatDetailRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'ChatDetailRoute';
-
-  static const _i17.PageInfo<void> page = _i17.PageInfo<void>(name);
-}
-
-/// generated route for
-/// [_i16.ChatStackPage]
+/// [_i15.ChatStackPage]
 class ChatStackRoute extends _i17.PageRouteInfo<void> {
   const ChatStackRoute({List<_i17.PageRouteInfo>? children})
       : super(
@@ -479,6 +465,20 @@ class ChatStackRoute extends _i17.PageRouteInfo<void> {
         );
 
   static const String name = 'ChatStackRoute';
+
+  static const _i17.PageInfo<void> page = _i17.PageInfo<void>(name);
+}
+
+/// generated route for
+/// [_i16.ChatDetailPage]
+class ChatDetailRoute extends _i17.PageRouteInfo<void> {
+  const ChatDetailRoute({List<_i17.PageRouteInfo>? children})
+      : super(
+          ChatDetailRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'ChatDetailRoute';
 
   static const _i17.PageInfo<void> page = _i17.PageInfo<void>(name);
 }
