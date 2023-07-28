@@ -1,13 +1,20 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:app/core/config.dart';
+import 'package:app/core/data/fcm/fcm_mutation.dart';
+import 'package:app/core/gql.dart';
+import 'package:app/core/oauth/oauth.dart';
 import 'package:app/core/utils/navigation_utils.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter/material.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:injectable/injectable.dart';
 
 import '../../../firebase_options_staging.dart' as FirebaseOptionsStaging;
 import '../../../firebase_options_production.dart' as FirebaseOptionsProduction;
@@ -31,6 +38,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   }
 }
 
+@lazySingleton
 class FirebaseService {
   static BuildContext? _context;
 
@@ -43,7 +51,7 @@ class FirebaseService {
 
   late AndroidNotificationChannel channel;
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-  
+
   Future<void> initialize() async {
     await Firebase.initializeApp(
       options: AppConfig.env == 'production'
@@ -104,6 +112,8 @@ class FirebaseService {
 
     await _requestPermission();
     _setUpMessageHandlers();
+    getIt<AppOauth>().tokenStateStream.listen(_onTokenStateChange);
+    getToken();
   }
 
   Future<void> _requestPermission() async {
@@ -155,5 +165,44 @@ class FirebaseService {
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
     FirebaseMessaging.onMessageOpenedApp
         .listen(_firebaseMessagingBackgroundHandler);
+  }
+
+  void addFcmToken() async {
+    String? fcmToken = await getToken();
+    await getIt<AppGQL>().client.mutate(
+          MutationOptions(
+            document: addUserFcmTokenMutation,
+            variables: {
+              'token': fcmToken,
+            },
+            parserFn: (data) => data['addFcmToken'],
+          ),
+        );
+  }
+
+  Future<void> removeFcmToken() async {
+    String? fcmToken = await getToken();
+    final response = await getIt<AppGQL>().client.mutate(
+          MutationOptions(
+            document: removeUserFcmTokenMutation,
+            variables: {
+              'token': fcmToken,
+            },
+            parserFn: (data) => data['removeFcmToken'],
+          ),
+        );
+    if (!response.hasException) {
+      _firebaseMessaging?.deleteToken();
+    }
+  }
+
+  void _onTokenStateChange(OAuthTokenState tokenState) {
+    if (tokenState == OAuthTokenState.valid) {
+      addFcmToken();
+    } else if (tokenState == OAuthTokenState.invalid) {
+      if (_firebaseMessaging != null) {
+        _firebaseMessaging?.deleteToken();
+      }
+    }
   }
 }

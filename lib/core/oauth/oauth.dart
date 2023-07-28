@@ -35,6 +35,7 @@ class AppOauth {
   Future<String>? refreshTokenFuture;
 
   Stream<OAuthTokenState> get tokenStateStream => _tokenStateStreamCtrl.stream;
+  OAuthTokenState get tokenState => _tokenState;
 
   late final OAuth2Client client = OAuth2Client(
     authorizeUrl: '$baseOAuthUrl/auth',
