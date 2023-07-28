@@ -11,15 +11,17 @@ import 'package:flutter/material.dart';
 @lazySingleton
 class ShakeService {
   bool _isCopied = false;
+  bool _isDialogShowing = false;
   late final FirebaseService firebaseService = FirebaseService();
   ShakeDetector? _detector;
 
   void startShakeDetection(BuildContext context) {
     if (_detector == null) {
       _detector = ShakeDetector.autoStart(
-        onPhoneShake: () async {
-          String? fcmToken = await firebaseService.getToken();
-          showDebugInfoDialog(context, fcmToken);
+        onPhoneShake: () {
+          if (!_isDialogShowing) {
+            showDebugInfoDialog(context);
+          }
         },
         minimumShakeCount: 1,
         shakeSlopTimeMS: 500,
@@ -33,9 +35,12 @@ class ShakeService {
     _detector?.stopListening();
   }
 
-  void showDebugInfoDialog(BuildContext context, String? fcmToken) {
+  Future<void> showDebugInfoDialog(BuildContext context) async {
+    _isDialogShowing = true;
+    String? fcmToken = await firebaseService.getToken();
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return Dialog(
           child: StatefulBuilder(
@@ -102,6 +107,7 @@ class ShakeService {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
+                          _isDialogShowing = false;
                           getIt<AppOauth>().forceLogout();
                           Navigator.pop(context);
                         },
@@ -114,6 +120,7 @@ class ShakeService {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
+                          _isDialogShowing = false;
                           Navigator.pop(context); // Close the bottom sheet
                         },
                         child: Text('Close'),
