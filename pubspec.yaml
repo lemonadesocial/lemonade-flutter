@@ -80,6 +80,22 @@ dependencies:
   # wallet
   walletconnect_flutter_v2: ^2.0.12
 
+  # matrix
+  matrix: ^0.22.0
+  adaptive_dialog: ^1.9.0-x-macos-beta.1
+  desktop_notifications: ^0.6.3
+  flutter_app_lock: ^3.0.0
+  future_loading_dialog: ^0.2.3
+  image_picker: ^1.0.0
+  universal_html: ^2.0.8
+  vrouter: ^1.2.0+21
+  hive_flutter: ^1.1.0
+  native_imaging: ^0.1.0
+  unifiedpush: ^5.0.0
+  desktop_lifecycle: ^0.1.0
+  flutter_app_badger: ^1.5.0
+  file_picker: ^5.3.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
