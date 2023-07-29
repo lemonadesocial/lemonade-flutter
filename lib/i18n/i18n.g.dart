@@ -1,9 +1,9 @@
 /// Generated file. Do not edit.
 ///
 /// Locales: 1
-/// Strings: 69
+/// Strings: 119
 ///
-/// Built on 2023-07-25 at 09:12 UTC
+/// Built on 2023-07-29 at 08:56 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -152,6 +152,7 @@ class _I18nEn implements BaseTranslations<AppLocale, _I18nEn> {
 	late final _I18nNotificationEn notification = _I18nNotificationEn._(_root);
 	late final _I18nCommonEn common = _I18nCommonEn._(_root);
 	late final _I18nEventEn event = _I18nEventEn._(_root);
+	late final _I18nMatrixEn matrix = _I18nMatrixEn._(_root);
 }
 
 // Path: post
@@ -278,6 +279,65 @@ class _I18nEventEn {
 	String get noEvents => 'No events yet';
 }
 
+// Path: matrix
+class _I18nMatrixEn {
+	_I18nMatrixEn._(this._root);
+
+	final _I18nEn _root; // ignore: unused_field
+
+	// Translations
+	String get sourceCode => 'sourceCode';
+	String get passphraseOrKey => 'passphrase or recovery key';
+	String get incorrectPassphraseOrKey => 'Incorrect passphrase or recovery key';
+	String get verifyTitle => 'Verifying other account';
+	String get askSSSSSign => 'To be able to sign the other person, please enter your secure store passphrase or recovery key.';
+	String get submit => 'Submit';
+	String get skip => 'Skip';
+	String get newVerificationRequest => 'New verification request!';
+	String askVerificationRequest({required Object username}) => 'Accept this verification request from ${username}?';
+	String get reject => 'Reject';
+	String get accept => 'Accept';
+	String get waitingPartnerAcceptRequest => 'Waiting for partner to accept the request…';
+	String get compareEmojiMatch => 'Please compare the emojis';
+	String get compareNumbersMatch => 'Please compare the numbers';
+	String get theyDontMatch => 'They Don\'t Match';
+	String get theyMatch => 'They Match';
+	String get waitingPartnerEmoji => 'Waiting for partner to accept the emoji…';
+	String get waitingPartnerNumbers => 'Waiting for partner to accept the numbers…';
+	String get verifySuccess => 'You successfully verified!';
+	String get close => 'Close';
+	String get openChat => 'Open Chat';
+	String get markAsRead => 'Mark as read';
+	String get loadingPleaseWait => 'Loading… Please wait.';
+	String get oneClientLoggedOut => 'One of your clients has been logged out';
+	String get oopsSomethingWentWrong => 'Oops, something went wrong…';
+	String get ok => 'Ok';
+	String get help => 'Help';
+	String get doNotShowAgain => 'Do not show again';
+	String get saveFile => 'Save file';
+	String fileHasBeenSavedAt({required Object path}) => 'File has been saved at ${path}';
+	String lastActiveAgo({required Object localizedTimeShort}) => 'Last active: ${localizedTimeShort}';
+	String dateWithoutYear({required Object month, required Object day}) => '${month}-${day}';
+	String dateWithYear({required Object year, required Object month, required Object day}) => '${year}-${month}-${day}';
+	String dateAndTimeOfDay({required Object date, required Object timeOfDay}) => '${date}, ${timeOfDay}';
+	String get lastSeenLongTimeAgo => 'Seen a long time ago';
+	String get currentlyActive => 'Currently active';
+	String get noPermission => 'No permission';
+	String get tooManyRequestsWarning => 'Too many requests. Please try again later!';
+	String get fileIsTooBigForServer => 'The server reports that the file is too large to be sent.';
+	String badServerVersionsException({required Object serverVersions, required Object supportedVersions}) => 'The homeserver supports the Spec versions:\n${serverVersions}\nBut this app supports only ${supportedVersions}';
+	String badServerLoginTypesException({required Object serverVersions, required Object supportedVersions}) => 'The homeserver supports the login types:\n${serverVersions}\nBut this app supports only:\n${supportedVersions}';
+	String get noConnectionToTheServer => 'No connection to the server';
+	String get pleaseEnterYourPassword => 'Please enter your password';
+	String get cancel => 'Cancel';
+	String get weSentYouAnEmail => 'We sent you an email';
+	String get pleaseClickOnLink => 'Please click on the link in the email and then proceed.';
+	String get iHaveClickedOnLink => 'I have clicked on the link';
+	String get pleaseFollowInstructionsOnWeb => 'Please follow the instructions on the website and tap on next.';
+	String get next => 'Next';
+	String get serverRequiresEmail => 'This server needs to validate your email address for registration.';
+}
+
 // Path: auth.login
 class _I18nAuthLoginEn {
 	_I18nAuthLoginEn._(this._root);
@@ -394,6 +454,56 @@ extension on _I18nEn {
 			case 'event.empty_attending_events': return ({required Object time}) => 'You are currently not attending any events ${time}';
 			case 'event.empty_hosting_events': return ({required Object time}) => 'You are currently not hosting any events ${time}';
 			case 'event.noEvents': return 'No events yet';
+			case 'matrix.sourceCode': return 'sourceCode';
+			case 'matrix.passphraseOrKey': return 'passphrase or recovery key';
+			case 'matrix.incorrectPassphraseOrKey': return 'Incorrect passphrase or recovery key';
+			case 'matrix.verifyTitle': return 'Verifying other account';
+			case 'matrix.askSSSSSign': return 'To be able to sign the other person, please enter your secure store passphrase or recovery key.';
+			case 'matrix.submit': return 'Submit';
+			case 'matrix.skip': return 'Skip';
+			case 'matrix.newVerificationRequest': return 'New verification request!';
+			case 'matrix.askVerificationRequest': return ({required Object username}) => 'Accept this verification request from ${username}?';
+			case 'matrix.reject': return 'Reject';
+			case 'matrix.accept': return 'Accept';
+			case 'matrix.waitingPartnerAcceptRequest': return 'Waiting for partner to accept the request…';
+			case 'matrix.compareEmojiMatch': return 'Please compare the emojis';
+			case 'matrix.compareNumbersMatch': return 'Please compare the numbers';
+			case 'matrix.theyDontMatch': return 'They Don\'t Match';
+			case 'matrix.theyMatch': return 'They Match';
+			case 'matrix.waitingPartnerEmoji': return 'Waiting for partner to accept the emoji…';
+			case 'matrix.waitingPartnerNumbers': return 'Waiting for partner to accept the numbers…';
+			case 'matrix.verifySuccess': return 'You successfully verified!';
+			case 'matrix.close': return 'Close';
+			case 'matrix.openChat': return 'Open Chat';
+			case 'matrix.markAsRead': return 'Mark as read';
+			case 'matrix.loadingPleaseWait': return 'Loading… Please wait.';
+			case 'matrix.oneClientLoggedOut': return 'One of your clients has been logged out';
+			case 'matrix.oopsSomethingWentWrong': return 'Oops, something went wrong…';
+			case 'matrix.ok': return 'Ok';
+			case 'matrix.help': return 'Help';
+			case 'matrix.doNotShowAgain': return 'Do not show again';
+			case 'matrix.saveFile': return 'Save file';
+			case 'matrix.fileHasBeenSavedAt': return ({required Object path}) => 'File has been saved at ${path}';
+			case 'matrix.lastActiveAgo': return ({required Object localizedTimeShort}) => 'Last active: ${localizedTimeShort}';
+			case 'matrix.dateWithoutYear': return ({required Object month, required Object day}) => '${month}-${day}';
+			case 'matrix.dateWithYear': return ({required Object year, required Object month, required Object day}) => '${year}-${month}-${day}';
+			case 'matrix.dateAndTimeOfDay': return ({required Object date, required Object timeOfDay}) => '${date}, ${timeOfDay}';
+			case 'matrix.lastSeenLongTimeAgo': return 'Seen a long time ago';
+			case 'matrix.currentlyActive': return 'Currently active';
+			case 'matrix.noPermission': return 'No permission';
+			case 'matrix.tooManyRequestsWarning': return 'Too many requests. Please try again later!';
+			case 'matrix.fileIsTooBigForServer': return 'The server reports that the file is too large to be sent.';
+			case 'matrix.badServerVersionsException': return ({required Object serverVersions, required Object supportedVersions}) => 'The homeserver supports the Spec versions:\n${serverVersions}\nBut this app supports only ${supportedVersions}';
+			case 'matrix.badServerLoginTypesException': return ({required Object serverVersions, required Object supportedVersions}) => 'The homeserver supports the login types:\n${serverVersions}\nBut this app supports only:\n${supportedVersions}';
+			case 'matrix.noConnectionToTheServer': return 'No connection to the server';
+			case 'matrix.pleaseEnterYourPassword': return 'Please enter your password';
+			case 'matrix.cancel': return 'Cancel';
+			case 'matrix.weSentYouAnEmail': return 'We sent you an email';
+			case 'matrix.pleaseClickOnLink': return 'Please click on the link in the email and then proceed.';
+			case 'matrix.iHaveClickedOnLink': return 'I have clicked on the link';
+			case 'matrix.pleaseFollowInstructionsOnWeb': return 'Please follow the instructions on the website and tap on next.';
+			case 'matrix.next': return 'Next';
+			case 'matrix.serverRequiresEmail': return 'This server needs to validate your email address for registration.';
 			default: return null;
 		}
 	}
