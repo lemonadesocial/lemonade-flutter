@@ -8,8 +8,11 @@ import 'package:flutter/material.dart';
 class ChannelListItem extends StatelessWidget {
   final ChatRoom room;
   ChannelListItem({required this.room});
+
   Widget _buildAvatar(ColorScheme colorScheme) {
     bool isPrivateChannel = room.isPrivate ?? false;
+    bool isMuted = room.isMuted ?? false;
+    var color = isMuted ? colorScheme.onSurface : colorScheme.onPrimary;
 
     if (isPrivateChannel) {
       var icon = Icons.lock;
@@ -22,7 +25,7 @@ class ChannelListItem extends StatelessWidget {
         child: Icon(
           icon,
           size: 15,
-          color: colorScheme.onPrimary,
+          color: color,
         ),
       );
     } else {
@@ -35,7 +38,7 @@ class ChannelListItem extends StatelessWidget {
             '#',
             style: TextStyle(
               fontSize: 15,
-              color: colorScheme.onPrimary,
+              color: color,
             ),
           ),
         ),
@@ -47,6 +50,8 @@ class ChannelListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     var name = room.name ?? '';
+    var isMuted = room.isMuted ?? false;
+    var textColor = isMuted ? colorScheme.onSurface : colorScheme.onPrimary;
     return Container(
       child: InkWell(
         onTap: () {
@@ -65,7 +70,7 @@ class ChannelListItem extends StatelessWidget {
                 child: Text(
                   name,
                   style: Typo.medium.copyWith(
-                      color: colorScheme.onPrimary,
+                      color: textColor,
                       fontWeight: FontWeight.w600),
                 ),
               ),

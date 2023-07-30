@@ -33,6 +33,8 @@ class DirectMessageItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     var name = room.name ?? '';
+    bool isMuted = room.isMuted ?? false;
+    var color = isMuted ? colorScheme.onSurface : colorScheme.onPrimary;
     return Container(
       child: InkWell(
         onTap: () {
@@ -51,7 +53,7 @@ class DirectMessageItem extends StatelessWidget {
                 child: Text(
                   name,
                   style: Typo.medium.copyWith(
-                      color: colorScheme.onPrimary,
+                      color: color,
                       fontWeight: FontWeight.w600),
                 ),
               ),

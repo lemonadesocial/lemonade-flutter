@@ -4,7 +4,7 @@ import 'package:app/core/presentation/pages/chat/chat_list/widgets/direct_messag
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/drawer/spaces_drawer.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
-import 'package:app/core/presentation/widgets/common/collapsible/collapsible_section.dart';
+import 'package:app/core/presentation/widgets/common/collapsible/collapsible_section_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:auto_route/auto_route.dart';
@@ -23,7 +23,6 @@ class ChatListPage extends StatelessWidget {
       ),
       child: CollapsibleSection(
         title: title,
-        chatRooms: chatRooms,
         children: [
           for (var room in chatRooms)
             title == 'Channels'
