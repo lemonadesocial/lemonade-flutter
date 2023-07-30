@@ -1,9 +1,9 @@
 /// Generated file. Do not edit.
 ///
 /// Locales: 1
-/// Strings: 69
+/// Strings: 70
 ///
-/// Built on 2023-07-25 at 09:12 UTC
+/// Built on 2023-07-29 at 22:09 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -255,6 +255,7 @@ class _I18nCommonEn {
 	String get qrCode => 'qrCode';
 	String get support => 'support';
 	String get delete => 'delete';
+	String get lemonade => 'Lemonade';
 }
 
 // Path: event
@@ -382,6 +383,7 @@ extension on _I18nEn {
 			case 'common.qrCode': return 'qrCode';
 			case 'common.support': return 'support';
 			case 'common.delete': return 'delete';
+			case 'common.lemonade': return 'Lemonade';
 			case 'event.events': return 'Events';
 			case 'event.all': return 'all';
 			case 'event.attending': return 'attending';

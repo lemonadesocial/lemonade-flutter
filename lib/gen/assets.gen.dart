@@ -93,6 +93,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_grid.svg
   SvgGenImage get icGrid => const SvgGenImage('assets/icons/ic_grid.svg');
 
+  /// File path: assets/icons/ic_hash_symbol.svg
+  SvgGenImage get icHashSymbol =>
+      const SvgGenImage('assets/icons/ic_hash_symbol.svg');
+
   /// File path: assets/icons/ic_host_filled.svg
   SvgGenImage get icHostFilled =>
       const SvgGenImage('assets/icons/ic_host_filled.svg');
@@ -130,9 +134,16 @@ class $AssetsIconsGen {
   SvgGenImage get icLemonOutline =>
       const SvgGenImage('assets/icons/ic_lemon_outline.svg');
 
+  /// File path: assets/icons/ic_lemonade_white.svg
+  SvgGenImage get icLemonadeWhite =>
+      const SvgGenImage('assets/icons/ic_lemonade_white.svg');
+
   /// File path: assets/icons/ic_linkedin.svg
   SvgGenImage get icLinkedin =>
       const SvgGenImage('assets/icons/ic_linkedin.svg');
+
+  /// File path: assets/icons/ic_lock.svg
+  SvgGenImage get icLock => const SvgGenImage('assets/icons/ic_lock.svg');
 
   /// File path: assets/icons/ic_matches.svg
   SvgGenImage get icMatches => const SvgGenImage('assets/icons/ic_matches.svg');
@@ -198,6 +209,7 @@ class $AssetsIconsGen {
         icFilter,
         icFilterOutline,
         icGrid,
+        icHashSymbol,
         icHostFilled,
         icHouse,
         icHouseParty,
@@ -208,7 +220,9 @@ class $AssetsIconsGen {
         icLemonFilledBackground,
         icLemonFilledStart,
         icLemonOutline,
+        icLemonadeWhite,
         icLinkedin,
+        icLock,
         icMatches,
         icMenu,
         icMoreHoriz,
