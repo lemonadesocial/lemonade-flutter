@@ -5,42 +5,28 @@ import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
-class ChannelListItem extends StatelessWidget {
+class DirectMessageItem extends StatelessWidget {
   final ChatRoom room;
-  ChannelListItem({required this.room});
-  Widget _buildAvatar(ColorScheme colorScheme) {
-    bool isPrivateChannel = room.isPrivate ?? false;
+  DirectMessageItem({required this.room});
 
-    if (isPrivateChannel) {
-      var icon = Icons.lock;
-      return Container(
-        width: 27,
-        height: 27,
+  Widget _buildAvatar() {
+    var avatarUrl = room.avatarUrl;
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(6),
+      child: Container(
+        width: 28,
+        height: 28,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(9),
+          color: Colors.grey,
+          image: avatarUrl != null
+              ? DecorationImage(
+                  image: NetworkImage(avatarUrl),
+                  fit: BoxFit.cover,
+                )
+              : null,
         ),
-        child: Icon(
-          icon,
-          size: 15,
-          color: colorScheme.onPrimary,
-        ),
-      );
-    } else {
-      return Container(
-        width: 27,
-        height: 27,
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(9)),
-        child: Center(
-          child: Text(
-            '#',
-            style: TextStyle(
-              fontSize: 15,
-              color: colorScheme.onPrimary,
-            ),
-          ),
-        ),
-      );
-    }
+      ),
+    );
   }
 
   @override
@@ -57,7 +43,7 @@ class ChannelListItem extends StatelessWidget {
               vertical: Spacing.extraSmall, horizontal: Spacing.small),
           child: Row(
             children: [
-              _buildAvatar(colorScheme),
+              _buildAvatar(),
               SizedBox(
                   width: Spacing
                       .extraSmall), // Add some spacing between avatar and title

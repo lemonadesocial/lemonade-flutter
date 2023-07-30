@@ -5,6 +5,7 @@ class ChatRoom {
   final DateTime? createdAt;
   final int? unseenMessageCount;
   final bool? isPrivate;
+  final bool? isMuted;
 
   ChatRoom({
     this.avatarUrl,
@@ -12,6 +13,7 @@ class ChatRoom {
     this.latestMessage,
     this.createdAt,
     this.unseenMessageCount,
-    this.isPrivate
+    this.isPrivate,
+    this.isMuted
   });
 }
