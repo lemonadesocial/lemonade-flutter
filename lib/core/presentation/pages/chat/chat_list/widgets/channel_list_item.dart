@@ -3,7 +3,6 @@ import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/theme/color.dart';
-import 'package:app/theme/sizing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +13,7 @@ class ChannelListItem extends StatelessWidget {
 
   Widget _buildAvatar() {
     bool isPrivateChannel = room.isPrivate ?? false;
+    var icon = isPrivateChannel ? Assets.icons.icPrivateChannel : Assets.icons.icPublicChannel;
     return Stack(
       children: [
         Container(
@@ -23,30 +23,13 @@ class ChannelListItem extends StatelessWidget {
             color: LemonColor.white12,
             borderRadius: BorderRadius.circular(9),
           ),
-          child: Positioned.fill(
-            child: Align(
-              alignment: Alignment.center,
-              child: ThemeSvgIcon(
-                builder: (filter) => Assets.icons.icHashSymbol.svg(
-                  width: Sizing.small,
-                  height: Sizing.small,
-                ),
-              ),
+          child: ThemeSvgIcon(
+            // color: colorScheme.onPrimary,
+            builder: (filter) => icon.svg(
+              colorFilter: filter,
             ),
           ),
         ),
-        if (isPrivateChannel)
-          Positioned.fill(
-            child: Align(
-              alignment: Alignment.bottomRight,
-              child: ThemeSvgIcon(
-                builder: (filter) => Assets.icons.icLock.svg(
-                  width: Sizing.small / 1.2,
-                  height: Sizing.small / 1.2,
-                ),
-              ),
-            ),
-          ),
       ],
     );
   }
@@ -59,7 +42,9 @@ class ChannelListItem extends StatelessWidget {
     final DateTime today = DateTime(now.year, now.month, now.day);
     final DateTime yesterday = today.subtract(Duration(days: 1));
 
-    var color = room.unseenMessageCount!  > 0 ? LemonColor.paleViolet : LemonColor.white36;
+    var color = room.unseenMessageCount! > 0
+        ? LemonColor.paleViolet
+        : LemonColor.white36;
 
     if (createdAt!.isAfter(today)) {
       label = DateFormatUtils.timeOnly(createdAt);

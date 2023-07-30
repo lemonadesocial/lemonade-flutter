@@ -1,11 +1,14 @@
 import 'package:app/core/presentation/pages/chat/chat_list/mock_data.dart';
 import 'package:app/core/presentation/pages/chat/chat_list/widgets/channel_list_item.dart';
 import 'package:app/core/presentation/pages/chat/chat_list/widgets/chat_list_item.dart';
+import 'package:app/core/presentation/widgets/burger_menu_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
+import 'package:app/core/presentation/widgets/common/drawer/spaces_drawer.dart';
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-
 
 class Channels extends StatelessWidget {
   @override
@@ -60,11 +63,36 @@ class ChatListPage extends StatelessWidget {
     final t = Translations.of(context);
     final themeColor = Theme.of(context).colorScheme;
     return DefaultTabController(
-      length: 4, // Number of tabs
+      length: 4,
       child: Scaffold(
         appBar: LemonAppBar(
+          actionsHeight: 27,
           title: t.common.lemonade,
+          actions: [
+            Builder(
+              builder: (context) => GestureDetector(
+                onTap: () {
+                  Scaffold.of(context).openEndDrawer();
+                },
+                child: Container(
+                  width: 27,
+                  height: 27,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Center(
+                    child: ThemeSvgIcon(
+                      color: themeColor.onSurface,
+                      builder: (filter) => Assets.icons.icLemonadeWhite.svg(),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
+        endDrawer: SpacesDrawer(),
         backgroundColor: themeColor.primary,
         body: Column(
           children: [
