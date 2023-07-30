@@ -1,15 +1,12 @@
-import 'package:app/core/mock_model/chat_room.dart';
 import 'package:app/theme/theme.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 
 class CollapsibleSection extends StatefulWidget {
   final String title;
-  final List<ChatRoom> chatRooms;
   final List<Widget> children;
 
-  CollapsibleSection(
-      {required this.title, required this.chatRooms, required this.children});
+  CollapsibleSection({required this.title, required this.children});
 
   @override
   _CollapsibleSectionState createState() => _CollapsibleSectionState();
