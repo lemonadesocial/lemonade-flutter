@@ -23,9 +23,4 @@ class DateFormatUtils {
     if(date == null) return '';
     return DateFormat(monthYearOnlyFormat).format(date.toLocal());
   }
-
-  static String timeOnly(DateTime? date) {
-    if(date == null) return '';
-    return DateFormat(timeOnlyFormat).format(date.toLocal());
-  }
 }
