@@ -14,24 +14,31 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageViewState extends State<HomePage> {
-
   @override
   void initState() {
     super.initState();
     getIt<ShakeService>().startShakeDetection(context);
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: LemonColor.black,
       body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            AutoRouter.of(context).navigate(PoapListingRoute());
-          },
-          child: Text("Navigate to poap"),
-        ),
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          ElevatedButton(
+            onPressed: () {
+              AutoRouter.of(context).navigate(PoapListingRoute());
+            },
+            child: Text("Navigate to poap"),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              AutoRouter.of(context).navigate(ChatListRoute());
+            },
+            child: Text("Navigate to Chat"),
+          )
+        ]),
       ),
     );
   }

@@ -93,6 +93,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_grid.svg
   SvgGenImage get icGrid => const SvgGenImage('assets/icons/ic_grid.svg');
 
+  /// File path: assets/icons/ic_hash_symbol.svg
+  SvgGenImage get icHashSymbol =>
+      const SvgGenImage('assets/icons/ic_hash_symbol.svg');
+
   /// File path: assets/icons/ic_host_filled.svg
   SvgGenImage get icHostFilled =>
       const SvgGenImage('assets/icons/ic_host_filled.svg');
@@ -118,6 +122,10 @@ class $AssetsIconsGen {
   SvgGenImage get icInstagram =>
       const SvgGenImage('assets/icons/ic_instagram.svg');
 
+  /// File path: assets/icons/ic_join_space.svg
+  SvgGenImage get icJoinSpace =>
+      const SvgGenImage('assets/icons/ic_join_space.svg');
+
   /// File path: assets/icons/ic_lemon_filled_background.png
   AssetGenImage get icLemonFilledBackground =>
       const AssetGenImage('assets/icons/ic_lemon_filled_background.png');
@@ -129,6 +137,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_lemon_outline.svg
   SvgGenImage get icLemonOutline =>
       const SvgGenImage('assets/icons/ic_lemon_outline.svg');
+
+  /// File path: assets/icons/ic_lemonade_white.svg
+  SvgGenImage get icLemonadeWhite =>
+      const SvgGenImage('assets/icons/ic_lemonade_white.svg');
 
   /// File path: assets/icons/ic_linkedin.svg
   SvgGenImage get icLinkedin =>
@@ -183,6 +195,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_wallet.svg
   SvgGenImage get icWallet => const SvgGenImage('assets/icons/ic_wallet.svg');
 
+  /// File path: assets/icons/ico_create_space.svg
+  SvgGenImage get icoCreateSpace =>
+      const SvgGenImage('assets/icons/ico_create_space.svg');
+
   /// List of all assets
   List<dynamic> get values => [
         icBack,
@@ -198,6 +214,7 @@ class $AssetsIconsGen {
         icFilter,
         icFilterOutline,
         icGrid,
+        icHashSymbol,
         icHostFilled,
         icHouse,
         icHouseParty,
@@ -205,9 +222,11 @@ class $AssetsIconsGen {
         icInfo,
         icInsights,
         icInstagram,
+        icJoinSpace,
         icLemonFilledBackground,
         icLemonFilledStart,
         icLemonOutline,
+        icLemonadeWhite,
         icLinkedin,
         icMatches,
         icMenu,
@@ -223,7 +242,8 @@ class $AssetsIconsGen {
         icSupport,
         icTicket,
         icTwitter,
-        icWallet
+        icWallet,
+        icoCreateSpace
       ];
 }
 
