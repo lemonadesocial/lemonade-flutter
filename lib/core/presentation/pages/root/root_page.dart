@@ -22,7 +22,10 @@ class RootPage extends StatelessWidget {
           HomeRoute(),
           EventsListingRoute(),
           WalletRoute(),
-          NotificationRoute(),
+          authState.maybeWhen(
+            authenticated: (session) => NotificationRoute(),
+            orElse: () => EmptyRoute(),
+          ),
           authState.maybeWhen(
             authenticated: (session) => MyProfileRoute(),
             orElse: () => EmptyRoute(),

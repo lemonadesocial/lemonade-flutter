@@ -62,6 +62,7 @@ dependencies:
   intl: ^0.18.0
   timeago: ^3.5.0
   sliver_tools: ^0.2.10
+  flutter_slidable: ^3.0.0
 
   # Webview
   flutter_inappwebview: ^5.7.2+3

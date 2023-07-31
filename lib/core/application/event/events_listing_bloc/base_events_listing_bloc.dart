@@ -25,7 +25,6 @@ abstract class BaseEventListingBloc<I> extends Bloc<BaseEventsListingEvent, Base
   Future<Either<Failure, List<Event>>> getEvents(int skip, bool endReached, {required I input});
 
   _onFetch(BaseEventsListingEventFetch blocEvent, Emitter emit) async {
-    emit(BaseEventsListingState.loading());
     final timeFilterType = blocEvent.eventTimeFilter;
     final result = await paginationService.fetch(defaultInput);
 

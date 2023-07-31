@@ -41,16 +41,15 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 @lazySingleton
 class FirebaseService {
   static BuildContext? _context;
-
-  static void setContext(BuildContext context) =>
-      FirebaseService._context = context;
-
   static FirebaseMessaging? _firebaseMessaging;
   static FirebaseMessaging get firebaseMessaging =>
       FirebaseService._firebaseMessaging ?? FirebaseMessaging.instance;
 
   late AndroidNotificationChannel channel;
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+  void setContext(BuildContext context) =>
+      FirebaseService._context = context;
 
   Future<void> initialize() async {
     await Firebase.initializeApp(
