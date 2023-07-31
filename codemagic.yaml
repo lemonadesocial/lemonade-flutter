@@ -165,9 +165,6 @@ definitions:
         gh release create "${CM_TAG}" \
           --title "Lemonade ${CM_TAG}" \
           --generate-notes
-          build/ios/ipa/*.ipa \
-          build/**/outputs/apk/**/*.apk \
-          build/**/outputs/bundle/**/*.aab
     - &notify_ios_staging_to_slack
       name: Notify iOS Staging app to slack
       script: | 
