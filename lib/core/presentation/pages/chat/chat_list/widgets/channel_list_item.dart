@@ -46,7 +46,7 @@ class ChannelListItem extends StatelessWidget {
   }
 
   Widget _buildAvatar(ColorScheme colorScheme) {
-    var color =  room.isUnread  ? colorScheme.onPrimary : colorScheme.onSurfaceVariant;
+    var color =  room.isUnread  ? colorScheme.onPrimary : colorScheme.onSurface;
     if (isPrivateChannel) {
       var icon = Icons.lock;
       return Container(
