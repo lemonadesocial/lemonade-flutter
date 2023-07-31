@@ -19,8 +19,9 @@ class _CollapsibleSectionState extends State<CollapsibleSection> {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return Theme(
-        data:
-            lemonadeAppDarkThemeData.copyWith(dividerColor: Colors.transparent),
+        data: Theme.of(context).copyWith(
+          dividerColor: Colors.transparent
+        ),
         child: ExpansionTile(
             initiallyExpanded: _isExpanded,
             onExpansionChanged: (expanded) {
