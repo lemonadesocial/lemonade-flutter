@@ -43,6 +43,7 @@ class ChatStackController extends State<ChatStackPage> {
     return isLogged
         ? AutoRouter()
         : Scaffold(
+            backgroundColor: Theme.of(context).colorScheme.primary,
             body: Center(
               child: Loading.defaultLoading(context),
             ),

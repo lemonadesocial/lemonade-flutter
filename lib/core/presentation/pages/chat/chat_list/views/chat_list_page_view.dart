@@ -21,7 +21,6 @@ class ChatListPageView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final themeColor = Theme.of(context).colorScheme;
     final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: LemonAppBar(
@@ -41,7 +40,7 @@ class ChatListPageView extends StatelessWidget {
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: ThemeSvgIcon(
-                    color: themeColor.onSurface,
+                    color: colorScheme.onSurface,
                     builder: (filter) => Assets.icons.icLemonadeWhite.svg(),
                   ),
                 ),
@@ -51,7 +50,7 @@ class ChatListPageView extends StatelessWidget {
         ],
       ),
       endDrawer: SpacesDrawer(),
-      backgroundColor: themeColor.primary,
+      backgroundColor: colorScheme.primary,
       body: SafeArea(
         child: StreamBuilder(
           stream: getIt<MatrixService>()
