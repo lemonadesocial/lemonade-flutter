@@ -1,6 +1,13 @@
 # Lemonade Flutter App
+## Build Status
 
-[![Codemagic build status](https://api.codemagic.io/apps/6493f698db20b1801c5e821b/staging-workflow/status_badge.svg)](https://codemagic.io/apps/6493f698db20b1801c5e821b/staging-workflow/latest_build)
+### Build Staging iOS
+
+| Environment             | Status                                                                                                    |
+|-------------------------|-----------------------------------------------------------------------------------------------------------|
+| Build Staging iOS       | [![iOS Staging Build Status](https://api.codemagic.io/apps/6493f698db20b1801c5e821b/ios-staging/status_badge.svg)](https://codemagic.io/apps/6493f698db20b1801c5e821b/ios-staging/latest_build)       |
+| Build Staging Android   | [![Android Staging Build Status](https://api.codemagic.io/apps/6493f698db20b1801c5e821b/android-staging/status_badge.svg)](https://codemagic.io/apps/6493f698db20b1801c5e821b/android-staging/latest_build)   |
+| Build Production (iOS and Android)       | [![iOS and Android Production Build Status](https://api.codemagic.io/apps/6493f698db20b1801c5e821b/ios-android-production/status_badge.svg)](https://codemagic.io/apps/6493f698db20b1801c5e821b/ios-android-production/latest_build) |
 
 ## Introduction
 
