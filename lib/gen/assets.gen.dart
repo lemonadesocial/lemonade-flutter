@@ -146,9 +146,6 @@ class $AssetsIconsGen {
   SvgGenImage get icLinkedin =>
       const SvgGenImage('assets/icons/ic_linkedin.svg');
 
-  /// File path: assets/icons/ic_lock.svg
-  SvgGenImage get icLock => const SvgGenImage('assets/icons/ic_lock.svg');
-
   /// File path: assets/icons/ic_matches.svg
   SvgGenImage get icMatches => const SvgGenImage('assets/icons/ic_matches.svg');
 
@@ -173,14 +170,6 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_people_alt.svg
   SvgGenImage get icPeopleAlt =>
       const SvgGenImage('assets/icons/ic_people_alt.svg');
-
-  /// File path: assets/icons/ic_private_channel.svg
-  SvgGenImage get icPrivateChannel =>
-      const SvgGenImage('assets/icons/ic_private_channel.svg');
-
-  /// File path: assets/icons/ic_public_channel.svg
-  SvgGenImage get icPublicChannel =>
-      const SvgGenImage('assets/icons/ic_public_channel.svg');
 
   /// File path: assets/icons/ic_qr.svg
   SvgGenImage get icQr => const SvgGenImage('assets/icons/ic_qr.svg');
@@ -239,7 +228,6 @@ class $AssetsIconsGen {
         icLemonOutline,
         icLemonadeWhite,
         icLinkedin,
-        icLock,
         icMatches,
         icMenu,
         icMoreHoriz,
@@ -247,8 +235,6 @@ class $AssetsIconsGen {
         icNavigationLine,
         icNews,
         icPeopleAlt,
-        icPrivateChannel,
-        icPublicChannel,
         icQr,
         icSearch,
         icShare,
