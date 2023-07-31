@@ -1,4 +1,3 @@
-import 'package:app/theme/theme.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 
