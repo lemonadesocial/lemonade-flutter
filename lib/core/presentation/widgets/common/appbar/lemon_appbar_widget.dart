@@ -8,10 +8,13 @@ class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget? leading;
   final String? title;
   final List<Widget>? actions;
-  final double? actionsHeight;
 
-  const LemonAppBar(
-      {super.key, this.title, this.leading, this.actions, this.actionsHeight});
+  const LemonAppBar({
+    super.key,
+    this.title,
+    this.leading,
+    this.actions,
+  });
 
   @override
   Size get preferredSize => Size.fromHeight(60);
@@ -62,7 +65,7 @@ class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
                     (item) => Container(
                       margin: EdgeInsets.only(left: Spacing.medium),
                       width: Sizing.small,
-                      height: actionsHeight ?? preferredSize.height,
+                      height: preferredSize.height,
                       child: item,
                     ),
                   )
@@ -71,7 +74,7 @@ class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
           : Container(
               margin: EdgeInsets.only(left: Spacing.medium),
               width: Sizing.small,
-              height: actionsHeight ?? preferredSize.height,
+              height: preferredSize.height,
             ),
     );
   }
