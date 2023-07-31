@@ -1,9 +1,9 @@
 /// Generated file. Do not edit.
 ///
 /// Locales: 1
-/// Strings: 70
+/// Strings: 73
 ///
-/// Built on 2023-07-29 at 22:09 UTC
+/// Built on 2023-07-31 at 06:28 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -147,6 +147,7 @@ class _I18nEn implements BaseTranslations<AppLocale, _I18nEn> {
 
 	// Translations
 	late final _I18nPostEn post = _I18nPostEn._(_root);
+	late final _I18nChatEn chat = _I18nChatEn._(_root);
 	late final _I18nNftEn nft = _I18nNftEn._(_root);
 	late final _I18nAuthEn auth = _I18nAuthEn._(_root);
 	late final _I18nNotificationEn notification = _I18nNotificationEn._(_root);
@@ -162,6 +163,18 @@ class _I18nPostEn {
 
 	// Translations
 	String get noPost => 'No posts yet';
+}
+
+// Path: chat
+class _I18nChatEn {
+	_I18nChatEn._(this._root);
+
+	final _I18nEn _root; // ignore: unused_field
+
+	// Translations
+	String get unread => 'unread';
+	String get channels => 'channels';
+	String get directMessages => 'direct messages';
 }
 
 // Path: nft
@@ -321,6 +334,9 @@ extension on _I18nEn {
 	dynamic _flatMapFunction(String path) {
 		switch (path) {
 			case 'post.noPost': return 'No posts yet';
+			case 'chat.unread': return 'unread';
+			case 'chat.channels': return 'channels';
+			case 'chat.directMessages': return 'direct messages';
 			case 'nft.onSale': return 'on sale';
 			case 'nft.created': return 'created';
 			case 'nft.collected': return 'collected';
