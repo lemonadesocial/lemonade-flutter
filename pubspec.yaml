@@ -79,6 +79,17 @@ dependencies:
   # wallet
   walletconnect_flutter_v2: ^2.0.12
 
+  # matrix
+  matrix: ^0.22.1
+  flutter_olm: ^1.2.0
+  flutter_openssl_crypto: ^0.1.0
+
+dependency_overrides: 
+  matrix_api_lite:
+    git:
+      url: https://github.com/mthinh/dart_matrix_api_lite.git
+      ref: main
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

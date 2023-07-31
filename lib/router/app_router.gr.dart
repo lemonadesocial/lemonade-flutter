@@ -8,30 +8,30 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:app/core/presentation/pages/auth/login_page.dart' as _i2;
+import 'package:app/core/presentation/pages/auth/login_page.dart' as _i6;
 import 'package:app/core/presentation/pages/chat/chat_detail/chat_detail_page.dart'
-    as _i15;
+    as _i5;
 import 'package:app/core/presentation/pages/chat/chat_list/chat_list_page.dart'
-    as _i14;
+    as _i3;
 import 'package:app/core/presentation/pages/chat/chat_setting/chat_setting_page.dart'
-    as _i13;
-import 'package:app/core/presentation/pages/chat/chat_stack_page.dart' as _i16;
+    as _i2;
+import 'package:app/core/presentation/pages/chat/chat_stack_page.dart' as _i4;
 import 'package:app/core/presentation/pages/event/event_detail_page.dart'
-    as _i12;
+    as _i16;
 import 'package:app/core/presentation/pages/event/events_listing_page.dart'
-    as _i11;
+    as _i15;
 import 'package:app/core/presentation/pages/home/home_page.dart' as _i1;
 import 'package:app/core/presentation/pages/notification/notifications_listing_page.dart'
-    as _i3;
+    as _i7;
 import 'package:app/core/presentation/pages/poap/popap_listing_page.dart'
-    as _i5;
+    as _i9;
 import 'package:app/core/presentation/pages/profile/my_profile_page.dart'
-    as _i6;
-import 'package:app/core/presentation/pages/profile/profile_page.dart' as _i7;
-import 'package:app/core/presentation/pages/root/empty_page.dart' as _i10;
-import 'package:app/core/presentation/pages/root/root_page.dart' as _i9;
-import 'package:app/core/presentation/pages/wallet/wallet_page.dart' as _i8;
-import 'package:app/core/presentation/pages/webview/webview_page.dart' as _i4;
+    as _i10;
+import 'package:app/core/presentation/pages/profile/profile_page.dart' as _i11;
+import 'package:app/core/presentation/pages/root/empty_page.dart' as _i14;
+import 'package:app/core/presentation/pages/root/root_page.dart' as _i13;
+import 'package:app/core/presentation/pages/wallet/wallet_page.dart' as _i12;
+import 'package:app/core/presentation/pages/webview/webview_page.dart' as _i8;
 import 'package:auto_route/auto_route.dart' as _i17;
 import 'package:flutter/cupertino.dart' as _i19;
 import 'package:flutter/material.dart' as _i18;
@@ -47,23 +47,47 @@ abstract class $AppRouter extends _i17.RootStackRouter {
         child: const _i1.HomePage(),
       );
     },
+    ChatSettingRoute.name: (routeData) {
+      return _i17.AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const _i2.ChatSettingPage(),
+      );
+    },
+    ChatListRoute.name: (routeData) {
+      return _i17.AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const _i3.ChatListPage(),
+      );
+    },
+    ChatStackRoute.name: (routeData) {
+      return _i17.AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const _i4.ChatStackPage(),
+      );
+    },
+    ChatDetailRoute.name: (routeData) {
+      return _i17.AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const _i5.ChatDetailPage(),
+      );
+    },
     LoginRoute.name: (routeData) {
       return _i17.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i2.LoginPage(),
+        child: const _i6.LoginPage(),
       );
     },
     NotificationRoute.name: (routeData) {
       return _i17.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i3.NotificationPage(),
+        child: _i7.NotificationPage(),
       );
     },
     WebviewRoute.name: (routeData) {
       final args = routeData.argsAs<WebviewRouteArgs>();
       return _i17.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i4.WebviewPage(
+        child: _i8.WebviewPage(
           key: args.key,
           uri: args.uri,
         ),
@@ -74,13 +98,13 @@ abstract class $AppRouter extends _i17.RootStackRouter {
           orElse: () => const PoapListingRouteArgs());
       return _i17.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i5.PoapListingPage(key: args.key),
+        child: _i9.PoapListingPage(key: args.key),
       );
     },
     MyProfileRoute.name: (routeData) {
       return _i17.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i6.MyProfilePage(),
+        child: const _i10.MyProfilePage(),
       );
     },
     ProfileRoute.name: (routeData) {
@@ -89,7 +113,7 @@ abstract class $AppRouter extends _i17.RootStackRouter {
           orElse: () => ProfileRouteArgs(userId: pathParams.getString('id')));
       return _i17.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i7.ProfilePage(
+        child: _i11.ProfilePage(
           key: args.key,
           userId: args.userId,
         ),
@@ -98,25 +122,25 @@ abstract class $AppRouter extends _i17.RootStackRouter {
     WalletRoute.name: (routeData) {
       return _i17.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i8.WalletPage(),
+        child: const _i12.WalletPage(),
       );
     },
     RootRoute.name: (routeData) {
       return _i17.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i9.RootPage(),
+        child: const _i13.RootPage(),
       );
     },
     EmptyRoute.name: (routeData) {
       return _i17.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i10.EmptyPage(),
+        child: const _i14.EmptyPage(),
       );
     },
     EventsListingRoute.name: (routeData) {
       return _i17.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i11.EventsListingPage(),
+        child: _i15.EventsListingPage(),
       );
     },
     EventDetailRoute.name: (routeData) {
@@ -128,35 +152,11 @@ abstract class $AppRouter extends _i17.RootStackRouter {
               ));
       return _i17.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i12.EventDetailPage(
+        child: _i16.EventDetailPage(
           key: args.key,
           eventId: args.eventId,
           eventName: args.eventName,
         ),
-      );
-    },
-    ChatSettingRoute.name: (routeData) {
-      return _i17.AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const _i13.ChatSettingPage(),
-      );
-    },
-    ChatListRoute.name: (routeData) {
-      return _i17.AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const _i14.ChatListPage(),
-      );
-    },
-    ChatDetailRoute.name: (routeData) {
-      return _i17.AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const _i15.ChatDetailPage(),
-      );
-    },
-    ChatStackRoute.name: (routeData) {
-      return _i17.AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const _i16.ChatStackPage(),
       );
     },
   };
@@ -177,7 +177,63 @@ class HomeRoute extends _i17.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i2.LoginPage]
+/// [_i2.ChatSettingPage]
+class ChatSettingRoute extends _i17.PageRouteInfo<void> {
+  const ChatSettingRoute({List<_i17.PageRouteInfo>? children})
+      : super(
+          ChatSettingRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'ChatSettingRoute';
+
+  static const _i17.PageInfo<void> page = _i17.PageInfo<void>(name);
+}
+
+/// generated route for
+/// [_i3.ChatListPage]
+class ChatListRoute extends _i17.PageRouteInfo<void> {
+  const ChatListRoute({List<_i17.PageRouteInfo>? children})
+      : super(
+          ChatListRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'ChatListRoute';
+
+  static const _i17.PageInfo<void> page = _i17.PageInfo<void>(name);
+}
+
+/// generated route for
+/// [_i4.ChatStackPage]
+class ChatStackRoute extends _i17.PageRouteInfo<void> {
+  const ChatStackRoute({List<_i17.PageRouteInfo>? children})
+      : super(
+          ChatStackRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'ChatStackRoute';
+
+  static const _i17.PageInfo<void> page = _i17.PageInfo<void>(name);
+}
+
+/// generated route for
+/// [_i5.ChatDetailPage]
+class ChatDetailRoute extends _i17.PageRouteInfo<void> {
+  const ChatDetailRoute({List<_i17.PageRouteInfo>? children})
+      : super(
+          ChatDetailRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'ChatDetailRoute';
+
+  static const _i17.PageInfo<void> page = _i17.PageInfo<void>(name);
+}
+
+/// generated route for
+/// [_i6.LoginPage]
 class LoginRoute extends _i17.PageRouteInfo<void> {
   const LoginRoute({List<_i17.PageRouteInfo>? children})
       : super(
@@ -191,7 +247,7 @@ class LoginRoute extends _i17.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i3.NotificationPage]
+/// [_i7.NotificationPage]
 class NotificationRoute extends _i17.PageRouteInfo<void> {
   const NotificationRoute({List<_i17.PageRouteInfo>? children})
       : super(
@@ -205,7 +261,7 @@ class NotificationRoute extends _i17.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i4.WebviewPage]
+/// [_i8.WebviewPage]
 class WebviewRoute extends _i17.PageRouteInfo<WebviewRouteArgs> {
   WebviewRoute({
     _i18.Key? key,
@@ -243,7 +299,7 @@ class WebviewRouteArgs {
 }
 
 /// generated route for
-/// [_i5.PoapListingPage]
+/// [_i9.PoapListingPage]
 class PoapListingRoute extends _i17.PageRouteInfo<PoapListingRouteArgs> {
   PoapListingRoute({
     _i18.Key? key,
@@ -272,7 +328,7 @@ class PoapListingRouteArgs {
 }
 
 /// generated route for
-/// [_i6.MyProfilePage]
+/// [_i10.MyProfilePage]
 class MyProfileRoute extends _i17.PageRouteInfo<void> {
   const MyProfileRoute({List<_i17.PageRouteInfo>? children})
       : super(
@@ -286,7 +342,7 @@ class MyProfileRoute extends _i17.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i7.ProfilePage]
+/// [_i11.ProfilePage]
 class ProfileRoute extends _i17.PageRouteInfo<ProfileRouteArgs> {
   ProfileRoute({
     _i18.Key? key,
@@ -325,7 +381,7 @@ class ProfileRouteArgs {
 }
 
 /// generated route for
-/// [_i8.WalletPage]
+/// [_i12.WalletPage]
 class WalletRoute extends _i17.PageRouteInfo<void> {
   const WalletRoute({List<_i17.PageRouteInfo>? children})
       : super(
@@ -339,7 +395,7 @@ class WalletRoute extends _i17.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i9.RootPage]
+/// [_i13.RootPage]
 class RootRoute extends _i17.PageRouteInfo<void> {
   const RootRoute({List<_i17.PageRouteInfo>? children})
       : super(
@@ -353,7 +409,7 @@ class RootRoute extends _i17.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i10.EmptyPage]
+/// [_i14.EmptyPage]
 class EmptyRoute extends _i17.PageRouteInfo<void> {
   const EmptyRoute({List<_i17.PageRouteInfo>? children})
       : super(
@@ -367,7 +423,7 @@ class EmptyRoute extends _i17.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i11.EventsListingPage]
+/// [_i15.EventsListingPage]
 class EventsListingRoute extends _i17.PageRouteInfo<void> {
   const EventsListingRoute({List<_i17.PageRouteInfo>? children})
       : super(
@@ -381,7 +437,7 @@ class EventsListingRoute extends _i17.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i12.EventDetailPage]
+/// [_i16.EventDetailPage]
 class EventDetailRoute extends _i17.PageRouteInfo<EventDetailRouteArgs> {
   EventDetailRoute({
     _i19.Key? key,
@@ -425,60 +481,4 @@ class EventDetailRouteArgs {
   String toString() {
     return 'EventDetailRouteArgs{key: $key, eventId: $eventId, eventName: $eventName}';
   }
-}
-
-/// generated route for
-/// [_i13.ChatSettingPage]
-class ChatSettingRoute extends _i17.PageRouteInfo<void> {
-  const ChatSettingRoute({List<_i17.PageRouteInfo>? children})
-      : super(
-          ChatSettingRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'ChatSettingRoute';
-
-  static const _i17.PageInfo<void> page = _i17.PageInfo<void>(name);
-}
-
-/// generated route for
-/// [_i14.ChatListPage]
-class ChatListRoute extends _i17.PageRouteInfo<void> {
-  const ChatListRoute({List<_i17.PageRouteInfo>? children})
-      : super(
-          ChatListRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'ChatListRoute';
-
-  static const _i17.PageInfo<void> page = _i17.PageInfo<void>(name);
-}
-
-/// generated route for
-/// [_i15.ChatDetailPage]
-class ChatDetailRoute extends _i17.PageRouteInfo<void> {
-  const ChatDetailRoute({List<_i17.PageRouteInfo>? children})
-      : super(
-          ChatDetailRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'ChatDetailRoute';
-
-  static const _i17.PageInfo<void> page = _i17.PageInfo<void>(name);
-}
-
-/// generated route for
-/// [_i16.ChatStackPage]
-class ChatStackRoute extends _i17.PageRouteInfo<void> {
-  const ChatStackRoute({List<_i17.PageRouteInfo>? children})
-      : super(
-          ChatStackRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'ChatStackRoute';
-
-  static const _i17.PageInfo<void> page = _i17.PageInfo<void>(name);
 }
