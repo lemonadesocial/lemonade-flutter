@@ -22,5 +22,9 @@ class AppConfig {
   // Wallet connect
   static get walletConnectProjectId => dotenv.env["WALLET_CONNECT_PROJECT_ID"];
 
+  // Matrix 
+  static get matrixHomeserver => dotenv.env["MATRIX_HOMESERVER"];
+
   static get isProduction => dotenv.env['ENV'] == 'PROD';
+
 }
