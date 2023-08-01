@@ -44,24 +44,25 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
 
   // Event handlers
   _onFetchRooms(ChatListEventFetchRooms event, Emitter emit) async {
+    final rooms = _getRoom(spaceId);
     emit(
       state.copyWith(
         channelRooms: List.from(
-          matrixClient.rooms
+          rooms
               .where(
                 RoomTypeFilter.getRoomByRoomTypeFilter(RoomTypeFilter.groups),
               )
               .toList(),
         ),
         unreadDmRooms: List.from(
-          matrixClient.rooms
+          rooms
               .where(
                 (room) => RoomTypeFilter.getRoomByRoomTypeFilter(RoomTypeFilter.messages)(room) && room.isUnread,
               )
               .toList(),
         ),
         dmRooms: List.from(
-          matrixClient.rooms
+          rooms
               .where(
                 (room) => RoomTypeFilter.getRoomByRoomTypeFilter(RoomTypeFilter.messages)(room) && !room.isUnread,
               )
@@ -69,6 +70,25 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
         ),
       ),
     );
+  }
+
+  List<Room> _getRoom(String? spaceId) {
+    if (spaceId == null) return matrixClient.rooms;
+
+    var space = matrixClient.getRoomById(spaceId);
+
+    if (space == null) return [];
+
+    List<Room> rooms = [];
+
+    for (var spaceChild in space.spaceChildren) {
+      if (spaceChild.roomId != null) {
+        final childRoom = matrixClient.getRoomById(spaceChild.roomId!);
+        if (childRoom != null) rooms.add(childRoom);
+      }
+    }
+
+    return rooms;
   }
 }
 

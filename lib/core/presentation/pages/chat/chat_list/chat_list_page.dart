@@ -1,4 +1,5 @@
 import 'package:app/core/application/chat/chat_list_bloc/chat_list_bloc.dart';
+import 'package:app/core/application/chat/chat_space_bloc/chat_space_bloc.dart';
 import 'package:app/core/presentation/pages/chat/chat_list/views/chat_list_page_view.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -15,9 +16,20 @@ class ChatListPage extends StatefulWidget {
 class _ChatListPageState extends State<ChatListPage> {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => ChatListBloc()..add(ChatListEvent.fetchRooms()),
-      child: ChatListPageView(),
+    return BlocBuilder<ChatSpaceBloc, ChatSpaceState>(
+      builder: (context, chatSpaceState) {
+        return BlocProvider(
+          key: ValueKey(
+            chatSpaceState.activeSpace?.id
+          ),
+          create: (context) => ChatListBloc(
+            spaceId: chatSpaceState.activeSpace?.id,
+          )..add(
+              ChatListEvent.fetchRooms(),
+            ),
+          child: ChatListPageView(),
+        );
+      },
     );
   }
 }

@@ -31,10 +31,14 @@ class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 buildLeading(),
-                Center(
-                  child: Text(
-                    title ?? '',
-                    style: Typo.large,
+                Flexible(
+                  child: Center(
+                    child: Text(
+                      title ?? '',
+                      style: Typo.large,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                 ),
                 buildActions(),

@@ -24,6 +24,8 @@ class DirectMessageItem extends StatelessWidget {
         client: getIt<MatrixService>().client,
         mxContent: avatarUrl,
         size: 28,
+        name: roomName,
+        fontSize: Typo.small.fontSize!,
       ),
     );
   }

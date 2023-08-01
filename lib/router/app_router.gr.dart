@@ -62,7 +62,7 @@ abstract class $AppRouter extends _i17.RootStackRouter {
     ChatStackRoute.name: (routeData) {
       return _i17.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i4.ChatStackPage(),
+        child: _i17.WrappedRoute(child: const _i4.ChatStackPage()),
       );
     },
     ChatDetailRoute.name: (routeData) {

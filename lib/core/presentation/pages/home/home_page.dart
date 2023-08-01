@@ -32,11 +32,13 @@ class _HomePageViewState extends State<HomePage> {
             },
             child: Text("Navigate to poap"),
           ),
-          ElevatedButton(
-            onPressed: () {
+          GestureDetector(
+            onTap: () {
               AutoRouter.of(context).navigate(ChatListRoute());
             },
-            child: Text("Navigate to Chat"),
+            child: SizedBox(
+              child: Text("Navigate to Chat"),
+            ),
           )
         ]),
       ),

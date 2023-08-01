@@ -1,9 +1,9 @@
 /// Generated file. Do not edit.
 ///
 /// Locales: 1
-/// Strings: 73
+/// Strings: 75
 ///
-/// Built on 2023-07-31 at 06:28 UTC
+/// Built on 2023-08-01 at 03:23 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -175,6 +175,8 @@ class _I18nChatEn {
 	String get unread => 'unread';
 	String get channels => 'channels';
 	String get directMessages => 'direct messages';
+	String get spaces => 'spaces';
+	String get home => 'home';
 }
 
 // Path: nft
@@ -337,6 +339,8 @@ extension on _I18nEn {
 			case 'chat.unread': return 'unread';
 			case 'chat.channels': return 'channels';
 			case 'chat.directMessages': return 'direct messages';
+			case 'chat.spaces': return 'spaces';
+			case 'chat.home': return 'home';
 			case 'nft.onSale': return 'on sale';
 			case 'nft.created': return 'created';
 			case 'nft.collected': return 'collected';
