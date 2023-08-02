@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:app/core/config.dart';
 import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/widgets/event/event_buy_ticket_button_widget.dart';
@@ -24,11 +25,14 @@ class EventPostCard extends StatelessWidget {
     required this.event,
   });
 
-  DbFile? get eventPhoto => event.newNewPhotosExpanded?.isNotEmpty == true ? event.newNewPhotosExpanded!.first : null;
+  DbFile? get eventPhoto => event.newNewPhotosExpanded?.isNotEmpty == true
+      ? event.newNewPhotosExpanded!.first
+      : null;
 
   String get eventTitle => event.title ?? '';
 
-  String get hostName => event.hostExpanded?.displayName ?? event.hostExpanded?.username ?? '';
+  String get hostName =>
+      event.hostExpanded?.displayName ?? event.hostExpanded?.username ?? '';
 
   int? get cohostsCount => event.cohostsExpanded?.length;
 
@@ -38,7 +42,8 @@ class EventPostCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         AutoRouter.of(context).navigate(
-          EventDetailRoute(eventId: event.id ?? '', eventName: event.title ?? ''),
+          EventDetailRoute(
+              eventId: event.id ?? '', eventName: event.title ?? ''),
         );
       },
       child: Container(
@@ -67,9 +72,9 @@ class EventPostCard extends StatelessWidget {
               ],
             ),
             Positioned(
-              top: Spacing.extraSmall,
-              right: Spacing.extraSmall,
-              child: _buildEventBadge(colorScheme))
+                top: Spacing.extraSmall,
+                right: Spacing.extraSmall,
+                child: _buildEventBadge(colorScheme))
           ],
         ),
       ),
@@ -97,7 +102,8 @@ class EventPostCard extends StatelessWidget {
           TextSpan(
             text: hostName,
             children: [
-              if (cohostsCount != null && cohostsCount != 0) TextSpan(text: ' +${cohostsCount}'),
+              if (cohostsCount != null && cohostsCount != 0)
+                TextSpan(text: ' +${cohostsCount}'),
             ],
           ),
         ),
@@ -113,7 +119,9 @@ class EventPostCard extends StatelessWidget {
       height: Sizing.small,
       child: Stack(
         children: hosts.asMap().entries.map((entry) {
-          final file = (entry.value?.newPhotosExpanded != null) ? entry.value?.newPhotosExpanded!.first : null;
+          final file = (entry.value?.newPhotosExpanded != null)
+              ? entry.value?.newPhotosExpanded!.first
+              : null;
           return Positioned(
             right: entry.key * 12,
             child: Container(
@@ -123,7 +131,8 @@ class EventPostCard extends StatelessWidget {
                   color: colorScheme.primary,
                   border: Border.all(color: colorScheme.outline),
                   borderRadius: BorderRadius.circular(Sizing.small)),
-              child: LemonCircleAvatar(url: ImageUtils.generateUrl(file: file), size: Sizing.small),
+              child: LemonCircleAvatar(
+                  url: ImageUtils.generateUrl(file: file), size: Sizing.small),
             ),
           );
         }).toList(),
@@ -139,7 +148,8 @@ class EventPostCard extends StatelessWidget {
             text: "${event.title}\n",
             children: [
               TextSpan(
-                style: Typo.small.copyWith(color: colorScheme.onSurface, height: 1.5),
+                style: Typo.small
+                    .copyWith(color: colorScheme.onSurface, height: 1.5),
                 text: DateFormatUtils.fullDateWithTime(event.start),
               )
             ],
@@ -152,6 +162,12 @@ class EventPostCard extends StatelessWidget {
   }
 
   Container _buildEventPhoto() {
+    final imageUrl = eventPhoto != null
+        ? ImageUtils.generateUrl(
+            file: eventPhoto,
+            imageConfig: ImageConfig.eventPhoto,
+          )
+        : '${AppConfig.assetPrefix}/assets/images/no_photo_event.png';
     return Container(
       height: 170,
       width: double.infinity,
@@ -161,10 +177,7 @@ class EventPostCard extends StatelessWidget {
           topLeft: Radius.circular(LemonRadius.normal),
         ),
         child: CachedNetworkImage(
-          imageUrl: ImageUtils.generateUrl(
-            file: eventPhoto,
-            imageConfig: ImageConfig.eventPhoto,
-          ),
+          imageUrl: imageUrl,
           errorWidget: (_, __, ___) => ImagePlaceholder.defaultPlaceholder(),
           placeholder: (_, __) => ImagePlaceholder.defaultPlaceholder(),
           fit: BoxFit.cover,

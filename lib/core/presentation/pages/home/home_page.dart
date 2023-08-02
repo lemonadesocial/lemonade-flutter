@@ -78,41 +78,45 @@ class _HomePageViewState extends State<_HomeListingView> {
       backgroundColor: LemonColor.black,
       body: Container(
         child: Column(children: [
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: Spacing.small),
-            child: WhatOnYourMindInput(),
-          ),
-          SizedBox(height: Spacing.smMedium),
+          Padding(
+              padding: EdgeInsets.only(
+                  left: Spacing.small,
+                  right: Spacing.small,
+                  bottom: Spacing.small),
+              child: WhatOnYourMindInput()),
           HorizontalLine(),
           Expanded(
-              child: BlocBuilder<NewsfeedListingBloc, NewsfeedListingState>(
-                builder: (context, state) {
-                  return state.when(
-                    loading: () => Loading.defaultLoading(context),
-                    fetched: (newsfeed) {
-                      if (newsfeed.isEmpty) {
-                        return Center(
-                          child: EmptyList(
-                              emptyText: t.notification.emptyNotifications),
-                        );
-                      }
-                      return ListView.separated(
-                        itemBuilder: (ctx, index) => index == newsfeed.length
-                            ? const SizedBox(height: 80)
-                            : PostProfileCard(
-                                key: Key(newsfeed[index].id),
-                                post: newsfeed[index]),
-                        separatorBuilder: (ctx, index) =>
-                            SizedBox(height: Spacing.small),
-                        itemCount: newsfeed.length + 1,
+              child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: Spacing.small),
+                  child: BlocBuilder<NewsfeedListingBloc, NewsfeedListingState>(
+                    builder: (context, state) {
+                      return state.when(
+                        loading: () => Loading.defaultLoading(context),
+                        fetched: (newsfeed) {
+                          if (newsfeed.isEmpty) {
+                            return Center(
+                              child: EmptyList(
+                                  emptyText: t.notification.emptyNotifications),
+                            );
+                          }
+                          return ListView.separated(
+                            itemBuilder: (ctx, index) =>
+                                index == newsfeed.length
+                                    ? const SizedBox(height: 80)
+                                    : PostProfileCard(
+                                        key: Key(newsfeed[index].id),
+                                        post: newsfeed[index]),
+                            separatorBuilder: (ctx, index) =>
+                                SizedBox(height: Spacing.small),
+                            itemCount: newsfeed.length + 1,
+                          );
+                        },
+                        failure: () => Center(
+                          child: Text(t.common.somethingWrong),
+                        ),
                       );
                     },
-                    failure: () => Center(
-                      child: Text(t.common.somethingWrong),
-                    ),
-                  );
-                },
-              )),
+                  ))),
         ]),
       ),
     );

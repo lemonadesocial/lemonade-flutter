@@ -9,6 +9,7 @@ import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/avatar_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
 import 'package:app/gen/assets.gen.dart';
+import 'package:app/gen/fonts.gen.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -23,7 +24,7 @@ class PostProfileCard extends StatelessWidget {
     required this.post,
   });
 
-  String get postUsername => post.userExpanded?.username ?? '';
+  String get postName => post.userExpanded?.name ?? '';
 
   String get postText => post.text ?? '';
 
@@ -56,16 +57,20 @@ class PostProfileCard extends StatelessWidget {
                 Row(
                   mainAxisSize: MainAxisSize.max,
                   children: [
-                    Text(postUsername),
+                    Text(postName,
+                        style: Typo.medium
+                            .copyWith(fontFamily: FontFamily.circularStd)),
                     if (postCreatedAt != null)
                       Text(
-                        ' • ${timeago.format(postCreatedAt!)}',
-                        style: Typo.medium.copyWith(color: colorScheme.onSurface),
+                        '  •  ${timeago.format(postCreatedAt!)}',
+                        style:
+                            Typo.medium.copyWith(color: colorScheme.onSurface),
                       ),
                     Spacer(),
                     ThemeSvgIcon(
                       color: colorScheme.onSurface,
-                      builder: (filter) => Assets.icons.icMoreHoriz.svg(colorFilter: filter),
+                      builder: (filter) => Assets.icons.icMoreHoriz
+                          .svg(colorFilter: filter, width: 18, height: 18),
                     ),
                   ],
                 ),
@@ -73,7 +78,10 @@ class PostProfileCard extends StatelessWidget {
                   SizedBox(height: Spacing.superExtraSmall),
                   Text(
                     postText,
-                    style: Typo.medium.copyWith(color: colorScheme.onSurface),
+                    style: Typo.medium.copyWith(
+                        color: colorScheme.onSurface,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: FontFamily.circularStd),
                   ),
                 ],
                 if (postEvent != null) ...[
