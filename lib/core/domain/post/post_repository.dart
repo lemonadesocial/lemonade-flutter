@@ -5,4 +5,5 @@ import 'package:dartz/dartz.dart';
 
 abstract class PostRepository {
   Future<Either<Failure, List<Post>>> getPosts({GetPostsInput? input});
+  Future<Either<Failure, List<Post>>> getNewsfeed(int? offset);
 }

@@ -20,15 +20,38 @@ class PostRepositoryImpl implements PostRepository {
       QueryOptions(
         document: getPostsQuery,
         variables: input?.toJson() ?? {},
-        parserFn: (data) => List.from(data['getPosts'] ?? []).map(
-          (item) => Post.fromDto(
-            PostDto.fromJson(item),
-          ),
-        ).toList(),
+        parserFn: (data) => List.from(data['getPosts'] ?? [])
+            .map(
+              (item) => Post.fromDto(
+                PostDto.fromJson(item),
+              ),
+            )
+            .toList(),
       ),
     );
 
-    if(result.hasException) return Left(Failure());
+    if (result.hasException) return Left(Failure());
+    return Right(result.parsedData ?? []);
+  }
+
+  @override
+  Future<Either<Failure, List<Post>>> getNewsfeed(int? offset) async {
+    print("getNewsfeed");
+    final result = await _client.query(
+      QueryOptions(
+          document: getNewsfeedQuery,
+          parserFn: (data) {
+            return List.from(data['getNewsfeed']['posts'] ?? [])
+                .map(
+                  (item) => Post.fromDto(
+                    PostDto.fromJson(item),
+                  ),
+                )
+                .toList();
+          }
+          ),
+    );
+    if (result.hasException) return Left(Failure());
     return Right(result.parsedData ?? []);
   }
 }
