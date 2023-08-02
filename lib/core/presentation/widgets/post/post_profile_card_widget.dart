@@ -6,6 +6,7 @@ import 'package:app/core/presentation/widgets/hero_image_viewer_widget.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/utils/avatar_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/theme/sizing.dart';
@@ -21,9 +22,6 @@ class PostProfileCard extends StatelessWidget {
     super.key,
     required this.post,
   });
-
-  DbFile? get postUserAvatar =>
-      post.userExpanded?.newPhotosExpanded?.isNotEmpty == true ? post.userExpanded!.newPhotosExpanded![0] : null;
 
   String get postUsername => post.userExpanded?.username ?? '';
 
@@ -47,7 +45,7 @@ class PostProfileCard extends StatelessWidget {
           // Card left
           LemonCircleAvatar(
             size: Sizing.medium,
-            url: ImageUtils.generateUrl(file: postUserAvatar),
+            url: AvatarUtils.getAvatarUrl(user: post.userExpanded),
           ),
           SizedBox(width: Spacing.xSmall),
           // Card right
