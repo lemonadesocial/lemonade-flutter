@@ -1,22 +1,14 @@
+import 'package:app/core/application/chat/chat_space_bloc/chat_space_bloc.dart';
+import 'package:app/core/presentation/widgets/chat/matrix_avatar.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
-import 'package:app/gen/fonts.gen.dart';
-import 'package:app/theme/color.dart';
+import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
-
-class SpaceItem {
-  final String icon;
-  final String label;
-  final String subLabel;
-  final bool? selected;
-  SpaceItem(
-      {required this.icon,
-      required this.label,
-      required this.subLabel,
-      this.selected});
-}
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:matrix/matrix.dart';
 
 class SpacesDrawer extends StatelessWidget {
   const SpacesDrawer({super.key});
@@ -28,41 +20,54 @@ class SpacesDrawer extends StatelessWidget {
       child: Drawer(
         width: 300,
         backgroundColor: colorScheme.primary,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: EdgeInsets.symmetric(
-                vertical: Spacing.small,
-                horizontal: Spacing.smMedium,
+        child: BlocBuilder<ChatSpaceBloc, ChatSpaceState>(
+          builder: (context, chatSpaceState) => Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: EdgeInsets.symmetric(
+                  vertical: Spacing.small,
+                  horizontal: Spacing.smMedium,
+                ),
+                child: Row(
+                  children: [
+                    Text(
+                      StringUtils.capitalize(t.chat.spaces),
+                      style: Typo.extraMedium.copyWith(color: colorScheme.onPrimary),
+                    ),
+                  ],
+                ),
               ),
-              child: Row(children: [
-                Text("Spaces",
-                    style:
-                        Typo.extraMedium.copyWith(color: colorScheme.onPrimary))
-              ]),
-            ),
-            ...[
-              SpaceItem(
-                  icon:
-                      'https://play-lh.googleusercontent.com/AwVn1UZPqMMEPFR0jWqlmMFA8veTG3T-DRZ_BQjQahShQxAa8_7Cu5Fe9tlnRVTHPTGK',
-                  label: "Lemonade",
-                  subLabel: 'lemonade.social',
-                  selected: true),
-              SpaceItem(
-                  icon:
-                      'https://images.lemonade.social/eyJidWNrZXQiOiJsZW1vbmFkZS11cGxvYWRzLWV1LWNlbnRyYWwtMSIsImtleSI6IjY0YmZlNTU1YTRhZTUyY2ExMTQ3NmRjZi9waG90b3MvNjRiZmU1OGJkNjIyYTk3NGMyNTI0NTQyLnBuZyIsImVkaXRzIjp7InJlc2l6ZSI6eyJoZWlnaHQiOjUxMiwid2lkdGgiOjUxMiwiZml0IjoiY292ZXIifX19',
-                  label: "HER Nation",
-                  subLabel: 'hernation.ai'),
-              SpaceItem(
-                  icon:
-                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlDsismHhyTIf7eybUn4kw16dU-y6vm35yPMOf9yTGIvdFIjKQcEWZ3TmyECsr2Be6mbE&usqp=CAU',
-                  label: "PopEx",
-                  subLabel: 'lemonade.popex.net'),
-            ].map((item) => _buildSpaceItem(context, item: item)),
-            Spacer(),
-            _buildSpaceActions(context),
-          ],
+              _buildSpaceItem(
+                context,
+                isActive: chatSpaceState.activeSpace == null,
+                isRoot: true,
+                onTap: () {
+                  context.read<ChatSpaceBloc>().add(
+                        ChatSpaceEvent.setActiveSpace(space: null),
+                      );
+                  Navigator.of(context).pop();
+                },
+              ),
+              ...chatSpaceState.spaces
+                  .map(
+                    (space) => _buildSpaceItem(
+                      context,
+                      space: space,
+                      isActive: chatSpaceState.activeSpace?.id == space.id,
+                      onTap: () {
+                        context.read<ChatSpaceBloc>().add(
+                              ChatSpaceEvent.setActiveSpace(space: space),
+                            );
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  )
+                  .toList(),
+              Spacer(),
+              _buildSpaceActions(context),
+            ],
+          ),
         ),
       ),
     );
@@ -70,47 +75,74 @@ class SpacesDrawer extends StatelessWidget {
 
   Widget _buildSpaceItem(
     BuildContext context, {
-    required SpaceItem item,
+    Room? space,
+    bool isActive = false,
+    bool isRoot = false,
+    Function()? onTap,
   }) {
     final colorScheme = Theme.of(context).colorScheme;
-    var selected = item.selected ?? false;
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: Spacing.small),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(
-            10), // Set the border radius for the blue container
-        child: Container(
-          padding: EdgeInsets.symmetric(
-            vertical: Spacing.xSmall,
-            horizontal: Spacing.xSmall,
-          ),
-          color: selected ? LemonColor.white15 : Colors.transparent,
-          child: Row(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(6),
-                child: Image.network(
-                  item.icon,
-                  width: 42,
-                  height: 42,
-                  fit: BoxFit.contain,
-                ),
-              ),
-              SizedBox(width: Spacing.xSmall),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    item.label,
-                    style: Typo.medium.copyWith(color: colorScheme.onPrimary, fontFamily: FontFamily.switzerVariable),
+    final t = Translations.of(context);
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: Spacing.small),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(10), // Set the border radius for the blue container
+          child: Container(
+            padding: EdgeInsets.symmetric(
+              vertical: Spacing.xSmall,
+              horizontal: Spacing.xSmall,
+            ),
+            color: isActive ? colorScheme.surfaceVariant : Colors.transparent,
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                if (space != null)
+                  MatrixAvatar(
+                    mxContent: space.avatar,
+                    size: 42,
+                    name: space.name,
                   ),
-                  Text(
-                    item.subLabel,
-                    style: Typo.small.copyWith(color: LemonColor.white36),
-                  )
-                ],
-              ),
-            ],
+                if (space == null && isRoot)
+                  Container(
+                    width: 42,
+                    height: 42,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: ThemeSvgIcon(
+                      builder: (filter) => Assets.icons.icLemonadeWhite.svg(),
+                    ),
+                  ),
+                SizedBox(width: Spacing.xSmall),
+                Flexible(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        StringUtils.capitalize(isRoot ? t.common.lemonade : space?.getLocalizedDisplayname()),
+                        style: Typo.medium.copyWith(
+                          color: colorScheme.onPrimary.withOpacity(0.87),
+                        ),
+                        maxLines: 2,
+                      ),
+                      if (space?.canonicalAlias.isNotEmpty == true) ...[
+                        SizedBox(height: Spacing.superExtraSmall),
+                        Text(
+                          space!.canonicalAlias.replaceFirst("#", ""),
+                          style: Typo.small.copyWith(
+                            color: colorScheme.onSurfaceVariant,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                        ),
+                      ]
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

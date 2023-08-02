@@ -2,6 +2,7 @@ import 'package:app/core/config.dart';
 import 'package:app/core/data/matrix/matrix_mutation.dart';
 import 'package:app/core/gql.dart';
 import 'package:app/core/oauth/oauth.dart';
+import 'package:app/core/service/matrix/matrix_chat_space_extension.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
@@ -15,6 +16,7 @@ import 'package:path_provider/path_provider.dart';
 class MatrixService {
   static String clientName = 'LemonadeChat';
   static String dbName = 'matrix_lemonade_chat';
+
   late Client _client;
 
   Client get client => _client;
@@ -37,6 +39,7 @@ class MatrixService {
 
       if (tokenState == OAuthTokenState.invalid) {
         if (client.isLogged()) {
+          await clearChatSpaceBox();
           await _client.logout();
         }
       }
@@ -82,6 +85,7 @@ class MatrixService {
         KeyVerificationMethod.numbers,
         KeyVerificationMethod.emoji,
       },
+      // TODO: will figure out later the need of important state events
       // importantStateEvents: <String>{
       //   // To make room emotes work
       //   'im.ponies.room_emotes',
