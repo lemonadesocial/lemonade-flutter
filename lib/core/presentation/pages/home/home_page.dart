@@ -13,6 +13,7 @@ import 'package:app/core/service/shake/shake_service.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
@@ -64,7 +65,7 @@ class _HomePageViewState extends State<_HomeListingView> {
         actions: [
           GestureDetector(
             onTap: () {
-              AutoRouter.of(context).navigateNamed('/chat');
+              AutoRouter.of(context).navigate(ChatListRoute());
             },
             child: ThemeSvgIcon(
               color: themeColor.onSurface,
@@ -86,52 +87,39 @@ class _HomePageViewState extends State<_HomeListingView> {
               child: WhatOnYourMindInput()),
           HorizontalLine(),
           Expanded(
-              child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: Spacing.small),
-                  child: BlocBuilder<NewsfeedListingBloc, NewsfeedListingState>(
-                    builder: (context, state) {
-                      return state.when(
-                        loading: () => Loading.defaultLoading(context),
-                        fetched: (newsfeed) {
-                          if (newsfeed.isEmpty) {
-                            return Center(
-                              child: EmptyList(
-                                  emptyText: t.notification.emptyNotifications),
-                            );
-                          }
-                          return ListView.separated(
-                            itemBuilder: (ctx, index) =>
-                                index == newsfeed.length
-                                    ? const SizedBox(height: 80)
-                                    : PostProfileCard(
-                                        key: Key(newsfeed[index].id),
-                                        post: newsfeed[index]),
-                            separatorBuilder: (ctx, index) =>
-                                SizedBox(height: Spacing.small),
-                            itemCount: newsfeed.length + 1,
-                          );
-                        },
-                        failure: () => Center(
-                          child: Text(t.common.somethingWrong),
-                        ),
-                      );
-                    },
-                  ))),
+              child: BlocBuilder<NewsfeedListingBloc, NewsfeedListingState>(
+            builder: (context, state) {
+              return state.when(
+                loading: () => Loading.defaultLoading(context),
+                fetched: (newsfeed) {
+                  if (newsfeed.isEmpty) {
+                    return Center(
+                      child: EmptyList(
+                          emptyText: t.notification.emptyNotifications),
+                    );
+                  }
+                  return ListView.separated(
+                    itemBuilder: (ctx, index) => index == newsfeed.length
+                        ? const SizedBox(height: 80)
+                        : Padding(
+                            padding:
+                                EdgeInsets.symmetric(horizontal: Spacing.small),
+                            child: PostProfileCard(
+                                key: Key(newsfeed[index].id),
+                                post: newsfeed[index]),
+                          ),
+                    separatorBuilder: (ctx, index) => HorizontalLine(),
+                    itemCount: newsfeed.length + 1,
+                  );
+                },
+                failure: () => Center(
+                  child: Text(t.common.somethingWrong),
+                ),
+              );
+            },
+          )),
         ]),
       ),
     );
   }
 }
-
-// ElevatedButton(
-//             onPressed: () {
-//               AutoRouter.of(context).navigate(PoapListingRoute());
-//             },
-//             child: Text("Navigate to poap"),
-//           ),
-//           ElevatedButton(
-//             onPressed: () {
-//               AutoRouter.of(context).navigate(ChatListRoute());
-//             },
-//             child: Text("Navigate to Chat"),
-//           )

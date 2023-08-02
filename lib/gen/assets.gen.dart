@@ -97,6 +97,13 @@ class $AssetsIconsGen {
   SvgGenImage get icHashSymbol =>
       const SvgGenImage('assets/icons/ic_hash_symbol.svg');
 
+  /// File path: assets/icons/ic_heart.svg
+  SvgGenImage get icHeart => const SvgGenImage('assets/icons/ic_heart.svg');
+
+  /// File path: assets/icons/ic_heart_fillled.svg
+  SvgGenImage get icHeartFillled =>
+      const SvgGenImage('assets/icons/ic_heart_fillled.svg');
+
   /// File path: assets/icons/ic_host_filled.svg
   SvgGenImage get icHostFilled =>
       const SvgGenImage('assets/icons/ic_host_filled.svg');
@@ -152,6 +159,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_menu.svg
   SvgGenImage get icMenu => const SvgGenImage('assets/icons/ic_menu.svg');
 
+  /// File path: assets/icons/ic_message.svg
+  SvgGenImage get icMessage => const SvgGenImage('assets/icons/ic_message.svg');
+
   /// File path: assets/icons/ic_more_horiz.svg
   SvgGenImage get icMoreHoriz =>
       const SvgGenImage('assets/icons/ic_more_horiz.svg');
@@ -179,6 +189,10 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/ic_share.svg
   SvgGenImage get icShare => const SvgGenImage('assets/icons/ic_share.svg');
+
+  /// File path: assets/icons/ic_share_up.svg
+  SvgGenImage get icShareUp =>
+      const SvgGenImage('assets/icons/ic_share_up.svg');
 
   /// File path: assets/icons/ic_store.svg
   SvgGenImage get icStore => const SvgGenImage('assets/icons/ic_store.svg');
@@ -215,6 +229,8 @@ class $AssetsIconsGen {
         icFilterOutline,
         icGrid,
         icHashSymbol,
+        icHeart,
+        icHeartFillled,
         icHostFilled,
         icHouse,
         icHouseParty,
@@ -230,6 +246,7 @@ class $AssetsIconsGen {
         icLinkedin,
         icMatches,
         icMenu,
+        icMessage,
         icMoreHoriz,
         icMyLocation,
         icNavigationLine,
@@ -238,6 +255,7 @@ class $AssetsIconsGen {
         icQr,
         icSearch,
         icShare,
+        icShareUp,
         icStore,
         icSupport,
         icTicket,

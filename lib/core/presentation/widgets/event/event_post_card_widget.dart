@@ -57,11 +57,10 @@ class EventPostCard extends StatelessWidget {
             Container(
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: colorScheme.outline, 
-                  width: 1.0, 
+                  color: colorScheme.outline,
+                  width: 1.0,
                 ),
-                borderRadius:
-                    BorderRadius.circular(20), 
+                borderRadius: BorderRadius.circular(20),
               ),
               child: Column(
                 children: [
@@ -160,8 +159,10 @@ class EventPostCard extends StatelessWidget {
             style: Typo.medium.copyWith(fontFamily: FontFamily.circularStd),
             children: [
               TextSpan(
-                style: Typo.small
-                    .copyWith(color: colorScheme.onSurface, height: 1.5, fontFamily: FontFamily.circularStd),
+                style: Typo.small.copyWith(
+                    color: colorScheme.onSurface,
+                    height: 1.5,
+                    fontFamily: FontFamily.circularStd),
                 text: DateFormatUtils.fullDateWithTime(event.start),
               )
             ],

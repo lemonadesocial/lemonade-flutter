@@ -34,6 +34,12 @@ class PostProfileCard extends StatelessWidget {
 
   DbFile? get postFile => post.refFile;
 
+  int? get reactions => post.reactions;
+
+  int? get comments => post.comments;
+
+  bool? get hasReaction => post.hasReaction;
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -91,7 +97,8 @@ class PostProfileCard extends StatelessWidget {
                 if (postFile != null) ...[
                   SizedBox(height: Spacing.superExtraSmall),
                   _buildFile(colorScheme, postFile),
-                ]
+                ],
+                _buildActions(colorScheme)
               ],
             ),
           )
@@ -121,5 +128,61 @@ class PostProfileCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  _buildActions(ColorScheme colorScheme) {
+    final hasReactionColor = hasReaction == true
+                      ? colorScheme.tertiary
+                      : colorScheme.onSecondary;
+    return Padding(
+        padding: EdgeInsets.only(top: Spacing.small),
+        child: Row(
+          children: [
+            Row(
+              children: [
+                ThemeSvgIcon(
+                  color: hasReactionColor,
+                  builder: (filter) => Assets.icons.icHeart.svg(
+                    colorFilter: filter,
+                    width: 18,
+                    height: 18,
+                  ),
+                ),
+                SizedBox(width: 3),
+                Text(reactions != null ? '$reactions' : '',
+                    style: Typo.small.copyWith(
+                        fontFamily: FontFamily.circularStd,
+                        color: colorScheme.onSecondary)),
+              ],
+            ),
+            SizedBox(width: 12),
+            Row(
+              children: [
+                ThemeSvgIcon(
+                  color: colorScheme.onSecondary,
+                  builder: (filter) => Assets.icons.icMessage.svg(
+                    colorFilter: filter,
+                    width: 18,
+                    height: 18,
+                  ),
+                ),
+                SizedBox(width: 3),
+                Text(comments != null ? '$comments' : '',
+                    style: Typo.small.copyWith(
+                        fontFamily: FontFamily.circularStd,
+                        color: colorScheme.onSecondary)),
+              ],
+            ),
+            Spacer(),
+            ThemeSvgIcon(
+              color: colorScheme.onSecondary,
+              builder: (filter) => Assets.icons.icShare.svg(
+                colorFilter: filter,
+                width: 18,
+                height: 18,
+              ),
+            ),
+          ],
+        ));
   }
 }
