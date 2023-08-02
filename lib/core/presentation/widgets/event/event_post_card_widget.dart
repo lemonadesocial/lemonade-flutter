@@ -10,6 +10,7 @@ import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
 import 'package:app/gen/assets.gen.dart';
+import 'package:app/gen/fonts.gen.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
@@ -53,23 +54,33 @@ class EventPostCard extends StatelessWidget {
         ),
         child: Stack(
           children: [
-            Column(
-              children: [
-                _buildEventPhoto(),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    vertical: Spacing.small,
-                    horizontal: Spacing.small,
+            Container(
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: colorScheme.outline, 
+                  width: 1.0, 
+                ),
+                borderRadius:
+                    BorderRadius.circular(20), 
+              ),
+              child: Column(
+                children: [
+                  _buildEventPhoto(),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: Spacing.small,
+                      horizontal: Spacing.small,
+                    ),
+                    child: Column(
+                      children: [
+                        _buildEventTitleAndTime(colorScheme),
+                        SizedBox(height: Spacing.xSmall),
+                        _buildEventHost(colorScheme),
+                      ],
+                    ),
                   ),
-                  child: Column(
-                    children: [
-                      _buildEventTitleAndTime(colorScheme),
-                      SizedBox(height: Spacing.xSmall),
-                      _buildEventHost(colorScheme),
-                    ],
-                  ),
-                )
-              ],
+                ],
+              ),
             ),
             Positioned(
                 top: Spacing.extraSmall,
@@ -146,10 +157,11 @@ class EventPostCard extends StatelessWidget {
         Text.rich(
           TextSpan(
             text: "${event.title}\n",
+            style: Typo.medium.copyWith(fontFamily: FontFamily.circularStd),
             children: [
               TextSpan(
                 style: Typo.small
-                    .copyWith(color: colorScheme.onSurface, height: 1.5),
+                    .copyWith(color: colorScheme.onSurface, height: 1.5, fontFamily: FontFamily.circularStd),
                 text: DateFormatUtils.fullDateWithTime(event.start),
               )
             ],
