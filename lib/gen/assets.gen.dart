@@ -190,10 +190,6 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_share.svg
   SvgGenImage get icShare => const SvgGenImage('assets/icons/ic_share.svg');
 
-  /// File path: assets/icons/ic_share_up.svg
-  SvgGenImage get icShareUp =>
-      const SvgGenImage('assets/icons/ic_share_up.svg');
-
   /// File path: assets/icons/ic_store.svg
   SvgGenImage get icStore => const SvgGenImage('assets/icons/ic_store.svg');
 
@@ -255,7 +251,6 @@ class $AssetsIconsGen {
         icQr,
         icSearch,
         icShare,
-        icShareUp,
         icStore,
         icSupport,
         icTicket,

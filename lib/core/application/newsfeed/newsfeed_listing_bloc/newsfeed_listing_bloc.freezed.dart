@@ -458,20 +458,20 @@ abstract class NewsfeedListingStateFailure implements NewsfeedListingState {
 
 /// @nodoc
 mixin _$NewsfeedListingEvent {
-  int get offset => throw _privateConstructorUsedError;
+  GetPostsInput? get input => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int offset) fetch,
+    required TResult Function(GetPostsInput? input) fetch,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int offset)? fetch,
+    TResult? Function(GetPostsInput? input)? fetch,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int offset)? fetch,
+    TResult Function(GetPostsInput? input)? fetch,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -503,7 +503,9 @@ abstract class $NewsfeedListingEventCopyWith<$Res> {
           $Res Function(NewsfeedListingEvent) then) =
       _$NewsfeedListingEventCopyWithImpl<$Res, NewsfeedListingEvent>;
   @useResult
-  $Res call({int offset});
+  $Res call({GetPostsInput? input});
+
+  $GetPostsInputCopyWith<$Res>? get input;
 }
 
 /// @nodoc
@@ -520,14 +522,26 @@ class _$NewsfeedListingEventCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? offset = null,
+    Object? input = freezed,
   }) {
     return _then(_value.copyWith(
-      offset: null == offset
-          ? _value.offset
-          : offset // ignore: cast_nullable_to_non_nullable
-              as int,
+      input: freezed == input
+          ? _value.input
+          : input // ignore: cast_nullable_to_non_nullable
+              as GetPostsInput?,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $GetPostsInputCopyWith<$Res>? get input {
+    if (_value.input == null) {
+      return null;
+    }
+
+    return $GetPostsInputCopyWith<$Res>(_value.input!, (value) {
+      return _then(_value.copyWith(input: value) as $Val);
+    });
   }
 }
 
@@ -540,7 +554,10 @@ abstract class _$$NewsfeedListingEventFetchCopyWith<$Res>
       __$$NewsfeedListingEventFetchCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int offset});
+  $Res call({GetPostsInput? input});
+
+  @override
+  $GetPostsInputCopyWith<$Res>? get input;
 }
 
 /// @nodoc
@@ -555,13 +572,13 @@ class __$$NewsfeedListingEventFetchCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? offset = null,
+    Object? input = freezed,
   }) {
     return _then(_$NewsfeedListingEventFetch(
-      null == offset
-          ? _value.offset
-          : offset // ignore: cast_nullable_to_non_nullable
-              as int,
+      input: freezed == input
+          ? _value.input
+          : input // ignore: cast_nullable_to_non_nullable
+              as GetPostsInput?,
     ));
   }
 }
@@ -569,14 +586,14 @@ class __$$NewsfeedListingEventFetchCopyWithImpl<$Res>
 /// @nodoc
 
 class _$NewsfeedListingEventFetch implements NewsfeedListingEventFetch {
-  _$NewsfeedListingEventFetch(this.offset);
+  _$NewsfeedListingEventFetch({this.input});
 
   @override
-  final int offset;
+  final GetPostsInput? input;
 
   @override
   String toString() {
-    return 'NewsfeedListingEvent.fetch(offset: $offset)';
+    return 'NewsfeedListingEvent.fetch(input: $input)';
   }
 
   @override
@@ -584,11 +601,11 @@ class _$NewsfeedListingEventFetch implements NewsfeedListingEventFetch {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$NewsfeedListingEventFetch &&
-            (identical(other.offset, offset) || other.offset == offset));
+            (identical(other.input, input) || other.input == input));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, offset);
+  int get hashCode => Object.hash(runtimeType, input);
 
   @JsonKey(ignore: true)
   @override
@@ -600,27 +617,27 @@ class _$NewsfeedListingEventFetch implements NewsfeedListingEventFetch {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int offset) fetch,
+    required TResult Function(GetPostsInput? input) fetch,
   }) {
-    return fetch(offset);
+    return fetch(input);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int offset)? fetch,
+    TResult? Function(GetPostsInput? input)? fetch,
   }) {
-    return fetch?.call(offset);
+    return fetch?.call(input);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int offset)? fetch,
+    TResult Function(GetPostsInput? input)? fetch,
     required TResult orElse(),
   }) {
     if (fetch != null) {
-      return fetch(offset);
+      return fetch(input);
     }
     return orElse();
   }
@@ -655,11 +672,11 @@ class _$NewsfeedListingEventFetch implements NewsfeedListingEventFetch {
 }
 
 abstract class NewsfeedListingEventFetch implements NewsfeedListingEvent {
-  factory NewsfeedListingEventFetch(final int offset) =
+  factory NewsfeedListingEventFetch({final GetPostsInput? input}) =
       _$NewsfeedListingEventFetch;
 
   @override
-  int get offset;
+  GetPostsInput? get input;
   @override
   @JsonKey(ignore: true)
   _$$NewsfeedListingEventFetchCopyWith<_$NewsfeedListingEventFetch>

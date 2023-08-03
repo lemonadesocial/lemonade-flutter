@@ -12,7 +12,7 @@ class PostService {
     return postRepository.getPosts(input: input);
   }
 
-  Future<Either<Failure, List<Post>>> getNewsfeed(int? offset) {
-    return postRepository.getNewsfeed(offset);
+  Future<Either<Failure, List<Post>>> getNewsfeed({GetPostsInput? input}) {
+    return postRepository.getNewsfeed(input: input);
   }
 }

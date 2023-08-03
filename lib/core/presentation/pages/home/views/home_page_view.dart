@@ -1,6 +1,6 @@
 import 'package:app/core/application/newsfeed/newsfeed_listing_bloc/newsfeed_listing_bloc.dart';
-import 'package:app/core/data/post/post_repository_impl.dart';
 import 'package:app/core/domain/post/input/get_posts_input.dart';
+import 'package:app/core/domain/post/post_repository.dart';
 import 'package:app/core/presentation/pages/home/views/list/home_newsfeed_list.dart';
 import 'package:app/core/presentation/widgets/burger_menu_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
@@ -17,40 +17,29 @@ import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
-@RoutePage()
-class HomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<NewsfeedListingBloc>(
-          create: (context) => NewsfeedListingBloc(
-              PostService(PostRepositoryImpl()),
-              defaultInput: GetPostsInput())
-            ..add(NewsfeedListingEvent.fetch()),
-        ),
-        // Add other Blocs here if needed.
-      ],
-      child: _HomeListingView(),
-    );
-  }
-}
-
-class _HomeListingView extends StatefulWidget {
-  const _HomeListingView();
+class HomePageView extends StatefulWidget {
+  const HomePageView();
 
   @override
-  State<_HomeListingView> createState() => _HomePageViewState();
+  State<HomePageView> createState() => _HomePageViewState();
 }
 
-class _HomePageViewState extends State<_HomeListingView> {
+class _HomePageViewState extends State<HomePageView> {
   @override
   void initState() {
     super.initState();
     getIt<ShakeService>().startShakeDetection(context);
   }
+
+  GetPostsInput get input => GetPostsInput();
+
+  late final newsfeedListingBloc = NewsfeedListingBloc(
+    PostService(
+      getIt<PostRepository>(),
+    ),
+    defaultInput: input,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -90,9 +79,7 @@ class _HomePageViewState extends State<_HomeListingView> {
                     if (notification is ScrollEndNotification) {
                       if (notification.metrics.pixels ==
                           notification.metrics.maxScrollExtent) {
-                        context
-                            .read<NewsfeedListingBloc>()
-                            .add(NewsfeedListingEvent.fetch());
+                        newsfeedListingBloc.add(NewsfeedListingEvent.fetch());
                       }
                     }
                     return true;

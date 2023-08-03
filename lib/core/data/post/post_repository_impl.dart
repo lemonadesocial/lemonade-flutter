@@ -16,6 +16,8 @@ class PostRepositoryImpl implements PostRepository {
 
   @override
   Future<Either<Failure, List<Post>>> getPosts({GetPostsInput? input}) async {
+    print("getPosts");
+    print(input);
     final result = await _client.query(
       QueryOptions(
         document: getPostsQuery,
@@ -35,8 +37,8 @@ class PostRepositoryImpl implements PostRepository {
   }
 
   @override
-  Future<Either<Failure, List<Post>>> getNewsfeed(int? offset) async {
-    print("getNewsfeed");
+  Future<Either<Failure, List<Post>>> getNewsfeed(
+      {GetPostsInput? input}) async {
     final result = await _client.query(
       QueryOptions(
           document: getNewsfeedQuery,
@@ -48,8 +50,7 @@ class PostRepositoryImpl implements PostRepository {
                   ),
                 )
                 .toList();
-          }
-          ),
+          }),
     );
     if (result.hasException) return Left(Failure());
     return Right(result.parsedData ?? []);

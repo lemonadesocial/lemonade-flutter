@@ -3,10 +3,13 @@ import 'package:dartz/dartz.dart';
 
 class OffsetPaginationService<T, I> {
   List<T> _items = [];
+  bool _reachedEnd = false;
   int _offset = 0;
 
-  Future<Either<Failure, List<T>>> Function(int offset)? getDataFuture;
-  Stream<Either<Failure, List<T>>> Function(int offset)? getDataStream;
+  Future<Either<Failure, List<T>>> Function(int offset, bool reachedEnd,
+      {required I input})? getDataFuture;
+  Stream<Either<Failure, List<T>>> Function(int offset, bool reachedEnd,
+      {required I input})? getDataStream;
 
   OffsetPaginationService({this.getDataFuture, this.getDataStream});
 
@@ -14,26 +17,24 @@ class OffsetPaginationService<T, I> {
 
   int get offset => _offset;
 
+  bool get reachedEnd => _reachedEnd;
+
   Future<Either<Failure, List<T>>> fetch(I input) async {
-    _items.clear();
-    _offset = 0;
     return _processGetDataFuture(input);
   }
 
   Future<Either<Failure, List<T>>> refresh(I input) async {
-    _items.clear();
+    _reachedEnd = false;
     _offset = 0;
     return _processGetDataFuture(input);
   }
 
   Stream<Either<Failure, List<T>>> fetchStream(I input) {
-    _items.clear();
-    _offset = 0;
     return _processGetDataStream(input);
   }
 
   Stream<Either<Failure, List<T>>> refreshStream(I input) {
-    _items.clear();
+    _reachedEnd = false;
     _offset = 0;
     return _processGetDataStream(input);
   }
@@ -41,7 +42,11 @@ class OffsetPaginationService<T, I> {
   Future<Either<Failure, List<T>>> _processGetDataFuture(I input) async {
     if (getDataFuture == null) throw Exception("getDataFuture is required");
 
-    final result = await getDataFuture!.call(_offset);
+    if (reachedEnd) {
+      return Right(_items);
+    }
+
+    final result = await getDataFuture!.call(offset, reachedEnd, input: input);
 
     return result.fold(
       (failure) {
@@ -54,19 +59,34 @@ class OffsetPaginationService<T, I> {
   Stream<Either<Failure, List<T>>> _processGetDataStream(I input) {
     if (getDataStream == null) throw Exception("getDataStream is required");
 
-    return getDataStream!.call(_offset).asyncMap((streamEvent) {
+    return getDataStream!
+        .call(offset, reachedEnd, input: input)
+        .asyncMap((streamEvent) {
+      if (reachedEnd) {
+        return Right(_items);
+      }
+
       return streamEvent.fold(
         (failure) {
           return Left(Failure());
         },
-        (newItems) => Right(_onReceiveNewItems(newItems)),
+        (newItems) {
+          return Right(_onReceiveNewItems(newItems));
+        },
       );
     });
   }
 
   List<T> _onReceiveNewItems(List<T> newItems) {
-    _items.addAll(newItems);
-    _offset = _items.length;
+    print("_onReceiveNewItems");
+    if (newItems.isEmpty) {
+      _reachedEnd = true;
+    }
+    _items = [..._items, ...newItems];
     return _items;
+  }
+
+  void updateOffset(int offset) {
+    _offset = offset;
   }
 }
