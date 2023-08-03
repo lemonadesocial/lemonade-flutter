@@ -82,6 +82,7 @@ dependencies:
 
   # matrix
   matrix: ^0.22.1
+  scroll_to_index: ^3.0.1
 
 dependency_overrides: 
   matrix_api_lite:
