@@ -1,5 +1,7 @@
 {
     "unread": "unread",
     "channels": "channels",
-    "directMessages": "direct messages"
+    "directMessages": "direct messages",
+    "spaces": "spaces",
+    "home": "home"
 }

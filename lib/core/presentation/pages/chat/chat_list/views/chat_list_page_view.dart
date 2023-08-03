@@ -1,6 +1,8 @@
 import 'package:app/core/application/chat/chat_list_bloc/chat_list_bloc.dart';
+import 'package:app/core/application/chat/chat_space_bloc/chat_space_bloc.dart';
 import 'package:app/core/presentation/pages/chat/chat_list/widgets/channel_list_item.dart';
 import 'package:app/core/presentation/pages/chat/chat_list/widgets/direct_message_item.dart';
+import 'package:app/core/presentation/widgets/chat/matrix_avatar.dart';
 import 'package:app/core/presentation/widgets/chat/spaces_drawer.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/collapsible/collapsible_section_widget.dart';
@@ -11,6 +13,7 @@ import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
+import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:matrix/matrix.dart';
@@ -22,26 +25,38 @@ class ChatListPageView extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+    final activeSpace = context.read<ChatSpaceBloc>().state.activeSpace;
     return Scaffold(
       appBar: LemonAppBar(
-        title: t.common.lemonade,
+        title:  activeSpace != null ? activeSpace.getLocalizedDisplayname() : t.common.lemonade,
         actions: [
-          Builder(
-            builder: (context) => GestureDetector(
-              onTap: () {
-                Scaffold.of(context).openEndDrawer();
-              },
-              child: Center(
-                child: Container(
-                  width: 27,
-                  height: 27,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: ThemeSvgIcon(
-                    color: colorScheme.onSurface,
-                    builder: (filter) => Assets.icons.icLemonadeWhite.svg(),
+          BlocBuilder<ChatSpaceBloc, ChatSpaceState>(
+            builder: (context, chatSpaceState) => Builder(
+              builder: (_context) => GestureDetector(
+                onTap: () {
+                  Scaffold.of(_context).openEndDrawer();
+                },
+                child: Center(
+                  child: SizedBox(
+                    child: chatSpaceState.activeSpace != null
+                        ? MatrixAvatar(
+                            size: 27,
+                            mxContent: chatSpaceState.activeSpace?.avatar,
+                            name: chatSpaceState.activeSpace?.name,
+                            fontSize: Typo.small.fontSize!,
+                            )
+                        : Container(
+                            width: 27,
+                            height: 27,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: ThemeSvgIcon(
+                              color: colorScheme.onSurface,
+                              builder: (filter) => Assets.icons.icLemonadeWhite.svg(),
+                            ),
+                          ),
                   ),
                 ),
               ),
