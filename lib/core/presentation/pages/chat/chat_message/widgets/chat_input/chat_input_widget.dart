@@ -33,6 +33,7 @@ class ChatInput extends StatelessWidget {
               autofocus: false,
               keyboardType: TextInputType.multiline,
               onSubmitted: controller.onInputBarSubmitted,
+              // TODO:
               // onSubmitImage: controller.sendImageFromClipBoard,
               // focusNode: controller.inputFocus,
               controller: controller.sendController,

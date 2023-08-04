@@ -37,6 +37,22 @@ class InputBar extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
+  RegExp get commandMatchRegex => RegExp(r'^/(\w*)$');
+
+  RegExp get replaceCommandMatchRegex => RegExp(r'^(/\w*)$');
+
+  RegExp get emojiMatchRegex => RegExp(r'(?:\s|^):(?:([-\w]+)~)?([-\w]+)$');
+
+  RegExp get replaceEmoteMatchRegex => RegExp(r'(\s|^)(:(?:[-\w]+~)?[-\w]+)$');
+
+  RegExp get mentionUserMatchRegex => RegExp(r'(?:\s|^)@([-\w]+)$');
+
+  RegExp get replaceMentionUserMatchRegex => RegExp(r'(\s|^)(@[-\w]+)$');
+
+  RegExp get mentionRoomMatchRegex => RegExp(r'(?:\s|^)#([-\w]+)$');
+
+  RegExp get replaceMentionRoomMatchRegex => RegExp(r'(\s|^)(#[-\w]+)$');
+
   List<Map<String, String?>> getSuggestions(String text) {
     if (controller!.selection.baseOffset != controller!.selection.extentOffset ||
         controller!.selection.baseOffset < 0) {
@@ -46,7 +62,7 @@ class InputBar extends StatelessWidget {
     final List<Map<String, String?>> ret = <Map<String, String?>>[];
     const maxResults = 30;
 
-    final commandMatch = RegExp(r'^/(\w*)$').firstMatch(searchText);
+    final commandMatch = commandMatchRegex.firstMatch(searchText);
     if (commandMatch != null) {
       final commandSearch = commandMatch[1]!.toLowerCase();
       for (final command in room.client.commands.keys) {
@@ -60,7 +76,7 @@ class InputBar extends StatelessWidget {
         if (ret.length > maxResults) return ret;
       }
     }
-    final emojiMatch = RegExp(r'(?:\s|^):(?:([-\w]+)~)?([-\w]+)$').firstMatch(searchText);
+    final emojiMatch = emojiMatchRegex.firstMatch(searchText);
     if (emojiMatch != null) {
       final packSearch = emojiMatch[1];
       final emoteSearch = emojiMatch[2]!.toLowerCase();
@@ -141,7 +157,7 @@ class InputBar extends StatelessWidget {
         }
       }
     }
-    final userMatch = RegExp(r'(?:\s|^)@([-\w]+)$').firstMatch(searchText);
+    final userMatch = mentionUserMatchRegex.firstMatch(searchText);
     if (userMatch != null) {
       final userSearch = userMatch[1]!.toLowerCase();
       for (final user in room.getParticipants()) {
@@ -162,7 +178,7 @@ class InputBar extends StatelessWidget {
         }
       }
     }
-    final roomMatch = RegExp(r'(?:\s|^)#([-\w]+)$').firstMatch(searchText);
+    final roomMatch = mentionRoomMatchRegex.firstMatch(searchText);
     if (roomMatch != null) {
       final roomSearch = roomMatch[1]!.toLowerCase();
       for (final r in room.client.rooms) {
@@ -202,7 +218,7 @@ class InputBar extends StatelessWidget {
     if (suggestion['type'] == 'command') {
       insertText = '${suggestion['name']!} ';
       startText = replaceText.replaceAllMapped(
-        RegExp(r'^(/\w*)$'),
+        replaceCommandMatchRegex,
         (Match m) => '/$insertText',
       );
     }
@@ -234,21 +250,21 @@ class InputBar extends StatelessWidget {
       }
       insertText = ':${isUnique ? '' : '${insertPack!}~'}$insertEmote: ';
       startText = replaceText.replaceAllMapped(
-        RegExp(r'(\s|^)(:(?:[-\w]+~)?[-\w]+)$'),
+        replaceEmoteMatchRegex,
         (Match m) => '${m[1]}$insertText',
       );
     }
     if (suggestion['type'] == 'user') {
       insertText = '${suggestion['mention']!} ';
       startText = replaceText.replaceAllMapped(
-        RegExp(r'(\s|^)(@[-\w]+)$'),
+        replaceMentionUserMatchRegex,
         (Match m) => '${m[1]}$insertText',
       );
     }
     if (suggestion['type'] == 'room') {
       insertText = '${suggestion['mxid']!} ';
       startText = replaceText.replaceAllMapped(
-        RegExp(r'(\s|^)(#[-\w]+)$'),
+        replaceMentionRoomMatchRegex,
         (Match m) => '${m[1]}$insertText',
       );
     }

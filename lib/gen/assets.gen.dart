@@ -192,9 +192,6 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_twitter.svg
   SvgGenImage get icTwitter => const SvgGenImage('assets/icons/ic_twitter.svg');
 
-  /// File path: assets/icons/ic_typing.svg
-  SvgGenImage get icTyping => const SvgGenImage('assets/icons/ic_typing.svg');
-
   /// File path: assets/icons/ic_wallet.svg
   SvgGenImage get icWallet => const SvgGenImage('assets/icons/ic_wallet.svg');
 
@@ -245,7 +242,6 @@ class $AssetsIconsGen {
         icSupport,
         icTicket,
         icTwitter,
-        icTyping,
         icWallet,
         icoCreateSpace
       ];
