@@ -1,3 +1,4 @@
+import 'package:app/core/data/post/dtos/newsfeed_dtos.dart';
 import 'package:app/core/data/post/dtos/post_dtos.dart';
 import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/event/entities/event.dart';
@@ -53,4 +54,19 @@ class Post {
         comments: dto.comments,
         published: dto.published,
       );
+}
+
+
+class Newsfeed {
+  final int? offset;
+  final List<Post>? posts;
+
+  Newsfeed({this.offset, this.posts});
+
+  static Newsfeed fromDto(NewsfeedDto dto) {
+    return Newsfeed(
+      offset: dto.offset,
+      posts: List.from(dto.posts ?? []).map((item) => Post.fromDto(item)).toList()
+    );
+  }
 }

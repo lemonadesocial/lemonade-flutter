@@ -4,18 +4,18 @@ import 'package:dartz/dartz.dart';
 class OffsetPaginationService<T, I> {
   List<T> _items = [];
   bool _reachedEnd = false;
-  int _offset = 0;
+  int? _offset = 0;
 
-  Future<Either<Failure, List<T>>> Function(int offset, bool reachedEnd,
+  Future<Either<Failure, List<T>>> Function(int? offset, bool reachedEnd,
       {required I input})? getDataFuture;
-  Stream<Either<Failure, List<T>>> Function(int offset, bool reachedEnd,
+  Stream<Either<Failure, List<T>>> Function(int? offset, bool reachedEnd,
       {required I input})? getDataStream;
 
   OffsetPaginationService({this.getDataFuture, this.getDataStream});
 
   List<T> get items => _items;
 
-  int get offset => _offset;
+  int? get offset => _offset;
 
   bool get reachedEnd => _reachedEnd;
 
@@ -78,12 +78,14 @@ class OffsetPaginationService<T, I> {
   }
 
   List<T> _onReceiveNewItems(List<T> newItems) {
-    print("_onReceiveNewItems");
     if (newItems.isEmpty) {
       _reachedEnd = true;
     }
     _items = [..._items, ...newItems];
-    _offset = items.length;
     return _items;
+  }
+
+  updateOffset(int? offset) {
+    _offset = offset;
   }
 }

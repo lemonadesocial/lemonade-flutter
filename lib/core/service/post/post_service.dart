@@ -11,8 +11,4 @@ class PostService {
   Future<Either<Failure, List<Post>>> getPosts({GetPostsInput? input}) {
     return postRepository.getPosts(input: input);
   }
-
-  Future<Either<Failure, List<Post>>> getNewsfeed({GetPostsInput? input}) {
-    return postRepository.getNewsfeed(input: input);
-  }
 }

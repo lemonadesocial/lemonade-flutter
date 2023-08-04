@@ -1,13 +1,13 @@
 import 'package:app/core/application/newsfeed/newsfeed_listing_bloc/newsfeed_listing_bloc.dart';
-import 'package:app/core/data/post/post_repository_impl.dart';
-import 'package:app/core/domain/post/input/get_posts_input.dart';
+import 'package:app/core/data/post/newsfeed_repository_impl.dart';
+import 'package:app/core/domain/newsfeed/input/get_newsfeed_input.dart';
 import 'package:app/core/presentation/pages/home/views/list/home_newsfeed_list.dart';
 import 'package:app/core/presentation/widgets/burger_menu_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/separator/horizontal_line.dart';
 import 'package:app/core/presentation/widgets/home/what_on_your_mind_input.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
-import 'package:app/core/service/post/post_service.dart';
+import 'package:app/core/service/newsfeed/newsfeed_service.dart';
 import 'package:app/core/service/shake/shake_service.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -27,8 +27,8 @@ class HomePage extends StatelessWidget {
       providers: [
         BlocProvider<NewsfeedListingBloc>(
           create: (context) => NewsfeedListingBloc(
-              PostService(PostRepositoryImpl()),
-              defaultInput: GetPostsInput())
+              NewsfeedService(NewsfeedRepositoryImpl()),
+              defaultInput: GetNewsfeedInput())
             ..add(NewsfeedListingEvent.fetch()),
         ),
         // Add other Blocs here if needed.

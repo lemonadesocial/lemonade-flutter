@@ -458,20 +458,20 @@ abstract class NewsfeedListingStateFailure implements NewsfeedListingState {
 
 /// @nodoc
 mixin _$NewsfeedListingEvent {
-  GetPostsInput? get input => throw _privateConstructorUsedError;
+  GetNewsfeedInput? get input => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(GetPostsInput? input) fetch,
+    required TResult Function(GetNewsfeedInput? input) fetch,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(GetPostsInput? input)? fetch,
+    TResult? Function(GetNewsfeedInput? input)? fetch,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(GetPostsInput? input)? fetch,
+    TResult Function(GetNewsfeedInput? input)? fetch,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -503,9 +503,9 @@ abstract class $NewsfeedListingEventCopyWith<$Res> {
           $Res Function(NewsfeedListingEvent) then) =
       _$NewsfeedListingEventCopyWithImpl<$Res, NewsfeedListingEvent>;
   @useResult
-  $Res call({GetPostsInput? input});
+  $Res call({GetNewsfeedInput? input});
 
-  $GetPostsInputCopyWith<$Res>? get input;
+  $GetNewsfeedInputCopyWith<$Res>? get input;
 }
 
 /// @nodoc
@@ -528,18 +528,18 @@ class _$NewsfeedListingEventCopyWithImpl<$Res,
       input: freezed == input
           ? _value.input
           : input // ignore: cast_nullable_to_non_nullable
-              as GetPostsInput?,
+              as GetNewsfeedInput?,
     ) as $Val);
   }
 
   @override
   @pragma('vm:prefer-inline')
-  $GetPostsInputCopyWith<$Res>? get input {
+  $GetNewsfeedInputCopyWith<$Res>? get input {
     if (_value.input == null) {
       return null;
     }
 
-    return $GetPostsInputCopyWith<$Res>(_value.input!, (value) {
+    return $GetNewsfeedInputCopyWith<$Res>(_value.input!, (value) {
       return _then(_value.copyWith(input: value) as $Val);
     });
   }
@@ -554,10 +554,10 @@ abstract class _$$NewsfeedListingEventFetchCopyWith<$Res>
       __$$NewsfeedListingEventFetchCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({GetPostsInput? input});
+  $Res call({GetNewsfeedInput? input});
 
   @override
-  $GetPostsInputCopyWith<$Res>? get input;
+  $GetNewsfeedInputCopyWith<$Res>? get input;
 }
 
 /// @nodoc
@@ -578,7 +578,7 @@ class __$$NewsfeedListingEventFetchCopyWithImpl<$Res>
       input: freezed == input
           ? _value.input
           : input // ignore: cast_nullable_to_non_nullable
-              as GetPostsInput?,
+              as GetNewsfeedInput?,
     ));
   }
 }
@@ -589,7 +589,7 @@ class _$NewsfeedListingEventFetch implements NewsfeedListingEventFetch {
   _$NewsfeedListingEventFetch({this.input});
 
   @override
-  final GetPostsInput? input;
+  final GetNewsfeedInput? input;
 
   @override
   String toString() {
@@ -617,7 +617,7 @@ class _$NewsfeedListingEventFetch implements NewsfeedListingEventFetch {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(GetPostsInput? input) fetch,
+    required TResult Function(GetNewsfeedInput? input) fetch,
   }) {
     return fetch(input);
   }
@@ -625,7 +625,7 @@ class _$NewsfeedListingEventFetch implements NewsfeedListingEventFetch {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(GetPostsInput? input)? fetch,
+    TResult? Function(GetNewsfeedInput? input)? fetch,
   }) {
     return fetch?.call(input);
   }
@@ -633,7 +633,7 @@ class _$NewsfeedListingEventFetch implements NewsfeedListingEventFetch {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(GetPostsInput? input)? fetch,
+    TResult Function(GetNewsfeedInput? input)? fetch,
     required TResult orElse(),
   }) {
     if (fetch != null) {
@@ -672,11 +672,11 @@ class _$NewsfeedListingEventFetch implements NewsfeedListingEventFetch {
 }
 
 abstract class NewsfeedListingEventFetch implements NewsfeedListingEvent {
-  factory NewsfeedListingEventFetch({final GetPostsInput? input}) =
+  factory NewsfeedListingEventFetch({final GetNewsfeedInput? input}) =
       _$NewsfeedListingEventFetch;
 
   @override
-  GetPostsInput? get input;
+  GetNewsfeedInput? get input;
   @override
   @JsonKey(ignore: true)
   _$$NewsfeedListingEventFetchCopyWith<_$NewsfeedListingEventFetch>
