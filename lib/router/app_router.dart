@@ -76,7 +76,7 @@ final chatRoutes = AutoRoute(
     ),
     AutoRoute(
       path: 'detail/:id',
-      page: ChatDetailRoute.page,
+      page: ChatRoute.page
     ),
     AutoRoute(
       path: 'setting/:id',
