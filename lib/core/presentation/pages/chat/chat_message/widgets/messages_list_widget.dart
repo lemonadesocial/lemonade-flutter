@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:app/core/presentation/pages/chat/chat_message/chat_message_page.dart';
 import 'package:app/core/presentation/pages/chat/chat_message/widgets/message_item/message_item_widget.dart';
+import 'package:app/core/presentation/pages/chat/chat_message/widgets/message_item/typing_indicator_widget.dart';
 import 'package:app/core/utils/chat/filter_event_timeline_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
@@ -122,7 +123,7 @@ class MessagesList extends StatelessWidget {
       children: [
         // TODO: todo widgets
         // SeenByRow(controller),
-        // TypingIndicators(controller),
+        TypingIndicators(controller),
       ],
     );
   }

@@ -1,4 +1,5 @@
 import 'package:app/core/presentation/pages/chat/chat_message/chat_message_page.dart';
+import 'package:app/core/presentation/pages/chat/chat_message/widgets/chat_input/chat_input_widget.dart';
 import 'package:app/core/presentation/pages/chat/chat_message/widgets/messages_list_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
@@ -30,7 +31,8 @@ class ChatMessageView extends StatelessWidget {
                     children: [
                       Expanded(
                         child: MessagesList(controller: controller),
-                      )
+                      ),
+                      ChatInput(controller)
                     ],
                   ),
                 ),

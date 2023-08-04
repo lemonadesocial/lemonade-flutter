@@ -192,6 +192,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_twitter.svg
   SvgGenImage get icTwitter => const SvgGenImage('assets/icons/ic_twitter.svg');
 
+  /// File path: assets/icons/ic_typing.svg
+  SvgGenImage get icTyping => const SvgGenImage('assets/icons/ic_typing.svg');
+
   /// File path: assets/icons/ic_wallet.svg
   SvgGenImage get icWallet => const SvgGenImage('assets/icons/ic_wallet.svg');
 
@@ -242,9 +245,20 @@ class $AssetsIconsGen {
         icSupport,
         icTicket,
         icTwitter,
+        icTyping,
         icWallet,
         icoCreateSpace
       ];
+}
+
+class $AssetsImagesGen {
+  const $AssetsImagesGen();
+
+  /// File path: assets/images/typing.gif
+  AssetGenImage get typing => const AssetGenImage('assets/images/typing.gif');
+
+  /// List of all assets
+  List<AssetGenImage> get values => [typing];
 }
 
 class Assets {
@@ -252,6 +266,7 @@ class Assets {
 
   static const $AssetsFontsGen fonts = $AssetsFontsGen();
   static const $AssetsIconsGen icons = $AssetsIconsGen();
+  static const $AssetsImagesGen images = $AssetsImagesGen();
   static const String index = 'assets/index.html';
 
   /// List of all assets

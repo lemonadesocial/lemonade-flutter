@@ -16,7 +16,7 @@ class ChannelListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     var name = room.getLocalizedDisplayname();
-    var textColor = room.isUnread ? colorScheme.primary : colorScheme.onSurface;
+    var textColor = room.isUnread ? colorScheme.onPrimary : colorScheme.onSurface;
     return Container(
       child: InkWell(
         onTap: () {
