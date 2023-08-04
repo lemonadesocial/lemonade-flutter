@@ -83,10 +83,7 @@ class OffsetPaginationService<T, I> {
       _reachedEnd = true;
     }
     _items = [..._items, ...newItems];
+    _offset = items.length;
     return _items;
-  }
-
-  void updateOffset(int offset) {
-    _offset = offset;
   }
 }
