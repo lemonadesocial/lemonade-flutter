@@ -38,7 +38,7 @@ class DirectMessageItem extends StatelessWidget {
     return Container(
       child: InkWell(
         onTap: () {
-          AutoRouter.of(context).navigateNamed('/chat/detail/chatId');
+          AutoRouter.of(context).navigateNamed('/chat/detail/${room.id}');
         },
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: Spacing.extraSmall, horizontal: Spacing.small),
