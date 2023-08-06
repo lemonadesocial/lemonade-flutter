@@ -3,5 +3,30 @@
     "channels": "channels",
     "directMessages": "direct messages",
     "spaces": "spaces",
-    "home": "home"
+    "home": "home",
+    "command": {
+        "ban": "Ban the given user from this room",
+        "clearcache": "Clear cache",
+        "create": "Create",
+        "discardsession": "Discard session",
+        "dm": "Start a direct chat\nUse --no-encryption to disable encryption",
+        "html": "Send HTML-formatted text",
+        "invite": "Invite the given user to this room",
+        "join": "Join the given room",
+        "kick": "Remove the given user from this room",
+        "leave": "Leave this room",
+        "me": "Describe yourself",
+        "myroomavatar": "Set your picture for this room (by mxc-uri)",
+        "myroomnick": "Set your display name for this room",
+        "op": "Set the given user's power level (default: 50)",
+        "plain": "Send unformatted text",
+        "react": "Send reply as a reaction",
+        "send": "Send text",
+        "unban": "Unban the given user from this room",
+        "markasdm": "Mark as direct message room",
+        "markasgroup": "Mark as group",
+        "googly": "Send some googly eyes",
+        "hug": "Send a hug",
+        "cuddle": "Send a cuddle"
+    }
 }

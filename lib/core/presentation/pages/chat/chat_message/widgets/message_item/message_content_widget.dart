@@ -1,4 +1,7 @@
+import 'package:app/core/presentation/pages/chat/chat_message/widgets/message_item/html_message_widget.dart';
+import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:matrix/matrix.dart';
 
 class MessageContent extends StatelessWidget {
@@ -97,6 +100,7 @@ class MessageContent extends StatelessWidget {
 
   FutureBuilder<String> _buildLinkifyMessage() {
     final bigEmotes = event.onlyEmotes && event.numberEmotes > 0 && event.numberEmotes <= 10;
+    final fontSize = Typo.medium.fontSize!;
     return FutureBuilder<String>(
       future: event.calcLocalizedBody(
         MatrixDefaultLocalizations(),
@@ -104,32 +108,25 @@ class MessageContent extends StatelessWidget {
       ),
       builder: (context, snapshot) {
         // TODO:
-        // return Linkify(
-        //   text: snapshot.data ??
-        //       event.calcLocalizedBodyFallback(
-        //         MatrixLocals(L10n.of(context)!),
-        //         hideReply: true,
-        //       ),
-        //   style: TextStyle(
-        //     color: textColor,
-        //     fontSize: bigEmotes ? fontSize * 3 : fontSize,
-        //     decoration: event.redacted ? TextDecoration.lineThrough : null,
-        //   ),
-        //   options: const LinkifyOptions(humanize: false),
-        //   linkStyle: TextStyle(
-        //     color: textColor.withAlpha(150),
-        //     fontSize: bigEmotes ? fontSize * 3 : fontSize,
-        //     decoration: TextDecoration.underline,
-        //     decorationColor: textColor.withAlpha(150),
-        //   ),
-        //   onOpen: (url) => UrlLauncher(context, url.url).launchUrl(),
-        // );
-        return Text(
-          snapshot.data ??
+        return Linkify(
+          text: snapshot.data ??
               event.calcLocalizedBodyFallback(
                 MatrixDefaultLocalizations(),
                 hideReply: true,
               ),
+          style: TextStyle(
+            color: textColor,
+            fontSize: bigEmotes ? fontSize * 3 : fontSize,
+            decoration: event.redacted ? TextDecoration.lineThrough : null,
+          ),
+          options: const LinkifyOptions(humanize: false),
+          linkStyle: TextStyle(
+            color: textColor.withAlpha(150),
+            fontSize: bigEmotes ? fontSize * 3 : fontSize,
+            decoration: TextDecoration.underline,
+            decorationColor: textColor.withAlpha(150),
+          ),
+          // onOpen: (url) => UrlLauncher(context, url.url).launchUrl(),
         );
       },
     );
@@ -171,18 +168,16 @@ class MessageContent extends StatelessWidget {
     );
   }
 
-  Text _buildHtmlMessage() {
+  Widget _buildHtmlMessage() {
     var html = event.formattedText;
     if (event.messageType == MessageTypes.Emote) {
       html = '* $html';
     }
-    // TODO:
-    // return HtmlMessage(
-    //   html: html,
-    //   textColor: textColor,
-    //   room: event.room,
-    // );
-    return Text("Html message, ${html}");
+    return HtmlMessage(
+      html: html,
+      textColor: textColor,
+      room: event.room,
+    );
   }
 
   Text _buildFileMessage() {
