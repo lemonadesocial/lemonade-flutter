@@ -46,7 +46,7 @@ abstract class $AppRouter extends _i18.RootStackRouter {
     HomeRoute.name: (routeData) {
       return _i18.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i1.HomePage(),
+        child: _i1.HomePage(),
       );
     },
     ChatSettingRoute.name: (routeData) {

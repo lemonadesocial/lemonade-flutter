@@ -1,9 +1,9 @@
 /// Generated file. Do not edit.
 ///
 /// Locales: 1
-/// Strings: 99
+/// Strings: 101
 ///
-/// Built on 2023-08-07 at 08:49 UTC
+/// Built on 2023-08-07 at 08:59 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -146,6 +146,7 @@ class _I18nEn implements BaseTranslations<AppLocale, _I18nEn> {
 	late final _I18nEn _root = this; // ignore: unused_field
 
 	// Translations
+	late final _I18nHomeEn home = _I18nHomeEn._(_root);
 	late final _I18nPostEn post = _I18nPostEn._(_root);
 	late final _I18nChatEn chat = _I18nChatEn._(_root);
 	late final _I18nNftEn nft = _I18nNftEn._(_root);
@@ -153,6 +154,17 @@ class _I18nEn implements BaseTranslations<AppLocale, _I18nEn> {
 	late final _I18nNotificationEn notification = _I18nNotificationEn._(_root);
 	late final _I18nCommonEn common = _I18nCommonEn._(_root);
 	late final _I18nEventEn event = _I18nEventEn._(_root);
+}
+
+// Path: home
+class _I18nHomeEn {
+	_I18nHomeEn._(this._root);
+
+	final _I18nEn _root; // ignore: unused_field
+
+	// Translations
+	String get newsfeed => 'Newsfeed';
+	String get whatOnYourMind => 'What\'s on your mind, Joseph?';
 }
 
 // Path: post
@@ -369,6 +381,8 @@ class _I18nCommonUnitEn {
 extension on _I18nEn {
 	dynamic _flatMapFunction(String path) {
 		switch (path) {
+			case 'home.newsfeed': return 'Newsfeed';
+			case 'home.whatOnYourMind': return 'What\'s on your mind, Joseph?';
 			case 'post.noPost': return 'No posts yet';
 			case 'chat.unread': return 'unread';
 			case 'chat.channels': return 'channels';
