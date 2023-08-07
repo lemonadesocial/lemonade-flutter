@@ -28,21 +28,28 @@ class ChatMessageView extends StatelessWidget {
           backgroundColor: colorScheme.primary,
           appBar: LemonAppBar(
             titleBuilder: (context) => Center(
-              child: Row(
-                children: [
-                  MatrixAvatar(
-                    size: 27,
-                    mxContent: controller.room.avatar,
-                    name: controller.room.name,
-                    radius: 27,
-                    fontSize: Typo.small.fontSize!,
-                  ),
-                  SizedBox(width: Spacing.xSmall),
-                  Text(
-                    controller.room.getLocalizedDisplayname(),
-                    style: Typo.extraMedium,
-                  )
-                ],
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: 200),
+                child: Row(
+                  children: [
+                    MatrixAvatar(
+                      size: 27,
+                      mxContent: controller.room.avatar,
+                      name: controller.room.name,
+                      radius: 27,
+                      fontSize: Typo.small.fontSize!,
+                    ),
+                    SizedBox(width: Spacing.xSmall),
+                    Flexible(
+                      child: Text(
+                        controller.room.getLocalizedDisplayname(),
+                        style: Typo.extraMedium,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
             actions: [
