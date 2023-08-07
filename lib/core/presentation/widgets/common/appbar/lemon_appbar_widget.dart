@@ -7,11 +7,13 @@ import 'package:flutter/material.dart';
 class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget? leading;
   final String? title;
+  final Widget Function(BuildContext context)? titleBuilder;
   final List<Widget>? actions;
 
   const LemonAppBar({
     super.key,
     this.title,
+    this.titleBuilder,
     this.leading,
     this.actions,
   });
@@ -31,16 +33,18 @@ class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 buildLeading(),
-                Flexible(
-                  child: Center(
-                    child: Text(
-                      title ?? '',
-                      style: Typo.large,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                if (title?.isNotEmpty == true)
+                  Flexible(
+                    child: Center(
+                      child: Text(
+                        title!,
+                        style: Typo.large,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                   ),
-                ),
+                if (titleBuilder != null) titleBuilder!.call(context),
                 buildActions(),
               ],
             ),

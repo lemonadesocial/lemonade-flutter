@@ -50,6 +50,9 @@ class $AssetsFontsGen {
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
+  /// File path: assets/icons/ic_add.svg
+  SvgGenImage get icAdd => const SvgGenImage('assets/icons/ic_add.svg');
+
   /// File path: assets/icons/ic_back.svg
   SvgGenImage get icBack => const SvgGenImage('assets/icons/ic_back.svg');
 
@@ -201,6 +204,7 @@ class $AssetsIconsGen {
 
   /// List of all assets
   List<dynamic> get values => [
+        icAdd,
         icBack,
         icBadge,
         icCamera,

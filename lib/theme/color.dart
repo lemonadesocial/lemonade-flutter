@@ -6,6 +6,7 @@ class LemonColor {
   static Color black87 = const Color(0x0f0f0f).withOpacity(0.87);
   static Color raisinBlack = const Color(0xff212121);
   static Color raisinBlack0 = const Color(0xff212121).withOpacity(0);
+  static Color chineseBlack = const Color(0xff1171717);
   static Color oliveBlack = const Color(0xff404040);
   static Color white = const Color(0xffFFFFFF);
   static Color white6 = const Color(0xffFFFFFF).withOpacity(0.6);
@@ -59,8 +60,10 @@ final ColorScheme lemonadeLightThemeColorScheme = ColorScheme.light(
 
 final ColorScheme lemonadeDarkThemeColorScheme = ColorScheme.dark(
   primary: LemonColor.black,
+  primaryContainer: LemonColor.darkCharcoal,
   onPrimary: LemonColor.white,
   secondary: LemonColor.raisinBlack,
+  secondaryContainer: LemonColor.chineseBlack,
   onSecondary: LemonColor.white54,
   tertiary: LemonColor.paleViolet,
   onTertiary: LemonColor.lavender,
