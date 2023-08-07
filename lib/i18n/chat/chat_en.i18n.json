@@ -28,5 +28,6 @@
         "googly": "Send some googly eyes",
         "hug": "Send a hug",
         "cuddle": "Send a cuddle"
-    }
+    },
+    "typeMessage": "type a message..."
 }
