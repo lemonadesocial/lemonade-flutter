@@ -32,6 +32,8 @@ mixin _$GetPostsInput {
   int? get skip => throw _privateConstructorUsedError;
   @JsonKey(includeIfNull: false)
   int? get limit => throw _privateConstructorUsedError;
+  @JsonKey(includeIfNull: false)
+  int? get offset => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -57,7 +59,9 @@ abstract class $GetPostsInputCopyWith<$Res> {
       @JsonKey(includeIfNull: false)
           int? skip,
       @JsonKey(includeIfNull: false)
-          int? limit});
+          int? limit,
+      @JsonKey(includeIfNull: false)
+          int? offset});
 
   $GetPostCreatedAtInputCopyWith<$Res>? get createdAt;
 }
@@ -81,6 +85,7 @@ class _$GetPostsInputCopyWithImpl<$Res, $Val extends GetPostsInput>
     Object? createdAt = freezed,
     Object? skip = freezed,
     Object? limit = freezed,
+    Object? offset = freezed,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -106,6 +111,10 @@ class _$GetPostsInputCopyWithImpl<$Res, $Val extends GetPostsInput>
       limit: freezed == limit
           ? _value.limit
           : limit // ignore: cast_nullable_to_non_nullable
+              as int?,
+      offset: freezed == offset
+          ? _value.offset
+          : offset // ignore: cast_nullable_to_non_nullable
               as int?,
     ) as $Val);
   }
@@ -143,7 +152,9 @@ abstract class _$$_GetPostsInputCopyWith<$Res>
       @JsonKey(includeIfNull: false)
           int? skip,
       @JsonKey(includeIfNull: false)
-          int? limit});
+          int? limit,
+      @JsonKey(includeIfNull: false)
+          int? offset});
 
   @override
   $GetPostCreatedAtInputCopyWith<$Res>? get createdAt;
@@ -166,6 +177,7 @@ class __$$_GetPostsInputCopyWithImpl<$Res>
     Object? createdAt = freezed,
     Object? skip = freezed,
     Object? limit = freezed,
+    Object? offset = freezed,
   }) {
     return _then(_$_GetPostsInput(
       id: freezed == id
@@ -192,6 +204,10 @@ class __$$_GetPostsInputCopyWithImpl<$Res>
           ? _value.limit
           : limit // ignore: cast_nullable_to_non_nullable
               as int?,
+      offset: freezed == offset
+          ? _value.offset
+          : offset // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -206,7 +222,8 @@ class _$_GetPostsInput implements _GetPostsInput {
       @JsonKey(includeIfNull: false) this.published,
       @JsonKey(name: 'created_at', includeIfNull: false) this.createdAt,
       @JsonKey(includeIfNull: false) this.skip,
-      @JsonKey(includeIfNull: false) this.limit});
+      @JsonKey(includeIfNull: false) this.limit,
+      @JsonKey(includeIfNull: false) this.offset});
 
   factory _$_GetPostsInput.fromJson(Map<String, dynamic> json) =>
       _$$_GetPostsInputFromJson(json);
@@ -229,10 +246,13 @@ class _$_GetPostsInput implements _GetPostsInput {
   @override
   @JsonKey(includeIfNull: false)
   final int? limit;
+  @override
+  @JsonKey(includeIfNull: false)
+  final int? offset;
 
   @override
   String toString() {
-    return 'GetPostsInput(id: $id, user: $user, published: $published, createdAt: $createdAt, skip: $skip, limit: $limit)';
+    return 'GetPostsInput(id: $id, user: $user, published: $published, createdAt: $createdAt, skip: $skip, limit: $limit, offset: $offset)';
   }
 
   @override
@@ -247,13 +267,14 @@ class _$_GetPostsInput implements _GetPostsInput {
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.skip, skip) || other.skip == skip) &&
-            (identical(other.limit, limit) || other.limit == limit));
+            (identical(other.limit, limit) || other.limit == limit) &&
+            (identical(other.offset, offset) || other.offset == offset));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, user, published, createdAt, skip, limit);
+  int get hashCode => Object.hash(
+      runtimeType, id, user, published, createdAt, skip, limit, offset);
 
   @JsonKey(ignore: true)
   @override
@@ -282,7 +303,9 @@ abstract class _GetPostsInput implements GetPostsInput {
       @JsonKey(includeIfNull: false)
           final int? skip,
       @JsonKey(includeIfNull: false)
-          final int? limit}) = _$_GetPostsInput;
+          final int? limit,
+      @JsonKey(includeIfNull: false)
+          final int? offset}) = _$_GetPostsInput;
 
   factory _GetPostsInput.fromJson(Map<String, dynamic> json) =
       _$_GetPostsInput.fromJson;
@@ -305,6 +328,9 @@ abstract class _GetPostsInput implements GetPostsInput {
   @override
   @JsonKey(includeIfNull: false)
   int? get limit;
+  @override
+  @JsonKey(includeIfNull: false)
+  int? get offset;
   @override
   @JsonKey(ignore: true)
   _$$_GetPostsInputCopyWith<_$_GetPostsInput> get copyWith =>

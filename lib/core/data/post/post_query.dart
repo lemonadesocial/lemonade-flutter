@@ -89,3 +89,22 @@ final getPostsQuery = gql('''
   }
 }
 ''');
+
+
+final getNewsfeedQuery = gql('''
+  ${postFragment}
+  
+  query(
+  \$offset: Float
+) {
+  getNewsfeed(
+    offset: \$offset
+  ) {
+    offset
+    posts {
+      ...postFragment
+    }
+  }
+}
+''');
+

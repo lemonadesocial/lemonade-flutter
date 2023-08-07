@@ -97,6 +97,13 @@ class $AssetsIconsGen {
   SvgGenImage get icHashSymbol =>
       const SvgGenImage('assets/icons/ic_hash_symbol.svg');
 
+  /// File path: assets/icons/ic_heart.svg
+  SvgGenImage get icHeart => const SvgGenImage('assets/icons/ic_heart.svg');
+
+  /// File path: assets/icons/ic_heart_fillled.svg
+  SvgGenImage get icHeartFillled =>
+      const SvgGenImage('assets/icons/ic_heart_fillled.svg');
+
   /// File path: assets/icons/ic_host_filled.svg
   SvgGenImage get icHostFilled =>
       const SvgGenImage('assets/icons/ic_host_filled.svg');
@@ -151,6 +158,9 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/ic_menu.svg
   SvgGenImage get icMenu => const SvgGenImage('assets/icons/ic_menu.svg');
+
+  /// File path: assets/icons/ic_message.svg
+  SvgGenImage get icMessage => const SvgGenImage('assets/icons/ic_message.svg');
 
   /// File path: assets/icons/ic_more_horiz.svg
   SvgGenImage get icMoreHoriz =>
@@ -215,6 +225,8 @@ class $AssetsIconsGen {
         icFilterOutline,
         icGrid,
         icHashSymbol,
+        icHeart,
+        icHeartFillled,
         icHostFilled,
         icHouse,
         icHouseParty,
@@ -230,6 +242,7 @@ class $AssetsIconsGen {
         icLinkedin,
         icMatches,
         icMenu,
+        icMessage,
         icMoreHoriz,
         icMyLocation,
         icNavigationLine,
