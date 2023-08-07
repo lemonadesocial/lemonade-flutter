@@ -9,7 +9,6 @@ import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/avatar_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
 import 'package:app/gen/assets.gen.dart';
-import 'package:app/gen/fonts.gen.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -65,7 +64,7 @@ class PostProfileCard extends StatelessWidget {
                   children: [
                     Text(
                       postName,
-                      style: Typo.medium.copyWith(),
+                      style: Typo.medium,
                     ),
                     if (postCreatedAt != null)
                       Text(

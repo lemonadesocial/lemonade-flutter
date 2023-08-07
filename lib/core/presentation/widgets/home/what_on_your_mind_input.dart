@@ -21,7 +21,7 @@ class WhatOnYourMindInput extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                t.home.what_on_your_mind,
+                t.home.whatOnYourMind,
                 style: Typo.medium.copyWith(fontWeight: FontWeight.w400, color: themeColor.onSecondary),
               ),
             ),

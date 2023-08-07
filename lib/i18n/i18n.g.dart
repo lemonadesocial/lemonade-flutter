@@ -3,7 +3,7 @@
 /// Locales: 1
 /// Strings: 100
 ///
-/// Built on 2023-08-07 at 04:48 UTC
+/// Built on 2023-08-07 at 06:31 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -164,7 +164,7 @@ class _I18nHomeEn {
 
 	// Translations
 	String get newsfeed => 'Newsfeed';
-	String get what_on_your_mind => 'What\'s on your mind, Joseph?';
+	String get whatOnYourMind => 'What\'s on your mind, Joseph?';
 }
 
 // Path: post
@@ -381,7 +381,7 @@ extension on _I18nEn {
 	dynamic _flatMapFunction(String path) {
 		switch (path) {
 			case 'home.newsfeed': return 'Newsfeed';
-			case 'home.what_on_your_mind': return 'What\'s on your mind, Joseph?';
+			case 'home.whatOnYourMind': return 'What\'s on your mind, Joseph?';
 			case 'post.noPost': return 'No posts yet';
 			case 'chat.unread': return 'unread';
 			case 'chat.channels': return 'channels';
