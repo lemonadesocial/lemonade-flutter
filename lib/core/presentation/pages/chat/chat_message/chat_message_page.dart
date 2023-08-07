@@ -183,6 +183,46 @@ class ChatController extends State<ChatPageWithRoom> {
     }
   }
 
+  void scrollDown() async {
+    if (!timeline!.allowNewEvent) {
+      setState(() {
+        timeline = null;
+        _scrolledUp = false;
+        loadTimelineFuture = _getTimeline().onError((_, __) {});
+      });
+      await loadTimelineFuture;
+      setReadMarker(eventId: timeline!.events.first.eventId);
+    }
+    scrollController.jumpTo(0);
+  }
+
+  void onInputBarSubmitted(_) {
+    send();
+  }
+
+  Timer? typingCoolDown;
+  Timer? typingTimeout;
+  bool currentlyTyping = false;
+
+  void onInputBarChanged(String text) {
+    setReadMarker();
+    typingCoolDown?.cancel();
+    typingCoolDown = Timer(const Duration(seconds: 2), () {
+      typingCoolDown = null;
+      currentlyTyping = false;
+      room.setTyping(false);
+    });
+    typingTimeout ??= Timer(const Duration(seconds: 30), () {
+      typingTimeout = null;
+      currentlyTyping = false;
+    });
+    if (!currentlyTyping) {
+      currentlyTyping = true;
+      room.setTyping(true, timeout: const Duration(seconds: 30).inMilliseconds);
+    }
+    setState(() => inputText = text);
+  }
+
   Future<void> send() async {
     if (sendController.text.trim().isEmpty) return;
     // ignore: unawaited_futures
@@ -202,23 +242,6 @@ class ChatController extends State<ChatPageWithRoom> {
       editEvent = null;
       pendingText = '';
     });
-  }
-
-  void scrollDown() async {
-    if (!timeline!.allowNewEvent) {
-      setState(() {
-        timeline = null;
-        _scrolledUp = false;
-        loadTimelineFuture = _getTimeline().onError((_, __) {});
-      });
-      await loadTimelineFuture;
-      setReadMarker(eventId: timeline!.events.first.eventId);
-    }
-    scrollController.jumpTo(0);
-  }
-
-  void onInputBarSubmitted(_) {
-    send();
   }
 
   bool get isArchived => {Membership.leave, Membership.ban}.contains(room.membership);

@@ -260,11 +260,22 @@ class $AssetsIconsGen {
       ];
 }
 
+class $AssetsImagesGen {
+  const $AssetsImagesGen();
+
+  /// File path: assets/images/typing.gif
+  AssetGenImage get typing => const AssetGenImage('assets/images/typing.gif');
+
+  /// List of all assets
+  List<AssetGenImage> get values => [typing];
+}
+
 class Assets {
   Assets._();
 
   static const $AssetsFontsGen fonts = $AssetsFontsGen();
   static const $AssetsIconsGen icons = $AssetsIconsGen();
+  static const $AssetsImagesGen images = $AssetsImagesGen();
   static const String index = 'assets/index.html';
 
   /// List of all assets

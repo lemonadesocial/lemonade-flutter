@@ -1,9 +1,9 @@
 /// Generated file. Do not edit.
 ///
 /// Locales: 1
-/// Strings: 77
+/// Strings: 100
 ///
-/// Built on 2023-08-07 at 04:38 UTC
+/// Built on 2023-08-07 at 04:48 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -189,6 +189,7 @@ class _I18nChatEn {
 	String get directMessages => 'direct messages';
 	String get spaces => 'spaces';
 	String get home => 'home';
+	late final _I18nChatCommandEn command = _I18nChatCommandEn._(_root);
 }
 
 // Path: nft
@@ -306,6 +307,38 @@ class _I18nEventEn {
 	String get noEvents => 'No events yet';
 }
 
+// Path: chat.command
+class _I18nChatCommandEn {
+	_I18nChatCommandEn._(this._root);
+
+	final _I18nEn _root; // ignore: unused_field
+
+	// Translations
+	String get ban => 'Ban the given user from this room';
+	String get clearcache => 'Clear cache';
+	String get create => 'Create';
+	String get discardsession => 'Discard session';
+	String get dm => 'Start a direct chat\nUse --no-encryption to disable encryption';
+	String get html => 'Send HTML-formatted text';
+	String get invite => 'Invite the given user to this room';
+	String get join => 'Join the given room';
+	String get kick => 'Remove the given user from this room';
+	String get leave => 'Leave this room';
+	String get me => 'Describe yourself';
+	String get myroomavatar => 'Set your picture for this room (by mxc-uri)';
+	String get myroomnick => 'Set your display name for this room';
+	String get op => 'Set the given user\'s power level (default: 50)';
+	String get plain => 'Send unformatted text';
+	String get react => 'Send reply as a reaction';
+	String get send => 'Send text';
+	String get unban => 'Unban the given user from this room';
+	String get markasdm => 'Mark as direct message room';
+	String get markasgroup => 'Mark as group';
+	String get googly => 'Send some googly eyes';
+	String get hug => 'Send a hug';
+	String get cuddle => 'Send a cuddle';
+}
+
 // Path: auth.login
 class _I18nAuthLoginEn {
 	_I18nAuthLoginEn._(this._root);
@@ -355,6 +388,29 @@ extension on _I18nEn {
 			case 'chat.directMessages': return 'direct messages';
 			case 'chat.spaces': return 'spaces';
 			case 'chat.home': return 'home';
+			case 'chat.command.ban': return 'Ban the given user from this room';
+			case 'chat.command.clearcache': return 'Clear cache';
+			case 'chat.command.create': return 'Create';
+			case 'chat.command.discardsession': return 'Discard session';
+			case 'chat.command.dm': return 'Start a direct chat\nUse --no-encryption to disable encryption';
+			case 'chat.command.html': return 'Send HTML-formatted text';
+			case 'chat.command.invite': return 'Invite the given user to this room';
+			case 'chat.command.join': return 'Join the given room';
+			case 'chat.command.kick': return 'Remove the given user from this room';
+			case 'chat.command.leave': return 'Leave this room';
+			case 'chat.command.me': return 'Describe yourself';
+			case 'chat.command.myroomavatar': return 'Set your picture for this room (by mxc-uri)';
+			case 'chat.command.myroomnick': return 'Set your display name for this room';
+			case 'chat.command.op': return 'Set the given user\'s power level (default: 50)';
+			case 'chat.command.plain': return 'Send unformatted text';
+			case 'chat.command.react': return 'Send reply as a reaction';
+			case 'chat.command.send': return 'Send text';
+			case 'chat.command.unban': return 'Unban the given user from this room';
+			case 'chat.command.markasdm': return 'Mark as direct message room';
+			case 'chat.command.markasgroup': return 'Mark as group';
+			case 'chat.command.googly': return 'Send some googly eyes';
+			case 'chat.command.hug': return 'Send a hug';
+			case 'chat.command.cuddle': return 'Send a cuddle';
 			case 'nft.onSale': return 'on sale';
 			case 'nft.created': return 'created';
 			case 'nft.collected': return 'collected';
