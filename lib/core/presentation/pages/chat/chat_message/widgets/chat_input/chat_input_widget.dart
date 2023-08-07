@@ -43,8 +43,8 @@ class ChatInput extends StatelessWidget {
                     ),
                   ),
                   contentPadding: EdgeInsets.symmetric(
-                    vertical: 9,
-                    horizontal: 18,
+                    vertical: Spacing.extraSmall,
+                    horizontal: Spacing.smMedium,
                   ), 
                 ),
                 textSelectionTheme: TextSelectionThemeData(
