@@ -86,6 +86,7 @@ dependencies:
 
   # matrix
   matrix: ^0.22.1
+  unifiedpush: ^5.0.0
 
 dependency_overrides: 
   matrix_api_lite:

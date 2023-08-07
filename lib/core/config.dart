@@ -26,5 +26,10 @@ class AppConfig {
   static get matrixHomeserver => dotenv.env["MATRIX_HOMESERVER"];
 
   static get isProduction => dotenv.env['ENV'] == 'PROD';
+  
+  static const String pushNotificationsAppId = 'social.lemonade.app.staging';
+  static const String pushNotificationsGatewayUrl =
+      'https://staging.lemonade.social/_matrix/push/v1/notify';
+  static const String pushNotificationsPusherFormat = 'event_id_only';
 
 }

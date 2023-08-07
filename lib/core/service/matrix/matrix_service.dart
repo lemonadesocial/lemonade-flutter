@@ -3,6 +3,8 @@ import 'package:app/core/data/matrix/matrix_mutation.dart';
 import 'package:app/core/gql.dart';
 import 'package:app/core/oauth/oauth.dart';
 import 'package:app/core/service/matrix/matrix_chat_space_extension.dart';
+import 'package:app/core/utils/chat_notification/background_push.dart';
+import 'package:app/core/utils/platform_infos.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
@@ -18,6 +20,7 @@ class MatrixService {
   static String dbName = 'matrix_lemonade_chat';
 
   late Client _client;
+  BackgroundPush? backgroundPush;
 
   Client get client => _client;
 
@@ -44,6 +47,7 @@ class MatrixService {
         }
       }
     });
+    backgroundPush = _createBackgroundPush();
   }
 
   Future<void> login() async {
@@ -105,5 +109,9 @@ class MatrixService {
       },
       nativeImplementations: NativeImplementationsIsolate(compute),
     );
+  }
+
+  BackgroundPush _createBackgroundPush() {
+    return BackgroundPush(client);
   }
 }
