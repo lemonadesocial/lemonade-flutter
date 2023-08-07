@@ -82,9 +82,10 @@ class EventPostCard extends StatelessWidget {
               ),
             ),
             Positioned(
-                top: Spacing.extraSmall,
-                right: Spacing.extraSmall,
-                child: _buildEventBadge(colorScheme))
+              top: Spacing.extraSmall,
+              right: Spacing.extraSmall,
+              child: _buildEventBadge(colorScheme),
+            )
           ],
         ),
       ),
@@ -138,9 +139,10 @@ class EventPostCard extends StatelessWidget {
               width: Sizing.small,
               height: Sizing.small,
               decoration: BoxDecoration(
-                  color: colorScheme.primary,
-                  border: Border.all(color: colorScheme.outline),
-                  borderRadius: BorderRadius.circular(Sizing.small)),
+                color: colorScheme.primary,
+                border: Border.all(color: colorScheme.outline),
+                borderRadius: BorderRadius.circular(Sizing.small),
+              ),
               child: LemonCircleAvatar(
                   url: ImageUtils.generateUrl(file: file), size: Sizing.small),
             ),
@@ -207,7 +209,9 @@ class EventPostCard extends StatelessWidget {
           width: Sizing.regular,
           height: Sizing.regular,
           decoration: ShapeDecoration(
-            shape: CircleBorder(side: BorderSide(color: colorScheme.outline)),
+            shape: CircleBorder(
+              side: BorderSide(color: colorScheme.outline),
+            ),
             color: Colors.transparent,
           ),
           child: Center(

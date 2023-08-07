@@ -13,7 +13,6 @@ class GetPostsInput with _$GetPostsInput {
     @JsonKey(name: 'created_at', includeIfNull: false) GetPostCreatedAtInput? createdAt,
     @JsonKey(includeIfNull: false) int? skip,
     @JsonKey(includeIfNull: false) int? limit,
-    @JsonKey(includeIfNull: false) int? offset,
   }) = _GetPostsInput;
   factory GetPostsInput.fromJson(Map<String, dynamic> json) => _$GetPostsInputFromJson(json);
 }

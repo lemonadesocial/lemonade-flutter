@@ -32,7 +32,9 @@ class HomeNewsfeedListView extends StatelessWidget {
                 : Padding(
                     padding: EdgeInsets.symmetric(horizontal: Spacing.small),
                     child: PostProfileCard(
-                        key: Key(newsfeed[index].id), post: newsfeed[index]),
+                      key: Key(newsfeed[index].id),
+                      post: newsfeed[index],
+                    ),
                   ),
             separatorBuilder: (ctx, index) => HorizontalLine(),
             itemCount: newsfeed.length + 1,

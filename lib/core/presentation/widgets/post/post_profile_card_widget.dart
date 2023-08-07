@@ -63,9 +63,10 @@ class PostProfileCard extends StatelessWidget {
                 Row(
                   mainAxisSize: MainAxisSize.max,
                   children: [
-                    Text(postName,
-                        style: Typo.medium
-                            .copyWith(fontFamily: FontFamily.circularStd)),
+                    Text(
+                      postName,
+                      style: Typo.medium.copyWith(),
+                    ),
                     if (postCreatedAt != null)
                       Text(
                         '  •  ${timeago.format(postCreatedAt!)}',
@@ -75,8 +76,11 @@ class PostProfileCard extends StatelessWidget {
                     Spacer(),
                     ThemeSvgIcon(
                       color: colorScheme.onSurface,
-                      builder: (filter) => Assets.icons.icMoreHoriz
-                          .svg(colorFilter: filter, width: 18, height: 18),
+                      builder: (filter) => Assets.icons.icMoreHoriz.svg(
+                        colorFilter: filter,
+                        width: 18,
+                        height: 18,
+                      ),
                     ),
                   ],
                 ),
@@ -85,9 +89,9 @@ class PostProfileCard extends StatelessWidget {
                   Text(
                     postText,
                     style: Typo.medium.copyWith(
-                        color: colorScheme.onSurface,
-                        fontWeight: FontWeight.w400,
-                        fontFamily: FontFamily.circularStd),
+                      color: colorScheme.onSurface,
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
                 ],
                 if (postEvent != null) ...[
@@ -131,9 +135,8 @@ class PostProfileCard extends StatelessWidget {
   }
 
   _buildActions(ColorScheme colorScheme) {
-    final hasReactionColor = hasReaction == true
-                      ? colorScheme.tertiary
-                      : colorScheme.onSecondary;
+    final hasReactionColor =
+        hasReaction == true ? colorScheme.tertiary : colorScheme.onSecondary;
     return Padding(
         padding: EdgeInsets.only(top: Spacing.small),
         child: Row(
@@ -149,13 +152,15 @@ class PostProfileCard extends StatelessWidget {
                   ),
                 ),
                 SizedBox(width: 3),
-                Text(reactions != null ? '$reactions' : '',
-                    style: Typo.small.copyWith(
-                        fontFamily: FontFamily.circularStd,
-                        color: colorScheme.onSecondary)),
+                Text(
+                  reactions != null ? '$reactions' : '',
+                  style: Typo.small.copyWith(
+                    color: colorScheme.onSecondary,
+                  ),
+                ),
               ],
             ),
-            SizedBox(width: 12),
+            SizedBox(width: Spacing.xSmall),
             Row(
               children: [
                 ThemeSvgIcon(
@@ -167,10 +172,10 @@ class PostProfileCard extends StatelessWidget {
                   ),
                 ),
                 SizedBox(width: 3),
-                Text(comments != null ? '$comments' : '',
-                    style: Typo.small.copyWith(
-                        fontFamily: FontFamily.circularStd,
-                        color: colorScheme.onSecondary)),
+                Text(
+                  comments != null ? '$comments' : '',
+                  style: Typo.small.copyWith(color: colorScheme.onSecondary),
+                ),
               ],
             ),
             Spacer(),

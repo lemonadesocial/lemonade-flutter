@@ -17,22 +17,10 @@ class NewsfeedRepositoryImpl implements NewsfeedRepository {
   @override
   Future<Either<Failure, Newsfeed>> getNewsfeed(
       {GetNewsfeedInput? input}) async {
-    if (input?.offset == 0) {
-      final result = await _client.query(
-        QueryOptions(
-            document: getNewsfeedQuery,
-            parserFn: (data) {
-              return Newsfeed.fromDto(
-                  NewsfeedDto.fromJson(data['getNewsfeed']));
-            }),
-      );
-      if (result.hasException) return Left(Failure());
-      return Right(result.parsedData!);
-    }
     final result = await _client.query(
       QueryOptions(
           document: getNewsfeedQuery,
-          variables: input?.toJson() ?? {},
+          variables: input?.offset == 0 ? {} : input?.toJson() ?? {},
           parserFn: (data) {
             if (data['getNewsfeed'] == null) {
               return Newsfeed();
