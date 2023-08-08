@@ -1,6 +1,8 @@
+import 'package:app/core/presentation/pages/chat/chat_message/widgets/chat_input/reply_content_widget.dart';
 import 'package:app/core/presentation/pages/chat/chat_message/widgets/message_item/message_content_widget.dart';
 import 'package:app/core/presentation/pages/chat/chat_message/widgets/message_item/state_message_item_widget.dart';
 import 'package:app/core/presentation/widgets/chat/matrix_avatar.dart';
+import 'package:app/core/presentation/widgets/common/swipe/swipeable.dart';
 import 'package:app/core/service/matrix/matrix_service.dart';
 import 'package:app/core/utils/chat/matrix_date_time_extension.dart';
 import 'package:app/core/utils/date_format_utils.dart';
@@ -16,6 +18,7 @@ class MessageItem extends StatefulWidget {
   final Event event;
   final Event? nextEvent;
   final bool displayReadMarker;
+  final void Function(Event)? onSwipe;
   final void Function(Event)? onSelect;
   final void Function(Event)? onAvatarTab;
   final void Function(Event)? onInfoTab;
@@ -29,6 +32,7 @@ class MessageItem extends StatefulWidget {
     this.nextEvent,
     this.displayReadMarker = false,
     this.longPressSelect = false,
+    this.onSwipe,
     this.onSelect,
     this.onInfoTab,
     this.onAvatarTab,
@@ -134,11 +138,19 @@ class _MessageItemState extends State<MessageItem> with AutomaticKeepAliveClient
       container = Opacity(opacity: 0.33, child: container);
     }
 
-    return Container(
-      constraints: const BoxConstraints(maxWidth: 100 * 2.5),
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-        child: container,
+    return Swipeable(
+      direction: ownMessage ? SwipeDirection.endToStart : SwipeDirection.startToEnd,
+      maxOffset: 0.4,
+      onSwipe: (direction) {
+        widget.onSwipe?.call(widget.event);
+      } ,
+      key: ValueKey(widget.event.eventId),
+      child: Container(
+        constraints: const BoxConstraints(maxWidth: 100 * 2.5),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+          child: container,
+        ),
       ),
     );
   }
@@ -192,6 +204,7 @@ class _MessageItemState extends State<MessageItem> with AutomaticKeepAliveClient
                       children: <Widget>[
                         if (widget.event.relationshipType == RelationshipTypes.reply) _buildRepliedMessage(),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.end,
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -305,7 +318,7 @@ class _MessageItemState extends State<MessageItem> with AutomaticKeepAliveClient
         return InkWell(
           onTap: () {
             if (widget.scrollToEventId != null) {
-              widget.scrollToEventId!(replyEvent!.eventId);
+              widget.scrollToEventId!(replyEvent.eventId);
             }
           },
           child: AbsorbPointer(
@@ -313,11 +326,11 @@ class _MessageItemState extends State<MessageItem> with AutomaticKeepAliveClient
               margin: EdgeInsets.symmetric(
                 vertical: 4.0,
               ),
-              // child: ReplyContent(
-              //   replyEvent,
-              //   ownMessage: ownMessage,
-              //   timeline: timeline,
-              // ),
+              child: ReplyContent(
+                replyEvent!,
+                ownMessage: ownMessage,
+                timeline: widget.timeline,
+              ),
             ),
           ),
         );

@@ -1,5 +1,6 @@
 import 'package:app/core/presentation/pages/chat/chat_message/chat_message_page.dart';
 import 'package:app/core/presentation/pages/chat/chat_message/widgets/chat_input/chat_input_widget.dart';
+import 'package:app/core/presentation/pages/chat/chat_message/widgets/chat_input/reply_display_widget.dart';
 import 'package:app/core/presentation/pages/chat/chat_message/widgets/messages_list_widget.dart';
 import 'package:app/core/presentation/widgets/chat/matrix_avatar.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
@@ -74,6 +75,7 @@ class ChatMessageView extends StatelessWidget {
                       ),
               ),
             ),
+            ReplyDisplay(controller),
             ChatInput(controller)
           ],
         ),

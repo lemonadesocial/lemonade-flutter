@@ -244,6 +244,12 @@ class ChatController extends State<ChatPageWithRoom> {
     });
   }
 
+  void reply({Event? replyTo}) {
+    setState(() {
+      replyEvent = replyTo;
+    });
+  }
+
   bool get isArchived => {Membership.leave, Membership.ban}.contains(room.membership);
 
   @override
