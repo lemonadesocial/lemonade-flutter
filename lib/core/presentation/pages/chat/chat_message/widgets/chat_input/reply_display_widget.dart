@@ -21,15 +21,18 @@ class ReplyDisplay extends StatelessWidget {
             ),
             child: Row(
               mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                SizedBox(width: Spacing.small),
                 Flexible(
-                  child: controller.replyEvent != null
-                      ? ReplyContent(
-                          controller.replyEvent!,
-                          timeline: controller.timeline!,
-                        )
-                      : SizedBox.shrink(),
+                  child: Padding(
+                    padding: EdgeInsets.only(left: Spacing.extraSmall),
+                    child: controller.replyEvent != null
+                        ? ReplyContent(
+                            controller.replyEvent!,
+                            timeline: controller.timeline!,
+                          )
+                        : SizedBox.shrink(),
+                  ),
                 ),
                 IconButton(
                   icon: const Icon(Icons.close),
