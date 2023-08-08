@@ -31,12 +31,6 @@ class ReplyContent extends StatelessWidget {
       ),
       overflow: TextOverflow.ellipsis,
       maxLines: 1,
-      style: TextStyle(
-        color: ownMessage
-            ? colorScheme.onPrimaryContainer
-            : colorScheme.onBackground,
-        fontSize: fontSize,
-      ),
     );
 
     return Row(
@@ -60,12 +54,8 @@ class ReplyContent extends StatelessWidget {
                     '${snapshot.data?.calcDisplayname() ?? displayEvent.senderFromMemoryOrFallback.calcDisplayname()}:',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
+                    style: Typo.medium.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: ownMessage
-                          ? colorScheme.onPrimaryContainer
-                          : colorScheme.onBackground,
-                      fontSize: fontSize,
                     ),
                   );
                 },
