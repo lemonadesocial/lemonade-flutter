@@ -5,7 +5,9 @@ import 'package:app/core/service/matrix/matrix_service.dart';
 import 'package:app/core/utils/chat/matrix_date_time_extension.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/injection/register_module.dart';
+import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 
 import 'package:matrix/matrix.dart';
@@ -95,7 +97,7 @@ class MessageItem extends StatelessWidget {
     return _buildMessage(context);
   }
 
-  _buildMessage(BuildContext context) {
+  Widget _buildMessage(BuildContext context) {
     final messageBody = _buildMessageBody(context);
     Widget container;
     if (event.hasAggregatedEvents(timeline, RelationshipTypes.reaction) ||
@@ -108,7 +110,7 @@ class MessageItem extends StatelessWidget {
         children: <Widget>[
           if (shouldDisplayTime || selected) _buildMessageSentTime(context),
           messageBody,
-          if (event.hasAggregatedEvents(timeline, RelationshipTypes.reaction)) _buildMessageReaction(),
+          //TODO: if (event.hasAggregatedEvents(timeline, RelationshipTypes.reaction)) _buildMessageReaction(),
           if (displayReadMarker) _buildMessageReadMarker(context),
         ],
       );
@@ -121,7 +123,6 @@ class MessageItem extends StatelessWidget {
     }
 
     return Container(
-      color: selected ? Theme.of(context).primaryColor.withAlpha(100) : Theme.of(context).primaryColor.withAlpha(0),
       constraints: const BoxConstraints(maxWidth: 100 * 2.5),
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
@@ -131,10 +132,9 @@ class MessageItem extends StatelessWidget {
   }
 
   Row _buildMessageBody(BuildContext context) {
-    var color = Theme.of(context).colorScheme.surfaceVariant;
-
-    final textColor =
-        ownMessage ? Theme.of(context).colorScheme.onPrimaryContainer : Theme.of(context).colorScheme.onBackground;
+    final colorScheme = Theme.of(context).colorScheme;
+    var bodyColor = ownMessage ? colorScheme.primaryContainer : colorScheme.secondaryContainer;
+    final textColor = ownMessage ? colorScheme.onPrimary : colorScheme.onSurface;
     final borderRadius = BorderRadius.only(
       topLeft: !ownMessage ? const Radius.circular(4) : Radius.circular(LemonRadius.extraSmall),
       topRight: Radius.circular(LemonRadius.extraSmall),
@@ -142,11 +142,8 @@ class MessageItem extends StatelessWidget {
       bottomRight: ownMessage ? Radius.circular(4) : Radius.circular(LemonRadius.extraSmall),
     );
 
-    if (ownMessage) {
-      color = displayEvent.status.isError ? Colors.redAccent : Theme.of(context).colorScheme.primaryContainer;
-    }
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.end,
       mainAxisAlignment: rowMainAxisAlignment,
       mainAxisSize: MainAxisSize.max,
       children: [
@@ -154,22 +151,21 @@ class MessageItem extends StatelessWidget {
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
+            mainAxisSize: MainAxisSize.max,
             children: [
-              if (!sameSender) _buildSenderName(),
               Container(
                 alignment: alignment,
-                padding: const EdgeInsets.only(left: 8),
+                padding: EdgeInsets.only(left: sameSender ? 0 : 8),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: noBubble ? Colors.transparent : color,
-                    borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
+                    color: noBubble ? Colors.transparent : bodyColor,
+                    borderRadius: BorderRadius.circular(LemonRadius.small),
                   ),
                   padding: noBubble || noPadding
                       ? EdgeInsets.zero
                       : EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 8,
+                          horizontal: Spacing.xSmall,
+                          vertical: Spacing.extraSmall,
                         ),
                   constraints: BoxConstraints(
                     maxWidth: columnWidth * 1.5,
@@ -178,25 +174,32 @@ class MessageItem extends StatelessWidget {
                   child: InkWell(
                     onLongPress: !longPressSelect ? null : () => onSelect!(event),
                     borderRadius: borderRadius,
-                    child: Stack(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Column(
+                        if (event.relationshipType == RelationshipTypes.reply) _buildRepliedMessage(),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
                           mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            if (event.relationshipType == RelationshipTypes.reply) _buildRepliedMessage(),
-                            MessageContent(
-                              displayEvent,
-                              textColor: textColor,
-                              onInfoTab: onInfoTab,
+                          children: [
+                            Flexible(
+                              flex: 6,
+                              child: MessageContent(
+                                displayEvent,
+                                textColor: textColor,
+                                onInfoTab: onInfoTab,
+                              ),
                             ),
-                            if (event.hasAggregatedEvents(
-                              timeline,
-                              RelationshipTypes.edit,
-                            ))
-                              _buildMessageEditTime(textColor)
+                            SizedBox(width: Spacing.superExtraSmall),
+                            Flexible(
+                              flex: 1,
+                              child: 
+                              _buildMessageEditTime(colorScheme.onSurfaceVariant)
+                            )
+                            
                           ],
-                        ),
+                        )
                       ],
                     ),
                   ),
@@ -255,7 +258,7 @@ class MessageItem extends StatelessWidget {
     return Padding(
       padding: shouldDisplayTime
           ? EdgeInsets.symmetric(
-              vertical: 8.0,
+              vertical: Spacing.extraSmall
             )
           : EdgeInsets.zero,
       child: Center(
@@ -268,9 +271,12 @@ class MessageItem extends StatelessWidget {
           ),
           clipBehavior: Clip.antiAlias,
           child: Padding(
-            padding: const EdgeInsets.all(6.0),
+            padding: EdgeInsets.all(Spacing.superExtraSmall),
             child: Text(
               DateFormatUtils.fullDateWithTime(event.originServerTs),
+              style: Typo.small.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
             ),
           ),
         ),
@@ -336,65 +342,30 @@ class MessageItem extends StatelessWidget {
                 ),
               ),
             ),
-          )
+          ) 
         : FutureBuilder<User?>(
             future: event.fetchSenderUser(),
             builder: (context, snapshot) {
               final user = snapshot.data ?? event.senderFromMemoryOrFallback;
               return MatrixAvatar(
-                mxContent: user.avatarUrl,
                 name: user.calcDisplayname(),
                 onTap: () => onAvatarTab!(event),
+                size: Sizing.regular,
+                radius: Sizing.regular / 2,
+                fontSize: Typo.small.fontSize!,
+                mxContent: user.avatarUrl,
               );
             },
           );
   }
 
-  Widget _buildSenderName() {
-    return Padding(
-      padding: const EdgeInsets.only(left: 8.0, bottom: 4),
-      child: ownMessage || event.room.isDirectChat
-          ? const SizedBox(height: 12)
-          : FutureBuilder<User?>(
-              future: event.fetchSenderUser(),
-              builder: (context, snapshot) {
-                final displayName =
-                    snapshot.data?.calcDisplayname() ?? event.senderFromMemoryOrFallback.calcDisplayname();
-                return Text(
-                  displayName,
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.onPrimary,
-                  ),
-                );
-              },
-            ),
-    );
-  }
-
   _buildMessageEditTime(Color textColor) {
     final displayEvent = event.getDisplayEvent(timeline);
     return Padding(
-      padding: EdgeInsets.only(
-        top: 4.0,
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            Icons.edit_outlined,
-            color: textColor.withAlpha(164),
-            size: 14,
-          ),
-          Text(
-            ' - ${displayEvent.originServerTs.toString()}',
-            style: TextStyle(
-              color: textColor.withAlpha(164),
-              fontSize: 12,
-            ),
-          ),
-        ],
+      padding: EdgeInsets.only(top: Spacing.extraSmall / 2),
+      child: Text(
+        DateFormatUtils.timeOnly(displayEvent.originServerTs).toLowerCase(),
+        style: Typo.xSmall.copyWith(color: textColor),
       ),
     );
   }

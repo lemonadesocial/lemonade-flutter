@@ -107,7 +107,6 @@ class MessageContent extends StatelessWidget {
         hideReply: true,
       ),
       builder: (context, snapshot) {
-        // TODO:
         return Linkify(
           text: snapshot.data ??
               event.calcLocalizedBodyFallback(

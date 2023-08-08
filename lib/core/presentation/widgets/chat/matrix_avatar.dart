@@ -12,6 +12,7 @@ class MatrixAvatar extends StatelessWidget {
   static const double defaultSize = 44;
   final Client? client;
   final double fontSize;
+  final double? radius;
 
   const MatrixAvatar({
     this.mxContent,
@@ -20,6 +21,7 @@ class MatrixAvatar extends StatelessWidget {
     this.onTap,
     this.client,
     this.fontSize = 18,
+    this.radius,
     Key? key,
   }) : super(key: key);
 
@@ -46,7 +48,7 @@ class MatrixAvatar extends StatelessWidget {
         ),
       ),
     );
-    final borderRadius = BorderRadius.circular(LemonRadius.extraSmall);
+    final borderRadius = BorderRadius.circular(radius ?? LemonRadius.extraSmall);
     final container = ClipRRect(
       borderRadius: borderRadius,
       child: Container(
