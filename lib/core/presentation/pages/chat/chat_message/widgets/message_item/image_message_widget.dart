@@ -36,13 +36,11 @@ class ImageMessage extends StatelessWidget {
         child: CircularProgressIndicator.adaptive(),
       );
     }
-    final String blurHashString =
-        event.infoMap['xyz.amorgan.blurhash'] is String
-            ? event.infoMap['xyz.amorgan.blurhash']
-            : 'LEHV6nWB2yk8pyo0adR*.7kCMdnj';
-    final ratio = event.infoMap['w'] is int && event.infoMap['h'] is int
-        ? event.infoMap['w'] / event.infoMap['h']
-        : 1.0;
+    final String blurHashString = event.infoMap['xyz.amorgan.blurhash'] is String
+        ? event.infoMap['xyz.amorgan.blurhash']
+        : 'LEHV6nWB2yk8pyo0adR*.7kCMdnj';
+    final ratio =
+        event.infoMap['w'] is int && event.infoMap['h'] is int ? event.infoMap['w'] / event.infoMap['h'] : 1.0;
     var width = 32;
     var height = 32;
     if (ratio > 1.0) {
@@ -62,11 +60,15 @@ class ImageMessage extends StatelessWidget {
     );
   }
 
-  void _onTap(BuildContext context) {
-    if (onTap != null) {
-      onTap!();
-      return;
-    }
+  void _onTap(BuildContext context, {Widget Function()? imageBuilder}) {
+    showDialog(
+      context: context,
+      useRootNavigator: false,
+      builder: (_) => ImageViewerPage(
+        heroTag: event.eventId,
+        imageBuilder: imageBuilder,
+      ),
+    );
   }
 
   @override
@@ -89,6 +91,9 @@ class ImageMessage extends StatelessWidget {
             isThumbnail: false,
             placeholder: (ctx) => Loading.defaultLoading(ctx),
           ),
+          onTap: (_imageBuilder) {
+            _onTap(context, imageBuilder: _imageBuilder);
+          },
           child: MxcImage(
             event: event,
             width: width,
