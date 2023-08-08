@@ -181,6 +181,12 @@ class $AssetsIconsGen {
   SvgGenImage get icPeopleAlt =>
       const SvgGenImage('assets/icons/ic_people_alt.svg');
 
+  /// File path: assets/icons/ic_poll.svg
+  SvgGenImage get icPoll => const SvgGenImage('assets/icons/ic_poll.svg');
+
+  /// File path: assets/icons/ic_public.svg
+  SvgGenImage get icPublic => const SvgGenImage('assets/icons/ic_public.svg');
+
   /// File path: assets/icons/ic_qr.svg
   SvgGenImage get icQr => const SvgGenImage('assets/icons/ic_qr.svg');
 
@@ -248,6 +254,8 @@ class $AssetsIconsGen {
         icNavigationLine,
         icNews,
         icPeopleAlt,
+        icPoll,
+        icPublic,
         icQr,
         icSearch,
         icShare,

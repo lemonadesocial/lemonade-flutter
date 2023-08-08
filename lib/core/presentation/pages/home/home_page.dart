@@ -78,11 +78,13 @@ class _HomePageViewState extends State<_HomeListingView> {
       body: Container(
         child: Column(children: [
           Padding(
-              padding: EdgeInsets.only(
-                  left: Spacing.small,
-                  right: Spacing.small,
-                  bottom: Spacing.small),
-              child: WhatOnYourMindInput()),
+            padding: EdgeInsets.only(
+              left: Spacing.small,
+              right: Spacing.small,
+              bottom: Spacing.small,
+            ),
+            child: WhatOnYourMindInput(),
+          ),
           HorizontalLine(),
           Expanded(
               child: NotificationListener<ScrollNotification>(

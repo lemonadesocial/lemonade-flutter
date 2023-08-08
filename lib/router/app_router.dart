@@ -61,6 +61,10 @@ class AppRouter extends $AppRouter {
           page: WebviewRoute.page,
           fullscreenDialog: true,
         ),
+        AutoRoute(
+          path: '/create_post',
+          page: CreatePostRoute.page,
+        ),
         chatRoutes,
       ];
 }
