@@ -34,7 +34,7 @@ class ReplyContent extends StatelessWidget {
     );
 
     return Row(
-      mainAxisSize: MainAxisSize.max,
+      mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Container(
           width: 3,
