@@ -1,5 +1,5 @@
-import 'package:app/core/presentation/widgets/chat/matrix_avatar.dart';
 import 'package:app/core/presentation/widgets/chat/mxc_image.dart';
+import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_html/flutter_html.dart';
@@ -377,35 +377,16 @@ class MatrixPill extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       // onTap: UrlLauncher(outerContext, uri).launchUrl,
-      child: Material(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(6),
-          side: BorderSide(
-            color: Theme.of(outerContext).colorScheme.onPrimaryContainer,
-            width: 0.5,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            '@$name',
+            style: Typo.medium.copyWith(
+              fontWeight: FontWeight.w700
+            )
           ),
-        ),
-        color: Theme.of(outerContext).colorScheme.primaryContainer,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 6.0),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              MatrixAvatar(
-                mxContent: avatar,
-                name: name,
-                size: 16,
-              ),
-              const SizedBox(width: 6),
-              Text(
-                name,
-                style: TextStyle(
-                  color: Theme.of(outerContext).colorScheme.onPrimaryContainer,
-                ),
-              ),
-            ],
-          ),
-        ),
+        ],
       ),
     );
   }

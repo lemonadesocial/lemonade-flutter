@@ -8,14 +8,16 @@ import 'package:flutter/material.dart';
 class HeroImageViewer extends StatelessWidget {
   final Widget child;
   final String tag;
-  final String imageUrl;
+  final String? imageUrl;
+  final Widget Function()? imageBuilder;
 
   const HeroImageViewer({
     super.key,
     required this.child,
     required this.tag,
-    required this.imageUrl,
-  });
+    this.imageUrl,
+    this.imageBuilder,
+  }) : assert(imageUrl != null || imageBuilder != null);
 
   _showImage(context) {
     Navigator.of(context).push(
@@ -24,6 +26,7 @@ class HeroImageViewer extends StatelessWidget {
         pageBuilder: (_, __, ___) => _ImageViewerPage(
           heroTag: tag,
           imageUrl: imageUrl,
+          imageBuilder: imageBuilder,
         ),
       ),
     );
@@ -31,12 +34,12 @@ class HeroImageViewer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        _showImage(context);
-      },
-      child: Hero(
-        tag: tag,
+    return Hero(
+      tag: tag,
+      child: GestureDetector(
+        onTap: () {
+          _showImage(context);
+        },
         child: child,
       ),
     );
@@ -45,11 +48,13 @@ class HeroImageViewer extends StatelessWidget {
 
 class _ImageViewerPage extends StatelessWidget {
   final String heroTag;
-  final String imageUrl;
+  final String? imageUrl;
+  final Widget Function()? imageBuilder;
 
   const _ImageViewerPage({
     required this.heroTag,
-    required this.imageUrl,
+    this.imageUrl,
+    this.imageBuilder,
   });
 
   @override
@@ -79,26 +84,38 @@ class _ImageViewerPage extends StatelessWidget {
   }
 
   _buildHero() {
-    return Container(
-      width: 350,
-      height: 350,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(LemonRadius.small),
-      ),
-      child: Hero(
-          flightShuttleBuilder: (_, __, ___, ____, _____) {
-            return _buildImage();
-          },
-          tag: heroTag,
-          child: _buildImage()),
-    );
+    return imageBuilder != null
+        ? Hero(
+            tag: heroTag,
+            child: imageBuilder!(),
+            flightShuttleBuilder: (_, __, ___, ____, _____) {
+              return imageBuilder!();
+            },
+          )
+        : Hero(
+            tag: heroTag,
+            child: Container(
+              width: 350,
+              height: 350,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(LemonRadius.small),
+              ),
+              child: Hero(
+                tag: heroTag,
+                flightShuttleBuilder: (_, __, ___, ____, _____) {
+                  return _buildImage();
+                },
+                child: _buildImage(),
+              ),
+            ),
+          );
   }
 
   _buildImage() {
     return ClipRRect(
       borderRadius: BorderRadius.circular(LemonRadius.small),
       child: CachedNetworkImage(
-        imageUrl: imageUrl,
+        imageUrl: imageUrl!,
         fit: BoxFit.cover,
         errorWidget: (_, __, ___) => ImagePlaceholder.defaultPlaceholder(),
         placeholder: (_, __) => ImagePlaceholder.defaultPlaceholder(),

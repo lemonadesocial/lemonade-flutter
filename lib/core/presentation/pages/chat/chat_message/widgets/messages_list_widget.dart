@@ -79,7 +79,6 @@ class MessagesList extends StatelessWidget {
 
           // The message at this index:
           final event = controller.timeline!.events[i - 1];
-
           return AutoScrollTag(
             key: ValueKey(event.eventId),
             index: i - 1,
@@ -133,9 +132,7 @@ class MessagesList extends StatelessWidget {
   }) {
     return Builder(
       builder: (context) {
-        WidgetsBinding.instance.addPostFrameCallback(
-          (_) => action()
-        );
+        WidgetsBinding.instance.addPostFrameCallback((_) => action());
         return Center(
           child: IconButton(
             onPressed: action,

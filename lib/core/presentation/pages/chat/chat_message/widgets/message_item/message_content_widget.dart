@@ -1,4 +1,6 @@
 import 'package:app/core/presentation/pages/chat/chat_message/widgets/message_item/html_message_widget.dart';
+import 'package:app/core/presentation/pages/chat/chat_message/widgets/message_item/image_message_widget.dart';
+import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
@@ -212,7 +214,14 @@ class MessageContent extends StatelessWidget {
 
   Text _buildStickerMessage() => Text('Sticker message'); //TODO: return Sticker(event);
 
-  Text _buildImageMessage() => Text('Image message'); //TODO:
+  Widget _buildImageMessage() => ClipRRect(
+        borderRadius: BorderRadius.circular(LemonRadius.small),
+        child: ImageMessage(
+          event,
+          fit: BoxFit.cover,
+          thumbnailOnly: true,
+        ),
+      );
 }
 
 class _ButtonContent extends StatelessWidget {
