@@ -1,3 +1,4 @@
+import 'package:app/core/presentation/widgets/back_button_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
@@ -5,6 +6,7 @@ import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../i18n/i18n.g.dart';
+import '../../widgets/theme_svg_icon_widget.dart';
 
 @RoutePage()
 class CreatePostPage extends StatelessWidget {
@@ -14,10 +16,11 @@ class CreatePostPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final textCtrl = TextEditingController();
     final t = Translations.of(context);
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       backgroundColor: LemonColor.black,
       appBar: AppBar(
-        automaticallyImplyLeading: true,
+        leading: LemonBackButton(),
         actions: [
           InkWell(
             onTap: textCtrl.text.isEmpty ? null : () {},
@@ -33,7 +36,7 @@ class CreatePostPage extends StatelessWidget {
                     color: LemonColor.lavender,
                   ),
                   child: Text(
-                    'Post',
+                    t.post.post,
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
@@ -50,34 +53,49 @@ class CreatePostPage extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            Divider(color: LemonColor.white.withOpacity(0.7)),
+            Divider(color: colorScheme.onSurface),
             Expanded(
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
                 child: TextFormField(
                   controller: textCtrl,
                   maxLines: 10,
-                  cursorColor: LemonColor.white,
+                  cursorColor: colorScheme.onPrimary,
                   decoration: InputDecoration.collapsed(hintText: t.home.whatOnYourMind),
                 ),
               ),
             ),
-            Divider(color: LemonColor.white.withOpacity(0.7)),
+            Divider(color: colorScheme.onSurface),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
               child: Row(
                 children: [
-                  Assets.icons.icHouseParty.svg(color: LemonColor.white.withOpacity(0.7)),
-                  SizedBox(width: Spacing.medium),
-                  Assets.icons.icCrystal.svg(color: LemonColor.white.withOpacity(0.7)),
-                  SizedBox(width: Spacing.medium),
-                  Assets.icons.icTicket.svg(color: LemonColor.white.withOpacity(0.7)),
-                  SizedBox(width: Spacing.medium),
-                  Assets.icons.icPoll.svg(color: LemonColor.white.withOpacity(0.7)),
-                  SizedBox(width: Spacing.medium),
-                  Assets.icons.icCamera.svg(color: LemonColor.white.withOpacity(0.7)),
-                  SizedBox(width: Spacing.medium),
                   Expanded(
+                    flex: 7,
+                    child: Row(
+                      children: [
+                        ThemeSvgIcon(
+                          color: colorScheme.onSurface,
+                          builder: (filter) => Assets.icons.icHouseParty.svg(colorFilter: filter),
+                        ),
+                        SizedBox(width: Spacing.medium),
+
+                        ///Temporary remove since we don't have integration with it yet
+                        // Assets.icons.icCrystal.svg(color: LemonColor.white.withOpacity(0.7)),
+                        // SizedBox(width: Spacing.medium),
+                        // Assets.icons.icTicket.svg(color: LemonColor.white.withOpacity(0.7)),
+                        // SizedBox(width: Spacing.medium),
+                        // Assets.icons.icPoll.svg(color: LemonColor.white.withOpacity(0.7)),
+                        // SizedBox(width: Spacing.medium),
+                        ThemeSvgIcon(
+                          color: colorScheme.onSurface,
+                          builder: (filter) => Assets.icons.icCamera.svg(colorFilter: filter),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    flex: 3,
                     child: Container(
                       decoration: BoxDecoration(
                         color: LemonColor.black,
