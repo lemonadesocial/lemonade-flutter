@@ -250,6 +250,28 @@ class ChatController extends State<ChatPageWithRoom> {
     });
   }
 
+  Future<void> sendEmojiAction({required Event event, required String emoji}) async {
+    Iterable<Event> _allReactionEvents = event
+        .aggregatedEvents(
+          timeline!,
+          RelationshipTypes.reaction,
+        )
+        .where(
+          (event) => event.senderId == event.room.client.userID && event.type == 'm.reaction',
+        );
+    // prevent duplicated reactions
+    bool reacted = _allReactionEvents.any(
+      (e) => e.content.tryGetMap('m.relates_to')?['key'] == emoji,
+    );
+    if (reacted) {
+      return;
+    }
+    await  room.sendReaction(
+        event.eventId,
+        emoji,
+      );
+  }
+
   bool get isArchived => {Membership.leave, Membership.ban}.contains(room.membership);
 
   @override
