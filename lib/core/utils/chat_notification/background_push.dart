@@ -1,18 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:app/core/config.dart';
-import 'package:app/core/service/firebase/firebase_service.dart';
 import 'package:app/core/utils/chat_notification/setting_keys.dart';
 import 'package:app/core/utils/platform_infos.dart';
-import 'package:app/injection/register_module.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:matrix/matrix.dart';
-import 'package:unifiedpush/unifiedpush.dart';
-import 'package:http/http.dart' as http;
-
+import 'package:fcm_shared_isolate/fcm_shared_isolate.dart';
 import 'famedlysdk_store.dart';
 import 'push_helper.dart';
 
@@ -22,14 +18,15 @@ class BackgroundPush {
       FlutterLocalNotificationsPlugin();
   Client client;
   String? _fcmToken;
-  final dynamic firebase = null; //FcmSharedIsolate();
+  BuildContext? context;
+  final dynamic firebase = FcmSharedIsolate();
   StreamSubscription<SyncUpdate>? onRoomSync;
   bool upAction = false;
   Store? _store;
   Store get store => _store ??= Store();
   // BuildContext? context;
   // void Function(String errorMsg, {Uri? link})? onFcmError;
-  
+
   factory BackgroundPush.clientOnly(Client client) {
     _instance ??= BackgroundPush._(client);
     return _instance!;
@@ -45,29 +42,29 @@ class BackgroundPush {
     return instance;
   }
 
-
   BackgroundPush._(this.client) {
     onRoomSync ??= client.onSync.stream
         .where((s) => s.hasRoomUpdate)
         .listen((s) => _onClearingPush(getFromServer: false));
-    firebase?.setListeners(
-      onMessage: (message) => pushHelper(
-        PushNotification.fromJson(
-          Map<String, dynamic>.from(message['data'] ?? message),
-        ),
-        client: client,
-        // activeRoomId: router?.currentState?.pathParameters['roomid'],
-        onSelectNotification: goToRoom,
-      ),
+    firebase.setListeners(
+      onMessage: onMessage,
     );
-    if (Platform.isAndroid) {
-      UnifiedPush.initialize(
-        onNewEndpoint: _newUpEndpoint,
-        onRegistrationFailed: _upUnregistered,
-        onUnregistered: _upUnregistered,
-        onMessage: _onUpMessage,
-      );
-    }
+  }
+
+  Future<void> onMessage(Map<dynamic, dynamic> message) async {
+    print('Got a new message from firebase cloud messaging: $message');
+    final data = Map<String, dynamic>.from(message);
+    // UP may strip the devices list
+    data['devices'] ??= [];
+    pushHelper(
+      context!,
+      PushNotification.fromJson(
+        Map<String, dynamic>.from(data),
+      ),
+      client: client,
+      // activeRoomId: router?.currentState?.pathParameters['roomid'],
+      onSelectNotification: goToRoom,
+    );
   }
 
   bool _clearingPushLock = false;
@@ -151,6 +148,7 @@ class BackgroundPush {
 
   // TODO: Handle redirect to room
   Future<void> goToRoom(NotificationResponse? response) async {
+    Logs().i("goToRoom");
     // try {
     //   final roomId = response?.payload;
     //   Logs().v('[Push] Attempting to go to room $roomId...');
@@ -169,81 +167,6 @@ class BackgroundPush {
     // } catch (e, s) {
     //   Logs().e('[Push] Failed to open room', e, s);
     // }
-  }
-
-  Future<void> _newUpEndpoint(String newEndpoint, String i) async {
-    upAction = true;
-    if (newEndpoint.isEmpty) {
-      await _upUnregistered(i);
-      return;
-    }
-    var endpoint =
-        'https://matrix.gateway.unifiedpush.org/_matrix/push/v1/notify';
-    try {
-      final url = Uri.parse(newEndpoint)
-          .replace(
-            path: '/_matrix/push/v1/notify',
-            query: '',
-          )
-          .toString()
-          .split('?')
-          .first;
-      final res =
-          json.decode(utf8.decode((await http.get(Uri.parse(url))).bodyBytes));
-      if (res['gateway'] == 'matrix' ||
-          (res['unifiedpush'] is Map &&
-              res['unifiedpush']['gateway'] == 'matrix')) {
-        endpoint = url;
-      }
-    } catch (e) {
-      Logs().i(
-        '[Push] No self-hosted unified push gateway present: $newEndpoint',
-      );
-    }
-    Logs().i('[Push] UnifiedPush using endpoint $endpoint');
-    final oldTokens = <String?>{};
-    try {
-      // final fcmToken = await firebase?.getToken();
-      final fcmToken = await getIt<FirebaseService>().getToken();
-      oldTokens.add(fcmToken);
-    } catch (_) {}
-    await setupPusher(
-      gatewayUrl: endpoint,
-      token: newEndpoint,
-      oldTokens: oldTokens,
-      useDeviceSpecificAppId: true,
-    );
-    await store.setItem(SettingKeys.unifiedPushEndpoint, newEndpoint);
-    await store.setItemBool(SettingKeys.unifiedPushRegistered, true);
-  }
-
-  Future<void> _upUnregistered(String i) async {
-    upAction = true;
-    Logs().i('[Push] Removing UnifiedPush endpoint...');
-    final oldEndpoint = await store.getItem(SettingKeys.unifiedPushEndpoint);
-    await store.setItemBool(SettingKeys.unifiedPushRegistered, false);
-    await store.deleteItem(SettingKeys.unifiedPushEndpoint);
-    if (oldEndpoint?.isNotEmpty ?? false) {
-      // remove the old pusher
-      await setupPusher(
-        oldTokens: {oldEndpoint},
-      );
-    }
-  }
-
-  Future<void> _onUpMessage(Uint8List message, String i) async {
-    upAction = true;
-    final data = Map<String, dynamic>.from(
-      json.decode(utf8.decode(message))['notification'],
-    );
-    // UP may strip the devices list
-    data['devices'] ??= [];
-    await pushHelper(
-      PushNotification.fromJson(data),
-      client: client,
-      // TODO: Add router for navigate
-      // activeRoomId: router?.currentState?.pathParameters['roomid'],
-    );
   }
 
   /// Workaround for the problem that local notification IDs must be int but we
@@ -275,10 +198,6 @@ class BackgroundPush {
         })) ??
         [];
 
-    Logs().i('get Pushers');
-    Logs().i(pushers.toSet().toString());
-    Logs().i('token');
-    Logs().i(token ?? '');
     var setNewPusher = false;
     // Just the plain app id, we add the .data_message suffix later
     var appId = AppConfig.pushNotificationsAppId;
@@ -289,14 +208,11 @@ class BackgroundPush {
       deviceAppId = deviceAppId.substring(0, 64);
     }
     if (!useDeviceSpecificAppId && PlatformInfos.isAndroid) {
-      appId += '.data_message';
+      appId += '';
     }
     final thisAppId = useDeviceSpecificAppId ? deviceAppId : appId;
     if (gatewayUrl != null && token != null) {
       final currentPushers = pushers.where((pusher) => pusher.pushkey == token);
-      Logs().i("currentPushers");
-      Logs().i(currentPushers.toString());
-      Logs().i(currentPushers.first.toJson().toString());
       if (currentPushers.length == 1 &&
           currentPushers.first.kind == 'http' &&
           currentPushers.first.appId == thisAppId &&
@@ -332,12 +248,7 @@ class BackgroundPush {
     }
     if (setNewPusher) {
       try {
-        Logs().i('client postPusher');
-        Logs().i(token!);
-        Logs().i(thisAppId);
-        Logs().i(clientName);
-        Logs().i(client.deviceName!);
-        Logs().i(gatewayUrl!);
+        Logs().i('[Push] postPusher');
         await client.postPusher(
           Pusher(
             pushkey: token!,
@@ -359,16 +270,11 @@ class BackgroundPush {
     }
   }
 
-  Future<void> setupUp() async {
-    // await UnifiedPush.registerAppWithDialog(context!);
-  }
-
   Future<void> setupFirebase() async {
     Logs().v('Setup firebase');
     if (_fcmToken?.isEmpty ?? true) {
       try {
-        // _fcmToken = await firebase?.getToken();
-        _fcmToken = await getIt<FirebaseService>().getToken();
+        _fcmToken = await firebase?.getToken();
         if (_fcmToken == null) throw ('PushToken is null');
       } catch (e, s) {
         Logs().w('[Push] cannot get token', e, e is String ? null : s);
@@ -381,10 +287,8 @@ class BackgroundPush {
     );
   }
 
-
   bool _wentToRoomOnStartup = false;
   Future<void> setupPush() async {
-    print('...........SetupPush');
     Logs().d("SetupPush");
     if (client.onLoginStateChanged.value != LoginState.loggedIn ||
         !PlatformInfos.isMobile) {
@@ -395,12 +299,7 @@ class BackgroundPush {
     if (upAction) {
       return;
     }
-    if (!PlatformInfos.isIOS &&
-        (await UnifiedPush.getDistributors()).isNotEmpty) {
-      await setupUp();
-    } else {
-      await setupFirebase();
-    }
+    await setupFirebase();
 
     // ignore: unawaited_futures
     _flutterLocalNotificationsPlugin

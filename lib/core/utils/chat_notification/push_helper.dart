@@ -5,12 +5,14 @@ import 'dart:io';
 import 'package:app/core/service/matrix/matrix_service.dart';
 import 'package:app/core/utils/chat_notification/setting_keys.dart';
 import 'package:app/injection/register_module.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:matrix/matrix.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> pushHelper(
+  BuildContext context,
   PushNotification notification, {
   Client? client,
   String? activeRoomId,
@@ -18,6 +20,7 @@ Future<void> pushHelper(
 }) async {
   try {
     await _tryPushHelper(
+      context,
       notification,
       client: client,
       activeRoomId: activeRoomId,
@@ -30,23 +33,23 @@ Future<void> pushHelper(
     final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     await flutterLocalNotificationsPlugin.initialize(
       const InitializationSettings(
-        android: AndroidInitializationSettings('notifications_icon'),
+        android: AndroidInitializationSettings('ic_launcher'),
         iOS: DarwinInitializationSettings(),
       ),
       onDidReceiveNotificationResponse: onSelectNotification,
       onDidReceiveBackgroundNotificationResponse: onSelectNotification,
     );
-
+    
     flutterLocalNotificationsPlugin.show(
       0,
-      "newMessageInFluffyChat",
+      "newMessageInLemonadeChat",
       "openAppToReadMessages",
       NotificationDetails(
         iOS: const DarwinNotificationDetails(),
         android: AndroidNotificationDetails(
-          "fluffychat_push",
-          "FluffyChat push channel",
-          channelDescription: 'Push notifications for FluffyChat',
+          "lemonadechat_push",
+          "LemonadeChat push channel",
+          channelDescription: 'Push notifications for LemonadeChat',
           number: notification.counts?.unread,
           ticker: "unread chats",
           // ticker: l10n.unreadChats(notification.counts?.unread ?? 1),
@@ -60,11 +63,13 @@ Future<void> pushHelper(
 }
 
 Future<void> _tryPushHelper(
+  BuildContext context,
   PushNotification notification, {
   Client? client,
   String? activeRoomId,
   void Function(NotificationResponse?)? onSelectNotification,
 }) async {
+  Logs().v('_tryPushHelper');
   final isBackgroundMessage = client == null;
   Logs().v(
     'Push helper has been started (background=$isBackgroundMessage).',
@@ -83,7 +88,7 @@ Future<void> _tryPushHelper(
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   await flutterLocalNotificationsPlugin.initialize(
     const InitializationSettings(
-      android: AndroidInitializationSettings('notifications_icon'),
+      android: AndroidInitializationSettings('ic_launcher'),
       iOS: DarwinInitializationSettings(),
     ),
     onDidReceiveNotificationResponse: onSelectNotification,
@@ -103,7 +108,7 @@ Future<void> _tryPushHelper(
         await flutterLocalNotificationsPlugin.cancelAll();
         final store = await SharedPreferences.getInstance();
         await store.setString(
-          "chat.fluffy.notification_ids",
+          "chat.lemonade.notification_ids",
           json.encode({}),
         );
       }
@@ -139,7 +144,7 @@ Future<void> _tryPushHelper(
 
   // Calculate the body
   final body = event.type == EventTypes.Encrypted
-      ? "💬 New message in FluffyChat"
+      ? "💬 New message in LemonadeChat"
       : await event.calcLocalizedBody(
           MatrixDefaultLocalizations(),
           plaintextBody: true,
@@ -224,7 +229,6 @@ Future<void> _tryPushHelper(
           groupConversation: !event.room.isDirectChat,
           messages: [newMessage],
         ),
-    // TODO: Fix ticker
     // ticker: l10n.unreadChats(notification.counts?.unread ?? 1),
     ticker: "Unread chats",
     importance: Importance.max,

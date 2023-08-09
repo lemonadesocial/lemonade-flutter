@@ -5,6 +5,8 @@ import 'package:app/core/config.dart';
 import 'package:app/core/data/fcm/fcm_mutation.dart';
 import 'package:app/core/gql.dart';
 import 'package:app/core/oauth/oauth.dart';
+import 'package:app/core/service/matrix/matrix_service.dart';
+import 'package:app/core/utils/chat_notification/push_helper.dart';
 import 'package:app/core/utils/navigation_utils.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -15,8 +17,10 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:injectable/injectable.dart';
+import 'package:matrix/matrix.dart';
 
-import '../../../firebase_options_staging.dart' as FirebaseOptionsStaging;
+import '../../../firebase_options_staging.dart'
+    as FirebaseOptionsStaging;
 import '../../../firebase_options_production.dart' as FirebaseOptionsProduction;
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -26,7 +30,6 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     print('Message notification title: ${message.notification?.title}');
     print('Message notification body: ${message.notification?.body}');
   }
-
   try {
     String? type = message.data['type'];
     String? objectType = message.data['object_type'];
@@ -40,6 +43,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 @lazySingleton
 class FirebaseService {
+  static Client? _client;
   static BuildContext? _context;
   static FirebaseMessaging? _firebaseMessaging;
   static FirebaseMessaging get firebaseMessaging =>
@@ -48,8 +52,8 @@ class FirebaseService {
   late AndroidNotificationChannel channel;
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
-  void setContext(BuildContext context) =>
-      FirebaseService._context = context;
+  void setContext(BuildContext context) => FirebaseService._context = context;
+  void setClient(Client client) => FirebaseService._client = client;
 
   Future<void> initialize() async {
     await Firebase.initializeApp(
@@ -110,7 +114,7 @@ class FirebaseService {
     };
 
     await _requestPermission();
-    _setUpMessageHandlers();
+    // _setUpMessageHandlers();
     getIt<AppOauth>().tokenStateStream.listen(_onTokenStateChange);
     getToken();
   }
@@ -140,6 +144,7 @@ class FirebaseService {
   }
 
   void showFlutterNotification(RemoteMessage message) {
+    Logs().i("showFlutterNotification");
     RemoteNotification? notification = message.notification;
     AndroidNotification? android = message.notification?.android;
     if (notification != null && android != null && !kIsWeb) {
@@ -159,7 +164,7 @@ class FirebaseService {
     }
   }
 
-  void _setUpMessageHandlers() {
+  void setUpMessageHandlers() {
     FirebaseMessaging.onMessage.listen(showFlutterNotification);
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
     FirebaseMessaging.onMessageOpenedApp
