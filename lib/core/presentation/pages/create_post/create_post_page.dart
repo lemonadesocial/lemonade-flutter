@@ -2,6 +2,7 @@ import 'package:app/core/presentation/widgets/back_button_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:app/theme/typo.dart';
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 
@@ -37,10 +38,7 @@ class CreatePostPage extends StatelessWidget {
                   ),
                   child: Text(
                     t.post.post,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                    ),
+                    style: Typo.medium.copyWith(fontWeight: FontWeight.w700)
                   ),
                 ),
               ],
@@ -113,7 +111,7 @@ class CreatePostPage extends StatelessWidget {
                         children: [
                           Assets.icons.icPublic.svg(),
                           SizedBox(width: Spacing.superExtraSmall),
-                          Text('Public'),
+                          Text(t.post.public),
                         ],
                       ),
                     ),
