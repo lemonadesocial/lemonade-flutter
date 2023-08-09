@@ -123,7 +123,7 @@ class HtmlMessage extends StatelessWidget {
         const ImageExtension(),
         FontColorExtension(),
       ],
-      // onLinkTap: (url, _, __) => UrlLauncher(context, url).launchUrl(),
+      //TODO: onLinkTap: (url, _, __) => UrlLauncher(context, url).launchUrl(),
       onlyRenderTheseTags: const {
         ...allowedHtmlTags,
         // Needed to make it work properly
@@ -376,7 +376,7 @@ class MatrixPill extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      // onTap: UrlLauncher(outerContext, uri).launchUrl,
+      //TODO: onTap: UrlLauncher(outerContext, uri).launchUrl,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [

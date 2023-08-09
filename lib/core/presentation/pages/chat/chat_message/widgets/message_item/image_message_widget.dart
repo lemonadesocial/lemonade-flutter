@@ -30,35 +30,7 @@ class ImageMessage extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  Widget _buildPlaceholder(BuildContext context) {
-    if (event.messageType == MessageTypes.Sticker) {
-      return const Center(
-        child: CircularProgressIndicator.adaptive(),
-      );
-    }
-    final String blurHashString = event.infoMap['xyz.amorgan.blurhash'] is String
-        ? event.infoMap['xyz.amorgan.blurhash']
-        : 'LEHV6nWB2yk8pyo0adR*.7kCMdnj';
-    final ratio =
-        event.infoMap['w'] is int && event.infoMap['h'] is int ? event.infoMap['w'] / event.infoMap['h'] : 1.0;
-    var width = 32;
-    var height = 32;
-    if (ratio > 1.0) {
-      height = (width / ratio).round();
-    } else {
-      width = (height * ratio).round();
-    }
-    return SizedBox(
-      width: this.width,
-      height: this.height,
-      child: BlurHash(
-        hash: blurHashString,
-        decodingWidth: width,
-        decodingHeight: height,
-        imageFit: fit,
-      ),
-    );
-  }
+  String get defaultBlurHash => 'LEHV6nWB2yk8pyo0adR*.7kCMdnj';
 
   void _onTap(BuildContext context, {Widget Function()? imageBuilder}) {
     showDialog(
@@ -104,6 +76,36 @@ class ImageMessage extends StatelessWidget {
             placeholder: _buildPlaceholder,
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildPlaceholder(BuildContext context) {
+    if (event.messageType == MessageTypes.Sticker) {
+      return const Center(
+        child: CircularProgressIndicator.adaptive(),
+      );
+    }
+    final String blurHashString = event.infoMap['xyz.amorgan.blurhash'] is String
+        ? event.infoMap['xyz.amorgan.blurhash']
+        : defaultBlurHash;
+    final ratio =
+        event.infoMap['w'] is int && event.infoMap['h'] is int ? event.infoMap['w'] / event.infoMap['h'] : 1.0;
+    var width = 32;
+    var height = 32;
+    if (ratio > 1.0) {
+      height = (width / ratio).round();
+    } else {
+      width = (height * ratio).round();
+    }
+    return SizedBox(
+      width: this.width,
+      height: this.height,
+      child: BlurHash(
+        hash: blurHashString,
+        decodingWidth: width,
+        decodingHeight: height,
+        imageFit: fit,
       ),
     );
   }

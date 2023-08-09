@@ -1,3 +1,5 @@
+import 'package:app/theme/sizing.dart';
+import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:matrix/matrix.dart';
@@ -21,7 +23,6 @@ class ReplyContent extends StatelessWidget {
     final timeline = this.timeline;
     final displayEvent =
         timeline != null ? replyEvent.getDisplayEvent(timeline) : replyEvent;
-    final fontSize = Typo.medium.fontSize!;
 
     replyBody = Text(
       displayEvent.calcLocalizedBodyFallback(
@@ -37,11 +38,11 @@ class ReplyContent extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Container(
-          width: 3,
-          height: fontSize * 2 + 6,
+          width: 2,
+          height: Sizing.medium,
           color: colorScheme.onSecondary
         ),
-        const SizedBox(width: 6),
+        SizedBox(width: Spacing.superExtraSmall),
         Flexible(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
