@@ -10,7 +10,7 @@ class ReplyDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return controller.replyEvent == null
-        ? SizedBox.shrink()
+        ? const SizedBox.shrink()
         : Container(
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.primaryContainer,

@@ -19,29 +19,12 @@ class ReplyContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    Widget replyBody;
-    final timeline = this.timeline;
-    final displayEvent =
-        timeline != null ? replyEvent.getDisplayEvent(timeline) : replyEvent;
-
-    replyBody = Text(
-      displayEvent.calcLocalizedBodyFallback(
-        MatrixDefaultLocalizations(),
-        withSenderNamePrefix: false,
-        hideReply: true,
-      ),
-      overflow: TextOverflow.ellipsis,
-      maxLines: 1,
-    );
+    final displayEvent = timeline != null ? replyEvent.getDisplayEvent(timeline!) : replyEvent;
 
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        Container(
-          width: 2,
-          height: Sizing.medium,
-          color: colorScheme.onSecondary
-        ),
+        Container(width: 2, height: Sizing.medium, color: colorScheme.onSecondary),
         SizedBox(width: Spacing.superExtraSmall),
         Flexible(
           child: Column(
@@ -61,7 +44,15 @@ class ReplyContent extends StatelessWidget {
                   );
                 },
               ),
-              replyBody,
+              Text(
+                displayEvent.calcLocalizedBodyFallback(
+                  MatrixDefaultLocalizations(),
+                  withSenderNamePrefix: false,
+                  hideReply: true,
+                ),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+              ),
             ],
           ),
         ),
