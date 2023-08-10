@@ -4,6 +4,7 @@ import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../i18n/i18n.g.dart';
@@ -19,9 +20,9 @@ class CreatePostPage extends StatelessWidget {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      backgroundColor: LemonColor.black,
+      backgroundColor: colorScheme.primary,
       appBar: AppBar(
-        leading: LemonBackButton(),
+        leading: const LemonBackButton(),
         actions: [
           InkWell(
             onTap: textCtrl.text.isEmpty ? null : () {},
@@ -78,7 +79,7 @@ class CreatePostPage extends StatelessWidget {
                         ),
                         SizedBox(width: Spacing.medium),
 
-                        ///Temporary remove since we don't have integration with it yet
+                        // TODO(Ron): Temporary remove since we don't have integration with it yet
                         // Assets.icons.icCrystal.svg(color: LemonColor.white.withOpacity(0.7)),
                         // SizedBox(width: Spacing.medium),
                         // Assets.icons.icTicket.svg(color: LemonColor.white.withOpacity(0.7)),
@@ -96,10 +97,10 @@ class CreatePostPage extends StatelessWidget {
                     flex: 3,
                     child: Container(
                       decoration: BoxDecoration(
-                        color: LemonColor.black,
+                        color: colorScheme.primary,
                         borderRadius: BorderRadius.circular(32),
                         border: Border.all(
-                          color: LemonColor.white.withOpacity(0.7),
+                          color: colorScheme.onSurface,
                         ),
                       ),
                       padding: EdgeInsets.symmetric(
