@@ -8,22 +8,27 @@ import 'package:flutter/material.dart';
 class HeroImageViewer extends StatelessWidget {
   final Widget child;
   final String tag;
-  final String imageUrl;
+  final String? imageUrl;
+  final Widget Function()? imageBuilder;
+  final Function(Widget Function()? imageBuilder)? onTap;
 
   const HeroImageViewer({
     super.key,
     required this.child,
     required this.tag,
-    required this.imageUrl,
-  });
+    this.imageUrl,
+    this.imageBuilder,
+    this.onTap,
+  }) : assert(imageUrl != null || imageBuilder != null);
 
-  _showImage(context) {
+  void _showImage(BuildContext context) {
     Navigator.of(context).push(
       PageRouteBuilder(
         opaque: false,
-        pageBuilder: (_, __, ___) => _ImageViewerPage(
+        pageBuilder: (_, __, ___) => ImageViewerPage(
           heroTag: tag,
           imageUrl: imageUrl,
+          imageBuilder: imageBuilder,
         ),
       ),
     );
@@ -31,25 +36,31 @@ class HeroImageViewer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        _showImage(context);
-      },
-      child: Hero(
-        tag: tag,
+    return Hero(
+      tag: tag,
+      child: GestureDetector(
+        onTap: () {
+          if (onTap != null) {
+            onTap?.call(imageBuilder);
+            return;
+          }
+          _showImage(context);
+        },
         child: child,
       ),
     );
   }
 }
 
-class _ImageViewerPage extends StatelessWidget {
+class ImageViewerPage extends StatelessWidget {
   final String heroTag;
-  final String imageUrl;
+  final String? imageUrl;
+  final Widget Function()? imageBuilder;
 
-  const _ImageViewerPage({
+  const ImageViewerPage({
     required this.heroTag,
-    required this.imageUrl,
+    this.imageUrl,
+    this.imageBuilder,
   });
 
   @override
@@ -78,30 +89,36 @@ class _ImageViewerPage extends StatelessWidget {
     );
   }
 
-  _buildHero() {
-    return Container(
-      width: 350,
-      height: 350,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(LemonRadius.small),
-      ),
-      child: Hero(
-          flightShuttleBuilder: (_, __, ___, ____, _____) {
-            return _buildImage();
-          },
-          tag: heroTag,
-          child: _buildImage()),
-    );
+  Widget _buildHero() {
+    return imageBuilder != null
+        ? Hero(
+            tag: heroTag,
+            child: imageBuilder!(),
+            flightShuttleBuilder: (_, __, ___, ____, _____) {
+              return imageBuilder!();
+            },
+          )
+        : Hero(
+            tag: heroTag,
+            flightShuttleBuilder: (_, __, ___, ____, _____) {
+              return _buildImage();
+            },
+            child: _buildImage(),
+          );
   }
 
   _buildImage() {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(LemonRadius.small),
-      child: CachedNetworkImage(
-        imageUrl: imageUrl,
-        fit: BoxFit.cover,
-        errorWidget: (_, __, ___) => ImagePlaceholder.defaultPlaceholder(),
-        placeholder: (_, __) => ImagePlaceholder.defaultPlaceholder(),
+    return Container(
+      width: 350,
+      height: 350,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(LemonRadius.small),
+        child: CachedNetworkImage(
+          imageUrl: imageUrl!,
+          fit: BoxFit.cover,
+          errorWidget: (_, __, ___) => ImagePlaceholder.defaultPlaceholder(),
+          placeholder: (_, __) => ImagePlaceholder.defaultPlaceholder(),
+        ),
       ),
     );
   }

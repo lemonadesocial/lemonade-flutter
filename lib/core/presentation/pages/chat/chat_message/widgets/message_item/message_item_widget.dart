@@ -1,6 +1,8 @@
+import 'package:app/core/presentation/pages/chat/chat_message/widgets/chat_input/reply_content_widget.dart';
 import 'package:app/core/presentation/pages/chat/chat_message/widgets/message_item/message_content_widget.dart';
 import 'package:app/core/presentation/pages/chat/chat_message/widgets/message_item/state_message_item_widget.dart';
 import 'package:app/core/presentation/widgets/chat/matrix_avatar.dart';
+import 'package:app/core/presentation/widgets/common/swipe/swipeable.dart';
 import 'package:app/core/service/matrix/matrix_service.dart';
 import 'package:app/core/utils/chat/matrix_date_time_extension.dart';
 import 'package:app/core/utils/date_format_utils.dart';
@@ -12,10 +14,11 @@ import 'package:flutter/material.dart';
 
 import 'package:matrix/matrix.dart';
 
-class MessageItem extends StatelessWidget {
+class MessageItem extends StatefulWidget {
   final Event event;
   final Event? nextEvent;
   final bool displayReadMarker;
+  final void Function(Event)? onSwipe;
   final void Function(Event)? onSelect;
   final void Function(Event)? onAvatarTab;
   final void Function(Event)? onInfoTab;
@@ -23,13 +26,13 @@ class MessageItem extends StatelessWidget {
   final bool longPressSelect;
   final bool selected;
   final Timeline timeline;
-  final client = getIt<MatrixService>().client;
 
   MessageItem(
     this.event, {
     this.nextEvent,
     this.displayReadMarker = false,
     this.longPressSelect = false,
+    this.onSwipe,
     this.onSelect,
     this.onInfoTab,
     this.onAvatarTab,
@@ -39,25 +42,32 @@ class MessageItem extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  Event get displayEvent => event.getDisplayEvent(timeline);
+  @override
+  State<MessageItem> createState() => _MessageItemState();
+}
 
-  bool get ownMessage => event.senderId == client.userID;
+class _MessageItemState extends State<MessageItem> with AutomaticKeepAliveClientMixin {
+  final client = getIt<MatrixService>().client;
+
+  Event get displayEvent => widget.event.getDisplayEvent(widget.timeline);
+
+  bool get ownMessage => widget.event.senderId == client.userID;
 
   bool get shouldDisplayTime =>
-      event.type == EventTypes.RoomCreate ||
-      nextEvent == null ||
+      widget.event.type == EventTypes.RoomCreate ||
+      widget.nextEvent == null ||
       // check if 2 time close enough
-      !event.originServerTs.sameEnvironment(nextEvent!.originServerTs);
+      !widget.event.originServerTs.sameEnvironment(widget.nextEvent!.originServerTs);
 
   bool get sameSender =>
-      nextEvent != null &&
+      widget.nextEvent != null &&
       [
         EventTypes.Message,
         EventTypes.Sticker,
         EventTypes.Encrypted,
-      ].contains(nextEvent!.type) &&
-      nextEvent?.relationshipType == null &&
-      nextEvent!.senderId == event.senderId &&
+      ].contains(widget.nextEvent!.type) &&
+      widget.nextEvent?.relationshipType == null &&
+      widget.nextEvent!.senderId == widget.event.senderId &&
       !shouldDisplayTime;
 
   double get columnWidth => 360;
@@ -67,30 +77,36 @@ class MessageItem extends StatelessWidget {
         MessageTypes.Video,
         MessageTypes.Image,
         MessageTypes.Sticker,
-      }.contains(event.messageType) &&
-      !event.redacted;
+      }.contains(widget.event.messageType) &&
+      !widget.event.redacted;
 
   bool get noPadding => {
         MessageTypes.File,
         MessageTypes.Audio,
-      }.contains(event.messageType);
+      }.contains(widget.event.messageType);
 
   Alignment get alignment => ownMessage ? Alignment.topRight : Alignment.topLeft;
 
   MainAxisAlignment get rowMainAxisAlignment => ownMessage ? MainAxisAlignment.end : MainAxisAlignment.start;
 
+
+  @override
+  bool get wantKeepAlive => true;
+
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+    
     if (!{
       EventTypes.Message,
       EventTypes.Sticker,
       EventTypes.Encrypted,
       EventTypes.CallInvite,
-    }.contains(event.type)) {
+    }.contains(widget.event.type)) {
       return _buildStateMessage();
     }
 
-    if (event.type == EventTypes.Message && event.messageType == EventTypes.KeyVerificationRequest) {
+    if (widget.event.type == EventTypes.Message && widget.event.messageType == EventTypes.KeyVerificationRequest) {
       return _buildVerificationRequestContent();
     }
 
@@ -100,33 +116,41 @@ class MessageItem extends StatelessWidget {
   Widget _buildMessage(BuildContext context) {
     final messageBody = _buildMessageBody(context);
     Widget container;
-    if (event.hasAggregatedEvents(timeline, RelationshipTypes.reaction) ||
+    if (widget.event.hasAggregatedEvents(widget.timeline, RelationshipTypes.reaction) ||
         shouldDisplayTime ||
-        selected ||
-        displayReadMarker) {
+        widget.selected ||
+        widget.displayReadMarker) {
       container = Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: ownMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: <Widget>[
-          if (shouldDisplayTime || selected) _buildMessageSentTime(context),
+          if (shouldDisplayTime || widget.selected) _buildMessageSentTime(context),
           messageBody,
           //TODO: if (event.hasAggregatedEvents(timeline, RelationshipTypes.reaction)) _buildMessageReaction(),
-          if (displayReadMarker) _buildMessageReadMarker(context),
+          if (widget.displayReadMarker) _buildMessageReadMarker(context),
         ],
       );
     } else {
       container = messageBody;
     }
 
-    if (event.messageType == MessageTypes.BadEncrypted || event.redacted) {
+    if (widget.event.messageType == MessageTypes.BadEncrypted || widget.event.redacted) {
       container = Opacity(opacity: 0.33, child: container);
     }
 
-    return Container(
-      constraints: const BoxConstraints(maxWidth: 100 * 2.5),
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-        child: container,
+    return Swipeable(
+      direction: ownMessage ? SwipeDirection.endToStart : SwipeDirection.startToEnd,
+      maxOffset: 0.4,
+      onSwipe: (direction) {
+        widget.onSwipe?.call(widget.event);
+      } ,
+      key: ValueKey(widget.event.eventId),
+      child: Container(
+        constraints: const BoxConstraints(maxWidth: 100 * 2.5),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+          child: container,
+        ),
       ),
     );
   }
@@ -172,32 +196,28 @@ class MessageItem extends StatelessWidget {
                   ),
                   clipBehavior: Clip.antiAlias,
                   child: InkWell(
-                    onLongPress: !longPressSelect ? null : () => onSelect!(event),
+                    onLongPress: !widget.longPressSelect ? null : () => widget.onSelect!(widget.event),
                     borderRadius: borderRadius,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        if (event.relationshipType == RelationshipTypes.reply) _buildRepliedMessage(),
+                        if (widget.event.relationshipType == RelationshipTypes.reply) _buildRepliedMessage(),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.end,
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Flexible(
-                              flex: 6,
+                              flex: 5,
                               child: MessageContent(
                                 displayEvent,
                                 textColor: textColor,
-                                onInfoTab: onInfoTab,
+                                onInfoTab: widget.onInfoTab,
                               ),
                             ),
                             SizedBox(width: Spacing.superExtraSmall),
-                            Flexible(
-                              flex: 1,
-                              child: 
-                              _buildMessageEditTime(colorScheme.onSurfaceVariant)
-                            )
-                            
+                            Flexible(flex: 1, child: _buildMessageEditTime(colorScheme.onSurfaceVariant))
                           ],
                         )
                       ],
@@ -256,11 +276,7 @@ class MessageItem extends StatelessWidget {
 
   Widget _buildMessageSentTime(BuildContext context) {
     return Padding(
-      padding: shouldDisplayTime
-          ? EdgeInsets.symmetric(
-              vertical: Spacing.extraSmall
-            )
-          : EdgeInsets.zero,
+      padding: shouldDisplayTime ? EdgeInsets.symmetric(vertical: Spacing.extraSmall) : EdgeInsets.zero,
       child: Center(
         child: Container(
           decoration: BoxDecoration(
@@ -273,7 +289,7 @@ class MessageItem extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.all(Spacing.superExtraSmall),
             child: Text(
-              DateFormatUtils.fullDateWithTime(event.originServerTs),
+              DateFormatUtils.fullDateWithTime(widget.event.originServerTs),
               style: Typo.small.copyWith(
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
               ),
@@ -286,23 +302,23 @@ class MessageItem extends StatelessWidget {
 
   FutureBuilder<Event?> _buildRepliedMessage() {
     return FutureBuilder<Event?>(
-      future: event.getReplyEvent(timeline),
+      future: widget.event.getReplyEvent(widget.timeline),
       builder: (BuildContext context, snapshot) {
         final replyEvent = snapshot.hasData
             ? snapshot.data
             : Event(
-                eventId: event.relationshipEventId!,
+                eventId: widget.event.relationshipEventId!,
                 content: {'msgtype': 'm.text', 'body': '...'},
-                senderId: event.senderId,
+                senderId: widget.event.senderId,
                 type: 'm.room.message',
-                room: event.room,
+                room: widget.event.room,
                 status: EventStatus.sent,
                 originServerTs: DateTime.now(),
               );
         return InkWell(
           onTap: () {
-            if (scrollToEventId != null) {
-              scrollToEventId!(replyEvent!.eventId);
+            if (widget.scrollToEventId != null) {
+              widget.scrollToEventId!(replyEvent.eventId);
             }
           },
           child: AbsorbPointer(
@@ -310,11 +326,11 @@ class MessageItem extends StatelessWidget {
               margin: EdgeInsets.symmetric(
                 vertical: 4.0,
               ),
-              // child: ReplyContent(
-              //   replyEvent,
-              //   ownMessage: ownMessage,
-              //   timeline: timeline,
-              // ),
+              child: ReplyContent(
+                replyEvent!,
+                ownMessage: ownMessage,
+                timeline: widget.timeline,
+              ),
             ),
           ),
         );
@@ -330,26 +346,26 @@ class MessageItem extends StatelessWidget {
               padding: const EdgeInsets.only(top: 8.0),
               child: Center(
                 child: SizedBox(
-                  width: 16,
-                  height: 16,
-                  child: event.status == EventStatus.sending
+                  width: Sizing.xSmall,
+                  height: Sizing.xSmall,
+                  child: widget.event.status == EventStatus.sending
                       ? const CircularProgressIndicator.adaptive(
                           strokeWidth: 2,
                         )
-                      : event.status == EventStatus.error
+                      : widget.event.status == EventStatus.error
                           ? const Icon(Icons.error, color: Colors.red)
                           : null,
                 ),
               ),
             ),
-          ) 
+          )
         : FutureBuilder<User?>(
-            future: event.fetchSenderUser(),
+            future: widget.event.fetchSenderUser(),
             builder: (context, snapshot) {
-              final user = snapshot.data ?? event.senderFromMemoryOrFallback;
+              final user = snapshot.data ?? widget.event.senderFromMemoryOrFallback;
               return MatrixAvatar(
                 name: user.calcDisplayname(),
-                onTap: () => onAvatarTab!(event),
+                onTap: () => widget.onAvatarTab!(widget.event),
                 size: Sizing.regular,
                 radius: Sizing.regular / 2,
                 fontSize: Typo.small.fontSize!,
@@ -360,7 +376,7 @@ class MessageItem extends StatelessWidget {
   }
 
   _buildMessageEditTime(Color textColor) {
-    final displayEvent = event.getDisplayEvent(timeline);
+    final displayEvent = widget.event.getDisplayEvent(widget.timeline);
     return Padding(
       padding: EdgeInsets.only(top: Spacing.extraSmall / 2),
       child: Text(
@@ -376,9 +392,9 @@ class MessageItem extends StatelessWidget {
   }
 
   Widget _buildStateMessage() {
-    if (event.type.startsWith('m.call.')) {
+    if (widget.event.type.startsWith('m.call.')) {
       return const SizedBox.shrink();
     }
-    return StateMessageItem(event);
+    return StateMessageItem(widget.event);
   }
 }
