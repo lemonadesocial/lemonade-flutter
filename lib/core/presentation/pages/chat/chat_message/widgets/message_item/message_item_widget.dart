@@ -97,13 +97,13 @@ class _MessageItemState extends State<MessageItem> with AutomaticKeepAliveClient
 
   MainAxisAlignment get rowMainAxisAlignment => ownMessage ? MainAxisAlignment.end : MainAxisAlignment.start;
 
+
   @override
   bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-
     if (!{
       EventTypes.Message,
       EventTypes.Sticker,

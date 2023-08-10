@@ -21,7 +21,7 @@ class HeroImageViewer extends StatelessWidget {
     this.onTap,
   }) : assert(imageUrl != null || imageBuilder != null);
 
-  _showImage(context) {
+  void _showImage(BuildContext context) {
     Navigator.of(context).push(
       PageRouteBuilder(
         opaque: false,
@@ -40,10 +40,10 @@ class HeroImageViewer extends StatelessWidget {
       tag: tag,
       child: GestureDetector(
         onTap: () {
-          if(onTap != null) {
+          if (onTap != null) {
             onTap?.call(imageBuilder);
             return;
-          } 
+          }
           _showImage(context);
         },
         child: child,
@@ -89,7 +89,7 @@ class ImageViewerPage extends StatelessWidget {
     );
   }
 
-  _buildHero() {
+  Widget _buildHero() {
     return imageBuilder != null
         ? Hero(
             tag: heroTag,
