@@ -49,7 +49,7 @@ class MessageItem extends StatefulWidget {
   State<MessageItem> createState() => _MessageItemState();
 }
 
-class _MessageItemState extends State<MessageItem> with AutomaticKeepAliveClientMixin {
+class _MessageItemState extends State<MessageItem> {
   final client = getIt<MatrixService>().client;
 
   Event get displayEvent => widget.event.getDisplayEvent(widget.timeline);
@@ -97,13 +97,8 @@ class _MessageItemState extends State<MessageItem> with AutomaticKeepAliveClient
 
   MainAxisAlignment get rowMainAxisAlignment => ownMessage ? MainAxisAlignment.end : MainAxisAlignment.start;
 
-
-  @override
-  bool get wantKeepAlive => true;
-
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     if (!{
       EventTypes.Message,
       EventTypes.Sticker,
