@@ -51,7 +51,9 @@ class ChatStackController extends State<ChatStackPage> {
   @override
   Widget build(BuildContext context) {
     return isLogged
-        ? AutoRouter()
+        ? AutoRouter(
+          navigatorObservers: () => [HeroController()],
+        )
         : Scaffold(
             backgroundColor: Theme.of(context).colorScheme.primary,
             body: Center(
