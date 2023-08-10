@@ -1,13 +1,13 @@
 import 'package:app/core/presentation/widgets/back_button_widget.dart';
+import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
 import 'package:app/gen/assets.gen.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../i18n/i18n.g.dart';
+import '../../widgets/common/button/linear_gradient_button_widget.dart';
 import '../../widgets/theme_svg_icon_widget.dart';
 
 @RoutePage()
@@ -28,20 +28,15 @@ class CreatePostPage extends StatelessWidget {
             onTap: textCtrl.text.isEmpty ? null : () {},
             child: Row(
               children: [
-                Container(
+                LinearGradientButton(
+                  label: t.post.post,
+                  radius: BorderRadius.circular(32),
                   padding: EdgeInsets.symmetric(
                     horizontal: Spacing.smMedium,
                     vertical: Spacing.superExtraSmall,
                   ),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(32),
-                    color: LemonColor.lavender,
-                  ),
-                  child: Text(
-                    t.post.post,
-                    style: Typo.medium.copyWith(fontWeight: FontWeight.w700)
-                  ),
-                ),
+                  onTap: textCtrl.text.isEmpty ? null : () {},
+                )
               ],
             ),
           ),
@@ -95,26 +90,14 @@ class CreatePostPage extends StatelessWidget {
                   ),
                   Expanded(
                     flex: 3,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: colorScheme.primary,
-                        borderRadius: BorderRadius.circular(32),
-                        border: Border.all(
-                          color: colorScheme.onSurface,
-                        ),
-                      ),
+                    child: LemonOutlineButton(
+                      leading: Assets.icons.icPublic.svg(),
+                      label: t.post.public,
                       padding: EdgeInsets.symmetric(
                         vertical: Spacing.superExtraSmall,
                         horizontal: Spacing.small,
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Assets.icons.icPublic.svg(),
-                          SizedBox(width: Spacing.superExtraSmall),
-                          Text(t.post.public),
-                        ],
-                      ),
+                      radius: BorderRadius.circular(32),
                     ),
                   ),
                 ],
