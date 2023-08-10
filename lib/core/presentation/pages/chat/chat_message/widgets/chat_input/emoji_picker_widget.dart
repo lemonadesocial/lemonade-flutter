@@ -19,26 +19,19 @@ class LemonEmojiPicker extends StatelessWidget {
       snapSizes: [0.7],
       builder: (controller) => Flexible(
         child: SafeArea(
-          child: CustomScrollView(
-            controller: controller,
-            slivers: [
-              SliverToBoxAdapter(
-                child: SizedBox(
-                  height: 600,
-                  child: EmojiPicker(
-                    onEmojiSelected: (category, emoji) {
-                      onEmojiSelected?.call(emoji);
-                    },
-                    config: Config(
-                      iconColor: colorScheme.onSurfaceVariant,
-                      iconColorSelected: colorScheme.onPrimary,
-                      indicatorColor: Colors.transparent,
-                      bgColor: colorScheme.surface,
-                    ),
-                  ),
-                ),
+          child: SizedBox(
+            height: 600,
+            child: EmojiPicker(
+              onEmojiSelected: (category, emoji) {
+                onEmojiSelected?.call(emoji);
+              },
+              config: Config(
+                iconColor: colorScheme.onSurfaceVariant,
+                iconColorSelected: colorScheme.onPrimary,
+                indicatorColor: Colors.transparent,
+                bgColor: colorScheme.surface,
               ),
-            ],
+            ),
           ),
         ),
       ),

@@ -61,15 +61,18 @@ class ChatMessageView extends StatelessWidget {
       ),
       body: SafeArea(
         child: Column(
+          mainAxisSize: MainAxisSize.max,
           children: [
             StreamBuilder(
               stream: controller.room.onUpdate.stream.rateLimit(Duration(seconds: 1)),
               builder: (context, snapshot) => FutureBuilder(
                 future: controller.loadTimelineFuture,
                 builder: (context, _snapshot) => controller.timeline == null
-                    ? Center(
-                        child: Loading.defaultLoading(context),
-                      )
+                    ? Expanded(
+                      child: Center(
+                          child: Loading.defaultLoading(context),
+                        ),
+                    )
                     : Expanded(
                         child: MessagesList(controller: controller),
                       ),
