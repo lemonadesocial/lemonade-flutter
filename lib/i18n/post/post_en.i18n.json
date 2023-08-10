@@ -3,5 +3,7 @@
     "post": "Post",
     "public": "Public",
     "friend": "Friends",
-    "follower": "Followers"
+    "follower": "Followers",
+    "selectEvent": "Select Event",
+    "searchEventHint": "Search for events or their hosts"
 }

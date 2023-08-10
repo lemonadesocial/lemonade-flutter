@@ -110,7 +110,7 @@ linter:
     leading_newlines_in_multiline_strings: true
     library_names: true
     missing_whitespace_between_adjacent_strings: true
-    no_default_cases: true
+    no_default_cases: false
     null_check_on_nullable_type_parameter: true
     only_throw_errors: true
     overridden_fields: true
