@@ -1,18 +1,15 @@
 import 'dart:convert';
 import 'dart:io';
 
-
 import 'package:app/core/service/matrix/matrix_service.dart';
 import 'package:app/core/utils/chat_notification/setting_keys.dart';
 import 'package:app/injection/register_module.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:matrix/matrix.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> pushHelper(
-  BuildContext context,
   PushNotification notification, {
   Client? client,
   String? activeRoomId,
@@ -20,7 +17,6 @@ Future<void> pushHelper(
 }) async {
   try {
     await _tryPushHelper(
-      context,
       notification,
       client: client,
       activeRoomId: activeRoomId,
@@ -51,8 +47,8 @@ Future<void> pushHelper(
           "LemonadeChat push channel",
           channelDescription: 'Push notifications for LemonadeChat',
           number: notification.counts?.unread,
-          ticker: "unread chats",
-          // ticker: l10n.unreadChats(notification.counts?.unread ?? 1),
+          ticker: "Unread chats",
+          // ticker: t.chat.unread_chats(unreadCount: notification.counts?.unread ?? 1),
           importance: Importance.max,
           priority: Priority.max,
         ),
@@ -63,7 +59,6 @@ Future<void> pushHelper(
 }
 
 Future<void> _tryPushHelper(
-  BuildContext context,
   PushNotification notification, {
   Client? client,
   String? activeRoomId,
@@ -229,8 +224,8 @@ Future<void> _tryPushHelper(
           groupConversation: !event.room.isDirectChat,
           messages: [newMessage],
         ),
-    // ticker: l10n.unreadChats(notification.counts?.unread ?? 1),
     ticker: "Unread chats",
+    // ticker: t.chat.unread_chats(unreadCount: notification.counts?.unread ?? 1),
     importance: Importance.max,
     priority: Priority.max,
     groupKey: notificationGroupId,

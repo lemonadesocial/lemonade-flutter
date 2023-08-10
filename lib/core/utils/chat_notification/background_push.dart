@@ -5,7 +5,6 @@ import 'dart:io';
 import 'package:app/core/config.dart';
 import 'package:app/core/utils/chat_notification/setting_keys.dart';
 import 'package:app/core/utils/platform_infos.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:matrix/matrix.dart';
 import 'package:fcm_shared_isolate/fcm_shared_isolate.dart';
@@ -18,13 +17,12 @@ class BackgroundPush {
       FlutterLocalNotificationsPlugin();
   Client client;
   String? _fcmToken;
-  BuildContext? context;
+  // BuildContext? context;
   final dynamic firebase = FcmSharedIsolate();
   StreamSubscription<SyncUpdate>? onRoomSync;
   bool upAction = false;
   Store? _store;
   Store get store => _store ??= Store();
-  // BuildContext? context;
   // void Function(String errorMsg, {Uri? link})? onFcmError;
 
   factory BackgroundPush.clientOnly(Client client) {
@@ -57,7 +55,6 @@ class BackgroundPush {
     // UP may strip the devices list
     data['devices'] ??= [];
     pushHelper(
-      context!,
       PushNotification.fromJson(
         Map<String, dynamic>.from(data),
       ),

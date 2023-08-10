@@ -4,6 +4,7 @@
     "directMessages": "direct messages",
     "spaces": "spaces",
     "home": "home",
+    "unread_chats": "$unreadCount unread chats",
     "command": {
         "ban": "Ban the given user from this room",
         "clearcache": "Clear cache",
