@@ -1,34 +1,41 @@
 {
   "project_info": {
-    "project_number": "610594530625",
-    "project_id": "lemonade-staging-88d1c",
-    "storage_bucket": "lemonade-staging-88d1c.appspot.com"
+    "project_number": "1019886962700",
+    "project_id": "lemonade-development",
+    "storage_bucket": "lemonade-development.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:610594530625:android:0f12542abff71d4197adc0",
+        "mobilesdk_app_id": "1:1019886962700:android:0a92cdc86475e714340629",
         "android_client_info": {
           "package_name": "social.lemonade.app.staging"
         }
       },
       "oauth_client": [
         {
-          "client_id": "610594530625-4130b5km9ee1id42iuvt1v9kv8ctb22p.apps.googleusercontent.com",
+          "client_id": "1019886962700-ikgbh91ds8un0grh0pj0m3dtjsbj1vff.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAa6SbBX30d2xsl-opo_jvavt22cj3wN2Y"
+          "current_key": "AIzaSyBDqmuE_rWF1rT25EnGOuYubkq2WFwoMRs"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "610594530625-4130b5km9ee1id42iuvt1v9kv8ctb22p.apps.googleusercontent.com",
+              "client_id": "1019886962700-ikgbh91ds8un0grh0pj0m3dtjsbj1vff.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "1019886962700-r5paqir97uefk6aht6120b5j40o1utls.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "social.lemonade.app.development"
+              }
             }
           ]
         }
