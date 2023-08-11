@@ -272,6 +272,24 @@ class ChatController extends State<ChatPageWithRoom> {
       );
   }
 
+  void selectEditEventAction(Event? event) => setState(() {
+        editEvent = event;
+        inputText = sendController.text = editEvent!.getDisplayEvent(timeline!).calcLocalizedBodyFallback(
+              MatrixDefaultLocalizations(),
+              withSenderNamePrefix: false,
+              hideReply: true,
+            );
+      });
+  
+  void cancelReplyOrEditEventAction() => setState(() {
+        if (editEvent != null) {
+          inputText = sendController.text = pendingText;
+          pendingText = '';
+        }
+        replyEvent = null;
+        editEvent = null;
+      });
+
   bool get isArchived => {Membership.leave, Membership.ban}.contains(room.membership);
 
   @override

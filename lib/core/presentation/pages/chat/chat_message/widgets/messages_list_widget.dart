@@ -93,6 +93,10 @@ class MessagesList extends StatelessWidget {
                       BottomSheetUtils.showSnapBottomSheet(
                         context,
                         builder: (context) => MessageActions(
+                          event: event,
+                          onEdit: () {
+                            controller.selectEditEventAction(event);
+                          },
                           onReact: (emoji) {
                             controller.sendEmojiAction(event: event, emoji: emoji);
                           }

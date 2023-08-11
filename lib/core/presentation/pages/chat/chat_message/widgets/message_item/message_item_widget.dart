@@ -216,7 +216,12 @@ class _MessageItemState extends State<MessageItem> {
                               ),
                             ),
                             SizedBox(width: Spacing.superExtraSmall),
-                            Flexible(flex: 1, child: _buildMessageEditTime(colorScheme.onSurfaceVariant))
+                            Flexible(
+                              flex: 2,
+                              child: _buildMessageEditTime(
+                                colorScheme.onSurfaceVariant,
+                              ),
+                            )
                           ],
                         )
                       ],
@@ -382,9 +387,25 @@ class _MessageItemState extends State<MessageItem> {
     final displayEvent = widget.event.getDisplayEvent(widget.timeline);
     return Padding(
       padding: EdgeInsets.only(top: Spacing.extraSmall / 2),
-      child: Text(
-        DateFormatUtils.timeOnly(displayEvent.originServerTs).toLowerCase(),
-        style: Typo.xSmall.copyWith(color: textColor),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (widget.event.hasAggregatedEvents(
+            widget.timeline,
+            RelationshipTypes.edit,
+          )) ...[
+            Icon(
+              Icons.edit_outlined,
+              color: textColor,
+              size: Typo.small.fontSize!
+            ),
+            SizedBox(width: 6),
+          ],
+          Text(
+            DateFormatUtils.timeOnly(displayEvent.originServerTs).toLowerCase(),
+            style: Typo.xSmall.copyWith(color: textColor),
+          ),
+        ],
       ),
     );
   }

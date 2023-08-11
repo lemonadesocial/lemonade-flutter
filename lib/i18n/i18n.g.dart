@@ -1,9 +1,9 @@
 /// Generated file. Do not edit.
 ///
 /// Locales: 1
-/// Strings: 101
+/// Strings: 102
 ///
-/// Built on 2023-08-07 at 08:59 UTC
+/// Built on 2023-08-11 at 01:04 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -191,6 +191,7 @@ class _I18nChatEn {
 	String get home => 'home';
 	late final _I18nChatCommandEn command = _I18nChatCommandEn._(_root);
 	String get typeMessage => 'type a message...';
+	String get editMessage => 'Edit message';
 }
 
 // Path: nft
@@ -413,6 +414,7 @@ extension on _I18nEn {
 			case 'chat.command.hug': return 'Send a hug';
 			case 'chat.command.cuddle': return 'Send a cuddle';
 			case 'chat.typeMessage': return 'type a message...';
+			case 'chat.editMessage': return 'Edit message';
 			case 'nft.onSale': return 'on sale';
 			case 'nft.created': return 'created';
 			case 'nft.collected': return 'collected';
