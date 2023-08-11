@@ -263,13 +263,11 @@ class ChatController extends State<ChatPageWithRoom> {
     bool reacted = _allReactionEvents.any(
       (e) => e.content.tryGetMap('m.relates_to')?['key'] == emoji,
     );
-    if (reacted) {
-      return;
-    }
-    await  room.sendReaction(
-        event.eventId,
-        emoji,
-      );
+    if (reacted) return;
+    await room.sendReaction(
+      event.eventId,
+      emoji,
+    );
   }
 
   void selectEditEventAction(Event? event) => setState(() {
@@ -280,7 +278,7 @@ class ChatController extends State<ChatPageWithRoom> {
               hideReply: true,
             );
       });
-  
+
   void cancelReplyOrEditEventAction() => setState(() {
         if (editEvent != null) {
           inputText = sendController.text = pendingText;

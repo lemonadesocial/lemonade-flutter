@@ -48,7 +48,7 @@ class MessageReactions extends StatelessWidget {
     return reactionMap.values.toList();
   }
 
-  _onTapReaction(_ReactionEntry r) async {
+  Future<void> _onTapReaction(_ReactionEntry r) async {
     if (r.reacted) {
       final evt = getAllReactionEvents().firstWhereOrNull(
         (e) => e.senderId == e.room.client.userID && e.content.tryGetMap('m.relates_to')?['key'] == r.key,
@@ -138,6 +138,10 @@ class _Reaction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = reacted == true ? LemonColor.lavender : Theme.of(context).colorScheme.surface;
+    var renderKey = Characters(reactionKey!);
+    if (renderKey.length > 10) {
+      renderKey = renderKey.getRange(0, 9) + Characters('…');
+    }
 
     return InkWell(
       onTap: () => onTap != null ? onTap!() : null,
@@ -152,18 +156,10 @@ class _Reaction extends StatelessWidget {
           horizontal: Spacing.superExtraSmall,
           vertical: Spacing.superExtraSmall / 2,
         ),
-        child: _buildContent(),
+        child: Text(
+          '$renderKey $count',
+        ),
       ),
-    );
-  }
-
-  Widget _buildContent() {
-    var renderKey = Characters(reactionKey!);
-    if (renderKey.length > 10) {
-      renderKey = renderKey.getRange(0, 9) + Characters('…');
-    }
-    return Text(
-      '$renderKey $count',
     );
   }
 }
