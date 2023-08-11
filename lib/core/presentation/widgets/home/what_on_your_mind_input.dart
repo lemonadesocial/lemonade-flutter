@@ -1,7 +1,9 @@
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/typo.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 class WhatOnYourMindInput extends StatelessWidget {
@@ -10,9 +12,7 @@ class WhatOnYourMindInput extends StatelessWidget {
     final t = Translations.of(context);
     final themeColor = Theme.of(context).colorScheme;
     return GestureDetector(
-      onTap: () {
-        print("Custom input widget tapped!");
-      },
+      onTap: () => context.router.push(CreatePostRoute()),
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
         decoration: BoxDecoration(
