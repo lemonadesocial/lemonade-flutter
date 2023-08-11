@@ -79,7 +79,6 @@ class MessagesList extends StatelessWidget {
 
           // The message at this index:
           final event = controller.timeline!.events[i - 1];
-
           return AutoScrollTag(
             key: ValueKey(event.eventId),
             index: i - 1,
@@ -87,9 +86,12 @@ class MessagesList extends StatelessWidget {
             child: event.isVisibleInGui
                 ? MessageItem(
                     event,
-                    // TODO: todo actions on chat message item
-                    // onSwipe: (direction) =>
-                    //     controller.replyAction(replyTo: event),
+                    onSwipe: (event) =>
+                        controller.reply(replyTo: event),
+                    timeline: controller.timeline!,
+                    displayReadMarker:
+                        controller.readMarkerEventId == event.eventId && controller.timeline?.allowNewEvent == false,
+                    nextEvent: i < controller.timeline!.events.length ? controller.timeline!.events[i] : null,
                     // onInfoTab: controller.showEventInfo,
                     // onAvatarTab: (Event event) => showAdaptiveBottomSheet(
                     //   context: context,
@@ -103,10 +105,6 @@ class MessagesList extends StatelessWidget {
                     // onSelect: controller.onSelectMessage,
                     // scrollToEventId: (String eventId) =>
                     //     controller.scrollToEventId(eventId),
-                    timeline: controller.timeline!,
-                    displayReadMarker:
-                        controller.readMarkerEventId == event.eventId && controller.timeline?.allowNewEvent == false,
-                    nextEvent: i < controller.timeline!.events.length ? controller.timeline!.events[i] : null,
                   )
                 : const SizedBox.shrink(),
           );
@@ -133,9 +131,7 @@ class MessagesList extends StatelessWidget {
   }) {
     return Builder(
       builder: (context) {
-        WidgetsBinding.instance.addPostFrameCallback(
-          (_) => action()
-        );
+        WidgetsBinding.instance.addPostFrameCallback((_) => action());
         return Center(
           child: IconButton(
             onPressed: action,
