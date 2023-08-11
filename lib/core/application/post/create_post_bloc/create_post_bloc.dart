@@ -25,12 +25,12 @@ class CreatePostBloc extends Cubit<CreatePostState> {
   void onPostPrivacyChange(PostPrivacy privacy) {
     switch (privacy) {
       case PostPrivacy.public:
-        emit(state.copyWith(postPrivacy: PostPrivacy.friend));
+        emit(state.copyWith(postPrivacy: PostPrivacy.friends));
         break;
-      case PostPrivacy.friend:
-        emit(state.copyWith(postPrivacy: PostPrivacy.follower));
+      case PostPrivacy.friends:
+        emit(state.copyWith(postPrivacy: PostPrivacy.followers));
         break;
-      case PostPrivacy.follower:
+      case PostPrivacy.followers:
         emit(state.copyWith(postPrivacy: PostPrivacy.public));
         break;
     }
@@ -48,5 +48,15 @@ class CreatePostBloc extends Cubit<CreatePostState> {
     emit(state.copyWith(uploadImage: null));
   }
 
-  Future<void> createNewPost() async {}
+  Future<void> createNewPost() async {
+    emit(state.copyWith(status: CreatePostStatus.loading));
+    final response = await postService.createPost(
+      postDescription: state.postDescription!,
+      postPrivacy: state.postPrivacy,
+    );
+    response.fold(
+      (l) => emit(state.copyWith(status: CreatePostStatus.error)),
+      (isUpdateSuccess) => emit(state.copyWith(status: CreatePostStatus.postCreated)),
+    );
+  }
 }

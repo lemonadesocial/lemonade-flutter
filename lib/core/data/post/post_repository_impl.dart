@@ -1,3 +1,4 @@
+import 'package:app/core/application/post/create_post_bloc/create_post_bloc.dart';
 import 'package:app/core/data/post/dtos/post_dtos.dart';
 import 'package:app/core/data/post/post_query.dart';
 import 'package:app/core/domain/post/entities/post_entities.dart';
@@ -32,5 +33,29 @@ class PostRepositoryImpl implements PostRepository {
 
     if (result.hasException) return Left(Failure());
     return Right(result.parsedData ?? []);
+  }
+
+  @override
+  Future<Either<Failure, bool>> createNewPost({
+    required String postDescription,
+    required PostPrivacy postPrivacy,
+    String? imageRefId,
+}) async{
+   final result = await _client.mutate(
+     MutationOptions(
+       document: createPostQuery,
+       variables: {
+         'text': postDescription,
+         'visibility': postPrivacy.name.toUpperCase(),
+       },
+       parserFn: (data) => data['setUserWallet'],
+     ),
+   );
+
+   print("resulst: $result");
+   if (result.hasException) {
+     return Left(Failure());
+   }
+   return Right(result.parsedData == true);
   }
 }

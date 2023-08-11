@@ -18,10 +18,12 @@ class CreatePostState with _$CreatePostState{
 enum CreatePostStatus{
   initial,
   loading,
+  postCreated,
+  error,
 }
 
 enum PostPrivacy{
   public,
-  friend,
-  follower,
+  friends,
+  followers,
 }
