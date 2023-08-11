@@ -1,9 +1,9 @@
 /// Generated file. Do not edit.
 ///
 /// Locales: 1
-/// Strings: 101
+/// Strings: 105
 ///
-/// Built on 2023-08-07 at 08:59 UTC
+/// Built on 2023-08-09 at 08:10 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -175,6 +175,10 @@ class _I18nPostEn {
 
 	// Translations
 	String get noPost => 'No posts yet';
+	String get post => 'Post';
+	String get public => 'Public';
+	String get friend => 'Friends';
+	String get follower => 'Followers';
 }
 
 // Path: chat
@@ -384,6 +388,10 @@ extension on _I18nEn {
 			case 'home.newsfeed': return 'Newsfeed';
 			case 'home.whatOnYourMind': return 'What\'s on your mind, Joseph?';
 			case 'post.noPost': return 'No posts yet';
+			case 'post.post': return 'Post';
+			case 'post.public': return 'Public';
+			case 'post.friend': return 'Friends';
+			case 'post.follower': return 'Followers';
 			case 'chat.unread': return 'unread';
 			case 'chat.channels': return 'channels';
 			case 'chat.directMessages': return 'direct messages';
