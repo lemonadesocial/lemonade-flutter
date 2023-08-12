@@ -24,7 +24,11 @@ class ReplyContent extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        Container(width: 2, height: Sizing.medium, color: colorScheme.onSecondary),
+        Container(
+          width: 2,
+          height: Sizing.medium,
+          color: colorScheme.onSecondary,
+        ),
         SizedBox(width: Spacing.superExtraSmall),
         Flexible(
           child: Column(

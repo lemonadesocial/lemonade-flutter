@@ -2,6 +2,7 @@ import 'package:app/core/presentation/pages/chat/chat_message/chat_message_page.
 import 'package:app/core/presentation/pages/chat/chat_message/widgets/chat_input/reply_content_widget.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
+import 'package:matrix/matrix.dart';
 
 class ReplyDisplay extends StatelessWidget {
   final ChatController controller;
@@ -9,9 +10,8 @@ class ReplyDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return controller.replyEvent == null
-        ? const SizedBox.shrink()
-        : Container(
+    return controller.editEvent != null || controller.replyEvent != null
+        ? Container(
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.primaryContainer,
               borderRadius: BorderRadius.only(
@@ -31,15 +31,64 @@ class ReplyDisplay extends StatelessWidget {
                             controller.replyEvent!,
                             timeline: controller.timeline!,
                           )
-                        : SizedBox.shrink(),
+                        : _EditContent(
+                            controller.editEvent?.getDisplayEvent(
+                              controller.timeline!,
+                            ),
+                          ),
                   ),
                 ),
                 IconButton(
                   icon: const Icon(Icons.close),
-                  onPressed: () => controller.reply(replyTo: null),
+                  onPressed: () => controller.cancelReplyOrEditEventAction(),
                 ),
               ],
             ),
-          );
+          )
+        : const SizedBox.shrink();
+  }
+}
+
+class _EditContent extends StatelessWidget {
+  final Event? event;
+
+  const _EditContent(this.event);
+
+  @override
+  Widget build(BuildContext context) {
+    final event = this.event;
+    if (event == null) {
+      return const SizedBox.shrink();
+    }
+    return Row(
+      children: <Widget>[
+        Icon(
+          Icons.edit,
+          color: Theme.of(context).colorScheme.onSurface,
+        ),
+        Container(width: Spacing.small),
+        Flexible(
+          child: FutureBuilder<String>(
+            future: event.calcLocalizedBody(
+              MatrixDefaultLocalizations(),
+              withSenderNamePrefix: false,
+              hideReply: true,
+            ),
+            builder: (context, snapshot) {
+              return Text(
+                snapshot.data ??
+                    event.calcLocalizedBodyFallback(
+                      MatrixDefaultLocalizations(),
+                      withSenderNamePrefix: false,
+                      hideReply: true,
+                    ),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+              );
+            },
+          ),
+        ),
+      ],
+    );
   }
 }
