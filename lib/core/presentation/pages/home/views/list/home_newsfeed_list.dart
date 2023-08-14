@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeNewsfeedListView extends StatelessWidget {
-  HomeNewsfeedListView({
+  const HomeNewsfeedListView({
     super.key,
   });
 
@@ -18,8 +18,8 @@ class HomeNewsfeedListView extends StatelessWidget {
     final t = Translations.of(context);
     return BlocBuilder<NewsfeedListingBloc, NewsfeedListingState>(
         builder: (context, state) {
-      return state.when(
-        loading: () => Loading.defaultLoading(context),
+      return state.maybeWhen(
+        orElse : () => Loading.defaultLoading(context),
         fetched: (newsfeed) {
           if (newsfeed.isEmpty) {
             return Center(

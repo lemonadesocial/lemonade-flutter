@@ -89,6 +89,9 @@ dependencies:
   # matrix
   matrix: ^0.22.1
 
+  # widget visibile detector
+  visibility_detector: ^0.4.0+2
+
 dependency_overrides: 
   matrix_api_lite:
     git:

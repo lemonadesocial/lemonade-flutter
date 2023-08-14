@@ -17,7 +17,6 @@ _$_GetPostsInput _$$_GetPostsInputFromJson(Map<String, dynamic> json) =>
               json['created_at'] as Map<String, dynamic>),
       skip: json['skip'] as int?,
       limit: json['limit'] as int?,
-      offset: json['offset'] as int?,
     );
 
 Map<String, dynamic> _$$_GetPostsInputToJson(_$_GetPostsInput instance) {
@@ -35,7 +34,6 @@ Map<String, dynamic> _$$_GetPostsInputToJson(_$_GetPostsInput instance) {
   writeNotNull('created_at', instance.createdAt?.toJson());
   writeNotNull('skip', instance.skip);
   writeNotNull('limit', instance.limit);
-  writeNotNull('offset', instance.offset);
   return val;
 }
 
