@@ -19,7 +19,7 @@ class MatrixService {
   static String dbName = 'matrix_lemonade_chat';
 
   late Client _client;
-  BackgroundPush? backgroundPush;
+  late BackgroundPush backgroundPush;
 
   Client get client => _client;
 
@@ -29,6 +29,7 @@ class MatrixService {
       waitForFirstSync: false,
       waitUntilLoadCompletedLoaded: false,
     );
+    backgroundPush = BackgroundPush(client);
     getIt<AppOauth>().tokenStateStream.listen((tokenState) async {
       if (tokenState == OAuthTokenState.valid) {
         if (!_client.isLogged()) {
@@ -36,6 +37,7 @@ class MatrixService {
         }
         await _client.roomsLoading;
         await _client.accountDataLoading;
+        await backgroundPush.setupPush();
         return;
       }
 
@@ -46,7 +48,6 @@ class MatrixService {
         }
       }
     });
-    backgroundPush = _createBackgroundPush();
   }
 
   Future<void> login() async {
@@ -108,9 +109,5 @@ class MatrixService {
       },
       nativeImplementations: NativeImplementationsIsolate(compute),
     );
-  }
-
-  BackgroundPush _createBackgroundPush() {
-    return BackgroundPush(client);
   }
 }

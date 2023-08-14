@@ -5,6 +5,8 @@ import 'dart:io';
 import 'package:app/core/config.dart';
 import 'package:app/core/utils/chat_notification/setting_keys.dart';
 import 'package:app/core/utils/platform_infos.dart';
+import 'package:app/router/app_router.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:matrix/matrix.dart';
 import 'package:fcm_shared_isolate/fcm_shared_isolate.dart';
@@ -12,12 +14,12 @@ import 'famedlysdk_store.dart';
 import 'push_helper.dart';
 
 class BackgroundPush {
-  static BackgroundPush? _instance;
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
-  Client client;
+  final Client client;
   String? _fcmToken;
-  // BuildContext? context;
+  BuildContext? _context;
+  AppRouter? _router;
   final dynamic firebase = FcmSharedIsolate();
   StreamSubscription<SyncUpdate>? onRoomSync;
   bool upAction = false;
@@ -25,28 +27,25 @@ class BackgroundPush {
   Store get store => _store ??= Store();
   // void Function(String errorMsg, {Uri? link})? onFcmError;
 
-  factory BackgroundPush.clientOnly(Client client) {
-    _instance ??= BackgroundPush._(client);
-    return _instance!;
-  }
-
-  factory BackgroundPush(Client client) {
-    final instance = BackgroundPush.clientOnly(client);
-    // instance.context = context;
+  BackgroundPush(Client this.client) {
     // ignore: prefer_initializing_formals
     // instance.router = router;
     // ignore: prefer_initializing_formals
     // instance.onFcmError = onFcmError;
-    return instance;
-  }
-
-  BackgroundPush._(this.client) {
     onRoomSync ??= client.onSync.stream
         .where((s) => s.hasRoomUpdate)
         .listen((s) => _onClearingPush(getFromServer: false));
     firebase.setListeners(
       onMessage: onMessage,
     );
+  }
+
+  void setupContextAndRouter({
+    required AppRouter router,
+    required BuildContext context,
+  }) {
+    _router = router;
+    _context = context;
   }
 
   Future<void> onMessage(Map<dynamic, dynamic> message) async {
