@@ -25,4 +25,7 @@ class PostService {
         postPrivacy: postPrivacy,
         imageRefId: imageRefId,
       );
+
+  Future<Either<Failure, String>> uploadImage(String filePath) =>
+      postRepository.uploadImage(filePath);
 }

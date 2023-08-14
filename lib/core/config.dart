@@ -28,4 +28,7 @@ class AppConfig {
 
   static get isProduction => dotenv.env['ENV'] == 'PROD';
 
+  // Legacy api
+  static get legacyApi => dotenv.env['LMD_API_LEGACY'];
+
 }

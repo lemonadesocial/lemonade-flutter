@@ -18,6 +18,7 @@ dependencies:
 
   # networking 
   graphql_flutter: ^5.1.2
+  dio: ^5.3.2
 
   # data
   freezed_annotation: ^2.2.0
@@ -69,6 +70,7 @@ dependencies:
   flutter_linkify: ^6.0.0
   flutter_html: ^3.0.0-beta.2
   flutter_blurhash: ^0.7.0
+  mime: ^1.0.4
   
   # Webview
   flutter_inappwebview: ^5.7.2+3
@@ -128,9 +130,9 @@ flutter:
     - assets/fonts/
     - assets/images/
     - assets/index.html
-    - .env
+#    - .env
     - .env.staging
-    - .env.production
+#    - .env.production
 
   fonts:
     - family: CircularStd

@@ -50,6 +50,9 @@ class CreatePostBloc extends Cubit<CreatePostState> {
 
   Future<void> createNewPost() async {
     emit(state.copyWith(status: CreatePostStatus.loading));
+    if (state.uploadImage!= null){
+      uploadImage(state.uploadImage!.path);
+    }
     final response = await postService.createPost(
       postDescription: state.postDescription!,
       postPrivacy: state.postPrivacy,
@@ -58,5 +61,13 @@ class CreatePostBloc extends Cubit<CreatePostState> {
       (l) => emit(state.copyWith(status: CreatePostStatus.error)),
       (isUpdateSuccess) => emit(state.copyWith(status: CreatePostStatus.postCreated)),
     );
+  }
+
+  Future<void> uploadImage(String filePath) async{
+    print('uploadImage called');
+    final response = await postService.uploadImage(filePath);
+    response.fold((l) {
+      print('error: $l');
+    }, (r) {});
   }
 }
