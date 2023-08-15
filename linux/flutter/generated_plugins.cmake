@@ -3,7 +3,7 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
-  file_selector_linux
+  emoji_picker_flutter
   flutter_secure_storage_linux
   url_launcher_linux
   window_to_front

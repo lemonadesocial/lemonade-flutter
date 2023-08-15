@@ -1,5 +1,6 @@
 import 'package:app/core/presentation/pages/chat/chat_message/widgets/chat_input/reply_content_widget.dart';
 import 'package:app/core/presentation/pages/chat/chat_message/widgets/message_item/message_content_widget.dart';
+import 'package:app/core/presentation/pages/chat/chat_message/widgets/message_item/message_reaction_widget.dart';
 import 'package:app/core/presentation/pages/chat/chat_message/widgets/message_item/state_message_item_widget.dart';
 import 'package:app/core/presentation/widgets/chat/matrix_avatar.dart';
 import 'package:app/core/presentation/widgets/common/swipe/swipeable.dart';
@@ -20,6 +21,7 @@ class MessageItem extends StatefulWidget {
   final bool displayReadMarker;
   final void Function(Event)? onSwipe;
   final void Function(Event)? onSelect;
+  final void Function(Event, String)? onReact;
   final void Function(Event)? onAvatarTab;
   final void Function(Event)? onInfoTab;
   final void Function(String)? scrollToEventId;
@@ -31,8 +33,9 @@ class MessageItem extends StatefulWidget {
     this.event, {
     this.nextEvent,
     this.displayReadMarker = false,
-    this.longPressSelect = false,
+    this.longPressSelect = true,
     this.onSwipe,
+    this.onReact,
     this.onSelect,
     this.onInfoTab,
     this.onAvatarTab,
@@ -46,7 +49,7 @@ class MessageItem extends StatefulWidget {
   State<MessageItem> createState() => _MessageItemState();
 }
 
-class _MessageItemState extends State<MessageItem> with AutomaticKeepAliveClientMixin {
+class _MessageItemState extends State<MessageItem> {
   final client = getIt<MatrixService>().client;
 
   Event get displayEvent => widget.event.getDisplayEvent(widget.timeline);
@@ -70,6 +73,11 @@ class _MessageItemState extends State<MessageItem> with AutomaticKeepAliveClient
       widget.nextEvent!.senderId == widget.event.senderId &&
       !shouldDisplayTime;
 
+  bool get hasReactions => widget.event.hasAggregatedEvents(
+        widget.timeline,
+        RelationshipTypes.reaction,
+      );
+
   double get columnWidth => 360;
 
   bool get noBubble =>
@@ -89,14 +97,8 @@ class _MessageItemState extends State<MessageItem> with AutomaticKeepAliveClient
 
   MainAxisAlignment get rowMainAxisAlignment => ownMessage ? MainAxisAlignment.end : MainAxisAlignment.start;
 
-
-  @override
-  bool get wantKeepAlive => true;
-
   @override
   Widget build(BuildContext context) {
-    super.build(context);
-    
     if (!{
       EventTypes.Message,
       EventTypes.Sticker,
@@ -116,17 +118,14 @@ class _MessageItemState extends State<MessageItem> with AutomaticKeepAliveClient
   Widget _buildMessage(BuildContext context) {
     final messageBody = _buildMessageBody(context);
     Widget container;
-    if (widget.event.hasAggregatedEvents(widget.timeline, RelationshipTypes.reaction) ||
-        shouldDisplayTime ||
-        widget.selected ||
-        widget.displayReadMarker) {
+    if (hasReactions || shouldDisplayTime || widget.selected || widget.displayReadMarker) {
       container = Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: ownMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: <Widget>[
           if (shouldDisplayTime || widget.selected) _buildMessageSentTime(context),
           messageBody,
-          //TODO: if (event.hasAggregatedEvents(timeline, RelationshipTypes.reaction)) _buildMessageReaction(),
+          if (hasReactions) _buildMessageReaction(),
           if (widget.displayReadMarker) _buildMessageReadMarker(context),
         ],
       );
@@ -143,7 +142,7 @@ class _MessageItemState extends State<MessageItem> with AutomaticKeepAliveClient
       maxOffset: 0.4,
       onSwipe: (direction) {
         widget.onSwipe?.call(widget.event);
-      } ,
+      },
       key: ValueKey(widget.event.eventId),
       child: Container(
         constraints: const BoxConstraints(maxWidth: 100 * 2.5),
@@ -217,7 +216,12 @@ class _MessageItemState extends State<MessageItem> with AutomaticKeepAliveClient
                               ),
                             ),
                             SizedBox(width: Spacing.superExtraSmall),
-                            Flexible(flex: 1, child: _buildMessageEditTime(colorScheme.onSurfaceVariant))
+                            Flexible(
+                              flex: 2,
+                              child: _buildMessageEditTime(
+                                colorScheme.onSurfaceVariant,
+                              ),
+                            )
                           ],
                         )
                       ],
@@ -262,15 +266,19 @@ class _MessageItemState extends State<MessageItem> with AutomaticKeepAliveClient
     );
   }
 
-  Padding _buildMessageReaction() {
+  Widget _buildMessageReaction() {
     return Padding(
       padding: EdgeInsets.only(
-        top: 4.0,
-        left: (ownMessage ? 0 : MatrixAvatar.defaultSize) + 12.0,
-        right: 12.0,
+        top: Spacing.superExtraSmall,
+        left: ownMessage ? 0 : MatrixAvatar.defaultSize,
       ),
-      // child: MessageReactions(event, timeline),
-      child: Text("Message reaction"),
+      child: MessageReactions(
+        event: widget.event,
+        timeline: widget.timeline,
+        onReact: ({required Event event, required String emoji}) {
+          widget.onReact?.call(event, emoji);
+        },
+      ),
     );
   }
 
@@ -379,9 +387,25 @@ class _MessageItemState extends State<MessageItem> with AutomaticKeepAliveClient
     final displayEvent = widget.event.getDisplayEvent(widget.timeline);
     return Padding(
       padding: EdgeInsets.only(top: Spacing.extraSmall / 2),
-      child: Text(
-        DateFormatUtils.timeOnly(displayEvent.originServerTs).toLowerCase(),
-        style: Typo.xSmall.copyWith(color: textColor),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (widget.event.hasAggregatedEvents(
+            widget.timeline,
+            RelationshipTypes.edit,
+          )) ...[
+            Icon(
+              Icons.edit_outlined,
+              color: textColor,
+              size: Typo.small.fontSize!
+            ),
+            SizedBox(width: 6),
+          ],
+          Text(
+            DateFormatUtils.timeOnly(displayEvent.originServerTs).toLowerCase(),
+            style: Typo.xSmall.copyWith(color: textColor),
+          ),
+        ],
       ),
     );
   }

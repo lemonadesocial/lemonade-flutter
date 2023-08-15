@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:app/core/presentation/pages/chat/chat_message/chat_message_page.dart';
+import 'package:app/core/presentation/pages/chat/chat_message/widgets/chat_input/message_actions_widget.dart';
 import 'package:app/core/presentation/pages/chat/chat_message/widgets/message_item/message_item_widget.dart';
 import 'package:app/core/presentation/pages/chat/chat_message/widgets/message_item/typing_indicator_widget.dart';
+import 'package:app/core/utils/bottomsheet_utils.dart';
 import 'package:app/core/utils/chat/filter_event_timeline_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
@@ -86,8 +88,24 @@ class MessagesList extends StatelessWidget {
             child: event.isVisibleInGui
                 ? MessageItem(
                     event,
-                    onSwipe: (event) =>
-                        controller.reply(replyTo: event),
+                    onSwipe: (event) => controller.reply(replyTo: event),
+                    onSelect: (event) {
+                      BottomSheetUtils.showSnapBottomSheet(
+                        context,
+                        builder: (context) => MessageActions(
+                          event: event,
+                          onEdit: () {
+                            controller.selectEditEventAction(event);
+                          },
+                          onReact: (emoji) {
+                            controller.sendEmojiAction(event: event, emoji: emoji);
+                          }
+                        ),
+                      );
+                    },
+                    onReact: (event, emoji) {
+                      controller.sendEmojiAction(event: event, emoji: emoji);
+                    },
                     timeline: controller.timeline!,
                     displayReadMarker:
                         controller.readMarkerEventId == event.eventId && controller.timeline?.allowNewEvent == false,

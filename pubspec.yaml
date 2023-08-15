@@ -70,8 +70,9 @@ dependencies:
   flutter_linkify: ^6.0.0
   flutter_html: ^3.0.0-beta.2
   flutter_blurhash: ^0.7.0
+  emoji_picker_flutter: ^1.6.1
   mime: ^1.0.4
-  
+
   # Webview
   flutter_inappwebview: ^5.7.2+3
   
@@ -94,7 +95,7 @@ dependencies:
   # widget visibile detector
   visibility_detector: ^0.4.0+2
 
-dependency_overrides: 
+dependency_overrides:
   matrix_api_lite:
     git:
       url: https://github.com/mthinh/dart_matrix_api_lite.git
@@ -130,9 +131,9 @@ flutter:
     - assets/fonts/
     - assets/images/
     - assets/index.html
-#    - .env
+    - .env
     - .env.staging
-#    - .env.production
+    - .env.production
 
   fonts:
     - family: CircularStd

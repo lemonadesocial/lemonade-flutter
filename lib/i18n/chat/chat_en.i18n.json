@@ -29,5 +29,6 @@
         "hug": "Send a hug",
         "cuddle": "Send a cuddle"
     },
-    "typeMessage": "type a message..."
+    "typeMessage": "type a message...",
+    "editMessage": "Edit message"
 }
