@@ -1,7 +1,7 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/presentation/widgets/app_limit_layout_builder_widget.dart';
 import 'package:app/core/service/firebase/firebase_service.dart';
-import 'package:app/core/service/shake/shake_service.dart';
+import 'package:app/core/service/matrix/matrix_service.dart';
 import 'package:app/core/utils/navigation_utils.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -24,6 +24,19 @@ class LemonadeApp extends StatefulWidget {
 
 class _LemonadeAppViewState extends State<LemonadeApp> {
   final _appRouter = AppRouter();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      getIt<FirebaseService>().setContext(context);
+      getIt<MatrixService>().backgroundPush.setupContextAndRouter(
+            router: _appRouter,
+            context: context,
+          );
+    });
+    setupInteractedMessage();
+  }
 
   Widget _translationProviderBuilder(Widget child) => TranslationProvider(child: child);
 
@@ -62,16 +75,6 @@ class _LemonadeAppViewState extends State<LemonadeApp> {
           print("Error parsing JSON: $e");
         }
     }
-  }
-
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      getIt<FirebaseService>().setContext(context);
-    });
-    setupInteractedMessage();
   }
 }
 
