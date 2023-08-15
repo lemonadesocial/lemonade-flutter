@@ -1,8 +1,3 @@
-import 'dart:convert';
-import 'dart:io';
-
-import 'package:http/http.dart' as http;
-
 import 'package:app/core/application/post/create_post_bloc/create_post_bloc.dart';
 import 'package:app/core/config.dart';
 import 'package:app/core/data/post/dtos/post_dtos.dart';
@@ -16,6 +11,8 @@ import 'package:app/injection/register_module.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:http_parser/http_parser.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mime/mime.dart';
 
@@ -50,15 +47,25 @@ class PostRepositoryImpl implements PostRepository {
   Future<Either<Failure, bool>> createNewPost({
     required String postDescription,
     required PostPrivacy postPrivacy,
-    String? imageRefId,
+    PostRefType? postRefType,
+    String? postRefId,
   }) async {
+    final payload = {
+      'text': postDescription,
+      'visibility': postPrivacy.name.toUpperCase(),
+      'ref_type': postRefType?.name.toUpperCase(),
+      'ref_id': postRefId,
+    }..removeWhere((key, value) => value == null);
+    print('payload: $payload');
     final result = await _client.mutate(
       MutationOptions(
         document: createPostQuery,
         variables: {
           'text': postDescription,
           'visibility': postPrivacy.name.toUpperCase(),
-        },
+          'ref_type': postRefType?.name.toUpperCase(),
+          'ref_id': postRefId,
+        }..removeWhere((key, value) => value == null),
         parserFn: (data) => data['setUserWallet'],
       ),
     );
@@ -70,57 +77,38 @@ class PostRepositoryImpl implements PostRepository {
   }
 
   @override
-  Future<Either<Failure, String>> uploadImage(String filePath) async {
+  Future<Either<Failure, String>> uploadImage(XFile file) async {
     final token = await getIt<AppOauth>().getTokenForGql();
+    final mimeType = lookupMimeType(file.path);
+    final mime = mimeType!.split('/')[0];
+    final type = mimeType.split('/')[1];
+    final formData = FormData.fromMap({
+      'file': await MultipartFile.fromFile(
+        file.path,
+        filename: file.path.split('/').last,
+        contentType: MediaType(mime, type),
+      ),
+      'directory': 'post',
+    });
+    final response = await _legacyClient.post(
+      '/v1/file',
+      queryParameters: {
+        'blocking': true,
+      },
+      options: Options(
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Accept': '*/*',
+          'Connection': 'keep-alive',
+          'Authorization': token,
+        },
+      ),
+      data: formData,
+    );
 
-    /// Using legacy HTTP method from Dart package
-    // final postUri = Uri.parse('${AppConfig.legacyApi}/v1/file?blocking=true');
-    // final request = http.MultipartRequest('POST', postUri);
-    // request.files.add(
-    //   await http.MultipartFile.fromPath(
-    //     'file',
-    //     filePath,
-    //     filename: filePath.split('/').last,
-    //   ),
-    // );
-    // request.headers.addAll(
-    //   {
-    //     'Content-Type': 'multipart/form-data',
-    //     'Accept': '*/*',
-    //     'Connection': 'keep-alive',
-    //     'Authorization': token,
-    //   },
-    // );
-    // final response = await request.send();
-
-    /// Using Dio package
-    // final formData = FormData.fromMap({
-    //   'file': await MultipartFile.fromFile(
-    //     filePath,
-    //     filename: filePath.split('/').last,
-    //   ),
-    //   'directory': 'post',
-    // });
-    // final response = await _legacyClient.post(
-    //   '/v1/file',
-    //   queryParameters: {
-    //     'blocking': true,
-    //   },
-    //   options: Options(
-    //     headers: {
-    //       'Content-Type': 'multipart/form-data',
-    //       'Accept': '*/*',
-    //       'Connection': 'keep-alive',
-    //       'Authorization': token,
-    //     },
-    //   ),
-    //   data: formData,
-    // );
-    //
-    // print("response: ${response.statusCode}");
-    // if (response.statusCode != 200) {
-    //   return Left(Failure());
-    // }
-    // return Right('');
+    if (response.statusCode != 200) {
+      return Left(Failure());
+    }
+    return Right(response.data['_id']);
   }
 }

@@ -3,6 +3,7 @@ import 'package:app/core/domain/post/input/get_posts_input.dart';
 import 'package:app/core/domain/post/post_repository.dart';
 import 'package:app/core/failure.dart';
 import 'package:dartz/dartz.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../application/post/create_post_bloc/create_post_bloc.dart';
 
@@ -18,14 +19,16 @@ class PostService {
   Future<Either<Failure, bool>> createPost({
     required String postDescription,
     required PostPrivacy postPrivacy,
-    String? imageRefId,
+    PostRefType? postRefType,
+    String? postRefId,
   }) =>
       postRepository.createNewPost(
         postDescription: postDescription,
         postPrivacy: postPrivacy,
-        imageRefId: imageRefId,
+        postRefType: postRefType,
+        postRefId: postRefId,
       );
 
-  Future<Either<Failure, String>> uploadImage(String filePath) =>
-      postRepository.uploadImage(filePath);
+  Future<Either<Failure, String>> uploadImage(XFile file) =>
+      postRepository.uploadImage(file);
 }

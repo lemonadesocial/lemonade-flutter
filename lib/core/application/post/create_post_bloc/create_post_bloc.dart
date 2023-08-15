@@ -14,12 +14,20 @@ class CreatePostBloc extends Cubit<CreatePostState> {
 
   final PostService postService;
 
+  PostRefType? postRefType;
+  String? postRefId;
+
   void onPostDescriptionChange(String inputValue) {
     emit(state.copyWith(postDescription: inputValue));
   }
 
   void onEventSelect(Event? selectedEvent) {
-    emit(state.copyWith(selectEvent: selectedEvent));
+    emit(
+      state.copyWith(
+        selectEvent: selectedEvent,
+        uploadImage: null,
+      ),
+    );
   }
 
   void onPostPrivacyChange(PostPrivacy privacy) {
@@ -40,7 +48,12 @@ class CreatePostBloc extends Cubit<CreatePostState> {
     final imagePicker = ImagePicker();
     final pickImage = await imagePicker.pickImage(source: ImageSource.gallery);
     if (pickImage != null) {
-      emit(state.copyWith(uploadImage: pickImage));
+      emit(
+        state.copyWith(
+          uploadImage: pickImage,
+          selectEvent: null,
+        ),
+      );
     }
   }
 
@@ -50,12 +63,19 @@ class CreatePostBloc extends Cubit<CreatePostState> {
 
   Future<void> createNewPost() async {
     emit(state.copyWith(status: CreatePostStatus.loading));
-    if (state.uploadImage!= null){
-      uploadImage(state.uploadImage!.path);
+    if (state.uploadImage != null) {
+      await uploadImage(state.uploadImage!);
     }
+    if (state.selectEvent != null) {
+      postRefType = PostRefType.event;
+      postRefId = state.selectEvent!.id;
+    }
+
     final response = await postService.createPost(
       postDescription: state.postDescription!,
       postPrivacy: state.postPrivacy,
+      postRefType: postRefType,
+      postRefId: postRefId,
     );
     response.fold(
       (l) => emit(state.copyWith(status: CreatePostStatus.error)),
@@ -63,11 +83,14 @@ class CreatePostBloc extends Cubit<CreatePostState> {
     );
   }
 
-  Future<void> uploadImage(String filePath) async{
-    print('uploadImage called');
-    final response = await postService.uploadImage(filePath);
-    response.fold((l) {
-      print('error: $l');
-    }, (r) {});
+  Future<void> uploadImage(XFile file) async {
+    final response = await postService.uploadImage(file);
+    response.fold(
+      (l) => emit(state.copyWith(status: CreatePostStatus.error)),
+      (imageId) {
+        postRefType = PostRefType.file;
+        postRefId = imageId;
+      },
+    );
   }
 }

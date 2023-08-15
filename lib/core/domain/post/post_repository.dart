@@ -12,8 +12,9 @@ abstract class PostRepository {
   Future<Either<Failure, bool>> createNewPost({
     required String postDescription,
     required PostPrivacy postPrivacy,
-    String? imageRefId,
+    PostRefType? postRefType,
+    String? postRefId,
   });
 
-  Future<Either<Failure, String>> uploadImage(String filePath);
+  Future<Either<Failure, String>> uploadImage(XFile file);
 }
