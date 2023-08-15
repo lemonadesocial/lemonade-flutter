@@ -139,7 +139,7 @@ Future<void> _tryPushHelper(
 
   // Calculate the body
   final body = event.type == EventTypes.Encrypted
-      ? "💬 New message in LemonadeChat"
+      ? "💬 You got a new message"
       : await event.calcLocalizedBody(
           MatrixDefaultLocalizations(),
           plaintextBody: true,

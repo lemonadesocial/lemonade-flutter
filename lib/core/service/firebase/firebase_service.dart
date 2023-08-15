@@ -114,7 +114,7 @@ class FirebaseService {
     };
 
     await _requestPermission();
-    // _setUpMessageHandlers();
+    _setUpMessageHandlers();
     getIt<AppOauth>().tokenStateStream.listen(_onTokenStateChange);
     getToken();
   }
@@ -164,7 +164,7 @@ class FirebaseService {
     }
   }
 
-  void setUpMessageHandlers() {
+  void _setUpMessageHandlers() {
     FirebaseMessaging.onMessage.listen(showFlutterNotification);
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
     FirebaseMessaging.onMessageOpenedApp

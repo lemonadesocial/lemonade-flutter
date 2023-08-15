@@ -12,7 +12,7 @@ class AppConfig {
 
   static get metaverseUrl => dotenv.env['METAVERSE_URL'];
   static get wssMetaverseUrl => dotenv.env['WSS_METAVERSE_URL'];
-  
+
   // Social
   static get twitterUrl => 'https://twitter.com';
   static get instagramUrl => 'https://www.instagram.com';
@@ -22,14 +22,13 @@ class AppConfig {
   // Wallet connect
   static get walletConnectProjectId => dotenv.env["WALLET_CONNECT_PROJECT_ID"];
 
-  // Matrix 
+  // Matrix
   static get matrixHomeserver => dotenv.env["MATRIX_HOMESERVER"];
 
   static get isProduction => dotenv.env['ENV'] == 'PROD';
-  
+
   static const String pushNotificationsAppId = 'social.lemonade.app.staging';
   static const String pushNotificationsGatewayUrl =
-      'https://d65f-115-76-94-123.ngrok.io/_matrix/push/v1/notify';
+      'https://9566-115-76-94-123.ngrok.io/_matrix/push/v1/notify';
   static const String pushNotificationsPusherFormat = 'event_id_only';
-
 }

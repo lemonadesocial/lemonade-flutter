@@ -44,7 +44,7 @@ class BackgroundPush {
     onRoomSync ??= client.onSync.stream
         .where((s) => s.hasRoomUpdate)
         .listen((s) => _onClearingPush(getFromServer: false));
-    firebase.setListeners(
+    firebase?.setListeners(
       onMessage: onMessage,
     );
   }
@@ -185,7 +185,9 @@ class BackgroundPush {
     bool useDeviceSpecificAppId = false,
   }) async {
     if (Platform.isIOS) {
-      await firebase?.requestPermission();
+      final result = await firebase?.requestPermission();
+      Logs().i("result requestPermission");
+      Logs().i(result.toString());
     }
     final clientName = PlatformInfos.clientName;
     oldTokens ??= <String>{};
@@ -205,7 +207,7 @@ class BackgroundPush {
       deviceAppId = deviceAppId.substring(0, 64);
     }
     if (!useDeviceSpecificAppId && PlatformInfos.isAndroid) {
-      appId += '';
+      appId += '.data_message';
     }
     final thisAppId = useDeviceSpecificAppId ? deviceAppId : appId;
     if (gatewayUrl != null && token != null) {
@@ -220,6 +222,11 @@ class BackgroundPush {
           currentPushers.first.data.format ==
               AppConfig.pushNotificationsPusherFormat) {
         Logs().i('[Push] Pusher already set');
+        Logs().i(currentPushers.first.appId);
+        Logs().i(currentPushers.first.appDisplayName);
+        Logs().i(currentPushers.first.deviceDisplayName);
+        Logs().i(currentPushers.first.pushkey);
+        Logs().i(currentPushers.first.data.url.toString());
       } else {
         Logs().i('Need to set new pusher');
         oldTokens.add(token);
@@ -272,6 +279,8 @@ class BackgroundPush {
     if (_fcmToken?.isEmpty ?? true) {
       try {
         _fcmToken = await firebase?.getToken();
+        Logs().i("_fcmToken");
+        Logs().i(_fcmToken!);
         if (_fcmToken == null) throw ('PushToken is null');
       } catch (e, s) {
         Logs().w('[Push] cannot get token', e, e is String ? null : s);
