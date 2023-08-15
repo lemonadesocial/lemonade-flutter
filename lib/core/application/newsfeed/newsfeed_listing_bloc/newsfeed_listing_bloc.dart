@@ -24,11 +24,14 @@ class NewsfeedListingBloc extends Bloc<NewsfeedListingEvent, NewsfeedListingStat
   );
   final GetNewsfeedInput defaultInput;
 
-  Future<Either<Failure, List<Post>>> _getNewsfeed(int? offset, bool endReached,
-      {GetNewsfeedInput? input}) async {
+  Future<Either<Failure, List<Post>>> _getNewsfeed(
+    int? offset,
+    bool endReached, {
+    GetNewsfeedInput? input,
+  }) async {
     final result = await newsfeedService.getNewsfeed(input: input?.copyWith(offset: offset));
     return result.fold(
-      (failure) => Left(failure),
+      Left.new,
       (newsfeed) {
         offsetPaginationService.updateOffset(newsfeed.offset);
         return Right(newsfeed.posts ?? []);
@@ -36,8 +39,7 @@ class NewsfeedListingBloc extends Bloc<NewsfeedListingEvent, NewsfeedListingStat
     );
   }
 
-  _onFetch(NewsfeedListingEventFetch event, Emitter emit) async {
-    print("_onFetch");
+  Future<void> _onFetch(NewsfeedListingEventFetch event, Emitter emit) async {
     emit(NewsfeedListingState.loading());
     final result = await offsetPaginationService.fetch(defaultInput);
     result.fold(
