@@ -8,6 +8,7 @@ class LemonColor {
   static Color raisinBlack0 = const Color(0xff212121).withOpacity(0);
   static Color chineseBlack = const Color(0xff1171717);
   static Color oliveBlack = const Color(0xff404040);
+  static Color tertiaryBlack = const Color(0x4Debebf5);
   static Color white = const Color(0xffFFFFFF);
   static Color white6 = const Color(0xffFFFFFF).withOpacity(0.6);
   static Color white10 = const Color(0xffFFFFFF).withOpacity(0.10);
@@ -27,6 +28,7 @@ class LemonColor {
   
   // UI specific
   static Color dropdownBackground = const Color.fromARGB(221, 32, 32, 32);
+  static Color dialogBackground = const Color(0xFF141414);
 
   // Button
   static Color arsenic = Color(0xff424242);
@@ -56,6 +58,8 @@ final ColorScheme lemonadeLightThemeColorScheme = ColorScheme.light(
   onSurface: LemonColor.raisinBlack,
   onSurfaceVariant: LemonColor.raisinBlack,
   outline: LemonColor.oliveBlack,
+  tertiaryContainer: LemonColor.tertiaryBlack,
+  onPrimaryContainer: LemonColor.dialogBackground,
 );
 
 final ColorScheme lemonadeDarkThemeColorScheme = ColorScheme.dark(
@@ -74,4 +78,6 @@ final ColorScheme lemonadeDarkThemeColorScheme = ColorScheme.dark(
   onSurface: LemonColor.white72,
   onSurfaceVariant: LemonColor.white36,
   outline: LemonColor.white12,
+  tertiaryContainer: LemonColor.tertiaryBlack,
+  onPrimaryContainer: LemonColor.dialogBackground,
 );

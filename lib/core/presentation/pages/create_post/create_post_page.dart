@@ -1,8 +1,8 @@
 import 'package:app/core/application/post/create_post_bloc/create_post_bloc.dart';
 import 'package:app/core/presentation/pages/create_post/widgets/create_post_event_card_widget.dart';
+import 'package:app/core/presentation/pages/event/event_selecting_page.dart';
 import 'package:app/core/presentation/widgets/back_button_widget.dart';
 import 'package:app/gen/assets.gen.dart';
-import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
@@ -31,15 +31,13 @@ class CreatePostPage extends StatelessWidget {
       create: (context) => createPostBloc,
       child: BlocConsumer<CreatePostBloc, CreatePostState>(
         listener: (context, state) {
-          if (state.status == CreatePostStatus.loading){
+          if (state.status == CreatePostStatus.loading) {
             // showDialog(context: context, builder: Loading.defaultLoading);
           }
-          if (state.status == CreatePostStatus.postCreated){
+          if (state.status == CreatePostStatus.postCreated) {
             context.router.pop();
           }
-          if (state.status == CreatePostStatus.error){
-
-          }
+          if (state.status == CreatePostStatus.error) {}
         },
         builder: (context, state) {
           return Scaffold(
@@ -128,14 +126,12 @@ class CreatePostPage extends StatelessWidget {
                           child: Row(
                             children: [
                               InkWell(
-                                onTap: () => context.router.push(
-                                  EventSelectingRoute(
-                                    onEventTap: (event) {
-                                      context.router.pop();
-                                      createPostBloc.onEventSelect(event);
-                                    },
-                                  ),
-                                ),
+                                onTap: () => EventSelectingPage(
+                                  onEventTap: (event) {
+                                    context.router.pop();
+                                    createPostBloc.onEventSelect(event);
+                                  },
+                                ).show(context),
                                 child: ThemeSvgIcon(
                                   color: colorScheme.onSurface,
                                   builder: (filter) =>

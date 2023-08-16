@@ -63,6 +63,40 @@ class EventSelectingPage extends StatelessWidget {
       onEventTap: onEventTap,
     );
   }
+
+  void show(BuildContext context) => showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        builder: (context) => Container(
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
+            color: Theme.of(context).colorScheme.onPrimaryContainer,
+          ),
+          clipBehavior: Clip.hardEdge,
+          child: FractionallySizedBox(
+            heightFactor: 0.95,
+            child: Column(
+              children: [
+                const SizedBox(height: 10),
+                Container(
+                  width: 35,
+                  height: 5,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.tertiaryContainer,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                Expanded(
+                  child: EventSelectingPage(
+                    onEventTap: onEventTap,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
 }
 
 class _EventsListingView extends StatefulWidget {
@@ -143,14 +177,17 @@ class _EventsListingViewState extends State<_EventsListingView> {
     final textCtrl = TextEditingController();
     final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      appBar: const LemonAppBar(),
-      backgroundColor: colorScheme.primary,
-      body: Padding(
+      appBar: LemonAppBar(
         padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
+        backgroundColor: colorScheme.onPrimaryContainer,
+      ),
+      backgroundColor: colorScheme.onPrimaryContainer,
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+            child: Text(
               t.post.selectEvent,
               style: Typo.large.copyWith(
                 fontSize: 30,
@@ -158,35 +195,40 @@ class _EventsListingViewState extends State<_EventsListingView> {
                 fontWeight: FontWeight.w700,
               ),
             ),
-            SizedBox(height: Spacing.smMedium),
-            Container(
-              decoration: BoxDecoration(
-                color: colorScheme.primary,
-                borderRadius: BorderRadius.circular(32),
-                border: Border.all(
-                  color: colorScheme.onSurface,
-                ),
-              ),
-              padding: EdgeInsets.symmetric(
-                vertical: Spacing.xSmall,
-                horizontal: Spacing.smMedium,
-              ),
-              child: Row(
-                children: [
-                  Assets.icons.icSearch.svg(),
-                  SizedBox(width: Spacing.superExtraSmall),
-                  Expanded(
-                    child: TextFormField(
-                      controller: textCtrl,
-                      cursorColor: colorScheme.onPrimary,
-                      decoration: InputDecoration.collapsed(hintText: t.post.searchEventHint),
-                    ),
-                  ),
-                ],
+          ),
+          SizedBox(height: Spacing.smMedium),
+          Container(
+            decoration: BoxDecoration(
+              color: colorScheme.primary,
+              borderRadius: BorderRadius.circular(32),
+              border: Border.all(
+                color: colorScheme.outline,
+                width: 2,
               ),
             ),
-            SizedBox(height: Spacing.smMedium),
-            Row(
+            margin: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+            padding: EdgeInsets.symmetric(
+              vertical: Spacing.xSmall,
+              horizontal: Spacing.smMedium,
+            ),
+            child: Row(
+              children: [
+                Assets.icons.icSearch.svg(),
+                SizedBox(width: Spacing.superExtraSmall),
+                Expanded(
+                  child: TextFormField(
+                    controller: textCtrl,
+                    cursorColor: colorScheme.onPrimary,
+                    decoration: InputDecoration.collapsed(hintText: t.post.searchEventHint),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: Spacing.smMedium),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+            child: Row(
               children: [
                 LemonChip(
                   label: t.event.all.capitalize(),
@@ -238,23 +280,24 @@ class _EventsListingViewState extends State<_EventsListingView> {
                 )
               ],
             ),
-            NotificationListener<ScrollNotification>(
-              onNotification: (notification) {
-                if (notification is ScrollEndNotification) {
-                  if (notification.metrics.pixels == notification.metrics.maxScrollExtent) {
-                    _selectedEventsBloc.add(
-                      BaseEventsListingEvent.fetch(
-                        eventTimeFilter: eventTimeFilter,
-                      ),
-                    );
-                  }
+          ),
+          const SizedBox(height: 12),
+          NotificationListener<ScrollNotification>(
+            onNotification: (notification) {
+              if (notification is ScrollEndNotification) {
+                if (notification.metrics.pixels == notification.metrics.maxScrollExtent) {
+                  _selectedEventsBloc.add(
+                    BaseEventsListingEvent.fetch(
+                      eventTimeFilter: eventTimeFilter,
+                    ),
+                  );
                 }
-                return true;
-              },
-              child: _buildEventsList(onEventTap: widget.onEventTap),
-            ),
-          ],
-        ),
+              }
+              return true;
+            },
+            child: _buildEventsList(onEventTap: widget.onEventTap),
+          ),
+        ],
       ),
     );
   }
@@ -354,10 +397,10 @@ class _EventList<T extends BaseEventListingBloc> extends StatelessWidget {
                 itemBuilder: (ctx, index) => index == filteredEvents.length
                     ? const SizedBox(height: 80)
                     : EventTileWidget(
-                        key: Key(filteredEvents[index].id ?? ''),
-                        event: filteredEvents[index],
-                        onTap: () => onEventTap(filteredEvents[index]),
-                      ),
+                      key: Key(filteredEvents[index].id ?? ''),
+                      event: filteredEvents[index],
+                      onTap: () => onEventTap(filteredEvents[index]),
+                    ),
                 separatorBuilder: (ctx, index) => Divider(
                   color: Theme.of(context).colorScheme.onSurface,
                 ),

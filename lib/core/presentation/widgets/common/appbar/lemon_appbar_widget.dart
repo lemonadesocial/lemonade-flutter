@@ -9,6 +9,8 @@ class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? title;
   final Widget Function(BuildContext context)? titleBuilder;
   final List<Widget>? actions;
+  final Color? backgroundColor;
+  final EdgeInsets? padding;
 
   const LemonAppBar({
     super.key,
@@ -16,6 +18,8 @@ class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.titleBuilder,
     this.leading,
     this.actions,
+    this.backgroundColor,
+    this.padding,
   });
 
   @override
@@ -25,7 +29,8 @@ class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     final primary = Theme.of(context).colorScheme.primary;
     return Container(
-      color: primary,
+      color: backgroundColor ?? primary,
+      padding: padding,
       child: SafeArea(
         child: PreferredSize(
           child: Container(
@@ -56,11 +61,7 @@ class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   Widget buildLeading() {
-    return Container(
-      height: double.infinity,
-      width: preferredSize.height,
-      child: leading ?? LemonBackButton(),
-    );
+    return leading ?? LemonBackButton();
   }
 
   Widget buildActions() {

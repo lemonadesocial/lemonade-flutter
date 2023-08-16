@@ -27,14 +27,20 @@ class EventTileWidget extends StatelessWidget {
         leading: SizedBox(
           width: 80,
           height: 48,
-          child: CachedNetworkImage(
-            width: double.infinity,
-            fit: BoxFit.cover,
-            placeholder: (_, __) => ImagePlaceholder.eventCard(),
-            errorWidget: (_, __, ___) => ImagePlaceholder.eventCard(),
-            imageUrl: ImageUtils.generateUrl(
-              file: event.newNewPhotosExpanded?.firstOrNull,
-              imageConfig: ImageConfig.eventPhoto,
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(6),
+              border: Border.all(color: colorScheme.outline)
+            ),
+            child: CachedNetworkImage(
+              width: double.infinity,
+              fit: BoxFit.cover,
+              placeholder: (_, __) => ImagePlaceholder.eventCard(),
+              errorWidget: (_, __, ___) => ImagePlaceholder.eventCard(),
+              imageUrl: ImageUtils.generateUrl(
+                file: event.newNewPhotosExpanded?.firstOrNull,
+                imageConfig: ImageConfig.eventPhoto,
+              ),
             ),
           ),
         ),
