@@ -3,16 +3,39 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:app/core/config.dart';
+import 'package:app/core/service/matrix/matrix_service.dart';
 import 'package:app/core/utils/chat_notification/setting_keys.dart';
 import 'package:app/core/utils/platform_infos.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:matrix/matrix.dart';
 import 'package:fcm_shared_isolate/fcm_shared_isolate.dart';
 import 'famedlysdk_store.dart';
 import 'push_helper.dart';
+
+import '../../../firebase_options_staging.dart' as FirebaseOptionsStaging;
+import '../../../firebase_options_production.dart' as FirebaseOptionsProduction;
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  if (kDebugMode) {
+    print("Handling a background message: ${message.messageId}");
+    print('Message data: ${message.data}');
+    print('Message notification title: ${message.notification?.title}');
+    print('Message notification body: ${message.notification?.body}');
+  }
+  try {
+    final backgroundPush = getIt<MatrixService>().backgroundPush;
+    backgroundPush.showFlutterNotification(message);
+  } catch (e) {
+    print("Something wrong _firebaseMessagingBackgroundHandler $e");
+  }
+}
 
 class BackgroundPush {
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
@@ -31,9 +54,57 @@ class BackgroundPush {
     onRoomSync ??= client.onSync.stream
         .where((s) => s.hasRoomUpdate)
         .listen((s) => _onClearingPush(getFromServer: false));
-    firebase?.setListeners(
-      onMessage: onMessage,
+
+    if (Platform.isAndroid) {
+      firebase?.setListeners(
+        onMessage: onMessage,
+      );
+    }
+    if (Platform.isIOS) {
+      firebaseInitialize();
+    }
+  }
+
+
+  Future<void> firebaseInitialize() async {
+    print("......firebaseInitialize");
+    await Firebase.initializeApp(
+      options: AppConfig.env == 'production'
+          ? FirebaseOptionsProduction.DefaultFirebaseOptions.currentPlatform
+          : FirebaseOptionsStaging.DefaultFirebaseOptions.currentPlatform,
     );
+    await FirebaseMessaging.instance
+        .setForegroundNotificationPresentationOptions(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+    await FirebaseMessaging.instance.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+    _setUpMessageHandlers();
+  }
+
+  void _setUpMessageHandlers() {
+    FirebaseMessaging.onMessage.listen(showFlutterNotification);
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+    FirebaseMessaging.onMessageOpenedApp
+        .listen(_firebaseMessagingBackgroundHandler);
+  }
+
+
+  showFlutterNotification(RemoteMessage message) async {
+    Logs().i("showFlutterNotification");
+    final data = message.data;
+    data['devices'] ??= [];
+    await pushHelper(PushNotification.fromJson(data),
+        client: client, onSelectNotification: goToRoom);
   }
 
   void setupContextAndRouter({

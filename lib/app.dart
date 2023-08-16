@@ -27,9 +27,6 @@ class _LemonadeAppViewState extends State<LemonadeApp> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      getIt<FirebaseService>().setContext(context);
-    });
     setupInteractedMessage();
   }
 
