@@ -27,21 +27,25 @@ class EventTileWidget extends StatelessWidget {
         leading: SizedBox(
           width: 80,
           height: 48,
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(6),
-              border: Border.all(color: colorScheme.outline)
+          child: CachedNetworkImage(
+            width: double.infinity,
+            fit: BoxFit.cover,
+            placeholder: (_, __) => ImagePlaceholder.eventCard(),
+            errorWidget: (_, __, ___) => ImagePlaceholder.eventCard(),
+            imageUrl: ImageUtils.generateUrl(
+              file: event.newNewPhotosExpanded?.firstOrNull,
+              imageConfig: ImageConfig.eventPhoto,
             ),
-            child: CachedNetworkImage(
-              width: double.infinity,
-              fit: BoxFit.cover,
-              placeholder: (_, __) => ImagePlaceholder.eventCard(),
-              errorWidget: (_, __, ___) => ImagePlaceholder.eventCard(),
-              imageUrl: ImageUtils.generateUrl(
-                file: event.newNewPhotosExpanded?.firstOrNull,
-                imageConfig: ImageConfig.eventPhoto,
-              ),
-            ),
+            imageBuilder: (context, imageProvider) {
+              return Container(
+                clipBehavior: Clip.hardEdge,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(6),
+                  border: Border.all(color: colorScheme.outline),
+                  image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                ),
+              );
+            },
           ),
         ),
         title: Text(
