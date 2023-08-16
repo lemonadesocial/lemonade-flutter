@@ -58,11 +58,11 @@ definitions:
         echo $ENV_PRODUCTION | base64 --decode > $CM_BUILD_DIR/.env.production
         
         # Generate Firebase services file
-        echo $FIREBASE_OPTIONS_STAGING | base64 --decode > $CM_BUILD_DIR/lib/firebase_options_staging.dart
+        echo $FIREBASE_OPTIONS_DEVELOPMENT | base64 --decode > $CM_BUILD_DIR/lib/firebase_options_staging.dart
         echo $FIREBASE_OPTIONS_PRODUCTION | base64 --decode > $CM_BUILD_DIR/lib/firebase_options_production.dart
-        echo $GOOGLESERVICE_INFO_PLIST_STAGING | base64 --decode > $CM_BUILD_DIR/ios/config/staging/GoogleService-Info.plist
+        echo $GOOGLESERVICE_INFO_PLIST_DEVELOPMENT | base64 --decode > $CM_BUILD_DIR/ios/config/staging/GoogleService-Info.plist
         echo $GOOGLESERVICE_INFO_PLIST_PRODUCTION | base64 --decode > $CM_BUILD_DIR/ios/config/production/GoogleService-Info.plist
-        echo $GOOGLESERVICE_JSON_STAGING | base64 --decode > $CM_BUILD_DIR/android/app/src/staging/google-services.json
+        echo $GOOGLESERVICE_JSON_DEVELOPMENT | base64 --decode > $CM_BUILD_DIR/android/app/src/staging/google-services.json
         echo $GOOGLESERVICE_JSON_PRODUCTION | base64 --decode > $CM_BUILD_DIR/android/app/src/production/google-services.json
         
     - &use_profiles
