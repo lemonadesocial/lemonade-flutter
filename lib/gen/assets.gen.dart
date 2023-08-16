@@ -50,6 +50,9 @@ class $AssetsFontsGen {
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
+  /// File path: assets/icons/ic_add.svg
+  SvgGenImage get icAdd => const SvgGenImage('assets/icons/ic_add.svg');
+
   /// File path: assets/icons/ic_back.svg
   SvgGenImage get icBack => const SvgGenImage('assets/icons/ic_back.svg');
 
@@ -96,6 +99,13 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_hash_symbol.svg
   SvgGenImage get icHashSymbol =>
       const SvgGenImage('assets/icons/ic_hash_symbol.svg');
+
+  /// File path: assets/icons/ic_heart.svg
+  SvgGenImage get icHeart => const SvgGenImage('assets/icons/ic_heart.svg');
+
+  /// File path: assets/icons/ic_heart_fillled.svg
+  SvgGenImage get icHeartFillled =>
+      const SvgGenImage('assets/icons/ic_heart_fillled.svg');
 
   /// File path: assets/icons/ic_host_filled.svg
   SvgGenImage get icHostFilled =>
@@ -152,6 +162,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_menu.svg
   SvgGenImage get icMenu => const SvgGenImage('assets/icons/ic_menu.svg');
 
+  /// File path: assets/icons/ic_message.svg
+  SvgGenImage get icMessage => const SvgGenImage('assets/icons/ic_message.svg');
+
   /// File path: assets/icons/ic_more_horiz.svg
   SvgGenImage get icMoreHoriz =>
       const SvgGenImage('assets/icons/ic_more_horiz.svg');
@@ -170,6 +183,12 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_people_alt.svg
   SvgGenImage get icPeopleAlt =>
       const SvgGenImage('assets/icons/ic_people_alt.svg');
+
+  /// File path: assets/icons/ic_poll.svg
+  SvgGenImage get icPoll => const SvgGenImage('assets/icons/ic_poll.svg');
+
+  /// File path: assets/icons/ic_public.svg
+  SvgGenImage get icPublic => const SvgGenImage('assets/icons/ic_public.svg');
 
   /// File path: assets/icons/ic_qr.svg
   SvgGenImage get icQr => const SvgGenImage('assets/icons/ic_qr.svg');
@@ -201,6 +220,7 @@ class $AssetsIconsGen {
 
   /// List of all assets
   List<dynamic> get values => [
+        icAdd,
         icBack,
         icBadge,
         icCamera,
@@ -215,6 +235,8 @@ class $AssetsIconsGen {
         icFilterOutline,
         icGrid,
         icHashSymbol,
+        icHeart,
+        icHeartFillled,
         icHostFilled,
         icHouse,
         icHouseParty,
@@ -230,11 +252,14 @@ class $AssetsIconsGen {
         icLinkedin,
         icMatches,
         icMenu,
+        icMessage,
         icMoreHoriz,
         icMyLocation,
         icNavigationLine,
         icNews,
         icPeopleAlt,
+        icPoll,
+        icPublic,
         icQr,
         icSearch,
         icShare,

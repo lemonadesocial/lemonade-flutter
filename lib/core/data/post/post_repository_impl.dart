@@ -20,15 +20,17 @@ class PostRepositoryImpl implements PostRepository {
       QueryOptions(
         document: getPostsQuery,
         variables: input?.toJson() ?? {},
-        parserFn: (data) => List.from(data['getPosts'] ?? []).map(
-          (item) => Post.fromDto(
-            PostDto.fromJson(item),
-          ),
-        ).toList(),
+        parserFn: (data) => List.from(data['getPosts'] ?? [])
+            .map(
+              (item) => Post.fromDto(
+                PostDto.fromJson(item),
+              ),
+            )
+            .toList(),
       ),
     );
 
-    if(result.hasException) return Left(Failure());
+    if (result.hasException) return Left(Failure());
     return Right(result.parsedData ?? []);
   }
 }

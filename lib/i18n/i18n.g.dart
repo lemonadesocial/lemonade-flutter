@@ -1,9 +1,9 @@
 /// Generated file. Do not edit.
 ///
 /// Locales: 1
-/// Strings: 99
+/// Strings: 107
 ///
-/// Built on 2023-08-09 at 18:04 UTC
+/// Built on 2023-08-16 at 15:04 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -146,6 +146,7 @@ class _I18nEn implements BaseTranslations<AppLocale, _I18nEn> {
 	late final _I18nEn _root = this; // ignore: unused_field
 
 	// Translations
+	late final _I18nHomeEn home = _I18nHomeEn._(_root);
 	late final _I18nPostEn post = _I18nPostEn._(_root);
 	late final _I18nChatEn chat = _I18nChatEn._(_root);
 	late final _I18nNftEn nft = _I18nNftEn._(_root);
@@ -153,6 +154,17 @@ class _I18nEn implements BaseTranslations<AppLocale, _I18nEn> {
 	late final _I18nNotificationEn notification = _I18nNotificationEn._(_root);
 	late final _I18nCommonEn common = _I18nCommonEn._(_root);
 	late final _I18nEventEn event = _I18nEventEn._(_root);
+}
+
+// Path: home
+class _I18nHomeEn {
+	_I18nHomeEn._(this._root);
+
+	final _I18nEn _root; // ignore: unused_field
+
+	// Translations
+	String get newsfeed => 'Newsfeed';
+	String get whatOnYourMind => 'What\'s on your mind, Joseph?';
 }
 
 // Path: post
@@ -163,6 +175,10 @@ class _I18nPostEn {
 
 	// Translations
 	String get noPost => 'No posts yet';
+	String get post => 'Post';
+	String get public => 'Public';
+	String get friend => 'Friends';
+	String get follower => 'Followers';
 }
 
 // Path: chat
@@ -179,6 +195,8 @@ class _I18nChatEn {
 	String get home => 'home';
 	String unread_chats({required Object unreadCount}) => '${unreadCount} unread chats';
 	late final _I18nChatCommandEn command = _I18nChatCommandEn._(_root);
+	String get typeMessage => 'type a message...';
+	String get editMessage => 'Edit message';
 }
 
 // Path: nft
@@ -369,7 +387,13 @@ class _I18nCommonUnitEn {
 extension on _I18nEn {
 	dynamic _flatMapFunction(String path) {
 		switch (path) {
+			case 'home.newsfeed': return 'Newsfeed';
+			case 'home.whatOnYourMind': return 'What\'s on your mind, Joseph?';
 			case 'post.noPost': return 'No posts yet';
+			case 'post.post': return 'Post';
+			case 'post.public': return 'Public';
+			case 'post.friend': return 'Friends';
+			case 'post.follower': return 'Followers';
 			case 'chat.unread': return 'unread';
 			case 'chat.channels': return 'channels';
 			case 'chat.directMessages': return 'direct messages';
@@ -399,6 +423,8 @@ extension on _I18nEn {
 			case 'chat.command.googly': return 'Send some googly eyes';
 			case 'chat.command.hug': return 'Send a hug';
 			case 'chat.command.cuddle': return 'Send a cuddle';
+			case 'chat.typeMessage': return 'type a message...';
+			case 'chat.editMessage': return 'Edit message';
 			case 'nft.onSale': return 'on sale';
 			case 'nft.created': return 'created';
 			case 'nft.collected': return 'collected';

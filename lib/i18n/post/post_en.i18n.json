@@ -1,3 +1,7 @@
 {
-    "noPost": "No posts yet"
+    "noPost": "No posts yet",
+    "post": "Post",
+    "public": "Public",
+    "friend": "Friends",
+    "follower": "Followers"
 }

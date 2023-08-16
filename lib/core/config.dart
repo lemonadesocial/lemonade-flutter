@@ -9,6 +9,7 @@ class AppConfig {
 
   static get backedUrl => dotenv.env['BACKEND_URL'];
   static get wssBackedUrl => dotenv.env['WSS_BACKEND_URL'];
+  static get assetPrefix => dotenv.env['ASSET_PREFIX'];
 
   static get metaverseUrl => dotenv.env['METAVERSE_URL'];
   static get wssMetaverseUrl => dotenv.env['WSS_METAVERSE_URL'];

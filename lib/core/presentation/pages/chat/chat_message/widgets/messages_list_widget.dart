@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:app/core/presentation/pages/chat/chat_message/chat_message_page.dart';
+import 'package:app/core/presentation/pages/chat/chat_message/widgets/chat_input/message_actions_widget.dart';
 import 'package:app/core/presentation/pages/chat/chat_message/widgets/message_item/message_item_widget.dart';
 import 'package:app/core/presentation/pages/chat/chat_message/widgets/message_item/typing_indicator_widget.dart';
+import 'package:app/core/utils/bottomsheet_utils.dart';
 import 'package:app/core/utils/chat/filter_event_timeline_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
@@ -79,7 +81,6 @@ class MessagesList extends StatelessWidget {
 
           // The message at this index:
           final event = controller.timeline!.events[i - 1];
-
           return AutoScrollTag(
             key: ValueKey(event.eventId),
             index: i - 1,
@@ -87,9 +88,28 @@ class MessagesList extends StatelessWidget {
             child: event.isVisibleInGui
                 ? MessageItem(
                     event,
-                    // TODO: todo actions on chat message item
-                    // onSwipe: (direction) =>
-                    //     controller.replyAction(replyTo: event),
+                    onSwipe: (event) => controller.reply(replyTo: event),
+                    onSelect: (event) {
+                      BottomSheetUtils.showSnapBottomSheet(
+                        context,
+                        builder: (context) => MessageActions(
+                          event: event,
+                          onEdit: () {
+                            controller.selectEditEventAction(event);
+                          },
+                          onReact: (emoji) {
+                            controller.sendEmojiAction(event: event, emoji: emoji);
+                          }
+                        ),
+                      );
+                    },
+                    onReact: (event, emoji) {
+                      controller.sendEmojiAction(event: event, emoji: emoji);
+                    },
+                    timeline: controller.timeline!,
+                    displayReadMarker:
+                        controller.readMarkerEventId == event.eventId && controller.timeline?.allowNewEvent == false,
+                    nextEvent: i < controller.timeline!.events.length ? controller.timeline!.events[i] : null,
                     // onInfoTab: controller.showEventInfo,
                     // onAvatarTab: (Event event) => showAdaptiveBottomSheet(
                     //   context: context,
@@ -103,10 +123,6 @@ class MessagesList extends StatelessWidget {
                     // onSelect: controller.onSelectMessage,
                     // scrollToEventId: (String eventId) =>
                     //     controller.scrollToEventId(eventId),
-                    timeline: controller.timeline!,
-                    displayReadMarker:
-                        controller.readMarkerEventId == event.eventId && controller.timeline?.allowNewEvent == false,
-                    nextEvent: i < controller.timeline!.events.length ? controller.timeline!.events[i] : null,
                   )
                 : const SizedBox.shrink(),
           );
@@ -133,9 +149,7 @@ class MessagesList extends StatelessWidget {
   }) {
     return Builder(
       builder: (context) {
-        WidgetsBinding.instance.addPostFrameCallback(
-          (_) => action()
-        );
+        WidgetsBinding.instance.addPostFrameCallback((_) => action());
         return Center(
           child: IconButton(
             onPressed: action,

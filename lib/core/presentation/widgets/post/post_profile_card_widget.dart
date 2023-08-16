@@ -6,6 +6,7 @@ import 'package:app/core/presentation/widgets/hero_image_viewer_widget.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/utils/avatar_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/theme/sizing.dart';
@@ -22,10 +23,7 @@ class PostProfileCard extends StatelessWidget {
     required this.post,
   });
 
-  DbFile? get postUserAvatar =>
-      post.userExpanded?.newPhotosExpanded?.isNotEmpty == true ? post.userExpanded!.newPhotosExpanded![0] : null;
-
-  String get postUsername => post.userExpanded?.username ?? '';
+  String get postName => post.userExpanded?.name ?? '';
 
   String get postText => post.text ?? '';
 
@@ -34,6 +32,12 @@ class PostProfileCard extends StatelessWidget {
   DateTime? get postCreatedAt => post.createdAt;
 
   DbFile? get postFile => post.refFile;
+
+  int? get reactions => post.reactions;
+
+  int? get comments => post.comments;
+
+  bool? get hasReaction => post.hasReaction;
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +51,7 @@ class PostProfileCard extends StatelessWidget {
           // Card left
           LemonCircleAvatar(
             size: Sizing.medium,
-            url: ImageUtils.generateUrl(file: postUserAvatar),
+            url: AvatarUtils.getAvatarUrl(user: post.userExpanded),
           ),
           SizedBox(width: Spacing.xSmall),
           // Card right
@@ -58,16 +62,24 @@ class PostProfileCard extends StatelessWidget {
                 Row(
                   mainAxisSize: MainAxisSize.max,
                   children: [
-                    Text(postUsername),
+                    Text(
+                      postName,
+                      style: Typo.medium,
+                    ),
                     if (postCreatedAt != null)
                       Text(
-                        ' • ${timeago.format(postCreatedAt!)}',
-                        style: Typo.medium.copyWith(color: colorScheme.onSurface),
+                        '  •  ${timeago.format(postCreatedAt!)}',
+                        style:
+                            Typo.medium.copyWith(color: colorScheme.onSurface),
                       ),
                     Spacer(),
                     ThemeSvgIcon(
                       color: colorScheme.onSurface,
-                      builder: (filter) => Assets.icons.icMoreHoriz.svg(colorFilter: filter),
+                      builder: (filter) => Assets.icons.icMoreHoriz.svg(
+                        colorFilter: filter,
+                        width: 18,
+                        height: 18,
+                      ),
                     ),
                   ],
                 ),
@@ -75,7 +87,10 @@ class PostProfileCard extends StatelessWidget {
                   SizedBox(height: Spacing.superExtraSmall),
                   Text(
                     postText,
-                    style: Typo.medium.copyWith(color: colorScheme.onSurface),
+                    style: Typo.medium.copyWith(
+                      color: colorScheme.onSurface,
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
                 ],
                 if (postEvent != null) ...[
@@ -85,7 +100,8 @@ class PostProfileCard extends StatelessWidget {
                 if (postFile != null) ...[
                   SizedBox(height: Spacing.superExtraSmall),
                   _buildFile(colorScheme, postFile),
-                ]
+                ],
+                _buildActions(colorScheme)
               ],
             ),
           )
@@ -115,5 +131,62 @@ class PostProfileCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  _buildActions(ColorScheme colorScheme) {
+    final hasReactionColor =
+        hasReaction == true ? colorScheme.tertiary : colorScheme.onSecondary;
+    return Padding(
+        padding: EdgeInsets.only(top: Spacing.small),
+        child: Row(
+          children: [
+            Row(
+              children: [
+                ThemeSvgIcon(
+                  color: hasReactionColor,
+                  builder: (filter) => Assets.icons.icHeart.svg(
+                    colorFilter: filter,
+                    width: 18,
+                    height: 18,
+                  ),
+                ),
+                SizedBox(width: 3),
+                Text(
+                  reactions != null ? '$reactions' : '',
+                  style: Typo.small.copyWith(
+                    color: colorScheme.onSecondary,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(width: Spacing.xSmall),
+            Row(
+              children: [
+                ThemeSvgIcon(
+                  color: colorScheme.onSecondary,
+                  builder: (filter) => Assets.icons.icMessage.svg(
+                    colorFilter: filter,
+                    width: 18,
+                    height: 18,
+                  ),
+                ),
+                SizedBox(width: 3),
+                Text(
+                  comments != null ? '$comments' : '',
+                  style: Typo.small.copyWith(color: colorScheme.onSecondary),
+                ),
+              ],
+            ),
+            Spacer(),
+            ThemeSvgIcon(
+              color: colorScheme.onSecondary,
+              builder: (filter) => Assets.icons.icShare.svg(
+                colorFilter: filter,
+                width: 18,
+                height: 18,
+              ),
+            ),
+          ],
+        ));
   }
 }
