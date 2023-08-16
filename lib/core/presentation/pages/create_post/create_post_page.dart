@@ -60,6 +60,7 @@ class CreatePostPage extends StatelessWidget {
                           vertical: Spacing.superExtraSmall,
                         ),
                         backgroundColor: colorScheme.onTertiary,
+                        disabledBackgroundColor: colorScheme.onSecondaryContainer,
                       ),
                       child: Text(
                         t.post.post,
@@ -75,7 +76,8 @@ class CreatePostPage extends StatelessWidget {
             body: SafeArea(
               child: Column(
                 children: [
-                  Divider(color: colorScheme.onSurface),
+                  Divider(color: colorScheme.outline),
+                  SizedBox(height: Spacing.smMedium),
                   Expanded(
                     child: SingleChildScrollView(
                       child: Padding(
@@ -116,9 +118,12 @@ class CreatePostPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Divider(color: colorScheme.onSurface),
+                  Divider(color: colorScheme.outline),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: Spacing.smMedium,
+                      vertical: Spacing.extraSmall,
+                    ),
                     child: Row(
                       children: [
                         Expanded(
@@ -167,7 +172,7 @@ class CreatePostPage extends StatelessWidget {
                                 color: colorScheme.primary,
                                 borderRadius: BorderRadius.circular(32),
                                 border: Border.all(
-                                  color: colorScheme.onSurface,
+                                  color: colorScheme.outline,
                                 ),
                               ),
                               padding: EdgeInsets.symmetric(

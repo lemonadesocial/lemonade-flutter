@@ -41,7 +41,7 @@ class CreatePostImageWidget extends StatelessWidget {
               padding: EdgeInsets.all(Spacing.extraSmall),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                border: Border.all(color: colorScheme.onSurface),
+                border: Border.all(color: colorScheme.outline),
               ),
               child: ThemeSvgIcon(
                 color: colorScheme.onSurface,
