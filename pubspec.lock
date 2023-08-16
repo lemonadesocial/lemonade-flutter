@@ -438,7 +438,7 @@ packages:
     description:
       path: "."
       ref: main
-      resolved-ref: "350743a71e5777150f0295c1c6582bb9facc43ea"
+      resolved-ref: "82a69b8964825a3b10f2a2bbbb994925a9417042"
       url: "https://github.com/sieuhuflit/fcm_shared_isolate.git"
     source: git
     version: "0.1.0"
