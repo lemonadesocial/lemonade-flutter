@@ -20,32 +20,38 @@ mixin _$BadgesListingEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(GetBadgesInput? input) fetch,
+    required TResult Function(GetBadgesInput? input) refresh,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(GetBadgesInput? input)? fetch,
+    TResult? Function(GetBadgesInput? input)? refresh,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(GetBadgesInput? input)? fetch,
+    TResult Function(GetBadgesInput? input)? refresh,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(BadgesListingEventFetch value) fetch,
+    required TResult Function(BadgesListingEventRefresh value) refresh,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(BadgesListingEventFetch value)? fetch,
+    TResult? Function(BadgesListingEventRefresh value)? refresh,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(BadgesListingEventFetch value)? fetch,
+    TResult Function(BadgesListingEventRefresh value)? refresh,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -173,6 +179,7 @@ class _$BadgesListingEventFetch implements BadgesListingEventFetch {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(GetBadgesInput? input) fetch,
+    required TResult Function(GetBadgesInput? input) refresh,
   }) {
     return fetch(input);
   }
@@ -181,6 +188,7 @@ class _$BadgesListingEventFetch implements BadgesListingEventFetch {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(GetBadgesInput? input)? fetch,
+    TResult? Function(GetBadgesInput? input)? refresh,
   }) {
     return fetch?.call(input);
   }
@@ -189,6 +197,7 @@ class _$BadgesListingEventFetch implements BadgesListingEventFetch {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(GetBadgesInput? input)? fetch,
+    TResult Function(GetBadgesInput? input)? refresh,
     required TResult orElse(),
   }) {
     if (fetch != null) {
@@ -201,6 +210,7 @@ class _$BadgesListingEventFetch implements BadgesListingEventFetch {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(BadgesListingEventFetch value) fetch,
+    required TResult Function(BadgesListingEventRefresh value) refresh,
   }) {
     return fetch(this);
   }
@@ -209,6 +219,7 @@ class _$BadgesListingEventFetch implements BadgesListingEventFetch {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(BadgesListingEventFetch value)? fetch,
+    TResult? Function(BadgesListingEventRefresh value)? refresh,
   }) {
     return fetch?.call(this);
   }
@@ -217,6 +228,7 @@ class _$BadgesListingEventFetch implements BadgesListingEventFetch {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(BadgesListingEventFetch value)? fetch,
+    TResult Function(BadgesListingEventRefresh value)? refresh,
     required TResult orElse(),
   }) {
     if (fetch != null) {
@@ -236,6 +248,149 @@ abstract class BadgesListingEventFetch implements BadgesListingEvent {
   @JsonKey(ignore: true)
   _$$BadgesListingEventFetchCopyWith<_$BadgesListingEventFetch> get copyWith =>
       throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$BadgesListingEventRefreshCopyWith<$Res>
+    implements $BadgesListingEventCopyWith<$Res> {
+  factory _$$BadgesListingEventRefreshCopyWith(
+          _$BadgesListingEventRefresh value,
+          $Res Function(_$BadgesListingEventRefresh) then) =
+      __$$BadgesListingEventRefreshCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({GetBadgesInput? input});
+
+  @override
+  $GetBadgesInputCopyWith<$Res>? get input;
+}
+
+/// @nodoc
+class __$$BadgesListingEventRefreshCopyWithImpl<$Res>
+    extends _$BadgesListingEventCopyWithImpl<$Res, _$BadgesListingEventRefresh>
+    implements _$$BadgesListingEventRefreshCopyWith<$Res> {
+  __$$BadgesListingEventRefreshCopyWithImpl(_$BadgesListingEventRefresh _value,
+      $Res Function(_$BadgesListingEventRefresh) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? input = freezed,
+  }) {
+    return _then(_$BadgesListingEventRefresh(
+      input: freezed == input
+          ? _value.input
+          : input // ignore: cast_nullable_to_non_nullable
+              as GetBadgesInput?,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$BadgesListingEventRefresh implements BadgesListingEventRefresh {
+  _$BadgesListingEventRefresh({this.input});
+
+  @override
+  final GetBadgesInput? input;
+
+  @override
+  String toString() {
+    return 'BadgesListingEvent.refresh(input: $input)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$BadgesListingEventRefresh &&
+            (identical(other.input, input) || other.input == input));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, input);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$BadgesListingEventRefreshCopyWith<_$BadgesListingEventRefresh>
+      get copyWith => __$$BadgesListingEventRefreshCopyWithImpl<
+          _$BadgesListingEventRefresh>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(GetBadgesInput? input) fetch,
+    required TResult Function(GetBadgesInput? input) refresh,
+  }) {
+    return refresh(input);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(GetBadgesInput? input)? fetch,
+    TResult? Function(GetBadgesInput? input)? refresh,
+  }) {
+    return refresh?.call(input);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(GetBadgesInput? input)? fetch,
+    TResult Function(GetBadgesInput? input)? refresh,
+    required TResult orElse(),
+  }) {
+    if (refresh != null) {
+      return refresh(input);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(BadgesListingEventFetch value) fetch,
+    required TResult Function(BadgesListingEventRefresh value) refresh,
+  }) {
+    return refresh(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(BadgesListingEventFetch value)? fetch,
+    TResult? Function(BadgesListingEventRefresh value)? refresh,
+  }) {
+    return refresh?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(BadgesListingEventFetch value)? fetch,
+    TResult Function(BadgesListingEventRefresh value)? refresh,
+    required TResult orElse(),
+  }) {
+    if (refresh != null) {
+      return refresh(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class BadgesListingEventRefresh implements BadgesListingEvent {
+  factory BadgesListingEventRefresh({final GetBadgesInput? input}) =
+      _$BadgesListingEventRefresh;
+
+  @override
+  GetBadgesInput? get input;
+  @override
+  @JsonKey(ignore: true)
+  _$$BadgesListingEventRefreshCopyWith<_$BadgesListingEventRefresh>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc

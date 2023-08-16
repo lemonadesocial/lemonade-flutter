@@ -19,19 +19,22 @@ mixin _$BadgeLocationsListingEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() fetch,
-    required TResult Function(BadgeCity location) select,
+    required TResult Function(BadgeLocation? location) select,
+    required TResult Function(double distance) updateDistance,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? fetch,
-    TResult? Function(BadgeCity location)? select,
+    TResult? Function(BadgeLocation? location)? select,
+    TResult? Function(double distance)? updateDistance,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? fetch,
-    TResult Function(BadgeCity location)? select,
+    TResult Function(BadgeLocation? location)? select,
+    TResult Function(double distance)? updateDistance,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -39,18 +42,24 @@ mixin _$BadgeLocationsListingEvent {
   TResult map<TResult extends Object?>({
     required TResult Function(BadgeLocationsListingEventFetch value) fetch,
     required TResult Function(BadgeLocationsListingEventSelect value) select,
+    required TResult Function(BadgeLocationsListingEventUpdateDistance value)
+        updateDistance,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(BadgeLocationsListingEventFetch value)? fetch,
     TResult? Function(BadgeLocationsListingEventSelect value)? select,
+    TResult? Function(BadgeLocationsListingEventUpdateDistance value)?
+        updateDistance,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(BadgeLocationsListingEventFetch value)? fetch,
     TResult Function(BadgeLocationsListingEventSelect value)? select,
+    TResult Function(BadgeLocationsListingEventUpdateDistance value)?
+        updateDistance,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -120,7 +129,8 @@ class _$BadgeLocationsListingEventFetch
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() fetch,
-    required TResult Function(BadgeCity location) select,
+    required TResult Function(BadgeLocation? location) select,
+    required TResult Function(double distance) updateDistance,
   }) {
     return fetch();
   }
@@ -129,7 +139,8 @@ class _$BadgeLocationsListingEventFetch
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? fetch,
-    TResult? Function(BadgeCity location)? select,
+    TResult? Function(BadgeLocation? location)? select,
+    TResult? Function(double distance)? updateDistance,
   }) {
     return fetch?.call();
   }
@@ -138,7 +149,8 @@ class _$BadgeLocationsListingEventFetch
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? fetch,
-    TResult Function(BadgeCity location)? select,
+    TResult Function(BadgeLocation? location)? select,
+    TResult Function(double distance)? updateDistance,
     required TResult orElse(),
   }) {
     if (fetch != null) {
@@ -152,6 +164,8 @@ class _$BadgeLocationsListingEventFetch
   TResult map<TResult extends Object?>({
     required TResult Function(BadgeLocationsListingEventFetch value) fetch,
     required TResult Function(BadgeLocationsListingEventSelect value) select,
+    required TResult Function(BadgeLocationsListingEventUpdateDistance value)
+        updateDistance,
   }) {
     return fetch(this);
   }
@@ -161,6 +175,8 @@ class _$BadgeLocationsListingEventFetch
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(BadgeLocationsListingEventFetch value)? fetch,
     TResult? Function(BadgeLocationsListingEventSelect value)? select,
+    TResult? Function(BadgeLocationsListingEventUpdateDistance value)?
+        updateDistance,
   }) {
     return fetch?.call(this);
   }
@@ -170,6 +186,8 @@ class _$BadgeLocationsListingEventFetch
   TResult maybeMap<TResult extends Object?>({
     TResult Function(BadgeLocationsListingEventFetch value)? fetch,
     TResult Function(BadgeLocationsListingEventSelect value)? select,
+    TResult Function(BadgeLocationsListingEventUpdateDistance value)?
+        updateDistance,
     required TResult orElse(),
   }) {
     if (fetch != null) {
@@ -191,7 +209,7 @@ abstract class _$$BadgeLocationsListingEventSelectCopyWith<$Res> {
           $Res Function(_$BadgeLocationsListingEventSelect) then) =
       __$$BadgeLocationsListingEventSelectCopyWithImpl<$Res>;
   @useResult
-  $Res call({BadgeCity location});
+  $Res call({BadgeLocation? location});
 }
 
 /// @nodoc
@@ -207,13 +225,13 @@ class __$$BadgeLocationsListingEventSelectCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? location = null,
+    Object? location = freezed,
   }) {
     return _then(_$BadgeLocationsListingEventSelect(
-      location: null == location
+      location: freezed == location
           ? _value.location
           : location // ignore: cast_nullable_to_non_nullable
-              as BadgeCity,
+              as BadgeLocation?,
     ));
   }
 }
@@ -222,10 +240,10 @@ class __$$BadgeLocationsListingEventSelectCopyWithImpl<$Res>
 
 class _$BadgeLocationsListingEventSelect
     implements BadgeLocationsListingEventSelect {
-  _$BadgeLocationsListingEventSelect({required this.location});
+  _$BadgeLocationsListingEventSelect({this.location});
 
   @override
-  final BadgeCity location;
+  final BadgeLocation? location;
 
   @override
   String toString() {
@@ -256,7 +274,8 @@ class _$BadgeLocationsListingEventSelect
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() fetch,
-    required TResult Function(BadgeCity location) select,
+    required TResult Function(BadgeLocation? location) select,
+    required TResult Function(double distance) updateDistance,
   }) {
     return select(location);
   }
@@ -265,7 +284,8 @@ class _$BadgeLocationsListingEventSelect
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? fetch,
-    TResult? Function(BadgeCity location)? select,
+    TResult? Function(BadgeLocation? location)? select,
+    TResult? Function(double distance)? updateDistance,
   }) {
     return select?.call(location);
   }
@@ -274,7 +294,8 @@ class _$BadgeLocationsListingEventSelect
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? fetch,
-    TResult Function(BadgeCity location)? select,
+    TResult Function(BadgeLocation? location)? select,
+    TResult Function(double distance)? updateDistance,
     required TResult orElse(),
   }) {
     if (select != null) {
@@ -288,6 +309,8 @@ class _$BadgeLocationsListingEventSelect
   TResult map<TResult extends Object?>({
     required TResult Function(BadgeLocationsListingEventFetch value) fetch,
     required TResult Function(BadgeLocationsListingEventSelect value) select,
+    required TResult Function(BadgeLocationsListingEventUpdateDistance value)
+        updateDistance,
   }) {
     return select(this);
   }
@@ -297,6 +320,8 @@ class _$BadgeLocationsListingEventSelect
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(BadgeLocationsListingEventFetch value)? fetch,
     TResult? Function(BadgeLocationsListingEventSelect value)? select,
+    TResult? Function(BadgeLocationsListingEventUpdateDistance value)?
+        updateDistance,
   }) {
     return select?.call(this);
   }
@@ -306,6 +331,8 @@ class _$BadgeLocationsListingEventSelect
   TResult maybeMap<TResult extends Object?>({
     TResult Function(BadgeLocationsListingEventFetch value)? fetch,
     TResult Function(BadgeLocationsListingEventSelect value)? select,
+    TResult Function(BadgeLocationsListingEventUpdateDistance value)?
+        updateDistance,
     required TResult orElse(),
   }) {
     if (select != null) {
@@ -317,13 +344,166 @@ class _$BadgeLocationsListingEventSelect
 
 abstract class BadgeLocationsListingEventSelect
     implements BadgeLocationsListingEvent {
-  factory BadgeLocationsListingEventSelect(
-      {required final BadgeCity location}) = _$BadgeLocationsListingEventSelect;
+  factory BadgeLocationsListingEventSelect({final BadgeLocation? location}) =
+      _$BadgeLocationsListingEventSelect;
 
-  BadgeCity get location;
+  BadgeLocation? get location;
   @JsonKey(ignore: true)
   _$$BadgeLocationsListingEventSelectCopyWith<
           _$BadgeLocationsListingEventSelect>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$BadgeLocationsListingEventUpdateDistanceCopyWith<$Res> {
+  factory _$$BadgeLocationsListingEventUpdateDistanceCopyWith(
+          _$BadgeLocationsListingEventUpdateDistance value,
+          $Res Function(_$BadgeLocationsListingEventUpdateDistance) then) =
+      __$$BadgeLocationsListingEventUpdateDistanceCopyWithImpl<$Res>;
+  @useResult
+  $Res call({double distance});
+}
+
+/// @nodoc
+class __$$BadgeLocationsListingEventUpdateDistanceCopyWithImpl<$Res>
+    extends _$BadgeLocationsListingEventCopyWithImpl<$Res,
+        _$BadgeLocationsListingEventUpdateDistance>
+    implements _$$BadgeLocationsListingEventUpdateDistanceCopyWith<$Res> {
+  __$$BadgeLocationsListingEventUpdateDistanceCopyWithImpl(
+      _$BadgeLocationsListingEventUpdateDistance _value,
+      $Res Function(_$BadgeLocationsListingEventUpdateDistance) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? distance = null,
+  }) {
+    return _then(_$BadgeLocationsListingEventUpdateDistance(
+      distance: null == distance
+          ? _value.distance
+          : distance // ignore: cast_nullable_to_non_nullable
+              as double,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$BadgeLocationsListingEventUpdateDistance
+    implements BadgeLocationsListingEventUpdateDistance {
+  _$BadgeLocationsListingEventUpdateDistance({required this.distance});
+
+  @override
+  final double distance;
+
+  @override
+  String toString() {
+    return 'BadgeLocationsListingEvent.updateDistance(distance: $distance)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$BadgeLocationsListingEventUpdateDistance &&
+            (identical(other.distance, distance) ||
+                other.distance == distance));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, distance);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$BadgeLocationsListingEventUpdateDistanceCopyWith<
+          _$BadgeLocationsListingEventUpdateDistance>
+      get copyWith => __$$BadgeLocationsListingEventUpdateDistanceCopyWithImpl<
+          _$BadgeLocationsListingEventUpdateDistance>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() fetch,
+    required TResult Function(BadgeLocation? location) select,
+    required TResult Function(double distance) updateDistance,
+  }) {
+    return updateDistance(distance);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? fetch,
+    TResult? Function(BadgeLocation? location)? select,
+    TResult? Function(double distance)? updateDistance,
+  }) {
+    return updateDistance?.call(distance);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? fetch,
+    TResult Function(BadgeLocation? location)? select,
+    TResult Function(double distance)? updateDistance,
+    required TResult orElse(),
+  }) {
+    if (updateDistance != null) {
+      return updateDistance(distance);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(BadgeLocationsListingEventFetch value) fetch,
+    required TResult Function(BadgeLocationsListingEventSelect value) select,
+    required TResult Function(BadgeLocationsListingEventUpdateDistance value)
+        updateDistance,
+  }) {
+    return updateDistance(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(BadgeLocationsListingEventFetch value)? fetch,
+    TResult? Function(BadgeLocationsListingEventSelect value)? select,
+    TResult? Function(BadgeLocationsListingEventUpdateDistance value)?
+        updateDistance,
+  }) {
+    return updateDistance?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(BadgeLocationsListingEventFetch value)? fetch,
+    TResult Function(BadgeLocationsListingEventSelect value)? select,
+    TResult Function(BadgeLocationsListingEventUpdateDistance value)?
+        updateDistance,
+    required TResult orElse(),
+  }) {
+    if (updateDistance != null) {
+      return updateDistance(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class BadgeLocationsListingEventUpdateDistance
+    implements BadgeLocationsListingEvent {
+  factory BadgeLocationsListingEventUpdateDistance(
+          {required final double distance}) =
+      _$BadgeLocationsListingEventUpdateDistance;
+
+  double get distance;
+  @JsonKey(ignore: true)
+  _$$BadgeLocationsListingEventUpdateDistanceCopyWith<
+          _$BadgeLocationsListingEventUpdateDistance>
       get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -332,8 +512,8 @@ mixin _$BadgeLocationsListingState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function(
-            List<BadgeCity> locations, BadgeList selectedLocation)
+    required TResult Function(List<BadgeLocation> locations,
+            BadgeLocation? selectedLocation, double distance)
         fetched,
     required TResult Function() failure,
   }) =>
@@ -341,7 +521,8 @@ mixin _$BadgeLocationsListingState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
-    TResult? Function(List<BadgeCity> locations, BadgeList selectedLocation)?
+    TResult? Function(List<BadgeLocation> locations,
+            BadgeLocation? selectedLocation, double distance)?
         fetched,
     TResult? Function()? failure,
   }) =>
@@ -349,7 +530,8 @@ mixin _$BadgeLocationsListingState {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(List<BadgeCity> locations, BadgeList selectedLocation)?
+    TResult Function(List<BadgeLocation> locations,
+            BadgeLocation? selectedLocation, double distance)?
         fetched,
     TResult Function()? failure,
     required TResult orElse(),
@@ -443,8 +625,8 @@ class _$BadgeLocationsListingStateInitial
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function(
-            List<BadgeCity> locations, BadgeList selectedLocation)
+    required TResult Function(List<BadgeLocation> locations,
+            BadgeLocation? selectedLocation, double distance)
         fetched,
     required TResult Function() failure,
   }) {
@@ -455,7 +637,8 @@ class _$BadgeLocationsListingStateInitial
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
-    TResult? Function(List<BadgeCity> locations, BadgeList selectedLocation)?
+    TResult? Function(List<BadgeLocation> locations,
+            BadgeLocation? selectedLocation, double distance)?
         fetched,
     TResult? Function()? failure,
   }) {
@@ -466,7 +649,8 @@ class _$BadgeLocationsListingStateInitial
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(List<BadgeCity> locations, BadgeList selectedLocation)?
+    TResult Function(List<BadgeLocation> locations,
+            BadgeLocation? selectedLocation, double distance)?
         fetched,
     TResult Function()? failure,
     required TResult orElse(),
@@ -525,7 +709,10 @@ abstract class _$$BadgeLocationsListingStateFetchedCopyWith<$Res> {
           $Res Function(_$BadgeLocationsListingStateFetched) then) =
       __$$BadgeLocationsListingStateFetchedCopyWithImpl<$Res>;
   @useResult
-  $Res call({List<BadgeCity> locations, BadgeList selectedLocation});
+  $Res call(
+      {List<BadgeLocation> locations,
+      BadgeLocation? selectedLocation,
+      double distance});
 }
 
 /// @nodoc
@@ -542,17 +729,22 @@ class __$$BadgeLocationsListingStateFetchedCopyWithImpl<$Res>
   @override
   $Res call({
     Object? locations = null,
-    Object? selectedLocation = null,
+    Object? selectedLocation = freezed,
+    Object? distance = null,
   }) {
     return _then(_$BadgeLocationsListingStateFetched(
       locations: null == locations
           ? _value._locations
           : locations // ignore: cast_nullable_to_non_nullable
-              as List<BadgeCity>,
-      selectedLocation: null == selectedLocation
+              as List<BadgeLocation>,
+      selectedLocation: freezed == selectedLocation
           ? _value.selectedLocation
           : selectedLocation // ignore: cast_nullable_to_non_nullable
-              as BadgeList,
+              as BadgeLocation?,
+      distance: null == distance
+          ? _value.distance
+          : distance // ignore: cast_nullable_to_non_nullable
+              as double,
     ));
   }
 }
@@ -562,24 +754,27 @@ class __$$BadgeLocationsListingStateFetchedCopyWithImpl<$Res>
 class _$BadgeLocationsListingStateFetched
     implements BadgeLocationsListingStateFetched {
   _$BadgeLocationsListingStateFetched(
-      {required final List<BadgeCity> locations,
-      required this.selectedLocation})
+      {required final List<BadgeLocation> locations,
+      this.selectedLocation,
+      required this.distance})
       : _locations = locations;
 
-  final List<BadgeCity> _locations;
+  final List<BadgeLocation> _locations;
   @override
-  List<BadgeCity> get locations {
+  List<BadgeLocation> get locations {
     if (_locations is EqualUnmodifiableListView) return _locations;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_locations);
   }
 
   @override
-  final BadgeList selectedLocation;
+  final BadgeLocation? selectedLocation;
+  @override
+  final double distance;
 
   @override
   String toString() {
-    return 'BadgeLocationsListingState.fetched(locations: $locations, selectedLocation: $selectedLocation)';
+    return 'BadgeLocationsListingState.fetched(locations: $locations, selectedLocation: $selectedLocation, distance: $distance)';
   }
 
   @override
@@ -590,12 +785,17 @@ class _$BadgeLocationsListingStateFetched
             const DeepCollectionEquality()
                 .equals(other._locations, _locations) &&
             (identical(other.selectedLocation, selectedLocation) ||
-                other.selectedLocation == selectedLocation));
+                other.selectedLocation == selectedLocation) &&
+            (identical(other.distance, distance) ||
+                other.distance == distance));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType,
-      const DeepCollectionEquality().hash(_locations), selectedLocation);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(_locations),
+      selectedLocation,
+      distance);
 
   @JsonKey(ignore: true)
   @override
@@ -609,36 +809,38 @@ class _$BadgeLocationsListingStateFetched
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function(
-            List<BadgeCity> locations, BadgeList selectedLocation)
+    required TResult Function(List<BadgeLocation> locations,
+            BadgeLocation? selectedLocation, double distance)
         fetched,
     required TResult Function() failure,
   }) {
-    return fetched(locations, selectedLocation);
+    return fetched(locations, selectedLocation, distance);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
-    TResult? Function(List<BadgeCity> locations, BadgeList selectedLocation)?
+    TResult? Function(List<BadgeLocation> locations,
+            BadgeLocation? selectedLocation, double distance)?
         fetched,
     TResult? Function()? failure,
   }) {
-    return fetched?.call(locations, selectedLocation);
+    return fetched?.call(locations, selectedLocation, distance);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(List<BadgeCity> locations, BadgeList selectedLocation)?
+    TResult Function(List<BadgeLocation> locations,
+            BadgeLocation? selectedLocation, double distance)?
         fetched,
     TResult Function()? failure,
     required TResult orElse(),
   }) {
     if (fetched != null) {
-      return fetched(locations, selectedLocation);
+      return fetched(locations, selectedLocation, distance);
     }
     return orElse();
   }
@@ -681,12 +883,13 @@ class _$BadgeLocationsListingStateFetched
 abstract class BadgeLocationsListingStateFetched
     implements BadgeLocationsListingState {
   factory BadgeLocationsListingStateFetched(
-          {required final List<BadgeCity> locations,
-          required final BadgeList selectedLocation}) =
-      _$BadgeLocationsListingStateFetched;
+      {required final List<BadgeLocation> locations,
+      final BadgeLocation? selectedLocation,
+      required final double distance}) = _$BadgeLocationsListingStateFetched;
 
-  List<BadgeCity> get locations;
-  BadgeList get selectedLocation;
+  List<BadgeLocation> get locations;
+  BadgeLocation? get selectedLocation;
+  double get distance;
   @JsonKey(ignore: true)
   _$$BadgeLocationsListingStateFetchedCopyWith<
           _$BadgeLocationsListingStateFetched>
@@ -737,8 +940,8 @@ class _$BadgeLocationsListingStateFailure
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function(
-            List<BadgeCity> locations, BadgeList selectedLocation)
+    required TResult Function(List<BadgeLocation> locations,
+            BadgeLocation? selectedLocation, double distance)
         fetched,
     required TResult Function() failure,
   }) {
@@ -749,7 +952,8 @@ class _$BadgeLocationsListingStateFailure
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
-    TResult? Function(List<BadgeCity> locations, BadgeList selectedLocation)?
+    TResult? Function(List<BadgeLocation> locations,
+            BadgeLocation? selectedLocation, double distance)?
         fetched,
     TResult? Function()? failure,
   }) {
@@ -760,7 +964,8 @@ class _$BadgeLocationsListingStateFailure
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(List<BadgeCity> locations, BadgeList selectedLocation)?
+    TResult Function(List<BadgeLocation> locations,
+            BadgeLocation? selectedLocation, double distance)?
         fetched,
     TResult Function()? failure,
     required TResult orElse(),

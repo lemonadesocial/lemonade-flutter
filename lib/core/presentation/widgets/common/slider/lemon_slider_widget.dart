@@ -3,21 +3,24 @@ import 'package:app/theme/sizing.dart';
 import 'package:flutter/material.dart';
 
 class LemonSlider extends StatefulWidget {
-  final double min;
-  final double max;
-
   const LemonSlider({
     super.key,
     required this.min,
     required this.max,
+    this.defaultValue,
+    this.onChange,
   });
+  final double min;
+  final double max;
+  final double? defaultValue;
+  final Function(double value)? onChange;
 
   @override
   State<LemonSlider> createState() => _LemonSliderState();
 }
 
 class _LemonSliderState extends State<LemonSlider> {
-  late double _value = widget.min;
+  late double _value = widget.defaultValue ?? widget.min;
 
   @override
   Widget build(BuildContext context) {
@@ -26,15 +29,17 @@ class _LemonSliderState extends State<LemonSlider> {
       height: Sizing.small,
       child: SliderTheme(
         data: SliderThemeData(
-            trackShape: _CustomTrackShape(),
-            trackHeight: 2,
-            overlayColor: Colors.transparent,
-            activeTrackColor: LemonColor.sunrise,
-            inactiveTrackColor: LemonColor.sunrise18,
-            thumbColor: colorScheme.onPrimary),
+          trackShape: _CustomTrackShape(),
+          trackHeight: 2,
+          overlayColor: Colors.transparent,
+          activeTrackColor: LemonColor.sunrise,
+          inactiveTrackColor: LemonColor.sunrise18,
+          thumbColor: colorScheme.onPrimary,
+        ),
         child: Slider(
           value: _value,
           onChanged: (v) {
+            widget.onChange?.call(v);
             setState(() {
               _value = v;
             });
@@ -66,23 +71,28 @@ class _CustomTrackShape extends RoundedRectSliderTrackShape {
   }
 
   @override
-  paint(PaintingContext context, Offset offset,
-      {required RenderBox parentBox,
-      required SliderThemeData sliderTheme,
-      required Animation<double> enableAnimation,
-      required TextDirection textDirection,
-      required Offset thumbCenter,
-      Offset? secondaryOffset,
-      bool isDiscrete = false,
-      bool isEnabled = false,
-      double additionalActiveTrackHeight = 0}) {
-    return super.paint(context, offset,
-        parentBox: parentBox,
-        sliderTheme: sliderTheme,
-        enableAnimation: enableAnimation,
-        textDirection: textDirection,
-        thumbCenter: thumbCenter,
-        additionalActiveTrackHeight: 0
-        );
+  void paint(
+    PaintingContext context,
+    Offset offset, {
+    required RenderBox parentBox,
+    required SliderThemeData sliderTheme,
+    required Animation<double> enableAnimation,
+    required TextDirection textDirection,
+    required Offset thumbCenter,
+    Offset? secondaryOffset,
+    bool isDiscrete = false,
+    bool isEnabled = false,
+    double additionalActiveTrackHeight = 0,
+  }) {
+    return super.paint(
+      context,
+      offset,
+      parentBox: parentBox,
+      sliderTheme: sliderTheme,
+      enableAnimation: enableAnimation,
+      textDirection: textDirection,
+      thumbCenter: thumbCenter,
+      additionalActiveTrackHeight: 0,
+    );
   }
 }

@@ -12,12 +12,27 @@ part 'badges_listing_bloc.freezed.dart';
 
 class BadgesListingBloc extends Bloc<BadgesListingEvent, BadgesListingState> {
   BadgesListingBloc() : super(BadgesListingStateInitial()) {
+    _createInput();
     on<BadgesListingEventFetch>(_onFetch);
+    on<BadgesListingEventRefresh>(_onRefresh);
   }
   final BadgeService _badgeService = getIt<BadgeService>();
+  late GetBadgesInput defaultInput;
   late final PaginationService<Badge, GetBadgesInput?> _paginationService = PaginationService(
     getDataFuture: _getBadges,
   );
+
+  void _createInput() {
+    defaultInput = GetBadgesInput(
+      limit: 25,
+      list: _badgeService.selectedCollections.isNotEmpty
+          ? _badgeService.selectedCollections.map((item) => item.id ?? '').toList()
+          : null,
+      city: _badgeService.selectedLocation?.badgeCity?.city,
+      country: _badgeService.selectedLocation?.badgeCity?.country,
+      distance: _badgeService.distance,
+    );
+  }
 
   Future<Either<Failure, List<Badge>>> _getBadges(
     skip,
@@ -28,7 +43,23 @@ class BadgesListingBloc extends Bloc<BadgesListingEvent, BadgesListingState> {
   }
 
   Future<void> _onFetch(BadgesListingEventFetch event, Emitter emit) async {
-    final result = await _paginationService.fetch(event.input);
+    final result = await _paginationService.fetch(event.input ?? defaultInput);
+    result.fold(
+      (l) => emit(BadgesListingState.failure()),
+      (badges) => emit(
+        BadgesListingState.fetched(
+          badges: badges,
+        ),
+      ),
+    );
+  }
+
+  Future<void> _onRefresh(BadgesListingEventRefresh event, Emitter emit) async {
+    emit(
+      BadgesListingState.initial(),
+    );
+    _createInput();
+    final result = await _paginationService.refresh(defaultInput);
     result.fold(
       (l) => emit(BadgesListingState.failure()),
       (badges) => emit(
@@ -45,6 +76,9 @@ class BadgesListingEvent with _$BadgesListingEvent {
   factory BadgesListingEvent.fetch({
     GetBadgesInput? input,
   }) = BadgesListingEventFetch;
+  factory BadgesListingEvent.refresh({
+    GetBadgesInput? input,
+  }) = BadgesListingEventRefresh;
 }
 
 @freezed

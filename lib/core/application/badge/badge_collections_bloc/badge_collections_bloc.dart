@@ -10,24 +10,46 @@ part 'badge_collections_bloc.freezed.dart';
 class BadgeCollectionsBloc extends Bloc<BadgeCollectionsEvent, BadgeCollectionsState> {
   BadgeCollectionsBloc() : super(BadgeCollectionsStateInitial()) {
     on<BadgeCollectionsEventFetch>(_onFetch);
+    on<BadgeCollectionsEventSelect>(_onSelect);
+    on<BadgeCollectionsEventDeselect>(_onDeselect);
   }
   final BadgeService _badgeService = getIt<BadgeService>();
+  final GetBadgeListsInput defaultInput = GetBadgeListsInput(
+    skip: 0,
+    limit: 25,
+  );
 
   Future<void> _onFetch(BadgeCollectionsEventFetch event, Emitter emit) async {
-    final result = await _badgeService.getBadgeCollections(
-      GetBadgeListsInput(
-        skip: 0,
-        limit: 100,
-      ),
-    );
+    final result = await _badgeService.getBadgeCollections(defaultInput);
     result.fold(
       (l) => emit(BadgeCollectionsState.failure()),
-      (collections) => BadgeCollectionsState.fetched(
-        collections: collections,
-        selectedCollections: _badgeService.selectedCollections,
+      (collections) => emit(
+        BadgeCollectionsState.fetched(
+          collections: collections,
+          selectedCollections: _badgeService.selectedCollections,
+        ),
+      ),
+    );  
+  }
+
+  Future<void> _onSelect(BadgeCollectionsEventSelect event, Emitter emit) async {
+    final selectedCollections = _badgeService.addCollection(event.collection);
+    state.whenOrNull(
+      fetched: (collections, _) => emit(
+        BadgeCollectionsState.fetched(collections: collections, selectedCollections: selectedCollections),
       ),
     );
   }
+
+  Future<void> _onDeselect(BadgeCollectionsEventDeselect event, Emitter emit) async {
+    final selectedCollections = _badgeService.removeCollection(event.collection);
+    state.whenOrNull(
+      fetched: (collections, _) => emit(
+        BadgeCollectionsState.fetched(collections: collections, selectedCollections: selectedCollections),
+      ),
+    );
+  }
+
 }
 
 @freezed
