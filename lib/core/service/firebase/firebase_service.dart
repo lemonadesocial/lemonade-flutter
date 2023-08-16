@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:app/core/config.dart';
 import 'package:app/core/data/fcm/fcm_mutation.dart';
@@ -18,9 +19,10 @@ import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:injectable/injectable.dart';
 import 'package:matrix/matrix.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../firebase_options_staging.dart'
-    as FirebaseOptionsStaging;
+import '../../../firebase_options_staging.dart' as FirebaseOptionsStaging;
 import '../../../firebase_options_production.dart' as FirebaseOptionsProduction;
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -31,11 +33,12 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     print('Message notification body: ${message.notification?.body}');
   }
   try {
-    String? type = message.data['type'];
-    String? objectType = message.data['object_type'];
-    String? objectId = message.data['object_id'];
-    NavigationUtils.handleNotificationNavigate(
-        FirebaseService._context!, type, objectType, objectId);
+    // final client = getIt<MatrixService>().client;
+    // String? type = message.data['type'];
+    // String? objectType = message.data['object_type'];
+    // String? objectId = message.data['object_id'];
+    // NavigationUtils.handleNotificationNavigate(
+    //     FirebaseService._context!, type, objectType, objectId);
   } catch (e) {
     print("Something wrong _firebaseMessagingBackgroundHandler $e");
   }
@@ -114,7 +117,7 @@ class FirebaseService {
     };
 
     await _requestPermission();
-    _setUpMessageHandlers();
+    // _setUpMessageHandlers();
     getIt<AppOauth>().tokenStateStream.listen(_onTokenStateChange);
     getToken();
   }
@@ -143,25 +146,32 @@ class FirebaseService {
     return token;
   }
 
-  void showFlutterNotification(RemoteMessage message) {
+  showFlutterNotification(RemoteMessage message) async {
     Logs().i("showFlutterNotification");
-    RemoteNotification? notification = message.notification;
-    AndroidNotification? android = message.notification?.android;
-    if (notification != null && android != null && !kIsWeb) {
-      flutterLocalNotificationsPlugin.show(
-          notification.hashCode,
-          notification.title,
-          notification.body,
-          NotificationDetails(
-            android: AndroidNotificationDetails(
-              channel.id,
-              channel.name,
-              channelDescription: channel.description,
-              icon: '@mipmap/ic_launcher',
-            ),
-          ),
-          payload: json.encode(message.data));
-    }
+    final client = getIt<MatrixService>().client;
+    final data = message.data;
+    data['devices'] ??= [];
+    await _tryPushHelper(
+      PushNotification.fromJson(data),
+      client: client,
+    );
+    // RemoteNotification? notification = message.notification;
+    // AndroidNotification? android = message.notification?.android;
+    // if (notification != null && android != null && !kIsWeb) {
+    //   flutterLocalNotificationsPlugin.show(
+    //       notification.hashCode,
+    //       notification.title,
+    //       notification.body,
+    //       NotificationDetails(
+    //         android: AndroidNotificationDetails(
+    //           channel.id,
+    //           channel.name,
+    //           channelDescription: channel.description,
+    //           icon: '@mipmap/ic_launcher',
+    //         ),
+    //       ),
+    //       payload: json.encode(message.data));
+    // }
   }
 
   void _setUpMessageHandlers() {
@@ -208,5 +218,196 @@ class FirebaseService {
         _firebaseMessaging?.deleteToken();
       }
     }
+  }
+
+  Future<void> _tryPushHelper(
+    PushNotification notification, {
+    Client? client,
+    String? activeRoomId,
+    void Function(NotificationResponse?)? onSelectNotification,
+  }) async {
+    Logs().v('_tryPushHelper');
+    final isBackgroundMessage = client == null;
+    Logs().v(
+      'Push helper has been started (background=$isBackgroundMessage).',
+      notification.toJson(),
+    );
+
+    if (!isBackgroundMessage &&
+        activeRoomId == notification.roomId &&
+        activeRoomId != null &&
+        client.syncPresence == null) {
+      Logs().v('Room is in foreground. Stop push helper here.');
+      return;
+    }
+
+    // Initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
+    final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    await flutterLocalNotificationsPlugin.initialize(
+      const InitializationSettings(
+        android: AndroidInitializationSettings('ic_launcher'),
+        iOS: DarwinInitializationSettings(),
+      ),
+      onDidReceiveNotificationResponse: onSelectNotification,
+      //onDidReceiveBackgroundNotificationResponse: onSelectNotification,
+    );
+
+    client = getIt<MatrixService>().client;
+    final event = await client.getEventByPushNotification(
+      notification,
+      storeInDatabase: isBackgroundMessage,
+    );
+
+    if (event == null) {
+      Logs().v('Notification is a clearing indicator.');
+      if (notification.counts?.unread == 0) {
+        if (notification.counts == null || notification.counts?.unread == 0) {
+          await flutterLocalNotificationsPlugin.cancelAll();
+          final store = await SharedPreferences.getInstance();
+          await store.setString(
+            "chat.lemonade.notification_ids",
+            json.encode({}),
+          );
+        }
+      }
+      return;
+    }
+    Logs().v('Push helper got notification event of type ${event.type}.');
+
+    if (event.type.startsWith('m.call')) {
+      // make sure bg sync is on (needed to update hold, unhold events)
+      // prevent over write from app life cycle change
+      client.backgroundSync = true;
+    }
+
+    if (event.type == EventTypes.CallInvite) {
+      // TODO: Implement phone call
+      // CallKeepManager().initialize();
+    } else if (event.type == EventTypes.CallHangup) {
+      client.backgroundSync = false;
+    }
+
+    if (event.type.startsWith('m.call') &&
+        event.type != EventTypes.CallInvite) {
+      Logs().v('Push message is a m.call but not invite. Do not display.');
+      return;
+    }
+
+    if ((event.type.startsWith('m.call') &&
+            event.type != EventTypes.CallInvite) ||
+        event.type == 'org.matrix.call.sdp_stream_metadata_changed') {
+      Logs().v('Push message was for a call, but not call invite.');
+      return;
+    }
+
+    // Calculate the body
+    final body = event.type == EventTypes.Encrypted
+        ? "💬 You got a new message"
+        : await event.calcLocalizedBody(
+            MatrixDefaultLocalizations(),
+            plaintextBody: true,
+            withSenderNamePrefix: false,
+            hideReply: true,
+            hideEdit: true,
+            removeMarkdown: true,
+          );
+
+    // The person object for the android message style notification
+    final avatar = event.room.avatar
+        ?.getThumbnail(
+          client,
+          width: 126,
+          height: 126,
+        )
+        .toString();
+    File? avatarFile;
+    try {
+      avatarFile = avatar == null
+          ? null
+          : await DefaultCacheManager().getSingleFile(avatar);
+    } catch (e, s) {
+      Logs().e('Unable to get avatar picture', e, s);
+    }
+
+    final id = await mapRoomIdToInt(event.room.id);
+
+    // Show notification
+    final person = Person(
+      name: event.senderFromMemoryOrFallback.calcDisplayname(),
+      icon: avatarFile == null
+          ? null
+          : BitmapFilePathAndroidIcon(avatarFile.path),
+    );
+    final newMessage = Message(
+      body,
+      event.originServerTs,
+      person,
+    );
+
+    final messagingStyleInformation = Platform.isAndroid
+        ? await AndroidFlutterLocalNotificationsPlugin()
+            .getActiveNotificationMessagingStyle(id)
+        : null;
+    messagingStyleInformation?.messages?.add(newMessage);
+
+    final roomName =
+        event.room.getLocalizedDisplayname(MatrixDefaultLocalizations());
+
+    final notificationGroupId =
+        event.room.isDirectChat ? 'directChats' : 'groupChats';
+    final groupName = event.room.isDirectChat ? "Direct chat" : "Group";
+
+    final messageRooms = AndroidNotificationChannelGroup(
+      notificationGroupId,
+      groupName,
+    );
+    final roomsChannel = AndroidNotificationChannel(
+      event.room.id,
+      roomName,
+      groupId: notificationGroupId,
+    );
+
+    await flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
+        ?.createNotificationChannelGroup(messageRooms);
+    await flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
+        ?.createNotificationChannel(roomsChannel);
+
+    final androidPlatformChannelSpecifics = AndroidNotificationDetails(
+      event.room.id,
+      roomName,
+      channelDescription: groupName,
+      number: notification.counts?.unread,
+      category: AndroidNotificationCategory.message,
+      styleInformation: messagingStyleInformation ??
+          MessagingStyleInformation(
+            person,
+            conversationTitle: roomName,
+            groupConversation: !event.room.isDirectChat,
+            messages: [newMessage],
+          ),
+      ticker: "Unread chats",
+      // ticker: t.chat.unread_chats(unreadCount: notification.counts?.unread ?? 1),
+      importance: Importance.max,
+      priority: Priority.max,
+      groupKey: notificationGroupId,
+    );
+    const iOSPlatformChannelSpecifics = DarwinNotificationDetails();
+    final platformChannelSpecifics = NotificationDetails(
+      android: androidPlatformChannelSpecifics,
+      iOS: iOSPlatformChannelSpecifics,
+    );
+
+    await flutterLocalNotificationsPlugin.show(
+      id,
+      event.room.getLocalizedDisplayname(MatrixDefaultLocalizations()),
+      body,
+      platformChannelSpecifics,
+      payload: event.roomId,
+    );
+    Logs().v('Push helper has been completed!');
   }
 }

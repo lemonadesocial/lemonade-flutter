@@ -6,6 +6,7 @@ import 'package:app/core/config.dart';
 import 'package:app/core/utils/chat_notification/setting_keys.dart';
 import 'package:app/core/utils/platform_infos.dart';
 import 'package:app/router/app_router.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:matrix/matrix.dart';
@@ -25,13 +26,8 @@ class BackgroundPush {
   bool upAction = false;
   Store? _store;
   Store get store => _store ??= Store();
-  // void Function(String errorMsg, {Uri? link})? onFcmError;
 
   BackgroundPush(Client this.client) {
-    // ignore: prefer_initializing_formals
-    // instance.router = router;
-    // ignore: prefer_initializing_formals
-    // instance.onFcmError = onFcmError;
     onRoomSync ??= client.onSync.stream
         .where((s) => s.hasRoomUpdate)
         .listen((s) => _onClearingPush(getFromServer: false));
@@ -58,7 +54,6 @@ class BackgroundPush {
         Map<String, dynamic>.from(data),
       ),
       client: client,
-      // activeRoomId: router?.currentState?.pathParameters['roomid'],
       onSelectNotification: goToRoom,
     );
   }
@@ -142,27 +137,19 @@ class BackgroundPush {
     }
   }
 
-  // TODO: Handle redirect to room
   Future<void> goToRoom(NotificationResponse? response) async {
-    Logs().i("goToRoom");
-    // try {
-    //   final roomId = response?.payload;
-    //   Logs().v('[Push] Attempting to go to room $roomId...');
-    //   if (router == null || roomId == null) {
-    //     return;
-    //   }
-    //   await client.roomsLoading;
-    //   await client.accountDataLoading;
-    //   final isStory = client
-    //           .getRoomById(roomId)
-    //           ?.getState(EventTypes.RoomCreate)
-    //           ?.content
-    //           .tryGet<String>('type') ==
-    //       ClientStoriesExtension.storiesRoomType;
-    //   router!.currentState!.toSegments([isStory ? 'stories' : 'rooms', roomId]);
-    // } catch (e, s) {
-    //   Logs().e('[Push] Failed to open room', e, s);
-    // }
+    try {
+      final roomId = response?.payload;
+      Logs().v('[Push] Attempting to go to room $roomId...');
+      if (_router == null || roomId == null) {
+        return;
+      }
+      await client.roomsLoading;
+      await client.accountDataLoading;
+      AutoRouter.of(_context!).navigateNamed('/chat/detail/${roomId}');
+    } catch (e, s) {
+      Logs().e('[Push] Failed to open room', e, s);
+    }
   }
 
   /// Workaround for the problem that local notification IDs must be int but we
