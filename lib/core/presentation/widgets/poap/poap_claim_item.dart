@@ -1,9 +1,17 @@
+import 'package:app/core/domain/badge/entities/badge_entities.dart' as badgeEntities;
+import 'package:app/core/domain/token/entities/token_entities.dart';
+import 'package:app/core/domain/token/input/get_tokens_input.dart';
+import 'package:app/core/domain/token/token_repository.dart';
+import 'package:app/core/presentation/pages/poap/popap_detail_page.dart';
 import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/utils/bottomsheet_utils.dart';
+import 'package:app/core/utils/media_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
@@ -12,44 +20,68 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class POAPClaimItem extends StatelessWidget {
-  const POAPClaimItem({super.key});
+  const POAPClaimItem({
+    super.key,
+    required this.badge,
+  });
+  final badgeEntities.Badge badge;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: Spacing.small, vertical: Spacing.small),
-      decoration: ShapeDecoration(
-        color: colorScheme.surfaceVariant,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(LemonRadius.small),
+    return FutureBuilder(
+      future: getIt<TokenRepository>().getToken(
+        input: GetTokenDetailInput(
+          id: '${badge.contract!}-0'.toLowerCase(),
+          network: badge.network,
         ),
       ),
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildPoapImage(),
-          SizedBox(width: Spacing.small),
-          Flexible(
-            child: Column(
+      builder: (context, snapshot) {
+        final tokenDetail = snapshot.data?.fold((l) => null, (r) => r);
+        return InkWell(
+          onTap: () {
+            BottomSheetUtils.showSnapBottomSheet(
+              context,
+              builder: (context) => PopapDetailPage(
+                badge: badge,
+                tokenDetail: tokenDetail,
+              ),
+            );
+          },
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: Spacing.small, vertical: Spacing.small),
+            decoration: ShapeDecoration(
+              color: colorScheme.surfaceVariant,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(LemonRadius.small),
+              ),
+            ),
+            child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.max,
               children: [
-                _buildPoapInfo(colorScheme),
-                SizedBox(height: Spacing.xSmall),
-                _buildPoapQuantityBar(context),
-                SizedBox(height: Spacing.small),
-                _buildButtons(context),
+                _buildPoapImage(tokenDetail?.metadata),
+                SizedBox(width: Spacing.small),
+                Flexible(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildPoapInfo(colorScheme, tokenDetail?.metadata),
+                      SizedBox(height: Spacing.xSmall),
+                      _buildPoapQuantityBar(context),
+                      SizedBox(height: Spacing.small),
+                      _buildButtons(context),
+                    ],
+                  ),
+                )
               ],
             ),
-          )
-        ],
-      ),
+          ),
+        );
+      },
     );
   }
 
-  Widget _buildPoapImage() {
+  Widget _buildPoapImage(TokenMetadata? tokenMetadata) {
     return Container(
       width: 72,
       height: 72,
@@ -60,37 +92,43 @@ class POAPClaimItem extends StatelessWidget {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
-        child: CachedNetworkImage(
-          fit: BoxFit.cover,
-          imageUrl: "https://i.pinimg.com/originals/02/3a/bc/023abc27a2a99211090dcbde0ba6bf2e.png",
-          errorWidget: (_, __, ___) => ImagePlaceholder.defaultPlaceholder(
-            radius: BorderRadius.circular(LemonRadius.extraSmall),
-          ),
-          placeholder: (_, __) => ImagePlaceholder.defaultPlaceholder(
-            radius: BorderRadius.circular(LemonRadius.extraSmall),
+        child: FutureBuilder<Media>(
+          future: MediaUtils.getNftMedia(tokenMetadata?.image, tokenMetadata?.animation_url),
+          builder: (context, snapshot) => CachedNetworkImage(
+            fit: BoxFit.cover,
+            imageUrl: snapshot.data?.url ?? '',
+            errorWidget: (_, __, ___) => ImagePlaceholder.defaultPlaceholder(
+              radius: BorderRadius.circular(LemonRadius.extraSmall),
+            ),
+            placeholder: (_, __) => ImagePlaceholder.defaultPlaceholder(
+              radius: BorderRadius.circular(LemonRadius.extraSmall),
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildPoapInfo(ColorScheme colorScheme) {
+  Widget _buildPoapInfo(ColorScheme colorScheme, TokenMetadata? metadata) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          "Raging Burger",
-          style: Typo.medium.copyWith(fontWeight: FontWeight.bold),
-          overflow: TextOverflow.ellipsis,
-          maxLines: 2,
-        ),
-        SizedBox(height: 2),
-        Text(
-          "Burger Nation",
-          style: Typo.small.copyWith(color: colorScheme.onSurfaceVariant),
-          overflow: TextOverflow.ellipsis,
-          maxLines: 2,
-        ),
+        if (metadata?.name != null)
+          Text(
+            '${metadata?.name}',
+            style: Typo.medium.copyWith(fontWeight: FontWeight.bold),
+            overflow: TextOverflow.ellipsis,
+            maxLines: 2,
+          ),
+        if (metadata?.description != null) ...[
+          const SizedBox(height: 2),
+          Text(
+            '${metadata?.description}',
+            style: Typo.small.copyWith(color: colorScheme.onSurfaceVariant),
+            overflow: TextOverflow.ellipsis,
+            maxLines: 2,
+          ),
+        ]
       ],
     );
   }
@@ -113,10 +151,9 @@ class POAPClaimItem extends StatelessWidget {
         SizedBox(height: Spacing.extraSmall),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          mainAxisSize: MainAxisSize.max,
           children: [
-            Text("12 ${t.nft.claimed}", style: smallTextStyle),
-            Text("100", style: smallTextStyle),
+            Text('12 ${t.nft.claimed}', style: smallTextStyle),
+            Text('100', style: smallTextStyle),
           ],
         ),
       ],
@@ -150,11 +187,11 @@ class POAPClaimItem extends StatelessWidget {
               color: colorScheme.onSecondary,
               builder: (filter) => Assets.icons.icNavigationLine.svg(colorFilter: filter),
             ),
-            label: "1.2${t.common.unit.km}",
+            label: '1.2${t.common.unit.km}',
             radius: BorderRadius.circular(LemonRadius.extraSmall),
             padding: EdgeInsets.symmetric(horizontal: Spacing.extraSmall, vertical: Spacing.superExtraSmall),
           ),
-          Spacer(),
+          const Spacer(),
           LinearGradientButton(
             label: t.nft.claim,
             leading: Assets.icons.icDownload.svg(),

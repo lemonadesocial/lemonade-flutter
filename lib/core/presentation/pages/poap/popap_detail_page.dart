@@ -1,6 +1,9 @@
+import 'package:app/core/domain/badge/entities/badge_entities.dart' as badgeEntities;
+import 'package:app/core/domain/token/entities/token_entities.dart';
 import 'package:app/core/presentation/widgets/common/bottomsheet/lemon_snap_bottom_sheet_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
+import 'package:app/core/utils/media_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
@@ -11,11 +14,17 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 class PopapDetailPage extends StatelessWidget {
-  final ScrollController? scrollController;
+  
   const PopapDetailPage({
     super.key,
     this.scrollController,
+    required this.badge,
+    this.tokenDetail,
   });
+  
+  final ScrollController? scrollController;
+  final badgeEntities.Badge badge;
+  final TokenDetail? tokenDetail;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +34,7 @@ class PopapDetailPage extends StatelessWidget {
       defaultSnapSize: 0.77,
       minSnapSize: 0.77,
       maxSnapSize: 1,
-      snapSizes: [0.77, 1],
+      snapSizes: const [0.77, 1],
       backgroundColor: colorScheme.surfaceVariant,
       builder: (scrollController) => Flexible(
         child: Container(
@@ -75,44 +84,47 @@ class PopapDetailPage extends StatelessWidget {
     );
   }
 
-  _buildPopapImage(BuildContext context) {
+  Widget _buildPopapImage(BuildContext context) {
     final imagePlaceholder = ImagePlaceholder.defaultPlaceholder(
       radius: BorderRadius.circular(
         LemonRadius.extraSmall,
       ),
     );
     return LayoutBuilder(
-      builder: (context, constraints) => Container(
+      builder: (context, constraints) => SizedBox(
         height: constraints.maxWidth,
         child: ClipRRect(
           borderRadius: BorderRadius.circular(
             LemonRadius.extraSmall,
           ),
-          child: CachedNetworkImage(
-            imageUrl: "https://static.vecteezy.com/system/resources/thumbnails/013/003/046/small_2x/burger-cartoon-illustration-suitable-for-sticker-symbol-logo-icon-clipart-etc-free-vector.jpg",
-            fit: BoxFit.cover,
-            placeholder: (_, __) => imagePlaceholder,
-            errorWidget: (_, __, ___) => imagePlaceholder,
+          child: FutureBuilder(
+            future: MediaUtils.getNftMedia(tokenDetail?.metadata?.image, tokenDetail?.metadata?.animation_url),
+            builder: (context, snapshot) => CachedNetworkImage(
+              imageUrl: snapshot.data?.url ?? '',
+              fit: BoxFit.cover,
+              placeholder: (_, __) => imagePlaceholder,
+              errorWidget: (_, __, ___) => imagePlaceholder,
+            ),
           ),
         ),
       ),
     );
   }
 
-  _buildPoapInfo(BuildContext context) {
+  Widget _buildPoapInfo(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Raging Burger",
+          tokenDetail?.metadata?.name ?? '--',
           style: Typo.extraMedium.copyWith(fontWeight: FontWeight.bold),
           overflow: TextOverflow.ellipsis,
           maxLines: 2,
         ),
-        SizedBox(height: 2),
+        const SizedBox(height: 2),
         Text(
-          "Burger Nation",
+          badge.listExpanded?.title ?? '--',
           style: Typo.medium.copyWith(color: colorScheme.onSurfaceVariant),
           overflow: TextOverflow.ellipsis,
           maxLines: 2,
@@ -139,10 +151,9 @@ class PopapDetailPage extends StatelessWidget {
         SizedBox(height: Spacing.extraSmall),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          mainAxisSize: MainAxisSize.max,
           children: [
-            Text("12 ${t.nft.claimed}", style: smallTextStyle),
-            Text("100", style: smallTextStyle),
+            Text('12 ${t.nft.claimed}', style: smallTextStyle),
+            Text('100', style: smallTextStyle),
           ],
         ),
       ],
@@ -161,19 +172,19 @@ class PopapDetailPage extends StatelessWidget {
           style: Typo.small.copyWith(color: colorScheme.outline),
         ),
         Text(
-            'Introducing "Raging Burger," an NFT collection merging art and culinary pleasure. Each masterpiece unlocks hidden menus and discounts at renowned eateries. Immerse yourself in extraordinary gastronomic experiences, savoring tantalizing flavors where art and cuisine collide.',
+            tokenDetail?.metadata?.description ?? '--',
             style: Typo.medium.copyWith(
               color: colorScheme.onPrimary.withOpacity(0.87),
-            ))
+            ),)
       ],
     );
   }
 
   Container _buildFooter(BuildContext context) {
     // TODO: just for illustration
-    var needLocation = false;
-    var ableToClaim = false;
-    var buttonDisabled = needLocation || !ableToClaim;
+    const needLocation = false;
+    final ableToClaim = badge.claimable ?? false;
+    final buttonDisabled = needLocation || !badge.claimable!;
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
     return Container(
@@ -186,7 +197,6 @@ class PopapDetailPage extends StatelessWidget {
       decoration: BoxDecoration(border: Border(top: BorderSide(color: colorScheme.onPrimary.withOpacity(0.09)))),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        mainAxisSize: MainAxisSize.max,
         children: [
           Flexible(
               child: Text.rich(
@@ -205,7 +215,9 @@ class PopapDetailPage extends StatelessWidget {
                         )
                     ],
                   ),
-                  style: Typo.small.copyWith(color: colorScheme.onSurfaceVariant))),
+                  style: Typo.small.copyWith(color: colorScheme.onSurfaceVariant),
+            ),
+          ),
           SizedBox(
             width: Spacing.medium * 2,
           ),

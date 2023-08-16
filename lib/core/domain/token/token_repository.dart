@@ -8,5 +8,7 @@ import 'package:dartz/dartz.dart';
 abstract class TokenRepository {
   Future<Either<Failure, List<TokenComplex>>> getTokens({required GetTokensInput input});
 
+  Future<Either<Failure, TokenDetail?>> getToken({ required GetTokenDetailInput input });
+
   Stream<Either<Failure, List<OrderComplex>>> watchOrders({required WatchOrdersInput input});
 }

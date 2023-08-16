@@ -33,6 +33,18 @@ class TokenComplexDto with _$TokenComplexDto {
 }
 
 @freezed
+class TokenDetailDto with _$TokenDetailDto {
+  const factory TokenDetailDto({
+      String? id,
+      String? network,
+      String? tokenId,
+      TokenMetadataDto? metadata,
+  }) = _TokenDetailDto;
+
+  factory TokenDetailDto.fromJson(Map<String, dynamic> json) => _$TokenDetailDtoFromJson(json);
+}
+
+@freezed
 class RegistryDto with _$RegistryDto {
   const factory RegistryDto({
     String? id,

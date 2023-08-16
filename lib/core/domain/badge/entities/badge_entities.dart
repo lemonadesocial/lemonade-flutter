@@ -2,10 +2,9 @@ import 'package:app/core/data/badge/dtos/badge_dtos.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 
 class Badge {
-
   Badge({
     this.id,
-    this.city, 
+    this.city,
     this.country,
     this.claimable,
     this.distance,
@@ -38,7 +37,6 @@ class Badge {
 }
 
 class BadgeList {
-
   BadgeList({
     this.id,
     this.imageUrl,
@@ -62,7 +60,6 @@ class BadgeList {
 }
 
 class BadgeCity {
-
   BadgeCity({
     this.city,
     this.country,
@@ -74,4 +71,35 @@ class BadgeCity {
       );
   final String? city;
   final String? country;
+}
+
+class BadgeLocation {
+  BadgeLocation({
+    this.badgeCity,
+    this.lng,
+    this.lat,
+    this.isMyLocation = false,
+  });
+
+  factory BadgeLocation.city({
+    required BadgeCity city,
+  }) =>
+      BadgeLocation(
+        badgeCity: city,
+      );
+
+  factory BadgeLocation.myLocation({
+    required double lat,
+    required double lng,
+  }) =>
+      BadgeLocation(
+        isMyLocation: true,
+        lat: lat,
+        lng: lng,
+      );
+
+  final BadgeCity? badgeCity;
+  final double? lat;
+  final double? lng;
+  final bool isMyLocation;
 }

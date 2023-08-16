@@ -1,9 +1,9 @@
 /// Generated file. Do not edit.
 ///
 /// Locales: 1
-/// Strings: 106
+/// Strings: 107
 ///
-/// Built on 2023-08-11 at 08:51 UTC
+/// Built on 2023-08-16 at 04:04 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -217,6 +217,7 @@ class _I18nNftEn {
 	String get ineligibleToClaimPoap => 'Uh oh! 🙁 You are ineligible to claim this badge...';
 	String get ableToClaimPoap => 'Congrats! 🥳 You meet all requirements to claim this badge';
 	String get badges => 'badges';
+	String get noBadges => 'No badges found';
 }
 
 // Path: auth
@@ -435,6 +436,7 @@ extension on _I18nEn {
 			case 'nft.ineligibleToClaimPoap': return 'Uh oh! 🙁 You are ineligible to claim this badge...';
 			case 'nft.ableToClaimPoap': return 'Congrats! 🥳 You meet all requirements to claim this badge';
 			case 'nft.badges': return 'badges';
+			case 'nft.noBadges': return 'No badges found';
 			case 'auth.login.success': return 'Logged in successfully';
 			case 'auth.login.fail': return 'Logged in failed';
 			case 'auth.logout': return 'Logout';
