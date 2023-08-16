@@ -2,14 +2,16 @@ import 'package:app/core/failure.dart';
 import 'package:dartz/dartz.dart';
 
 class PaginationService<T, I> {
+  PaginationService({
+    this.getDataFuture,
+    this.getDataStream,
+  });
   List<T> _items = [];
   bool _reachedEnd = false;
   int _skip = 0;
 
   Future<Either<Failure, List<T>>> Function(int skip, bool reachedEnd, {required I input})? getDataFuture;
   Stream<Either<Failure, List<T>>> Function(int skip, bool reachedEnd, {required I input})? getDataStream;
-
-  PaginationService({this.getDataFuture, this.getDataStream});
 
   List<T> get items => _items;
 
@@ -38,7 +40,7 @@ class PaginationService<T, I> {
   }
 
   Future<Either<Failure, List<T>>> _processGetDataFuture(I input) async {
-    if (getDataFuture == null) throw Exception("getDataFuture is required");
+    if (getDataFuture == null) throw Exception('getDataFuture is required');
 
     if (reachedEnd) {
       return Right(_items);
@@ -55,10 +57,9 @@ class PaginationService<T, I> {
   }
 
   Stream<Either<Failure, List<T>>> _processGetDataStream(I input) {
-    if (getDataStream == null) throw Exception("getDataStream is required");
+    if (getDataStream == null) throw Exception('getDataStream is required');
 
     return getDataStream!.call(skip, reachedEnd, input: input).asyncMap((streamEvent) {
-      
       if (reachedEnd) {
         return Right(_items);
       }
@@ -76,8 +77,12 @@ class PaginationService<T, I> {
     if (newItems.isEmpty) {
       _reachedEnd = true;
     }
-    _items = [..._items, ...newItems];
-    _skip = items.length;
+    if (skip == 0) {
+      _items = [...newItems];
+    } else {
+      _items = [..._items, ...newItems];
+    }
+    _skip = _items.length;
     return _items;
   }
 }
