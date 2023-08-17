@@ -61,7 +61,7 @@ dependencies:
   flutter_portal: ^1.1.4
   intl: ^0.18.0
   timeago: ^3.5.0
-  sliver_tools: ^0.2.10
+  sliver_tools: ^0.2.12
   flutter_slidable: ^3.0.0
   scroll_to_index: ^3.0.1
   flutter_typeahead: ^4.6.2
