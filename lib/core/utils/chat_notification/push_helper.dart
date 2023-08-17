@@ -35,7 +35,7 @@ Future<void> pushHelper(
       onDidReceiveNotificationResponse: onSelectNotification,
       onDidReceiveBackgroundNotificationResponse: onSelectNotification,
     );
-    
+
     flutterLocalNotificationsPlugin.show(
       0,
       "newMessageInLemonadeChat",
@@ -103,7 +103,7 @@ Future<void> _tryPushHelper(
         await flutterLocalNotificationsPlugin.cancelAll();
         final store = await SharedPreferences.getInstance();
         await store.setString(
-          "chat.lemonade.notification_ids",
+          'chat.lemonade.notification_ids',
           json.encode({}),
         );
       }
@@ -139,11 +139,10 @@ Future<void> _tryPushHelper(
 
   // Calculate the body
   final body = event.type == EventTypes.Encrypted
-      ? "💬 You got a new message"
+      ? '💬 You got a new message'
       : await event.calcLocalizedBody(
-          MatrixDefaultLocalizations(),
+          const MatrixDefaultLocalizations(),
           plaintextBody: true,
-          withSenderNamePrefix: false,
           hideReply: true,
           hideEdit: true,
           removeMarkdown: true,
@@ -186,7 +185,8 @@ Future<void> _tryPushHelper(
       : null;
   messagingStyleInformation?.messages?.add(newMessage);
 
-  final roomName = event.room.getLocalizedDisplayname(MatrixDefaultLocalizations());
+  final roomName =
+      event.room.getLocalizedDisplayname(MatrixDefaultLocalizations());
 
   final notificationGroupId =
       event.room.isDirectChat ? 'directChats' : 'groupChats';
@@ -224,7 +224,7 @@ Future<void> _tryPushHelper(
           groupConversation: !event.room.isDirectChat,
           messages: [newMessage],
         ),
-    ticker: "Unread chats",
+    ticker: 'Unread chats',
     // ticker: t.chat.unread_chats(unreadCount: notification.counts?.unread ?? 1),
     importance: Importance.max,
     priority: Priority.max,
@@ -238,9 +238,7 @@ Future<void> _tryPushHelper(
 
   await flutterLocalNotificationsPlugin.show(
     id,
-    event.room.getLocalizedDisplayname(
-      MatrixDefaultLocalizations()
-    ),
+    event.room.getLocalizedDisplayname(),
     body,
     platformChannelSpecifics,
     payload: event.roomId,

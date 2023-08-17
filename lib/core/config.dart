@@ -30,6 +30,6 @@ class AppConfig {
 
   static const String pushNotificationsAppId = 'social.lemonade.app.staging';
   static const String pushNotificationsGatewayUrl =
-      'https://c2cf-116-110-40-0.ngrok.io/_matrix/push/v1/notify';
+      'https://5603-14-186-96-93.ngrok.io/_matrix/push/v1/notify';
   static const String pushNotificationsPusherFormat = 'event_id_only';
 }

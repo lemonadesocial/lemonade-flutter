@@ -3,41 +3,30 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:app/core/config.dart';
-import 'package:app/core/service/matrix/matrix_service.dart';
 import 'package:app/core/utils/chat_notification/setting_keys.dart';
 import 'package:app/core/utils/platform_infos.dart';
-import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.dart';
 import 'package:auto_route/auto_route.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:fcm_shared_isolate/fcm_shared_isolate.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:matrix/matrix.dart';
-import 'package:fcm_shared_isolate/fcm_shared_isolate.dart';
+
 import 'famedlysdk_store.dart';
 import 'push_helper.dart';
 
-import '../../../firebase_options_staging.dart' as FirebaseOptionsStaging;
-import '../../../firebase_options_production.dart' as FirebaseOptionsProduction;
-
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  if (kDebugMode) {
-    print("Handling a background message: ${message.messageId}");
-    print('Message data: ${message.data}');
-    print('Message notification title: ${message.notification?.title}');
-    print('Message notification body: ${message.notification?.body}');
-  }
-  try {
-    final backgroundPush = getIt<MatrixService>().backgroundPush;
-    backgroundPush.showFlutterNotification(message);
-  } catch (e) {
-    print("Something wrong _firebaseMessagingBackgroundHandler $e");
-  }
-}
 
 class BackgroundPush {
+
+  BackgroundPush(this.client) {
+    onRoomSync ??= client.onSync.stream
+        .where((s) => s.hasRoomUpdate)
+        .listen((s) => _onClearingPush(getFromServer: false));
+    firebase?.setListeners(
+      onMessage: onMessage,
+    );
+  }
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
   final Client client;
@@ -50,63 +39,6 @@ class BackgroundPush {
   Store? _store;
   Store get store => _store ??= Store();
 
-  BackgroundPush(Client this.client) {
-    onRoomSync ??= client.onSync.stream
-        .where((s) => s.hasRoomUpdate)
-        .listen((s) => _onClearingPush(getFromServer: false));
-
-    if (Platform.isAndroid) {
-      firebase?.setListeners(
-        onMessage: onMessage,
-      );
-    }
-    if (Platform.isIOS) {
-      firebaseInitialize();
-    }
-  }
-
-
-  Future<void> firebaseInitialize() async {
-    print("......firebaseInitialize");
-    await Firebase.initializeApp(
-      options: AppConfig.env == 'production'
-          ? FirebaseOptionsProduction.DefaultFirebaseOptions.currentPlatform
-          : FirebaseOptionsStaging.DefaultFirebaseOptions.currentPlatform,
-    );
-    await FirebaseMessaging.instance
-        .setForegroundNotificationPresentationOptions(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
-    await FirebaseMessaging.instance.requestPermission(
-      alert: true,
-      announcement: false,
-      badge: true,
-      carPlay: false,
-      criticalAlert: false,
-      provisional: false,
-      sound: true,
-    );
-    _setUpMessageHandlers();
-  }
-
-  void _setUpMessageHandlers() {
-    FirebaseMessaging.onMessage.listen(showFlutterNotification);
-    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-    FirebaseMessaging.onMessageOpenedApp
-        .listen(_firebaseMessagingBackgroundHandler);
-  }
-
-
-  showFlutterNotification(RemoteMessage message) async {
-    Logs().i("showFlutterNotification");
-    final data = message.data;
-    data['devices'] ??= [];
-    await pushHelper(PushNotification.fromJson(data),
-        client: client, onSelectNotification: goToRoom);
-  }
-
   void setupContextAndRouter({
     required AppRouter router,
     required BuildContext context,
@@ -116,7 +48,9 @@ class BackgroundPush {
   }
 
   Future<void> onMessage(Map<dynamic, dynamic> message) async {
-    print('Got a new message from firebase cloud messaging: $message');
+    if (kDebugMode) {
+      print('Got a new message from firebase cloud messaging: $message');
+    }
     final data = Map<String, dynamic>.from(message);
     // UP may strip the devices list
     data['devices'] ??= [];
@@ -217,7 +151,7 @@ class BackgroundPush {
       }
       await client.roomsLoading;
       await client.accountDataLoading;
-      AutoRouter.of(_context!).navigateNamed('/chat/detail/${roomId}');
+      AutoRouter.of(_context!).navigateNamed('/chat/detail/$roomId');
     } catch (e, s) {
       Logs().e('[Push] Failed to open room', e, s);
     }
@@ -243,15 +177,15 @@ class BackgroundPush {
   }) async {
     if (Platform.isIOS) {
       final result = await firebase?.requestPermission();
-      Logs().i("result requestPermission");
+      Logs().i('result requestPermission');
       Logs().i(result.toString());
     }
     final clientName = PlatformInfos.clientName;
     oldTokens ??= <String>{};
-    final pushers = await (client.getPushers().catchError((e) {
+    final pushers = await client.getPushers().catchError((e) {
           Logs().w('[Push] Unable to request pushers', e);
           return <Pusher>[];
-        })) ??
+        }) ??
         [];
 
     var setNewPusher = false;
@@ -336,9 +270,12 @@ class BackgroundPush {
     if (_fcmToken?.isEmpty ?? true) {
       try {
         _fcmToken = await firebase?.getToken();
-        Logs().i("_fcmToken");
+        Logs().i('_fcmToken');
         Logs().i(_fcmToken!);
-        if (_fcmToken == null) throw ('PushToken is null');
+        if (_fcmToken == null) {
+          // ignore: only_throw_errors
+          throw 'PushToken is null';
+        }
       } catch (e, s) {
         Logs().w('[Push] cannot get token', e, e is String ? null : s);
         return;
@@ -352,7 +289,7 @@ class BackgroundPush {
 
   bool _wentToRoomOnStartup = false;
   Future<void> setupPush() async {
-    Logs().d("SetupPush");
+    Logs().d('SetupPush');
     if (client.onLoginStateChanged.value != LoginState.loggedIn ||
         !PlatformInfos.isMobile) {
       return;
