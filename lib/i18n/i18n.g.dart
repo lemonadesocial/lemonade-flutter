@@ -1,9 +1,9 @@
 /// Generated file. Do not edit.
 ///
 /// Locales: 1
-/// Strings: 107
+/// Strings: 108
 ///
-/// Built on 2023-08-16 at 04:04 UTC
+/// Built on 2023-08-17 at 09:26 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -378,6 +378,7 @@ class _I18nCommonUnitEn {
 	final _I18nEn _root; // ignore: unused_field
 
 	// Translations
+	String get m => 'm';
 	String get km => 'km';
 }
 
@@ -476,6 +477,7 @@ extension on _I18nEn {
 			case 'common.upcoming': return 'Upcoming';
 			case 'common.past': return 'Past';
 			case 'common.noPhotos': return 'No photos yet';
+			case 'common.unit.m': return 'm';
 			case 'common.unit.km': return 'km';
 			case 'common.search': return 'search';
 			case 'common.viewRequirements': return 'view requirements';

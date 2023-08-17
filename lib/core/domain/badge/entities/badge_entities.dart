@@ -1,4 +1,5 @@
 import 'package:app/core/data/badge/dtos/badge_dtos.dart';
+import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 
 class Badge {
@@ -67,7 +68,7 @@ class BadgeCity {
 
   factory BadgeCity.fromDto(BadgeCityDto dto) => BadgeCity(
         city: dto.city,
-        country: dto.city,
+        country: dto.country,
       );
   final String? city;
   final String? country;
@@ -76,9 +77,8 @@ class BadgeCity {
 class BadgeLocation {
   BadgeLocation({
     this.badgeCity,
-    this.lng,
-    this.lat,
     this.isMyLocation = false,
+    this.geoPoint,
   });
 
   factory BadgeLocation.city({
@@ -89,17 +89,14 @@ class BadgeLocation {
       );
 
   factory BadgeLocation.myLocation({
-    required double lat,
-    required double lng,
+    required GeoPoint geoPoint,
   }) =>
       BadgeLocation(
         isMyLocation: true,
-        lat: lat,
-        lng: lng,
+        geoPoint: geoPoint,
       );
 
   final BadgeCity? badgeCity;
-  final double? lat;
-  final double? lng;
   final bool isMyLocation;
+  final GeoPoint? geoPoint;
 }

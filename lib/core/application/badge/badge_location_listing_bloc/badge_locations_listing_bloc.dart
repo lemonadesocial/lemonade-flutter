@@ -8,7 +8,13 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'badge_locations_listing_bloc.freezed.dart';
 
 class BadgeLocationsListingBloc extends Bloc<BadgeLocationsListingEvent, BadgeLocationsListingState> {
-  BadgeLocationsListingBloc() : super(BadgeLocationsListingStateInitial()) {
+  BadgeLocationsListingBloc()
+      : super(
+          BadgeLocationsListingStateInitial(
+            selectedLocation: getIt<BadgeService>().selectedLocation,
+            distance: getIt<BadgeService>().distance,
+          ),
+        ) {
     on<BadgeLocationsListingEventFetch>(_onFetch);
     on<BadgeLocationsListingEventSelect>(_onSelect);
     on<BadgeLocationsListingEventUpdateDistance>(_onUpdateDistance);
@@ -76,7 +82,10 @@ class BadgeLocationsListingEvent with _$BadgeLocationsListingEvent {
 
 @freezed
 class BadgeLocationsListingState with _$BadgeLocationsListingState {
-  factory BadgeLocationsListingState.initial() = BadgeLocationsListingStateInitial;
+  factory BadgeLocationsListingState.initial({
+    BadgeLocation? selectedLocation,
+    double? distance,
+  }) = BadgeLocationsListingStateInitial;
   factory BadgeLocationsListingState.fetched({
     required List<BadgeLocation> locations,
     BadgeLocation? selectedLocation,

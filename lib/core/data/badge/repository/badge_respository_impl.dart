@@ -3,6 +3,7 @@ import 'package:app/core/data/badge/dtos/badge_dtos.dart';
 import 'package:app/core/domain/badge/badge_repository.dart';
 import 'package:app/core/domain/badge/entities/badge_entities.dart';
 import 'package:app/core/domain/badge/input/badge_input.dart';
+import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/core/gql.dart';
 import 'package:app/injection/register_module.dart';
@@ -13,11 +14,24 @@ class BadgeRepositoryImpl implements BadgeRepository {
   final _client = getIt<AppGQL>().client;
 
   @override
-  Future<Either<Failure, List<Badge>>> getBadges(GetBadgesInput? input) async {
-    final result = await _client.query(
+  Future<Either<Failure, List<Badge>>> getBadges(
+    GetBadgesInput? input, {
+    GeoPoint? geoPoint,
+  }) async {
+    GraphQLClient queryClient;
+    if (geoPoint != null) {
+      queryClient = GeoLocationBasedGQL(
+        GeoLocationLink(geoPoint: geoPoint),
+      ).client;
+    } else {
+      queryClient = _client;
+    }
+
+    final result = await queryClient.query(
       QueryOptions(
         document: getBadgesQuery,
         variables: input?.toJson() ?? {},
+        fetchPolicy: geoPoint != null ? FetchPolicy.networkOnly : null,
         parserFn: (data) => List.from(data['getBadges'] ?? [])
             .map(
               (item) => Badge.fromDto(

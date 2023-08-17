@@ -36,6 +36,7 @@
     "past": "Past",
     "noPhotos": "No photos yet",
     "unit": {
+        "m": "m",
         "km": "km"
     },
     "search": "search",

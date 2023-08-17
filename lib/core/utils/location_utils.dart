@@ -1,39 +1,46 @@
 import 'package:geolocator/geolocator.dart';
+import 'package:injectable/injectable.dart';
 
+@LazySingleton()
 class LocationUtils {
+  LocationUtils();
+
   LocationPermission _permissionStatus = LocationPermission.denied;
-  final Function()? onPermissionDeniedForever;
-
-  LocationUtils({
-    this.onPermissionDeniedForever,
-  });
-
   LocationPermission get permissionStatus => _permissionStatus;
 
-  Future<Position> getCurrentLocation() async {
+  Future<Position> getCurrentLocation({
+    void Function()? onPermissionDeniedForever,
+  }) async {
     if (!(await Geolocator.isLocationServiceEnabled())) {
       throw LocationServiceNotEnabledException();
     }
-    
+
     if (!await _checkAndRequestPermission()) {
       throw PermissionNotGrantedException();
     }
 
-    return await Geolocator.getCurrentPosition();
+    return Geolocator.getCurrentPosition();
   }
 
-  Future<bool> _checkAndRequestPermission() async {
-    LocationPermission _status = await Geolocator.checkPermission();
+  Future<bool> checkPermission() async {
+    _permissionStatus = await Geolocator.checkPermission();
+    return _permissionStatus == LocationPermission.always || _permissionStatus == LocationPermission.whileInUse;
+  }
 
-    if (_status == LocationPermission.denied) {
-      _status = await Geolocator.requestPermission();
+  Future<bool> _checkAndRequestPermission({
+    void Function()? onPermissionDeniedForever,
+  }) async {
+    var status = await Geolocator.checkPermission();
+
+    if (status == LocationPermission.denied) {
+      status = await Geolocator.requestPermission();
     }
 
-    if (_status == LocationPermission.deniedForever) {
+    if (status == LocationPermission.deniedForever) {
       onPermissionDeniedForever?.call();
     }
 
-    _permissionStatus = _status;
+    _permissionStatus = status;
 
     return _permissionStatus == LocationPermission.always || _permissionStatus == LocationPermission.whileInUse;
   }
@@ -42,13 +49,13 @@ class LocationUtils {
 class LocationServiceNotEnabledException implements Exception {
   @override
   String toString() {
-    return "Location service is not enabled";
+    return 'Location service is not enabled';
   }
 }
 
 class PermissionNotGrantedException implements Exception {
   @override
   String toString() {
-    return "Location permission is not granted";
+    return 'Location permission is not granted';
   }
 }

@@ -18,6 +18,7 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class POAPClaimItem extends StatelessWidget {
   const POAPClaimItem({
@@ -163,6 +164,13 @@ class POAPClaimItem extends StatelessWidget {
   Widget _buildButtons(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
+    final distanceInKm = (badge.distance ?? 0) / 1000;
+    String displayDistance;
+    if (distanceInKm >= 1) {
+      displayDistance = NumberFormat.compact().format(distanceInKm);
+    } else {
+      displayDistance = NumberFormat('##.##').format(badge.distance ?? 0);
+    }
     return SizedBox(
       height: 30,
       child: Row(
@@ -187,7 +195,7 @@ class POAPClaimItem extends StatelessWidget {
               color: colorScheme.onSecondary,
               builder: (filter) => Assets.icons.icNavigationLine.svg(colorFilter: filter),
             ),
-            label: '1.2${t.common.unit.km}',
+            label: '$displayDistance ${distanceInKm >= 1 ? t.common.unit.km : t.common.unit.m}',
             radius: BorderRadius.circular(LemonRadius.extraSmall),
             padding: EdgeInsets.symmetric(horizontal: Spacing.extraSmall, vertical: Spacing.superExtraSmall),
           ),

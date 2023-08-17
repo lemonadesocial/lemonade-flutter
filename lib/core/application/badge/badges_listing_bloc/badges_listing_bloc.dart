@@ -30,7 +30,9 @@ class BadgesListingBloc extends Bloc<BadgesListingEvent, BadgesListingState> {
           : null,
       city: _badgeService.selectedLocation?.badgeCity?.city,
       country: _badgeService.selectedLocation?.badgeCity?.country,
-      distance: _badgeService.distance,
+      distance: _badgeService.selectedLocation != null && _badgeService.selectedLocation!.isMyLocation
+          ? _badgeService.distance
+          : null,
     );
   }
 
@@ -39,11 +41,15 @@ class BadgesListingBloc extends Bloc<BadgesListingEvent, BadgesListingState> {
     endReached, {
     GetBadgesInput? input,
   }) async {
-    return _badgeService.getBadges(input?.copyWith(skip: skip, limit: 25));
+    return _badgeService.getBadges(
+      input?.copyWith(skip: skip, limit: 25),
+      geoPoint: _badgeService.selectedLocation?.geoPoint,
+    );
   }
 
   Future<void> _onFetch(BadgesListingEventFetch event, Emitter emit) async {
-    final result = await _paginationService.fetch(event.input ?? defaultInput);
+    await _badgeService.updateMyLocation();
+    final result = await _paginationService.fetch(defaultInput);
     result.fold(
       (l) => emit(BadgesListingState.failure()),
       (badges) => emit(
@@ -55,6 +61,7 @@ class BadgesListingBloc extends Bloc<BadgesListingEvent, BadgesListingState> {
   }
 
   Future<void> _onRefresh(BadgesListingEventRefresh event, Emitter emit) async {
+    await _badgeService.updateMyLocation();
     emit(
       BadgesListingState.initial(),
     );

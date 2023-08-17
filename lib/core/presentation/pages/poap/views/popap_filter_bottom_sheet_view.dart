@@ -1,6 +1,7 @@
 import 'package:app/core/application/badge/badge_collections_bloc/badge_collections_bloc.dart';
 import 'package:app/core/application/badge/badge_location_listing_bloc/badge_locations_listing_bloc.dart';
 import 'package:app/core/domain/badge/entities/badge_entities.dart';
+import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/presentation/widgets/common/bottomsheet/lemon_snap_bottom_sheet_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/lemon_filled_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
@@ -11,6 +12,7 @@ import 'package:app/core/presentation/widgets/poap/poap_creator_item.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/service/badge/badge_service.dart';
 import 'package:app/core/utils/animation_utils.dart';
+import 'package:app/core/utils/location_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
@@ -338,7 +340,7 @@ class LocationFilter extends StatelessWidget {
               height: Sizing.medium,
               child: BlocBuilder<BadgeLocationsListingBloc, BadgeLocationsListingState>(
                 builder: (context, state) => state.when(
-                  initial: () => Loading.defaultLoading(context),
+                  initial: (_, __) => Loading.defaultLoading(context),
                   failure: () => const Center(child: Text('error')),
                   fetched: (locations, selectedLocation, _) {
                     return ListView.separated(
@@ -347,7 +349,6 @@ class LocationFilter extends StatelessWidget {
                       itemBuilder: (context, index) {
                         var isSelected = false;
                         if (index == 0) {
-                          final myLocation = BadgeLocation.myLocation(lat: 0, lng: 0);
                           isSelected = selectedLocation?.isMyLocation != null && selectedLocation!.isMyLocation == true;
                           return isSelected
                               ? LemonFilledButton(
@@ -363,10 +364,22 @@ class LocationFilter extends StatelessWidget {
                                   label: t.common.nearMe,
                                 )
                               : LemonOutlineButton(
-                                  onTap: () {
-                                    context.read<BadgeLocationsListingBloc>().add(
-                                          BadgeLocationsListingEvent.select(location: myLocation),
-                                        );
+                                  onTap: () async {
+                                    try {
+                                      final position = await getIt<LocationUtils>().getCurrentLocation();
+                                      context.read<BadgeLocationsListingBloc>().add(
+                                            BadgeLocationsListingEvent.select(
+                                              location: BadgeLocation.myLocation(
+                                                geoPoint: GeoPoint(
+                                                  lat: position.latitude,
+                                                  lng: position.longitude,
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                    } catch (error) {
+                                      print(error);
+                                    }
                                   },
                                   leading: ThemeSvgIcon(
                                     color: colorScheme.onSecondary,
@@ -376,8 +389,7 @@ class LocationFilter extends StatelessWidget {
                                 );
                         }
                         final location = locations[index - 1];
-                        isSelected = selectedLocation?.badgeCity?.city == location.badgeCity?.city ||
-                            selectedLocation?.badgeCity?.country == location.badgeCity?.country;
+                        isSelected = selectedLocation?.badgeCity?.city == location.badgeCity?.city;
                         return isSelected
                             ? LemonFilledButton(
                                 onTap: () {
