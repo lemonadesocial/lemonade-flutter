@@ -33,28 +33,26 @@ class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
       padding: padding,
       child: SafeArea(
         child: PreferredSize(
-          child: Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                buildLeading(),
-                if (title?.isNotEmpty == true)
-                  Flexible(
-                    child: Center(
-                      child: Text(
-                        title!,
-                        style: Typo.large,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
+          preferredSize: Size.fromHeight(preferredSize.height),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              buildLeading(),
+              if (title?.isNotEmpty ?? false)
+                Flexible(
+                  child: Center(
+                    child: Text(
+                      title!,
+                      style: Typo.large.copyWith(fontWeight: FontWeight.w500),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                if (titleBuilder != null) titleBuilder!.call(context),
-                buildActions(),
-              ],
-            ),
+                ),
+              if (titleBuilder != null) titleBuilder!.call(context),
+              buildActions(),
+            ],
           ),
-          preferredSize: Size.fromHeight(preferredSize.height),
         ),
       ),
     );

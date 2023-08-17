@@ -4,8 +4,6 @@ import 'package:app/core/domain/newsfeed/input/get_newsfeed_input.dart';
 import 'package:app/core/presentation/pages/home/views/list/home_newsfeed_list.dart';
 import 'package:app/core/presentation/widgets/burger_menu_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
-import 'package:app/core/presentation/widgets/common/separator/horizontal_line.dart';
-import 'package:app/core/presentation/widgets/home/what_on_your_mind_input.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/service/newsfeed/newsfeed_service.dart';
 import 'package:app/core/service/shake/shake_service.dart';
@@ -14,7 +12,6 @@ import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
-import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -40,16 +37,15 @@ class HomePage extends StatelessWidget {
       child: Builder(
         builder: (context) {
           return VisibilityDetector(
-              key: const Key('HomePageVisibilityDetector'),
-              onVisibilityChanged: (info) {
-                if (info.visibleFraction == 1) {
-                  //Whenever this screen is appear on screen, fetch latest news feed
-                  context
-                      .read<NewsfeedListingBloc>()
-                      .add(NewsfeedListingEvent.fetch());
-                }
-              },
-              child: _HomeListingView());
+            key: const Key('HomePageVisibilityDetector'),
+            onVisibilityChanged: (info) {
+              if (info.visibleFraction == 1) {
+                //Whenever this screen is appear on screen, fetch latest news feed
+                context.read<NewsfeedListingBloc>().add(NewsfeedListingEvent.fetch());
+              }
+            },
+            child: const _HomeListingView(),
+          );
         },
       ),
     );
@@ -93,28 +89,17 @@ class _HomePageViewState extends State<_HomeListingView> {
         ],
       ),
       backgroundColor: LemonColor.black,
-      body: Column(children: [
-        Padding(
-          padding: EdgeInsets.only(
-            left: Spacing.small,
-            right: Spacing.small,
-            bottom: Spacing.small,
-          ),
-          child: WhatOnYourMindInput(),
-        ),
-        HorizontalLine(),
-        Expanded(
-            child: NotificationListener<ScrollNotification>(
-                onNotification: (notification) {
-                  if (notification is ScrollEndNotification) {
-                    if (notification.metrics.pixels == notification.metrics.maxScrollExtent) {
-                      context.read<NewsfeedListingBloc>().add(NewsfeedListingEvent.fetch());
-                    }
-                  }
-                  return true;
-                },
-                child: HomeNewsfeedListView())),
-      ]),
+      body: NotificationListener<ScrollNotification>(
+        onNotification: (notification) {
+          if (notification is ScrollEndNotification) {
+            if (notification.metrics.pixels == notification.metrics.maxScrollExtent) {
+              context.read<NewsfeedListingBloc>().add(NewsfeedListingEvent.fetch());
+            }
+          }
+          return true;
+        },
+        child: const HomeNewsfeedListView(),
+      ),
     );
   }
 }

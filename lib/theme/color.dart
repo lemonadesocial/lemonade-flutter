@@ -9,7 +9,7 @@ class LemonColor {
   static Color chineseBlack = const Color(0xff1171717);
   static Color oliveBlack = const Color(0xff404040);
   static Color tertiaryBlack = const Color(0x4Debebf5);
-  static Color white = const Color(0xffFFFFFF);
+  static Color white = const Color(0xffffffff);
   static Color white6 = const Color(0xffFFFFFF).withOpacity(0.6);
   static Color white10 = const Color(0xffFFFFFF).withOpacity(0.10);
   static Color white12 = const Color(0xffFFFFFF).withOpacity(0.12);
