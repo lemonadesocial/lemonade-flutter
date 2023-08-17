@@ -219,6 +219,7 @@ class _EventsListingViewState extends State<_EventsListingView> {
                   child: TextFormField(
                     controller: textCtrl,
                     cursorColor: colorScheme.onPrimary,
+                    style: Typo.medium.copyWith(fontWeight: FontWeight.normal),
                     decoration: InputDecoration.collapsed(hintText: t.post.searchEventHint),
                   ),
                 ),
@@ -269,7 +270,7 @@ class _EventsListingViewState extends State<_EventsListingView> {
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(
-                          color: colorScheme.onSurface,
+                          color: colorScheme.outline,
                         ),
                       ),
                       child: EventTimeFilterButton(
@@ -402,7 +403,7 @@ class _EventList<T extends BaseEventListingBloc> extends StatelessWidget {
                       onTap: () => onEventTap(filteredEvents[index]),
                     ),
                 separatorBuilder: (ctx, index) => Divider(
-                  color: Theme.of(context).colorScheme.onSurface,
+                  color: Theme.of(context).colorScheme.outline,
                 ),
                 itemCount: filteredEvents.length + 1,
               ),

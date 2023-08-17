@@ -4,6 +4,6 @@
     "public": "Public",
     "friend": "Friends",
     "follower": "Followers",
-    "selectEvent": "Select Event",
+    "selectEvent": "Select event",
     "searchEventHint": "Search for events or their hosts"
 }
