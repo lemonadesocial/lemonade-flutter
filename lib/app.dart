@@ -55,7 +55,7 @@ class _LemonadeAppViewState extends State<LemonadeApp> {
   }
 
   Future<void> setupInteractedMessage() async {
-    RemoteMessage? initialMessage =
+    final initialMessage =
         await FirebaseMessaging.instance.getInitialMessage();
     if (initialMessage != null) {
       try {
@@ -64,7 +64,7 @@ class _LemonadeAppViewState extends State<LemonadeApp> {
           String objectType = initialMessage.data['object_type'];
           NavigationUtils.handleNotificationNavigate(context, type, objectType, objectId);
         } catch (e) {
-          print("Error parsing JSON: $e");
+          print('Error parsing JSON: $e');
         }
     }
   }

@@ -8,6 +8,7 @@ import 'package:app/core/utils/platform_infos.dart';
 import 'package:app/router/app_router.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:fcm_shared_isolate/fcm_shared_isolate.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -16,6 +17,15 @@ import 'package:matrix/matrix.dart';
 import 'famedlysdk_store.dart';
 import 'push_helper.dart';
 
+// ignore: unused_element
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  if (kDebugMode) {
+    print('Handling a background message: ${message.messageId}');
+    print('Message data: ${message.data}');
+    print('Message notification title: ${message.notification?.title}');
+    print('Message notification body: ${message.notification?.body}');
+  }
+}
 
 class BackgroundPush {
 
