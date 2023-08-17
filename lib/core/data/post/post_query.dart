@@ -90,7 +90,6 @@ final getPostsQuery = gql('''
 }
 ''');
 
-
 final getNewsfeedQuery = gql('''
   ${postFragment}
   
@@ -108,3 +107,15 @@ final getNewsfeedQuery = gql('''
 }
 ''');
 
+final createPostQuery = gql('''
+  ${postFragment}
+  
+  mutation (\$visibility: PostVisibility!, \$text: String, \$ref_type: PostRefType, \$ref_id: String) {
+  createPost(
+    input: {visibility: \$visibility, text: \$text, ref_type: \$ref_type, ref_id: \$ref_id}
+  ) {
+    ...postFragment
+    __typename
+  }
+}
+''');
