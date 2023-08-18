@@ -14,6 +14,7 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class PostProfileCard extends StatelessWidget {
@@ -76,8 +77,8 @@ class PostProfileCard extends StatelessWidget {
                     color: colorScheme.onSurface,
                     builder: (filter) => Assets.icons.icMoreHoriz.svg(
                       colorFilter: filter,
-                      width: 18,
-                      height: 18,
+                      width: 18.w,
+                      height: 18.w,
                     ),
                   ),
                 ],
@@ -143,8 +144,8 @@ class PostProfileCard extends StatelessWidget {
                 color: hasReactionColor,
                 builder: (filter) => Assets.icons.icHeart.svg(
                   colorFilter: filter,
-                  width: 18,
-                  height: 18,
+                  width: 18.w,
+                  height: 18.w,
                 ),
               ),
               const SizedBox(width: 3),
@@ -163,8 +164,8 @@ class PostProfileCard extends StatelessWidget {
                 color: colorScheme.onSecondary,
                 builder: (filter) => Assets.icons.icMessage.svg(
                   colorFilter: filter,
-                  width: 18,
-                  height: 18,
+                  width: 18.w,
+                  height: 18.w,
                 ),
               ),
               const SizedBox(width: 3),
@@ -179,8 +180,8 @@ class PostProfileCard extends StatelessWidget {
             color: colorScheme.onSecondary,
             builder: (filter) => Assets.icons.icShare.svg(
               colorFilter: filter,
-              width: 18,
-              height: 18,
+              width: 18.w,
+              height: 18.w,
             ),
           ),
         ],
