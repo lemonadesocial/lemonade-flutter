@@ -46,6 +46,10 @@ class BadgeList {
     this.userExpanded,
   });
 
+  factory BadgeList.empty() => BadgeList(
+    id: '',
+  );
+
   factory BadgeList.fromDto(BadgeListDto dto) => BadgeList(
         id: dto.id,
         imageUrl: dto.imageUrl,
@@ -99,4 +103,19 @@ class BadgeLocation {
   final BadgeCity? badgeCity;
   final bool isMyLocation;
   final GeoPoint? geoPoint;
+
+  @override
+  bool operator ==(Object other) {
+    if(identical(this, other)) return true;
+
+    return other is BadgeLocation &&
+        other.badgeCity?.city == badgeCity?.city &&
+        other.badgeCity?.country == badgeCity?.country &&
+        other.isMyLocation == isMyLocation &&
+        other.geoPoint?.lat == geoPoint?.lat &&
+        other.geoPoint?.lng == geoPoint?.lng;
+  }
+
+  @override
+  int get hashCode => badgeCity.hashCode ^ isMyLocation.hashCode ^ geoPoint.hashCode;
 }
