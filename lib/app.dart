@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_portal/flutter_portal.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LemonadeApp extends StatefulWidget {
   const LemonadeApp({super.key});
@@ -81,16 +82,22 @@ class _App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SnackBarUtils.init(lemonadeAppDarkThemeData.colorScheme);
-    return MaterialApp.router(
-      scaffoldMessengerKey: SnackBarUtils.rootScaffoldMessengerKey,
-      locale: _getCurrentLocale(context), // use provider
-      supportedLocales: _supportedLocales,
-      localizationsDelegates: _localizationsDelegates,
-      themeMode: ThemeMode.dark,
-      darkTheme: lemonadeAppDarkThemeData,
-      theme: lemonadeAppLightThemeData,
-      routerDelegate: router.delegate(),
-      routeInformationParser: router.defaultRouteParser(includePrefixMatches: true),
+    return ScreenUtilInit(
+      minTextAdapt: true,
+      designSize: const Size(375, 812), //Iphone X screen size, match Figma
+      builder: (context, state) {
+        return MaterialApp.router(
+          scaffoldMessengerKey: SnackBarUtils.rootScaffoldMessengerKey,
+          locale: _getCurrentLocale(context), // use provider
+          supportedLocales: _supportedLocales,
+          localizationsDelegates: _localizationsDelegates,
+          themeMode: ThemeMode.dark,
+          darkTheme: lemonadeAppDarkThemeData,
+          theme: lemonadeAppLightThemeData,
+          routerDelegate: router.delegate(),
+          routeInformationParser: router.defaultRouteParser(includePrefixMatches: true),
+        );
+      },
     );
   }
 

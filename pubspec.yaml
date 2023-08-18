@@ -72,6 +72,7 @@ dependencies:
   flutter_blurhash: ^0.7.0
   emoji_picker_flutter: ^1.6.1
   mime: ^1.0.4
+  flutter_screenutil: ^5.8.4
 
   # Webview
   flutter_inappwebview: ^5.7.2+3
