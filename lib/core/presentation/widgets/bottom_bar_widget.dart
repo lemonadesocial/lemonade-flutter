@@ -1,12 +1,13 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
-import 'package:app/gen/assets.gen.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/gen/assets.gen.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BottomBar extends StatelessWidget {
   const BottomBar({
@@ -17,7 +18,7 @@ class BottomBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return Container(
-      height: 80,
+      height: 89.h,
       decoration: BoxDecoration(
         color: colorScheme.primary,
         border: Border(
@@ -25,29 +26,56 @@ class BottomBar extends StatelessWidget {
         ),
       ),
       child: Column(
-        mainAxisSize: MainAxisSize.max,
         children: [
+          SizedBox(height: 12.h),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _buildItem(context,
-                  icon: ThemeSvgIcon(builder: (filter) => Assets.icons.icHouse.svg(colorFilter: filter)), path: '/'),
-              _buildItem(context,
-                  icon: ThemeSvgIcon(
-                    builder: (filter) => Assets.icons.icHouseParty.svg(colorFilter: filter),
+              _buildItem(
+                context,
+                icon: ThemeSvgIcon(
+                  builder: (filter) => Assets.icons.icHouse.svg(
+                    colorFilter: filter,
+                    width: 24.w,
+                    height: 24.w,
                   ),
-                  path: '/events'),
-              _buildItem(context,
-                  icon: ThemeSvgIcon(
-                    builder: (filter) => Assets.icons.icInbox.svg(colorFilter: filter),
+                ),
+                path: '/',
+              ),
+              _buildItem(
+                context,
+                icon: ThemeSvgIcon(
+                  builder: (filter) => Assets.icons.icHouseParty.svg(
+                    colorFilter: filter,
+                    width: 24.w,
+                    height: 24.w,
                   ),
-                  path: '/notification'),
-              _buildItem(context,
-                  icon: ThemeSvgIcon(
-                    builder: (filter) => Assets.icons.icWallet.svg(colorFilter: filter),
+                ),
+                path: '/events',
+              ),
+              _buildItem(
+                context,
+                icon: ThemeSvgIcon(
+                  builder: (filter) => Assets.icons.icInbox.svg(
+                    colorFilter: filter,
+                    width: 24.w,
+                    height: 24.w,
                   ),
-                  path: '/wallet'),
+                ),
+                path: '/notification',
+              ),
+              _buildItem(
+                context,
+                icon: ThemeSvgIcon(
+                  builder: (filter) => Assets.icons.icWallet.svg(
+                    colorFilter: filter,
+                    width: 24.w,
+                    height: 24.w,
+                  ),
+                ),
+                path: '/wallet',
+              ),
               _ProfileAuthGuardItem(
                 authenticatedChild: BlocBuilder<AuthBloc, AuthState>(
                   builder: (context, authState) => _buildItem(
@@ -55,9 +83,11 @@ class BottomBar extends StatelessWidget {
                     path: '/me',
                     icon: Center(
                       child: LemonCircleAvatar(
-                        size: 24,
+                        size: 24.w,
                         url: authState.maybeWhen(
-                            authenticated: (authSession) => authSession.userAvatar ?? '', orElse: () => ''),
+                          authenticated: (authSession) => authSession.userAvatar ?? '',
+                          orElse: () => '',
+                        ),
                       ),
                     ),
                   ),
@@ -100,14 +130,15 @@ class BottomBar extends StatelessWidget {
 }
 
 class _ProfileAuthGuardItem extends StatelessWidget {
-  final Widget authenticatedChild;
-  final Widget unauthenticatedChild;
-  final Widget processingChild;
   const _ProfileAuthGuardItem({
     required this.authenticatedChild,
     required this.unauthenticatedChild,
     required this.processingChild,
   });
+
+  final Widget authenticatedChild;
+  final Widget unauthenticatedChild;
+  final Widget processingChild;
 
   @override
   Widget build(BuildContext context) {
@@ -119,7 +150,7 @@ class _ProfileAuthGuardItem extends StatelessWidget {
           },
           unauthenticated: (_) => unauthenticatedChild,
           unknown: () => unauthenticatedChild,
-          processing: () => processingChild
+          processing: () => processingChild,
         );
       },
     );
