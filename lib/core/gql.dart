@@ -113,6 +113,14 @@ class AppGQL extends BaseGQL {
         );
 }
 
+@lazySingleton
+class WalletGQL extends BaseGQL {
+  WalletGQL(): super(
+    httpUrl: AppConfig.walletUrl,
+    wssUrl: AppConfig.walletUrl,
+  );
+}
+
 class GeoLocationBasedGQL extends BaseGQL {
   GeoLocationBasedGQL(
     GeoLocationLink link,

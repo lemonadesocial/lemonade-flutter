@@ -6,13 +6,13 @@ import 'package:app/core/presentation/pages/poap/popap_detail_page.dart';
 import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
+import 'package:app/core/presentation/widgets/poap/poap_quantity_bar.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/bottomsheet_utils.dart';
 import 'package:app/core/utils/media_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -68,7 +68,7 @@ class POAPClaimItem extends StatelessWidget {
                     children: [
                       _buildPoapInfo(colorScheme, tokenDetail?.metadata),
                       SizedBox(height: Spacing.xSmall),
-                      _buildPoapQuantityBar(context),
+                      PoapQuantityBar(badge: badge),
                       SizedBox(height: Spacing.small),
                       _buildButtons(context),
                     ],
@@ -130,33 +130,6 @@ class POAPClaimItem extends StatelessWidget {
             maxLines: 2,
           ),
         ]
-      ],
-    );
-  }
-
-  Widget _buildPoapQuantityBar(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final t = Translations.of(context);
-    final smallTextStyle = Typo.small.copyWith(color: colorScheme.onSurfaceVariant);
-    return Column(
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(100),
-          child: LinearProgressIndicator(
-            value: 12 / 100,
-            color: LemonColor.paleViolet,
-            backgroundColor: LemonColor.paleViolet18,
-            minHeight: 2,
-          ),
-        ),
-        SizedBox(height: Spacing.extraSmall),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text('12 ${t.nft.claimed}', style: smallTextStyle),
-            Text('100', style: smallTextStyle),
-          ],
-        ),
       ],
     );
   }

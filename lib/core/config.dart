@@ -1,3 +1,4 @@
+// ignore_for_file: always_declare_return_types
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AppConfig {
@@ -13,7 +14,10 @@ class AppConfig {
 
   static get metaverseUrl => dotenv.env['METAVERSE_URL'];
   static get wssMetaverseUrl => dotenv.env['WSS_METAVERSE_URL'];
-  
+
+  static get walletUrl => dotenv.env['WALLET_URL'];
+  static get wssWalletUrl => dotenv.env['WSS_WALLET_URL'];
+
   // Social
   static get twitterUrl => 'https://twitter.com';
   static get instagramUrl => 'https://www.instagram.com';
@@ -21,10 +25,10 @@ class AppConfig {
   static get linkedinUrl => 'https://www.linkedin.com/in';
 
   // Wallet connect
-  static get walletConnectProjectId => dotenv.env["WALLET_CONNECT_PROJECT_ID"];
+  static get walletConnectProjectId => dotenv.env['WALLET_CONNECT_PROJECT_ID'];
 
   // Matrix 
-  static get matrixHomeserver => dotenv.env["MATRIX_HOMESERVER"];
+  static get matrixHomeserver => dotenv.env['MATRIX_HOMESERVER'];
 
   static get isProduction => dotenv.env['ENV'] == 'PROD';
 

@@ -3,6 +3,7 @@ import 'package:app/core/domain/token/entities/token_entities.dart';
 import 'package:app/core/presentation/widgets/common/bottomsheet/lemon_snap_bottom_sheet_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
+import 'package:app/core/presentation/widgets/poap/poap_quantity_bar.dart';
 import 'package:app/core/utils/media_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -64,7 +65,7 @@ class PopapDetailPage extends StatelessWidget {
                         child: SizedBox(height: Spacing.medium),
                       ),
                       SliverToBoxAdapter(
-                        child: _buildPoapQuantityBar(context),
+                        child: PoapQuantityBar(badge: badge),
                       ),
                       SliverToBoxAdapter(
                         child: SizedBox(height: Spacing.medium),
