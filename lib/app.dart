@@ -21,7 +21,6 @@ class LemonadeApp extends StatefulWidget {
   State<StatefulWidget> createState() => _LemonadeAppViewState();
 }
 
-
 class _LemonadeAppViewState extends State<LemonadeApp> {
   final _appRouter = AppRouter();
 
@@ -40,30 +39,34 @@ class _LemonadeAppViewState extends State<LemonadeApp> {
 
   @override
   Widget build(BuildContext context) {
-    return _limitAppLayoutBuilder(
-      _translationProviderBuilder(
-        _portalBuilder(
-          _globalBlocProviderBuilder(_App(_appRouter)),
-        ),
-      ),
+    return ScreenUtilInit(
+      minTextAdapt: true,
+      designSize: const Size(375, 812), //Iphone X screen size, match Figma
+      builder: (context, state) {
+        return _limitAppLayoutBuilder(
+          _translationProviderBuilder(
+            _portalBuilder(
+              _globalBlocProviderBuilder(_App(_appRouter)),
+            ),
+          ),
+        );
+      },
     );
   }
 
   Future<void> setupInteractedMessage() async {
-    RemoteMessage? initialMessage =
-        await FirebaseMessaging.instance.getInitialMessage();
+    RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
     if (initialMessage != null) {
       try {
-          String type = initialMessage.data['type']; 
-          String objectId = initialMessage.data['object_id']; 
-          String objectType = initialMessage.data['object_type'];
-          NavigationUtils.handleNotificationNavigate(context, type, objectType, objectId);
-        } catch (e) {
-          print("Error parsing JSON: $e");
-        }
+        String type = initialMessage.data['type'];
+        String objectId = initialMessage.data['object_id'];
+        String objectType = initialMessage.data['object_type'];
+        NavigationUtils.handleNotificationNavigate(context, type, objectType, objectId);
+      } catch (e) {
+        print("Error parsing JSON: $e");
+      }
     }
   }
-
 
   @override
   void initState() {
@@ -82,22 +85,16 @@ class _App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SnackBarUtils.init(lemonadeAppDarkThemeData.colorScheme);
-    return ScreenUtilInit(
-      minTextAdapt: true,
-      designSize: const Size(375, 812), //Iphone X screen size, match Figma
-      builder: (context, state) {
-        return MaterialApp.router(
-          scaffoldMessengerKey: SnackBarUtils.rootScaffoldMessengerKey,
-          locale: _getCurrentLocale(context), // use provider
-          supportedLocales: _supportedLocales,
-          localizationsDelegates: _localizationsDelegates,
-          themeMode: ThemeMode.dark,
-          darkTheme: lemonadeAppDarkThemeData,
-          theme: lemonadeAppLightThemeData,
-          routerDelegate: router.delegate(),
-          routeInformationParser: router.defaultRouteParser(includePrefixMatches: true),
-        );
-      },
+    return MaterialApp.router(
+      scaffoldMessengerKey: SnackBarUtils.rootScaffoldMessengerKey,
+      locale: _getCurrentLocale(context), // use provider
+      supportedLocales: _supportedLocales,
+      localizationsDelegates: _localizationsDelegates,
+      themeMode: ThemeMode.dark,
+      darkTheme: lemonadeAppDarkThemeData,
+      theme: lemonadeAppLightThemeData,
+      routerDelegate: router.delegate(),
+      routeInformationParser: router.defaultRouteParser(includePrefixMatches: true),
     );
   }
 
