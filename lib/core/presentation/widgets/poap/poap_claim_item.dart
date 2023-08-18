@@ -6,6 +6,7 @@ import 'package:app/core/presentation/pages/poap/popap_detail_page.dart';
 import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
+import 'package:app/core/presentation/widgets/poap/poap_claim_button.dart';
 import 'package:app/core/presentation/widgets/poap/poap_quantity_bar.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/bottomsheet_utils.dart';
@@ -173,12 +174,27 @@ class POAPClaimItem extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: Spacing.extraSmall, vertical: Spacing.superExtraSmall),
           ),
           const Spacer(),
-          LinearGradientButton(
-            label: t.nft.claim,
-            leading: Assets.icons.icDownload.svg(),
-            padding: EdgeInsets.symmetric(horizontal: Spacing.extraSmall, vertical: Spacing.extraSmall),
-            radius: BorderRadius.circular(LemonRadius.extraSmall),
-          )
+          PoapClaimButton(
+            badge: badge,
+            builder: (context, claimPoapState) {
+              final disabled = badge.claimable != true || claimPoapState.claimed;
+              return Opacity(
+                opacity: disabled ? 0.36 : 1,
+                child: LinearGradientButton(
+                  onTap: () {
+                    if (disabled) return;
+                  },
+                  label: t.nft.claim,
+                  leading: Assets.icons.icDownload.svg(),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: Spacing.extraSmall,
+                    vertical: Spacing.extraSmall,
+                  ),
+                  radius: BorderRadius.circular(LemonRadius.extraSmall),
+                ),
+              );
+            },
+          ),
         ],
       ),
     );

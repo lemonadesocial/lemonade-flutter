@@ -7,4 +7,8 @@ abstract class PoapRepository {
   Future<Either<Failure, PoapViewSupply>> getPoapViewSupply({
     required GetPoapViewSupplyInput input,
   });
+
+  Future<Either<Failure, PoapViewCheckHasClaimed>> checkHasClaimedPoap({
+    required CheckHasClaimedPoapViewInput input,
+  });
 }

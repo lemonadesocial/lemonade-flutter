@@ -16,3 +16,17 @@ class PoapViewSupply {
   final int claimedQuantity;
   final int quantity;
 }
+
+class PoapViewCheckHasClaimed {
+  PoapViewCheckHasClaimed({
+    required this.claimed,
+  });
+
+  factory PoapViewCheckHasClaimed.fromDto(PoapViewCheckHasClaimedDto dto) {
+    return PoapViewCheckHasClaimed(
+      claimed: dto.claimed,
+    );
+  }
+
+  final bool claimed;
+}

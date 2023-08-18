@@ -3,6 +3,7 @@ import 'package:app/core/domain/token/entities/token_entities.dart';
 import 'package:app/core/presentation/widgets/common/bottomsheet/lemon_snap_bottom_sheet_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
+import 'package:app/core/presentation/widgets/poap/poap_claim_button.dart';
 import 'package:app/core/presentation/widgets/poap/poap_quantity_bar.dart';
 import 'package:app/core/utils/media_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
@@ -185,7 +186,6 @@ class PopapDetailPage extends StatelessWidget {
     // TODO: just for illustration
     const needLocation = false;
     final ableToClaim = badge.claimable ?? false;
-    final buttonDisabled = needLocation || !badge.claimable!;
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
     return Container(
@@ -222,18 +222,24 @@ class PopapDetailPage extends StatelessWidget {
           SizedBox(
             width: Spacing.medium * 2,
           ),
-          SizedBox(
-            width: 90,
-            height: 42,
-            child: Opacity(
-              opacity: buttonDisabled ? 0.36 : 1,
-              child: LinearGradientButton(
-                onTap: () {},
-                mode: GradientButtonMode.lavenderMode,
-                label: StringUtils.capitalize(t.nft.claim),
-              ),
-            ),
-          )
+          PoapClaimButton(
+            badge: badge,
+            builder: (context, claimPoapState) {
+              final buttonDisabled = needLocation || badge.claimable != true || claimPoapState.claimed;
+              return SizedBox(
+                width: 90,
+                height: 42,
+                child: Opacity(
+                  opacity: buttonDisabled ? 0.36 : 1,
+                  child: LinearGradientButton(
+                    onTap: () {},
+                    mode: GradientButtonMode.lavenderMode,
+                    label: StringUtils.capitalize(t.nft.claim),
+                  ),
+                ),
+              );
+            },
+          ),
         ],
       ),
     );

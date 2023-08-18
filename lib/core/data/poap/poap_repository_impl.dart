@@ -18,12 +18,28 @@ class PoapRepositoryImpl implements PoapRepository {
     required GetPoapViewSupplyInput input,
   }) async {
     final result = await _walletClient.query(
-      QueryOptions(document: getPoapViewQuery,
+      QueryOptions(
+        document: getPoapViewQuery,
         variables: input.toJson(),
         parserFn: (data) => PoapViewSupply.fromDto(PoapViewSupplyDto.fromJson(data['poapView'])),
       ),
     );
-    if(result.hasException) return Left(Failure());
+    if (result.hasException) return Left(Failure());
+    return Right(result.parsedData!);
+  }
+
+  @override
+  Future<Either<Failure, PoapViewCheckHasClaimed>> checkHasClaimedPoap({
+    required CheckHasClaimedPoapViewInput input,
+  }) async {
+    final result = await _walletClient.query(
+      QueryOptions(
+        document: checkHasClaimedPoapQuery,
+        variables: input.toJson(),
+        parserFn: (data) => PoapViewCheckHasClaimed.fromDto(PoapViewCheckHasClaimedDto.fromJson(data['poapView'])),
+      ),
+    );
+    if (result.hasException) return Left(Failure());
     return Right(result.parsedData!);
   }
 }

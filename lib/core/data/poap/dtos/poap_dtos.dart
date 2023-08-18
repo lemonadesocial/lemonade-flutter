@@ -21,3 +21,17 @@ class PoapViewSupplyDto {
   final int claimedQuantity;
   final int quantity;
 }
+
+class PoapViewCheckHasClaimedDto {
+  PoapViewCheckHasClaimedDto({
+    required this.claimed,
+  });
+
+  factory PoapViewCheckHasClaimedDto.fromJson(List<dynamic>? data) {
+    return PoapViewCheckHasClaimedDto(
+      claimed: bool.tryParse(data?[0]) ?? false,
+    );
+  }
+
+  final bool claimed;
+}

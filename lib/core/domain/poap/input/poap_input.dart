@@ -13,3 +13,17 @@ class GetPoapViewSupplyInput with _$GetPoapViewSupplyInput {
   
   factory GetPoapViewSupplyInput.fromJson(Map<String, dynamic> json) => _$GetPoapViewSupplyInputFromJson(json);
 }
+
+@freezed
+class CheckHasClaimedPoapViewInput with _$CheckHasClaimedPoapViewInput {
+  factory CheckHasClaimedPoapViewInput({
+    required String network,
+    required String address,
+    @Default('hasClaimed') name,
+    /// user wallet address,
+    required List<List<String>> args,
+  }) = _CheckHasClaimedPoapViewInput;
+  
+  factory CheckHasClaimedPoapViewInput.fromJson(Map<String, dynamic> json) => _$CheckHasClaimedPoapViewInputFromJson(json);
+}
+

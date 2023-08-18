@@ -188,3 +188,224 @@ abstract class _GetPoapViewSupplyInput implements GetPoapViewSupplyInput {
   _$$_GetPoapViewSupplyInputCopyWith<_$_GetPoapViewSupplyInput> get copyWith =>
       throw _privateConstructorUsedError;
 }
+
+CheckHasClaimedPoapViewInput _$CheckHasClaimedPoapViewInputFromJson(
+    Map<String, dynamic> json) {
+  return _CheckHasClaimedPoapViewInput.fromJson(json);
+}
+
+/// @nodoc
+mixin _$CheckHasClaimedPoapViewInput {
+  String get network => throw _privateConstructorUsedError;
+  String get address => throw _privateConstructorUsedError;
+  dynamic get name => throw _privateConstructorUsedError;
+
+  /// user wallet address,
+  List<List<String>> get args => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $CheckHasClaimedPoapViewInputCopyWith<CheckHasClaimedPoapViewInput>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $CheckHasClaimedPoapViewInputCopyWith<$Res> {
+  factory $CheckHasClaimedPoapViewInputCopyWith(
+          CheckHasClaimedPoapViewInput value,
+          $Res Function(CheckHasClaimedPoapViewInput) then) =
+      _$CheckHasClaimedPoapViewInputCopyWithImpl<$Res,
+          CheckHasClaimedPoapViewInput>;
+  @useResult
+  $Res call(
+      {String network, String address, dynamic name, List<List<String>> args});
+}
+
+/// @nodoc
+class _$CheckHasClaimedPoapViewInputCopyWithImpl<$Res,
+        $Val extends CheckHasClaimedPoapViewInput>
+    implements $CheckHasClaimedPoapViewInputCopyWith<$Res> {
+  _$CheckHasClaimedPoapViewInputCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? network = null,
+    Object? address = null,
+    Object? name = freezed,
+    Object? args = null,
+  }) {
+    return _then(_value.copyWith(
+      network: null == network
+          ? _value.network
+          : network // ignore: cast_nullable_to_non_nullable
+              as String,
+      address: null == address
+          ? _value.address
+          : address // ignore: cast_nullable_to_non_nullable
+              as String,
+      name: freezed == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as dynamic,
+      args: null == args
+          ? _value.args
+          : args // ignore: cast_nullable_to_non_nullable
+              as List<List<String>>,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$_CheckHasClaimedPoapViewInputCopyWith<$Res>
+    implements $CheckHasClaimedPoapViewInputCopyWith<$Res> {
+  factory _$$_CheckHasClaimedPoapViewInputCopyWith(
+          _$_CheckHasClaimedPoapViewInput value,
+          $Res Function(_$_CheckHasClaimedPoapViewInput) then) =
+      __$$_CheckHasClaimedPoapViewInputCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {String network, String address, dynamic name, List<List<String>> args});
+}
+
+/// @nodoc
+class __$$_CheckHasClaimedPoapViewInputCopyWithImpl<$Res>
+    extends _$CheckHasClaimedPoapViewInputCopyWithImpl<$Res,
+        _$_CheckHasClaimedPoapViewInput>
+    implements _$$_CheckHasClaimedPoapViewInputCopyWith<$Res> {
+  __$$_CheckHasClaimedPoapViewInputCopyWithImpl(
+      _$_CheckHasClaimedPoapViewInput _value,
+      $Res Function(_$_CheckHasClaimedPoapViewInput) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? network = null,
+    Object? address = null,
+    Object? name = freezed,
+    Object? args = null,
+  }) {
+    return _then(_$_CheckHasClaimedPoapViewInput(
+      network: null == network
+          ? _value.network
+          : network // ignore: cast_nullable_to_non_nullable
+              as String,
+      address: null == address
+          ? _value.address
+          : address // ignore: cast_nullable_to_non_nullable
+              as String,
+      name: freezed == name ? _value.name! : name,
+      args: null == args
+          ? _value._args
+          : args // ignore: cast_nullable_to_non_nullable
+              as List<List<String>>,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$_CheckHasClaimedPoapViewInput implements _CheckHasClaimedPoapViewInput {
+  _$_CheckHasClaimedPoapViewInput(
+      {required this.network,
+      required this.address,
+      this.name = 'hasClaimed',
+      required final List<List<String>> args})
+      : _args = args;
+
+  factory _$_CheckHasClaimedPoapViewInput.fromJson(Map<String, dynamic> json) =>
+      _$$_CheckHasClaimedPoapViewInputFromJson(json);
+
+  @override
+  final String network;
+  @override
+  final String address;
+  @override
+  @JsonKey()
+  final dynamic name;
+
+  /// user wallet address,
+  final List<List<String>> _args;
+
+  /// user wallet address,
+  @override
+  List<List<String>> get args {
+    if (_args is EqualUnmodifiableListView) return _args;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_args);
+  }
+
+  @override
+  String toString() {
+    return 'CheckHasClaimedPoapViewInput(network: $network, address: $address, name: $name, args: $args)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_CheckHasClaimedPoapViewInput &&
+            (identical(other.network, network) || other.network == network) &&
+            (identical(other.address, address) || other.address == address) &&
+            const DeepCollectionEquality().equals(other.name, name) &&
+            const DeepCollectionEquality().equals(other._args, _args));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      network,
+      address,
+      const DeepCollectionEquality().hash(name),
+      const DeepCollectionEquality().hash(_args));
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$_CheckHasClaimedPoapViewInputCopyWith<_$_CheckHasClaimedPoapViewInput>
+      get copyWith => __$$_CheckHasClaimedPoapViewInputCopyWithImpl<
+          _$_CheckHasClaimedPoapViewInput>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_CheckHasClaimedPoapViewInputToJson(
+      this,
+    );
+  }
+}
+
+abstract class _CheckHasClaimedPoapViewInput
+    implements CheckHasClaimedPoapViewInput {
+  factory _CheckHasClaimedPoapViewInput(
+          {required final String network,
+          required final String address,
+          final dynamic name,
+          required final List<List<String>> args}) =
+      _$_CheckHasClaimedPoapViewInput;
+
+  factory _CheckHasClaimedPoapViewInput.fromJson(Map<String, dynamic> json) =
+      _$_CheckHasClaimedPoapViewInput.fromJson;
+
+  @override
+  String get network;
+  @override
+  String get address;
+  @override
+  dynamic get name;
+  @override
+
+  /// user wallet address,
+  List<List<String>> get args;
+  @override
+  @JsonKey(ignore: true)
+  _$$_CheckHasClaimedPoapViewInputCopyWith<_$_CheckHasClaimedPoapViewInput>
+      get copyWith => throw _privateConstructorUsedError;
+}
