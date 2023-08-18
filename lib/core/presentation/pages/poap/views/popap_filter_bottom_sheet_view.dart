@@ -366,7 +366,11 @@ class LocationFilter extends StatelessWidget {
                               : LemonOutlineButton(
                                   onTap: () async {
                                     try {
-                                      final position = await getIt<LocationUtils>().getCurrentLocation();
+                                      final position = await getIt<LocationUtils>().getCurrentLocation(
+                                        onPermissionDeniedForever: () {
+                                          LocationUtils.goToSetting(context);
+                                        },
+                                      );
                                       context.read<BadgeLocationsListingBloc>().add(
                                             BadgeLocationsListingEvent.select(
                                               location: BadgeLocation.myLocation(

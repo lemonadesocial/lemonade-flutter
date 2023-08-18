@@ -1,9 +1,9 @@
 /// Generated file. Do not edit.
 ///
 /// Locales: 1
-/// Strings: 108
+/// Strings: 111
 ///
-/// Built on 2023-08-17 at 09:26 UTC
+/// Built on 2023-08-17 at 10:12 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -291,6 +291,7 @@ class _I18nCommonEn {
 	String get support => 'support';
 	String get delete => 'delete';
 	String get lemonade => 'Lemonade';
+	String get requestLocation => 'Location Services are currently disabled. Please enable Location Services in your device settings.';
 }
 
 // Path: event
@@ -369,6 +370,8 @@ class _I18nCommonActionsEn {
 	String get editProfile => 'Edit profile';
 	String get shareProfile => 'Share profile';
 	String get follow => 'Follow';
+	String get cancel => 'Cancel';
+	String get goToSettings => 'Go to settings';
 }
 
 // Path: common.unit
@@ -471,6 +474,8 @@ extension on _I18nEn {
 			case 'common.actions.editProfile': return 'Edit profile';
 			case 'common.actions.shareProfile': return 'Share profile';
 			case 'common.actions.follow': return 'Follow';
+			case 'common.actions.cancel': return 'Cancel';
+			case 'common.actions.goToSettings': return 'Go to settings';
 			case 'common.followed': return 'Followed';
 			case 'common.anonymous': return 'anonymous';
 			case 'common.profileUrlCopied': return 'Profile\'s URL copied to clipboard';
@@ -490,6 +495,7 @@ extension on _I18nEn {
 			case 'common.support': return 'support';
 			case 'common.delete': return 'delete';
 			case 'common.lemonade': return 'Lemonade';
+			case 'common.requestLocation': return 'Location Services are currently disabled. Please enable Location Services in your device settings.';
 			case 'event.events': return 'Events';
 			case 'event.all': return 'all';
 			case 'event.attending': return 'attending';

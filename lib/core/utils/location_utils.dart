@@ -1,3 +1,6 @@
+import 'package:app/i18n/i18n.g.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:injectable/injectable.dart';
 
@@ -15,7 +18,9 @@ class LocationUtils {
       throw LocationServiceNotEnabledException();
     }
 
-    if (!await _checkAndRequestPermission()) {
+    if (!await _checkAndRequestPermission(
+      onPermissionDeniedForever: onPermissionDeniedForever,
+    )) {
       throw PermissionNotGrantedException();
     }
 
@@ -43,6 +48,38 @@ class LocationUtils {
     _permissionStatus = status;
 
     return _permissionStatus == LocationPermission.always || _permissionStatus == LocationPermission.whileInUse;
+  }
+
+  static Future<void> goToSetting(BuildContext context) async {
+    await showDialog(
+      context: context,
+      builder: (context) {
+        final t = Translations.of(context);
+        return Theme(
+          data: ThemeData.dark(),
+          child: CupertinoAlertDialog(
+            content: Text(t.common.requestLocation),
+            actions: [
+              CupertinoDialogAction(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                isDestructiveAction: true,
+                child: Text(t.common.actions.cancel),
+              ),
+              CupertinoDialogAction(
+                isDefaultAction: true,
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Geolocator.openLocationSettings();
+                },
+                child: Text(t.common.actions.goToSettings),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }
 

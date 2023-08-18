@@ -62,6 +62,7 @@ class PoapListingPageController extends State<PoapListingPage> with WidgetsBindi
       initial: (selectedLocation, _) => selectedLocation,
       fetched: (_, selectedLocation, __) => selectedLocation,
     );
+    if (prevLocation?.isMyLocation == true && currentLocation?.isMyLocation == true) return false;
     return prevLocation != currentLocation;
   }
 
