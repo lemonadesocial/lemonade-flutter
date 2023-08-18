@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:app/core/application/badge/badge_collections_bloc/badge_collections_bloc.dart';
 import 'package:app/core/application/badge/badge_location_listing_bloc/badge_locations_listing_bloc.dart';
 import 'package:app/core/domain/badge/entities/badge_entities.dart';
@@ -227,8 +229,12 @@ class _PoapFilterBottomSheetViewState extends State<PoapFilterBottomSheetView> w
           fetched: (collections, selectedCollections) {
             return SliverLayoutBuilder(
               builder: (context, constraints) {
-                final maxWidth = constraints.crossAxisExtent;
+                var maxWidth = constraints.crossAxisExtent;
+                final fourItemInRowWidth = _poapCreatorItemWidth * 4 + (4 * Spacing.small);
                 final isLargeDevice = maxWidth >= 500;
+                if(isLargeDevice) {
+                  maxWidth = min(maxWidth, fourItemInRowWidth);
+                }
                 final numOfItems = AnimationUtils.calculateMaxItemsInRow(
                   rowWidth: maxWidth - 2 * Spacing.smMedium,
                   itemWidth: _poapCreatorItemWidth,
@@ -238,59 +244,68 @@ class _PoapFilterBottomSheetViewState extends State<PoapFilterBottomSheetView> w
                   list: collections,
                   chunkSize: numOfItems,
                 );
-                return SliverList.separated(
-                  separatorBuilder: (context, item) => SizedBox(height: Spacing.xSmall),
-                  itemCount: chunkListResult.length + 1,
-                  itemBuilder: (context, index) {
-                    // Render bottom space for list
-                    if (index == chunkListResult.length) {
-                      return Container(
-                        height: 220,
-                        color: Colors.transparent,
+                return SliverPadding(
+                  padding: EdgeInsets.symmetric(horizontal: isLargeDevice ? fourItemInRowWidth / 4 : 0),
+                  sliver: SliverList.separated(
+                    separatorBuilder: (context, item) => SizedBox(height: Spacing.xSmall),
+                    itemCount: chunkListResult.length + 1,
+                    itemBuilder: (context, index) {
+                      // Render bottom space for list
+                      if (index == chunkListResult.length) {
+                        return Container(
+                          height: 220,
+                          color: Colors.transparent,
+                        );
+                      }
+                      var chunkPortion = chunkListResult[index];
+                      final isNotFullRow = chunkPortion.length < numOfItems;
+                      if (isNotFullRow && !isLargeDevice) {
+                        chunkPortion = [
+                          ...chunkPortion,
+                          ...List.filled(
+                            numOfItems - chunkPortion.length,
+                            BadgeList.empty(),
+                          ),
+                        ];
+                      }
+                      return AnimatedBuilder(
+                        animation: animation,
+                        builder: (context, child) => Transform.translate(
+                          offset: index == 0 ? Offset.zero : _calculateGridRowOffset(index: index, maxWidth: maxWidth),
+                          child: child,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: List<BadgeList>.from(chunkPortion).map(
+                            (collection) {
+                              final selected = selectedCollections.any((element) => element.id == collection.id);
+                              return Container(
+                                margin: EdgeInsets.only(
+                                  right: isLargeDevice ? Spacing.extraSmall : 0,
+                                ),
+                                child: PoapCreatorItem(
+                                        badgeCollection: collection,
+                                        selected: selected,
+                                        visible: collection.id != null && collection.id!.isNotEmpty,
+                                        onTap: (collection) {
+                                          if (selected) {
+                                            context
+                                                .read<BadgeCollectionsBloc>()
+                                                .add(BadgeCollectionsEvent.deselect(collection: collection));
+                                          } else {
+                                            context
+                                                .read<BadgeCollectionsBloc>()
+                                                .add(BadgeCollectionsEvent.select(collection: collection));
+                                          }
+                                        },
+                                      ),
+                              );
+                            },
+                          ).toList(),
+                        ),
                       );
-                    }
-                    final chunkPortion = chunkListResult[index];
-                    final isNotFullRow = chunkPortion.length < numOfItems;
-                    return AnimatedBuilder(
-                      animation: animation,
-                      builder: (context, child) => Transform.translate(
-                        offset: index == 0 ? Offset.zero : _calculateGridRowOffset(index: index, maxWidth: maxWidth),
-                        child: child,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: isLargeDevice
-                            ? MainAxisAlignment.center
-                            : isNotFullRow
-                                ? MainAxisAlignment.start
-                                : MainAxisAlignment.spaceBetween,
-                        children: List<BadgeList>.from(chunkPortion).map(
-                          (collection) {
-                            final selected = selectedCollections.any((element) => element.id == collection.id);
-                            return Container(
-                              margin: EdgeInsets.only(
-                                right: isLargeDevice || isNotFullRow ? Spacing.extraSmall : 0,
-                              ),
-                              child: PoapCreatorItem(
-                                badgeCollection: collection,
-                                selected: selected,
-                                onTap: (collection) {
-                                  if (selected) {
-                                    context
-                                        .read<BadgeCollectionsBloc>()
-                                        .add(BadgeCollectionsEvent.deselect(collection: collection));
-                                  } else {
-                                    context
-                                        .read<BadgeCollectionsBloc>()
-                                        .add(BadgeCollectionsEvent.select(collection: collection));
-                                  }
-                                },
-                              ),
-                            );
-                          },
-                        ).toList(),
-                      ),
-                    );
-                  },
+                    },
+                  ),
                 );
               },
             );

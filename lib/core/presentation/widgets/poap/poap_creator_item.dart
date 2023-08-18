@@ -11,15 +11,20 @@ class PoapCreatorItem extends StatelessWidget {
     required this.badgeCollection,
     this.onTap,
     this.selected = false,
+    this.visible = true,
   });
 
   final BadgeList badgeCollection;
   final void Function(BadgeList collection)? onTap;
   final bool selected;
+  final bool visible;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+
+    if(!visible) return const SizedBox(width: 78);
+
     return InkWell(
       onTap: () {
         onTap?.call(badgeCollection);
@@ -27,28 +32,29 @@ class PoapCreatorItem extends StatelessWidget {
       child: SizedBox(
         width: 78,
         child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: selected ? LemonColor.lavender : colorScheme.outline,),
-                borderRadius: BorderRadius.circular(70),
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: selected ? LemonColor.lavender : colorScheme.outline,
+                      ),
+                      borderRadius: BorderRadius.circular(70),
+                    ),
+                    child: LemonCircleAvatar(
+                      url: badgeCollection.imageUrl ?? '',
+                      size: 70,
+                    ),
+                  ),
+                  SizedBox(height: Spacing.superExtraSmall),
+                  Text(
+                    badgeCollection.title ?? '',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Typo.xSmall,
+                  )
+                ],
               ),
-              child: LemonCircleAvatar(
-                url: badgeCollection.imageUrl ?? '',
-                size: 70,
-              ),
-            ),
-            SizedBox(height: Spacing.superExtraSmall),
-            Text(
-              badgeCollection.title ?? '',
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: Typo.xSmall,
-            )
-          ],
-        ),
       ),
     );
   }
