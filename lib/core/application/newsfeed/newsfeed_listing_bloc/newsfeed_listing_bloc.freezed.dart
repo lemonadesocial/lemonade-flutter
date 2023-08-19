@@ -18,6 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$NewsfeedListingState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
+    required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<Post> posts) fetched,
     required TResult Function() failure,
@@ -25,6 +26,7 @@ mixin _$NewsfeedListingState {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<Post> posts)? fetched,
     TResult? Function()? failure,
@@ -32,6 +34,7 @@ mixin _$NewsfeedListingState {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<Post> posts)? fetched,
     TResult Function()? failure,
@@ -40,6 +43,7 @@ mixin _$NewsfeedListingState {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
+    required TResult Function(NewsfeedListingStateInitial value) initial,
     required TResult Function(NewsfeedListingStateLoading value) loading,
     required TResult Function(NewsfeedListingStateFetched value) fetched,
     required TResult Function(NewsfeedListingStateFailure value) failure,
@@ -47,6 +51,7 @@ mixin _$NewsfeedListingState {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(NewsfeedListingStateInitial value)? initial,
     TResult? Function(NewsfeedListingStateLoading value)? loading,
     TResult? Function(NewsfeedListingStateFetched value)? fetched,
     TResult? Function(NewsfeedListingStateFailure value)? failure,
@@ -54,6 +59,7 @@ mixin _$NewsfeedListingState {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
+    TResult Function(NewsfeedListingStateInitial value)? initial,
     TResult Function(NewsfeedListingStateLoading value)? loading,
     TResult Function(NewsfeedListingStateFetched value)? fetched,
     TResult Function(NewsfeedListingStateFailure value)? failure,
@@ -79,6 +85,124 @@ class _$NewsfeedListingStateCopyWithImpl<$Res,
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+}
+
+/// @nodoc
+abstract class _$$NewsfeedListingStateInitialCopyWith<$Res> {
+  factory _$$NewsfeedListingStateInitialCopyWith(
+          _$NewsfeedListingStateInitial value,
+          $Res Function(_$NewsfeedListingStateInitial) then) =
+      __$$NewsfeedListingStateInitialCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$NewsfeedListingStateInitialCopyWithImpl<$Res>
+    extends _$NewsfeedListingStateCopyWithImpl<$Res,
+        _$NewsfeedListingStateInitial>
+    implements _$$NewsfeedListingStateInitialCopyWith<$Res> {
+  __$$NewsfeedListingStateInitialCopyWithImpl(
+      _$NewsfeedListingStateInitial _value,
+      $Res Function(_$NewsfeedListingStateInitial) _then)
+      : super(_value, _then);
+}
+
+/// @nodoc
+
+class _$NewsfeedListingStateInitial implements NewsfeedListingStateInitial {
+  _$NewsfeedListingStateInitial();
+
+  @override
+  String toString() {
+    return 'NewsfeedListingState.initial()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$NewsfeedListingStateInitial);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(List<Post> posts) fetched,
+    required TResult Function() failure,
+  }) {
+    return initial();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(List<Post> posts)? fetched,
+    TResult? Function()? failure,
+  }) {
+    return initial?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(List<Post> posts)? fetched,
+    TResult Function()? failure,
+    required TResult orElse(),
+  }) {
+    if (initial != null) {
+      return initial();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(NewsfeedListingStateInitial value) initial,
+    required TResult Function(NewsfeedListingStateLoading value) loading,
+    required TResult Function(NewsfeedListingStateFetched value) fetched,
+    required TResult Function(NewsfeedListingStateFailure value) failure,
+  }) {
+    return initial(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(NewsfeedListingStateInitial value)? initial,
+    TResult? Function(NewsfeedListingStateLoading value)? loading,
+    TResult? Function(NewsfeedListingStateFetched value)? fetched,
+    TResult? Function(NewsfeedListingStateFailure value)? failure,
+  }) {
+    return initial?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(NewsfeedListingStateInitial value)? initial,
+    TResult Function(NewsfeedListingStateLoading value)? loading,
+    TResult Function(NewsfeedListingStateFetched value)? fetched,
+    TResult Function(NewsfeedListingStateFailure value)? failure,
+    required TResult orElse(),
+  }) {
+    if (initial != null) {
+      return initial(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class NewsfeedListingStateInitial implements NewsfeedListingState {
+  factory NewsfeedListingStateInitial() = _$NewsfeedListingStateInitial;
 }
 
 /// @nodoc
@@ -123,6 +247,7 @@ class _$NewsfeedListingStateLoading implements NewsfeedListingStateLoading {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
+    required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<Post> posts) fetched,
     required TResult Function() failure,
@@ -133,6 +258,7 @@ class _$NewsfeedListingStateLoading implements NewsfeedListingStateLoading {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<Post> posts)? fetched,
     TResult? Function()? failure,
@@ -143,6 +269,7 @@ class _$NewsfeedListingStateLoading implements NewsfeedListingStateLoading {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<Post> posts)? fetched,
     TResult Function()? failure,
@@ -157,6 +284,7 @@ class _$NewsfeedListingStateLoading implements NewsfeedListingStateLoading {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
+    required TResult Function(NewsfeedListingStateInitial value) initial,
     required TResult Function(NewsfeedListingStateLoading value) loading,
     required TResult Function(NewsfeedListingStateFetched value) fetched,
     required TResult Function(NewsfeedListingStateFailure value) failure,
@@ -167,6 +295,7 @@ class _$NewsfeedListingStateLoading implements NewsfeedListingStateLoading {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(NewsfeedListingStateInitial value)? initial,
     TResult? Function(NewsfeedListingStateLoading value)? loading,
     TResult? Function(NewsfeedListingStateFetched value)? fetched,
     TResult? Function(NewsfeedListingStateFailure value)? failure,
@@ -177,6 +306,7 @@ class _$NewsfeedListingStateLoading implements NewsfeedListingStateLoading {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
+    TResult Function(NewsfeedListingStateInitial value)? initial,
     TResult Function(NewsfeedListingStateLoading value)? loading,
     TResult Function(NewsfeedListingStateFetched value)? fetched,
     TResult Function(NewsfeedListingStateFailure value)? failure,
@@ -268,6 +398,7 @@ class _$NewsfeedListingStateFetched implements NewsfeedListingStateFetched {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
+    required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<Post> posts) fetched,
     required TResult Function() failure,
@@ -278,6 +409,7 @@ class _$NewsfeedListingStateFetched implements NewsfeedListingStateFetched {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<Post> posts)? fetched,
     TResult? Function()? failure,
@@ -288,6 +420,7 @@ class _$NewsfeedListingStateFetched implements NewsfeedListingStateFetched {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<Post> posts)? fetched,
     TResult Function()? failure,
@@ -302,6 +435,7 @@ class _$NewsfeedListingStateFetched implements NewsfeedListingStateFetched {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
+    required TResult Function(NewsfeedListingStateInitial value) initial,
     required TResult Function(NewsfeedListingStateLoading value) loading,
     required TResult Function(NewsfeedListingStateFetched value) fetched,
     required TResult Function(NewsfeedListingStateFailure value) failure,
@@ -312,6 +446,7 @@ class _$NewsfeedListingStateFetched implements NewsfeedListingStateFetched {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(NewsfeedListingStateInitial value)? initial,
     TResult? Function(NewsfeedListingStateLoading value)? loading,
     TResult? Function(NewsfeedListingStateFetched value)? fetched,
     TResult? Function(NewsfeedListingStateFailure value)? failure,
@@ -322,6 +457,7 @@ class _$NewsfeedListingStateFetched implements NewsfeedListingStateFetched {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
+    TResult Function(NewsfeedListingStateInitial value)? initial,
     TResult Function(NewsfeedListingStateLoading value)? loading,
     TResult Function(NewsfeedListingStateFetched value)? fetched,
     TResult Function(NewsfeedListingStateFailure value)? failure,
@@ -386,6 +522,7 @@ class _$NewsfeedListingStateFailure implements NewsfeedListingStateFailure {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
+    required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<Post> posts) fetched,
     required TResult Function() failure,
@@ -396,6 +533,7 @@ class _$NewsfeedListingStateFailure implements NewsfeedListingStateFailure {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<Post> posts)? fetched,
     TResult? Function()? failure,
@@ -406,6 +544,7 @@ class _$NewsfeedListingStateFailure implements NewsfeedListingStateFailure {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<Post> posts)? fetched,
     TResult Function()? failure,
@@ -420,6 +559,7 @@ class _$NewsfeedListingStateFailure implements NewsfeedListingStateFailure {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
+    required TResult Function(NewsfeedListingStateInitial value) initial,
     required TResult Function(NewsfeedListingStateLoading value) loading,
     required TResult Function(NewsfeedListingStateFetched value) fetched,
     required TResult Function(NewsfeedListingStateFailure value) failure,
@@ -430,6 +570,7 @@ class _$NewsfeedListingStateFailure implements NewsfeedListingStateFailure {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(NewsfeedListingStateInitial value)? initial,
     TResult? Function(NewsfeedListingStateLoading value)? loading,
     TResult? Function(NewsfeedListingStateFetched value)? fetched,
     TResult? Function(NewsfeedListingStateFailure value)? failure,
@@ -440,6 +581,7 @@ class _$NewsfeedListingStateFailure implements NewsfeedListingStateFailure {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
+    TResult Function(NewsfeedListingStateInitial value)? initial,
     TResult Function(NewsfeedListingStateLoading value)? loading,
     TResult Function(NewsfeedListingStateFetched value)? fetched,
     TResult Function(NewsfeedListingStateFailure value)? failure,

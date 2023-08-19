@@ -1,6 +1,5 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/presentation/widgets/app_limit_layout_builder_widget.dart';
-import 'package:app/core/service/firebase/firebase_service.dart';
 import 'package:app/core/utils/navigation_utils.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -12,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_portal/flutter_portal.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LemonadeApp extends StatefulWidget {
   const LemonadeApp({super.key});
@@ -19,7 +19,6 @@ class LemonadeApp extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _LemonadeAppViewState();
 }
-
 
 class _LemonadeAppViewState extends State<LemonadeApp> {
   final _appRouter = AppRouter();
@@ -45,12 +44,18 @@ class _LemonadeAppViewState extends State<LemonadeApp> {
 
   @override
   Widget build(BuildContext context) {
-    return _limitAppLayoutBuilder(
-      _translationProviderBuilder(
-        _portalBuilder(
-          _globalBlocProviderBuilder(_App(_appRouter)),
-        ),
-      ),
+    return ScreenUtilInit(
+      minTextAdapt: true,
+      designSize: const Size(375, 812), //Iphone X screen size, match Figma
+      builder: (context, state) {
+        return _limitAppLayoutBuilder(
+          _translationProviderBuilder(
+            _portalBuilder(
+              _globalBlocProviderBuilder(_App(_appRouter)),
+            ),
+          ),
+        );
+      },
     );
   }
 

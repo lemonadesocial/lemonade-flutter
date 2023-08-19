@@ -65,6 +65,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_chat.svg
   SvgGenImage get icChat => const SvgGenImage('assets/icons/ic_chat.svg');
 
+  /// File path: assets/icons/ic_close.svg
+  SvgGenImage get icClose => const SvgGenImage('assets/icons/ic_close.svg');
+
   /// File path: assets/icons/ic_crystal.svg
   SvgGenImage get icCrystal => const SvgGenImage('assets/icons/ic_crystal.svg');
 
@@ -225,6 +228,7 @@ class $AssetsIconsGen {
         icBadge,
         icCamera,
         icChat,
+        icClose,
         icCrystal,
         icDone,
         icDownload,

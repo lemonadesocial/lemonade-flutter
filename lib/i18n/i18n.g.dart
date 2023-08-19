@@ -1,9 +1,9 @@
 /// Generated file. Do not edit.
 ///
 /// Locales: 1
-/// Strings: 107
+/// Strings: 109
 ///
-/// Built on 2023-08-16 at 15:04 UTC
+/// Built on 2023-08-19 at 16:01 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -179,6 +179,8 @@ class _I18nPostEn {
 	String get public => 'Public';
 	String get friend => 'Friends';
 	String get follower => 'Followers';
+	String get selectEvent => 'Select event';
+	String get searchEventHint => 'search for events or their hosts';
 }
 
 // Path: chat
@@ -394,6 +396,8 @@ extension on _I18nEn {
 			case 'post.public': return 'Public';
 			case 'post.friend': return 'Friends';
 			case 'post.follower': return 'Followers';
+			case 'post.selectEvent': return 'Select event';
+			case 'post.searchEventHint': return 'search for events or their hosts';
 			case 'chat.unread': return 'unread';
 			case 'chat.channels': return 'channels';
 			case 'chat.directMessages': return 'direct messages';

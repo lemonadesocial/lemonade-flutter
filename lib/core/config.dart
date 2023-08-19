@@ -28,6 +28,9 @@ class AppConfig {
 
   static get isProduction => dotenv.env['ENV'] == 'PROD';
 
+  // Legacy api
+  static get legacyApi => dotenv.env['LMD_API_LEGACY'];
+
   static const String pushNotificationsAppId = 'social.lemonade.app.staging';
   static const String pushNotificationsGatewayUrl =
       'https://hedwig.staging.lemonade.social/_matrix/push/v1/notify';

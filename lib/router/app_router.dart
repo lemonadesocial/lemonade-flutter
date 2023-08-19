@@ -65,6 +65,9 @@ class AppRouter extends $AppRouter {
           path: '/create_post',
           page: CreatePostRoute.page,
         ),
+        AutoRoute(
+          page: EventSelectingRoute.page,
+        ),
         chatRoutes,
       ];
 }
@@ -78,10 +81,7 @@ final chatRoutes = AutoRoute(
       path: '',
       page: ChatListRoute.page,
     ),
-    AutoRoute(
-      path: 'detail/:id',
-      page: ChatRoute.page
-    ),
+    AutoRoute(path: 'detail/:id', page: ChatRoute.page),
     AutoRoute(
       path: 'setting/:id',
       page: ChatSettingRoute.page,

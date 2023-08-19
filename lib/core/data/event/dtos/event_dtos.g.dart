@@ -12,7 +12,8 @@ _$_EventDto _$$_EventDtoFromJson(Map<String, dynamic> json) => _$_EventDto(
           ? null
           : UserDto.fromJson(json['host_expanded'] as Map<String, dynamic>),
       newNewPhotosExpanded: (json['new_new_photos_expanded'] as List<dynamic>?)
-          ?.map((e) => DbFileDto.fromJson(e as Map<String, dynamic>))
+          ?.map((e) =>
+              e == null ? null : DbFileDto.fromJson(e as Map<String, dynamic>))
           .toList(),
       cohostsExpanded: (json['cohosts_expanded'] as List<dynamic>?)
           ?.map((e) =>
@@ -38,7 +39,7 @@ Map<String, dynamic> _$$_EventDtoToJson(_$_EventDto instance) =>
       '_id': instance.id,
       'host_expanded': instance.hostExpanded?.toJson(),
       'new_new_photos_expanded':
-          instance.newNewPhotosExpanded?.map((e) => e.toJson()).toList(),
+          instance.newNewPhotosExpanded?.map((e) => e?.toJson()).toList(),
       'cohosts_expanded':
           instance.cohostsExpanded?.map((e) => e?.toJson()).toList(),
       'title': instance.title,

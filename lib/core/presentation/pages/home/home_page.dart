@@ -20,6 +20,7 @@ import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 @RoutePage()
 class HomePage extends StatelessWidget {
@@ -27,17 +28,32 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final newFeedBloc = NewsfeedListingBloc(
+      NewsfeedService(NewsfeedRepositoryImpl()),
+      defaultInput: const GetNewsfeedInput(),
+    );
     return MultiBlocProvider(
       providers: [
         BlocProvider<NewsfeedListingBloc>(
-          create: (context) => NewsfeedListingBloc(
-              NewsfeedService(NewsfeedRepositoryImpl()),
-              defaultInput: const GetNewsfeedInput())
-            ..add(NewsfeedListingEvent.fetch()),
+          create: (context) => newFeedBloc..add(NewsfeedListingEvent.fetch()),
         ),
         // Add other Blocs here if needed.
       ],
-      child: const _HomeListingView(),
+      child: Builder(
+        builder: (context) {
+          return VisibilityDetector(
+              key: const Key('HomePageVisibilityDetector'),
+              onVisibilityChanged: (info) {
+                if (info.visibleFraction == 1) {
+                  //Whenever this screen is appear on screen, fetch latest news feed
+                  context
+                      .read<NewsfeedListingBloc>()
+                      .add(NewsfeedListingEvent.fetch());
+                }
+              },
+              child: _HomeListingView());
+        },
+      ),
     );
   }
 }
@@ -102,16 +118,13 @@ class _HomePageViewState extends State<_HomeListingView> {
             child: NotificationListener<ScrollNotification>(
                 onNotification: (notification) {
                   if (notification is ScrollEndNotification) {
-                    if (notification.metrics.pixels ==
-                        notification.metrics.maxScrollExtent) {
-                      context
-                          .read<NewsfeedListingBloc>()
-                          .add(NewsfeedListingEvent.fetch());
+                    if (notification.metrics.pixels == notification.metrics.maxScrollExtent) {
+                      context.read<NewsfeedListingBloc>().add(NewsfeedListingEvent.fetch());
                     }
                   }
                   return true;
                 },
-                child: HomeNewsfeedListView(),),),
+                child: HomeNewsfeedListView())),
       ]),
     );
   }
