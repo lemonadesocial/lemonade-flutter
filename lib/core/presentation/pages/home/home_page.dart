@@ -73,13 +73,13 @@ class _HomePageViewState extends State<_HomeListingView> {
   void initState() {
     super.initState();
     getIt<ShakeService>().startShakeDetection(context);
-
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       getIt<MatrixService>().backgroundPush.setupContextAndRouter(
             router: _appRouter,
             context: context,
           );
-      getIt<FirebaseService>().setupContext(
+      getIt<FirebaseService>().setupContextAndRouter(
+        router: _appRouter,
         context: context,
       );
     });

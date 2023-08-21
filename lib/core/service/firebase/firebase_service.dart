@@ -77,14 +77,12 @@ class FirebaseService {
       initializationSettings,
       onDidReceiveNotificationResponse:
           (NotificationResponse notificationResponse) {
-        print('onDidReceiveNotificationResponse');
-        print(notificationResponse.payload.toString());
         try {
           var jsonObject = json.decode(notificationResponse.payload ?? '');
           String type = jsonObject['type'];
           String objectId = jsonObject['object_id'];
           String objectType = jsonObject['object_type'];
-          
+
           NavigationUtils.handleNotificationNavigate(
               _context!, type, objectType, objectId);
         } catch (e) {
@@ -107,9 +105,11 @@ class FirebaseService {
     getToken();
   }
 
-void setupContext({
+  void setupContextAndRouter({
+    required AppRouter router,
     required BuildContext context,
   }) {
+    _router = router;
     _context = context;
   }
 
@@ -155,7 +155,6 @@ void setupContext({
             ),
           ),
           payload: json.encode(message.data));
-        
     }
   }
 
