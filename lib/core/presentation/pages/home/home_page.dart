@@ -111,31 +111,34 @@ class _HomePageViewState extends State<_HomeListingView> {
         },
         child: const HomeNewsfeedListView(),
       ),
-      floatingActionButton: Container(
-        width: 54.h,
-        height: 54.h,
-        padding: const EdgeInsets.all(15),
-        decoration: const BoxDecoration(
-          shape: BoxShape.circle,
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [LemonColor.fabSecondaryBg, LemonColor.fabFirstBg],
+      floatingActionButton: InkWell(
+        onTap: () => context.router.push(const CreatePostRoute()),
+        child: Container(
+          width: 54.h,
+          height: 54.h,
+          padding: const EdgeInsets.all(15),
+          decoration: const BoxDecoration(
+            shape: BoxShape.circle,
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [LemonColor.fabSecondaryBg, LemonColor.fabFirstBg],
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: LemonColor.fabShadow,
+                blurRadius: 8,
+                offset: Offset(0, 4),
+              )
+            ],
           ),
-          boxShadow: [
-            BoxShadow(
-              color: LemonColor.fabShadow,
-              blurRadius: 8,
-              offset: Offset(0, 4),
-            )
-          ],
-        ),
-        child: ThemeSvgIcon(
-          color: LemonColor.white,
-          builder: (filter) => Assets.icons.icAdd.svg(
-            colorFilter: filter,
-            width: 24.w,
-            height: 24.w,
+          child: ThemeSvgIcon(
+            color: LemonColor.white,
+            builder: (filter) => Assets.icons.icAdd.svg(
+              colorFilter: filter,
+              width: 24.w,
+              height: 24.w,
+            ),
           ),
         ),
       ),
