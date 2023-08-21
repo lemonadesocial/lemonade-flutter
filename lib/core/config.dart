@@ -31,8 +31,8 @@ class AppConfig {
   // Legacy api
   static get legacyApi => dotenv.env['LMD_API_LEGACY'];
 
-  static const String pushNotificationsAppId = 'social.lemonade.app.staging';
-  static const String pushNotificationsGatewayUrl =
-      'https://hedwig.staging.lemonade.social/_matrix/push/v1/notify';
-  static const String pushNotificationsPusherFormat = 'event_id_only';
+  /// Matrix chat
+  static get pushNotificationsAppId => dotenv.env['PUSH_NOTIFICATION_APP_ID'];
+  
+  static get pushNotificationsGatewayUrl => dotenv.env['PUSH_NOTIFICATION_GATEWAY_URL'];
 }

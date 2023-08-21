@@ -226,7 +226,7 @@ class BackgroundPush {
           currentPushers.first.lang == 'en' &&
           currentPushers.first.data.url.toString() == gatewayUrl &&
           currentPushers.first.data.format ==
-              AppConfig.pushNotificationsPusherFormat) {
+              'event_id_only') {
         Logs().i('[Push] Pusher already set');
       } else {
         Logs().i('Need to set new pusher');
@@ -263,7 +263,7 @@ class BackgroundPush {
             lang: 'en',
             data: PusherData(
               url: Uri.parse(gatewayUrl!),
-              format: AppConfig.pushNotificationsPusherFormat,
+              format: 'event_id_only',
             ),
             kind: 'http',
           ),
