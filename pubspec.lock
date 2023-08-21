@@ -1558,6 +1558,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.3"
+  pull_to_refresh_flutter3:
+    dependency: "direct main"
+    description:
+      name: pull_to_refresh_flutter3
+      sha256: "223a6241067162dc15cf8c46c05af998ce7aa85e0703d8f696101eb1b5629d76"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.1"
   random_string:
     dependency: transitive
     description:

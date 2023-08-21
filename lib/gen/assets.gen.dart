@@ -65,6 +65,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_chat.svg
   SvgGenImage get icChat => const SvgGenImage('assets/icons/ic_chat.svg');
 
+  /// File path: assets/icons/ic_chat_bubble.svg
+  SvgGenImage get icChatBubble =>
+      const SvgGenImage('assets/icons/ic_chat_bubble.svg');
+
   /// File path: assets/icons/ic_close.svg
   SvgGenImage get icClose => const SvgGenImage('assets/icons/ic_close.svg');
 
@@ -138,6 +142,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_join_space.svg
   SvgGenImage get icJoinSpace =>
       const SvgGenImage('assets/icons/ic_join_space.svg');
+
+  /// File path: assets/icons/ic_lemon_filled.svg
+  SvgGenImage get icLemonFilled =>
+      const SvgGenImage('assets/icons/ic_lemon_filled.svg');
 
   /// File path: assets/icons/ic_lemon_filled_background.png
   AssetGenImage get icLemonFilledBackground =>
@@ -228,6 +236,7 @@ class $AssetsIconsGen {
         icBadge,
         icCamera,
         icChat,
+        icChatBubble,
         icClose,
         icCrystal,
         icDone,
@@ -249,6 +258,7 @@ class $AssetsIconsGen {
         icInsights,
         icInstagram,
         icJoinSpace,
+        icLemonFilled,
         icLemonFilledBackground,
         icLemonFilledStart,
         icLemonOutline,
