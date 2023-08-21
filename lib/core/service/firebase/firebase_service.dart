@@ -1,71 +1,45 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:app/core/config.dart';
 import 'package:app/core/data/fcm/fcm_mutation.dart';
 import 'package:app/core/gql.dart';
 import 'package:app/core/oauth/oauth.dart';
-import 'package:app/core/service/matrix/matrix_service.dart';
-import 'package:app/core/utils/chat_notification/push_helper.dart';
 import 'package:app/core/utils/navigation_utils.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.dart';
-import 'package:auto_route/auto_route.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:injectable/injectable.dart';
 import 'package:matrix/matrix.dart';
-import 'package:app/core/utils/chat_notification/push_helper.dart';
-// import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../firebase_options_staging.dart' as FirebaseOptionsStaging;
 import '../../../firebase_options_production.dart' as FirebaseOptionsProduction;
+import '../../../firebase_options_staging.dart' as FirebaseOptionsStaging;
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   if (kDebugMode) {
-    print("Handling a background message: ${message.messageId}");
+    print('Handling a background message: ${message.messageId}');
     print('Message data: ${message.data}');
     print('Message notification title: ${message.notification?.title}');
     print('Message notification body: ${message.notification?.body}');
-  }
-  try {
-    // final client = getIt<MatrixService>().client;
-    // String? type = message.data['type'];
-    // String? objectType = message.data['object_type'];
-    // String? objectId = message.data['object_id'];
-    // NavigationUtils.handleNotificationNavigate(
-    //     FirebaseService._context!, type, objectType, objectId);
-  } catch (e) {
-    print("Something wrong _firebaseMessagingBackgroundHandler $e");
   }
 }
 
 @lazySingleton
 class FirebaseService {
-  static Client? _client;
   static BuildContext? _context;
-  AppRouter? _router;
+  static AppRouter? _router;
   static FirebaseMessaging? _firebaseMessaging;
   static FirebaseMessaging get firebaseMessaging =>
       FirebaseService._firebaseMessaging ?? FirebaseMessaging.instance;
 
   late AndroidNotificationChannel channel;
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-
-  void setupContextAndRouter({
-    required AppRouter router,
-    required BuildContext context,
-  }) {
-    _router = router;
-    _context = context;
-  }
 
   Future<void> initialize() async {
     await Firebase.initializeApp(
@@ -103,11 +77,14 @@ class FirebaseService {
       initializationSettings,
       onDidReceiveNotificationResponse:
           (NotificationResponse notificationResponse) {
+        print('onDidReceiveNotificationResponse');
+        print(notificationResponse.payload.toString());
         try {
-          var jsonObject = json.decode(notificationResponse.payload ?? "");
+          var jsonObject = json.decode(notificationResponse.payload ?? '');
           String type = jsonObject['type'];
           String objectId = jsonObject['object_id'];
           String objectType = jsonObject['object_type'];
+          
           NavigationUtils.handleNotificationNavigate(
               _context!, type, objectType, objectId);
         } catch (e) {
@@ -125,15 +102,18 @@ class FirebaseService {
       return true;
     };
 
-    await _requestPermission();
-    if (Platform.isIOS) {
-      _setUpMessageHandlers();
-    }
+    _setUpMessageHandlers();
     getIt<AppOauth>().tokenStateStream.listen(_onTokenStateChange);
     getToken();
   }
 
-  Future<void> _requestPermission() async {
+void setupContext({
+    required BuildContext context,
+  }) {
+    _context = context;
+  }
+
+  Future<void> requestPermission() async {
     final messaging = FirebaseMessaging.instance;
     final settings = await messaging.requestPermission(
       alert: true,
@@ -159,42 +139,23 @@ class FirebaseService {
 
   showFlutterNotification(RemoteMessage message) async {
     Logs().i("showFlutterNotification");
-    final client = getIt<MatrixService>().client;
-    final data = message.data;
-    data['devices'] ??= [];
-    await pushHelper(PushNotification.fromJson(data),
-        client: client, onSelectNotification: goToRoom);
-    // RemoteNotification? notification = message.notification;
-    // AndroidNotification? android = message.notification?.android;
-    // if (notification != null && android != null && !kIsWeb) {
-    //   flutterLocalNotificationsPlugin.show(
-    //       notification.hashCode,
-    //       notification.title,
-    //       notification.body,
-    //       NotificationDetails(
-    //         android: AndroidNotificationDetails(
-    //           channel.id,
-    //           channel.name,
-    //           channelDescription: channel.description,
-    //           icon: '@mipmap/ic_launcher',
-    //         ),
-    //       ),
-    //       payload: json.encode(message.data));
-    // }
-  }
-
-  Future<void> goToRoom(NotificationResponse? response) async {
-    try {
-      final roomId = response?.payload;
-      Logs().v('[Push] Attempting to go to room $roomId...');
-      if (_router == null || roomId == null) {
-        return;
-      }
-      await _client!.roomsLoading;
-      await _client!.accountDataLoading;
-      AutoRouter.of(_context!).navigateNamed('/chat/detail/${roomId}');
-    } catch (e, s) {
-      Logs().e('[Push] Failed to open room', e, s);
+    RemoteNotification? notification = message.notification;
+    AndroidNotification? android = message.notification?.android;
+    if (notification != null && android != null && !kIsWeb) {
+      flutterLocalNotificationsPlugin.show(
+          notification.hashCode,
+          notification.title,
+          notification.body,
+          NotificationDetails(
+            android: AndroidNotificationDetails(
+              channel.id,
+              channel.name,
+              channelDescription: channel.description,
+              icon: '@mipmap/ic_launcher',
+            ),
+          ),
+          payload: json.encode(message.data));
+        
     }
   }
 

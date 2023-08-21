@@ -12,14 +12,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 Future<void> pushHelper(
   PushNotification notification, {
   Client? client,
-  String? activeRoomId,
   void Function(NotificationResponse?)? onSelectNotification,
 }) async {
   try {
     await _tryPushHelper(
       notification,
       client: client,
-      activeRoomId: activeRoomId,
       onSelectNotification: onSelectNotification,
     );
   } catch (e, s) {
@@ -61,7 +59,6 @@ Future<void> pushHelper(
 Future<void> _tryPushHelper(
   PushNotification notification, {
   Client? client,
-  String? activeRoomId,
   void Function(NotificationResponse?)? onSelectNotification,
 }) async {
   Logs().v('_tryPushHelper');
@@ -71,13 +68,12 @@ Future<void> _tryPushHelper(
     notification.toJson(),
   );
 
-  if (!isBackgroundMessage &&
-      activeRoomId == notification.roomId &&
-      activeRoomId != null &&
-      client.syncPresence == null) {
-    Logs().v('Room is in foreground. Stop push helper here.');
-    return;
-  }
+  // TOOD: Keep this due to maybe we wanna block push in forreground
+  // if (!isBackgroundMessage &&
+  //     client.syncPresence == null) {
+  //   Logs().v('Room is in foreground. Stop push helper here.');
+  //   return;
+  // }
 
   // Initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -191,7 +187,7 @@ Future<void> _tryPushHelper(
   final notificationGroupId =
       event.room.isDirectChat ? 'directChats' : 'groupChats';
   final groupName = event.room.isDirectChat ? "Direct chat" : "Group";
-
+  
   final messageRooms = AndroidNotificationChannelGroup(
     notificationGroupId,
     groupName,
@@ -200,6 +196,7 @@ Future<void> _tryPushHelper(
     event.room.id,
     roomName,
     groupId: notificationGroupId,
+    importance: Importance.high,
   );
 
   await flutterLocalNotificationsPlugin
@@ -235,10 +232,12 @@ Future<void> _tryPushHelper(
     android: androidPlatformChannelSpecifics,
     iOS: iOSPlatformChannelSpecifics,
   );
-
+  final title = roomName;
+  Logs().i('title: $title', title);
+  Logs().i('body: $body', body);
   await flutterLocalNotificationsPlugin.show(
     id,
-    event.room.getLocalizedDisplayname(),
+    title,
     body,
     platformChannelSpecifics,
     payload: event.roomId,

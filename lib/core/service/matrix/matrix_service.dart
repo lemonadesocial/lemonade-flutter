@@ -59,7 +59,9 @@ class MatrixService {
       _client.login(
         LoginType.mLoginJwt,
         token: jwtToken,
-      );
+      ).then((value) async => {
+        await backgroundPush.setupPush()
+      });
     } catch (e) {
       FirebaseCrashlytics.instance.log(e.toString());
     }

@@ -28,7 +28,6 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 class BackgroundPush {
-
   BackgroundPush(this.client) {
     onRoomSync ??= client.onSync.stream
         .where((s) => s.hasRoomUpdate)
@@ -62,15 +61,18 @@ class BackgroundPush {
       print('Got a new message from firebase cloud messaging: $message');
     }
     final data = Map<String, dynamic>.from(message);
-    // UP may strip the devices list
-    data['devices'] ??= [];
-    pushHelper(
-      PushNotification.fromJson(
-        Map<String, dynamic>.from(data),
-      ),
-      client: client,
-      onSelectNotification: goToRoom,
-    );
+    // If is chat room message
+    if (data.containsKey('room_id')) {
+      // UP may strip the devices list
+      data['devices'] ??= [];
+      pushHelper(
+        PushNotification.fromJson(
+          Map<String, dynamic>.from(data),
+        ),
+        client: client,
+        onSelectNotification: goToRoom,
+      );
+    }
   }
 
   bool _clearingPushLock = false;
@@ -156,9 +158,12 @@ class BackgroundPush {
     try {
       final roomId = response?.payload;
       Logs().v('[Push] Attempting to go to room $roomId...');
+      Logs().i(roomId.toString());
       if (_router == null || roomId == null) {
         return;
       }
+      Logs().v('Navigating ...');
+
       await client.roomsLoading;
       await client.accountDataLoading;
       AutoRouter.of(_context!).navigateNamed('/chat/detail/$roomId');
@@ -223,11 +228,6 @@ class BackgroundPush {
           currentPushers.first.data.format ==
               AppConfig.pushNotificationsPusherFormat) {
         Logs().i('[Push] Pusher already set');
-        Logs().i(currentPushers.first.appId);
-        Logs().i(currentPushers.first.appDisplayName);
-        Logs().i(currentPushers.first.deviceDisplayName);
-        Logs().i(currentPushers.first.pushkey);
-        Logs().i(currentPushers.first.data.url.toString());
       } else {
         Logs().i('Need to set new pusher');
         oldTokens.add(token);
@@ -302,11 +302,15 @@ class BackgroundPush {
     Logs().d('SetupPush');
     if (client.onLoginStateChanged.value != LoginState.loggedIn ||
         !PlatformInfos.isMobile) {
+      Logs().i('return 1');
+      Logs().i(client.onLoginStateChanged.value.toString());
+      Logs().i(client.isLogged().toString());
       return;
     }
     // Do not setup unifiedpush if this has been initialized by
     // an unifiedpush action
     if (upAction) {
+      Logs().i('return 2');
       return;
     }
     await setupFirebase();
@@ -321,7 +325,10 @@ class BackgroundPush {
         return;
       }
       _wentToRoomOnStartup = true;
-      goToRoom(details.notificationResponse);
+      Logs().i('_wentToRoomOnStartup');
+      if (details.notificationResponse!.payload!.contains('room_id')) {
+        goToRoom(details.notificationResponse);
+      }
     });
   }
 }

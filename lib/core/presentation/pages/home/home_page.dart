@@ -7,6 +7,7 @@ import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.
 import 'package:app/core/presentation/widgets/common/separator/horizontal_line.dart';
 import 'package:app/core/presentation/widgets/home/what_on_your_mind_input.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/service/firebase/firebase_service.dart';
 import 'package:app/core/service/matrix/matrix_service.dart';
 import 'package:app/core/service/newsfeed/newsfeed_service.dart';
 import 'package:app/core/service/shake/shake_service.dart';
@@ -78,6 +79,9 @@ class _HomePageViewState extends State<_HomeListingView> {
             router: _appRouter,
             context: context,
           );
+      getIt<FirebaseService>().setupContext(
+        context: context,
+      );
     });
   }
 
@@ -118,8 +122,11 @@ class _HomePageViewState extends State<_HomeListingView> {
             child: NotificationListener<ScrollNotification>(
                 onNotification: (notification) {
                   if (notification is ScrollEndNotification) {
-                    if (notification.metrics.pixels == notification.metrics.maxScrollExtent) {
-                      context.read<NewsfeedListingBloc>().add(NewsfeedListingEvent.fetch());
+                    if (notification.metrics.pixels ==
+                        notification.metrics.maxScrollExtent) {
+                      context
+                          .read<NewsfeedListingBloc>()
+                          .add(NewsfeedListingEvent.fetch());
                     }
                   }
                   return true;
