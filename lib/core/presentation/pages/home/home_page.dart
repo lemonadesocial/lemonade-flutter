@@ -100,17 +100,7 @@ class _HomePageViewState extends State<_HomeListingView> {
         ],
       ),
       backgroundColor: LemonColor.black,
-      body: NotificationListener<ScrollNotification>(
-        onNotification: (notification) {
-          if (notification is ScrollEndNotification) {
-            if (notification.metrics.pixels == notification.metrics.maxScrollExtent) {
-              context.read<NewsfeedListingBloc>().add(NewsfeedListingEvent.fetch());
-            }
-          }
-          return true;
-        },
-        child: const HomeNewsfeedListView(),
-      ),
+      body: const HomeNewsfeedListView(),
       floatingActionButton: InkWell(
         onTap: () => context.router.push(const CreatePostRoute()),
         child: Container(

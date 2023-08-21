@@ -6,6 +6,7 @@ import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 class HomeNewsfeedListView extends StatelessWidget {
   const HomeNewsfeedListView({
@@ -16,6 +17,7 @@ class HomeNewsfeedListView extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+    final _refreshController = RefreshController();
     return BlocBuilder<NewsfeedListingBloc, NewsfeedListingState>(
       builder: (context, state) {
         return state.maybeWhen(
@@ -26,18 +28,29 @@ class HomeNewsfeedListView extends StatelessWidget {
                 child: EmptyList(emptyText: t.notification.emptyNotifications),
               );
             }
-            return ListView.separated(
-              itemBuilder: (ctx, index) => index == newsfeed.length
-                  ? const SizedBox(height: 80)
-                  : Padding(
-                      padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
-                      child: PostProfileCard(
-                        key: Key(newsfeed[index].id),
-                        post: newsfeed[index],
+            return SmartRefresher(
+              controller: _refreshController,
+              enablePullUp: true,
+              onRefresh: () {
+                context.read<NewsfeedListingBloc>().add(NewsfeedListingEvent.fetch());
+                _refreshController.refreshCompleted();
+              },
+              onLoading: () {
+                // add load more here
+                context.read<NewsfeedListingBloc>().add(NewsfeedListingEvent.fetch());
+                _refreshController.loadComplete();
+              },
+              child: ListView.separated(
+                itemBuilder: (ctx, index) => Padding(
+                        padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
+                        child: PostProfileCard(
+                          key: Key(newsfeed[index].id),
+                          post: newsfeed[index],
+                        ),
                       ),
-                    ),
-              separatorBuilder: (ctx, index) => Divider(color: colorScheme.outline),
-              itemCount: newsfeed.length + 1,
+                separatorBuilder: (ctx, index) => Divider(color: colorScheme.outline),
+                itemCount: newsfeed.length,
+              ),
             );
           },
           failure: () => Center(
