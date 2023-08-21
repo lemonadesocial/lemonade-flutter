@@ -15,6 +15,7 @@ import 'package:app/theme/color.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 @RoutePage()
@@ -99,6 +100,34 @@ class _HomePageViewState extends State<_HomeListingView> {
           return true;
         },
         child: const HomeNewsfeedListView(),
+      ),
+      floatingActionButton: Container(
+        width: 54.h,
+        height: 54.h,
+        padding: const EdgeInsets.all(15),
+        decoration: const BoxDecoration(
+          shape: BoxShape.circle,
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [LemonColor.fabSecondaryBg, LemonColor.fabFirstBg],
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: LemonColor.fabShadow,
+              blurRadius: 8,
+              offset: Offset(0, 4),
+            )
+          ],
+        ),
+        child: ThemeSvgIcon(
+          color: LemonColor.white,
+          builder: (filter) => Assets.icons.icAdd.svg(
+            colorFilter: filter,
+            width: 24.w,
+            height: 24.w,
+          ),
+        ),
       ),
     );
   }

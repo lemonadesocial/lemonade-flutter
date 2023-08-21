@@ -43,6 +43,11 @@ class LemonColor {
 
   // Textfield
   static Color darkCharcoal = Color(0xff2e2e2e);
+
+  // FAB
+  static const fabSecondaryBg = Color(0xFFB17AF4);
+  static const fabFirstBg = Color(0xFF6F3FAA);
+  static const fabShadow = Color(0x89090909);
 } 
 
 final ColorScheme lemonadeLightThemeColorScheme = ColorScheme.light(
