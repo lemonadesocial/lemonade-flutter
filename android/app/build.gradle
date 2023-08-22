@@ -68,7 +68,7 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         manifestPlaceholders += [
-                'appAuthRedirectScheme': 'lemonadesocial://oauth2/logout'
+                'appAuthRedirectScheme': 'staging.lemonadesocial://oauth2/logout'
         ]
         multiDexEnabled true
     }
@@ -123,6 +123,9 @@ android {
             resValue "string", "app_name", "Lemonade Social"
             resValue "string", "uri_scheme", "lemonadesocial"
             applicationIdSuffix ""
+            manifestPlaceholders += [
+                    'appAuthRedirectScheme': 'lemonadesocial://oauth2/logout'
+            ]
         }
     }
 }
