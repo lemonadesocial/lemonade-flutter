@@ -44,7 +44,7 @@
                     <action android:name="android.intent.action.VIEW" />
                     <category android:name="android.intent.category.DEFAULT" />
                     <category android:name="android.intent.category.BROWSABLE" />
-                    <data android:scheme="lemonadesocial" android:host="oauth2" android:path="/callback" />
+                    <data android:scheme="@string/uri_scheme" android:host="oauth2" android:path="/callback" />
                 </intent-filter>
         </activity>
 
@@ -55,7 +55,7 @@
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:scheme="lemonadesocial" android:host="oauth2" android:path="/logout" />
+                <data android:scheme="@string/uri_scheme" android:host="oauth2" android:path="/logout" />
             </intent-filter>
         </activity>
 

@@ -68,7 +68,7 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         manifestPlaceholders += [
-                'appAuthRedirectScheme': 'lemonadesocial://oauth2/logout'
+                'appAuthRedirectScheme': 'staging.lemonadesocial://oauth2/logout'
         ]
         multiDexEnabled true
     }
@@ -109,17 +109,23 @@ android {
         development {
             dimension "default"
             resValue "string", "app_name", "Lemonade Social Development"
+            resValue "string", "uri_scheme", "staging.lemonadesocial"
             applicationIdSuffix ".development"
         }
         staging {
             dimension "default"
             resValue "string", "app_name", "Lemonade Social Staging"
+            resValue "string", "uri_scheme", "staging.lemonadesocial"
             applicationIdSuffix ".staging"
         }
         production {
             dimension "default"
             resValue "string", "app_name", "Lemonade Social"
+            resValue "string", "uri_scheme", "lemonadesocial"
             applicationIdSuffix ""
+            manifestPlaceholders += [
+                    'appAuthRedirectScheme': 'lemonadesocial://oauth2/logout'
+            ]
         }
     }
 }

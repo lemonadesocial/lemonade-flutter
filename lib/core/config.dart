@@ -4,7 +4,7 @@ class AppConfig {
   static get env => dotenv.env['ENV'];
   static get oauth2BaseUrl => dotenv.env['OAUTH2_BASE_URL'];
   static get oauth2ClientId => dotenv.env['OAUTH2_CLIENT_ID'];
-  static get oauthRedirectScheme => 'lemonadesocial';
+  static get oauthRedirectScheme => dotenv.env['OAUTH2_REDIRECT_SCHEME'];
   static get webUrl => dotenv.env['WEB_URL'];
 
   static get backedUrl => dotenv.env['BACKEND_URL'];
