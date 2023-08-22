@@ -50,13 +50,6 @@ class PostRepositoryImpl implements PostRepository {
     PostRefType? postRefType,
     String? postRefId,
   }) async {
-    final payload = {
-      'text': postDescription,
-      'visibility': postPrivacy.name.toUpperCase(),
-      'ref_type': postRefType?.name.toUpperCase(),
-      'ref_id': postRefId,
-    }..removeWhere((key, value) => value == null);
-    print('payload: $payload');
     final result = await _client.mutate(
       MutationOptions(
         document: createPostQuery,
@@ -66,7 +59,7 @@ class PostRepositoryImpl implements PostRepository {
           'ref_type': postRefType?.name.toUpperCase(),
           'ref_id': postRefId,
         }..removeWhere((key, value) => value == null),
-        parserFn: (data) => data['setUserWallet'],
+        parserFn: (data) => data['createPost'],
       ),
     );
 

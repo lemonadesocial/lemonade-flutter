@@ -7,7 +7,7 @@ class Event {
   String? id;
   User? hostExpanded;
   List<User?>? cohostsExpanded;
-  List<DbFile>? newNewPhotosExpanded;
+  List<DbFile?>? newNewPhotosExpanded;
   String? title;
   String? slug;
   String? host;
@@ -40,7 +40,7 @@ class Event {
       hostExpanded: dto.hostExpanded != null ? User.fromDto(dto.hostExpanded!) : null,
       cohostsExpanded:
           List.from(dto.cohostsExpanded ?? []).map((item) => item != null ? User.fromDto(item) : null).toList(),
-      newNewPhotosExpanded: List.from(dto.newNewPhotosExpanded ?? []).map((i) => DbFile.fromDto(i)).toList(),
+      newNewPhotosExpanded: (dto.newNewPhotosExpanded ?? []).map((i) => i == null ? null : DbFile.fromDto(i)).toList(),
       title: dto.title,
       slug: dto.slug,
       host: dto.host,

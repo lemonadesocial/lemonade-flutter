@@ -14,14 +14,15 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class PostProfileCard extends StatelessWidget {
-  final Post post;
   const PostProfileCard({
     super.key,
     required this.post,
   });
+  final Post post;
 
   String get postName => post.userExpanded?.name ?? '';
 
@@ -42,75 +43,73 @@ class PostProfileCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: Spacing.small),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          // Card left
-          LemonCircleAvatar(
-            size: Sizing.medium,
-            url: AvatarUtils.getAvatarUrl(user: post.userExpanded),
-          ),
-          SizedBox(width: Spacing.xSmall),
-          // Card right
-          Flexible(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Text(
-                      postName,
-                      style: Typo.medium,
-                    ),
-                    if (postCreatedAt != null)
-                      Text(
-                        '  •  ${timeago.format(postCreatedAt!)}',
-                        style:
-                            Typo.medium.copyWith(color: colorScheme.onSurface),
-                      ),
-                    Spacer(),
-                    ThemeSvgIcon(
-                      color: colorScheme.onSurface,
-                      builder: (filter) => Assets.icons.icMoreHoriz.svg(
-                        colorFilter: filter,
-                        width: 18,
-                        height: 18,
-                      ),
-                    ),
-                  ],
-                ),
-                if (postText.isNotEmpty) ...[
-                  SizedBox(height: Spacing.superExtraSmall),
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Card left
+        LemonCircleAvatar(
+          size: Sizing.medium,
+          url: AvatarUtils.getAvatarUrl(user: post.userExpanded),
+        ),
+        const SizedBox(width: 9),
+        // Card right
+        Flexible(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
                   Text(
-                    postText,
+                    postName,
                     style: Typo.medium.copyWith(
-                      color: colorScheme.onSurface,
-                      fontWeight: FontWeight.w400,
+                      color: colorScheme.onPrimary,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  if (postCreatedAt != null)
+                    Text(
+                      '  •  ${timeago.format(postCreatedAt!)}',
+                      style:
+                          Typo.medium.copyWith(color: colorScheme.onSurface),
+                    ),
+                  const Spacer(),
+                  ThemeSvgIcon(
+                    color: colorScheme.onSurface,
+                    builder: (filter) => Assets.icons.icMoreHoriz.svg(
+                      colorFilter: filter,
+                      width: 18.w,
+                      height: 18.w,
                     ),
                   ),
                 ],
-                if (postEvent != null) ...[
-                  SizedBox(height: Spacing.superExtraSmall),
-                  EventPostCard(event: postEvent!),
-                ],
-                if (postFile != null) ...[
-                  SizedBox(height: Spacing.superExtraSmall),
-                  _buildFile(colorScheme, postFile),
-                ],
-                _buildActions(colorScheme)
+              ),
+              if (postText.isNotEmpty) ...[
+                SizedBox(height: Spacing.superExtraSmall),
+                Text(
+                  postText,
+                  style: Typo.medium.copyWith(
+                    color: colorScheme.onPrimary,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
               ],
-            ),
-          )
-        ],
-      ),
+              if (postEvent != null) ...[
+                SizedBox(height: Spacing.xSmall),
+                EventPostCard(event: postEvent!),
+              ],
+              if (postFile != null) ...[
+                SizedBox(height: Spacing.xSmall),
+                _buildFile(colorScheme, postFile),
+              ],
+              _buildActions(colorScheme)
+            ],
+          ),
+        )
+      ],
     );
   }
 
-  _buildFile(ColorScheme colorScheme, DbFile? file) {
+  Widget _buildFile(ColorScheme colorScheme, DbFile? file) {
     return Container(
       width: double.infinity,
       height: 270,
@@ -133,60 +132,60 @@ class PostProfileCard extends StatelessWidget {
     );
   }
 
-  _buildActions(ColorScheme colorScheme) {
-    final hasReactionColor =
-        hasReaction == true ? colorScheme.tertiary : colorScheme.onSecondary;
+  Widget _buildActions(ColorScheme colorScheme) {
+    final hasReactionColor = hasReaction ?? false ? colorScheme.tertiary : colorScheme.onSecondary;
     return Padding(
-        padding: EdgeInsets.only(top: Spacing.small),
-        child: Row(
-          children: [
-            Row(
-              children: [
-                ThemeSvgIcon(
-                  color: hasReactionColor,
-                  builder: (filter) => Assets.icons.icHeart.svg(
-                    colorFilter: filter,
-                    width: 18,
-                    height: 18,
-                  ),
+      padding: EdgeInsets.only(top: Spacing.xSmall),
+      child: Row(
+        children: [
+          Row(
+            children: [
+              ThemeSvgIcon(
+                color: hasReactionColor,
+                builder: (filter) => Assets.icons.icHeart.svg(
+                  colorFilter: filter,
+                  width: 18.w,
+                  height: 18.w,
                 ),
-                SizedBox(width: 3),
-                Text(
-                  reactions != null ? '$reactions' : '',
-                  style: Typo.small.copyWith(
-                    color: colorScheme.onSecondary,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(width: Spacing.xSmall),
-            Row(
-              children: [
-                ThemeSvgIcon(
-                  color: colorScheme.onSecondary,
-                  builder: (filter) => Assets.icons.icMessage.svg(
-                    colorFilter: filter,
-                    width: 18,
-                    height: 18,
-                  ),
-                ),
-                SizedBox(width: 3),
-                Text(
-                  comments != null ? '$comments' : '',
-                  style: Typo.small.copyWith(color: colorScheme.onSecondary),
-                ),
-              ],
-            ),
-            Spacer(),
-            ThemeSvgIcon(
-              color: colorScheme.onSecondary,
-              builder: (filter) => Assets.icons.icShare.svg(
-                colorFilter: filter,
-                width: 18,
-                height: 18,
               ),
+              const SizedBox(width: 3),
+              Text(
+                reactions != null ? '$reactions' : '',
+                style: Typo.small.copyWith(
+                  color: colorScheme.onSecondary,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(width: Spacing.xSmall),
+          Row(
+            children: [
+              ThemeSvgIcon(
+                color: colorScheme.onSecondary,
+                builder: (filter) => Assets.icons.icMessage.svg(
+                  colorFilter: filter,
+                  width: 18.w,
+                  height: 18.w,
+                ),
+              ),
+              const SizedBox(width: 3),
+              Text(
+                comments != null ? '$comments' : '',
+                style: Typo.small.copyWith(color: colorScheme.onSecondary),
+              ),
+            ],
+          ),
+          const Spacer(),
+          ThemeSvgIcon(
+            color: colorScheme.onSecondary,
+            builder: (filter) => Assets.icons.icShare.svg(
+              colorFilter: filter,
+              width: 18.w,
+              height: 18.w,
             ),
-          ],
-        ));
+          ),
+        ],
+      ),
+    );
   }
 }
