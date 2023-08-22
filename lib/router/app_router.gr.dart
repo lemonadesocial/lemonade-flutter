@@ -48,7 +48,7 @@ abstract class $AppRouter extends _i19.RootStackRouter {
     HomeRoute.name: (routeData) {
       return _i19.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i1.HomePage(),
+        child: const _i1.HomePage(),
       );
     },
     ChatSettingRoute.name: (routeData) {
@@ -117,11 +117,9 @@ abstract class $AppRouter extends _i19.RootStackRouter {
       );
     },
     PoapListingRoute.name: (routeData) {
-      final args = routeData.argsAs<PoapListingRouteArgs>(
-          orElse: () => const PoapListingRouteArgs());
       return _i19.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i11.PoapListingPage(key: args.key),
+        child: const _i11.PoapListingPage(),
       );
     },
     MyProfileRoute.name: (routeData) {
@@ -381,31 +379,16 @@ class WebviewRouteArgs {
 
 /// generated route for
 /// [_i11.PoapListingPage]
-class PoapListingRoute extends _i19.PageRouteInfo<PoapListingRouteArgs> {
-  PoapListingRoute({
-    _i20.Key? key,
-    List<_i19.PageRouteInfo>? children,
-  }) : super(
+class PoapListingRoute extends _i19.PageRouteInfo<void> {
+  const PoapListingRoute({List<_i19.PageRouteInfo>? children})
+      : super(
           PoapListingRoute.name,
-          args: PoapListingRouteArgs(key: key),
           initialChildren: children,
         );
 
   static const String name = 'PoapListingRoute';
 
-  static const _i19.PageInfo<PoapListingRouteArgs> page =
-      _i19.PageInfo<PoapListingRouteArgs>(name);
-}
-
-class PoapListingRouteArgs {
-  const PoapListingRouteArgs({this.key});
-
-  final _i20.Key? key;
-
-  @override
-  String toString() {
-    return 'PoapListingRouteArgs{key: $key}';
-  }
+  static const _i19.PageInfo<void> page = _i19.PageInfo<void>(name);
 }
 
 /// generated route for

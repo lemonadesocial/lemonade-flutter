@@ -21,19 +21,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 @RoutePage()
 class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
         BlocProvider<NewsfeedListingBloc>(
           create: (context) => NewsfeedListingBloc(
-              NewsfeedService(NewsfeedRepositoryImpl()),
-              defaultInput: GetNewsfeedInput())
-            ..add(NewsfeedListingEvent.fetch()),
+            NewsfeedService(NewsfeedRepositoryImpl()),
+            defaultInput: const GetNewsfeedInput(),
+          )..add(NewsfeedListingEvent.fetch()),
         ),
         // Add other Blocs here if needed.
       ],
-      child: _HomeListingView(),
+      child: const _HomeListingView(),
     );
   }
 }
@@ -59,11 +61,11 @@ class _HomePageViewState extends State<_HomeListingView> {
     return Scaffold(
       appBar: LemonAppBar(
         title: t.home.newsfeed,
-        leading: BurgerMenu(),
+        leading: const BurgerMenu(),
         actions: [
           GestureDetector(
             onTap: () {
-              AutoRouter.of(context).navigate(ChatListRoute());
+              AutoRouter.of(context).navigate(const ChatListRoute());
             },
             child: ThemeSvgIcon(
               color: themeColor.onSurface,
@@ -76,31 +78,32 @@ class _HomePageViewState extends State<_HomeListingView> {
       ),
       backgroundColor: LemonColor.black,
       body: Container(
-        child: Column(children: [
-          Padding(
-            padding: EdgeInsets.only(
-              left: Spacing.small,
-              right: Spacing.small,
-              bottom: Spacing.small,
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(
+                left: Spacing.small,
+                right: Spacing.small,
+                bottom: Spacing.small,
+              ),
+              child: WhatOnYourMindInput(),
             ),
-            child: WhatOnYourMindInput(),
-          ),
-          HorizontalLine(),
-          Expanded(
+            HorizontalLine(),
+            Expanded(
               child: NotificationListener<ScrollNotification>(
-                  onNotification: (notification) {
-                    if (notification is ScrollEndNotification) {
-                      if (notification.metrics.pixels ==
-                          notification.metrics.maxScrollExtent) {
-                        context
-                            .read<NewsfeedListingBloc>()
-                            .add(NewsfeedListingEvent.fetch());
-                      }
+                onNotification: (notification) {
+                  if (notification is ScrollEndNotification) {
+                    if (notification.metrics.pixels == notification.metrics.maxScrollExtent) {
+                      context.read<NewsfeedListingBloc>().add(NewsfeedListingEvent.fetch());
                     }
-                    return true;
-                  },
-                  child: HomeNewsfeedListView())),
-        ]),
+                  }
+                  return true;
+                },
+                child: HomeNewsfeedListView(),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
