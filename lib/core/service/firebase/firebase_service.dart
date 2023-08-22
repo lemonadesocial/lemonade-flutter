@@ -7,49 +7,39 @@ import 'package:app/core/gql.dart';
 import 'package:app/core/oauth/oauth.dart';
 import 'package:app/core/utils/navigation_utils.dart';
 import 'package:app/injection/register_module.dart';
+import 'package:app/router/app_router.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:injectable/injectable.dart';
+import 'package:matrix/matrix.dart';
 
-import '../../../firebase_options_staging.dart' as FirebaseOptionsStaging;
 import '../../../firebase_options_production.dart' as FirebaseOptionsProduction;
+import '../../../firebase_options_staging.dart' as FirebaseOptionsStaging;
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   if (kDebugMode) {
-    print("Handling a background message: ${message.messageId}");
+    print('Handling a background message: ${message.messageId}');
     print('Message data: ${message.data}');
     print('Message notification title: ${message.notification?.title}');
     print('Message notification body: ${message.notification?.body}');
-  }
-
-  try {
-    String? type = message.data['type'];
-    String? objectType = message.data['object_type'];
-    String? objectId = message.data['object_id'];
-    NavigationUtils.handleNotificationNavigate(
-        FirebaseService._context!, type, objectType, objectId);
-  } catch (e) {
-    print("Something wrong _firebaseMessagingBackgroundHandler $e");
   }
 }
 
 @lazySingleton
 class FirebaseService {
   static BuildContext? _context;
+  static AppRouter? _router;
   static FirebaseMessaging? _firebaseMessaging;
   static FirebaseMessaging get firebaseMessaging =>
       FirebaseService._firebaseMessaging ?? FirebaseMessaging.instance;
 
   late AndroidNotificationChannel channel;
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-
-  void setContext(BuildContext context) =>
-      FirebaseService._context = context;
 
   Future<void> initialize() async {
     await Firebase.initializeApp(
@@ -87,15 +77,19 @@ class FirebaseService {
       initializationSettings,
       onDidReceiveNotificationResponse:
           (NotificationResponse notificationResponse) {
+        if (kDebugMode) {
+          print('onDidReceiveNotificationResponse');
+        }
         try {
-          var jsonObject = json.decode(notificationResponse.payload ?? "");
+          var jsonObject = json.decode(notificationResponse.payload ?? '');
           String type = jsonObject['type'];
           String objectId = jsonObject['object_id'];
           String objectType = jsonObject['object_type'];
+
           NavigationUtils.handleNotificationNavigate(
-              _context!, type, objectType, objectId);
+              _router!, _context!, type, objectType, objectId);
         } catch (e) {
-          print("Error parsing JSON: $e");
+          print('Error parsing JSON: $e');
         }
       },
     );
@@ -109,13 +103,20 @@ class FirebaseService {
       return true;
     };
 
-    await _requestPermission();
     _setUpMessageHandlers();
     getIt<AppOauth>().tokenStateStream.listen(_onTokenStateChange);
     getToken();
   }
 
-  Future<void> _requestPermission() async {
+  void setupContextAndRouter({
+    required AppRouter router,
+    required BuildContext context,
+  }) {
+    _router = router;
+    _context = context;
+  }
+
+  Future<void> requestPermission() async {
     final messaging = FirebaseMessaging.instance;
     final settings = await messaging.requestPermission(
       alert: true,
@@ -139,7 +140,8 @@ class FirebaseService {
     return token;
   }
 
-  void showFlutterNotification(RemoteMessage message) {
+  showFlutterNotification(RemoteMessage message) async {
+    Logs().i("showFlutterNotification");
     RemoteNotification? notification = message.notification;
     AndroidNotification? android = message.notification?.android;
     if (notification != null && android != null && !kIsWeb) {
@@ -162,8 +164,23 @@ class FirebaseService {
   void _setUpMessageHandlers() {
     FirebaseMessaging.onMessage.listen(showFlutterNotification);
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-    FirebaseMessaging.onMessageOpenedApp
-        .listen(_firebaseMessagingBackgroundHandler);
+    FirebaseMessaging.onMessageOpenedApp.listen(onPressNotification);
+  }
+  void onPressNotification(RemoteMessage message) {
+    if (kDebugMode) {
+      print('onPressNotification: ${message.data}');
+    }
+    try {
+      var jsonObject = message.data;
+      String type = jsonObject['type'];
+      String objectId = jsonObject['object_id'];
+      String objectType = jsonObject['object_type'];
+
+      NavigationUtils.handleNotificationNavigate(
+          _router!, _context!, type, objectType, objectId);
+    } catch (e) {
+      print('Something wrong when onPressNotification: $e');
+    }
   }
 
   void addFcmToken() async {

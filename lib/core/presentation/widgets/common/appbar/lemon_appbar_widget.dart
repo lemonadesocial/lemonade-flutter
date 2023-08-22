@@ -9,6 +9,8 @@ class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? title;
   final Widget Function(BuildContext context)? titleBuilder;
   final List<Widget>? actions;
+  final Color? backgroundColor;
+  final EdgeInsets? padding;
 
   const LemonAppBar({
     super.key,
@@ -16,6 +18,8 @@ class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.titleBuilder,
     this.leading,
     this.actions,
+    this.backgroundColor,
+    this.padding,
   });
 
   @override
@@ -25,53 +29,49 @@ class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     final primary = Theme.of(context).colorScheme.primary;
     return Container(
-      color: primary,
+      color: backgroundColor ?? primary,
+      padding: padding,
       child: SafeArea(
         child: PreferredSize(
-          child: Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                buildLeading(),
-                if (title?.isNotEmpty == true)
-                  Flexible(
-                    child: Center(
-                      child: Text(
-                        title!,
-                        style: Typo.large,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
+          preferredSize: Size.fromHeight(preferredSize.height),
+          child: Row(
+            children: [
+              buildLeading(),
+              if (title?.isNotEmpty ?? false)
+                Flexible(
+                  child: Center(
+                    child: Text(
+                      title!,
+                      style: Typo.extraMedium.copyWith(fontWeight: FontWeight.w600),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                if (titleBuilder != null) titleBuilder!.call(context),
-                buildActions(),
-              ],
-            ),
+                ),
+              if (titleBuilder != null) titleBuilder!.call(context),
+              buildActions(),
+            ],
           ),
-          preferredSize: Size.fromHeight(preferredSize.height),
         ),
       ),
     );
   }
 
   Widget buildLeading() {
-    return Container(
-      height: double.infinity,
-      width: preferredSize.height,
-      child: leading ?? LemonBackButton(),
+    return Padding(
+      padding: EdgeInsets.only(left: Spacing.small),
+      child: leading ?? const LemonBackButton(),
     );
   }
 
   Widget buildActions() {
-    return Container(
-      padding: EdgeInsets.only(right: 18),
-      child: actions?.isNotEmpty == true
+    return Padding(
+      padding: EdgeInsets.only(right: Spacing.small),
+      child: actions?.isNotEmpty ?? false
           ? Row(
               children: List.from(actions ?? [])
                   .map(
-                    (item) => Container(
-                      margin: EdgeInsets.only(left: Spacing.medium),
+                    (item) => SizedBox(
                       width: Sizing.small,
                       height: preferredSize.height,
                       child: item,
@@ -79,8 +79,7 @@ class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
                   )
                   .toList(),
             )
-          : Container(
-              margin: EdgeInsets.only(left: Spacing.medium),
+          : SizedBox(
               width: Sizing.small,
               height: preferredSize.height,
             ),

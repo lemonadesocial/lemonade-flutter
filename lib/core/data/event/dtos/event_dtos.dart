@@ -12,7 +12,7 @@ class EventDto with _$EventDto {
   factory EventDto({
     @JsonKey(name: '_id') String? id,
     @JsonKey(name: 'host_expanded') UserDto? hostExpanded,
-    @JsonKey(name: 'new_new_photos_expanded') List<DbFileDto>? newNewPhotosExpanded,
+    @JsonKey(name: 'new_new_photos_expanded') List<DbFileDto?>? newNewPhotosExpanded,
     @JsonKey(name: 'cohosts_expanded') List<UserDto?>? cohostsExpanded,
 
     String? title,

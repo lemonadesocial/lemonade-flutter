@@ -32,4 +32,11 @@ class AppConfig {
 
   static get isProduction => dotenv.env['ENV'] == 'PROD';
 
+  // Legacy api
+  static get legacyApi => dotenv.env['LMD_API_LEGACY'];
+
+  /// Matrix chat
+  static get pushNotificationsAppId => dotenv.env['PUSH_NOTIFICATION_APP_ID'];
+  
+  static get pushNotificationsGatewayUrl => dotenv.env['PUSH_NOTIFICATION_GATEWAY_URL'];
 }

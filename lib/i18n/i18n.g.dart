@@ -1,9 +1,9 @@
 /// Generated file. Do not edit.
 ///
 /// Locales: 1
-/// Strings: 112
+/// Strings: 115
 ///
-/// Built on 2023-08-21 at 07:33 UTC
+/// Built on 2023-08-22 at 06:34 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -179,6 +179,8 @@ class _I18nPostEn {
 	String get public => 'Public';
 	String get friend => 'Friends';
 	String get follower => 'Followers';
+	String get selectEvent => 'Select event';
+	String get searchEventHint => 'search for events or their hosts';
 }
 
 // Path: chat
@@ -193,6 +195,7 @@ class _I18nChatEn {
 	String get directMessages => 'direct messages';
 	String get spaces => 'spaces';
 	String get home => 'home';
+	String unread_chats({required Object unreadCount}) => '${unreadCount} unread chats';
 	late final _I18nChatCommandEn command = _I18nChatCommandEn._(_root);
 	String get typeMessage => 'type a message...';
 	String get editMessage => 'Edit message';
@@ -399,11 +402,14 @@ extension on _I18nEn {
 			case 'post.public': return 'Public';
 			case 'post.friend': return 'Friends';
 			case 'post.follower': return 'Followers';
+			case 'post.selectEvent': return 'Select event';
+			case 'post.searchEventHint': return 'search for events or their hosts';
 			case 'chat.unread': return 'unread';
 			case 'chat.channels': return 'channels';
 			case 'chat.directMessages': return 'direct messages';
 			case 'chat.spaces': return 'spaces';
 			case 'chat.home': return 'home';
+			case 'chat.unread_chats': return ({required Object unreadCount}) => '${unreadCount} unread chats';
 			case 'chat.command.ban': return 'Ban the given user from this room';
 			case 'chat.command.clearcache': return 'Clear cache';
 			case 'chat.command.create': return 'Create';

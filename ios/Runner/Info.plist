@@ -78,5 +78,9 @@
 	<string>We require your location information to accurately show nearby badges. This data will only be used when you use this feature and confidentiality will be maintained.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>We require your location information to accurately show nearby badges. This data will only be used when you use this feature and confidentiality will be maintained.</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>We need to access photo library to upload image</string>
+    <key>NSCameraUsageDescription</key>
+    <string>We need to access photo library to upload image</string>
 </dict>
 </plist>
