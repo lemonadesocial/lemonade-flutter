@@ -7,7 +7,6 @@ printMessage() {
 }
 
 REPO_DIR=$(git rev-parse --show-toplevel)
-echo "Home Git directory of the current repository: $REPO_DIR"
 
 # Add the githooks directory to your git configuration
 printMessage "Setting up githooks."
