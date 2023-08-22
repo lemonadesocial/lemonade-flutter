@@ -9,6 +9,7 @@ import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/service/notification/notification_service.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/router/app_router.dart';
 import 'package:app/theme/color.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -45,6 +46,7 @@ class _NotificationsListingView extends StatefulWidget {
 
 class _NotificationsListingViewState extends State<_NotificationsListingView> {
   GlobalKey<AnimatedListState> _notificationList = GlobalKey<AnimatedListState>();
+  final _appRouter = AppRouter();
 
   removeItem(
     int index, {
@@ -128,6 +130,7 @@ class _NotificationsListingViewState extends State<_NotificationsListingView> {
                           notification: notifications[index],
                           onTap: () {
                             NavigationUtils.handleNotificationNavigate(
+                              _appRouter,
                               context,
                               notifications[index].type,
                               notifications[index].object_type,

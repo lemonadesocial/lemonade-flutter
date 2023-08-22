@@ -63,6 +63,7 @@ class _HomeListingView extends StatefulWidget {
 }
 
 class _HomePageViewState extends State<_HomeListingView> {
+
   @override
   void initState() {
     super.initState();

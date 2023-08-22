@@ -13,7 +13,7 @@ class AppConfig {
 
   static get metaverseUrl => dotenv.env['METAVERSE_URL'];
   static get wssMetaverseUrl => dotenv.env['WSS_METAVERSE_URL'];
-  
+
   // Social
   static get twitterUrl => 'https://twitter.com';
   static get instagramUrl => 'https://www.instagram.com';
@@ -23,7 +23,7 @@ class AppConfig {
   // Wallet connect
   static get walletConnectProjectId => dotenv.env["WALLET_CONNECT_PROJECT_ID"];
 
-  // Matrix 
+  // Matrix
   static get matrixHomeserver => dotenv.env["MATRIX_HOMESERVER"];
 
   static get isProduction => dotenv.env['ENV'] == 'PROD';
@@ -31,4 +31,8 @@ class AppConfig {
   // Legacy api
   static get legacyApi => dotenv.env['LMD_API_LEGACY'];
 
+  /// Matrix chat
+  static get pushNotificationsAppId => dotenv.env['PUSH_NOTIFICATION_APP_ID'];
+  
+  static get pushNotificationsGatewayUrl => dotenv.env['PUSH_NOTIFICATION_GATEWAY_URL'];
 }

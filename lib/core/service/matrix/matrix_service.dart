@@ -3,6 +3,7 @@ import 'package:app/core/data/matrix/matrix_mutation.dart';
 import 'package:app/core/gql.dart';
 import 'package:app/core/oauth/oauth.dart';
 import 'package:app/core/service/matrix/matrix_chat_space_extension.dart';
+import 'package:app/core/utils/chat_notification/background_push.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
@@ -18,6 +19,7 @@ class MatrixService {
   static String dbName = 'matrix_lemonade_chat';
 
   late Client _client;
+  late BackgroundPush backgroundPush;
 
   Client get client => _client;
 
@@ -27,6 +29,7 @@ class MatrixService {
       waitForFirstSync: false,
       waitUntilLoadCompletedLoaded: false,
     );
+    backgroundPush = BackgroundPush(client);
     getIt<AppOauth>().tokenStateStream.listen((tokenState) async {
       if (tokenState == OAuthTokenState.valid) {
         if (!_client.isLogged()) {
@@ -34,6 +37,7 @@ class MatrixService {
         }
         await _client.roomsLoading;
         await _client.accountDataLoading;
+        await backgroundPush.setupPush();
         return;
       }
 
@@ -55,7 +59,9 @@ class MatrixService {
       _client.login(
         LoginType.mLoginJwt,
         token: jwtToken,
-      );
+      ).then((value) async => {
+        await backgroundPush.setupPush()
+      });
     } catch (e) {
       FirebaseCrashlytics.instance.log(e.toString());
     }

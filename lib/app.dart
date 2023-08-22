@@ -1,6 +1,7 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/presentation/widgets/app_limit_layout_builder_widget.dart';
 import 'package:app/core/service/firebase/firebase_service.dart';
+import 'package:app/core/service/matrix/matrix_service.dart';
 import 'package:app/core/utils/navigation_utils.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -8,6 +9,7 @@ import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.dart';
 import 'package:app/theme/theme.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -24,7 +26,24 @@ class LemonadeApp extends StatefulWidget {
 class _LemonadeAppViewState extends State<LemonadeApp> {
   final _appRouter = AppRouter();
 
-  Widget _translationProviderBuilder(Widget child) => TranslationProvider(child: child);
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      getIt<MatrixService>().backgroundPush.setupContextAndRouter(
+            router: _appRouter,
+            context: context,
+          );
+      getIt<FirebaseService>().setupContextAndRouter(
+        router: _appRouter,
+        context: context,
+      );
+      setupInteractedMessage();
+    });
+  }
+
+  Widget _translationProviderBuilder(Widget child) =>
+      TranslationProvider(child: child);
 
   Widget _portalBuilder(Widget child) => Portal(child: child);
 
@@ -55,26 +74,20 @@ class _LemonadeAppViewState extends State<LemonadeApp> {
   }
 
   Future<void> setupInteractedMessage() async {
-    RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+    if (kDebugMode) {
+      print('setupInteractedMessage');
+    }
+    final initialMessage = await FirebaseMessaging.instance.getInitialMessage();
     if (initialMessage != null) {
       try {
         String type = initialMessage.data['type'];
         String objectId = initialMessage.data['object_id'];
         String objectType = initialMessage.data['object_type'];
-        NavigationUtils.handleNotificationNavigate(context, type, objectType, objectId);
+        // NavigationUtils.handleNotificationNavigate(context, type, objectType, objectId);
       } catch (e) {
-        print("Error parsing JSON: $e");
+        print('Error parsing JSON: $e');
       }
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      getIt<FirebaseService>().setContext(context);
-    });
-    setupInteractedMessage();
   }
 }
 
@@ -94,7 +107,8 @@ class _App extends StatelessWidget {
       darkTheme: lemonadeAppDarkThemeData,
       theme: lemonadeAppLightThemeData,
       routerDelegate: router.delegate(),
-      routeInformationParser: router.defaultRouteParser(includePrefixMatches: true),
+      routeInformationParser:
+          router.defaultRouteParser(includePrefixMatches: true),
     );
   }
 
@@ -102,5 +116,6 @@ class _App extends StatelessWidget {
 
   get _localizationsDelegates => GlobalMaterialLocalizations.delegates;
 
-  Locale _getCurrentLocale(BuildContext context) => TranslationProvider.of(context).flutterLocale;
+  Locale _getCurrentLocale(BuildContext context) =>
+      TranslationProvider.of(context).flutterLocale;
 }

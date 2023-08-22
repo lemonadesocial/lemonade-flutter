@@ -15,8 +15,8 @@ void main() async {
   registerModule();
 
   await getIt<AppOauth>().init();
-  await getIt<FirebaseService>().initialize();
   await getIt<MatrixService>().init();
+  await getIt<FirebaseService>().initialize();
 
   runApp(LemonadeApp());
 
