@@ -23,6 +23,8 @@ mixin _$GetBadgesInput {
   int? get skip => throw _privateConstructorUsedError;
   int? get limit => throw _privateConstructorUsedError;
   List<String>? get list => throw _privateConstructorUsedError;
+  @JsonKey(name: '_id')
+  List<String>? get id => throw _privateConstructorUsedError;
   String? get city => throw _privateConstructorUsedError;
   String? get country => throw _privateConstructorUsedError;
   double? get distance => throw _privateConstructorUsedError;
@@ -43,6 +45,7 @@ abstract class $GetBadgesInputCopyWith<$Res> {
       {int? skip,
       int? limit,
       List<String>? list,
+      @JsonKey(name: '_id') List<String>? id,
       String? city,
       String? country,
       double? distance});
@@ -64,6 +67,7 @@ class _$GetBadgesInputCopyWithImpl<$Res, $Val extends GetBadgesInput>
     Object? skip = freezed,
     Object? limit = freezed,
     Object? list = freezed,
+    Object? id = freezed,
     Object? city = freezed,
     Object? country = freezed,
     Object? distance = freezed,
@@ -80,6 +84,10 @@ class _$GetBadgesInputCopyWithImpl<$Res, $Val extends GetBadgesInput>
       list: freezed == list
           ? _value.list
           : list // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
               as List<String>?,
       city: freezed == city
           ? _value.city
@@ -109,6 +117,7 @@ abstract class _$$_GetBadgesInputCopyWith<$Res>
       {int? skip,
       int? limit,
       List<String>? list,
+      @JsonKey(name: '_id') List<String>? id,
       String? city,
       String? country,
       double? distance});
@@ -128,6 +137,7 @@ class __$$_GetBadgesInputCopyWithImpl<$Res>
     Object? skip = freezed,
     Object? limit = freezed,
     Object? list = freezed,
+    Object? id = freezed,
     Object? city = freezed,
     Object? country = freezed,
     Object? distance = freezed,
@@ -144,6 +154,10 @@ class __$$_GetBadgesInputCopyWithImpl<$Res>
       list: freezed == list
           ? _value._list
           : list // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
+      id: freezed == id
+          ? _value._id
+          : id // ignore: cast_nullable_to_non_nullable
               as List<String>?,
       city: freezed == city
           ? _value.city
@@ -169,10 +183,12 @@ class _$_GetBadgesInput implements _GetBadgesInput {
       {this.skip,
       this.limit,
       final List<String>? list,
+      @JsonKey(name: '_id') final List<String>? id,
       this.city,
       this.country,
       this.distance})
-      : _list = list;
+      : _list = list,
+        _id = id;
 
   factory _$_GetBadgesInput.fromJson(Map<String, dynamic> json) =>
       _$$_GetBadgesInputFromJson(json);
@@ -191,6 +207,17 @@ class _$_GetBadgesInput implements _GetBadgesInput {
     return EqualUnmodifiableListView(value);
   }
 
+  final List<String>? _id;
+  @override
+  @JsonKey(name: '_id')
+  List<String>? get id {
+    final value = _id;
+    if (value == null) return null;
+    if (_id is EqualUnmodifiableListView) return _id;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
   @override
   final String? city;
   @override
@@ -200,7 +227,7 @@ class _$_GetBadgesInput implements _GetBadgesInput {
 
   @override
   String toString() {
-    return 'GetBadgesInput(skip: $skip, limit: $limit, list: $list, city: $city, country: $country, distance: $distance)';
+    return 'GetBadgesInput(skip: $skip, limit: $limit, list: $list, id: $id, city: $city, country: $country, distance: $distance)';
   }
 
   @override
@@ -211,6 +238,7 @@ class _$_GetBadgesInput implements _GetBadgesInput {
             (identical(other.skip, skip) || other.skip == skip) &&
             (identical(other.limit, limit) || other.limit == limit) &&
             const DeepCollectionEquality().equals(other._list, _list) &&
+            const DeepCollectionEquality().equals(other._id, _id) &&
             (identical(other.city, city) || other.city == city) &&
             (identical(other.country, country) || other.country == country) &&
             (identical(other.distance, distance) ||
@@ -219,8 +247,15 @@ class _$_GetBadgesInput implements _GetBadgesInput {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, skip, limit,
-      const DeepCollectionEquality().hash(_list), city, country, distance);
+  int get hashCode => Object.hash(
+      runtimeType,
+      skip,
+      limit,
+      const DeepCollectionEquality().hash(_list),
+      const DeepCollectionEquality().hash(_id),
+      city,
+      country,
+      distance);
 
   @JsonKey(ignore: true)
   @override
@@ -241,6 +276,7 @@ abstract class _GetBadgesInput implements GetBadgesInput {
       {final int? skip,
       final int? limit,
       final List<String>? list,
+      @JsonKey(name: '_id') final List<String>? id,
       final String? city,
       final String? country,
       final double? distance}) = _$_GetBadgesInput;
@@ -254,6 +290,9 @@ abstract class _GetBadgesInput implements GetBadgesInput {
   int? get limit;
   @override
   List<String>? get list;
+  @override
+  @JsonKey(name: '_id')
+  List<String>? get id;
   @override
   String? get city;
   @override

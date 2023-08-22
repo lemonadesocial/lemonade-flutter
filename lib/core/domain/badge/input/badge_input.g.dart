@@ -11,6 +11,7 @@ _$_GetBadgesInput _$$_GetBadgesInputFromJson(Map<String, dynamic> json) =>
       skip: json['skip'] as int?,
       limit: json['limit'] as int?,
       list: (json['list'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      id: (json['_id'] as List<dynamic>?)?.map((e) => e as String).toList(),
       city: json['city'] as String?,
       country: json['country'] as String?,
       distance: (json['distance'] as num?)?.toDouble(),
@@ -28,6 +29,7 @@ Map<String, dynamic> _$$_GetBadgesInputToJson(_$_GetBadgesInput instance) {
   writeNotNull('skip', instance.skip);
   writeNotNull('limit', instance.limit);
   writeNotNull('list', instance.list);
+  writeNotNull('_id', instance.id);
   writeNotNull('city', instance.city);
   writeNotNull('country', instance.country);
   writeNotNull('distance', instance.distance);

@@ -1,3 +1,4 @@
+import 'package:app/core/domain/badge/badge_repository.dart';
 import 'package:app/core/domain/badge/entities/badge_entities.dart';
 import 'package:app/core/domain/badge/input/badge_input.dart';
 import 'package:app/core/service/badge/badge_service.dart';
@@ -14,13 +15,14 @@ class BadgeCollectionsBloc extends Bloc<BadgeCollectionsEvent, BadgeCollectionsS
     on<BadgeCollectionsEventDeselect>(_onDeselect);
   }
   final BadgeService _badgeService = getIt<BadgeService>();
+  final BadgeRepository _badgeRepository = getIt<BadgeRepository>();
   final GetBadgeListsInput defaultInput = GetBadgeListsInput(
     skip: 0,
     limit: 25,
   );
 
   Future<void> _onFetch(BadgeCollectionsEventFetch event, Emitter emit) async {
-    final result = await _badgeService.getBadgeCollections(defaultInput);
+    final result = await _badgeRepository.getBadgeCollections(defaultInput);
     result.fold(
       (l) => emit(BadgeCollectionsState.failure()),
       (collections) => emit(

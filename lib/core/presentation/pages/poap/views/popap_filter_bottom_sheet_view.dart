@@ -10,7 +10,7 @@ import 'package:app/core/presentation/widgets/common/button/lemon_outline_button
 import 'package:app/core/presentation/widgets/common/searchbar/lemon_search_bar_widget.dart';
 import 'package:app/core/presentation/widgets/common/slider/lemon_slider_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
-import 'package:app/core/presentation/widgets/poap/poap_creator_item.dart';
+import 'package:app/core/presentation/widgets/poap/poap_collection_item.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/service/badge/badge_service.dart';
 import 'package:app/core/utils/animation_utils.dart';
@@ -189,7 +189,7 @@ class _PoapFilterBottomSheetViewState extends State<PoapFilterBottomSheetView> w
                     itemBuilder: (context, i) {
                       final collection = collections[i];
                       final selected = selectedCollections.any((element) => element.id == collection.id);
-                      return PoapCreatorItem(
+                      return PoapCollectionItem(
                         badgeCollection: collections[i],
                         selected: selected,
                         onTap: (collection) {
@@ -283,7 +283,7 @@ class _PoapFilterBottomSheetViewState extends State<PoapFilterBottomSheetView> w
                                 margin: EdgeInsets.only(
                                   right: isLargeDevice ? Spacing.extraSmall : 0,
                                 ),
-                                child: PoapCreatorItem(
+                                child: PoapCollectionItem(
                                         badgeCollection: collection,
                                         selected: selected,
                                         visible: collection.id != null && collection.id!.isNotEmpty,

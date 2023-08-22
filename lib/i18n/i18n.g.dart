@@ -1,9 +1,9 @@
 /// Generated file. Do not edit.
 ///
 /// Locales: 1
-/// Strings: 111
+/// Strings: 112
 ///
-/// Built on 2023-08-17 at 10:12 UTC
+/// Built on 2023-08-21 at 07:33 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -213,6 +213,7 @@ class _I18nNftEn {
 	String get noCollectible => 'No collectibles yet';
 	String get claimed => 'claimed';
 	String get claim => 'claim';
+	String get claiming => 'claiming';
 	String get needLocationToClaimPoap => 'We need to access your location to check eligibility...';
 	String get ineligibleToClaimPoap => 'Uh oh! 🙁 You are ineligible to claim this badge...';
 	String get ableToClaimPoap => 'Congrats! 🥳 You meet all requirements to claim this badge';
@@ -436,6 +437,7 @@ extension on _I18nEn {
 			case 'nft.noCollectible': return 'No collectibles yet';
 			case 'nft.claimed': return 'claimed';
 			case 'nft.claim': return 'claim';
+			case 'nft.claiming': return 'claiming';
 			case 'nft.needLocationToClaimPoap': return 'We need to access your location to check eligibility...';
 			case 'nft.ineligibleToClaimPoap': return 'Uh oh! 🙁 You are ineligible to claim this badge...';
 			case 'nft.ableToClaimPoap': return 'Congrats! 🥳 You meet all requirements to claim this badge';

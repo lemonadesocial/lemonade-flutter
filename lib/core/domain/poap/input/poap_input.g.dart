@@ -41,3 +41,42 @@ Map<String, dynamic> _$$_CheckHasClaimedPoapViewInputToJson(
       'name': instance.name,
       'args': instance.args,
     };
+
+_$_ClaimInput _$$_ClaimInputFromJson(Map<String, dynamic> json) =>
+    _$_ClaimInput(
+      network: json['network'] as String,
+      address: json['address'] as String,
+      input: json['input'] == null
+          ? null
+          : ClaimArgsInput.fromJson(json['input'] as Map<String, dynamic>),
+      to: json['to'] as String?,
+    );
+
+Map<String, dynamic> _$$_ClaimInputToJson(_$_ClaimInput instance) {
+  final val = <String, dynamic>{
+    'network': instance.network,
+    'address': instance.address,
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('input', instance.input?.toJson());
+  writeNotNull('to', instance.to);
+  return val;
+}
+
+_$_ClaimArgsInput _$$_ClaimArgsInputFromJson(Map<String, dynamic> json) =>
+    _$_ClaimArgsInput(
+      claimer: json['claimer'] as String?,
+      tokenURI: json['tokenURI'] as String?,
+    );
+
+Map<String, dynamic> _$$_ClaimArgsInputToJson(_$_ClaimArgsInput instance) =>
+    <String, dynamic>{
+      'claimer': instance.claimer,
+      'tokenURI': instance.tokenURI,
+    };

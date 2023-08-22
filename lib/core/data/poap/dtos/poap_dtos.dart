@@ -1,3 +1,9 @@
+import 'package:app/core/domain/poap/poap_enums.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'poap_dtos.freezed.dart';
+part 'poap_dtos.g.dart';
+
 class PoapViewSupplyDto {
   PoapViewSupplyDto({
     required this.claimedQuantity,
@@ -34,4 +40,29 @@ class PoapViewCheckHasClaimedDto {
   }
 
   final bool claimed;
+}
+
+@freezed
+class ClaimDto with _$ClaimDto {
+  const factory ClaimDto({
+    @JsonKey(name: '_id') String? id,
+    String? network,
+    ClaimState? state,
+    String? errorMessage,
+    ClaimArgsDto? args,
+    String? address,
+    String? tokenId,
+  }) = _ClaimDto;
+
+  factory ClaimDto.fromJson(Map<String, dynamic> json) => _$ClaimDtoFromJson(json);
+}
+
+@freezed
+class ClaimArgsDto with _$ClaimArgsDto {
+  const factory ClaimArgsDto({
+    String? claimer,
+    String? tokenURI,
+  }) = _ClaimArgsDto;
+
+  factory ClaimArgsDto.fromJson(Map<String, dynamic> json) => _$ClaimArgsDtoFromJson(json);
 }

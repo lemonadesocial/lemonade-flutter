@@ -18,7 +18,7 @@ class LocationUtils {
       throw LocationServiceNotEnabledException();
     }
 
-    if (!await _checkAndRequestPermission(
+    if (!await checkAndRequestPermission(
       onPermissionDeniedForever: onPermissionDeniedForever,
     )) {
       throw PermissionNotGrantedException();
@@ -32,7 +32,7 @@ class LocationUtils {
     return _permissionStatus == LocationPermission.always || _permissionStatus == LocationPermission.whileInUse;
   }
 
-  Future<bool> _checkAndRequestPermission({
+  Future<bool> checkAndRequestPermission({
     void Function()? onPermissionDeniedForever,
   }) async {
     var status = await Geolocator.checkPermission();

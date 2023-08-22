@@ -9,7 +9,9 @@ import 'package:app/core/gql.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:dartz/dartz.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:injectable/injectable.dart';
 
+@LazySingleton(as: BadgeRepository)
 class BadgeRepositoryImpl implements BadgeRepository {
   final _client = getIt<AppGQL>().client;
 

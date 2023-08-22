@@ -1,3 +1,4 @@
+import 'package:app/core/domain/badge/badge_repository.dart';
 import 'package:app/core/domain/badge/entities/badge_entities.dart';
 import 'package:app/core/domain/badge/input/badge_input.dart';
 import 'package:app/core/failure.dart';
@@ -7,6 +8,7 @@ import 'package:app/injection/register_module.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:rxdart/rxdart.dart';
 
 part 'badges_listing_bloc.freezed.dart';
 
@@ -14,9 +16,15 @@ class BadgesListingBloc extends Bloc<BadgesListingEvent, BadgesListingState> {
   BadgesListingBloc() : super(BadgesListingStateInitial()) {
     _createInput();
     on<BadgesListingEventFetch>(_onFetch);
-    on<BadgesListingEventRefresh>(_onRefresh);
+    on<BadgesListingEventRefresh>(
+      _onRefresh,
+      transformer: (events, mapper) {
+        return events.debounceTime(const Duration(milliseconds: 300)).asyncExpand(mapper);
+      },
+    );
   }
   final BadgeService _badgeService = getIt<BadgeService>();
+  final BadgeRepository _badgeRepository = getIt<BadgeRepository>();
   late GetBadgesInput defaultInput;
   late final PaginationService<Badge, GetBadgesInput?> _paginationService = PaginationService(
     getDataFuture: _getBadges,
@@ -41,9 +49,9 @@ class BadgesListingBloc extends Bloc<BadgesListingEvent, BadgesListingState> {
     endReached, {
     GetBadgesInput? input,
   }) async {
-    return _badgeService.getBadges(
+    return _badgeRepository.getBadges(
       input?.copyWith(skip: skip, limit: 25),
-      geoPoint: _badgeService.selectedLocation?.geoPoint,
+      geoPoint: _badgeService.geoPoint,
     );
   }
 

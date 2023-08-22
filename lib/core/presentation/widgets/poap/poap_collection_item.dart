@@ -5,8 +5,8 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 
-class PoapCreatorItem extends StatelessWidget {
-  const PoapCreatorItem({
+class PoapCollectionItem extends StatelessWidget {
+  const PoapCollectionItem({
     super.key,
     required this.badgeCollection,
     this.onTap,

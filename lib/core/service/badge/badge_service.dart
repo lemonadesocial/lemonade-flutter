@@ -1,12 +1,7 @@
-import 'package:app/core/data/badge/repository/badge_respository_impl.dart';
-import 'package:app/core/domain/badge/badge_repository.dart';
 import 'package:app/core/domain/badge/entities/badge_entities.dart';
-import 'package:app/core/domain/badge/input/badge_input.dart';
 import 'package:app/core/domain/common/entities/common.dart';
-import 'package:app/core/failure.dart';
 import 'package:app/core/utils/location_utils.dart';
 import 'package:app/injection/register_module.dart';
-import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
 
 @LazySingleton()
@@ -14,9 +9,8 @@ class BadgeService {
   final LocationUtils _locationUtils = getIt<LocationUtils>();
   List<BadgeList> selectedCollections = [];
   BadgeLocation? selectedLocation;
+  GeoPoint? geoPoint;
   double distance = 1;
-
-  BadgeRepository badgeRepository = BadgeRepositoryImpl();
 
   List<BadgeList> addCollection(BadgeList collection) {
     return selectedCollections = [...selectedCollections, collection];
@@ -24,6 +18,10 @@ class BadgeService {
 
   List<BadgeList> removeCollection(BadgeList collection) {
     return selectedCollections = selectedCollections.where((item) => item.id != collection.id).toList();
+  }
+
+  void updateGeoPoint(GeoPoint? point) {
+    geoPoint = point;
   }
 
   void selectLocation(BadgeLocation? location) {
@@ -39,32 +37,25 @@ class BadgeService {
   }
 
   Future<void> updateMyLocation() async {
-    if (selectedLocation == null || !selectedLocation!.isMyLocation) return;
     try {
       final position = await _locationUtils.getCurrentLocation();
-      selectLocation(
-        BadgeLocation.myLocation(
-          geoPoint: GeoPoint(
-            lat: position.latitude,
-            lng: position.longitude,
-          ),
+      updateGeoPoint(
+        GeoPoint(
+          lat: position.latitude,
+          lng: position.longitude,
         ),
       );
+
+      if (selectedLocation != null && selectedLocation!.isMyLocation) {
+        selectLocation(
+          BadgeLocation.myLocation(
+            geoPoint: GeoPoint(
+              lat: position.latitude,
+              lng: position.longitude,
+            ),
+          ),
+        );
+      }
     } catch (error) {}
-  }
-
-  Future<Either<Failure, List<Badge>>> getBadges(
-    GetBadgesInput? input, {
-    GeoPoint? geoPoint,
-  }) async {
-    return badgeRepository.getBadges(input, geoPoint: geoPoint);
-  }
-
-  Future<Either<Failure, List<BadgeList>>> getBadgeCollections(GetBadgeListsInput? input) async {
-    return badgeRepository.getBadgeCollections(input);
-  }
-
-  Future<Either<Failure, List<BadgeCity>>> getBadgeCities(GetBadgeCitiesInput? input) {
-    return badgeRepository.getBadgeCities(input);
   }
 }

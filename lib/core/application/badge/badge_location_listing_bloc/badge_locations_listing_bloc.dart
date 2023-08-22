@@ -1,3 +1,4 @@
+import 'package:app/core/domain/badge/badge_repository.dart';
 import 'package:app/core/domain/badge/entities/badge_entities.dart';
 import 'package:app/core/domain/badge/input/badge_input.dart';
 import 'package:app/core/service/badge/badge_service.dart';
@@ -20,12 +21,13 @@ class BadgeLocationsListingBloc extends Bloc<BadgeLocationsListingEvent, BadgeLo
     on<BadgeLocationsListingEventUpdateDistance>(_onUpdateDistance);
   }
   final _badgeService = getIt<BadgeService>();
+  final _badgeRepository = getIt<BadgeRepository>();
   final defaultInput = GetBadgeCitiesInput(
     skip: 0,
     limit: 25,
   );
   Future<void> _onFetch(BadgeLocationsListingEvent event, Emitter emit) async {
-    final result = await _badgeService.getBadgeCities(defaultInput);
+    final result = await _badgeRepository.getBadgeCities(defaultInput);
     result.fold(
       (l) => emit(BadgeLocationsListingState.failure()),
       (badgeCities) => emit(

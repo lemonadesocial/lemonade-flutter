@@ -6,12 +6,13 @@ import 'package:app/core/presentation/pages/poap/views/popap_filter_bottom_sheet
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
-import 'package:app/core/presentation/widgets/poap/poap_claim_item.dart';
+import 'package:app/core/presentation/widgets/poap/poap_item.dart';
 import 'package:app/core/utils/debouncer.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -103,6 +104,11 @@ class _PoapListingViewState extends State<PoapListingView> {
                       ],
                     ),
                   ),
+                  CupertinoSliverRefreshControl(
+                    onRefresh: () async {
+                      context.read<BadgesListingBloc>().add(BadgesListingEvent.refresh());
+                    },
+                  ),
                   BlocBuilder<BadgesListingBloc, BadgesListingState>(
                     builder: (context, state) => state.when(
                       initial: () => SliverToBoxAdapter(
@@ -128,7 +134,7 @@ class _PoapListingViewState extends State<PoapListingView> {
                         return SliverList.separated(
                           itemCount: badges.length,
                           separatorBuilder: (context, i) => const SizedBox(height: 12),
-                          itemBuilder: (context, i) => POAPClaimItem(
+                          itemBuilder: (context, i) => PoapItem(
                             badge: badges[i],
                           ),
                         );

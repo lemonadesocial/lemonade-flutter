@@ -409,3 +409,366 @@ abstract class _CheckHasClaimedPoapViewInput
   _$$_CheckHasClaimedPoapViewInputCopyWith<_$_CheckHasClaimedPoapViewInput>
       get copyWith => throw _privateConstructorUsedError;
 }
+
+ClaimInput _$ClaimInputFromJson(Map<String, dynamic> json) {
+  return _ClaimInput.fromJson(json);
+}
+
+/// @nodoc
+mixin _$ClaimInput {
+  String get network => throw _privateConstructorUsedError;
+  String get address => throw _privateConstructorUsedError;
+  ClaimArgsInput? get input => throw _privateConstructorUsedError;
+  String? get to => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $ClaimInputCopyWith<ClaimInput> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $ClaimInputCopyWith<$Res> {
+  factory $ClaimInputCopyWith(
+          ClaimInput value, $Res Function(ClaimInput) then) =
+      _$ClaimInputCopyWithImpl<$Res, ClaimInput>;
+  @useResult
+  $Res call(
+      {String network, String address, ClaimArgsInput? input, String? to});
+
+  $ClaimArgsInputCopyWith<$Res>? get input;
+}
+
+/// @nodoc
+class _$ClaimInputCopyWithImpl<$Res, $Val extends ClaimInput>
+    implements $ClaimInputCopyWith<$Res> {
+  _$ClaimInputCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? network = null,
+    Object? address = null,
+    Object? input = freezed,
+    Object? to = freezed,
+  }) {
+    return _then(_value.copyWith(
+      network: null == network
+          ? _value.network
+          : network // ignore: cast_nullable_to_non_nullable
+              as String,
+      address: null == address
+          ? _value.address
+          : address // ignore: cast_nullable_to_non_nullable
+              as String,
+      input: freezed == input
+          ? _value.input
+          : input // ignore: cast_nullable_to_non_nullable
+              as ClaimArgsInput?,
+      to: freezed == to
+          ? _value.to
+          : to // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $ClaimArgsInputCopyWith<$Res>? get input {
+    if (_value.input == null) {
+      return null;
+    }
+
+    return $ClaimArgsInputCopyWith<$Res>(_value.input!, (value) {
+      return _then(_value.copyWith(input: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$_ClaimInputCopyWith<$Res>
+    implements $ClaimInputCopyWith<$Res> {
+  factory _$$_ClaimInputCopyWith(
+          _$_ClaimInput value, $Res Function(_$_ClaimInput) then) =
+      __$$_ClaimInputCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {String network, String address, ClaimArgsInput? input, String? to});
+
+  @override
+  $ClaimArgsInputCopyWith<$Res>? get input;
+}
+
+/// @nodoc
+class __$$_ClaimInputCopyWithImpl<$Res>
+    extends _$ClaimInputCopyWithImpl<$Res, _$_ClaimInput>
+    implements _$$_ClaimInputCopyWith<$Res> {
+  __$$_ClaimInputCopyWithImpl(
+      _$_ClaimInput _value, $Res Function(_$_ClaimInput) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? network = null,
+    Object? address = null,
+    Object? input = freezed,
+    Object? to = freezed,
+  }) {
+    return _then(_$_ClaimInput(
+      network: null == network
+          ? _value.network
+          : network // ignore: cast_nullable_to_non_nullable
+              as String,
+      address: null == address
+          ? _value.address
+          : address // ignore: cast_nullable_to_non_nullable
+              as String,
+      input: freezed == input
+          ? _value.input
+          : input // ignore: cast_nullable_to_non_nullable
+              as ClaimArgsInput?,
+      to: freezed == to
+          ? _value.to
+          : to // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
+  }
+}
+
+/// @nodoc
+
+@JsonSerializable(includeIfNull: false, explicitToJson: true)
+class _$_ClaimInput implements _ClaimInput {
+  _$_ClaimInput(
+      {required this.network, required this.address, this.input, this.to});
+
+  factory _$_ClaimInput.fromJson(Map<String, dynamic> json) =>
+      _$$_ClaimInputFromJson(json);
+
+  @override
+  final String network;
+  @override
+  final String address;
+  @override
+  final ClaimArgsInput? input;
+  @override
+  final String? to;
+
+  @override
+  String toString() {
+    return 'ClaimInput(network: $network, address: $address, input: $input, to: $to)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_ClaimInput &&
+            (identical(other.network, network) || other.network == network) &&
+            (identical(other.address, address) || other.address == address) &&
+            (identical(other.input, input) || other.input == input) &&
+            (identical(other.to, to) || other.to == to));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, network, address, input, to);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$_ClaimInputCopyWith<_$_ClaimInput> get copyWith =>
+      __$$_ClaimInputCopyWithImpl<_$_ClaimInput>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_ClaimInputToJson(
+      this,
+    );
+  }
+}
+
+abstract class _ClaimInput implements ClaimInput {
+  factory _ClaimInput(
+      {required final String network,
+      required final String address,
+      final ClaimArgsInput? input,
+      final String? to}) = _$_ClaimInput;
+
+  factory _ClaimInput.fromJson(Map<String, dynamic> json) =
+      _$_ClaimInput.fromJson;
+
+  @override
+  String get network;
+  @override
+  String get address;
+  @override
+  ClaimArgsInput? get input;
+  @override
+  String? get to;
+  @override
+  @JsonKey(ignore: true)
+  _$$_ClaimInputCopyWith<_$_ClaimInput> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+ClaimArgsInput _$ClaimArgsInputFromJson(Map<String, dynamic> json) {
+  return _ClaimArgsInput.fromJson(json);
+}
+
+/// @nodoc
+mixin _$ClaimArgsInput {
+  String? get claimer => throw _privateConstructorUsedError;
+  String? get tokenURI => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $ClaimArgsInputCopyWith<ClaimArgsInput> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $ClaimArgsInputCopyWith<$Res> {
+  factory $ClaimArgsInputCopyWith(
+          ClaimArgsInput value, $Res Function(ClaimArgsInput) then) =
+      _$ClaimArgsInputCopyWithImpl<$Res, ClaimArgsInput>;
+  @useResult
+  $Res call({String? claimer, String? tokenURI});
+}
+
+/// @nodoc
+class _$ClaimArgsInputCopyWithImpl<$Res, $Val extends ClaimArgsInput>
+    implements $ClaimArgsInputCopyWith<$Res> {
+  _$ClaimArgsInputCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? claimer = freezed,
+    Object? tokenURI = freezed,
+  }) {
+    return _then(_value.copyWith(
+      claimer: freezed == claimer
+          ? _value.claimer
+          : claimer // ignore: cast_nullable_to_non_nullable
+              as String?,
+      tokenURI: freezed == tokenURI
+          ? _value.tokenURI
+          : tokenURI // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$_ClaimArgsInputCopyWith<$Res>
+    implements $ClaimArgsInputCopyWith<$Res> {
+  factory _$$_ClaimArgsInputCopyWith(
+          _$_ClaimArgsInput value, $Res Function(_$_ClaimArgsInput) then) =
+      __$$_ClaimArgsInputCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({String? claimer, String? tokenURI});
+}
+
+/// @nodoc
+class __$$_ClaimArgsInputCopyWithImpl<$Res>
+    extends _$ClaimArgsInputCopyWithImpl<$Res, _$_ClaimArgsInput>
+    implements _$$_ClaimArgsInputCopyWith<$Res> {
+  __$$_ClaimArgsInputCopyWithImpl(
+      _$_ClaimArgsInput _value, $Res Function(_$_ClaimArgsInput) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? claimer = freezed,
+    Object? tokenURI = freezed,
+  }) {
+    return _then(_$_ClaimArgsInput(
+      claimer: freezed == claimer
+          ? _value.claimer
+          : claimer // ignore: cast_nullable_to_non_nullable
+              as String?,
+      tokenURI: freezed == tokenURI
+          ? _value.tokenURI
+          : tokenURI // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$_ClaimArgsInput implements _ClaimArgsInput {
+  const _$_ClaimArgsInput({this.claimer, this.tokenURI});
+
+  factory _$_ClaimArgsInput.fromJson(Map<String, dynamic> json) =>
+      _$$_ClaimArgsInputFromJson(json);
+
+  @override
+  final String? claimer;
+  @override
+  final String? tokenURI;
+
+  @override
+  String toString() {
+    return 'ClaimArgsInput(claimer: $claimer, tokenURI: $tokenURI)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_ClaimArgsInput &&
+            (identical(other.claimer, claimer) || other.claimer == claimer) &&
+            (identical(other.tokenURI, tokenURI) ||
+                other.tokenURI == tokenURI));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, claimer, tokenURI);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$_ClaimArgsInputCopyWith<_$_ClaimArgsInput> get copyWith =>
+      __$$_ClaimArgsInputCopyWithImpl<_$_ClaimArgsInput>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_ClaimArgsInputToJson(
+      this,
+    );
+  }
+}
+
+abstract class _ClaimArgsInput implements ClaimArgsInput {
+  const factory _ClaimArgsInput(
+      {final String? claimer, final String? tokenURI}) = _$_ClaimArgsInput;
+
+  factory _ClaimArgsInput.fromJson(Map<String, dynamic> json) =
+      _$_ClaimArgsInput.fromJson;
+
+  @override
+  String? get claimer;
+  @override
+  String? get tokenURI;
+  @override
+  @JsonKey(ignore: true)
+  _$$_ClaimArgsInputCopyWith<_$_ClaimArgsInput> get copyWith =>
+      throw _privateConstructorUsedError;
+}

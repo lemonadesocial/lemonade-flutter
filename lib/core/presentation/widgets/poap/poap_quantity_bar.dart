@@ -7,7 +7,7 @@ import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
-  
+
 final _poapRepository = getIt<PoapRepository>();
 
 class PoapQuantityBar extends StatelessWidget {
@@ -17,7 +17,7 @@ class PoapQuantityBar extends StatelessWidget {
   });
 
   final badgeEntities.Badge badge;
-  
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -40,11 +40,19 @@ class PoapQuantityBar extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(100),
-              child: LinearProgressIndicator(
-                value: quantity == 0 ? 0 : claimedQuantity / quantity,
-                color: LemonColor.paleViolet,
-                backgroundColor: LemonColor.paleViolet18,
-                minHeight: 2,
+              child: TweenAnimationBuilder(
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+                tween: Tween<double>(
+                  begin: 0,
+                  end: quantity == 0 ? 0 : claimedQuantity / quantity,
+                ),
+                builder: (context, value, _) => LinearProgressIndicator(
+                  value: value,
+                  color: LemonColor.paleViolet,
+                  backgroundColor: LemonColor.paleViolet18,
+                  minHeight: 2,
+                ),
               ),
             ),
             SizedBox(height: Spacing.extraSmall),

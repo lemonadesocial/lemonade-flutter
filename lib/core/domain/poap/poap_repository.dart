@@ -10,5 +10,10 @@ abstract class PoapRepository {
 
   Future<Either<Failure, PoapViewCheckHasClaimed>> checkHasClaimedPoap({
     required CheckHasClaimedPoapViewInput input,
+    bool fromServer = false,
+  });
+
+  Future<Either<Failure, Claim>> claim({
+    required ClaimInput input,
   });
 }

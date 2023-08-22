@@ -14,31 +14,8 @@ class PoapListingPage extends StatefulWidget {
   State<PoapListingPage> createState() => PoapListingPageController();
 }
 
-class PoapListingPageController extends State<PoapListingPage> with WidgetsBindingObserver {
+class PoapListingPageController extends State<PoapListingPage> {
   final _badgeListingBloc = BadgesListingBloc();
-
-  @override
-  void initState() {
-    WidgetsBinding.instance.addObserver(this);
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
-
-  @override
-  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
-    switch (state) {
-      case AppLifecycleState.resumed:
-        _badgeListingBloc.add(BadgesListingEvent.refresh());
-        break;
-      // ignore: no_default_cases
-      default:
-    }
-  }
 
   bool badgeCollectionListenWhen(
     BadgeCollectionsState prev,
