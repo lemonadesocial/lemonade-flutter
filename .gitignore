@@ -48,3 +48,6 @@ app.*.map.json
 .env.production
 
 *.keystore
+
+# Ignore commit lint
+.githooks/gitlint
