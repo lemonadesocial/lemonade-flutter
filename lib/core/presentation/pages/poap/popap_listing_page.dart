@@ -21,10 +21,7 @@ class PoapListingPageController extends State<PoapListingPage> {
     BadgeCollectionsState prev,
     BadgeCollectionsState cur,
   ) {
-    if (prev is BadgeCollectionsStateFetched && cur is BadgeCollectionsStateFetched) {
-      return true;
-    }
-    return false;
+    return prev is BadgeCollectionsStateFetched && cur is BadgeCollectionsStateFetched;
   }
 
   bool badgeLocationListenWhen(
