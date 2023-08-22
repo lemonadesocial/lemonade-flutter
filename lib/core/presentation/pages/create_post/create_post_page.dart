@@ -127,7 +127,6 @@ class CreatePostPage extends StatelessWidget {
                     child: Row(
                       children: [
                         Expanded(
-                          flex: 7,
                           child: Row(
                             children: [
                               InkWell(
@@ -163,30 +162,27 @@ class CreatePostPage extends StatelessWidget {
                             ],
                           ),
                         ),
-                        Expanded(
-                          flex: 3,
-                          child: InkWell(
-                            onTap: () => createPostBloc.onPostPrivacyChange(state.postPrivacy),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: colorScheme.primary,
-                                borderRadius: BorderRadius.circular(32),
-                                border: Border.all(
-                                  color: colorScheme.outline,
-                                ),
+                        InkWell(
+                          onTap: () => createPostBloc.onPostPrivacyChange(state.postPrivacy),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: colorScheme.primary,
+                              borderRadius: BorderRadius.circular(32),
+                              border: Border.all(
+                                color: colorScheme.outline,
                               ),
-                              padding: EdgeInsets.symmetric(
-                                vertical: Spacing.superExtraSmall,
-                                horizontal: Spacing.small,
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Assets.icons.icPublic.svg(),
-                                  SizedBox(width: Spacing.superExtraSmall),
-                                  Text(state.postPrivacy.name.capitalize()),
-                                ],
-                              ),
+                            ),
+                            padding: EdgeInsets.symmetric(
+                              vertical: Spacing.superExtraSmall,
+                              horizontal: Spacing.small,
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Assets.icons.icPublic.svg(),
+                                SizedBox(width: Spacing.superExtraSmall),
+                                Text(state.postPrivacy.name.capitalize()),
+                              ],
                             ),
                           ),
                         ),

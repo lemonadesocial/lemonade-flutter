@@ -73,6 +73,7 @@ dependencies:
   emoji_picker_flutter: ^1.6.1
   mime: ^1.0.4
   flutter_screenutil: ^5.8.4
+  pull_to_refresh_flutter3: ^2.0.1
 
   # Webview
   flutter_inappwebview: ^5.7.2+3

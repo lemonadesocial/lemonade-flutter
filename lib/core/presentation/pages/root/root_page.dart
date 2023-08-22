@@ -31,9 +31,10 @@ class RootPage extends StatelessWidget {
             orElse: () => EmptyRoute(),
           )
         ],
-        drawer: LemonDrawer(),
+        drawer: const LemonDrawer(),
+        endDrawer: const LemonDrawer(),
         bottomNavigationBuilder: (_, tabsRouter) {
-          return BottomBar();
+          return const BottomBar();
         },
       ),
     );

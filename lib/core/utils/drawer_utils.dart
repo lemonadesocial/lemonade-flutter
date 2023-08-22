@@ -9,6 +9,10 @@ class DrawerUtils {
     drawerGlobalKey.currentState?.openDrawer();
   }
 
+  static openEndDrawer() {
+    drawerGlobalKey.currentState?.openEndDrawer();
+  }
+
   static closeDrawer() {
     drawerGlobalKey.currentState?.closeDrawer();
   }
