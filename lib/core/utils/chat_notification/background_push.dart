@@ -6,7 +6,6 @@ import 'package:app/core/config.dart';
 import 'package:app/core/utils/chat_notification/setting_keys.dart';
 import 'package:app/core/utils/platform_infos.dart';
 import 'package:app/router/app_router.dart';
-import 'package:auto_route/auto_route.dart';
 import 'package:fcm_shared_isolate/fcm_shared_isolate.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -61,8 +60,9 @@ class BackgroundPush {
       print('Got a new message from firebase cloud messaging: $message');
     }
     final data = Map<String, dynamic>.from(message);
-    // If is chat room message
-    if (data.containsKey('room_id')) {
+
+    // Is chat matrix message
+    if (data.containsKey('room_id') && data.containsKey('event_id')) {
       // UP may strip the devices list
       data['devices'] ??= [];
       pushHelper(
@@ -166,7 +166,7 @@ class BackgroundPush {
 
       await client.roomsLoading;
       await client.accountDataLoading;
-      AutoRouter.of(_context!).navigateNamed('/chat/detail/$roomId');
+      _router!.navigateNamed('/chat/detail/$roomId');
     } catch (e, s) {
       Logs().e('[Push] Failed to open room', e, s);
     }
@@ -225,8 +225,7 @@ class BackgroundPush {
           currentPushers.first.deviceDisplayName == client.deviceName &&
           currentPushers.first.lang == 'en' &&
           currentPushers.first.data.url.toString() == gatewayUrl &&
-          currentPushers.first.data.format ==
-              'event_id_only') {
+          currentPushers.first.data.format == 'event_id_only') {
         Logs().i('[Push] Pusher already set');
       } else {
         Logs().i('Need to set new pusher');
@@ -298,19 +297,16 @@ class BackgroundPush {
   }
 
   bool _wentToRoomOnStartup = false;
+
   Future<void> setupPush() async {
     Logs().d('SetupPush');
     if (client.onLoginStateChanged.value != LoginState.loggedIn ||
         !PlatformInfos.isMobile) {
-      Logs().i('return 1');
-      Logs().i(client.onLoginStateChanged.value.toString());
-      Logs().i(client.isLogged().toString());
       return;
     }
     // Do not setup unifiedpush if this has been initialized by
     // an unifiedpush action
     if (upAction) {
-      Logs().i('return 2');
       return;
     }
     await setupFirebase();
@@ -326,9 +322,7 @@ class BackgroundPush {
       }
       _wentToRoomOnStartup = true;
       Logs().i('_wentToRoomOnStartup');
-      if (details.notificationResponse!.payload!.contains('room_id')) {
-        goToRoom(details.notificationResponse);
-      }
+      goToRoom(details.notificationResponse);
     });
   }
 }

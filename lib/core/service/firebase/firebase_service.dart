@@ -77,6 +77,9 @@ class FirebaseService {
       initializationSettings,
       onDidReceiveNotificationResponse:
           (NotificationResponse notificationResponse) {
+        if (kDebugMode) {
+          print('onDidReceiveNotificationResponse');
+        }
         try {
           var jsonObject = json.decode(notificationResponse.payload ?? '');
           String type = jsonObject['type'];
@@ -84,9 +87,9 @@ class FirebaseService {
           String objectType = jsonObject['object_type'];
 
           NavigationUtils.handleNotificationNavigate(
-              _context!, type, objectType, objectId);
+              _router!, _context!, type, objectType, objectId);
         } catch (e) {
-          print("Error parsing JSON: $e");
+          print('Error parsing JSON: $e');
         }
       },
     );
@@ -161,8 +164,23 @@ class FirebaseService {
   void _setUpMessageHandlers() {
     FirebaseMessaging.onMessage.listen(showFlutterNotification);
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-    FirebaseMessaging.onMessageOpenedApp
-        .listen(_firebaseMessagingBackgroundHandler);
+    FirebaseMessaging.onMessageOpenedApp.listen(onPressNotification);
+  }
+  void onPressNotification(RemoteMessage message) {
+    if (kDebugMode) {
+      print('onPressNotification: ${message.data}');
+    }
+    try {
+      var jsonObject = message.data;
+      String type = jsonObject['type'];
+      String objectId = jsonObject['object_id'];
+      String objectType = jsonObject['object_type'];
+
+      NavigationUtils.handleNotificationNavigate(
+          _router!, _context!, type, objectType, objectId);
+    } catch (e) {
+      print('Something wrong when onPressNotification: $e');
+    }
   }
 
   void addFcmToken() async {

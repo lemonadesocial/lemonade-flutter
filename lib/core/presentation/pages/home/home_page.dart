@@ -67,22 +67,11 @@ class _HomeListingView extends StatefulWidget {
 }
 
 class _HomePageViewState extends State<_HomeListingView> {
-  final _appRouter = AppRouter();
 
   @override
   void initState() {
     super.initState();
     getIt<ShakeService>().startShakeDetection(context);
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      getIt<MatrixService>().backgroundPush.setupContextAndRouter(
-            router: _appRouter,
-            context: context,
-          );
-      getIt<FirebaseService>().setupContextAndRouter(
-        router: _appRouter,
-        context: context,
-      );
-    });
   }
 
   @override
