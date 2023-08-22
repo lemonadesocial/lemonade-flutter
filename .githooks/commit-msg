@@ -12,15 +12,15 @@ RED="\e[31m"
 ENDCOLOR="\e[0m"
 
 printMessage() {
-    printf "${YELLOW}Lemonade : $1${ENDCOLOR}\n"
+    printf "${YELLOW}🍋 Lemonade : $1${ENDCOLOR}\n"
 }
 
 printSuccess() {
-    printf "${GREEN}Lemonade : $1${ENDCOLOR}\n"
+    printf "${GREEN}🍋 Lemonade : $1${ENDCOLOR}\n"
 }
 
 printError() {
-    printf "${RED}Lemonade : $1${ENDCOLOR}\n"
+    printf "${RED}❌ Lemonade : $1${ENDCOLOR}\n"
 }
 
 printMessage "Running the Lemonade commit-msg hook."
