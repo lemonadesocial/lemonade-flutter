@@ -27,6 +27,7 @@ final getBadgesQuery = gql('''
   \$city: String
   \$country: String
   \$distance: Float
+  \$id: [MongoID!]
 ) {
   getBadges(
     skip: \$skip
@@ -35,6 +36,7 @@ final getBadgesQuery = gql('''
     city: \$city
     country: \$country
     distance: \$distance
+    _id: \$id
   ) {
     _id
     city

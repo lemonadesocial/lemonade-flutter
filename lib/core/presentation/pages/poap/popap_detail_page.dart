@@ -21,7 +21,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class PopapDetailPage extends StatelessWidget {
+class PopapDetailPage extends StatefulWidget {
   const PopapDetailPage({
     super.key,
     this.scrollController,
@@ -30,6 +30,20 @@ class PopapDetailPage extends StatelessWidget {
 
   final ScrollController? scrollController;
   final TokenDetail? tokenDetail;
+
+  @override
+  State<PopapDetailPage> createState() => _PopapDetailPageState();
+}
+
+class _PopapDetailPageState extends State<PopapDetailPage> {
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      context.read<BadgeDetailBloc>().add(const BadgeDetailEvent.fetch());
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,13 +74,13 @@ class PopapDetailPage extends StatelessWidget {
                         controller: scrollController,
                         slivers: [
                           SliverToBoxAdapter(
-                            child: _PoapImage(tokenDetail: tokenDetail),
+                            child: _PoapImage(tokenDetail: widget.tokenDetail),
                           ),
                           SliverToBoxAdapter(
                             child: SizedBox(height: Spacing.medium),
                           ),
                           SliverToBoxAdapter(
-                            child: _PoapInfo(tokenDetail: tokenDetail, badge: badge),
+                            child: _PoapInfo(tokenDetail: widget.tokenDetail, badge: badge),
                           ),
                           SliverToBoxAdapter(
                             child: SizedBox(height: Spacing.medium),
@@ -78,7 +92,7 @@ class PopapDetailPage extends StatelessWidget {
                             child: SizedBox(height: Spacing.medium),
                           ),
                           SliverToBoxAdapter(
-                            child: _PoapDescription(tokenDetail: tokenDetail),
+                            child: _PoapDescription(tokenDetail: widget.tokenDetail),
                           ),
                         ],
                       ),
@@ -251,9 +265,11 @@ class _PoapDetailFooterState extends State<PoapDetailFooter> with WidgetsBinding
     switch (state) {
       case AppLifecycleState.resumed:
         setState(() {});
+        context.read<BadgeDetailBloc>().add(const BadgeDetailEvent.fetch());
         break;
       // ignore: no_default_cases
       default:
+        break;
     }
   }
 

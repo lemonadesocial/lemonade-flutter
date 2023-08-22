@@ -12,7 +12,7 @@ class GetBadgesInput with _$GetBadgesInput {
     int? skip,
     int? limit,
     List<String>? list,
-    @JsonKey(name: '_id') List<String>? id,
+    List<String>? id,
     String? city,
     String? country,
     double? distance,

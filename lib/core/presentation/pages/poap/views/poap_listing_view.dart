@@ -135,6 +135,7 @@ class _PoapListingViewState extends State<PoapListingView> {
                           itemCount: badges.length,
                           separatorBuilder: (context, i) => const SizedBox(height: 12),
                           itemBuilder: (context, i) => PoapItem(
+                            key: ValueKey(badges[i].id),
                             badge: badges[i],
                           ),
                         );

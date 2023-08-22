@@ -23,7 +23,6 @@ mixin _$GetBadgesInput {
   int? get skip => throw _privateConstructorUsedError;
   int? get limit => throw _privateConstructorUsedError;
   List<String>? get list => throw _privateConstructorUsedError;
-  @JsonKey(name: '_id')
   List<String>? get id => throw _privateConstructorUsedError;
   String? get city => throw _privateConstructorUsedError;
   String? get country => throw _privateConstructorUsedError;
@@ -45,7 +44,7 @@ abstract class $GetBadgesInputCopyWith<$Res> {
       {int? skip,
       int? limit,
       List<String>? list,
-      @JsonKey(name: '_id') List<String>? id,
+      List<String>? id,
       String? city,
       String? country,
       double? distance});
@@ -117,7 +116,7 @@ abstract class _$$_GetBadgesInputCopyWith<$Res>
       {int? skip,
       int? limit,
       List<String>? list,
-      @JsonKey(name: '_id') List<String>? id,
+      List<String>? id,
       String? city,
       String? country,
       double? distance});
@@ -183,7 +182,7 @@ class _$_GetBadgesInput implements _GetBadgesInput {
       {this.skip,
       this.limit,
       final List<String>? list,
-      @JsonKey(name: '_id') final List<String>? id,
+      final List<String>? id,
       this.city,
       this.country,
       this.distance})
@@ -209,7 +208,6 @@ class _$_GetBadgesInput implements _GetBadgesInput {
 
   final List<String>? _id;
   @override
-  @JsonKey(name: '_id')
   List<String>? get id {
     final value = _id;
     if (value == null) return null;
@@ -276,7 +274,7 @@ abstract class _GetBadgesInput implements GetBadgesInput {
       {final int? skip,
       final int? limit,
       final List<String>? list,
-      @JsonKey(name: '_id') final List<String>? id,
+      final List<String>? id,
       final String? city,
       final String? country,
       final double? distance}) = _$_GetBadgesInput;
@@ -291,7 +289,6 @@ abstract class _GetBadgesInput implements GetBadgesInput {
   @override
   List<String>? get list;
   @override
-  @JsonKey(name: '_id')
   List<String>? get id;
   @override
   String? get city;

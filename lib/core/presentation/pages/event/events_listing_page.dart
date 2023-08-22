@@ -3,6 +3,7 @@ import 'package:app/core/application/event/events_listing_bloc/attending_events_
 import 'package:app/core/application/event/events_listing_bloc/base_events_listing_bloc.dart';
 import 'package:app/core/application/event/events_listing_bloc/home_events_listing_bloc.dart';
 import 'package:app/core/application/event/events_listing_bloc/hosting_events_listing_bloc.dart';
+import 'package:app/core/config.dart';
 import 'package:app/core/domain/event/event_enums.dart';
 import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/core/domain/event/input/get_events_listing_input.dart';
@@ -126,6 +127,14 @@ class _EventsListingViewState extends State<_EventsListingView> {
     final t = Translations.of(context);
     final themeColor = Theme.of(context).colorScheme;
     return Scaffold(
+      floatingActionButton: !AppConfig.isProduction
+          ? FloatingActionButton(
+              onPressed: () {
+                AutoRouter.of(context).navigate(const PoapListingRoute());
+              },
+              child: const Text('badge'),
+            )
+          : null,
       appBar: LemonAppBar(
         title: t.event.events,
         leading: BurgerMenu(),

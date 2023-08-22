@@ -43,10 +43,7 @@ class PoapItem extends StatelessWidget {
             ),
         ),
         BlocProvider(
-          create: (context) => BadgeDetailBloc(defaultBadge: badge)
-            ..add(
-              const BadgeDetailEvent.fetch(),
-            ),
+          create: (context) => BadgeDetailBloc(defaultBadge: badge),
         )
       ],
       child: const _PoapItemView(),
