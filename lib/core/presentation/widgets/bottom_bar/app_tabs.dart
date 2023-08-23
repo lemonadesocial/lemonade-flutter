@@ -4,6 +4,7 @@ import 'package:app/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+
 enum AppTab {
   home,
   events,

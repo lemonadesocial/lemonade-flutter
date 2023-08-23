@@ -2,8 +2,6 @@ import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/presentation/widgets/bottom_bar/app_tabs.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
-import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
-import 'package:app/gen/assets.gen.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
@@ -11,7 +9,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class BottomBar extends StatelessWidget {
+class BottomBar extends StatefulWidget {
+  @override
+  _BottomBarState createState() => _BottomBarState();
+}
+
+class _BottomBarState extends State<BottomBar> {
   AppTab _selectedTab = AppTab.home;
 
   @override
@@ -32,127 +35,68 @@ class BottomBar extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: tabs.map((tabData) {
-              return _buildItem(
-                context,
-                tab: tabData.tab,
-                icon: tabData.icon,
-                path: tabData.route,
-              );
+              return _buildTabItem(context, tabData);
             }).toList(),
           ),
-          // Row(
-          //   crossAxisAlignment: CrossAxisAlignment.start,
-          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //   children: [
-          //     _buildItem(
-          //       context,
-          //       icon: ThemeSvgIcon(
-          //         builder: (filter) => Assets.icons.icHouse.svg(
-          //           colorFilter: filter,
-          //           width: 24.w,
-          //           height: 24.w,
-          //         ),
-          //       ),
-          //       path: '/',
-          //     ),
-          //     _buildItem(
-          //       context,
-          //       icon: ThemeSvgIcon(
-          //         builder: (filter) => Assets.icons.icHouseParty.svg(
-          //           colorFilter: filter,
-          //           width: 24.w,
-          //           height: 24.w,
-          //         ),
-          //       ),
-          //       path: '/events',
-          //     ),
-          //     _buildItem(
-          //       context,
-          //       icon: ThemeSvgIcon(
-          //         builder: (filter) => Assets.icons.icInbox.svg(
-          //           colorFilter: filter,
-          //           width: 24.w,
-          //           height: 24.w,
-          //         ),
-          //       ),
-          //       path: '/notification',
-          //     ),
-          //     _buildItem(
-          //       context,
-          //       icon: ThemeSvgIcon(
-          //         builder: (filter) => Assets.icons.icWallet.svg(
-          //           colorFilter: filter,
-          //           width: 24.w,
-          //           height: 24.w,
-          //         ),
-          //       ),
-          //       path: '/wallet',
-          //     ),
-          //     _ProfileAuthGuardItem(
-          //       authenticatedChild: BlocBuilder<AuthBloc, AuthState>(
-          //         builder: (context, authState) => _buildItem(
-          //           context,
-          //           path: '/me',
-          //           icon: Center(
-          //             child: LemonCircleAvatar(
-          //               size: 24.w,
-          //               url: authState.maybeWhen(
-          //                 authenticated: (authSession) =>
-          //                     authSession.userAvatar ?? '',
-          //                 orElse: () => '',
-          //               ),
-          //             ),
-          //           ),
-          //         ),
-          //       ),
-          //       unauthenticatedChild: _buildItem(
-          //         context,
-          //         path: '/login',
-          //         icon: Icon(Icons.person,
-          //             color: colorScheme.onPrimary, size: 24),
-          //       ),
-          //       processingChild: _buildItem(
-          //         context,
-          //         path: '',
-          //         icon: Loading.defaultLoading(context),
-          //       ),
-          //     ),
-          // ],
-          // )
         ],
       ),
     );
   }
 
-  Widget _buildItem(
-    BuildContext context, {
-    required AppTab tab,
-    required Widget icon,
-    required String path,
-  }) {
-    final tabData = tabs.firstWhere((data) => data.tab == tab);
-    final isSelected = _selectedTab == tab;
+  Widget _buildTabItem(BuildContext context, TabData tabData) {
+    final isSelected = _selectedTab == tabData.tab;
+    return _buildItem(context, tabData, isSelected);
+  }
 
+  Widget _buildItem(BuildContext context, TabData tabData, bool isSelected) {
+    final colorScheme = Theme.of(context).colorScheme;
+    Widget icon;
+
+    if (tabData.tab == AppTab.profile) {
+      icon = BlocBuilder<AuthBloc, AuthState>(
+        builder: (context, authState) {
+          if (authState is AuthStateAuthenticated) {
+            return Center(
+              child: LemonCircleAvatar(
+                size: 24.w,
+                url: authState.authSession.userAvatar ?? '',
+              ),
+            );
+          } else if (authState is AuthStateProcessing) {
+            return Loading.defaultLoading(context);
+          } else {
+            return Icon(Icons.person, color: colorScheme.onPrimary, size: 24);
+          }
+        },
+      );
+    } else {
+      icon = tabData.icon;
+    }
     return Expanded(
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
-        onTap: () => AutoRouter.of(context)
-            .navigateNamed(path, includePrefixMatches: true),
+        onTap: () {
+          setState(() {
+            _selectedTab = tabData.tab;
+          });
+          AutoRouter.of(context)
+              .navigateNamed(tabData.route, includePrefixMatches: true);
+        },
         child: Container(
           color: Colors.transparent,
           padding: EdgeInsets.symmetric(
-              horizontal: Spacing.xSmall, vertical: Spacing.xSmall),
+            horizontal: Spacing.xSmall,
+            vertical: Spacing.xSmall,
+          ),
           child: Container(
             width: 54.6,
             height: 36,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(18),
-              color: isSelected
-                  ? LemonColor.white12
-                  : Colors.transparent,
+              color: isSelected ? LemonColor.white09 : Colors.transparent,
             ),
             padding: EdgeInsets.symmetric(vertical: Spacing.superExtraSmall),
-            child: tabData.icon,
+            child: icon,
           ),
         ),
       ),
