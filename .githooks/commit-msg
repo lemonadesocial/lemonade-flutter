@@ -45,3 +45,5 @@ then
     printError "Please fix your commit message to match coding standards"
     exit 1
 fi
+
+printSuccess "Your commit match coding standards"
