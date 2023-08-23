@@ -2,6 +2,7 @@ import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/presentation/widgets/bottom_bar/app_tabs.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
+import 'package:app/core/utils/avatar_utils.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
@@ -26,7 +27,7 @@ class _BottomBarState extends State<BottomBar>
     super.initState();
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 450),
     );
     _animation = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(
@@ -109,7 +110,10 @@ class _BottomBarState extends State<BottomBar>
             return Center(
               child: LemonCircleAvatar(
                 size: 24.w,
-                url: authState.authSession.userAvatar ?? '',
+                url: AvatarUtils.getProfileAvatar(
+                  userAvatar: authState.authSession.userAvatar,
+                  userId: authState.authSession.userId,
+                ),
               ),
             );
           } else if (authState is AuthStateProcessing) {
@@ -158,7 +162,7 @@ class _BottomBarState extends State<BottomBar>
               height: 36,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(18),
-                color: isSelected ? LemonColor.white09 : Colors.transparent,
+                color: isSelected ? LemonColor.white12 : Colors.transparent,
               ),
             ),
           );
@@ -168,7 +172,7 @@ class _BottomBarState extends State<BottomBar>
           height: 36,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(18),
-            color: isSelected ? LemonColor.white09 : Colors.transparent,
+            color: isSelected ? LemonColor.white12 : Colors.transparent,
           ),
         );
       },
