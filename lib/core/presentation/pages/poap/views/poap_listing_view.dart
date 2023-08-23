@@ -23,7 +23,7 @@ class PoapListingView extends StatefulWidget {
     super.key,
     required this.controller,
   });
-  final PoapListingPageController controller;
+  final PoapListingPage controller;
 
   @override
   State<PoapListingView> createState() => _PoapListingViewState();

@@ -7,14 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 @RoutePage()
-class PoapListingPage extends StatefulWidget {
-  const PoapListingPage({super.key});
+class PoapListingPage extends StatelessWidget {
+  PoapListingPage({super.key});
 
-  @override
-  State<PoapListingPage> createState() => PoapListingPageController();
-}
-
-class PoapListingPageController extends State<PoapListingPage> {
   final _badgeListingBloc = BadgesListingBloc();
 
   bool badgeCollectionListenWhen(

@@ -2,6 +2,7 @@ import 'package:app/core/domain/badge/entities/badge_entities.dart';
 import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/utils/location_utils.dart';
 import 'package:app/injection/register_module.dart';
+import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 
 @LazySingleton()
@@ -56,6 +57,8 @@ class BadgeService {
           ),
         );
       }
-    } catch (error) {}
+    } catch (error) {
+      debugPrint(error.toString());
+    }
   }
 }

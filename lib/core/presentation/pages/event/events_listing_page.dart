@@ -130,7 +130,7 @@ class _EventsListingViewState extends State<_EventsListingView> {
       floatingActionButton: !AppConfig.isProduction
           ? FloatingActionButton(
               onPressed: () {
-                AutoRouter.of(context).navigate(const PoapListingRoute());
+                AutoRouter.of(context).navigate(PoapListingRoute());
               },
               child: const Text('badge'),
             )

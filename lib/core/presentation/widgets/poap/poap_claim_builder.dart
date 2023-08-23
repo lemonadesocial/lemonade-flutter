@@ -16,20 +16,6 @@ class PoapClaimBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _PoapClaimBuilderView(
-      builder: builder,
-    );
-  }
-}
-
-class _PoapClaimBuilderView extends StatelessWidget {
-  const _PoapClaimBuilderView({
-    required this.builder,
-  });
-  final Widget Function(BuildContext context, ClaimPoapState state, bool locationEnabled) builder;
-
-  @override
-  Widget build(BuildContext context) {
     return FutureBuilder<bool>(
       future: getIt<LocationUtils>().checkPermission(),
       builder: (context, snapshot) {

@@ -23,6 +23,7 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 List<String> get _mockLocations => ['New york', 'California', 'Washington'];
 
@@ -48,9 +49,9 @@ class _PoapFilterBottomSheetViewState extends State<PoapFilterBottomSheetView> w
 
   final Duration _animationDuration = const Duration(milliseconds: 300);
 
-  final double _searchBarHeight = 42;
+  final double _searchBarHeight = 42.w;
 
-  final double _poapCreatorItemWidth = 78;
+  final double _poapCreatorItemWidth = 78.w;
 
   List<double> get snapSizes => widget.snapSizes; //const [.2, .8, 1];
 
@@ -172,7 +173,7 @@ class _PoapFilterBottomSheetViewState extends State<PoapFilterBottomSheetView> w
       child: LayoutBuilder(
         builder: (context, constraints) {
           return Container(
-            constraints: const BoxConstraints(maxHeight: 150),
+            constraints: BoxConstraints(maxHeight: 150.w),
             child: BlocBuilder<BadgeCollectionsBloc, BadgeCollectionsState>(
               builder: (context, state) => state.when(
                 initial: () => SafeArea(
@@ -236,7 +237,7 @@ class _PoapFilterBottomSheetViewState extends State<PoapFilterBottomSheetView> w
                   maxWidth = min(maxWidth, fourItemInRowWidth);
                 }
                 final numOfItems = AnimationUtils.calculateMaxItemsInRow(
-                  rowWidth: maxWidth - 2 * Spacing.smMedium,
+                  rowWidth: maxWidth.w - 2 * Spacing.smMedium,
                   itemWidth: _poapCreatorItemWidth,
                   separatorWidth: Spacing.small,
                 );
@@ -253,7 +254,7 @@ class _PoapFilterBottomSheetViewState extends State<PoapFilterBottomSheetView> w
                       // Render bottom space for list
                       if (index == chunkListResult.length) {
                         return Container(
-                          height: 220,
+                          height: 220.w,
                           color: Colors.transparent,
                         );
                       }

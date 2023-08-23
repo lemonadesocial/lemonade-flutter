@@ -23,6 +23,7 @@ import 'package:app/theme/typo.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
 class PoapItem extends StatelessWidget {
@@ -144,8 +145,8 @@ class _PoapItemImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 72,
-      height: 72,
+      width: 72.w,
+      height: 72.w,
       decoration: ShapeDecoration(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
@@ -224,7 +225,7 @@ class _PoapItemButtons extends StatelessWidget {
       displayDistance = NumberFormat('##.##').format(badge.distance ?? 0);
     }
     return SizedBox(
-      height: 30,
+      height: 30.w,
       child: Row(
         children: [
           LemonOutlineButton(

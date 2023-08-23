@@ -4,6 +4,7 @@ import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PoapCollectionItem extends StatelessWidget {
   const PoapCollectionItem({
@@ -23,14 +24,14 @@ class PoapCollectionItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    if(!visible) return const SizedBox(width: 78);
+    if(!visible) return SizedBox(width: 78.w);
 
     return InkWell(
       onTap: () {
         onTap?.call(badgeCollection);
       },
       child: SizedBox(
-        width: 78,
+        width: 78.w,
         child: Column(
                 children: [
                   Container(
