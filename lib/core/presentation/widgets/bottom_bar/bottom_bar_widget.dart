@@ -8,7 +8,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hive/hive.dart';
 
 class BottomBar extends StatefulWidget {
   @override
@@ -75,7 +74,7 @@ class _BottomBarState extends State<BottomBar>
   }
 
   Widget _buildItem(BuildContext context, TabData tabData, bool isSelected) {
-    final icon = _buildIcon(context, tabData);
+    final icon = _buildIcon(context, tabData, isSelected);
     return Expanded(
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
@@ -100,7 +99,9 @@ class _BottomBarState extends State<BottomBar>
     );
   }
 
-  Widget _buildIcon(BuildContext context, TabData tabData) {
+  Widget _buildIcon(BuildContext context, TabData tabData, bool isSelected) {
+    final icon = tabData.icon;
+    final selectedIcon = tabData.selectedIcon;
     if (tabData.tab == AppTab.profile) {
       return BlocBuilder<AuthBloc, AuthState>(
         builder: (context, authState) {
@@ -120,7 +121,7 @@ class _BottomBarState extends State<BottomBar>
         },
       );
     } else {
-      return tabData.icon;
+      return isSelected ? selectedIcon : icon;
     }
   }
 

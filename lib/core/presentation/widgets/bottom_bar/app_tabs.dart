@@ -14,10 +14,11 @@ enum AppTab {
 }
 
 class TabData {
-  TabData(this.tab, this.route, this.icon);
+  TabData(this.tab, this.route, this.icon, this.selectedIcon);
   final AppTab tab;
   final String route;
   final Widget icon;
+  final Widget selectedIcon;
 }
 
 final List<TabData> tabs = [
@@ -31,12 +32,26 @@ final List<TabData> tabs = [
         height: 24.w,
       ),
     ),
+    ThemeSvgIcon(
+      builder: (filter) => Assets.icons.icoHouseFilled.svg(
+        colorFilter: filter,
+        width: 24.w,
+        height: 24.w,
+      ),
+    ),
   ),
   TabData(
     AppTab.events,
     '/events',
     ThemeSvgIcon(
-      builder: (filter) => Assets.icons.icHouseParty.svg(
+      builder: (filter) => Assets.icons.icDiscover.svg(
+        colorFilter: filter,
+        width: 24.w,
+        height: 24.w,
+      ),
+    ),
+    ThemeSvgIcon(
+      builder: (filter) => Assets.icons.icDiscoverFilled.svg(
         colorFilter: filter,
         width: 24.w,
         height: 24.w,
@@ -47,7 +62,14 @@ final List<TabData> tabs = [
     AppTab.notification,
     '/notification',
     ThemeSvgIcon(
-      builder: (filter) => Assets.icons.icInbox.svg(
+      builder: (filter) => Assets.icons.icNotification.svg(
+        colorFilter: filter,
+        width: 24.w,
+        height: 24.w,
+      ),
+    ),
+    ThemeSvgIcon(
+      builder: (filter) => Assets.icons.icNotificationFilled.svg(
         colorFilter: filter,
         width: 24.w,
         height: 24.w,
@@ -64,12 +86,26 @@ final List<TabData> tabs = [
         height: 24.w,
       ),
     ),
+    ThemeSvgIcon(
+      builder: (filter) => Assets.icons.icWalletFilled.svg(
+        colorFilter: filter,
+        width: 24.w,
+        height: 24.w,
+      ),
+    ),
   ),
   TabData(
     AppTab.profile,
     '/me',
     ThemeSvgIcon(
       builder: (filter) => Assets.icons.icHouse.svg(
+        colorFilter: filter,
+        width: 24.w,
+        height: 24.w,
+      ),
+    ),
+    ThemeSvgIcon(
+      builder: (filter) => Assets.icons.icoHouseFilled.svg(
         colorFilter: filter,
         width: 24.w,
         height: 24.w,
