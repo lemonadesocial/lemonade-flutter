@@ -43,3 +43,26 @@ Map<String, dynamic> _$$_GetTokensInputToJson(_$_GetTokensInput instance) {
   writeNotNull('limit', instance.limit);
   return val;
 }
+
+_$_GetTokenDetailInput _$$_GetTokenDetailInputFromJson(
+        Map<String, dynamic> json) =>
+    _$_GetTokenDetailInput(
+      id: json['id'] as String,
+      network: json['network'] as String?,
+    );
+
+Map<String, dynamic> _$$_GetTokenDetailInputToJson(
+    _$_GetTokenDetailInput instance) {
+  final val = <String, dynamic>{
+    'id': instance.id,
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('network', instance.network);
+  return val;
+}

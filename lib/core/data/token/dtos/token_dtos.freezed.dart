@@ -654,6 +654,220 @@ abstract class _TokenComplexDto implements TokenComplexDto {
       throw _privateConstructorUsedError;
 }
 
+TokenDetailDto _$TokenDetailDtoFromJson(Map<String, dynamic> json) {
+  return _TokenDetailDto.fromJson(json);
+}
+
+/// @nodoc
+mixin _$TokenDetailDto {
+  String? get id => throw _privateConstructorUsedError;
+  String? get network => throw _privateConstructorUsedError;
+  String? get tokenId => throw _privateConstructorUsedError;
+  TokenMetadataDto? get metadata => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $TokenDetailDtoCopyWith<TokenDetailDto> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $TokenDetailDtoCopyWith<$Res> {
+  factory $TokenDetailDtoCopyWith(
+          TokenDetailDto value, $Res Function(TokenDetailDto) then) =
+      _$TokenDetailDtoCopyWithImpl<$Res, TokenDetailDto>;
+  @useResult
+  $Res call(
+      {String? id,
+      String? network,
+      String? tokenId,
+      TokenMetadataDto? metadata});
+
+  $TokenMetadataDtoCopyWith<$Res>? get metadata;
+}
+
+/// @nodoc
+class _$TokenDetailDtoCopyWithImpl<$Res, $Val extends TokenDetailDto>
+    implements $TokenDetailDtoCopyWith<$Res> {
+  _$TokenDetailDtoCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = freezed,
+    Object? network = freezed,
+    Object? tokenId = freezed,
+    Object? metadata = freezed,
+  }) {
+    return _then(_value.copyWith(
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String?,
+      network: freezed == network
+          ? _value.network
+          : network // ignore: cast_nullable_to_non_nullable
+              as String?,
+      tokenId: freezed == tokenId
+          ? _value.tokenId
+          : tokenId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      metadata: freezed == metadata
+          ? _value.metadata
+          : metadata // ignore: cast_nullable_to_non_nullable
+              as TokenMetadataDto?,
+    ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $TokenMetadataDtoCopyWith<$Res>? get metadata {
+    if (_value.metadata == null) {
+      return null;
+    }
+
+    return $TokenMetadataDtoCopyWith<$Res>(_value.metadata!, (value) {
+      return _then(_value.copyWith(metadata: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$_TokenDetailDtoCopyWith<$Res>
+    implements $TokenDetailDtoCopyWith<$Res> {
+  factory _$$_TokenDetailDtoCopyWith(
+          _$_TokenDetailDto value, $Res Function(_$_TokenDetailDto) then) =
+      __$$_TokenDetailDtoCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {String? id,
+      String? network,
+      String? tokenId,
+      TokenMetadataDto? metadata});
+
+  @override
+  $TokenMetadataDtoCopyWith<$Res>? get metadata;
+}
+
+/// @nodoc
+class __$$_TokenDetailDtoCopyWithImpl<$Res>
+    extends _$TokenDetailDtoCopyWithImpl<$Res, _$_TokenDetailDto>
+    implements _$$_TokenDetailDtoCopyWith<$Res> {
+  __$$_TokenDetailDtoCopyWithImpl(
+      _$_TokenDetailDto _value, $Res Function(_$_TokenDetailDto) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = freezed,
+    Object? network = freezed,
+    Object? tokenId = freezed,
+    Object? metadata = freezed,
+  }) {
+    return _then(_$_TokenDetailDto(
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String?,
+      network: freezed == network
+          ? _value.network
+          : network // ignore: cast_nullable_to_non_nullable
+              as String?,
+      tokenId: freezed == tokenId
+          ? _value.tokenId
+          : tokenId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      metadata: freezed == metadata
+          ? _value.metadata
+          : metadata // ignore: cast_nullable_to_non_nullable
+              as TokenMetadataDto?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$_TokenDetailDto implements _TokenDetailDto {
+  const _$_TokenDetailDto({this.id, this.network, this.tokenId, this.metadata});
+
+  factory _$_TokenDetailDto.fromJson(Map<String, dynamic> json) =>
+      _$$_TokenDetailDtoFromJson(json);
+
+  @override
+  final String? id;
+  @override
+  final String? network;
+  @override
+  final String? tokenId;
+  @override
+  final TokenMetadataDto? metadata;
+
+  @override
+  String toString() {
+    return 'TokenDetailDto(id: $id, network: $network, tokenId: $tokenId, metadata: $metadata)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_TokenDetailDto &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.network, network) || other.network == network) &&
+            (identical(other.tokenId, tokenId) || other.tokenId == tokenId) &&
+            (identical(other.metadata, metadata) ||
+                other.metadata == metadata));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, id, network, tokenId, metadata);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$_TokenDetailDtoCopyWith<_$_TokenDetailDto> get copyWith =>
+      __$$_TokenDetailDtoCopyWithImpl<_$_TokenDetailDto>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_TokenDetailDtoToJson(
+      this,
+    );
+  }
+}
+
+abstract class _TokenDetailDto implements TokenDetailDto {
+  const factory _TokenDetailDto(
+      {final String? id,
+      final String? network,
+      final String? tokenId,
+      final TokenMetadataDto? metadata}) = _$_TokenDetailDto;
+
+  factory _TokenDetailDto.fromJson(Map<String, dynamic> json) =
+      _$_TokenDetailDto.fromJson;
+
+  @override
+  String? get id;
+  @override
+  String? get network;
+  @override
+  String? get tokenId;
+  @override
+  TokenMetadataDto? get metadata;
+  @override
+  @JsonKey(ignore: true)
+  _$$_TokenDetailDtoCopyWith<_$_TokenDetailDto> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
 RegistryDto _$RegistryDtoFromJson(Map<String, dynamic> json) {
   return _RegistryDto.fromJson(json);
 }

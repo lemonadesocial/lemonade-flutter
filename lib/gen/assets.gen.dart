@@ -143,10 +143,6 @@ class $AssetsIconsGen {
   SvgGenImage get icJoinSpace =>
       const SvgGenImage('assets/icons/ic_join_space.svg');
 
-  /// File path: assets/icons/ic_lemon_filled.svg
-  SvgGenImage get icLemonFilled =>
-      const SvgGenImage('assets/icons/ic_lemon_filled.svg');
-
   /// File path: assets/icons/ic_lemon_filled_background.png
   AssetGenImage get icLemonFilledBackground =>
       const AssetGenImage('assets/icons/ic_lemon_filled_background.png');
@@ -258,7 +254,6 @@ class $AssetsIconsGen {
         icInsights,
         icInstagram,
         icJoinSpace,
-        icLemonFilled,
         icLemonFilledBackground,
         icLemonFilledStart,
         icLemonOutline,

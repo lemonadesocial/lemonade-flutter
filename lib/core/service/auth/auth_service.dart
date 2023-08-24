@@ -16,7 +16,7 @@ class AuthService {
   Stream<OAuthTokenState> get tokenStateStream => appOAuth.tokenStateStream;
 
   Future<Either<Failure, bool>> login() async {
-    var res = await appOAuth.login();
+    final res = await appOAuth.login();
     return res.fold(
       (l) => Left(Failure()),
       (success) {
@@ -30,7 +30,7 @@ class AuthService {
 
   Future<Either<Failure, bool>> logout() async {
     firebaseService.removeFcmToken();
-    var res = await appOAuth.logout();
+    final res = await appOAuth.logout();
     return res.fold(
       (l) => Left(Failure()),
       (success) {
@@ -47,6 +47,8 @@ class AuthService {
       userAvatar: user.imageAvatar,
       userDisplayName: user.displayName,
       username: user.username,
+      wallets: user.wallets,
+      walletCustodial: user.walletCustodial,
     );
   }
 }

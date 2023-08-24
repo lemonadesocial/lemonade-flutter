@@ -2,11 +2,11 @@ import 'package:app/core/config.dart';
 import 'package:app/core/oauth/oauth.dart';
 import 'package:app/core/service/firebase/firebase_service.dart';
 import 'package:app/injection/register_module.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:injectable/injectable.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shake/shake.dart';
-import 'package:flutter/material.dart';
 
 @lazySingleton
 class ShakeService {
@@ -16,19 +16,13 @@ class ShakeService {
   ShakeDetector? _detector;
 
   void startShakeDetection(BuildContext context) {
-    if (_detector == null) {
-      _detector = ShakeDetector.autoStart(
+    _detector ??= ShakeDetector.autoStart(
         onPhoneShake: () {
           if (!_isDialogShowing) {
             showDebugInfoDialog(context);
           }
         },
-        minimumShakeCount: 1,
-        shakeSlopTimeMS: 500,
-        shakeCountResetTime: 3000,
-        shakeThresholdGravity: 2.7,
       );
-    }
   }
 
   void stopShakeDetection() {
@@ -37,47 +31,45 @@ class ShakeService {
 
   Future<void> showDebugInfoDialog(BuildContext context) async {
     _isDialogShowing = true;
-    String? fcmToken = await firebaseService.getToken();
+    final fcmToken = await firebaseService.getToken();
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (BuildContext context) {
+      builder: (context) {
         return Dialog(
           child: StatefulBuilder(
             builder: (context, setState) {
               return Container(
-                padding: EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       'Debug info',
-                      style: TextStyle(
-                          fontSize: 24.0, fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(height: 16.0),
+                    const SizedBox(height: 16),
                     Text(
-                      "Environment: " + AppConfig.env,
+                      'Environment: ' + AppConfig.env,
                       textAlign: TextAlign.left,
                     ),
-                    SizedBox(height: 16.0),
+                    const SizedBox(height: 16),
                     Text(
-                      "Backend url: " + AppConfig.backedUrl,
+                      'Backend url: ' + AppConfig.backedUrl,
                       textAlign: TextAlign.left,
                     ),
-                    SizedBox(height: 16.0),
+                    const SizedBox(height: 16),
                     Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Expanded(
                           child: Text(
-                            "FCM Token: " + (fcmToken ?? 'N/A'),
+                            "FCM Token: ${fcmToken ?? 'N/A'}",
                             textAlign: TextAlign.left,
                           ),
                         ),
                         IconButton(
-                          icon: Icon(Icons.copy),
+                          icon: const Icon(Icons.copy),
                           onPressed: () {
                             _copyToClipboard(fcmToken);
                             setState(() {
@@ -88,21 +80,21 @@ class ShakeService {
                       ],
                     ),
                     if (_isCopied)
-                      Padding(
-                        padding: EdgeInsets.only(top: 8.0),
+                      const Padding(
+                        padding: EdgeInsets.only(top: 8),
                         child: Text(
                           'FCM Token copied to clipboard',
                           style: TextStyle(color: Colors.green),
                         ),
                       ),
-                    SizedBox(height: 16.0),
+                    const SizedBox(height: 16),
                     FutureBuilder<PackageInfo>(
                         future: PackageInfo.fromPlatform(),
                         builder: (context, snapshot) {
                           return Text(
-                              'App version: ${snapshot.data?.version}\nBuild number: ${snapshot.data?.buildNumber}');
-                        }),
-                    SizedBox(height: 16.0),
+                              'App version: ${snapshot.data?.version}\nBuild number: ${snapshot.data?.buildNumber}',);
+                        },),
+                    const SizedBox(height: 16),
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
@@ -111,11 +103,11 @@ class ShakeService {
                           getIt<AppOauth>().forceLogout();
                           Navigator.pop(context);
                         },
-                        child: Text("Force logout"),
+                        child: const Text('Force logout'),
                       ),
                     ),
-                    SizedBox(height: 16.0),
-                    Container(
+                    const SizedBox(height: 16),
+                    SizedBox(
                       // Use Container to set button width to full
                       width: double.infinity,
                       child: ElevatedButton(
@@ -123,7 +115,7 @@ class ShakeService {
                           _isDialogShowing = false;
                           Navigator.pop(context); // Close the bottom sheet
                         },
-                        child: Text('Close'),
+                        child: const Text('Close'),
                       ),
                     ),
                   ],

@@ -8,6 +8,8 @@ const baseUserFragment = '''
   display_name
   new_photos
   image_avatar
+  wallets
+  wallet_custodial
 }
 ''';
 
@@ -162,7 +164,7 @@ const privateFragment = '''
 ''';
 
 final getMeQuery = gql('''
-  ${baseUserFragment}
+  $baseUserFragment
   query() {
     getMe() {
       ...baseUserFragment
@@ -171,8 +173,8 @@ final getMeQuery = gql('''
 ''');
 
 final getUserQuery = gql('''
-  ${baseUserFragment}
-  ${userProfileFragment}
+  $baseUserFragment
+  $userProfileFragment
 
   query (\$id: MongoID, \$username: String, \$matrix_localpart: String) {
     getUser(_id: \$id, username: \$username, matrix_localpart: \$matrix_localpart) {
