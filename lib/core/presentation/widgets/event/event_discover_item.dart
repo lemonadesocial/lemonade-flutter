@@ -86,9 +86,9 @@ class _EventInfo extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(
-          width: 80.w,
+          width: 85.w,
           child: Text(
-            'Early morning y......',
+            'Living room gig',
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: Typo.small.copyWith(
