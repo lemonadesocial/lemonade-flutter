@@ -3,6 +3,7 @@ import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget? leading;
@@ -23,7 +24,7 @@ class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
   });
 
   @override
-  Size get preferredSize => Size.fromHeight(60);
+  Size get preferredSize => Size.fromHeight(60.h);
 
   @override
   Widget build(BuildContext context) {
@@ -37,17 +38,21 @@ class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
           child: Row(
             children: [
               buildLeading(),
-              if (title?.isNotEmpty ?? false)
-                Flexible(
-                  child: Center(
-                    child: Text(
-                      title!,
-                      style: Typo.extraMedium.copyWith(fontWeight: FontWeight.w600),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
+              Expanded(
+                child: Container(
+                  color: Colors.red,
+                  child: title?.isNotEmpty ?? false
+                      ? Center(
+                          child: Text(
+                            title!,
+                            style: Typo.extraMedium.copyWith(fontWeight: FontWeight.w600),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        )
+                      : const SizedBox.expand(),
                 ),
+              ),
               if (titleBuilder != null) titleBuilder!.call(context),
               buildActions(),
             ],

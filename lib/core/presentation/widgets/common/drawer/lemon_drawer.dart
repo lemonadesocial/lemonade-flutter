@@ -1,4 +1,5 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
+import 'package:app/core/domain/auth/entities/auth_session.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/drawer_utils.dart';
@@ -10,13 +11,17 @@ import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../dpos/common/dropdown_item_dpo.dart';
+import '../../floating_frosted_glass_dropdown_widget.dart';
+
 class DrawerItem {
-  final SvgGenImage icon;
-  final String label;
   DrawerItem({
     required this.icon,
     required this.label,
   });
+
+  final SvgGenImage icon;
+  final String label;
 }
 
 class LemonDrawer extends StatelessWidget {
@@ -34,9 +39,7 @@ class LemonDrawer extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             GestureDetector(
-              onTap: () {
-                DrawerUtils.closeDrawer();
-              },
+              onTap: DrawerUtils.closeDrawer,
               child: Container(
                 color: Colors.transparent,
                 padding: EdgeInsets.symmetric(
@@ -67,7 +70,7 @@ class LemonDrawer extends StatelessWidget {
               context,
               item: DrawerItem(icon: Assets.icons.icSupport, label: t.common.support),
             ),
-            Spacer(),
+            const Spacer(),
             _buildUser(context),
           ],
         ),
@@ -106,46 +109,59 @@ class LemonDrawer extends StatelessWidget {
   Widget _buildUser(
     context,
   ) {
+    return BlocBuilder<AuthBloc, AuthState>(
+      builder: (context, state) {
+        return state.when(
+          authenticated: (authSession) => authedUser(context, authSession),
+          onBoardingRequired: (authSession) => authedUser(context, authSession),
+          processing: SizedBox.shrink,
+          unknown: SizedBox.shrink,
+          unauthenticated: (_) => const SizedBox.shrink(),
+        );
+      },
+    );
+  }
+
+  Widget authedUser(BuildContext context, AuthSession authSession) {
     final colorScheme = Theme.of(context).colorScheme;
-    return BlocBuilder<AuthBloc, AuthState>(builder: (context, state) {
-      return state.when(
-        authenticated: (authSession) {
-          return Padding(
-            padding: EdgeInsets.symmetric(
-              vertical: Spacing.small,
-              horizontal: Spacing.smMedium,
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        vertical: Spacing.small,
+        horizontal: Spacing.smMedium,
+      ),
+      child: Row(
+        children: [
+          LemonCircleAvatar(
+            url: authSession.userAvatar ?? '',
+            size: 42,
+          ),
+          SizedBox(width: Spacing.xSmall),
+          Column(
+            children: [
+              Text(authSession.userDisplayName ?? ''),
+              Text(
+                '@${authSession.username ?? ''}',
+                style: Typo.small.copyWith(color: colorScheme.onSecondary),
+              ),
+            ],
+          ),
+          const Spacer(),
+          FloatingFrostedGlassDropdown(
+            items: [
+              DropdownItemDpo(
+                label: t.auth.logout,
+              ),
+            ],
+            onItemPressed: (item) {
+              context.read<AuthBloc>().add(const AuthEvent.logout());
+            },
+            child: ThemeSvgIcon(
+              color: colorScheme.onSecondary,
+              builder: (filter) => Assets.icons.icMoreHoriz.svg(colorFilter: filter),
             ),
-            child: Row(
-              children: [
-                LemonCircleAvatar(
-                  url: authSession.userAvatar ?? '',
-                  size: 42,
-                ),
-                SizedBox(width: Spacing.xSmall),
-                Column(
-                  children: [
-                    Text(authSession.userDisplayName ?? ''),
-                    Text(
-                      '@${authSession.username ?? ''}',
-                      style: Typo.small.copyWith(color: colorScheme.onSecondary),
-                    ),
-                  ],
-                ),
-                Spacer(),
-                GestureDetector(
-                  onTap: () {},
-                  child: ThemeSvgIcon(
-                      color: colorScheme.onSecondary,
-                      builder: (filter) => Assets.icons.icMoreHoriz.svg(colorFilter: filter)),
-                )
-              ],
-            ),
-          );
-        },
-        processing: () => SizedBox.shrink(),
-        unknown: () => SizedBox.shrink(),
-        unauthenticated: (_) => SizedBox.shrink(),
-      );
-    });
+          ),
+        ],
+      ),
+    );
   }
 }
