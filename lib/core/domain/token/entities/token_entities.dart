@@ -1,27 +1,9 @@
 import 'package:app/core/data/token/dtos/token_dtos.dart';
+import 'package:app/core/data/user/dtos/user_dtos.dart';
 import 'package:app/core/domain/token/token_enums.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 
 class TokenComplex {
-  final String id;
-  final String network;
-  final String tokenId;
-  final RegistryDto registry;
-  final String contract;
-  final OrderSimpleDto? order;
-  final DateTime? createdAt;
-  final String? creator;
-  final User? creatorExpanded;
-  final double? enrichCount;
-  final DateTime? enrichedAt;
-  final String? founder;
-  final User? founderExpanded;
-  final TokenMetadata? metadata;
-  final List? metadataCreatorsExpanded;
-  final String? owner;
-  final User? ownerExpanded;
-  final List<TokenRoyalty>? royalties;
-  final String? uri;
 
   const TokenComplex({
     required this.id,
@@ -63,19 +45,52 @@ class TokenComplex {
         metadataCreatorsExpanded: dto.metadataCreatorsExpanded,
         owner: dto.owner,
         ownerExpanded: dto.ownerExpanded != null ? User.fromDto(dto.ownerExpanded!) : null,
-        royalties: List.from(dto.royalties ?? []).map((item) => TokenRoyalty.fromDto(item)).toList(),
+        royalties: List<TokenRoyaltyDto>.from(dto.royalties ?? []).map(TokenRoyalty.fromDto).toList(),
         uri: dto.uri,
       );
+  final String id;
+  final String network;
+  final String tokenId;
+  final RegistryDto registry;
+  final String contract;
+  final OrderSimpleDto? order;
+  final DateTime? createdAt;
+  final String? creator;
+  final User? creatorExpanded;
+  final double? enrichCount;
+  final DateTime? enrichedAt;
+  final String? founder;
+  final User? founderExpanded;
+  final TokenMetadata? metadata;
+  final List? metadataCreatorsExpanded;
+  final String? owner;
+  final User? ownerExpanded;
+  final List<TokenRoyalty>? royalties;
+  final String? uri;
+}
+
+class TokenDetail {
+  TokenDetail({
+    this.id,
+    this.network,
+    this.tokenId,
+    this.metadata,
+  });
+
+  factory TokenDetail.fromDto(TokenDetailDto dto) => TokenDetail(
+    id: dto.id,
+    network: dto.network,
+    tokenId: dto.tokenId,
+    metadata: dto.metadata != null ? TokenMetadata.fromDto(dto.metadata!) : null,
+  );
+
+  final String? id;
+  final String? network;
+  final String? tokenId;
+  final TokenMetadata? metadata;
 }
 
 class Registry {
-  final String? id;
-  final String? network;
-  final bool? isERC721;
-  final bool? supportsERC721Metadata;
-  final bool? supportsERC2981;
-  final bool? supportsLemonadePoapV1;
-  final bool? supportsRaribleRoyaltiesV2;
 
   const Registry({
     this.id,
@@ -96,28 +111,16 @@ class Registry {
         supportsLemonadePoapV1: dto.supportsLemonadePoapV1,
         supportsRaribleRoyaltiesV2: dto.supportsRaribleRoyaltiesV2,
       );
+  final String? id;
+  final String? network;
+  final bool? isERC721;
+  final bool? supportsERC721Metadata;
+  final bool? supportsERC2981;
+  final bool? supportsLemonadePoapV1;
+  final bool? supportsRaribleRoyaltiesV2;
 }
 
 class OrderSimple {
-  final String id;
-  final String contract;
-  final DateTime createdAt;
-  final OrderKind kind;
-  final String maker;
-  final String network;
-  final bool open;
-  final String orderId;
-  final String price;
-  final String token;
-  final String? bidAmount;
-  final String? bidder;
-  final OrderCurrency? currency;
-  final User? makerExpanded;
-  final DateTime? openFrom;
-  final DateTime? openTo;
-  final String? paidAmount;
-  final String? taker;
-  final DateTime? updatedAt;
 
   const OrderSimple({
     required this.id,
@@ -162,17 +165,33 @@ class OrderSimple {
         taker: dto.taker,
         updatedAt: dto.updatedAt,
       );
+  final String id;
+  final String contract;
+  final DateTime createdAt;
+  final OrderKind kind;
+  final String maker;
+  final String network;
+  final bool open;
+  final String orderId;
+  final String price;
+  final String token;
+  final String? bidAmount;
+  final String? bidder;
+  final OrderCurrency? currency;
+  final User? makerExpanded;
+  final DateTime? openFrom;
+  final DateTime? openTo;
+  final String? paidAmount;
+  final String? taker;
+  final DateTime? updatedAt;
 }
 
 class OrderCurrency {
-  final String id;
-  final String? name;
-  final String? symbol;
 
   const OrderCurrency({
     required this.id,
-    String? this.name,
-    String? this.symbol,
+    this.name,
+    this.symbol,
   });
 
   factory OrderCurrency.fromDto(OrderCurrencyDto dto) => OrderCurrency(
@@ -180,11 +199,12 @@ class OrderCurrency {
         name: dto.name,
         symbol: dto.symbol,
       );
+  final String id;
+  final String? name;
+  final String? symbol;
 }
 
 class TokenRoyalty {
-  final String account;
-  final String value;
 
   const TokenRoyalty({
     required this.account,
@@ -195,15 +215,11 @@ class TokenRoyalty {
         account: dto.account,
         value: dto.value,
       );
+  final String account;
+  final String value;
 }
 
 class TokenMetadata {
-  final String? name;
-  final String? description;
-  final String? image;
-  final String? animation_url;
-  final String? external_url;
-  final List<String?>? creators;
 
   const TokenMetadata({
     this.name,
@@ -223,26 +239,15 @@ class TokenMetadata {
         external_url: dto.external_url,
         creators: dto.creators,
       );
+  final String? name;
+  final String? description;
+  final String? image;
+  final String? animation_url;
+  final String? external_url;
+  final List<String?>? creators;
 }
 
 class TokenSimple {
-  final String id;
-  final String network;
-  final String tokenId;
-  final String? typename;
-  final String? contract;
-  final String? createdAt;
-  final String? creator;
-  final User? creatorExpanded;
-  final double? enrichCount;
-  final String? enrichedAt;
-  final String? founder;
-  final User? founderExpanded;
-  final TokenMetadata? metadata;
-  final List<User>? metadataCreatorsExpanded;
-  final String? order;
-  final List<TokenRoyalty>? royalties;
-  final String? uri;
 
   const TokenSimple({
     required this.id,
@@ -279,9 +284,26 @@ class TokenSimple {
         founderExpanded: dto.founderExpanded != null ? User.fromDto(dto.founderExpanded!) : null,
         metadata: dto.metadata != null ? TokenMetadata.fromDto(dto.metadata!) : null,
         metadataCreatorsExpanded:
-            List.from(dto.metadataCreatorsExpanded ?? []).map((item) => User.fromDto(item)).toList(),
+            List<UserDto>.from(dto.metadataCreatorsExpanded ?? []).map(User.fromDto).toList(),
         order: dto.order,
-        royalties: List.from(dto.royalties ?? []).map((item) => TokenRoyalty.fromDto(item)).toList(),
+        royalties: List<TokenRoyaltyDto>.from(dto.royalties ?? []).map(TokenRoyalty.fromDto).toList(),
         uri: dto.uri,
       );
+  final String id;
+  final String network;
+  final String tokenId;
+  final String? typename;
+  final String? contract;
+  final String? createdAt;
+  final String? creator;
+  final User? creatorExpanded;
+  final double? enrichCount;
+  final String? enrichedAt;
+  final String? founder;
+  final User? founderExpanded;
+  final TokenMetadata? metadata;
+  final List<User>? metadataCreatorsExpanded;
+  final String? order;
+  final List<TokenRoyalty>? royalties;
+  final String? uri;
 }

@@ -1,27 +1,40 @@
+import 'dart:math';
+
+import 'package:app/core/application/badge/badge_collections_bloc/badge_collections_bloc.dart';
+import 'package:app/core/application/badge/badge_location_listing_bloc/badge_locations_listing_bloc.dart';
+import 'package:app/core/domain/badge/entities/badge_entities.dart';
+import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/presentation/widgets/common/bottomsheet/lemon_snap_bottom_sheet_widget.dart';
+import 'package:app/core/presentation/widgets/common/button/lemon_filled_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/searchbar/lemon_search_bar_widget.dart';
 import 'package:app/core/presentation/widgets/common/slider/lemon_slider_widget.dart';
-import 'package:app/core/presentation/widgets/poap/poap_creator_item.dart';
+import 'package:app/core/presentation/widgets/loading_widget.dart';
+import 'package:app/core/presentation/widgets/poap/poap_collection_item.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/service/badge/badge_service.dart';
 import 'package:app/core/utils/animation_utils.dart';
+import 'package:app/core/utils/location_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-List<String> get _mockLocations => ["New york", "California", "Washington"];
+List<String> get _mockLocations => ['New york', 'California', 'Washington'];
 
 class PoapFilterBottomSheetView extends StatefulWidget {
-  final DraggableScrollableController dragController;
-  final List<double> snapSizes;
-  PoapFilterBottomSheetView({
+  const PoapFilterBottomSheetView({
     super.key,
     required this.dragController,
     required this.snapSizes,
   });
+  final DraggableScrollableController dragController;
+  final List<double> snapSizes;
 
   @override
   State<PoapFilterBottomSheetView> createState() => _PoapFilterBottomSheetViewState();
@@ -34,11 +47,11 @@ class _PoapFilterBottomSheetViewState extends State<PoapFilterBottomSheetView> w
   );
   late final animation = Tween<double>(begin: 0, end: 1).animate(animationController);
 
-  Duration _animationDuration = const Duration(milliseconds: 300);
+  final Duration _animationDuration = const Duration(milliseconds: 300);
 
-  double _searchBarHeight = 42;
+  final double _searchBarHeight = 42.w;
 
-  double _poapCreatorItemWidth = 78;
+  final double _poapCreatorItemWidth = 78.w;
 
   List<double> get snapSizes => widget.snapSizes; //const [.2, .8, 1];
 
@@ -70,15 +83,15 @@ class _PoapFilterBottomSheetViewState extends State<PoapFilterBottomSheetView> w
   }
 
   Offset _calculateGridRowOffset({required int index, required double maxWidth}) {
-    double x = index * (maxWidth - (animation.value * maxWidth));
-    double y = -((index + 1) * (1 - animation.value) * 50);
+    final x = index * (maxWidth - (animation.value * maxWidth));
+    final y = -((index + 1) * (1 - animation.value) * 50);
 
     return Offset(x, y);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: MediaQuery.of(context).size.height,
       child: LemonSnapBottomSheet(
         resizeToAvoidBottomInset: false,
@@ -146,9 +159,9 @@ class _PoapFilterBottomSheetViewState extends State<PoapFilterBottomSheetView> w
         duration: _animationDuration,
         child: Transform.translate(
           offset: Offset(0, (1 - animation.value) * _searchBarHeight),
-          child: Container(
+          child: SizedBox(
             height: animation.value * _searchBarHeight,
-            child: LemonSearchBar(),
+            child: const LemonSearchBar(),
           ),
         ),
       ),
@@ -160,13 +173,44 @@ class _PoapFilterBottomSheetViewState extends State<PoapFilterBottomSheetView> w
       child: LayoutBuilder(
         builder: (context, constraints) {
           return Container(
-            constraints: BoxConstraints(maxHeight: 150),
-            child: ListView.separated(
-              padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-              separatorBuilder: (context, index) => SizedBox(width: Spacing.extraSmall),
-              scrollDirection: Axis.horizontal,
-              itemCount: _mockPoapList.length,
-              itemBuilder: (context, i) => PoapCreatorItem(),
+            constraints: BoxConstraints(maxHeight: 150.w),
+            child: BlocBuilder<BadgeCollectionsBloc, BadgeCollectionsState>(
+              builder: (context, state) => state.when(
+                initial: () => SafeArea(
+                  child: Center(
+                    child: Loading.defaultLoading(context),
+                  ),
+                ),
+                fetched: (collections, selectedCollections) {
+                  return ListView.separated(
+                    padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+                    separatorBuilder: (context, index) => SizedBox(width: Spacing.extraSmall),
+                    scrollDirection: Axis.horizontal,
+                    itemCount: collections.length,
+                    itemBuilder: (context, i) {
+                      final collection = collections[i];
+                      final selected = selectedCollections.any((element) => element.id == collection.id);
+                      return PoapCollectionItem(
+                        badgeCollection: collections[i],
+                        selected: selected,
+                        onTap: (collection) {
+                          final selected = selectedCollections.any((element) => element.id == collection.id);
+                          if (selected) {
+                            context
+                                .read<BadgeCollectionsBloc>()
+                                .add(BadgeCollectionsEvent.deselect(collection: collection));
+                          } else {
+                            context
+                                .read<BadgeCollectionsBloc>()
+                                .add(BadgeCollectionsEvent.select(collection: collection));
+                          }
+                        },
+                      );
+                    },
+                  );
+                },
+                failure: SizedBox.shrink,
+              ),
             ),
           );
         },
@@ -177,67 +221,105 @@ class _PoapFilterBottomSheetViewState extends State<PoapFilterBottomSheetView> w
   SliverPadding _buildGridList() {
     return SliverPadding(
       padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-      sliver: SliverLayoutBuilder(
-        builder: (context, constraints) {
-          final maxWidth = constraints.crossAxisExtent;
-          final isLargeDevice = maxWidth >= 500;
-          final numOfItems = AnimationUtils.calculateMaxItemsInRow(
-            rowWidth: maxWidth - 2 * Spacing.smMedium,
-            itemWidth: _poapCreatorItemWidth,
-            separatorWidth: Spacing.small,
-          );
-          final chunkListResult = AnimationUtils.chunkList(
-            list: _mockPoapList,
-            chunkSize: numOfItems,
-          );
-          return SliverList.separated(
-            separatorBuilder: (context, item) => SizedBox(height: Spacing.xSmall),
-            itemCount: chunkListResult.length + 1,
-            itemBuilder: (context, index) {
-              // Render bottom space for list
-              if (index == chunkListResult.length)
-                return Container(
-                  height: 220,
-                  color: Colors.transparent,
+      sliver: BlocBuilder<BadgeCollectionsBloc, BadgeCollectionsState>(
+        builder: (context, state) => state.when(
+          initial: () => SliverToBoxAdapter(
+            child: Loading.defaultLoading(context),
+          ),
+          failure: SliverToBoxAdapter.new,
+          fetched: (collections, selectedCollections) {
+            return SliverLayoutBuilder(
+              builder: (context, constraints) {
+                var maxWidth = constraints.crossAxisExtent;
+                final fourItemInRowWidth = _poapCreatorItemWidth * 4 + (4 * Spacing.small);
+                final isLargeDevice = maxWidth >= 500;
+                if(isLargeDevice) {
+                  maxWidth = min(maxWidth, fourItemInRowWidth);
+                }
+                final numOfItems = AnimationUtils.calculateMaxItemsInRow(
+                  rowWidth: maxWidth.w - 2 * Spacing.smMedium,
+                  itemWidth: _poapCreatorItemWidth,
+                  separatorWidth: Spacing.small,
                 );
-
-              final chunkPortion = chunkListResult[index];
-              final isNotFullRow = chunkPortion.length < numOfItems;
-              return AnimatedBuilder(
-                animation: animation,
-                builder: (context, child) => Transform.translate(
-                  offset: index == 0 ? Offset(0, 0) : _calculateGridRowOffset(index: index, maxWidth: maxWidth),
-                  child: child,
-                ),
-                child: Row(
-                  mainAxisAlignment: isLargeDevice
-                      ? MainAxisAlignment.center
-                      : isNotFullRow
-                          ? MainAxisAlignment.start
-                          : MainAxisAlignment.spaceBetween,
-                  children: List.from(chunkPortion)
-                      .map(
-                        (item) => Container(
-                          margin: EdgeInsets.only(
-                            right: isLargeDevice || isNotFullRow ? Spacing.extraSmall : 0,
+                final chunkListResult = AnimationUtils.chunkList(
+                  list: collections,
+                  chunkSize: numOfItems,
+                );
+                return SliverPadding(
+                  padding: EdgeInsets.symmetric(horizontal: isLargeDevice ? fourItemInRowWidth / 4 : 0),
+                  sliver: SliverList.separated(
+                    separatorBuilder: (context, item) => SizedBox(height: Spacing.xSmall),
+                    itemCount: chunkListResult.length + 1,
+                    itemBuilder: (context, index) {
+                      // Render bottom space for list
+                      if (index == chunkListResult.length) {
+                        return Container(
+                          height: 220.w,
+                          color: Colors.transparent,
+                        );
+                      }
+                      var chunkPortion = chunkListResult[index];
+                      final isNotFullRow = chunkPortion.length < numOfItems;
+                      if (isNotFullRow && !isLargeDevice) {
+                        chunkPortion = [
+                          ...chunkPortion,
+                          ...List.filled(
+                            numOfItems - chunkPortion.length,
+                            BadgeList.empty(),
                           ),
-                          child: PoapCreatorItem(),
+                        ];
+                      }
+                      return AnimatedBuilder(
+                        animation: animation,
+                        builder: (context, child) => Transform.translate(
+                          offset: index == 0 ? Offset.zero : _calculateGridRowOffset(index: index, maxWidth: maxWidth),
+                          child: child,
                         ),
-                      )
-                      .toList(),
-                ),
-              );
-            },
-          );
-        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: List<BadgeList>.from(chunkPortion).map(
+                            (collection) {
+                              final selected = selectedCollections.any((element) => element.id == collection.id);
+                              return Container(
+                                margin: EdgeInsets.only(
+                                  right: isLargeDevice ? Spacing.extraSmall : 0,
+                                ),
+                                child: PoapCollectionItem(
+                                        badgeCollection: collection,
+                                        selected: selected,
+                                        visible: collection.id != null && collection.id!.isNotEmpty,
+                                        onTap: (collection) {
+                                          if (selected) {
+                                            context
+                                                .read<BadgeCollectionsBloc>()
+                                                .add(BadgeCollectionsEvent.deselect(collection: collection));
+                                          } else {
+                                            context
+                                                .read<BadgeCollectionsBloc>()
+                                                .add(BadgeCollectionsEvent.select(collection: collection));
+                                          }
+                                        },
+                                      ),
+                              );
+                            },
+                          ).toList(),
+                        ),
+                      );
+                    },
+                  ),
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }
 
-  _buildLocationFilter(BuildContext context) {
+  AnimatedBuilder _buildLocationFilter(BuildContext context) {
     return AnimatedBuilder(
       animation: animation,
-      child: Align(
+      child: const Align(
         alignment: Alignment.bottomCenter,
         child: LocationFilter(),
       ),
@@ -264,35 +346,95 @@ class LocationFilter extends StatelessWidget {
     return Container(
       color: colorScheme.secondary,
       child: SingleChildScrollView(
-        physics: NeverScrollableScrollPhysics(),
+        physics: const NeverScrollableScrollPhysics(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Divider(color: colorScheme.outline, height: 1),
             SizedBox(height: Spacing.medium),
-            Container(
+            SizedBox(
               height: Sizing.medium,
-              child: ListView.separated(
-                padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) {
-                  if (index == 0) {
-                    return LemonOutlineButton(
-                      leading: ThemeSvgIcon(
-                        color: colorScheme.onSecondary,
-                        builder: (filter) => Assets.icons.icMyLocation.svg(colorFilter: filter),
+              child: BlocBuilder<BadgeLocationsListingBloc, BadgeLocationsListingState>(
+                builder: (context, state) => state.when(
+                  initial: (_, __) => Loading.defaultLoading(context),
+                  failure: () => const Center(child: Text('error')),
+                  fetched: (locations, selectedLocation, _) {
+                    return ListView.separated(
+                      padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        var isSelected = false;
+                        if (index == 0) {
+                          isSelected = selectedLocation?.isMyLocation != null && selectedLocation!.isMyLocation == true;
+                          return isSelected
+                              ? LemonFilledButton(
+                                  onTap: () {
+                                    context.read<BadgeLocationsListingBloc>().add(
+                                          BadgeLocationsListingEvent.select(),
+                                        );
+                                  },
+                                  leading: ThemeSvgIcon(
+                                    color: isSelected ? colorScheme.primary : colorScheme.onSecondary,
+                                    builder: (filter) => Assets.icons.icMyLocation.svg(colorFilter: filter),
+                                  ),
+                                  label: t.common.nearMe,
+                                )
+                              : LemonOutlineButton(
+                                  onTap: () async {
+                                    try {
+                                      final position = await getIt<LocationUtils>().getCurrentLocation(
+                                        onPermissionDeniedForever: () {
+                                          LocationUtils.goToSetting(context);
+                                        },
+                                      );
+                                      context.read<BadgeLocationsListingBloc>().add(
+                                            BadgeLocationsListingEvent.select(
+                                              location: BadgeLocation.myLocation(
+                                                geoPoint: GeoPoint(
+                                                  lat: position.latitude,
+                                                  lng: position.longitude,
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                    } catch (error) {
+                                      print(error);
+                                    }
+                                  },
+                                  leading: ThemeSvgIcon(
+                                    color: colorScheme.onSecondary,
+                                    builder: (filter) => Assets.icons.icMyLocation.svg(colorFilter: filter),
+                                  ),
+                                  label: t.common.nearMe,
+                                );
+                        }
+                        final location = locations[index - 1];
+                        isSelected = selectedLocation?.badgeCity?.city == location.badgeCity?.city;
+                        return isSelected
+                            ? LemonFilledButton(
+                                onTap: () {
+                                  context.read<BadgeLocationsListingBloc>().add(
+                                        BadgeLocationsListingEvent.select(),
+                                      );
+                                },
+                                label: location.badgeCity?.city ?? location.badgeCity?.country,
+                              )
+                            : LemonOutlineButton(
+                                onTap: () {
+                                  context.read<BadgeLocationsListingBloc>().add(
+                                        BadgeLocationsListingEvent.select(location: location),
+                                      );
+                                },
+                                label: location.badgeCity?.city ?? location.badgeCity?.country,
+                              );
+                      },
+                      separatorBuilder: (context, index) => SizedBox(
+                        width: Spacing.superExtraSmall,
                       ),
-                      label: t.common.nearMe,
+                      itemCount: locations.length + 1,
                     );
-                  }
-                  return LemonOutlineButton(
-                    label: _mockLocations[index - 1],
-                  );
-                },
-                separatorBuilder: (context, index) => SizedBox(
-                  width: Spacing.superExtraSmall,
+                  },
                 ),
-                itemCount: _mockLocations.length + 1,
               ),
             ),
             SizedBox(height: Spacing.medium),
@@ -308,15 +450,29 @@ class LocationFilter extends StatelessWidget {
                         t.common.maximumDistance,
                         style: Typo.medium.copyWith(color: colorScheme.onSurface),
                       ),
-                      Text(
-                        '50',
-                        style: Typo.medium.copyWith(color: colorScheme.onSurface),
+                      BlocBuilder<BadgeLocationsListingBloc, BadgeLocationsListingState>(
+                        builder: (context, state) => Text(
+                          state.maybeWhen(
+                            fetched: (_, __, distance) => '${distance.toInt()}',
+                            orElse: () => '1',
+                          ),
+                          style: Typo.medium.copyWith(color: colorScheme.onSurface),
+                        ),
                       ),
                     ],
                   ),
                   SizedBox(height: Spacing.superExtraSmall),
-                  LemonSlider(min: 1, max: 100),
-                  SizedBox(height: 2),
+                  LemonSlider(
+                    min: 1,
+                    max: 100,
+                    onChange: (value) {
+                      context.read<BadgeLocationsListingBloc>().add(
+                            BadgeLocationsListingEvent.updateDistance(distance: value),
+                          );
+                    },
+                    defaultValue: getIt<BadgeService>().distance,
+                  ),
+                  const SizedBox(height: 2),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

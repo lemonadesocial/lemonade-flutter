@@ -69,6 +69,24 @@ Map<String, dynamic> _$$_TokenComplexDtoToJson(_$_TokenComplexDto instance) =>
       'uri': instance.uri,
     };
 
+_$_TokenDetailDto _$$_TokenDetailDtoFromJson(Map<String, dynamic> json) =>
+    _$_TokenDetailDto(
+      id: json['id'] as String?,
+      network: json['network'] as String?,
+      tokenId: json['tokenId'] as String?,
+      metadata: json['metadata'] == null
+          ? null
+          : TokenMetadataDto.fromJson(json['metadata'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$$_TokenDetailDtoToJson(_$_TokenDetailDto instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'network': instance.network,
+      'tokenId': instance.tokenId,
+      'metadata': instance.metadata,
+    };
+
 _$_RegistryDto _$$_RegistryDtoFromJson(Map<String, dynamic> json) =>
     _$_RegistryDto(
       id: json['id'] as String?,

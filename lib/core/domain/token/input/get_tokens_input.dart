@@ -21,3 +21,16 @@ class GetTokensInput with _$GetTokensInput {
 
   factory GetTokensInput.fromJson(Map<String, dynamic> json) => _$GetTokensInputFromJson(json);
 }
+
+@freezed
+class GetTokenDetailInput with _$GetTokenDetailInput {
+  @JsonSerializable(
+    includeIfNull: false,
+  )
+  const factory GetTokenDetailInput({
+    required String id,
+    String? network,
+  }) = _GetTokenDetailInput;
+
+  factory GetTokenDetailInput.fromJson(Map<String, dynamic> json) => _$GetTokenDetailInputFromJson(json);
+}

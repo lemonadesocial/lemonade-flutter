@@ -11,11 +11,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProfilePostsTabView extends StatelessWidget {
-  final User user;
   ProfilePostsTabView({
     super.key,
     required this.user,
   });
+  final User user;
 
   GetPostsInput get input => GetPostsInput(
         user: user.id,
@@ -32,9 +32,9 @@ class ProfilePostsTabView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseSliverTabView(
-      name: "posts",
+      name: 'posts',
       children: [
-        SliverToBoxAdapter(
+        const SliverToBoxAdapter(
           child: SizedBox(height: 3),
         ),
         // ProfilePostsListView(user: user),
@@ -44,12 +44,12 @@ class ProfilePostsTabView extends StatelessWidget {
             listener: (context, scrollState) {
               scrollState.whenOrNull(endReached: () {
                 postsListingBloc.add(PostsListingEvent.fetch());
-              });
+              },);
             },
             child: ProfilePostsListView(user: user),
           ),
         ),
-        SliverToBoxAdapter(
+        const SliverToBoxAdapter(
           child: SizedBox(height: 92),
         ),
       ],

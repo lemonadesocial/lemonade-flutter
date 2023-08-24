@@ -75,6 +75,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_crystal.svg
   SvgGenImage get icCrystal => const SvgGenImage('assets/icons/ic_crystal.svg');
 
+  /// File path: assets/icons/ic_discover.svg
+  SvgGenImage get icDiscover =>
+      const SvgGenImage('assets/icons/ic_discover.svg');
+
   /// File path: assets/icons/ic_discover_badges.svg
   SvgGenImage get icDiscoverBadges =>
       const SvgGenImage('assets/icons/ic_discover_badges.svg');
@@ -82,6 +86,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_discover_events.svg
   SvgGenImage get icDiscoverEvents =>
       const SvgGenImage('assets/icons/ic_discover_events.svg');
+
+  /// File path: assets/icons/ic_discover_filled.svg
+  SvgGenImage get icDiscoverFilled =>
+      const SvgGenImage('assets/icons/ic_discover_filled.svg');
 
   /// File path: assets/icons/ic_discover_music.svg
   SvgGenImage get icDiscoverMusic =>
@@ -159,10 +167,6 @@ class $AssetsIconsGen {
   SvgGenImage get icJoinSpace =>
       const SvgGenImage('assets/icons/ic_join_space.svg');
 
-  /// File path: assets/icons/ic_lemon_filled.svg
-  SvgGenImage get icLemonFilled =>
-      const SvgGenImage('assets/icons/ic_lemon_filled.svg');
-
   /// File path: assets/icons/ic_lemon_filled_background.png
   AssetGenImage get icLemonFilledBackground =>
       const AssetGenImage('assets/icons/ic_lemon_filled_background.png');
@@ -211,6 +215,14 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_news.svg
   SvgGenImage get icNews => const SvgGenImage('assets/icons/ic_news.svg');
 
+  /// File path: assets/icons/ic_notification.svg
+  SvgGenImage get icNotification =>
+      const SvgGenImage('assets/icons/ic_notification.svg');
+
+  /// File path: assets/icons/ic_notification_filled.svg
+  SvgGenImage get icNotificationFilled =>
+      const SvgGenImage('assets/icons/ic_notification_filled.svg');
+
   /// File path: assets/icons/ic_people_alt.svg
   SvgGenImage get icPeopleAlt =>
       const SvgGenImage('assets/icons/ic_people_alt.svg');
@@ -248,9 +260,17 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_wallet.svg
   SvgGenImage get icWallet => const SvgGenImage('assets/icons/ic_wallet.svg');
 
+  /// File path: assets/icons/ic_wallet_filled.svg
+  SvgGenImage get icWalletFilled =>
+      const SvgGenImage('assets/icons/ic_wallet_filled.svg');
+
   /// File path: assets/icons/ico_create_space.svg
   SvgGenImage get icoCreateSpace =>
       const SvgGenImage('assets/icons/ico_create_space.svg');
+
+  /// File path: assets/icons/ico_house_filled.svg
+  SvgGenImage get icoHouseFilled =>
+      const SvgGenImage('assets/icons/ico_house_filled.svg');
 
   /// List of all assets
   List<dynamic> get values => [
@@ -262,8 +282,10 @@ class $AssetsIconsGen {
         icChatBubble,
         icClose,
         icCrystal,
+        icDiscover,
         icDiscoverBadges,
         icDiscoverEvents,
+        icDiscoverFilled,
         icDiscoverMusic,
         icDiscoverPeople,
         icDone,
@@ -285,7 +307,6 @@ class $AssetsIconsGen {
         icInsights,
         icInstagram,
         icJoinSpace,
-        icLemonFilled,
         icLemonFilledBackground,
         icLemonFilledStart,
         icLemonOutline,
@@ -299,6 +320,8 @@ class $AssetsIconsGen {
         icNavigationFilled,
         icNavigationLine,
         icNews,
+        icNotification,
+        icNotificationFilled,
         icPeopleAlt,
         icPoll,
         icProfile,
@@ -311,7 +334,9 @@ class $AssetsIconsGen {
         icTicket,
         icTwitter,
         icWallet,
-        icoCreateSpace
+        icWalletFilled,
+        icoCreateSpace,
+        icoHouseFilled
       ];
 }
 

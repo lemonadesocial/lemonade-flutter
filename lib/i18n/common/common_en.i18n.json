@@ -27,7 +27,9 @@
         "connect": "connect",
         "editProfile": "Edit profile",
         "shareProfile": "Share profile",
-        "follow": "Follow"
+        "follow": "Follow",
+        "cancel": "Cancel",
+        "goToSettings": "Go to settings"
     },
     "followed": "Followed",
     "anonymous": "anonymous",
@@ -36,6 +38,7 @@
     "past": "Past",
     "noPhotos": "No photos yet",
     "unit": {
+        "m": "m",
         "km": "km"
     },
     "search": "search",
@@ -48,5 +51,6 @@
     "qrCode": "qrCode",
     "support": "support",
     "delete": "delete",
-    "lemonade": "Lemonade"
+    "lemonade": "Lemonade",
+    "requestLocation": "Location Services are currently disabled. Please enable Location Services in your device settings."
 }

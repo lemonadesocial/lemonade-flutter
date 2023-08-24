@@ -54,6 +54,15 @@ final getTokensQuery = gql('''
 }
 ''');
 
+final getTokenQuery = gql('''
+  query(\$id: String!, \$network: String) {
+    getToken(id: \$id, network: \$network) {
+      id
+      metadata
+    }
+  }
+''');
+
 final watchOrdersSubscription = gql('''
   subscription WatchOrders(
   \$where: OrderWhereComplex
