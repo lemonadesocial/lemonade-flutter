@@ -1,7 +1,7 @@
 import 'package:app/router/app_router.gr.dart';
 import 'package:auto_route/auto_route.dart';
 
-@AutoRouterConfig(replaceInRouteName: "Page,Route")
+@AutoRouterConfig(replaceInRouteName: 'Page,Route')
 class AppRouter extends $AppRouter {
   @override
   List<AutoRoute> get routes => [
@@ -19,8 +19,8 @@ class AppRouter extends $AppRouter {
               page: HomeRoute.page,
             ),
             AutoRoute(
-              path: 'events',
-              page: EventsListingRoute.page,
+              path: 'discover',
+              page: DiscoverRoute.page,
             ),
             AutoRoute(
               path: 'notification',

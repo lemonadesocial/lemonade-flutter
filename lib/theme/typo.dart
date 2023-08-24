@@ -26,8 +26,8 @@ class Typo {
     fontWeight: FontWeight.w500,
   );
 
-  static const xSmall = TextStyle(
-    fontSize: 10,
+  static final xSmall = TextStyle(
+    fontSize: 10.sp,
     fontWeight: FontWeight.w500,
   );
 }
