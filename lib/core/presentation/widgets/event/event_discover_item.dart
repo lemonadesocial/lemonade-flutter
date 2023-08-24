@@ -47,13 +47,13 @@ class EventDiscoverItem extends StatelessWidget {
             ),
           ),
           Positioned.fill(
-            child: Container(
+            child: DecoratedBox(
               decoration: BoxDecoration(
                 gradient: RadialGradient(
                   center: Alignment.bottomCenter,
                   radius: 0.8,
                   colors: [
-                    LemonColor.black.withOpacity(0.5), 
+                    LemonColor.black.withOpacity(0.5),
                     Colors.transparent,
                   ],
                 ),
@@ -86,7 +86,7 @@ class _EventInfo extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(
-          width: 100.w,
+          width: 80.w,
           child: Text(
             'Early morning y......',
             maxLines: 1,
