@@ -1,14 +1,16 @@
+import 'dart:io';
+
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/presentation/widgets/bottom_bar/app_tabs.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/utils/avatar_utils.dart';
 import 'package:app/theme/color.dart';
-import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 
 class BottomBar extends StatefulWidget {
   @override
@@ -47,7 +49,7 @@ class _BottomBarState extends State<BottomBar>
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return Container(
-      height: 89.h,
+      height: Platform.isIOS ? 89.h : 69.h,
       decoration: BoxDecoration(
         color: colorScheme.primary,
         border: Border(
@@ -56,7 +58,7 @@ class _BottomBarState extends State<BottomBar>
       ),
       child: Column(
         children: [
-          SizedBox(height: 12.h),
+          SizedBox(height: 15.h),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -64,6 +66,7 @@ class _BottomBarState extends State<BottomBar>
               return _buildTabItem(context, tabData);
             }).toList(),
           ),
+          SizedBox(height: 18.h),
         ],
       ),
     );
@@ -84,10 +87,6 @@ class _BottomBarState extends State<BottomBar>
         },
         child: Container(
           color: Colors.transparent,
-          padding: EdgeInsets.symmetric(
-            horizontal: Spacing.xSmall,
-            vertical: Spacing.xSmall,
-          ),
           child: Stack(
             alignment: Alignment.center,
             children: [
@@ -130,6 +129,7 @@ class _BottomBarState extends State<BottomBar>
   }
 
   void _handleTabTap(BuildContext context, TabData tabData) {
+    Vibrate.feedback(FeedbackType.light);
     setState(() {
       _isTabChanged = true;
       _selectedTab = tabData.tab;
@@ -162,7 +162,7 @@ class _BottomBarState extends State<BottomBar>
               height: 36,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(18),
-                color: isSelected ? LemonColor.white12 : Colors.transparent,
+                color: isSelected ? LemonColor.white09 : Colors.transparent,
               ),
             ),
           );
@@ -172,7 +172,7 @@ class _BottomBarState extends State<BottomBar>
           height: 36,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(18),
-            color: isSelected ? LemonColor.white12 : Colors.transparent,
+            color: isSelected ? LemonColor.white09 : Colors.transparent,
           ),
         );
       },
