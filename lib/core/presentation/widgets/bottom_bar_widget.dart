@@ -52,7 +52,7 @@ class BottomBar extends StatelessWidget {
                     height: 24.w,
                   ),
                 ),
-                path: '/events',
+                path: '/discover',
               ),
               _buildItem(
                 context,

@@ -3,14 +3,9 @@ import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final Widget? leading;
-  final String? title;
-  final Widget Function(BuildContext context)? titleBuilder;
-  final List<Widget>? actions;
-  final Color? backgroundColor;
-  final EdgeInsets? padding;
 
   const LemonAppBar({
     super.key,
@@ -21,9 +16,15 @@ class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.backgroundColor,
     this.padding,
   });
+  final Widget? leading;
+  final String? title;
+  final Widget Function(BuildContext context)? titleBuilder;
+  final List<Widget>? actions;
+  final Color? backgroundColor;
+  final EdgeInsets? padding;
 
   @override
-  Size get preferredSize => Size.fromHeight(60);
+  Size get preferredSize => Size.fromHeight(60.w);
 
   @override
   Widget build(BuildContext context) {

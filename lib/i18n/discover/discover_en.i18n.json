@@ -1,0 +1,23 @@
+{
+    "discover": "Discover",
+    "cardSections": {
+        "events": {
+            "title": "Events",
+            "subTitle": "Find unique experiences"
+        },
+        "collaborators": {
+            "title": "Collaborators",
+            "subTitle": "Connect & create with others"
+        },
+        "badges": {
+            "title": "Badges",
+            "subTitle": "Exclusive rewards near you"
+        },
+        "music": {
+            "title": "Vinyls",
+            "subTitle": "Music that you truly own"
+        }
+    },
+    "hotBadgesNearYou": "Hot badges near you",
+    "upcomingEvents": "Upcoming events"
+}
