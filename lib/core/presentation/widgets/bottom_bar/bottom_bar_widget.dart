@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:app/core/application/auth/auth_bloc.dart';
-import 'package:app/core/presentation/pages/auth/login_page.dart';
 import 'package:app/core/presentation/widgets/bottom_bar/app_tabs.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
@@ -15,6 +14,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 
 class BottomBar extends StatefulWidget {
+  const BottomBar({super.key});
+
   @override
   _BottomBarState createState() => _BottomBarState();
 }

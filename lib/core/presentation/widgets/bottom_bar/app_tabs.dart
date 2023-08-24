@@ -7,7 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 enum AppTab {
   home,
-  events,
+  discover,
   notification,
   wallet,
   profile,
@@ -41,8 +41,8 @@ final List<TabData> tabs = [
     ),
   ),
   TabData(
-    AppTab.events,
-    '/events',
+    AppTab.discover,
+    '/discover',
     ThemeSvgIcon(
       builder: (filter) => Assets.icons.icDiscover.svg(
         colorFilter: filter,
