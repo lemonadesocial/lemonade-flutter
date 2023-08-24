@@ -91,7 +91,7 @@ class _BottomBarState extends State<BottomBar>
             alignment: Alignment.center,
             children: [
               _buildAnimatedContainer(isSelected),
-              icon, // The icon is outside the animated container
+              icon,
             ],
           ),
         ),
@@ -102,6 +102,7 @@ class _BottomBarState extends State<BottomBar>
   Widget _buildIcon(BuildContext context, TabData tabData, bool isSelected) {
     final icon = tabData.icon;
     final selectedIcon = tabData.selectedIcon;
+    // Handle display user avatar for tab profile
     if (tabData.tab == AppTab.profile) {
       return BlocBuilder<AuthBloc, AuthState>(
         builder: (context, authState) {
