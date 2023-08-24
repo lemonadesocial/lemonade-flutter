@@ -80,10 +80,7 @@ class AppRouter extends $AppRouter {
             AutoRoute(
               page: OnboardingAboutRoute.page,
             ),
-            AutoRoute(
-              page: OnboardingInterestRoute.page,
-            ),
-          ]
+          ],
         ),
         chatRoutes,
       ];
