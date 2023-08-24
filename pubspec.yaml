@@ -138,9 +138,9 @@ flutter:
     - assets/fonts/
     - assets/images/
     - assets/index.html
-    - .env
+#    - .env
     - .env.staging
-    - .env.production
+#    - .env.production
 
   fonts:
     - family: CircularStd
@@ -162,3 +162,6 @@ flutter:
     - family: SwitzerVariable
       fonts:
         - asset: assets/fonts/Switzer-Variable.ttf
+    - family: NohemiVariable
+      fonts:
+        - asset: assets/fonts/Nohemi-VF.ttf

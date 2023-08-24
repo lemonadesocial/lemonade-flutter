@@ -68,6 +68,23 @@ class AppRouter extends $AppRouter {
         AutoRoute(
           page: EventSelectingRoute.page,
         ),
+        AutoRoute(
+          page: OnboardingWrapperRoute.page,
+          children:[
+            AutoRoute(
+              page: OnboardingUsernameRoute.page,
+            ),
+            AutoRoute(
+              page: OnboardingProfilePhotoRoute.page,
+            ),
+            AutoRoute(
+              page: OnboardingAboutRoute.page,
+            ),
+            AutoRoute(
+              page: OnboardingInterestRoute.page,
+            ),
+          ]
+        ),
         chatRoutes,
       ];
 }

@@ -14,6 +14,7 @@ class LemonColor {
   static Color white10 = const Color(0xffFFFFFF).withOpacity(0.10);
   static Color white12 = const Color(0xffFFFFFF).withOpacity(0.12);
   static Color white15 = const Color(0xffFFFFFF).withOpacity(0.15);
+  static Color white18 = const Color(0xffFFFFFF).withOpacity(0.18);
   static Color white36 = const Color(0xffFFFFFF).withOpacity(0.36);
   static Color white54 = const Color(0xffFFFFFF).withOpacity(0.54);
   static Color white72 = const Color(0xffFFFFFF).withOpacity(0.72);
@@ -43,11 +44,20 @@ class LemonColor {
 
   // Textfield
   static Color darkCharcoal = Color(0xff2e2e2e);
+  static const onboardingTitle = Color(0xFFDDDDDD);
 
   // FAB
   static const fabSecondaryBg = Color(0xFFB17AF4);
   static const fabFirstBg = Color(0xFF6F3FAA);
   static const fabShadow = Color(0x89090909);
+
+  // Onboarding gender color
+  static const femaleDefault = Color(0x2DF691B5);
+  static const maleDefault = Color(0x1E91C0F6);
+  static const ambiguousDefault = Color(0x1EA591F6);
+  static const femaleActiveColor = Color(0xFFF691B5);
+  static const maleActiveColor = Color(0xFF91C0F6);
+  static const ambiguousActiveColor = Color(0xFFA591F6);
 } 
 
 final ColorScheme lemonadeLightThemeColorScheme = ColorScheme.light(
@@ -84,6 +94,7 @@ final ColorScheme lemonadeDarkThemeColorScheme = ColorScheme.dark(
   onSurface: LemonColor.white72,
   onSurfaceVariant: LemonColor.white36,
   outline: LemonColor.white12,
+  outlineVariant: LemonColor.white18,
   tertiaryContainer: LemonColor.tertiaryBlack,
   onPrimaryContainer: LemonColor.dialogBackground,
   onSecondaryContainer: LemonColor.disableButton,
