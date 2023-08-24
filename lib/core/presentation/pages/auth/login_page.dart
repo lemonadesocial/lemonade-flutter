@@ -23,10 +23,11 @@ class _LoginPageState extends State<LoginPage> {
         body: BlocListener<AuthBloc, AuthState>(
           listener: (context, state) {
             state.maybeWhen(
-                authenticated: (_) {
-                  AutoRouter.of(context).pop();
-                },
-                orElse: () {});
+              authenticated: (_) {
+                AutoRouter.of(context).pop();
+              },
+              orElse: () {},
+            );
           },
           child: Center(
             child: BlocBuilder<AuthBloc, AuthState>(
