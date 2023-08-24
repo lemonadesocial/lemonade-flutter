@@ -75,6 +75,14 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_crystal.svg
   SvgGenImage get icCrystal => const SvgGenImage('assets/icons/ic_crystal.svg');
 
+  /// File path: assets/icons/ic_discover.svg
+  SvgGenImage get icDiscover =>
+      const SvgGenImage('assets/icons/ic_discover.svg');
+
+  /// File path: assets/icons/ic_discover_filled.svg
+  SvgGenImage get icDiscoverFilled =>
+      const SvgGenImage('assets/icons/ic_discover_filled.svg');
+
   /// File path: assets/icons/ic_done.svg
   SvgGenImage get icDone => const SvgGenImage('assets/icons/ic_done.svg');
 
@@ -187,6 +195,14 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_news.svg
   SvgGenImage get icNews => const SvgGenImage('assets/icons/ic_news.svg');
 
+  /// File path: assets/icons/ic_notification.svg
+  SvgGenImage get icNotification =>
+      const SvgGenImage('assets/icons/ic_notification.svg');
+
+  /// File path: assets/icons/ic_notification_filled.svg
+  SvgGenImage get icNotificationFilled =>
+      const SvgGenImage('assets/icons/ic_notification_filled.svg');
+
   /// File path: assets/icons/ic_people_alt.svg
   SvgGenImage get icPeopleAlt =>
       const SvgGenImage('assets/icons/ic_people_alt.svg');
@@ -221,9 +237,17 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_wallet.svg
   SvgGenImage get icWallet => const SvgGenImage('assets/icons/ic_wallet.svg');
 
+  /// File path: assets/icons/ic_wallet_filled.svg
+  SvgGenImage get icWalletFilled =>
+      const SvgGenImage('assets/icons/ic_wallet_filled.svg');
+
   /// File path: assets/icons/ico_create_space.svg
   SvgGenImage get icoCreateSpace =>
       const SvgGenImage('assets/icons/ico_create_space.svg');
+
+  /// File path: assets/icons/ico_house_filled.svg
+  SvgGenImage get icoHouseFilled =>
+      const SvgGenImage('assets/icons/ico_house_filled.svg');
 
   /// List of all assets
   List<dynamic> get values => [
@@ -235,6 +259,8 @@ class $AssetsIconsGen {
         icChatBubble,
         icClose,
         icCrystal,
+        icDiscover,
+        icDiscoverFilled,
         icDone,
         icDownload,
         icEdit,
@@ -266,6 +292,8 @@ class $AssetsIconsGen {
         icMyLocation,
         icNavigationLine,
         icNews,
+        icNotification,
+        icNotificationFilled,
         icPeopleAlt,
         icPoll,
         icPublic,
@@ -277,7 +305,9 @@ class $AssetsIconsGen {
         icTicket,
         icTwitter,
         icWallet,
-        icoCreateSpace
+        icWalletFilled,
+        icoCreateSpace,
+        icoHouseFilled
       ];
 }
 
