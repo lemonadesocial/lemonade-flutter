@@ -1,10 +1,12 @@
 import 'dart:io';
 
 import 'package:app/core/application/auth/auth_bloc.dart';
+import 'package:app/core/presentation/pages/auth/login_page.dart';
 import 'package:app/core/presentation/widgets/bottom_bar/app_tabs.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/utils/avatar_utils.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -49,7 +51,7 @@ class _BottomBarState extends State<BottomBar>
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return Container(
-      height: Platform.isIOS ? 89.h : 69.h,
+      height: Platform.isIOS ? 90.h : 70.h,
       decoration: BoxDecoration(
         color: colorScheme.primary,
         border: Border(
@@ -74,10 +76,6 @@ class _BottomBarState extends State<BottomBar>
 
   Widget _buildTabItem(BuildContext context, TabData tabData) {
     final isSelected = _selectedTab == tabData.tab;
-    return _buildItem(context, tabData, isSelected);
-  }
-
-  Widget _buildItem(BuildContext context, TabData tabData, bool isSelected) {
     final icon = _buildIcon(context, tabData, isSelected);
     return Expanded(
       child: GestureDetector(
@@ -143,7 +141,7 @@ class _BottomBarState extends State<BottomBar>
         AutoRouter.of(context)
             .navigateNamed(tabData.route, includePrefixMatches: true);
       } else {
-        AutoRouter.of(context).navigateNamed('/login');
+        context.router.navigate(const LoginRoute());
       }
     } else {
       AutoRouter.of(context)
