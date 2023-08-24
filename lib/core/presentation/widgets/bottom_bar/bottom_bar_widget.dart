@@ -130,24 +130,29 @@ class _BottomBarState extends State<BottomBar>
 
   void _handleTabTap(BuildContext context, TabData tabData) {
     Vibrate.feedback(FeedbackType.light);
-    setState(() {
-      _isTabChanged = true;
-      _selectedTab = tabData.tab;
-    });
-    _animationController.reset();
-    _animationController.forward();
-    if (tabData.tab == AppTab.profile) {
-      final authState = BlocProvider.of<AuthBloc>(context).state;
+    final authState = BlocProvider.of<AuthBloc>(context).state;
+    if (tabData.tab == AppTab.profile || tabData.tab == AppTab.notification) {
       if (authState is AuthStateAuthenticated) {
+        _triggerAnimation(tabData);
         AutoRouter.of(context)
             .navigateNamed(tabData.route, includePrefixMatches: true);
       } else {
         context.router.navigate(const LoginRoute());
       }
     } else {
+      _triggerAnimation(tabData);
       AutoRouter.of(context)
           .navigateNamed(tabData.route, includePrefixMatches: true);
     }
+  }
+
+  void _triggerAnimation(tabData) {
+    setState(() {
+      _isTabChanged = true;
+      _selectedTab = tabData.tab;
+    });
+    _animationController.reset();
+    _animationController.forward();
   }
 
   Widget _buildAnimatedContainer(bool isSelected) {
