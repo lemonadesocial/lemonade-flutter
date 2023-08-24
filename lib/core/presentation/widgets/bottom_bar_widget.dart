@@ -86,6 +86,7 @@ class BottomBar extends StatelessWidget {
                         size: 24.w,
                         url: authState.maybeWhen(
                           authenticated: (authSession) => authSession.userAvatar ?? '',
+                          onBoardingRequired:  (authSession) => authSession.userAvatar ?? '',
                           orElse: () => '',
                         ),
                       ),
@@ -148,6 +149,7 @@ class _ProfileAuthGuardItem extends StatelessWidget {
           authenticated: (_) {
             return authenticatedChild;
           },
+          onBoardingRequired: (authSession) => authenticatedChild,
           unauthenticated: (_) => unauthenticatedChild,
           unknown: () => unauthenticatedChild,
           processing: () => processingChild,

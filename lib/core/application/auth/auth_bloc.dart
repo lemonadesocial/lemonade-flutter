@@ -12,9 +12,6 @@ part 'auth_bloc.freezed.dart';
 
 @lazySingleton
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  final AuthService authService;
-  final UserService userService;
-  late StreamSubscription? _tokenStateSubscription;
   AuthBloc({
     required this.userService,
     required this.authService,
@@ -26,62 +23,82 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthEventUnAuthenticated>(_onUnAuthenticated);
   }
 
+  final AuthService authService;
+  final UserService userService;
+  late StreamSubscription? _tokenStateSubscription;
+
   @override
   Future<void> close() async {
     await _tokenStateSubscription?.cancel();
     super.close();
   }
 
-  _onTokenStateChange(OAuthTokenState tokenState) {
+  void _onTokenStateChange(OAuthTokenState tokenState) {
     if (tokenState == OAuthTokenState.valid) {
-      add(AuthEvent.authenticated());
+      add(const AuthEvent.authenticated());
     } else {
-      add(AuthEvent.unauthenticated());
+      add(const AuthEvent.unauthenticated());
     }
   }
 
-  _onAuthenticated(AuthEventAuthenticated event, Emitter emit) async {
+  Future<void> _onAuthenticated(AuthEventAuthenticated event, Emitter emit) async {
     emit(const AuthState.processing());
-    await Future.delayed(Duration(milliseconds: 500));
+    await Future.delayed(const Duration(milliseconds: 500));
     final session = await _createSession();
     if (session != null) {
+      if (session.username?.isEmpty ?? true) {
+        // Authenticated but lacking username
+        // Navigate to OnBoarding flow instead
+        emit(AuthState.onBoardingRequired(authSession: session));
+        return;
+      }
       emit(AuthState.authenticated(authSession: session));
       return;
     }
     emit(const AuthState.unauthenticated(isChecking: false));
   }
 
-  _onUnAuthenticated(AuthEventUnAuthenticated event, Emitter emit) {
+  void _onUnAuthenticated(AuthEventUnAuthenticated event, Emitter emit) {
     emit(const AuthState.unauthenticated(isChecking: false));
   }
 
-  _onLogin(AuthEventLogin event, Emitter emit) async {
+  Future<void> _onLogin(AuthEventLogin event, Emitter emit) async {
     await authService.login();
   }
 
-  _onLogout(AuthEventLogout event, Emitter emit) async {
+  Future<void> _onLogout(AuthEventLogout event, Emitter emit) async {
     await authService.logout();
   }
 
   Future<AuthSession?> _createSession() async {
     final getMeResult = await userService.getMe();
-    return getMeResult.fold((l) => null, (authUser) => authService.createSession(authUser));
+    return getMeResult.fold((l) => null, authService.createSession);
   }
 }
 
 @freezed
 class AuthEvent with _$AuthEvent {
   const factory AuthEvent.login() = AuthEventLogin;
+
   const factory AuthEvent.logout() = AuthEventLogout;
+
   const factory AuthEvent.authenticated() = AuthEventAuthenticated;
+
   const factory AuthEvent.unauthenticated() = AuthEventUnAuthenticated;
 }
 
 @freezed
 class AuthState with _$AuthState {
   const factory AuthState.unknown() = AuthStateUnknown;
+
   const factory AuthState.processing() = AuthStateProcessing;
+
   const factory AuthState.unauthenticated({required bool isChecking}) = AuthStateUnauthenticated;
+
+  const factory AuthState.onBoardingRequired({
+    required AuthSession authSession,
+  }) = AuthStateOnBoardingRequired;
+
   const factory AuthState.authenticated({
     required AuthSession authSession,
   }) = AuthStateAuthenticated;

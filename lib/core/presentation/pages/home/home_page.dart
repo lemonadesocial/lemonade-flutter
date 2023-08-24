@@ -63,7 +63,6 @@ class _HomeListingView extends StatefulWidget {
 }
 
 class _HomePageViewState extends State<_HomeListingView> {
-
   @override
   void initState() {
     super.initState();
@@ -103,7 +102,11 @@ class _HomePageViewState extends State<_HomeListingView> {
       backgroundColor: LemonColor.black,
       body: const HomeNewsfeedListView(),
       floatingActionButton: InkWell(
-        onTap: () => context.router.push(const CreatePostRoute()),
+        onTap: () => context.router.push(
+          const OnboardingWrapperRoute(
+            children: [OnboardingUsernameRoute()],
+          ),
+        ),
         child: Container(
           width: 54.h,
           height: 54.h,
