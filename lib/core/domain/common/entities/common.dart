@@ -2,16 +2,6 @@ import 'package:app/core/data/common/dtos/common_dtos.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 
 class Address {
-  final String? street1;
-  final String? street2;
-  final String? city;
-  final String? region;
-  final String? postal;
-  final String? country;
-  final String? title;
-  final double? latitude;
-  final double? longitude;
-  final String? recipientName;
 
   Address({
     this.street1,
@@ -25,6 +15,16 @@ class Address {
     this.longitude,
     this.recipientName,
   });
+  final String? street1;
+  final String? street2;
+  final String? city;
+  final String? region;
+  final String? postal;
+  final String? country;
+  final String? title;
+  final double? latitude;
+  final double? longitude;
+  final String? recipientName;
 
   static Address fromDto(AddressDto dto) {
     return Address(
@@ -43,17 +43,6 @@ class Address {
 }
 
 class DbFile {
-  final String? id;
-  final String? url;
-  final String? owner;
-  final String? bucket;
-  final User? ownerExpanded;
-  final String? stamp;
-  final int? likes;
-  final bool? liked;
-  final String? description;
-  final String? key;
-  final String? type;
 
   DbFile({
     this.id,
@@ -68,6 +57,17 @@ class DbFile {
     this.key,
     this.type,
   });
+  final String? id;
+  final String? url;
+  final String? owner;
+  final String? bucket;
+  final User? ownerExpanded;
+  final String? stamp;
+  final int? likes;
+  final bool? liked;
+  final String? description;
+  final String? key;
+  final String? type;
 
   static DbFile fromDto(DbFileDto dto) {
     return DbFile(
@@ -84,4 +84,13 @@ class DbFile {
       type: dto.type,
     );
   }
+}
+
+class GeoPoint {
+  GeoPoint({
+    required this.lat,
+    required this.lng,
+  });
+  final double lat;
+  final double lng;
 }

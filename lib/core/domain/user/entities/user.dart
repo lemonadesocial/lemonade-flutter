@@ -4,16 +4,14 @@ import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/payment/payment_enums.dart';
 
 class AuthUser {
-  String id;
-  String? imageAvatar;
-  String? displayName;
-  String? username;
 
   AuthUser({
     required this.id,
     this.imageAvatar,
     this.displayName,
     this.username,
+    this.wallets,
+    this.walletCustodial,
   });
 
   factory AuthUser.fromDto(UserDto dto) {
@@ -21,53 +19,21 @@ class AuthUser {
       id: dto.id!,
       imageAvatar: dto.imageAvatar,
       displayName: dto.displayName,
-      username: dto.username
+      username: dto.username, 
+      wallets: dto.wallets,
+      walletCustodial: dto.walletCustodial,
     );
   }
+  
+  String id;
+  String? imageAvatar;
+  String? displayName;
+  String? username;
+  List<String>? wallets;
+  String? walletCustodial;
 }
 
 class User {
-  final String? id;
-  final DateTime? createdAt;
-  final String? displayName;
-  final String? firstName;
-  final String? lastName;
-  final String? imageAvatar;
-  final List<DbFile>? newPhotosExpanded;
-  final DateTime? dateOfBirth;
-  final bool? phoneVerified;
-  final GoogleUserInfo? googleUserInfo;
-  final DiscordUserInfo? discordUserInfo;
-  final ShopifyUserInfo? shopifyUserInfo;
-  final TwitchUserInfo? twitchUserInfo;
-  final ZoomUserInfo? zoomUserInfo;
-  final String? name;
-  final String? username;
-  final String? phone;
-  final String? email;
-  final String? description;
-  final bool? active;
-  final String? cover;
-  final UserType? type;
-  final String? industry;
-  final List<Address>? addresses;
-  final int? hosted;
-  final int? attended;
-  final int? friends;
-  final int? following;
-  final int? followers;
-  final Currency? currency;
-
-  final String? jobTitle;
-  final String? tagline;
-
-  final String? handleTwitter;
-  final String? handleInstagram;
-  final String? handleFacebook;
-  final String? handleLinkedin;
-
-  final List<String>? wallets;
-  final String? walletCustodial;
 
   User({
     this.id,
@@ -119,7 +85,7 @@ class User {
       lastName: dto.lastName,
       imageAvatar: dto.imageAvatar,
       newPhotosExpanded: dto.newPhotosExpanded != null
-          ? dto.newPhotosExpanded!.map((dbFile) => DbFile.fromDto(dbFile)).toList()
+          ? dto.newPhotosExpanded!.map(DbFile.fromDto).toList()
           : null,
       dateOfBirth: dto.dateOfBirth,
       phoneVerified: dto.phoneVerified,
@@ -137,7 +103,7 @@ class User {
       cover: dto.cover,
       type: dto.type,
       industry: dto.industry,
-      addresses: dto.addresses != null ? dto.addresses!.map((address) => Address.fromDto(address)).toList() : null,
+      addresses: dto.addresses != null ? dto.addresses!.map(Address.fromDto).toList() : null,
       hosted: dto.hosted,
       attended: dto.attended,
       friends: dto.friends,
@@ -154,12 +120,53 @@ class User {
       walletCustodial: dto.walletCustodial,
     );
   }
+  final String? id;
+  final DateTime? createdAt;
+  final String? displayName;
+  final String? firstName;
+  final String? lastName;
+  final String? imageAvatar;
+  final List<DbFile>? newPhotosExpanded;
+  final DateTime? dateOfBirth;
+  final bool? phoneVerified;
+  final GoogleUserInfo? googleUserInfo;
+  final DiscordUserInfo? discordUserInfo;
+  final ShopifyUserInfo? shopifyUserInfo;
+  final TwitchUserInfo? twitchUserInfo;
+  final ZoomUserInfo? zoomUserInfo;
+  final String? name;
+  final String? username;
+  final String? phone;
+  final String? email;
+  final String? description;
+  final bool? active;
+  final String? cover;
+  final UserType? type;
+  final String? industry;
+  final List<Address>? addresses;
+  final int? hosted;
+  final int? attended;
+  final int? friends;
+  final int? following;
+  final int? followers;
+  final Currency? currency;
+
+  final String? jobTitle;
+  final String? tagline;
+
+  final String? handleTwitter;
+  final String? handleInstagram;
+  final String? handleFacebook;
+  final String? handleLinkedin;
+
+  final List<String>? wallets;
+  final String? walletCustodial;
 }
 
 class DiscordUserInfo {
-  final String? username;
 
   DiscordUserInfo({this.username});
+  final String? username;
 
   static DiscordUserInfo fromDto(DiscordUserInfoDto dto) {
     return DiscordUserInfo(username: dto.username);
@@ -167,9 +174,9 @@ class DiscordUserInfo {
 }
 
 class ShopifyUserInfo {
-  final String? shopName;
 
   ShopifyUserInfo({this.shopName});
+  final String? shopName;
 
   static ShopifyUserInfo fromDto(ShopifyUserInfoDto dto) {
     return ShopifyUserInfo(shopName: dto.shopName);
@@ -177,17 +184,6 @@ class ShopifyUserInfo {
 }
 
 class GoogleUserInfo {
-  final String? id;
-  final String? name;
-  final String? email;
-  final String? familyName;
-  final String? gender;
-  final String? givenName;
-  final String? hd;
-  final String? link;
-  final String? locale;
-  final String? picture;
-  final String? verifiedEmail;
 
   GoogleUserInfo({
     this.id,
@@ -202,6 +198,17 @@ class GoogleUserInfo {
     this.picture,
     this.verifiedEmail,
   });
+  final String? id;
+  final String? name;
+  final String? email;
+  final String? familyName;
+  final String? gender;
+  final String? givenName;
+  final String? hd;
+  final String? link;
+  final String? locale;
+  final String? picture;
+  final String? verifiedEmail;
 
   static GoogleUserInfo fromDto(GoogleUserInfoDto dto) {
     return GoogleUserInfo(
@@ -221,12 +228,12 @@ class GoogleUserInfo {
 }
 
 class TwitchUserInfo {
+
+  TwitchUserInfo({this.id, this.displayName, this.logoUrl, this.name});
   final String? id;
   final String? displayName;
   final String? logoUrl;
   final String? name;
-
-  TwitchUserInfo({this.id, this.displayName, this.logoUrl, this.name});
 
   static TwitchUserInfo fromDto(TwitchUserInfoDto dto) {
     return TwitchUserInfo(
@@ -239,12 +246,12 @@ class TwitchUserInfo {
 }
 
 class ZoomUserInfo {
+
+  ZoomUserInfo({this.id, this.firstName, this.lastName, this.email});
   final String? id;
   final String? firstName;
   final String? lastName;
   final String? email;
-
-  ZoomUserInfo({this.id, this.firstName, this.lastName, this.email});
 
   static ZoomUserInfo fromDto(ZoomUserInfoDto dto) {
     return ZoomUserInfo(

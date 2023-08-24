@@ -44,4 +44,14 @@ class AvatarUtils {
     }
     return '';
   }
+
+  static String getProfileAvatar({
+    required String? userAvatar,
+    required String userId,
+  }) {
+    if (userAvatar != null) {
+      return userAvatar;
+    }
+    return randomUserImage(userId);
+  }
 }

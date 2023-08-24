@@ -1,9 +1,9 @@
 /// Generated file. Do not edit.
 ///
 /// Locales: 1
-/// Strings: 126
+/// Strings: 115
 ///
-/// Built on 2023-08-23 at 08:38 UTC
+/// Built on 2023-08-22 at 06:34 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -154,7 +154,6 @@ class _I18nEn implements BaseTranslations<AppLocale, _I18nEn> {
 	late final _I18nNotificationEn notification = _I18nNotificationEn._(_root);
 	late final _I18nCommonEn common = _I18nCommonEn._(_root);
 	late final _I18nEventEn event = _I18nEventEn._(_root);
-	late final _I18nOnboardingEn onboarding = _I18nOnboardingEn._(_root);
 }
 
 // Path: home
@@ -217,10 +216,12 @@ class _I18nNftEn {
 	String get noCollectible => 'No collectibles yet';
 	String get claimed => 'claimed';
 	String get claim => 'claim';
+	String get claiming => 'claiming';
 	String get needLocationToClaimPoap => 'We need to access your location to check eligibility...';
 	String get ineligibleToClaimPoap => 'Uh oh! 🙁 You are ineligible to claim this badge...';
 	String get ableToClaimPoap => 'Congrats! 🥳 You meet all requirements to claim this badge';
 	String get badges => 'badges';
+	String get noBadges => 'No badges found';
 }
 
 // Path: auth
@@ -294,6 +295,7 @@ class _I18nCommonEn {
 	String get support => 'support';
 	String get delete => 'delete';
 	String get lemonade => 'Lemonade';
+	String get requestLocation => 'Location Services are currently disabled. Please enable Location Services in your device settings.';
 }
 
 // Path: event
@@ -315,32 +317,6 @@ class _I18nEventEn {
 	String empty_attending_events({required Object time}) => 'You are currently not attending any events ${time}';
 	String empty_hosting_events({required Object time}) => 'You are currently not hosting any events ${time}';
 	String get noEvents => 'No events yet';
-}
-
-// Path: onboarding
-class _I18nOnboardingEn {
-	_I18nOnboardingEn._(this._root);
-
-	final _I18nEn _root; // ignore: unused_field
-
-	// Translations
-	String get pickUsername => 'Pick username';
-	String get pickUsernameDesc => 'Claim your unique username before someone else does!';
-	String get username => 'Username';
-	String get claim => 'Claim';
-	String get next => 'Next';
-	String get displayName => 'Display name';
-	String get shortBio => 'Short bio';
-	String get she => 'she';
-	String get he => 'he';
-	String get they => 'they';
-	String get skip => 'Skip';
-	String get findYourLook => 'Find your look';
-	String get findYourLookDesc => 'Show off your personality and creativity through your profile photo or an NFT';
-	String get aboutYou => 'About you';
-	String get aboutYouDesc => 'Announce yourself to the world!';
-	String get interest => 'Interests';
-	String get interestDesc => 'Pick what you are passionate about & unlock a world of tailored content';
 }
 
 // Path: chat.command
@@ -398,6 +374,8 @@ class _I18nCommonActionsEn {
 	String get editProfile => 'Edit profile';
 	String get shareProfile => 'Share profile';
 	String get follow => 'Follow';
+	String get cancel => 'Cancel';
+	String get goToSettings => 'Go to settings';
 }
 
 // Path: common.unit
@@ -407,6 +385,7 @@ class _I18nCommonUnitEn {
 	final _I18nEn _root; // ignore: unused_field
 
 	// Translations
+	String get m => 'm';
 	String get km => 'km';
 }
 
@@ -464,10 +443,12 @@ extension on _I18nEn {
 			case 'nft.noCollectible': return 'No collectibles yet';
 			case 'nft.claimed': return 'claimed';
 			case 'nft.claim': return 'claim';
+			case 'nft.claiming': return 'claiming';
 			case 'nft.needLocationToClaimPoap': return 'We need to access your location to check eligibility...';
 			case 'nft.ineligibleToClaimPoap': return 'Uh oh! 🙁 You are ineligible to claim this badge...';
 			case 'nft.ableToClaimPoap': return 'Congrats! 🥳 You meet all requirements to claim this badge';
 			case 'nft.badges': return 'badges';
+			case 'nft.noBadges': return 'No badges found';
 			case 'auth.login.success': return 'Logged in successfully';
 			case 'auth.login.fail': return 'Logged in failed';
 			case 'auth.logout': return 'Logout';
@@ -501,12 +482,15 @@ extension on _I18nEn {
 			case 'common.actions.editProfile': return 'Edit profile';
 			case 'common.actions.shareProfile': return 'Share profile';
 			case 'common.actions.follow': return 'Follow';
+			case 'common.actions.cancel': return 'Cancel';
+			case 'common.actions.goToSettings': return 'Go to settings';
 			case 'common.followed': return 'Followed';
 			case 'common.anonymous': return 'anonymous';
 			case 'common.profileUrlCopied': return 'Profile\'s URL copied to clipboard';
 			case 'common.upcoming': return 'Upcoming';
 			case 'common.past': return 'Past';
 			case 'common.noPhotos': return 'No photos yet';
+			case 'common.unit.m': return 'm';
 			case 'common.unit.km': return 'km';
 			case 'common.search': return 'search';
 			case 'common.viewRequirements': return 'view requirements';
@@ -519,6 +503,7 @@ extension on _I18nEn {
 			case 'common.support': return 'support';
 			case 'common.delete': return 'delete';
 			case 'common.lemonade': return 'Lemonade';
+			case 'common.requestLocation': return 'Location Services are currently disabled. Please enable Location Services in your device settings.';
 			case 'event.events': return 'Events';
 			case 'event.all': return 'all';
 			case 'event.attending': return 'attending';
@@ -531,23 +516,6 @@ extension on _I18nEn {
 			case 'event.empty_attending_events': return ({required Object time}) => 'You are currently not attending any events ${time}';
 			case 'event.empty_hosting_events': return ({required Object time}) => 'You are currently not hosting any events ${time}';
 			case 'event.noEvents': return 'No events yet';
-			case 'onboarding.pickUsername': return 'Pick username';
-			case 'onboarding.pickUsernameDesc': return 'Claim your unique username before someone else does!';
-			case 'onboarding.username': return 'Username';
-			case 'onboarding.claim': return 'Claim';
-			case 'onboarding.next': return 'Next';
-			case 'onboarding.displayName': return 'Display name';
-			case 'onboarding.shortBio': return 'Short bio';
-			case 'onboarding.she': return 'she';
-			case 'onboarding.he': return 'he';
-			case 'onboarding.they': return 'they';
-			case 'onboarding.skip': return 'Skip';
-			case 'onboarding.findYourLook': return 'Find your look';
-			case 'onboarding.findYourLookDesc': return 'Show off your personality and creativity through your profile photo or an NFT';
-			case 'onboarding.aboutYou': return 'About you';
-			case 'onboarding.aboutYouDesc': return 'Announce yourself to the world!';
-			case 'onboarding.interest': return 'Interests';
-			case 'onboarding.interestDesc': return 'Pick what you are passionate about & unlock a world of tailored content';
 			default: return null;
 		}
 	}

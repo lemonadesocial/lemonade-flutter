@@ -1,54 +1,98 @@
+import 'package:app/i18n/i18n.g.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:injectable/injectable.dart';
 
+@LazySingleton()
 class LocationUtils {
+  LocationUtils();
+
   LocationPermission _permissionStatus = LocationPermission.denied;
-  final Function()? onPermissionDeniedForever;
-
-  LocationUtils({
-    this.onPermissionDeniedForever,
-  });
-
   LocationPermission get permissionStatus => _permissionStatus;
 
-  Future<Position> getCurrentLocation() async {
+  Future<Position> getCurrentLocation({
+    void Function()? onPermissionDeniedForever,
+  }) async {
     if (!(await Geolocator.isLocationServiceEnabled())) {
       throw LocationServiceNotEnabledException();
     }
-    
-    if (!await _checkAndRequestPermission()) {
+
+    if (!await checkAndRequestPermission(
+      onPermissionDeniedForever: onPermissionDeniedForever,
+    )) {
       throw PermissionNotGrantedException();
     }
 
-    return await Geolocator.getCurrentPosition();
+    return Geolocator.getCurrentPosition();
   }
 
-  Future<bool> _checkAndRequestPermission() async {
-    LocationPermission _status = await Geolocator.checkPermission();
+  Future<bool> checkPermission() async {
+    _permissionStatus = await Geolocator.checkPermission();
+    return _permissionStatus == LocationPermission.always || _permissionStatus == LocationPermission.whileInUse;
+  }
 
-    if (_status == LocationPermission.denied) {
-      _status = await Geolocator.requestPermission();
+  Future<bool> checkAndRequestPermission({
+    void Function()? onPermissionDeniedForever,
+  }) async {
+    var status = await Geolocator.checkPermission();
+
+    if (status == LocationPermission.denied) {
+      status = await Geolocator.requestPermission();
     }
 
-    if (_status == LocationPermission.deniedForever) {
+    if (status == LocationPermission.deniedForever) {
       onPermissionDeniedForever?.call();
     }
 
-    _permissionStatus = _status;
+    _permissionStatus = status;
 
     return _permissionStatus == LocationPermission.always || _permissionStatus == LocationPermission.whileInUse;
+  }
+
+  static Future<void> goToSetting(BuildContext context) async {
+    await showDialog(
+      context: context,
+      builder: (context) {
+        final t = Translations.of(context);
+        return Theme(
+          data: ThemeData.dark(),
+          child: CupertinoAlertDialog(
+            content: Text(t.common.requestLocation),
+            actions: [
+              CupertinoDialogAction(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                isDestructiveAction: true,
+                child: Text(t.common.actions.cancel),
+              ),
+              CupertinoDialogAction(
+                isDefaultAction: true,
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Geolocator.openLocationSettings();
+                },
+                child: Text(t.common.actions.goToSettings),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }
 
 class LocationServiceNotEnabledException implements Exception {
   @override
   String toString() {
-    return "Location service is not enabled";
+    return 'Location service is not enabled';
   }
 }
 
 class PermissionNotGrantedException implements Exception {
   @override
   String toString() {
-    return "Location permission is not granted";
+    return 'Location permission is not granted';
   }
 }

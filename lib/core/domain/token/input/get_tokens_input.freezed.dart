@@ -409,3 +409,159 @@ abstract class _GetTokensInput implements GetTokensInput {
   _$$_GetTokensInputCopyWith<_$_GetTokensInput> get copyWith =>
       throw _privateConstructorUsedError;
 }
+
+GetTokenDetailInput _$GetTokenDetailInputFromJson(Map<String, dynamic> json) {
+  return _GetTokenDetailInput.fromJson(json);
+}
+
+/// @nodoc
+mixin _$GetTokenDetailInput {
+  String get id => throw _privateConstructorUsedError;
+  String? get network => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $GetTokenDetailInputCopyWith<GetTokenDetailInput> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $GetTokenDetailInputCopyWith<$Res> {
+  factory $GetTokenDetailInputCopyWith(
+          GetTokenDetailInput value, $Res Function(GetTokenDetailInput) then) =
+      _$GetTokenDetailInputCopyWithImpl<$Res, GetTokenDetailInput>;
+  @useResult
+  $Res call({String id, String? network});
+}
+
+/// @nodoc
+class _$GetTokenDetailInputCopyWithImpl<$Res, $Val extends GetTokenDetailInput>
+    implements $GetTokenDetailInputCopyWith<$Res> {
+  _$GetTokenDetailInputCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? network = freezed,
+  }) {
+    return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      network: freezed == network
+          ? _value.network
+          : network // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$_GetTokenDetailInputCopyWith<$Res>
+    implements $GetTokenDetailInputCopyWith<$Res> {
+  factory _$$_GetTokenDetailInputCopyWith(_$_GetTokenDetailInput value,
+          $Res Function(_$_GetTokenDetailInput) then) =
+      __$$_GetTokenDetailInputCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({String id, String? network});
+}
+
+/// @nodoc
+class __$$_GetTokenDetailInputCopyWithImpl<$Res>
+    extends _$GetTokenDetailInputCopyWithImpl<$Res, _$_GetTokenDetailInput>
+    implements _$$_GetTokenDetailInputCopyWith<$Res> {
+  __$$_GetTokenDetailInputCopyWithImpl(_$_GetTokenDetailInput _value,
+      $Res Function(_$_GetTokenDetailInput) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? network = freezed,
+  }) {
+    return _then(_$_GetTokenDetailInput(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      network: freezed == network
+          ? _value.network
+          : network // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
+  }
+}
+
+/// @nodoc
+
+@JsonSerializable(includeIfNull: false)
+class _$_GetTokenDetailInput implements _GetTokenDetailInput {
+  const _$_GetTokenDetailInput({required this.id, this.network});
+
+  factory _$_GetTokenDetailInput.fromJson(Map<String, dynamic> json) =>
+      _$$_GetTokenDetailInputFromJson(json);
+
+  @override
+  final String id;
+  @override
+  final String? network;
+
+  @override
+  String toString() {
+    return 'GetTokenDetailInput(id: $id, network: $network)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_GetTokenDetailInput &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.network, network) || other.network == network));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, id, network);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$_GetTokenDetailInputCopyWith<_$_GetTokenDetailInput> get copyWith =>
+      __$$_GetTokenDetailInputCopyWithImpl<_$_GetTokenDetailInput>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_GetTokenDetailInputToJson(
+      this,
+    );
+  }
+}
+
+abstract class _GetTokenDetailInput implements GetTokenDetailInput {
+  const factory _GetTokenDetailInput(
+      {required final String id,
+      final String? network}) = _$_GetTokenDetailInput;
+
+  factory _GetTokenDetailInput.fromJson(Map<String, dynamic> json) =
+      _$_GetTokenDetailInput.fromJson;
+
+  @override
+  String get id;
+  @override
+  String? get network;
+  @override
+  @JsonKey(ignore: true)
+  _$$_GetTokenDetailInputCopyWith<_$_GetTokenDetailInput> get copyWith =>
+      throw _privateConstructorUsedError;
+}

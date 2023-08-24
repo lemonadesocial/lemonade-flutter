@@ -25,7 +25,7 @@ class TokenRepositoryImpl implements TokenRepository {
       QueryOptions(
         operationName: 'getTokens',
         document: getTokensQuery,
-        variables: (input ?? GetTokensInput()).toJson(),
+        variables: input.toJson(),
         parserFn: (data) {
           return List.from(data['tokens'] ?? [])
               .map(
@@ -40,13 +40,38 @@ class TokenRepositoryImpl implements TokenRepository {
     return Right(result.parsedData ?? []);
   }
 
+  @override
+  Future<Either<Failure, TokenDetail?>> getToken({
+    required GetTokenDetailInput input,
+  }) async {
+    final result = await _metaverseClient.query(
+      QueryOptions(document: getTokenQuery,
+        variables: input.toJson(),
+        parserFn: (data) {
+          if(data['getToken'] == null) {
+            return null;
+          } 
+          return TokenDetail.fromDto(
+          TokenDetailDto.fromJson(
+            data['getToken'],
+          ),
+        );
+        },
+      ),
+    );
+
+    if(result.hasException) return Left(Failure());
+    return Right(result.parsedData);
+  }
+
+  @override
   Stream<Either<Failure, List<OrderComplex>>> watchOrders({
     required WatchOrdersInput input,
   }) {
     final stream = _metaverseClient.subscribe(
       SubscriptionOptions(
         document: watchOrdersSubscription,
-        variables: input.toJson() ?? {},
+        variables: input.toJson(),
         parserFn: (data) => List.from(data['orders'] ?? [])
             .map((item) => OrderComplex.fromDto(OrderComplexDto.fromJson(item)))
             .toList(),

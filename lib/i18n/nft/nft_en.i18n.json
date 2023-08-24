@@ -7,8 +7,10 @@
     "noCollectible": "No collectibles yet",
     "claimed": "claimed",
     "claim": "claim",
+    "claiming": "claiming",
     "needLocationToClaimPoap": "We need to access your location to check eligibility...",
     "ineligibleToClaimPoap": "Uh oh! 🙁 You are ineligible to claim this badge...",
     "ableToClaimPoap": "Congrats! 🥳 You meet all requirements to claim this badge",
-    "badges": "badges"
+    "badges": "badges",
+    "noBadges": "No badges found"
 }

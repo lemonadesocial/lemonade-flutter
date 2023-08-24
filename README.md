@@ -16,12 +16,15 @@
 To run the Lemonade Flutter app, you need to set up a `.env` configuration file containing the required variables. Follow the steps below:
 
 1. Create a `.env` file in the root directory of the project.
-2. Add the following variables to the file and replace `<OAUTH_URL>` and `<CLIENT_ID>` with your credentials:
+2. Ask team member about `.env` config file
 
-```env
-OAUTH2_BASE_URL=<OAUTH_URL>
-OAUTH2_CLIENT_ID=<CLIENT_ID>
-```
+## Setup commitlint check in local
+
+Follow [Conventional Commit](https://www.conventionalcommits.org/en/v1.0.0/)
+
+1. cd scripts
+2. Execute `./install_dev_env.sh`
+3. After this setup, everytime time you commit code, it's will automate trigger check your commit conventions
 
 ### Build and run the app with Flutter
 
