@@ -22,7 +22,7 @@ class _BottomBarState extends State<BottomBar>
   AppTab _selectedTab = AppTab.home;
   late AnimationController _animationController;
   late Animation<double> _animation;
-  bool _isTabChanged = false;
+  bool _isTabChanged = false; // for initial render didn't change any tab yet
 
   @override
   void initState() {
@@ -159,8 +159,8 @@ class _BottomBarState extends State<BottomBar>
           return Transform.scale(
             scale: _animation.value,
             child: Container(
-              width: 54.6,
-              height: 36,
+              width: 54.6.w,
+              height: 36.h,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(18),
                 color: isSelected ? LemonColor.white09 : Colors.transparent,
@@ -168,9 +168,11 @@ class _BottomBarState extends State<BottomBar>
             ),
           );
         }
+        // This is for initial render, when first time render
+        // It's must render container style around selected tab instead of animation
         return Container(
-          width: 54.6,
-          height: 36,
+          width: 54.6.w,
+          height: 36.h,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(18),
             color: isSelected ? LemonColor.white09 : Colors.transparent,
