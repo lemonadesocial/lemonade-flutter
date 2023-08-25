@@ -3,6 +3,7 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 final notificationFragment = '''
   fragment notificationField on Notification {
     _id
+    title
     message
     type
     created_at
@@ -18,6 +19,10 @@ final notificationFragment = '''
       __typename
     }
     is_seen
+    ref_event
+    ref_room
+    ref_store_order
+    ref_user
     __typename
   }
 ''';

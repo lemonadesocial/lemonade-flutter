@@ -24,13 +24,20 @@ mixin _$NotificationDto {
   String? get id => throw _privateConstructorUsedError;
   @JsonKey(name: 'from_expanded')
   UserDto? get fromExpanded => throw _privateConstructorUsedError;
+  String? get title => throw _privateConstructorUsedError;
   String? get message => throw _privateConstructorUsedError;
   String? get type => throw _privateConstructorUsedError;
   DateTime? get createdAt => throw _privateConstructorUsedError;
   String? get from => throw _privateConstructorUsedError;
   bool? get isSeen => throw _privateConstructorUsedError;
-  String? get object_id => throw _privateConstructorUsedError;
-  String? get object_type => throw _privateConstructorUsedError;
+  @JsonKey(name: 'ref_event')
+  String? get refEvent => throw _privateConstructorUsedError;
+  @JsonKey(name: 'ref_room')
+  String? get refRoom => throw _privateConstructorUsedError;
+  @JsonKey(name: 'ref_store_order')
+  String? get refStoreOrder => throw _privateConstructorUsedError;
+  @JsonKey(name: 'ref_user')
+  String? get refUser => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -47,13 +54,16 @@ abstract class $NotificationDtoCopyWith<$Res> {
   $Res call(
       {@JsonKey(name: '_id') String? id,
       @JsonKey(name: 'from_expanded') UserDto? fromExpanded,
+      String? title,
       String? message,
       String? type,
       DateTime? createdAt,
       String? from,
       bool? isSeen,
-      String? object_id,
-      String? object_type});
+      @JsonKey(name: 'ref_event') String? refEvent,
+      @JsonKey(name: 'ref_room') String? refRoom,
+      @JsonKey(name: 'ref_store_order') String? refStoreOrder,
+      @JsonKey(name: 'ref_user') String? refUser});
 
   $UserDtoCopyWith<$Res>? get fromExpanded;
 }
@@ -73,13 +83,16 @@ class _$NotificationDtoCopyWithImpl<$Res, $Val extends NotificationDto>
   $Res call({
     Object? id = freezed,
     Object? fromExpanded = freezed,
+    Object? title = freezed,
     Object? message = freezed,
     Object? type = freezed,
     Object? createdAt = freezed,
     Object? from = freezed,
     Object? isSeen = freezed,
-    Object? object_id = freezed,
-    Object? object_type = freezed,
+    Object? refEvent = freezed,
+    Object? refRoom = freezed,
+    Object? refStoreOrder = freezed,
+    Object? refUser = freezed,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -90,6 +103,10 @@ class _$NotificationDtoCopyWithImpl<$Res, $Val extends NotificationDto>
           ? _value.fromExpanded
           : fromExpanded // ignore: cast_nullable_to_non_nullable
               as UserDto?,
+      title: freezed == title
+          ? _value.title
+          : title // ignore: cast_nullable_to_non_nullable
+              as String?,
       message: freezed == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -110,13 +127,21 @@ class _$NotificationDtoCopyWithImpl<$Res, $Val extends NotificationDto>
           ? _value.isSeen
           : isSeen // ignore: cast_nullable_to_non_nullable
               as bool?,
-      object_id: freezed == object_id
-          ? _value.object_id
-          : object_id // ignore: cast_nullable_to_non_nullable
+      refEvent: freezed == refEvent
+          ? _value.refEvent
+          : refEvent // ignore: cast_nullable_to_non_nullable
               as String?,
-      object_type: freezed == object_type
-          ? _value.object_type
-          : object_type // ignore: cast_nullable_to_non_nullable
+      refRoom: freezed == refRoom
+          ? _value.refRoom
+          : refRoom // ignore: cast_nullable_to_non_nullable
+              as String?,
+      refStoreOrder: freezed == refStoreOrder
+          ? _value.refStoreOrder
+          : refStoreOrder // ignore: cast_nullable_to_non_nullable
+              as String?,
+      refUser: freezed == refUser
+          ? _value.refUser
+          : refUser // ignore: cast_nullable_to_non_nullable
               as String?,
     ) as $Val);
   }
@@ -145,13 +170,16 @@ abstract class _$$_NotificationDtoCopyWith<$Res>
   $Res call(
       {@JsonKey(name: '_id') String? id,
       @JsonKey(name: 'from_expanded') UserDto? fromExpanded,
+      String? title,
       String? message,
       String? type,
       DateTime? createdAt,
       String? from,
       bool? isSeen,
-      String? object_id,
-      String? object_type});
+      @JsonKey(name: 'ref_event') String? refEvent,
+      @JsonKey(name: 'ref_room') String? refRoom,
+      @JsonKey(name: 'ref_store_order') String? refStoreOrder,
+      @JsonKey(name: 'ref_user') String? refUser});
 
   @override
   $UserDtoCopyWith<$Res>? get fromExpanded;
@@ -170,13 +198,16 @@ class __$$_NotificationDtoCopyWithImpl<$Res>
   $Res call({
     Object? id = freezed,
     Object? fromExpanded = freezed,
+    Object? title = freezed,
     Object? message = freezed,
     Object? type = freezed,
     Object? createdAt = freezed,
     Object? from = freezed,
     Object? isSeen = freezed,
-    Object? object_id = freezed,
-    Object? object_type = freezed,
+    Object? refEvent = freezed,
+    Object? refRoom = freezed,
+    Object? refStoreOrder = freezed,
+    Object? refUser = freezed,
   }) {
     return _then(_$_NotificationDto(
       id: freezed == id
@@ -187,6 +218,10 @@ class __$$_NotificationDtoCopyWithImpl<$Res>
           ? _value.fromExpanded
           : fromExpanded // ignore: cast_nullable_to_non_nullable
               as UserDto?,
+      title: freezed == title
+          ? _value.title
+          : title // ignore: cast_nullable_to_non_nullable
+              as String?,
       message: freezed == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -207,13 +242,21 @@ class __$$_NotificationDtoCopyWithImpl<$Res>
           ? _value.isSeen
           : isSeen // ignore: cast_nullable_to_non_nullable
               as bool?,
-      object_id: freezed == object_id
-          ? _value.object_id
-          : object_id // ignore: cast_nullable_to_non_nullable
+      refEvent: freezed == refEvent
+          ? _value.refEvent
+          : refEvent // ignore: cast_nullable_to_non_nullable
               as String?,
-      object_type: freezed == object_type
-          ? _value.object_type
-          : object_type // ignore: cast_nullable_to_non_nullable
+      refRoom: freezed == refRoom
+          ? _value.refRoom
+          : refRoom // ignore: cast_nullable_to_non_nullable
+              as String?,
+      refStoreOrder: freezed == refStoreOrder
+          ? _value.refStoreOrder
+          : refStoreOrder // ignore: cast_nullable_to_non_nullable
+              as String?,
+      refUser: freezed == refUser
+          ? _value.refUser
+          : refUser // ignore: cast_nullable_to_non_nullable
               as String?,
     ));
   }
@@ -226,13 +269,16 @@ class _$_NotificationDto implements _NotificationDto {
   _$_NotificationDto(
       {@JsonKey(name: '_id') this.id,
       @JsonKey(name: 'from_expanded') this.fromExpanded,
+      this.title,
       this.message,
       this.type,
       this.createdAt,
       this.from,
       this.isSeen,
-      this.object_id,
-      this.object_type});
+      @JsonKey(name: 'ref_event') this.refEvent,
+      @JsonKey(name: 'ref_room') this.refRoom,
+      @JsonKey(name: 'ref_store_order') this.refStoreOrder,
+      @JsonKey(name: 'ref_user') this.refUser});
 
   factory _$_NotificationDto.fromJson(Map<String, dynamic> json) =>
       _$$_NotificationDtoFromJson(json);
@@ -244,6 +290,8 @@ class _$_NotificationDto implements _NotificationDto {
   @JsonKey(name: 'from_expanded')
   final UserDto? fromExpanded;
   @override
+  final String? title;
+  @override
   final String? message;
   @override
   final String? type;
@@ -254,13 +302,21 @@ class _$_NotificationDto implements _NotificationDto {
   @override
   final bool? isSeen;
   @override
-  final String? object_id;
+  @JsonKey(name: 'ref_event')
+  final String? refEvent;
   @override
-  final String? object_type;
+  @JsonKey(name: 'ref_room')
+  final String? refRoom;
+  @override
+  @JsonKey(name: 'ref_store_order')
+  final String? refStoreOrder;
+  @override
+  @JsonKey(name: 'ref_user')
+  final String? refUser;
 
   @override
   String toString() {
-    return 'NotificationDto(id: $id, fromExpanded: $fromExpanded, message: $message, type: $type, createdAt: $createdAt, from: $from, isSeen: $isSeen, object_id: $object_id, object_type: $object_type)';
+    return 'NotificationDto(id: $id, fromExpanded: $fromExpanded, title: $title, message: $message, type: $type, createdAt: $createdAt, from: $from, isSeen: $isSeen, refEvent: $refEvent, refRoom: $refRoom, refStoreOrder: $refStoreOrder, refUser: $refUser)';
   }
 
   @override
@@ -271,22 +327,25 @@ class _$_NotificationDto implements _NotificationDto {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.fromExpanded, fromExpanded) ||
                 other.fromExpanded == fromExpanded) &&
+            (identical(other.title, title) || other.title == title) &&
             (identical(other.message, message) || other.message == message) &&
             (identical(other.type, type) || other.type == type) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.from, from) || other.from == from) &&
             (identical(other.isSeen, isSeen) || other.isSeen == isSeen) &&
-            (identical(other.object_id, object_id) ||
-                other.object_id == object_id) &&
-            (identical(other.object_type, object_type) ||
-                other.object_type == object_type));
+            (identical(other.refEvent, refEvent) ||
+                other.refEvent == refEvent) &&
+            (identical(other.refRoom, refRoom) || other.refRoom == refRoom) &&
+            (identical(other.refStoreOrder, refStoreOrder) ||
+                other.refStoreOrder == refStoreOrder) &&
+            (identical(other.refUser, refUser) || other.refUser == refUser));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, fromExpanded, message, type,
-      createdAt, from, isSeen, object_id, object_type);
+  int get hashCode => Object.hash(runtimeType, id, fromExpanded, title, message,
+      type, createdAt, from, isSeen, refEvent, refRoom, refStoreOrder, refUser);
 
   @JsonKey(ignore: true)
   @override
@@ -306,13 +365,16 @@ abstract class _NotificationDto implements NotificationDto {
   factory _NotificationDto(
       {@JsonKey(name: '_id') final String? id,
       @JsonKey(name: 'from_expanded') final UserDto? fromExpanded,
+      final String? title,
       final String? message,
       final String? type,
       final DateTime? createdAt,
       final String? from,
       final bool? isSeen,
-      final String? object_id,
-      final String? object_type}) = _$_NotificationDto;
+      @JsonKey(name: 'ref_event') final String? refEvent,
+      @JsonKey(name: 'ref_room') final String? refRoom,
+      @JsonKey(name: 'ref_store_order') final String? refStoreOrder,
+      @JsonKey(name: 'ref_user') final String? refUser}) = _$_NotificationDto;
 
   factory _NotificationDto.fromJson(Map<String, dynamic> json) =
       _$_NotificationDto.fromJson;
@@ -324,6 +386,8 @@ abstract class _NotificationDto implements NotificationDto {
   @JsonKey(name: 'from_expanded')
   UserDto? get fromExpanded;
   @override
+  String? get title;
+  @override
   String? get message;
   @override
   String? get type;
@@ -334,9 +398,17 @@ abstract class _NotificationDto implements NotificationDto {
   @override
   bool? get isSeen;
   @override
-  String? get object_id;
+  @JsonKey(name: 'ref_event')
+  String? get refEvent;
   @override
-  String? get object_type;
+  @JsonKey(name: 'ref_room')
+  String? get refRoom;
+  @override
+  @JsonKey(name: 'ref_store_order')
+  String? get refStoreOrder;
+  @override
+  @JsonKey(name: 'ref_user')
+  String? get refUser;
   @override
   @JsonKey(ignore: true)
   _$$_NotificationDtoCopyWith<_$_NotificationDto> get copyWith =>

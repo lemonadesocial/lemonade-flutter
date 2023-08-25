@@ -11,11 +11,16 @@ class NotificationDto with _$NotificationDto {
     @JsonKey(name: '_id') String? id,
     @JsonKey(name: 'from_expanded') UserDto? fromExpanded,
     
+    String? title,
     String? message,
     String? type,
     DateTime? createdAt,
     String? from,
     bool? isSeen,
+    @JsonKey(name: 'ref_event') String? refEvent,
+    @JsonKey(name: 'ref_room') String? refRoom,
+    @JsonKey(name: 'ref_store_order') String? refStoreOrder,
+    @JsonKey(name: 'ref_user') String? refUser,
   }) = _NotificationDto;
 
   factory NotificationDto.fromJson(Map<String, dynamic> json) => _$NotificationDtoFromJson(json);
