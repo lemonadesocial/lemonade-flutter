@@ -16,7 +16,7 @@ class NotificationDto with _$NotificationDto {
     String? type,
     @JsonKey(name: 'created_at') DateTime? createdAt,
     String? from,
-    @JsonKey(name: 'is_seen') String? isSeen,
+    @JsonKey(name: 'is_seen') bool? isSeen,
     @JsonKey(name: 'ref_event') String? refEvent,
     @JsonKey(name: 'ref_room') String? refRoom,
     @JsonKey(name: 'ref_store_order') String? refStoreOrder,
