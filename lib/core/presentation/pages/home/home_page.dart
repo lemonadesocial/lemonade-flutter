@@ -2,6 +2,7 @@ import 'package:app/core/application/newsfeed/newsfeed_listing_bloc/newsfeed_lis
 import 'package:app/core/data/post/newsfeed_repository_impl.dart';
 import 'package:app/core/domain/newsfeed/input/get_newsfeed_input.dart';
 import 'package:app/core/presentation/pages/home/views/list/home_newsfeed_list.dart';
+import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/service/newsfeed/newsfeed_service.dart';
 import 'package:app/core/service/shake/shake_service.dart';
@@ -44,7 +45,9 @@ class HomePage extends StatelessWidget {
             onVisibilityChanged: (info) {
               if (info.visibleFraction == 1) {
                 //Whenever this screen is appear on screen, fetch latest news feed
-                context.read<NewsfeedListingBloc>().add(NewsfeedListingEvent.fetch());
+                context
+                    .read<NewsfeedListingBloc>()
+                    .add(NewsfeedListingEvent.fetch());
               }
             },
             child: const _HomeListingView(),
@@ -63,7 +66,6 @@ class _HomeListingView extends StatefulWidget {
 }
 
 class _HomePageViewState extends State<_HomeListingView> {
-
   @override
   void initState() {
     super.initState();
@@ -73,17 +75,9 @@ class _HomePageViewState extends State<_HomeListingView> {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final themeColor = Theme.of(context).colorScheme;
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          t.home.newsfeed,
-          style: Typo.extraMedium.copyWith(
-            color: themeColor.onPrimary,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        centerTitle: true,
+      appBar: LemonAppBar(
+        title: t.home.newsfeed,
         leading: const AppBarLogo(),
         actions: [
           GestureDetector(
@@ -91,13 +85,12 @@ class _HomePageViewState extends State<_HomeListingView> {
               AutoRouter.of(context).navigate(const ChatListRoute());
             },
             child: ThemeSvgIcon(
-              color: themeColor.onSurface,
+              color: Theme.of(context).colorScheme.onSurface,
               builder: (filter) => Assets.icons.icChatBubble.svg(
                 colorFilter: filter,
               ),
             ),
           ),
-          SizedBox(width: Spacing.xSmall),
         ],
       ),
       backgroundColor: LemonColor.black,
