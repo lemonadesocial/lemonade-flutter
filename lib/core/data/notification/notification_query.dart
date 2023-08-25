@@ -5,7 +5,7 @@ final notificationFragment = '''
     _id
     message
     type
-    stamp
+    created_at
     from
     from_expanded {
       _id
@@ -17,44 +17,7 @@ final notificationFragment = '''
       }
       __typename
     }
-    seen
-    object_id
-    object_type
-    object {
-      ... on Event {
-        _id
-        cover
-        end
-        __typename
-      }
-      ... on StoreOrder {
-        _id
-        store
-        user_expanded {
-          _id
-          new_photos_expanded(limit: 1) {
-            _id
-            key
-            bucket
-            __typename
-          }
-          __typename
-        }
-        __typename
-      }
-      ... on User {
-        _id
-        new_photos_expanded(limit: 1) {
-          _id
-          key
-          bucket
-          __typename
-        }
-        username
-        __typename
-      }
-      __typename
-    }
+    is_seen
     __typename
   }
 ''';

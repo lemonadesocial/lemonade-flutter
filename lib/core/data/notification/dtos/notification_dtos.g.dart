@@ -14,11 +14,11 @@ _$_NotificationDto _$$_NotificationDtoFromJson(Map<String, dynamic> json) =>
           : UserDto.fromJson(json['from_expanded'] as Map<String, dynamic>),
       message: json['message'] as String?,
       type: json['type'] as String?,
-      stamp: json['stamp'] == null
+      createdAt: json['createdAt'] == null
           ? null
-          : DateTime.parse(json['stamp'] as String),
+          : DateTime.parse(json['createdAt'] as String),
       from: json['from'] as String?,
-      seen: json['seen'] as bool?,
+      isSeen: json['isSeen'] as bool?,
       object_id: json['object_id'] as String?,
       object_type: json['object_type'] as String?,
     );
@@ -29,9 +29,9 @@ Map<String, dynamic> _$$_NotificationDtoToJson(_$_NotificationDto instance) =>
       'from_expanded': instance.fromExpanded?.toJson(),
       'message': instance.message,
       'type': instance.type,
-      'stamp': instance.stamp?.toIso8601String(),
+      'createdAt': instance.createdAt?.toIso8601String(),
       'from': instance.from,
-      'seen': instance.seen,
+      'isSeen': instance.isSeen,
       'object_id': instance.object_id,
       'object_type': instance.object_type,
     };

@@ -81,13 +81,14 @@ class FirebaseService {
           print('onDidReceiveNotificationResponse');
         }
         try {
-          var jsonObject = json.decode(notificationResponse.payload ?? '');
-          String type = jsonObject['type'];
-          String objectId = jsonObject['object_id'];
-          String objectType = jsonObject['object_type'];
+          // TODO: Handle notification navigate
+          // var jsonObject = json.decode(notificationResponse.payload ?? '');
+          // String type = jsonObject['type'];
+          // String objectId = jsonObject['object_id'];
+          // String objectType = jsonObject['object_type'];
 
-          NavigationUtils.handleNotificationNavigate(
-              _router!, _context!, type, objectType, objectId);
+          // NavigationUtils.handleNotificationNavigate(
+          //     _router!, _context!, type, objectType, objectId);
         } catch (e) {
           print('Error parsing JSON: $e');
         }
@@ -171,13 +172,13 @@ class FirebaseService {
       print('onPressNotification: ${message.data}');
     }
     try {
-      var jsonObject = message.data;
-      String type = jsonObject['type'];
-      String objectId = jsonObject['object_id'];
-      String objectType = jsonObject['object_type'];
+      // var jsonObject = message.data;
+      // String type = jsonObject['type'];
+      // String objectId = jsonObject['object_id'];
+      // String objectType = jsonObject['object_type'];
 
-      NavigationUtils.handleNotificationNavigate(
-          _router!, _context!, type, objectType, objectId);
+      // NavigationUtils.handleNotificationNavigate(
+      //     _router!, _context!, type, objectType, objectId);
     } catch (e) {
       print('Something wrong when onPressNotification: $e');
     }

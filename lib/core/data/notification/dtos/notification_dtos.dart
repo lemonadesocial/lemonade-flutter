@@ -13,11 +13,9 @@ class NotificationDto with _$NotificationDto {
     
     String? message,
     String? type,
-    DateTime? stamp,
+    DateTime? createdAt,
     String? from,
-    bool? seen,
-    String? object_id,
-    String? object_type,
+    bool? isSeen,
   }) = _NotificationDto;
 
   factory NotificationDto.fromJson(Map<String, dynamic> json) => _$NotificationDtoFromJson(json);

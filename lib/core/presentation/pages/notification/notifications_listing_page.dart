@@ -129,13 +129,12 @@ class _NotificationsListingViewState extends State<_NotificationsListingView> {
                           key: Key(notifications[index].id ?? ''),
                           notification: notifications[index],
                           onTap: () {
-                            NavigationUtils.handleNotificationNavigate(
-                              _appRouter,
-                              context,
-                              notifications[index].type,
-                              notifications[index].object_type,
-                              notifications[index].object_id,
-                            );
+                            // TODO: Refactor handle notification navigation 
+                            // NavigationUtils.handleNotificationNavigate(
+                            //   _appRouter,
+                            //   context,
+                            //   notifications[index].type
+                            // );
                           },
                         ),
                       ),

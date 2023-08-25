@@ -26,9 +26,9 @@ mixin _$NotificationDto {
   UserDto? get fromExpanded => throw _privateConstructorUsedError;
   String? get message => throw _privateConstructorUsedError;
   String? get type => throw _privateConstructorUsedError;
-  DateTime? get stamp => throw _privateConstructorUsedError;
+  DateTime? get createdAt => throw _privateConstructorUsedError;
   String? get from => throw _privateConstructorUsedError;
-  bool? get seen => throw _privateConstructorUsedError;
+  bool? get isSeen => throw _privateConstructorUsedError;
   String? get object_id => throw _privateConstructorUsedError;
   String? get object_type => throw _privateConstructorUsedError;
 
@@ -49,9 +49,9 @@ abstract class $NotificationDtoCopyWith<$Res> {
       @JsonKey(name: 'from_expanded') UserDto? fromExpanded,
       String? message,
       String? type,
-      DateTime? stamp,
+      DateTime? createdAt,
       String? from,
-      bool? seen,
+      bool? isSeen,
       String? object_id,
       String? object_type});
 
@@ -75,9 +75,9 @@ class _$NotificationDtoCopyWithImpl<$Res, $Val extends NotificationDto>
     Object? fromExpanded = freezed,
     Object? message = freezed,
     Object? type = freezed,
-    Object? stamp = freezed,
+    Object? createdAt = freezed,
     Object? from = freezed,
-    Object? seen = freezed,
+    Object? isSeen = freezed,
     Object? object_id = freezed,
     Object? object_type = freezed,
   }) {
@@ -98,17 +98,17 @@ class _$NotificationDtoCopyWithImpl<$Res, $Val extends NotificationDto>
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
               as String?,
-      stamp: freezed == stamp
-          ? _value.stamp
-          : stamp // ignore: cast_nullable_to_non_nullable
+      createdAt: freezed == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
       from: freezed == from
           ? _value.from
           : from // ignore: cast_nullable_to_non_nullable
               as String?,
-      seen: freezed == seen
-          ? _value.seen
-          : seen // ignore: cast_nullable_to_non_nullable
+      isSeen: freezed == isSeen
+          ? _value.isSeen
+          : isSeen // ignore: cast_nullable_to_non_nullable
               as bool?,
       object_id: freezed == object_id
           ? _value.object_id
@@ -147,9 +147,9 @@ abstract class _$$_NotificationDtoCopyWith<$Res>
       @JsonKey(name: 'from_expanded') UserDto? fromExpanded,
       String? message,
       String? type,
-      DateTime? stamp,
+      DateTime? createdAt,
       String? from,
-      bool? seen,
+      bool? isSeen,
       String? object_id,
       String? object_type});
 
@@ -172,9 +172,9 @@ class __$$_NotificationDtoCopyWithImpl<$Res>
     Object? fromExpanded = freezed,
     Object? message = freezed,
     Object? type = freezed,
-    Object? stamp = freezed,
+    Object? createdAt = freezed,
     Object? from = freezed,
-    Object? seen = freezed,
+    Object? isSeen = freezed,
     Object? object_id = freezed,
     Object? object_type = freezed,
   }) {
@@ -195,17 +195,17 @@ class __$$_NotificationDtoCopyWithImpl<$Res>
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
               as String?,
-      stamp: freezed == stamp
-          ? _value.stamp
-          : stamp // ignore: cast_nullable_to_non_nullable
+      createdAt: freezed == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
       from: freezed == from
           ? _value.from
           : from // ignore: cast_nullable_to_non_nullable
               as String?,
-      seen: freezed == seen
-          ? _value.seen
-          : seen // ignore: cast_nullable_to_non_nullable
+      isSeen: freezed == isSeen
+          ? _value.isSeen
+          : isSeen // ignore: cast_nullable_to_non_nullable
               as bool?,
       object_id: freezed == object_id
           ? _value.object_id
@@ -228,9 +228,9 @@ class _$_NotificationDto implements _NotificationDto {
       @JsonKey(name: 'from_expanded') this.fromExpanded,
       this.message,
       this.type,
-      this.stamp,
+      this.createdAt,
       this.from,
-      this.seen,
+      this.isSeen,
       this.object_id,
       this.object_type});
 
@@ -248,11 +248,11 @@ class _$_NotificationDto implements _NotificationDto {
   @override
   final String? type;
   @override
-  final DateTime? stamp;
+  final DateTime? createdAt;
   @override
   final String? from;
   @override
-  final bool? seen;
+  final bool? isSeen;
   @override
   final String? object_id;
   @override
@@ -260,7 +260,7 @@ class _$_NotificationDto implements _NotificationDto {
 
   @override
   String toString() {
-    return 'NotificationDto(id: $id, fromExpanded: $fromExpanded, message: $message, type: $type, stamp: $stamp, from: $from, seen: $seen, object_id: $object_id, object_type: $object_type)';
+    return 'NotificationDto(id: $id, fromExpanded: $fromExpanded, message: $message, type: $type, createdAt: $createdAt, from: $from, isSeen: $isSeen, object_id: $object_id, object_type: $object_type)';
   }
 
   @override
@@ -273,9 +273,10 @@ class _$_NotificationDto implements _NotificationDto {
                 other.fromExpanded == fromExpanded) &&
             (identical(other.message, message) || other.message == message) &&
             (identical(other.type, type) || other.type == type) &&
-            (identical(other.stamp, stamp) || other.stamp == stamp) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
             (identical(other.from, from) || other.from == from) &&
-            (identical(other.seen, seen) || other.seen == seen) &&
+            (identical(other.isSeen, isSeen) || other.isSeen == isSeen) &&
             (identical(other.object_id, object_id) ||
                 other.object_id == object_id) &&
             (identical(other.object_type, object_type) ||
@@ -285,7 +286,7 @@ class _$_NotificationDto implements _NotificationDto {
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, id, fromExpanded, message, type,
-      stamp, from, seen, object_id, object_type);
+      createdAt, from, isSeen, object_id, object_type);
 
   @JsonKey(ignore: true)
   @override
@@ -307,9 +308,9 @@ abstract class _NotificationDto implements NotificationDto {
       @JsonKey(name: 'from_expanded') final UserDto? fromExpanded,
       final String? message,
       final String? type,
-      final DateTime? stamp,
+      final DateTime? createdAt,
       final String? from,
-      final bool? seen,
+      final bool? isSeen,
       final String? object_id,
       final String? object_type}) = _$_NotificationDto;
 
@@ -327,11 +328,11 @@ abstract class _NotificationDto implements NotificationDto {
   @override
   String? get type;
   @override
-  DateTime? get stamp;
+  DateTime? get createdAt;
   @override
   String? get from;
   @override
-  bool? get seen;
+  bool? get isSeen;
   @override
   String? get object_id;
   @override
