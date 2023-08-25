@@ -15,11 +15,11 @@ _$_NotificationDto _$$_NotificationDtoFromJson(Map<String, dynamic> json) =>
       title: json['title'] as String?,
       message: json['message'] as String?,
       type: json['type'] as String?,
-      createdAt: json['createdAt'] == null
+      createdAt: json['created_at'] == null
           ? null
-          : DateTime.parse(json['createdAt'] as String),
+          : DateTime.parse(json['created_at'] as String),
       from: json['from'] as String?,
-      isSeen: json['isSeen'] as bool?,
+      isSeen: json['is_seen'] as String?,
       refEvent: json['ref_event'] as String?,
       refRoom: json['ref_room'] as String?,
       refStoreOrder: json['ref_store_order'] as String?,
@@ -33,9 +33,9 @@ Map<String, dynamic> _$$_NotificationDtoToJson(_$_NotificationDto instance) =>
       'title': instance.title,
       'message': instance.message,
       'type': instance.type,
-      'createdAt': instance.createdAt?.toIso8601String(),
+      'created_at': instance.createdAt?.toIso8601String(),
       'from': instance.from,
-      'isSeen': instance.isSeen,
+      'is_seen': instance.isSeen,
       'ref_event': instance.refEvent,
       'ref_room': instance.refRoom,
       'ref_store_order': instance.refStoreOrder,

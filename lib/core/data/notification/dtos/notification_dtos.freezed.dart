@@ -27,9 +27,11 @@ mixin _$NotificationDto {
   String? get title => throw _privateConstructorUsedError;
   String? get message => throw _privateConstructorUsedError;
   String? get type => throw _privateConstructorUsedError;
+  @JsonKey(name: 'created_at')
   DateTime? get createdAt => throw _privateConstructorUsedError;
   String? get from => throw _privateConstructorUsedError;
-  bool? get isSeen => throw _privateConstructorUsedError;
+  @JsonKey(name: 'is_seen')
+  String? get isSeen => throw _privateConstructorUsedError;
   @JsonKey(name: 'ref_event')
   String? get refEvent => throw _privateConstructorUsedError;
   @JsonKey(name: 'ref_room')
@@ -57,9 +59,9 @@ abstract class $NotificationDtoCopyWith<$Res> {
       String? title,
       String? message,
       String? type,
-      DateTime? createdAt,
+      @JsonKey(name: 'created_at') DateTime? createdAt,
       String? from,
-      bool? isSeen,
+      @JsonKey(name: 'is_seen') String? isSeen,
       @JsonKey(name: 'ref_event') String? refEvent,
       @JsonKey(name: 'ref_room') String? refRoom,
       @JsonKey(name: 'ref_store_order') String? refStoreOrder,
@@ -126,7 +128,7 @@ class _$NotificationDtoCopyWithImpl<$Res, $Val extends NotificationDto>
       isSeen: freezed == isSeen
           ? _value.isSeen
           : isSeen // ignore: cast_nullable_to_non_nullable
-              as bool?,
+              as String?,
       refEvent: freezed == refEvent
           ? _value.refEvent
           : refEvent // ignore: cast_nullable_to_non_nullable
@@ -173,9 +175,9 @@ abstract class _$$_NotificationDtoCopyWith<$Res>
       String? title,
       String? message,
       String? type,
-      DateTime? createdAt,
+      @JsonKey(name: 'created_at') DateTime? createdAt,
       String? from,
-      bool? isSeen,
+      @JsonKey(name: 'is_seen') String? isSeen,
       @JsonKey(name: 'ref_event') String? refEvent,
       @JsonKey(name: 'ref_room') String? refRoom,
       @JsonKey(name: 'ref_store_order') String? refStoreOrder,
@@ -241,7 +243,7 @@ class __$$_NotificationDtoCopyWithImpl<$Res>
       isSeen: freezed == isSeen
           ? _value.isSeen
           : isSeen // ignore: cast_nullable_to_non_nullable
-              as bool?,
+              as String?,
       refEvent: freezed == refEvent
           ? _value.refEvent
           : refEvent // ignore: cast_nullable_to_non_nullable
@@ -272,9 +274,9 @@ class _$_NotificationDto implements _NotificationDto {
       this.title,
       this.message,
       this.type,
-      this.createdAt,
+      @JsonKey(name: 'created_at') this.createdAt,
       this.from,
-      this.isSeen,
+      @JsonKey(name: 'is_seen') this.isSeen,
       @JsonKey(name: 'ref_event') this.refEvent,
       @JsonKey(name: 'ref_room') this.refRoom,
       @JsonKey(name: 'ref_store_order') this.refStoreOrder,
@@ -296,11 +298,13 @@ class _$_NotificationDto implements _NotificationDto {
   @override
   final String? type;
   @override
+  @JsonKey(name: 'created_at')
   final DateTime? createdAt;
   @override
   final String? from;
   @override
-  final bool? isSeen;
+  @JsonKey(name: 'is_seen')
+  final String? isSeen;
   @override
   @JsonKey(name: 'ref_event')
   final String? refEvent;
@@ -368,9 +372,9 @@ abstract class _NotificationDto implements NotificationDto {
       final String? title,
       final String? message,
       final String? type,
-      final DateTime? createdAt,
+      @JsonKey(name: 'created_at') final DateTime? createdAt,
       final String? from,
-      final bool? isSeen,
+      @JsonKey(name: 'is_seen') final String? isSeen,
       @JsonKey(name: 'ref_event') final String? refEvent,
       @JsonKey(name: 'ref_room') final String? refRoom,
       @JsonKey(name: 'ref_store_order') final String? refStoreOrder,
@@ -392,11 +396,13 @@ abstract class _NotificationDto implements NotificationDto {
   @override
   String? get type;
   @override
+  @JsonKey(name: 'created_at')
   DateTime? get createdAt;
   @override
   String? get from;
   @override
-  bool? get isSeen;
+  @JsonKey(name: 'is_seen')
+  String? get isSeen;
   @override
   @JsonKey(name: 'ref_event')
   String? get refEvent;
