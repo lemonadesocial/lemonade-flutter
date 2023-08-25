@@ -31,7 +31,7 @@ mixin _$NotificationDto {
   DateTime? get createdAt => throw _privateConstructorUsedError;
   String? get from => throw _privateConstructorUsedError;
   @JsonKey(name: 'is_seen')
-  String? get isSeen => throw _privateConstructorUsedError;
+  bool? get isSeen => throw _privateConstructorUsedError;
   @JsonKey(name: 'ref_event')
   String? get refEvent => throw _privateConstructorUsedError;
   @JsonKey(name: 'ref_room')
@@ -61,7 +61,7 @@ abstract class $NotificationDtoCopyWith<$Res> {
       String? type,
       @JsonKey(name: 'created_at') DateTime? createdAt,
       String? from,
-      @JsonKey(name: 'is_seen') String? isSeen,
+      @JsonKey(name: 'is_seen') bool? isSeen,
       @JsonKey(name: 'ref_event') String? refEvent,
       @JsonKey(name: 'ref_room') String? refRoom,
       @JsonKey(name: 'ref_store_order') String? refStoreOrder,
@@ -128,7 +128,7 @@ class _$NotificationDtoCopyWithImpl<$Res, $Val extends NotificationDto>
       isSeen: freezed == isSeen
           ? _value.isSeen
           : isSeen // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as bool?,
       refEvent: freezed == refEvent
           ? _value.refEvent
           : refEvent // ignore: cast_nullable_to_non_nullable
@@ -177,7 +177,7 @@ abstract class _$$_NotificationDtoCopyWith<$Res>
       String? type,
       @JsonKey(name: 'created_at') DateTime? createdAt,
       String? from,
-      @JsonKey(name: 'is_seen') String? isSeen,
+      @JsonKey(name: 'is_seen') bool? isSeen,
       @JsonKey(name: 'ref_event') String? refEvent,
       @JsonKey(name: 'ref_room') String? refRoom,
       @JsonKey(name: 'ref_store_order') String? refStoreOrder,
@@ -243,7 +243,7 @@ class __$$_NotificationDtoCopyWithImpl<$Res>
       isSeen: freezed == isSeen
           ? _value.isSeen
           : isSeen // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as bool?,
       refEvent: freezed == refEvent
           ? _value.refEvent
           : refEvent // ignore: cast_nullable_to_non_nullable
@@ -304,7 +304,7 @@ class _$_NotificationDto implements _NotificationDto {
   final String? from;
   @override
   @JsonKey(name: 'is_seen')
-  final String? isSeen;
+  final bool? isSeen;
   @override
   @JsonKey(name: 'ref_event')
   final String? refEvent;
@@ -374,7 +374,7 @@ abstract class _NotificationDto implements NotificationDto {
       final String? type,
       @JsonKey(name: 'created_at') final DateTime? createdAt,
       final String? from,
-      @JsonKey(name: 'is_seen') final String? isSeen,
+      @JsonKey(name: 'is_seen') final bool? isSeen,
       @JsonKey(name: 'ref_event') final String? refEvent,
       @JsonKey(name: 'ref_room') final String? refRoom,
       @JsonKey(name: 'ref_store_order') final String? refStoreOrder,
@@ -402,7 +402,7 @@ abstract class _NotificationDto implements NotificationDto {
   String? get from;
   @override
   @JsonKey(name: 'is_seen')
-  String? get isSeen;
+  bool? get isSeen;
   @override
   @JsonKey(name: 'ref_event')
   String? get refEvent;

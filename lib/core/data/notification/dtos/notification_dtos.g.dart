@@ -19,7 +19,7 @@ _$_NotificationDto _$$_NotificationDtoFromJson(Map<String, dynamic> json) =>
           ? null
           : DateTime.parse(json['created_at'] as String),
       from: json['from'] as String?,
-      isSeen: json['is_seen'] as String?,
+      isSeen: json['is_seen'] as bool?,
       refEvent: json['ref_event'] as String?,
       refRoom: json['ref_room'] as String?,
       refStoreOrder: json['ref_store_order'] as String?,
