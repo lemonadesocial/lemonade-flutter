@@ -9,7 +9,7 @@ import 'package:dartz/dartz.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 class NotificationRepositoryImpl implements NotificationRepository {
-    final client = getIt<AppGQL>().client;
+  final client = getIt<AppGQL>().client;
 
   @override
   Future<Either<Failure, List<Notification>>> getNotifications() async {

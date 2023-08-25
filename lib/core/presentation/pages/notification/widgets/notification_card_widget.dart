@@ -76,7 +76,7 @@ class NotificationCard extends StatelessWidget {
               color: colorScheme.onPrimary,
               fontWeight: FontWeight.w700,
             )),
-        Text(timeago.format(notification.stamp!, locale: 'en_short'),
+        Text(timeago.format(notification.createdAt!, locale: 'en_short'),
             style: Typo.medium.copyWith(
               color: colorScheme.onSurfaceVariant,
               fontWeight: FontWeight.w700,
