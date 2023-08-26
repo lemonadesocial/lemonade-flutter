@@ -94,6 +94,9 @@ class FirebaseService {
         }
       },
     );
+    // Enabled only for signed builds
+    FirebaseCrashlytics.instance
+        .setCrashlyticsCollectionEnabled(kDebugMode == false);
     FlutterError.onError = (errorDetails) {
       // If you wish to record a "non-fatal" exception, please use `FirebaseCrashlytics.instance.recordFlutterError` instead
       FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
@@ -167,6 +170,7 @@ class FirebaseService {
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
     FirebaseMessaging.onMessageOpenedApp.listen(onPressNotification);
   }
+
   void onPressNotification(RemoteMessage message) {
     if (kDebugMode) {
       print('onPressNotification: ${message.data}');
