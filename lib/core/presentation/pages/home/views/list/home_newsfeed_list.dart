@@ -55,7 +55,7 @@ class HomeNewsfeedListView extends StatelessWidget {
                   ),
                 ),
                 separatorBuilder: (ctx, index) =>
-                    Divider(color: colorScheme.error),
+                    Divider(color: colorScheme.outline),
                 itemCount: newsfeed.length,
               ),
             );
