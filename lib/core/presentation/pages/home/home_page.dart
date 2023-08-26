@@ -81,13 +81,18 @@ class _HomePageViewState extends State<_HomeListingView> {
         leading: const AppBarLogo(),
         actions: [
           GestureDetector(
+            behavior: HitTestBehavior.translucent,
             onTap: () {
               AutoRouter.of(context).navigate(const ChatListRoute());
             },
-            child: ThemeSvgIcon(
-              color: Theme.of(context).colorScheme.onSurface,
-              builder: (filter) => Assets.icons.icChatBubble.svg(
-                colorFilter: filter,
+            child: Container(
+              width: 48.w,
+              alignment: Alignment.centerRight,
+              child: ThemeSvgIcon(
+                color: Theme.of(context).colorScheme.onSurface,
+                builder: (filter) => Assets.icons.icChatBubble.svg(
+                  colorFilter: filter,
+                ),
               ),
             ),
           ),
