@@ -1,12 +1,14 @@
-import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
+import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/gen/assets.gen.dart';
+import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 // import 'package:flutter_bloc/flutter_bloc.dart';
+
 @RoutePage()
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -19,9 +21,9 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final themeColor = Theme.of(context).colorScheme;
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      backgroundColor: themeColor.primary,
+      backgroundColor: colorScheme.primary,
       appBar: const LemonAppBar(),
       body: Stack(
         children: [
@@ -29,27 +31,42 @@ class _LoginPageState extends State<LoginPage> {
             child: Image(image: Assets.images.bgCircle.provider()),
           ),
           Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image(image: Assets.images.bgGetStarted.provider()),
-              const SizedBox(height: 20),
-              const Text(
-                "Let's start",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 10),
-              const Text(
-                'Sign up or Login',
-                style: TextStyle(fontSize: 18),
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  context.read<AuthBloc>().add(const AuthEvent.login());
-                },
-                child: const Text(
-                  'Get started',
-                  style: TextStyle(fontSize: 16),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 42.w),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      t.auth.lets_get_you_in,
+                      textAlign: TextAlign.center,
+                      style: Typo.large.copyWith(
+                        color: colorScheme.onPrimary,
+                        fontSize: 26.sp,
+                        fontWeight: FontWeight.w800,
+                        fontFamily: FontFamily.spaceGrotesk,
+                      ),
+                    ),
+                    SizedBox(height: 9.h),
+                    Text(
+                      t.auth.get_started_description,
+                      textAlign: TextAlign.center,
+                      style: Typo.medium.copyWith(
+                        color: colorScheme.onSecondary,
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    SizedBox(height: 42.h),
+                    LinearGradientButton(
+                      label: t.auth.get_started,
+                      mode: GradientButtonMode.lavenderMode,
+                      height: 48.h,
+                      radius: BorderRadius.circular(24),
+                      textStyle: Typo.medium.copyWith(),
+                    ),
+                  ],
                 ),
               ),
             ],
