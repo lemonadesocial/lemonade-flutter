@@ -3,7 +3,7 @@ import 'package:app/core/data/notification/repository/notification_repository_im
 import 'package:app/core/domain/notification/entities/notification.dart'
     as entities;
 import 'package:app/core/presentation/pages/notification/widgets/notification_card_widget.dart';
-import 'package:app/core/presentation/widgets/burger_menu_widget.dart';
+import 'package:app/core/presentation/widgets/common/appbar/appbar_logo.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
@@ -12,10 +12,12 @@ import 'package:app/core/service/notification/notification_service.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 @RoutePage()
@@ -91,7 +93,25 @@ class _NotificationsListingViewState extends State<_NotificationsListingView> {
     return Scaffold(
       appBar: LemonAppBar(
         title: t.notification.notifications,
-        hideLeading: true,
+        leading: const AppBarLogo(),
+        actions: [
+          GestureDetector(
+            behavior: HitTestBehavior.translucent,
+            onTap: () {
+              AutoRouter.of(context).navigate(const ChatListRoute());
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 15.w),
+              alignment: Alignment.centerRight,
+              child: ThemeSvgIcon(
+                color: Theme.of(context).colorScheme.onSurface,
+                builder: (filter) => Assets.icons.icChatBubble.svg(
+                  colorFilter: filter,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
       backgroundColor: themeColor.primary,
       body: BlocBuilder<NotificationsListingBloc, NotificationsListingState>(

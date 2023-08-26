@@ -31,7 +31,7 @@ class DiscoverPage extends StatelessWidget {
               AutoRouter.of(context).navigate(const ChatListRoute());
             },
             child: Container(
-              width: 48.w,
+              padding: EdgeInsets.symmetric(horizontal: 15.w),
               alignment: Alignment.centerRight,
               child: ThemeSvgIcon(
                 color: Theme.of(context).colorScheme.onSurface,
