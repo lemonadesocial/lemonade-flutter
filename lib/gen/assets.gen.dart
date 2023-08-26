@@ -343,11 +343,43 @@ class $AssetsIconsGen {
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
+  /// File path: assets/images/bg_circle.png
+  AssetGenImage get bgCircle =>
+      const AssetGenImage('assets/images/bg_circle.png');
+
+  /// File path: assets/images/bg_circle@2x.png
+  AssetGenImage get bgCircle2x =>
+      const AssetGenImage('assets/images/bg_circle@2x.png');
+
+  /// File path: assets/images/bg_circle@3x.png
+  AssetGenImage get bgCircle3x =>
+      const AssetGenImage('assets/images/bg_circle@3x.png');
+
+  /// File path: assets/images/bg_get_started.png
+  AssetGenImage get bgGetStarted =>
+      const AssetGenImage('assets/images/bg_get_started.png');
+
+  /// File path: assets/images/bg_get_started@2x.png
+  AssetGenImage get bgGetStarted2x =>
+      const AssetGenImage('assets/images/bg_get_started@2x.png');
+
+  /// File path: assets/images/bg_get_started@3x.png
+  AssetGenImage get bgGetStarted3x =>
+      const AssetGenImage('assets/images/bg_get_started@3x.png');
+
   /// File path: assets/images/typing.gif
   AssetGenImage get typing => const AssetGenImage('assets/images/typing.gif');
 
   /// List of all assets
-  List<AssetGenImage> get values => [typing];
+  List<AssetGenImage> get values => [
+        bgCircle,
+        bgCircle2x,
+        bgCircle3x,
+        bgGetStarted,
+        bgGetStarted2x,
+        bgGetStarted3x,
+        typing
+      ];
 }
 
 class Assets {

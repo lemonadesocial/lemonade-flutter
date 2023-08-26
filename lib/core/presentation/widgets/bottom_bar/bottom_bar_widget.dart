@@ -131,19 +131,19 @@ class _BottomBarState extends State<BottomBar>
   void _handleTabTap(BuildContext context, TabData tabData) {
     Vibrate.feedback(FeedbackType.light);
     final authState = BlocProvider.of<AuthBloc>(context).state;
-    // if (tabData.tab == AppTab.profile || tabData.tab == AppTab.notification) {
-    //   if (authState is AuthStateAuthenticated) {
-    //     _triggerAnimation(tabData);
-    //     AutoRouter.of(context)
-    //         .navigateNamed(tabData.route, includePrefixMatches: true);
-    //   } else {
-    //     context.router.navigate(const LoginRoute());
-    //   }
-    // } else {
-    _triggerAnimation(tabData);
-    AutoRouter.of(context)
-        .navigateNamed(tabData.route, includePrefixMatches: true);
-    // }
+    if (tabData.tab == AppTab.profile || tabData.tab == AppTab.notification) {
+      if (authState is AuthStateAuthenticated) {
+        _triggerAnimation(tabData);
+        AutoRouter.of(context)
+            .navigateNamed(tabData.route, includePrefixMatches: true);
+      } else {
+        context.router.navigate(const LoginRoute());
+      }
+    } else {
+      _triggerAnimation(tabData);
+      AutoRouter.of(context)
+          .navigateNamed(tabData.route, includePrefixMatches: true);
+    }
   }
 
   void _triggerAnimation(tabData) {

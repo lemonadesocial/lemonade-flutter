@@ -18,25 +18,23 @@ class RootPage extends StatelessWidget {
       builder: (context, authState) => AutoTabsScaffold(
         scaffoldKey: DrawerUtils.drawerGlobalKey,
         backgroundColor: primaryColor,
-        routes: const [
-          HomeRoute(),
-          DiscoverRoute(),
-          WalletRoute(),
-          NotificationRoute(),
-          MyProfileRoute(),
-          // authState.maybeWhen(
-          //   authenticated: (session) => const NotificationRoute(),
-          //   orElse: EmptyRoute.new,
-          // ),
-          // authState.maybeWhen(
-          //   authenticated: (session) => const MyProfileRoute(),
-          // orElse: EmptyRoute.new,
-          // )
+        routes: [
+          const HomeRoute(),
+          const DiscoverRoute(),
+          const WalletRoute(),
+          authState.maybeWhen(
+            authenticated: (session) => const NotificationRoute(),
+            orElse: EmptyRoute.new,
+          ),
+          authState.maybeWhen(
+            authenticated: (session) => const MyProfileRoute(),
+            orElse: EmptyRoute.new,
+          )
         ],
         drawer: const LemonDrawer(),
         endDrawer: const LemonDrawer(),
         bottomNavigationBuilder: (_, tabsRouter) {
-          return BottomBar();
+          return const BottomBar();
         },
       ),
     );

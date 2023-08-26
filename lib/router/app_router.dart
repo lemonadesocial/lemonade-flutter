@@ -5,11 +5,11 @@ import 'package:auto_route/auto_route.dart';
 class AppRouter extends $AppRouter {
   @override
   List<AutoRoute> get routes => [
-        // AutoRoute(
-        //   path: '/login',
-        //   page: LoginRoute.page,
-        //   fullscreenDialog: true,
-        // ),
+        AutoRoute(
+          path: '/login',
+          page: LoginRoute.page,
+          fullscreenDialog: true,
+        ),
         AutoRoute(
           path: '/',
           page: RootRoute.page,
