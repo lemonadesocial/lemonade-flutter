@@ -1,5 +1,7 @@
 import 'package:app/core/application/notification/notifications_listing_bloc.dart';
 import 'package:app/core/data/notification/repository/notification_repository_impl.dart';
+import 'package:app/core/domain/notification/entities/notification.dart'
+    as entities;
 import 'package:app/core/presentation/pages/notification/widgets/notification_card_widget.dart';
 import 'package:app/core/presentation/widgets/burger_menu_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
@@ -14,17 +16,17 @@ import 'package:app/theme/color.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:app/core/utils/navigation_utils.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:app/core/domain/notification/entities/notification.dart' as entities;
 
 @RoutePage()
 class NotificationPage extends StatelessWidget {
-  late final NotificationService notificationService = NotificationService(NotificationRepositoryImpl());
+  late final NotificationService notificationService =
+      NotificationService(NotificationRepositoryImpl());
 
   Widget _notificationsListingBlocProvider(Widget child) {
     return BlocProvider<NotificationsListingBloc>(
-      create: (context) => NotificationsListingBloc(notificationService)..add(NotificationsListingEvent.fetch()),
+      create: (context) => NotificationsListingBloc(notificationService)
+        ..add(NotificationsListingEvent.fetch()),
       child: child,
     );
   }
@@ -41,11 +43,13 @@ class _NotificationsListingView extends StatefulWidget {
   const _NotificationsListingView();
 
   @override
-  State<_NotificationsListingView> createState() => _NotificationsListingViewState();
+  State<_NotificationsListingView> createState() =>
+      _NotificationsListingViewState();
 }
 
 class _NotificationsListingViewState extends State<_NotificationsListingView> {
-  GlobalKey<AnimatedListState> _notificationList = GlobalKey<AnimatedListState>();
+  GlobalKey<AnimatedListState> _notificationList =
+      GlobalKey<AnimatedListState>();
   final _appRouter = AppRouter();
 
   removeItem(
@@ -87,13 +91,7 @@ class _NotificationsListingViewState extends State<_NotificationsListingView> {
     return Scaffold(
       appBar: LemonAppBar(
         title: t.notification.notifications,
-        leading: BurgerMenu(),
-        actions: [
-          ThemeSvgIcon(
-            color: themeColor.onSurface,
-            builder: (filter) => Assets.icons.icChat.svg(colorFilter: filter),
-          ),
-        ],
+        hideLeading: true,
       ),
       backgroundColor: themeColor.primary,
       body: BlocBuilder<NotificationsListingBloc, NotificationsListingState>(
@@ -103,41 +101,43 @@ class _NotificationsListingViewState extends State<_NotificationsListingView> {
             fetched: (notifications) {
               if (notifications.isEmpty) {
                 return Center(
-                  child: EmptyList(emptyText: t.notification.emptyNotifications),
+                  child:
+                      EmptyList(emptyText: t.notification.emptyNotifications),
                 );
               }
               return AnimatedList(
                 key: _notificationList,
-                itemBuilder: (ctx, index, animation) => index == notifications.length
-                    ? const SizedBox(height: 80)
-                    : _NotificationSlidable(
-                        id: notifications[index].id ?? '',
-                        onRemove: () {
-                          removeItem(
-                            index,
-                            notification: notifications[index],
-                          );
-                        },
-                        onDismissed: () {
-                          removeItem(
-                            index,
-                            notification: notifications[index],
-                            isDismiss: true,
-                          );
-                        },
-                        child: NotificationCard(
-                          key: Key(notifications[index].id ?? ''),
-                          notification: notifications[index],
-                          onTap: () {
-                            // TODO: Refactor handle notification navigation 
-                            // NavigationUtils.handleNotificationNavigate(
-                            //   _appRouter,
-                            //   context,
-                            //   notifications[index].type
-                            // );
-                          },
-                        ),
-                      ),
+                itemBuilder: (ctx, index, animation) =>
+                    index == notifications.length
+                        ? const SizedBox(height: 80)
+                        : _NotificationSlidable(
+                            id: notifications[index].id ?? '',
+                            onRemove: () {
+                              removeItem(
+                                index,
+                                notification: notifications[index],
+                              );
+                            },
+                            onDismissed: () {
+                              removeItem(
+                                index,
+                                notification: notifications[index],
+                                isDismiss: true,
+                              );
+                            },
+                            child: NotificationCard(
+                              key: Key(notifications[index].id ?? ''),
+                              notification: notifications[index],
+                              onTap: () {
+                                // TODO: Refactor handle notification navigation
+                                // NavigationUtils.handleNotificationNavigate(
+                                //   _appRouter,
+                                //   context,
+                                //   notifications[index].type
+                                // );
+                              },
+                            ),
+                          ),
                 initialItemCount: notifications.length,
               );
             },

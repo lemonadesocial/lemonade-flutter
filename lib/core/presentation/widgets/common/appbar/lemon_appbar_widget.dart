@@ -1,7 +1,6 @@
 import 'package:app/core/presentation/widgets/lemon_back_button_widget.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -14,6 +13,7 @@ class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.actions,
     this.backgroundColor,
     this.padding,
+    this.hideLeading
   });
   final Widget? leading;
   final String? title;
@@ -21,6 +21,7 @@ class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
   final List<Widget>? actions;
   final Color? backgroundColor;
   final EdgeInsets? padding;
+  final bool? hideLeading;
 
   @override
   Size get preferredSize => Size.fromHeight(60.w);
@@ -70,6 +71,9 @@ class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   Widget buildLeading() {
+    if (hideLeading ?? false) {
+      return const SizedBox();
+    }
     return Padding(
       padding: EdgeInsets.only(left: Spacing.small),
       child: leading ?? const LemonBackButton(),
