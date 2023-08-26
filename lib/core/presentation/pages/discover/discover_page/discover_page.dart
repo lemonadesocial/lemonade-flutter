@@ -10,6 +10,7 @@ import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 @RoutePage()
 class DiscoverPage extends StatelessWidget {
@@ -25,13 +26,18 @@ class DiscoverPage extends StatelessWidget {
         leading: const AppBarLogo(),
         actions: [
           GestureDetector(
+            behavior: HitTestBehavior.translucent,
             onTap: () {
               AutoRouter.of(context).navigate(const ChatListRoute());
             },
-            child: ThemeSvgIcon(
-              color: Theme.of(context).colorScheme.onSurface,
-              builder: (filter) => Assets.icons.icChatBubble.svg(
-                colorFilter: filter,
+            child: Container(
+              width: 48.w,
+              alignment: Alignment.centerRight,
+              child: ThemeSvgIcon(
+                color: Theme.of(context).colorScheme.onSurface,
+                builder: (filter) => Assets.icons.icChatBubble.svg(
+                  colorFilter: filter,
+                ),
               ),
             ),
           ),
