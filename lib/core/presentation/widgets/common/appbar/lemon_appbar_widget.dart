@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
-
   const LemonAppBar({
     super.key,
     this.title,
@@ -35,25 +34,37 @@ class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
       child: SafeArea(
         child: PreferredSize(
           preferredSize: Size.fromHeight(preferredSize.height),
-          child: Row(
+          child: Stack(
+            alignment: Alignment.center,
             children: [
-              buildLeading(),
-              if (title?.isNotEmpty ?? false)
-                Flexible(
-                  child: Center(
-                    child: Text(
-                      title!,
-                      style: Typo.extraMedium.copyWith(fontWeight: FontWeight.w600),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
+              Positioned.fill(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    buildLeading(),
+                    const Spacer(),
+                    buildActions(),
+                  ],
                 ),
-              if (titleBuilder != null) titleBuilder!.call(context),
-              buildActions(),
+              ),
+              buildCenteredTitle(title!),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget buildCenteredTitle(String title) {
+    return Center(
+      child: Text(
+        title,
+        style: const TextStyle(
+          fontWeight: FontWeight.w600,
+          fontSize: 18, 
+        ),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
       ),
     );
   }
@@ -73,7 +84,6 @@ class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
               children: List.from(actions ?? [])
                   .map(
                     (item) => SizedBox(
-                      width: Sizing.small,
                       height: preferredSize.height,
                       child: item,
                     ),
