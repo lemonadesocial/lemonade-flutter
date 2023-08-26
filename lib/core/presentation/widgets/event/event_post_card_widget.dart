@@ -18,6 +18,7 @@ import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EventPostCard extends StatelessWidget {
   final Event event;
@@ -26,7 +27,7 @@ class EventPostCard extends StatelessWidget {
     required this.event,
   });
 
-  DbFile? get eventPhoto => event.newNewPhotosExpanded?.isNotEmpty == true
+  DbFile? get eventPhoto => event.newNewPhotosExpanded?.isNotEmpty ?? false
       ? event.newNewPhotosExpanded!.first
       : null;
 
@@ -44,7 +45,9 @@ class EventPostCard extends StatelessWidget {
       onTap: () {
         AutoRouter.of(context).navigate(
           EventDetailRoute(
-              eventId: event.id ?? '', eventName: event.title ?? ''),
+            eventId: event.id ?? '',
+            eventName: event.title ?? '',
+          ),
         );
       },
       child: Container(
@@ -58,7 +61,6 @@ class EventPostCard extends StatelessWidget {
               decoration: BoxDecoration(
                 border: Border.all(
                   color: colorScheme.outline,
-                  width: 1.0,
                 ),
                 borderRadius: BorderRadius.circular(20),
               ),
@@ -94,8 +96,6 @@ class EventPostCard extends StatelessWidget {
 
   Row _buildEventHost(ColorScheme colorScheme) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         _buildHostsAvatars(colorScheme),
         SizedBox(width: Spacing.extraSmall),
@@ -114,7 +114,7 @@ class EventPostCard extends StatelessWidget {
             text: hostName,
             children: [
               if (cohostsCount != null && cohostsCount != 0)
-                TextSpan(text: ' +${cohostsCount}'),
+                TextSpan(text: ' +$cohostsCount'),
             ],
           ),
         ),
@@ -124,8 +124,8 @@ class EventPostCard extends StatelessWidget {
   }
 
   Widget _buildHostsAvatars(ColorScheme colorScheme) {
-    final hosts = [...(event.cohostsExpanded ?? []), event.hostExpanded];
-    return Container(
+    final hosts = [...event.cohostsExpanded ?? [], event.hostExpanded];
+    return SizedBox(
       width: (1 + 1 / 2 * (hosts.length - 1)) * Sizing.small,
       height: Sizing.small,
       child: Stack(
@@ -144,7 +144,9 @@ class EventPostCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(Sizing.small),
               ),
               child: LemonCircleAvatar(
-                  url: ImageUtils.generateUrl(file: file), size: Sizing.small),
+                url: ImageUtils.generateUrl(file: file),
+                size: Sizing.small,
+              ),
             ),
           );
         }).toList(),
@@ -155,36 +157,41 @@ class EventPostCard extends StatelessWidget {
   Row _buildEventTitleAndTime(ColorScheme colorScheme) {
     return Row(
       children: [
-        Text.rich(
-          TextSpan(
-            text: "${event.title}\n",
-            style: Typo.medium.copyWith(fontFamily: FontFamily.circularStd),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextSpan(
+              Text(
+                '${event.title}',
+                style: Typo.medium.copyWith(fontFamily: FontFamily.circularStd),
+              ),
+              Text(
+                DateFormatUtils.fullDateWithTime(event.start),
                 style: Typo.small.copyWith(
                     color: colorScheme.onSurface,
                     height: 1.5,
                     fontFamily: FontFamily.circularStd),
-                text: DateFormatUtils.fullDateWithTime(event.start),
               )
             ],
           ),
         ),
-        Spacer(),
+        SizedBox(
+          width: Spacing.xSmall,
+        ),
         EventBuyTicketButton(event: event),
       ],
     );
   }
 
-  Container _buildEventPhoto() {
+  SizedBox _buildEventPhoto() {
     final imageUrl = eventPhoto != null
         ? ImageUtils.generateUrl(
             file: eventPhoto,
             imageConfig: ImageConfig.eventPhoto,
           )
         : '${AppConfig.assetPrefix}/assets/images/no_photo_event.png';
-    return Container(
-      height: 170,
+    return SizedBox(
+      height: 170.h,
       width: double.infinity,
       child: ClipRRect(
         borderRadius: BorderRadius.only(
@@ -204,7 +211,7 @@ class EventPostCard extends StatelessWidget {
   Widget _buildEventBadge(ColorScheme colorScheme) {
     return ClipRRect(
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 3.0, sigmaY: 3.0),
+        filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
         child: Container(
           width: Sizing.regular,
           height: Sizing.regular,

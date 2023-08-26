@@ -6,12 +6,15 @@ import 'package:app/core/presentation/widgets/hero_image_viewer_widget.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/core/utils/avatar_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
 import 'package:app/gen/assets.gen.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -46,13 +49,22 @@ class PostProfileCard extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Card left
-        LemonCircleAvatar(
-          size: Sizing.medium,
-          url: AvatarUtils.getAvatarUrl(user: post.userExpanded),
+        GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: () {
+            final isMe = AuthUtils.isMe(context, user: post.userExpanded!);
+            if (isMe) {
+              AutoRouter.of(context).navigate(const MyProfileRoute());
+            } else {
+              AutoRouter.of(context).navigate(ProfileRoute(userId: post.user));
+            }
+          },
+          child: LemonCircleAvatar(
+            size: Sizing.medium,
+            url: AvatarUtils.getAvatarUrl(user: post.userExpanded),
+          ),
         ),
         const SizedBox(width: 9),
-        // Card right
         Flexible(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,8 +81,7 @@ class PostProfileCard extends StatelessWidget {
                   if (postCreatedAt != null)
                     Text(
                       '  •  ${timeago.format(postCreatedAt!)}',
-                      style:
-                          Typo.medium.copyWith(color: colorScheme.onSurface),
+                      style: Typo.medium.copyWith(color: colorScheme.onSurface),
                     ),
                   const Spacer(),
                   ThemeSvgIcon(
@@ -133,7 +144,8 @@ class PostProfileCard extends StatelessWidget {
   }
 
   Widget _buildActions(ColorScheme colorScheme) {
-    final hasReactionColor = hasReaction ?? false ? colorScheme.tertiary : colorScheme.onSecondary;
+    final hasReactionColor =
+        hasReaction ?? false ? colorScheme.tertiary : colorScheme.onSecondary;
     return Padding(
       padding: EdgeInsets.only(top: Spacing.xSmall),
       child: Row(
