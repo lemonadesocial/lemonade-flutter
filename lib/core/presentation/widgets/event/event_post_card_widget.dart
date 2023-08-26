@@ -18,6 +18,7 @@ import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EventPostCard extends StatelessWidget {
   final Event event;
@@ -143,7 +144,9 @@ class EventPostCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(Sizing.small),
               ),
               child: LemonCircleAvatar(
-                  url: ImageUtils.generateUrl(file: file), size: Sizing.small),
+                url: ImageUtils.generateUrl(file: file),
+                size: Sizing.small,
+              ),
             ),
           );
         }).toList(),
@@ -188,7 +191,7 @@ class EventPostCard extends StatelessWidget {
           )
         : '${AppConfig.assetPrefix}/assets/images/no_photo_event.png';
     return SizedBox(
-      height: 170,
+      height: 170.h,
       width: double.infinity,
       child: ClipRRect(
         borderRadius: BorderRadius.only(
