@@ -146,7 +146,7 @@ class _MessageItemState extends State<MessageItem> {
 
     if (widget.event.messageType == MessageTypes.BadEncrypted ||
         widget.event.redacted) {
-      container = Opacity(opacity: 0.33, child: container);
+      container = Opacity(opacity: 0.45, child: container);
     }
 
     return Swipeable(
@@ -169,22 +169,8 @@ class _MessageItemState extends State<MessageItem> {
 
   Row _buildMessageBody(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    var bodyColor = ownMessage
-        ? colorScheme.primaryContainer
-        : colorScheme.secondaryContainer;
     final textColor =
         ownMessage ? colorScheme.onPrimary : colorScheme.onSurface;
-    final borderRadius = BorderRadius.only(
-      topLeft: !ownMessage
-          ? const Radius.circular(4)
-          : Radius.circular(LemonRadius.extraSmall),
-      topRight: Radius.circular(LemonRadius.extraSmall),
-      bottomLeft: Radius.circular(LemonRadius.extraSmall),
-      bottomRight: ownMessage
-          ? Radius.circular(4)
-          : Radius.circular(LemonRadius.extraSmall),
-    );
-
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
       mainAxisAlignment: rowMainAxisAlignment,
@@ -215,7 +201,6 @@ class _MessageItemState extends State<MessageItem> {
                       onLongPress: !widget.longPressSelect
                           ? null
                           : () => widget.onSelect!(widget.event),
-                      borderRadius: borderRadius,
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -314,7 +299,7 @@ class _MessageItemState extends State<MessageItem> {
           decoration: BoxDecoration(
             color: shouldDisplayTime
                 ? Theme.of(context).colorScheme.background
-                : Theme.of(context).colorScheme.background.withOpacity(0.33),
+                : Theme.of(context).colorScheme.background.withOpacity(0.45),
             borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
           ),
           clipBehavior: Clip.antiAlias,
