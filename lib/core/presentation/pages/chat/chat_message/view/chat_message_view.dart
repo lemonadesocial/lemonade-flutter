@@ -6,6 +6,7 @@ import 'package:app/core/presentation/widgets/chat/matrix_avatar.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/utils/chat/room_status_extension.dart';
 import 'package:app/core/utils/stream_extension.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/theme/spacing.dart';
@@ -37,6 +38,7 @@ class ChatMessageView extends StatelessWidget {
                   name: controller.room.name,
                   radius: 27,
                   fontSize: Typo.small.fontSize!,
+                  presence: controller.room.directChatPresence?.presence,
                 ),
                 SizedBox(width: Spacing.xSmall),
                 Flexible(
@@ -52,12 +54,16 @@ class ChatMessageView extends StatelessWidget {
           ),
         ),
         actions: [
-          ThemeSvgIcon(
-            color: colorScheme.onSurface,
-            builder: (filter) => Assets.icons.icMoreHoriz.svg(
-              colorFilter: filter,
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 15.w),
+            alignment: Alignment.centerRight,
+            child: ThemeSvgIcon(
+              color: colorScheme.onSurface,
+              builder: (filter) => Assets.icons.icMoreHoriz.svg(
+                colorFilter: filter,
+              ),
             ),
-          )
+          ),
         ],
       ),
       body: SafeArea(
