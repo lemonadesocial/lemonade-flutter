@@ -97,7 +97,6 @@ class MatrixAvatar extends StatelessWidget {
               shape: BoxShape.circle,
               color: isOnline ? LemonColor.online : Colors.grey,
               border: Border.all(
-                color: Colors.black,
                 width: 3.w,
               ),
             ),

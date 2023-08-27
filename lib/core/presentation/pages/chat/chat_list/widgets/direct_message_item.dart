@@ -1,9 +1,11 @@
 import 'package:app/core/presentation/pages/chat/chat_list/widgets/unseen_message_count_widget.dart';
 import 'package:app/core/presentation/widgets/chat/matrix_avatar.dart';
 import 'package:app/core/service/matrix/matrix_service.dart';
+import 'package:app/core/utils/chat/date_time_extension.dart';
 import 'package:app/core/utils/chat/room_status_extension.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
+import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
@@ -59,7 +61,8 @@ class DirectMessageItem extends StatelessWidget {
       );
     }
     return FutureBuilder<String>(
-      future: room.lastEvent?.calcLocalizedBody(MatrixDefaultLocalizations(),
+      future: room.lastEvent?.calcLocalizedBody(
+              const MatrixDefaultLocalizations(),
               hideReply: true,
               hideEdit: true,
               plaintextBody: true,
@@ -73,7 +76,7 @@ class DirectMessageItem extends StatelessWidget {
               ? t.chat.youAreInvitedToThisChat
               : snapshot.data ??
                   room.lastEvent?.calcLocalizedBodyFallback(
-                      MatrixDefaultLocalizations(),
+                      const MatrixDefaultLocalizations(),
                       hideReply: true,
                       hideEdit: true,
                       plaintextBody: true,
@@ -88,7 +91,7 @@ class DirectMessageItem extends StatelessWidget {
           style: TextStyle(
             fontWeight: unread ? FontWeight.w600 : null,
             color: Theme.of(context).colorScheme.onSurfaceVariant,
-            decoration: room.lastEvent?.redacted == true
+            decoration: room.lastEvent?.redacted ?? false
                 ? TextDecoration.lineThrough
                 : null,
           ),
@@ -109,13 +112,15 @@ class DirectMessageItem extends StatelessWidget {
       },
       child: Padding(
         padding: EdgeInsets.symmetric(
-            vertical: Spacing.extraSmall, horizontal: Spacing.small),
+          vertical: Spacing.extraSmall,
+          horizontal: Spacing.small,
+        ),
         child: Row(
           children: [
             _buildAvatar(),
             SizedBox(
               width: Spacing.xSmall,
-            ), 
+            ),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -135,7 +140,19 @@ class DirectMessageItem extends StatelessWidget {
             SizedBox(
               width: Spacing.xSmall,
             ),
-            UnseenMessageCountWidget(room: room),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  room.timeCreated.localizedTimeShort(context),
+                  style: Typo.small.copyWith(color: LemonColor.paleViolet),
+                ),
+                SizedBox(
+                  height: 4.h,
+                ),
+                UnseenMessageCountWidget(room: room),
+              ],
+            ),
           ],
         ),
       ),
