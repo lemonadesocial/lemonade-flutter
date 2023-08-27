@@ -8,10 +8,12 @@ import 'package:app/core/service/matrix/matrix_service.dart';
 import 'package:app/core/utils/chat/matrix_date_time_extension.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/injection/register_module.dart';
+import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_chat_bubble/chat_bubble.dart';
 
 import 'package:matrix/matrix.dart';
 
@@ -60,7 +62,8 @@ class _MessageItemState extends State<MessageItem> {
       widget.event.type == EventTypes.RoomCreate ||
       widget.nextEvent == null ||
       // check if 2 time close enough
-      !widget.event.originServerTs.sameEnvironment(widget.nextEvent!.originServerTs);
+      !widget.event.originServerTs
+          .sameEnvironment(widget.nextEvent!.originServerTs);
 
   bool get sameSender =>
       widget.nextEvent != null &&
@@ -93,9 +96,11 @@ class _MessageItemState extends State<MessageItem> {
         MessageTypes.Audio,
       }.contains(widget.event.messageType);
 
-  Alignment get alignment => ownMessage ? Alignment.topRight : Alignment.topLeft;
+  Alignment get alignment =>
+      ownMessage ? Alignment.topRight : Alignment.topLeft;
 
-  MainAxisAlignment get rowMainAxisAlignment => ownMessage ? MainAxisAlignment.end : MainAxisAlignment.start;
+  MainAxisAlignment get rowMainAxisAlignment =>
+      ownMessage ? MainAxisAlignment.end : MainAxisAlignment.start;
 
   @override
   Widget build(BuildContext context) {
@@ -108,7 +113,8 @@ class _MessageItemState extends State<MessageItem> {
       return _buildStateMessage();
     }
 
-    if (widget.event.type == EventTypes.Message && widget.event.messageType == EventTypes.KeyVerificationRequest) {
+    if (widget.event.type == EventTypes.Message &&
+        widget.event.messageType == EventTypes.KeyVerificationRequest) {
       return _buildVerificationRequestContent();
     }
 
@@ -118,12 +124,17 @@ class _MessageItemState extends State<MessageItem> {
   Widget _buildMessage(BuildContext context) {
     final messageBody = _buildMessageBody(context);
     Widget container;
-    if (hasReactions || shouldDisplayTime || widget.selected || widget.displayReadMarker) {
+    if (hasReactions ||
+        shouldDisplayTime ||
+        widget.selected ||
+        widget.displayReadMarker) {
       container = Column(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: ownMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        crossAxisAlignment:
+            ownMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: <Widget>[
-          if (shouldDisplayTime || widget.selected) _buildMessageSentTime(context),
+          if (shouldDisplayTime || widget.selected)
+            _buildMessageSentTime(context),
           messageBody,
           if (hasReactions) _buildMessageReaction(),
           if (widget.displayReadMarker) _buildMessageReadMarker(context),
@@ -133,12 +144,14 @@ class _MessageItemState extends State<MessageItem> {
       container = messageBody;
     }
 
-    if (widget.event.messageType == MessageTypes.BadEncrypted || widget.event.redacted) {
+    if (widget.event.messageType == MessageTypes.BadEncrypted ||
+        widget.event.redacted) {
       container = Opacity(opacity: 0.33, child: container);
     }
 
     return Swipeable(
-      direction: ownMessage ? SwipeDirection.endToStart : SwipeDirection.startToEnd,
+      direction:
+          ownMessage ? SwipeDirection.endToStart : SwipeDirection.startToEnd,
       maxOffset: 0.4,
       onSwipe: (direction) {
         widget.onSwipe?.call(widget.event);
@@ -156,13 +169,20 @@ class _MessageItemState extends State<MessageItem> {
 
   Row _buildMessageBody(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    var bodyColor = ownMessage ? colorScheme.primaryContainer : colorScheme.secondaryContainer;
-    final textColor = ownMessage ? colorScheme.onPrimary : colorScheme.onSurface;
+    var bodyColor = ownMessage
+        ? colorScheme.primaryContainer
+        : colorScheme.secondaryContainer;
+    final textColor =
+        ownMessage ? colorScheme.onPrimary : colorScheme.onSurface;
     final borderRadius = BorderRadius.only(
-      topLeft: !ownMessage ? const Radius.circular(4) : Radius.circular(LemonRadius.extraSmall),
+      topLeft: !ownMessage
+          ? const Radius.circular(4)
+          : Radius.circular(LemonRadius.extraSmall),
       topRight: Radius.circular(LemonRadius.extraSmall),
       bottomLeft: Radius.circular(LemonRadius.extraSmall),
-      bottomRight: ownMessage ? Radius.circular(4) : Radius.circular(LemonRadius.extraSmall),
+      bottomRight: ownMessage
+          ? Radius.circular(4)
+          : Radius.circular(LemonRadius.extraSmall),
     );
 
     return Row(
@@ -170,6 +190,7 @@ class _MessageItemState extends State<MessageItem> {
       mainAxisAlignment: rowMainAxisAlignment,
       mainAxisSize: MainAxisSize.max,
       children: [
+        // _buildSenderAvatar(),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -177,53 +198,55 @@ class _MessageItemState extends State<MessageItem> {
             children: [
               Container(
                 alignment: alignment,
-                padding: EdgeInsets.only(left: sameSender ? 0 : 8),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: noBubble ? Colors.transparent : bodyColor,
-                    borderRadius: BorderRadius.circular(LemonRadius.small),
-                  ),
-                  padding: noBubble || noPadding
-                      ? EdgeInsets.zero
-                      : EdgeInsets.symmetric(
-                          horizontal: Spacing.xSmall,
-                          vertical: Spacing.extraSmall,
-                        ),
-                  constraints: BoxConstraints(
-                    maxWidth: columnWidth * 1.5,
-                  ),
-                  clipBehavior: Clip.antiAlias,
-                  child: InkWell(
-                    onLongPress: !widget.longPressSelect ? null : () => widget.onSelect!(widget.event),
-                    borderRadius: borderRadius,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        if (widget.event.relationshipType == RelationshipTypes.reply) _buildRepliedMessage(),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Flexible(
-                              flex: 5,
-                              child: MessageContent(
-                                displayEvent,
-                                textColor: textColor,
-                                onInfoTab: widget.onInfoTab,
+                child: ChatBubble(
+                  elevation: 0,
+                  clipper: ownMessage
+                      ? ChatBubbleClipper3(type: BubbleType.sendBubble)
+                      : ChatBubbleClipper3(type: BubbleType.receiverBubble),
+                  alignment: alignment,
+                  backGroundColor: ownMessage
+                      ? LemonColor.ownMessage
+                      : LemonColor.otherMessage,
+                  child: Container(
+                    constraints: BoxConstraints(
+                      maxWidth: MediaQuery.of(context).size.width * 0.7,
+                    ),
+                    child: InkWell(
+                      onLongPress: !widget.longPressSelect
+                          ? null
+                          : () => widget.onSelect!(widget.event),
+                      borderRadius: borderRadius,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          if (widget.event.relationshipType ==
+                              RelationshipTypes.reply)
+                            _buildRepliedMessage(),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Flexible(
+                                flex: 5,
+                                child: MessageContent(
+                                  displayEvent,
+                                  textColor: textColor,
+                                  onInfoTab: widget.onInfoTab,
+                                ),
                               ),
-                            ),
-                            SizedBox(width: Spacing.superExtraSmall),
-                            Flexible(
-                              flex: 2,
-                              child: _buildMessageEditTime(
-                                colorScheme.onSurfaceVariant,
-                              ),
-                            )
-                          ],
-                        )
-                      ],
+                              SizedBox(width: Spacing.superExtraSmall),
+                              Flexible(
+                                flex: 2,
+                                child: _buildMessageEditTime(
+                                  colorScheme.onSurfaceVariant,
+                                ),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -283,7 +306,9 @@ class _MessageItemState extends State<MessageItem> {
 
   Widget _buildMessageSentTime(BuildContext context) {
     return Padding(
-      padding: shouldDisplayTime ? EdgeInsets.symmetric(vertical: Spacing.extraSmall) : EdgeInsets.zero,
+      padding: shouldDisplayTime
+          ? EdgeInsets.symmetric(vertical: Spacing.extraSmall)
+          : EdgeInsets.zero,
       child: Center(
         child: Container(
           decoration: BoxDecoration(
@@ -394,11 +419,8 @@ class _MessageItemState extends State<MessageItem> {
             widget.timeline,
             RelationshipTypes.edit,
           )) ...[
-            Icon(
-              Icons.edit_outlined,
-              color: textColor,
-              size: Typo.small.fontSize!
-            ),
+            Icon(Icons.edit_outlined,
+                color: textColor, size: Typo.small.fontSize!),
             SizedBox(width: 6),
           ],
           Text(

@@ -241,6 +241,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.1"
+  chat_bubbles:
+    dependency: "direct main"
+    description:
+      name: chat_bubbles
+      sha256: "16b4d0f575fbd80ef7a687d6e63c56c23137c660f6de7884507c55e255ef2920"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.5.0"
   checked_yaml:
     dependency: transitive
     description:
@@ -615,6 +623,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.3.0"
+  flutter_chat_bubble:
+    dependency: "direct main"
+    description:
+      name: flutter_chat_bubble
+      sha256: ede33df7237fea3d89464c8493bfa0bee2f94f50fd097ebd30c517c3c0d4fcf9
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.2"
   flutter_dotenv:
     dependency: "direct main"
     description:
