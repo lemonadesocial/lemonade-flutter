@@ -170,7 +170,6 @@ class _MessageItemState extends State<MessageItem> {
       mainAxisAlignment: rowMainAxisAlignment,
       mainAxisSize: MainAxisSize.max,
       children: [
-        _buildSenderAvatar(),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -346,42 +345,43 @@ class _MessageItemState extends State<MessageItem> {
     );
   }
 
-  Widget _buildSenderAvatar() {
-    return sameSender || ownMessage
-        ? SizedBox(
-            width: MatrixAvatar.defaultSize,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: Center(
-                child: SizedBox(
-                  width: Sizing.xSmall,
-                  height: Sizing.xSmall,
-                  child: widget.event.status == EventStatus.sending
-                      ? const CircularProgressIndicator.adaptive(
-                          strokeWidth: 2,
-                        )
-                      : widget.event.status == EventStatus.error
-                          ? const Icon(Icons.error, color: Colors.red)
-                          : null,
-                ),
-              ),
-            ),
-          )
-        : FutureBuilder<User?>(
-            future: widget.event.fetchSenderUser(),
-            builder: (context, snapshot) {
-              final user = snapshot.data ?? widget.event.senderFromMemoryOrFallback;
-              return MatrixAvatar(
-                name: user.calcDisplayname(),
-                onTap: () => widget.onAvatarTab!(widget.event),
-                size: Sizing.regular,
-                radius: Sizing.regular / 2,
-                fontSize: Typo.small.fontSize!,
-                mxContent: user.avatarUrl,
-              );
-            },
-          );
-  }
+  // TODO: Not use for now, but maybe we need this in future
+  // Widget _buildSenderAvatar() {
+  //   return sameSender || ownMessage
+  //       ? SizedBox(
+  //           width: MatrixAvatar.defaultSize,
+  //           child: Padding(
+  //             padding: const EdgeInsets.only(top: 8.0),
+  //             child: Center(
+  //               child: SizedBox(
+  //                 width: Sizing.xSmall,
+  //                 height: Sizing.xSmall,
+  //                 child: widget.event.status == EventStatus.sending
+  //                     ? const CircularProgressIndicator.adaptive(
+  //                         strokeWidth: 2,
+  //                       )
+  //                     : widget.event.status == EventStatus.error
+  //                         ? const Icon(Icons.error, color: Colors.red)
+  //                         : null,
+  //               ),
+  //             ),
+  //           ),
+  //         )
+  //       : FutureBuilder<User?>(
+  //           future: widget.event.fetchSenderUser(),
+  //           builder: (context, snapshot) {
+  //             final user = snapshot.data ?? widget.event.senderFromMemoryOrFallback;
+  //             return MatrixAvatar(
+  //               name: user.calcDisplayname(),
+  //               onTap: () => widget.onAvatarTab!(widget.event),
+  //               size: Sizing.regular,
+  //               radius: Sizing.regular / 2,
+  //               fontSize: Typo.small.fontSize!,
+  //               mxContent: user.avatarUrl,
+  //             );
+  //           },
+  //         );
+  // }
 
   _buildMessageEditTime(Color textColor) {
     final displayEvent = widget.event.getDisplayEvent(widget.timeline);
