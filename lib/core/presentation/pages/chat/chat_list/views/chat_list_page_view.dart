@@ -38,28 +38,32 @@ class ChatListPageView extends StatelessWidget {
                 onTap: () {
                   Scaffold.of(_context).openEndDrawer();
                 },
-                child: Center(
-                  child: SizedBox(
-                    child: chatSpaceState.activeSpace != null
-                        ? MatrixAvatar(
-                            size: 27,
-                            mxContent: chatSpaceState.activeSpace?.avatar,
-                            name: chatSpaceState.activeSpace?.name,
-                            fontSize: Typo.small.fontSize!,
-                          )
-                        : Container(
-                            width: 27,
-                            height: 27,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(5),
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 15.w),
+                  alignment: Alignment.centerRight,
+                  child: Center(
+                    child: SizedBox(
+                      child: chatSpaceState.activeSpace != null
+                          ? MatrixAvatar(
+                              size: 27,
+                              mxContent: chatSpaceState.activeSpace?.avatar,
+                              name: chatSpaceState.activeSpace?.name,
+                              fontSize: Typo.small.fontSize!,
+                            )
+                          : Container(
+                              width: 27,
+                              height: 27,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: ThemeSvgIcon(
+                                color: colorScheme.onSurface,
+                                builder: (filter) =>
+                                    Assets.icons.icLemonadeWhite.svg(),
+                              ),
                             ),
-                            child: ThemeSvgIcon(
-                              color: colorScheme.onSurface,
-                              builder: (filter) =>
-                                  Assets.icons.icLemonadeWhite.svg(),
-                            ),
-                          ),
+                    ),
                   ),
                 ),
               ),
