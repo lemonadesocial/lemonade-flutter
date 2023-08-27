@@ -9,7 +9,6 @@ import 'package:app/core/utils/chat/matrix_date_time_extension.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/theme/color.dart';
-import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
