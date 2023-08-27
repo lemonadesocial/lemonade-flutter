@@ -1,9 +1,9 @@
 /// Generated file. Do not edit.
 ///
 /// Locales: 1
-/// Strings: 126
+/// Strings: 140
 ///
-/// Built on 2023-08-24 at 06:29 UTC
+/// Built on 2023-08-27 at 06:45 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -213,6 +213,20 @@ class _I18nChatEn {
 	late final _I18nChatCommandEn command = _I18nChatCommandEn._(_root);
 	String get typeMessage => 'type a message...';
 	String get editMessage => 'Edit message';
+	String dateAndTimeOfDay({required Object date, required Object timeOfDay}) => '${date}, ${timeOfDay}';
+	String dateWithoutYear({required Object month, required Object day}) => '${month}-${day}';
+	String dateWithYear({required Object year, required Object month, required Object day}) => '${year}-${month}-${day}';
+	String get currentlyActive => 'Currently active';
+	String get lastSeenLongTimeAgo => 'Seen a long time ago';
+	String lastActiveAgo({required Object localizedTimeShort}) => 'Last active: ${localizedTimeShort}';
+	String countParticipants({required Object count}) => '${count} participants';
+	String numUsersTyping({required Object count}) => '${count} users are typing...';
+	String userIsTyping({required Object username}) => '${username} is typing...';
+	String userAndUserAreTyping({required Object username, required Object username2}) => '${username} and ${username2} is typing';
+	String userAndOthersAreTyping({required Object username, required Object count}) => '${username} and ${count} others are typing...';
+	String get isTyping => 'is typing...';
+	String get emptyChat => 'Empty chat';
+	String get youAreInvitedToThisChat => 'You are invited to this chat';
 }
 
 // Path: nft
@@ -517,6 +531,20 @@ extension on _I18nEn {
 			case 'chat.command.cuddle': return 'Send a cuddle';
 			case 'chat.typeMessage': return 'type a message...';
 			case 'chat.editMessage': return 'Edit message';
+			case 'chat.dateAndTimeOfDay': return ({required Object date, required Object timeOfDay}) => '${date}, ${timeOfDay}';
+			case 'chat.dateWithoutYear': return ({required Object month, required Object day}) => '${month}-${day}';
+			case 'chat.dateWithYear': return ({required Object year, required Object month, required Object day}) => '${year}-${month}-${day}';
+			case 'chat.currentlyActive': return 'Currently active';
+			case 'chat.lastSeenLongTimeAgo': return 'Seen a long time ago';
+			case 'chat.lastActiveAgo': return ({required Object localizedTimeShort}) => 'Last active: ${localizedTimeShort}';
+			case 'chat.countParticipants': return ({required Object count}) => '${count} participants';
+			case 'chat.numUsersTyping': return ({required Object count}) => '${count} users are typing...';
+			case 'chat.userIsTyping': return ({required Object username}) => '${username} is typing...';
+			case 'chat.userAndUserAreTyping': return ({required Object username, required Object username2}) => '${username} and ${username2} is typing';
+			case 'chat.userAndOthersAreTyping': return ({required Object username, required Object count}) => '${username} and ${count} others are typing...';
+			case 'chat.isTyping': return 'is typing...';
+			case 'chat.emptyChat': return 'Empty chat';
+			case 'chat.youAreInvitedToThisChat': return 'You are invited to this chat';
 			case 'nft.onSale': return 'on sale';
 			case 'nft.created': return 'created';
 			case 'nft.collected': return 'collected';

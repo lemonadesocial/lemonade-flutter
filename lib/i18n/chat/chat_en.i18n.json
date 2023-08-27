@@ -31,5 +31,19 @@
         "cuddle": "Send a cuddle"
     },
     "typeMessage": "type a message...",
-    "editMessage": "Edit message"
+    "editMessage": "Edit message", 
+    "dateAndTimeOfDay": "$date, $timeOfDay",
+    "dateWithoutYear": "$month-$day",
+    "dateWithYear": "$year-$month-$day",
+    "currentlyActive": "Currently active",
+    "lastSeenLongTimeAgo" : "Seen a long time ago",
+    "lastActiveAgo": "Last active: $localizedTimeShort",
+    "countParticipants": "$count participants",
+    "numUsersTyping": "$count users are typing...",
+    "userIsTyping": "$username is typing...",
+    "userAndUserAreTyping": "$username and $username2 is typing",
+    "userAndOthersAreTyping": "$username and $count others are typing...",
+    "isTyping": "is typing...",
+    "emptyChat": "Empty chat",
+    "youAreInvitedToThisChat": "You are invited to this chat"
 }
