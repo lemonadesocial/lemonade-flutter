@@ -21,16 +21,15 @@ class DirectMessageItem extends StatelessWidget {
 
   Widget _buildAvatar() {
     final avatarUrl = room.avatar;
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(6),
-      child: MatrixAvatar(
-        client: getIt<MatrixService>().client,
-        mxContent: avatarUrl,
-        size: 42.w,
-        name: roomName,
-        fontSize: Typo.small.fontSize!,
-        radius: 42.w,
-      ),
+    final presence = room.directChatPresence?.presence;
+    return MatrixAvatar(
+      client: getIt<MatrixService>().client,
+      mxContent: avatarUrl,
+      size: 42.w,
+      name: roomName,
+      fontSize: Typo.small.fontSize!,
+      radius: 42.w,
+      presence: presence,
     );
   }
 
@@ -104,39 +103,40 @@ class DirectMessageItem extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final color = room.isUnread ? colorScheme.onPrimary : colorScheme.onSurface;
 
-    return Container(
-      child: InkWell(
-        onTap: () {
-          AutoRouter.of(context).navigateNamed('/chat/detail/${room.id}');
-        },
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-              vertical: Spacing.extraSmall, horizontal: Spacing.small),
-          child: Row(
-            children: [
-              _buildAvatar(),
-              SizedBox(
-                  width: Spacing
-                      .extraSmall), // Add some spacing between avatar and title
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      roomName,
-                      style: Typo.medium.copyWith(
-                        color: color,
-                        fontWeight:
-                            room.isUnread ? FontWeight.w600 : FontWeight.w400,
-                      ),
+    return InkWell(
+      onTap: () {
+        AutoRouter.of(context).navigateNamed('/chat/detail/${room.id}');
+      },
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+            vertical: Spacing.extraSmall, horizontal: Spacing.small),
+        child: Row(
+          children: [
+            _buildAvatar(),
+            SizedBox(
+              width: Spacing.xSmall,
+            ), 
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    roomName,
+                    style: Typo.medium.copyWith(
+                      color: color,
+                      fontWeight:
+                          room.isUnread ? FontWeight.w600 : FontWeight.w400,
                     ),
-                    _buildSubtitle(context),
-                  ],
-                ),
+                  ),
+                  _buildSubtitle(context),
+                ],
               ),
-              UnseenMessageCountWidget(room: room),
-            ],
-          ),
+            ),
+            SizedBox(
+              width: Spacing.xSmall,
+            ),
+            UnseenMessageCountWidget(room: room),
+          ],
         ),
       ),
     );
