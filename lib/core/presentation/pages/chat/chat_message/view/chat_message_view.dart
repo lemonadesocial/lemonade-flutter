@@ -66,40 +66,46 @@ class ChatMessageView extends StatelessWidget {
           ),
         ],
       ),
-      body: SafeArea(
-        child: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: Assets.images.bgChat.provider(),
-              fit: BoxFit.cover,
+      body: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () {
+          FocusScope.of(context).requestFocus(FocusNode());
+        },
+        child: SafeArea(
+          child: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: Assets.images.bgChat.provider(),
+                fit: BoxFit.cover,
+              ),
             ),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              StreamBuilder(
-                stream: controller.room.onUpdate.stream
-                    .rateLimit(Duration(seconds: 1)),
-                builder: (context, snapshot) => FutureBuilder(
-                  future: controller.loadTimelineFuture,
-                  builder: (context, _snapshot) => controller.timeline == null
-                      ? Expanded(
-                          child: Center(
-                            child: Loading.defaultLoading(context),
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                StreamBuilder(
+                  stream: controller.room.onUpdate.stream
+                      .rateLimit(Duration(seconds: 1)),
+                  builder: (context, snapshot) => FutureBuilder(
+                    future: controller.loadTimelineFuture,
+                    builder: (context, _snapshot) => controller.timeline == null
+                        ? Expanded(
+                            child: Center(
+                              child: Loading.defaultLoading(context),
+                            ),
+                          )
+                        : Expanded(
+                            child: MessagesList(controller: controller),
                           ),
-                        )
-                      : Expanded(
-                          child: MessagesList(controller: controller),
-                        ),
+                  ),
                 ),
-              ),
-              ReplyDisplay(controller),
-              Divider(
-                color: colorScheme.outline,
-                height: 1.h,
-              ),
-              ChatInput(controller)
-            ],
+                ReplyDisplay(controller),
+                Divider(
+                  color: colorScheme.outline,
+                  height: 1.h,
+                ),
+                ChatInput(controller)
+              ],
+            ),
           ),
         ),
       ),
