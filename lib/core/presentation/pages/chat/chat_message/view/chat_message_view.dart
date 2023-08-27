@@ -60,27 +60,36 @@ class ChatMessageView extends StatelessWidget {
         ],
       ),
       body: SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            StreamBuilder(
-              stream: controller.room.onUpdate.stream.rateLimit(Duration(seconds: 1)),
-              builder: (context, snapshot) => FutureBuilder(
-                future: controller.loadTimelineFuture,
-                builder: (context, _snapshot) => controller.timeline == null
-                    ? Expanded(
-                      child: Center(
-                          child: Loading.defaultLoading(context),
-                        ),
-                    )
-                    : Expanded(
-                        child: MessagesList(controller: controller),
-                      ),
-              ),
+        child: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: Assets.images.bgChat.provider(),
+              fit: BoxFit.cover,
             ),
-            ReplyDisplay(controller),
-            ChatInput(controller)
-          ],
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              StreamBuilder(
+                stream: controller.room.onUpdate.stream
+                    .rateLimit(Duration(seconds: 1)),
+                builder: (context, snapshot) => FutureBuilder(
+                  future: controller.loadTimelineFuture,
+                  builder: (context, _snapshot) => controller.timeline == null
+                      ? Expanded(
+                          child: Center(
+                            child: Loading.defaultLoading(context),
+                          ),
+                        )
+                      : Expanded(
+                          child: MessagesList(controller: controller),
+                        ),
+                ),
+              ),
+              ReplyDisplay(controller),
+              ChatInput(controller)
+            ],
+          ),
         ),
       ),
     );
