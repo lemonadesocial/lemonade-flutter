@@ -13,24 +13,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:matrix/matrix.dart';
 
-class DirectMessageItem extends StatelessWidget {
-  const DirectMessageItem({super.key, required this.room});
+class ChatListItem extends StatelessWidget {
+  const ChatListItem({super.key, required this.room});
   final Room room;
 
   bool get isMuted => room.pushRuleState != PushRuleState.notify;
-
+  bool get isPrivateChannel => room.joinRules == JoinRules.private;
+  bool get isChannel => room.directChatMatrixID == null;
   String get roomName => room.getLocalizedDisplayname();
 
   Widget _buildAvatar() {
     final avatarUrl = room.avatar;
     final presence = room.directChatPresence?.presence;
+    final radius = isChannel ? 6.r : 42.r;
     return MatrixAvatar(
       client: getIt<MatrixService>().client,
       mxContent: avatarUrl,
       size: 42.w,
       name: roomName,
       fontSize: Typo.small.fontSize!,
-      radius: 42.w,
+      radius: radius,
       presence: presence,
     );
   }
@@ -105,7 +107,7 @@ class DirectMessageItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final color = room.isUnread ? colorScheme.onPrimary : colorScheme.onSurface;
-
+    
     return InkWell(
       onTap: () {
         AutoRouter.of(context).navigateNamed('/chat/detail/${room.id}');

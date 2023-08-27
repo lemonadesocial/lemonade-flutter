@@ -1,7 +1,6 @@
 import 'package:app/core/application/chat/chat_list_bloc/chat_list_bloc.dart';
 import 'package:app/core/application/chat/chat_space_bloc/chat_space_bloc.dart';
-import 'package:app/core/presentation/pages/chat/chat_list/widgets/channel_list_item.dart';
-import 'package:app/core/presentation/pages/chat/chat_list/widgets/direct_message_item.dart';
+import 'package:app/core/presentation/pages/chat/chat_list/widgets/chat_list_item.dart';
 import 'package:app/core/presentation/widgets/chat/matrix_avatar.dart';
 import 'package:app/core/presentation/widgets/chat/spaces_drawer.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
@@ -82,7 +81,7 @@ class ChatListPageView extends StatelessWidget {
                     _ChatListSection(
                       title: StringUtils.capitalize(t.chat.unread),
                       rooms: chatListState.unreadDmRooms,
-                      itemBuilder: (room) => DirectMessageItem(room: room),
+                      itemBuilder: (room) => ChatListItem(room: room),
                     ),
                     SliverToBoxAdapter(
                       child: Divider(color: colorScheme.onSurfaceVariant, height: 1),
@@ -91,7 +90,7 @@ class ChatListPageView extends StatelessWidget {
                   _ChatListSection(
                     title: StringUtils.capitalize(t.chat.channels),
                     rooms: chatListState.channelRooms,
-                    itemBuilder: (room) => ChannelListItem(room: room),
+                    itemBuilder: (room) => ChatListItem(room: room),
                   ),
                   SliverToBoxAdapter(
                     child: Divider(color: colorScheme.onSurfaceVariant, height: 1),
@@ -99,7 +98,7 @@ class ChatListPageView extends StatelessWidget {
                   _ChatListSection(
                     title: StringUtils.capitalize(t.chat.directMessages),
                     rooms: chatListState.dmRooms,
-                    itemBuilder: (room) => DirectMessageItem(room: room),
+                    itemBuilder: (room) => ChatListItem(room: room)
                   ),
                 ],
               );
