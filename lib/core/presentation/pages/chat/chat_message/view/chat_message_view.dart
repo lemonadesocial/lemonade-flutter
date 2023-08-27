@@ -11,6 +11,7 @@ import 'package:app/gen/assets.gen.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ChatMessageView extends StatelessWidget {
   final ChatController controller;
@@ -87,6 +88,10 @@ class ChatMessageView extends StatelessWidget {
                 ),
               ),
               ReplyDisplay(controller),
+              Divider(
+                color: colorScheme.outline,
+                height: 1.h,
+              ),
               ChatInput(controller)
             ],
           ),
