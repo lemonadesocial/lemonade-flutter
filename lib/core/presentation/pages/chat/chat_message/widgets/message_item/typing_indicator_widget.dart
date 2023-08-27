@@ -5,6 +5,7 @@ import 'package:app/gen/assets.gen.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lottie/lottie.dart';
 
 class TypingIndicators extends StatelessWidget {
   final ChatController controller;
@@ -16,7 +17,6 @@ class TypingIndicators extends StatelessWidget {
   Widget build(BuildContext context) {
     final typingUsers = controller.room.typingUsers
       ..removeWhere((u) => u.stateKey == client.userID);
-    const topPadding = 20.0;
     const bottomPadding = 4.0;
 
     return Container(
@@ -70,26 +70,9 @@ class TypingIndicators extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 8),
-            Padding(
-              padding: const EdgeInsets.only(top: topPadding),
-              child: Material(
-                color: Theme.of(context).appBarTheme.backgroundColor,
-                elevation: 6,
-                shadowColor:
-                    Theme.of(context).secondaryHeaderColor.withAlpha(100),
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(2),
-                  topRight: Radius.circular(6),
-                  bottomLeft: Radius.circular(6),
-                  bottomRight: Radius.circular(6),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8),
-                  child:
-                      typingUsers.isEmpty ? null : Assets.images.typing.image(),
-                ),
-              ),
-            ),
+            Container(
+              child: Lottie.asset(Assets.images.typing),
+            )
           ],
         ),
       ),

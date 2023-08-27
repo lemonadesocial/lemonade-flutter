@@ -354,11 +354,11 @@ class $AssetsImagesGen {
   AssetGenImage get bgChat3x =>
       const AssetGenImage('assets/images/bg_chat@3x.png');
 
-  /// File path: assets/images/typing.gif
-  AssetGenImage get typing => const AssetGenImage('assets/images/typing.gif');
+  /// File path: assets/images/typing.json
+  String get typing => 'assets/images/typing.json';
 
   /// List of all assets
-  List<AssetGenImage> get values => [bgChat, bgChat2x, bgChat3x, typing];
+  List<dynamic> get values => [bgChat, bgChat2x, bgChat3x, typing];
 }
 
 class Assets {

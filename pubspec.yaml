@@ -98,6 +98,7 @@ dependencies:
   flutter_openssl_crypto: ^0.1.0
   flutter_chat_bubble: ^2.0.2
   chat_bubbles: ^1.5.0
+  lottie: ^2.6.0
   
 dependency_overrides:
   # widget visibile detector
