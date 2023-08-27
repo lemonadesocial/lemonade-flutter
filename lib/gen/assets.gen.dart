@@ -343,11 +343,22 @@ class $AssetsIconsGen {
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
+  /// File path: assets/images/bg_chat.png
+  AssetGenImage get bgChat => const AssetGenImage('assets/images/bg_chat.png');
+
+  /// File path: assets/images/bg_chat@2x.png
+  AssetGenImage get bgChat2x =>
+      const AssetGenImage('assets/images/bg_chat@2x.png');
+
+  /// File path: assets/images/bg_chat@3x.png
+  AssetGenImage get bgChat3x =>
+      const AssetGenImage('assets/images/bg_chat@3x.png');
+
   /// File path: assets/images/typing.gif
   AssetGenImage get typing => const AssetGenImage('assets/images/typing.gif');
 
   /// List of all assets
-  List<AssetGenImage> get values => [typing];
+  List<AssetGenImage> get values => [bgChat, bgChat2x, bgChat3x, typing];
 }
 
 class Assets {
