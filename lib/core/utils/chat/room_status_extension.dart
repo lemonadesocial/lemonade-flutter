@@ -1,10 +1,7 @@
 import 'package:app/core/config.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:flutter/widgets.dart';
-
 import 'package:matrix/matrix.dart';
-
-// import '../config/app_config.dart';
 import 'date_time_extension.dart';
 
 extension RoomStatusExtension on Room {
@@ -18,18 +15,22 @@ extension RoomStatusExtension on Room {
       if (directChatPresence != null &&
           (directChatPresence.lastActiveTimestamp != null ||
               directChatPresence.currentlyActive != null)) {
+        // Status of user
         if (directChatPresence.statusMsg?.isNotEmpty ?? false) {
           return directChatPresence.statusMsg!;
         }
+        // Currently active state
         if (directChatPresence.currentlyActive ?? false) {
           return t.chat.currentlyActive;
         }
+        // Last active long time
         if (directChatPresence.lastActiveTimestamp == null) {
           return t.chat.lastSeenLongTimeAgo;
         }
         final time = directChatPresence.lastActiveTimestamp!;
         return t.chat.lastActiveAgo(
-            localizedTimeShort: time.localizedTimeShort(context));
+          localizedTimeShort: time.localizedTimeShort(context),
+        );
       }
       return t.chat.lastSeenLongTimeAgo;
     }

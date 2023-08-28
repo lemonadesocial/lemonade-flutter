@@ -90,9 +90,6 @@ class MatrixAvatar extends StatelessWidget {
         _buildBottomRightCorner(colorScheme)
       ],
     );
-    if (onTap == null) {
-      return container;
-    }
     return InkWell(
       onTap: onTap,
       borderRadius: borderRadius,

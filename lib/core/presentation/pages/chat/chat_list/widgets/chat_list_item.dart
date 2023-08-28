@@ -107,7 +107,7 @@ class ChatListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final color = room.isUnread ? colorScheme.onPrimary : colorScheme.onSurface;
-    
+
     return InkWell(
       onTap: () {
         AutoRouter.of(context).navigateNamed('/chat/detail/${room.id}');
