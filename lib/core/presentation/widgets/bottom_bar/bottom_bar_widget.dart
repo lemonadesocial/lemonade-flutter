@@ -65,7 +65,7 @@ class _BottomBarState extends State<BottomBar>
           filter: ImageFilter.blur(
             sigmaX: 10,
             sigmaY: 10,
-          ), 
+          ),
           child: Column(
             children: [
               SizedBox(height: 15.h),
@@ -141,7 +141,8 @@ class _BottomBarState extends State<BottomBar>
     final authState = BlocProvider.of<AuthBloc>(context).state;
     if (tabData.tab == AppTab.profile ||
         tabData.tab == AppTab.notification ||
-        tabData.tab == AppTab.wallet) {
+        tabData.tab == AppTab.wallet ||
+        tabData.tab == AppTab.discover) {
       if (authState is AuthStateAuthenticated) {
         _triggerAnimation(tabData);
         AutoRouter.of(context)

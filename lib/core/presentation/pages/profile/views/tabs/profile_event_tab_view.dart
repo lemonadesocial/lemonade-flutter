@@ -26,11 +26,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
 class ProfileEventTabView extends StatefulWidget {
-  final User user;
   const ProfileEventTabView({
     super.key,
     required this.user,
   });
+  final User user;
 
   @override
   State<ProfileEventTabView> createState() => _ProfileEventTabViewState();
@@ -59,16 +59,16 @@ class _ProfileEventTabViewState extends State<ProfileEventTabView> {
     super.initState();
   }
 
-  setEventListingType(EventListingType _type) {
+  setEventListingType(EventListingType type) {
     setState(() {
-      type = _type;
+      type = type;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return BaseSliverTabView(
-      name: "event",
+      name: 'event',
       children: [
         // TODO: temporary hide the filter bar
         // SliverPadding(
@@ -118,7 +118,7 @@ class _ProfileEventTabViewState extends State<ProfileEventTabView> {
           value: hostingEventsBloc,
           child: _EventList<HostingEventsListingBloc>(),
         ),
-        SliverToBoxAdapter(
+        const SliverToBoxAdapter(
           child: SizedBox(height: 92),
         )
       ],
@@ -137,7 +137,7 @@ class _EventList<T extends BaseEventListingBloc> extends StatelessWidget {
             return SliverToBoxAdapter(
                 child: Center(
               child: Text(t.common.somethingWrong),
-            ));
+            ),);
           },
           loading: () {
             return SliverToBoxAdapter(
@@ -160,7 +160,7 @@ class _EventList<T extends BaseEventListingBloc> extends StatelessWidget {
                 if (upcomingEvents.isNotEmpty) ...[
                   SliverToBoxAdapter(
                     child: Container(
-                      padding: EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(16),
                       child: Text(t.common.upcoming),
                     ),
                   ),
@@ -175,7 +175,7 @@ class _EventList<T extends BaseEventListingBloc> extends StatelessWidget {
                       ),
                       delegate: SliverChildBuilderDelegate(
                         (context, index) {
-                          var event = upcomingEvents[index];
+                          final event = upcomingEvents[index];
                           return _EventItem(
                             event: event,
                           );
@@ -188,8 +188,8 @@ class _EventList<T extends BaseEventListingBloc> extends StatelessWidget {
                 if (pastEvents.isNotEmpty) ...[
                   SliverToBoxAdapter(
                     child: Container(
-                      padding: EdgeInsets.all(16),
-                      child: Text("Past"),
+                      padding: const EdgeInsets.all(16),
+                      child: const Text('Past'),
                     ),
                   ),
                   SliverPadding(
@@ -203,7 +203,7 @@ class _EventList<T extends BaseEventListingBloc> extends StatelessWidget {
                       ),
                       delegate: SliverChildBuilderDelegate(
                         (context, index) {
-                          var event = pastEvents[index];
+                          final event = pastEvents[index];
                           return _EventItem(
                             event: event,
                           );
@@ -223,10 +223,10 @@ class _EventList<T extends BaseEventListingBloc> extends StatelessWidget {
 }
 
 class _EventItem extends StatelessWidget {
-  final Event event;
   const _EventItem({
     required this.event,
   });
+  final Event event;
 
   @override
   Widget build(BuildContext context) {
@@ -250,7 +250,7 @@ class _EventItem extends StatelessWidget {
                       borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
                       child: CachedNetworkImage(
                         imageUrl: ImageUtils.generateUrl(
-                            file: event.newNewPhotosExpanded!.first, imageConfig: ImageConfig.eventPhoto),
+                            file: event.newNewPhotosExpanded!.first, imageConfig: ImageConfig.eventPhoto,),
                         fit: BoxFit.cover,
                         errorWidget: (ctx, _, __) => ImagePlaceholder.eventCard(),
                       ),
@@ -262,7 +262,7 @@ class _EventItem extends StatelessWidget {
               left: Spacing.xSmall,
               child: Text.rich(
                 TextSpan(
-                  text: "${event.title}\n",
+                  text: '${event.title}\n',
                   style: Typo.small.copyWith(fontWeight: FontWeight.w700),
                   children: [
                     TextSpan(
