@@ -45,17 +45,17 @@ class ChatListPageView extends StatelessWidget {
                     child: SizedBox(
                       child: chatSpaceState.activeSpace != null
                           ? MatrixAvatar(
-                              size: 27,
+                              size: 27.w,
                               mxContent: chatSpaceState.activeSpace?.avatar,
                               name: chatSpaceState.activeSpace?.name,
                               fontSize: Typo.small.fontSize!,
                             )
                           : Container(
-                              width: 27,
-                              height: 27,
+                              width: 27.w,
+                              height: 27.w,
                               decoration: BoxDecoration(
                                 color: Colors.white,
-                                borderRadius: BorderRadius.circular(5),
+                                borderRadius: BorderRadius.circular(5.r),
                               ),
                               child: ThemeSvgIcon(
                                 color: colorScheme.onSurface,
