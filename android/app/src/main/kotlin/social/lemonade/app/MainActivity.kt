@@ -1,17 +1,20 @@
-package com.lemonadesocial.app
+package social.lemonade.app
 
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 
 import android.content.Context
+import androidx.multidex.MultiDex
 import android.os.Bundle
 import android.util.Log
 import android.view.WindowManager
 
 class MainActivity : FlutterActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    };
+    
+    override fun attachBaseContext(base: Context) {
+        super.attachBaseContext(base)
+        MultiDex.install(this)
+    }
 
     override fun provideFlutterEngine(context: Context): FlutterEngine? {
         return provideEngine(this)

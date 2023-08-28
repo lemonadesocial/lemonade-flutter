@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:matrix/matrix.dart';
 
 class StateMessageItem extends StatelessWidget {
-  final Event event;
   const StateMessageItem(this.event, {Key? key}) : super(key: key);
+  final Event event;
 
   @override
   Widget build(BuildContext context) {
@@ -24,16 +24,16 @@ class StateMessageItem extends StatelessWidget {
             borderRadius: BorderRadius.circular(LemonRadius.small),
           ),
           child: FutureBuilder<String>(
-            future: event.calcLocalizedBody(MatrixDefaultLocalizations()),
+            future: event.calcLocalizedBody(const MatrixDefaultLocalizations()),
             builder: (context, snapshot) {
               return Text(
                 snapshot.data ??
                     event.calcLocalizedBodyFallback(
-                      MatrixDefaultLocalizations()
+                      const MatrixDefaultLocalizations()
                     ),
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSecondaryContainer,
+                  color: Theme.of(context).colorScheme.onSecondary,
                   decoration:
                       event.redacted ? TextDecoration.lineThrough : null,
                 ),

@@ -27,7 +27,7 @@ class AppConfig {
   // Wallet connect
   static get walletConnectProjectId => dotenv.env['WALLET_CONNECT_PROJECT_ID'];
 
-  // Matrix 
+  // Matrix
   static get matrixHomeserver => dotenv.env['MATRIX_HOMESERVER'];
 
   static get isProduction => dotenv.env['ENV'] == 'PROD';
@@ -37,6 +37,9 @@ class AppConfig {
 
   /// Matrix chat
   static get pushNotificationsAppId => dotenv.env['PUSH_NOTIFICATION_APP_ID'];
-  
-  static get pushNotificationsGatewayUrl => dotenv.env['PUSH_NOTIFICATION_GATEWAY_URL'];
+
+  static get pushNotificationsGatewayUrl =>
+      dotenv.env['PUSH_NOTIFICATION_GATEWAY_URL'];
+
+  static get hideTypingUsernames => false;
 }
