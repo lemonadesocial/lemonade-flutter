@@ -29,7 +29,7 @@ class UnseenMessageCountWidget extends StatelessWidget {
       child: Center(
         child: Text(
           unseenMessageCount > 9 ? '9+' : '$unseenMessageCount',
-          style: Typo.medium.copyWith(color: textColor),
+          style: Typo.small.copyWith(color: textColor),
         ),
       ),
     );

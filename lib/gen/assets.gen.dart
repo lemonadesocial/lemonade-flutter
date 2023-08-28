@@ -343,6 +343,17 @@ class $AssetsIconsGen {
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
+  /// File path: assets/images/bg_chat.png
+  AssetGenImage get bgChat => const AssetGenImage('assets/images/bg_chat.png');
+
+  /// File path: assets/images/bg_chat@2x.png
+  AssetGenImage get bgChat2x =>
+      const AssetGenImage('assets/images/bg_chat@2x.png');
+
+  /// File path: assets/images/bg_chat@3x.png
+  AssetGenImage get bgChat3x =>
+      const AssetGenImage('assets/images/bg_chat@3x.png');
+
   /// File path: assets/images/bg_circle.png
   AssetGenImage get bgCircle =>
       const AssetGenImage('assets/images/bg_circle.png');
@@ -367,19 +378,28 @@ class $AssetsImagesGen {
   AssetGenImage get bgGetStarted3x =>
       const AssetGenImage('assets/images/bg_get_started@3x.png');
 
-  /// File path: assets/images/typing.gif
-  AssetGenImage get typing => const AssetGenImage('assets/images/typing.gif');
-
   /// List of all assets
   List<AssetGenImage> get values => [
+        bgChat,
+        bgChat2x,
+        bgChat3x,
         bgCircle,
         bgCircle2x,
         bgCircle3x,
         bgGetStarted,
         bgGetStarted2x,
-        bgGetStarted3x,
-        typing
+        bgGetStarted3x
       ];
+}
+
+class $AssetsLottiesGen {
+  const $AssetsLottiesGen();
+
+  /// File path: assets/lotties/typing.json
+  String get typing => 'assets/lotties/typing.json';
+
+  /// List of all assets
+  List<String> get values => [typing];
 }
 
 class Assets {
@@ -389,6 +409,7 @@ class Assets {
   static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
   static const String index = 'assets/index.html';
+  static const $AssetsLottiesGen lotties = $AssetsLottiesGen();
 
   /// List of all assets
   List<String> get values => [index];
