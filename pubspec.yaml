@@ -139,7 +139,7 @@ flutter:
     - assets/fonts/
     - assets/images/
     - assets/index.html
-#    - .env
+    - .env
     - .env.staging
 #    - .env.production
 
