@@ -3,20 +3,18 @@ import 'package:app/core/application/event/events_listing_bloc/attending_events_
 import 'package:app/core/application/event/events_listing_bloc/base_events_listing_bloc.dart';
 import 'package:app/core/application/event/events_listing_bloc/home_events_listing_bloc.dart';
 import 'package:app/core/application/event/events_listing_bloc/hosting_events_listing_bloc.dart';
-import 'package:app/core/config.dart';
 import 'package:app/core/domain/event/event_enums.dart';
 import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/core/domain/event/input/get_events_listing_input.dart';
-import 'package:app/core/presentation/widgets/burger_menu_widget.dart';
+import 'package:app/core/presentation/pages/event/widgets/event_card_widget.dart';
+import 'package:app/core/presentation/pages/event/widgets/event_time_filter_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
+import 'package:app/core/presentation/widgets/lemon_chip_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/service/event/event_service.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/core/presentation/pages/event/widgets/event_card_widget.dart';
-import 'package:app/core/presentation/pages/event/widgets/event_time_filter_button_widget.dart';
-import 'package:app/core/presentation/widgets/lemon_chip_widget.dart';
-import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
@@ -26,9 +24,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 @RoutePage()
 class EventsListingPage extends StatelessWidget {
+  const EventsListingPage({super.key});
+
   HomeEventListingBloc resolveHomeEventsListingBloc() => HomeEventListingBloc(
         EventService(getIt<EventRepository>()),
-        defaultInput: GetHomeEventsInput(),
+        defaultInput: const GetHomeEventsInput(),
       );
   AttendingEventListingBloc resolveAttendingEventsListingBloc(String userId) => AttendingEventListingBloc(
         EventService(getIt<EventRepository>()),
@@ -54,15 +54,15 @@ class EventsListingPage extends StatelessWidget {
 }
 
 class _EventsListingView extends StatefulWidget {
-  final HomeEventListingBloc homeEventListingBloc;
-  final AttendingEventListingBloc attendingEventListingBloc;
-  final HostingEventsListingBloc hostingEventsListingBloc;
 
   const _EventsListingView({
     required this.homeEventListingBloc,
     required this.attendingEventListingBloc,
     required this.hostingEventsListingBloc,
   });
+  final HomeEventListingBloc homeEventListingBloc;
+  final AttendingEventListingBloc attendingEventListingBloc;
+  final HostingEventsListingBloc hostingEventsListingBloc;
 
   @override
   State<_EventsListingView> createState() => _EventsListingViewState();
@@ -79,18 +79,18 @@ class _EventsListingViewState extends State<_EventsListingView> {
             eventListingType = EventListingType.all;
           });
         },
-        orElse: () {});
+        orElse: () {},);
   }
 
-  _selectEventListingType(EventListingType _eventListingType) {
+  _selectEventListingType(EventListingType eventListingType) {
     setState(() {
-      eventListingType = _eventListingType;
+      eventListingType = eventListingType;
     });
   }
 
-  _selectEventTimeFilter(EventTimeFilter? _eventTimeFilter) {
+  _selectEventTimeFilter(EventTimeFilter? eventTimeFilter) {
     setState(() {
-      eventTimeFilter = _eventTimeFilter;
+      eventTimeFilter = eventTimeFilter;
     });
     _selectedEventsBloc.add(BaseEventsListingEvent.filter(eventTimeFilter: eventTimeFilter));
   }
@@ -127,17 +127,8 @@ class _EventsListingViewState extends State<_EventsListingView> {
     final t = Translations.of(context);
     final themeColor = Theme.of(context).colorScheme;
     return Scaffold(
-      floatingActionButton: !AppConfig.isProduction
-          ? FloatingActionButton(
-              onPressed: () {
-                AutoRouter.of(context).navigate(PoapListingRoute());
-              },
-              child: const Text('badge'),
-            )
-          : null,
       appBar: LemonAppBar(
         title: t.event.events,
-        leading: BurgerMenu(),
         actions: [
           GestureDetector(
             onTap: () {
@@ -164,12 +155,12 @@ class _EventsListingViewState extends State<_EventsListingView> {
                     if (notification.metrics.pixels == notification.metrics.maxScrollExtent) {
                       _selectedEventsBloc.add(BaseEventsListingEvent.fetch(
                         eventTimeFilter: eventTimeFilter,
-                      ));
+                      ),);
                     }
                   }
                   return true;
                 },
-                child: _buildEventsList()),
+                child: _buildEventsList(),),
           ],
         ),
       ),
@@ -178,7 +169,6 @@ class _EventsListingViewState extends State<_EventsListingView> {
 
   Widget _buildEventsFilterBar(BuildContext ctx) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         LemonChip(
           label: t.event.all,
@@ -207,12 +197,12 @@ class _EventsListingViewState extends State<_EventsListingView> {
                         ),
                       ],
                     ),
-                orElse: () => SizedBox.shrink());
+                orElse: SizedBox.shrink,);
           },
         ),
         const Spacer(),
         EventTimeFilterButton(
-          onSelect: (filter) => _selectEventTimeFilter(filter),
+          onSelect: _selectEventTimeFilter,
         ),
       ],
     );
@@ -250,18 +240,18 @@ class _EventsListingViewState extends State<_EventsListingView> {
 }
 
 class _EventList<T extends BaseEventListingBloc> extends StatelessWidget {
-  final EventListingType? eventListingType;
-  final EventTimeFilter? eventTimeFilter;
 
   const _EventList({
     super.key,
     this.eventListingType,
     this.eventTimeFilter,
   });
+  final EventListingType? eventListingType;
+  final EventTimeFilter? eventTimeFilter;
 
-  _buildEmptyEvents(BuildContext context) {
+  Expanded _buildEmptyEvents(BuildContext context) {
     final t = Translations.of(context);
-    String timeFilterText = eventTimeFilter != null ? t['common.${eventTimeFilter!.labelKey}'] : '';
+    final String timeFilterText = eventTimeFilter != null ? t['common.${eventTimeFilter!.labelKey}'] : '';
 
     String emptyText;
 
@@ -308,7 +298,7 @@ class _EventList<T extends BaseEventListingBloc> extends StatelessWidget {
                         onTap: () {
                           AutoRouter.of(context).navigate(
                             EventDetailRoute(
-                                eventId: filteredEvents[index].id!, eventName: filteredEvents[index].title ?? ''),
+                                eventId: filteredEvents[index].id!, eventName: filteredEvents[index].title ?? '',),
                           );
                         },
                       ),

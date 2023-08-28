@@ -1,7 +1,12 @@
 import 'dart:ui';
 
+import 'package:app/core/config.dart';
+import 'package:app/core/domain/common/entities/common.dart';
+import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/utils/date_format_utils.dart';
+import 'package:app/core/utils/image_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
@@ -11,10 +16,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EventDiscoverItem extends StatelessWidget {
-  const EventDiscoverItem({super.key});
+  const EventDiscoverItem({
+    super.key,
+    required this.event,
+  });
+  final Event event;
+
+  DbFile? get eventPhoto => event.newNewPhotosExpanded?.isNotEmpty ?? false ? event.newNewPhotosExpanded!.first : null;
 
   @override
   Widget build(BuildContext context) {
+    final imageUrl = eventPhoto != null
+        ? ImageUtils.generateUrl(
+            file: eventPhoto,
+            imageConfig: ImageConfig.eventPhoto,
+          )
+        : '${AppConfig.assetPrefix}/assets/images/no_photo_event.png';
     final colorScheme = Theme.of(context).colorScheme;
     return Container(
       width: 120.w,
@@ -39,8 +56,7 @@ class EventDiscoverItem extends StatelessWidget {
               ),
               child: CachedNetworkImage(
                 fit: BoxFit.cover,
-                imageUrl:
-                    'https://s3-alpha-sig.figma.com/img/7294/6bfc/384b10e942c4081db6ddefc3b8df1d42?Expires=1693785600&Signature=Fy5UnMZqPt0SYVqO6jTnb-sDHMRVE~6KZ07Z6v2On9NIh8OXwNags9RiFJ7waACcqkDwBiWGYKNc5cA3HB80fW8h3TKCuIfUrVXKYrPLsem~gMZ~PEeMzbXhF3jHHuLjjMDOR8PGrm-n-AlGlg6xr72ieHgRZcZUliE8RbTM9dRSVIEDjivaQAkhj0iW7DHOUk0VTm64WKbe4GJByv92KUhWrgXmWlh-FdNn4h~QY8Wxuk5c2wTtXlIuTOlRGll2GXM2xYZZCUUaYXb6cSYQrxMfyz4e9TJpvOkDN7H1NQrAKeB2jq5QQ2qUSh4vXDc0qvDa1tgPu5Xfbn96eE0aKQ__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4',
+                imageUrl: imageUrl,
                 placeholder: (_, __) => ImagePlaceholder.defaultPlaceholder(),
                 errorWidget: (_, __, ___) => ImagePlaceholder.defaultPlaceholder(),
               ),
@@ -60,15 +76,16 @@ class EventDiscoverItem extends StatelessWidget {
               ),
             ),
           ),
-          Positioned(
-            top: Spacing.superExtraSmall,
-            right: Spacing.superExtraSmall,
-            child: const _EventJoinCount(),
-          ),
+          // TODO:
+          // Positioned(
+          //   top: Spacing.superExtraSmall,
+          //   right: Spacing.superExtraSmall,
+          //   child: const _EventJoinCount(),
+          // ),
           Positioned(
             left: Spacing.xSmall,
             bottom: Spacing.xSmall,
-            child: const _EventInfo(),
+            child: _EventInfo(event),
           ),
         ],
       ),
@@ -77,7 +94,8 @@ class EventDiscoverItem extends StatelessWidget {
 }
 
 class _EventInfo extends StatelessWidget {
-  const _EventInfo();
+  const _EventInfo(this.event);
+  final Event event;
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +106,7 @@ class _EventInfo extends StatelessWidget {
         SizedBox(
           width: 85.w,
           child: Text(
-            'Living room gig',
+            event.title ?? '',
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: Typo.small.copyWith(
@@ -97,7 +115,7 @@ class _EventInfo extends StatelessWidget {
           ),
         ),
         Text(
-          'Sun, 22 Dec',
+          DateFormatUtils.dateOnly(event.start),
           maxLines: 1,
           style: Typo.xSmall.copyWith(
             fontSize: 9.sp,
