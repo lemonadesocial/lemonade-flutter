@@ -1,9 +1,9 @@
 /// Generated file. Do not edit.
 ///
 /// Locales: 1
-/// Strings: 140
+/// Strings: 143
 ///
-/// Built on 2023-08-27 at 06:45 UTC
+/// Built on 2023-08-28 at 09:31 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -261,6 +261,9 @@ class _I18nAuthEn {
 	// Translations
 	late final _I18nAuthLoginEn login = _I18nAuthLoginEn._(_root);
 	String get logout => 'Logout';
+	String get lets_get_you_in => 'Let\'s get you in!';
+	String get get_started_description => 'Sign up or log in to create, collaborate & celebrate! #makelemonade';
+	String get get_started => 'Get Started';
 }
 
 // Path: notification
@@ -562,6 +565,9 @@ extension on _I18nEn {
 			case 'auth.login.success': return 'Logged in successfully';
 			case 'auth.login.fail': return 'Logged in failed';
 			case 'auth.logout': return 'Logout';
+			case 'auth.lets_get_you_in': return 'Let\'s get you in!';
+			case 'auth.get_started_description': return 'Sign up or log in to create, collaborate & celebrate! #makelemonade';
+			case 'auth.get_started': return 'Get Started';
 			case 'notification.notifications': return 'Notifications';
 			case 'notification.emptyNotifications': return 'No notifications yet';
 			case 'common.today': return 'today';
