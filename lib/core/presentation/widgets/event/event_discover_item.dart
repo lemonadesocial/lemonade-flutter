@@ -77,11 +77,11 @@ class EventDiscoverItem extends StatelessWidget {
             ),
           ),
           // TODO:
-          // Positioned(
-          //   top: Spacing.superExtraSmall,
-          //   right: Spacing.superExtraSmall,
-          //   child: const _EventJoinCount(),
-          // ),
+          if(event.accepted?.isNotEmpty == true) Positioned(
+            top: Spacing.superExtraSmall,
+            right: Spacing.superExtraSmall,
+            child: _EventJoinCount(count: event.accepted?.length ?? 0),
+          ),
           Positioned(
             left: Spacing.xSmall,
             bottom: Spacing.xSmall,
@@ -129,7 +129,8 @@ class _EventInfo extends StatelessWidget {
 }
 
 class _EventJoinCount extends StatelessWidget {
-  const _EventJoinCount();
+  const _EventJoinCount({required this.count});
+  final int count;
 
   @override
   Widget build(BuildContext context) {
@@ -156,7 +157,7 @@ class _EventJoinCount extends StatelessWidget {
               ),
               SizedBox(width: Spacing.superExtraSmall / 2),
               Text(
-                '129',
+                count.toString(),
                 style: Typo.xSmall.copyWith(
                   color: colorScheme.onPrimary,
                   fontWeight: FontWeight.w600,
