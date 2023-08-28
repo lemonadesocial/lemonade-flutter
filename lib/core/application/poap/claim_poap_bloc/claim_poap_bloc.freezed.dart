@@ -20,18 +20,21 @@ mixin _$ClaimPoapEvent {
   TResult when<TResult extends Object?>({
     required TResult Function(bool fromServer) checkHasClaimed,
     required TResult Function(ClaimInput input) claim,
+    required TResult Function(GetPoapPolicyInput input) getPolicy,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(bool fromServer)? checkHasClaimed,
     TResult? Function(ClaimInput input)? claim,
+    TResult? Function(GetPoapPolicyInput input)? getPolicy,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(bool fromServer)? checkHasClaimed,
     TResult Function(ClaimInput input)? claim,
+    TResult Function(GetPoapPolicyInput input)? getPolicy,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -40,18 +43,21 @@ mixin _$ClaimPoapEvent {
     required TResult Function(ClaimPoapEventCheckHasClaimed value)
         checkHasClaimed,
     required TResult Function(ClaimPoapEventClaim value) claim,
+    required TResult Function(ClaimPoapEventGetPoapPolicy value) getPolicy,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(ClaimPoapEventCheckHasClaimed value)? checkHasClaimed,
     TResult? Function(ClaimPoapEventClaim value)? claim,
+    TResult? Function(ClaimPoapEventGetPoapPolicy value)? getPolicy,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(ClaimPoapEventCheckHasClaimed value)? checkHasClaimed,
     TResult Function(ClaimPoapEventClaim value)? claim,
+    TResult Function(ClaimPoapEventGetPoapPolicy value)? getPolicy,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -146,6 +152,7 @@ class _$ClaimPoapEventCheckHasClaimed implements ClaimPoapEventCheckHasClaimed {
   TResult when<TResult extends Object?>({
     required TResult Function(bool fromServer) checkHasClaimed,
     required TResult Function(ClaimInput input) claim,
+    required TResult Function(GetPoapPolicyInput input) getPolicy,
   }) {
     return checkHasClaimed(fromServer);
   }
@@ -155,6 +162,7 @@ class _$ClaimPoapEventCheckHasClaimed implements ClaimPoapEventCheckHasClaimed {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(bool fromServer)? checkHasClaimed,
     TResult? Function(ClaimInput input)? claim,
+    TResult? Function(GetPoapPolicyInput input)? getPolicy,
   }) {
     return checkHasClaimed?.call(fromServer);
   }
@@ -164,6 +172,7 @@ class _$ClaimPoapEventCheckHasClaimed implements ClaimPoapEventCheckHasClaimed {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(bool fromServer)? checkHasClaimed,
     TResult Function(ClaimInput input)? claim,
+    TResult Function(GetPoapPolicyInput input)? getPolicy,
     required TResult orElse(),
   }) {
     if (checkHasClaimed != null) {
@@ -178,6 +187,7 @@ class _$ClaimPoapEventCheckHasClaimed implements ClaimPoapEventCheckHasClaimed {
     required TResult Function(ClaimPoapEventCheckHasClaimed value)
         checkHasClaimed,
     required TResult Function(ClaimPoapEventClaim value) claim,
+    required TResult Function(ClaimPoapEventGetPoapPolicy value) getPolicy,
   }) {
     return checkHasClaimed(this);
   }
@@ -187,6 +197,7 @@ class _$ClaimPoapEventCheckHasClaimed implements ClaimPoapEventCheckHasClaimed {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(ClaimPoapEventCheckHasClaimed value)? checkHasClaimed,
     TResult? Function(ClaimPoapEventClaim value)? claim,
+    TResult? Function(ClaimPoapEventGetPoapPolicy value)? getPolicy,
   }) {
     return checkHasClaimed?.call(this);
   }
@@ -196,6 +207,7 @@ class _$ClaimPoapEventCheckHasClaimed implements ClaimPoapEventCheckHasClaimed {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(ClaimPoapEventCheckHasClaimed value)? checkHasClaimed,
     TResult Function(ClaimPoapEventClaim value)? claim,
+    TResult Function(ClaimPoapEventGetPoapPolicy value)? getPolicy,
     required TResult orElse(),
   }) {
     if (checkHasClaimed != null) {
@@ -292,6 +304,7 @@ class _$ClaimPoapEventClaim implements ClaimPoapEventClaim {
   TResult when<TResult extends Object?>({
     required TResult Function(bool fromServer) checkHasClaimed,
     required TResult Function(ClaimInput input) claim,
+    required TResult Function(GetPoapPolicyInput input) getPolicy,
   }) {
     return claim(input);
   }
@@ -301,6 +314,7 @@ class _$ClaimPoapEventClaim implements ClaimPoapEventClaim {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(bool fromServer)? checkHasClaimed,
     TResult? Function(ClaimInput input)? claim,
+    TResult? Function(GetPoapPolicyInput input)? getPolicy,
   }) {
     return claim?.call(input);
   }
@@ -310,6 +324,7 @@ class _$ClaimPoapEventClaim implements ClaimPoapEventClaim {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(bool fromServer)? checkHasClaimed,
     TResult Function(ClaimInput input)? claim,
+    TResult Function(GetPoapPolicyInput input)? getPolicy,
     required TResult orElse(),
   }) {
     if (claim != null) {
@@ -324,6 +339,7 @@ class _$ClaimPoapEventClaim implements ClaimPoapEventClaim {
     required TResult Function(ClaimPoapEventCheckHasClaimed value)
         checkHasClaimed,
     required TResult Function(ClaimPoapEventClaim value) claim,
+    required TResult Function(ClaimPoapEventGetPoapPolicy value) getPolicy,
   }) {
     return claim(this);
   }
@@ -333,6 +349,7 @@ class _$ClaimPoapEventClaim implements ClaimPoapEventClaim {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(ClaimPoapEventCheckHasClaimed value)? checkHasClaimed,
     TResult? Function(ClaimPoapEventClaim value)? claim,
+    TResult? Function(ClaimPoapEventGetPoapPolicy value)? getPolicy,
   }) {
     return claim?.call(this);
   }
@@ -342,6 +359,7 @@ class _$ClaimPoapEventClaim implements ClaimPoapEventClaim {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(ClaimPoapEventCheckHasClaimed value)? checkHasClaimed,
     TResult Function(ClaimPoapEventClaim value)? claim,
+    TResult Function(ClaimPoapEventGetPoapPolicy value)? getPolicy,
     required TResult orElse(),
   }) {
     if (claim != null) {
@@ -362,11 +380,167 @@ abstract class ClaimPoapEventClaim implements ClaimPoapEvent {
 }
 
 /// @nodoc
+abstract class _$$ClaimPoapEventGetPoapPolicyCopyWith<$Res> {
+  factory _$$ClaimPoapEventGetPoapPolicyCopyWith(
+          _$ClaimPoapEventGetPoapPolicy value,
+          $Res Function(_$ClaimPoapEventGetPoapPolicy) then) =
+      __$$ClaimPoapEventGetPoapPolicyCopyWithImpl<$Res>;
+  @useResult
+  $Res call({GetPoapPolicyInput input});
+
+  $GetPoapPolicyInputCopyWith<$Res> get input;
+}
+
+/// @nodoc
+class __$$ClaimPoapEventGetPoapPolicyCopyWithImpl<$Res>
+    extends _$ClaimPoapEventCopyWithImpl<$Res, _$ClaimPoapEventGetPoapPolicy>
+    implements _$$ClaimPoapEventGetPoapPolicyCopyWith<$Res> {
+  __$$ClaimPoapEventGetPoapPolicyCopyWithImpl(
+      _$ClaimPoapEventGetPoapPolicy _value,
+      $Res Function(_$ClaimPoapEventGetPoapPolicy) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? input = null,
+  }) {
+    return _then(_$ClaimPoapEventGetPoapPolicy(
+      input: null == input
+          ? _value.input
+          : input // ignore: cast_nullable_to_non_nullable
+              as GetPoapPolicyInput,
+    ));
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $GetPoapPolicyInputCopyWith<$Res> get input {
+    return $GetPoapPolicyInputCopyWith<$Res>(_value.input, (value) {
+      return _then(_value.copyWith(input: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$ClaimPoapEventGetPoapPolicy implements ClaimPoapEventGetPoapPolicy {
+  const _$ClaimPoapEventGetPoapPolicy({required this.input});
+
+  @override
+  final GetPoapPolicyInput input;
+
+  @override
+  String toString() {
+    return 'ClaimPoapEvent.getPolicy(input: $input)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ClaimPoapEventGetPoapPolicy &&
+            (identical(other.input, input) || other.input == input));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, input);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ClaimPoapEventGetPoapPolicyCopyWith<_$ClaimPoapEventGetPoapPolicy>
+      get copyWith => __$$ClaimPoapEventGetPoapPolicyCopyWithImpl<
+          _$ClaimPoapEventGetPoapPolicy>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(bool fromServer) checkHasClaimed,
+    required TResult Function(ClaimInput input) claim,
+    required TResult Function(GetPoapPolicyInput input) getPolicy,
+  }) {
+    return getPolicy(input);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(bool fromServer)? checkHasClaimed,
+    TResult? Function(ClaimInput input)? claim,
+    TResult? Function(GetPoapPolicyInput input)? getPolicy,
+  }) {
+    return getPolicy?.call(input);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(bool fromServer)? checkHasClaimed,
+    TResult Function(ClaimInput input)? claim,
+    TResult Function(GetPoapPolicyInput input)? getPolicy,
+    required TResult orElse(),
+  }) {
+    if (getPolicy != null) {
+      return getPolicy(input);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(ClaimPoapEventCheckHasClaimed value)
+        checkHasClaimed,
+    required TResult Function(ClaimPoapEventClaim value) claim,
+    required TResult Function(ClaimPoapEventGetPoapPolicy value) getPolicy,
+  }) {
+    return getPolicy(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(ClaimPoapEventCheckHasClaimed value)? checkHasClaimed,
+    TResult? Function(ClaimPoapEventClaim value)? claim,
+    TResult? Function(ClaimPoapEventGetPoapPolicy value)? getPolicy,
+  }) {
+    return getPolicy?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(ClaimPoapEventCheckHasClaimed value)? checkHasClaimed,
+    TResult Function(ClaimPoapEventClaim value)? claim,
+    TResult Function(ClaimPoapEventGetPoapPolicy value)? getPolicy,
+    required TResult orElse(),
+  }) {
+    if (getPolicy != null) {
+      return getPolicy(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class ClaimPoapEventGetPoapPolicy implements ClaimPoapEvent {
+  const factory ClaimPoapEventGetPoapPolicy(
+          {required final GetPoapPolicyInput input}) =
+      _$ClaimPoapEventGetPoapPolicy;
+
+  GetPoapPolicyInput get input;
+  @JsonKey(ignore: true)
+  _$$ClaimPoapEventGetPoapPolicyCopyWith<_$ClaimPoapEventGetPoapPolicy>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
 mixin _$ClaimPoapState {
   bool get claimed => throw _privateConstructorUsedError;
   bool get claiming => throw _privateConstructorUsedError;
   Claim? get claim => throw _privateConstructorUsedError;
   Failure? get failure => throw _privateConstructorUsedError;
+  PoapPolicy? get policy => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $ClaimPoapStateCopyWith<ClaimPoapState> get copyWith =>
@@ -379,7 +553,12 @@ abstract class $ClaimPoapStateCopyWith<$Res> {
           ClaimPoapState value, $Res Function(ClaimPoapState) then) =
       _$ClaimPoapStateCopyWithImpl<$Res, ClaimPoapState>;
   @useResult
-  $Res call({bool claimed, bool claiming, Claim? claim, Failure? failure});
+  $Res call(
+      {bool claimed,
+      bool claiming,
+      Claim? claim,
+      Failure? failure,
+      PoapPolicy? policy});
 }
 
 /// @nodoc
@@ -399,6 +578,7 @@ class _$ClaimPoapStateCopyWithImpl<$Res, $Val extends ClaimPoapState>
     Object? claiming = null,
     Object? claim = freezed,
     Object? failure = freezed,
+    Object? policy = freezed,
   }) {
     return _then(_value.copyWith(
       claimed: null == claimed
@@ -417,6 +597,10 @@ class _$ClaimPoapStateCopyWithImpl<$Res, $Val extends ClaimPoapState>
           ? _value.failure
           : failure // ignore: cast_nullable_to_non_nullable
               as Failure?,
+      policy: freezed == policy
+          ? _value.policy
+          : policy // ignore: cast_nullable_to_non_nullable
+              as PoapPolicy?,
     ) as $Val);
   }
 }
@@ -429,7 +613,12 @@ abstract class _$$_ClaimPoapStateCopyWith<$Res>
       __$$_ClaimPoapStateCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({bool claimed, bool claiming, Claim? claim, Failure? failure});
+  $Res call(
+      {bool claimed,
+      bool claiming,
+      Claim? claim,
+      Failure? failure,
+      PoapPolicy? policy});
 }
 
 /// @nodoc
@@ -447,6 +636,7 @@ class __$$_ClaimPoapStateCopyWithImpl<$Res>
     Object? claiming = null,
     Object? claim = freezed,
     Object? failure = freezed,
+    Object? policy = freezed,
   }) {
     return _then(_$_ClaimPoapState(
       claimed: null == claimed
@@ -465,6 +655,10 @@ class __$$_ClaimPoapStateCopyWithImpl<$Res>
           ? _value.failure
           : failure // ignore: cast_nullable_to_non_nullable
               as Failure?,
+      policy: freezed == policy
+          ? _value.policy
+          : policy // ignore: cast_nullable_to_non_nullable
+              as PoapPolicy?,
     ));
   }
 }
@@ -473,7 +667,11 @@ class __$$_ClaimPoapStateCopyWithImpl<$Res>
 
 class _$_ClaimPoapState implements _ClaimPoapState {
   const _$_ClaimPoapState(
-      {this.claimed = false, this.claiming = false, this.claim, this.failure});
+      {this.claimed = false,
+      this.claiming = false,
+      this.claim,
+      this.failure,
+      this.policy});
 
   @override
   @JsonKey()
@@ -485,10 +683,12 @@ class _$_ClaimPoapState implements _ClaimPoapState {
   final Claim? claim;
   @override
   final Failure? failure;
+  @override
+  final PoapPolicy? policy;
 
   @override
   String toString() {
-    return 'ClaimPoapState(claimed: $claimed, claiming: $claiming, claim: $claim, failure: $failure)';
+    return 'ClaimPoapState(claimed: $claimed, claiming: $claiming, claim: $claim, failure: $failure, policy: $policy)';
   }
 
   @override
@@ -500,12 +700,13 @@ class _$_ClaimPoapState implements _ClaimPoapState {
             (identical(other.claiming, claiming) ||
                 other.claiming == claiming) &&
             (identical(other.claim, claim) || other.claim == claim) &&
-            (identical(other.failure, failure) || other.failure == failure));
+            (identical(other.failure, failure) || other.failure == failure) &&
+            (identical(other.policy, policy) || other.policy == policy));
   }
 
   @override
   int get hashCode =>
-      Object.hash(runtimeType, claimed, claiming, claim, failure);
+      Object.hash(runtimeType, claimed, claiming, claim, failure, policy);
 
   @JsonKey(ignore: true)
   @override
@@ -519,7 +720,8 @@ abstract class _ClaimPoapState implements ClaimPoapState {
       {final bool claimed,
       final bool claiming,
       final Claim? claim,
-      final Failure? failure}) = _$_ClaimPoapState;
+      final Failure? failure,
+      final PoapPolicy? policy}) = _$_ClaimPoapState;
 
   @override
   bool get claimed;
@@ -529,6 +731,8 @@ abstract class _ClaimPoapState implements ClaimPoapState {
   Claim? get claim;
   @override
   Failure? get failure;
+  @override
+  PoapPolicy? get policy;
   @override
   @JsonKey(ignore: true)
   _$$_ClaimPoapStateCopyWith<_$_ClaimPoapState> get copyWith =>

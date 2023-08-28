@@ -66,3 +66,47 @@ class ClaimArgsDto with _$ClaimArgsDto {
 
   factory ClaimArgsDto.fromJson(Map<String, dynamic> json) => _$ClaimArgsDtoFromJson(json);
 }
+
+@freezed
+class PoapPolicyNodeDto with _$PoapPolicyNodeDto {
+  const factory PoapPolicyNodeDto({
+    required String value,
+    @JsonKey(defaultValue: <PoapPolicyNodeDto>[]) List<PoapPolicyNodeDto>? children,
+  }) = _PoapPolicyNodeDto;
+
+  factory PoapPolicyNodeDto.fromJson(Map<String, dynamic> json) => _$PoapPolicyNodeDtoFromJson(json);
+}
+
+@freezed
+class PoapPolicyErrorDto with _$PoapPolicyErrorDto {
+  const factory PoapPolicyErrorDto({
+    String? message,
+    String? path,
+  }) = _PoapPolicyErrorDto;
+
+  factory PoapPolicyErrorDto.fromJson(Map<String, dynamic> json) => _$PoapPolicyErrorDtoFromJson(json);
+}
+
+@freezed
+class PoapPolicyResultDto with _$PoapPolicyResultDto {
+  factory PoapPolicyResultDto({
+    bool? boolean,
+    PoapPolicyNodeDto? node,
+    @JsonKey(defaultValue: <PoapPolicyErrorDto>[]) List<PoapPolicyErrorDto>? errors,
+  }) = _PoapPolicyResultDto;
+
+  factory PoapPolicyResultDto.fromJson(Map<String, dynamic> json) => _$PoapPolicyResultDtoFromJson(json);
+}
+
+@freezed
+class PoapPolicyDto with _$PoapPolicyDto {
+  factory PoapPolicyDto({
+    @JsonKey(name: '_id') String? id,
+    String? network,
+    String? address,
+    PoapPolicyNodeDto? node,
+    PoapPolicyResultDto? result,
+  }) = _PoapPolicyDto;
+
+  factory PoapPolicyDto.fromJson(Map<String, dynamic> json) => _$PoapPolicyDtoFromJson(json);
+}

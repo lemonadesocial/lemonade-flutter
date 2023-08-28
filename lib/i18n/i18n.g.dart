@@ -1,9 +1,9 @@
 /// Generated file. Do not edit.
 ///
 /// Locales: 1
-/// Strings: 143
+/// Strings: 162
 ///
-/// Built on 2023-08-28 at 09:37 UTC
+/// Built on 2023-08-28 at 12:15 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -250,6 +250,7 @@ class _I18nNftEn {
 	String get ableToClaimPoap => 'Congrats! 🥳 You meet all requirements to claim this badge';
 	String get badges => 'badges';
 	String get noBadges => 'No badges found';
+	late final _I18nNftPoapPolicyEn poapPolicy = _I18nNftPoapPolicyEn._(_root);
 }
 
 // Path: auth
@@ -395,6 +396,21 @@ class _I18nChatCommandEn {
 	String get cuddle => 'Send a cuddle';
 }
 
+// Path: nft.poapPolicy
+class _I18nNftPoapPolicyEn {
+	_I18nNftPoapPolicyEn._(this._root);
+
+	final _I18nEn _root; // ignore: unused_field
+
+	// Translations
+	late final _I18nNftPoapPolicyEventPolicyEn eventPolicy = _I18nNftPoapPolicyEventPolicyEn._(_root);
+	late final _I18nNftPoapPolicyEmailPolicyEn emailPolicy = _I18nNftPoapPolicyEmailPolicyEn._(_root);
+	late final _I18nNftPoapPolicyPhonePolicyEn phonePolicy = _I18nNftPoapPolicyPhonePolicyEn._(_root);
+	late final _I18nNftPoapPolicyLocationPolicyEn locationPolicy = _I18nNftPoapPolicyLocationPolicyEn._(_root);
+	late final _I18nNftPoapPolicyTwitterPolicyEn twitterPolicy = _I18nNftPoapPolicyTwitterPolicyEn._(_root);
+	late final _I18nNftPoapPolicyUserPolicyEn userPolicy = _I18nNftPoapPolicyUserPolicyEn._(_root);
+}
+
 // Path: auth.login
 class _I18nAuthLoginEn {
 	_I18nAuthLoginEn._(this._root);
@@ -475,6 +491,79 @@ class _I18nDiscoverCardSectionsMusicEn {
 	// Translations
 	String get title => 'Vinyls';
 	String get subTitle => 'Music that you truly own';
+}
+
+// Path: nft.poapPolicy.eventPolicy
+class _I18nNftPoapPolicyEventPolicyEn {
+	_I18nNftPoapPolicyEventPolicyEn._(this._root);
+
+	final _I18nEn _root; // ignore: unused_field
+
+	// Translations
+	String title({required Object event}) => 'RSVP to ${event}';
+	String get qualified => '';
+	String get nonQualified => 'not RSVP\'d to the event';
+}
+
+// Path: nft.poapPolicy.emailPolicy
+class _I18nNftPoapPolicyEmailPolicyEn {
+	_I18nNftPoapPolicyEmailPolicyEn._(this._root);
+
+	final _I18nEn _root; // ignore: unused_field
+
+	// Translations
+	String get title => 'Verify email address';
+	String get qualified => 'Completed';
+	String get nonQualified => 'Incomplete';
+}
+
+// Path: nft.poapPolicy.phonePolicy
+class _I18nNftPoapPolicyPhonePolicyEn {
+	_I18nNftPoapPolicyPhonePolicyEn._(this._root);
+
+	final _I18nEn _root; // ignore: unused_field
+
+	// Translations
+	String get title => 'Verify phone number';
+	String get qualified => 'Completed';
+	String get nonQualified => 'Incomplete';
+}
+
+// Path: nft.poapPolicy.locationPolicy
+class _I18nNftPoapPolicyLocationPolicyEn {
+	_I18nNftPoapPolicyLocationPolicyEn._(this._root);
+
+	final _I18nEn _root; // ignore: unused_field
+
+	// Translations
+	String get title => 'Location';
+	String get qualified => 'Completed';
+	String get nonQualified => 'Incomplete';
+}
+
+// Path: nft.poapPolicy.twitterPolicy
+class _I18nNftPoapPolicyTwitterPolicyEn {
+	_I18nNftPoapPolicyTwitterPolicyEn._(this._root);
+
+	final _I18nEn _root; // ignore: unused_field
+
+	// Translations
+	String title({required Object twitter}) => 'Follow @${twitter} on Twitter';
+	String get qualified => 'Completed';
+	String get nonQualified => 'Incomplete';
+	String get error => 'account not connected';
+}
+
+// Path: nft.poapPolicy.userPolicy
+class _I18nNftPoapPolicyUserPolicyEn {
+	_I18nNftPoapPolicyUserPolicyEn._(this._root);
+
+	final _I18nEn _root; // ignore: unused_field
+
+	// Translations
+	String title({required Object username}) => 'Follow @${username} on Lemonade';
+	String get qualified => 'following account';
+	String get nonQualified => 'not following account';
 }
 
 /// Flat map(s) containing all translations.
@@ -562,6 +651,25 @@ extension on _I18nEn {
 			case 'nft.ableToClaimPoap': return 'Congrats! 🥳 You meet all requirements to claim this badge';
 			case 'nft.badges': return 'badges';
 			case 'nft.noBadges': return 'No badges found';
+			case 'nft.poapPolicy.eventPolicy.title': return ({required Object event}) => 'RSVP to ${event}';
+			case 'nft.poapPolicy.eventPolicy.qualified': return '';
+			case 'nft.poapPolicy.eventPolicy.nonQualified': return 'not RSVP\'d to the event';
+			case 'nft.poapPolicy.emailPolicy.title': return 'Verify email address';
+			case 'nft.poapPolicy.emailPolicy.qualified': return 'Completed';
+			case 'nft.poapPolicy.emailPolicy.nonQualified': return 'Incomplete';
+			case 'nft.poapPolicy.phonePolicy.title': return 'Verify phone number';
+			case 'nft.poapPolicy.phonePolicy.qualified': return 'Completed';
+			case 'nft.poapPolicy.phonePolicy.nonQualified': return 'Incomplete';
+			case 'nft.poapPolicy.locationPolicy.title': return 'Location';
+			case 'nft.poapPolicy.locationPolicy.qualified': return 'Completed';
+			case 'nft.poapPolicy.locationPolicy.nonQualified': return 'Incomplete';
+			case 'nft.poapPolicy.twitterPolicy.title': return ({required Object twitter}) => 'Follow @${twitter} on Twitter';
+			case 'nft.poapPolicy.twitterPolicy.qualified': return 'Completed';
+			case 'nft.poapPolicy.twitterPolicy.nonQualified': return 'Incomplete';
+			case 'nft.poapPolicy.twitterPolicy.error': return 'account not connected';
+			case 'nft.poapPolicy.userPolicy.title': return ({required Object username}) => 'Follow @${username} on Lemonade';
+			case 'nft.poapPolicy.userPolicy.qualified': return 'following account';
+			case 'nft.poapPolicy.userPolicy.nonQualified': return 'not following account';
 			case 'auth.login.success': return 'Logged in successfully';
 			case 'auth.login.fail': return 'Logged in failed';
 			case 'auth.logout': return 'Logout';

@@ -1,12 +1,14 @@
 import 'package:app/core/application/badge/badge_detail_bloc/badge_detail_bloc.dart';
 import 'package:app/core/application/poap/claim_poap_bloc/claim_poap_bloc.dart';
 import 'package:app/core/domain/badge/entities/badge_entities.dart' as badgeEntities;
+import 'package:app/core/domain/poap/entities/poap_entities.dart';
 import 'package:app/core/domain/poap/input/poap_input.dart';
 import 'package:app/core/domain/token/entities/token_entities.dart';
 import 'package:app/core/presentation/widgets/common/bottomsheet/lemon_snap_bottom_sheet_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/poap/poap_claim_builder.dart';
+import 'package:app/core/presentation/widgets/poap/poap_policy_popup/poap_policy_popup.dart';
 import 'package:app/core/presentation/widgets/poap/poap_quantity_bar.dart';
 import 'package:app/core/utils/location_utils.dart';
 import 'package:app/core/utils/media_utils.dart';
@@ -36,7 +38,6 @@ class PopapDetailPage extends StatefulWidget {
 }
 
 class _PopapDetailPageState extends State<PopapDetailPage> {
-
   @override
   void initState() {
     super.initState();
@@ -115,10 +116,17 @@ class _PopapDetailPageState extends State<PopapDetailPage> {
                         final isGranted = await getIt<LocationUtils>().checkAndRequestPermission(
                           onPermissionDeniedForever: () => LocationUtils.goToSetting(context),
                         );
-                        if(isGranted) {
+                        if (isGranted) {
                           context.read<BadgeDetailBloc>().add(const BadgeDetailEvent.fetch());
                         }
                       } catch (error) {}
+                    },
+                    onPressViewRequirements: (policy) {
+                      if (policy?.result == null) return;
+                      showDialog(
+                        context: context,
+                        builder: (context) => PoapPolicyPopup(policyResult: policy!.result!),
+                      );
                     },
                   ),
                 ],
@@ -236,18 +244,19 @@ class PoapDetailFooter extends StatefulWidget {
     required this.badge,
     required this.onPressGrantAccess,
     required this.onPressClaim,
+    required this.onPressViewRequirements,
   });
 
   final badgeEntities.Badge badge;
   final Function() onPressGrantAccess;
   final Function() onPressClaim;
+  final Function(PoapPolicy? poapPolicy) onPressViewRequirements;
 
   @override
   State<PoapDetailFooter> createState() => _PoapDetailFooterState();
 }
 
 class _PoapDetailFooterState extends State<PoapDetailFooter> with WidgetsBindingObserver {
-
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
@@ -307,10 +316,16 @@ class _PoapDetailFooterState extends State<PoapDetailFooter> with WidgetsBinding
                         TextSpan(
                           text: !locationEnabled ? t.common.grantAccess : t.common.viewRequirements,
                           style: Typo.small.copyWith(color: LemonColor.paleViolet),
-                          recognizer: TapGestureRecognizer()..onTap = () async {
-                            await widget.onPressGrantAccess();
-                            setState(() {});
-                          },
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () async {
+                              if (!locationEnabled) {
+                                await widget.onPressGrantAccess();
+                                setState(() {});
+                              }
+                              if (!ableToClaim) {
+                                widget.onPressViewRequirements(claimPoapState.policy);
+                              }
+                            },
                         )
                     ],
                   ),
@@ -326,9 +341,7 @@ class _PoapDetailFooterState extends State<PoapDetailFooter> with WidgetsBinding
                 child: Opacity(
                   opacity: buttonDisabled ? 0.36 : 1,
                   child: LinearGradientButton(
-                    onTap: !buttonDisabled
-                        ? widget.onPressClaim
-                        : null,
+                    onTap: !buttonDisabled ? widget.onPressClaim : null,
                     mode: GradientButtonMode.lavenderMode,
                     label: claimPoapState.claiming
                         ? '${StringUtils.capitalize(t.nft.claiming)}...'

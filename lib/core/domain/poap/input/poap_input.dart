@@ -1,4 +1,3 @@
-import 'package:app/core/domain/poap/entities/poap_entities.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'poap_input.freezed.dart';
@@ -52,4 +51,15 @@ class ClaimArgsInput with _$ClaimArgsInput {
   }) = _ClaimArgsInput;
 
   factory ClaimArgsInput.fromJson(Map<String, dynamic> json) => _$ClaimArgsInputFromJson(json);
+}
+
+@freezed
+class GetPoapPolicyInput with _$GetPoapPolicyInput {
+  const factory GetPoapPolicyInput({
+    required String network,
+    required String address,
+    @JsonKey(includeIfNull: false) String? target,
+  }) = _GetPoapPolicyInput;
+
+  factory GetPoapPolicyInput.fromJson(Map<String, dynamic> json) => _$GetPoapPolicyInputFromJson(json);
 }

@@ -446,3 +446,804 @@ abstract class _ClaimArgsDto implements ClaimArgsDto {
   _$$_ClaimArgsDtoCopyWith<_$_ClaimArgsDto> get copyWith =>
       throw _privateConstructorUsedError;
 }
+
+PoapPolicyNodeDto _$PoapPolicyNodeDtoFromJson(Map<String, dynamic> json) {
+  return _PoapPolicyNodeDto.fromJson(json);
+}
+
+/// @nodoc
+mixin _$PoapPolicyNodeDto {
+  String get value => throw _privateConstructorUsedError;
+  @JsonKey(defaultValue: <PoapPolicyNodeDto>[])
+  List<PoapPolicyNodeDto>? get children => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $PoapPolicyNodeDtoCopyWith<PoapPolicyNodeDto> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $PoapPolicyNodeDtoCopyWith<$Res> {
+  factory $PoapPolicyNodeDtoCopyWith(
+          PoapPolicyNodeDto value, $Res Function(PoapPolicyNodeDto) then) =
+      _$PoapPolicyNodeDtoCopyWithImpl<$Res, PoapPolicyNodeDto>;
+  @useResult
+  $Res call(
+      {String value,
+      @JsonKey(defaultValue: <PoapPolicyNodeDto>[])
+          List<PoapPolicyNodeDto>? children});
+}
+
+/// @nodoc
+class _$PoapPolicyNodeDtoCopyWithImpl<$Res, $Val extends PoapPolicyNodeDto>
+    implements $PoapPolicyNodeDtoCopyWith<$Res> {
+  _$PoapPolicyNodeDtoCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? value = null,
+    Object? children = freezed,
+  }) {
+    return _then(_value.copyWith(
+      value: null == value
+          ? _value.value
+          : value // ignore: cast_nullable_to_non_nullable
+              as String,
+      children: freezed == children
+          ? _value.children
+          : children // ignore: cast_nullable_to_non_nullable
+              as List<PoapPolicyNodeDto>?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$_PoapPolicyNodeDtoCopyWith<$Res>
+    implements $PoapPolicyNodeDtoCopyWith<$Res> {
+  factory _$$_PoapPolicyNodeDtoCopyWith(_$_PoapPolicyNodeDto value,
+          $Res Function(_$_PoapPolicyNodeDto) then) =
+      __$$_PoapPolicyNodeDtoCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {String value,
+      @JsonKey(defaultValue: <PoapPolicyNodeDto>[])
+          List<PoapPolicyNodeDto>? children});
+}
+
+/// @nodoc
+class __$$_PoapPolicyNodeDtoCopyWithImpl<$Res>
+    extends _$PoapPolicyNodeDtoCopyWithImpl<$Res, _$_PoapPolicyNodeDto>
+    implements _$$_PoapPolicyNodeDtoCopyWith<$Res> {
+  __$$_PoapPolicyNodeDtoCopyWithImpl(
+      _$_PoapPolicyNodeDto _value, $Res Function(_$_PoapPolicyNodeDto) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? value = null,
+    Object? children = freezed,
+  }) {
+    return _then(_$_PoapPolicyNodeDto(
+      value: null == value
+          ? _value.value
+          : value // ignore: cast_nullable_to_non_nullable
+              as String,
+      children: freezed == children
+          ? _value._children
+          : children // ignore: cast_nullable_to_non_nullable
+              as List<PoapPolicyNodeDto>?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$_PoapPolicyNodeDto implements _PoapPolicyNodeDto {
+  const _$_PoapPolicyNodeDto(
+      {required this.value,
+      @JsonKey(defaultValue: <PoapPolicyNodeDto>[])
+          final List<PoapPolicyNodeDto>? children})
+      : _children = children;
+
+  factory _$_PoapPolicyNodeDto.fromJson(Map<String, dynamic> json) =>
+      _$$_PoapPolicyNodeDtoFromJson(json);
+
+  @override
+  final String value;
+  final List<PoapPolicyNodeDto>? _children;
+  @override
+  @JsonKey(defaultValue: <PoapPolicyNodeDto>[])
+  List<PoapPolicyNodeDto>? get children {
+    final value = _children;
+    if (value == null) return null;
+    if (_children is EqualUnmodifiableListView) return _children;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  @override
+  String toString() {
+    return 'PoapPolicyNodeDto(value: $value, children: $children)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_PoapPolicyNodeDto &&
+            (identical(other.value, value) || other.value == value) &&
+            const DeepCollectionEquality().equals(other._children, _children));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType, value, const DeepCollectionEquality().hash(_children));
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$_PoapPolicyNodeDtoCopyWith<_$_PoapPolicyNodeDto> get copyWith =>
+      __$$_PoapPolicyNodeDtoCopyWithImpl<_$_PoapPolicyNodeDto>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_PoapPolicyNodeDtoToJson(
+      this,
+    );
+  }
+}
+
+abstract class _PoapPolicyNodeDto implements PoapPolicyNodeDto {
+  const factory _PoapPolicyNodeDto(
+      {required final String value,
+      @JsonKey(defaultValue: <PoapPolicyNodeDto>[])
+          final List<PoapPolicyNodeDto>? children}) = _$_PoapPolicyNodeDto;
+
+  factory _PoapPolicyNodeDto.fromJson(Map<String, dynamic> json) =
+      _$_PoapPolicyNodeDto.fromJson;
+
+  @override
+  String get value;
+  @override
+  @JsonKey(defaultValue: <PoapPolicyNodeDto>[])
+  List<PoapPolicyNodeDto>? get children;
+  @override
+  @JsonKey(ignore: true)
+  _$$_PoapPolicyNodeDtoCopyWith<_$_PoapPolicyNodeDto> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+PoapPolicyErrorDto _$PoapPolicyErrorDtoFromJson(Map<String, dynamic> json) {
+  return _PoapPolicyErrorDto.fromJson(json);
+}
+
+/// @nodoc
+mixin _$PoapPolicyErrorDto {
+  String? get message => throw _privateConstructorUsedError;
+  String? get path => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $PoapPolicyErrorDtoCopyWith<PoapPolicyErrorDto> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $PoapPolicyErrorDtoCopyWith<$Res> {
+  factory $PoapPolicyErrorDtoCopyWith(
+          PoapPolicyErrorDto value, $Res Function(PoapPolicyErrorDto) then) =
+      _$PoapPolicyErrorDtoCopyWithImpl<$Res, PoapPolicyErrorDto>;
+  @useResult
+  $Res call({String? message, String? path});
+}
+
+/// @nodoc
+class _$PoapPolicyErrorDtoCopyWithImpl<$Res, $Val extends PoapPolicyErrorDto>
+    implements $PoapPolicyErrorDtoCopyWith<$Res> {
+  _$PoapPolicyErrorDtoCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? message = freezed,
+    Object? path = freezed,
+  }) {
+    return _then(_value.copyWith(
+      message: freezed == message
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String?,
+      path: freezed == path
+          ? _value.path
+          : path // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$_PoapPolicyErrorDtoCopyWith<$Res>
+    implements $PoapPolicyErrorDtoCopyWith<$Res> {
+  factory _$$_PoapPolicyErrorDtoCopyWith(_$_PoapPolicyErrorDto value,
+          $Res Function(_$_PoapPolicyErrorDto) then) =
+      __$$_PoapPolicyErrorDtoCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({String? message, String? path});
+}
+
+/// @nodoc
+class __$$_PoapPolicyErrorDtoCopyWithImpl<$Res>
+    extends _$PoapPolicyErrorDtoCopyWithImpl<$Res, _$_PoapPolicyErrorDto>
+    implements _$$_PoapPolicyErrorDtoCopyWith<$Res> {
+  __$$_PoapPolicyErrorDtoCopyWithImpl(
+      _$_PoapPolicyErrorDto _value, $Res Function(_$_PoapPolicyErrorDto) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? message = freezed,
+    Object? path = freezed,
+  }) {
+    return _then(_$_PoapPolicyErrorDto(
+      message: freezed == message
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String?,
+      path: freezed == path
+          ? _value.path
+          : path // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$_PoapPolicyErrorDto implements _PoapPolicyErrorDto {
+  const _$_PoapPolicyErrorDto({this.message, this.path});
+
+  factory _$_PoapPolicyErrorDto.fromJson(Map<String, dynamic> json) =>
+      _$$_PoapPolicyErrorDtoFromJson(json);
+
+  @override
+  final String? message;
+  @override
+  final String? path;
+
+  @override
+  String toString() {
+    return 'PoapPolicyErrorDto(message: $message, path: $path)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_PoapPolicyErrorDto &&
+            (identical(other.message, message) || other.message == message) &&
+            (identical(other.path, path) || other.path == path));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, message, path);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$_PoapPolicyErrorDtoCopyWith<_$_PoapPolicyErrorDto> get copyWith =>
+      __$$_PoapPolicyErrorDtoCopyWithImpl<_$_PoapPolicyErrorDto>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_PoapPolicyErrorDtoToJson(
+      this,
+    );
+  }
+}
+
+abstract class _PoapPolicyErrorDto implements PoapPolicyErrorDto {
+  const factory _PoapPolicyErrorDto(
+      {final String? message, final String? path}) = _$_PoapPolicyErrorDto;
+
+  factory _PoapPolicyErrorDto.fromJson(Map<String, dynamic> json) =
+      _$_PoapPolicyErrorDto.fromJson;
+
+  @override
+  String? get message;
+  @override
+  String? get path;
+  @override
+  @JsonKey(ignore: true)
+  _$$_PoapPolicyErrorDtoCopyWith<_$_PoapPolicyErrorDto> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+PoapPolicyResultDto _$PoapPolicyResultDtoFromJson(Map<String, dynamic> json) {
+  return _PoapPolicyResultDto.fromJson(json);
+}
+
+/// @nodoc
+mixin _$PoapPolicyResultDto {
+  bool? get boolean => throw _privateConstructorUsedError;
+  PoapPolicyNodeDto? get node => throw _privateConstructorUsedError;
+  @JsonKey(defaultValue: <PoapPolicyErrorDto>[])
+  List<PoapPolicyErrorDto>? get errors => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $PoapPolicyResultDtoCopyWith<PoapPolicyResultDto> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $PoapPolicyResultDtoCopyWith<$Res> {
+  factory $PoapPolicyResultDtoCopyWith(
+          PoapPolicyResultDto value, $Res Function(PoapPolicyResultDto) then) =
+      _$PoapPolicyResultDtoCopyWithImpl<$Res, PoapPolicyResultDto>;
+  @useResult
+  $Res call(
+      {bool? boolean,
+      PoapPolicyNodeDto? node,
+      @JsonKey(defaultValue: <PoapPolicyErrorDto>[])
+          List<PoapPolicyErrorDto>? errors});
+
+  $PoapPolicyNodeDtoCopyWith<$Res>? get node;
+}
+
+/// @nodoc
+class _$PoapPolicyResultDtoCopyWithImpl<$Res, $Val extends PoapPolicyResultDto>
+    implements $PoapPolicyResultDtoCopyWith<$Res> {
+  _$PoapPolicyResultDtoCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? boolean = freezed,
+    Object? node = freezed,
+    Object? errors = freezed,
+  }) {
+    return _then(_value.copyWith(
+      boolean: freezed == boolean
+          ? _value.boolean
+          : boolean // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      node: freezed == node
+          ? _value.node
+          : node // ignore: cast_nullable_to_non_nullable
+              as PoapPolicyNodeDto?,
+      errors: freezed == errors
+          ? _value.errors
+          : errors // ignore: cast_nullable_to_non_nullable
+              as List<PoapPolicyErrorDto>?,
+    ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $PoapPolicyNodeDtoCopyWith<$Res>? get node {
+    if (_value.node == null) {
+      return null;
+    }
+
+    return $PoapPolicyNodeDtoCopyWith<$Res>(_value.node!, (value) {
+      return _then(_value.copyWith(node: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$_PoapPolicyResultDtoCopyWith<$Res>
+    implements $PoapPolicyResultDtoCopyWith<$Res> {
+  factory _$$_PoapPolicyResultDtoCopyWith(_$_PoapPolicyResultDto value,
+          $Res Function(_$_PoapPolicyResultDto) then) =
+      __$$_PoapPolicyResultDtoCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {bool? boolean,
+      PoapPolicyNodeDto? node,
+      @JsonKey(defaultValue: <PoapPolicyErrorDto>[])
+          List<PoapPolicyErrorDto>? errors});
+
+  @override
+  $PoapPolicyNodeDtoCopyWith<$Res>? get node;
+}
+
+/// @nodoc
+class __$$_PoapPolicyResultDtoCopyWithImpl<$Res>
+    extends _$PoapPolicyResultDtoCopyWithImpl<$Res, _$_PoapPolicyResultDto>
+    implements _$$_PoapPolicyResultDtoCopyWith<$Res> {
+  __$$_PoapPolicyResultDtoCopyWithImpl(_$_PoapPolicyResultDto _value,
+      $Res Function(_$_PoapPolicyResultDto) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? boolean = freezed,
+    Object? node = freezed,
+    Object? errors = freezed,
+  }) {
+    return _then(_$_PoapPolicyResultDto(
+      boolean: freezed == boolean
+          ? _value.boolean
+          : boolean // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      node: freezed == node
+          ? _value.node
+          : node // ignore: cast_nullable_to_non_nullable
+              as PoapPolicyNodeDto?,
+      errors: freezed == errors
+          ? _value._errors
+          : errors // ignore: cast_nullable_to_non_nullable
+              as List<PoapPolicyErrorDto>?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$_PoapPolicyResultDto implements _PoapPolicyResultDto {
+  _$_PoapPolicyResultDto(
+      {this.boolean,
+      this.node,
+      @JsonKey(defaultValue: <PoapPolicyErrorDto>[])
+          final List<PoapPolicyErrorDto>? errors})
+      : _errors = errors;
+
+  factory _$_PoapPolicyResultDto.fromJson(Map<String, dynamic> json) =>
+      _$$_PoapPolicyResultDtoFromJson(json);
+
+  @override
+  final bool? boolean;
+  @override
+  final PoapPolicyNodeDto? node;
+  final List<PoapPolicyErrorDto>? _errors;
+  @override
+  @JsonKey(defaultValue: <PoapPolicyErrorDto>[])
+  List<PoapPolicyErrorDto>? get errors {
+    final value = _errors;
+    if (value == null) return null;
+    if (_errors is EqualUnmodifiableListView) return _errors;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  @override
+  String toString() {
+    return 'PoapPolicyResultDto(boolean: $boolean, node: $node, errors: $errors)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_PoapPolicyResultDto &&
+            (identical(other.boolean, boolean) || other.boolean == boolean) &&
+            (identical(other.node, node) || other.node == node) &&
+            const DeepCollectionEquality().equals(other._errors, _errors));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType, boolean, node, const DeepCollectionEquality().hash(_errors));
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$_PoapPolicyResultDtoCopyWith<_$_PoapPolicyResultDto> get copyWith =>
+      __$$_PoapPolicyResultDtoCopyWithImpl<_$_PoapPolicyResultDto>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_PoapPolicyResultDtoToJson(
+      this,
+    );
+  }
+}
+
+abstract class _PoapPolicyResultDto implements PoapPolicyResultDto {
+  factory _PoapPolicyResultDto(
+      {final bool? boolean,
+      final PoapPolicyNodeDto? node,
+      @JsonKey(defaultValue: <PoapPolicyErrorDto>[])
+          final List<PoapPolicyErrorDto>? errors}) = _$_PoapPolicyResultDto;
+
+  factory _PoapPolicyResultDto.fromJson(Map<String, dynamic> json) =
+      _$_PoapPolicyResultDto.fromJson;
+
+  @override
+  bool? get boolean;
+  @override
+  PoapPolicyNodeDto? get node;
+  @override
+  @JsonKey(defaultValue: <PoapPolicyErrorDto>[])
+  List<PoapPolicyErrorDto>? get errors;
+  @override
+  @JsonKey(ignore: true)
+  _$$_PoapPolicyResultDtoCopyWith<_$_PoapPolicyResultDto> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+PoapPolicyDto _$PoapPolicyDtoFromJson(Map<String, dynamic> json) {
+  return _PoapPolicyDto.fromJson(json);
+}
+
+/// @nodoc
+mixin _$PoapPolicyDto {
+  @JsonKey(name: '_id')
+  String? get id => throw _privateConstructorUsedError;
+  String? get network => throw _privateConstructorUsedError;
+  String? get address => throw _privateConstructorUsedError;
+  PoapPolicyNodeDto? get node => throw _privateConstructorUsedError;
+  PoapPolicyResultDto? get result => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $PoapPolicyDtoCopyWith<PoapPolicyDto> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $PoapPolicyDtoCopyWith<$Res> {
+  factory $PoapPolicyDtoCopyWith(
+          PoapPolicyDto value, $Res Function(PoapPolicyDto) then) =
+      _$PoapPolicyDtoCopyWithImpl<$Res, PoapPolicyDto>;
+  @useResult
+  $Res call(
+      {@JsonKey(name: '_id') String? id,
+      String? network,
+      String? address,
+      PoapPolicyNodeDto? node,
+      PoapPolicyResultDto? result});
+
+  $PoapPolicyNodeDtoCopyWith<$Res>? get node;
+  $PoapPolicyResultDtoCopyWith<$Res>? get result;
+}
+
+/// @nodoc
+class _$PoapPolicyDtoCopyWithImpl<$Res, $Val extends PoapPolicyDto>
+    implements $PoapPolicyDtoCopyWith<$Res> {
+  _$PoapPolicyDtoCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = freezed,
+    Object? network = freezed,
+    Object? address = freezed,
+    Object? node = freezed,
+    Object? result = freezed,
+  }) {
+    return _then(_value.copyWith(
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String?,
+      network: freezed == network
+          ? _value.network
+          : network // ignore: cast_nullable_to_non_nullable
+              as String?,
+      address: freezed == address
+          ? _value.address
+          : address // ignore: cast_nullable_to_non_nullable
+              as String?,
+      node: freezed == node
+          ? _value.node
+          : node // ignore: cast_nullable_to_non_nullable
+              as PoapPolicyNodeDto?,
+      result: freezed == result
+          ? _value.result
+          : result // ignore: cast_nullable_to_non_nullable
+              as PoapPolicyResultDto?,
+    ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $PoapPolicyNodeDtoCopyWith<$Res>? get node {
+    if (_value.node == null) {
+      return null;
+    }
+
+    return $PoapPolicyNodeDtoCopyWith<$Res>(_value.node!, (value) {
+      return _then(_value.copyWith(node: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $PoapPolicyResultDtoCopyWith<$Res>? get result {
+    if (_value.result == null) {
+      return null;
+    }
+
+    return $PoapPolicyResultDtoCopyWith<$Res>(_value.result!, (value) {
+      return _then(_value.copyWith(result: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$_PoapPolicyDtoCopyWith<$Res>
+    implements $PoapPolicyDtoCopyWith<$Res> {
+  factory _$$_PoapPolicyDtoCopyWith(
+          _$_PoapPolicyDto value, $Res Function(_$_PoapPolicyDto) then) =
+      __$$_PoapPolicyDtoCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {@JsonKey(name: '_id') String? id,
+      String? network,
+      String? address,
+      PoapPolicyNodeDto? node,
+      PoapPolicyResultDto? result});
+
+  @override
+  $PoapPolicyNodeDtoCopyWith<$Res>? get node;
+  @override
+  $PoapPolicyResultDtoCopyWith<$Res>? get result;
+}
+
+/// @nodoc
+class __$$_PoapPolicyDtoCopyWithImpl<$Res>
+    extends _$PoapPolicyDtoCopyWithImpl<$Res, _$_PoapPolicyDto>
+    implements _$$_PoapPolicyDtoCopyWith<$Res> {
+  __$$_PoapPolicyDtoCopyWithImpl(
+      _$_PoapPolicyDto _value, $Res Function(_$_PoapPolicyDto) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = freezed,
+    Object? network = freezed,
+    Object? address = freezed,
+    Object? node = freezed,
+    Object? result = freezed,
+  }) {
+    return _then(_$_PoapPolicyDto(
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String?,
+      network: freezed == network
+          ? _value.network
+          : network // ignore: cast_nullable_to_non_nullable
+              as String?,
+      address: freezed == address
+          ? _value.address
+          : address // ignore: cast_nullable_to_non_nullable
+              as String?,
+      node: freezed == node
+          ? _value.node
+          : node // ignore: cast_nullable_to_non_nullable
+              as PoapPolicyNodeDto?,
+      result: freezed == result
+          ? _value.result
+          : result // ignore: cast_nullable_to_non_nullable
+              as PoapPolicyResultDto?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$_PoapPolicyDto implements _PoapPolicyDto {
+  _$_PoapPolicyDto(
+      {@JsonKey(name: '_id') this.id,
+      this.network,
+      this.address,
+      this.node,
+      this.result});
+
+  factory _$_PoapPolicyDto.fromJson(Map<String, dynamic> json) =>
+      _$$_PoapPolicyDtoFromJson(json);
+
+  @override
+  @JsonKey(name: '_id')
+  final String? id;
+  @override
+  final String? network;
+  @override
+  final String? address;
+  @override
+  final PoapPolicyNodeDto? node;
+  @override
+  final PoapPolicyResultDto? result;
+
+  @override
+  String toString() {
+    return 'PoapPolicyDto(id: $id, network: $network, address: $address, node: $node, result: $result)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_PoapPolicyDto &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.network, network) || other.network == network) &&
+            (identical(other.address, address) || other.address == address) &&
+            (identical(other.node, node) || other.node == node) &&
+            (identical(other.result, result) || other.result == result));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, id, network, address, node, result);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$_PoapPolicyDtoCopyWith<_$_PoapPolicyDto> get copyWith =>
+      __$$_PoapPolicyDtoCopyWithImpl<_$_PoapPolicyDto>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_PoapPolicyDtoToJson(
+      this,
+    );
+  }
+}
+
+abstract class _PoapPolicyDto implements PoapPolicyDto {
+  factory _PoapPolicyDto(
+      {@JsonKey(name: '_id') final String? id,
+      final String? network,
+      final String? address,
+      final PoapPolicyNodeDto? node,
+      final PoapPolicyResultDto? result}) = _$_PoapPolicyDto;
+
+  factory _PoapPolicyDto.fromJson(Map<String, dynamic> json) =
+      _$_PoapPolicyDto.fromJson;
+
+  @override
+  @JsonKey(name: '_id')
+  String? get id;
+  @override
+  String? get network;
+  @override
+  String? get address;
+  @override
+  PoapPolicyNodeDto? get node;
+  @override
+  PoapPolicyResultDto? get result;
+  @override
+  @JsonKey(ignore: true)
+  _$$_PoapPolicyDtoCopyWith<_$_PoapPolicyDto> get copyWith =>
+      throw _privateConstructorUsedError;
+}

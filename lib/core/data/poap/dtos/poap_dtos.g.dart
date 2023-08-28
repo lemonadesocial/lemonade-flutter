@@ -46,3 +46,79 @@ Map<String, dynamic> _$$_ClaimArgsDtoToJson(_$_ClaimArgsDto instance) =>
       'claimer': instance.claimer,
       'tokenURI': instance.tokenURI,
     };
+
+_$_PoapPolicyNodeDto _$$_PoapPolicyNodeDtoFromJson(Map<String, dynamic> json) =>
+    _$_PoapPolicyNodeDto(
+      value: json['value'] as String,
+      children: (json['children'] as List<dynamic>?)
+              ?.map(
+                  (e) => PoapPolicyNodeDto.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
+    );
+
+Map<String, dynamic> _$$_PoapPolicyNodeDtoToJson(
+        _$_PoapPolicyNodeDto instance) =>
+    <String, dynamic>{
+      'value': instance.value,
+      'children': instance.children,
+    };
+
+_$_PoapPolicyErrorDto _$$_PoapPolicyErrorDtoFromJson(
+        Map<String, dynamic> json) =>
+    _$_PoapPolicyErrorDto(
+      message: json['message'] as String?,
+      path: json['path'] as String?,
+    );
+
+Map<String, dynamic> _$$_PoapPolicyErrorDtoToJson(
+        _$_PoapPolicyErrorDto instance) =>
+    <String, dynamic>{
+      'message': instance.message,
+      'path': instance.path,
+    };
+
+_$_PoapPolicyResultDto _$$_PoapPolicyResultDtoFromJson(
+        Map<String, dynamic> json) =>
+    _$_PoapPolicyResultDto(
+      boolean: json['boolean'] as bool?,
+      node: json['node'] == null
+          ? null
+          : PoapPolicyNodeDto.fromJson(json['node'] as Map<String, dynamic>),
+      errors: (json['errors'] as List<dynamic>?)
+              ?.map(
+                  (e) => PoapPolicyErrorDto.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
+    );
+
+Map<String, dynamic> _$$_PoapPolicyResultDtoToJson(
+        _$_PoapPolicyResultDto instance) =>
+    <String, dynamic>{
+      'boolean': instance.boolean,
+      'node': instance.node,
+      'errors': instance.errors,
+    };
+
+_$_PoapPolicyDto _$$_PoapPolicyDtoFromJson(Map<String, dynamic> json) =>
+    _$_PoapPolicyDto(
+      id: json['_id'] as String?,
+      network: json['network'] as String?,
+      address: json['address'] as String?,
+      node: json['node'] == null
+          ? null
+          : PoapPolicyNodeDto.fromJson(json['node'] as Map<String, dynamic>),
+      result: json['result'] == null
+          ? null
+          : PoapPolicyResultDto.fromJson(
+              json['result'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$$_PoapPolicyDtoToJson(_$_PoapPolicyDto instance) =>
+    <String, dynamic>{
+      '_id': instance.id,
+      'network': instance.network,
+      'address': instance.address,
+      'node': instance.node,
+      'result': instance.result,
+    };

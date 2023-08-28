@@ -15,7 +15,12 @@ part 'badges_listing_bloc.freezed.dart';
 class BadgesListingBloc extends Bloc<BadgesListingEvent, BadgesListingState> {
   BadgesListingBloc() : super(BadgesListingStateInitial()) {
     _createInput();
-    on<BadgesListingEventFetch>(_onFetch);
+    on<BadgesListingEventFetch>(
+      _onFetch,
+      transformer: (events, mapper) {
+        return events.debounceTime(const Duration(milliseconds: 300)).asyncExpand(mapper);
+      },
+    );
     on<BadgesListingEventRefresh>(
       _onRefresh,
       transformer: (events, mapper) {
