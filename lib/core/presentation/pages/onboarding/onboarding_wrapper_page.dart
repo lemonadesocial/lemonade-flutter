@@ -9,6 +9,7 @@ import '../../../../injection/register_module.dart';
 import '../../../../theme/color.dart';
 import '../../../../theme/typo.dart';
 import '../../../domain/post/post_repository.dart';
+import '../../../domain/user/user_repository.dart';
 import '../../../service/post/post_service.dart';
 
 @RoutePage()
@@ -27,6 +28,7 @@ class OnboardingWrapperPage extends StatelessWidget implements AutoRouteWrapper 
   Widget wrappedRoute(BuildContext context) {
     return BlocProvider<OnboardingBloc>(
       create: (context) => OnboardingBloc(
+        getIt<UserRepository>(),
         PostService(
           getIt<PostRepository>(),
         ),

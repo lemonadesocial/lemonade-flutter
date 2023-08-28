@@ -15,5 +15,7 @@
   "aboutYou": "About you",
   "aboutYouDesc": "Announce yourself to the world!",
   "interest": "Interests",
-  "interestDesc": "Pick what you are passionate about & unlock a world of tailored content"
+  "interestDesc": "Pick what you are passionate about & unlock a world of tailored content",
+  "usernameAvailable" : "Username available",
+  "usernameTaken": "Username unavailable"
 }

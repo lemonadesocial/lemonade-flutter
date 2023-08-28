@@ -1,9 +1,9 @@
 /// Generated file. Do not edit.
 ///
 /// Locales: 1
-/// Strings: 129
+/// Strings: 148
 ///
-/// Built on 2023-08-26 at 15:46 UTC
+/// Built on 2023-08-28 at 06:34 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -155,6 +155,7 @@ class _I18nEn implements BaseTranslations<AppLocale, _I18nEn> {
 	late final _I18nNotificationEn notification = _I18nNotificationEn._(_root);
 	late final _I18nCommonEn common = _I18nCommonEn._(_root);
 	late final _I18nEventEn event = _I18nEventEn._(_root);
+	late final _I18nOnboardingEn onboarding = _I18nOnboardingEn._(_root);
 }
 
 // Path: home
@@ -334,6 +335,34 @@ class _I18nEventEn {
 	String empty_attending_events({required Object time}) => 'You are currently not attending any events ${time}';
 	String empty_hosting_events({required Object time}) => 'You are currently not hosting any events ${time}';
 	String get noEvents => 'No events yet';
+}
+
+// Path: onboarding
+class _I18nOnboardingEn {
+	_I18nOnboardingEn._(this._root);
+
+	final _I18nEn _root; // ignore: unused_field
+
+	// Translations
+	String get pickUsername => 'Pick username';
+	String get pickUsernameDesc => 'Claim your unique username before someone else does!';
+	String get username => 'Username';
+	String get claim => 'Claim';
+	String get next => 'Next';
+	String get displayName => 'Display name';
+	String get shortBio => 'Short bio';
+	String get she => 'she';
+	String get he => 'he';
+	String get they => 'they';
+	String get skip => 'Skip';
+	String get findYourLook => 'Find your look';
+	String get findYourLookDesc => 'Show off your personality and creativity through your profile photo or an NFT';
+	String get aboutYou => 'About you';
+	String get aboutYouDesc => 'Announce yourself to the world!';
+	String get interest => 'Interests';
+	String get interestDesc => 'Pick what you are passionate about & unlock a world of tailored content';
+	String get usernameAvailable => 'Username available';
+	String get usernameTaken => 'Username unavailable';
 }
 
 // Path: discover.cardSections
@@ -604,6 +633,25 @@ extension on _I18nEn {
 			case 'event.empty_attending_events': return ({required Object time}) => 'You are currently not attending any events ${time}';
 			case 'event.empty_hosting_events': return ({required Object time}) => 'You are currently not hosting any events ${time}';
 			case 'event.noEvents': return 'No events yet';
+			case 'onboarding.pickUsername': return 'Pick username';
+			case 'onboarding.pickUsernameDesc': return 'Claim your unique username before someone else does!';
+			case 'onboarding.username': return 'Username';
+			case 'onboarding.claim': return 'Claim';
+			case 'onboarding.next': return 'Next';
+			case 'onboarding.displayName': return 'Display name';
+			case 'onboarding.shortBio': return 'Short bio';
+			case 'onboarding.she': return 'she';
+			case 'onboarding.he': return 'he';
+			case 'onboarding.they': return 'they';
+			case 'onboarding.skip': return 'Skip';
+			case 'onboarding.findYourLook': return 'Find your look';
+			case 'onboarding.findYourLookDesc': return 'Show off your personality and creativity through your profile photo or an NFT';
+			case 'onboarding.aboutYou': return 'About you';
+			case 'onboarding.aboutYouDesc': return 'Announce yourself to the world!';
+			case 'onboarding.interest': return 'Interests';
+			case 'onboarding.interestDesc': return 'Pick what you are passionate about & unlock a world of tailored content';
+			case 'onboarding.usernameAvailable': return 'Username available';
+			case 'onboarding.usernameTaken': return 'Username unavailable';
 			default: return null;
 		}
 	}
