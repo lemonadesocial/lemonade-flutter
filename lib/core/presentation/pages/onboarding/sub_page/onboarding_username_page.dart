@@ -26,7 +26,12 @@ class _OnboardingUsernamePageState extends State<OnboardingUsernamePage> {
     final t = Translations.of(context);
     final theme = Theme.of(context);
     final bloc = context.read<OnboardingBloc>();
-    return BlocBuilder<OnboardingBloc, OnboardingState>(
+    return BlocConsumer<OnboardingBloc, OnboardingState>(
+      listener: (context, state) {
+        if (state.status == OnboardingStatus.success) {
+          context.router.push(const OnboardingProfilePhotoRoute());
+        }
+      },
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
@@ -60,6 +65,10 @@ class _OnboardingUsernamePageState extends State<OnboardingUsernamePage> {
                       LemonTextField(
                         onChange: bloc.onUsernameChange,
                         hintText: t.onboarding.username,
+                        borderColor: state.usernameExisted ?? false ? LemonColor.errorRedBg : null,
+                        statusWidget: state.usernameExisted == null
+                            ? null
+                            : statusWidget(context, state.usernameExisted!),
                       ),
                     ],
                   ),
@@ -67,11 +76,7 @@ class _OnboardingUsernamePageState extends State<OnboardingUsernamePage> {
                 SizedBox(
                   width: 1.sw,
                   child: ElevatedButton(
-                    onPressed: bloc.state.username?.isEmpty ?? true
-                        ? null
-                        : () => context.router.push(
-                              const OnboardingProfilePhotoRoute(),
-                            ),
+                    onPressed: bloc.state.username?.isEmpty ?? true ? null : bloc.updateProfile,
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(32),
@@ -98,6 +103,26 @@ class _OnboardingUsernamePageState extends State<OnboardingUsernamePage> {
           ),
         );
       },
+    );
+  }
+
+  Widget statusWidget(BuildContext context, bool usernameExisted) {
+    final color = usernameExisted ? LemonColor.errorRedBg : LemonColor.usernameApproved;
+    final t = Translations.of(context);
+    return Row(
+      children: [
+        Icon(
+          usernameExisted ? Icons.info_outline : Icons.check_circle,
+          color: color,
+        ),
+        SizedBox(width: Spacing.superExtraSmall),
+        Text(
+          usernameExisted ? t.onboarding.usernameTaken : t.onboarding.usernameAvailable,
+          style: TextStyle(
+            color: color,
+          ),
+        ),
+      ],
     );
   }
 }

@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:app/core/config.dart';
 import 'package:app/core/presentation/widgets/back_button_widget.dart';
+import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/service/webview/webview_token_service.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
@@ -146,9 +147,8 @@ class _EventDetailPageState extends State<EventDetailPage> with WidgetsBindingOb
     final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       backgroundColor: colorScheme.primary,
-      appBar: AppBar(
-        title: Text(widget.eventName),
-        leading: LemonBackButton(),
+      appBar: LemonAppBar(
+        title: widget.eventName,
       ),
       body: Stack(
         children: [

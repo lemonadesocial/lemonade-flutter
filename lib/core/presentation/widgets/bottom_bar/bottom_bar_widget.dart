@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:app/core/application/auth/auth_bloc.dart';
-import 'package:app/core/presentation/pages/auth/login_page.dart';
 import 'package:app/core/presentation/widgets/bottom_bar/app_tabs.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
@@ -15,6 +14,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 
 class BottomBar extends StatefulWidget {
+  const BottomBar({super.key});
+
   @override
   _BottomBarState createState() => _BottomBarState();
 }
@@ -129,24 +130,29 @@ class _BottomBarState extends State<BottomBar>
 
   void _handleTabTap(BuildContext context, TabData tabData) {
     Vibrate.feedback(FeedbackType.light);
-    setState(() {
-      _isTabChanged = true;
-      _selectedTab = tabData.tab;
-    });
-    _animationController.reset();
-    _animationController.forward();
-    if (tabData.tab == AppTab.profile) {
-      final authState = BlocProvider.of<AuthBloc>(context).state;
+    final authState = BlocProvider.of<AuthBloc>(context).state;
+    if (tabData.tab == AppTab.profile || tabData.tab == AppTab.notification) {
       if (authState is AuthStateAuthenticated) {
+        _triggerAnimation(tabData);
         AutoRouter.of(context)
             .navigateNamed(tabData.route, includePrefixMatches: true);
       } else {
         context.router.navigate(const LoginRoute());
       }
     } else {
+      _triggerAnimation(tabData);
       AutoRouter.of(context)
           .navigateNamed(tabData.route, includePrefixMatches: true);
     }
+  }
+
+  void _triggerAnimation(tabData) {
+    setState(() {
+      _isTabChanged = true;
+      _selectedTab = tabData.tab;
+    });
+    _animationController.reset();
+    _animationController.forward();
   }
 
   Widget _buildAnimatedContainer(bool isSelected) {

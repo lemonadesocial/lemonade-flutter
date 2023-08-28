@@ -1,9 +1,9 @@
 /// Generated file. Do not edit.
 ///
 /// Locales: 1
-/// Strings: 132
+/// Strings: 148
 ///
-/// Built on 2023-08-24 at 04:51 UTC
+/// Built on 2023-08-28 at 06:34 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -147,6 +147,7 @@ class _I18nEn implements BaseTranslations<AppLocale, _I18nEn> {
 
 	// Translations
 	late final _I18nHomeEn home = _I18nHomeEn._(_root);
+	late final _I18nDiscoverEn discover = _I18nDiscoverEn._(_root);
 	late final _I18nPostEn post = _I18nPostEn._(_root);
 	late final _I18nChatEn chat = _I18nChatEn._(_root);
 	late final _I18nNftEn nft = _I18nNftEn._(_root);
@@ -166,6 +167,19 @@ class _I18nHomeEn {
 	// Translations
 	String get newsfeed => 'Newsfeed';
 	String get whatOnYourMind => 'What\'s on your mind, Joseph?';
+}
+
+// Path: discover
+class _I18nDiscoverEn {
+	_I18nDiscoverEn._(this._root);
+
+	final _I18nEn _root; // ignore: unused_field
+
+	// Translations
+	String get discover => 'Discover';
+	late final _I18nDiscoverCardSectionsEn cardSections = _I18nDiscoverCardSectionsEn._(_root);
+	String get hotBadgesNearYou => 'Hot badges near you';
+	String get upcomingEvents => 'Upcoming events';
 }
 
 // Path: post
@@ -234,6 +248,9 @@ class _I18nAuthEn {
 	// Translations
 	late final _I18nAuthLoginEn login = _I18nAuthLoginEn._(_root);
 	String get logout => 'Logout';
+	String get lets_get_you_in => 'Let\'s get you in!';
+	String get get_started_description => 'Sign up or log in to create, collaborate & celebrate! #makelemonade';
+	String get get_started => 'Get Started';
 }
 
 // Path: notification
@@ -344,6 +361,21 @@ class _I18nOnboardingEn {
 	String get aboutYouDesc => 'Announce yourself to the world!';
 	String get interest => 'Interests';
 	String get interestDesc => 'Pick what you are passionate about & unlock a world of tailored content';
+	String get usernameAvailable => 'Username available';
+	String get usernameTaken => 'Username unavailable';
+}
+
+// Path: discover.cardSections
+class _I18nDiscoverCardSectionsEn {
+	_I18nDiscoverCardSectionsEn._(this._root);
+
+	final _I18nEn _root; // ignore: unused_field
+
+	// Translations
+	late final _I18nDiscoverCardSectionsEventsEn events = _I18nDiscoverCardSectionsEventsEn._(_root);
+	late final _I18nDiscoverCardSectionsCollaboratorsEn collaborators = _I18nDiscoverCardSectionsCollaboratorsEn._(_root);
+	late final _I18nDiscoverCardSectionsBadgesEn badges = _I18nDiscoverCardSectionsBadgesEn._(_root);
+	late final _I18nDiscoverCardSectionsMusicEn music = _I18nDiscoverCardSectionsMusicEn._(_root);
 }
 
 // Path: chat.command
@@ -416,6 +448,50 @@ class _I18nCommonUnitEn {
 	String get km => 'km';
 }
 
+// Path: discover.cardSections.events
+class _I18nDiscoverCardSectionsEventsEn {
+	_I18nDiscoverCardSectionsEventsEn._(this._root);
+
+	final _I18nEn _root; // ignore: unused_field
+
+	// Translations
+	String get title => 'Events';
+	String get subTitle => 'Find unique experiences';
+}
+
+// Path: discover.cardSections.collaborators
+class _I18nDiscoverCardSectionsCollaboratorsEn {
+	_I18nDiscoverCardSectionsCollaboratorsEn._(this._root);
+
+	final _I18nEn _root; // ignore: unused_field
+
+	// Translations
+	String get title => 'Collaborators';
+	String get subTitle => 'Connect & create with others';
+}
+
+// Path: discover.cardSections.badges
+class _I18nDiscoverCardSectionsBadgesEn {
+	_I18nDiscoverCardSectionsBadgesEn._(this._root);
+
+	final _I18nEn _root; // ignore: unused_field
+
+	// Translations
+	String get title => 'Badges';
+	String get subTitle => 'Exclusive rewards near you';
+}
+
+// Path: discover.cardSections.music
+class _I18nDiscoverCardSectionsMusicEn {
+	_I18nDiscoverCardSectionsMusicEn._(this._root);
+
+	final _I18nEn _root; // ignore: unused_field
+
+	// Translations
+	String get title => 'Vinyls';
+	String get subTitle => 'Music that you truly own';
+}
+
 /// Flat map(s) containing all translations.
 /// Only for edge cases! For simple maps, use the map function of this library.
 
@@ -424,6 +500,17 @@ extension on _I18nEn {
 		switch (path) {
 			case 'home.newsfeed': return 'Newsfeed';
 			case 'home.whatOnYourMind': return 'What\'s on your mind, Joseph?';
+			case 'discover.discover': return 'Discover';
+			case 'discover.cardSections.events.title': return 'Events';
+			case 'discover.cardSections.events.subTitle': return 'Find unique experiences';
+			case 'discover.cardSections.collaborators.title': return 'Collaborators';
+			case 'discover.cardSections.collaborators.subTitle': return 'Connect & create with others';
+			case 'discover.cardSections.badges.title': return 'Badges';
+			case 'discover.cardSections.badges.subTitle': return 'Exclusive rewards near you';
+			case 'discover.cardSections.music.title': return 'Vinyls';
+			case 'discover.cardSections.music.subTitle': return 'Music that you truly own';
+			case 'discover.hotBadgesNearYou': return 'Hot badges near you';
+			case 'discover.upcomingEvents': return 'Upcoming events';
 			case 'post.noPost': return 'No posts yet';
 			case 'post.post': return 'Post';
 			case 'post.public': return 'Public';
@@ -479,6 +566,9 @@ extension on _I18nEn {
 			case 'auth.login.success': return 'Logged in successfully';
 			case 'auth.login.fail': return 'Logged in failed';
 			case 'auth.logout': return 'Logout';
+			case 'auth.lets_get_you_in': return 'Let\'s get you in!';
+			case 'auth.get_started_description': return 'Sign up or log in to create, collaborate & celebrate! #makelemonade';
+			case 'auth.get_started': return 'Get Started';
 			case 'notification.notifications': return 'Notifications';
 			case 'notification.emptyNotifications': return 'No notifications yet';
 			case 'common.today': return 'today';
@@ -560,6 +650,8 @@ extension on _I18nEn {
 			case 'onboarding.aboutYouDesc': return 'Announce yourself to the world!';
 			case 'onboarding.interest': return 'Interests';
 			case 'onboarding.interestDesc': return 'Pick what you are passionate about & unlock a world of tailored content';
+			case 'onboarding.usernameAvailable': return 'Username available';
+			case 'onboarding.usernameTaken': return 'Username unavailable';
 			default: return null;
 		}
 	}

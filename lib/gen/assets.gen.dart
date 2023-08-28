@@ -83,9 +83,25 @@ class $AssetsIconsGen {
   SvgGenImage get icDiscover =>
       const SvgGenImage('assets/icons/ic_discover.svg');
 
+  /// File path: assets/icons/ic_discover_badges.svg
+  SvgGenImage get icDiscoverBadges =>
+      const SvgGenImage('assets/icons/ic_discover_badges.svg');
+
+  /// File path: assets/icons/ic_discover_events.svg
+  SvgGenImage get icDiscoverEvents =>
+      const SvgGenImage('assets/icons/ic_discover_events.svg');
+
   /// File path: assets/icons/ic_discover_filled.svg
   SvgGenImage get icDiscoverFilled =>
       const SvgGenImage('assets/icons/ic_discover_filled.svg');
+
+  /// File path: assets/icons/ic_discover_music.svg
+  SvgGenImage get icDiscoverMusic =>
+      const SvgGenImage('assets/icons/ic_discover_music.svg');
+
+  /// File path: assets/icons/ic_discover_people.svg
+  SvgGenImage get icDiscoverPeople =>
+      const SvgGenImage('assets/icons/ic_discover_people.svg');
 
   /// File path: assets/icons/ic_done.svg
   SvgGenImage get icDone => const SvgGenImage('assets/icons/ic_done.svg');
@@ -204,6 +220,10 @@ class $AssetsIconsGen {
   SvgGenImage get icMyLocation =>
       const SvgGenImage('assets/icons/ic_my_location.svg');
 
+  /// File path: assets/icons/ic_navigation_filled.svg
+  SvgGenImage get icNavigationFilled =>
+      const SvgGenImage('assets/icons/ic_navigation_filled.svg');
+
   /// File path: assets/icons/ic_navigation_line.svg
   SvgGenImage get icNavigationLine =>
       const SvgGenImage('assets/icons/ic_navigation_line.svg');
@@ -225,6 +245,9 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/ic_poll.svg
   SvgGenImage get icPoll => const SvgGenImage('assets/icons/ic_poll.svg');
+
+  /// File path: assets/icons/ic_profile.svg
+  SvgGenImage get icProfile => const SvgGenImage('assets/icons/ic_profile.svg');
 
   /// File path: assets/icons/ic_public.svg
   SvgGenImage get icPublic => const SvgGenImage('assets/icons/ic_public.svg');
@@ -280,7 +303,11 @@ class $AssetsIconsGen {
         icClose,
         icCrystal,
         icDiscover,
+        icDiscoverBadges,
+        icDiscoverEvents,
         icDiscoverFilled,
+        icDiscoverMusic,
+        icDiscoverPeople,
         icDone,
         icDownload,
         icEdit,
@@ -313,12 +340,14 @@ class $AssetsIconsGen {
         icMessage,
         icMoreHoriz,
         icMyLocation,
+        icNavigationFilled,
         icNavigationLine,
         icNews,
         icNotification,
         icNotificationFilled,
         icPeopleAlt,
         icPoll,
+        icProfile,
         icPublic,
         icQr,
         icSearch,
@@ -338,11 +367,43 @@ class $AssetsIconsGen {
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
+  /// File path: assets/images/bg_circle.png
+  AssetGenImage get bgCircle =>
+      const AssetGenImage('assets/images/bg_circle.png');
+
+  /// File path: assets/images/bg_circle@2x.png
+  AssetGenImage get bgCircle2x =>
+      const AssetGenImage('assets/images/bg_circle@2x.png');
+
+  /// File path: assets/images/bg_circle@3x.png
+  AssetGenImage get bgCircle3x =>
+      const AssetGenImage('assets/images/bg_circle@3x.png');
+
+  /// File path: assets/images/bg_get_started.png
+  AssetGenImage get bgGetStarted =>
+      const AssetGenImage('assets/images/bg_get_started.png');
+
+  /// File path: assets/images/bg_get_started@2x.png
+  AssetGenImage get bgGetStarted2x =>
+      const AssetGenImage('assets/images/bg_get_started@2x.png');
+
+  /// File path: assets/images/bg_get_started@3x.png
+  AssetGenImage get bgGetStarted3x =>
+      const AssetGenImage('assets/images/bg_get_started@3x.png');
+
   /// File path: assets/images/typing.gif
   AssetGenImage get typing => const AssetGenImage('assets/images/typing.gif');
 
   /// List of all assets
-  List<AssetGenImage> get values => [typing];
+  List<AssetGenImage> get values => [
+        bgCircle,
+        bgCircle2x,
+        bgCircle3x,
+        bgGetStarted,
+        bgGetStarted2x,
+        bgGetStarted3x,
+        typing
+      ];
 }
 
 class Assets {

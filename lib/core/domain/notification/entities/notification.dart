@@ -6,22 +6,18 @@ class Notification {
   User? fromExpanded;
   String? message;
   String? type;
-  DateTime? stamp;
+  DateTime? createdAt;
   String? from;
-  bool? seen;
-  String? object_id;
-  String? object_type;
+  bool? isSeen;
 
   Notification({
     this.id, 
     this.fromExpanded, 
     this.message, 
     this.type, 
-    this.stamp,
+    this.createdAt,
     this.from,
-    this.seen,
-    this.object_id,
-    this.object_type
+    this.isSeen,
   });
 
   static Notification fromDto(NotificationDto dto) {
@@ -30,11 +26,9 @@ class Notification {
       fromExpanded: dto.fromExpanded != null ? User.fromDto(dto.fromExpanded!) : null,
       message: dto.message,
       type: dto.type,
-      stamp: dto.stamp,
+      createdAt: dto.createdAt,
       from: dto.from,
-      seen: dto.seen,
-      object_id: dto.object_id,
-      object_type: dto.object_type
+      isSeen: dto.isSeen,
     );
   }
 }

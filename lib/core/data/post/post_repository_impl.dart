@@ -70,7 +70,10 @@ class PostRepositoryImpl implements PostRepository {
   }
 
   @override
-  Future<Either<Failure, String>> uploadImage(XFile file) async {
+  Future<Either<Failure, String>> uploadImage(
+    XFile file,
+    String directory,
+  ) async {
     final token = await getIt<AppOauth>().getTokenForGql();
     final mimeType = lookupMimeType(file.path);
     final mime = mimeType!.split('/')[0];
@@ -81,7 +84,7 @@ class PostRepositoryImpl implements PostRepository {
         filename: file.path.split('/').last,
         contentType: MediaType(mime, type),
       ),
-      'directory': 'post',
+      'directory': directory,
     });
     final response = await _legacyClient.post(
       '/v1/file',

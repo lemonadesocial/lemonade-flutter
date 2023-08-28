@@ -17,6 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$OnboardingState {
   OnboardingStatus get status => throw _privateConstructorUsedError;
+  bool? get usernameExisted => throw _privateConstructorUsedError;
   String? get username => throw _privateConstructorUsedError;
   XFile? get profilePhoto => throw _privateConstructorUsedError;
   OnboardingGender? get gender => throw _privateConstructorUsedError;
@@ -37,6 +38,7 @@ abstract class $OnboardingStateCopyWith<$Res> {
   @useResult
   $Res call(
       {OnboardingStatus status,
+      bool? usernameExisted,
       String? username,
       XFile? profilePhoto,
       OnboardingGender? gender,
@@ -59,6 +61,7 @@ class _$OnboardingStateCopyWithImpl<$Res, $Val extends OnboardingState>
   @override
   $Res call({
     Object? status = null,
+    Object? usernameExisted = freezed,
     Object? username = freezed,
     Object? profilePhoto = freezed,
     Object? gender = freezed,
@@ -71,6 +74,10 @@ class _$OnboardingStateCopyWithImpl<$Res, $Val extends OnboardingState>
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as OnboardingStatus,
+      usernameExisted: freezed == usernameExisted
+          ? _value.usernameExisted
+          : usernameExisted // ignore: cast_nullable_to_non_nullable
+              as bool?,
       username: freezed == username
           ? _value.username
           : username // ignore: cast_nullable_to_non_nullable
@@ -109,6 +116,7 @@ abstract class _$$_OnboardingStateCopyWith<$Res>
   @useResult
   $Res call(
       {OnboardingStatus status,
+      bool? usernameExisted,
       String? username,
       XFile? profilePhoto,
       OnboardingGender? gender,
@@ -129,6 +137,7 @@ class __$$_OnboardingStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? status = null,
+    Object? usernameExisted = freezed,
     Object? username = freezed,
     Object? profilePhoto = freezed,
     Object? gender = freezed,
@@ -141,6 +150,10 @@ class __$$_OnboardingStateCopyWithImpl<$Res>
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as OnboardingStatus,
+      usernameExisted: freezed == usernameExisted
+          ? _value.usernameExisted
+          : usernameExisted // ignore: cast_nullable_to_non_nullable
+              as bool?,
       username: freezed == username
           ? _value.username
           : username // ignore: cast_nullable_to_non_nullable
@@ -174,6 +187,7 @@ class __$$_OnboardingStateCopyWithImpl<$Res>
 class _$_OnboardingState implements _OnboardingState {
   const _$_OnboardingState(
       {this.status = OnboardingStatus.initial,
+      this.usernameExisted,
       this.username,
       this.profilePhoto,
       this.gender,
@@ -185,6 +199,8 @@ class _$_OnboardingState implements _OnboardingState {
   @override
   @JsonKey()
   final OnboardingStatus status;
+  @override
+  final bool? usernameExisted;
   @override
   final String? username;
   @override
@@ -207,7 +223,7 @@ class _$_OnboardingState implements _OnboardingState {
 
   @override
   String toString() {
-    return 'OnboardingState(status: $status, username: $username, profilePhoto: $profilePhoto, gender: $gender, aboutDisplayName: $aboutDisplayName, aboutShortBio: $aboutShortBio, interestList: $interestList)';
+    return 'OnboardingState(status: $status, usernameExisted: $usernameExisted, username: $username, profilePhoto: $profilePhoto, gender: $gender, aboutDisplayName: $aboutDisplayName, aboutShortBio: $aboutShortBio, interestList: $interestList)';
   }
 
   @override
@@ -216,6 +232,8 @@ class _$_OnboardingState implements _OnboardingState {
         (other.runtimeType == runtimeType &&
             other is _$_OnboardingState &&
             (identical(other.status, status) || other.status == status) &&
+            (identical(other.usernameExisted, usernameExisted) ||
+                other.usernameExisted == usernameExisted) &&
             (identical(other.username, username) ||
                 other.username == username) &&
             (identical(other.profilePhoto, profilePhoto) ||
@@ -233,6 +251,7 @@ class _$_OnboardingState implements _OnboardingState {
   int get hashCode => Object.hash(
       runtimeType,
       status,
+      usernameExisted,
       username,
       profilePhoto,
       gender,
@@ -250,6 +269,7 @@ class _$_OnboardingState implements _OnboardingState {
 abstract class _OnboardingState implements OnboardingState {
   const factory _OnboardingState(
       {final OnboardingStatus status,
+      final bool? usernameExisted,
       final String? username,
       final XFile? profilePhoto,
       final OnboardingGender? gender,
@@ -259,6 +279,8 @@ abstract class _OnboardingState implements OnboardingState {
 
   @override
   OnboardingStatus get status;
+  @override
+  bool? get usernameExisted;
   @override
   String? get username;
   @override

@@ -124,7 +124,7 @@ android {
             resValue "string", "uri_scheme", "lemonadesocial"
             applicationIdSuffix ""
             manifestPlaceholders += [
-                    'appAuthRedirectScheme': 'lemonadesocial://oauth2/logout'
+                'appAuthRedirectScheme': 'lemonadesocial://oauth2/logout'
             ]
         }
     }

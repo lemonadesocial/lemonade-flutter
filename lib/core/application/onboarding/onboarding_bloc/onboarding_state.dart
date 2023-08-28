@@ -4,6 +4,7 @@ part of 'onboarding_bloc.dart';
 class OnboardingState with _$OnboardingState{
   const factory OnboardingState({
     @Default(OnboardingStatus.initial) OnboardingStatus status,
+    bool? usernameExisted,
     String? username,
     XFile? profilePhoto,
     OnboardingGender? gender,
