@@ -1,3 +1,4 @@
+import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/presentation/pages/onboarding/widgets/gender_chip_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/theme/spacing.dart';
@@ -26,9 +27,9 @@ class OnboardingAboutPage extends StatelessWidget {
     final bloc = context.read<OnboardingBloc>();
     return BlocConsumer<OnboardingBloc, OnboardingState>(
       listener: (context, state) {
-        print("status: ${state.status}");
         if (state.status == OnboardingStatus.success) {
-          context.router.push(const RootRoute(children: [HomeRoute()]));
+          context.read<AuthBloc>().add(const AuthEvent.authenticated());
+          context.router.replaceAll([const RootRoute()]);
         }
       },
       builder: (context, state) {
