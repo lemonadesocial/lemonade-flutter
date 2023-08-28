@@ -32,23 +32,30 @@ class HomeNewsfeedListView extends StatelessWidget {
               controller: _refreshController,
               enablePullUp: true,
               onRefresh: () {
-                context.read<NewsfeedListingBloc>().add(NewsfeedListingEvent.fetch());
+                context
+                    .read<NewsfeedListingBloc>()
+                    .add(NewsfeedListingEvent.fetch());
                 _refreshController.refreshCompleted();
               },
               onLoading: () {
                 // add load more here
-                context.read<NewsfeedListingBloc>().add(NewsfeedListingEvent.fetch());
+                context
+                    .read<NewsfeedListingBloc>()
+                    .add(NewsfeedListingEvent.fetch());
                 _refreshController.loadComplete();
               },
               child: ListView.separated(
+                padding:
+                    EdgeInsetsDirectional.symmetric(vertical: Spacing.xSmall),
                 itemBuilder: (ctx, index) => Padding(
-                        padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
-                        child: PostProfileCard(
-                          key: Key(newsfeed[index].id),
-                          post: newsfeed[index],
-                        ),
-                      ),
-                separatorBuilder: (ctx, index) => Divider(color: colorScheme.outline),
+                  padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
+                  child: PostProfileCard(
+                    key: Key(newsfeed[index].id),
+                    post: newsfeed[index],
+                  ),
+                ),
+                separatorBuilder: (ctx, index) =>
+                    Divider(color: colorScheme.outline),
                 itemCount: newsfeed.length,
               ),
             );

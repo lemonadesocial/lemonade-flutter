@@ -81,18 +81,22 @@ class FirebaseService {
           print('onDidReceiveNotificationResponse');
         }
         try {
-          var jsonObject = json.decode(notificationResponse.payload ?? '');
-          String type = jsonObject['type'];
-          String objectId = jsonObject['object_id'];
-          String objectType = jsonObject['object_type'];
+          // TODO: Handle notification navigate
+          // var jsonObject = json.decode(notificationResponse.payload ?? '');
+          // String type = jsonObject['type'];
+          // String objectId = jsonObject['object_id'];
+          // String objectType = jsonObject['object_type'];
 
-          NavigationUtils.handleNotificationNavigate(
-              _router!, _context!, type, objectType, objectId);
+          // NavigationUtils.handleNotificationNavigate(
+          //     _router!, _context!, type, objectType, objectId);
         } catch (e) {
           print('Error parsing JSON: $e');
         }
       },
     );
+    // Enabled only for signed builds
+    FirebaseCrashlytics.instance
+        .setCrashlyticsCollectionEnabled(kDebugMode == false);
     FlutterError.onError = (errorDetails) {
       // If you wish to record a "non-fatal" exception, please use `FirebaseCrashlytics.instance.recordFlutterError` instead
       FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
@@ -166,18 +170,19 @@ class FirebaseService {
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
     FirebaseMessaging.onMessageOpenedApp.listen(onPressNotification);
   }
+
   void onPressNotification(RemoteMessage message) {
     if (kDebugMode) {
       print('onPressNotification: ${message.data}');
     }
     try {
-      var jsonObject = message.data;
-      String type = jsonObject['type'];
-      String objectId = jsonObject['object_id'];
-      String objectType = jsonObject['object_type'];
+      // var jsonObject = message.data;
+      // String type = jsonObject['type'];
+      // String objectId = jsonObject['object_id'];
+      // String objectType = jsonObject['object_type'];
 
-      NavigationUtils.handleNotificationNavigate(
-          _router!, _context!, type, objectType, objectId);
+      // NavigationUtils.handleNotificationNavigate(
+      //     _router!, _context!, type, objectType, objectId);
     } catch (e) {
       print('Something wrong when onPressNotification: $e');
     }

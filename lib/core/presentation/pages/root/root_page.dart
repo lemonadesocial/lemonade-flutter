@@ -19,22 +19,22 @@ class RootPage extends StatelessWidget {
         scaffoldKey: DrawerUtils.drawerGlobalKey,
         backgroundColor: primaryColor,
         routes: [
-          HomeRoute(),
-          EventsListingRoute(),
-          WalletRoute(),
+          const HomeRoute(),
+          const DiscoverRoute(),
+          const WalletRoute(),
           authState.maybeWhen(
-            authenticated: (session) => NotificationRoute(),
-            orElse: () => EmptyRoute(),
+            authenticated: (session) => const NotificationRoute(),
+            orElse: EmptyRoute.new,
           ),
           authState.maybeWhen(
-            authenticated: (session) => MyProfileRoute(),
-            orElse: () => EmptyRoute(),
+            authenticated: (session) => const MyProfileRoute(),
+            orElse: EmptyRoute.new,
           )
         ],
         drawer: const LemonDrawer(),
         endDrawer: const LemonDrawer(),
         bottomNavigationBuilder: (_, tabsRouter) {
-          return BottomBar();
+          return const BottomBar();
         },
       ),
     );

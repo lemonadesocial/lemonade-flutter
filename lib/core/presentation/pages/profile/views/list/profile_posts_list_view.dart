@@ -17,26 +17,33 @@ class ProfilePostsListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
     return BlocBuilder<PostsListingBloc, PostsListingState>(
       builder: (context, postsState) {
         return postsState.when(
-          loading: () => SliverFillRemaining(child: Center(child: Loading.defaultLoading(context))),
-          failure: () => SliverToBoxAdapter(child: Center(child: Text(t.common.somethingWrong))),
+          loading: () => SliverFillRemaining(
+              child: Center(child: Loading.defaultLoading(context))),
+          failure: () => SliverToBoxAdapter(
+              child: Center(child: Text(t.common.somethingWrong))),
           fetched: (posts) {
             if (posts.isEmpty) {
               return SliverFillRemaining(
-                    hasScrollBody: false,
-                    child: EmptyList(emptyText: t.post.noPost),
+                hasScrollBody: false,
+                child: EmptyList(emptyText: t.post.noPost),
               );
             }
             return SliverPadding(
-              padding: EdgeInsets.symmetric(horizontal: Spacing.small),
-              sliver: SliverList.builder(
-                itemCount: posts.length,
+              padding: EdgeInsets.symmetric(
+                horizontal: Spacing.xSmall,
+                vertical: Spacing.xSmall,
+              ),
+              sliver: SliverList.separated(
                 itemBuilder: (context, index) {
                   return PostProfileCard(post: posts[index]);
                 },
+                separatorBuilder: (ctx, index) =>
+                    Divider(color: colorScheme.outline),
               ),
             );
           },
