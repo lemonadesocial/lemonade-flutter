@@ -71,7 +71,7 @@ class TypingIndicators extends StatelessWidget {
             ),
             const SizedBox(width: 8),
             Container(
-              child: Lottie.asset(Assets.images.typing),
+              child: Lottie.asset(Assets.lotties.typing),
             )
           ],
         ),

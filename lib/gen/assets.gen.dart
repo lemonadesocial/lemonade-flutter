@@ -354,11 +354,52 @@ class $AssetsImagesGen {
   AssetGenImage get bgChat3x =>
       const AssetGenImage('assets/images/bg_chat@3x.png');
 
-  /// File path: assets/images/typing.json
-  String get typing => 'assets/images/typing.json';
+  /// File path: assets/images/bg_circle.png
+  AssetGenImage get bgCircle =>
+      const AssetGenImage('assets/images/bg_circle.png');
+
+  /// File path: assets/images/bg_circle@2x.png
+  AssetGenImage get bgCircle2x =>
+      const AssetGenImage('assets/images/bg_circle@2x.png');
+
+  /// File path: assets/images/bg_circle@3x.png
+  AssetGenImage get bgCircle3x =>
+      const AssetGenImage('assets/images/bg_circle@3x.png');
+
+  /// File path: assets/images/bg_get_started.png
+  AssetGenImage get bgGetStarted =>
+      const AssetGenImage('assets/images/bg_get_started.png');
+
+  /// File path: assets/images/bg_get_started@2x.png
+  AssetGenImage get bgGetStarted2x =>
+      const AssetGenImage('assets/images/bg_get_started@2x.png');
+
+  /// File path: assets/images/bg_get_started@3x.png
+  AssetGenImage get bgGetStarted3x =>
+      const AssetGenImage('assets/images/bg_get_started@3x.png');
 
   /// List of all assets
-  List<dynamic> get values => [bgChat, bgChat2x, bgChat3x, typing];
+  List<AssetGenImage> get values => [
+        bgChat,
+        bgChat2x,
+        bgChat3x,
+        bgCircle,
+        bgCircle2x,
+        bgCircle3x,
+        bgGetStarted,
+        bgGetStarted2x,
+        bgGetStarted3x
+      ];
+}
+
+class $AssetsLottiesGen {
+  const $AssetsLottiesGen();
+
+  /// File path: assets/lotties/typing.json
+  String get typing => 'assets/lotties/typing.json';
+
+  /// List of all assets
+  List<String> get values => [typing];
 }
 
 class Assets {
@@ -368,6 +409,7 @@ class Assets {
   static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
   static const String index = 'assets/index.html';
+  static const $AssetsLottiesGen lotties = $AssetsLottiesGen();
 
   /// List of all assets
   List<String> get values => [index];
