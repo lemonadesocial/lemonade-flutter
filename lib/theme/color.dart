@@ -26,6 +26,7 @@ class LemonColor {
   static Color paleViolet18 = const Color(0xffC69DF7).withOpacity(0.18);
   static Color paleViolet36 = const Color(0xffC69DF7).withOpacity(0.36);
   static Color red = const Color(0xFFFE4A49); 
+  static Color black54 = const Color(0xff000000).withOpacity(0.54);
   static Color online = const Color(0xFF5FCB90);
   static Color ownMessage = const Color(0xFF8F71B2);
   static Color otherMessage = const Color(0xFF272727);
@@ -37,7 +38,9 @@ class LemonColor {
   // Button
   static Color arsenic = Color(0xff424242);
   static Color charlestonGreen = Color(0xff2c2c2c);
-  static Color grape = Color(0xff6f3faa);
+  static Color button_linear_1 = Color(0xFFB17AF4);
+  static Color button_linear_2 = Color(0xFF6F3FAA);
+  static Color grape = Color(0xffB17AF4);
   static Color shadow = Color.fromARGB(91, 0, 0, 0);
   static Color disableButton = const Color(0xFF3c2557);
 

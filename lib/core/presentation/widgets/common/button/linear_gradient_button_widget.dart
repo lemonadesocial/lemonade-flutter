@@ -13,7 +13,7 @@ enum GradientButtonMode {
       case defaultMode:
         return [LemonColor.arsenic, LemonColor.charlestonGreen];
       case lavenderMode:
-        return [LemonColor.lavender, LemonColor.grape];
+        return [LemonColor.button_linear_1, LemonColor.button_linear_2];
       default:
         return [];
     }
@@ -79,7 +79,8 @@ class LinearGradientButton extends StatelessWidget {
               ],
               Text(
                 label,
-                style: textStyle ?? Typo.small.copyWith(fontWeight: FontWeight.w600),
+                style: textStyle ??
+                    Typo.small.copyWith(fontWeight: FontWeight.w600),
               )
             ],
           ),

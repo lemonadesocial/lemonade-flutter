@@ -51,7 +51,11 @@ class _LoginPageState extends State<LoginPage> {
         ),
         Column(
           children: [
-            Image(image: Assets.images.bgGetStarted.provider()),
+            // Image(image: Assets.images.bgGetStarted.provider()),
+            Transform.translate(
+              offset: Offset(0, -22.h), // Move the image up by 30 pixels
+              child: Image(image: Assets.images.bgGetStarted.provider()),
+            ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 42.w),
               child: Column(
@@ -79,6 +83,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   SizedBox(height: 42.h),
                   _buildAuthButton(context),
+                  SizedBox(height: 42.h),
                 ],
               ),
             ),
@@ -90,7 +95,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _buildAuthButton(BuildContext context) {
     final t = Translations.of(context);
-    
+
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
         final processingWidget = SizedBox(

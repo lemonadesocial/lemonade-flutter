@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/presentation/widgets/bottom_bar/app_tabs.dart';
@@ -20,7 +21,8 @@ class BottomBar extends StatefulWidget {
   _BottomBarState createState() => _BottomBarState();
 }
 
-class _BottomBarState extends State<BottomBar> with SingleTickerProviderStateMixin {
+class _BottomBarState extends State<BottomBar>
+    with SingleTickerProviderStateMixin {
   AppTab _selectedTab = AppTab.home;
   late AnimationController _animationController;
   late Animation<double> _animation;
@@ -53,23 +55,31 @@ class _BottomBarState extends State<BottomBar> with SingleTickerProviderStateMix
     return Container(
       height: Platform.isIOS ? 90.h : 70.h,
       decoration: BoxDecoration(
-        color: colorScheme.primary,
+        color: Colors.black54,
         border: Border(
           top: BorderSide(color: colorScheme.secondary),
         ),
       ),
-      child: Column(
-        children: [
-          SizedBox(height: 15.h),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: tabs.map((tabData) {
-              return _buildTabItem(context, tabData);
-            }).toList(),
+      child: ClipRect(
+        child: BackdropFilter(
+          filter: ImageFilter.blur(
+            sigmaX: 10,
+            sigmaY: 10,
           ),
-          SizedBox(height: 18.h),
-        ],
+          child: Column(
+            children: [
+              SizedBox(height: 15.h),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: tabs.map((tabData) {
+                  return _buildTabItem(context, tabData);
+                }).toList(),
+              ),
+              SizedBox(height: 18.h),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -117,8 +127,7 @@ class _BottomBarState extends State<BottomBar> with SingleTickerProviderStateMix
           } else if (authState is AuthStateProcessing) {
             return Loading.defaultLoading(context);
           } else {
-            final colorScheme = Theme.of(context).colorScheme;
-            return Icon(Icons.person, color: colorScheme.onPrimary, size: 24);
+            return isSelected ? selectedIcon : icon;
           }
         },
       );
@@ -130,16 +139,21 @@ class _BottomBarState extends State<BottomBar> with SingleTickerProviderStateMix
   void _handleTabTap(BuildContext context, TabData tabData) {
     Vibrate.feedback(FeedbackType.light);
     final authState = BlocProvider.of<AuthBloc>(context).state;
-    if (tabData.tab == AppTab.profile || tabData.tab == AppTab.notification || tabData.tab == AppTab.discover) {
+    if (tabData.tab == AppTab.profile ||
+        tabData.tab == AppTab.notification ||
+        tabData.tab == AppTab.wallet ||
+        tabData.tab == AppTab.discover) {
       if (authState is AuthStateAuthenticated) {
         _triggerAnimation(tabData);
-        AutoRouter.of(context).navigateNamed(tabData.route, includePrefixMatches: true);
+        AutoRouter.of(context)
+            .navigateNamed(tabData.route, includePrefixMatches: true);
       } else {
         context.router.navigate(const LoginRoute());
       }
     } else {
       _triggerAnimation(tabData);
-      AutoRouter.of(context).navigateNamed(tabData.route, includePrefixMatches: true);
+      AutoRouter.of(context)
+          .navigateNamed(tabData.route, includePrefixMatches: true);
     }
   }
 

@@ -227,6 +227,9 @@ class $AssetsIconsGen {
   SvgGenImage get icPeopleAlt =>
       const SvgGenImage('assets/icons/ic_people_alt.svg');
 
+  /// File path: assets/icons/ic_person.svg
+  SvgGenImage get icPerson => const SvgGenImage('assets/icons/ic_person.svg');
+
   /// File path: assets/icons/ic_poll.svg
   SvgGenImage get icPoll => const SvgGenImage('assets/icons/ic_poll.svg');
 
@@ -323,6 +326,7 @@ class $AssetsIconsGen {
         icNotification,
         icNotificationFilled,
         icPeopleAlt,
+        icPerson,
         icPoll,
         icProfile,
         icPublic,

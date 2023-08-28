@@ -16,14 +16,18 @@ class RootPage extends StatelessWidget {
     final primaryColor = Theme.of(context).colorScheme.primary;
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, authState) => AutoTabsScaffold(
+        extendBody: true,
         scaffoldKey: DrawerUtils.drawerGlobalKey,
         backgroundColor: primaryColor,
         routes: [
           const HomeRoute(),
           const DiscoverRoute(),
-          const WalletRoute(),
           authState.maybeWhen(
             authenticated: (session) => const NotificationRoute(),
+            orElse: EmptyRoute.new,
+          ),
+          authState.maybeWhen(
+            authenticated: (session) => const WalletRoute(),
             orElse: EmptyRoute.new,
           ),
           authState.maybeWhen(
