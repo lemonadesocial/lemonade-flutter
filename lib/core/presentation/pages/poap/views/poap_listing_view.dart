@@ -12,9 +12,9 @@ import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 final List<double> _snapSizes = [.2, .77, 1];
 
@@ -32,6 +32,7 @@ class PoapListingView extends StatefulWidget {
 class _PoapListingViewState extends State<PoapListingView> {
   final DraggableScrollableController dragController = DraggableScrollableController();
   final debouncer = Debouncer(milliseconds: 300);
+  final refreshController = RefreshController();
 
   @override
   void dispose() {
@@ -75,77 +76,80 @@ class _PoapListingViewState extends State<PoapListingView> {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: colorScheme.primary,
+        appBar: LemonAppBar(
+          title: StringUtils.capitalize(t.nft.badges),
+          actions: [
+            GestureDetector(
+              onTap: () {
+                dragController.animateTo(
+                  _snapSizes[1],
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.linear,
+                );
+              },
+              child: Assets.icons.icFilterOutline.svg(),
+            ),
+          ],
+        ),
         body: Padding(
           padding: EdgeInsets.symmetric(
             horizontal: Spacing.extraSmall,
           ),
           child: Stack(
             children: [
-              CustomScrollView(
-                slivers: [
-                  SliverAppBar(
-                    leading: const SizedBox.shrink(),
-                    expandedHeight: 60,
-                    collapsedHeight: 60,
-                    floating: true,
-                    flexibleSpace: LemonAppBar(
-                      title: StringUtils.capitalize(t.nft.badges),
-                      actions: [
-                        GestureDetector(
-                          onTap: () {
-                            dragController.animateTo(
-                              _snapSizes[1],
-                              duration: const Duration(milliseconds: 300),
-                              curve: Curves.linear,
-                            );
-                          },
-                          child: Assets.icons.icFilterOutline.svg(),
+              SmartRefresher(
+                enablePullUp: true,
+                onRefresh: () async {
+                  context.read<BadgesListingBloc>().add(BadgesListingEvent.refresh());
+                  await Future.delayed(const Duration(milliseconds: 500));
+                  refreshController.refreshCompleted();
+                },
+                onLoading: () async {
+                  context.read<BadgesListingBloc>().add(BadgesListingEvent.fetch());
+                  await Future.delayed(const Duration(milliseconds: 500));
+                  refreshController.loadComplete();
+                },
+                controller: refreshController,
+                child: CustomScrollView(
+                  slivers: [
+                    BlocBuilder<BadgesListingBloc, BadgesListingState>(
+                      builder: (context, state) => state.when(
+                        initial: () => SliverFillRemaining(
+                          child: Loading.defaultLoading(context),
                         ),
-                      ],
-                    ),
-                  ),
-                  CupertinoSliverRefreshControl(
-                    onRefresh: () async {
-                      context.read<BadgesListingBloc>().add(BadgesListingEvent.refresh());
-                    },
-                  ),
-                  BlocBuilder<BadgesListingBloc, BadgesListingState>(
-                    builder: (context, state) => state.when(
-                      initial: () => SliverToBoxAdapter(
-                        child: Loading.defaultLoading(context),
-                      ),
-                      failure: () {
-                        return SliverToBoxAdapter(
-                          child: Center(
-                            child: Text(t.common.somethingWrong),
-                          ),
-                        );
-                      },
-                      fetched: (badges) {
-                        if (badges.isEmpty) {
+                        failure: () {
                           return SliverToBoxAdapter(
                             child: Center(
-                              child: EmptyList(
-                                emptyText: t.nft.noBadges,
-                              ),
+                              child: Text(t.common.somethingWrong),
                             ),
                           );
-                        }
-                        return SliverList.separated(
-                          itemCount: badges.length,
-                          separatorBuilder: (context, i) => const SizedBox(height: 12),
-                          itemBuilder: (context, i) => PoapItem(
-                            key: ValueKey(badges[i].id),
-                            badge: badges[i],
-                          ),
-                        );
-                      },
+                        },
+                        fetched: (badges) {
+                          if (badges.isEmpty) {
+                            return SliverToBoxAdapter(
+                              child: Center(
+                                child: EmptyList(
+                                  emptyText: t.nft.noBadges,
+                                ),
+                              ),
+                            );
+                          }
+                          return SliverList.separated(
+                            itemCount: badges.length,
+                            separatorBuilder: (context, i) => const SizedBox(height: 12),
+                            itemBuilder: (context, i) => PoapItem(
+                              key: ValueKey(badges[i].id),
+                              badge: badges[i],
+                            ),
+                          );
+                        },
+                      ),
                     ),
-                  ),
-                  SliverToBoxAdapter(
-                    child: SizedBox(height: MediaQuery.of(context).size.height * 0.2),
-                  )
-                ],
+                    SliverToBoxAdapter(
+                      child: SizedBox(height: MediaQuery.of(context).size.height * 0.2),
+                    )
+                  ],
+                ),
               ),
               SafeArea(
                 bottom: false,
@@ -153,7 +157,7 @@ class _PoapListingViewState extends State<PoapListingView> {
                   dragController: dragController,
                   snapSizes: _snapSizes,
                 ),
-              )
+              ),
             ],
           ),
         ),
