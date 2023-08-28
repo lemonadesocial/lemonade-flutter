@@ -121,7 +121,7 @@ class _LoginPageState extends State<LoginPage> {
           processing: () => processingWidget,
           unauthenticated: (_) => loginButton,
           unknown: () => loginButton,
-          orElse: () => const SizedBox.shrink(),
+          orElse: () => loginButton,
         );
       },
     );
