@@ -176,7 +176,7 @@ abstract class $AppRouter extends _i20.RootStackRouter {
     EventsListingRoute.name: (routeData) {
       return _i20.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i19.EventsListingPage(),
+        child: const _i18.EventsListingPage(),
       );
     },
     EventDetailRoute.name: (routeData) {
