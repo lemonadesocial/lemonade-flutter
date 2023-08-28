@@ -32,6 +32,9 @@ _$_EventDto _$$_EventDtoFromJson(Map<String, dynamic> json) => _$_EventDto(
       end: json['end'] == null ? null : DateTime.parse(json['end'] as String),
       cost: (json['cost'] as num?)?.toDouble(),
       currency: $enumDecodeNullable(_$CurrencyEnumMap, json['currency']),
+      accepted: (json['accepted'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
     );
 
 Map<String, dynamic> _$$_EventDtoToJson(_$_EventDto instance) =>
@@ -51,6 +54,7 @@ Map<String, dynamic> _$$_EventDtoToJson(_$_EventDto instance) =>
       'end': instance.end?.toIso8601String(),
       'cost': instance.cost,
       'currency': _$CurrencyEnumMap[instance.currency],
+      'accepted': instance.accepted,
     };
 
 const _$CurrencyEnumMap = {
