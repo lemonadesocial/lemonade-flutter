@@ -1,4 +1,3 @@
-import 'package:app/core/presentation/pages/discover/discover_page/views/discover_badges_near_you.dart';
 import 'package:app/core/presentation/pages/discover/discover_page/views/discover_cards.dart';
 import 'package:app/core/presentation/pages/discover/discover_page/views/discover_upcoming_events.dart';
 import 'package:app/core/presentation/widgets/common/appbar/appbar_logo.dart';
@@ -52,7 +51,8 @@ class DiscoverPage extends StatelessWidget {
           SliverPadding(
             padding: EdgeInsets.symmetric(vertical: Spacing.xSmall),
           ),
-          const DiscoverBadgesNearYou(),
+          //TODO temporary hidden
+          // const DiscoverBadgesNearYou(),
           const DiscoverUpcomingEvents(),
           SliverPadding(
             padding: EdgeInsets.only(top: Spacing.medium),

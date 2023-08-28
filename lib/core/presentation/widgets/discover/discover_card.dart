@@ -44,49 +44,54 @@ class DiscoverCard extends StatelessWidget {
     required this.title,
     required this.subTitle,
     required this.icon,
+    required this.onTap,
   });
   final List<Color> colors;
   final String title;
   final String subTitle;
   final Widget icon;
+  final Function() onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(Spacing.xSmall),
-      clipBehavior: Clip.antiAlias,
-      decoration: ShapeDecoration(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(
-            LemonRadius.small,
-          ),
-        ),
-        gradient: RadialGradient(
-          radius: 1.2,
-          center: Alignment.bottomCenter,
-          stops: const [.1, .4, 1],
-          colors: colors,
-        ),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          icon,
-          SizedBox(height: Spacing.smMedium),
-          Text(
-            title,
-            style: Typo.small.copyWith(fontWeight: FontWeight.w600),
-          ),
-          const SizedBox(height: 2),
-          Text(
-            subTitle,
-            style: Typo.xSmall.copyWith(
-              fontSize: 9.sp,
-              fontWeight: FontWeight.w400,
-              color: Theme.of(context).colorScheme.onSecondary,
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.all(Spacing.xSmall),
+        clipBehavior: Clip.antiAlias,
+        decoration: ShapeDecoration(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(
+              LemonRadius.small,
             ),
           ),
-        ],
+          gradient: RadialGradient(
+            radius: 1.2,
+            center: Alignment.bottomCenter,
+            stops: const [.1, .4, 1],
+            colors: colors,
+          ),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            icon,
+            SizedBox(height: Spacing.smMedium),
+            Text(
+              title,
+              style: Typo.small.copyWith(fontWeight: FontWeight.w600),
+            ),
+            const SizedBox(height: 2),
+            Text(
+              subTitle,
+              style: Typo.xSmall.copyWith(
+                fontSize: 9.sp,
+                fontWeight: FontWeight.w400,
+                color: Theme.of(context).colorScheme.onSecondary,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

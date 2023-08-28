@@ -15,70 +15,72 @@ class ChatInput extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        vertical: Spacing.xSmall,
-        horizontal: Spacing.xSmall,
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          _buildAddButton(context),
-          SizedBox(width: Spacing.superExtraSmall),
-          Expanded(
-            child: Theme(
-              data: Theme.of(context).copyWith(
-                inputDecorationTheme: InputDecorationTheme(
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(21),
-                    borderSide: BorderSide(
-                      color: colorScheme.outline,
+    return Container(
+      color: colorScheme.primary,
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          vertical: Spacing.xSmall,
+          horizontal: Spacing.xSmall,
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            _buildAddButton(context),
+            SizedBox(width: Spacing.superExtraSmall),
+            Expanded(
+              child: Theme(
+                data: Theme.of(context).copyWith(
+                    inputDecorationTheme: InputDecorationTheme(
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(21),
+                        borderSide: BorderSide(
+                          color: colorScheme.outline,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(21),
+                        borderSide: BorderSide(
+                          color: colorScheme.outline,
+                        ),
+                      ),
+                      contentPadding: EdgeInsets.symmetric(
+                        vertical: Spacing.extraSmall,
+                        horizontal: Spacing.smMedium,
+                      ),
+                    ),
+                    textSelectionTheme: TextSelectionThemeData(
+                      cursorColor: colorScheme.surface,
+                      selectionColor: colorScheme.secondary,
+                    )),
+                child: InputBar(
+                  room: controller.room,
+                  minLines: 1,
+                  maxLines: 8,
+                  autofocus: false,
+                  keyboardType: TextInputType.multiline,
+                  onSubmitted: controller.onInputBarSubmitted,
+                  // TODO:
+                  // onSubmitImage: controller.sendImageFromClipBoard,
+                  // focusNode: controller.inputFocus,
+                  controller: controller.sendController,
+                  decoration: InputDecoration(
+                    isDense: true,
+                    hintText: t.chat.typeMessage,
+                    hintMaxLines: 1,
+                    filled: false,
+                    hintStyle: Typo.medium.copyWith(
+                      color: Theme.of(context).colorScheme.outline,
                     ),
                   ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(21),
-                    borderSide: BorderSide(
-                      color: colorScheme.outline,
-                    ),
-                  ),
-                  contentPadding: EdgeInsets.symmetric(
-                    vertical: Spacing.extraSmall,
-                    horizontal: Spacing.smMedium,
-                  ), 
+                  onChanged: controller.onInputBarChanged,
                 ),
-                textSelectionTheme: TextSelectionThemeData(
-                  cursorColor: colorScheme.surface,
-                  selectionColor: colorScheme.secondary,
-                )
-              ),
-              child: InputBar(
-                room: controller.room,
-                minLines: 1,
-                maxLines: 8,
-                autofocus: false,
-                keyboardType: TextInputType.multiline,
-                onSubmitted: controller.onInputBarSubmitted,
-                // TODO:
-                // onSubmitImage: controller.sendImageFromClipBoard,
-                // focusNode: controller.inputFocus,
-                controller: controller.sendController,
-                decoration: InputDecoration(
-                  isDense: true,
-                  hintText: t.chat.typeMessage,
-                  hintMaxLines: 1,
-                  filled: false,
-                  hintStyle: Typo.medium.copyWith(
-                    color: Theme.of(context).colorScheme.outline,
-                  ),
-                ),
-                onChanged: controller.onInputBarChanged,
               ),
             ),
-          ),
-          SizedBox(width: Spacing.superExtraSmall),
-          _buildSendButton(context),
-        ],
+            SizedBox(width: Spacing.superExtraSmall),
+            _buildSendButton(context),
+          ],
+        ),
       ),
     );
   }
