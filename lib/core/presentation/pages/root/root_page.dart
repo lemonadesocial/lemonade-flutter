@@ -16,6 +16,7 @@ class RootPage extends StatelessWidget {
     final primaryColor = Theme.of(context).colorScheme.primary;
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, authState) => AutoTabsScaffold(
+        extendBody: true,
         scaffoldKey: DrawerUtils.drawerGlobalKey,
         backgroundColor: primaryColor,
         routes: [

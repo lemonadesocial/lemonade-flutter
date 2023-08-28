@@ -26,6 +26,7 @@ class LemonColor {
   static Color paleViolet18 = const Color(0xffC69DF7).withOpacity(0.18);
   static Color paleViolet36 = const Color(0xffC69DF7).withOpacity(0.36);
   static Color red = const Color(0xFFFE4A49); 
+  static Color black54 = const Color(0xff000000).withOpacity(0.54);
   
   // UI specific
   static Color dropdownBackground = const Color.fromARGB(221, 32, 32, 32);

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/presentation/widgets/bottom_bar/app_tabs.dart';
@@ -54,23 +55,31 @@ class _BottomBarState extends State<BottomBar>
     return Container(
       height: Platform.isIOS ? 90.h : 70.h,
       decoration: BoxDecoration(
-        color: colorScheme.primary,
+        color: Colors.black54,
         border: Border(
           top: BorderSide(color: colorScheme.secondary),
         ),
       ),
-      child: Column(
-        children: [
-          SizedBox(height: 15.h),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: tabs.map((tabData) {
-              return _buildTabItem(context, tabData);
-            }).toList(),
+      child: ClipRect(
+        child: BackdropFilter(
+          filter: ImageFilter.blur(
+            sigmaX: 10,
+            sigmaY: 10,
+          ), 
+          child: Column(
+            children: [
+              SizedBox(height: 15.h),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: tabs.map((tabData) {
+                  return _buildTabItem(context, tabData);
+                }).toList(),
+              ),
+              SizedBox(height: 18.h),
+            ],
           ),
-          SizedBox(height: 18.h),
-        ],
+        ),
       ),
     );
   }
