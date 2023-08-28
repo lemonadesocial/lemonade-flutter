@@ -15,8 +15,8 @@ const eventHostExpandedFragment = '''
   }
 ''';
 
-final eventFragment = '''
-  ${eventHostExpandedFragment}
+const eventFragment = '''
+  $eventHostExpandedFragment
 
   fragment eventFields on Event {
   _id
@@ -48,7 +48,7 @@ final eventFragment = '''
 ''';
 
 final getEventsQuery = gql('''
-  ${eventFragment}
+  $eventFragment
   query(
     \$highlight: Boolean
     \$search: String
@@ -69,7 +69,7 @@ final getEventsQuery = gql('''
 ''');
 
 final getHomeEventsQuery = gql('''
-  ${eventFragment}
+  $eventFragment
   query(
         \$tense: EventTense,
         \$latitude: Float,
@@ -91,7 +91,7 @@ final getHomeEventsQuery = gql('''
 ''');
 
 final getHostingEventsQuery = gql('''
-  ${eventFragment}
+  $eventFragment
   query(
     \$id: MongoID!, 
     \$state: FilterEventInput, 

@@ -20,8 +20,7 @@ class BottomBar extends StatefulWidget {
   _BottomBarState createState() => _BottomBarState();
 }
 
-class _BottomBarState extends State<BottomBar>
-    with SingleTickerProviderStateMixin {
+class _BottomBarState extends State<BottomBar> with SingleTickerProviderStateMixin {
   AppTab _selectedTab = AppTab.home;
   late AnimationController _animationController;
   late Animation<double> _animation;
@@ -131,18 +130,16 @@ class _BottomBarState extends State<BottomBar>
   void _handleTabTap(BuildContext context, TabData tabData) {
     Vibrate.feedback(FeedbackType.light);
     final authState = BlocProvider.of<AuthBloc>(context).state;
-    if (tabData.tab == AppTab.profile || tabData.tab == AppTab.notification) {
+    if (tabData.tab == AppTab.profile || tabData.tab == AppTab.notification || tabData.tab == AppTab.discover) {
       if (authState is AuthStateAuthenticated) {
         _triggerAnimation(tabData);
-        AutoRouter.of(context)
-            .navigateNamed(tabData.route, includePrefixMatches: true);
+        AutoRouter.of(context).navigateNamed(tabData.route, includePrefixMatches: true);
       } else {
         context.router.navigate(const LoginRoute());
       }
     } else {
       _triggerAnimation(tabData);
-      AutoRouter.of(context)
-          .navigateNamed(tabData.route, includePrefixMatches: true);
+      AutoRouter.of(context).navigateNamed(tabData.route, includePrefixMatches: true);
     }
   }
 

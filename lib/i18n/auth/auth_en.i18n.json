@@ -3,5 +3,8 @@
         "success": "Logged in successfully",
         "fail": "Logged in failed"
     },
-    "logout": "Logout"
+    "logout": "Logout",
+    "lets_get_you_in": "Let's get you in!",
+    "get_started_description": "Sign up or log in to create, collaborate & celebrate! #makelemonade",
+    "get_started": "Get Started"
 }

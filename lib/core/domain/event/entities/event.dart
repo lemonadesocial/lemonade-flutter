@@ -3,22 +3,7 @@ import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 
-class Event {
-  String? id;
-  User? hostExpanded;
-  List<User?>? cohostsExpanded;
-  List<DbFile?>? newNewPhotosExpanded;
-  String? title;
-  String? slug;
-  String? host;
-  List<Broadcast>? broadcasts;
-  String? description;
-  DateTime? start;
-  DateTime? end;
-  double? cost;
-  Currency? currency;
-
-  Event({
+class Event {Event({
     this.id,
     this.hostExpanded,
     this.cohostsExpanded,
@@ -32,6 +17,7 @@ class Event {
     this.cost,
     this.currency,
     this.newNewPhotosExpanded,
+    this.accepted,
   });
 
   factory Event.fromDto(EventDto dto) {
@@ -44,18 +30,32 @@ class Event {
       title: dto.title,
       slug: dto.slug,
       host: dto.host,
-      broadcasts: List.from(dto.broadcasts ?? []).map((broadcast) => Broadcast.fromDto(broadcast)).toList(),
+      broadcasts: List<BroadcastDto>.from(dto.broadcasts ?? []).map(Broadcast.fromDto).toList(),
       description: dto.description,
       start: dto.start,
       end: dto.end,
       cost: dto.cost,
       currency: dto.currency,
+      accepted: List<String>.from(dto.accepted ?? []).map((item) => item).toList(),
     );
   }
+  String? id;
+  User? hostExpanded;
+  List<User?>? cohostsExpanded;
+  List<DbFile?>? newNewPhotosExpanded;
+  String? title;
+  String? slug;
+  String? host;
+  List<Broadcast>? broadcasts;
+  String? description;
+  DateTime? start;
+  DateTime? end;
+  double? cost;
+  Currency? currency;
+  List<String>? accepted;
 }
 
 class Broadcast {
-  String? providerId;
 
   Broadcast({this.providerId});
 
@@ -64,4 +64,5 @@ class Broadcast {
       providerId: dto.providerId,
     );
   }
+  String? providerId;
 }
