@@ -98,14 +98,14 @@ final List<TabData> tabs = [
     AppTab.profile,
     '/me',
     ThemeSvgIcon(
-      builder: (filter) => Assets.icons.icHouse.svg(
+      builder: (filter) => Assets.icons.icPerson.svg(
         colorFilter: filter,
         width: 24.w,
         height: 24.w,
       ),
     ),
     ThemeSvgIcon(
-      builder: (filter) => Assets.icons.icoHouseFilled.svg(
+      builder: (filter) => Assets.icons.icPerson.svg(
         colorFilter: filter,
         width: 24.w,
         height: 24.w,

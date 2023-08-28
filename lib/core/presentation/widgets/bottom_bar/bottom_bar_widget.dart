@@ -118,8 +118,7 @@ class _BottomBarState extends State<BottomBar>
           } else if (authState is AuthStateProcessing) {
             return Loading.defaultLoading(context);
           } else {
-            final colorScheme = Theme.of(context).colorScheme;
-            return Icon(Icons.person, color: colorScheme.onPrimary, size: 24);
+            return isSelected ? selectedIcon : icon;
           }
         },
       );

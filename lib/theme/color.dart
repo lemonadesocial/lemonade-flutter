@@ -34,7 +34,9 @@ class LemonColor {
   // Button
   static Color arsenic = Color(0xff424242);
   static Color charlestonGreen = Color(0xff2c2c2c);
-  static Color grape = Color(0xff6f3faa);
+  static Color button_linear_1 = Color(0xFFB17AF4);
+  static Color button_linear_2 = Color(0xFF6F3FAA);
+  static Color grape = Color(0xffB17AF4);
   static Color shadow = Color.fromARGB(91, 0, 0, 0);
   static Color disableButton = const Color(0xFF3c2557);
 
