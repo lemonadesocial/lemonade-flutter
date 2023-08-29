@@ -1,10 +1,8 @@
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/fonts.gen.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../gen/assets.gen.dart';
 
@@ -33,16 +31,17 @@ class GenderChipWidget extends StatelessWidget {
   /// - true/false, meaning one of gender has been selected
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return InkWell(
       onTap: onSelect,
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(21.r),
+          borderRadius: BorderRadius.circular(LemonRadius.button),
           color: isSelected == null
               ? defaultColor
               : isSelected!
                   ? activeColor
-                  : LemonColor.white.withOpacity(0.06),
+                  : colorScheme.onPrimary.withOpacity(0.06),
         ),
         padding: EdgeInsets.all(Spacing.xSmall),
         child: Row(
@@ -51,8 +50,8 @@ class GenderChipWidget extends StatelessWidget {
               color: isSelected == null
                   ? activeColor
                   : isSelected!
-                      ? LemonColor.black
-                      : LemonColor.white36,
+                      ? colorScheme.primary
+                      : colorScheme.onPrimary.withOpacity(0.36),
               builder: (filter) => leading.svg(colorFilter: filter),
             ),
             SizedBox(width: Spacing.superExtraSmall),
@@ -62,8 +61,8 @@ class GenderChipWidget extends StatelessWidget {
                 color: isSelected == null
                     ? activeColor
                     : isSelected!
-                        ? LemonColor.black
-                        : LemonColor.white36,
+                        ? colorScheme.primary
+                        : colorScheme.onPrimary.withOpacity(0.36),
                 fontWeight: FontWeight.w600,
                 fontFamily: FontFamily.nohemiVariable,
               ),

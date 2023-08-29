@@ -4,6 +4,7 @@ import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,14 +15,9 @@ import '../../../../../theme/color.dart';
 import '../../../widgets/back_button_widget.dart';
 
 @RoutePage()
-class OnboardingUsernamePage extends StatefulWidget {
+class OnboardingUsernamePage extends StatelessWidget {
   const OnboardingUsernamePage({Key? key}) : super(key: key);
 
-  @override
-  State<OnboardingUsernamePage> createState() => _OnboardingUsernamePageState();
-}
-
-class _OnboardingUsernamePageState extends State<OnboardingUsernamePage> {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
@@ -50,8 +46,7 @@ class _OnboardingUsernamePageState extends State<OnboardingUsernamePage> {
                     children: [
                       Text(
                         t.onboarding.pickUsername,
-                        style: TextStyle(
-                          fontSize: 26.sp,
+                        style: Typo.extraLarge.copyWith(
                           fontWeight: FontWeight.w800,
                           color: LemonColor.onboardingTitle,
                           fontFamily: FontFamily.nohemiVariable,
