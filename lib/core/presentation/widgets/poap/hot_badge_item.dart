@@ -3,77 +3,116 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:app/core/domain/badge/entities/badge_entities.dart' as badge_entities;
+import 'package:app/core/domain/poap/input/poap_input.dart';
+import 'package:app/core/domain/poap/poap_repository.dart';
+import 'package:app/core/domain/token/entities/token_entities.dart';
+import 'package:app/core/domain/token/input/get_tokens_input.dart';
+import 'package:app/core/domain/token/token_repository.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/utils/media_utils.dart';
 import 'package:app/gen/assets.gen.dart';
+import 'package:app/i18n/i18n.g.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 
 final _badgeThumbnailHeight = 144.w;
 final _badgeCollectionThumbnailHeight = 65.w;
 final _badgeQuantityBarSize = Size(94.w, 94.w);
 
-class HotBadgeItem extends StatefulWidget {
-  const HotBadgeItem({super.key});
+class HotBadgeItem extends StatelessWidget {
+  const HotBadgeItem({
+    super.key,
+    required this.badge,
+  });
 
-  @override
-  State<HotBadgeItem> createState() => _HotBadgeItemState();
-}
-
-class _HotBadgeItemState extends State<HotBadgeItem> {
-  late final Tween<double> _tween = Tween<double>(begin: 0, end: 0.9);
+  final badge_entities.Badge badge;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: _badgeThumbnailHeight,
       height: _badgeCollectionThumbnailHeight * 1.6,
-      child: Stack(
-        children: [
-          const _BadgeThumbnail(),
-          const Align(
-            alignment: Alignment(0, 0.3),
-            child: _BadgeCollectionThumbnail(),
+      child: FutureBuilder(
+        future: getIt<TokenRepository>().getToken(
+          input: GetTokenDetailInput(
+            id: '${badge.contract!}-0'.toLowerCase(),
+            network: badge.network,
           ),
-          const Align(
-            alignment: Alignment.bottomCenter,
-            child: _BadgeName(),
-          ),
-          Positioned(
-            top: Spacing.superExtraSmall,
-            right: Spacing.superExtraSmall,
-            child: const _BadgeLocationTag(),
-          ),
-          Align(
-            alignment: const Alignment(0, 0.3),
-            child: Stack(
-              children: [
-                Transform.flip(
-                  flipY: true,
-                  child: CustomPaint(
-                    painter: _BadgeQuantityBarPainter(),
-                    size: _badgeQuantityBarSize,
-                  ),
+        ),
+        builder: (context, snapshot) {
+          final token = snapshot.data?.fold((l) => null, (token) => token);
+          return Stack(
+            children: [
+              _BadgeThumbnail(tokenMetadata: token?.metadata),
+              Align(
+                alignment: const Alignment(0, 0.3),
+                child: _BadgeCollectionThumbnail(badge: badge),
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: _BadgeName(
+                  tokenMetadata: token?.metadata,
+                  badge: badge,
                 ),
-                Transform.flip(
-                  flipY: true,
-                  child: TweenAnimationBuilder(
-                    duration: const Duration(milliseconds: 500),
-                    tween: _tween,
-                    builder: (context, animationValue, _) => CustomPaint(
-                      painter: _BadgeQuantityBarPainter(isGradient: true, progress: animationValue),
-                      size: _badgeQuantityBarSize,
+              ),
+              Positioned(
+                top: Spacing.superExtraSmall,
+                right: Spacing.superExtraSmall,
+                child: _BadgeLocationTag(badge: badge),
+              ),
+              Align(
+                alignment: const Alignment(0, 0.3),
+                child: Stack(
+                  children: [
+                    Transform.flip(
+                      flipY: true,
+                      child: CustomPaint(
+                        painter: _BadgeQuantityBarPainter(),
+                        size: _badgeQuantityBarSize,
+                      ),
                     ),
-                  ),
+                    Transform.flip(
+                      flipY: true,
+                      child: FutureBuilder(
+                        future: getIt<PoapRepository>().getPoapViewSupply(
+                          input: GetPoapViewSupplyInput(
+                            network: badge.network ?? '',
+                            address: badge.contract?.toLowerCase() ?? '',
+                          ),
+                        ),
+                        builder: (context, snapshot) {
+                          final poapViewSupply = snapshot.data?.fold((l) => null, (poapView) => poapView);
+                          var claimProgress = .0;
+                          final claimedQuantity = poapViewSupply?.claimedQuantity ?? 0;
+                          final quantity = poapViewSupply?.quantity ?? 0;
+                          if(quantity != 0) {
+                            claimProgress = claimedQuantity / quantity;
+                          }
+                          return TweenAnimationBuilder(
+                            duration: const Duration(milliseconds: 500),
+                            tween: Tween<double>(begin: 0, end: claimProgress),
+                            builder: (context, animationValue, _) => CustomPaint(
+                              painter: _BadgeQuantityBarPainter(isGradient: true, progress: animationValue),
+                              size: _badgeQuantityBarSize,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          )
-        ],
+              )
+            ],
+          );
+        },
       ),
     );
   }
@@ -120,10 +159,23 @@ class _BadgeQuantityBarPainter extends CustomPainter {
 }
 
 class _BadgeLocationTag extends StatelessWidget {
-  const _BadgeLocationTag();
+  const _BadgeLocationTag({
+    required this.badge,
+  });
+
+  final badge_entities.Badge badge;
 
   @override
   Widget build(BuildContext context) {
+    final t = Translations.of(context);
+    final distanceInKm = (badge.distance ?? 0) / 1000;
+    String displayDistance;
+    if (distanceInKm >= 1) {
+      displayDistance = NumberFormat.compact().format(distanceInKm);
+    } else {
+      displayDistance = NumberFormat('##.##').format(badge.distance ?? 0);
+    }
+
     final colorScheme = Theme.of(context).colorScheme;
     return Container(
       padding: EdgeInsets.all(Spacing.superExtraSmall),
@@ -148,7 +200,7 @@ class _BadgeLocationTag extends StatelessWidget {
                 ),
                 SizedBox(width: Spacing.superExtraSmall / 2),
                 Text(
-                  '1.2km',
+                  '$displayDistance ${distanceInKm >= 1 ? t.common.unit.km : t.common.unit.m}',
                   style: Typo.xSmall.copyWith(
                     color: colorScheme.onPrimary,
                     fontWeight: FontWeight.w600,
@@ -164,7 +216,13 @@ class _BadgeLocationTag extends StatelessWidget {
 }
 
 class _BadgeName extends StatelessWidget {
-  const _BadgeName();
+  const _BadgeName({
+    required this.tokenMetadata,
+    required this.badge,
+  });
+
+  final TokenMetadata? tokenMetadata;
+  final badge_entities.Badge badge;
 
   @override
   Widget build(BuildContext context) {
@@ -176,7 +234,7 @@ class _BadgeName extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            'Raging Burger',
+            tokenMetadata?.name ?? '',
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: Typo.small.copyWith(
@@ -184,12 +242,25 @@ class _BadgeName extends StatelessWidget {
             ),
           ),
           SizedBox(height: 2.w),
-          Text(
-            '82/100 claimed',
-            style: Typo.xSmall.copyWith(
-              fontWeight: FontWeight.w400,
-              color: Theme.of(context).colorScheme.onSecondary,
+          FutureBuilder(
+            future: getIt<PoapRepository>().getPoapViewSupply(
+              input: GetPoapViewSupplyInput(
+                network: badge.network ?? '',
+                address: badge.contract?.toLowerCase() ?? '',
+              ),
             ),
+            builder: (context, snapshot) {
+              final poapViewSupply = snapshot.data?.fold((l) => null, (poapView) => poapView);
+              final claimedQuantity = poapViewSupply?.claimedQuantity ?? 0;
+              final quantity = poapViewSupply?.quantity ?? 0;
+              return Text(
+                '$claimedQuantity/$quantity ${t.nft.claimed}',
+                style: Typo.xSmall.copyWith(
+                  fontWeight: FontWeight.w400,
+                  color: Theme.of(context).colorScheme.onSecondary,
+                ),
+              );
+            },
           ),
         ],
       ),
@@ -197,14 +268,12 @@ class _BadgeName extends StatelessWidget {
   }
 }
 
-const collectionThumbnails = [
-  'https://s3-alpha-sig.figma.com/img/b2b5/81b9/060fc740efe7a7c28ec3b2acd4147df2?Expires=1693785600&Signature=TGMwFv-Tke6mJzC70ESjbSGLEdK99fjgYEpp6janm8RsKyVLZJOOmBRwP9~m8DLJycz8q7hkEIevkOumQ8MkU910Rblt2efcd4pmexwyWdeMgb7eLz748W4tw7X5uN0Lh0zUF720Kzs7LogYosiIz-FXAzskCL9K8aZ9pXspjKaNymugET6mGPLQ78doux5m~VbBy2Mjf293rTyUD88VeIJ2hBxYLsOMCiaVoeJF6lB4VQBpPlYES~ljRY~WXeYxxV1i7TdLql3JylEEqCjirONolstSycm6rgc8SCSDLFmTmTxY6~0mwvs3qAL9lhQ8mahn3kb3dJOvgHbVklPdUA__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4',
-  'https://s3-alpha-sig.figma.com/img/1a60/9488/951de67469eeda9d8620bbe234f635f9?Expires=1693785600&Signature=L6NB82-IsGn7EEjFHmpLtuvFluuSvNO6EZat2yWZ4yPsPMMrxl-8as~3o-QY4IZi7~XmxWYfpicaK0lphYgnFABh65GHYLo4SKVbPekBZuKWzRsoMtihZhY7rDwKCrzpjqRS9pzN2Ss3VfCj6zjlqhbXh5HM-KAMTqH8lnPdSgJxGhgoLwI6owo4XVUzDrsGVZ7BXa0Av5EjGrsnssJCCbntIWso5LmsKGmtehvxRJxHR1jmcHMjrFzNirAIcVOv~3VtioTTUKAFIJLssPU585mmdNWx5gDGvFBzsbIZQeKH-~OoVhK8c5cgG6UPzTinDCEbJ8ErlQIzeYkMv34xCA__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4',
-  'https://s3-alpha-sig.figma.com/img/3d60/bcfe/eae148f9a38b5ac2ff50115261ba41a9?Expires=1693785600&Signature=WEMkpnI9spQnCb2rymoOM8xn~wIx57hYiB0usdGOJcIRVxiPYdGRKRDrCbnOXeDj01J-l4PASkpGH9KL4gpp6wfEVkijD9KpvMuV0VrvjxHtrhf5lVzqDAmyArRQSuUapqkmnvQ6bGAr-JJwNOwqU1YoH2ee56Sc6T1ZIGOtZhlEI5JAL3dAJ7CR21jqIlvb6CmJKvbENztflSP9IncGDnwrQLi60pV-QBBhmr2-4KmPd8KWuUCG-2jwXaL6RNM5M4snby15cXZctiiypXzHICiBRTAPxhw94NHpapR59DuRBv1Gj8wIFcYiOZ-74u6mwAz8KNZv75wza0T1lHZQYg__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4',
-];
-
 class _BadgeCollectionThumbnail extends StatelessWidget {
-  const _BadgeCollectionThumbnail();
+  const _BadgeCollectionThumbnail({
+    required this.badge,
+  });
+
+  final badge_entities.Badge badge;
 
   @override
   Widget build(BuildContext context) {
@@ -220,7 +289,7 @@ class _BadgeCollectionThumbnail extends StatelessWidget {
         borderRadius: BorderRadius.circular(100),
         child: CachedNetworkImage(
           fit: BoxFit.cover,
-          imageUrl: collectionThumbnails[Random().nextInt(2)],
+          imageUrl: badge.listExpanded?.imageUrl ?? '',
           placeholder: (_, __) => ImagePlaceholder.defaultPlaceholder(),
           errorWidget: (_, __, ___) => ImagePlaceholder.defaultPlaceholder(),
         ),
@@ -229,14 +298,13 @@ class _BadgeCollectionThumbnail extends StatelessWidget {
   }
 }
 
-const badgeThumbnails = [
-  'https://s3-alpha-sig.figma.com/img/2612/46f7/1df532592e016bc83de3d5f4a22bc83e?Expires=1693785600&Signature=fek6RMir4GR~4xlsFEswggSSuGNRoFLjZLwGRkCa0F2~ODODrMKRTBc6Ggi1xiTRlEvQDD5hxpaOb-j81UFMEwQ8SS2P98Bj73XmU6Bz2x7Gxa9hcWLef4eENozYcLMrCi7bp7YAidCJefzJH0-UGA5rMRwtpms5RuTu0SzN-TKJyvoiHn3hPiLmMc9NYIiDkaEQUrgtQzbvNLetMGAfKsKgLm~G7S9xuPqeXimEmQqagrLJuB-dDdJbCRoxabtCf8U7foJW5bKeV26Nk0XN76pDStbJBnk~zvSy2k14jv6gCopqAQtIZ18~mEwYupy4FJPitKs6dEAQ3vnTKPG4Yw__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4',
-  'https://s3-alpha-sig.figma.com/img/cf33/55d0/c0fa2ddcb4c2452336a845efab9d13a7?Expires=1693785600&Signature=mFtDaFRZ0pzmwvlwz0NmJXMl1eDE7uNlC-Zx3riFO485oIL92mXER3cSxi2DYza-Bl0XM1RfZfocmpDca3UadzWoaxe44yUW6hYZGuPdh0xzU5j15EevUvvAWAZq9utI7t0kIoHA3KCCp0lfd2QXYHCKepCUsgEpGZKZfUO3dTYzKRcuRH~kTq5MOrSw2iVnoh35S3t7uJuHms59dsrNC2GZD1B0D08HV~rqvrBTh3tQpproD-uG51VFI5imdtwKmFXJ~TzeFU8WSSo4X~1gqyttWGOSe3YUDVwU~Bzk-99iW-PrxmjsnYiF~Zo42tbSqJ8igHSIHIAJsZ5~~X~6dw__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4',
-  'https://s3-alpha-sig.figma.com/img/769c/b5bb/27a760109b0d104b9d41d9442fef1838?Expires=1693785600&Signature=p0Pw3YH0vtAZYbsiO0SGy8rPt5e750B~nZk9AOk9hmMkCaMAAoGFZm5ApvSwqXnatzBLwlYzEPAFTOJHlBpuIJB4hqRntDX~h-cSzjPTxNxra~6rMkv6nBaiGu~iipUoNs2O7rpOVijj2YNeEluZuRnLc4IV0GleiEGMcbQLyOFdabiWnVThezZfjdrr-5KaO-WJT1j3~k-vuYJMjN6lDLEgAD9ats6P2jk2q2NBByRFp5~G0jLQXQiHfL~pjvmJ3slvZ7UVPCFORbBCZJvxuL2yBTFMQRt~F-MIuJRviILog4reaYUeIevvqiAmmAUhJQHYg0isn9lKFCo9d9GNMQ__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4'
-];
-
 class _BadgeThumbnail extends StatelessWidget {
-  const _BadgeThumbnail();
+  const _BadgeThumbnail({
+    required this.tokenMetadata,
+  });
+
+  final TokenMetadata? tokenMetadata;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -251,11 +319,14 @@ class _BadgeThumbnail extends StatelessWidget {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(LemonRadius.xSmall),
-        child: CachedNetworkImage(
-          fit: BoxFit.cover,
-          imageUrl: badgeThumbnails[Random().nextInt(2)],
-          placeholder: (_, __) => ImagePlaceholder.defaultPlaceholder(),
-          errorWidget: (_, __, ___) => ImagePlaceholder.defaultPlaceholder(),
+        child: FutureBuilder<Media>(
+          future: MediaUtils.getNftMedia(tokenMetadata?.image, tokenMetadata?.animation_url),
+          builder: (context, snapshot) => CachedNetworkImage(
+            fit: BoxFit.cover,
+            imageUrl: snapshot.data?.url ?? '',
+            placeholder: (_, __) => ImagePlaceholder.defaultPlaceholder(),
+            errorWidget: (_, __, ___) => ImagePlaceholder.defaultPlaceholder(),
+          ),
         ),
       ),
     );

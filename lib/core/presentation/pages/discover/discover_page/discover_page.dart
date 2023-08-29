@@ -1,5 +1,7 @@
+import 'package:app/core/presentation/pages/discover/discover_page/views/discover_badges_near_you.dart';
 import 'package:app/core/presentation/pages/discover/discover_page/views/discover_cards.dart';
 import 'package:app/core/presentation/pages/discover/discover_page/views/discover_upcoming_events.dart';
+import 'package:app/core/presentation/widgets/bottom_bar/bottom_bar_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/appbar_logo.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
@@ -51,11 +53,10 @@ class DiscoverPage extends StatelessWidget {
           SliverPadding(
             padding: EdgeInsets.symmetric(vertical: Spacing.xSmall),
           ),
-          //TODO temporary hidden
-          // const DiscoverBadgesNearYou(),
+          const DiscoverBadgesNearYou(),
           const DiscoverUpcomingEvents(),
-          SliverPadding(
-            padding: EdgeInsets.only(top: Spacing.medium),
+          SliverToBoxAdapter(
+            child: SizedBox(height: BottomBar.bottomBarHeight),
           ),
         ],
       ),
