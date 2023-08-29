@@ -1,4 +1,5 @@
 import 'package:app/core/application/onboarding/onboarding_bloc/onboarding_bloc.dart';
+import 'package:app/core/presentation/pages/onboarding/widgets/onboarding_primary_button.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -73,29 +74,9 @@ class _OnboardingUsernamePageState extends State<OnboardingUsernamePage> {
                     ],
                   ),
                 ),
-                SizedBox(
-                  width: 1.sw,
-                  child: ElevatedButton(
-                    onPressed: bloc.state.username?.isEmpty ?? true ? null : bloc.updateProfile,
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(32),
-                      ),
-                      padding: EdgeInsets.symmetric(
-                        vertical: 18.w,
-                      ),
-                      backgroundColor: theme.colorScheme.onTertiary,
-                      disabledBackgroundColor: theme.colorScheme.onSecondaryContainer,
-                    ),
-                    child: Text(
-                      t.onboarding.claim,
-                      style: TextStyle(
-                        fontSize: 14.sp,
-                        fontFamily: FontFamily.nohemiVariable,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
+                OnboardingPrimaryButton(
+                  onPressed: bloc.state.username?.isEmpty ?? true ? null : bloc.updateProfile,
+                  label: t.onboarding.claim,
                 ),
                 SizedBox(height: 24.h),
               ],

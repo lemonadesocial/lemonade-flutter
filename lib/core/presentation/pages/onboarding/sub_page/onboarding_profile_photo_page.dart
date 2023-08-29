@@ -1,4 +1,5 @@
 import 'package:app/core/presentation/pages/onboarding/widgets/onboarding_photo_picker.dart';
+import 'package:app/core/presentation/pages/onboarding/widgets/onboarding_primary_button.dart';
 import 'package:app/core/presentation/widgets/back_button_widget.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
@@ -79,29 +80,9 @@ class OnboardingProfilePhotoPage extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(
-                  width: 1.sw,
-                  child: ElevatedButton(
-                    onPressed: state.profilePhoto == null ? null : bloc.uploadImage,
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(32),
-                      ),
-                      padding: EdgeInsets.symmetric(
-                        vertical: 18.w,
-                      ),
-                      backgroundColor: theme.colorScheme.onTertiary,
-                      disabledBackgroundColor: theme.colorScheme.onSecondaryContainer,
-                    ),
-                    child: Text(
-                      t.onboarding.next,
-                      style: TextStyle(
-                        fontSize: 14.sp,
-                        fontFamily: FontFamily.nohemiVariable,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
+                OnboardingPrimaryButton(
+                  onPressed: state.profilePhoto == null ? null : bloc.uploadImage,
+                  label: t.onboarding.next,
                 ),
                 SizedBox(height: 24.h),
               ],

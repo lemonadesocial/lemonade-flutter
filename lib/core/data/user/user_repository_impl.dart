@@ -1,6 +1,6 @@
-import 'package:app/core/application/onboarding/onboarding_bloc/onboarding_bloc.dart';
 import 'package:app/core/data/user/dtos/user_dtos.dart';
 import 'package:app/core/data/user/dtos/user_query.dart';
+import 'package:app/core/domain/onboarding/onboarding_inputs.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/failure.dart';
@@ -31,15 +31,14 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<Either<Failure, User>> getUserProfile({String? userId, String? username}) async {
-    assert(userId != null || username != null);
+  Future<Either<Failure, User>> getUserProfile(GetProfileInput input) async {
     final result = await _gqlClient.query(
       QueryOptions(
         document: getUserQuery,
         parserFn: (data) {
           return User.fromDto(UserDto.fromJson(data['getUser']));
         },
-        variables: {'id': userId, 'username': username},
+        variables: {'id': input.userId, 'username': input.username},
       ),
     );
 
@@ -48,21 +47,15 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> updateUserProfile({
-    required String username,
-    String? uploadPhoto,
-    OnboardingGender? gender,
-    String? displayName,
-    String? shortBio,
-  }) async {
+  Future<Either<Failure, bool>> updateUserProfile(UpdateUserProfileInput input) async {
     final result = await _gqlClient.mutate(
       MutationOptions(
         document: updateUserProfileQuery,
         variables: {
-          'username': username,
-          'pronoun': gender?.name.capitalize(),
-          'description': shortBio,
-          'display_name': displayName,
+          'username': input.username,
+          'pronoun': input.gender?.name.capitalize(),
+          'description': input.shortBio,
+          'display_name': input.displayName,
         }..removeWhere((key, value) => value == null),
         parserFn: (data) {
           return data['updateUser'];

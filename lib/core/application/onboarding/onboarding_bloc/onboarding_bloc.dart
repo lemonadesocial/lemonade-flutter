@@ -1,3 +1,4 @@
+import 'package:app/core/domain/onboarding/onboarding_inputs.dart';
 import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/service/post/post_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -98,11 +99,13 @@ class OnboardingBloc extends Cubit<OnboardingState> {
   Future<void> updateProfile({String? imageId}) async {
     emit(state.copyWith(status: OnboardingStatus.loading));
     final response = await userRepository.updateUserProfile(
-      username: state.username!,
-      gender: state.gender,
-      displayName: state.aboutDisplayName,
-      shortBio: state.aboutShortBio,
-      uploadPhoto: imageId,
+      UpdateUserProfileInput(
+        username: state.username!,
+        gender: state.gender,
+        displayName: state.aboutDisplayName,
+        shortBio: state.aboutShortBio,
+        uploadPhoto: imageId,
+      ),
     );
     response.fold(
       (l) => emit(

@@ -1,6 +1,7 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/onboarding/onboarding_bloc/onboarding_bloc.dart';
 import 'package:app/core/presentation/pages/onboarding/widgets/gender_chip_widget.dart';
+import 'package:app/core/presentation/pages/onboarding/widgets/onboarding_primary_button.dart';
 import 'package:app/core/presentation/widgets/back_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -64,8 +65,7 @@ class OnboardingAboutPage extends StatelessWidget {
                         children: [
                           Text(
                             t.onboarding.aboutYou,
-                            style: TextStyle(
-                              fontSize: 26.sp,
+                            style: Typo.extraLarge.copyWith(
                               fontWeight: FontWeight.w800,
                               color: LemonColor.onboardingTitle,
                               fontFamily: FontFamily.nohemiVariable,
@@ -131,29 +131,9 @@ class OnboardingAboutPage extends StatelessWidget {
                         ],
                       ),
                     ),
-                    SizedBox(
-                      width: 1.sw,
-                      child: ElevatedButton(
-                        onPressed: state.gender == null ? null : bloc.updateProfile,
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(32),
-                          ),
-                          padding: EdgeInsets.symmetric(
-                            vertical: 18.w,
-                          ),
-                          backgroundColor: theme.colorScheme.onTertiary,
-                          disabledBackgroundColor: theme.colorScheme.onSecondaryContainer,
-                        ),
-                        child: Text(
-                          t.onboarding.next,
-                          style: TextStyle(
-                            fontSize: 14.sp,
-                            fontFamily: FontFamily.nohemiVariable,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
+                    OnboardingPrimaryButton(
+                      onPressed: state.gender == null ? null : bloc.updateProfile,
+                      label: t.onboarding.next,
                     ),
                     SizedBox(height: 24.h),
                   ],
