@@ -176,7 +176,7 @@ UpdateUserProfileInput _$UpdateUserProfileInputFromJson(
 /// @nodoc
 mixin _$UpdateUserProfileInput {
   String get username => throw _privateConstructorUsedError;
-  String? get uploadPhoto => throw _privateConstructorUsedError;
+  List<String>? get uploadPhoto => throw _privateConstructorUsedError;
   OnboardingGender? get gender => throw _privateConstructorUsedError;
   String? get displayName => throw _privateConstructorUsedError;
   String? get shortBio => throw _privateConstructorUsedError;
@@ -195,7 +195,7 @@ abstract class $UpdateUserProfileInputCopyWith<$Res> {
   @useResult
   $Res call(
       {String username,
-      String? uploadPhoto,
+      List<String>? uploadPhoto,
       OnboardingGender? gender,
       String? displayName,
       String? shortBio});
@@ -229,7 +229,7 @@ class _$UpdateUserProfileInputCopyWithImpl<$Res,
       uploadPhoto: freezed == uploadPhoto
           ? _value.uploadPhoto
           : uploadPhoto // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as List<String>?,
       gender: freezed == gender
           ? _value.gender
           : gender // ignore: cast_nullable_to_non_nullable
@@ -256,7 +256,7 @@ abstract class _$$_UpdateUserProfileInputCopyWith<$Res>
   @useResult
   $Res call(
       {String username,
-      String? uploadPhoto,
+      List<String>? uploadPhoto,
       OnboardingGender? gender,
       String? displayName,
       String? shortBio});
@@ -286,9 +286,9 @@ class __$$_UpdateUserProfileInputCopyWithImpl<$Res>
           : username // ignore: cast_nullable_to_non_nullable
               as String,
       uploadPhoto: freezed == uploadPhoto
-          ? _value.uploadPhoto
+          ? _value._uploadPhoto
           : uploadPhoto // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as List<String>?,
       gender: freezed == gender
           ? _value.gender
           : gender // ignore: cast_nullable_to_non_nullable
@@ -310,18 +310,27 @@ class __$$_UpdateUserProfileInputCopyWithImpl<$Res>
 class _$_UpdateUserProfileInput implements _UpdateUserProfileInput {
   _$_UpdateUserProfileInput(
       {required this.username,
-      this.uploadPhoto,
+      final List<String>? uploadPhoto,
       this.gender,
       this.displayName,
-      this.shortBio});
+      this.shortBio})
+      : _uploadPhoto = uploadPhoto;
 
   factory _$_UpdateUserProfileInput.fromJson(Map<String, dynamic> json) =>
       _$$_UpdateUserProfileInputFromJson(json);
 
   @override
   final String username;
+  final List<String>? _uploadPhoto;
   @override
-  final String? uploadPhoto;
+  List<String>? get uploadPhoto {
+    final value = _uploadPhoto;
+    if (value == null) return null;
+    if (_uploadPhoto is EqualUnmodifiableListView) return _uploadPhoto;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
   @override
   final OnboardingGender? gender;
   @override
@@ -341,8 +350,8 @@ class _$_UpdateUserProfileInput implements _UpdateUserProfileInput {
             other is _$_UpdateUserProfileInput &&
             (identical(other.username, username) ||
                 other.username == username) &&
-            (identical(other.uploadPhoto, uploadPhoto) ||
-                other.uploadPhoto == uploadPhoto) &&
+            const DeepCollectionEquality()
+                .equals(other._uploadPhoto, _uploadPhoto) &&
             (identical(other.gender, gender) || other.gender == gender) &&
             (identical(other.displayName, displayName) ||
                 other.displayName == displayName) &&
@@ -353,7 +362,12 @@ class _$_UpdateUserProfileInput implements _UpdateUserProfileInput {
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
-      runtimeType, username, uploadPhoto, gender, displayName, shortBio);
+      runtimeType,
+      username,
+      const DeepCollectionEquality().hash(_uploadPhoto),
+      gender,
+      displayName,
+      shortBio);
 
   @JsonKey(ignore: true)
   @override
@@ -373,7 +387,7 @@ class _$_UpdateUserProfileInput implements _UpdateUserProfileInput {
 abstract class _UpdateUserProfileInput implements UpdateUserProfileInput {
   factory _UpdateUserProfileInput(
       {required final String username,
-      final String? uploadPhoto,
+      final List<String>? uploadPhoto,
       final OnboardingGender? gender,
       final String? displayName,
       final String? shortBio}) = _$_UpdateUserProfileInput;
@@ -384,7 +398,7 @@ abstract class _UpdateUserProfileInput implements UpdateUserProfileInput {
   @override
   String get username;
   @override
-  String? get uploadPhoto;
+  List<String>? get uploadPhoto;
   @override
   OnboardingGender? get gender;
   @override

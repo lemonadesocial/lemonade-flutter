@@ -16,7 +16,7 @@ class GetProfileInput with _$GetProfileInput {
 class UpdateUserProfileInput with _$UpdateUserProfileInput {
   factory UpdateUserProfileInput({
     required String username,
-    String? uploadPhoto,
+    List<String>? uploadPhoto,
     OnboardingGender? gender,
     String? displayName,
     String? shortBio,

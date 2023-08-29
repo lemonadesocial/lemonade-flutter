@@ -22,7 +22,9 @@ _$_UpdateUserProfileInput _$$_UpdateUserProfileInputFromJson(
         Map<String, dynamic> json) =>
     _$_UpdateUserProfileInput(
       username: json['username'] as String,
-      uploadPhoto: json['uploadPhoto'] as String?,
+      uploadPhoto: (json['uploadPhoto'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
       gender: $enumDecodeNullable(_$OnboardingGenderEnumMap, json['gender']),
       displayName: json['displayName'] as String?,
       shortBio: json['shortBio'] as String?,

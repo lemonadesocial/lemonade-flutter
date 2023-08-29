@@ -104,7 +104,7 @@ class OnboardingBloc extends Cubit<OnboardingState> {
         gender: state.gender,
         displayName: state.aboutDisplayName,
         shortBio: state.aboutShortBio,
-        uploadPhoto: imageId,
+        uploadPhoto: imageId != null ? [imageId] : null,
       ),
     );
     response.fold(

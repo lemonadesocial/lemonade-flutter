@@ -9,7 +9,6 @@ import 'package:app/injection/register_module.dart';
 import 'package:dartz/dartz.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:injectable/injectable.dart';
-import 'package:slang/builder/utils/string_extensions.dart';
 
 import '../onboarding/onboarding_query.dart';
 
@@ -38,7 +37,7 @@ class UserRepositoryImpl implements UserRepository {
         parserFn: (data) {
           return User.fromDto(UserDto.fromJson(data['getUser']));
         },
-        variables: {'id': input.userId, 'username': input.username},
+        variables: input.toJson(),
       ),
     );
 
@@ -51,13 +50,7 @@ class UserRepositoryImpl implements UserRepository {
     final result = await _gqlClient.mutate(
       MutationOptions(
         document: updateUserProfileQuery,
-        variables: {
-          'username': input.username,
-          'pronoun': input.gender?.name.capitalize(),
-          'description': input.shortBio,
-          'display_name': input.displayName,
-          if (input.uploadPhoto != null) 'new_photos': [input.uploadPhoto],
-        }..removeWhere((key, value) => value == null),
+        variables: input.toJson(),
         parserFn: (data) {
           return data['updateUser'];
         },
