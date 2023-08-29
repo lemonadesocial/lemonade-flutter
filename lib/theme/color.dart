@@ -15,6 +15,7 @@ class LemonColor {
   static Color white10 = const Color(0xffFFFFFF).withOpacity(0.10);
   static Color white12 = const Color(0xffFFFFFF).withOpacity(0.12);
   static Color white15 = const Color(0xffFFFFFF).withOpacity(0.15);
+  static Color white18 = const Color(0xffFFFFFF).withOpacity(0.18);
   static Color white36 = const Color(0xffFFFFFF).withOpacity(0.36);
   static Color white54 = const Color(0xffFFFFFF).withOpacity(0.54);
   static Color white72 = const Color(0xffFFFFFF).withOpacity(0.72);
@@ -25,12 +26,14 @@ class LemonColor {
   static Color paleViolet12 = const Color(0xffC69DF7).withOpacity(0.12);
   static Color paleViolet18 = const Color(0xffC69DF7).withOpacity(0.18);
   static Color paleViolet36 = const Color(0xffC69DF7).withOpacity(0.36);
-  static Color red = const Color(0xFFFE4A49); 
+  static Color red = const Color(0xFFFE4A49);
+  static const errorRedBg = Color(0xFFED7E8C);
+  static const usernameApproved = Color(0xFF49DB95);
   static Color black54 = const Color(0xff000000).withOpacity(0.54);
   static Color online = const Color(0xFF5FCB90);
   static Color ownMessage = const Color(0xFF8F71B2);
   static Color otherMessage = const Color(0xFF272727);
-  
+
   // UI specific
   static Color dropdownBackground = const Color.fromARGB(221, 32, 32, 32);
   static Color dialogBackground = const Color(0xFF141414);
@@ -42,7 +45,7 @@ class LemonColor {
   static Color button_linear_2 = Color(0xFF6F3FAA);
   static Color grape = Color(0xffB17AF4);
   static Color shadow = Color.fromARGB(91, 0, 0, 0);
-  static Color disableButton = const Color(0xFF3c2557);
+  static Color disableButtonLavender = const Color(0xFF3c2557);
 
   // Slider 
   static Color sunrise = Color(0xffFFDB00);
@@ -50,12 +53,21 @@ class LemonColor {
 
   // Textfield
   static Color darkCharcoal = Color(0xff2e2e2e);
+  static const onboardingTitle = Color(0xFFDDDDDD);
 
   // FAB
   static const fabSecondaryBg = Color(0xFFB17AF4);
   static const fabFirstBg = Color(0xFF6F3FAA);
   static const fabShadow = Color(0x89090909);
-} 
+
+  // Onboarding gender color
+  static const femaleDefault = Color(0x2DF691B5);
+  static const maleDefault = Color(0x1E91C0F6);
+  static const ambiguousDefault = Color(0x1EA591F6);
+  static const femaleActiveColor = Color(0xFFF691B5);
+  static const maleActiveColor = Color(0xFF91C0F6);
+  static const ambiguousActiveColor = Color(0xFFA591F6);
+}
 
 final ColorScheme lemonadeLightThemeColorScheme = ColorScheme.light(
   primary: LemonColor.white,
@@ -73,6 +85,7 @@ final ColorScheme lemonadeLightThemeColorScheme = ColorScheme.light(
   outline: LemonColor.oliveBlack,
   tertiaryContainer: LemonColor.tertiaryBlack,
   onPrimaryContainer: LemonColor.dialogBackground,
+  errorContainer: LemonColor.errorRedBg,
 );
 
 final ColorScheme lemonadeDarkThemeColorScheme = ColorScheme.dark(
@@ -91,7 +104,9 @@ final ColorScheme lemonadeDarkThemeColorScheme = ColorScheme.dark(
   onSurface: LemonColor.white72,
   onSurfaceVariant: LemonColor.white36,
   outline: LemonColor.white12,
+  outlineVariant: LemonColor.white18,
   tertiaryContainer: LemonColor.tertiaryBlack,
   onPrimaryContainer: LemonColor.dialogBackground,
-  onSecondaryContainer: LemonColor.disableButton,
+  onSecondaryContainer: LemonColor.disableButtonLavender,
+  errorContainer: LemonColor.errorRedBg,
 );

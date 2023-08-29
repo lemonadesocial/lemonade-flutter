@@ -16,5 +16,5 @@ abstract class PostRepository {
     String? postRefId,
   });
 
-  Future<Either<Failure, String>> uploadImage(XFile file);
+  Future<Either<Failure, String>> uploadImage(XFile file, String directory);
 }

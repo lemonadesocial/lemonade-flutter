@@ -13,6 +13,9 @@ class FontFamily {
   /// Font family: CircularStd
   static const String circularStd = 'CircularStd';
 
+  /// Font family: NohemiVariable
+  static const String nohemiVariable = 'NohemiVariable';
+
   /// Font family: SpaceGrotesk
   static const String spaceGrotesk = 'SpaceGrotesk';
 

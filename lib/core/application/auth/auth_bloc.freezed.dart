@@ -549,6 +549,7 @@ mixin _$AuthState {
     required TResult Function() unknown,
     required TResult Function() processing,
     required TResult Function(bool isChecking) unauthenticated,
+    required TResult Function(AuthSession authSession) onBoardingRequired,
     required TResult Function(AuthSession authSession) authenticated,
   }) =>
       throw _privateConstructorUsedError;
@@ -557,6 +558,7 @@ mixin _$AuthState {
     TResult? Function()? unknown,
     TResult? Function()? processing,
     TResult? Function(bool isChecking)? unauthenticated,
+    TResult? Function(AuthSession authSession)? onBoardingRequired,
     TResult? Function(AuthSession authSession)? authenticated,
   }) =>
       throw _privateConstructorUsedError;
@@ -565,6 +567,7 @@ mixin _$AuthState {
     TResult Function()? unknown,
     TResult Function()? processing,
     TResult Function(bool isChecking)? unauthenticated,
+    TResult Function(AuthSession authSession)? onBoardingRequired,
     TResult Function(AuthSession authSession)? authenticated,
     required TResult orElse(),
   }) =>
@@ -574,6 +577,8 @@ mixin _$AuthState {
     required TResult Function(AuthStateUnknown value) unknown,
     required TResult Function(AuthStateProcessing value) processing,
     required TResult Function(AuthStateUnauthenticated value) unauthenticated,
+    required TResult Function(AuthStateOnBoardingRequired value)
+        onBoardingRequired,
     required TResult Function(AuthStateAuthenticated value) authenticated,
   }) =>
       throw _privateConstructorUsedError;
@@ -582,6 +587,7 @@ mixin _$AuthState {
     TResult? Function(AuthStateUnknown value)? unknown,
     TResult? Function(AuthStateProcessing value)? processing,
     TResult? Function(AuthStateUnauthenticated value)? unauthenticated,
+    TResult? Function(AuthStateOnBoardingRequired value)? onBoardingRequired,
     TResult? Function(AuthStateAuthenticated value)? authenticated,
   }) =>
       throw _privateConstructorUsedError;
@@ -590,6 +596,7 @@ mixin _$AuthState {
     TResult Function(AuthStateUnknown value)? unknown,
     TResult Function(AuthStateProcessing value)? processing,
     TResult Function(AuthStateUnauthenticated value)? unauthenticated,
+    TResult Function(AuthStateOnBoardingRequired value)? onBoardingRequired,
     TResult Function(AuthStateAuthenticated value)? authenticated,
     required TResult orElse(),
   }) =>
@@ -654,6 +661,7 @@ class _$AuthStateUnknown implements AuthStateUnknown {
     required TResult Function() unknown,
     required TResult Function() processing,
     required TResult Function(bool isChecking) unauthenticated,
+    required TResult Function(AuthSession authSession) onBoardingRequired,
     required TResult Function(AuthSession authSession) authenticated,
   }) {
     return unknown();
@@ -665,6 +673,7 @@ class _$AuthStateUnknown implements AuthStateUnknown {
     TResult? Function()? unknown,
     TResult? Function()? processing,
     TResult? Function(bool isChecking)? unauthenticated,
+    TResult? Function(AuthSession authSession)? onBoardingRequired,
     TResult? Function(AuthSession authSession)? authenticated,
   }) {
     return unknown?.call();
@@ -676,6 +685,7 @@ class _$AuthStateUnknown implements AuthStateUnknown {
     TResult Function()? unknown,
     TResult Function()? processing,
     TResult Function(bool isChecking)? unauthenticated,
+    TResult Function(AuthSession authSession)? onBoardingRequired,
     TResult Function(AuthSession authSession)? authenticated,
     required TResult orElse(),
   }) {
@@ -691,6 +701,8 @@ class _$AuthStateUnknown implements AuthStateUnknown {
     required TResult Function(AuthStateUnknown value) unknown,
     required TResult Function(AuthStateProcessing value) processing,
     required TResult Function(AuthStateUnauthenticated value) unauthenticated,
+    required TResult Function(AuthStateOnBoardingRequired value)
+        onBoardingRequired,
     required TResult Function(AuthStateAuthenticated value) authenticated,
   }) {
     return unknown(this);
@@ -702,6 +714,7 @@ class _$AuthStateUnknown implements AuthStateUnknown {
     TResult? Function(AuthStateUnknown value)? unknown,
     TResult? Function(AuthStateProcessing value)? processing,
     TResult? Function(AuthStateUnauthenticated value)? unauthenticated,
+    TResult? Function(AuthStateOnBoardingRequired value)? onBoardingRequired,
     TResult? Function(AuthStateAuthenticated value)? authenticated,
   }) {
     return unknown?.call(this);
@@ -713,6 +726,7 @@ class _$AuthStateUnknown implements AuthStateUnknown {
     TResult Function(AuthStateUnknown value)? unknown,
     TResult Function(AuthStateProcessing value)? processing,
     TResult Function(AuthStateUnauthenticated value)? unauthenticated,
+    TResult Function(AuthStateOnBoardingRequired value)? onBoardingRequired,
     TResult Function(AuthStateAuthenticated value)? authenticated,
     required TResult orElse(),
   }) {
@@ -768,6 +782,7 @@ class _$AuthStateProcessing implements AuthStateProcessing {
     required TResult Function() unknown,
     required TResult Function() processing,
     required TResult Function(bool isChecking) unauthenticated,
+    required TResult Function(AuthSession authSession) onBoardingRequired,
     required TResult Function(AuthSession authSession) authenticated,
   }) {
     return processing();
@@ -779,6 +794,7 @@ class _$AuthStateProcessing implements AuthStateProcessing {
     TResult? Function()? unknown,
     TResult? Function()? processing,
     TResult? Function(bool isChecking)? unauthenticated,
+    TResult? Function(AuthSession authSession)? onBoardingRequired,
     TResult? Function(AuthSession authSession)? authenticated,
   }) {
     return processing?.call();
@@ -790,6 +806,7 @@ class _$AuthStateProcessing implements AuthStateProcessing {
     TResult Function()? unknown,
     TResult Function()? processing,
     TResult Function(bool isChecking)? unauthenticated,
+    TResult Function(AuthSession authSession)? onBoardingRequired,
     TResult Function(AuthSession authSession)? authenticated,
     required TResult orElse(),
   }) {
@@ -805,6 +822,8 @@ class _$AuthStateProcessing implements AuthStateProcessing {
     required TResult Function(AuthStateUnknown value) unknown,
     required TResult Function(AuthStateProcessing value) processing,
     required TResult Function(AuthStateUnauthenticated value) unauthenticated,
+    required TResult Function(AuthStateOnBoardingRequired value)
+        onBoardingRequired,
     required TResult Function(AuthStateAuthenticated value) authenticated,
   }) {
     return processing(this);
@@ -816,6 +835,7 @@ class _$AuthStateProcessing implements AuthStateProcessing {
     TResult? Function(AuthStateUnknown value)? unknown,
     TResult? Function(AuthStateProcessing value)? processing,
     TResult? Function(AuthStateUnauthenticated value)? unauthenticated,
+    TResult? Function(AuthStateOnBoardingRequired value)? onBoardingRequired,
     TResult? Function(AuthStateAuthenticated value)? authenticated,
   }) {
     return processing?.call(this);
@@ -827,6 +847,7 @@ class _$AuthStateProcessing implements AuthStateProcessing {
     TResult Function(AuthStateUnknown value)? unknown,
     TResult Function(AuthStateProcessing value)? processing,
     TResult Function(AuthStateUnauthenticated value)? unauthenticated,
+    TResult Function(AuthStateOnBoardingRequired value)? onBoardingRequired,
     TResult Function(AuthStateAuthenticated value)? authenticated,
     required TResult orElse(),
   }) {
@@ -911,6 +932,7 @@ class _$AuthStateUnauthenticated implements AuthStateUnauthenticated {
     required TResult Function() unknown,
     required TResult Function() processing,
     required TResult Function(bool isChecking) unauthenticated,
+    required TResult Function(AuthSession authSession) onBoardingRequired,
     required TResult Function(AuthSession authSession) authenticated,
   }) {
     return unauthenticated(isChecking);
@@ -922,6 +944,7 @@ class _$AuthStateUnauthenticated implements AuthStateUnauthenticated {
     TResult? Function()? unknown,
     TResult? Function()? processing,
     TResult? Function(bool isChecking)? unauthenticated,
+    TResult? Function(AuthSession authSession)? onBoardingRequired,
     TResult? Function(AuthSession authSession)? authenticated,
   }) {
     return unauthenticated?.call(isChecking);
@@ -933,6 +956,7 @@ class _$AuthStateUnauthenticated implements AuthStateUnauthenticated {
     TResult Function()? unknown,
     TResult Function()? processing,
     TResult Function(bool isChecking)? unauthenticated,
+    TResult Function(AuthSession authSession)? onBoardingRequired,
     TResult Function(AuthSession authSession)? authenticated,
     required TResult orElse(),
   }) {
@@ -948,6 +972,8 @@ class _$AuthStateUnauthenticated implements AuthStateUnauthenticated {
     required TResult Function(AuthStateUnknown value) unknown,
     required TResult Function(AuthStateProcessing value) processing,
     required TResult Function(AuthStateUnauthenticated value) unauthenticated,
+    required TResult Function(AuthStateOnBoardingRequired value)
+        onBoardingRequired,
     required TResult Function(AuthStateAuthenticated value) authenticated,
   }) {
     return unauthenticated(this);
@@ -959,6 +985,7 @@ class _$AuthStateUnauthenticated implements AuthStateUnauthenticated {
     TResult? Function(AuthStateUnknown value)? unknown,
     TResult? Function(AuthStateProcessing value)? processing,
     TResult? Function(AuthStateUnauthenticated value)? unauthenticated,
+    TResult? Function(AuthStateOnBoardingRequired value)? onBoardingRequired,
     TResult? Function(AuthStateAuthenticated value)? authenticated,
   }) {
     return unauthenticated?.call(this);
@@ -970,6 +997,7 @@ class _$AuthStateUnauthenticated implements AuthStateUnauthenticated {
     TResult Function(AuthStateUnknown value)? unknown,
     TResult Function(AuthStateProcessing value)? processing,
     TResult Function(AuthStateUnauthenticated value)? unauthenticated,
+    TResult Function(AuthStateOnBoardingRequired value)? onBoardingRequired,
     TResult Function(AuthStateAuthenticated value)? authenticated,
     required TResult orElse(),
   }) {
@@ -987,6 +1015,163 @@ abstract class AuthStateUnauthenticated implements AuthState {
   bool get isChecking;
   @JsonKey(ignore: true)
   _$$AuthStateUnauthenticatedCopyWith<_$AuthStateUnauthenticated>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$AuthStateOnBoardingRequiredCopyWith<$Res> {
+  factory _$$AuthStateOnBoardingRequiredCopyWith(
+          _$AuthStateOnBoardingRequired value,
+          $Res Function(_$AuthStateOnBoardingRequired) then) =
+      __$$AuthStateOnBoardingRequiredCopyWithImpl<$Res>;
+  @useResult
+  $Res call({AuthSession authSession});
+}
+
+/// @nodoc
+class __$$AuthStateOnBoardingRequiredCopyWithImpl<$Res>
+    extends _$AuthStateCopyWithImpl<$Res, _$AuthStateOnBoardingRequired>
+    implements _$$AuthStateOnBoardingRequiredCopyWith<$Res> {
+  __$$AuthStateOnBoardingRequiredCopyWithImpl(
+      _$AuthStateOnBoardingRequired _value,
+      $Res Function(_$AuthStateOnBoardingRequired) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? authSession = null,
+  }) {
+    return _then(_$AuthStateOnBoardingRequired(
+      authSession: null == authSession
+          ? _value.authSession
+          : authSession // ignore: cast_nullable_to_non_nullable
+              as AuthSession,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$AuthStateOnBoardingRequired implements AuthStateOnBoardingRequired {
+  const _$AuthStateOnBoardingRequired({required this.authSession});
+
+  @override
+  final AuthSession authSession;
+
+  @override
+  String toString() {
+    return 'AuthState.onBoardingRequired(authSession: $authSession)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$AuthStateOnBoardingRequired &&
+            (identical(other.authSession, authSession) ||
+                other.authSession == authSession));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, authSession);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$AuthStateOnBoardingRequiredCopyWith<_$AuthStateOnBoardingRequired>
+      get copyWith => __$$AuthStateOnBoardingRequiredCopyWithImpl<
+          _$AuthStateOnBoardingRequired>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() unknown,
+    required TResult Function() processing,
+    required TResult Function(bool isChecking) unauthenticated,
+    required TResult Function(AuthSession authSession) onBoardingRequired,
+    required TResult Function(AuthSession authSession) authenticated,
+  }) {
+    return onBoardingRequired(authSession);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? unknown,
+    TResult? Function()? processing,
+    TResult? Function(bool isChecking)? unauthenticated,
+    TResult? Function(AuthSession authSession)? onBoardingRequired,
+    TResult? Function(AuthSession authSession)? authenticated,
+  }) {
+    return onBoardingRequired?.call(authSession);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? unknown,
+    TResult Function()? processing,
+    TResult Function(bool isChecking)? unauthenticated,
+    TResult Function(AuthSession authSession)? onBoardingRequired,
+    TResult Function(AuthSession authSession)? authenticated,
+    required TResult orElse(),
+  }) {
+    if (onBoardingRequired != null) {
+      return onBoardingRequired(authSession);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(AuthStateUnknown value) unknown,
+    required TResult Function(AuthStateProcessing value) processing,
+    required TResult Function(AuthStateUnauthenticated value) unauthenticated,
+    required TResult Function(AuthStateOnBoardingRequired value)
+        onBoardingRequired,
+    required TResult Function(AuthStateAuthenticated value) authenticated,
+  }) {
+    return onBoardingRequired(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(AuthStateUnknown value)? unknown,
+    TResult? Function(AuthStateProcessing value)? processing,
+    TResult? Function(AuthStateUnauthenticated value)? unauthenticated,
+    TResult? Function(AuthStateOnBoardingRequired value)? onBoardingRequired,
+    TResult? Function(AuthStateAuthenticated value)? authenticated,
+  }) {
+    return onBoardingRequired?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(AuthStateUnknown value)? unknown,
+    TResult Function(AuthStateProcessing value)? processing,
+    TResult Function(AuthStateUnauthenticated value)? unauthenticated,
+    TResult Function(AuthStateOnBoardingRequired value)? onBoardingRequired,
+    TResult Function(AuthStateAuthenticated value)? authenticated,
+    required TResult orElse(),
+  }) {
+    if (onBoardingRequired != null) {
+      return onBoardingRequired(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class AuthStateOnBoardingRequired implements AuthState {
+  const factory AuthStateOnBoardingRequired(
+      {required final AuthSession authSession}) = _$AuthStateOnBoardingRequired;
+
+  AuthSession get authSession;
+  @JsonKey(ignore: true)
+  _$$AuthStateOnBoardingRequiredCopyWith<_$AuthStateOnBoardingRequired>
       get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -1059,6 +1244,7 @@ class _$AuthStateAuthenticated implements AuthStateAuthenticated {
     required TResult Function() unknown,
     required TResult Function() processing,
     required TResult Function(bool isChecking) unauthenticated,
+    required TResult Function(AuthSession authSession) onBoardingRequired,
     required TResult Function(AuthSession authSession) authenticated,
   }) {
     return authenticated(authSession);
@@ -1070,6 +1256,7 @@ class _$AuthStateAuthenticated implements AuthStateAuthenticated {
     TResult? Function()? unknown,
     TResult? Function()? processing,
     TResult? Function(bool isChecking)? unauthenticated,
+    TResult? Function(AuthSession authSession)? onBoardingRequired,
     TResult? Function(AuthSession authSession)? authenticated,
   }) {
     return authenticated?.call(authSession);
@@ -1081,6 +1268,7 @@ class _$AuthStateAuthenticated implements AuthStateAuthenticated {
     TResult Function()? unknown,
     TResult Function()? processing,
     TResult Function(bool isChecking)? unauthenticated,
+    TResult Function(AuthSession authSession)? onBoardingRequired,
     TResult Function(AuthSession authSession)? authenticated,
     required TResult orElse(),
   }) {
@@ -1096,6 +1284,8 @@ class _$AuthStateAuthenticated implements AuthStateAuthenticated {
     required TResult Function(AuthStateUnknown value) unknown,
     required TResult Function(AuthStateProcessing value) processing,
     required TResult Function(AuthStateUnauthenticated value) unauthenticated,
+    required TResult Function(AuthStateOnBoardingRequired value)
+        onBoardingRequired,
     required TResult Function(AuthStateAuthenticated value) authenticated,
   }) {
     return authenticated(this);
@@ -1107,6 +1297,7 @@ class _$AuthStateAuthenticated implements AuthStateAuthenticated {
     TResult? Function(AuthStateUnknown value)? unknown,
     TResult? Function(AuthStateProcessing value)? processing,
     TResult? Function(AuthStateUnauthenticated value)? unauthenticated,
+    TResult? Function(AuthStateOnBoardingRequired value)? onBoardingRequired,
     TResult? Function(AuthStateAuthenticated value)? authenticated,
   }) {
     return authenticated?.call(this);
@@ -1118,6 +1309,7 @@ class _$AuthStateAuthenticated implements AuthStateAuthenticated {
     TResult Function(AuthStateUnknown value)? unknown,
     TResult Function(AuthStateProcessing value)? processing,
     TResult Function(AuthStateUnauthenticated value)? unauthenticated,
+    TResult Function(AuthStateOnBoardingRequired value)? onBoardingRequired,
     TResult Function(AuthStateAuthenticated value)? authenticated,
     required TResult orElse(),
   }) {

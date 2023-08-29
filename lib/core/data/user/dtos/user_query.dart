@@ -183,3 +183,14 @@ final getUserQuery = gql('''
     }
   }
 ''');
+
+final checkValidUsernameQuery = gql('''
+  query (\$username: String) {
+  getUser(username: \$username) {
+    active
+    __typename
+  }
+}
+
+''');
+
