@@ -94,6 +94,10 @@ dependencies:
 
   # matrix
   matrix: ^0.22.1
+  flutter_olm: ^1.2.0
+  flutter_openssl_crypto: ^0.1.0
+  flutter_chat_bubble: ^2.0.2
+  lottie: ^2.6.0
   
 dependency_overrides:
   # widget visibile detector
@@ -138,6 +142,7 @@ flutter:
     - assets/icons/
     - assets/fonts/
     - assets/images/
+    - assets/lotties/
     - assets/index.html
     - .env
     - .env.staging

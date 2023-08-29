@@ -1,8 +1,8 @@
-package com.lemonadesocial.app
+package social.lemonade.app
 
 import com.famedly.fcm_shared_isolate.FcmSharedIsolateService
 
-import com.lemonadesocial.app.MainActivity
+import social.lemonade.app.MainActivity
 
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine

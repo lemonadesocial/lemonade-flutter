@@ -38,6 +38,7 @@ mixin _$EventDto {
   DateTime? get end => throw _privateConstructorUsedError;
   double? get cost => throw _privateConstructorUsedError;
   Currency? get currency => throw _privateConstructorUsedError;
+  List<String>? get accepted => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -67,7 +68,8 @@ abstract class $EventDtoCopyWith<$Res> {
       DateTime? start,
       DateTime? end,
       double? cost,
-      Currency? currency});
+      Currency? currency,
+      List<String>? accepted});
 
   $UserDtoCopyWith<$Res>? get hostExpanded;
 }
@@ -98,6 +100,7 @@ class _$EventDtoCopyWithImpl<$Res, $Val extends EventDto>
     Object? end = freezed,
     Object? cost = freezed,
     Object? currency = freezed,
+    Object? accepted = freezed,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -152,6 +155,10 @@ class _$EventDtoCopyWithImpl<$Res, $Val extends EventDto>
           ? _value.currency
           : currency // ignore: cast_nullable_to_non_nullable
               as Currency?,
+      accepted: freezed == accepted
+          ? _value.accepted
+          : accepted // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
     ) as $Val);
   }
 
@@ -192,7 +199,8 @@ abstract class _$$_EventDtoCopyWith<$Res> implements $EventDtoCopyWith<$Res> {
       DateTime? start,
       DateTime? end,
       double? cost,
-      Currency? currency});
+      Currency? currency,
+      List<String>? accepted});
 
   @override
   $UserDtoCopyWith<$Res>? get hostExpanded;
@@ -222,6 +230,7 @@ class __$$_EventDtoCopyWithImpl<$Res>
     Object? end = freezed,
     Object? cost = freezed,
     Object? currency = freezed,
+    Object? accepted = freezed,
   }) {
     return _then(_$_EventDto(
       id: freezed == id
@@ -276,6 +285,10 @@ class __$$_EventDtoCopyWithImpl<$Res>
           ? _value.currency
           : currency // ignore: cast_nullable_to_non_nullable
               as Currency?,
+      accepted: freezed == accepted
+          ? _value._accepted
+          : accepted // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
     ));
   }
 }
@@ -301,10 +314,12 @@ class _$_EventDto implements _EventDto {
       this.start,
       this.end,
       this.cost,
-      this.currency})
+      this.currency,
+      final List<String>? accepted})
       : _newNewPhotosExpanded = newNewPhotosExpanded,
         _cohostsExpanded = cohostsExpanded,
-        _broadcasts = broadcasts;
+        _broadcasts = broadcasts,
+        _accepted = accepted;
 
   factory _$_EventDto.fromJson(Map<String, dynamic> json) =>
       _$$_EventDtoFromJson(json);
@@ -364,10 +379,19 @@ class _$_EventDto implements _EventDto {
   final double? cost;
   @override
   final Currency? currency;
+  final List<String>? _accepted;
+  @override
+  List<String>? get accepted {
+    final value = _accepted;
+    if (value == null) return null;
+    if (_accepted is EqualUnmodifiableListView) return _accepted;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
 
   @override
   String toString() {
-    return 'EventDto(id: $id, hostExpanded: $hostExpanded, newNewPhotosExpanded: $newNewPhotosExpanded, cohostsExpanded: $cohostsExpanded, title: $title, slug: $slug, host: $host, broadcasts: $broadcasts, description: $description, start: $start, end: $end, cost: $cost, currency: $currency)';
+    return 'EventDto(id: $id, hostExpanded: $hostExpanded, newNewPhotosExpanded: $newNewPhotosExpanded, cohostsExpanded: $cohostsExpanded, title: $title, slug: $slug, host: $host, broadcasts: $broadcasts, description: $description, start: $start, end: $end, cost: $cost, currency: $currency, accepted: $accepted)';
   }
 
   @override
@@ -393,7 +417,8 @@ class _$_EventDto implements _EventDto {
             (identical(other.end, end) || other.end == end) &&
             (identical(other.cost, cost) || other.cost == cost) &&
             (identical(other.currency, currency) ||
-                other.currency == currency));
+                other.currency == currency) &&
+            const DeepCollectionEquality().equals(other._accepted, _accepted));
   }
 
   @JsonKey(ignore: true)
@@ -412,7 +437,8 @@ class _$_EventDto implements _EventDto {
       start,
       end,
       cost,
-      currency);
+      currency,
+      const DeepCollectionEquality().hash(_accepted));
 
   @JsonKey(ignore: true)
   @override
@@ -446,7 +472,8 @@ abstract class _EventDto implements EventDto {
       final DateTime? start,
       final DateTime? end,
       final double? cost,
-      final Currency? currency}) = _$_EventDto;
+      final Currency? currency,
+      final List<String>? accepted}) = _$_EventDto;
 
   factory _EventDto.fromJson(Map<String, dynamic> json) = _$_EventDto.fromJson;
 
@@ -480,6 +507,8 @@ abstract class _EventDto implements EventDto {
   double? get cost;
   @override
   Currency? get currency;
+  @override
+  List<String>? get accepted;
   @override
   @JsonKey(ignore: true)
   _$$_EventDtoCopyWith<_$_EventDto> get copyWith =>

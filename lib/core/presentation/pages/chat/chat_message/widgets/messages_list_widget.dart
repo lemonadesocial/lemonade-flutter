@@ -6,7 +6,10 @@ import 'package:app/core/presentation/pages/chat/chat_message/widgets/message_it
 import 'package:app/core/presentation/pages/chat/chat_message/widgets/message_item/typing_indicator_widget.dart';
 import 'package:app/core/utils/bottomsheet_utils.dart';
 import 'package:app/core/utils/chat/filter_event_timeline_extension.dart';
+import 'package:app/theme/sizing.dart';
+import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
 class MessagesList extends StatelessWidget {
@@ -49,10 +52,12 @@ class MessagesList extends StatelessWidget {
     final eventsKeyMap = _createEventsKeyMap();
 
     return ListView.custom(
+      padding: EdgeInsets.only(bottom: 10.h),
       reverse: true,
       controller: controller.scrollController,
-      keyboardDismissBehavior:
-          Platform.isIOS ? ScrollViewKeyboardDismissBehavior.onDrag : ScrollViewKeyboardDismissBehavior.manual,
+      keyboardDismissBehavior: Platform.isIOS
+          ? ScrollViewKeyboardDismissBehavior.onDrag
+          : ScrollViewKeyboardDismissBehavior.manual,
       childrenDelegate: SliverChildBuilderDelegate(
         (BuildContext context, int i) {
           // Footer to display typing indicator and read receipts:
@@ -93,14 +98,14 @@ class MessagesList extends StatelessWidget {
                       BottomSheetUtils.showSnapBottomSheet(
                         context,
                         builder: (context) => MessageActions(
-                          event: event,
-                          onEdit: () {
-                            controller.selectEditEventAction(event);
-                          },
-                          onReact: (emoji) {
-                            controller.sendEmojiAction(event: event, emoji: emoji);
-                          }
-                        ),
+                            event: event,
+                            onEdit: () {
+                              controller.selectEditEventAction(event);
+                            },
+                            onReact: (emoji) {
+                              controller.sendEmojiAction(
+                                  event: event, emoji: emoji);
+                            }),
                       );
                     },
                     onReact: (event, emoji) {
@@ -108,8 +113,11 @@ class MessagesList extends StatelessWidget {
                     },
                     timeline: controller.timeline!,
                     displayReadMarker:
-                        controller.readMarkerEventId == event.eventId && controller.timeline?.allowNewEvent == false,
-                    nextEvent: i < controller.timeline!.events.length ? controller.timeline!.events[i] : null,
+                        controller.readMarkerEventId == event.eventId &&
+                            controller.timeline?.allowNewEvent == false,
+                    nextEvent: i < controller.timeline!.events.length
+                        ? controller.timeline!.events[i]
+                        : null,
                     // onInfoTab: controller.showEventInfo,
                     // onAvatarTab: (Event event) => showAdaptiveBottomSheet(
                     //   context: context,
@@ -128,7 +136,8 @@ class MessagesList extends StatelessWidget {
           );
         },
         childCount: controller.timeline!.events.length + 2,
-        findChildIndexCallback: (key) => findChildIndexCallback(key, eventsKeyMap),
+        findChildIndexCallback: (key) =>
+            findChildIndexCallback(key, eventsKeyMap),
       ),
     );
   }

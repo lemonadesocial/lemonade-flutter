@@ -1,7 +1,10 @@
 import 'package:app/core/presentation/widgets/chat/mxc_image.dart';
 import 'package:app/core/utils/chat/matrix_string_color_extension.dart';
+import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:matrix/matrix.dart';
 
 class MatrixAvatar extends StatelessWidget {
@@ -13,6 +16,7 @@ class MatrixAvatar extends StatelessWidget {
   final Client? client;
   final double fontSize;
   final double? radius;
+  final PresenceType? presence;
 
   const MatrixAvatar({
     this.mxContent,
@@ -22,11 +26,13 @@ class MatrixAvatar extends StatelessWidget {
     this.client,
     this.fontSize = 18,
     this.radius,
+    this.presence,
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     var fallbackLetters = '@';
     final name = this.name;
     if (name != null) {
@@ -48,33 +54,90 @@ class MatrixAvatar extends StatelessWidget {
         ),
       ),
     );
-    final borderRadius = BorderRadius.circular(radius ?? LemonRadius.extraSmall);
-    final container = ClipRRect(
-      borderRadius: borderRadius,
-      child: Container(
-        width: size,
-        height: size,
-        color: noPic
-            ? name?.lightColorAvatar
-            : Theme.of(context).secondaryHeaderColor,
-        child: noPic
-            ? textWidget
-            : MxcImage(
-                key: Key(mxContent.toString()),
-                uri: mxContent,
-                fit: BoxFit.cover,
-                width: size,
-                height: size,
-                placeholder: (_) => textWidget,
-                cacheKey: mxContent.toString(),
-              ),
-      ),
+    final borderRadius = BorderRadius.circular(radius ?? LemonRadius.xSmall);
+    final container = Stack(
+      alignment: Alignment.center,
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: LemonColor.white15,
+            ),
+            borderRadius: borderRadius,
+          ),
+          child: ClipRRect(
+            borderRadius: borderRadius,
+            child: Container(
+              width: size,
+              height: size,
+              color: noPic
+                  ? name?.lightColorAvatar
+                  : Theme.of(context).secondaryHeaderColor,
+              child: noPic
+                  ? textWidget
+                  : MxcImage(
+                      key: Key(mxContent.toString()),
+                      uri: mxContent,
+                      fit: BoxFit.cover,
+                      width: size,
+                      height: size,
+                      placeholder: (_) => textWidget,
+                      cacheKey: mxContent.toString(),
+                    ),
+            ),
+          ),
+        ),
+        _buildBottomRightCorner(colorScheme)
+      ],
     );
-    if (onTap == null) return container;
     return InkWell(
       onTap: onTap,
       borderRadius: borderRadius,
       child: container,
+    );
+  }
+
+  Widget _buildBottomRightCorner(ColorScheme colorScheme) {
+    final isOnline = presence == PresenceType.online;
+    if (presence == null) {
+      return Positioned(
+        bottom: -3.w,
+        right: -3.w,
+        child: Container(
+          width: 21.w,
+          height: 21.w,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
+            color: LemonColor.chineseBlack,
+            border: Border.all(
+              width: 3.w,
+            ),
+          ),
+          child: Center(
+            child: Text(
+              '#',
+              style: Typo.xSmall.copyWith(
+                color: colorScheme.onSecondary,
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+    return Positioned(
+      bottom: -2.h,
+      right: -2.w,
+      child: Container(
+        width: 15.w,
+        height: 15.w,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: isOnline ? LemonColor.online : Colors.grey,
+          border: Border.all(
+            width: 3.w,
+          ),
+        ),
+      ),
     );
   }
 }

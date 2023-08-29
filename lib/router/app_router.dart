@@ -41,6 +41,10 @@ class AppRouter extends $AppRouter {
           ],
         ),
         AutoRoute(
+          path: '/events',
+          page: EventsListingRoute.page,
+        ),
+        AutoRoute(
           path: '/events/:id/:name',
           page: EventDetailRoute.page,
         ),

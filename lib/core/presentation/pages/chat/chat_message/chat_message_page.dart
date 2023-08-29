@@ -4,9 +4,11 @@ import 'dart:io';
 import 'package:app/core/presentation/pages/chat/chat_message/view/chat_message_view.dart';
 import 'package:app/core/service/matrix/matrix_service.dart';
 import 'package:app/core/utils/chat/matrix_client_ios_badge_extension.dart';
+import 'package:app/gen/assets.gen.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:matrix/matrix.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
