@@ -87,7 +87,7 @@ class PostRepositoryImpl implements PostRepository {
       'directory': directory,
     });
     final response = await _legacyClient.post(
-      '/v1/file',
+      '/api/v1/file',
       queryParameters: {
         'blocking': true,
       },
