@@ -146,7 +146,7 @@ flutter:
     - assets/index.html
     - .env
     - .env.staging
-#    - .env.production
+    - .env.production
 
   fonts:
     - family: CircularStd
