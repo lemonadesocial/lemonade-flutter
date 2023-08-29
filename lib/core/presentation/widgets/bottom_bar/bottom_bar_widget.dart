@@ -14,8 +14,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 
+
+
 class BottomBar extends StatefulWidget {
   const BottomBar({super.key});
+  
+  static double get bottomBarHeight => Platform.isIOS ? 90.h : 70.h;
 
   @override
   _BottomBarState createState() => _BottomBarState();
@@ -53,7 +57,7 @@ class _BottomBarState extends State<BottomBar>
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return Container(
-      height: Platform.isIOS ? 90.h : 70.h,
+      height: BottomBar.bottomBarHeight,
       decoration: BoxDecoration(
         color: Colors.black54,
         border: Border(
