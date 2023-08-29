@@ -1,7 +1,7 @@
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 const listingFragment = '''
-fragment ListingFragment on User {
+fragment listingFragment on User {
   _id
   name
   username
@@ -12,7 +12,7 @@ fragment ListingFragment on User {
 ''';
 
 const profileFragment = '''
-fragment ProfileFragment on User {
+fragment profileFragment on User {
   created_at
   display_name
   first_name
@@ -126,7 +126,7 @@ fragment ProfileFragment on User {
 ''';
 
 const privateFragment = '''
-fragment PrivateFragment on User {
+fragment privateFragment on User {
   active
   age
   company_address {
@@ -183,13 +183,83 @@ final updateUserProfileQuery = gql('''
   $profileFragment
   $privateFragment
   
-  mutation (\$currency: String, \$date_of_birth: DateTimeISO, \$description: String, \$phone: String, \$name: String, \$display_name: String, \$new_photos: [MongoID!], \$settings: JSON, \$timezone: String, \$username: String, \$addresses: [AddressInput!], \$job_title: String, \$education_title: String, \$company_name: String, \$company_address: AddressInput, \$industry: String, \$search_range: Float, \$languages: [String!], \$discovery: UserDiscoverySettingsInput, \$icebreakers: [UserIcebreakerInput!], \$handle_facebook: String, \$handle_instagram: String, \$handle_linkedin: String, \$handle_twitter: String, \$pronoun: String, \$new_gender: String, \$ethnicity: String, \$events: [MongoID!], \$offers: [UserOfferInput!], \$layout_sections: [LayoutSectionInput!], \$cover: MongoID, \$tagline: String, \$music: [String!], \$data: JSON) {
+  mutation (
+  \$currency: String
+  \$date_of_birth: DateTimeISO
+  \$description: String
+  \$phone: String
+  \$name: String
+  \$display_name: String
+  \$new_photos: [MongoID!]
+  \$settings: JSON
+  \$timezone: String
+  \$username: String
+  \$addresses: [AddressInput!]
+  \$job_title: String
+  \$education_title: String
+  \$company_name: String
+  \$company_address: AddressInput
+  \$industry: String
+  \$search_range: Float
+  \$languages: [String!]
+  \$discovery: UserDiscoverySettingsInput
+  \$icebreakers: [UserIcebreakerInput!]
+  \$handle_facebook: String
+  \$handle_instagram: String
+  \$handle_linkedin: String
+  \$handle_twitter: String
+  \$pronoun: String
+  \$new_gender: String
+  \$ethnicity: String
+  \$events: [MongoID!]
+  \$offers: [UserOfferInput!]
+  \$layout_sections: [LayoutSectionInput!]
+  \$cover: MongoID
+  \$tagline: String
+  \$music: [String!]
+  \$data: JSON
+) {
   updateUser(
-    input: {currency: \$currency, date_of_birth: \$date_of_birth, description: \$description, phone: \$phone, name: \$name, display_name: \$display_name, new_photos: \$new_photos, settings: \$settings, timezone: \$timezone, username: \$username, addresses: \$addresses, job_title: \$job_title, education_title: \$education_title, company_name: \$company_name, company_address: \$company_address, industry: \$industry, search_range: \$search_range, languages: \$languages, discovery: \$discovery, icebreakers: \$icebreakers, handle_facebook: \$handle_facebook, handle_instagram: \$handle_instagram, handle_linkedin: \$handle_linkedin, handle_twitter: \$handle_twitter, pronoun: \$pronoun, new_gender: \$new_gender, ethnicity: \$ethnicity, events: \$events, offers: \$offers, layout_sections: \$layout_sections, cover: \$cover, tagline: \$tagline, music: \$music, data: \$data}
+    input: {
+      currency: \$currency
+      date_of_birth: \$date_of_birth
+      description: \$description
+      phone: \$phone
+      name: \$name
+      display_name: \$display_name
+      new_photos: \$new_photos
+      settings: \$settings
+      timezone: \$timezone
+      username: \$username
+      addresses: \$addresses
+      job_title: \$job_title
+      education_title: \$education_title
+      company_name: \$company_name
+      company_address: \$company_address
+      industry: \$industry
+      search_range: \$search_range
+      languages: \$languages
+      discovery: \$discovery
+      icebreakers: \$icebreakers
+      handle_facebook: \$handle_facebook
+      handle_instagram: \$handle_instagram
+      handle_linkedin: \$handle_linkedin
+      handle_twitter: \$handle_twitter
+      pronoun: \$pronoun
+      new_gender: \$new_gender
+      ethnicity: \$ethnicity
+      events: \$events
+      offers: \$offers
+      layout_sections: \$layout_sections
+      cover: \$cover
+      tagline: \$tagline
+      music: \$music
+      data: \$data
+    }
   ) {
-    ...ListingFragment
-    ...ProfileFragment
-    ...PrivateFragment
+    ...listingFragment
+    ...profileFragment
+    ...privateFragment
     __typename
   }
 }
