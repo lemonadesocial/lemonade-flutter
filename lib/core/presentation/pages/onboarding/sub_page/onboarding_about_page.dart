@@ -1,7 +1,6 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/onboarding/onboarding_bloc/onboarding_bloc.dart';
 import 'package:app/core/presentation/pages/onboarding/widgets/gender_chip_widget.dart';
-import 'package:app/core/presentation/pages/onboarding/widgets/onboarding_primary_button.dart';
 import 'package:app/core/presentation/widgets/back_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -15,6 +14,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '../../../widgets/common/button/linear_gradient_button_widget.dart';
 
 @RoutePage()
 class OnboardingAboutPage extends StatelessWidget {
@@ -132,9 +133,15 @@ class OnboardingAboutPage extends StatelessWidget {
                         ],
                       ),
                     ),
-                    OnboardingPrimaryButton(
-                      onPressed: state.gender == null ? null : bloc.updateProfile,
+                    LinearGradientButton(
+                      onTap: state.gender == null ? null : bloc.updateProfile,
                       label: t.onboarding.next,
+                      textStyle: Typo.medium.copyWith(
+                        fontFamily: FontFamily.nohemiVariable,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      radius: BorderRadius.circular(LemonRadius.large),
+                      mode: GradientButtonMode.lavenderMode,
                     ),
                     SizedBox(height: 24.h),
                   ],

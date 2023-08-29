@@ -1,8 +1,8 @@
 import 'package:app/theme/color.dart';
-import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 enum GradientButtonMode {
   defaultMode,
@@ -18,9 +18,30 @@ enum GradientButtonMode {
         return [];
     }
   }
+
+  Color? get disableColor{
+    switch (this) {
+      case lavenderMode:
+        return LemonColor.disableButtonLavender;
+      default:
+        return null;
+    }
+  }
 }
 
 class LinearGradientButton extends StatelessWidget {
+  const LinearGradientButton({
+    super.key,
+    required this.label,
+    this.leading,
+    this.mode = GradientButtonMode.defaultMode,
+    this.onTap,
+    this.height,
+    this.padding,
+    this.radius,
+    this.textStyle,
+  });
+
   final GradientButtonMode mode;
   final String label;
   final Widget? leading;
@@ -30,60 +51,38 @@ class LinearGradientButton extends StatelessWidget {
   final BorderRadius? radius;
   final TextStyle? textStyle;
 
-  const LinearGradientButton(
-      {super.key,
-      required this.label,
-      this.leading,
-      this.mode = GradientButtonMode.defaultMode,
-      this.onTap,
-      this.height,
-      this.padding,
-      this.radius,
-      this.textStyle});
-
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        height: height ?? Sizing.medium,
-        padding: padding ??
-            EdgeInsets.symmetric(
-                horizontal: Spacing.xSmall, vertical: Spacing.extraSmall),
-        decoration: ShapeDecoration(
-          gradient: LinearGradient(
-            begin: Alignment(0.00, -1.00),
-            end: Alignment(0, 1),
-            colors: mode.gradients,
-          ),
-          shape: RoundedRectangleBorder(
-              borderRadius:
-                  radius ?? BorderRadius.circular(LemonRadius.xSmall)),
-          shadows: [
-            BoxShadow(
-              color: LemonColor.shadow,
-              blurRadius: 4,
-              offset: Offset(0, 2),
-              spreadRadius: 0,
-            )
-          ],
+    return Container(
+      width: 1.sw,
+      decoration: BoxDecoration(
+        borderRadius: radius ?? BorderRadius.circular(LemonRadius.xSmall),
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: mode.gradients,
         ),
-        child: Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              if (leading != null) ...[
-                leading!,
-                SizedBox(width: Spacing.extraSmall)
-              ],
-              Text(
-                label,
-                style: textStyle ??
-                    Typo.small.copyWith(fontWeight: FontWeight.w600),
-              )
-            ],
+        boxShadow: [
+          BoxShadow(
+            color: LemonColor.shadow,
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          )
+        ],
+      ),
+      child: ElevatedButton(
+        onPressed: onTap,
+        style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: radius ?? BorderRadius.circular(LemonRadius.xSmall),
           ),
+          padding: padding ?? EdgeInsets.symmetric(vertical: Spacing.xSmall),
+          backgroundColor: Colors.transparent,
+          disabledBackgroundColor: mode.disableColor,
+        ),
+        child: Text(
+          label,
+          style: textStyle ?? Typo.medium.copyWith(fontWeight: FontWeight.w600),
         ),
       ),
     );

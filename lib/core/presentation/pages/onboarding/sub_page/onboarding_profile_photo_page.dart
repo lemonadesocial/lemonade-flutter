@@ -1,5 +1,4 @@
 import 'package:app/core/presentation/pages/onboarding/widgets/onboarding_photo_picker.dart';
-import 'package:app/core/presentation/pages/onboarding/widgets/onboarding_primary_button.dart';
 import 'package:app/core/presentation/widgets/back_button_widget.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
@@ -13,6 +12,7 @@ import '../../../../../gen/fonts.gen.dart';
 import '../../../../../i18n/i18n.g.dart';
 import '../../../../../theme/color.dart';
 import '../../../../application/onboarding/onboarding_bloc/onboarding_bloc.dart';
+import '../../../widgets/common/button/linear_gradient_button_widget.dart';
 
 @RoutePage()
 class OnboardingProfilePhotoPage extends StatelessWidget {
@@ -81,9 +81,15 @@ class OnboardingProfilePhotoPage extends StatelessWidget {
                     ],
                   ),
                 ),
-                OnboardingPrimaryButton(
-                  onPressed: state.profilePhoto == null ? null : bloc.uploadImage,
+                LinearGradientButton(
+                  onTap: state.profilePhoto == null ? null : bloc.uploadImage,
                   label: t.onboarding.next,
+                  textStyle: Typo.medium.copyWith(
+                    fontFamily: FontFamily.nohemiVariable,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  radius: BorderRadius.circular(LemonRadius.large),
+                  mode: GradientButtonMode.lavenderMode,
                 ),
                 SizedBox(height: 24.h),
               ],

@@ -45,7 +45,7 @@ class LemonColor {
   static Color button_linear_2 = Color(0xFF6F3FAA);
   static Color grape = Color(0xffB17AF4);
   static Color shadow = Color.fromARGB(91, 0, 0, 0);
-  static Color disableButton = const Color(0xFF3c2557);
+  static Color disableButtonLavender = const Color(0xFF3c2557);
 
   // Slider 
   static Color sunrise = Color(0xffFFDB00);
@@ -107,6 +107,6 @@ final ColorScheme lemonadeDarkThemeColorScheme = ColorScheme.dark(
   outlineVariant: LemonColor.white18,
   tertiaryContainer: LemonColor.tertiaryBlack,
   onPrimaryContainer: LemonColor.dialogBackground,
-  onSecondaryContainer: LemonColor.disableButton,
+  onSecondaryContainer: LemonColor.disableButtonLavender,
   errorContainer: LemonColor.errorRedBg,
 );

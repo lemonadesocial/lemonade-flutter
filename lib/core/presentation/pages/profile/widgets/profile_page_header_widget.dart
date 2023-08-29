@@ -18,6 +18,7 @@ import 'package:share_plus/share_plus.dart';
 
 class ProfilePageHeader extends StatelessWidget {
   final User user;
+
   const ProfilePageHeader({
     super.key,
     required this.user,
@@ -70,7 +71,13 @@ class _ActionButtons extends StatelessWidget {
       children: [
         Expanded(
           child: LinearGradientButton(
+            onTap: () {},
             label: t.common.actions.editProfile,
+            radius: BorderRadius.circular(LemonRadius.xSmall),
+            textStyle: Typo.small.copyWith(
+              fontWeight: FontWeight.w600,
+              letterSpacing: 0.24,
+            ),
           ),
         ),
         SizedBox(width: Spacing.superExtraSmall),
@@ -78,6 +85,11 @@ class _ActionButtons extends StatelessWidget {
           child: LinearGradientButton(
             onTap: () => _shareProfileLink(context, user: user),
             label: t.common.actions.shareProfile,
+            radius: BorderRadius.circular(LemonRadius.xSmall),
+            textStyle: Typo.small.copyWith(
+              fontWeight: FontWeight.w600,
+              letterSpacing: 0.24,
+            ),
           ),
         ),
         SizedBox(width: Spacing.superExtraSmall),
@@ -98,7 +110,10 @@ class _ActionButtons extends StatelessWidget {
               builder: (filter) => Assets.icons.icDone.svg(colorFilter: filter),
             ),
           )
-        : LinearGradientButton(label: t.common.actions.follow, mode: GradientButtonMode.lavenderMode);
+        : LinearGradientButton(
+            label: t.common.actions.follow,
+            mode: GradientButtonMode.lavenderMode,
+          );
   }
 
   @override
@@ -114,6 +129,7 @@ class _ActionButtons extends StatelessWidget {
 
 class _ProfileAvatar extends StatelessWidget {
   final User user;
+
   _ProfileAvatar({required this.user});
 
   @override
@@ -132,6 +148,7 @@ class _ProfileAvatar extends StatelessWidget {
 
 class _ProfileUserFollow extends StatelessWidget {
   final User user;
+
   const _ProfileUserFollow({
     required this.user,
   });
@@ -170,6 +187,7 @@ class _ProfileUserFollow extends StatelessWidget {
 
 class _ProfileUserNameAndTitle extends StatelessWidget {
   final User user;
+
   _ProfileUserNameAndTitle({
     required this.user,
   });

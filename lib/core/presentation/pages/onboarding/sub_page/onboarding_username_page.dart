@@ -1,5 +1,5 @@
 import 'package:app/core/application/onboarding/onboarding_bloc/onboarding_bloc.dart';
-import 'package:app/core/presentation/pages/onboarding/widgets/onboarding_primary_button.dart';
+import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -70,9 +70,18 @@ class OnboardingUsernamePage extends StatelessWidget {
                     ],
                   ),
                 ),
-                OnboardingPrimaryButton(
-                  onPressed: bloc.state.username?.isEmpty ?? true ? null : bloc.updateProfile,
+                LinearGradientButton(
+                  onTap:
+                      (bloc.state.username?.isEmpty ?? true) || (bloc.state.usernameExisted ?? true)
+                          ? null
+                          : bloc.updateProfile,
                   label: t.onboarding.claim,
+                  textStyle: Typo.medium.copyWith(
+                    fontFamily: FontFamily.nohemiVariable,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  radius: BorderRadius.circular(LemonRadius.large),
+                  mode: GradientButtonMode.lavenderMode,
                 ),
                 SizedBox(height: 24.h),
               ],
