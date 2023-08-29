@@ -5,6 +5,7 @@ import 'package:app/core/presentation/pages/home/views/list/home_newsfeed_list.d
 import 'package:app/core/presentation/widgets/bottom_bar/bottom_bar_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/appbar_logo.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
+import 'package:app/core/presentation/widgets/home/floating_create_button.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/service/newsfeed/newsfeed_service.dart';
 import 'package:app/core/service/shake/shake_service.dart';
@@ -99,39 +100,11 @@ class _HomePageViewState extends State<_HomeListingView> {
       backgroundColor: LemonColor.black,
       body: const HomeNewsfeedListView(),
       floatingActionButton: Padding(
-          padding:
-              EdgeInsets.only(bottom: BottomBar.bottomBarHeight),
-          child: InkWell(
-            onTap: () => context.router.push(const CreatePostRoute()),
-            child: Container(
-              width: 54.h,
-              height: 54.h,
-              padding: const EdgeInsets.all(15),
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [LemonColor.fabSecondaryBg, LemonColor.fabFirstBg],
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: LemonColor.fabShadow,
-                    blurRadius: 8,
-                    offset: Offset(0, 4),
-                  )
-                ],
-              ),
-              child: ThemeSvgIcon(
-                color: LemonColor.white,
-                builder: (filter) => Assets.icons.icAdd.svg(
-                  colorFilter: filter,
-                  width: 24.w,
-                  height: 24.w,
-                ),
-              ),
-            ),
-          )),
+        padding: EdgeInsets.only(bottom: BottomBar.bottomBarHeight),
+        child: FloatingCreateButton(
+          onTap: () => context.router.push(const CreatePostRoute()),
+        ),
+      ),
     );
   }
 }
