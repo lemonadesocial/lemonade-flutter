@@ -29,7 +29,6 @@ class LemonColor {
   static Color red = const Color(0xFFFE4A49);
   static const errorRedBg = Color(0xFFED7E8C);
   static const usernameApproved = Color(0xFF49DB95);
-  static Color red = const Color(0xFFFE4A49);
   static Color black54 = const Color(0xff000000).withOpacity(0.54);
   static Color online = const Color(0xFF5FCB90);
   static Color ownMessage = const Color(0xFF8F71B2);
