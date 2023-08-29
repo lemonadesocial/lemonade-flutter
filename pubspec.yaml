@@ -144,9 +144,9 @@ flutter:
     - assets/images/
     - assets/lotties/
     - assets/index.html
-#    - .env
+    - .env
     - .env.staging
-#    - .env.production
+    - .env.production
 
   fonts:
     - family: CircularStd
