@@ -1,16 +1,15 @@
 import 'package:app/core/application/onboarding/onboarding_bloc/onboarding_bloc.dart';
+import 'package:app/core/domain/post/post_repository.dart';
+import 'package:app/core/domain/user/user_repository.dart';
+import 'package:app/core/service/post/post_service.dart';
+import 'package:app/gen/fonts.gen.dart';
+import 'package:app/injection/register_module.dart';
+import 'package:app/theme/color.dart';
+import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import '../../../../gen/fonts.gen.dart';
-import '../../../../injection/register_module.dart';
-import '../../../../theme/color.dart';
-import '../../../../theme/typo.dart';
-import '../../../domain/post/post_repository.dart';
-import '../../../domain/user/user_repository.dart';
-import '../../../service/post/post_service.dart';
 
 @RoutePage()
 class OnboardingWrapperPage extends StatelessWidget implements AutoRouteWrapper {

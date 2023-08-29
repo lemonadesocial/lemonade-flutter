@@ -63,7 +63,6 @@ class UserRepositoryImpl implements UserRepository {
           'pronoun': gender?.name.capitalize(),
           'description': shortBio,
           'display_name': displayName,
-          // if (uploadPhoto != null) 'new_photos': [uploadPhoto],
         }..removeWhere((key, value) => value == null),
         parserFn: (data) {
           return data['updateUser'];

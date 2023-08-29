@@ -1,5 +1,7 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/domain/auth/entities/auth_session.dart';
+import 'package:app/core/presentation/dpos/common/dropdown_item_dpo.dart';
+import 'package:app/core/presentation/widgets/floating_frosted_glass_dropdown_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/drawer_utils.dart';
@@ -10,9 +12,6 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../../dpos/common/dropdown_item_dpo.dart';
-import '../../floating_frosted_glass_dropdown_widget.dart';
 
 class DrawerItem {
   DrawerItem({
