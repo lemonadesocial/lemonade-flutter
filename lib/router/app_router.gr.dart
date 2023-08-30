@@ -112,9 +112,13 @@ abstract class $AppRouter extends _i24.RootStackRouter {
       );
     },
     CreatePostRoute.name: (routeData) {
+      final args = routeData.argsAs<CreatePostRouteArgs>();
       return _i24.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i9.CreatePostPage(),
+        child: _i9.CreatePostPage(
+          key: args.key,
+          onPostCreated: args.onPostCreated,
+        ),
       );
     },
     WebviewRoute.name: (routeData) {
@@ -374,16 +378,40 @@ class NotificationRoute extends _i24.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i9.CreatePostPage]
-class CreatePostRoute extends _i24.PageRouteInfo<void> {
-  const CreatePostRoute({List<_i24.PageRouteInfo>? children})
-      : super(
+class CreatePostRoute extends _i24.PageRouteInfo<CreatePostRouteArgs> {
+  CreatePostRoute({
+    _i25.Key? key,
+    required void Function() onPostCreated,
+    List<_i24.PageRouteInfo>? children,
+  }) : super(
           CreatePostRoute.name,
+          args: CreatePostRouteArgs(
+            key: key,
+            onPostCreated: onPostCreated,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'CreatePostRoute';
 
-  static const _i24.PageInfo<void> page = _i24.PageInfo<void>(name);
+  static const _i24.PageInfo<CreatePostRouteArgs> page =
+      _i24.PageInfo<CreatePostRouteArgs>(name);
+}
+
+class CreatePostRouteArgs {
+  const CreatePostRouteArgs({
+    this.key,
+    required this.onPostCreated,
+  });
+
+  final _i25.Key? key;
+
+  final void Function() onPostCreated;
+
+  @override
+  String toString() {
+    return 'CreatePostRouteArgs{key: $key, onPostCreated: $onPostCreated}';
+  }
 }
 
 /// generated route for

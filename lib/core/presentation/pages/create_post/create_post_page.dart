@@ -19,7 +19,12 @@ import 'widgets/create_post_image_widget.dart';
 
 @RoutePage()
 class CreatePostPage extends StatelessWidget {
-  const CreatePostPage({Key? key}) : super(key: key);
+  const CreatePostPage({
+    Key? key,
+    required this.onPostCreated,
+  }) : super(key: key);
+
+  final VoidCallback onPostCreated;
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +40,7 @@ class CreatePostPage extends StatelessWidget {
             // showDialog(context: context, builder: Loading.defaultLoading);
           }
           if (state.status == CreatePostStatus.postCreated) {
+            onPostCreated();
             context.router.pop();
           }
           if (state.status == CreatePostStatus.error) {}
