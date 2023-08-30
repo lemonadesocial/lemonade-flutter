@@ -9,8 +9,10 @@ import 'package:app/core/service/event/event_service.dart';
 import 'package:app/core/utils/date_utils.dart' as date_utils;
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -91,7 +93,20 @@ class _DiscoverEventsList extends StatelessWidget {
               return ListView.separated(
                 padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
                 scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) => EventDiscoverItem(event: upcomingEvents[index]),
+                itemBuilder: (context, index) => InkWell(
+                  onTap: () {
+                    final eventItem = upcomingEvents[index];
+                    AutoRouter.of(context).navigate(
+                      EventDetailRoute(
+                        eventId: eventItem.id ?? '',
+                        eventName: eventItem.title ?? '',
+                      ),
+                    );
+                  },
+                  child: EventDiscoverItem(
+                    event: upcomingEvents[index],
+                  ),
+                ),
                 separatorBuilder: (context, index) => SizedBox(
                   width: Spacing.xSmall,
                 ),

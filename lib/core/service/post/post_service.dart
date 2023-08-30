@@ -29,6 +29,9 @@ class PostService {
         postRefId: postRefId,
       );
 
-  Future<Either<Failure, String>> uploadImage(XFile file) =>
-      postRepository.uploadImage(file);
+  Future<Either<Failure, String>> uploadImage(
+    XFile file, {
+    required String directory,
+  }) =>
+      postRepository.uploadImage(file, directory);
 }

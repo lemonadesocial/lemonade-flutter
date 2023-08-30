@@ -26,6 +26,9 @@ class $AssetsFontsGen {
   /// File path: assets/fonts/CircularStd-Medium.ttf
   String get circularStdMedium => 'assets/fonts/CircularStd-Medium.ttf';
 
+  /// File path: assets/fonts/Nohemi-VF.ttf
+  String get nohemiVF => 'assets/fonts/Nohemi-VF.ttf';
+
   /// File path: assets/fonts/SpaceGrotesk-Regular.ttf
   String get spaceGroteskRegular => 'assets/fonts/SpaceGrotesk-Regular.ttf';
 
@@ -41,6 +44,7 @@ class $AssetsFontsGen {
         circularStdBold,
         circularStdBook,
         circularStdMedium,
+        nohemiVF,
         spaceGroteskRegular,
         spaceGroteskSemiBold,
         switzerVariable
@@ -123,6 +127,18 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_filter_outline.svg
   SvgGenImage get icFilterOutline =>
       const SvgGenImage('assets/icons/ic_filter_outline.svg');
+
+  /// File path: assets/icons/ic_gender_ambiguous.svg
+  SvgGenImage get icGenderAmbiguous =>
+      const SvgGenImage('assets/icons/ic_gender_ambiguous.svg');
+
+  /// File path: assets/icons/ic_gender_female.svg
+  SvgGenImage get icGenderFemale =>
+      const SvgGenImage('assets/icons/ic_gender_female.svg');
+
+  /// File path: assets/icons/ic_gender_male.svg
+  SvgGenImage get icGenderMale =>
+      const SvgGenImage('assets/icons/ic_gender_male.svg');
 
   /// File path: assets/icons/ic_grid.svg
   SvgGenImage get icGrid => const SvgGenImage('assets/icons/ic_grid.svg');
@@ -245,6 +261,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_search.svg
   SvgGenImage get icSearch => const SvgGenImage('assets/icons/ic_search.svg');
 
+  /// File path: assets/icons/ic_select_image.svg
+  SvgGenImage get icSelectImage =>
+      const SvgGenImage('assets/icons/ic_select_image.svg');
+
   /// File path: assets/icons/ic_share.svg
   SvgGenImage get icShare => const SvgGenImage('assets/icons/ic_share.svg');
 
@@ -298,6 +318,9 @@ class $AssetsIconsGen {
         icFacebook,
         icFilter,
         icFilterOutline,
+        icGenderAmbiguous,
+        icGenderFemale,
+        icGenderMale,
         icGrid,
         icHashSymbol,
         icHeart,
@@ -332,6 +355,7 @@ class $AssetsIconsGen {
         icPublic,
         icQr,
         icSearch,
+        icSelectImage,
         icShare,
         icStore,
         icSupport,

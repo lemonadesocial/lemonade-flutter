@@ -5,6 +5,7 @@ import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -31,6 +32,13 @@ class _LoginPageState extends State<LoginPage> {
           state.maybeWhen(
             authenticated: (_) {
               AutoRouter.of(context).pop();
+            },
+            onBoardingRequired: (authSession) {
+              context.router.push(
+                const OnboardingWrapperRoute(
+                  children: [OnboardingUsernameRoute()],
+                ),
+              );
             },
             orElse: () {},
           );
@@ -118,7 +126,7 @@ class _LoginPageState extends State<LoginPage> {
           processing: () => processingWidget,
           unauthenticated: (_) => loginButton,
           unknown: () => loginButton,
-          orElse: () => const SizedBox.shrink(),
+          orElse: () => loginButton,
         );
       },
     );
