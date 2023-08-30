@@ -30,14 +30,17 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<Either<Failure, User>> getUserProfile(GetProfileInput input) async {
+  Future<Either<Failure, User>> getUserProfile({ String? userId, String? username }) async {
     final result = await _gqlClient.query(
       QueryOptions(
         document: getUserQuery,
         parserFn: (data) {
           return User.fromDto(UserDto.fromJson(data['getUser']));
         },
-        variables: input.toJson(),
+        variables: {
+          'id': userId,
+          'username': username
+        },
       ),
     );
 

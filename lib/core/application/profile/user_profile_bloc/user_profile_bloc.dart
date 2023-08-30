@@ -1,4 +1,3 @@
-import 'package:app/core/domain/onboarding/onboarding_inputs.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/domain/user/user_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,10 +16,8 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
 
   Future<void> _onFetch(UserProfileEventFetch event, Emitter emit) async {
     final result = await userRepository.getUserProfile(
-      GetProfileInput(
-        userId: event.userId,
-        username: event.username,
-      ),
+      userId: event.userId,
+      username: event.username,
     );
     result.fold(
       (failure) => emit(UserProfileState.failure()),
