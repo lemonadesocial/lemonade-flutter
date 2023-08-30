@@ -14,8 +14,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 
-
-
 class BottomBar extends StatefulWidget {
   const BottomBar({super.key});
   
