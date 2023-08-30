@@ -1,7 +1,7 @@
 import 'package:app/core/application/badge/badge_near_you_bloc/badge_near_you_bloc.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
-import 'package:app/core/presentation/widgets/poap/hot_badge_item.dart';
+import 'package:app/core/presentation/widgets/poap/hot_badge_item/hot_badge_item.dart';
 import 'package:app/core/utils/location_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';

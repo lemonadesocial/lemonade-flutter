@@ -1,8 +1,6 @@
 // ignore_for_file: unused_element
 
-import 'dart:math';
 import 'dart:ui';
-
 import 'package:app/core/domain/badge/entities/badge_entities.dart' as badge_entities;
 import 'package:app/core/domain/poap/input/poap_input.dart';
 import 'package:app/core/domain/poap/poap_repository.dart';
@@ -10,18 +8,18 @@ import 'package:app/core/domain/token/entities/token_entities.dart';
 import 'package:app/core/domain/token/input/get_tokens_input.dart';
 import 'package:app/core/domain/token/token_repository.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
+import 'package:app/core/presentation/widgets/poap/hot_badge_item/hot_badge_quantity_bar.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/utils/badge_utils.dart';
 import 'package:app/core/utils/media_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:intl/intl.dart';
 
 final _badgeThumbnailHeight = 144.w;
 final _badgeCollectionThumbnailHeight = 65.w;
@@ -70,91 +68,13 @@ class HotBadgeItem extends StatelessWidget {
               ),
               Align(
                 alignment: const Alignment(0, 0.3),
-                child: Stack(
-                  children: [
-                    Transform.flip(
-                      flipY: true,
-                      child: CustomPaint(
-                        painter: _BadgeQuantityBarPainter(),
-                        size: _badgeQuantityBarSize,
-                      ),
-                    ),
-                    Transform.flip(
-                      flipY: true,
-                      child: FutureBuilder(
-                        future: getIt<PoapRepository>().getPoapViewSupply(
-                          input: GetPoapViewSupplyInput(
-                            network: badge.network ?? '',
-                            address: badge.contract?.toLowerCase() ?? '',
-                          ),
-                        ),
-                        builder: (context, snapshot) {
-                          final poapViewSupply = snapshot.data?.fold((l) => null, (poapView) => poapView);
-                          var claimProgress = .0;
-                          final claimedQuantity = poapViewSupply?.claimedQuantity ?? 0;
-                          final quantity = poapViewSupply?.quantity ?? 0;
-                          if(quantity != 0) {
-                            claimProgress = claimedQuantity / quantity;
-                          }
-                          return TweenAnimationBuilder(
-                            duration: const Duration(milliseconds: 500),
-                            tween: Tween<double>(begin: 0, end: claimProgress),
-                            builder: (context, animationValue, _) => CustomPaint(
-                              painter: _BadgeQuantityBarPainter(isGradient: true, progress: animationValue),
-                              size: _badgeQuantityBarSize,
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
+                child: HotBadgeQuantityBar(badge: badge),
               )
             ],
           );
         },
       ),
     );
-  }
-}
-
-class _BadgeQuantityBarPainter extends CustomPainter {
-  _BadgeQuantityBarPainter({
-    this.isGradient = false,
-    this.progress = 1,
-  }) : super();
-  final bool isGradient;
-  final double progress;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final rect = Rect.fromLTRB(0, 0, size.width, size.height);
-    final paint = Paint()
-      ..strokeCap = StrokeCap.round
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 4.w;
-
-    if (isGradient) {
-      paint.shader = SweepGradient(
-        center: Alignment.centerRight,
-        endAngle: 1,
-        colors: [
-          LemonColor.white,
-          LemonColor.paleViolet,
-        ],
-      ).createShader(rect);
-    } else {
-      paint.color = LemonColor.paleViolet36;
-    }
-
-    const startAngle = 0.6 + pi;
-    final sweepAngle = (pi - 1.2) * progress;
-    canvas.drawArc(rect, startAngle, sweepAngle, false, paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return true;
   }
 }
 
@@ -168,13 +88,7 @@ class _BadgeLocationTag extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final distanceInKm = (badge.distance ?? 0) / 1000;
-    String displayDistance;
-    if (distanceInKm >= 1) {
-      displayDistance = NumberFormat.compact().format(distanceInKm);
-    } else {
-      displayDistance = NumberFormat('##.##').format(badge.distance ?? 0);
-    }
+    final displayDistance = BadgeUtils.getDisplayDistance(distanceInMeter: badge.distance ?? 0);
 
     final colorScheme = Theme.of(context).colorScheme;
     return Container(
@@ -200,7 +114,7 @@ class _BadgeLocationTag extends StatelessWidget {
                 ),
                 SizedBox(width: Spacing.superExtraSmall / 2),
                 Text(
-                  '$displayDistance ${distanceInKm >= 1 ? t.common.unit.km : t.common.unit.m}',
+                  '${displayDistance.text} ${displayDistance.unit == DistanceUnit.kilometer ? t.common.unit.km : t.common.unit.m}',
                   style: Typo.xSmall.copyWith(
                     color: colorScheme.onPrimary,
                     fontWeight: FontWeight.w600,
