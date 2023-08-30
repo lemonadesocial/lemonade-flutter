@@ -41,4 +41,7 @@ class LemonRadius {
 
   /// Represents spacing of 21.0 pixels.
   static double button = 21.r;
+
+  /// Represents spacing of 32.0 pixels.
+  static double large = 32.r;
 }

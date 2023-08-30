@@ -84,7 +84,7 @@ class CreatePostBloc extends Cubit<CreatePostState> {
   }
 
   Future<void> uploadImage(XFile file) async {
-    final response = await postService.uploadImage(file);
+    final response = await postService.uploadImage(file, directory: 'post');
     response.fold(
       (l) => emit(state.copyWith(status: CreatePostStatus.error)),
       (imageId) {

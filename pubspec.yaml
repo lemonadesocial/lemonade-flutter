@@ -168,3 +168,6 @@ flutter:
     - family: SwitzerVariable
       fonts:
         - asset: assets/fonts/Switzer-Variable.ttf
+    - family: NohemiVariable
+      fonts:
+        - asset: assets/fonts/Nohemi-VF.ttf
