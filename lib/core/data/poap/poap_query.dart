@@ -21,3 +21,30 @@ final checkHasClaimedPoapQuery = gql('''
     )
   }
 ''');
+
+final getPoapPolicyQuery = gql('''
+  query(
+      \$network: String!, 
+      \$address: Address!, 
+      \$target: Address
+    ) {
+      getPolicy(
+        network: \$network,
+        address: \$address, 
+        target: \$target
+      ) {
+        _id
+        network
+        address
+        node
+        result {
+          boolean
+          node
+          errors {
+            message
+            path
+          }
+        }
+      }
+    }
+''');

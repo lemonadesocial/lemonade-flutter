@@ -75,3 +75,75 @@ class ClaimArgs {
   final String? claimer;
   final String? tokenURI;
 }
+
+class PoapPolicyNode {
+  const PoapPolicyNode({
+    required this.value,
+    this.children,
+  });
+
+  factory PoapPolicyNode.fromDto(PoapPolicyNodeDto dto) => PoapPolicyNode(
+        value: dto.value,
+        children: List<PoapPolicyNodeDto>.from(dto.children ?? []).map(PoapPolicyNode.fromDto).toList(),
+      );
+
+  final String value;
+  final List<PoapPolicyNode>? children;
+}
+
+class PoapPolicyError {
+  PoapPolicyError({
+    this.message,
+    this.path,
+  });
+
+  factory PoapPolicyError.fromDto(PoapPolicyErrorDto dto) => PoapPolicyError(
+        message: dto.message,
+        path: dto.path,
+      );
+
+  final String? message;
+  final String? path;
+}
+
+class PoapPolicyResult {
+  const PoapPolicyResult({
+    required this.boolean,
+    this.node,
+    required this.errors,
+  });
+
+  factory PoapPolicyResult.fromDto(PoapPolicyResultDto dto) => PoapPolicyResult(
+        boolean: dto.boolean ?? false,
+        node: dto.node != null ? PoapPolicyNode.fromDto(dto.node!) : null,
+        errors: List<PoapPolicyErrorDto>.from(dto.errors ?? []).map(PoapPolicyError.fromDto).toList(),
+      );
+
+  final bool boolean;
+  final PoapPolicyNode? node;
+  final List<PoapPolicyError> errors;
+}
+
+class PoapPolicy {
+  PoapPolicy({
+    this.id,
+    this.network,
+    this.address,
+    this.node,
+    this.result,
+  });
+
+  factory PoapPolicy.fromDto(PoapPolicyDto dto) => PoapPolicy(
+        id: dto.id,
+        network: dto.network,
+        address: dto.address,
+        node: dto.node != null ? PoapPolicyNode.fromDto(dto.node!) : null,
+        result: dto.result != null ? PoapPolicyResult.fromDto(dto.result!) : null,
+      );
+
+  final String? id;
+  final String? network;
+  final String? address;
+  final PoapPolicyNode? node;
+  final PoapPolicyResult? result;
+}

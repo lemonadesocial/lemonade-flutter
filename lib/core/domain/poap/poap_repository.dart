@@ -16,4 +16,8 @@ abstract class PoapRepository {
   Future<Either<Failure, Claim>> claim({
     required ClaimInput input,
   });
+
+  Future<Either<Failure, PoapPolicy>> getPoapPolicy({
+    required GetPoapPolicyInput input,
+  });
 }

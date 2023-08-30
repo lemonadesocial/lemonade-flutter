@@ -47,6 +47,16 @@ const eventFragment = '''
 }
 ''';
 
+final getEventDetailQuery = gql('''
+  $eventFragment
+
+  query(\$id: MongoID!) {
+    getEvent(_id: \$id) {
+      ...eventFields
+    }
+  }
+''');
+
 final getEventsQuery = gql('''
   $eventFragment
   query(

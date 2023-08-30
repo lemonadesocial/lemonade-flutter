@@ -66,4 +66,23 @@ class PoapRepositoryImpl implements PoapRepository {
     }
     return Right(result.parsedData!);
   }
+
+  @override
+  Future<Either<Failure, PoapPolicy>> getPoapPolicy({
+    required GetPoapPolicyInput input,
+  }) async {
+    final result = await _walletClient.query(
+      QueryOptions(
+        document: getPoapPolicyQuery,
+        variables: input.toJson(),
+        parserFn: (data) => PoapPolicy.fromDto(
+          PoapPolicyDto.fromJson(data['getPolicy']),
+        ),
+      ),
+    );
+    if (result.hasException) {
+      return Left(Failure());
+    }
+    return Right(result.parsedData!);
+  }
 }

@@ -1,10 +1,11 @@
 import 'package:app/core/data/event/dtos/event_dtos.dart';
 import 'package:app/core/data/event/event_query.dart';
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/event_repository.dart';
+import 'package:app/core/domain/event/input/get_event_detail_input.dart';
 import 'package:app/core/domain/event/input/get_events_listing_input.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/core/gql.dart';
-import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:dartz/dartz.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -69,5 +70,22 @@ class EventRepositoryImpl implements EventRepository {
     );
     if (result.hasException) return Left(Failure());
     return Right(result.parsedData ?? []);
+  }
+
+  @override
+  Future<Either<Failure, Event>> getEventDetail({
+    required GetEventDetailInput input,
+  }) async {
+    final result = await client.query<Event>(
+      QueryOptions(
+        document: getEventDetailQuery,
+        variables: input.toJson(),
+        parserFn: (data) => Event.fromDto(
+          EventDto.fromJson(data['getEvent']),
+        ),
+      ),
+    );
+    if (result.hasException) return Left(Failure());
+    return Right(result.parsedData!);
   }
 }

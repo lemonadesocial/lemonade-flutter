@@ -6,6 +6,7 @@ import 'package:app/core/domain/poap/poap_enums.dart';
 import 'package:app/core/domain/poap/poap_repository.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/injection/register_module.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:rxdart/rxdart.dart';
@@ -32,7 +33,19 @@ class ClaimPoapBloc extends Bloc<ClaimPoapEvent, ClaimPoapState> {
         .state
         .maybeWhen(authenticated: (authSession) => authSession.walletCustodial, orElse: () => null);
     if (userWallet == null) return;
-    final result = await _poapRepository.checkHasClaimedPoap(
+    
+    Either<Failure, PoapPolicy>? poapPolicyData;
+    if (badge.claimable != true) {
+      poapPolicyData = await _poapRepository.getPoapPolicy(
+        input: GetPoapPolicyInput(
+          network: badge.network ?? '',
+          address: badge.contract?.toLowerCase() ?? '',
+          target: userWallet.toLowerCase(),
+        ),
+      );
+    }
+
+    final hasClaimedData = await _poapRepository.checkHasClaimedPoap(
       input: CheckHasClaimedPoapViewInput(
         network: badge.network ?? '',
         address: badge.contract?.toLowerCase() ?? '',
@@ -44,13 +57,14 @@ class ClaimPoapBloc extends Bloc<ClaimPoapEvent, ClaimPoapState> {
       ),
       fromServer: event.fromServer,
     );
-    result.fold(
-      (l) => null,
-      (poapViewCheckHasClaimed) {
-        emit(
-          state.copyWith(claimed: poapViewCheckHasClaimed.claimed),
-        );
-      },
+
+    final poapPolicy = poapPolicyData?.fold((l) => null, (r) => r);
+    final hasClaimed = hasClaimedData.fold((l) => null, (r) => r);
+    emit(
+      state.copyWith(
+        policy: poapPolicy,
+        claimed: hasClaimed?.claimed ?? false,
+      ),
     );
   }
 
@@ -87,6 +101,9 @@ class ClaimPoapEvent with _$ClaimPoapEvent {
   const factory ClaimPoapEvent.claim({
     required ClaimInput input,
   }) = ClaimPoapEventClaim;
+  const factory ClaimPoapEvent.getPolicy({
+    required GetPoapPolicyInput input,
+  }) = ClaimPoapEventGetPoapPolicy;
 }
 
 @freezed
@@ -96,5 +113,6 @@ class ClaimPoapState with _$ClaimPoapState {
     @Default(false) bool claiming,
     Claim? claim,
     Failure? failure,
+    PoapPolicy? policy,
   }) = _ClaimPoapState;
 }

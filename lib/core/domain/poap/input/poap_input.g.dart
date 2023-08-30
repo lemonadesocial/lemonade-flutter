@@ -80,3 +80,28 @@ Map<String, dynamic> _$$_ClaimArgsInputToJson(_$_ClaimArgsInput instance) =>
       'claimer': instance.claimer,
       'tokenURI': instance.tokenURI,
     };
+
+_$_GetPoapPolicyInput _$$_GetPoapPolicyInputFromJson(
+        Map<String, dynamic> json) =>
+    _$_GetPoapPolicyInput(
+      network: json['network'] as String,
+      address: json['address'] as String,
+      target: json['target'] as String?,
+    );
+
+Map<String, dynamic> _$$_GetPoapPolicyInputToJson(
+    _$_GetPoapPolicyInput instance) {
+  final val = <String, dynamic>{
+    'network': instance.network,
+    'address': instance.address,
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('target', instance.target);
+  return val;
+}

@@ -12,5 +12,38 @@
     "ineligibleToClaimPoap": "Uh oh! 🙁 You are ineligible to claim this badge...",
     "ableToClaimPoap": "Congrats! 🥳 You meet all requirements to claim this badge",
     "badges": "badges",
-    "noBadges": "No badges found"
+    "noBadges": "No badges found",
+    "poapPolicy": {
+        "eventPolicy": {
+            "title":  "RSVP to $event",
+            "qualified": "",
+            "nonQualified": "not RSVP'd to the event"
+        },
+        "emailPolicy": {
+            "title":  "Verify email address",
+            "qualified": "Completed",
+            "nonQualified": "Incomplete"
+        },
+        "phonePolicy": {
+            "title":  "Verify phone number",
+            "qualified": "Completed",
+            "nonQualified": "Incomplete"
+        },
+        "locationPolicy": {
+            "title":  "Location",
+            "qualified": "Completed",
+            "nonQualified": "Incomplete"
+        },
+        "twitterPolicy": {
+            "title":  "Follow @$twitter on Twitter",
+            "qualified": "Completed",
+            "nonQualified": "Incomplete",
+            "error": "account not connected"
+        },
+        "userPolicy": {
+            "title":  "Follow @$username on Lemonade",
+            "qualified": "following account",
+            "nonQualified": "not following account"
+        }
+    }
 }

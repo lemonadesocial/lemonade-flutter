@@ -772,3 +772,188 @@ abstract class _ClaimArgsInput implements ClaimArgsInput {
   _$$_ClaimArgsInputCopyWith<_$_ClaimArgsInput> get copyWith =>
       throw _privateConstructorUsedError;
 }
+
+GetPoapPolicyInput _$GetPoapPolicyInputFromJson(Map<String, dynamic> json) {
+  return _GetPoapPolicyInput.fromJson(json);
+}
+
+/// @nodoc
+mixin _$GetPoapPolicyInput {
+  String get network => throw _privateConstructorUsedError;
+  String get address => throw _privateConstructorUsedError;
+  @JsonKey(includeIfNull: false)
+  String? get target => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $GetPoapPolicyInputCopyWith<GetPoapPolicyInput> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $GetPoapPolicyInputCopyWith<$Res> {
+  factory $GetPoapPolicyInputCopyWith(
+          GetPoapPolicyInput value, $Res Function(GetPoapPolicyInput) then) =
+      _$GetPoapPolicyInputCopyWithImpl<$Res, GetPoapPolicyInput>;
+  @useResult
+  $Res call(
+      {String network,
+      String address,
+      @JsonKey(includeIfNull: false) String? target});
+}
+
+/// @nodoc
+class _$GetPoapPolicyInputCopyWithImpl<$Res, $Val extends GetPoapPolicyInput>
+    implements $GetPoapPolicyInputCopyWith<$Res> {
+  _$GetPoapPolicyInputCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? network = null,
+    Object? address = null,
+    Object? target = freezed,
+  }) {
+    return _then(_value.copyWith(
+      network: null == network
+          ? _value.network
+          : network // ignore: cast_nullable_to_non_nullable
+              as String,
+      address: null == address
+          ? _value.address
+          : address // ignore: cast_nullable_to_non_nullable
+              as String,
+      target: freezed == target
+          ? _value.target
+          : target // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$_GetPoapPolicyInputCopyWith<$Res>
+    implements $GetPoapPolicyInputCopyWith<$Res> {
+  factory _$$_GetPoapPolicyInputCopyWith(_$_GetPoapPolicyInput value,
+          $Res Function(_$_GetPoapPolicyInput) then) =
+      __$$_GetPoapPolicyInputCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {String network,
+      String address,
+      @JsonKey(includeIfNull: false) String? target});
+}
+
+/// @nodoc
+class __$$_GetPoapPolicyInputCopyWithImpl<$Res>
+    extends _$GetPoapPolicyInputCopyWithImpl<$Res, _$_GetPoapPolicyInput>
+    implements _$$_GetPoapPolicyInputCopyWith<$Res> {
+  __$$_GetPoapPolicyInputCopyWithImpl(
+      _$_GetPoapPolicyInput _value, $Res Function(_$_GetPoapPolicyInput) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? network = null,
+    Object? address = null,
+    Object? target = freezed,
+  }) {
+    return _then(_$_GetPoapPolicyInput(
+      network: null == network
+          ? _value.network
+          : network // ignore: cast_nullable_to_non_nullable
+              as String,
+      address: null == address
+          ? _value.address
+          : address // ignore: cast_nullable_to_non_nullable
+              as String,
+      target: freezed == target
+          ? _value.target
+          : target // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$_GetPoapPolicyInput implements _GetPoapPolicyInput {
+  const _$_GetPoapPolicyInput(
+      {required this.network,
+      required this.address,
+      @JsonKey(includeIfNull: false) this.target});
+
+  factory _$_GetPoapPolicyInput.fromJson(Map<String, dynamic> json) =>
+      _$$_GetPoapPolicyInputFromJson(json);
+
+  @override
+  final String network;
+  @override
+  final String address;
+  @override
+  @JsonKey(includeIfNull: false)
+  final String? target;
+
+  @override
+  String toString() {
+    return 'GetPoapPolicyInput(network: $network, address: $address, target: $target)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_GetPoapPolicyInput &&
+            (identical(other.network, network) || other.network == network) &&
+            (identical(other.address, address) || other.address == address) &&
+            (identical(other.target, target) || other.target == target));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, network, address, target);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$_GetPoapPolicyInputCopyWith<_$_GetPoapPolicyInput> get copyWith =>
+      __$$_GetPoapPolicyInputCopyWithImpl<_$_GetPoapPolicyInput>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_GetPoapPolicyInputToJson(
+      this,
+    );
+  }
+}
+
+abstract class _GetPoapPolicyInput implements GetPoapPolicyInput {
+  const factory _GetPoapPolicyInput(
+          {required final String network,
+          required final String address,
+          @JsonKey(includeIfNull: false) final String? target}) =
+      _$_GetPoapPolicyInput;
+
+  factory _GetPoapPolicyInput.fromJson(Map<String, dynamic> json) =
+      _$_GetPoapPolicyInput.fromJson;
+
+  @override
+  String get network;
+  @override
+  String get address;
+  @override
+  @JsonKey(includeIfNull: false)
+  String? get target;
+  @override
+  @JsonKey(ignore: true)
+  _$$_GetPoapPolicyInputCopyWith<_$_GetPoapPolicyInput> get copyWith =>
+      throw _privateConstructorUsedError;
+}
