@@ -8,13 +8,13 @@ part of 'onboarding_inputs.dart';
 
 _$_GetProfileInput _$$_GetProfileInputFromJson(Map<String, dynamic> json) =>
     _$_GetProfileInput(
-      userId: json['userId'] as String?,
+      id: json['id'] as String?,
       username: json['username'] as String?,
     );
 
 Map<String, dynamic> _$$_GetProfileInputToJson(_$_GetProfileInput instance) =>
     <String, dynamic>{
-      'userId': instance.userId,
+      'id': instance.id,
       'username': instance.username,
     };
 
