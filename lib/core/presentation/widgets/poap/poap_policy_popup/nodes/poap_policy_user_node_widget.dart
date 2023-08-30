@@ -1,3 +1,4 @@
+import 'package:app/core/domain/onboarding/onboarding_inputs.dart';
 import 'package:app/core/domain/poap/entities/poap_entities.dart';
 import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -21,7 +22,7 @@ class PoapPolicyUserNodeWidget extends StatelessWidget {
     final t = Translations.of(context);
     final userId = node.children?[0].value ?? '';
     return FutureBuilder(
-      future: getIt<UserRepository>().getUserProfile(userId: userId),
+      future: getIt<UserRepository>().getUserProfile(GetProfileInput(id: userId)),
       builder: (context, snapshot) {
         final user = snapshot.data?.fold((l) => null, (user) => user);
         

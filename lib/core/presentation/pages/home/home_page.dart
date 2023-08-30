@@ -18,7 +18,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:visibility_detector/visibility_detector.dart';
 
 @RoutePage()
 class HomePage extends StatelessWidget {
@@ -39,18 +38,7 @@ class HomePage extends StatelessWidget {
       ],
       child: Builder(
         builder: (context) {
-          return VisibilityDetector(
-            key: const Key('HomePageVisibilityDetector'),
-            onVisibilityChanged: (info) {
-              if (info.visibleFraction == 1) {
-                //Whenever this screen is appear on screen, fetch latest news feed
-                context
-                    .read<NewsfeedListingBloc>()
-                    .add(NewsfeedListingEvent.fetch());
-              }
-            },
-            child: const _HomeListingView(),
-          );
+          return const _HomeListingView();
         },
       ),
     );
@@ -102,7 +90,13 @@ class _HomePageViewState extends State<_HomeListingView> {
       floatingActionButton: Padding(
         padding: EdgeInsets.only(bottom: BottomBar.bottomBarHeight),
         child: FloatingCreateButton(
-          onTap: () => context.router.push(const CreatePostRoute()),
+          onTap: () => context.router.push(
+            CreatePostRoute(
+              onPostCreated: () => context.read<NewsfeedListingBloc>().add(
+                    NewsfeedListingEvent.fetch(),
+                  ),
+            ),
+          ),
         ),
       ),
     );

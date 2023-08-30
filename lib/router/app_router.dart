@@ -16,6 +16,7 @@ class AppRouter extends $AppRouter {
           children: [
             AutoRoute(
               path: '',
+              initial: true,
               page: HomeRoute.page,
             ),
             AutoRoute(
@@ -66,7 +67,6 @@ class AppRouter extends $AppRouter {
           fullscreenDialog: true,
         ),
         AutoRoute(
-          path: '/create_post',
           page: CreatePostRoute.page,
         ),
         AutoRoute(
@@ -74,7 +74,7 @@ class AppRouter extends $AppRouter {
         ),
         AutoRoute(
           page: OnboardingWrapperRoute.page,
-          children:[
+          children: [
             AutoRoute(
               page: OnboardingUsernameRoute.page,
             ),
