@@ -20,7 +20,7 @@ GetProfileInput _$GetProfileInputFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$GetProfileInput {
-  String? get userId => throw _privateConstructorUsedError;
+  String? get id => throw _privateConstructorUsedError;
   String? get username => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -35,7 +35,7 @@ abstract class $GetProfileInputCopyWith<$Res> {
           GetProfileInput value, $Res Function(GetProfileInput) then) =
       _$GetProfileInputCopyWithImpl<$Res, GetProfileInput>;
   @useResult
-  $Res call({String? userId, String? username});
+  $Res call({String? id, String? username});
 }
 
 /// @nodoc
@@ -51,13 +51,13 @@ class _$GetProfileInputCopyWithImpl<$Res, $Val extends GetProfileInput>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? userId = freezed,
+    Object? id = freezed,
     Object? username = freezed,
   }) {
     return _then(_value.copyWith(
-      userId: freezed == userId
-          ? _value.userId
-          : userId // ignore: cast_nullable_to_non_nullable
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
               as String?,
       username: freezed == username
           ? _value.username
@@ -75,7 +75,7 @@ abstract class _$$_GetProfileInputCopyWith<$Res>
       __$$_GetProfileInputCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String? userId, String? username});
+  $Res call({String? id, String? username});
 }
 
 /// @nodoc
@@ -89,13 +89,13 @@ class __$$_GetProfileInputCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? userId = freezed,
+    Object? id = freezed,
     Object? username = freezed,
   }) {
     return _then(_$_GetProfileInput(
-      userId: freezed == userId
-          ? _value.userId
-          : userId // ignore: cast_nullable_to_non_nullable
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
               as String?,
       username: freezed == username
           ? _value.username
@@ -108,19 +108,19 @@ class __$$_GetProfileInputCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_GetProfileInput implements _GetProfileInput {
-  _$_GetProfileInput({this.userId, this.username});
+  _$_GetProfileInput({this.id, this.username});
 
   factory _$_GetProfileInput.fromJson(Map<String, dynamic> json) =>
       _$$_GetProfileInputFromJson(json);
 
   @override
-  final String? userId;
+  final String? id;
   @override
   final String? username;
 
   @override
   String toString() {
-    return 'GetProfileInput(userId: $userId, username: $username)';
+    return 'GetProfileInput(id: $id, username: $username)';
   }
 
   @override
@@ -128,14 +128,14 @@ class _$_GetProfileInput implements _GetProfileInput {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_GetProfileInput &&
-            (identical(other.userId, userId) || other.userId == userId) &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.username, username) ||
                 other.username == username));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, userId, username);
+  int get hashCode => Object.hash(runtimeType, id, username);
 
   @JsonKey(ignore: true)
   @override
@@ -152,14 +152,14 @@ class _$_GetProfileInput implements _GetProfileInput {
 }
 
 abstract class _GetProfileInput implements GetProfileInput {
-  factory _GetProfileInput({final String? userId, final String? username}) =
+  factory _GetProfileInput({final String? id, final String? username}) =
       _$_GetProfileInput;
 
   factory _GetProfileInput.fromJson(Map<String, dynamic> json) =
       _$_GetProfileInput.fromJson;
 
   @override
-  String? get userId;
+  String? get id;
   @override
   String? get username;
   @override
