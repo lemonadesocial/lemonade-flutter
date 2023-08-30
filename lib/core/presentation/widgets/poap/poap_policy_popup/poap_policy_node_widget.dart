@@ -1,6 +1,5 @@
-// ignore_for_file: use_if_null_to_convert_nulls_to_bools, avoid_bool_literals_in_conditional_expressions
-
 import 'package:app/core/domain/poap/entities/poap_entities.dart';
+import 'package:app/core/domain/poap/poap_enums.dart';
 import 'package:app/core/presentation/widgets/poap/poap_policy_popup/nodes/poap_policy_email_node_widget.dart';
 import 'package:app/core/presentation/widgets/poap/poap_policy_popup/nodes/poap_policy_event_node_widget.dart';
 import 'package:app/core/presentation/widgets/poap/poap_policy_popup/nodes/poap_policy_location_node_widget.dart';
@@ -26,18 +25,22 @@ class PoapPolicyNodeWidget extends StatelessWidget {
 
     if (node == null) return const SizedBox.shrink();
 
-    if (node?.children?.isNotEmpty == true) {
+    if (node?.children != null && node!.children!.isNotEmpty) {
       final excludedResultNodes = <PoapPolicyNode>[];
 
       for (final nodeItem in node!.children!) {
-        if (nodeItem.value == 'result') {
-          result = nodeItem.children!.isNotEmpty ? nodeItem.children![0].value == 'true' : false;
+        if (nodeItem.value == PoapNodeValueType.result.value) {
+          if (nodeItem.children == null || nodeItem.children!.isEmpty) {
+            result = false;
+          } else {
+            result = nodeItem.children![0].value == 'true';
+          }
         } else {
           excludedResultNodes.add(nodeItem);
         }
       }
 
-      if (node!.value == 'and') {
+      if (node!.value == PoapNodeValueType.and.value) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
@@ -46,7 +49,7 @@ class PoapPolicyNodeWidget extends StatelessWidget {
             final nodeItem = entry.value;
             final isLast = index == excludedResultNodes.length - 1;
 
-            if (nodeItem.value == 'or') {
+            if (nodeItem.value == PoapNodeValueType.or.value) {
               return Column(
                 children: [
                   PoapPolicyNodeWidget(node: nodeItem),
@@ -73,7 +76,7 @@ class PoapPolicyNodeWidget extends StatelessWidget {
         );
       }
 
-      if (node!.value == 'or') {
+      if (node!.value == PoapNodeValueType.or.value) {
         return _NodeContainer(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -102,42 +105,44 @@ class PoapPolicyNodeWidget extends StatelessWidget {
       }
     }
 
-    if (node!.value == 'user-geolocation' && node?.children?.isNotEmpty == true) {
+    final isNodeChildrenEmpty = node!.children == null || node!.children!.isEmpty;
+
+    if (node!.value == PoapNodeValueType.userGeolocation.value && !isNodeChildrenEmpty) {
       return _NodeContainer(
         wrap: wrap,
         child: PoapPolicyLocationNodeWidget(node: node!, result: result),
       );
     }
 
-    if (node!.value == 'event-access' && node?.children?.isNotEmpty == true) {
+    if (node!.value == PoapNodeValueType.eventAccess.value && !isNodeChildrenEmpty) {
       return _NodeContainer(
         wrap: wrap,
         child: PoapPolicyEventNodeWidget(node: node!, result: result),
       );
     }
 
-    if (node!.value == 'twitter-follow' && node?.children?.isNotEmpty == true) {
+    if (node!.value == PoapNodeValueType.twitterFollow.value && !isNodeChildrenEmpty) {
       return _NodeContainer(
         wrap: wrap,
         child: PoapPolicyTwitterNodeWidget(node: node!, result: result),
       );
     }
 
-    if (node!.value == 'user-follow' && node?.children?.isNotEmpty == true) {
+    if (node!.value == PoapNodeValueType.userFollow.value && !isNodeChildrenEmpty) {
       return _NodeContainer(
         wrap: wrap,
         child: PoapPolicyUserNodeWidget(node: node!, result: result),
       );
     }
 
-    if (node!.value == 'user-email-verified') {
+    if (node!.value == PoapNodeValueType.userEmailVerified.value) {
       return _NodeContainer(
         wrap: wrap,
         child: PoapPolicyEmailNodeWidget(node: node!, result: result),
       );
     }
 
-    if (node!.value == 'user-phone-verified') {
+    if (node!.value == PoapNodeValueType.userPhoneVerified.value) {
       return _NodeContainer(
         wrap: wrap,
         child: PoapPolicyPhoneNodeWidget(node: node!, result: result),
