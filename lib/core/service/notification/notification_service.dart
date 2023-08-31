@@ -4,8 +4,8 @@ import 'package:app/core/failure.dart';
 import 'package:dartz/dartz.dart';
 
 class NotificationService {
-  final NotificationRepository notificationRepository;
   NotificationService(this.notificationRepository);
+  final NotificationRepository notificationRepository;
 
   Future<Either<Failure, List<Notification>>> getNotifications() async {
     return await notificationRepository.getNotifications();

@@ -6,11 +6,11 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'notifications_listing_bloc.freezed.dart';
 
 class NotificationsListingBloc extends Bloc<NotificationsListingEvent, NotificationsListingState> {
-  final NotificationService notificationService;
   NotificationsListingBloc(this.notificationService) : super(NotificationsListingState.loading()) {
     on<NotificationsListingEventFetch>(_onFetch);
     on<NotificationsListingEventRemoveItem>(_onRemoveItem);
   }
+  final NotificationService notificationService;
 
   _onFetch(NotificationsListingEventFetch event, Emitter emit) async {
     final result = await notificationService.getNotifications();
@@ -25,11 +25,11 @@ class NotificationsListingBloc extends Bloc<NotificationsListingEvent, Notificat
   }
 
   _onRemoveItem(NotificationsListingEventRemoveItem event, Emitter emit) async {
-    List<Notification> currentList = state.maybeWhen(
+    final currentList = state.maybeWhen(
       fetched: (notifications) => notifications,
       orElse: () => [],
     );
-    List<Notification> newList = currentList.where((item) => item.id != event.notification.id).toList();
+    final newList = currentList.where((item) => item.id != event.notification.id).toList();
     emit(NotificationsListingState.fetched(notifications: newList));
   }
 }

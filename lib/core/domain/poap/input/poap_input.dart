@@ -1,4 +1,3 @@
-import 'package:app/core/domain/poap/entities/poap_entities.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'poap_input.freezed.dart';

@@ -16,7 +16,7 @@ class NewsfeedRepositoryImpl implements NewsfeedRepository {
 
   @override
   Future<Either<Failure, Newsfeed>> getNewsfeed(
-      {GetNewsfeedInput? input}) async {
+      {GetNewsfeedInput? input,}) async {
     final result = await _client.query(
       QueryOptions(
           document: getNewsfeedQuery,
@@ -26,7 +26,7 @@ class NewsfeedRepositoryImpl implements NewsfeedRepository {
               return Newsfeed();
             }
             return Newsfeed.fromDto(NewsfeedDto.fromJson(data['getNewsfeed']));
-          }),
+          },),
     );
     if (result.hasException) return Left(Failure());
     return Right(result.parsedData!);

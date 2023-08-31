@@ -4,42 +4,40 @@ import 'dart:io';
 import 'package:app/core/presentation/pages/chat/chat_message/view/chat_message_view.dart';
 import 'package:app/core/service/matrix/matrix_service.dart';
 import 'package:app/core/utils/chat/matrix_client_ios_badge_extension.dart';
-import 'package:app/gen/assets.gen.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 import 'package:matrix/matrix.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
 @RoutePage()
 class ChatPage extends StatelessWidget {
-  final Widget? sideView;
-  final String roomId;
 
   const ChatPage({
     Key? key,
     this.sideView,
-    @PathParam("id") required this.roomId,
+    @PathParam('id') required this.roomId,
   }) : super(key: key);
+  final Widget? sideView;
+  final String roomId;
 
   @override
   Widget build(BuildContext context) {
     final room = getIt<MatrixService>().client.getRoomById(roomId);
-    if (room == null) return SizedBox.shrink();
+    if (room == null) return const SizedBox.shrink();
     return ChatPageWithRoom(sideView: sideView, room: room);
   }
 }
 
 class ChatPageWithRoom extends StatefulWidget {
-  final Widget? sideView;
-  final Room room;
 
   const ChatPageWithRoom({
     Key? key,
     required this.sideView,
     required this.room,
   }) : super(key: key);
+  final Widget? sideView;
+  final Room room;
 
   @override
   ChatController createState() => ChatController();
@@ -130,7 +128,7 @@ class ChatController extends State<ChatPageWithRoom> {
     }
   }
 
-  void requestHistory() async {
+  Future<void> requestHistory() async {
     if (!timeline!.canRequestHistory) return;
     Logs().v('Requesting history...');
     try {
@@ -140,7 +138,7 @@ class ChatController extends State<ChatPageWithRoom> {
     }
   }
 
-  void requestFuture() async {
+  Future<void> requestFuture() async {
     final timeline = this.timeline;
     if (timeline == null) return;
     if (!timeline.canRequestFuture) return;
@@ -185,7 +183,7 @@ class ChatController extends State<ChatPageWithRoom> {
     }
   }
 
-  void scrollDown() async {
+  Future<void> scrollDown() async {
     if (!timeline!.allowNewEvent) {
       setState(() {
         timeline = null;
@@ -253,7 +251,7 @@ class ChatController extends State<ChatPageWithRoom> {
   }
 
   Future<void> sendEmojiAction({required Event event, required String emoji}) async {
-    Iterable<Event> _allReactionEvents = event
+    final allReactionEvents = event
         .aggregatedEvents(
           timeline!,
           RelationshipTypes.reaction,
@@ -262,7 +260,7 @@ class ChatController extends State<ChatPageWithRoom> {
           (event) => event.senderId == event.room.client.userID && event.type == 'm.reaction',
         );
     // prevent duplicated reactions
-    bool reacted = _allReactionEvents.any(
+    final reacted = allReactionEvents.any(
       (e) => e.content.tryGetMap('m.relates_to')?['key'] == emoji,
     );
     if (reacted) return;
@@ -275,8 +273,7 @@ class ChatController extends State<ChatPageWithRoom> {
   void selectEditEventAction(Event? event) => setState(() {
         editEvent = event;
         inputText = sendController.text = editEvent!.getDisplayEvent(timeline!).calcLocalizedBodyFallback(
-              MatrixDefaultLocalizations(),
-              withSenderNamePrefix: false,
+              const MatrixDefaultLocalizations(),
               hideReply: true,
             );
       });

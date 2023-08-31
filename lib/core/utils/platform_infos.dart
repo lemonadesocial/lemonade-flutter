@@ -1,8 +1,8 @@
 import 'dart:io';
 
+import 'package:app/core/config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:app/core/config.dart';
 
 abstract class PlatformInfos {
   static bool get isWeb => kIsWeb;
@@ -23,7 +23,7 @@ abstract class PlatformInfos {
 
   static bool get usesTouchscreen => !isMobile;
 
-  static bool get platformCanRecord => (isMobile || isMacOS);
+  static bool get platformCanRecord => isMobile || isMacOS;
 
   static String get clientName =>
       'Lemonade ${AppConfig.env} ${isWeb ? 'web' : Platform.operatingSystem}${kReleaseMode ? '' : 'Debug'}';

@@ -10,11 +10,11 @@ import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 
 class EventBuyTicketButton extends StatelessWidget {
-  final Event event;
   const EventBuyTicketButton({
     super.key,
     required this.event,
   });
+  final Event event;
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +25,8 @@ class EventBuyTicketButton extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall, vertical: Spacing.extraSmall),
         decoration: ShapeDecoration(
           gradient: LinearGradient(
-            begin: Alignment(0.00, -1.00),
-            end: Alignment(0, 1),
+            begin: const Alignment(0, -1),
+            end: const Alignment(0, 1),
             colors: [LemonColor.arsenic, LemonColor.charlestonGreen],
           ),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(LemonRadius.normal)),
@@ -34,8 +34,7 @@ class EventBuyTicketButton extends StatelessWidget {
             BoxShadow(
               color: LemonColor.shadow,
               blurRadius: 4,
-              offset: Offset(0, 2),
-              spreadRadius: 0,
+              offset: const Offset(0, 2),
             )
           ],
         ),
@@ -52,13 +51,13 @@ class EventBuyTicketButton extends StatelessWidget {
             SizedBox(width: Spacing.superExtraSmall),
             Text(
               event.cost != null
-                  ? '${NumberUtils.formatCurrency(
+                  ? NumberUtils.formatCurrency(
                       amount: event.cost!,
                       currency: event.currency,
                       freeText: t.event.free,
                       prefix: '${t.event.buy} • ',
-                    )}'
-                  : '${t.event.free}',
+                    )
+                  : t.event.free,
               style: Typo.small.copyWith(color: colorScheme.onPrimary),
             )
           ],

@@ -2,7 +2,6 @@ import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/presentation/widgets/app_limit_layout_builder_widget.dart';
 import 'package:app/core/service/firebase/firebase_service.dart';
 import 'package:app/core/service/matrix/matrix_service.dart';
-import 'package:app/core/utils/navigation_utils.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
@@ -80,9 +79,9 @@ class _LemonadeAppViewState extends State<LemonadeApp> {
     final initialMessage = await FirebaseMessaging.instance.getInitialMessage();
     if (initialMessage != null) {
       try {
-        String type = initialMessage.data['type'];
-        String objectId = initialMessage.data['object_id'];
-        String objectType = initialMessage.data['object_type'];
+        final String type = initialMessage.data['type'];
+        final String objectId = initialMessage.data['object_id'];
+        final String objectType = initialMessage.data['object_type'];
         // NavigationUtils.handleNotificationNavigate(context, type, objectType, objectId);
       } catch (e) {
         print('Error parsing JSON: $e');
@@ -92,8 +91,8 @@ class _LemonadeAppViewState extends State<LemonadeApp> {
 }
 
 class _App extends StatelessWidget {
-  final AppRouter router;
   const _App(this.router);
+  final AppRouter router;
 
   @override
   Widget build(BuildContext context) {
@@ -112,9 +111,9 @@ class _App extends StatelessWidget {
     );
   }
 
-  get _supportedLocales => AppLocaleUtils.supportedLocales;
+  List<Locale> get _supportedLocales => AppLocaleUtils.supportedLocales;
 
-  get _localizationsDelegates => GlobalMaterialLocalizations.delegates;
+  List<LocalizationsDelegate> get _localizationsDelegates => GlobalMaterialLocalizations.delegates;
 
   Locale _getCurrentLocale(BuildContext context) =>
       TranslationProvider.of(context).flutterLocale;

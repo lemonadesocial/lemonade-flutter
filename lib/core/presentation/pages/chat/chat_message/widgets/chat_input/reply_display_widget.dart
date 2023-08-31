@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:matrix/matrix.dart';
 
 class ReplyDisplay extends StatelessWidget {
-  final ChatController controller;
   const ReplyDisplay(this.controller, {Key? key}) : super(key: key);
+  final ChatController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,6 @@ class ReplyDisplay extends StatelessWidget {
               ),
             ),
             child: Row(
-              mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Flexible(
@@ -40,7 +39,7 @@ class ReplyDisplay extends StatelessWidget {
                 ),
                 IconButton(
                   icon: const Icon(Icons.close),
-                  onPressed: () => controller.cancelReplyOrEditEventAction(),
+                  onPressed: controller.cancelReplyOrEditEventAction,
                 ),
               ],
             ),
@@ -50,9 +49,9 @@ class ReplyDisplay extends StatelessWidget {
 }
 
 class _EditContent extends StatelessWidget {
-  final Event? event;
 
   const _EditContent(this.event);
+  final Event? event;
 
   @override
   Widget build(BuildContext context) {
@@ -70,16 +69,14 @@ class _EditContent extends StatelessWidget {
         Flexible(
           child: FutureBuilder<String>(
             future: event.calcLocalizedBody(
-              MatrixDefaultLocalizations(),
-              withSenderNamePrefix: false,
+              const MatrixDefaultLocalizations(),
               hideReply: true,
             ),
             builder: (context, snapshot) {
               return Text(
                 snapshot.data ??
                     event.calcLocalizedBodyFallback(
-                      MatrixDefaultLocalizations(),
-                      withSenderNamePrefix: false,
+                      const MatrixDefaultLocalizations(),
                       hideReply: true,
                     ),
                 overflow: TextOverflow.ellipsis,

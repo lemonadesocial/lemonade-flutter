@@ -5,8 +5,8 @@ import 'package:app/core/failure.dart';
 import 'package:dartz/dartz.dart';
 
 class NewsfeedService {
-  final NewsfeedRepository newsfeedRepository;
   NewsfeedService(this.newsfeedRepository);
+  final NewsfeedRepository newsfeedRepository;
 
   Future<Either<Failure, Newsfeed>> getNewsfeed({GetNewsfeedInput? input}) {
     return newsfeedRepository.getNewsfeed(input: input);

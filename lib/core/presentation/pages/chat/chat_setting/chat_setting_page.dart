@@ -8,7 +8,7 @@ class ChatSettingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       appBar: LemonAppBar(),
       body: Center(
         child: Text('Chat setting'),

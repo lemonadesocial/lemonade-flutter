@@ -1,21 +1,20 @@
-import 'package:app/core/utils/avatar_utils.dart';
-import 'package:app/gen/assets.gen.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/gen/assets.gen.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
 
 class LemonCircleAvatar extends StatelessWidget {
-  final String url;
-  final double? size;
-  final String? label;
   const LemonCircleAvatar({
     super.key,
     required this.url,
     this.size,
     this.label,
   });
+  final String url;
+  final double? size;
+  final String? label;
 
   double get avatarSize => size ?? Sizing.regular;
 
@@ -49,7 +48,7 @@ class LemonCircleAvatar extends StatelessWidget {
             placeholder: (ctx, url) => _buildPlaceHolder(),
             errorWidget: (ctx, url, error) => _buildPlaceHolder(),
           ),
-        ));
+        ),);
   }
 
   Widget _buildPlaceHolder() => Center(

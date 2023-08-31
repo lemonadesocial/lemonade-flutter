@@ -1,10 +1,10 @@
 import 'package:app/core/data/event/dtos/event_dtos.dart';
 import 'package:app/core/data/event/event_query.dart';
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/core/domain/event/input/get_events_listing_input.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/core/gql.dart';
-import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:dartz/dartz.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';

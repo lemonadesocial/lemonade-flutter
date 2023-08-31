@@ -7,9 +7,6 @@ import 'package:linkify/linkify.dart';
 import 'package:matrix/matrix.dart';
 
 class HtmlMessage extends StatelessWidget {
-  final String html;
-  final Room room;
-  final Color textColor;
 
   const HtmlMessage({
     Key? key,
@@ -17,6 +14,9 @@ class HtmlMessage extends StatelessWidget {
     required this.room,
     this.textColor = Colors.black,
   }) : super(key: key);
+  final String html;
+  final Room room;
+  final Color textColor;
 
   @override
   Widget build(BuildContext context) {
@@ -30,13 +30,12 @@ class HtmlMessage extends StatelessWidget {
       RegExp(
         '<mx-reply>.*</mx-reply>',
         caseSensitive: false,
-        multiLine: false,
         dotAll: true,
       ),
       '',
     );
 
-    double fontSize = 14;
+    const fontSize = 14;
 
     final linkifiedRenderHtml = linkify(
       renderHtml,
@@ -51,7 +50,7 @@ class HtmlMessage extends StatelessWidget {
         }
         return '<a href="${element.url}">${element.text}</a>';
       },
-    ).join('');
+    ).join();
 
     final linkColor = textColor.withAlpha(150);
 
@@ -227,9 +226,9 @@ class FontColorExtension extends HtmlExtension {
 }
 
 class ImageExtension extends HtmlExtension {
-  final double defaultDimension;
 
   const ImageExtension({this.defaultDimension = 64});
+  final double defaultDimension;
 
   @override
   Set<String> get supportedTags => {'img'};
@@ -260,9 +259,9 @@ class ImageExtension extends HtmlExtension {
 }
 
 class SpoilerExtension extends HtmlExtension {
-  final Color textColor;
 
   const SpoilerExtension({required this.textColor});
+  final Color textColor;
 
   @override
   Set<String> get supportedTags => {'span'};
@@ -300,10 +299,10 @@ class SpoilerExtension extends HtmlExtension {
 }
 
 class RoomPillExtension extends HtmlExtension {
-  final Room room;
-  final BuildContext context;
 
   RoomPillExtension(this.context, this.room);
+  final Room room;
+  final BuildContext context;
   @override
   Set<String> get supportedTags => {'a'};
 
@@ -360,10 +359,6 @@ class RoomPillExtension extends HtmlExtension {
 }
 
 class MatrixPill extends StatelessWidget {
-  final String name;
-  final BuildContext outerContext;
-  final Uri? avatar;
-  final String uri;
 
   const MatrixPill({
     super.key,
@@ -372,6 +367,10 @@ class MatrixPill extends StatelessWidget {
     this.avatar,
     required this.uri,
   });
+  final String name;
+  final BuildContext outerContext;
+  final Uri? avatar;
+  final String uri;
 
   @override
   Widget build(BuildContext context) {
@@ -383,8 +382,8 @@ class MatrixPill extends StatelessWidget {
           Text(
             '@$name',
             style: Typo.medium.copyWith(
-              fontWeight: FontWeight.w700
-            )
+              fontWeight: FontWeight.w700,
+            ),
           ),
         ],
       ),

@@ -1,5 +1,4 @@
 import 'package:app/core/config.dart';
-import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/utils/image_utils.dart';
 
@@ -9,9 +8,9 @@ class AvatarUtils {
     int length,
     String Function(int) template,
   ) {
-    int idLength = id.length;
-    int hash = 0;
-    for (int i = 0; i < idLength; i++) {
+    final idLength = id.length;
+    var hash = 0;
+    for (var i = 0; i < idLength; i++) {
       hash += id.codeUnitAt(i);
     }
     return template((hash % length) + 1);
@@ -22,7 +21,7 @@ class AvatarUtils {
       id,
       10,
       (num) =>
-          '${AppConfig.assetPrefix}/assets/images/avatars/lemonade_davatar_${num}.png',
+          '${AppConfig.assetPrefix}/assets/images/avatars/lemonade_davatar_$num.png',
     );
   }
 
@@ -31,7 +30,7 @@ class AvatarUtils {
     bool useRandomUserImage = true,
   }) {
     if (user != null && user.newPhotosExpanded?.isNotEmpty == true) {
-      DbFile? photo = user.newPhotosExpanded?.isNotEmpty == true
+      final photo = user.newPhotosExpanded?.isNotEmpty == true
           ? user.newPhotosExpanded![0]
           : null;
       return ImageUtils.generateUrl(file: photo);

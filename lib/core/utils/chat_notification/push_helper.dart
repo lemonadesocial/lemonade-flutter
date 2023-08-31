@@ -36,16 +36,16 @@ Future<void> pushHelper(
 
     flutterLocalNotificationsPlugin.show(
       0,
-      "newMessageInLemonadeChat",
-      "openAppToReadMessages",
+      'newMessageInLemonadeChat',
+      'openAppToReadMessages',
       NotificationDetails(
         iOS: const DarwinNotificationDetails(),
         android: AndroidNotificationDetails(
-          "lemonadechat_push",
-          "LemonadeChat push channel",
+          'lemonadechat_push',
+          'LemonadeChat push channel',
           channelDescription: 'Push notifications for LemonadeChat',
           number: notification.counts?.unread,
-          ticker: "Unread chats",
+          ticker: 'Unread chats',
           // ticker: t.chat.unread_chats(unreadCount: notification.counts?.unread ?? 1),
           importance: Importance.max,
           priority: Priority.max,
@@ -182,11 +182,11 @@ Future<void> _tryPushHelper(
   messagingStyleInformation?.messages?.add(newMessage);
 
   final roomName =
-      event.room.getLocalizedDisplayname(MatrixDefaultLocalizations());
+      event.room.getLocalizedDisplayname();
 
   final notificationGroupId =
       event.room.isDirectChat ? 'directChats' : 'groupChats';
-  final groupName = event.room.isDirectChat ? "Direct chat" : "Group";
+  final groupName = event.room.isDirectChat ? 'Direct chat' : 'Group';
   
   final messageRooms = AndroidNotificationChannelGroup(
     notificationGroupId,

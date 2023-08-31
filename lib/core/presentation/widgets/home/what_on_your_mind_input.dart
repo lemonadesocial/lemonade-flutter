@@ -7,16 +7,18 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 class WhatOnYourMindInput extends StatelessWidget {
+  const WhatOnYourMindInput({super.key});
+
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final themeColor = Theme.of(context).colorScheme;
     return GestureDetector(
-      onTap: () => context.router.push(CreatePostRoute()),
+      onTap: () => context.router.push(const CreatePostRoute()),
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12), color: themeColor.outline),
+            borderRadius: BorderRadius.circular(12), color: themeColor.outline,),
         child: Row(
           children: [
             Expanded(
@@ -27,7 +29,7 @@ class WhatOnYourMindInput extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () {
-                print("Edit icon tapped!");
+                print('Edit icon tapped!');
               },
               child: ThemeSvgIcon(
                 color: themeColor.onSecondary,

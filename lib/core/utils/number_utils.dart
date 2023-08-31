@@ -13,12 +13,12 @@ class NumberUtils {
     amount = amount / 100;
 
 
-    var decimals = amount % 1 == 0 ? attemptedDecimals : 2;
+    final decimals = amount % 1 == 0 ? attemptedDecimals : 2;
 
     if (amount == 0 && showFree) {
       return freeText ?? 'free';
     } else {
-      var formattedAmount = NumberFormat.currency(
+      final formattedAmount = NumberFormat.currency(
         symbol: NumberFormat.simpleCurrency(name: currency?.name).currencySymbol,
         decimalDigits: decimals,
       ).format(amount);

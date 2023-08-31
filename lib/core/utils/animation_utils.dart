@@ -14,8 +14,8 @@ class AnimationUtils {
     required double itemWidth,
     required double separatorWidth,
   }) {
-    double totalWidthForOneItemAndSeparator = itemWidth + separatorWidth;
-    int numberOfItems = (rowWidth / totalWidthForOneItemAndSeparator).ceil();
+    final totalWidthForOneItemAndSeparator = itemWidth + separatorWidth;
+    final numberOfItems = (rowWidth / totalWidthForOneItemAndSeparator).ceil();
     return numberOfItems;
   }
 
@@ -23,7 +23,7 @@ class AnimationUtils {
     required List<T> list,
     required int chunkSize,
   }) {
-    List<List<T>> chunks = [];
+    final chunks = <List<T>>[];
     for (var i = 0; i < list.length; i += chunkSize) {
       chunks.add(list.sublist(i, i + chunkSize > list.length ? list.length : i + chunkSize));
     }

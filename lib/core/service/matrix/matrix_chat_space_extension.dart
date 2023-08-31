@@ -6,18 +6,18 @@ extension MatrixChatSpaceExtension on MatrixService {
   static String activeChatSpaceKey = 'lemonade_chat_space_id';
 
   Future<String?> getActiveChatSpaceId() async {
-    Box box = await Hive.openBox(chatSpaceBoxKey);
-    var spaceId = box.get(activeChatSpaceKey) as String?;
+    final box = await Hive.openBox(chatSpaceBoxKey);
+    final spaceId = box.get(activeChatSpaceKey) as String?;
     return spaceId;
   }
 
   Future<void> setActiveChatSpaceId(String? spaceId) async {
-    Box box = await Hive.openBox(chatSpaceBoxKey);
+    final box = await Hive.openBox(chatSpaceBoxKey);
     box.put(activeChatSpaceKey, spaceId);
   }
 
   Future<void> clearChatSpaceBox() async {
-    Box box = await Hive.openBox(chatSpaceBoxKey);
+    final box = await Hive.openBox(chatSpaceBoxKey);
     await box.clear();
   }
 }

@@ -23,7 +23,7 @@ class SnackBarUtils {
         ),
         behavior: SnackBarBehavior.floating,
         backgroundColor: _colorScheme?.primary ?? LemonColor.black,
-        margin: EdgeInsets.only(bottom: 50),
+        margin: const EdgeInsets.only(bottom: 50),
       ),
     );
   }

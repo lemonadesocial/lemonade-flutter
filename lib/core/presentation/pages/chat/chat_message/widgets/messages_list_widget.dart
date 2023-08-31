@@ -6,18 +6,16 @@ import 'package:app/core/presentation/pages/chat/chat_message/widgets/message_it
 import 'package:app/core/presentation/pages/chat/chat_message/widgets/message_item/typing_indicator_widget.dart';
 import 'package:app/core/utils/bottomsheet_utils.dart';
 import 'package:app/core/utils/chat/filter_event_timeline_extension.dart';
-import 'package:app/theme/sizing.dart';
-import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
 class MessagesList extends StatelessWidget {
-  final ChatController controller;
   const MessagesList({
     Key? key,
     required this.controller,
   }) : super(key: key);
+  final ChatController controller;
 
   int? findChildIndexCallback(Key key, Map<String, int> thisEventsKeyMap) {
     // this method is called very often. As such, it has to be optimized for speed.
@@ -37,7 +35,7 @@ class MessagesList extends StatelessWidget {
     return index + 1;
   }
 
-  _createEventsKeyMap() {
+  Map<String, int> _createEventsKeyMap() {
     // create a map of eventId --> index to greatly improve performance of
     // ListView's findChildIndexCallback
     final eventsKeyMap = <String, int>{};
@@ -59,7 +57,7 @@ class MessagesList extends StatelessWidget {
           ? ScrollViewKeyboardDismissBehavior.onDrag
           : ScrollViewKeyboardDismissBehavior.manual,
       childrenDelegate: SliverChildBuilderDelegate(
-        (BuildContext context, int i) {
+        (context, i) {
           // Footer to display typing indicator and read receipts:
           if (i == 0) {
             if (controller.timeline?.isRequestingFuture == true) {
@@ -104,8 +102,8 @@ class MessagesList extends StatelessWidget {
                             },
                             onReact: (emoji) {
                               controller.sendEmojiAction(
-                                  event: event, emoji: emoji);
-                            }),
+                                  event: event, emoji: emoji,);
+                            },),
                       );
                     },
                     onReact: (event, emoji) {

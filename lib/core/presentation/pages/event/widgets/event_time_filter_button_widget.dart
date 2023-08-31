@@ -1,19 +1,19 @@
 import 'package:app/core/domain/event/event_enums.dart';
-import 'package:app/gen/assets.gen.dart';
-import 'package:app/i18n/i18n.g.dart';
 import 'package:app/core/presentation/dpos/common/dropdown_item_dpo.dart';
 import 'package:app/core/presentation/widgets/frosted_glass_dropdown_widget.dart';
+import 'package:app/gen/assets.gen.dart';
+import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_portal/flutter_portal.dart';
 
 class EventTimeFilterButton extends StatefulWidget {
-  final Function(EventTimeFilter? eventTimeFilter)? onSelect;
   const EventTimeFilterButton({
     super.key,
     this.onSelect,
   });
+  final Function(EventTimeFilter? eventTimeFilter)? onSelect;
 
   @override
   State<EventTimeFilterButton> createState() => _EventTimeFilterButtonState();
@@ -38,7 +38,6 @@ class _EventTimeFilterButtonState extends State<EventTimeFilterButton> with Tick
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return PortalTarget(
-      visible: true,
       portalFollower: _buildDropdown(context),
       child: _buildButton(colorScheme),
     );
@@ -89,7 +88,7 @@ class _EventTimeFilterButtonState extends State<EventTimeFilterButton> with Tick
                   .map((filter) => DropdownItemDpo<EventTimeFilter>(
                         label: t['common.${filter.labelKey}'],
                         value: filter,
-                      ))
+                      ),)
                   .toList(),
               onItemPressed: (filterItem) {
                 widget.onSelect?.call(filterItem?.value);
@@ -107,7 +106,7 @@ class _EventTimeFilterButtonState extends State<EventTimeFilterButton> with Tick
       alignment: Alignment.topRight,
       scale: _animation,
       child: GestureDetector(
-        onTap: () => _hide(),
+        onTap: _hide,
         child: Container(color: Colors.transparent),
       ),
     );
@@ -125,8 +124,8 @@ class _EventTimeFilterButtonState extends State<EventTimeFilterButton> with Tick
 
   _calculatePosition() async {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      RenderBox? renderObj = _btnKey.currentContext?.findRenderObject() as RenderBox?;
-      Offset? position = renderObj?.localToGlobal(Offset.zero);
+      final renderObj = _btnKey.currentContext?.findRenderObject() as RenderBox?;
+      final position = renderObj?.localToGlobal(Offset.zero);
       setState(() {
         y = position?.dy ?? 150;
       });

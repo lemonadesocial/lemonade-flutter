@@ -76,7 +76,7 @@ class CreatePostEventCardWidget extends StatelessWidget {
                 child: LemonCircleAvatar(
                   url: ImageUtils.generateUrl(
                       file: event.hostExpanded?.newPhotosExpanded?.first,
-                      imageConfig: ImageConfig.profile),
+                      imageConfig: ImageConfig.profile,),
                   label: event.hostExpanded?.name ?? '',
                 ),
               ),

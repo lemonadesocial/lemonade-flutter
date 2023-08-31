@@ -46,7 +46,6 @@ class LemonDrawer extends StatelessWidget {
                   horizontal: Spacing.smMedium,
                 ),
                 child: Row(
-                  mainAxisSize: MainAxisSize.max,
                   children: [
                     ThemeSvgIcon(
                       color: colorScheme.onSecondary,

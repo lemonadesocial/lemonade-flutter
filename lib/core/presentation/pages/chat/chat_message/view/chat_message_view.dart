@@ -15,10 +15,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ChatMessageView extends StatelessWidget {
-  final ChatController controller;
   const ChatMessageView(
-    this.controller,
+    this.controller, {super.key,},
   );
+  final ChatController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,7 @@ class ChatMessageView extends StatelessWidget {
       appBar: LemonAppBar(
         titleBuilder: (context) => Center(
           child: ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: 200),
+            constraints: const BoxConstraints(maxWidth: 200),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -80,14 +80,13 @@ class ChatMessageView extends StatelessWidget {
               ),
             ),
             child: Column(
-              mainAxisSize: MainAxisSize.max,
               children: [
                 StreamBuilder(
                   stream: controller.room.onUpdate.stream
-                      .rateLimit(Duration(seconds: 1)),
+                      .rateLimit(const Duration(seconds: 1)),
                   builder: (context, snapshot) => FutureBuilder(
                     future: controller.loadTimelineFuture,
-                    builder: (context, _snapshot) => controller.timeline == null
+                    builder: (context, snapshot) => controller.timeline == null
                         ? Expanded(
                             child: Center(
                               child: Loading.defaultLoading(context),

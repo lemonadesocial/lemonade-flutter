@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class DrawerUtils {
-  static GlobalKey<ScaffoldState> _drawerGlobalKey = GlobalKey<ScaffoldState>();
+  static final GlobalKey<ScaffoldState> _drawerGlobalKey = GlobalKey<ScaffoldState>();
 
   static GlobalKey<ScaffoldState> get drawerGlobalKey => _drawerGlobalKey;
 

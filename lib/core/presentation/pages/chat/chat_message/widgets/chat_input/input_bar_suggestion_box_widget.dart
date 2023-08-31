@@ -7,21 +7,21 @@ import 'package:flutter/material.dart';
 import 'package:matrix/matrix.dart';
 
 class InputBarSuggestionBox extends StatelessWidget {
-  final client = getIt<MatrixService>().client;
-  final Map<String, String?> suggestion;
 
   InputBarSuggestionBox({
     super.key,
     required this.suggestion,
   });
+  final client = getIt<MatrixService>().client;
+  final Map<String, String?> suggestion;
 
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     const size = 30.0;
-    const padding = EdgeInsets.all(4.0);
+    const padding = EdgeInsets.all(4);
     if (suggestion['type'] == 'command') {
-      ChatCommand? command = ChatCommand.fromString(suggestion['name']!);
+      final command = ChatCommand.fromString(suggestion['name']!);
       final commandHint = command == null ? '' : t['chat.command.${command.name}'];
       return Tooltip(
         message: commandHint,
@@ -61,7 +61,6 @@ class InputBarSuggestionBox extends StatelessWidget {
       return Container(
         padding: padding,
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             MxcImage(
               // ensure proper ordering ...
@@ -105,7 +104,6 @@ class InputBarSuggestionBox extends StatelessWidget {
       return Container(
         padding: padding,
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             MatrixAvatar(
               mxContent: url,

@@ -11,15 +11,11 @@ import 'package:matrix/matrix.dart';
 part 'chat_list_bloc.freezed.dart';
 
 class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
-  final matrixClient = getIt<MatrixService>().client;
-  late final StreamSubscription _onSyncSub;
-
-  String? spaceId;
 
   ChatListBloc({
     this.spaceId,
   }) : super(
-          ChatListState(
+          const ChatListState(
             channelRooms: [],
             unreadDmRooms: [],
             dmRooms: [],
@@ -28,13 +24,17 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
     _onSyncSub = matrixClient.onSync.stream
         .where((sync) => sync.hasRoomUpdate)
         .rateLimit(
-          Duration(seconds: 1),
+          const Duration(seconds: 1),
         )
         .listen((_) {
-      add(ChatListEvent.fetchRooms());
+      add(const ChatListEvent.fetchRooms());
     });
     on<ChatListEventFetchRooms>(_onFetchRooms);
   }
+  final matrixClient = getIt<MatrixService>().client;
+  late final StreamSubscription _onSyncSub;
+
+  String? spaceId;
 
   @override
   close() async {
@@ -75,13 +75,13 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
   List<Room> _getRoom(String? spaceId) {
     if (spaceId == null) return matrixClient.rooms;
 
-    var space = matrixClient.getRoomById(spaceId);
+    final space = matrixClient.getRoomById(spaceId);
 
     if (space == null) return [];
 
-    List<Room> rooms = [];
+    final rooms = <Room>[];
 
-    for (var spaceChild in space.spaceChildren) {
+    for (final spaceChild in space.spaceChildren) {
       if (spaceChild.roomId != null) {
         final childRoom = matrixClient.getRoomById(spaceChild.roomId!);
         if (childRoom != null) rooms.add(childRoom);

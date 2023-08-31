@@ -6,10 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_portal/flutter_portal.dart';
 
 class FloatingFrostedGlassDropdown<T> extends StatefulWidget {
-  final Widget child;
-  final List<DropdownItemDpo<T>> items;
-  final Function(DropdownItemDpo<T>? item)? onItemPressed;
-  final Offset? offset;
 
   const FloatingFrostedGlassDropdown({
     super.key,
@@ -18,6 +14,10 @@ class FloatingFrostedGlassDropdown<T> extends StatefulWidget {
     this.onItemPressed,
     this.offset,
   });
+  final Widget child;
+  final List<DropdownItemDpo<T>> items;
+  final Function(DropdownItemDpo<T>? item)? onItemPressed;
+  final Offset? offset;
 
   @override
   State<FloatingFrostedGlassDropdown<T>> createState() => _FloatingFrostedGlassDropdown<T>();
@@ -42,7 +42,6 @@ class _FloatingFrostedGlassDropdown<T> extends State<FloatingFrostedGlassDropdow
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return PortalTarget(
-      visible: true,
       portalFollower: _buildDropdown(context),
       child: _buildChild(colorScheme),
     );
@@ -89,7 +88,7 @@ class _FloatingFrostedGlassDropdown<T> extends State<FloatingFrostedGlassDropdow
       alignment: Alignment.topRight,
       scale: _animation,
       child: GestureDetector(
-        onTap: () => _hide(),
+        onTap: _hide,
         child: Container(color: Colors.transparent),
       ),
     );
@@ -107,8 +106,8 @@ class _FloatingFrostedGlassDropdown<T> extends State<FloatingFrostedGlassDropdow
 
   _calculatePosition() async {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      RenderBox? renderObj = _btnKey.currentContext?.findRenderObject() as RenderBox?;
-      Offset? position = renderObj?.localToGlobal(Offset.zero);
+      final renderObj = _btnKey.currentContext?.findRenderObject() as RenderBox?;
+      final position = renderObj?.localToGlobal(Offset.zero);
       setState(() {
         y = position?.dy ?? 150;
       });

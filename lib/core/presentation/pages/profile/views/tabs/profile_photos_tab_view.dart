@@ -9,20 +9,20 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePhotosTabView extends StatelessWidget {
-  final User user;
   const ProfilePhotosTabView({
     super.key,
     required this.user,
   });
+  final User user;
 
   @override
   Widget build(BuildContext context) {
     final userPhotos = user.newPhotosExpanded ?? [];
     final t = Translations.of(context);
     return BaseSliverTabView(
-      name: "profile",
+      name: 'profile',
       children: [
-        SliverToBoxAdapter(
+        const SliverToBoxAdapter(
           child: SizedBox(height: 3),
         ),
         if (userPhotos.isEmpty)
@@ -34,7 +34,7 @@ class ProfilePhotosTabView extends StatelessWidget {
           SliverPadding(
             padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
             sliver: SliverGrid(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
                 crossAxisSpacing: 3,
                 mainAxisSpacing: 3,

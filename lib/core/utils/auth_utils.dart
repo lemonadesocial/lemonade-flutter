@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AuthUtils {
   static bool isMe(BuildContext context, {required User user}) {
-    String? myUserId = context.read<AuthBloc>().state.maybeWhen(
+    final myUserId = context.read<AuthBloc>().state.maybeWhen(
           authenticated: (authSession) => authSession.userId,
           orElse: () => null,
         );

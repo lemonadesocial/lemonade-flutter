@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 class ImagePlaceholder {
   static Widget eventCard() {
-    return Container(
+    return SizedBox(
       height: 200,
       width: double.infinity,
       child: Center(

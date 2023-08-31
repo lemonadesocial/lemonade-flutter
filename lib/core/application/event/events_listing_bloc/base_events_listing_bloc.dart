@@ -10,9 +10,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'base_events_listing_bloc.freezed.dart';
 
 abstract class BaseEventListingBloc<I> extends Bloc<BaseEventsListingEvent, BaseEventsListingState> {
-  final EventService eventService;
-  late final PaginationService<Event, I> paginationService = PaginationService(getDataFuture: getEvents);
-  final I defaultInput;
 
   BaseEventListingBloc(
     this.eventService, {
@@ -21,6 +18,9 @@ abstract class BaseEventListingBloc<I> extends Bloc<BaseEventsListingEvent, Base
     on<BaseEventsListingEventFetch>(_onFetch);
     on<BaseEventsListingEventFilter>(_onFilter);
   }
+  final EventService eventService;
+  late final PaginationService<Event, I> paginationService = PaginationService(getDataFuture: getEvents);
+  final I defaultInput;
 
   Future<Either<Failure, List<Event>>> getEvents(int skip, bool endReached, {required I input});
 
@@ -44,8 +44,8 @@ abstract class BaseEventListingBloc<I> extends Bloc<BaseEventsListingEvent, Base
     state.whenOrNull(fetched: (events, _) {
       emit(BaseEventsListingState.fetched(
           events: events,
-          filteredEvents: eventService.filterEventByTime(source: events, selectedFilter: timeFilterType)));
-    });
+          filteredEvents: eventService.filterEventByTime(source: events, selectedFilter: timeFilterType),),);
+    },);
   }
 }
 

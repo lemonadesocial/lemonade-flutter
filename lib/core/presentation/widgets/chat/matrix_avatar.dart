@@ -8,15 +8,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:matrix/matrix.dart';
 
 class MatrixAvatar extends StatelessWidget {
-  final Uri? mxContent;
-  final String? name;
-  final double size;
-  final void Function()? onTap;
-  static const double defaultSize = 44;
-  final Client? client;
-  final double fontSize;
-  final double? radius;
-  final PresenceType? presence;
 
   const MatrixAvatar({
     this.mxContent,
@@ -29,6 +20,15 @@ class MatrixAvatar extends StatelessWidget {
     this.presence,
     Key? key,
   }) : super(key: key);
+  final Uri? mxContent;
+  final String? name;
+  final double size;
+  final void Function()? onTap;
+  static const double defaultSize = 44;
+  final Client? client;
+  final double fontSize;
+  final double? radius;
+  final PresenceType? presence;
 
   @override
   Widget build(BuildContext context) {

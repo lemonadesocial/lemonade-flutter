@@ -70,7 +70,7 @@ class ChatListItem extends StatelessWidget {
               plaintextBody: true,
               removeMarkdown: true,
               withSenderNamePrefix: !room.isDirectChat ||
-                  room.directChatMatrixID != room.lastEvent?.senderId) ??
+                  room.directChatMatrixID != room.lastEvent?.senderId,) ??
           Future.value(t.chat.emptyChat),
       builder: (context, snapshot) {
         return Text(
@@ -85,7 +85,7 @@ class ChatListItem extends StatelessWidget {
                       removeMarkdown: true,
                       withSenderNamePrefix: !room.isDirectChat ||
                           room.directChatMatrixID !=
-                              room.lastEvent?.senderId) ??
+                              room.lastEvent?.senderId,) ??
                   t.chat.emptyChat,
           softWrap: false,
           maxLines: 1,

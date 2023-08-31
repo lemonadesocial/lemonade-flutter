@@ -11,17 +11,17 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'tokens_listing_bloc.freezed.dart';
 
 class TokensListingBloc extends Bloc<TokensListingEvent, TokensListingState> {
-  final TokenService tokenService;
-  final GetTokensInput defaultInput;
-  late final PaginationService<TokenComplex, GetTokensInput> paginationService =
-      PaginationService(getDataFuture: _getTokens);
 
   TokensListingBloc(
     this.tokenService, {
     required this.defaultInput,
-  }) : super(TokensListingState.loading()) {
+  }) : super(const TokensListingState.loading()) {
     on<TokensListingEventFetch>(_onFetch, transformer: droppable());
   }
+  final TokenService tokenService;
+  final GetTokensInput defaultInput;
+  late final PaginationService<TokenComplex, GetTokensInput> paginationService =
+      PaginationService(getDataFuture: _getTokens);
 
   Future<Either<Failure, List<TokenComplex>>> _getTokens(
     int skip,
@@ -35,11 +35,11 @@ class TokensListingBloc extends Bloc<TokensListingEvent, TokensListingState> {
     final result = await paginationService.fetch(defaultInput);
 
     result.fold((l) {
-      emit(TokensListingState.failure());
+      emit(const TokensListingState.failure());
     }, (tokens) {
       emit(TokensListingState.fetched(
         tokens: tokens,
-      ));
+      ),);
     });
   }
 }

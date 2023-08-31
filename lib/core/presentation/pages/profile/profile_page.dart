@@ -8,8 +8,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 @RoutePage()
 class ProfilePage extends StatelessWidget {
+  const ProfilePage({super.key, @PathParam('id') required this.userId});
   final String userId;
-  const ProfilePage({super.key, @PathParam("id") required this.userId});
 
   @override
   Widget build(BuildContext context) {

@@ -8,9 +8,9 @@ import 'package:image_picker/image_picker.dart';
 import '../../application/post/create_post_bloc/create_post_bloc.dart';
 
 class PostService {
-  final PostRepository postRepository;
 
   PostService(this.postRepository);
+  final PostRepository postRepository;
 
   Future<Either<Failure, List<Post>>> getPosts({GetPostsInput? input}) {
     return postRepository.getPosts(input: input);

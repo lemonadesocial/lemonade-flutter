@@ -7,9 +7,6 @@ import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:matrix/matrix.dart';
 
 class MessageContent extends StatelessWidget {
-  final Event event;
-  final Color textColor;
-  final void Function(Event)? onInfoTab;
 
   const MessageContent(
     this.event, {
@@ -17,6 +14,9 @@ class MessageContent extends StatelessWidget {
     Key? key,
     required this.textColor,
   }) : super(key: key);
+  final Event event;
+  final Color textColor;
+  final void Function(Event)? onInfoTab;
 
   @override
   Widget build(BuildContext context) {
@@ -105,14 +105,14 @@ class MessageContent extends StatelessWidget {
     final fontSize = Typo.medium.fontSize!;
     return FutureBuilder<String>(
       future: event.calcLocalizedBody(
-        MatrixDefaultLocalizations(),
+        const MatrixDefaultLocalizations(),
         hideReply: true,
       ),
       builder: (context, snapshot) {
         return Linkify(
           text: snapshot.data ??
               event.calcLocalizedBodyFallback(
-                MatrixDefaultLocalizations(),
+                const MatrixDefaultLocalizations(),
                 hideReply: true,
               ),
           style: TextStyle(
@@ -133,7 +133,7 @@ class MessageContent extends StatelessWidget {
     );
   }
 
-  _buildLocationMessage() {
+  Text _buildLocationMessage() {
     // TODO:
     //   final latlong = geoUri.path.split(';').first.split(',').map((s) => double.tryParse(s)).toList();
     //   if (latlong.length == 2 && latlong.first != null && latlong.last != null) {
@@ -156,7 +156,7 @@ class MessageContent extends StatelessWidget {
     //       ],
     //     );
     //   }
-    return Text("Location");
+    return const Text('Location');
   }
 
   _ButtonContent _buildEncryptedMessage(Color buttonTextColor) {
@@ -165,7 +165,7 @@ class MessageContent extends StatelessWidget {
       onPressed: () => {},
       // onPressed: () => _verifyOrRequestKey(context),
       icon: const Icon(Icons.lock_outline),
-      label: "Encrypted",
+      label: 'Encrypted',
     );
   }
 
@@ -184,7 +184,7 @@ class MessageContent extends StatelessWidget {
   Text _buildFileMessage() {
     // TODO:
     // // return MessageDownloadContent(event, textColor);
-    return Text("File");
+    return const Text('File');
   }
 
   Text _buildVideoMessage() {
@@ -193,7 +193,7 @@ class MessageContent extends StatelessWidget {
     //   return EventVideoPlayer(event);
     // }
     // return MessageDownloadContent(event, textColor);
-    return Text("video");
+    return const Text('video');
   }
 
   Text _buildAudioMessage() {
@@ -209,26 +209,20 @@ class MessageContent extends StatelessWidget {
     //   );
     // }
     // return MessageDownloadContent(event, textColor);
-    return Text("Audio");
+    return const Text('Audio');
   }
 
-  Text _buildStickerMessage() => Text('Sticker message'); //TODO: return Sticker(event);
+  Text _buildStickerMessage() => const Text('Sticker message'); //TODO: return Sticker(event);
 
   Widget _buildImageMessage() => ClipRRect(
         borderRadius: BorderRadius.circular(LemonRadius.small),
         child: ImageMessage(
           event,
-          fit: BoxFit.cover,
-          thumbnailOnly: true,
         ),
       );
 }
 
 class _ButtonContent extends StatelessWidget {
-  final void Function() onPressed;
-  final String label;
-  final Icon icon;
-  final Color? textColor;
 
   const _ButtonContent({
     required this.label,
@@ -237,6 +231,10 @@ class _ButtonContent extends StatelessWidget {
     required this.onPressed,
     Key? key,
   }) : super(key: key);
+  final void Function() onPressed;
+  final String label;
+  final Icon icon;
+  final Color? textColor;
 
   @override
   Widget build(BuildContext context) {

@@ -5,7 +5,7 @@ enum NotificationObjectType {
 }
 
 const Map<String, NotificationObjectType> objectTypeMap = {
-  "StoreOrder": NotificationObjectType.StoreOrder,
-  "Event": NotificationObjectType.Event,
-  "User": NotificationObjectType.User,
+  'StoreOrder': NotificationObjectType.StoreOrder,
+  'Event': NotificationObjectType.Event,
+  'User': NotificationObjectType.User,
 };

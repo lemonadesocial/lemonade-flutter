@@ -9,22 +9,22 @@ import 'package:matrix/matrix.dart';
 part 'chat_space_bloc.freezed.dart';
 
 class ChatSpaceBloc extends Bloc<ChatSpaceEvent, ChatSpaceState> {
-  final matrixService = getIt<MatrixService>();
   ChatSpaceBloc()
       : super(
-          ChatSpaceState(
+          const ChatSpaceState(
             spaces: [],
           ),
         ) {
     on<ChatSpaceEventFetchChatSpaces>(_onFetchChatSpaces);
     on<ChatSpaceEventSetActiveSpace>(_onSetActiveSpace);
   }
+  final matrixService = getIt<MatrixService>();
 
   _onFetchChatSpaces(ChatSpaceEventFetchChatSpaces event, Emitter emit) async {
     await matrixService.client.roomsLoading;
     await matrixService.client.accountDataLoading;
-    var storedActiveSpaceId = await matrixService.getActiveChatSpaceId();
-    var activeSpace = matrixService.client.getRoomById(storedActiveSpaceId ?? '');
+    final storedActiveSpaceId = await matrixService.getActiveChatSpaceId();
+    final activeSpace = matrixService.client.getRoomById(storedActiveSpaceId ?? '');
 
     emit(state.copyWith(
       activeSpace: activeSpace,
@@ -33,11 +33,11 @@ class ChatSpaceBloc extends Bloc<ChatSpaceEvent, ChatSpaceState> {
             RoomTypeFilter.getRoomByRoomTypeFilter(RoomTypeFilter.spaces),
           )
           .toList(),
-    ));
+    ),);
   }
 
-  _onSetActiveSpace(ChatSpaceEventSetActiveSpace event, Emitter emit) async {
-    var space = event.space;
+  Future<void> _onSetActiveSpace(ChatSpaceEventSetActiveSpace event, Emitter emit) async {
+    final space = event.space;
     // back to root (home)
     await matrixService.setActiveChatSpaceId(space?.id);
     if (space == null) {

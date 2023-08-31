@@ -4,11 +4,11 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 @RoutePage()
 class WebviewPage extends StatefulWidget {
-  final Uri uri;
   const WebviewPage({
     super.key,
     required this.uri,
   });
+  final Uri uri;
 
   @override
   State<WebviewPage> createState() => _WebviewPageState();
@@ -17,7 +17,7 @@ class WebviewPage extends StatefulWidget {
 class _WebviewPageState extends State<WebviewPage> {
   late final _MyBrowser inAppBrowser = _MyBrowser(onClose: () {
     close();
-  });
+  },);
 
   @override
   initState() {
@@ -49,8 +49,8 @@ class _WebviewPageState extends State<WebviewPage> {
 }
 
 class _MyBrowser extends InAppBrowser {
-  final Function() onClose;
   _MyBrowser({required this.onClose});
+  final Function() onClose;
 
   @override
   void onExit() {

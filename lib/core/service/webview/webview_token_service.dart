@@ -6,14 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:oauth2_client/access_token_response.dart';
 
 class WebviewTokenService {
-  final _appOauth = getIt<AppOauth>();
-  Timer? _timer;
-
-  final Function(String accessToken) onTokenChanged;
 
   WebviewTokenService({
     required this.onTokenChanged,
   });
+  final _appOauth = getIt<AppOauth>();
+  Timer? _timer;
+
+  final Function(String accessToken) onTokenChanged;
 
   Future<void> start() async {
     await _getToken();
@@ -33,27 +33,27 @@ class WebviewTokenService {
 
   Future<void> _getToken() async {
     if (_timer != null) {
-      throw new Exception('Waiting for next refresh');
+      throw Exception('Waiting for next refresh');
     }
 
     try {
-      AccessTokenResponse? tokenRes = await _getCurrentOrNewToken();
+      final tokenRes = await _getCurrentOrNewToken();
 
       if (tokenRes == null || !tokenRes.isValid() || tokenRes.isExpired()) {
         _stopTokenRefresher();
-        throw new Exception('Refresh token failed');
+        throw Exception('Refresh token failed');
       }
 
-      String accessToken = tokenRes.accessToken ?? '';
+      final accessToken = tokenRes.accessToken ?? '';
 
       _onTokenChanged(accessToken);
 
       // here we can be sure that token expiration date is greater than now;
-      int timeUntilRefresh = _getTimeUntilExpired(tokenRes) - 30;
+      final timeUntilRefresh = _getTimeUntilExpired(tokenRes) - 30;
 
       if (timeUntilRefresh <= 0) {
         _stopTokenRefresher();
-        throw new Exception('Invalid token expiredIn');
+        throw Exception('Invalid token expiredIn');
       }
 
       _timer = Timer(Duration(seconds: timeUntilRefresh), () async {

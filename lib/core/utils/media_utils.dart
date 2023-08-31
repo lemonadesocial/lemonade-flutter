@@ -10,12 +10,12 @@ enum MediaType {
 }
 
 class Media {
-  final MediaType type;
-  final String? url;
   Media({
     required this.type,
     this.url,
   });
+  final MediaType type;
+  final String? url;
 }
 
 class MediaUtils {
@@ -30,15 +30,15 @@ class MediaUtils {
           url: IpfsUtils.getFetchableUrl(imageUrl).href,
         );
       }
-      FetchableUrl fetchableUrl = IpfsUtils.getFetchableUrl(animationUrl ?? '');
-      String protocol = fetchableUrl.protocol;
-      String href = fetchableUrl.href;
+      final fetchableUrl = IpfsUtils.getFetchableUrl(animationUrl ?? '');
+      final protocol = fetchableUrl.protocol;
+      final href = fetchableUrl.href;
 
       if (protocol == 'blob:') {
-        HttpClient client = new HttpClient();
-        HttpClientRequest request = await client.getUrl(Uri.parse(animationUrl ?? ''));
-        HttpClientResponse response = await request.close();
-        ContentType? contentType = response.headers.contentType;
+        final client = HttpClient();
+        final request = await client.getUrl(Uri.parse(animationUrl ?? ''));
+        final response = await request.close();
+        final contentType = response.headers.contentType;
 
         if (contentType != null && contentType.value.startsWith('video/')) {
           return Media(

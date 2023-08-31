@@ -1,10 +1,4 @@
 class ChainMetadata {
-  final String chainId;
-  final String displayName;
-  final String name;
-  final String icon;
-  final bool isTestnet;
-  final String rpcUrl;
 
   ChainMetadata({
     required this.chainId,
@@ -14,6 +8,12 @@ class ChainMetadata {
     this.isTestnet = false,
     required this.rpcUrl,
   });
+  final String chainId;
+  final String displayName;
+  final String name;
+  final String icon;
+  final bool isTestnet;
+  final String rpcUrl;
 
   @override
   bool operator ==(Object other) {

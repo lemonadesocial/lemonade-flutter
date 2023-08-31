@@ -24,9 +24,9 @@ class ConnectWalletButton extends StatelessWidget {
       builder: (context, authState) {
         return authState.maybeWhen(
           authenticated: (authSession) {
-            return _Button();
+            return const _Button();
           },
-          orElse: () => SizedBox.shrink(),
+          orElse: SizedBox.shrink,
         );
       },
     );
@@ -51,9 +51,9 @@ class _Button extends StatelessWidget {
         if (activeSession == null) {
           return LemonButton(
             onTap: () {
-              context.read<WalletBloc>().add(WalletEventConnectWallet(
+              context.read<WalletBloc>().add(const WalletEventConnectWallet(
                     walletApp: SupportedWalletApp.metamask,
-                  ));
+                  ),);
             },
             label: t.common.actions.connect,
             icon: ThemeSvgIcon(
@@ -67,13 +67,13 @@ class _Button extends StatelessWidget {
 
         return FloatingFrostedGlassDropdown(
           items: [
-            DropdownItemDpo(label: "Sign your wallet"),
+            DropdownItemDpo(label: 'Sign your wallet'),
           ],
           offset: Offset(0, Spacing.extraSmall),
           onItemPressed: (item) {
             context.read<WalletBloc>().add(WalletEvent.updateUserWallet(
                   wallet: walletAddress,
-                ));
+                ),);
           },
           child: LemonButton(
             label: Web3Utils.formatIdentifier(

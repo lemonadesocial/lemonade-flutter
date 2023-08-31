@@ -44,7 +44,7 @@ class SpacesDrawer extends StatelessWidget {
                 isRoot: true,
                 onTap: () {
                   context.read<ChatSpaceBloc>().add(
-                        ChatSpaceEvent.setActiveSpace(space: null),
+                        const ChatSpaceEvent.setActiveSpace(),
                       );
                   Navigator.of(context).pop();
                 },
@@ -64,7 +64,7 @@ class SpacesDrawer extends StatelessWidget {
                     ),
                   )
                   .toList(),
-              Spacer(),
+              const Spacer(),
               _buildSpaceActions(context),
             ],
           ),
@@ -95,7 +95,6 @@ class SpacesDrawer extends StatelessWidget {
             ),
             color: isActive ? colorScheme.surfaceVariant : Colors.transparent,
             child: Row(
-              mainAxisSize: MainAxisSize.max,
               children: [
                 if (space != null)
                   MatrixAvatar(
@@ -130,7 +129,7 @@ class SpacesDrawer extends StatelessWidget {
                       if (space?.canonicalAlias.isNotEmpty == true) ...[
                         SizedBox(height: Spacing.superExtraSmall),
                         Text(
-                          space!.canonicalAlias.replaceFirst("#", ""),
+                          space!.canonicalAlias.replaceFirst('#', ''),
                           style: Typo.small.copyWith(
                             color: colorScheme.onSurfaceVariant,
                           ),
@@ -172,7 +171,7 @@ class SpacesDrawer extends StatelessWidget {
                 ),
                 SizedBox(width: Spacing.small),
                 Text(
-                  "Create space",
+                  'Create space',
                   style: Typo.medium.copyWith(color: colorScheme.onPrimary),
                 )
               ],
@@ -193,7 +192,7 @@ class SpacesDrawer extends StatelessWidget {
                 ),
                 SizedBox(width: Spacing.small),
                 Text(
-                  "Join space",
+                  'Join space',
                   style: Typo.medium.copyWith(color: colorScheme.onPrimary),
                 )
               ],

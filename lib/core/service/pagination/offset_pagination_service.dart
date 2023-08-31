@@ -2,16 +2,16 @@ import 'package:app/core/failure.dart';
 import 'package:dartz/dartz.dart';
 
 class OffsetPaginationService<T, I> {
+
+  OffsetPaginationService({this.getDataFuture, this.getDataStream});
   List<T> _items = [];
   bool _reachedEnd = false;
   int? _offset = 0;
 
   Future<Either<Failure, List<T>>> Function(int? offset, bool reachedEnd,
-      {required I input})? getDataFuture;
+      {required I input,})? getDataFuture;
   Stream<Either<Failure, List<T>>> Function(int? offset, bool reachedEnd,
-      {required I input})? getDataStream;
-
-  OffsetPaginationService({this.getDataFuture, this.getDataStream});
+      {required I input,})? getDataStream;
 
   List<T> get items => _items;
 
@@ -40,7 +40,7 @@ class OffsetPaginationService<T, I> {
   }
 
   Future<Either<Failure, List<T>>> _processGetDataFuture(I input) async {
-    if (getDataFuture == null) throw Exception("getDataFuture is required");
+    if (getDataFuture == null) throw Exception('getDataFuture is required');
 
     if (reachedEnd) {
       return Right(_items);
@@ -57,7 +57,7 @@ class OffsetPaginationService<T, I> {
   }
 
   Stream<Either<Failure, List<T>>> _processGetDataStream(I input) {
-    if (getDataStream == null) throw Exception("getDataStream is required");
+    if (getDataStream == null) throw Exception('getDataStream is required');
 
     return getDataStream!
         .call(offset, reachedEnd, input: input)

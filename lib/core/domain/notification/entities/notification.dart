@@ -2,13 +2,6 @@ import 'package:app/core/data/notification/dtos/notification_dtos.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 
 class Notification {
-  final String? id;
-  User? fromExpanded;
-  String? message;
-  String? type;
-  DateTime? createdAt;
-  String? from;
-  bool? isSeen;
 
   Notification({
     this.id, 
@@ -19,6 +12,13 @@ class Notification {
     this.from,
     this.isSeen,
   });
+  final String? id;
+  User? fromExpanded;
+  String? message;
+  String? type;
+  DateTime? createdAt;
+  String? from;
+  bool? isSeen;
 
   static Notification fromDto(NotificationDto dto) {
     return Notification(

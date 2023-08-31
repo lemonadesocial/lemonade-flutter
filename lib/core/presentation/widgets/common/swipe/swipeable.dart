@@ -2,8 +2,8 @@ import 'dart:ui';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-const double _kMinFlingVelocity = 700.0;
-const double _kMinFlingVelocityDelta = 400.0;
+const double _kMinFlingVelocity = 700;
+const double _kMinFlingVelocityDelta = 400;
 const double _kFlingVelocityScale = 1.0 / 300.0;
 const double _kDismissThreshold = 0.4;
 
@@ -169,9 +169,9 @@ class _SwipeableClipper extends CustomClipper<Rect> {
   Rect getClip(Size size) {
     final offset = moveAnimation.value.dx * size.width;
     if (offset < 0) {
-      return Rect.fromLTRB(size.width + offset, 0.0, size.width, size.height);
+      return Rect.fromLTRB(size.width + offset, 0, size.width, size.height);
     }
-    return Rect.fromLTRB(0.0, 0.0, offset, size.height);
+    return Rect.fromLTRB(0, 0, offset, size.height);
   }
 
   @override
@@ -198,7 +198,7 @@ class _SwipeableState extends State<Swipeable> with TickerProviderStateMixin, Au
   late AnimationController _moveController;
   late Animation<Offset> _moveAnimation;
 
-  double _dragExtent = 0.0;
+  double _dragExtent = 0;
   bool _dragUnderway = false;
   Size? _sizePriorToCollapse;
 
@@ -251,9 +251,7 @@ class _SwipeableState extends State<Swipeable> with TickerProviderStateMixin, Au
       _dragExtent = 0.0;
       _moveController.value = 0.0;
     }
-    setState(() {
-      _updateMoveAnimation();
-    });
+    setState(_updateMoveAnimation);
   }
 
   void _handleDragUpdate(DragUpdateDetails details) {
@@ -302,9 +300,7 @@ class _SwipeableState extends State<Swipeable> with TickerProviderStateMixin, Au
         break;
     }
     if (oldDragExtent.sign != _dragExtent.sign) {
-      setState(() {
-        _updateMoveAnimation();
-      });
+      setState(_updateMoveAnimation);
     }
     if (!_moveController.isAnimating) {
       _moveController.value = _dragExtent.abs() / _overallDragAxisExtent;
@@ -446,7 +442,7 @@ class _SwipeableState extends State<Swipeable> with TickerProviderStateMixin, Au
             ),
           ),
         content,
-      ]);
+      ],);
     }
     // We are not swiping but we may be being dragging in widget.direction.
     return Listener(
@@ -456,8 +452,8 @@ class _SwipeableState extends State<Swipeable> with TickerProviderStateMixin, Au
         onHorizontalDragUpdate: _isTouch ? _handleDragUpdate : null,
         onHorizontalDragEnd: _isTouch ? _handleDragEnd : null,
         behavior: HitTestBehavior.opaque,
-        child: content,
         dragStartBehavior: widget.dragStartBehavior,
+        child: content,
       ),
     );
   }

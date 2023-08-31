@@ -3,9 +3,6 @@ import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 
 class LemonButton extends StatelessWidget {
-  final String label;
-  final Widget? icon;
-  final Function()? onTap;
 
   const LemonButton({
     super.key,
@@ -13,6 +10,9 @@ class LemonButton extends StatelessWidget {
     this.icon,
     this.onTap,
   });
+  final String label;
+  final Widget? icon;
+  final Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +32,7 @@ class LemonButton extends StatelessWidget {
           ),
         ),
         child: Row(
-          mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             if (icon != null) ...[
               icon!,

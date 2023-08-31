@@ -6,14 +6,11 @@ import 'package:app/injection/register_module.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
 import 'package:matrix/matrix.dart';
-import 'package:collection/collection.dart' show IterableExtension;
 
 class MessageReactions extends StatelessWidget {
-  final Event event;
-  final Timeline timeline;
-  final Function({required Event event, required String emoji})? onReact;
 
   const MessageReactions({
     Key? key,
@@ -21,13 +18,16 @@ class MessageReactions extends StatelessWidget {
     required this.timeline,
     this.onReact,
   }) : super(key: key);
+  final Event event;
+  final Timeline timeline;
+  final Function({required Event event, required String emoji})? onReact;
 
   Set<Event> getAllReactionEvents() {
     return event.aggregatedEvents(timeline, RelationshipTypes.reaction);
   }
 
   List<_ReactionEntry> getReactions() {
-    Set<Event> allReactionEvents = getAllReactionEvents();
+    final allReactionEvents = getAllReactionEvents();
     final reactionMap = <String, _ReactionEntry>{};
     for (final e in allReactionEvents) {
       final key = e.content.tryGetMap<String, dynamic>('m.relates_to')?.tryGet<String>('key');
@@ -96,7 +96,7 @@ class MessageReactions extends StatelessWidget {
                     );
                   },
                 );
-              });
+              },);
             },
             borderRadius: BorderRadius.circular(LemonRadius.small),
             child: Container(
@@ -121,11 +121,6 @@ class MessageReactions extends StatelessWidget {
 }
 
 class _Reaction extends StatelessWidget {
-  final String? reactionKey;
-  final int? count;
-  final bool? reacted;
-  final void Function()? onTap;
-  final void Function()? onLongPress;
 
   const _Reaction({
     this.reactionKey,
@@ -134,6 +129,11 @@ class _Reaction extends StatelessWidget {
     this.onTap,
     this.onLongPress,
   });
+  final String? reactionKey;
+  final int? count;
+  final bool? reacted;
+  final void Function()? onTap;
+  final void Function()? onLongPress;
 
   @override
   Widget build(BuildContext context) {
@@ -165,10 +165,6 @@ class _Reaction extends StatelessWidget {
 }
 
 class _ReactionEntry {
-  String? key;
-  int count;
-  bool reacted;
-  List<User>? reactors;
 
   _ReactionEntry({
     this.key,
@@ -176,15 +172,19 @@ class _ReactionEntry {
     required this.reacted,
     this.reactors,
   });
+  String? key;
+  int count;
+  bool reacted;
+  List<User>? reactors;
 }
 
 class _AdaptableReactorsDialog extends StatelessWidget {
-  final _ReactionEntry? reactionEntry;
 
   const _AdaptableReactorsDialog({
     Key? key,
     this.reactionEntry,
   }) : super(key: key);
+  final _ReactionEntry? reactionEntry;
 
   Future<bool?> show(BuildContext context) => showDialog(
         context: context,
