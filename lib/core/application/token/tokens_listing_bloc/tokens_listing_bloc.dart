@@ -19,7 +19,7 @@ class TokensListingBloc extends Bloc<TokensListingEvent, TokensListingState> {
   TokensListingBloc(
     this.tokenService, {
     required this.defaultInput,
-  }) : super(TokensListingState.loading()) {
+  }) : super(const TokensListingState.loading()) {
     on<TokensListingEventFetch>(_onFetch, transformer: droppable());
   }
 
@@ -35,7 +35,7 @@ class TokensListingBloc extends Bloc<TokensListingEvent, TokensListingState> {
     final result = await paginationService.fetch(defaultInput);
 
     result.fold((l) {
-      emit(TokensListingState.failure());
+      emit(const TokensListingState.failure());
     }, (tokens) {
       emit(TokensListingState.fetched(
         tokens: tokens,

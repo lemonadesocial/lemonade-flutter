@@ -33,7 +33,7 @@ class WebviewTokenService {
 
   Future<void> _getToken() async {
     if (_timer != null) {
-      throw new Exception('Waiting for next refresh');
+      throw Exception('Waiting for next refresh');
     }
 
     try {
@@ -41,7 +41,7 @@ class WebviewTokenService {
 
       if (tokenRes == null || !tokenRes.isValid() || tokenRes.isExpired()) {
         _stopTokenRefresher();
-        throw new Exception('Refresh token failed');
+        throw Exception('Refresh token failed');
       }
 
       String accessToken = tokenRes.accessToken ?? '';
@@ -53,7 +53,7 @@ class WebviewTokenService {
 
       if (timeUntilRefresh <= 0) {
         _stopTokenRefresher();
-        throw new Exception('Invalid token expiredIn');
+        throw Exception('Invalid token expiredIn');
       }
 
       _timer = Timer(Duration(seconds: timeUntilRefresh), () async {

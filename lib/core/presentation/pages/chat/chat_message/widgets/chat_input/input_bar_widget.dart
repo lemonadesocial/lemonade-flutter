@@ -307,7 +307,7 @@ class InputBar extends StatelessWidget {
         },
         textCapitalization: TextCapitalization.sentences,
       ),
-      suggestionsBoxDecoration: SuggestionsBoxDecoration(
+      suggestionsBoxDecoration: const SuggestionsBoxDecoration(
         color: Colors.black,
         constraints: BoxConstraints(maxHeight: 300),
       ),

@@ -35,11 +35,11 @@ class WalletService {
   Future<Either<Failure, bool>> updateUserWallet({
     required String wallet,
   }) async {
-    final _requestResult = await walletRepository.getUserWalletRequest(wallet: wallet.toLowerCase());
-    if (_requestResult.isLeft()) {
+    final requestResult = await walletRepository.getUserWalletRequest(wallet: wallet.toLowerCase());
+    if (requestResult.isLeft()) {
       return Left(Failure());
     }
-    final userWalletRequest = _requestResult.getOrElse(() => null);
+    final userWalletRequest = requestResult.getOrElse(() => null);
     if (userWalletRequest == null) return Left(Failure());
 
     String message = Web3Utils.toHex(userWalletRequest.message);

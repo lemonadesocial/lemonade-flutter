@@ -44,7 +44,7 @@ class LemonSearchBar extends StatelessWidget {
         height: 42,
         child: TextField(
           decoration: InputDecoration(
-            prefixIconConstraints: BoxConstraints(minWidth: 0, minHeight: 0),
+            prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
             prefixIcon: Padding(
               padding: EdgeInsets.only(
                 left: Spacing.xSmall,
@@ -62,7 +62,7 @@ class LemonSearchBar extends StatelessWidget {
             ),
             hintText: StringUtils.capitalize(t.common.search),
           ),
-          onChanged: this.onChangeText,
+          onChanged: onChangeText,
         ),
       ),
     );

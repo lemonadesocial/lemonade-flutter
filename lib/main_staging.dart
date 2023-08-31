@@ -18,7 +18,7 @@ void main() async {
   await getIt<MatrixService>().init();
   await getIt<FirebaseService>().initialize();
 
-  runApp(LemonadeApp());
+  runApp(const LemonadeApp());
 
   debugPrint('App is ready!!! ✅');
 }

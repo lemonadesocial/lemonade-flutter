@@ -18,7 +18,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class ProfileInfoTabView extends StatelessWidget {
   final User user;
 
-  ProfileInfoTabView({
+  const ProfileInfoTabView({
     super.key,
     required this.user,
   });
@@ -76,8 +76,8 @@ class ProfileInfoTabView extends StatelessWidget {
         if (AuthUtils.isMe(context, user: user))
           SliverToBoxAdapter(
             child: ElevatedButton(
-              onPressed: () => context.read<AuthBloc>().add(AuthEvent.logout()),
-              child: Text("Logout"),
+              onPressed: () => context.read<AuthBloc>().add(const AuthEvent.logout()),
+              child: const Text("Logout"),
             ),
           )
       ],
@@ -91,7 +91,7 @@ class ProfileInfoTabView extends StatelessWidget {
           .asMap()
           .entries
           .map((entry) {
-        if (entry.value == null || entry.value?.isEmpty == true) return SizedBox.shrink();
+        if (entry.value == null || entry.value?.isEmpty == true) return const SizedBox.shrink();
         return GestureDetector(
           onTap: () async {
             AutoRouter.of(context).navigate(WebviewRoute(uri: Uri.parse('${_socialUrls[entry.key]}/${entry.value}}')));

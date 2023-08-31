@@ -12,7 +12,7 @@ class ChatSpaceBloc extends Bloc<ChatSpaceEvent, ChatSpaceState> {
   final matrixService = getIt<MatrixService>();
   ChatSpaceBloc()
       : super(
-          ChatSpaceState(
+          const ChatSpaceState(
             spaces: [],
           ),
         ) {

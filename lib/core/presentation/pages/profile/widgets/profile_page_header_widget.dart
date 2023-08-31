@@ -52,7 +52,7 @@ class ProfilePageHeader extends StatelessWidget {
 class _ActionButtons extends StatelessWidget {
   final User user;
 
-  _ActionButtons({required this.user});
+  const _ActionButtons({required this.user});
 
   _shareProfileLink(context, {required User user}) async {
     try {
@@ -130,7 +130,7 @@ class _ActionButtons extends StatelessWidget {
 class _ProfileAvatar extends StatelessWidget {
   final User user;
 
-  _ProfileAvatar({required this.user});
+  const _ProfileAvatar({required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -188,12 +188,12 @@ class _ProfileUserFollow extends StatelessWidget {
 class _ProfileUserNameAndTitle extends StatelessWidget {
   final User user;
 
-  _ProfileUserNameAndTitle({
+  const _ProfileUserNameAndTitle({
     required this.user,
   });
 
   String? get displayName {
-    return user.displayName ?? user.username ?? null;
+    return user.displayName ?? user.username;
   }
 
   @override
@@ -207,7 +207,7 @@ class _ProfileUserNameAndTitle extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             children: [
               ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: 200),
+                constraints: const BoxConstraints(maxWidth: 200),
                 child: Text(
                   displayName ?? t.common.anonymous,
                   style: Typo.large,

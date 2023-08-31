@@ -6,7 +6,7 @@ import 'package:matrix/matrix.dart';
 
 class UnseenMessageCountWidget extends StatelessWidget {
   final Room room;
-  UnseenMessageCountWidget({required this.room});
+  const UnseenMessageCountWidget({super.key, required this.room});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class UnseenMessageCountWidget extends StatelessWidget {
     var textColor = room.isMuted ? colorScheme.onSecondary : colorScheme.secondary;
 
     if (unseenMessageCount == 0) {
-      return SizedBox.shrink();
+      return const SizedBox.shrink();
     }
 
     return Container(

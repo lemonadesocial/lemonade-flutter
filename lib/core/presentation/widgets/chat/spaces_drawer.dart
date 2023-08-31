@@ -44,7 +44,7 @@ class SpacesDrawer extends StatelessWidget {
                 isRoot: true,
                 onTap: () {
                   context.read<ChatSpaceBloc>().add(
-                        ChatSpaceEvent.setActiveSpace(space: null),
+                        const ChatSpaceEvent.setActiveSpace(space: null),
                       );
                   Navigator.of(context).pop();
                 },
@@ -64,7 +64,7 @@ class SpacesDrawer extends StatelessWidget {
                     ),
                   )
                   .toList(),
-              Spacer(),
+              const Spacer(),
               _buildSpaceActions(context),
             ],
           ),

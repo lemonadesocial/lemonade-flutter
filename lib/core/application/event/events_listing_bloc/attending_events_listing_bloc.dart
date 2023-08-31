@@ -6,7 +6,9 @@ import 'package:app/core/service/event/event_service.dart';
 import 'package:dartz/dartz.dart';
 
 class AttendingEventListingBloc extends BaseEventListingBloc<GetEventsInput> {
+  @override
   final EventService eventService;
+  @override
   final GetEventsInput defaultInput;
   AttendingEventListingBloc(
     this.eventService, {

@@ -25,9 +25,9 @@ class _ChatListPageState extends State<ChatListPage> {
           create: (context) => ChatListBloc(
             spaceId: chatSpaceState.activeSpace?.id,
           )..add(
-              ChatListEvent.fetchRooms(),
+              const ChatListEvent.fetchRooms(),
             ),
-          child: ChatListPageView(),
+          child: const ChatListPageView(),
         );
       },
     );

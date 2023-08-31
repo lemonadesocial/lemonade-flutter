@@ -31,7 +31,7 @@ class LemonSnapBottomSheet extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(bottom: resizeToAvoidBottomInset == true ? MediaQuery.of(context).viewInsets.bottom : 0),
       child: DraggableScrollableSheet(
-        snapAnimationDuration: Duration(milliseconds: 300),
+        snapAnimationDuration: const Duration(milliseconds: 300),
         initialChildSize: defaultSnapSize ?? 0.5,
         minChildSize: minSnapSize ?? 0.25,
         maxChildSize: maxSnapSize ?? 1.0,

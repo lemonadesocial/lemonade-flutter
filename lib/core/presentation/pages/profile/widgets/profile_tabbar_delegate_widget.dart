@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 class _ProfileTabBar extends StatefulWidget {
   final TabController controller;
-  _ProfileTabBar({
+  const _ProfileTabBar({
     required this.controller,
   });
 

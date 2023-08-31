@@ -10,6 +10,6 @@ class Web3Utils {
   }
 
   static String toHex(String text) {
-    return '0x' + utf8.encode(text).map((e) => e.toRadixString(16).padLeft(2, '0')).join();
+    return '0x${utf8.encode(text).map((e) => e.toRadixString(16).padLeft(2, '0')).join()}';
   }
 }

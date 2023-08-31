@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:app/core/config.dart';
-import 'package:app/core/presentation/widgets/back_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/service/webview/webview_token_service.dart';
 import 'package:auto_route/auto_route.dart';
@@ -95,11 +94,11 @@ class _EventDetailPageState extends State<EventDetailPage> with WidgetsBindingOb
   _sendTokenToWebview() async {
     sendTokenAttempt++;
     try {
-      webViewController?.evaluateJavascript(source: 'document.mobileAuthToken = \"${token}\"');
+      webViewController?.evaluateJavascript(source: 'document.mobileAuthToken = "$token"');
     } catch (e) {
       if (sendTokenAttempt >= maxSendTokenAttempt) return;
       print('Retry times: $sendTokenAttempt');
-      await Future.delayed(Duration(milliseconds: 5000));
+      await Future.delayed(const Duration(milliseconds: 5000));
       _sendTokenToWebview();
     }
   }

@@ -11,13 +11,14 @@ part 'wallet_bloc.freezed.dart';
 class WalletBloc extends Bloc<WalletEvent, WalletState> {
   final WalletService walletService = WalletService();
 
-  WalletBloc() : super(WalletState()) {
+  WalletBloc() : super(const WalletState()) {
     on<WalletEventInitWalletConnect>(_onInitWalletConnect);
     on<WalletEventGetActiveSessions>(_onGetActiveSessions);
     on<WalletEventConnectWallet>(_onConnectWallet);
     on<WalletEventUpdateUserWallet>(_onUpdateUserWallet);
   }
 
+  @override
   close() async {
     walletService.close();
     super.close();
@@ -26,7 +27,7 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
   _onInitWalletConnect(WalletEventInitWalletConnect event, Emitter emit) async {
     final result = await walletService.initWallet();
     if (result.isRight()) {
-      add(WalletEventGetActiveSessions());
+      add(const WalletEventGetActiveSessions());
     }
   }
 
@@ -40,7 +41,7 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
   _onConnectWallet(WalletEventConnectWallet event, Emitter emit) async {
     var result = await walletService.connectWallet(walletApp: event.walletApp);
     if (result.isRight()) {
-      add(WalletEvent.getActiveSessions());
+      add(const WalletEvent.getActiveSessions());
     }
   }
 

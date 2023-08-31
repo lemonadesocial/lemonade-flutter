@@ -32,11 +32,11 @@ class BaseSliverTabView extends StatelessWidget {
               onNotification: (notification) {
                 if (notification is ScrollEndNotification) {
                   if (notification.metrics.pixels >= notification.metrics.maxScrollExtent) {
-                    scrollNotificationBloc.add(ScrollNotificationEvent.reachEnd());
+                    scrollNotificationBloc.add(const ScrollNotificationEvent.reachEnd());
                     return true;
                   }
                 } 
-                scrollNotificationBloc.add(ScrollNotificationEvent.scroll());
+                scrollNotificationBloc.add(const ScrollNotificationEvent.scroll());
                 return true;
               },
               child: CustomScrollView(

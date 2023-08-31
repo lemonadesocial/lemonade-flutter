@@ -87,13 +87,14 @@ class ChatInput extends StatelessWidget {
 
   Widget _buildSendButton(BuildContext context) {
     return GestureDetector(
+      onTap: controller.send,
       child: Container(
         height: 42,
         width: 42,
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            begin: Alignment(0.00, -1.00),
-            end: Alignment(0, 1),
+            begin: const Alignment(0.00, -1.00),
+            end: const Alignment(0, 1),
             colors: [
               Theme.of(context).colorScheme.surface,
               Theme.of(context).colorScheme.surfaceVariant,
@@ -109,7 +110,6 @@ class ChatInput extends StatelessWidget {
           ),
         ),
       ),
-      onTap: controller.send,
     );
   }
 

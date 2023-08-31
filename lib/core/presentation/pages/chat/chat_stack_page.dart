@@ -16,7 +16,7 @@ class ChatStackPage extends StatefulWidget implements AutoRouteWrapper {
   @override
   Widget wrappedRoute(BuildContext context) {
     return BlocProvider(
-      create: (context) => ChatSpaceBloc()..add(ChatSpaceEvent.fetchChatSpaces()),
+      create: (context) => ChatSpaceBloc()..add(const ChatSpaceEvent.fetchChatSpaces()),
       child: this,
     );
   }

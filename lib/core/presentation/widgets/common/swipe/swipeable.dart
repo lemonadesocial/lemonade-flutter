@@ -456,8 +456,8 @@ class _SwipeableState extends State<Swipeable> with TickerProviderStateMixin, Au
         onHorizontalDragUpdate: _isTouch ? _handleDragUpdate : null,
         onHorizontalDragEnd: _isTouch ? _handleDragEnd : null,
         behavior: HitTestBehavior.opaque,
-        child: content,
         dragStartBehavior: widget.dragStartBehavior,
+        child: content,
       ),
     );
   }

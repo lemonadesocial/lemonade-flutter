@@ -105,14 +105,14 @@ class MessageContent extends StatelessWidget {
     final fontSize = Typo.medium.fontSize!;
     return FutureBuilder<String>(
       future: event.calcLocalizedBody(
-        MatrixDefaultLocalizations(),
+        const MatrixDefaultLocalizations(),
         hideReply: true,
       ),
       builder: (context, snapshot) {
         return Linkify(
           text: snapshot.data ??
               event.calcLocalizedBodyFallback(
-                MatrixDefaultLocalizations(),
+                const MatrixDefaultLocalizations(),
                 hideReply: true,
               ),
           style: TextStyle(
@@ -156,7 +156,7 @@ class MessageContent extends StatelessWidget {
     //       ],
     //     );
     //   }
-    return Text("Location");
+    return const Text("Location");
   }
 
   _ButtonContent _buildEncryptedMessage(Color buttonTextColor) {
@@ -184,7 +184,7 @@ class MessageContent extends StatelessWidget {
   Text _buildFileMessage() {
     // TODO:
     // // return MessageDownloadContent(event, textColor);
-    return Text("File");
+    return const Text("File");
   }
 
   Text _buildVideoMessage() {
@@ -193,7 +193,7 @@ class MessageContent extends StatelessWidget {
     //   return EventVideoPlayer(event);
     // }
     // return MessageDownloadContent(event, textColor);
-    return Text("video");
+    return const Text("video");
   }
 
   Text _buildAudioMessage() {
@@ -209,10 +209,10 @@ class MessageContent extends StatelessWidget {
     //   );
     // }
     // return MessageDownloadContent(event, textColor);
-    return Text("Audio");
+    return const Text("Audio");
   }
 
-  Text _buildStickerMessage() => Text('Sticker message'); //TODO: return Sticker(event);
+  Text _buildStickerMessage() => const Text('Sticker message'); //TODO: return Sticker(event);
 
   Widget _buildImageMessage() => ClipRRect(
         borderRadius: BorderRadius.circular(LemonRadius.small),

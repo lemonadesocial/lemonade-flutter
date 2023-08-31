@@ -24,9 +24,9 @@ class ConnectWalletButton extends StatelessWidget {
       builder: (context, authState) {
         return authState.maybeWhen(
           authenticated: (authSession) {
-            return _Button();
+            return const _Button();
           },
-          orElse: () => SizedBox.shrink(),
+          orElse: () => const SizedBox.shrink(),
         );
       },
     );
@@ -51,7 +51,7 @@ class _Button extends StatelessWidget {
         if (activeSession == null) {
           return LemonButton(
             onTap: () {
-              context.read<WalletBloc>().add(WalletEventConnectWallet(
+              context.read<WalletBloc>().add(const WalletEventConnectWallet(
                     walletApp: SupportedWalletApp.metamask,
                   ));
             },

@@ -21,7 +21,7 @@ class ProfileNftCreatedListView extends StatelessWidget {
         getIt<TokenRepository>(),
       ),
       defaultInput: GetTokensInput(creator: user.wallets?[0]))
-    ..add(TokensListingEvent.fetch());
+    ..add(const TokensListingEvent.fetch());
 
   ProfileNftCreatedListView({
     super.key,
@@ -37,12 +37,12 @@ class ProfileNftCreatedListView extends StatelessWidget {
           scrollState.maybeWhen(
               endReached: () {
                 tokensListingBloc.add(
-                  TokensListingEvent.fetch(),
+                  const TokensListingEvent.fetch(),
                 );
               },
               orElse: () {});
         },
-        child: _ProfileNftCreatedList(),
+        child: const _ProfileNftCreatedList(),
       ),
     );
   }

@@ -4,8 +4,11 @@ import 'package:oauth2_client/oauth2_exception.dart';
 import 'package:oauth2_client/oauth2_helper.dart';
 
 class CustomOAuth2Helper extends OAuth2Helper {
+  @override
   final OAuth2Client client;
+  @override
   final String clientId;
+  @override
   final List<String> scopes;
 
   CustomOAuth2Helper(
@@ -49,6 +52,7 @@ class CustomOAuth2Helper extends OAuth2Helper {
     return tknResp;
   }
 
+  @override
   Future<AccessTokenResponse> refreshToken(AccessTokenResponse curTknResp) async {
     AccessTokenResponse? tknResp;
     var refreshToken = curTknResp.refreshToken!;

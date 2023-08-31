@@ -63,8 +63,8 @@ class ImageMessage extends StatelessWidget {
             isThumbnail: false,
             placeholder: (ctx) => Loading.defaultLoading(ctx),
           ),
-          onTap: (_imageBuilder) {
-            _onTap(context, imageBuilder: _imageBuilder);
+          onTap: (imageBuilder) {
+            _onTap(context, imageBuilder: imageBuilder);
           },
           child: MxcImage(
             event: event,

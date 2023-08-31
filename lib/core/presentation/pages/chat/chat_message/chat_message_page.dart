@@ -4,11 +4,9 @@ import 'dart:io';
 import 'package:app/core/presentation/pages/chat/chat_message/view/chat_message_view.dart';
 import 'package:app/core/service/matrix/matrix_service.dart';
 import 'package:app/core/utils/chat/matrix_client_ios_badge_extension.dart';
-import 'package:app/gen/assets.gen.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 import 'package:matrix/matrix.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
@@ -26,7 +24,7 @@ class ChatPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final room = getIt<MatrixService>().client.getRoomById(roomId);
-    if (room == null) return SizedBox.shrink();
+    if (room == null) return const SizedBox.shrink();
     return ChatPageWithRoom(sideView: sideView, room: room);
   }
 }
@@ -253,7 +251,7 @@ class ChatController extends State<ChatPageWithRoom> {
   }
 
   Future<void> sendEmojiAction({required Event event, required String emoji}) async {
-    Iterable<Event> _allReactionEvents = event
+    Iterable<Event> allReactionEvents = event
         .aggregatedEvents(
           timeline!,
           RelationshipTypes.reaction,
@@ -262,7 +260,7 @@ class ChatController extends State<ChatPageWithRoom> {
           (event) => event.senderId == event.room.client.userID && event.type == 'm.reaction',
         );
     // prevent duplicated reactions
-    bool reacted = _allReactionEvents.any(
+    bool reacted = allReactionEvents.any(
       (e) => e.content.tryGetMap('m.relates_to')?['key'] == emoji,
     );
     if (reacted) return;
@@ -275,7 +273,7 @@ class ChatController extends State<ChatPageWithRoom> {
   void selectEditEventAction(Event? event) => setState(() {
         editEvent = event;
         inputText = sendController.text = editEvent!.getDisplayEvent(timeline!).calcLocalizedBodyFallback(
-              MatrixDefaultLocalizations(),
+              const MatrixDefaultLocalizations(),
               withSenderNamePrefix: false,
               hideReply: true,
             );

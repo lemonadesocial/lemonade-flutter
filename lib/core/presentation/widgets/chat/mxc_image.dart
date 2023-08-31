@@ -17,13 +17,13 @@ class MxcImage extends StatefulWidget {
   final bool isThumbnail;
   final bool animated;
   final Duration retryDuration;
-  final Duration animationDuration = Duration(milliseconds: 300);
+  final Duration animationDuration = const Duration(milliseconds: 300);
   final Curve animationCurve = Curves.linear;
   final ThumbnailMethod thumbnailMethod;
   final Widget Function(BuildContext context)? placeholder;
   final String? cacheKey;
 
-  MxcImage({
+  const MxcImage({
     this.uri,
     this.event,
     this.width,

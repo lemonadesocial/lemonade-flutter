@@ -14,7 +14,7 @@ void main() async {
 
   await getIt<AppOauth>().init();
 
-  runApp(LemonadeApp());
+  runApp(const LemonadeApp());
 
   debugPrint('App is ready!!! ✅');
 }

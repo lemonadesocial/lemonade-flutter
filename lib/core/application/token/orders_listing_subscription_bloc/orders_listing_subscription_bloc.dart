@@ -19,7 +19,7 @@ class OrdersListingSubscriptionBloc extends Bloc<OrdersListingSubscriptionEvent,
   OrdersListingSubscriptionBloc(
     this.tokenService, {
     required this.defaultInput,
-  }) : super(OrdersListingSubscriptionState.loading()) {
+  }) : super(const OrdersListingSubscriptionState.loading()) {
     on<OrdersListingSubscriptionEventStart>(_onStartSubscription);
   }
 
@@ -35,7 +35,7 @@ class OrdersListingSubscriptionBloc extends Bloc<OrdersListingSubscriptionEvent,
     await emit.forEach(paginationService.fetchStream(defaultInput), onData: (streamEvent) {
       return streamEvent.fold(
         (l) {
-          return OrdersListingSubscriptionState.failure();
+          return const OrdersListingSubscriptionState.failure();
         },
         (orders) {
           return OrdersListingSubscriptionState.fetched(orders: orders);

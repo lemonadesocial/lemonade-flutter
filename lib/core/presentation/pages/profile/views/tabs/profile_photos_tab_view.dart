@@ -22,7 +22,7 @@ class ProfilePhotosTabView extends StatelessWidget {
     return BaseSliverTabView(
       name: "profile",
       children: [
-        SliverToBoxAdapter(
+        const SliverToBoxAdapter(
           child: SizedBox(height: 3),
         ),
         if (userPhotos.isEmpty)
@@ -34,7 +34,7 @@ class ProfilePhotosTabView extends StatelessWidget {
           SliverPadding(
             padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
             sliver: SliverGrid(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
                 crossAxisSpacing: 3,
                 mainAxisSpacing: 3,

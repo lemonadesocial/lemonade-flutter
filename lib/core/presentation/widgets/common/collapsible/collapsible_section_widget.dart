@@ -5,7 +5,7 @@ class CollapsibleSection extends StatefulWidget {
   final String title;
   final List<Widget> children;
 
-  CollapsibleSection({required this.title, required this.children});
+  const CollapsibleSection({super.key, required this.title, required this.children});
 
   @override
   _CollapsibleSectionState createState() => _CollapsibleSectionState();
@@ -31,9 +31,6 @@ class _CollapsibleSectionState extends State<CollapsibleSection> {
             title: Text(widget.title,
                 style: Typo.medium.copyWith(
                     color: colorScheme.onPrimary, fontWeight: FontWeight.w600)),
-            children: [
-              ...widget.children, // Include custom children here
-            ],
             trailing: _isExpanded
                 ? Icon(
                     Icons.keyboard_arrow_up,
@@ -42,6 +39,9 @@ class _CollapsibleSectionState extends State<CollapsibleSection> {
                 : Icon(
                     Icons.keyboard_arrow_down,
                     color: colorScheme.onPrimary,
-                  )));
+                  ),
+            children: [
+              ...widget.children, // Include custom children here
+            ]));
   }
 }

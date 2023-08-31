@@ -63,7 +63,7 @@ class AppOauth {
     try {
       var res = await _processTokenState(helper.fetchToken());
       if (res?.isValid() == true) {
-        return Right(true);
+        return const Right(true);
       }
       return Left(Exception(res?.error));
     } on PlatformException catch (e) {
@@ -87,16 +87,16 @@ class AppOauth {
         ),
       );
       await _reset();
-      return Right(true);
+      return const Right(true);
     } on PlatformException catch (e) {
       if (e.message?.contains(OauthError.userCancelled) == true) {
         return Left(e);
       }
       await _reset();
-      return Right(true);
+      return const Right(true);
     } catch (error) {
       await _reset();
-      return Right(true);
+      return const Right(true);
     }
   }
 
@@ -118,10 +118,10 @@ class AppOauth {
     if (tokenRes.refreshNeeded() || tokenRes.isExpired()) {
       // if token is expired, all coming request have to wait only one refresh token request
       // prevent duplicate call refresh token
-      refreshTokenFuture ??= getToken().then((_tokenRes) async {
-        _processTokenState(Future.value(_tokenRes));
+      refreshTokenFuture ??= getToken().then((tokenRes) async {
+        _processTokenState(Future.value(tokenRes));
         refreshTokenFuture = null;
-        return _tokenRes?.accessToken != null ? 'Bearer ${tokenRes?.accessToken}' : '';
+        return tokenRes?.accessToken != null ? 'Bearer ${tokenRes?.accessToken}' : '';
       }).catchError((e) {
         _reset();
         return '';

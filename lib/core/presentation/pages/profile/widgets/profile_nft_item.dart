@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 
 class ProfileNftItem extends StatelessWidget {
   final Either<TokenComplex, TokenSimple> nftToken;
-  const ProfileNftItem({
+  const ProfileNftItem({super.key, 
     required this.nftToken,
   });
 

@@ -5,7 +5,6 @@ import 'package:app/core/config.dart';
 import 'package:app/core/data/fcm/fcm_mutation.dart';
 import 'package:app/core/gql.dart';
 import 'package:app/core/oauth/oauth.dart';
-import 'package:app/core/utils/navigation_utils.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -67,7 +66,7 @@ class FirebaseService {
       sound: true,
     );
 
-    final InitializationSettings initializationSettings =
+    const InitializationSettings initializationSettings =
         InitializationSettings(
       android: AndroidInitializationSettings("@mipmap/ic_launcher"),
       iOS: DarwinInitializationSettings(),

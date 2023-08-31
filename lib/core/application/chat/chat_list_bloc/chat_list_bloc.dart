@@ -19,7 +19,7 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
   ChatListBloc({
     this.spaceId,
   }) : super(
-          ChatListState(
+          const ChatListState(
             channelRooms: [],
             unreadDmRooms: [],
             dmRooms: [],
@@ -28,10 +28,10 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
     _onSyncSub = matrixClient.onSync.stream
         .where((sync) => sync.hasRoomUpdate)
         .rateLimit(
-          Duration(seconds: 1),
+          const Duration(seconds: 1),
         )
         .listen((_) {
-      add(ChatListEvent.fetchRooms());
+      add(const ChatListEvent.fetchRooms());
     });
     on<ChatListEventFetchRooms>(_onFetchRooms);
   }

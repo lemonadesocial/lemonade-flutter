@@ -38,7 +38,7 @@ class MessageActions extends StatelessWidget {
       defaultSnapSize: 0.3,
       minSnapSize: 0.3,
       maxSnapSize: 0.3,
-      snapSizes: [0.3],
+      snapSizes: const [0.3],
       builder: (_) => Flexible(
         child: Container(
           child: Column(
@@ -56,7 +56,7 @@ class MessageActions extends StatelessWidget {
                           },
                           child: Text(
                             emoji,
-                            style: TextStyle(fontSize: 36),
+                            style: const TextStyle(fontSize: 36),
                           ),
                         ),
                       )

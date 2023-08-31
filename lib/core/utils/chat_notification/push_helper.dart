@@ -182,7 +182,7 @@ Future<void> _tryPushHelper(
   messagingStyleInformation?.messages?.add(newMessage);
 
   final roomName =
-      event.room.getLocalizedDisplayname(MatrixDefaultLocalizations());
+      event.room.getLocalizedDisplayname(const MatrixDefaultLocalizations());
 
   final notificationGroupId =
       event.room.isDirectChat ? 'directChats' : 'groupChats';

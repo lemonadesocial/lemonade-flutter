@@ -5,12 +5,12 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'scroll_notification_bloc.freezed.dart';
 
 class ScrollNotificationBloc extends Bloc<ScrollNotificationEvent, ScrollNotificationState> {
-  ScrollNotificationBloc() : super(ScrollNotificationState.initial()) {
+  ScrollNotificationBloc() : super(const ScrollNotificationState.initial()) {
     on<ScrollNotificationEventScroll>((event, emit) {
-      emit(ScrollNotificationState.initial());
+      emit(const ScrollNotificationState.initial());
     });
     on<ScrollNotificationEventReachEnd>((event, emit) async {
-      emit(ScrollNotificationState.endReached());
+      emit(const ScrollNotificationState.endReached());
     },
     transformer: droppable(),
     );

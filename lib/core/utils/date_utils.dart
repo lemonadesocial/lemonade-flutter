@@ -20,7 +20,7 @@ class DateUtils {
     if(todayWeekday <= DateTime.friday) {
       thisWeekendStart = startWeek.add(Duration(days: DateTime.saturday - startWeek.weekday));
     } else {
-      thisWeekendStart = endWeek.subtract(Duration(days: 1));
+      thisWeekendStart = endWeek.subtract(const Duration(days: 1));
     }
 
     DateTime thisWeekendEnd = thisWeekendStart.add(const Duration(days: 1));
@@ -95,7 +95,7 @@ class DateUtils {
 
   static bool isPast(DateTime? date) {
     if(date == null) return false;
-    final originToday = new DateTime(today.year, today.month, today.day);
+    final originToday = DateTime(today.year, today.month, today.day);
     return date.isBefore(originToday);
   }
 }

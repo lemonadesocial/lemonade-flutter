@@ -35,7 +35,7 @@ class MediaUtils {
       String href = fetchableUrl.href;
 
       if (protocol == 'blob:') {
-        HttpClient client = new HttpClient();
+        HttpClient client = HttpClient();
         HttpClientRequest request = await client.getUrl(Uri.parse(animationUrl ?? ''));
         HttpClientResponse response = await request.close();
         ContentType? contentType = response.headers.contentType;

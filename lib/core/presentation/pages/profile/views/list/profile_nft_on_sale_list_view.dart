@@ -24,12 +24,12 @@ class ProfileNftOnSaleListView extends StatelessWidget {
     ),
     defaultInput: WatchOrdersInput(
       where: OrderWhereComplex(makerIn: user.wallets, openEq: true),
-      sort: OrderSort(
+      sort: const OrderSort(
         by: OrderSortBy.createdAt,
         direction: SortDirection.DESC,
       ),
     ),
-  )..add(OrdersListingSubscriptionEvent.start());
+  )..add(const OrdersListingSubscriptionEvent.start());
 
   ProfileNftOnSaleListView({
     super.key,
@@ -44,12 +44,12 @@ class ProfileNftOnSaleListView extends StatelessWidget {
         listener: (context, scrollState) {
           scrollState.maybeWhen(
             endReached: () {
-              ordersListingBloc.add(OrdersListingSubscriptionEvent.start());
+              ordersListingBloc.add(const OrdersListingSubscriptionEvent.start());
             },
             orElse: () {},
           );
         },
-        child: _ProfileNftOnSaleList(),
+        child: const _ProfileNftOnSaleList(),
       ),
     );
   }

@@ -59,7 +59,7 @@ class NotificationCard extends StatelessWidget {
       return Container(
           padding: EdgeInsets.only(right: Spacing.small),
           child: ThemeSvgIcon(
-            color: Color(0xFFC69DF7),
+            color: const Color(0xFFC69DF7),
             builder: (filter) => Assets.icons.icMatches
                 .svg(colorFilter: filter, width: 42, height: 42),
           ));

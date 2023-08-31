@@ -27,12 +27,12 @@ class ProfileNftSoldListView extends StatelessWidget {
         makerIn: user.wallets,
         takerExists: true,
       ),
-      sort: OrderSort(
+      sort: const OrderSort(
         by: OrderSortBy.createdAt,
         direction: SortDirection.DESC,
       ),
     ),
-  )..add(OrdersListingSubscriptionEvent.start());
+  )..add(const OrdersListingSubscriptionEvent.start());
 
   ProfileNftSoldListView({
     super.key,
@@ -47,12 +47,12 @@ class ProfileNftSoldListView extends StatelessWidget {
         listener: (context, scrollState) {
           scrollState.maybeWhen(
             endReached: () {
-              ordersListingBloc.add(OrdersListingSubscriptionEvent.start());
+              ordersListingBloc.add(const OrdersListingSubscriptionEvent.start());
             },
             orElse: () {},
           );
         },
-        child: _ProfileNftSoldList(),
+        child: const _ProfileNftSoldList(),
       ),
     );
   }

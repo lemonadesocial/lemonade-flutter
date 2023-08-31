@@ -4,7 +4,7 @@ class DynamicSliverAppBar extends SliverAppBar {
   final Widget child;
   final double maxHeight;
   
-  DynamicSliverAppBar({
+  const DynamicSliverAppBar({
     required this.child,
     required this.maxHeight,
     super.key,
@@ -34,7 +34,7 @@ class _DynamicSliverAppBarState extends State<DynamicSliverAppBar> {
     });
 
     return SliverAppBar(
-      leading: SizedBox.shrink(),
+      leading: const SizedBox.shrink(),
       floating: widget.floating,
       forceElevated: widget.forceElevated,
       expandedHeight: isHeightCalculated ? height : widget.maxHeight,
@@ -45,7 +45,7 @@ class _DynamicSliverAppBarState extends State<DynamicSliverAppBar> {
               key: _childKey,
               child: widget.child,
             ),
-            Expanded(child: SizedBox.shrink()),
+            const Expanded(child: SizedBox.shrink()),
           ],
         ),
       ),
