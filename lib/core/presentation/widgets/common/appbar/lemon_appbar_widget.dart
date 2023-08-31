@@ -1,5 +1,6 @@
 import 'package:app/core/presentation/widgets/lemon_back_button_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
   const LemonAppBar({
@@ -22,7 +23,7 @@ class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool? hideLeading;
 
   @override
-  Size get preferredSize => const Size.fromHeight(60);
+  Size get preferredSize => Size.fromHeight(60.w);
 
   @override
   Widget build(BuildContext context) {

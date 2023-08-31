@@ -52,5 +52,15 @@
     "support": "support",
     "delete": "delete",
     "lemonade": "Lemonade",
-    "requestLocation": "Location Services are currently disabled. Please enable Location Services in your device settings."
+    "requestLocation": "Location Services are currently disabled. Please enable Location Services in your device settings.",
+    "showMore": "more",
+    "showLess": "show less",
+    "photo(ordinal)": {
+        "one": "photo",
+        "other": "photos"
+    },
+    "host(ordinal)": {
+        "one": "host",
+        "other": "hosts"
+    }
 }

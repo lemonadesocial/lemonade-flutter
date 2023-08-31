@@ -1,9 +1,9 @@
 /// Generated file. Do not edit.
 ///
 /// Locales: 1
-/// Strings: 181
+/// Strings: 188
 ///
-/// Built on 2023-08-30 at 03:41 UTC
+/// Built on 2023-08-31 at 09:31 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -329,6 +329,16 @@ class _I18nCommonEn {
 	String get delete => 'delete';
 	String get lemonade => 'Lemonade';
 	String get requestLocation => 'Location Services are currently disabled. Please enable Location Services in your device settings.';
+	String get showMore => 'more';
+	String get showLess => 'show less';
+	String photo({required num n}) => (_root.$meta.ordinalResolver ?? PluralResolvers.ordinal('en'))(n,
+		one: 'photo',
+		other: 'photos',
+	);
+	String host({required num n}) => (_root.$meta.ordinalResolver ?? PluralResolvers.ordinal('en'))(n,
+		one: 'host',
+		other: 'hosts',
+	);
 }
 
 // Path: event
@@ -350,6 +360,7 @@ class _I18nEventEn {
 	String empty_attending_events({required Object time}) => 'You are currently not attending any events ${time}';
 	String empty_hosting_events({required Object time}) => 'You are currently not hosting any events ${time}';
 	String get noEvents => 'No events yet';
+	String get buyTickets => 'Buy tickets';
 }
 
 // Path: onboarding
@@ -757,6 +768,16 @@ extension on _I18nEn {
 			case 'common.delete': return 'delete';
 			case 'common.lemonade': return 'Lemonade';
 			case 'common.requestLocation': return 'Location Services are currently disabled. Please enable Location Services in your device settings.';
+			case 'common.showMore': return 'more';
+			case 'common.showLess': return 'show less';
+			case 'common.photo': return ({required num n}) => (_root.$meta.ordinalResolver ?? PluralResolvers.ordinal('en'))(n,
+				one: 'photo',
+				other: 'photos',
+			);
+			case 'common.host': return ({required num n}) => (_root.$meta.ordinalResolver ?? PluralResolvers.ordinal('en'))(n,
+				one: 'host',
+				other: 'hosts',
+			);
 			case 'event.events': return 'Events';
 			case 'event.all': return 'all';
 			case 'event.attending': return 'attending';
@@ -769,6 +790,7 @@ extension on _I18nEn {
 			case 'event.empty_attending_events': return ({required Object time}) => 'You are currently not attending any events ${time}';
 			case 'event.empty_hosting_events': return ({required Object time}) => 'You are currently not hosting any events ${time}';
 			case 'event.noEvents': return 'No events yet';
+			case 'event.buyTickets': return 'Buy tickets';
 			case 'onboarding.pickUsername': return 'Pick username';
 			case 'onboarding.pickUsernameDesc': return 'Claim your unique username before someone else does!';
 			case 'onboarding.username': return 'Username';

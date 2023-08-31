@@ -11,6 +11,7 @@ const eventHostExpandedFragment = '''
       key
       bucket
     }
+    job_title
     __typename
   }
 ''';
@@ -24,6 +25,9 @@ const eventFragment = '''
   slug
   host
   host_expanded {
+    ...eventHostExpandedFragment
+  }
+  cohosts_expanded(limit: 25) {
     ...eventHostExpandedFragment
   }
   new_new_photos_expanded(limit: 1) {

@@ -54,7 +54,6 @@ class EventsListingPage extends StatelessWidget {
 }
 
 class _EventsListingView extends StatefulWidget {
-
   const _EventsListingView({
     required this.homeEventListingBloc,
     required this.attendingEventListingBloc,
@@ -72,25 +71,26 @@ class _EventsListingViewState extends State<_EventsListingView> {
   EventListingType eventListingType = EventListingType.all;
   EventTimeFilter? eventTimeFilter;
 
-  _onAuthStateChanged(AuthState authState) {
+  void _onAuthStateChanged(AuthState authState) {
     authState.maybeWhen(
-        unauthenticated: (_) {
-          setState(() {
-            eventListingType = EventListingType.all;
-          });
-        },
-        orElse: () {},);
+      unauthenticated: (_) {
+        setState(() {
+          eventListingType = EventListingType.all;
+        });
+      },
+      orElse: () {},
+    );
   }
 
-  _selectEventListingType(EventListingType eventListingType) {
+  void _selectEventListingType(EventListingType mEventListingType) {
     setState(() {
-      eventListingType = eventListingType;
+      eventListingType = mEventListingType;
     });
   }
 
-  _selectEventTimeFilter(EventTimeFilter? eventTimeFilter) {
+  void _selectEventTimeFilter(EventTimeFilter? mEventTimeFilter) {
     setState(() {
-      eventTimeFilter = eventTimeFilter;
+      eventTimeFilter = mEventTimeFilter;
     });
     _selectedEventsBloc.add(BaseEventsListingEvent.filter(eventTimeFilter: eventTimeFilter));
   }
@@ -150,17 +150,20 @@ class _EventsListingViewState extends State<_EventsListingView> {
             _buildEventsFilterBar(context),
             SizedBox(height: Spacing.small),
             NotificationListener<ScrollNotification>(
-                onNotification: (notification) {
-                  if (notification is ScrollEndNotification) {
-                    if (notification.metrics.pixels == notification.metrics.maxScrollExtent) {
-                      _selectedEventsBloc.add(BaseEventsListingEvent.fetch(
+              onNotification: (notification) {
+                if (notification is ScrollEndNotification) {
+                  if (notification.metrics.pixels == notification.metrics.maxScrollExtent) {
+                    _selectedEventsBloc.add(
+                      BaseEventsListingEvent.fetch(
                         eventTimeFilter: eventTimeFilter,
-                      ),);
-                    }
+                      ),
+                    );
                   }
-                  return true;
-                },
-                child: _buildEventsList(),),
+                }
+                return true;
+              },
+              child: _buildEventsList(),
+            ),
           ],
         ),
       ),
@@ -181,23 +184,26 @@ class _EventsListingViewState extends State<_EventsListingView> {
           },
           builder: (context, authState) {
             return authState.maybeWhen(
-                authenticated: (_) => Row(
-                      children: [
-                        SizedBox(width: Spacing.superExtraSmall),
-                        LemonChip(
-                          label: t.event.attending,
-                          isActive: eventListingType == EventListingType.attending,
-                          onTap: () => _selectEventListingType(EventListingType.attending),
-                        ),
-                        SizedBox(width: Spacing.superExtraSmall),
-                        LemonChip(
-                          label: t.event.hosting,
-                          isActive: eventListingType == EventListingType.hosting,
-                          onTap: () => _selectEventListingType(EventListingType.hosting),
-                        ),
-                      ],
-                    ),
-                orElse: SizedBox.shrink,);
+              authenticated: (_) => Row(
+                children: [
+                  SizedBox(width: Spacing.superExtraSmall),
+                  LemonChip(
+                    label: t.event.attending,
+                    isActive: eventListingType == EventListingType.attending,
+                    onTap: () {
+                      _selectEventListingType(EventListingType.attending);
+                    },
+                  ),
+                  SizedBox(width: Spacing.superExtraSmall),
+                  LemonChip(
+                    label: t.event.hosting,
+                    isActive: eventListingType == EventListingType.hosting,
+                    onTap: () => _selectEventListingType(EventListingType.hosting),
+                  ),
+                ],
+              ),
+              orElse: SizedBox.shrink,
+            );
           },
         ),
         const Spacer(),
@@ -240,7 +246,6 @@ class _EventsListingViewState extends State<_EventsListingView> {
 }
 
 class _EventList<T extends BaseEventListingBloc> extends StatelessWidget {
-
   const _EventList({
     super.key,
     this.eventListingType,
@@ -297,8 +302,9 @@ class _EventList<T extends BaseEventListingBloc> extends StatelessWidget {
                         event: filteredEvents[index],
                         onTap: () {
                           AutoRouter.of(context).navigate(
-                            EventDetailRoute(
-                                eventId: filteredEvents[index].id!, eventName: filteredEvents[index].title ?? '',),
+                            GuestEventDetailRoute(
+                              eventId: filteredEvents[index].id!,
+                            ),
                           );
                         },
                       ),

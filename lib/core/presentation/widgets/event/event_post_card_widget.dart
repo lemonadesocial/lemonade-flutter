@@ -21,11 +21,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EventPostCard extends StatelessWidget {
-  final Event event;
   const EventPostCard({
     super.key,
     required this.event,
   });
+  final Event event;
 
   DbFile? get eventPhoto => event.newNewPhotosExpanded?.isNotEmpty ?? false
       ? event.newNewPhotosExpanded!.first
@@ -44,9 +44,8 @@ class EventPostCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         AutoRouter.of(context).navigate(
-          EventDetailRoute(
+          GuestEventDetailRoute(
             eventId: event.id ?? '',
-            eventName: event.title ?? '',
           ),
         );
       },
@@ -170,7 +169,8 @@ class EventPostCard extends StatelessWidget {
                 style: Typo.small.copyWith(
                     color: colorScheme.onSurface,
                     height: 1.5,
-                    fontFamily: FontFamily.circularStd),
+                    fontFamily: FontFamily.circularStd,
+                ),
               )
             ],
           ),
