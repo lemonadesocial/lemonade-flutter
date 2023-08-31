@@ -12,5 +12,10 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v1
       - run: flutter pub get
+      - name: Create environment files
+        run: |
+          touch .env
+          touch .env.staging
+          touch .env.production
       - name: Analyze Dart
         uses: zgosalvez/github-actions-analyze-dart@v2
