@@ -58,15 +58,15 @@ class LinearGradientButton extends StatelessWidget {
             colors: mode.gradients,
           ),
           shape: RoundedRectangleBorder(
-              borderRadius:
-                  radius ?? BorderRadius.circular(LemonRadius.xSmall)),
+            borderRadius: radius ?? BorderRadius.circular(LemonRadius.xSmall),
+          ),
         ),
         child: Container(
           decoration: BoxDecoration(
             borderRadius: radius ?? BorderRadius.circular(LemonRadius.xSmall),
             boxShadow: [
               BoxShadow(
-                  color: LemonColor.black.withOpacity(0.36),
+                  color: LemonColor.black.withOpacity(0.30),
                   offset: const Offset(0, 2),
                   blurRadius: 18.r,
                   spreadRadius: 2)
