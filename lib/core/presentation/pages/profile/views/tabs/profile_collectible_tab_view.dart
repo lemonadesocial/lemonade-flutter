@@ -53,18 +53,20 @@ class _ProfileCollectibleTabViewState extends State<ProfileCollectibleTabView> {
                 child: Column(
                   children: [
                     SizedBox(height: Spacing.smMedium),
-                    Row(
-                      children: TokensListingType.values.map((item) {
-                        return Container(
-                          margin:
-                              EdgeInsets.only(right: Spacing.superExtraSmall),
-                          child: LemonChip(
-                            onTap: () => _selectTokenListingType(item),
-                            label: t['nft.${item.name}'],
-                            isActive: tokensListingType == item,
-                          ),
-                        );
-                      }).toList(),
+                    Flexible(
+                      child: Row(
+                        children: TokensListingType.values.map((item) {
+                          return Container(
+                            margin:
+                                EdgeInsets.only(right: Spacing.superExtraSmall),
+                            child: LemonChip(
+                              onTap: () => _selectTokenListingType(item),
+                              label: t['nft.${item.name}'],
+                              isActive: tokensListingType == item,
+                            ),
+                          );
+                        }).toList(),
+                      ),
                     ),
                     SizedBox(height: Spacing.smMedium),
                   ],
