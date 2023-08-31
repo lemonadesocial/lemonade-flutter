@@ -68,8 +68,10 @@ class LinearGradientButton extends StatelessWidget {
               BoxShadow(
                   color: LemonColor.black.withOpacity(0.36),
                   offset: const Offset(0, 2),
+
+
                   blurRadius: 18.r,
-                  spreadRadius: 2),
+                  spreadRadius: 2)
             ],
           ),
           child: Row(
