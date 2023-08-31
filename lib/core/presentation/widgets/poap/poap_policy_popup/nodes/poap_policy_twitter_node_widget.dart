@@ -19,8 +19,11 @@ class PoapPolicyTwitterNodeWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
-    final errorNode = node.children?.firstWhere((nodeItem) => nodeItem.value == 'error');
-    final error = errorNode?.children?.isNotEmpty == true ? errorNode?.children![0].value ?? '' : '';
+    final errorNode =
+        node.children?.firstWhere((nodeItem) => nodeItem.value == 'error');
+    final error = errorNode?.children?.isNotEmpty == true
+        ? errorNode?.children![0].value ?? ''
+        : '';
     String? errorText;
     // TODO: var twitterNotConnected = false;
     if (error.contains('400')) {
@@ -31,10 +34,13 @@ class PoapPolicyTwitterNodeWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          t.nft.poapPolicy.twitterPolicy.title(twitter: node.children?[0].value ?? ''),
+          t.nft.poapPolicy.twitterPolicy
+              .title(twitter: node.children?[0].value ?? ''),
         ),
         Text(
-          result ? t.nft.poapPolicy.twitterPolicy.qualified : errorText ?? t.nft.poapPolicy.twitterPolicy.nonQualified,
+          result
+              ? t.nft.poapPolicy.twitterPolicy.qualified
+              : errorText ?? t.nft.poapPolicy.twitterPolicy.nonQualified,
           style: Typo.small.copyWith(
             color: colorScheme.onSecondary,
           ),

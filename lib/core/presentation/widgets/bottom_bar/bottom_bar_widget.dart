@@ -16,7 +16,7 @@ import 'package:flutter_vibrate/flutter_vibrate.dart';
 
 class BottomBar extends StatefulWidget {
   const BottomBar({super.key});
-  
+
   static double get bottomBarHeight => Platform.isIOS ? 90.h : 70.h;
 
   @override

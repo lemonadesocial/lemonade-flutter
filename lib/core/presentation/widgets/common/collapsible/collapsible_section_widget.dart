@@ -5,7 +5,8 @@ class CollapsibleSection extends StatefulWidget {
   final String title;
   final List<Widget> children;
 
-  const CollapsibleSection({super.key, required this.title, required this.children});
+  const CollapsibleSection(
+      {super.key, required this.title, required this.children});
 
   @override
   CollapsibleSectionState createState() => CollapsibleSectionState();
@@ -18,9 +19,7 @@ class CollapsibleSectionState extends State<CollapsibleSection> {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return Theme(
-        data: Theme.of(context).copyWith(
-          dividerColor: Colors.transparent
-        ),
+        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
         child: ExpansionTile(
             initiallyExpanded: _isExpanded,
             onExpansionChanged: (expanded) {

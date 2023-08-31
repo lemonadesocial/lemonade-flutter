@@ -57,14 +57,20 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
         unreadDmRooms: List.from(
           rooms
               .where(
-                (room) => RoomTypeFilter.getRoomByRoomTypeFilter(RoomTypeFilter.messages)(room) && room.isUnread,
+                (room) =>
+                    RoomTypeFilter.getRoomByRoomTypeFilter(
+                        RoomTypeFilter.messages)(room) &&
+                    room.isUnread,
               )
               .toList(),
         ),
         dmRooms: List.from(
           rooms
               .where(
-                (room) => RoomTypeFilter.getRoomByRoomTypeFilter(RoomTypeFilter.messages)(room) && !room.isUnread,
+                (room) =>
+                    RoomTypeFilter.getRoomByRoomTypeFilter(
+                        RoomTypeFilter.messages)(room) &&
+                    !room.isUnread,
               )
               .toList(),
         ),

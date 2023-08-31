@@ -29,19 +29,21 @@ class TokenComplexDto with _$TokenComplexDto {
     String? uri,
   }) = _TokenComplexDto;
 
-  factory TokenComplexDto.fromJson(Map<String, dynamic> json) => _$TokenComplexDtoFromJson(json);
+  factory TokenComplexDto.fromJson(Map<String, dynamic> json) =>
+      _$TokenComplexDtoFromJson(json);
 }
 
 @freezed
 class TokenDetailDto with _$TokenDetailDto {
   const factory TokenDetailDto({
-      String? id,
-      String? network,
-      String? tokenId,
-      TokenMetadataDto? metadata,
+    String? id,
+    String? network,
+    String? tokenId,
+    TokenMetadataDto? metadata,
   }) = _TokenDetailDto;
 
-  factory TokenDetailDto.fromJson(Map<String, dynamic> json) => _$TokenDetailDtoFromJson(json);
+  factory TokenDetailDto.fromJson(Map<String, dynamic> json) =>
+      _$TokenDetailDtoFromJson(json);
 }
 
 @freezed
@@ -56,7 +58,8 @@ class RegistryDto with _$RegistryDto {
     bool? supportsRaribleRoyaltiesV2,
   }) = _RegistryDto;
 
-  factory RegistryDto.fromJson(Map<String, dynamic> json) => _$RegistryDtoFromJson(json);
+  factory RegistryDto.fromJson(Map<String, dynamic> json) =>
+      _$RegistryDtoFromJson(json);
 }
 
 @freezed
@@ -83,7 +86,8 @@ class OrderSimpleDto with _$OrderSimpleDto {
     DateTime? updatedAt,
   }) = _OrderSimpleDto;
 
-  factory OrderSimpleDto.fromJson(Map<String, dynamic> json) => _$OrderSimpleDtoFromJson(json);
+  factory OrderSimpleDto.fromJson(Map<String, dynamic> json) =>
+      _$OrderSimpleDtoFromJson(json);
 }
 
 @freezed
@@ -94,7 +98,8 @@ class OrderCurrencyDto with _$OrderCurrencyDto {
     String? symbol,
   }) = _OrderCurrencyDto;
 
-  factory OrderCurrencyDto.fromJson(Map<String, dynamic> json) => _$OrderCurrencyDtoFromJson(json);
+  factory OrderCurrencyDto.fromJson(Map<String, dynamic> json) =>
+      _$OrderCurrencyDtoFromJson(json);
 }
 
 @freezed
@@ -104,7 +109,8 @@ class TokenRoyaltyDto with _$TokenRoyaltyDto {
     required String value,
   }) = _TokenRoyaltyDto;
 
-  factory TokenRoyaltyDto.fromJson(Map<String, dynamic> json) => _$TokenRoyaltyDtoFromJson(json);
+  factory TokenRoyaltyDto.fromJson(Map<String, dynamic> json) =>
+      _$TokenRoyaltyDtoFromJson(json);
 }
 
 @freezed
@@ -119,7 +125,8 @@ class TokenMetadataDto with _$TokenMetadataDto {
     // attributes?: Attribute[];
   }) = _TokenMetadataDto;
 
-  factory TokenMetadataDto.fromJson(Map<String, dynamic> json) => _$TokenMetadataDtoFromJson(json);
+  factory TokenMetadataDto.fromJson(Map<String, dynamic> json) =>
+      _$TokenMetadataDtoFromJson(json);
 }
 
 @freezed
@@ -146,5 +153,6 @@ class TokenSimpleDto with _$TokenSimpleDto {
     String? uri,
   }) = _TokenSimpleDto;
 
-  factory TokenSimpleDto.fromJson(Map<String, dynamic> json) => _$TokenSimpleDtoFromJson(json);
+  factory TokenSimpleDto.fromJson(Map<String, dynamic> json) =>
+      _$TokenSimpleDtoFromJson(json);
 }

@@ -11,5 +11,6 @@ class NewsfeedDto with _$NewsfeedDto {
     int? offset,
   }) = _NewsfeedDto;
 
-  factory NewsfeedDto.fromJson(Map<String, dynamic> json) => _$NewsfeedDtoFromJson(json);
+  factory NewsfeedDto.fromJson(Map<String, dynamic> json) =>
+      _$NewsfeedDtoFromJson(json);
 }

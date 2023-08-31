@@ -1,8 +1,4 @@
-enum NotificationObjectType { 
-  storeOrder,
-  event,
-  user
-}
+enum NotificationObjectType { storeOrder, event, user }
 
 const Map<String, NotificationObjectType> objectTypeMap = {
   "StoreOrder": NotificationObjectType.storeOrder,

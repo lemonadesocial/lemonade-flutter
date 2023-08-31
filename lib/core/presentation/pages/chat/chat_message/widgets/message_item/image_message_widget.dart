@@ -86,11 +86,13 @@ class ImageMessage extends StatelessWidget {
         child: CircularProgressIndicator.adaptive(),
       );
     }
-    final String blurHashString = event.infoMap['xyz.amorgan.blurhash'] is String
-        ? event.infoMap['xyz.amorgan.blurhash']
-        : defaultBlurHash;
-    final ratio =
-        event.infoMap['w'] is int && event.infoMap['h'] is int ? event.infoMap['w'] / event.infoMap['h'] : 1.0;
+    final String blurHashString =
+        event.infoMap['xyz.amorgan.blurhash'] is String
+            ? event.infoMap['xyz.amorgan.blurhash']
+            : defaultBlurHash;
+    final ratio = event.infoMap['w'] is int && event.infoMap['h'] is int
+        ? event.infoMap['w'] / event.infoMap['h']
+        : 1.0;
     var width = 32;
     var height = 32;
     if (ratio > 1.0) {

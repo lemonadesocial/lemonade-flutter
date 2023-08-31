@@ -14,7 +14,8 @@ abstract class GetEventsInput with _$GetEventsInput {
     @JsonKey(includeIfNull: false) int? limit,
   }) = _GetEventsInput;
 
-  factory GetEventsInput.fromJson(Map<String, dynamic> json) => _$GetEventsInputFromJson(json);
+  factory GetEventsInput.fromJson(Map<String, dynamic> json) =>
+      _$GetEventsInputFromJson(json);
 }
 
 @freezed
@@ -28,7 +29,8 @@ abstract class GetHomeEventsInput with _$GetHomeEventsInput {
     @Default(EventTense.Future) EventTense tense,
   }) = _GetHomeEventsInput;
 
-  factory GetHomeEventsInput.fromJson(Map<String, dynamic> json) => _$GetHomeEventsInputFromJson(json);
+  factory GetHomeEventsInput.fromJson(Map<String, dynamic> json) =>
+      _$GetHomeEventsInputFromJson(json);
 }
 
 @freezed
@@ -41,16 +43,18 @@ abstract class GetHostingEventsInput with _$GetHostingEventsInput {
     @Default(-1) order,
   }) = _GetHostingEventsInput;
 
-  factory GetHostingEventsInput.fromJson(Map<String, dynamic> json) => _$GetHostingEventsInputFromJson(json);
+  factory GetHostingEventsInput.fromJson(Map<String, dynamic> json) =>
+      _$GetHostingEventsInputFromJson(json);
 }
 
 @freezed
 abstract class FilterEventInput with _$FilterEventInput {
   const factory FilterEventInput({
     @JsonKey(includeIfNull: false) EventState? eq,
-    @JsonKey(name: 'in', includeIfNull:  false) List<EventState>? include,
+    @JsonKey(name: 'in', includeIfNull: false) List<EventState>? include,
     @JsonKey(name: 'nin', includeIfNull: false) List<EventState>? notInclude,
   }) = _FilterEventInput;
-  
-  factory FilterEventInput.fromJson(Map<String, dynamic> json) => _$FilterEventInputFromJson(json);
+
+  factory FilterEventInput.fromJson(Map<String, dynamic> json) =>
+      _$FilterEventInputFromJson(json);
 }

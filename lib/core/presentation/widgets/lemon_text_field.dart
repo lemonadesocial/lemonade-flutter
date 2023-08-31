@@ -26,7 +26,8 @@ class LemonTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final border = OutlineInputBorder(
-      borderSide: BorderSide(color: borderColor ?? theme.colorScheme.outlineVariant),
+      borderSide:
+          BorderSide(color: borderColor ?? theme.colorScheme.outlineVariant),
       borderRadius: BorderRadius.circular(12.r),
     );
     return Column(
@@ -34,14 +35,15 @@ class LemonTextField extends StatelessWidget {
       children: [
         TextField(
           onChanged: onChange,
-          style: theme.textTheme.bodyMedium!.copyWith(color: theme.colorScheme.onPrimary),
+          style: theme.textTheme.bodyMedium!
+              .copyWith(color: theme.colorScheme.onPrimary),
           minLines: minLines,
           maxLines: maxLines ?? minLines,
           cursorColor: theme.colorScheme.onPrimary,
           decoration: InputDecoration(
             hintText: hintText,
-            hintStyle:
-                theme.textTheme.bodyMedium!.copyWith(color: theme.colorScheme.outlineVariant),
+            hintStyle: theme.textTheme.bodyMedium!
+                .copyWith(color: theme.colorScheme.outlineVariant),
             enabledBorder: border,
             focusedBorder: border,
             errorBorder: border,

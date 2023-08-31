@@ -12,7 +12,8 @@ class WalletPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => WalletBloc()..add(const WalletEvent.initWalletConnect()),
+      create: (context) =>
+          WalletBloc()..add(const WalletEvent.initWalletConnect()),
       child: const WalletPageView(),
     );
   }

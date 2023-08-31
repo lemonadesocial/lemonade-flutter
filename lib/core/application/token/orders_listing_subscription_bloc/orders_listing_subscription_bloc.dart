@@ -9,10 +9,11 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'orders_listing_subscription_bloc.freezed.dart';
 
-class OrdersListingSubscriptionBloc extends Bloc<OrdersListingSubscriptionEvent, OrdersListingSubscriptionState> {
+class OrdersListingSubscriptionBloc extends Bloc<OrdersListingSubscriptionEvent,
+    OrdersListingSubscriptionState> {
   final TokenService tokenService;
-  late final PaginationService<OrderComplex, WatchOrdersInput> paginationService =
-      PaginationService(getDataStream: _watchOrders);
+  late final PaginationService<OrderComplex, WatchOrdersInput>
+      paginationService = PaginationService(getDataStream: _watchOrders);
 
   final WatchOrdersInput defaultInput;
 
@@ -31,8 +32,10 @@ class OrdersListingSubscriptionBloc extends Bloc<OrdersListingSubscriptionEvent,
     return tokenService.watchOrders(input: input.copyWith(skip: skip));
   }
 
-  _onStartSubscription(OrdersListingSubscriptionEventStart event, Emitter emit) async {
-    await emit.forEach(paginationService.fetchStream(defaultInput), onData: (streamEvent) {
+  _onStartSubscription(
+      OrdersListingSubscriptionEventStart event, Emitter emit) async {
+    await emit.forEach(paginationService.fetchStream(defaultInput),
+        onData: (streamEvent) {
       return streamEvent.fold(
         (l) {
           return const OrdersListingSubscriptionState.failure();
@@ -47,14 +50,17 @@ class OrdersListingSubscriptionBloc extends Bloc<OrdersListingSubscriptionEvent,
 
 @freezed
 class OrdersListingSubscriptionEvent with _$OrdersListingSubscriptionEvent {
-  const factory OrdersListingSubscriptionEvent.start({WatchOrdersInput? input}) = OrdersListingSubscriptionEventStart;
+  const factory OrdersListingSubscriptionEvent.start(
+      {WatchOrdersInput? input}) = OrdersListingSubscriptionEventStart;
 }
 
 @freezed
 class OrdersListingSubscriptionState with _$OrdersListingSubscriptionState {
-  const factory OrdersListingSubscriptionState.loading() = OrdersListingSubscriptionStateLoading;
+  const factory OrdersListingSubscriptionState.loading() =
+      OrdersListingSubscriptionStateLoading;
   const factory OrdersListingSubscriptionState.fetched({
     required List<OrderComplex> orders,
   }) = OrdersListingSubscriptionStateFetched;
-  const factory OrdersListingSubscriptionState.failure() = OrdersListingSubscriptionStateFailure;
+  const factory OrdersListingSubscriptionState.failure() =
+      OrdersListingSubscriptionStateFailure;
 }

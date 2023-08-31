@@ -52,14 +52,11 @@ abstract class $EventDtoCopyWith<$Res> {
       _$EventDtoCopyWithImpl<$Res, EventDto>;
   @useResult
   $Res call(
-      {@JsonKey(name: '_id')
-          String? id,
-      @JsonKey(name: 'host_expanded')
-          UserDto? hostExpanded,
+      {@JsonKey(name: '_id') String? id,
+      @JsonKey(name: 'host_expanded') UserDto? hostExpanded,
       @JsonKey(name: 'new_new_photos_expanded')
-          List<DbFileDto?>? newNewPhotosExpanded,
-      @JsonKey(name: 'cohosts_expanded')
-          List<UserDto?>? cohostsExpanded,
+      List<DbFileDto?>? newNewPhotosExpanded,
+      @JsonKey(name: 'cohosts_expanded') List<UserDto?>? cohostsExpanded,
       String? title,
       String? slug,
       String? host,
@@ -183,14 +180,11 @@ abstract class _$$_EventDtoCopyWith<$Res> implements $EventDtoCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {@JsonKey(name: '_id')
-          String? id,
-      @JsonKey(name: 'host_expanded')
-          UserDto? hostExpanded,
+      {@JsonKey(name: '_id') String? id,
+      @JsonKey(name: 'host_expanded') UserDto? hostExpanded,
       @JsonKey(name: 'new_new_photos_expanded')
-          List<DbFileDto?>? newNewPhotosExpanded,
-      @JsonKey(name: 'cohosts_expanded')
-          List<UserDto?>? cohostsExpanded,
+      List<DbFileDto?>? newNewPhotosExpanded,
+      @JsonKey(name: 'cohosts_expanded') List<UserDto?>? cohostsExpanded,
       String? title,
       String? slug,
       String? host,
@@ -298,14 +292,11 @@ class __$$_EventDtoCopyWithImpl<$Res>
 @JsonSerializable(explicitToJson: true)
 class _$_EventDto implements _EventDto {
   _$_EventDto(
-      {@JsonKey(name: '_id')
-          this.id,
-      @JsonKey(name: 'host_expanded')
-          this.hostExpanded,
+      {@JsonKey(name: '_id') this.id,
+      @JsonKey(name: 'host_expanded') this.hostExpanded,
       @JsonKey(name: 'new_new_photos_expanded')
-          final List<DbFileDto?>? newNewPhotosExpanded,
-      @JsonKey(name: 'cohosts_expanded')
-          final List<UserDto?>? cohostsExpanded,
+      final List<DbFileDto?>? newNewPhotosExpanded,
+      @JsonKey(name: 'cohosts_expanded') final List<UserDto?>? cohostsExpanded,
       this.title,
       this.slug,
       this.host,
@@ -456,14 +447,11 @@ class _$_EventDto implements _EventDto {
 
 abstract class _EventDto implements EventDto {
   factory _EventDto(
-      {@JsonKey(name: '_id')
-          final String? id,
-      @JsonKey(name: 'host_expanded')
-          final UserDto? hostExpanded,
+      {@JsonKey(name: '_id') final String? id,
+      @JsonKey(name: 'host_expanded') final UserDto? hostExpanded,
       @JsonKey(name: 'new_new_photos_expanded')
-          final List<DbFileDto?>? newNewPhotosExpanded,
-      @JsonKey(name: 'cohosts_expanded')
-          final List<UserDto?>? cohostsExpanded,
+      final List<DbFileDto?>? newNewPhotosExpanded,
+      @JsonKey(name: 'cohosts_expanded') final List<UserDto?>? cohostsExpanded,
       final String? title,
       final String? slug,
       final String? host,
@@ -647,7 +635,7 @@ class _$_BroadcastDto implements _BroadcastDto {
 abstract class _BroadcastDto implements BroadcastDto {
   factory _BroadcastDto(
       {@JsonKey(name: 'provider_id', includeIfNull: false)
-          final String? providerId}) = _$_BroadcastDto;
+      final String? providerId}) = _$_BroadcastDto;
 
   factory _BroadcastDto.fromJson(Map<String, dynamic> json) =
       _$_BroadcastDto.fromJson;

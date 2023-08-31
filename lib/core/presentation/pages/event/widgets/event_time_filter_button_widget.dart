@@ -19,14 +19,16 @@ class EventTimeFilterButton extends StatefulWidget {
   State<EventTimeFilterButton> createState() => _EventTimeFilterButtonState();
 }
 
-class _EventTimeFilterButtonState extends State<EventTimeFilterButton> with TickerProviderStateMixin {
+class _EventTimeFilterButtonState extends State<EventTimeFilterButton>
+    with TickerProviderStateMixin {
   final GlobalKey _btnKey = GlobalKey();
   bool isVisible = false;
   double y = 0;
 
-  late final AnimationController _animationController =
-      AnimationController(vsync: this, duration: const Duration(milliseconds: 200));
-  late final Animation<double> _animation = CurvedAnimation(parent: _animationController, curve: Curves.easeInOut);
+  late final AnimationController _animationController = AnimationController(
+      vsync: this, duration: const Duration(milliseconds: 200));
+  late final Animation<double> _animation =
+      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut);
 
   @override
   void dispose() {
@@ -65,7 +67,8 @@ class _EventTimeFilterButtonState extends State<EventTimeFilterButton> with Tick
           child: Assets.icons.icFilter.svg(
             width: 18,
             height: 18,
-            colorFilter: ColorFilter.mode(colorScheme.onSurface, BlendMode.srcIn),
+            colorFilter:
+                ColorFilter.mode(colorScheme.onSurface, BlendMode.srcIn),
           ),
         ),
       ),
@@ -125,7 +128,8 @@ class _EventTimeFilterButtonState extends State<EventTimeFilterButton> with Tick
 
   _calculatePosition() async {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      RenderBox? renderObj = _btnKey.currentContext?.findRenderObject() as RenderBox?;
+      RenderBox? renderObj =
+          _btnKey.currentContext?.findRenderObject() as RenderBox?;
       Offset? position = renderObj?.localToGlobal(Offset.zero);
       setState(() {
         y = position?.dy ?? 150;

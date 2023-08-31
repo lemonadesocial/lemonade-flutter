@@ -168,7 +168,8 @@ class _ProfileUserFollow extends StatelessWidget {
         if (user.tagline?.isNotEmpty == true) ...[
           Text(
             '${user.tagline}',
-            style: Typo.medium.copyWith(color: LemonColor.paleViolet, fontWeight: FontWeight.w400),
+            style: Typo.medium.copyWith(
+                color: LemonColor.paleViolet, fontWeight: FontWeight.w400),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
@@ -222,7 +223,8 @@ class _ProfileUserNameAndTitle extends StatelessWidget {
                 ),
               ),
               SizedBox(width: Spacing.superExtraSmall),
-              if (user.username?.isNotEmpty == true) TextBadge(label: '@${user.username}'),
+              if (user.username?.isNotEmpty == true)
+                TextBadge(label: '@${user.username}'),
             ],
           ),
           Text(

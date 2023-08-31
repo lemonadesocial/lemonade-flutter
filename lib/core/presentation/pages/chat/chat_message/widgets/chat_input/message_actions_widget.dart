@@ -25,7 +25,8 @@ class MessageActions extends StatelessWidget {
   List<String> get defaultEmojis => ['👍', '🥳', '😍', '✅', '🎉'];
 
   bool get canEdit {
-    if ({Membership.leave, Membership.ban}.contains(event.room.membership) || !event.status.isSent) {
+    if ({Membership.leave, Membership.ban}.contains(event.room.membership) ||
+        !event.status.isSent) {
       return false;
     }
     return event.senderId == getIt<MatrixService>().client.userID;

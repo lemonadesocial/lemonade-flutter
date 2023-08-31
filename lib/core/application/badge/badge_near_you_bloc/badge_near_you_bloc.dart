@@ -17,7 +17,9 @@ class BadgesNearYouBloc extends Bloc<BadgesNearYouEvent, BadgesNearYouState> {
     on<BadgesNearYouEventFetch>(
       _onFetch,
       transformer: (events, mapper) {
-        return events.debounceTime(const Duration(milliseconds: 300)).asyncExpand(mapper);
+        return events
+            .debounceTime(const Duration(milliseconds: 300))
+            .asyncExpand(mapper);
       },
     );
   }
@@ -27,7 +29,8 @@ class BadgesNearYouBloc extends Bloc<BadgesNearYouEvent, BadgesNearYouState> {
     limit: 25,
     distance: 1,
   );
-  late final PaginationService<Badge, GetBadgesInput?> _paginationService = PaginationService(
+  late final PaginationService<Badge, GetBadgesInput?> _paginationService =
+      PaginationService(
     getDataFuture: _getBadges,
   );
 

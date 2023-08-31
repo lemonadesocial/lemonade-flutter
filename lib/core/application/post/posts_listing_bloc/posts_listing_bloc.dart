@@ -11,18 +11,21 @@ part 'posts_listing_bloc.freezed.dart';
 
 class PostsListingBloc extends Bloc<PostsListingEvent, PostsListingState> {
   final PostService postService;
-  late final PaginationService<Post, GetPostsInput> paginationService = PaginationService(
+  late final PaginationService<Post, GetPostsInput> paginationService =
+      PaginationService(
     getDataFuture: _getPosts,
   );
   final GetPostsInput defaultInput;
 
-  PostsListingBloc(this.postService, {
+  PostsListingBloc(
+    this.postService, {
     required this.defaultInput,
   }) : super(PostsListingState.loading()) {
     on<PostsListingEventFetch>(_onFetch);
   }
 
-  Future<Either<Failure, List<Post>>> _getPosts(int skip, bool endReached, { GetPostsInput? input }) async {
+  Future<Either<Failure, List<Post>>> _getPosts(int skip, bool endReached,
+      {GetPostsInput? input}) async {
     return postService.getPosts(input: input?.copyWith(skip: skip));
   }
 
@@ -50,7 +53,6 @@ class PostsListingState with _$PostsListingState {
 
 @freezed
 class PostsListingEvent with _$PostsListingEvent {
-  factory PostsListingEvent.fetch({
-    GetPostsInput? input
-  }) = PostsListingEventFetch;
+  factory PostsListingEvent.fetch({GetPostsInput? input}) =
+      PostsListingEventFetch;
 }

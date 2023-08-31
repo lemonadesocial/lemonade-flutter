@@ -20,7 +20,8 @@ class Media {
 }
 
 class MediaUtils {
-  static Future<Media> getNftMedia(String? imageUrl, String? animationUrl) async {
+  static Future<Media> getNftMedia(
+      String? imageUrl, String? animationUrl) async {
     try {
       if (imageUrl == null && animationUrl == null) {
         return Media(type: MediaType.unknown);
@@ -37,7 +38,8 @@ class MediaUtils {
 
       if (protocol == 'blob:') {
         HttpClient client = HttpClient();
-        HttpClientRequest request = await client.getUrl(Uri.parse(animationUrl ?? ''));
+        HttpClientRequest request =
+            await client.getUrl(Uri.parse(animationUrl ?? ''));
         HttpClientResponse response = await request.close();
         ContentType? contentType = response.headers.contentType;
 
@@ -80,7 +82,8 @@ class MediaUtils {
         );
       }
 
-      if (['png', 'jpg', 'gif', 'jpeg', 'bmp', 'svg', 'webp'].contains(extension)) {
+      if (['png', 'jpg', 'gif', 'jpeg', 'bmp', 'svg', 'webp']
+          .contains(extension)) {
         return Media(
           type: MediaType.image,
           url: href,

@@ -44,7 +44,8 @@ class ProfileNftOnSaleListView extends StatelessWidget {
         listener: (context, scrollState) {
           scrollState.maybeWhen(
             endReached: () {
-              ordersListingBloc.add(const OrdersListingSubscriptionEvent.start());
+              ordersListingBloc
+                  .add(const OrdersListingSubscriptionEvent.start());
             },
             orElse: () {},
           );
@@ -59,7 +60,8 @@ class _ProfileNftOnSaleList extends StatefulWidget {
   const _ProfileNftOnSaleList();
 
   @override
-  State<_ProfileNftOnSaleList> createState() => _ProfileNftCreatedListViewState();
+  State<_ProfileNftOnSaleList> createState() =>
+      _ProfileNftCreatedListViewState();
 }
 
 class _ProfileNftCreatedListViewState extends State<_ProfileNftOnSaleList> {
@@ -68,11 +70,14 @@ class _ProfileNftCreatedListViewState extends State<_ProfileNftOnSaleList> {
     final t = Translations.of(context);
     return SliverPadding(
       padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
-      sliver: BlocBuilder<OrdersListingSubscriptionBloc, OrdersListingSubscriptionState>(
+      sliver: BlocBuilder<OrdersListingSubscriptionBloc,
+          OrdersListingSubscriptionState>(
         builder: (context, tokenListingState) {
           return tokenListingState.when(
-              loading: () => SliverFillRemaining(child: Center(child: Loading.defaultLoading(context))),
-              failure: () => SliverToBoxAdapter(child: Center(child: Text(t.common.somethingWrong))),
+              loading: () => SliverFillRemaining(
+                  child: Center(child: Loading.defaultLoading(context))),
+              failure: () => SliverToBoxAdapter(
+                  child: Center(child: Text(t.common.somethingWrong))),
               fetched: (orders) {
                 if (orders.isEmpty) {
                   return SliverFillRemaining(

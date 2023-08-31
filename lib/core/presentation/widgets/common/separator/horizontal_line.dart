@@ -9,7 +9,7 @@ class HorizontalLine extends StatelessWidget {
     return Container(
       height: 1,
       width: double.infinity,
-      color: themeColor.outline, 
+      color: themeColor.outline,
     );
   }
 }

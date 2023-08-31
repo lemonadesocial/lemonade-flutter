@@ -28,9 +28,7 @@ class NotificationCard extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.all(Spacing.small),
           decoration: BoxDecoration(
-            border: Border(
-                bottom: BorderSide(color: colorScheme.outline)
-            ),
+            border: Border(bottom: BorderSide(color: colorScheme.outline)),
           ),
           child: Row(
             children: [

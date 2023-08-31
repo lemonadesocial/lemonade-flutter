@@ -10,8 +10,9 @@ class GetPoapViewSupplyInput with _$GetPoapViewSupplyInput {
     required String address,
     @Default('supply') name,
   }) = _GetPoapViewSupplyInput;
-  
-  factory GetPoapViewSupplyInput.fromJson(Map<String, dynamic> json) => _$GetPoapViewSupplyInputFromJson(json);
+
+  factory GetPoapViewSupplyInput.fromJson(Map<String, dynamic> json) =>
+      _$GetPoapViewSupplyInputFromJson(json);
 }
 
 @freezed
@@ -20,11 +21,13 @@ class CheckHasClaimedPoapViewInput with _$CheckHasClaimedPoapViewInput {
     required String network,
     required String address,
     @Default('hasClaimed') name,
+
     /// user wallet address,
     required List<List<String>> args,
   }) = _CheckHasClaimedPoapViewInput;
-  
-  factory CheckHasClaimedPoapViewInput.fromJson(Map<String, dynamic> json) => _$CheckHasClaimedPoapViewInputFromJson(json);
+
+  factory CheckHasClaimedPoapViewInput.fromJson(Map<String, dynamic> json) =>
+      _$CheckHasClaimedPoapViewInputFromJson(json);
 }
 
 @freezed
@@ -40,7 +43,8 @@ class ClaimInput with _$ClaimInput {
     String? to,
   }) = _ClaimInput;
 
-  factory ClaimInput.fromJson(Map<String, dynamic> json) => _$ClaimInputFromJson(json);
+  factory ClaimInput.fromJson(Map<String, dynamic> json) =>
+      _$ClaimInputFromJson(json);
 }
 
 @freezed
@@ -50,7 +54,8 @@ class ClaimArgsInput with _$ClaimArgsInput {
     String? tokenURI,
   }) = _ClaimArgsInput;
 
-  factory ClaimArgsInput.fromJson(Map<String, dynamic> json) => _$ClaimArgsInputFromJson(json);
+  factory ClaimArgsInput.fromJson(Map<String, dynamic> json) =>
+      _$ClaimArgsInputFromJson(json);
 }
 
 @freezed
@@ -61,5 +66,6 @@ class GetPoapPolicyInput with _$GetPoapPolicyInput {
     @JsonKey(includeIfNull: false) String? target,
   }) = _GetPoapPolicyInput;
 
-  factory GetPoapPolicyInput.fromJson(Map<String, dynamic> json) => _$GetPoapPolicyInputFromJson(json);
+  factory GetPoapPolicyInput.fromJson(Map<String, dynamic> json) =>
+      _$GetPoapPolicyInputFromJson(json);
 }

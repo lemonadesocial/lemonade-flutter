@@ -24,7 +24,8 @@ class EventDetailPage extends StatefulWidget {
   State<EventDetailPage> createState() => _EventDetailPageState();
 }
 
-class _EventDetailPageState extends State<EventDetailPage> with WidgetsBindingObserver {
+class _EventDetailPageState extends State<EventDetailPage>
+    with WidgetsBindingObserver {
   bool isReady = false;
   bool isLoaded = false;
 
@@ -32,13 +33,14 @@ class _EventDetailPageState extends State<EventDetailPage> with WidgetsBindingOb
   int maxSendTokenAttempt = 5;
   int sendTokenAttempt = 0;
 
-  late WebviewTokenService webviewTokenService = WebviewTokenService(onTokenChanged: (t) {
-      token = t;
-      _sendTokenToWebview();
-    });
+  late WebviewTokenService webviewTokenService =
+      WebviewTokenService(onTokenChanged: (t) {
+    token = t;
+    _sendTokenToWebview();
+  });
 
   final GlobalKey webViewKey = GlobalKey();
-  
+
   URLRequest? initialRequest;
 
   InAppWebViewController? webViewController;
@@ -95,7 +97,8 @@ class _EventDetailPageState extends State<EventDetailPage> with WidgetsBindingOb
   _sendTokenToWebview() async {
     sendTokenAttempt++;
     try {
-      webViewController?.evaluateJavascript(source: 'document.mobileAuthToken = "$token"');
+      webViewController?.evaluateJavascript(
+          source: 'document.mobileAuthToken = "$token"');
     } catch (e) {
       if (sendTokenAttempt >= maxSendTokenAttempt) return;
       if (kDebugMode) {
@@ -109,14 +112,16 @@ class _EventDetailPageState extends State<EventDetailPage> with WidgetsBindingOb
   _getInitialRequest() async {
     try {
       var headers = await webviewTokenService.generateHeaderWithToken();
-      if(headers == null) {
+      if (headers == null) {
         await _clearWebStorage();
       }
-      initialRequest = URLRequest(url: Uri.parse(_getEventWebUrl()), headers: headers);
+      initialRequest =
+          URLRequest(url: Uri.parse(_getEventWebUrl()), headers: headers);
     } catch (e) {
       if (kDebugMode) {
         print('Error _getInitialRequest: $e');
-      }}
+      }
+    }
   }
 
   String _getEventWebUrl() {
@@ -157,19 +162,20 @@ class _EventDetailPageState extends State<EventDetailPage> with WidgetsBindingOb
       ),
       body: Stack(
         children: [
-          if(isReady) InAppWebView(
-            key: webViewKey,
-            initialUrlRequest: initialRequest,
-            initialOptions: options,
-            onWebViewCreated: (controller) {
-              webViewController = controller;
-            },
-            onProgressChanged: (context, progress) {
-              if(progress == 100) {
-                _oWebViewLoaded();
-              }
-            },
-          ),
+          if (isReady)
+            InAppWebView(
+              key: webViewKey,
+              initialUrlRequest: initialRequest,
+              initialOptions: options,
+              onWebViewCreated: (controller) {
+                webViewController = controller;
+              },
+              onProgressChanged: (context, progress) {
+                if (progress == 100) {
+                  _oWebViewLoaded();
+                }
+              },
+            ),
           if (!isReady || !isLoaded)
             Container(
               color: colorScheme.primary,

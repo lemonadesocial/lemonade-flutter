@@ -65,7 +65,8 @@ class ChatController extends State<ChatPageWithRoom> {
 
   bool _scrolledUp = false;
 
-  bool get showScrollDownButton => _scrolledUp || timeline?.allowNewEvent == false;
+  bool get showScrollDownButton =>
+      _scrolledUp || timeline?.allowNewEvent == false;
 
   final int _loadHistoryCount = 100;
 
@@ -82,7 +83,8 @@ class ChatController extends State<ChatPageWithRoom> {
     scrollController.addListener(_updateScrollController);
     super.initState();
     readMarkerEventId = room.fullyRead;
-    loadTimelineFuture = _getTimeline(eventContextId: readMarkerEventId).onError((error, s) {
+    loadTimelineFuture =
+        _getTimeline(eventContextId: readMarkerEventId).onError((error, s) {
       if (kDebugMode) {
         print(error);
       }
@@ -107,7 +109,8 @@ class ChatController extends State<ChatPageWithRoom> {
   }) async {
     await sendingClient.roomsLoading;
     await sendingClient.accountDataLoading;
-    if (eventContextId != null && (!eventContextId.isValidMatrixId || eventContextId.sigil != '\$')) {
+    if (eventContextId != null &&
+        (!eventContextId.isValidMatrixId || eventContextId.sigil != '\$')) {
       eventContextId = null;
     }
     try {
@@ -157,7 +160,9 @@ class ChatController extends State<ChatPageWithRoom> {
 
   void setReadMarker({String? eventId}) {
     if (_setReadMarkerFuture != null) return;
-    if (eventId == null && !room.hasNewMessages && room.notificationCount == 0) {
+    if (eventId == null &&
+        !room.hasNewMessages &&
+        room.notificationCount == 0) {
       return;
     }
 
@@ -179,7 +184,8 @@ class ChatController extends State<ChatPageWithRoom> {
     }
     setReadMarker();
     if (!scrollController.hasClients) return;
-    if (timeline?.allowNewEvent == false || scrollController.position.pixels > 0 && _scrolledUp == false) {
+    if (timeline?.allowNewEvent == false ||
+        scrollController.position.pixels > 0 && _scrolledUp == false) {
       setState(() => _scrolledUp = true);
     } else if (scrollController.position.pixels == 0 && _scrolledUp == true) {
       setState(() => _scrolledUp = false);
@@ -253,14 +259,17 @@ class ChatController extends State<ChatPageWithRoom> {
     });
   }
 
-  Future<void> sendEmojiAction({required Event event, required String emoji}) async {
+  Future<void> sendEmojiAction(
+      {required Event event, required String emoji}) async {
     Iterable<Event> allReactionEvents = event
         .aggregatedEvents(
           timeline!,
           RelationshipTypes.reaction,
         )
         .where(
-          (event) => event.senderId == event.room.client.userID && event.type == 'm.reaction',
+          (event) =>
+              event.senderId == event.room.client.userID &&
+              event.type == 'm.reaction',
         );
     // prevent duplicated reactions
     bool reacted = allReactionEvents.any(
@@ -275,11 +284,12 @@ class ChatController extends State<ChatPageWithRoom> {
 
   void selectEditEventAction(Event? event) => setState(() {
         editEvent = event;
-        inputText = sendController.text = editEvent!.getDisplayEvent(timeline!).calcLocalizedBodyFallback(
-              const MatrixDefaultLocalizations(),
-              withSenderNamePrefix: false,
-              hideReply: true,
-            );
+        inputText = sendController.text =
+            editEvent!.getDisplayEvent(timeline!).calcLocalizedBodyFallback(
+                  const MatrixDefaultLocalizations(),
+                  withSenderNamePrefix: false,
+                  hideReply: true,
+                );
       });
 
   void cancelReplyOrEditEventAction() => setState(() {
@@ -291,7 +301,8 @@ class ChatController extends State<ChatPageWithRoom> {
         editEvent = null;
       });
 
-  bool get isArchived => {Membership.leave, Membership.ban}.contains(room.membership);
+  bool get isArchived =>
+      {Membership.leave, Membership.ban}.contains(room.membership);
 
   @override
   Widget build(BuildContext context) => ChatMessageView(this);

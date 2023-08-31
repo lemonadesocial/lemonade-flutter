@@ -30,11 +30,13 @@ class EventsListingPage extends StatelessWidget {
         EventService(getIt<EventRepository>()),
         defaultInput: const GetHomeEventsInput(),
       );
-  AttendingEventListingBloc resolveAttendingEventsListingBloc(String userId) => AttendingEventListingBloc(
+  AttendingEventListingBloc resolveAttendingEventsListingBloc(String userId) =>
+      AttendingEventListingBloc(
         EventService(getIt<EventRepository>()),
         defaultInput: GetEventsInput(accepted: userId),
       );
-  HostingEventsListingBloc resolveHostingEventsListingBloc(String userId) => HostingEventsListingBloc(
+  HostingEventsListingBloc resolveHostingEventsListingBloc(String userId) =>
+      HostingEventsListingBloc(
         EventService(getIt<EventRepository>()),
         defaultInput: GetHostingEventsInput(id: userId),
       );
@@ -54,7 +56,6 @@ class EventsListingPage extends StatelessWidget {
 }
 
 class _EventsListingView extends StatefulWidget {
-
   const _EventsListingView({
     required this.homeEventListingBloc,
     required this.attendingEventListingBloc,
@@ -74,12 +75,13 @@ class _EventsListingViewState extends State<_EventsListingView> {
 
   _onAuthStateChanged(AuthState authState) {
     authState.maybeWhen(
-        unauthenticated: (_) {
-          setState(() {
-            eventListingType = EventListingType.all;
-          });
-        },
-        orElse: () {},);
+      unauthenticated: (_) {
+        setState(() {
+          eventListingType = EventListingType.all;
+        });
+      },
+      orElse: () {},
+    );
   }
 
   _selectEventListingType(EventListingType eventListingType) {
@@ -92,7 +94,8 @@ class _EventsListingViewState extends State<_EventsListingView> {
     setState(() {
       eventTimeFilter = eventTimeFilter;
     });
-    _selectedEventsBloc.add(BaseEventsListingEvent.filter(eventTimeFilter: eventTimeFilter));
+    _selectedEventsBloc
+        .add(BaseEventsListingEvent.filter(eventTimeFilter: eventTimeFilter));
   }
 
   BaseEventListingBloc get _selectedEventsBloc {
@@ -150,17 +153,21 @@ class _EventsListingViewState extends State<_EventsListingView> {
             _buildEventsFilterBar(context),
             SizedBox(height: Spacing.small),
             NotificationListener<ScrollNotification>(
-                onNotification: (notification) {
-                  if (notification is ScrollEndNotification) {
-                    if (notification.metrics.pixels == notification.metrics.maxScrollExtent) {
-                      _selectedEventsBloc.add(BaseEventsListingEvent.fetch(
+              onNotification: (notification) {
+                if (notification is ScrollEndNotification) {
+                  if (notification.metrics.pixels ==
+                      notification.metrics.maxScrollExtent) {
+                    _selectedEventsBloc.add(
+                      BaseEventsListingEvent.fetch(
                         eventTimeFilter: eventTimeFilter,
-                      ),);
-                    }
+                      ),
+                    );
                   }
-                  return true;
-                },
-                child: _buildEventsList(),),
+                }
+                return true;
+              },
+              child: _buildEventsList(),
+            ),
           ],
         ),
       ),
@@ -181,23 +188,26 @@ class _EventsListingViewState extends State<_EventsListingView> {
           },
           builder: (context, authState) {
             return authState.maybeWhen(
-                authenticated: (_) => Row(
-                      children: [
-                        SizedBox(width: Spacing.superExtraSmall),
-                        LemonChip(
-                          label: t.event.attending,
-                          isActive: eventListingType == EventListingType.attending,
-                          onTap: () => _selectEventListingType(EventListingType.attending),
-                        ),
-                        SizedBox(width: Spacing.superExtraSmall),
-                        LemonChip(
-                          label: t.event.hosting,
-                          isActive: eventListingType == EventListingType.hosting,
-                          onTap: () => _selectEventListingType(EventListingType.hosting),
-                        ),
-                      ],
-                    ),
-                orElse: SizedBox.shrink,);
+              authenticated: (_) => Row(
+                children: [
+                  SizedBox(width: Spacing.superExtraSmall),
+                  LemonChip(
+                    label: t.event.attending,
+                    isActive: eventListingType == EventListingType.attending,
+                    onTap: () =>
+                        _selectEventListingType(EventListingType.attending),
+                  ),
+                  SizedBox(width: Spacing.superExtraSmall),
+                  LemonChip(
+                    label: t.event.hosting,
+                    isActive: eventListingType == EventListingType.hosting,
+                    onTap: () =>
+                        _selectEventListingType(EventListingType.hosting),
+                  ),
+                ],
+              ),
+              orElse: SizedBox.shrink,
+            );
           },
         ),
         const Spacer(),
@@ -211,7 +221,8 @@ class _EventsListingViewState extends State<_EventsListingView> {
   Widget _buildEventsList() {
     if (eventListingType == EventListingType.attending) {
       return BlocProvider.value(
-        value: widget.attendingEventListingBloc..add(_getInitialEvent(widget.attendingEventListingBloc)),
+        value: widget.attendingEventListingBloc
+          ..add(_getInitialEvent(widget.attendingEventListingBloc)),
         child: _EventList<AttendingEventListingBloc>(
           eventListingType: eventListingType,
           eventTimeFilter: eventTimeFilter,
@@ -221,7 +232,8 @@ class _EventsListingViewState extends State<_EventsListingView> {
 
     if (eventListingType == EventListingType.hosting) {
       return BlocProvider.value(
-        value: widget.hostingEventsListingBloc..add(_getInitialEvent(widget.hostingEventsListingBloc)),
+        value: widget.hostingEventsListingBloc
+          ..add(_getInitialEvent(widget.hostingEventsListingBloc)),
         child: _EventList<HostingEventsListingBloc>(
           eventListingType: eventListingType,
           eventTimeFilter: eventTimeFilter,
@@ -230,7 +242,8 @@ class _EventsListingViewState extends State<_EventsListingView> {
     }
 
     return BlocProvider.value(
-      value: widget.homeEventListingBloc..add(_getInitialEvent(widget.homeEventListingBloc)),
+      value: widget.homeEventListingBloc
+        ..add(_getInitialEvent(widget.homeEventListingBloc)),
       child: _EventList<HomeEventListingBloc>(
         eventListingType: eventListingType,
         eventTimeFilter: eventTimeFilter,
@@ -240,7 +253,6 @@ class _EventsListingViewState extends State<_EventsListingView> {
 }
 
 class _EventList<T extends BaseEventListingBloc> extends StatelessWidget {
-
   const _EventList({
     super.key,
     this.eventListingType,
@@ -251,7 +263,8 @@ class _EventList<T extends BaseEventListingBloc> extends StatelessWidget {
 
   Expanded _buildEmptyEvents(BuildContext context) {
     final t = Translations.of(context);
-    final String timeFilterText = eventTimeFilter != null ? t['common.${eventTimeFilter!.labelKey}'] : '';
+    final String timeFilterText =
+        eventTimeFilter != null ? t['common.${eventTimeFilter!.labelKey}'] : '';
 
     String emptyText;
 
@@ -298,11 +311,14 @@ class _EventList<T extends BaseEventListingBloc> extends StatelessWidget {
                         onTap: () {
                           AutoRouter.of(context).navigate(
                             EventDetailRoute(
-                                eventId: filteredEvents[index].id!, eventName: filteredEvents[index].title ?? '',),
+                              eventId: filteredEvents[index].id!,
+                              eventName: filteredEvents[index].title ?? '',
+                            ),
                           );
                         },
                       ),
-                separatorBuilder: (ctx, index) => SizedBox(height: Spacing.extraSmall),
+                separatorBuilder: (ctx, index) =>
+                    SizedBox(height: Spacing.extraSmall),
                 itemCount: filteredEvents.length + 1,
               ),
             );

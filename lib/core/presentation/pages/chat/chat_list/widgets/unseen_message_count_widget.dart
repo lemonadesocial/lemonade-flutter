@@ -13,7 +13,8 @@ class UnseenMessageCountWidget extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     int unseenMessageCount = room.notificationCount;
     var boxColor = room.isMuted ? LemonColor.white12 : LemonColor.paleViolet;
-    var textColor = room.isMuted ? colorScheme.onSecondary : colorScheme.secondary;
+    var textColor =
+        room.isMuted ? colorScheme.onSecondary : colorScheme.secondary;
 
     if (unseenMessageCount == 0) {
       return const SizedBox.shrink();

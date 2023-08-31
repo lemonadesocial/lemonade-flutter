@@ -18,24 +18,27 @@ class WalletService {
 
   Future<Either<Failure, bool>> initWallet() async {
     var success = await walletConnectService.init();
-    if(success) return Right(success);
-    return Left(Failure()); 
+    if (success) return Right(success);
+    return Left(Failure());
   }
 
   close() {
     walletConnectService.close();
   }
 
-  Future<Either<Failure, bool>> connectWallet({required SupportedWalletApp walletApp}) async {
-    var success = await walletConnectService.connectWallet(walletApp: walletApp);
-    if(success) return Right(success);
-    return Left(Failure()); 
+  Future<Either<Failure, bool>> connectWallet(
+      {required SupportedWalletApp walletApp}) async {
+    var success =
+        await walletConnectService.connectWallet(walletApp: walletApp);
+    if (success) return Right(success);
+    return Left(Failure());
   }
 
   Future<Either<Failure, bool>> updateUserWallet({
     required String wallet,
   }) async {
-    final requestResult = await walletRepository.getUserWalletRequest(wallet: wallet.toLowerCase());
+    final requestResult = await walletRepository.getUserWalletRequest(
+        wallet: wallet.toLowerCase());
     if (requestResult.isLeft()) {
       return Left(Failure());
     }
@@ -49,7 +52,7 @@ class WalletService {
       wallet: wallet,
     );
 
-    if(signature == null) return Left(Failure());
+    if (signature == null) return Left(Failure());
 
     final updateResult = await walletRepository.setUserWallet(
       token: userWalletRequest.token,

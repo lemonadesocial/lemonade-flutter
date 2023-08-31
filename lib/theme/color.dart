@@ -47,7 +47,7 @@ class LemonColor {
   static Color shadow = const Color.fromARGB(91, 0, 0, 0);
   static Color disableButtonLavender = const Color(0xFF3c2557);
 
-  // Slider 
+  // Slider
   static Color sunrise = const Color(0xffFFDB00);
   static Color sunrise18 = const Color(0xffFFDB00).withOpacity(0.18);
 

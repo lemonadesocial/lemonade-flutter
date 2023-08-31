@@ -51,7 +51,8 @@ class _ProfileNftCollectedList extends StatefulWidget {
   const _ProfileNftCollectedList();
 
   @override
-  State<_ProfileNftCollectedList> createState() => _ProfileNftCreatedListViewState();
+  State<_ProfileNftCollectedList> createState() =>
+      _ProfileNftCreatedListViewState();
 }
 
 class _ProfileNftCreatedListViewState extends State<_ProfileNftCollectedList> {
@@ -63,8 +64,10 @@ class _ProfileNftCreatedListViewState extends State<_ProfileNftCollectedList> {
       sliver: BlocBuilder<TokensListingBloc, TokensListingState>(
         builder: (context, tokenListingState) {
           return tokenListingState.when(
-              loading: () => SliverFillRemaining(child: Center(child: Loading.defaultLoading(context))),
-              failure: () => SliverToBoxAdapter(child: Center(child: Text(t.common.somethingWrong))),
+              loading: () => SliverFillRemaining(
+                  child: Center(child: Loading.defaultLoading(context))),
+              failure: () => SliverToBoxAdapter(
+                  child: Center(child: Text(t.common.somethingWrong))),
               fetched: (tokens) {
                 if (tokens.isEmpty) {
                   return SliverFillRemaining(

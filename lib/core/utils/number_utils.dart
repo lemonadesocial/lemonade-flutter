@@ -12,14 +12,14 @@ class NumberUtils {
   }) {
     amount = amount / 100;
 
-
     var decimals = amount % 1 == 0 ? attemptedDecimals : 2;
 
     if (amount == 0 && showFree) {
       return freeText ?? 'free';
     } else {
       var formattedAmount = NumberFormat.currency(
-        symbol: NumberFormat.simpleCurrency(name: currency?.name).currencySymbol,
+        symbol:
+            NumberFormat.simpleCurrency(name: currency?.name).currencySymbol,
         decimalDigits: decimals,
       ).format(amount);
 
@@ -28,7 +28,7 @@ class NumberUtils {
   }
 
   static String formatCompact({
-    num? amount, 
+    num? amount,
   }) {
     return NumberFormat.compact().format(amount ?? 0);
   }

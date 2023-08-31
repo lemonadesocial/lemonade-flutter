@@ -12,7 +12,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 @RoutePage()
-class OnboardingWrapperPage extends StatelessWidget implements AutoRouteWrapper {
+class OnboardingWrapperPage extends StatelessWidget
+    implements AutoRouteWrapper {
   const OnboardingWrapperPage({super.key});
 
   @override

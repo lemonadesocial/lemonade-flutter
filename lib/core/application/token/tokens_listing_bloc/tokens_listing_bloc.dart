@@ -46,7 +46,8 @@ class TokensListingBloc extends Bloc<TokensListingEvent, TokensListingState> {
 
 @freezed
 class TokensListingEvent with _$TokensListingEvent {
-  const factory TokensListingEvent.fetch({GetTokensInput? input}) = TokensListingEventFetch;
+  const factory TokensListingEvent.fetch({GetTokensInput? input}) =
+      TokensListingEventFetch;
 }
 
 @freezed

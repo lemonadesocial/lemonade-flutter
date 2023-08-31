@@ -37,7 +37,8 @@ class OnboardingProfilePhotoPage extends StatelessWidget {
               Row(
                 children: [
                   InkWell(
-                    onTap: () => context.router.push(const OnboardingAboutRoute()),
+                    onTap: () =>
+                        context.router.push(const OnboardingAboutRoute()),
                     child: Text(
                       t.onboarding.skip,
                       style: Typo.medium.copyWith(fontWeight: FontWeight.w400),

@@ -22,18 +22,22 @@ class PoapPolicyUserNodeWidget extends StatelessWidget {
     final t = Translations.of(context);
     final userId = node.children?[0].value ?? '';
     return FutureBuilder(
-      future: getIt<UserRepository>().getUserProfile(GetProfileInput(id: userId)),
+      future:
+          getIt<UserRepository>().getUserProfile(GetProfileInput(id: userId)),
       builder: (context, snapshot) {
         final user = snapshot.data?.fold((l) => null, (user) => user);
-        
+
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              t.nft.poapPolicy.userPolicy.title(username: user?.username ?? '...'),
+              t.nft.poapPolicy.userPolicy
+                  .title(username: user?.username ?? '...'),
             ),
             Text(
-              result ? t.nft.poapPolicy.userPolicy.qualified : t.nft.poapPolicy.userPolicy.nonQualified,
+              result
+                  ? t.nft.poapPolicy.userPolicy.qualified
+                  : t.nft.poapPolicy.userPolicy.nonQualified,
               style: Typo.small.copyWith(
                 color: colorScheme.onSecondary,
               ),

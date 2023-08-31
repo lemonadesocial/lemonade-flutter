@@ -16,7 +16,8 @@ class ChatStackPage extends StatefulWidget implements AutoRouteWrapper {
   @override
   Widget wrappedRoute(BuildContext context) {
     return BlocProvider(
-      create: (context) => ChatSpaceBloc()..add(const ChatSpaceEvent.fetchChatSpaces()),
+      create: (context) =>
+          ChatSpaceBloc()..add(const ChatSpaceEvent.fetchChatSpaces()),
       child: this,
     );
   }
@@ -32,7 +33,11 @@ class ChatStackController extends State<ChatStackPage> {
 
   @override
   void initState() {
-    _matrixLoginStateSub = getIt<MatrixService>().client.onLoginStateChanged.stream.listen((loginState) {
+    _matrixLoginStateSub = getIt<MatrixService>()
+        .client
+        .onLoginStateChanged
+        .stream
+        .listen((loginState) {
       if (loginState == LoginState.loggedIn) {
         setState(() {
           isLogged = true;
@@ -52,8 +57,8 @@ class ChatStackController extends State<ChatStackPage> {
   Widget build(BuildContext context) {
     return isLogged
         ? AutoRouter(
-          navigatorObservers: () => [HeroController()],
-        )
+            navigatorObservers: () => [HeroController()],
+          )
         : Scaffold(
             backgroundColor: Theme.of(context).colorScheme.primary,
             body: Center(

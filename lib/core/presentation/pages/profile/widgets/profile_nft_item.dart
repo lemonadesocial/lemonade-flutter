@@ -9,7 +9,8 @@ import 'package:flutter/material.dart';
 
 class ProfileNftItem extends StatelessWidget {
   final Either<TokenComplex, TokenSimple> nftToken;
-  const ProfileNftItem({super.key, 
+  const ProfileNftItem({
+    super.key,
     required this.nftToken,
   });
 
@@ -43,15 +44,19 @@ class ProfileNftItem extends StatelessWidget {
                     child: Container(
                       decoration: BoxDecoration(
                         border: Border.all(color: colorScheme.outline),
-                        borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
+                        borderRadius:
+                            BorderRadius.circular(LemonRadius.extraSmall),
                       ),
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
+                        borderRadius:
+                            BorderRadius.circular(LemonRadius.extraSmall),
                         child: CachedNetworkImage(
                           imageUrl: media.url ?? '',
                           fit: BoxFit.cover,
-                          errorWidget: (ctx, _, __) => ImagePlaceholder.defaultPlaceholder(),
-                          placeholder: (ctx, _) => ImagePlaceholder.defaultPlaceholder(),
+                          errorWidget: (ctx, _, __) =>
+                              ImagePlaceholder.defaultPlaceholder(),
+                          placeholder: (ctx, _) =>
+                              ImagePlaceholder.defaultPlaceholder(),
                         ),
                       ),
                     ),

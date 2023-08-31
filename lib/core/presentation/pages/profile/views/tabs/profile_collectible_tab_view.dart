@@ -18,7 +18,8 @@ class ProfileCollectibleTabView extends StatefulWidget {
   });
 
   @override
-  State<ProfileCollectibleTabView> createState() => _ProfileCollectibleTabViewState();
+  State<ProfileCollectibleTabView> createState() =>
+      _ProfileCollectibleTabViewState();
 }
 
 class _ProfileCollectibleTabViewState extends State<ProfileCollectibleTabView> {
@@ -55,7 +56,8 @@ class _ProfileCollectibleTabViewState extends State<ProfileCollectibleTabView> {
                     Row(
                       children: TokensListingType.values.map((item) {
                         return Container(
-                          margin: EdgeInsets.only(right: Spacing.superExtraSmall),
+                          margin:
+                              EdgeInsets.only(right: Spacing.superExtraSmall),
                           child: LemonChip(
                             onTap: () => _selectTokenListingType(item),
                             label: t['nft.${item.name}'],
@@ -71,10 +73,14 @@ class _ProfileCollectibleTabViewState extends State<ProfileCollectibleTabView> {
             ),
           ),
         ),
-        if(tokensListingType == TokensListingType.onSale) ProfileNftOnSaleListView(user: widget.user),
-        if(tokensListingType == TokensListingType.created) ProfileNftCreatedListView(user: widget.user),
-        if(tokensListingType == TokensListingType.collected) ProfileNftCollectedListView(user: widget.user),
-        if(tokensListingType == TokensListingType.sold) ProfileNftSoldListView(user: widget.user),
+        if (tokensListingType == TokensListingType.onSale)
+          ProfileNftOnSaleListView(user: widget.user),
+        if (tokensListingType == TokensListingType.created)
+          ProfileNftCreatedListView(user: widget.user),
+        if (tokensListingType == TokensListingType.collected)
+          ProfileNftCollectedListView(user: widget.user),
+        if (tokensListingType == TokensListingType.sold)
+          ProfileNftSoldListView(user: widget.user),
         const SliverToBoxAdapter(
           child: SizedBox(height: 92),
         )

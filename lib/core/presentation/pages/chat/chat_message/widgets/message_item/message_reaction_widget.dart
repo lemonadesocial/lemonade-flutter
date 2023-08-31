@@ -30,7 +30,9 @@ class MessageReactions extends StatelessWidget {
     Set<Event> allReactionEvents = getAllReactionEvents();
     final reactionMap = <String, ReactionEntry>{};
     for (final e in allReactionEvents) {
-      final key = e.content.tryGetMap<String, dynamic>('m.relates_to')?.tryGet<String>('key');
+      final key = e.content
+          .tryGetMap<String, dynamic>('m.relates_to')
+          ?.tryGet<String>('key');
       if (key != null) {
         if (!reactionMap.containsKey(key)) {
           reactionMap[key] = ReactionEntry(
@@ -51,7 +53,9 @@ class MessageReactions extends StatelessWidget {
   Future<void> _onTapReaction(ReactionEntry r) async {
     if (r.reacted) {
       final evt = getAllReactionEvents().firstWhereOrNull(
-        (e) => e.senderId == e.room.client.userID && e.content.tryGetMap('m.relates_to')?['key'] == r.key,
+        (e) =>
+            e.senderId == e.room.client.userID &&
+            e.content.tryGetMap('m.relates_to')?['key'] == r.key,
       );
       if (evt != null) {
         await evt.redactEvent();
@@ -137,7 +141,9 @@ class _Reaction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = reacted == true ? LemonColor.lavender : Theme.of(context).colorScheme.surface;
+    final color = reacted == true
+        ? LemonColor.lavender
+        : Theme.of(context).colorScheme.surface;
     var renderKey = Characters(reactionKey!);
     if (renderKey.length > 10) {
       renderKey = renderKey.getRange(0, 9) + Characters('…');

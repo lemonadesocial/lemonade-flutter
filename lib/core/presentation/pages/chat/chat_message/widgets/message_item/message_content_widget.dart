@@ -49,7 +49,8 @@ class MessageContent extends StatelessWidget {
           case EventTypes.Encrypted:
             return _buildEncryptedMessage(buttonTextColor);
           case MessageTypes.Location:
-            final geoUri = Uri.tryParse(event.content.tryGet<String>('geo_uri')!);
+            final geoUri =
+                Uri.tryParse(event.content.tryGet<String>('geo_uri')!);
             if (geoUri != null && geoUri.scheme == 'geo') {
               return _buildLocationMessage();
             }
@@ -62,7 +63,8 @@ class MessageContent extends StatelessWidget {
                 future: event.redactedBecause?.fetchSenderUser(),
                 builder: (context, snapshot) {
                   return _ButtonContent(
-                    label: snapshot.data?.calcDisplayname() ?? event.senderFromMemoryOrFallback.calcDisplayname(),
+                    label: snapshot.data?.calcDisplayname() ??
+                        event.senderFromMemoryOrFallback.calcDisplayname(),
                     icon: const Icon(Icons.delete_outlined),
                     textColor: buttonTextColor,
                     onPressed: () => onInfoTab!(event),
@@ -90,7 +92,8 @@ class MessageContent extends StatelessWidget {
           future: event.fetchSenderUser(),
           builder: (context, snapshot) {
             return _ButtonContent(
-              label: snapshot.data?.calcDisplayname() ?? event.senderFromMemoryOrFallback.calcDisplayname(),
+              label: snapshot.data?.calcDisplayname() ??
+                  event.senderFromMemoryOrFallback.calcDisplayname(),
               icon: const Icon(Icons.info_outlined),
               textColor: buttonTextColor,
               onPressed: () => onInfoTab!(event),
@@ -101,7 +104,8 @@ class MessageContent extends StatelessWidget {
   }
 
   FutureBuilder<String> _buildLinkifyMessage() {
-    final bigEmotes = event.onlyEmotes && event.numberEmotes > 0 && event.numberEmotes <= 10;
+    final bigEmotes =
+        event.onlyEmotes && event.numberEmotes > 0 && event.numberEmotes <= 10;
     final fontSize = Typo.medium.fontSize!;
     return FutureBuilder<String>(
       future: event.calcLocalizedBody(
@@ -212,7 +216,8 @@ class MessageContent extends StatelessWidget {
     return const Text("Audio");
   }
 
-  Text _buildStickerMessage() => const Text('Sticker message'); //TODO: return Sticker(event);
+  Text _buildStickerMessage() =>
+      const Text('Sticker message'); //TODO: return Sticker(event);
 
   Widget _buildImageMessage() => ClipRRect(
         borderRadius: BorderRadius.circular(LemonRadius.small),

@@ -19,7 +19,7 @@ class _ProfileTabBarState extends State<_ProfileTabBar> {
   @override
   initState() {
     widget.controller.addListener(() {
-      if(widget.controller.indexIsChanging) return;
+      if (widget.controller.indexIsChanging) return;
       setState(() {
         currentIndex = widget.controller.index;
       });
@@ -43,7 +43,9 @@ class _ProfileTabBarState extends State<_ProfileTabBar> {
       return Tab(
         child: SizedBox(
           child: ThemeSvgIcon(
-            color: !isSelected ? colorScheme.onSurfaceVariant : colorScheme.onPrimary,
+            color: !isSelected
+                ? colorScheme.onSurfaceVariant
+                : colorScheme.onPrimary,
             builder: (filter) => svgIcon.svg(colorFilter: filter),
           ),
         ),

@@ -54,9 +54,10 @@ class CreatePostPage extends StatelessWidget {
                 Row(
                   children: [
                     ElevatedButton(
-                      onPressed: createPostBloc.state.postDescription?.isEmpty ?? true
-                          ? null
-                          : createPostBloc.createNewPost,
+                      onPressed:
+                          createPostBloc.state.postDescription?.isEmpty ?? true
+                              ? null
+                              : createPostBloc.createNewPost,
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(32),
@@ -66,11 +67,13 @@ class CreatePostPage extends StatelessWidget {
                           vertical: Spacing.superExtraSmall,
                         ),
                         backgroundColor: colorScheme.onTertiary,
-                        disabledBackgroundColor: colorScheme.onSecondaryContainer,
+                        disabledBackgroundColor:
+                            colorScheme.onSecondaryContainer,
                       ),
                       child: Text(
                         t.post.post,
-                        style: Typo.medium.copyWith(fontWeight: FontWeight.w700),
+                        style:
+                            Typo.medium.copyWith(fontWeight: FontWeight.w700),
                       ),
                     ),
                   ],
@@ -87,7 +90,8 @@ class CreatePostPage extends StatelessWidget {
                   Expanded(
                     child: SingleChildScrollView(
                       child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: Spacing.smMedium),
                         child: Column(
                           children: [
                             TextFormField(
@@ -115,7 +119,8 @@ class CreatePostPage extends StatelessWidget {
                             if (state.selectEvent != null)
                               CreatePostEventCardWidget(
                                 event: state.selectEvent!,
-                                onDismiss: () => createPostBloc.onEventSelect(null),
+                                onDismiss: () =>
+                                    createPostBloc.onEventSelect(null),
                               )
                             else
                               const SizedBox.shrink(),
@@ -144,8 +149,8 @@ class CreatePostPage extends StatelessWidget {
                                 ).show(context),
                                 child: ThemeSvgIcon(
                                   color: colorScheme.onSurface,
-                                  builder: (filter) =>
-                                      Assets.icons.icHouseParty.svg(colorFilter: filter),
+                                  builder: (filter) => Assets.icons.icHouseParty
+                                      .svg(colorFilter: filter),
                                 ),
                               ),
                               SizedBox(width: Spacing.medium),
@@ -161,15 +166,16 @@ class CreatePostPage extends StatelessWidget {
                                 onTap: createPostBloc.onImagePick,
                                 child: ThemeSvgIcon(
                                   color: colorScheme.onSurface,
-                                  builder: (filter) =>
-                                      Assets.icons.icCamera.svg(colorFilter: filter),
+                                  builder: (filter) => Assets.icons.icCamera
+                                      .svg(colorFilter: filter),
                                 ),
                               ),
                             ],
                           ),
                         ),
                         InkWell(
-                          onTap: () => createPostBloc.onPostPrivacyChange(state.postPrivacy),
+                          onTap: () => createPostBloc
+                              .onPostPrivacyChange(state.postPrivacy),
                           child: Container(
                             decoration: BoxDecoration(
                               color: colorScheme.primary,

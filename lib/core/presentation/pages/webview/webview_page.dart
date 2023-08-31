@@ -35,7 +35,9 @@ class _WebviewPageState extends State<WebviewPage> {
   openBrowser() async {
     try {
       await inAppBrowser.openUrlRequest(
-        options: InAppBrowserClassOptions(crossPlatform: InAppBrowserOptions(toolbarTopBackgroundColor: Colors.white)),
+        options: InAppBrowserClassOptions(
+            crossPlatform:
+                InAppBrowserOptions(toolbarTopBackgroundColor: Colors.white)),
         urlRequest: URLRequest(url: widget.uri),
       );
     } catch (e) {

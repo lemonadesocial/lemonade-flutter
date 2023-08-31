@@ -29,7 +29,8 @@ class AppOauth {
   late final logoutRedirectUri = '$appUriScheme://oauth2/logout';
   final scopes = ['openid', 'offline_access'];
 
-  final BehaviorSubject<OAuthTokenState> _tokenStateStreamCtrl = BehaviorSubject();
+  final BehaviorSubject<OAuthTokenState> _tokenStateStreamCtrl =
+      BehaviorSubject();
   OAuthTokenState _tokenState = OAuthTokenState.unknown;
 
   Future<String>? refreshTokenFuture;
@@ -104,10 +105,12 @@ class AppOauth {
     _reset();
   }
 
-  Future<AccessTokenResponse?> manuallyRefreshToken(AccessTokenResponse tokenResponse) async =>
+  Future<AccessTokenResponse?> manuallyRefreshToken(
+          AccessTokenResponse tokenResponse) async =>
       helper.refreshToken(tokenResponse);
 
-  Future<AccessTokenResponse?> getTokenFromStorage() => helper.getTokenFromStorage();
+  Future<AccessTokenResponse?> getTokenFromStorage() =>
+      helper.getTokenFromStorage();
 
   Future<AccessTokenResponse?> getToken() async => helper.getToken();
 
@@ -121,7 +124,9 @@ class AppOauth {
       refreshTokenFuture ??= getToken().then((tokenRes) async {
         _processTokenState(Future.value(tokenRes));
         refreshTokenFuture = null;
-        return tokenRes?.accessToken != null ? 'Bearer ${tokenRes?.accessToken}' : '';
+        return tokenRes?.accessToken != null
+            ? 'Bearer ${tokenRes?.accessToken}'
+            : '';
       }).catchError((e) {
         _reset();
         return '';
@@ -136,7 +141,8 @@ class AppOauth {
     await _processTokenState(getToken());
   }
 
-  Future<AccessTokenResponse?> _processTokenState(Future<AccessTokenResponse?> future) async {
+  Future<AccessTokenResponse?> _processTokenState(
+      Future<AccessTokenResponse?> future) async {
     try {
       final token = await future;
       if (token == null || !token.isValid() || token.isExpired()) {

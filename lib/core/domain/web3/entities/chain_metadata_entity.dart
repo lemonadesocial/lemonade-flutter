@@ -29,6 +29,10 @@ class ChainMetadata {
 
   @override
   int get hashCode {
-    return chainId.hashCode ^ name.hashCode ^ icon.hashCode ^ rpcUrl.hashCode ^ isTestnet.hashCode;
+    return chainId.hashCode ^
+        name.hashCode ^
+        icon.hashCode ^
+        rpcUrl.hashCode ^
+        isTestnet.hashCode;
   }
 }

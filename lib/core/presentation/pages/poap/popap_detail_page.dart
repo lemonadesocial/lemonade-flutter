@@ -1,6 +1,7 @@
 import 'package:app/core/application/badge/badge_detail_bloc/badge_detail_bloc.dart';
 import 'package:app/core/application/poap/claim_poap_bloc/claim_poap_bloc.dart';
-import 'package:app/core/domain/badge/entities/badge_entities.dart' as badge_entities;
+import 'package:app/core/domain/badge/entities/badge_entities.dart'
+    as badge_entities;
 import 'package:app/core/domain/poap/entities/poap_entities.dart';
 import 'package:app/core/domain/poap/input/poap_input.dart';
 import 'package:app/core/domain/token/entities/token_entities.dart';
@@ -82,7 +83,8 @@ class _PopapDetailPageState extends State<PopapDetailPage> {
                             child: SizedBox(height: Spacing.medium),
                           ),
                           SliverToBoxAdapter(
-                            child: _PoapInfo(tokenDetail: widget.tokenDetail, badge: badge),
+                            child: _PoapInfo(
+                                tokenDetail: widget.tokenDetail, badge: badge),
                           ),
                           SliverToBoxAdapter(
                             child: SizedBox(height: Spacing.medium),
@@ -94,7 +96,8 @@ class _PopapDetailPageState extends State<PopapDetailPage> {
                             child: SizedBox(height: Spacing.medium),
                           ),
                           SliverToBoxAdapter(
-                            child: _PoapDescription(tokenDetail: widget.tokenDetail),
+                            child: _PoapDescription(
+                                tokenDetail: widget.tokenDetail),
                           ),
                         ],
                       ),
@@ -114,11 +117,15 @@ class _PopapDetailPageState extends State<PopapDetailPage> {
                     },
                     onPressGrantAccess: () async {
                       try {
-                        final isGranted = await getIt<LocationUtils>().checkAndRequestPermission(
-                          onPermissionDeniedForever: () => LocationUtils.goToSetting(context),
+                        final isGranted = await getIt<LocationUtils>()
+                            .checkAndRequestPermission(
+                          onPermissionDeniedForever: () =>
+                              LocationUtils.goToSetting(context),
                         );
                         if (isGranted) {
-                          context.read<BadgeDetailBloc>().add(const BadgeDetailEvent.fetch());
+                          context
+                              .read<BadgeDetailBloc>()
+                              .add(const BadgeDetailEvent.fetch());
                         }
                       } catch (error) {
                         if (kDebugMode) {
@@ -130,7 +137,8 @@ class _PopapDetailPageState extends State<PopapDetailPage> {
                       if (policy?.result == null) return;
                       showDialog(
                         context: context,
-                        builder: (context) => PoapPolicyPopup(policyResult: policy!.result!),
+                        builder: (context) =>
+                            PoapPolicyPopup(policyResult: policy!.result!),
                       );
                     },
                   ),
@@ -229,7 +237,8 @@ class _PoapImage extends StatelessWidget {
             LemonRadius.extraSmall,
           ),
           child: FutureBuilder(
-            future: MediaUtils.getNftMedia(tokenDetail?.metadata?.image, tokenDetail?.metadata?.animation_url),
+            future: MediaUtils.getNftMedia(tokenDetail?.metadata?.image,
+                tokenDetail?.metadata?.animation_url),
             builder: (context, snapshot) => CachedNetworkImage(
               imageUrl: snapshot.data?.url ?? '',
               fit: BoxFit.cover,
@@ -261,7 +270,8 @@ class PoapDetailFooter extends StatefulWidget {
   State<PoapDetailFooter> createState() => _PoapDetailFooterState();
 }
 
-class _PoapDetailFooterState extends State<PoapDetailFooter> with WidgetsBindingObserver {
+class _PoapDetailFooterState extends State<PoapDetailFooter>
+    with WidgetsBindingObserver {
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
@@ -295,8 +305,10 @@ class _PoapDetailFooterState extends State<PoapDetailFooter> with WidgetsBinding
       badge: widget.badge,
       builder: (context, claimPoapState, locationEnabled) {
         final ableToClaim = widget.badge.claimable ?? false;
-        final buttonDisabled =
-            !locationEnabled || widget.badge.claimable != true || claimPoapState.claimed || claimPoapState.claiming;
+        final buttonDisabled = !locationEnabled ||
+            widget.badge.claimable != true ||
+            claimPoapState.claimed ||
+            claimPoapState.claiming;
         return Container(
           padding: EdgeInsets.only(
             left: Spacing.smMedium,
@@ -304,7 +316,10 @@ class _PoapDetailFooterState extends State<PoapDetailFooter> with WidgetsBinding
             top: Spacing.smMedium,
             bottom: 2 * Spacing.smMedium,
           ),
-          decoration: BoxDecoration(border: Border(top: BorderSide(color: colorScheme.onPrimary.withOpacity(0.09)))),
+          decoration: BoxDecoration(
+              border: Border(
+                  top: BorderSide(
+                      color: colorScheme.onPrimary.withOpacity(0.09)))),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -319,8 +334,11 @@ class _PoapDetailFooterState extends State<PoapDetailFooter> with WidgetsBinding
                     children: [
                       if (!locationEnabled || !ableToClaim)
                         TextSpan(
-                          text: !locationEnabled ? t.common.grantAccess : t.common.viewRequirements,
-                          style: Typo.small.copyWith(color: LemonColor.paleViolet),
+                          text: !locationEnabled
+                              ? t.common.grantAccess
+                              : t.common.viewRequirements,
+                          style:
+                              Typo.small.copyWith(color: LemonColor.paleViolet),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () async {
                               if (!locationEnabled) {
@@ -328,13 +346,15 @@ class _PoapDetailFooterState extends State<PoapDetailFooter> with WidgetsBinding
                                 setState(() {});
                               }
                               if (!ableToClaim) {
-                                widget.onPressViewRequirements(claimPoapState.policy);
+                                widget.onPressViewRequirements(
+                                    claimPoapState.policy);
                               }
                             },
                         )
                     ],
                   ),
-                  style: Typo.small.copyWith(color: colorScheme.onSurfaceVariant),
+                  style:
+                      Typo.small.copyWith(color: colorScheme.onSurfaceVariant),
                 ),
               ),
               SizedBox(

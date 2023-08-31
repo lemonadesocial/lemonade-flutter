@@ -12,9 +12,9 @@ class EventDto with _$EventDto {
   factory EventDto({
     @JsonKey(name: '_id') String? id,
     @JsonKey(name: 'host_expanded') UserDto? hostExpanded,
-    @JsonKey(name: 'new_new_photos_expanded') List<DbFileDto?>? newNewPhotosExpanded,
+    @JsonKey(name: 'new_new_photos_expanded')
+    List<DbFileDto?>? newNewPhotosExpanded,
     @JsonKey(name: 'cohosts_expanded') List<UserDto?>? cohostsExpanded,
-    
     String? title,
     String? slug,
     String? host,
@@ -22,21 +22,22 @@ class EventDto with _$EventDto {
     String? description,
     DateTime? start,
     DateTime? end,
-    double? cost, 
+    double? cost,
     Currency? currency,
     List<String>? accepted,
   }) = _EventDto;
 
-  factory EventDto.fromJson(Map<String, dynamic> json) => _$EventDtoFromJson(json);
+  factory EventDto.fromJson(Map<String, dynamic> json) =>
+      _$EventDtoFromJson(json);
 }
-
 
 @freezed
 class BroadcastDto with _$BroadcastDto {
   @JsonSerializable(explicitToJson: true)
-  factory BroadcastDto({ 
+  factory BroadcastDto({
     @JsonKey(name: 'provider_id', includeIfNull: false) String? providerId,
   }) = _BroadcastDto;
 
-  factory BroadcastDto.fromJson(Map<String, dynamic> json) => _$BroadcastDtoFromJson(json);
+  factory BroadcastDto.fromJson(Map<String, dynamic> json) =>
+      _$BroadcastDtoFromJson(json);
 }

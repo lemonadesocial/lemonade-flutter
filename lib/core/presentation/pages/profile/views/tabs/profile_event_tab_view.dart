@@ -135,9 +135,10 @@ class _EventList<T extends BaseEventListingBloc> extends StatelessWidget {
         return state.when(
           failure: () {
             return SliverToBoxAdapter(
-                child: Center(
-              child: Text(t.common.somethingWrong),
-            ),);
+              child: Center(
+                child: Text(t.common.somethingWrong),
+              ),
+            );
           },
           loading: () {
             return SliverToBoxAdapter(
@@ -147,13 +148,18 @@ class _EventList<T extends BaseEventListingBloc> extends StatelessWidget {
           fetched: (events, _) {
             if (events.isEmpty) {
               return SliverFillRemaining(
-                    hasScrollBody: false,
-                    child: EmptyList(emptyText: t.event.noEvents),
+                hasScrollBody: false,
+                child: EmptyList(emptyText: t.event.noEvents),
               );
             }
 
-            final upcomingEvents = events.where((event) => !core_date_utils.DateUtils.isPast(event.start)).toList();
-            final pastEvents = events.where((event) => core_date_utils.DateUtils.isPast(event.start)).toList();
+            final upcomingEvents = events
+                .where(
+                    (event) => !core_date_utils.DateUtils.isPast(event.start))
+                .toList();
+            final pastEvents = events
+                .where((event) => core_date_utils.DateUtils.isPast(event.start))
+                .toList();
 
             return MultiSliver(
               children: [
@@ -234,7 +240,8 @@ class _EventItem extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         AutoRouter.of(context).navigate(
-          EventDetailRoute(eventId: event.id ?? '', eventName: event.title ?? ''),
+          EventDetailRoute(
+              eventId: event.id ?? '', eventName: event.title ?? ''),
         );
       },
       child: Container(
@@ -247,12 +254,16 @@ class _EventItem extends StatelessWidget {
             Positioned.fill(
               child: (event.newNewPhotosExpanded?.isNotEmpty == true)
                   ? ClipRRect(
-                      borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
+                      borderRadius:
+                          BorderRadius.circular(LemonRadius.extraSmall),
                       child: CachedNetworkImage(
                         imageUrl: ImageUtils.generateUrl(
-                            file: event.newNewPhotosExpanded!.first, imageConfig: ImageConfig.eventPhoto,),
+                          file: event.newNewPhotosExpanded!.first,
+                          imageConfig: ImageConfig.eventPhoto,
+                        ),
                         fit: BoxFit.cover,
-                        errorWidget: (ctx, _, __) => ImagePlaceholder.eventCard(),
+                        errorWidget: (ctx, _, __) =>
+                            ImagePlaceholder.eventCard(),
                       ),
                     )
                   : ImagePlaceholder.eventCard(),

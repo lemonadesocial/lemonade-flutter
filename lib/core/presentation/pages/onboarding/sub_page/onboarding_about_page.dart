@@ -41,7 +41,8 @@ class OnboardingAboutPage extends StatelessWidget {
               Row(
                 children: [
                   InkWell(
-                    onTap: () => context.router.push(const RootRoute(children: [HomeRoute()])),
+                    onTap: () => context.router
+                        .push(const RootRoute(children: [HomeRoute()])),
                     child: Text(
                       t.onboarding.skip,
                       style: Typo.medium.copyWith(fontWeight: FontWeight.w400),
@@ -88,7 +89,8 @@ class OnboardingAboutPage extends StatelessWidget {
                                 activeColor: LemonColor.femaleActiveColor,
                                 inActiveColor: LemonColor.femaleDefault,
                                 defaultColor: LemonColor.femaleDefault,
-                                onSelect: () => bloc.onGenderSelect(OnboardingGender.she),
+                                onSelect: () =>
+                                    bloc.onGenderSelect(OnboardingGender.she),
                                 isSelected: state.gender == null
                                     ? null
                                     : state.gender == OnboardingGender.she,
@@ -100,7 +102,8 @@ class OnboardingAboutPage extends StatelessWidget {
                                 activeColor: LemonColor.maleActiveColor,
                                 inActiveColor: LemonColor.maleDefault,
                                 defaultColor: LemonColor.maleDefault,
-                                onSelect: () => bloc.onGenderSelect(OnboardingGender.he),
+                                onSelect: () =>
+                                    bloc.onGenderSelect(OnboardingGender.he),
                                 isSelected: state.gender == null
                                     ? null
                                     : state.gender == OnboardingGender.he,
@@ -112,7 +115,8 @@ class OnboardingAboutPage extends StatelessWidget {
                                 activeColor: LemonColor.ambiguousActiveColor,
                                 inActiveColor: LemonColor.ambiguousDefault,
                                 defaultColor: LemonColor.ambiguousDefault,
-                                onSelect: () => bloc.onGenderSelect(OnboardingGender.they),
+                                onSelect: () =>
+                                    bloc.onGenderSelect(OnboardingGender.they),
                                 isSelected: state.gender == null
                                     ? null
                                     : state.gender == OnboardingGender.they,

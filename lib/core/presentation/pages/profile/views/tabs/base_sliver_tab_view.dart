@@ -31,16 +31,18 @@ class BaseSliverTabView extends StatelessWidget {
             child: NotificationListener<ScrollNotification>(
               onNotification: (notification) {
                 if (notification is ScrollEndNotification) {
-                  if (notification.metrics.pixels >= notification.metrics.maxScrollExtent) {
-                    scrollNotificationBloc.add(const ScrollNotificationEvent.reachEnd());
+                  if (notification.metrics.pixels >=
+                      notification.metrics.maxScrollExtent) {
+                    scrollNotificationBloc
+                        .add(const ScrollNotificationEvent.reachEnd());
                     return true;
                   }
-                } 
-                scrollNotificationBloc.add(const ScrollNotificationEvent.scroll());
+                }
+                scrollNotificationBloc
+                    .add(const ScrollNotificationEvent.scroll());
                 return true;
               },
               child: CustomScrollView(
-                
                 // The "controller" and "primary" members should be left
                 // unset, so that the NestedScrollView can control this
                 // inner scroll view.
@@ -52,8 +54,8 @@ class BaseSliverTabView extends StatelessWidget {
                 key: PageStorageKey<String>(name.toString()),
                 slivers: <Widget>[
                   SliverPinnedOverlapInjector(
-                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context)
-                  ),
+                      handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                          context)),
                   ...children
                 ],
               ),

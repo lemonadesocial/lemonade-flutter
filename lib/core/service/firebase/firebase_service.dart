@@ -17,7 +17,8 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:injectable/injectable.dart';
 import 'package:matrix/matrix.dart';
 
-import '../../../firebase_options_production.dart' as firebase_options_production;
+import '../../../firebase_options_production.dart'
+    as firebase_options_production;
 import '../../../firebase_options_staging.dart' as firebase_options_staging;
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {

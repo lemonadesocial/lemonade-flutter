@@ -22,7 +22,8 @@ class InputBarSuggestionBox extends StatelessWidget {
     const padding = EdgeInsets.all(4.0);
     if (suggestion['type'] == 'command') {
       ChatCommand? command = ChatCommand.fromString(suggestion['name']!);
-      final commandHint = command == null ? '' : t['chat.command.${command.name}'];
+      final commandHint =
+          command == null ? '' : t['chat.command.${command.name}'];
       return Tooltip(
         message: commandHint,
         waitDuration: const Duration(days: 1), // don't show on hover
@@ -66,7 +67,9 @@ class InputBarSuggestionBox extends StatelessWidget {
             MxcImage(
               // ensure proper ordering ...
               key: ValueKey(suggestion['name']),
-              uri: suggestion['mxc'] is String ? Uri.parse(suggestion['mxc'] ?? '') : null,
+              uri: suggestion['mxc'] is String
+                  ? Uri.parse(suggestion['mxc'] ?? '')
+                  : null,
               width: size,
               height: size,
             ),
@@ -109,7 +112,8 @@ class InputBarSuggestionBox extends StatelessWidget {
           children: <Widget>[
             MatrixAvatar(
               mxContent: url,
-              name: suggestion.tryGet<String>('displayname') ?? suggestion.tryGet<String>('mxid'),
+              name: suggestion.tryGet<String>('displayname') ??
+                  suggestion.tryGet<String>('mxid'),
               size: size,
               client: client,
             ),
@@ -155,6 +159,7 @@ enum ChatCommand {
   cuddle;
 
   static ChatCommand? fromString(String commandString) {
-    return ChatCommand.values.firstWhere((command) => command.name == commandString);
+    return ChatCommand.values
+        .firstWhere((command) => command.name == commandString);
   }
 }

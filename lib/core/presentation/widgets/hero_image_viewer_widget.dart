@@ -57,7 +57,8 @@ class ImageViewerPage extends StatelessWidget {
   final String? imageUrl;
   final Widget Function()? imageBuilder;
 
-  const ImageViewerPage({super.key, 
+  const ImageViewerPage({
+    super.key,
     required this.heroTag,
     this.imageUrl,
     this.imageBuilder,

@@ -16,7 +16,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     required this.userService,
     required this.authService,
   }) : super(const AuthState.unknown()) {
-    _tokenStateSubscription = authService.tokenStateStream.listen(_onTokenStateChange);
+    _tokenStateSubscription =
+        authService.tokenStateStream.listen(_onTokenStateChange);
     on<AuthEventLogin>(_onLogin);
     on<AuthEventLogout>(_onLogout);
     on<AuthEventAuthenticated>(_onAuthenticated);
@@ -41,7 +42,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  Future<void> _onAuthenticated(AuthEventAuthenticated event, Emitter emit) async {
+  Future<void> _onAuthenticated(
+      AuthEventAuthenticated event, Emitter emit) async {
     emit(const AuthState.processing());
     await Future.delayed(const Duration(milliseconds: 500));
     final session = await _createSession();
@@ -93,7 +95,8 @@ class AuthState with _$AuthState {
 
   const factory AuthState.processing() = AuthStateProcessing;
 
-  const factory AuthState.unauthenticated({required bool isChecking}) = AuthStateUnauthenticated;
+  const factory AuthState.unauthenticated({required bool isChecking}) =
+      AuthStateUnauthenticated;
 
   const factory AuthState.onBoardingRequired({
     required AuthSession authSession,

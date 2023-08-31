@@ -1,7 +1,7 @@
 part of 'onboarding_bloc.dart';
 
 @freezed
-class OnboardingState with _$OnboardingState{
+class OnboardingState with _$OnboardingState {
   const factory OnboardingState({
     @Default(OnboardingStatus.initial) OnboardingStatus status,
     bool? usernameExisted,
@@ -23,7 +23,7 @@ enum OnboardingStatus {
   error,
 }
 
-enum OnboardingGender{
+enum OnboardingGender {
   he,
   she,
   they,

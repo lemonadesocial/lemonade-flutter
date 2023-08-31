@@ -33,7 +33,8 @@ class SpacesDrawer extends StatelessWidget {
                   children: [
                     Text(
                       StringUtils.capitalize(t.chat.spaces),
-                      style: Typo.extraMedium.copyWith(color: colorScheme.onPrimary),
+                      style: Typo.extraMedium
+                          .copyWith(color: colorScheme.onPrimary),
                     ),
                   ],
                 ),
@@ -87,7 +88,8 @@ class SpacesDrawer extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: Spacing.small),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(10), // Set the border radius for the blue container
+          borderRadius: BorderRadius.circular(
+              10), // Set the border radius for the blue container
           child: Container(
             padding: EdgeInsets.symmetric(
               vertical: Spacing.xSmall,
@@ -121,7 +123,9 @@ class SpacesDrawer extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        StringUtils.capitalize(isRoot ? t.common.lemonade : space?.getLocalizedDisplayname()),
+                        StringUtils.capitalize(isRoot
+                            ? t.common.lemonade
+                            : space?.getLocalizedDisplayname()),
                         style: Typo.medium.copyWith(
                           color: colorScheme.onPrimary.withOpacity(0.87),
                         ),

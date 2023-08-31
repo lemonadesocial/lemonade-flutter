@@ -1,4 +1,5 @@
-import 'package:app/core/domain/badge/entities/badge_entities.dart' as badge_entities;
+import 'package:app/core/domain/badge/entities/badge_entities.dart'
+    as badge_entities;
 import 'package:app/core/domain/poap/input/poap_input.dart';
 import 'package:app/core/domain/poap/poap_repository.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -22,7 +23,8 @@ class PoapQuantityBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
-    final smallTextStyle = Typo.small.copyWith(color: colorScheme.onSurfaceVariant);
+    final smallTextStyle =
+        Typo.small.copyWith(color: colorScheme.onSurfaceVariant);
 
     return FutureBuilder(
       future: _poapRepository.getPoapViewSupply(
@@ -32,7 +34,8 @@ class PoapQuantityBar extends StatelessWidget {
         ),
       ),
       builder: (context, snapshot) {
-        final poapViewSupply = snapshot.data?.fold((l) => null, (poapView) => poapView);
+        final poapViewSupply =
+            snapshot.data?.fold((l) => null, (poapView) => poapView);
         final claimedQuantity = poapViewSupply?.claimedQuantity ?? 0;
         final quantity = poapViewSupply?.quantity ?? 0;
 
@@ -59,7 +62,8 @@ class PoapQuantityBar extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('$claimedQuantity ${t.nft.claimed}', style: smallTextStyle),
+                Text('$claimedQuantity ${t.nft.claimed}',
+                    style: smallTextStyle),
                 Text('$quantity', style: smallTextStyle),
               ],
             ),

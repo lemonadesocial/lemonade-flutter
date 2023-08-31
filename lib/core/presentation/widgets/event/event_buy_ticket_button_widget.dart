@@ -22,14 +22,16 @@ class EventBuyTicketButton extends StatelessWidget {
     final t = Translations.of(context);
     return GestureDetector(
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall, vertical: Spacing.extraSmall),
+        padding: EdgeInsets.symmetric(
+            horizontal: Spacing.xSmall, vertical: Spacing.extraSmall),
         decoration: ShapeDecoration(
           gradient: LinearGradient(
             begin: const Alignment(0.00, -1.00),
             end: const Alignment(0, 1),
             colors: [LemonColor.arsenic, LemonColor.charlestonGreen],
           ),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(LemonRadius.normal)),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(LemonRadius.normal)),
           shadows: [
             BoxShadow(
               color: LemonColor.shadow,

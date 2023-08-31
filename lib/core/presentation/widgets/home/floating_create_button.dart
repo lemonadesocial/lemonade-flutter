@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class FloatingCreateButton extends StatelessWidget {
-
   const FloatingCreateButton({
     super.key,
     this.onTap,

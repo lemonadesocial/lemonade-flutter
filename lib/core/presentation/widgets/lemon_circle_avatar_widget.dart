@@ -53,7 +53,8 @@ class LemonCircleAvatar extends StatelessWidget {
 
   Widget _buildPlaceHolder() => Center(
         child: ThemeSvgIcon(
-          builder: (filter) => Assets.icons.icLemonOutline.svg(colorFilter: filter, width: 18, height: 18),
+          builder: (filter) => Assets.icons.icLemonOutline
+              .svg(colorFilter: filter, width: 18, height: 18),
         ),
       );
 }

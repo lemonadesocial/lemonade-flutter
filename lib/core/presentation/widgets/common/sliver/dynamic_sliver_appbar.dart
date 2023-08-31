@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class DynamicSliverAppBar extends SliverAppBar {
   final Widget child;
   final double maxHeight;
-  
+
   const DynamicSliverAppBar({
     required this.child,
     required this.maxHeight,
@@ -28,7 +28,9 @@ class DynamicSliverAppBarState extends State<DynamicSliverAppBar> {
       if (!isHeightCalculated) {
         isHeightCalculated = true;
         setState(() {
-          height = (_childKey.currentContext?.findRenderObject() as RenderBox).size.height;
+          height = (_childKey.currentContext?.findRenderObject() as RenderBox)
+              .size
+              .height;
         });
       }
     });

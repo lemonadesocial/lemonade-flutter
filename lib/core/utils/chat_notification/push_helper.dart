@@ -187,7 +187,7 @@ Future<void> _tryPushHelper(
   final notificationGroupId =
       event.room.isDirectChat ? 'directChats' : 'groupChats';
   final groupName = event.room.isDirectChat ? "Direct chat" : "Group";
-  
+
   final messageRooms = AndroidNotificationChannelGroup(
     notificationGroupId,
     groupName,

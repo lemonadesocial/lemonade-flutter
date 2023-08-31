@@ -33,7 +33,8 @@ class OnboardingBloc extends Cubit<OnboardingState> {
     // Check valid username
     debouncer.run(() async {
       if (input.isNotEmpty) {
-        final response = await userRepository.checkValidUsername(username: input);
+        final response =
+            await userRepository.checkValidUsername(username: input);
         response.fold(
           (l) => emit(
             state.copyWith(
@@ -63,11 +64,13 @@ class OnboardingBloc extends Cubit<OnboardingState> {
   }
 
   void onDisplayNameChange(String input) {
-    emit(state.copyWith(status: OnboardingStatus.initial, aboutDisplayName: input));
+    emit(state.copyWith(
+        status: OnboardingStatus.initial, aboutDisplayName: input));
   }
 
   void onShortBioChange(String input) {
-    emit(state.copyWith(status: OnboardingStatus.initial, aboutShortBio: input));
+    emit(
+        state.copyWith(status: OnboardingStatus.initial, aboutShortBio: input));
   }
 
   Future<void> selectProfileImage() async {

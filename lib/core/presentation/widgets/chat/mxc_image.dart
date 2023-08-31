@@ -53,7 +53,9 @@ class _MxcImageState extends State<MxcImage> {
   set _imageData(Uint8List? data) {
     if (data == null) return;
     final cacheKey = widget.cacheKey;
-    cacheKey == null ? _imageDataNoCache = data : _imageDataCache[cacheKey] = data;
+    cacheKey == null
+        ? _imageDataNoCache = data
+        : _imageDataCache[cacheKey] = data;
   }
 
   bool? _isCached;
@@ -154,7 +156,8 @@ class _MxcImageState extends State<MxcImage> {
 
     return AnimatedCrossFade(
       duration: widget.animationDuration,
-      crossFadeState: data == null ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+      crossFadeState:
+          data == null ? CrossFadeState.showFirst : CrossFadeState.showSecond,
       firstChild: placeholder(context),
       secondChild: data == null || data.isEmpty
           ? const SizedBox.shrink()
