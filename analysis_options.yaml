@@ -6,6 +6,7 @@ analyzer:
     - "**/*.freezed.dart"
     - "**/*.gr.dart"
     - "**/*.gen.dart"
+    - "**/*_enums.dart"
     - "lib/firebase_options_staging.dart"
     - "lib/firebase_options_production.dart"
 
@@ -58,7 +59,7 @@ linter:
     library_private_types_in_public_api: true
     no_leading_underscores_for_library_prefixes: true
     no_leading_underscores_for_local_identifiers: true
-    non_constant_identifier_names: true
+    non_constant_identifier_names: false
     null_check_on_nullable_type_parameter: true
     null_closures: true
     overridden_fields: true
@@ -109,5 +110,6 @@ linter:
     use_function_type_syntax_for_parameters: true
     use_rethrow_when_possible: true
     use_string_in_part_of_directives: true
-    depend_on_referenced_packages: true
+    depend_on_referenced_packages: false
     package_names: true
+    use_build_context_synchronously: false

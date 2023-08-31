@@ -79,12 +79,14 @@ class _LemonadeAppViewState extends State<LemonadeApp> {
     final initialMessage = await FirebaseMessaging.instance.getInitialMessage();
     if (initialMessage != null) {
       try {
-        String type = initialMessage.data['type'];
-        String objectId = initialMessage.data['object_id'];
-        String objectType = initialMessage.data['object_type'];
+        // String type = initialMessage.data['type'];
+        // String objectId = initialMessage.data['object_id'];
+        // String objectType = initialMessage.data['object_type'];
         // NavigationUtils.handleNotificationNavigate(context, type, objectType, objectId);
       } catch (e) {
-        print('Error parsing JSON: $e');
+        if (kDebugMode) {
+          print('Error parsing JSON: $e');
+        }
       }
     }
   }

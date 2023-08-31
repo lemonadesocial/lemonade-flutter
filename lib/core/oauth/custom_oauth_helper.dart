@@ -4,17 +4,10 @@ import 'package:oauth2_client/oauth2_exception.dart';
 import 'package:oauth2_client/oauth2_helper.dart';
 
 class CustomOAuth2Helper extends OAuth2Helper {
-  @override
-  final OAuth2Client client;
-  @override
-  final String clientId;
-  @override
-  final List<String> scopes;
-
   CustomOAuth2Helper(
-    this.client, {
-    required this.clientId,
-    required this.scopes,
+    final OAuth2Client client, {
+    required final String clientId,
+    required final List<String> scopes,
   }) : super(
           client,
           clientId: clientId,
@@ -72,7 +65,7 @@ class CustomOAuth2Helper extends OAuth2Helper {
       } else {
         if (tknResp.error == 'invalid_grant') {
           //The refresh token is expired too
-          await tokenStorage.deleteToken(scopes);
+          await tokenStorage.deleteToken(scopes!);
         } else {
           throw OAuth2Exception(tknResp.error ?? 'Error', errorDescription: tknResp.errorDescription);
         }

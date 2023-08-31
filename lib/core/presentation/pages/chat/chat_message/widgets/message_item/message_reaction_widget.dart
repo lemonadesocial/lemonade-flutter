@@ -26,14 +26,14 @@ class MessageReactions extends StatelessWidget {
     return event.aggregatedEvents(timeline, RelationshipTypes.reaction);
   }
 
-  List<_ReactionEntry> getReactions() {
+  List<ReactionEntry> getReactions() {
     Set<Event> allReactionEvents = getAllReactionEvents();
-    final reactionMap = <String, _ReactionEntry>{};
+    final reactionMap = <String, ReactionEntry>{};
     for (final e in allReactionEvents) {
       final key = e.content.tryGetMap<String, dynamic>('m.relates_to')?.tryGet<String>('key');
       if (key != null) {
         if (!reactionMap.containsKey(key)) {
-          reactionMap[key] = _ReactionEntry(
+          reactionMap[key] = ReactionEntry(
             key: key,
             count: 0,
             reacted: false,
@@ -48,7 +48,7 @@ class MessageReactions extends StatelessWidget {
     return reactionMap.values.toList();
   }
 
-  Future<void> _onTapReaction(_ReactionEntry r) async {
+  Future<void> _onTapReaction(ReactionEntry r) async {
     if (r.reacted) {
       final evt = getAllReactionEvents().firstWhereOrNull(
         (e) => e.senderId == e.room.client.userID && e.content.tryGetMap('m.relates_to')?['key'] == r.key,
@@ -164,13 +164,13 @@ class _Reaction extends StatelessWidget {
   }
 }
 
-class _ReactionEntry {
+class ReactionEntry {
   String? key;
   int count;
   bool reacted;
   List<User>? reactors;
 
-  _ReactionEntry({
+  ReactionEntry({
     this.key,
     required this.count,
     required this.reacted,
@@ -179,7 +179,7 @@ class _ReactionEntry {
 }
 
 class _AdaptableReactorsDialog extends StatelessWidget {
-  final _ReactionEntry? reactionEntry;
+  final ReactionEntry? reactionEntry;
 
   const _AdaptableReactorsDialog({
     Key? key,

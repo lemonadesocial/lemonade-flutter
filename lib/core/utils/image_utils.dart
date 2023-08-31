@@ -59,7 +59,6 @@ class ImageUtils {
         'resize': editMap[imageConfig]!.resize
       };
     }
-    var a = json.encode(params);
     return '$url/${base64.encode(utf8.encode(json.encode(params)))}';
   }
 }

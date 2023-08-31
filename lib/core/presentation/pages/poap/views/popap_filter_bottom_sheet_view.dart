@@ -21,11 +21,11 @@ import 'package:app/injection/register_module.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-List<String> get _mockLocations => ['New york', 'California', 'Washington'];
 
 class PoapFilterBottomSheetView extends StatefulWidget {
   const PoapFilterBottomSheetView({
@@ -56,8 +56,6 @@ class _PoapFilterBottomSheetViewState extends State<PoapFilterBottomSheetView> w
   List<double> get snapSizes => widget.snapSizes; //const [.2, .8, 1];
 
   bool get _visibleWhenExpanded => animation.value > 0.4;
-
-  List<int> get _mockPoapList => List.generate(10, (index) => index);
 
   @override
   void initState() {
@@ -398,7 +396,9 @@ class LocationFilter extends StatelessWidget {
                                             ),
                                           );
                                     } catch (error) {
-                                      print(error);
+                                      if (kDebugMode) {
+                                        print(error);
+                                      }
                                     }
                                   },
                                   leading: ThemeSvgIcon(

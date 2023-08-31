@@ -17,8 +17,8 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:injectable/injectable.dart';
 import 'package:matrix/matrix.dart';
 
-import '../../../firebase_options_production.dart' as FirebaseOptionsProduction;
-import '../../../firebase_options_staging.dart' as FirebaseOptionsStaging;
+import '../../../firebase_options_production.dart' as firebase_options_production;
+import '../../../firebase_options_staging.dart' as firebase_options_staging;
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   if (kDebugMode) {
@@ -31,7 +31,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 @lazySingleton
 class FirebaseService {
-  static BuildContext? _context;
+  // ignore: unused_field
   static AppRouter? _router;
   static FirebaseMessaging? _firebaseMessaging;
   static FirebaseMessaging get firebaseMessaging =>
@@ -43,8 +43,8 @@ class FirebaseService {
   Future<void> initialize() async {
     await Firebase.initializeApp(
       options: AppConfig.env == 'production'
-          ? FirebaseOptionsProduction.DefaultFirebaseOptions.currentPlatform
-          : FirebaseOptionsStaging.DefaultFirebaseOptions.currentPlatform,
+          ? firebase_options_production.DefaultFirebaseOptions.currentPlatform
+          : firebase_options_staging.DefaultFirebaseOptions.currentPlatform,
     );
     FirebaseService._firebaseMessaging = FirebaseMessaging.instance;
     channel = const AndroidNotificationChannel(
@@ -89,7 +89,9 @@ class FirebaseService {
           // NavigationUtils.handleNotificationNavigate(
           //     _router!, _context!, type, objectType, objectId);
         } catch (e) {
-          print('Error parsing JSON: $e');
+          if (kDebugMode) {
+            print('Error parsing JSON: $e');
+          }
         }
       },
     );
@@ -116,7 +118,6 @@ class FirebaseService {
     required BuildContext context,
   }) {
     _router = router;
-    _context = context;
   }
 
   Future<void> requestPermission() async {
@@ -183,7 +184,9 @@ class FirebaseService {
       // NavigationUtils.handleNotificationNavigate(
       //     _router!, _context!, type, objectType, objectId);
     } catch (e) {
-      print('Something wrong when onPressNotification: $e');
+      if (kDebugMode) {
+        print('Something wrong when onPressNotification: $e');
+      }
     }
   }
 

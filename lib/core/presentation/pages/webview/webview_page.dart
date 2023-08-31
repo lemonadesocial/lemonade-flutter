@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
@@ -37,7 +38,11 @@ class _WebviewPageState extends State<WebviewPage> {
         options: InAppBrowserClassOptions(crossPlatform: InAppBrowserOptions(toolbarTopBackgroundColor: Colors.white)),
         urlRequest: URLRequest(url: widget.uri),
       );
-    } catch (e) {}
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error openBrowser: $e');
+      }
+    }
   }
 
   @override

@@ -13,15 +13,13 @@ class LemonBackButton extends StatelessWidget {
       onTap: () {
         AutoRouter.of(context).pop();
       },
-      child: Container(
-        child: Center(
-          child: ThemeSvgIcon(
-            builder: (filter) => Assets.icons.icBack.svg(
-              colorFilter: filter,
-              // fit: BoxFit.scaleDown,
-              width: Sizing.small,
-              height: Sizing.small,
-            ),
+      child: Center(
+        child: ThemeSvgIcon(
+          builder: (filter) => Assets.icons.icBack.svg(
+            colorFilter: filter,
+            // fit: BoxFit.scaleDown,
+            width: Sizing.small,
+            height: Sizing.small,
           ),
         ),
       ),

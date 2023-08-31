@@ -8,10 +8,10 @@ class CollapsibleSection extends StatefulWidget {
   const CollapsibleSection({super.key, required this.title, required this.children});
 
   @override
-  _CollapsibleSectionState createState() => _CollapsibleSectionState();
+  CollapsibleSectionState createState() => CollapsibleSectionState();
 }
 
-class _CollapsibleSectionState extends State<CollapsibleSection> {
+class CollapsibleSectionState extends State<CollapsibleSection> {
   bool _isExpanded = true;
 
   @override

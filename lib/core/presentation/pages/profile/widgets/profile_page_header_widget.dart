@@ -13,6 +13,7 @@ import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -61,7 +62,11 @@ class _ActionButtons extends StatelessWidget {
         '${AppConfig.webUrl}/${user.username}',
         sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
       );
-    } catch (e) {}
+    } catch (e) {
+      if (kDebugMode) {
+        print("Error _shareProfileLink $e");
+      }
+    }
   }
 
   _buildMyActionsButton(BuildContext context) {
@@ -103,6 +108,7 @@ class _ActionButtons extends StatelessWidget {
     // TODO: follow feature not implemented
     var isFollowed = false;
     return isFollowed
+        // ignore: dead_code
         ? LemonOutlineButton(
             label: t.common.followed,
             leading: ThemeSvgIcon(

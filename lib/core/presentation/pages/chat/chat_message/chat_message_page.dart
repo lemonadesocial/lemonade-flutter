@@ -6,6 +6,7 @@ import 'package:app/core/service/matrix/matrix_service.dart';
 import 'package:app/core/utils/chat/matrix_client_ios_badge_extension.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:matrix/matrix.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
@@ -82,7 +83,9 @@ class ChatController extends State<ChatPageWithRoom> {
     super.initState();
     readMarkerEventId = room.fullyRead;
     loadTimelineFuture = _getTimeline(eventContextId: readMarkerEventId).onError((error, s) {
-      print(error);
+      if (kDebugMode) {
+        print(error);
+      }
     });
   }
 

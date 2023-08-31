@@ -1,6 +1,6 @@
 import 'package:app/core/application/badge/badge_detail_bloc/badge_detail_bloc.dart';
 import 'package:app/core/application/poap/claim_poap_bloc/claim_poap_bloc.dart';
-import 'package:app/core/domain/badge/entities/badge_entities.dart' as badgeEntities;
+import 'package:app/core/domain/badge/entities/badge_entities.dart' as badge_entities;
 import 'package:app/core/domain/poap/entities/poap_entities.dart';
 import 'package:app/core/domain/poap/input/poap_input.dart';
 import 'package:app/core/domain/token/entities/token_entities.dart';
@@ -19,6 +19,7 @@ import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -119,7 +120,11 @@ class _PopapDetailPageState extends State<PopapDetailPage> {
                         if (isGranted) {
                           context.read<BadgeDetailBloc>().add(const BadgeDetailEvent.fetch());
                         }
-                      } catch (error) {}
+                      } catch (error) {
+                        if (kDebugMode) {
+                          print('Error onPressGrantAccess: $error');
+                        }
+                      }
                     },
                     onPressViewRequirements: (policy) {
                       if (policy?.result == null) return;
@@ -176,7 +181,7 @@ class _PoapInfo extends StatelessWidget {
   });
 
   final TokenDetail? tokenDetail;
-  final badgeEntities.Badge badge;
+  final badge_entities.Badge badge;
 
   @override
   Widget build(BuildContext context) {
@@ -247,7 +252,7 @@ class PoapDetailFooter extends StatefulWidget {
     required this.onPressViewRequirements,
   });
 
-  final badgeEntities.Badge badge;
+  final badge_entities.Badge badge;
   final Function() onPressGrantAccess;
   final Function() onPressClaim;
   final Function(PoapPolicy? poapPolicy) onPressViewRequirements;

@@ -75,7 +75,7 @@ class ProfileTabBarDelegate extends SliverPersistentHeaderDelegate {
   });
 
   @override
-  Widget build(BuildContext context, _, __) {
+  Widget build(BuildContext context, shrinkOffset, overlapsContent) {
     return _ProfileTabBar(controller: controller);
   }
 

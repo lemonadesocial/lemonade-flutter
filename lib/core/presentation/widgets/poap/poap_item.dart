@@ -1,6 +1,6 @@
 import 'package:app/core/application/badge/badge_detail_bloc/badge_detail_bloc.dart';
 import 'package:app/core/application/poap/claim_poap_bloc/claim_poap_bloc.dart';
-import 'package:app/core/domain/badge/entities/badge_entities.dart' as badgeEntities;
+import 'package:app/core/domain/badge/entities/badge_entities.dart' as badge_entities;
 import 'package:app/core/domain/poap/input/poap_input.dart';
 import 'package:app/core/domain/token/entities/token_entities.dart';
 import 'package:app/core/domain/token/input/get_tokens_input.dart';
@@ -31,7 +31,7 @@ class PoapItem extends StatelessWidget {
     super.key,
     required this.badge,
   });
-  final badgeEntities.Badge badge;
+  final badge_entities.Badge badge;
 
   @override
   Widget build(BuildContext context) {
@@ -211,7 +211,7 @@ class _PoapItemButtons extends StatelessWidget {
     required this.badge,
   });
 
-  final badgeEntities.Badge badge;
+  final badge_entities.Badge badge;
 
   @override
   Widget build(BuildContext context) {

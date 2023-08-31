@@ -1,4 +1,4 @@
-import 'package:app/core/domain/badge/entities/badge_entities.dart' as badgeEntities;
+import 'package:app/core/domain/badge/entities/badge_entities.dart' as badge_entities;
 import 'package:app/core/domain/poap/input/poap_input.dart';
 import 'package:app/core/domain/poap/poap_repository.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -16,7 +16,7 @@ class PoapQuantityBar extends StatelessWidget {
     required this.badge,
   });
 
-  final badgeEntities.Badge badge;
+  final badge_entities.Badge badge;
 
   @override
   Widget build(BuildContext context) {

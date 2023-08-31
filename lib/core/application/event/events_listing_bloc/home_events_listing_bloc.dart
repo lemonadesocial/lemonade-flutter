@@ -7,14 +7,10 @@ import 'package:dartz/dartz.dart';
 
 class HomeEventListingBloc extends BaseEventListingBloc<GetHomeEventsInput> {
   HomeEventListingBloc(
-    this.eventService, {
-    required this.defaultInput,
+    final EventService eventService, {
+    required final GetHomeEventsInput defaultInput,
   }) : super(eventService, defaultInput: defaultInput);
-  @override
-  final EventService eventService;
-  @override
-  final GetHomeEventsInput defaultInput;
-
+  
   @override
   Future<Either<Failure, List<Event>>> getEvents(int skip, bool endReached, {required GetHomeEventsInput input}) async {
     return eventService.getHomeEvents(input: input.copyWith(skip: skip));

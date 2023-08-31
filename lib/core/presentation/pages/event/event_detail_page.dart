@@ -6,6 +6,7 @@ import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.
 import 'package:app/core/service/webview/webview_token_service.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
@@ -31,8 +32,8 @@ class _EventDetailPageState extends State<EventDetailPage> with WidgetsBindingOb
   int maxSendTokenAttempt = 5;
   int sendTokenAttempt = 0;
 
-  late WebviewTokenService webviewTokenService = WebviewTokenService(onTokenChanged: (_token) {
-      token = _token;
+  late WebviewTokenService webviewTokenService = WebviewTokenService(onTokenChanged: (t) {
+      token = t;
       _sendTokenToWebview();
     });
 
@@ -97,7 +98,9 @@ class _EventDetailPageState extends State<EventDetailPage> with WidgetsBindingOb
       webViewController?.evaluateJavascript(source: 'document.mobileAuthToken = "$token"');
     } catch (e) {
       if (sendTokenAttempt >= maxSendTokenAttempt) return;
-      print('Retry times: $sendTokenAttempt');
+      if (kDebugMode) {
+        print('Retry times: $sendTokenAttempt');
+      }
       await Future.delayed(const Duration(milliseconds: 5000));
       _sendTokenToWebview();
     }
@@ -110,7 +113,10 @@ class _EventDetailPageState extends State<EventDetailPage> with WidgetsBindingOb
         await _clearWebStorage();
       }
       initialRequest = URLRequest(url: Uri.parse(_getEventWebUrl()), headers: headers);
-    } catch (e) {}
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error _getInitialRequest: $e');
+      }}
   }
 
   String _getEventWebUrl() {

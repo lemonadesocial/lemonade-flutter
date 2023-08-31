@@ -155,7 +155,7 @@ class Swipeable extends StatefulWidget {
   final DragStartBehavior dragStartBehavior;
 
   @override
-  _SwipeableState createState() => _SwipeableState();
+  SwipeableState createState() => SwipeableState();
 }
 
 class _SwipeableClipper extends CustomClipper<Rect> {
@@ -185,7 +185,7 @@ class _SwipeableClipper extends CustomClipper<Rect> {
 
 enum _FlingGestureKind { none, forward, reverse }
 
-class _SwipeableState extends State<Swipeable> with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+class SwipeableState extends State<Swipeable> with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   @override
   void initState() {
     _moveController = AnimationController(duration: widget.movementDuration, vsync: this)

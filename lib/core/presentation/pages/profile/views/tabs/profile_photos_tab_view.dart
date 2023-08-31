@@ -45,11 +45,9 @@ class ProfilePhotosTabView extends StatelessWidget {
                   return HeroImageViewer(
                     tag: photoItem.key ?? '',
                     imageUrl: ImageUtils.generateUrl(file: photoItem),
-                    child: Container(
-                      child: CachedNetworkImage(
-                        imageUrl: ImageUtils.generateUrl(file: photoItem),
-                        fit: BoxFit.cover,
-                      ),
+                    child: CachedNetworkImage(
+                      imageUrl: ImageUtils.generateUrl(file: photoItem),
+                      fit: BoxFit.cover,
                     ),
                   );
                 },

@@ -6,13 +6,9 @@ import 'package:app/core/service/event/event_service.dart';
 import 'package:dartz/dartz.dart';
 
 class HostingEventsListingBloc extends BaseEventListingBloc<GetHostingEventsInput> {
-  @override
-  final EventService eventService;
-  @override
-  final GetHostingEventsInput defaultInput;
   HostingEventsListingBloc(
-    this.eventService, {
-    required this.defaultInput,
+    final EventService eventService, {
+    required final GetHostingEventsInput defaultInput,
   }) : super(eventService, defaultInput: defaultInput);
 
   @override

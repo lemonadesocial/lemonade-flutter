@@ -6,7 +6,7 @@ class LemonColor {
   static Color black87 = const Color(0x000f0f0f).withOpacity(0.87);
   static Color raisinBlack = const Color(0xff212121);
   static Color raisinBlack0 = const Color(0xff212121).withOpacity(0);
-  static Color chineseBlack = const Color(0xff1171717);
+  static Color chineseBlack = const Color(0xff117171);
   static Color oliveBlack = const Color(0xff404040);
   static Color tertiaryBlack = const Color(0x4Debebf5);
   static Color white = const Color(0xffffffff);
@@ -41,8 +41,8 @@ class LemonColor {
   // Button
   static Color arsenic = const Color(0xff424242);
   static Color charlestonGreen = const Color(0xff2c2c2c);
-  static Color button_linear_1 = const Color(0xFFB17AF4);
-  static Color button_linear_2 = const Color(0xFF6F3FAA);
+  static Color buttonLinear1 = const Color(0xFFB17AF4);
+  static Color buttonLinear2 = const Color(0xFF6F3FAA);
   static Color grape = const Color(0xffB17AF4);
   static Color shadow = const Color.fromARGB(91, 0, 0, 0);
   static Color disableButtonLavender = const Color(0xFF3c2557);

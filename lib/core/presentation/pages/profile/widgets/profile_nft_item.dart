@@ -28,10 +28,6 @@ class ProfileNftItem extends StatelessWidget {
       (complex) => complex.id,
       (simple) => simple.id,
     );
-    String? tokenName = nftToken.fold(
-      (complex) => complex.metadata?.name,
-      (simple) => simple.metadata?.name,
-    );
     return Stack(
       children: [
         Positioned.fill(

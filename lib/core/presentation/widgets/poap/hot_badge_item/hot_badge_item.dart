@@ -104,24 +104,22 @@ class _BadgeLocationTag extends StatelessWidget {
       child: ClipRRect(
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
-          child: Container(
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                ThemeSvgIcon(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ThemeSvgIcon(
+                color: colorScheme.onPrimary,
+                builder: (filter) => Assets.icons.icNavigationFilled.svg(colorFilter: filter),
+              ),
+              SizedBox(width: Spacing.superExtraSmall / 2),
+              Text(
+                '${displayDistance.text} ${displayDistance.unit == DistanceUnit.kilometer ? t.common.unit.km : t.common.unit.m}',
+                style: Typo.xSmall.copyWith(
                   color: colorScheme.onPrimary,
-                  builder: (filter) => Assets.icons.icNavigationFilled.svg(colorFilter: filter),
+                  fontWeight: FontWeight.w600,
                 ),
-                SizedBox(width: Spacing.superExtraSmall / 2),
-                Text(
-                  '${displayDistance.text} ${displayDistance.unit == DistanceUnit.kilometer ? t.common.unit.km : t.common.unit.m}',
-                  style: Typo.xSmall.copyWith(
-                    color: colorScheme.onPrimary,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

@@ -17,7 +17,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class ChatMessageView extends StatelessWidget {
   final ChatController controller;
   const ChatMessageView(
-    this.controller, {super.key},
+    this.controller, {super.key}
   );
 
   @override

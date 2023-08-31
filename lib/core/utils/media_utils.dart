@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:app/core/utils/ipfs_utils.dart';
+import 'package:flutter/foundation.dart';
 
 enum MediaType {
   image,
@@ -88,7 +89,9 @@ class MediaUtils {
 
       return Media(type: MediaType.unknown, url: href);
     } catch (e) {
-      print('Caught error: $e');
+      if (kDebugMode) {
+        print('Caught error: $e');
+      }
       return Media(type: MediaType.unknown);
     }
   }

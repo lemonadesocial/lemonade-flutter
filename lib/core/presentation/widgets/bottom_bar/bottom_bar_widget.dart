@@ -20,10 +20,10 @@ class BottomBar extends StatefulWidget {
   static double get bottomBarHeight => Platform.isIOS ? 90.h : 70.h;
 
   @override
-  _BottomBarState createState() => _BottomBarState();
+  BottomBarState createState() => BottomBarState();
 }
 
-class _BottomBarState extends State<BottomBar>
+class BottomBarState extends State<BottomBar>
     with SingleTickerProviderStateMixin {
   AppTab _selectedTab = AppTab.home;
   late AnimationController _animationController;

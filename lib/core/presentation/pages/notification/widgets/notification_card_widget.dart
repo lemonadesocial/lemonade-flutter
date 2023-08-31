@@ -5,13 +5,13 @@ import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/theme/typo.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/core/domain/notification/entities/notification.dart'
-    as NotificationEntities;
+    as notification_entities;
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 
 class NotificationCard extends StatelessWidget {
-  final NotificationEntities.Notification notification;
+  final notification_entities.Notification notification;
   final Function()? onTap;
 
   const NotificationCard({

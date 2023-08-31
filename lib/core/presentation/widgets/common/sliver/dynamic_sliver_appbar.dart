@@ -14,10 +14,10 @@ class DynamicSliverAppBar extends SliverAppBar {
   });
 
   @override
-  _DynamicSliverAppBarState createState() => _DynamicSliverAppBarState();
+  DynamicSliverAppBarState createState() => DynamicSliverAppBarState();
 }
 
-class _DynamicSliverAppBarState extends State<DynamicSliverAppBar> {
+class DynamicSliverAppBarState extends State<DynamicSliverAppBar> {
   final GlobalKey _childKey = GlobalKey();
   bool isHeightCalculated = false;
   double? height;
