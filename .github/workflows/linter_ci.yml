@@ -1,0 +1,13 @@
+name: Linter CI
+on: [push]
+jobs:
+  linter:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Flutter
+        run: git clone https://github.com/flutter/flutter.git -b stable
+      - name: Run Flutter doctor
+        run: ./flutter/bin/flutter doctor
+      - name: Run Linter
+        run: ./flutter/bin/flutter analyze .
