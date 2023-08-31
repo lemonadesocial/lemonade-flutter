@@ -22,7 +22,8 @@ jobs:
           touch .env.production
 
       # Check for any formatting issues in the code.
-      - run: dart format --set-exit-if-changed .  
+      - name: Format code
+        run: dart format --set-exit-if-changed .  
 
       - name: Analyze Dart
         uses: zgosalvez/github-actions-analyze-dart@v2
