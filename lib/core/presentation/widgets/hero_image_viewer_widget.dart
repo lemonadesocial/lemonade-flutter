@@ -6,11 +6,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class HeroImageViewer extends StatelessWidget {
-  final Widget child;
-  final String tag;
-  final String? imageUrl;
-  final Widget Function()? imageBuilder;
-  final Function(Widget Function()? imageBuilder)? onTap;
 
   const HeroImageViewer({
     super.key,
@@ -20,6 +15,11 @@ class HeroImageViewer extends StatelessWidget {
     this.imageBuilder,
     this.onTap,
   }) : assert(imageUrl != null || imageBuilder != null);
+  final Widget child;
+  final String tag;
+  final String? imageUrl;
+  final Widget Function()? imageBuilder;
+  final Function(Widget Function()? imageBuilder)? onTap;
 
   void _showImage(BuildContext context) {
     Navigator.of(context).push(
@@ -53,15 +53,15 @@ class HeroImageViewer extends StatelessWidget {
 }
 
 class ImageViewerPage extends StatelessWidget {
-  final String heroTag;
-  final String? imageUrl;
-  final Widget Function()? imageBuilder;
 
-  const ImageViewerPage({
+  const ImageViewerPage({super.key, 
     required this.heroTag,
     this.imageUrl,
     this.imageBuilder,
   });
+  final String heroTag;
+  final String? imageUrl;
+  final Widget Function()? imageBuilder;
 
   @override
   Widget build(BuildContext context) {
@@ -76,9 +76,8 @@ class ImageViewerPage extends StatelessWidget {
             child: Container(
               color: Colors.black.withOpacity(0.5),
               child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 3.0, sigmaY: 3.0),
+                filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
                 child: Align(
-                  alignment: Alignment.center,
                   child: _buildHero(),
                 ),
               ),
@@ -107,8 +106,8 @@ class ImageViewerPage extends StatelessWidget {
           );
   }
 
-  _buildImage() {
-    return Container(
+  Container _buildImage() {
+    return SizedBox(
       width: 350,
       height: 350,
       child: ClipRRect(

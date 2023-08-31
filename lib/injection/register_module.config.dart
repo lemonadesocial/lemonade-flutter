@@ -64,7 +64,7 @@ extension GetItInjectableX on _i1.GetIt {
     gh.lazySingleton<_i13.MatrixService>(() => _i13.MatrixService());
     gh.lazySingleton<_i3.MetaverseGQL>(() => _i3.MetaverseGQL());
     gh.lazySingleton<_i14.NewsfeedRepository>(
-        () => _i15.NewsfeedRepositoryImpl());
+        () => _i15.NewsfeedRepositoryImpl(),);
     gh.lazySingleton<_i16.PoapRepository>(() => _i17.PoapRepositoryImpl());
     gh.lazySingleton<_i18.PostRepository>(() => _i19.PostRepositoryImpl());
     gh.lazySingleton<_i20.ShakeService>(() => _i20.ShakeService());
@@ -72,13 +72,13 @@ extension GetItInjectableX on _i1.GetIt {
     gh.lazySingleton<_i23.UserRepository>(() => _i24.UserRepositoryImpl());
     gh.lazySingleton<_i25.UserService>(() => _i25.UserService());
     gh.lazySingleton<_i26.WalletConnectService>(
-        () => _i26.WalletConnectService());
+        () => _i26.WalletConnectService(),);
     gh.lazySingleton<_i3.WalletGQL>(() => _i3.WalletGQL());
     gh.lazySingleton<_i27.WalletRepository>(() => _i28.WalletRepositoryImpl());
     gh.lazySingleton<_i29.AuthBloc>(() => _i29.AuthBloc(
           userService: gh<_i25.UserService>(),
           authService: gh<_i5.AuthService>(),
-        ));
+        ),);
     return this;
   }
 }

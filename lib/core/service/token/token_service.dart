@@ -7,8 +7,8 @@ import 'package:app/core/failure.dart';
 import 'package:dartz/dartz.dart';
 
 class TokenService {
-  final TokenRepository tokenRepository;
   TokenService(this.tokenRepository);
+  final TokenRepository tokenRepository;
 
   Future<Either<Failure, List<TokenComplex>>> getTokens({required GetTokensInput input}) {
     return tokenRepository.getTokens(input: input);

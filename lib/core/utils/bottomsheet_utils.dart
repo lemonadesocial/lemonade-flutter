@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class BottomSheetUtils {
-  static showSnapBottomSheet(
+  static Future showSnapBottomSheet(
     BuildContext context, {
     required Widget Function(BuildContext) builder,
     Widget? child,

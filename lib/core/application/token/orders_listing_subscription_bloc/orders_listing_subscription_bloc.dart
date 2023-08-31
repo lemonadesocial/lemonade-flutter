@@ -10,18 +10,18 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'orders_listing_subscription_bloc.freezed.dart';
 
 class OrdersListingSubscriptionBloc extends Bloc<OrdersListingSubscriptionEvent, OrdersListingSubscriptionState> {
+
+  OrdersListingSubscriptionBloc(
+    this.tokenService, {
+    required this.defaultInput,
+  }) : super(const OrdersListingSubscriptionState.loading()) {
+    on<OrdersListingSubscriptionEventStart>(_onStartSubscription);
+  }
   final TokenService tokenService;
   late final PaginationService<OrderComplex, WatchOrdersInput> paginationService =
       PaginationService(getDataStream: _watchOrders);
 
   final WatchOrdersInput defaultInput;
-
-  OrdersListingSubscriptionBloc(
-    this.tokenService, {
-    required this.defaultInput,
-  }) : super(OrdersListingSubscriptionState.loading()) {
-    on<OrdersListingSubscriptionEventStart>(_onStartSubscription);
-  }
 
   Stream<Either<Failure, List<OrderComplex>>> _watchOrders(
     int skip,
@@ -35,13 +35,13 @@ class OrdersListingSubscriptionBloc extends Bloc<OrdersListingSubscriptionEvent,
     await emit.forEach(paginationService.fetchStream(defaultInput), onData: (streamEvent) {
       return streamEvent.fold(
         (l) {
-          return OrdersListingSubscriptionState.failure();
+          return const OrdersListingSubscriptionState.failure();
         },
         (orders) {
           return OrdersListingSubscriptionState.fetched(orders: orders);
         },
       );
-    });
+    },);
   }
 }
 

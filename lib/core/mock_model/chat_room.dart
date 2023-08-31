@@ -1,11 +1,4 @@
 class ChatRoom {
-  final String? avatarUrl;
-  final String? name;
-  final String? latestMessage;
-  final DateTime? createdAt;
-  final int? unseenMessageCount;
-  final bool? isPrivate;
-  final bool? isMuted;
 
   ChatRoom({
     this.avatarUrl,
@@ -14,6 +7,13 @@ class ChatRoom {
     this.createdAt,
     this.unseenMessageCount,
     this.isPrivate,
-    this.isMuted
+    this.isMuted,
   });
+  final String? avatarUrl;
+  final String? name;
+  final String? latestMessage;
+  final DateTime? createdAt;
+  final int? unseenMessageCount;
+  final bool? isPrivate;
+  final bool? isMuted;
 }

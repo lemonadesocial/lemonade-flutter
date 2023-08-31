@@ -5,15 +5,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// @children should always be slivers
 class BaseSliverTabView extends StatelessWidget {
-  final String name;
-  final List<Widget> children;
-  final scrollNotificationBloc = ScrollNotificationBloc();
 
   BaseSliverTabView({
     super.key,
     required this.name,
     required this.children,
   });
+  final String name;
+  final List<Widget> children;
+  final scrollNotificationBloc = ScrollNotificationBloc();
 
   @override
   Widget build(BuildContext context) {
@@ -25,18 +25,18 @@ class BaseSliverTabView extends StatelessWidget {
         // "inside" the NestedScrollView, so that
         // sliverOverlapAbsorberHandleFor() can find the
         // NestedScrollView.
-        builder: (BuildContext context) {
+        builder: (context) {
           return BlocProvider.value(
             value: scrollNotificationBloc,
             child: NotificationListener<ScrollNotification>(
               onNotification: (notification) {
                 if (notification is ScrollEndNotification) {
                   if (notification.metrics.pixels >= notification.metrics.maxScrollExtent) {
-                    scrollNotificationBloc.add(ScrollNotificationEvent.reachEnd());
+                    scrollNotificationBloc.add(const ScrollNotificationEvent.reachEnd());
                     return true;
                   }
                 } 
-                scrollNotificationBloc.add(ScrollNotificationEvent.scroll());
+                scrollNotificationBloc.add(const ScrollNotificationEvent.scroll());
                 return true;
               },
               child: CustomScrollView(
@@ -52,7 +52,7 @@ class BaseSliverTabView extends StatelessWidget {
                 key: PageStorageKey<String>(name.toString()),
                 slivers: <Widget>[
                   SliverPinnedOverlapInjector(
-                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context)
+                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
                   ),
                   ...children
                 ],

@@ -11,9 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:matrix/matrix.dart';
 
 class MessageActions extends StatelessWidget {
-  final Function()? onEdit;
-  final Function(String emoji)? onReact;
-  final Event event;
 
   const MessageActions({
     super.key,
@@ -21,6 +18,9 @@ class MessageActions extends StatelessWidget {
     this.onEdit,
     this.onReact,
   });
+  final Function()? onEdit;
+  final Function(String emoji)? onReact;
+  final Event event;
 
   List<String> get defaultEmojis => ['👍', '🥳', '😍', '✅', '🎉'];
 
@@ -38,7 +38,7 @@ class MessageActions extends StatelessWidget {
       defaultSnapSize: 0.3,
       minSnapSize: 0.3,
       maxSnapSize: 0.3,
-      snapSizes: [0.3],
+      snapSizes: const [0.3],
       builder: (_) => Flexible(
         child: Container(
           child: Column(
@@ -56,7 +56,7 @@ class MessageActions extends StatelessWidget {
                           },
                           child: Text(
                             emoji,
-                            style: TextStyle(fontSize: 36),
+                            style: const TextStyle(fontSize: 36),
                           ),
                         ),
                       )

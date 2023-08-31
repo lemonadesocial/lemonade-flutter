@@ -7,15 +7,6 @@ import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:matrix/matrix.dart';
 
 class ImageMessage extends StatelessWidget {
-  final Event event;
-  final BoxFit fit;
-  final bool maxSize;
-  final Color? backgroundColor;
-  final bool thumbnailOnly;
-  final bool animated;
-  final double width;
-  final double height;
-  final void Function()? onTap;
 
   const ImageMessage(
     this.event, {
@@ -29,6 +20,15 @@ class ImageMessage extends StatelessWidget {
     this.onTap,
     Key? key,
   }) : super(key: key);
+  final Event event;
+  final BoxFit fit;
+  final bool maxSize;
+  final Color? backgroundColor;
+  final bool thumbnailOnly;
+  final bool animated;
+  final double width;
+  final double height;
+  final void Function()? onTap;
 
   String get defaultBlurHash => 'LEHV6nWB2yk8pyo0adR*.7kCMdnj';
 
@@ -61,10 +61,10 @@ class ImageMessage extends StatelessWidget {
             fit: BoxFit.contain,
             animated: true,
             isThumbnail: false,
-            placeholder: (ctx) => Loading.defaultLoading(ctx),
+            placeholder: Loading.defaultLoading,
           ),
-          onTap: (_imageBuilder) {
-            _onTap(context, imageBuilder: _imageBuilder);
+          onTap: (imageBuilder) {
+            _onTap(context, imageBuilder: imageBuilder);
           },
           child: MxcImage(
             event: event,

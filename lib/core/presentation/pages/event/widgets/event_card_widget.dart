@@ -1,23 +1,23 @@
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/widgets/event/event_buy_ticket_button_widget.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
+import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
-import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
-import 'package:app/theme/typo.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:app/theme/typo.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class EventCard extends StatelessWidget {
-  final Event event;
-  final Function()? onTap;
 
   const EventCard({
     super.key,
     required this.event,
     this.onTap,
   });
+  final Event event;
+  final Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -40,18 +40,18 @@ class EventCard extends StatelessWidget {
     );
   }
 
-  _buildCardHeader() => Padding(
+  Padding _buildCardHeader() => Padding(
         padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall, vertical: Spacing.xSmall),
         child: LemonCircleAvatar(
           url: ImageUtils.generateUrl(
-              file: event.hostExpanded?.newPhotosExpanded?.first, imageConfig: ImageConfig.profile),
+              file: event.hostExpanded?.newPhotosExpanded?.first, imageConfig: ImageConfig.profile,),
           label: event.hostExpanded?.name ?? '',
         ),
       );
 
-  _buildCardBody() => event.newNewPhotosExpanded?.isNotEmpty == true
+  Widget _buildCardBody() => event.newNewPhotosExpanded?.isNotEmpty == true
       ? Container(
-          constraints: BoxConstraints(maxHeight: 300),
+          constraints: const BoxConstraints(maxHeight: 300),
           width: double.infinity,
           height: 200,
           child: CachedNetworkImage(
@@ -65,11 +65,10 @@ class EventCard extends StatelessWidget {
         )
       : ImagePlaceholder.eventCard();
 
-  _buildCardFooter(BuildContext context, ColorScheme colorScheme) => Padding(
+  Padding _buildCardFooter(BuildContext context, ColorScheme colorScheme) => Padding(
         padding: EdgeInsets.symmetric(horizontal: Spacing.small, vertical: Spacing.small),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          mainAxisSize: MainAxisSize.max,
           children: [
             Flexible(
               flex: 10,
@@ -89,7 +88,7 @@ class EventCard extends StatelessWidget {
                 ],
               ),
             ),
-            Spacer(),
+            const Spacer(),
             EventBuyTicketButton(event: event),
           ],
         ),

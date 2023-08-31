@@ -4,29 +4,29 @@ import 'package:app/core/domain/token/input/get_tokens_input.dart';
 import 'package:app/core/domain/token/token_repository.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/pages/profile/widgets/profile_nft_item.dart';
-import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
+import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/service/token/token_service.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:dartz/dartz.dart' as dartz;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:dartz/dartz.dart' as dartz;
 
 class ProfileNftCreatedListView extends StatelessWidget {
-  final User user;
-  late final tokensListingBloc = TokensListingBloc(
-      TokenService(
-        getIt<TokenRepository>(),
-      ),
-      defaultInput: GetTokensInput(creator: user.wallets?[0]))
-    ..add(TokensListingEvent.fetch());
 
   ProfileNftCreatedListView({
     super.key,
     required this.user,
   });
+  final User user;
+  late final tokensListingBloc = TokensListingBloc(
+      TokenService(
+        getIt<TokenRepository>(),
+      ),
+      defaultInput: GetTokensInput(creator: user.wallets?[0]),)
+    ..add(const TokensListingEvent.fetch());
 
   @override
   Widget build(BuildContext context) {
@@ -37,12 +37,12 @@ class ProfileNftCreatedListView extends StatelessWidget {
           scrollState.maybeWhen(
               endReached: () {
                 tokensListingBloc.add(
-                  TokensListingEvent.fetch(),
+                  const TokensListingEvent.fetch(),
                 );
               },
-              orElse: () {});
+              orElse: () {},);
         },
-        child: _ProfileNftCreatedList(),
+        child: const _ProfileNftCreatedList(),
       ),
     );
   }

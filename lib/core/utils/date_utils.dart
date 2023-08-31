@@ -4,15 +4,15 @@ class DateUtils {
 
   /// return [start, end] of current week
   static List<DateTime> get thisWeek {
-    DateTime thisWeekStart = DateTime(today.year, today.month, today.day - today.weekday + 1);
-    DateTime thisWeekEnd = thisWeekStart.add(const Duration(days: 7)).subtract(const Duration(days: 1));
+    final thisWeekStart = DateTime(today.year, today.month, today.day - today.weekday + 1);
+    final thisWeekEnd = thisWeekStart.add(const Duration(days: 7)).subtract(const Duration(days: 1));
 
     return [thisWeekStart, thisWeekEnd];
   }
 
   /// return [start, end] of current weekend
   static List<DateTime> get thisWeekend {
-    int todayWeekday = today.weekday;
+    final todayWeekday = today.weekday;
     final [startWeek, endWeek] = thisWeek;
 
     DateTime thisWeekendStart;
@@ -20,25 +20,25 @@ class DateUtils {
     if(todayWeekday <= DateTime.friday) {
       thisWeekendStart = startWeek.add(Duration(days: DateTime.saturday - startWeek.weekday));
     } else {
-      thisWeekendStart = endWeek.subtract(Duration(days: 1));
+      thisWeekendStart = endWeek.subtract(const Duration(days: 1));
     }
 
-    DateTime thisWeekendEnd = thisWeekendStart.add(const Duration(days: 1));
+    final thisWeekendEnd = thisWeekendStart.add(const Duration(days: 1));
 
     return [thisWeekendStart, thisWeekendEnd];
   }
 
   /// return [start, end] of current weekend
   static List<DateTime> get nextMonth {
-    DateTime nextMonthStart = DateTime(today.year, today.month + 1);
-    DateTime nextMonthEnd = DateTime(today.year, today.month + 2).subtract(const Duration(days: 1));
+    final nextMonthStart = DateTime(today.year, today.month + 1);
+    final nextMonthEnd = DateTime(today.year, today.month + 2).subtract(const Duration(days: 1));
 
     return [nextMonthStart, nextMonthEnd];
   }
 
   static bool isToday(DateTime? date) {
     if (date == null) return false;
-    final DateTime now = DateTime.now();
+    final now = DateTime.now();
     return date.year == now.year && date.month == now.month && date.day == now.day;
   }
 
@@ -68,8 +68,8 @@ class DateUtils {
 
     final [thisWeekStart, thisWeekEnd] = DateUtils.thisWeek;
 
-    DateTime nextWeekStart = thisWeekStart.add(const Duration(days: 7));
-    DateTime nextWeekEnd = thisWeekEnd.add(const Duration(days: 7));
+    final nextWeekStart = thisWeekStart.add(const Duration(days: 7));
+    final nextWeekEnd = thisWeekEnd.add(const Duration(days: 7));
 
     return date.isAfter(nextWeekStart) && date.isBefore(nextWeekEnd);
   }
@@ -79,8 +79,8 @@ class DateUtils {
 
     final [start, end] = DateUtils.thisWeekend;
 
-    DateTime nextWeekendStart = start.add(const Duration(days: 7));
-    DateTime nextWeekendEnd = end.add(const Duration(days: 7));
+    final nextWeekendStart = start.add(const Duration(days: 7));
+    final nextWeekendEnd = end.add(const Duration(days: 7));
 
     return date.isAfter(nextWeekendStart) && date.isBefore(nextWeekendEnd);
   }
@@ -95,7 +95,7 @@ class DateUtils {
 
   static bool isPast(DateTime? date) {
     if(date == null) return false;
-    final originToday = new DateTime(today.year, today.month, today.day);
+    final originToday = DateTime(today.year, today.month, today.day);
     return date.isBefore(originToday);
   }
 }

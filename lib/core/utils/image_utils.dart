@@ -4,9 +4,9 @@ import 'dart:convert';
 import 'package:app/core/domain/common/entities/common.dart';
 
 class EditProps {
-  final Map<String, dynamic>? resize;
 
   EditProps({this.resize});
+  final Map<String, dynamic>? resize;
 }
 
 enum ImageConfig {
@@ -45,11 +45,11 @@ class ImageUtils {
       return file.url ?? '';
     }
 
-    String url = (file.bucket ?? '').contains('eu-west-1')
+    final url = (file.bucket ?? '').contains('eu-west-1')
         ? 'https://images.staging.lemonade.social'
         : 'https://images.lemonade.social';
 
-    Map<String, dynamic> params = {
+    final params = <String, dynamic>{
       'bucket': file.bucket,
       'key': file.key,
     };
@@ -59,7 +59,7 @@ class ImageUtils {
         'resize': editMap[imageConfig]!.resize
       };
     }
-    var a = json.encode(params);
+    final a = json.encode(params);
     return '$url/${base64.encode(utf8.encode(json.encode(params)))}';
   }
 }

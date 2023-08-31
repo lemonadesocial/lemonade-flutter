@@ -4,10 +4,10 @@ import 'package:app/theme/color.dart';
 import 'package:flutter/material.dart';
 
 class _ProfileTabBar extends StatefulWidget {
-  final TabController controller;
-  _ProfileTabBar({
+  const _ProfileTabBar({
     required this.controller,
   });
+  final TabController controller;
 
   @override
   State<_ProfileTabBar> createState() => _ProfileTabBarState();
@@ -38,8 +38,8 @@ class _ProfileTabBarState extends State<_ProfileTabBar> {
   List<Widget> _renderTabs(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return _tabIcons.asMap().entries.map((item) {
-      var isSelected = item.key == currentIndex;
-      var svgIcon = item.value;
+      final isSelected = item.key == currentIndex;
+      final svgIcon = item.value;
       return Tab(
         child: SizedBox(
           child: ThemeSvgIcon(
@@ -69,10 +69,10 @@ class _ProfileTabBarState extends State<_ProfileTabBar> {
 }
 
 class ProfileTabBarDelegate extends SliverPersistentHeaderDelegate {
-  final TabController controller;
   ProfileTabBarDelegate({
     required this.controller,
   });
+  final TabController controller;
 
   @override
   Widget build(BuildContext context, _, __) {
@@ -80,10 +80,10 @@ class ProfileTabBarDelegate extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  double get maxExtent => 48.0;
+  double get maxExtent => 48;
 
   @override
-  double get minExtent => 48.0;
+  double get minExtent => 48;
 
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {

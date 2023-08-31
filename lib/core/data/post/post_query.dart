@@ -1,8 +1,8 @@
-import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:app/core/data/event/event_query.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 
 const postFragment = '''
-  ${eventHostExpandedFragment}
+  $eventHostExpandedFragment
 
   fragment postFragment on Post {
   _id
@@ -65,7 +65,7 @@ const postFragment = '''
 ''';
 
 final getPostsQuery = gql('''
-  ${postFragment}
+  $postFragment
   
   query(
   \$id: MongoID
@@ -91,7 +91,7 @@ final getPostsQuery = gql('''
 ''');
 
 final getNewsfeedQuery = gql('''
-  ${postFragment}
+  $postFragment
   
   query(
   \$offset: Float
@@ -108,7 +108,7 @@ final getNewsfeedQuery = gql('''
 ''');
 
 final createPostQuery = gql('''
-  ${postFragment}
+  $postFragment
   
   mutation (\$visibility: PostVisibility!, \$text: String, \$ref_type: PostRefType, \$ref_id: String) {
   createPost(

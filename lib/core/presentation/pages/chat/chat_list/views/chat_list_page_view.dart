@@ -34,9 +34,9 @@ class ChatListPageView extends StatelessWidget {
         actions: [
           BlocBuilder<ChatSpaceBloc, ChatSpaceState>(
             builder: (context, chatSpaceState) => Builder(
-              builder: (_context) => GestureDetector(
+              builder: (context) => GestureDetector(
                 onTap: () {
-                  Scaffold.of(_context).openEndDrawer();
+                  Scaffold.of(context).openEndDrawer();
                 },
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 15.w),
@@ -71,7 +71,7 @@ class ChatListPageView extends StatelessWidget {
           ),
         ],
       ),
-      endDrawer: SpacesDrawer(),
+      endDrawer: const SpacesDrawer(),
       backgroundColor: colorScheme.primary,
       body: SafeArea(
         child: StreamBuilder(
@@ -80,7 +80,7 @@ class ChatListPageView extends StatelessWidget {
               .onSync
               .stream
               .where((event) => event.hasRoomUpdate)
-              .rateLimit(Duration(seconds: 1)),
+              .rateLimit(const Duration(seconds: 1)),
           builder: (context, snapshot) =>
               BlocBuilder<ChatListBloc, ChatListState>(
             builder: (context, chatListState) {
@@ -119,7 +119,7 @@ class ChatListPageView extends StatelessWidget {
                   _ChatListSection(
                       title: StringUtils.capitalize(t.chat.directMessages),
                       rooms: chatListState.dmRooms,
-                      itemBuilder: (room) => ChatListItem(room: room)),
+                      itemBuilder: (room) => ChatListItem(room: room),),
                 ],
               );
             },

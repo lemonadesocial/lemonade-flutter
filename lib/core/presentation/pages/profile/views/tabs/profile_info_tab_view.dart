@@ -16,12 +16,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProfileInfoTabView extends StatelessWidget {
-  final User user;
 
-  ProfileInfoTabView({
+  const ProfileInfoTabView({
     super.key,
     required this.user,
   });
+  final User user;
 
   List<SvgGenImage> get _socialIconsSvg => [
         Assets.icons.icTwitter,
@@ -42,7 +42,7 @@ class ProfileInfoTabView extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
     return BaseSliverTabView(
-      name: "info",
+      name: 'info',
       children: [
         SliverToBoxAdapter(
           child: Container(
@@ -56,7 +56,7 @@ class ProfileInfoTabView extends StatelessWidget {
                 ],
                 if (user.description != null && user.description?.isNotEmpty == true) ...[
                   Text(StringUtils.capitalize(t.common.description),
-                      style: Typo.small.copyWith(color: colorScheme.onSurfaceVariant)),
+                      style: Typo.small.copyWith(color: colorScheme.onSurfaceVariant),),
                   SizedBox(height: Spacing.superExtraSmall),
                   Text(user.description!),
                   SizedBox(height: Spacing.smMedium),
@@ -76,8 +76,8 @@ class ProfileInfoTabView extends StatelessWidget {
         if (AuthUtils.isMe(context, user: user))
           SliverToBoxAdapter(
             child: ElevatedButton(
-              onPressed: () => context.read<AuthBloc>().add(AuthEvent.logout()),
-              child: Text("Logout"),
+              onPressed: () => context.read<AuthBloc>().add(const AuthEvent.logout()),
+              child: const Text('Logout'),
             ),
           )
       ],
@@ -86,12 +86,11 @@ class ProfileInfoTabView extends StatelessWidget {
 
   Row _renderSocials(BuildContext context, ColorScheme colorScheme) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
       children: [user.handleTwitter, user.handleInstagram, user.handleFacebook, user.handleLinkedin]
           .asMap()
           .entries
           .map((entry) {
-        if (entry.value == null || entry.value?.isEmpty == true) return SizedBox.shrink();
+        if (entry.value == null || entry.value?.isEmpty == true) return const SizedBox.shrink();
         return GestureDetector(
           onTap: () async {
             AutoRouter.of(context).navigate(WebviewRoute(uri: Uri.parse('${_socialUrls[entry.key]}/${entry.value}}')));

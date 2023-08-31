@@ -7,8 +7,8 @@ import 'package:app/core/utils/date_utils.dart';
 import 'package:dartz/dartz.dart';
 
 class EventService {
-  final EventRepository eventRepository;
   EventService(this.eventRepository);
+  final EventRepository eventRepository;
 
   Future<Either<Failure, List<Event>>> getEvents({
     required GetEventsInput input,

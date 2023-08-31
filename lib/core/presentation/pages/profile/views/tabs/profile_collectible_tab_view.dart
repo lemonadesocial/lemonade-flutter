@@ -11,11 +11,11 @@ import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 
 class ProfileCollectibleTabView extends StatefulWidget {
-  final User user;
   const ProfileCollectibleTabView({
     super.key,
     required this.user,
   });
+  final User user;
 
   @override
   State<ProfileCollectibleTabView> createState() => _ProfileCollectibleTabViewState();
@@ -25,9 +25,9 @@ class _ProfileCollectibleTabViewState extends State<ProfileCollectibleTabView> {
   double get _filterBarHeight => 72;
   TokensListingType tokensListingType = TokensListingType.created;
 
-  _selectTokenListingType(TokensListingType _type) {
+  _selectTokenListingType(TokensListingType type) {
     setState(() {
-      tokensListingType = _type;
+      tokensListingType = type;
     });
   }
 
@@ -36,13 +36,13 @@ class _ProfileCollectibleTabViewState extends State<ProfileCollectibleTabView> {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
     return BaseSliverTabView(
-      name: "collectible",
+      name: 'collectible',
       children: [
         SliverPadding(
           padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
           sliver: SliverAppBar(
             pinned: true,
-            leading: SizedBox.shrink(),
+            leading: const SizedBox.shrink(),
             collapsedHeight: _filterBarHeight,
             expandedHeight: _filterBarHeight,
             flexibleSpace: GestureDetector(
@@ -75,7 +75,7 @@ class _ProfileCollectibleTabViewState extends State<ProfileCollectibleTabView> {
         if(tokensListingType == TokensListingType.created) ProfileNftCreatedListView(user: widget.user),
         if(tokensListingType == TokensListingType.collected) ProfileNftCollectedListView(user: widget.user),
         if(tokensListingType == TokensListingType.sold) ProfileNftSoldListView(user: widget.user),
-        SliverToBoxAdapter(
+        const SliverToBoxAdapter(
           child: SizedBox(height: 92),
         )
       ],

@@ -23,7 +23,7 @@ class UserRepositoryImpl implements UserRepository {
       parserFn: (data) {
         return AuthUser.fromDto(UserDto.fromJson(data['getMe']));
       },
-    ));
+    ),);
 
     if (result.hasException) return Left(Failure());
     return Right(result.parsedData!);

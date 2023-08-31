@@ -3,11 +3,11 @@ import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 
 class TextBadge extends StatelessWidget {
-  final String label;
   const TextBadge({
     super.key,
     required this.label,
   });
+  final String label;
 
   @override
   Widget build(BuildContext context) {

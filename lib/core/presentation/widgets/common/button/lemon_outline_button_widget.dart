@@ -4,12 +4,6 @@ import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 
 class LemonOutlineButton extends StatelessWidget {
-  final String? label;
-  final Widget? leading;
-  final Function()? onTap;
-  final double? height;
-  final EdgeInsets? padding;
-  final BorderRadius? radius;
 
   const LemonOutlineButton({
     super.key,
@@ -20,6 +14,12 @@ class LemonOutlineButton extends StatelessWidget {
     this.height,
     this.radius,
   });
+  final String? label;
+  final Widget? leading;
+  final Function()? onTap;
+  final double? height;
+  final EdgeInsets? padding;
+  final BorderRadius? radius;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +38,6 @@ class LemonOutlineButton extends StatelessWidget {
         child: Center(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               if (leading != null) ...[
                 leading!,

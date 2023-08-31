@@ -1,18 +1,18 @@
-import 'package:app/theme/typo.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 
 class LemonChip extends StatelessWidget {
-  final String label;
-  final bool isActive;
-  final Function()? onTap;
   const LemonChip({
     super.key,
     required this.label,
     this.isActive = false,
     this.onTap,
   });
+  final String label;
+  final bool isActive;
+  final Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,7 @@ class LemonChip extends StatelessWidget {
         constraints: BoxConstraints(minWidth: Sizing.large),
         decoration: BoxDecoration(
             color: isActive ? themeColor.onSurface : themeColor.surface,
-            borderRadius: BorderRadius.circular(LemonRadius.normal)),
+            borderRadius: BorderRadius.circular(LemonRadius.normal),),
         child: Center(
           widthFactor: 1,
           heightFactor: 1,

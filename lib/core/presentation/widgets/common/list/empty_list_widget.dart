@@ -4,11 +4,11 @@ import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 
 class EmptyList extends StatelessWidget {
-  final String? emptyText;
   const EmptyList({
     super.key,
     this.emptyText,
   });
+  final String? emptyText;
 
   @override
   Widget build(BuildContext context) {

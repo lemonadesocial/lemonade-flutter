@@ -5,7 +5,6 @@ import 'package:app/core/config.dart';
 import 'package:app/core/data/fcm/fcm_mutation.dart';
 import 'package:app/core/gql.dart';
 import 'package:app/core/oauth/oauth.dart';
-import 'package:app/core/utils/navigation_utils.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -67,16 +66,16 @@ class FirebaseService {
       sound: true,
     );
 
-    final InitializationSettings initializationSettings =
+    const initializationSettings =
         InitializationSettings(
-      android: AndroidInitializationSettings("@mipmap/ic_launcher"),
+      android: AndroidInitializationSettings('@mipmap/ic_launcher'),
       iOS: DarwinInitializationSettings(),
     );
 
     await flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
       onDidReceiveNotificationResponse:
-          (NotificationResponse notificationResponse) {
+          (notificationResponse) {
         if (kDebugMode) {
           print('onDidReceiveNotificationResponse');
         }
@@ -123,13 +122,7 @@ class FirebaseService {
   Future<void> requestPermission() async {
     final messaging = FirebaseMessaging.instance;
     final settings = await messaging.requestPermission(
-      alert: true,
-      announcement: false,
-      badge: true,
-      carPlay: false,
-      criticalAlert: false,
-      provisional: false,
-      sound: true,
+      
     );
     if (kDebugMode) {
       print('Permission granted: ${settings.authorizationStatus}');
@@ -145,9 +138,9 @@ class FirebaseService {
   }
 
   showFlutterNotification(RemoteMessage message) async {
-    Logs().i("showFlutterNotification");
-    RemoteNotification? notification = message.notification;
-    AndroidNotification? android = message.notification?.android;
+    Logs().i('showFlutterNotification');
+    final notification = message.notification;
+    final android = message.notification?.android;
     if (notification != null && android != null && !kIsWeb) {
       flutterLocalNotificationsPlugin.show(
           notification.hashCode,
@@ -161,7 +154,7 @@ class FirebaseService {
               icon: '@mipmap/ic_launcher',
             ),
           ),
-          payload: json.encode(message.data));
+          payload: json.encode(message.data),);
     }
   }
 
@@ -188,8 +181,8 @@ class FirebaseService {
     }
   }
 
-  void addFcmToken() async {
-    String? fcmToken = await getToken();
+  Future<void> addFcmToken() async {
+    final fcmToken = await getToken();
     await getIt<AppGQL>().client.mutate(
           MutationOptions(
             document: addUserFcmTokenMutation,
@@ -202,7 +195,7 @@ class FirebaseService {
   }
 
   Future<void> removeFcmToken() async {
-    String? fcmToken = await getToken();
+    final fcmToken = await getToken();
     final response = await getIt<AppGQL>().client.mutate(
           MutationOptions(
             document: removeUserFcmTokenMutation,

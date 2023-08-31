@@ -5,9 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:matrix/matrix.dart';
 
 class ReplyContent extends StatelessWidget {
-  final Event replyEvent;
-  final bool ownMessage;
-  final Timeline? timeline;
 
   const ReplyContent(
     this.replyEvent, {
@@ -15,6 +12,9 @@ class ReplyContent extends StatelessWidget {
     Key? key,
     this.timeline,
   }) : super(key: key);
+  final Event replyEvent;
+  final bool ownMessage;
+  final Timeline? timeline;
 
   @override
   Widget build(BuildContext context) {
@@ -50,8 +50,7 @@ class ReplyContent extends StatelessWidget {
               ),
               Text(
                 displayEvent.calcLocalizedBodyFallback(
-                  MatrixDefaultLocalizations(),
-                  withSenderNamePrefix: false,
+                  const MatrixDefaultLocalizations(),
                   hideReply: true,
                 ),
                 overflow: TextOverflow.ellipsis,

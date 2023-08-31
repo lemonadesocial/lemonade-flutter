@@ -17,7 +17,7 @@ class HomeNewsfeedListView extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-    final _refreshController = RefreshController();
+    final refreshController = RefreshController();
     return BlocBuilder<NewsfeedListingBloc, NewsfeedListingState>(
       builder: (context, state) {
         return state.maybeWhen(
@@ -29,20 +29,20 @@ class HomeNewsfeedListView extends StatelessWidget {
               );
             }
             return SmartRefresher(
-              controller: _refreshController,
+              controller: refreshController,
               enablePullUp: true,
               onRefresh: () {
                 context
                     .read<NewsfeedListingBloc>()
                     .add(NewsfeedListingEvent.fetch());
-                _refreshController.refreshCompleted();
+                refreshController.refreshCompleted();
               },
               onLoading: () {
                 // add load more here
                 context
                     .read<NewsfeedListingBloc>()
                     .add(NewsfeedListingEvent.fetch());
-                _refreshController.loadComplete();
+                refreshController.loadComplete();
               },
               child: ListView.separated(
                 padding:

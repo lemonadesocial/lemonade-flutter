@@ -39,7 +39,6 @@ class _ProfilePageViewState extends State<ProfilePageView> with SingleTickerProv
   late final TabController _tabCtrl = TabController(
     length: _tabCount,
     vsync: this,
-    initialIndex: 0,
   );
 
   @override

@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:app/core/config.dart';
-import 'package:app/core/presentation/widgets/back_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/service/webview/webview_token_service.dart';
 import 'package:auto_route/auto_route.dart';
@@ -12,13 +11,13 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 @RoutePage()
 class EventDetailPage extends StatefulWidget {
-  final String eventId;
-  final String eventName;
   const EventDetailPage({
     super.key,
     @PathParam('id') required this.eventId,
     @PathParam('name') required this.eventName,
   });
+  final String eventId;
+  final String eventName;
 
   @override
   State<EventDetailPage> createState() => _EventDetailPageState();
@@ -35,7 +34,7 @@ class _EventDetailPageState extends State<EventDetailPage> with WidgetsBindingOb
   late WebviewTokenService webviewTokenService = WebviewTokenService(onTokenChanged: (_token) {
       token = _token;
       _sendTokenToWebview();
-    });
+    },);
 
   final GlobalKey webViewKey = GlobalKey();
   
@@ -46,7 +45,6 @@ class _EventDetailPageState extends State<EventDetailPage> with WidgetsBindingOb
       crossPlatform: InAppWebViewOptions(
         useShouldOverrideUrlLoading: true,
         mediaPlaybackRequiresUserGesture: false,
-        javaScriptEnabled: true,
         transparentBackground: true,
       ),
       android: AndroidInAppWebViewOptions(
@@ -54,7 +52,7 @@ class _EventDetailPageState extends State<EventDetailPage> with WidgetsBindingOb
       ),
       ios: IOSInAppWebViewOptions(
         allowsInlineMediaPlayback: true,
-      ));
+      ),);
 
   @override
   void initState() {
@@ -92,21 +90,21 @@ class _EventDetailPageState extends State<EventDetailPage> with WidgetsBindingOb
     });
   }
 
-  _sendTokenToWebview() async {
+  Future<void> _sendTokenToWebview() async {
     sendTokenAttempt++;
     try {
-      webViewController?.evaluateJavascript(source: 'document.mobileAuthToken = \"${token}\"');
+      webViewController?.evaluateJavascript(source: 'document.mobileAuthToken = "$token"');
     } catch (e) {
       if (sendTokenAttempt >= maxSendTokenAttempt) return;
       print('Retry times: $sendTokenAttempt');
-      await Future.delayed(Duration(milliseconds: 5000));
+      await Future.delayed(const Duration(milliseconds: 5000));
       _sendTokenToWebview();
     }
   }
 
   _getInitialRequest() async {
     try {
-      var headers = await webviewTokenService.generateHeaderWithToken();
+      final headers = await webviewTokenService.generateHeaderWithToken();
       if(headers == null) {
         await _clearWebStorage();
       }
@@ -119,10 +117,10 @@ class _EventDetailPageState extends State<EventDetailPage> with WidgetsBindingOb
   }
 
   Future<void> _clearWebStorage() async {
-    WebStorageManager webStorageManager = WebStorageManager.instance();
+    final webStorageManager = WebStorageManager.instance();
     if (Platform.isIOS) {
       // if current platform is iOS, delete all data for "flutter.dev".
-      var records = await webStorageManager.ios.fetchDataRecords(
+      final records = await webStorageManager.ios.fetchDataRecords(
         dataTypes: IOSWKWebsiteDataType.values,
       );
       await webStorageManager.ios.removeDataFor(
@@ -170,7 +168,6 @@ class _EventDetailPageState extends State<EventDetailPage> with WidgetsBindingOb
               color: colorScheme.primary,
               child: Center(
                 child: CupertinoActivityIndicator(
-                  animating: true,
                   color: colorScheme.onPrimary,
                 ),
               ),

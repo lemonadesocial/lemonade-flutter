@@ -9,15 +9,16 @@ import 'package:walletconnect_flutter_v2/apis/sign_api/models/session_models.dar
 part 'wallet_bloc.freezed.dart';
 
 class WalletBloc extends Bloc<WalletEvent, WalletState> {
-  final WalletService walletService = WalletService();
 
-  WalletBloc() : super(WalletState()) {
+  WalletBloc() : super(const WalletState()) {
     on<WalletEventInitWalletConnect>(_onInitWalletConnect);
     on<WalletEventGetActiveSessions>(_onGetActiveSessions);
     on<WalletEventConnectWallet>(_onConnectWallet);
     on<WalletEventUpdateUserWallet>(_onUpdateUserWallet);
   }
+  final WalletService walletService = WalletService();
 
+  @override
   close() async {
     walletService.close();
     super.close();
@@ -26,7 +27,7 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
   _onInitWalletConnect(WalletEventInitWalletConnect event, Emitter emit) async {
     final result = await walletService.initWallet();
     if (result.isRight()) {
-      add(WalletEventGetActiveSessions());
+      add(const WalletEventGetActiveSessions());
     }
   }
 
@@ -38,9 +39,9 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
   }
 
   _onConnectWallet(WalletEventConnectWallet event, Emitter emit) async {
-    var result = await walletService.connectWallet(walletApp: event.walletApp);
+    final result = await walletService.connectWallet(walletApp: event.walletApp);
     if (result.isRight()) {
-      add(WalletEvent.getActiveSessions());
+      add(const WalletEvent.getActiveSessions());
     }
   }
 
@@ -48,13 +49,13 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
     final result = await walletService.updateUserWallet(wallet: event.wallet);
     result.fold(
       (l) {
-        SnackBarUtils.showSnackbar("Sign wallet failed");
+        SnackBarUtils.showSnackbar('Sign wallet failed');
       },
       (isSuccess) {
         if (isSuccess) {
-          SnackBarUtils.showSnackbar("Wallet successfully signed");
+          SnackBarUtils.showSnackbar('Wallet successfully signed');
         } else {
-          SnackBarUtils.showSnackbar("Sign wallet failed");
+          SnackBarUtils.showSnackbar('Sign wallet failed');
         }
       },
     );

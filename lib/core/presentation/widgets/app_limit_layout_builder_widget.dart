@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 class AppLimitLayoutBuilder extends StatelessWidget {
-  final Widget child;
   const AppLimitLayoutBuilder({
     super.key,
     required this.child,
   });
+  final Widget child;
 
   double get _maxAppWidth => 650;
 

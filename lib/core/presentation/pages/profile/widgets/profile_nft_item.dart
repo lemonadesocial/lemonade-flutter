@@ -8,27 +8,27 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 
 class ProfileNftItem extends StatelessWidget {
-  final Either<TokenComplex, TokenSimple> nftToken;
-  const ProfileNftItem({
+  const ProfileNftItem({super.key, 
     required this.nftToken,
   });
+  final Either<TokenComplex, TokenSimple> nftToken;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    String? imageUrl = nftToken.fold(
+    final imageUrl = nftToken.fold(
       (complex) => complex.metadata?.image,
       (simple) => simple.metadata?.image,
     );
-    String? animationUrl = nftToken.fold(
+    final animationUrl = nftToken.fold(
       (complex) => complex.metadata?.animation_url,
       (simple) => simple.metadata?.animation_url,
     );
-    String? id = nftToken.fold(
+    final id = nftToken.fold(
       (complex) => complex.id,
       (simple) => simple.id,
     );
-    String? tokenName = nftToken.fold(
+    final tokenName = nftToken.fold(
       (complex) => complex.metadata?.name,
       (simple) => simple.metadata?.name,
     );

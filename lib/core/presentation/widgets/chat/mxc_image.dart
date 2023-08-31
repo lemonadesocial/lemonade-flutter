@@ -9,21 +9,8 @@ import 'package:http/http.dart' as http;
 import 'package:matrix/matrix.dart';
 
 class MxcImage extends StatefulWidget {
-  final Uri? uri;
-  final Event? event;
-  final double? width;
-  final double? height;
-  final BoxFit? fit;
-  final bool isThumbnail;
-  final bool animated;
-  final Duration retryDuration;
-  final Duration animationDuration = Duration(milliseconds: 300);
-  final Curve animationCurve = Curves.linear;
-  final ThumbnailMethod thumbnailMethod;
-  final Widget Function(BuildContext context)? placeholder;
-  final String? cacheKey;
 
-  MxcImage({
+  const MxcImage({
     this.uri,
     this.event,
     this.width,
@@ -37,6 +24,19 @@ class MxcImage extends StatefulWidget {
     this.cacheKey,
     Key? key,
   }) : super(key: key);
+  final Uri? uri;
+  final Event? event;
+  final double? width;
+  final double? height;
+  final BoxFit? fit;
+  final bool isThumbnail;
+  final bool animated;
+  final Duration retryDuration;
+  final Duration animationDuration = const Duration(milliseconds: 300);
+  final Curve animationCurve = Curves.linear;
+  final ThumbnailMethod thumbnailMethod;
+  final Widget Function(BuildContext context)? placeholder;
+  final String? cacheKey;
 
   @override
   State<MxcImage> createState() => _MxcImageState();
@@ -125,7 +125,7 @@ class _MxcImageState extends State<MxcImage> {
     }
   }
 
-  void _tryLoad(_) async {
+  Future<void> _tryLoad(_) async {
     if (_imageData != null) return;
     try {
       await _load();

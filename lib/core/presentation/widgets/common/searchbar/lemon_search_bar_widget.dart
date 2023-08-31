@@ -8,11 +8,11 @@ import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 
 class LemonSearchBar extends StatelessWidget {
-  final Function(String? text)? onChangeText;
   const LemonSearchBar({
     super.key,
     this.onChangeText,
   });
+  final Function(String? text)? onChangeText;
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +44,7 @@ class LemonSearchBar extends StatelessWidget {
         height: 42,
         child: TextField(
           decoration: InputDecoration(
-            prefixIconConstraints: BoxConstraints(minWidth: 0, minHeight: 0),
+            prefixIconConstraints: const BoxConstraints(),
             prefixIcon: Padding(
               padding: EdgeInsets.only(
                 left: Spacing.xSmall,
@@ -62,7 +62,7 @@ class LemonSearchBar extends StatelessWidget {
             ),
             hintText: StringUtils.capitalize(t.common.search),
           ),
-          onChanged: this.onChangeText,
+          onChanged: onChangeText,
         ),
       ),
     );

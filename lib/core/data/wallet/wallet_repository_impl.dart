@@ -25,7 +25,7 @@ class WalletRepositoryImpl implements WalletRepository {
           variables: {
             'wallet': wallet,
           },
-          parserFn: (data) => UserWalletRequest.fromDto(UserWalletRequestDto.fromJson(data['getUserWalletRequest']))),
+          parserFn: (data) => UserWalletRequest.fromDto(UserWalletRequestDto.fromJson(data['getUserWalletRequest'])),),
     );
     if (result.hasException) return Left(Failure());
     return Right(result.parsedData);

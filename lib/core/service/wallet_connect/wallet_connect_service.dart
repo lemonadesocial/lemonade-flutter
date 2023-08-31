@@ -1,7 +1,7 @@
 import 'package:app/core/config.dart';
 import 'package:app/core/constants/web3/chains.dart';
-import 'package:app/core/utils/wc_utils.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
+import 'package:app/core/utils/wc_utils.dart';
 import 'package:app/core/utils/web3_utils.dart';
 import 'package:injectable/injectable.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -30,13 +30,13 @@ class WalletConnectService {
   static String defaultRequiredChainId = AppConfig.isProduction ? ETHEREUM.chainId : GOERLI.chainId;
 
   static const defaultMethods = [
-    "personal_sign",
-    "eth_sign",
-    "eth_signTypedData",
-    "eth_sendTransaction",
-    "eth_signTransaction",
-    "eth_chainId",
-    "eth_accounts",
+    'personal_sign',
+    'eth_sign',
+    'eth_signTypedData',
+    'eth_sendTransaction',
+    'eth_signTransaction',
+    'eth_chainId',
+    'eth_accounts',
   ];
   static const defaultEvents = SupportedSessionEvent.values;
 
@@ -59,7 +59,7 @@ class WalletConnectService {
             icons: [
               'https://walletconnect.com/walletconnect-logo.png',
             ],
-          ));
+          ),);
       // Register event handler for all chain in active session if available;
       final activeSession = await getActiveSession();
 
@@ -77,7 +77,7 @@ class WalletConnectService {
     }
   }
 
-  close() {
+  void close() {
     if (_app == null) return;
     _app!.onSessionEvent.unsubscribeAll();
     _app!.onSessionUpdate.unsubscribeAll();
@@ -87,7 +87,7 @@ class WalletConnectService {
     if (!initialized) {
       await init();
     }
-    var activeSessions = _app?.getActiveSessions().entries.map((entry) => entry.value).toList();
+    final activeSessions = _app?.getActiveSessions().entries.map((entry) => entry.value).toList();
 
     if (activeSessions?.isEmpty == true) return null;
 
@@ -116,7 +116,7 @@ class WalletConnectService {
         methods: defaultMethods,
         events: supportedEvents,
       );
-      final ConnectResponse connectResponse = await _app!.connect(
+      final connectResponse = await _app!.connect(
         requiredNamespaces: {
           defaultNamespace: requiredNamespace,
         },
@@ -125,10 +125,10 @@ class WalletConnectService {
         },
       );
 
-      final Uri? uri = connectResponse.uri;
+      final uri = connectResponse.uri;
 
       if (uri != null) {
-        final String encodedUrl = Uri.encodeComponent('$uri');
+        final encodedUrl = Uri.encodeComponent('$uri');
 
         _url = encodedUrl;
 
@@ -137,7 +137,7 @@ class WalletConnectService {
           mode: LaunchMode.externalApplication,
         );
 
-        var session = await connectResponse.session.future;
+        final session = await connectResponse.session.future;
 
         _registerEventHandler(WCUtils.getSessionsChains(session.namespaces));
 
@@ -158,7 +158,7 @@ class WalletConnectService {
   }) async {
     try {
       if (_shouldChangeAccount(wallet)) {
-        SnackBarUtils.showSnackbar("Should change account to ${Web3Utils.formatIdentifier(wallet, length: 4)}");
+        SnackBarUtils.showSnackbar('Should change account to ${Web3Utils.formatIdentifier(wallet)}');
         return null;
       }
       final chainId = _currentWalletChainId ?? defaultRequiredChainId;
@@ -189,7 +189,7 @@ class WalletConnectService {
   String _getDeepLinkUrl(String? walletAppScheme) => '${walletAppScheme ?? 'metamask'}://wc?uri=$_url';
 
   _onSessionEvent(SessionEvent? sessionEvent) {
-    var eventName = sessionEvent?.name;
+    final eventName = sessionEvent?.name;
     if (eventName == 'accountsChanged') {
       if (sessionEvent?.data is List) {
         _currentWalletAccount = NamespaceUtils.getAccount(sessionEvent?.data[0]);

@@ -17,12 +17,12 @@ import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 
 class ProfilePageHeader extends StatelessWidget {
-  final User user;
 
   const ProfilePageHeader({
     super.key,
     required this.user,
   });
+  final User user;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,6 @@ class ProfilePageHeader extends StatelessWidget {
       child: Column(
         children: [
           Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               _ProfileAvatar(user: user),
               SizedBox(width: Spacing.small),
@@ -50,9 +49,9 @@ class ProfilePageHeader extends StatelessWidget {
 }
 
 class _ActionButtons extends StatelessWidget {
-  final User user;
 
-  _ActionButtons({required this.user});
+  const _ActionButtons({required this.user});
+  final User user;
 
   _shareProfileLink(context, {required User user}) async {
     try {
@@ -64,10 +63,9 @@ class _ActionButtons extends StatelessWidget {
     } catch (e) {}
   }
 
-  _buildMyActionsButton(BuildContext context) {
+  Row _buildMyActionsButton(BuildContext context) {
     final t = Translations.of(context);
     return Row(
-      mainAxisSize: MainAxisSize.max,
       children: [
         Expanded(
           child: LinearGradientButton(
@@ -97,11 +95,11 @@ class _ActionButtons extends StatelessWidget {
     );
   }
 
-  _buildOtherActionsButton(BuildContext context) {
+  StatelessWidget _buildOtherActionsButton(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
     // TODO: follow feature not implemented
-    var isFollowed = false;
+    const isFollowed = false;
     return isFollowed
         ? LemonOutlineButton(
             label: t.common.followed,
@@ -128,14 +126,13 @@ class _ActionButtons extends StatelessWidget {
 }
 
 class _ProfileAvatar extends StatelessWidget {
-  final User user;
 
-  _ProfileAvatar({required this.user});
+  const _ProfileAvatar({required this.user});
+  final User user;
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisSize: MainAxisSize.max,
       children: [
         LemonCircleAvatar(
           url: user.imageAvatar ?? '',
@@ -147,11 +144,11 @@ class _ProfileAvatar extends StatelessWidget {
 }
 
 class _ProfileUserFollow extends StatelessWidget {
-  final User user;
 
   const _ProfileUserFollow({
     required this.user,
   });
+  final User user;
 
   @override
   Widget build(BuildContext context) {
@@ -186,28 +183,27 @@ class _ProfileUserFollow extends StatelessWidget {
 }
 
 class _ProfileUserNameAndTitle extends StatelessWidget {
-  final User user;
 
-  _ProfileUserNameAndTitle({
+  const _ProfileUserNameAndTitle({
     required this.user,
   });
+  final User user;
 
   String? get displayName {
-    return user.displayName ?? user.username ?? null;
+    return user.displayName ?? user.username;
   }
 
   @override
   Widget build(BuildContext context) {
-    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = Theme.of(context).colorScheme;
     return Flexible(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            mainAxisSize: MainAxisSize.max,
             children: [
               ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: 200),
+                constraints: const BoxConstraints(maxWidth: 200),
                 child: Text(
                   displayName ?? t.common.anonymous,
                   style: Typo.large,

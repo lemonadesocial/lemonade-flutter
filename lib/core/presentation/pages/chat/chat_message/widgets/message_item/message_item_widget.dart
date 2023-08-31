@@ -17,20 +17,8 @@ import 'package:flutter_chat_bubble/chat_bubble.dart';
 import 'package:matrix/matrix.dart';
 
 class MessageItem extends StatefulWidget {
-  final Event event;
-  final Event? nextEvent;
-  final bool displayReadMarker;
-  final void Function(Event)? onSwipe;
-  final void Function(Event)? onSelect;
-  final void Function(Event, String)? onReact;
-  final void Function(Event)? onAvatarTab;
-  final void Function(Event)? onInfoTab;
-  final void Function(String)? scrollToEventId;
-  final bool longPressSelect;
-  final bool selected;
-  final Timeline timeline;
 
-  MessageItem(
+  const MessageItem(
     this.event, {
     this.nextEvent,
     this.displayReadMarker = false,
@@ -45,6 +33,18 @@ class MessageItem extends StatefulWidget {
     required this.timeline,
     Key? key,
   }) : super(key: key);
+  final Event event;
+  final Event? nextEvent;
+  final bool displayReadMarker;
+  final void Function(Event)? onSwipe;
+  final void Function(Event)? onSelect;
+  final void Function(Event, String)? onReact;
+  final void Function(Event)? onAvatarTab;
+  final void Function(Event)? onInfoTab;
+  final void Function(String)? scrollToEventId;
+  final bool longPressSelect;
+  final bool selected;
+  final Timeline timeline;
 
   @override
   State<MessageItem> createState() => _MessageItemState();
@@ -151,7 +151,6 @@ class _MessageItemState extends State<MessageItem> {
     return Swipeable(
       direction:
           ownMessage ? SwipeDirection.endToStart : SwipeDirection.startToEnd,
-      maxOffset: 0.4,
       onSwipe: (direction) {
         widget.onSwipe?.call(widget.event);
       },
@@ -159,7 +158,7 @@ class _MessageItemState extends State<MessageItem> {
       child: Container(
         constraints: const BoxConstraints(maxWidth: 100 * 2.5),
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           child: container,
         ),
       ),
@@ -173,13 +172,11 @@ class _MessageItemState extends State<MessageItem> {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
       mainAxisAlignment: rowMainAxisAlignment,
-      mainAxisSize: MainAxisSize.max,
       children: [
         // _buildSenderAvatar(),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
             children: [
               Container(
                 alignment: alignment,
@@ -256,7 +253,7 @@ class _MessageItemState extends State<MessageItem> {
             color: Theme.of(context).colorScheme.primaryContainer,
             borderRadius: BorderRadius.circular(4),
           ),
-          margin: const EdgeInsets.all(8.0),
+          margin: const EdgeInsets.all(8),
           padding: const EdgeInsets.symmetric(
             horizontal: 8,
           ),
@@ -281,7 +278,7 @@ class _MessageItemState extends State<MessageItem> {
       child: MessageReactions(
         event: widget.event,
         timeline: widget.timeline,
-        onReact: ({required Event event, required String emoji}) {
+        onReact: ({required event, required emoji}) {
           widget.onReact?.call(event, emoji);
         },
       ),
@@ -319,7 +316,7 @@ class _MessageItemState extends State<MessageItem> {
   FutureBuilder<Event?> _buildRepliedMessage() {
     return FutureBuilder<Event?>(
       future: widget.event.getReplyEvent(widget.timeline),
-      builder: (BuildContext context, snapshot) {
+      builder: (context, snapshot) {
         final replyEvent = snapshot.hasData
             ? snapshot.data
             : Event(
@@ -339,8 +336,8 @@ class _MessageItemState extends State<MessageItem> {
           },
           child: AbsorbPointer(
             child: Container(
-              margin: EdgeInsets.symmetric(
-                vertical: 4.0,
+              margin: const EdgeInsets.symmetric(
+                vertical: 4,
               ),
               child: ReplyContent(
                 replyEvent!,
@@ -392,7 +389,7 @@ class _MessageItemState extends State<MessageItem> {
   //         );
   // }
 
-  _buildMessageEditTime(Color textColor) {
+  Padding _buildMessageEditTime(Color textColor) {
     final displayEvent = widget.event.getDisplayEvent(widget.timeline);
     return Padding(
       padding: EdgeInsets.only(top: Spacing.extraSmall / 2),
@@ -404,8 +401,8 @@ class _MessageItemState extends State<MessageItem> {
             RelationshipTypes.edit,
           )) ...[
             Icon(Icons.edit_outlined,
-                color: textColor, size: Typo.small.fontSize!),
-            SizedBox(width: 6),
+                color: textColor, size: Typo.small.fontSize!,),
+            const SizedBox(width: 6),
           ],
           Text(
             DateFormatUtils.timeOnly(displayEvent.originServerTs).toLowerCase(),
@@ -418,7 +415,7 @@ class _MessageItemState extends State<MessageItem> {
 
   Widget _buildVerificationRequestContent() {
     // TODO: // return VerificationRequestContent(event: event, timeline: timeline);
-    return Text("Verification request content");
+    return const Text('Verification request content');
   }
 
   Widget _buildStateMessage() {

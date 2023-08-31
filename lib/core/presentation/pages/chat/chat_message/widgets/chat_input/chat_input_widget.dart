@@ -7,9 +7,9 @@ import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 
 class ChatInput extends StatelessWidget {
-  final ChatController controller;
 
   const ChatInput(this.controller, {Key? key}) : super(key: key);
+  final ChatController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,6 @@ class ChatInput extends StatelessWidget {
           horizontal: Spacing.xSmall,
         ),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             _buildAddButton(context),
@@ -52,7 +51,7 @@ class ChatInput extends StatelessWidget {
                     textSelectionTheme: TextSelectionThemeData(
                       cursorColor: colorScheme.surface,
                       selectionColor: colorScheme.secondary,
-                    )),
+                    ),),
                 child: InputBar(
                   room: controller.room,
                   minLines: 1,
@@ -87,13 +86,14 @@ class ChatInput extends StatelessWidget {
 
   Widget _buildSendButton(BuildContext context) {
     return GestureDetector(
+      onTap: controller.send,
       child: Container(
         height: 42,
         width: 42,
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            begin: Alignment(0.00, -1.00),
-            end: Alignment(0, 1),
+            begin: const Alignment(0, -1),
+            end: const Alignment(0, 1),
             colors: [
               Theme.of(context).colorScheme.surface,
               Theme.of(context).colorScheme.surfaceVariant,
@@ -109,7 +109,6 @@ class ChatInput extends StatelessWidget {
           ),
         ),
       ),
-      onTap: controller.send,
     );
   }
 

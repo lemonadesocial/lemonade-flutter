@@ -6,19 +6,6 @@ import 'package:matrix/matrix.dart';
 import 'package:slugify/slugify.dart';
 
 class InputBar extends StatelessWidget {
-  final Room room;
-  final int? minLines;
-  final int? maxLines;
-  final TextInputType? keyboardType;
-  final TextInputAction? textInputAction;
-  final ValueChanged<String>? onSubmitted;
-  final ValueChanged<Uint8List?>? onSubmitImage;
-  final FocusNode? focusNode;
-  final TextEditingController? controller;
-  final InputDecoration? decoration;
-  final ValueChanged<String>? onChanged;
-  final bool? autofocus;
-  final bool readOnly;
 
   const InputBar({
     required this.room,
@@ -36,6 +23,19 @@ class InputBar extends StatelessWidget {
     this.readOnly = false,
     Key? key,
   }) : super(key: key);
+  final Room room;
+  final int? minLines;
+  final int? maxLines;
+  final TextInputType? keyboardType;
+  final TextInputAction? textInputAction;
+  final ValueChanged<String>? onSubmitted;
+  final ValueChanged<Uint8List?>? onSubmitImage;
+  final FocusNode? focusNode;
+  final TextEditingController? controller;
+  final InputDecoration? decoration;
+  final ValueChanged<String>? onChanged;
+  final bool? autofocus;
+  final bool readOnly;
 
   RegExp get commandMatchRegex => RegExp(r'^/(\w*)$');
 
@@ -59,7 +59,7 @@ class InputBar extends StatelessWidget {
       return []; // no entries if there is selected text
     }
     final searchText = controller!.text.substring(0, controller!.selection.baseOffset);
-    final List<Map<String, String?>> ret = <Map<String, String?>>[];
+    final ret = <Map<String, String?>>[];
     const maxResults = 30;
 
     final commandMatch = commandMatchRegex.firstMatch(searchText);
@@ -219,14 +219,14 @@ class InputBar extends StatelessWidget {
       insertText = '${suggestion['name']!} ';
       startText = replaceText.replaceAllMapped(
         replaceCommandMatchRegex,
-        (Match m) => '/$insertText',
+        (m) => '/$insertText',
       );
     }
     if (suggestion['type'] == 'emoji') {
       insertText = '${suggestion['emoji']!} ';
       startText = replaceText.replaceAllMapped(
         suggestion['current_word']!,
-        (Match m) => insertText,
+        (m) => insertText,
       );
     }
     if (suggestion['type'] == 'emote') {
@@ -251,21 +251,21 @@ class InputBar extends StatelessWidget {
       insertText = ':${isUnique ? '' : '${insertPack!}~'}$insertEmote: ';
       startText = replaceText.replaceAllMapped(
         replaceEmoteMatchRegex,
-        (Match m) => '${m[1]}$insertText',
+        (m) => '${m[1]}$insertText',
       );
     }
     if (suggestion['type'] == 'user') {
       insertText = '${suggestion['mention']!} ';
       startText = replaceText.replaceAllMapped(
         replaceMentionUserMatchRegex,
-        (Match m) => '${m[1]}$insertText',
+        (m) => '${m[1]}$insertText',
       );
     }
     if (suggestion['type'] == 'room') {
       insertText = '${suggestion['mxid']!} ';
       startText = replaceText.replaceAllMapped(
         replaceMentionRoomMatchRegex,
-        (Match m) => '${m[1]}$insertText',
+        (m) => '${m[1]}$insertText',
       );
     }
     if (insertText.isNotEmpty && startText.isNotEmpty) {
@@ -307,17 +307,17 @@ class InputBar extends StatelessWidget {
         },
         textCapitalization: TextCapitalization.sentences,
       ),
-      suggestionsBoxDecoration: SuggestionsBoxDecoration(
+      suggestionsBoxDecoration: const SuggestionsBoxDecoration(
         color: Colors.black,
         constraints: BoxConstraints(maxHeight: 300),
       ),
       suggestionsCallback: getSuggestions,
       itemBuilder: (c, s) => InputBarSuggestionBox(suggestion: s),
-      onSuggestionSelected: (Map<String, String?> suggestion) => insertSuggestion(context, suggestion),
-      errorBuilder: (BuildContext context, Object? error) => const SizedBox.shrink(),
-      loadingBuilder: (BuildContext context) => const SizedBox.shrink(),
+      onSuggestionSelected: (suggestion) => insertSuggestion(context, suggestion),
+      errorBuilder: (context, error) => const SizedBox.shrink(),
+      loadingBuilder: (context) => const SizedBox.shrink(),
       // fix loading briefly flickering a dark box
-      noItemsFoundBuilder: (BuildContext context) =>
+      noItemsFoundBuilder: (context) =>
           const SizedBox.shrink(), // fix loading briefly showing no suggestions
     );
   }

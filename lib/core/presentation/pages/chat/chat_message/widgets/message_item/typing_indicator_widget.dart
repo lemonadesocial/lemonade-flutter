@@ -8,10 +8,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 
 class TypingIndicators extends StatelessWidget {
-  final ChatController controller;
-  final client = getIt<MatrixService>().client;
 
   TypingIndicators(this.controller, {Key? key}) : super(key: key);
+  final ChatController controller;
+  final client = getIt<MatrixService>().client;
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +26,7 @@ class TypingIndicators extends StatelessWidget {
         constraints: const BoxConstraints(maxWidth: 360 * 2.5),
         height:
             typingUsers.isEmpty ? 0 : MatrixAvatar.defaultSize + bottomPadding,
-        duration: Duration(milliseconds: 300),
-        curve: Curves.linear,
+        duration: const Duration(milliseconds: 300),
         alignment: controller.timeline!.events.isNotEmpty &&
                 controller.timeline!.events.first.senderId == client.userID
             ? Alignment.topRight
@@ -35,7 +34,7 @@ class TypingIndicators extends StatelessWidget {
         clipBehavior: Clip.hardEdge,
         decoration: const BoxDecoration(),
         padding: const EdgeInsets.only(
-          left: 8.0,
+          left: 8,
           bottom: bottomPadding,
         ),
         child: Row(

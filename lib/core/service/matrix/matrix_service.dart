@@ -52,7 +52,7 @@ class MatrixService {
 
   Future<void> login() async {
     try {
-      var jwtToken = await _generateJWTMatrixToken();
+      final jwtToken = await _generateJWTMatrixToken();
       await _client.checkHomeserver(
         Uri.parse(AppConfig.matrixHomeserver),
       );
@@ -61,7 +61,7 @@ class MatrixService {
         token: jwtToken,
       ).then((value) async => {
         await backgroundPush.setupPush()
-      });
+      },);
     } catch (e) {
       FirebaseCrashlytics.instance.log(e.toString());
     }
@@ -73,7 +73,7 @@ class MatrixService {
   }
 
   Future<String> _generateJWTMatrixToken() async {
-    var result = await getIt<AppGQL>().client.mutate<String>(
+    final result = await getIt<AppGQL>().client.mutate<String>(
           MutationOptions(
             document: generateMatrixTokenMutation,
             fetchPolicy: FetchPolicy.networkOnly,

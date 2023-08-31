@@ -6,17 +6,22 @@ import 'package:app/core/domain/token/token_enums.dart';
 import 'package:app/core/domain/token/token_repository.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/pages/profile/widgets/profile_nft_item.dart';
-import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
+import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/service/token/token_service.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:dartz/dartz.dart' as dartz;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:dartz/dartz.dart' as dartz;
 
 class ProfileNftOnSaleListView extends StatelessWidget {
+
+  ProfileNftOnSaleListView({
+    super.key,
+    required this.user,
+  });
   final User user;
   late final ordersListingBloc = OrdersListingSubscriptionBloc(
     TokenService(
@@ -24,17 +29,12 @@ class ProfileNftOnSaleListView extends StatelessWidget {
     ),
     defaultInput: WatchOrdersInput(
       where: OrderWhereComplex(makerIn: user.wallets, openEq: true),
-      sort: OrderSort(
+      sort: const OrderSort(
         by: OrderSortBy.createdAt,
         direction: SortDirection.DESC,
       ),
     ),
-  )..add(OrdersListingSubscriptionEvent.start());
-
-  ProfileNftOnSaleListView({
-    super.key,
-    required this.user,
-  });
+  )..add(const OrdersListingSubscriptionEvent.start());
 
   @override
   Widget build(BuildContext context) {
@@ -44,12 +44,12 @@ class ProfileNftOnSaleListView extends StatelessWidget {
         listener: (context, scrollState) {
           scrollState.maybeWhen(
             endReached: () {
-              ordersListingBloc.add(OrdersListingSubscriptionEvent.start());
+              ordersListingBloc.add(const OrdersListingSubscriptionEvent.start());
             },
             orElse: () {},
           );
         },
-        child: _ProfileNftOnSaleList(),
+        child: const _ProfileNftOnSaleList(),
       ),
     );
   }
@@ -94,7 +94,7 @@ class _ProfileNftCreatedListViewState extends State<_ProfileNftOnSaleList> {
                     childCount: orders.length,
                   ),
                 );
-              });
+              },);
         },
       ),
     );

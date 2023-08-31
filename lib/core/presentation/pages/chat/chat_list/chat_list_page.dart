@@ -20,14 +20,14 @@ class _ChatListPageState extends State<ChatListPage> {
       builder: (context, chatSpaceState) {
         return BlocProvider(
           key: ValueKey(
-            chatSpaceState.activeSpace?.id
+            chatSpaceState.activeSpace?.id,
           ),
           create: (context) => ChatListBloc(
             spaceId: chatSpaceState.activeSpace?.id,
           )..add(
-              ChatListEvent.fetchRooms(),
+              const ChatListEvent.fetchRooms(),
             ),
-          child: ChatListPageView(),
+          child: const ChatListPageView(),
         );
       },
     );

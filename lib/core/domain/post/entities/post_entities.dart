@@ -6,20 +6,6 @@ import 'package:app/core/domain/post/post_enums.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 
 class Post {
-  final String id;
-  final String user;
-  final PostVisibility visibility;
-  final DateTime? createdAt;
-  final User? userExpanded;
-  final String? text;
-  final String? refId;
-  final PostRefType? refType;
-  final Event? refEvent;
-  final DbFile? refFile;
-  final bool? hasReaction;
-  final int? reactions;
-  final int? comments;
-  final bool? published;
 
   const Post({
     required this.id,
@@ -54,19 +40,33 @@ class Post {
         comments: dto.comments,
         published: dto.published,
       );
+  final String id;
+  final String user;
+  final PostVisibility visibility;
+  final DateTime? createdAt;
+  final User? userExpanded;
+  final String? text;
+  final String? refId;
+  final PostRefType? refType;
+  final Event? refEvent;
+  final DbFile? refFile;
+  final bool? hasReaction;
+  final int? reactions;
+  final int? comments;
+  final bool? published;
 }
 
 
 class Newsfeed {
-  final int? offset;
-  final List<Post>? posts;
 
   Newsfeed({this.offset, this.posts});
+  final int? offset;
+  final List<Post>? posts;
 
   static Newsfeed fromDto(NewsfeedDto dto) {
     return Newsfeed(
       offset: dto.offset,
-      posts: List.from(dto.posts ?? []).map((item) => Post.fromDto(item)).toList()
+      posts: List.from(dto.posts ?? []).map(Post.fromDto).toList(),
     );
   }
 }

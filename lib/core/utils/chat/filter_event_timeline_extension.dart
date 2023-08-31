@@ -18,7 +18,7 @@ extension IsStateExtension on Event {
       // if we enabled to hide all redacted events, don't show those
       (!redacted) &&
       // if we enabled to hide all unknown events, don't show those
-      (isEventTypeKnown) &&
+      isEventTypeKnown &&
       // hide unimportant state events
       (!isState || importantStateEvents.contains(type)) &&
       // hide simple join/leave member events in public rooms

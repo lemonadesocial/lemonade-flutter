@@ -7,17 +7,17 @@ import 'package:dartz/dartz.dart';
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
 
 class WalletService {
-  final walletRepository = getIt<WalletRepository>();
-  final walletConnectService = getIt<WalletConnectService>();
 
   WalletService();
+  final walletRepository = getIt<WalletRepository>();
+  final walletConnectService = getIt<WalletConnectService>();
 
   Future<SessionData?> getActiveSession() async {
     return walletConnectService.getActiveSession();
   }
 
   Future<Either<Failure, bool>> initWallet() async {
-    var success = await walletConnectService.init();
+    final success = await walletConnectService.init();
     if(success) return Right(success);
     return Left(Failure()); 
   }
@@ -27,7 +27,7 @@ class WalletService {
   }
 
   Future<Either<Failure, bool>> connectWallet({required SupportedWalletApp walletApp}) async {
-    var success = await walletConnectService.connectWallet(walletApp: walletApp);
+    final success = await walletConnectService.connectWallet(walletApp: walletApp);
     if(success) return Right(success);
     return Left(Failure()); 
   }
@@ -35,14 +35,14 @@ class WalletService {
   Future<Either<Failure, bool>> updateUserWallet({
     required String wallet,
   }) async {
-    final _requestResult = await walletRepository.getUserWalletRequest(wallet: wallet.toLowerCase());
-    if (_requestResult.isLeft()) {
+    final requestResult = await walletRepository.getUserWalletRequest(wallet: wallet.toLowerCase());
+    if (requestResult.isLeft()) {
       return Left(Failure());
     }
-    final userWalletRequest = _requestResult.getOrElse(() => null);
+    final userWalletRequest = requestResult.getOrElse(() => null);
     if (userWalletRequest == null) return Left(Failure());
 
-    String message = Web3Utils.toHex(userWalletRequest.message);
+    final message = Web3Utils.toHex(userWalletRequest.message);
 
     final signature = await walletConnectService.personalSign(
       message: message,
@@ -57,7 +57,7 @@ class WalletService {
     );
     return updateResult.fold(
       (l) => Left(Failure()),
-      (isUpdateSuccess) => Right(isUpdateSuccess),
+      Right.new,
     );
   }
 }

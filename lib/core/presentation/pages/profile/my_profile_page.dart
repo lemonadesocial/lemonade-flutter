@@ -12,11 +12,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class MyProfilePage extends StatelessWidget {
   const MyProfilePage({super.key});
 
-  _walletBlocProviderBuilder({required Widget child}) {
-    return BlocProvider(create: (context) => WalletBloc()..add(WalletEventInitWalletConnect()), child: child);
+  BlocProvider<WalletBloc> _walletBlocProviderBuilder({required Widget child}) {
+    return BlocProvider(create: (context) => WalletBloc()..add(const WalletEventInitWalletConnect()), child: child);
   }
 
-  _profileBlocProviderBuilder({required Widget Function(BuildContext context, String userId) builder}) {
+  BlocBuilder<AuthBloc, AuthState> _profileBlocProviderBuilder({required Widget Function(BuildContext context, String userId) builder}) {
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, authState) {
         final userId = authState.maybeWhen(
@@ -40,6 +40,6 @@ class MyProfilePage extends StatelessWidget {
       return _walletBlocProviderBuilder(
         child: ProfilePageView(userId: userId),
       );
-    });
+    },);
   }
 }

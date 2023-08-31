@@ -4,26 +4,6 @@ import 'package:app/core/domain/token/token_enums.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 
 class OrderComplex {
-  final String id;
-  final String orderId;
-  final String contract;
-  final OrderKind kind;
-  final String maker;
-  final String network;
-  final bool open;
-  final String price;
-  final TokenSimple token;
-  final String? typename;
-  final String? bidAmount;
-  final String? bidder;
-  final OrderCurrency? currency;
-  final User? makerExpanded;
-  final String? openFrom;
-  final String? openTo;
-  final String? paidAmount;
-  final String? taker;
-  final DateTime? createdAt;
-  final DateTime? updatedAt;
 
   const OrderComplex({
     required this.id,
@@ -70,4 +50,24 @@ class OrderComplex {
     createdAt: dto.createdAt,
     updatedAt: dto.updatedAt,
   );
+  final String id;
+  final String orderId;
+  final String contract;
+  final OrderKind kind;
+  final String maker;
+  final String network;
+  final bool open;
+  final String price;
+  final TokenSimple token;
+  final String? typename;
+  final String? bidAmount;
+  final String? bidder;
+  final OrderCurrency? currency;
+  final User? makerExpanded;
+  final String? openFrom;
+  final String? openTo;
+  final String? paidAmount;
+  final String? taker;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 }

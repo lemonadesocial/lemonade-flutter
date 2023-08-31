@@ -4,9 +4,6 @@ import 'package:oauth2_client/oauth2_exception.dart';
 import 'package:oauth2_client/oauth2_helper.dart';
 
 class CustomOAuth2Helper extends OAuth2Helper {
-  final OAuth2Client client;
-  final String clientId;
-  final List<String> scopes;
 
   CustomOAuth2Helper(
     this.client, {
@@ -17,12 +14,18 @@ class CustomOAuth2Helper extends OAuth2Helper {
           clientId: clientId,
           scopes: scopes,
           accessTokenHeaders: {
-            "Content-Type": "application/x-www-form-urlencoded",
+            'Content-Type': 'application/x-www-form-urlencoded',
           },
           webAuthOpts: {
             'preferEphemeral': true,
-          }
+          },
         );
+  @override
+  final OAuth2Client client;
+  @override
+  final String clientId;
+  @override
+  final List<String> scopes;
 
   @override
   Future<AccessTokenResponse?> getToken() async {
@@ -49,9 +52,10 @@ class CustomOAuth2Helper extends OAuth2Helper {
     return tknResp;
   }
 
+  @override
   Future<AccessTokenResponse> refreshToken(AccessTokenResponse curTknResp) async {
     AccessTokenResponse? tknResp;
-    var refreshToken = curTknResp.refreshToken!;
+    final refreshToken = curTknResp.refreshToken!;
     try {
       tknResp = await client.refreshToken(
         refreshToken,
@@ -75,7 +79,7 @@ class CustomOAuth2Helper extends OAuth2Helper {
       }
       return tknResp;
     } catch (_) {
-      throw Exception("Refresh token fail");
+      throw Exception('Refresh token fail');
     }
   }
 

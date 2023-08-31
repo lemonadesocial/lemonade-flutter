@@ -1,6 +1,6 @@
 import 'package:graphql_flutter/graphql_flutter.dart';
 
-final notificationFragment = '''
+const notificationFragment = '''
   fragment notificationField on Notification {
     _id
     title
@@ -28,7 +28,7 @@ final notificationFragment = '''
 ''';
 
 final getNotificationsQuery = gql('''
-  ${notificationFragment}
+  $notificationFragment
   query(
     \$skip: Int = 0
     \$limit: Int = 50

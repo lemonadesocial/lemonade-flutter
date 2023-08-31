@@ -3,11 +3,11 @@ import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 
 class LemonEmojiPicker extends StatelessWidget {
-  final Function(Emoji emoji)? onEmojiSelected;
   const LemonEmojiPicker({
     super.key,
     this.onEmojiSelected,
   });
+  final Function(Emoji emoji)? onEmojiSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class LemonEmojiPicker extends StatelessWidget {
       defaultSnapSize: 0.7,
       minSnapSize: 0.7,
       maxSnapSize: 0.7,
-      snapSizes: [0.7],
+      snapSizes: const [0.7],
       builder: (controller) => Flexible(
         child: SafeArea(
           child: SizedBox(
