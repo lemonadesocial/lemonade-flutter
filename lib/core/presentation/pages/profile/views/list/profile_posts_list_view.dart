@@ -44,6 +44,7 @@ class ProfilePostsListView extends StatelessWidget {
                 },
                 separatorBuilder: (ctx, index) =>
                     Divider(color: colorScheme.outline),
+                itemCount: posts.length,
               ),
             );
           },
