@@ -1,7 +1,6 @@
 import 'package:matrix/matrix.dart';
 
 extension MatrixFileExtension on MatrixFile {
-
   MatrixFile get detectFileType {
     if (msgType == MessageTypes.Image) {
       return MatrixImageFile(bytes: bytes, name: name);

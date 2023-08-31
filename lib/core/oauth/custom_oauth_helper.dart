@@ -4,25 +4,15 @@ import 'package:oauth2_client/oauth2_exception.dart';
 import 'package:oauth2_client/oauth2_helper.dart';
 
 class CustomOAuth2Helper extends OAuth2Helper {
-  final OAuth2Client client;
-  final String clientId;
-  final List<String> scopes;
-
   CustomOAuth2Helper(
-    this.client, {
-    required this.clientId,
-    required this.scopes,
-  }) : super(
-          client,
-          clientId: clientId,
-          scopes: scopes,
-          accessTokenHeaders: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-          webAuthOpts: {
-            'preferEphemeral': true,
-          }
-        );
+    final OAuth2Client client, {
+    required final String clientId,
+    required final List<String> scopes,
+  }) : super(client, clientId: clientId, scopes: scopes, accessTokenHeaders: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        }, webAuthOpts: {
+          'preferEphemeral': true,
+        });
 
   @override
   Future<AccessTokenResponse?> getToken() async {
@@ -38,7 +28,8 @@ class CustomOAuth2Helper extends OAuth2Helper {
       }
 
       if (!tknResp.isValid()) {
-        throw Exception('Provider error ${tknResp.httpStatusCode}: ${tknResp.error}: ${tknResp.errorDescription}');
+        throw Exception(
+            'Provider error ${tknResp.httpStatusCode}: ${tknResp.error}: ${tknResp.errorDescription}');
       }
 
       if (!tknResp.isBearer()) {
@@ -49,7 +40,9 @@ class CustomOAuth2Helper extends OAuth2Helper {
     return tknResp;
   }
 
-  Future<AccessTokenResponse> refreshToken(AccessTokenResponse curTknResp) async {
+  @override
+  Future<AccessTokenResponse> refreshToken(
+      AccessTokenResponse curTknResp) async {
     AccessTokenResponse? tknResp;
     var refreshToken = curTknResp.refreshToken!;
     try {
@@ -68,9 +61,10 @@ class CustomOAuth2Helper extends OAuth2Helper {
       } else {
         if (tknResp.error == 'invalid_grant') {
           //The refresh token is expired too
-          await tokenStorage.deleteToken(scopes);
+          await tokenStorage.deleteToken(scopes!);
         } else {
-          throw OAuth2Exception(tknResp.error ?? 'Error', errorDescription: tknResp.errorDescription);
+          throw OAuth2Exception(tknResp.error ?? 'Error',
+              errorDescription: tknResp.errorDescription);
         }
       }
       return tknResp;
@@ -84,7 +78,8 @@ class CustomOAuth2Helper extends OAuth2Helper {
       throw Exception('Required "clientId" parameter not set');
     }
 
-    if (grantType == OAuth2Helper.clientCredentials && (clientSecret == null || clientSecret!.isEmpty)) {
+    if (grantType == OAuth2Helper.clientCredentials &&
+        (clientSecret == null || clientSecret!.isEmpty)) {
       throw Exception('Required "clientSecret" parameter not set');
     }
   }

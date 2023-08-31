@@ -10,7 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProfilePostsListView extends StatelessWidget {
   final User user;
-  ProfilePostsListView({
+  const ProfilePostsListView({
     super.key,
     required this.user,
   });

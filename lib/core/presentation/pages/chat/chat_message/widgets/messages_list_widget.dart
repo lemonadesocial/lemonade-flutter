@@ -6,8 +6,6 @@ import 'package:app/core/presentation/pages/chat/chat_message/widgets/message_it
 import 'package:app/core/presentation/pages/chat/chat_message/widgets/message_item/typing_indicator_widget.dart';
 import 'package:app/core/utils/bottomsheet_utils.dart';
 import 'package:app/core/utils/chat/filter_event_timeline_extension.dart';
-import 'package:app/theme/sizing.dart';
-import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';

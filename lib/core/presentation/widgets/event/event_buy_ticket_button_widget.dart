@@ -22,19 +22,21 @@ class EventBuyTicketButton extends StatelessWidget {
     final t = Translations.of(context);
     return GestureDetector(
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall, vertical: Spacing.extraSmall),
+        padding: EdgeInsets.symmetric(
+            horizontal: Spacing.xSmall, vertical: Spacing.extraSmall),
         decoration: ShapeDecoration(
           gradient: LinearGradient(
-            begin: Alignment(0.00, -1.00),
-            end: Alignment(0, 1),
+            begin: const Alignment(0.00, -1.00),
+            end: const Alignment(0, 1),
             colors: [LemonColor.arsenic, LemonColor.charlestonGreen],
           ),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(LemonRadius.normal)),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(LemonRadius.normal)),
           shadows: [
             BoxShadow(
               color: LemonColor.shadow,
               blurRadius: 4,
-              offset: Offset(0, 2),
+              offset: const Offset(0, 2),
               spreadRadius: 0,
             )
           ],
@@ -52,13 +54,13 @@ class EventBuyTicketButton extends StatelessWidget {
             SizedBox(width: Spacing.superExtraSmall),
             Text(
               event.cost != null
-                  ? '${NumberUtils.formatCurrency(
+                  ? NumberUtils.formatCurrency(
                       amount: event.cost!,
                       currency: event.currency,
                       freeText: t.event.free,
                       prefix: '${t.event.buy} • ',
-                    )}'
-                  : '${t.event.free}',
+                    )
+                  : t.event.free,
               style: Typo.small.copyWith(color: colorScheme.onPrimary),
             )
           ],

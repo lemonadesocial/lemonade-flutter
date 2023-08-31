@@ -13,7 +13,7 @@ class BurgerMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     final onSurface = Theme.of(context).colorScheme.onSurface;
     return InkWell(
-      onTap: isRightDrawer ? DrawerUtils.openEndDrawer: DrawerUtils.openDrawer,
+      onTap: isRightDrawer ? DrawerUtils.openEndDrawer : DrawerUtils.openDrawer,
       child: Icon(
         Icons.menu_rounded,
         color: onSurface,

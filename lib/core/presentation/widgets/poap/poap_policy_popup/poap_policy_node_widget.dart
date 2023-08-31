@@ -105,30 +105,35 @@ class PoapPolicyNodeWidget extends StatelessWidget {
       }
     }
 
-    final isNodeChildrenEmpty = node!.children == null || node!.children!.isEmpty;
+    final isNodeChildrenEmpty =
+        node!.children == null || node!.children!.isEmpty;
 
-    if (node!.value == PoapNodeValueType.userGeolocation.value && !isNodeChildrenEmpty) {
+    if (node!.value == PoapNodeValueType.userGeolocation.value &&
+        !isNodeChildrenEmpty) {
       return _NodeContainer(
         wrap: wrap,
         child: PoapPolicyLocationNodeWidget(node: node!, result: result),
       );
     }
 
-    if (node!.value == PoapNodeValueType.eventAccess.value && !isNodeChildrenEmpty) {
+    if (node!.value == PoapNodeValueType.eventAccess.value &&
+        !isNodeChildrenEmpty) {
       return _NodeContainer(
         wrap: wrap,
         child: PoapPolicyEventNodeWidget(node: node!, result: result),
       );
     }
 
-    if (node!.value == PoapNodeValueType.twitterFollow.value && !isNodeChildrenEmpty) {
+    if (node!.value == PoapNodeValueType.twitterFollow.value &&
+        !isNodeChildrenEmpty) {
       return _NodeContainer(
         wrap: wrap,
         child: PoapPolicyTwitterNodeWidget(node: node!, result: result),
       );
     }
 
-    if (node!.value == PoapNodeValueType.userFollow.value && !isNodeChildrenEmpty) {
+    if (node!.value == PoapNodeValueType.userFollow.value &&
+        !isNodeChildrenEmpty) {
       return _NodeContainer(
         wrap: wrap,
         child: PoapPolicyUserNodeWidget(node: node!, result: result),

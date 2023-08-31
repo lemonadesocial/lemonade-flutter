@@ -35,5 +35,9 @@ extension IsStateExtension on Event {
     EventTypes.CallInvite,
   };
 
-  bool get isState => !{EventTypes.Message, EventTypes.Sticker, EventTypes.Encrypted}.contains(type);
+  bool get isState => !{
+        EventTypes.Message,
+        EventTypes.Sticker,
+        EventTypes.Encrypted
+      }.contains(type);
 }

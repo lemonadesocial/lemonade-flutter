@@ -21,7 +21,7 @@ class ProfileNftCreatedListView extends StatelessWidget {
         getIt<TokenRepository>(),
       ),
       defaultInput: GetTokensInput(creator: user.wallets?[0]))
-    ..add(TokensListingEvent.fetch());
+    ..add(const TokensListingEvent.fetch());
 
   ProfileNftCreatedListView({
     super.key,
@@ -37,12 +37,12 @@ class ProfileNftCreatedListView extends StatelessWidget {
           scrollState.maybeWhen(
               endReached: () {
                 tokensListingBloc.add(
-                  TokensListingEvent.fetch(),
+                  const TokensListingEvent.fetch(),
                 );
               },
               orElse: () {});
         },
-        child: _ProfileNftCreatedList(),
+        child: const _ProfileNftCreatedList(),
       ),
     );
   }
@@ -52,7 +52,8 @@ class _ProfileNftCreatedList extends StatefulWidget {
   const _ProfileNftCreatedList();
 
   @override
-  State<_ProfileNftCreatedList> createState() => _ProfileNftCreatedListViewState();
+  State<_ProfileNftCreatedList> createState() =>
+      _ProfileNftCreatedListViewState();
 }
 
 class _ProfileNftCreatedListViewState extends State<_ProfileNftCreatedList> {
@@ -64,13 +65,15 @@ class _ProfileNftCreatedListViewState extends State<_ProfileNftCreatedList> {
       sliver: BlocBuilder<TokensListingBloc, TokensListingState>(
         builder: (context, tokenListingState) {
           return tokenListingState.when(
-            loading: () => SliverFillRemaining(child: Center(child: Loading.defaultLoading(context))),
-            failure: () => SliverToBoxAdapter(child: Center(child: Text(t.common.somethingWrong))),
+            loading: () => SliverFillRemaining(
+                child: Center(child: Loading.defaultLoading(context))),
+            failure: () => SliverToBoxAdapter(
+                child: Center(child: Text(t.common.somethingWrong))),
             fetched: (tokens) {
               if (tokens.isEmpty) {
                 return SliverFillRemaining(
-                    hasScrollBody: false,
-                    child: EmptyList(emptyText: t.nft.noCollectible),
+                  hasScrollBody: false,
+                  child: EmptyList(emptyText: t.nft.noCollectible),
                 );
               }
               return SliverGrid(

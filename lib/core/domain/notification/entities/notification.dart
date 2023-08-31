@@ -11,10 +11,10 @@ class Notification {
   bool? isSeen;
 
   Notification({
-    this.id, 
-    this.fromExpanded, 
-    this.message, 
-    this.type, 
+    this.id,
+    this.fromExpanded,
+    this.message,
+    this.type,
     this.createdAt,
     this.from,
     this.isSeen,
@@ -23,7 +23,8 @@ class Notification {
   static Notification fromDto(NotificationDto dto) {
     return Notification(
       id: dto.id,
-      fromExpanded: dto.fromExpanded != null ? User.fromDto(dto.fromExpanded!) : null,
+      fromExpanded:
+          dto.fromExpanded != null ? User.fromDto(dto.fromExpanded!) : null,
       message: dto.message,
       type: dto.type,
       createdAt: dto.createdAt,

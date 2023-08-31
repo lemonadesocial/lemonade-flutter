@@ -23,7 +23,8 @@ class PoapPolicyEventNodeWidget extends StatelessWidget {
     final eventId = node.children?[0].value ?? '';
 
     return FutureBuilder(
-      future: getIt<EventRepository>().getEventDetail(input: GetEventDetailInput(id: eventId)),
+      future: getIt<EventRepository>()
+          .getEventDetail(input: GetEventDetailInput(id: eventId)),
       builder: (context, snapshot) {
         final event = snapshot.data?.fold((l) => null, (event) => event);
         return Column(

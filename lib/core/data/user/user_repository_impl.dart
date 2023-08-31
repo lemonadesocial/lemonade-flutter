@@ -46,7 +46,8 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> updateUserProfile(UpdateUserProfileInput input) async {
+  Future<Either<Failure, bool>> updateUserProfile(
+      UpdateUserProfileInput input) async {
     final result = await _gqlClient.mutate(
       MutationOptions(
         document: updateUserProfileQuery,
@@ -64,7 +65,8 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> checkValidUsername({required String username}) async {
+  Future<Either<Failure, bool>> checkValidUsername(
+      {required String username}) async {
     final result = await _gqlClient.query(
       QueryOptions(
         document: checkValidUsernameQuery,

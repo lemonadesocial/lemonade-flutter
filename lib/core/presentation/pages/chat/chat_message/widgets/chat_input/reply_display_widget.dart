@@ -70,7 +70,7 @@ class _EditContent extends StatelessWidget {
         Flexible(
           child: FutureBuilder<String>(
             future: event.calcLocalizedBody(
-              MatrixDefaultLocalizations(),
+              const MatrixDefaultLocalizations(),
               withSenderNamePrefix: false,
               hideReply: true,
             ),
@@ -78,7 +78,7 @@ class _EditContent extends StatelessWidget {
               return Text(
                 snapshot.data ??
                     event.calcLocalizedBodyFallback(
-                      MatrixDefaultLocalizations(),
+                      const MatrixDefaultLocalizations(),
                       withSenderNamePrefix: false,
                       hideReply: true,
                     ),

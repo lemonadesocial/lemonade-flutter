@@ -18,7 +18,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class ProfileInfoTabView extends StatelessWidget {
   final User user;
 
-  ProfileInfoTabView({
+  const ProfileInfoTabView({
     super.key,
     required this.user,
   });
@@ -46,17 +46,21 @@ class ProfileInfoTabView extends StatelessWidget {
       children: [
         SliverToBoxAdapter(
           child: Container(
-            padding: EdgeInsets.symmetric(vertical: Spacing.medium, horizontal: Spacing.smMedium),
+            padding: EdgeInsets.symmetric(
+                vertical: Spacing.medium, horizontal: Spacing.smMedium),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (user.tagline != null && user.tagline?.isNotEmpty == true) ...[
+                if (user.tagline != null &&
+                    user.tagline?.isNotEmpty == true) ...[
                   Text(user.tagline!),
                   SizedBox(height: Spacing.smMedium),
                 ],
-                if (user.description != null && user.description?.isNotEmpty == true) ...[
+                if (user.description != null &&
+                    user.description?.isNotEmpty == true) ...[
                   Text(StringUtils.capitalize(t.common.description),
-                      style: Typo.small.copyWith(color: colorScheme.onSurfaceVariant)),
+                      style: Typo.small
+                          .copyWith(color: colorScheme.onSurfaceVariant)),
                   SizedBox(height: Spacing.superExtraSmall),
                   Text(user.description!),
                   SizedBox(height: Spacing.smMedium),
@@ -65,9 +69,11 @@ class ProfileInfoTabView extends StatelessWidget {
                 SizedBox(height: Spacing.smMedium),
                 Text(
                   StringUtils.capitalize(
-                    t.common.joinedOn(date: DateFormatUtils.monthYearOnly(user.createdAt)),
+                    t.common.joinedOn(
+                        date: DateFormatUtils.monthYearOnly(user.createdAt)),
                   ),
-                  style: Typo.small.copyWith(color: colorScheme.onSurfaceVariant),
+                  style:
+                      Typo.small.copyWith(color: colorScheme.onSurfaceVariant),
                 ),
               ],
             ),
@@ -76,8 +82,9 @@ class ProfileInfoTabView extends StatelessWidget {
         if (AuthUtils.isMe(context, user: user))
           SliverToBoxAdapter(
             child: ElevatedButton(
-              onPressed: () => context.read<AuthBloc>().add(AuthEvent.logout()),
-              child: Text("Logout"),
+              onPressed: () =>
+                  context.read<AuthBloc>().add(const AuthEvent.logout()),
+              child: const Text("Logout"),
             ),
           )
       ],
@@ -87,14 +94,18 @@ class ProfileInfoTabView extends StatelessWidget {
   Row _renderSocials(BuildContext context, ColorScheme colorScheme) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
-      children: [user.handleTwitter, user.handleInstagram, user.handleFacebook, user.handleLinkedin]
-          .asMap()
-          .entries
-          .map((entry) {
-        if (entry.value == null || entry.value?.isEmpty == true) return SizedBox.shrink();
+      children: [
+        user.handleTwitter,
+        user.handleInstagram,
+        user.handleFacebook,
+        user.handleLinkedin
+      ].asMap().entries.map((entry) {
+        if (entry.value == null || entry.value?.isEmpty == true)
+          return const SizedBox.shrink();
         return GestureDetector(
           onTap: () async {
-            AutoRouter.of(context).navigate(WebviewRoute(uri: Uri.parse('${_socialUrls[entry.key]}/${entry.value}}')));
+            AutoRouter.of(context).navigate(WebviewRoute(
+                uri: Uri.parse('${_socialUrls[entry.key]}/${entry.value}}')));
           },
           child: Container(
             width: 42,
@@ -107,7 +118,8 @@ class ProfileInfoTabView extends StatelessWidget {
             child: Center(
               child: ThemeSvgIcon(
                 color: colorScheme.onSurface,
-                builder: (filter) => _socialIconsSvg[entry.key].svg(colorFilter: filter),
+                builder: (filter) =>
+                    _socialIconsSvg[entry.key].svg(colorFilter: filter),
               ),
             ),
           ),

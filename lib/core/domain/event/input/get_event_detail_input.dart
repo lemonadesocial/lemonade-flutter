@@ -9,5 +9,6 @@ class GetEventDetailInput with _$GetEventDetailInput {
     required String id,
   }) = _GetEventDetailInput;
 
-  factory GetEventDetailInput.fromJson(Map<String, dynamic> json) => _$GetEventDetailInputFromJson(json);
+  factory GetEventDetailInput.fromJson(Map<String, dynamic> json) =>
+      _$GetEventDetailInputFromJson(json);
 }

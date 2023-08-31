@@ -55,7 +55,7 @@ abstract class $AddressDtoCopyWith<$Res> {
       double? latitude,
       double? longitude,
       @JsonKey(name: 'recipient_name', includeIfNull: false)
-          String? recipientName});
+      String? recipientName});
 }
 
 /// @nodoc
@@ -146,7 +146,7 @@ abstract class _$$_AddressDtoCopyWith<$Res>
       double? latitude,
       double? longitude,
       @JsonKey(name: 'recipient_name', includeIfNull: false)
-          String? recipientName});
+      String? recipientName});
 }
 
 /// @nodoc
@@ -230,7 +230,7 @@ class _$_AddressDto implements _AddressDto {
       this.latitude,
       this.longitude,
       @JsonKey(name: 'recipient_name', includeIfNull: false)
-          this.recipientName});
+      this.recipientName});
 
   factory _$_AddressDto.fromJson(Map<String, dynamic> json) =>
       _$$_AddressDtoFromJson(json);
@@ -313,7 +313,7 @@ abstract class _AddressDto implements AddressDto {
       final double? latitude,
       final double? longitude,
       @JsonKey(name: 'recipient_name', includeIfNull: false)
-          final String? recipientName}) = _$_AddressDto;
+      final String? recipientName}) = _$_AddressDto;
 
   factory _AddressDto.fromJson(Map<String, dynamic> json) =
       _$_AddressDto.fromJson;

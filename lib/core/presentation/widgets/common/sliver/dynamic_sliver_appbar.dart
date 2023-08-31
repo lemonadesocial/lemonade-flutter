@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 class DynamicSliverAppBar extends SliverAppBar {
   final Widget child;
   final double maxHeight;
-  
-  DynamicSliverAppBar({
+
+  const DynamicSliverAppBar({
     required this.child,
     required this.maxHeight,
     super.key,
@@ -14,10 +14,10 @@ class DynamicSliverAppBar extends SliverAppBar {
   });
 
   @override
-  _DynamicSliverAppBarState createState() => _DynamicSliverAppBarState();
+  DynamicSliverAppBarState createState() => DynamicSliverAppBarState();
 }
 
-class _DynamicSliverAppBarState extends State<DynamicSliverAppBar> {
+class DynamicSliverAppBarState extends State<DynamicSliverAppBar> {
   final GlobalKey _childKey = GlobalKey();
   bool isHeightCalculated = false;
   double? height;
@@ -28,13 +28,15 @@ class _DynamicSliverAppBarState extends State<DynamicSliverAppBar> {
       if (!isHeightCalculated) {
         isHeightCalculated = true;
         setState(() {
-          height = (_childKey.currentContext?.findRenderObject() as RenderBox).size.height;
+          height = (_childKey.currentContext?.findRenderObject() as RenderBox)
+              .size
+              .height;
         });
       }
     });
 
     return SliverAppBar(
-      leading: SizedBox.shrink(),
+      leading: const SizedBox.shrink(),
       floating: widget.floating,
       forceElevated: widget.forceElevated,
       expandedHeight: isHeightCalculated ? height : widget.maxHeight,
@@ -45,7 +47,7 @@ class _DynamicSliverAppBarState extends State<DynamicSliverAppBar> {
               key: _childKey,
               child: widget.child,
             ),
-            Expanded(child: SizedBox.shrink()),
+            const Expanded(child: SizedBox.shrink()),
           ],
         ),
       ),

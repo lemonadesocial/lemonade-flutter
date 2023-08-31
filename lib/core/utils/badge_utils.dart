@@ -22,6 +22,8 @@ class BadgeUtils {
       displayDistance = NumberFormat('##.##').format(distanceInMeter);
     }
     return DisplayDistance(
-        text: displayDistance, unit: distanceInKm >= 1 ? DistanceUnit.kilometer : DistanceUnit.meter,);
+      text: displayDistance,
+      unit: distanceInKm >= 1 ? DistanceUnit.kilometer : DistanceUnit.meter,
+    );
   }
 }

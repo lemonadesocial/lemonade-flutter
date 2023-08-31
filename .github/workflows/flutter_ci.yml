@@ -1,0 +1,29 @@
+name: Flutter CI
+on: push
+jobs:
+  build:
+    if: github.event.pull_request.draft == false
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v1
+
+      # Get flutter dependencies.
+      - run: flutter pub get
+      
+      - name: Create environment files
+        run: |
+          touch .env
+          touch .env.staging
+          touch .env.production
+
+      # Check for any formatting issues in the code.
+      - name: Format code
+        run: dart format --set-exit-if-changed .  
+
+      - name: Analyze Dart
+        uses: zgosalvez/github-actions-analyze-dart@v2

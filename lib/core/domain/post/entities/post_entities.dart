@@ -43,7 +43,8 @@ class Post {
         user: dto.user,
         visibility: dto.visibility,
         createdAt: dto.createdAt,
-        userExpanded: dto.userExpanded != null ? User.fromDto(dto.userExpanded!) : null,
+        userExpanded:
+            dto.userExpanded != null ? User.fromDto(dto.userExpanded!) : null,
         text: dto.text,
         refId: dto.refId,
         refType: dto.refType,
@@ -56,7 +57,6 @@ class Post {
       );
 }
 
-
 class Newsfeed {
   final int? offset;
   final List<Post>? posts;
@@ -65,8 +65,9 @@ class Newsfeed {
 
   static Newsfeed fromDto(NewsfeedDto dto) {
     return Newsfeed(
-      offset: dto.offset,
-      posts: List.from(dto.posts ?? []).map((item) => Post.fromDto(item)).toList()
-    );
+        offset: dto.offset,
+        posts: List.from(dto.posts ?? [])
+            .map((item) => Post.fromDto(item))
+            .toList());
   }
 }

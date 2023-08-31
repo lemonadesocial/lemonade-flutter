@@ -13,7 +13,7 @@ enum GradientButtonMode {
       case defaultMode:
         return [LemonColor.arsenic, LemonColor.charlestonGreen];
       case lavenderMode:
-        return [LemonColor.button_linear_1, LemonColor.button_linear_2];
+        return [LemonColor.buttonLinear1, LemonColor.buttonLinear2];
       default:
         return [];
     }

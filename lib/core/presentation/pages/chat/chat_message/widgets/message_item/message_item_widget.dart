@@ -30,7 +30,7 @@ class MessageItem extends StatefulWidget {
   final bool selected;
   final Timeline timeline;
 
-  MessageItem(
+  const MessageItem(
     this.event, {
     this.nextEvent,
     this.displayReadMarker = false,
@@ -159,7 +159,7 @@ class _MessageItemState extends State<MessageItem> {
       child: Container(
         constraints: const BoxConstraints(maxWidth: 100 * 2.5),
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
           child: container,
         ),
       ),
@@ -339,7 +339,7 @@ class _MessageItemState extends State<MessageItem> {
           },
           child: AbsorbPointer(
             child: Container(
-              margin: EdgeInsets.symmetric(
+              margin: const EdgeInsets.symmetric(
                 vertical: 4.0,
               ),
               child: ReplyContent(
@@ -405,7 +405,7 @@ class _MessageItemState extends State<MessageItem> {
           )) ...[
             Icon(Icons.edit_outlined,
                 color: textColor, size: Typo.small.fontSize!),
-            SizedBox(width: 6),
+            const SizedBox(width: 6),
           ],
           Text(
             DateFormatUtils.timeOnly(displayEvent.originServerTs).toLowerCase(),
@@ -418,7 +418,7 @@ class _MessageItemState extends State<MessageItem> {
 
   Widget _buildVerificationRequestContent() {
     // TODO: // return VerificationRequestContent(event: event, timeline: timeline);
-    return Text("Verification request content");
+    return const Text("Verification request content");
   }
 
   Widget _buildStateMessage() {

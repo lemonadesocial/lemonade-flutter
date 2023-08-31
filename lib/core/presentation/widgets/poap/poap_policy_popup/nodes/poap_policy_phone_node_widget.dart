@@ -24,7 +24,9 @@ class PoapPolicyPhoneNodeWidget extends StatelessWidget {
           t.nft.poapPolicy.phonePolicy.title,
         ),
         Text(
-          result ? t.nft.poapPolicy.phonePolicy.qualified : t.nft.poapPolicy.phonePolicy.nonQualified,
+          result
+              ? t.nft.poapPolicy.phonePolicy.qualified
+              : t.nft.poapPolicy.phonePolicy.nonQualified,
           style: Typo.small.copyWith(
             color: colorScheme.onSecondary,
           ),

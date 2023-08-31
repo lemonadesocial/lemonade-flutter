@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:app/core/domain/web3/entities/chain_metadata_entity.dart';
 
 // TESTNET

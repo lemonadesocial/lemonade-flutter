@@ -25,7 +25,8 @@ class MessageActions extends StatelessWidget {
   List<String> get defaultEmojis => ['👍', '🥳', '😍', '✅', '🎉'];
 
   bool get canEdit {
-    if ({Membership.leave, Membership.ban}.contains(event.room.membership) || !event.status.isSent) {
+    if ({Membership.leave, Membership.ban}.contains(event.room.membership) ||
+        !event.status.isSent) {
       return false;
     }
     return event.senderId == getIt<MatrixService>().client.userID;
@@ -38,71 +39,69 @@ class MessageActions extends StatelessWidget {
       defaultSnapSize: 0.3,
       minSnapSize: 0.3,
       maxSnapSize: 0.3,
-      snapSizes: [0.3],
+      snapSizes: const [0.3],
       builder: (_) => Flexible(
-        child: Container(
-          child: Column(
-            children: [
-              SizedBox(height: Spacing.xSmall),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  ...defaultEmojis
-                      .map(
-                        (emoji) => InkWell(
-                          onTap: () {
-                            Navigator.of(context).pop();
-                            onReact?.call(emoji);
-                          },
-                          child: Text(
-                            emoji,
-                            style: TextStyle(fontSize: 36),
-                          ),
-                        ),
-                      )
-                      .toList(),
-                  IconButton(
-                    onPressed: () async {
-                      Navigator.of(context).pop();
-                      BottomSheetUtils.showSnapBottomSheet(
-                        context,
-                        builder: (context) {
-                          return LemonEmojiPicker(
-                            onEmojiSelected: (emoji) {
-                              Navigator.of(context).pop();
-                              onReact?.call(emoji.emoji);
-                            },
-                          );
+        child: Column(
+          children: [
+            SizedBox(height: Spacing.xSmall),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                ...defaultEmojis
+                    .map(
+                      (emoji) => InkWell(
+                        onTap: () {
+                          Navigator.of(context).pop();
+                          onReact?.call(emoji);
                         },
-                      );
-                    },
-                    icon: Icon(
-                      Icons.add_circle_outline_sharp,
-                      size: Sizing.medium,
-                      color: colorScheme.onSurface,
-                    ),
-                  ),
-                ],
-              ),
-              if (canEdit)
-                ListTile(
-                  onTap: () {
-                    onEdit?.call();
+                        child: Text(
+                          emoji,
+                          style: const TextStyle(fontSize: 36),
+                        ),
+                      ),
+                    )
+                    .toList(),
+                IconButton(
+                  onPressed: () async {
                     Navigator.of(context).pop();
+                    BottomSheetUtils.showSnapBottomSheet(
+                      context,
+                      builder: (context) {
+                        return LemonEmojiPicker(
+                          onEmojiSelected: (emoji) {
+                            Navigator.of(context).pop();
+                            onReact?.call(emoji.emoji);
+                          },
+                        );
+                      },
+                    );
                   },
-                  leading: Icon(
-                    Icons.edit,
+                  icon: Icon(
+                    Icons.add_circle_outline_sharp,
+                    size: Sizing.medium,
                     color: colorScheme.onSurface,
                   ),
-                  title: Text(
-                    Translations.of(context).chat.editMessage,
-                    style: Typo.medium.copyWith(
-                      color: colorScheme.onSurface,
-                    ),
+                ),
+              ],
+            ),
+            if (canEdit)
+              ListTile(
+                onTap: () {
+                  onEdit?.call();
+                  Navigator.of(context).pop();
+                },
+                leading: Icon(
+                  Icons.edit,
+                  color: colorScheme.onSurface,
+                ),
+                title: Text(
+                  Translations.of(context).chat.editMessage,
+                  style: Typo.medium.copyWith(
+                    color: colorScheme.onSurface,
                   ),
                 ),
-            ],
-          ),
+              ),
+          ],
         ),
       ),
     );

@@ -19,7 +19,8 @@ class ReplyContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final displayEvent = timeline != null ? replyEvent.getDisplayEvent(timeline!) : replyEvent;
+    final displayEvent =
+        timeline != null ? replyEvent.getDisplayEvent(timeline!) : replyEvent;
 
     return Row(
       mainAxisSize: MainAxisSize.min,
@@ -50,7 +51,7 @@ class ReplyContent extends StatelessWidget {
               ),
               Text(
                 displayEvent.calcLocalizedBodyFallback(
-                  MatrixDefaultLocalizations(),
+                  const MatrixDefaultLocalizations(),
                   withSenderNamePrefix: false,
                   hideReply: true,
                 ),

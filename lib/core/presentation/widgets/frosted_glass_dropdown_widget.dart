@@ -22,10 +22,12 @@ class FrostedGlassDropdown<T> extends StatefulWidget {
   });
 
   @override
-  State<FrostedGlassDropdown<T>> createState() => _FrostedGlassDropdownController<T>();
+  State<FrostedGlassDropdown<T>> createState() =>
+      _FrostedGlassDropdownController<T>();
 }
 
-class _FrostedGlassDropdownController<T> extends State<FrostedGlassDropdown<T>> {
+class _FrostedGlassDropdownController<T>
+    extends State<FrostedGlassDropdown<T>> {
   DropdownItemDpo<T>? selectedItem;
   @override
   Widget build(BuildContext context) {
@@ -42,8 +44,10 @@ class _FrostedGlassDropdownController<T> extends State<FrostedGlassDropdown<T>> 
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
-              children:
-                  List.generate(widget.items.length, (index) => _buildItem(context, index, item: widget.items[index])),
+              children: List.generate(
+                  widget.items.length,
+                  (index) =>
+                      _buildItem(context, index, item: widget.items[index])),
             ),
           ),
         ),
@@ -54,8 +58,9 @@ class _FrostedGlassDropdownController<T> extends State<FrostedGlassDropdown<T>> 
   _buildItem(BuildContext ctx, int index, {required DropdownItemDpo<T> item}) {
     if (widget.itemBuilder != null) return widget.itemBuilder?.call(ctx, index);
 
-    bool isSelected =
-        selectedItem == null || widget.isEqual == null ? false : widget.isEqual!.call(selectedItem!, item);
+    bool isSelected = selectedItem == null || widget.isEqual == null
+        ? false
+        : widget.isEqual!.call(selectedItem!, item);
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
@@ -66,15 +71,19 @@ class _FrostedGlassDropdownController<T> extends State<FrostedGlassDropdown<T>> 
         });
       },
       child: Container(
-        color: isSelected ? Colors.white.withOpacity(6/100) : Colors.transparent,
-        padding: EdgeInsets.symmetric(horizontal: Spacing.small, vertical: Spacing.small),
+        color:
+            isSelected ? Colors.white.withOpacity(6 / 100) : Colors.transparent,
+        padding: EdgeInsets.symmetric(
+            horizontal: Spacing.small, vertical: Spacing.small),
         child: Row(
           mainAxisSize: MainAxisSize.max,
           children: [
             Text(item.label),
             const Spacer(),
             if (isSelected)
-              ThemeSvgIcon(builder: (filter) => Assets.icons.icDone.svg(colorFilter: filter, width: 18, height: 18)),
+              ThemeSvgIcon(
+                  builder: (filter) => Assets.icons.icDone
+                      .svg(colorFilter: filter, width: 18, height: 18)),
           ],
         ),
       ),

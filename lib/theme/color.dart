@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 class LemonColor {
   static Color black = const Color(0xff000000);
   static Color black50 = const Color.fromRGBO(0, 0, 0, 0.5);
-  static Color black87 = const Color(0x0f0f0f).withOpacity(0.87);
+  static Color black87 = const Color(0x000f0f0f).withOpacity(0.87);
   static Color raisinBlack = const Color(0xff212121);
   static Color raisinBlack0 = const Color(0xff212121).withOpacity(0);
-  static Color chineseBlack = const Color(0xff1171717);
+  static Color chineseBlack = const Color(0xff117171);
   static Color oliveBlack = const Color(0xff404040);
   static Color tertiaryBlack = const Color(0x4Debebf5);
   static Color white = const Color(0xffffffff);
@@ -39,20 +39,20 @@ class LemonColor {
   static Color dialogBackground = const Color(0xFF141414);
 
   // Button
-  static Color arsenic = Color(0xff424242);
-  static Color charlestonGreen = Color(0xff2c2c2c);
-  static Color button_linear_1 = Color(0xFFB17AF4);
-  static Color button_linear_2 = Color(0xFF6F3FAA);
-  static Color grape = Color(0xffB17AF4);
-  static Color shadow = Color.fromARGB(91, 0, 0, 0);
+  static Color arsenic = const Color(0xff424242);
+  static Color charlestonGreen = const Color(0xff2c2c2c);
+  static Color buttonLinear1 = const Color(0xFFB17AF4);
+  static Color buttonLinear2 = const Color(0xFF6F3FAA);
+  static Color grape = const Color(0xffB17AF4);
+  static Color shadow = const Color.fromARGB(91, 0, 0, 0);
   static Color disableButtonLavender = const Color(0xFF3c2557);
 
-  // Slider 
-  static Color sunrise = Color(0xffFFDB00);
-  static Color sunrise18 = Color(0xffFFDB00).withOpacity(0.18);
+  // Slider
+  static Color sunrise = const Color(0xffFFDB00);
+  static Color sunrise18 = const Color(0xffFFDB00).withOpacity(0.18);
 
   // Textfield
-  static Color darkCharcoal = Color(0xff2e2e2e);
+  static Color darkCharcoal = const Color(0xff2e2e2e);
   static const onboardingTitle = Color(0xFFDDDDDD);
 
   // FAB

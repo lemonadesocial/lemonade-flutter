@@ -79,7 +79,8 @@ class CreatePostBloc extends Cubit<CreatePostState> {
     );
     response.fold(
       (l) => emit(state.copyWith(status: CreatePostStatus.error)),
-      (isUpdateSuccess) => emit(state.copyWith(status: CreatePostStatus.postCreated)),
+      (isUpdateSuccess) =>
+          emit(state.copyWith(status: CreatePostStatus.postCreated)),
     );
   }
 

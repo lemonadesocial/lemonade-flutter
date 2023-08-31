@@ -41,7 +41,7 @@ final lemonadeTextTheme = TextTheme(
   titleLarge: Typo.large,
   titleSmall: Typo.medium,
   bodyMedium: Typo.medium,
-  bodySmall: Typo.small, 
+  bodySmall: Typo.small,
   labelLarge: Typo.medium,
   labelMedium: Typo.small,
 );

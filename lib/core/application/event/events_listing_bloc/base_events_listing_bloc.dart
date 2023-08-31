@@ -9,9 +9,11 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'base_events_listing_bloc.freezed.dart';
 
-abstract class BaseEventListingBloc<I> extends Bloc<BaseEventsListingEvent, BaseEventsListingState> {
+abstract class BaseEventListingBloc<I>
+    extends Bloc<BaseEventsListingEvent, BaseEventsListingState> {
   final EventService eventService;
-  late final PaginationService<Event, I> paginationService = PaginationService(getDataFuture: getEvents);
+  late final PaginationService<Event, I> paginationService =
+      PaginationService(getDataFuture: getEvents);
   final I defaultInput;
 
   BaseEventListingBloc(
@@ -22,7 +24,8 @@ abstract class BaseEventListingBloc<I> extends Bloc<BaseEventsListingEvent, Base
     on<BaseEventsListingEventFilter>(_onFilter);
   }
 
-  Future<Either<Failure, List<Event>>> getEvents(int skip, bool endReached, {required I input});
+  Future<Either<Failure, List<Event>>> getEvents(int skip, bool endReached,
+      {required I input});
 
   _onFetch(BaseEventsListingEventFetch blocEvent, Emitter emit) async {
     final timeFilterType = blocEvent.eventTimeFilter;
@@ -33,7 +36,8 @@ abstract class BaseEventListingBloc<I> extends Bloc<BaseEventsListingEvent, Base
       (events) => emit(
         BaseEventsListingState.fetched(
           events: events,
-          filteredEvents: eventService.filterEventByTime(source: events, selectedFilter: timeFilterType),
+          filteredEvents: eventService.filterEventByTime(
+              source: events, selectedFilter: timeFilterType),
         ),
       ),
     );
@@ -44,7 +48,8 @@ abstract class BaseEventListingBloc<I> extends Bloc<BaseEventsListingEvent, Base
     state.whenOrNull(fetched: (events, _) {
       emit(BaseEventsListingState.fetched(
           events: events,
-          filteredEvents: eventService.filterEventByTime(source: events, selectedFilter: timeFilterType)));
+          filteredEvents: eventService.filterEventByTime(
+              source: events, selectedFilter: timeFilterType)));
     });
   }
 }
@@ -66,5 +71,6 @@ class BaseEventsListingEvent with _$BaseEventsListingEvent {
   factory BaseEventsListingEvent.fetch({
     EventTimeFilter? eventTimeFilter,
   }) = BaseEventsListingEventFetch;
-  factory BaseEventsListingEvent.filter({EventTimeFilter? eventTimeFilter}) = BaseEventsListingEventFilter;
+  factory BaseEventsListingEvent.filter({EventTimeFilter? eventTimeFilter}) =
+      BaseEventsListingEventFilter;
 }

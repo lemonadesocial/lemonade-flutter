@@ -39,22 +39,34 @@ class EventService {
         return source.where((event) => DateUtils.isToday(event.start)).toList();
 
       case EventTimeFilter.tomorrow:
-        return source.where((event) => DateUtils.isTomorrow(event.start)).toList();
+        return source
+            .where((event) => DateUtils.isTomorrow(event.start))
+            .toList();
 
       case EventTimeFilter.thisWeek:
-        return source.where((event) => DateUtils.isThisWeek(event.start)).toList();
+        return source
+            .where((event) => DateUtils.isThisWeek(event.start))
+            .toList();
 
       case EventTimeFilter.thisWeekend:
-        return source.where((event) => DateUtils.isThisWeekend(event.start)).toList();
+        return source
+            .where((event) => DateUtils.isThisWeekend(event.start))
+            .toList();
 
       case EventTimeFilter.nextWeek:
-        return source.where((event) => DateUtils.isNextWeek(event.start)).toList();
+        return source
+            .where((event) => DateUtils.isNextWeek(event.start))
+            .toList();
 
       case EventTimeFilter.nextWeekend:
-        return source.where((event) => DateUtils.isNextWeekend(event.start)).toList();
+        return source
+            .where((event) => DateUtils.isNextWeekend(event.start))
+            .toList();
 
       case EventTimeFilter.nextMonth:
-        return source.where((event) => DateUtils.isNextMonth(event.start)).toList();
+        return source
+            .where((event) => DateUtils.isNextMonth(event.start))
+            .toList();
 
       default:
         return source;

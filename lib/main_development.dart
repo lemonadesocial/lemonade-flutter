@@ -9,12 +9,12 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: '.env');
   await gql_flutter.initHiveForFlutter();
-  
+
   registerModule();
 
   await getIt<AppOauth>().init();
 
-  runApp(LemonadeApp());
+  runApp(const LemonadeApp());
 
   debugPrint('App is ready!!! ✅');
 }

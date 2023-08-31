@@ -7,7 +7,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'user_profile_bloc.freezed.dart';
 
 class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
-
   UserProfileBloc(
     this.userRepository,
   ) : super(UserProfileState.loading()) {
@@ -43,7 +42,8 @@ class UserProfileEvent with _$UserProfileEvent {
 class UserProfileState with _$UserProfileState {
   factory UserProfileState.loading() = UserProfileStateLoading;
 
-  factory UserProfileState.fetched({required User userProfile}) = UserProfileStateFetched;
+  factory UserProfileState.fetched({required User userProfile}) =
+      UserProfileStateFetched;
 
   factory UserProfileState.failure() = UserProfileStateFailure;
 }

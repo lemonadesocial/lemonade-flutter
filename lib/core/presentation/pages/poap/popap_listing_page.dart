@@ -16,7 +16,8 @@ class PoapListingPage extends StatelessWidget {
     BadgeCollectionsState prev,
     BadgeCollectionsState cur,
   ) {
-    return prev is BadgeCollectionsStateFetched && cur is BadgeCollectionsStateFetched;
+    return prev is BadgeCollectionsStateFetched &&
+        cur is BadgeCollectionsStateFetched;
   }
 
   bool badgeLocationListenWhen(
@@ -31,7 +32,8 @@ class PoapListingPage extends StatelessWidget {
       initial: (selectedLocation, _) => selectedLocation,
       fetched: (_, selectedLocation, __) => selectedLocation,
     );
-    if (prevLocation?.isMyLocation == true && currentLocation?.isMyLocation == true) return false;
+    if (prevLocation?.isMyLocation == true &&
+        currentLocation?.isMyLocation == true) return false;
     return prevLocation != currentLocation;
   }
 

@@ -1,6 +1,7 @@
 import 'dart:math';
 
-import 'package:app/core/domain/badge/entities/badge_entities.dart' as badge_entities;
+import 'package:app/core/domain/badge/entities/badge_entities.dart'
+    as badge_entities;
 import 'package:app/core/domain/poap/input/poap_input.dart';
 import 'package:app/core/domain/poap/poap_repository.dart';
 import 'package:app/injection/register_module.dart';
@@ -11,7 +12,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 final _badgeQuantityBarSize = Size(94.w, 94.w);
 
 class HotBadgeQuantityBar extends StatelessWidget {
-  const HotBadgeQuantityBar({super.key,
+  const HotBadgeQuantityBar({
+    super.key,
     required this.badge,
   });
 
@@ -38,7 +40,8 @@ class HotBadgeQuantityBar extends StatelessWidget {
               ),
             ),
             builder: (context, snapshot) {
-              final poapViewSupply = snapshot.data?.fold((l) => null, (poapView) => poapView);
+              final poapViewSupply =
+                  snapshot.data?.fold((l) => null, (poapView) => poapView);
               var claimProgress = .0;
               final claimedQuantity = poapViewSupply?.claimedQuantity ?? 0;
               final quantity = poapViewSupply?.quantity ?? 0;
@@ -49,7 +52,8 @@ class HotBadgeQuantityBar extends StatelessWidget {
                 duration: const Duration(milliseconds: 500),
                 tween: Tween<double>(begin: 0, end: claimProgress),
                 builder: (context, animationValue, _) => CustomPaint(
-                  painter: _BadgeQuantityBarPainter(isGradient: true, progress: animationValue),
+                  painter: _BadgeQuantityBarPainter(
+                      isGradient: true, progress: animationValue),
                   size: _badgeQuantityBarSize,
                 ),
               );

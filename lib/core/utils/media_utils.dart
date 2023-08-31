@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:app/core/utils/ipfs_utils.dart';
+import 'package:flutter/foundation.dart';
 
 enum MediaType {
   image,
@@ -19,7 +20,8 @@ class Media {
 }
 
 class MediaUtils {
-  static Future<Media> getNftMedia(String? imageUrl, String? animationUrl) async {
+  static Future<Media> getNftMedia(
+      String? imageUrl, String? animationUrl) async {
     try {
       if (imageUrl == null && animationUrl == null) {
         return Media(type: MediaType.unknown);
@@ -35,8 +37,9 @@ class MediaUtils {
       String href = fetchableUrl.href;
 
       if (protocol == 'blob:') {
-        HttpClient client = new HttpClient();
-        HttpClientRequest request = await client.getUrl(Uri.parse(animationUrl ?? ''));
+        HttpClient client = HttpClient();
+        HttpClientRequest request =
+            await client.getUrl(Uri.parse(animationUrl ?? ''));
         HttpClientResponse response = await request.close();
         ContentType? contentType = response.headers.contentType;
 
@@ -79,7 +82,8 @@ class MediaUtils {
         );
       }
 
-      if (['png', 'jpg', 'gif', 'jpeg', 'bmp', 'svg', 'webp'].contains(extension)) {
+      if (['png', 'jpg', 'gif', 'jpeg', 'bmp', 'svg', 'webp']
+          .contains(extension)) {
         return Media(
           type: MediaType.image,
           url: href,
@@ -88,7 +92,9 @@ class MediaUtils {
 
       return Media(type: MediaType.unknown, url: href);
     } catch (e) {
-      print('Caught error: $e');
+      if (kDebugMode) {
+        print('Caught error: $e');
+      }
       return Media(type: MediaType.unknown);
     }
   }

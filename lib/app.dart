@@ -2,7 +2,6 @@ import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/presentation/widgets/app_limit_layout_builder_widget.dart';
 import 'package:app/core/service/firebase/firebase_service.dart';
 import 'package:app/core/service/matrix/matrix_service.dart';
-import 'package:app/core/utils/navigation_utils.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
@@ -80,12 +79,14 @@ class _LemonadeAppViewState extends State<LemonadeApp> {
     final initialMessage = await FirebaseMessaging.instance.getInitialMessage();
     if (initialMessage != null) {
       try {
-        String type = initialMessage.data['type'];
-        String objectId = initialMessage.data['object_id'];
-        String objectType = initialMessage.data['object_type'];
+        // String type = initialMessage.data['type'];
+        // String objectId = initialMessage.data['object_id'];
+        // String objectType = initialMessage.data['object_type'];
         // NavigationUtils.handleNotificationNavigate(context, type, objectType, objectId);
       } catch (e) {
-        print('Error parsing JSON: $e');
+        if (kDebugMode) {
+          print('Error parsing JSON: $e');
+        }
       }
     }
   }

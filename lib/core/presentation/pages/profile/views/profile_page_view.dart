@@ -20,9 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
-
 class ProfilePageView extends StatefulWidget {
-
   const ProfilePageView({
     super.key,
     required this.userId,
@@ -33,7 +31,8 @@ class ProfilePageView extends StatefulWidget {
   State<ProfilePageView> createState() => _ProfilePageViewState();
 }
 
-class _ProfilePageViewState extends State<ProfilePageView> with SingleTickerProviderStateMixin {
+class _ProfilePageViewState extends State<ProfilePageView>
+    with SingleTickerProviderStateMixin {
   int get _tabCount => 5;
 
   late final TabController _tabCtrl = TabController(
@@ -68,14 +67,18 @@ class _ProfilePageViewState extends State<ProfilePageView> with SingleTickerProv
                 child: NestedScrollView(
                   headerSliverBuilder: (context, innerBoxIsScrolled) => [
                     SliverOverlapAbsorber(
-                      handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                      handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                          context),
                       sliver: MultiSliver(
                         children: [
                           SliverPersistentHeader(
                             pinned: true,
                             delegate: ProfileAnimatedAppBar(
-                              title: '@${userProfile.username ?? t.common.anonymous}',
-                              leading: isMe ? const AppBarLogo() : const LemonBackButton(),
+                              title:
+                                  '@${userProfile.username ?? t.common.anonymous}',
+                              leading: isMe
+                                  ? const AppBarLogo()
+                                  : const LemonBackButton(),
                               actions: [
                                 if (isMe)
                                   const BurgerMenu(isRightDrawer: true)
@@ -85,8 +88,9 @@ class _ProfilePageViewState extends State<ProfilePageView> with SingleTickerProv
                                     onTap: () {},
                                     child: ThemeSvgIcon(
                                       color: colorScheme.onPrimary,
-                                      builder: (filter) =>
-                                          Assets.icons.icMoreHoriz.svg(colorFilter: filter),
+                                      builder: (filter) => Assets
+                                          .icons.icMoreHoriz
+                                          .svg(colorFilter: filter),
                                     ),
                                   ),
                               ],
@@ -100,7 +104,8 @@ class _ProfilePageViewState extends State<ProfilePageView> with SingleTickerProv
                           ),
                           SliverPersistentHeader(
                             pinned: true,
-                            delegate: ProfileTabBarDelegate(controller: _tabCtrl),
+                            delegate:
+                                ProfileTabBarDelegate(controller: _tabCtrl),
                           ),
                         ],
                       ),

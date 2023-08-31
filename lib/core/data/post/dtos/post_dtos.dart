@@ -26,5 +26,6 @@ class PostDto with _$PostDto {
     bool? published,
   }) = _PostDto;
 
-  factory PostDto.fromJson(Map<String, dynamic> json) => _$PostDtoFromJson(json);
+  factory PostDto.fromJson(Map<String, dynamic> json) =>
+      _$PostDtoFromJson(json);
 }

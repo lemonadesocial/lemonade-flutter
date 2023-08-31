@@ -58,6 +58,7 @@ class ImageViewerPage extends StatelessWidget {
   final Widget Function()? imageBuilder;
 
   const ImageViewerPage({
+    super.key,
     required this.heroTag,
     this.imageUrl,
     this.imageBuilder,
@@ -108,7 +109,7 @@ class ImageViewerPage extends StatelessWidget {
   }
 
   _buildImage() {
-    return Container(
+    return SizedBox(
       width: 350,
       height: 350,
       child: ClipRRect(

@@ -10,22 +10,22 @@ class DateFormatUtils {
   static const String timeOnlyFormat = 'hh:mm a';
 
   static String fullDateWithTime(DateTime? date) {
-    if(date == null) return '';
+    if (date == null) return '';
     return DateFormat(defaultDateFormat).format(date.toLocal());
   }
 
   static String dateOnly(DateTime? date) {
-    if(date == null) return '';
+    if (date == null) return '';
     return DateFormat(dateOnlyFormat).format(date.toLocal());
   }
 
   static String monthYearOnly(DateTime? date) {
-    if(date == null) return '';
+    if (date == null) return '';
     return DateFormat(monthYearOnlyFormat).format(date.toLocal());
   }
 
   static String timeOnly(DateTime? date) {
-    if(date == null) return '';
+    if (date == null) return '';
     return DateFormat(timeOnlyFormat).format(date.toLocal());
   }
 }

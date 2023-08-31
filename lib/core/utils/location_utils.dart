@@ -29,7 +29,8 @@ class LocationUtils {
 
   Future<bool> checkPermission() async {
     _permissionStatus = await Geolocator.checkPermission();
-    return _permissionStatus == LocationPermission.always || _permissionStatus == LocationPermission.whileInUse;
+    return _permissionStatus == LocationPermission.always ||
+        _permissionStatus == LocationPermission.whileInUse;
   }
 
   Future<bool> checkAndRequestPermission({
@@ -47,7 +48,8 @@ class LocationUtils {
 
     _permissionStatus = status;
 
-    return _permissionStatus == LocationPermission.always || _permissionStatus == LocationPermission.whileInUse;
+    return _permissionStatus == LocationPermission.always ||
+        _permissionStatus == LocationPermission.whileInUse;
   }
 
   static Future<void> goToSetting(BuildContext context) async {

@@ -24,7 +24,7 @@ class PoapCollectionItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    if(!visible) return SizedBox(width: 78.w);
+    if (!visible) return SizedBox(width: 78.w);
 
     return InkWell(
       onTap: () {
@@ -33,29 +33,29 @@ class PoapCollectionItem extends StatelessWidget {
       child: SizedBox(
         width: 78.w,
         child: Column(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(4),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: selected ? LemonColor.lavender : colorScheme.outline,
-                      ),
-                      borderRadius: BorderRadius.circular(70),
-                    ),
-                    child: LemonCircleAvatar(
-                      url: badgeCollection.imageUrl ?? '',
-                      size: 70,
-                    ),
-                  ),
-                  SizedBox(height: Spacing.superExtraSmall),
-                  Text(
-                    badgeCollection.title ?? '',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: Typo.xSmall,
-                  )
-                ],
+          children: [
+            Container(
+              padding: const EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: selected ? LemonColor.lavender : colorScheme.outline,
+                ),
+                borderRadius: BorderRadius.circular(70),
               ),
+              child: LemonCircleAvatar(
+                url: badgeCollection.imageUrl ?? '',
+                size: 70,
+              ),
+            ),
+            SizedBox(height: Spacing.superExtraSmall),
+            Text(
+              badgeCollection.title ?? '',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: Typo.xSmall,
+            )
+          ],
+        ),
       ),
     );
   }

@@ -193,4 +193,3 @@ final checkValidUsernameQuery = gql('''
 }
 
 ''');
-

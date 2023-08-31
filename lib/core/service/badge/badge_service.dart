@@ -18,7 +18,8 @@ class BadgeService {
   }
 
   List<BadgeList> removeCollection(BadgeList collection) {
-    return selectedCollections = selectedCollections.where((item) => item.id != collection.id).toList();
+    return selectedCollections =
+        selectedCollections.where((item) => item.id != collection.id).toList();
   }
 
   void updateGeoPoint(GeoPoint? point) {

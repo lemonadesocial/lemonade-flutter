@@ -24,7 +24,9 @@ class PoapPolicyEmailNodeWidget extends StatelessWidget {
           t.nft.poapPolicy.emailPolicy.title,
         ),
         Text(
-          result ? t.nft.poapPolicy.emailPolicy.qualified : t.nft.poapPolicy.emailPolicy.nonQualified,
+          result
+              ? t.nft.poapPolicy.emailPolicy.qualified
+              : t.nft.poapPolicy.emailPolicy.nonQualified,
           style: Typo.small.copyWith(
             color: colorScheme.onSecondary,
           ),

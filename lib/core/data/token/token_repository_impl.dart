@@ -45,22 +45,23 @@ class TokenRepositoryImpl implements TokenRepository {
     required GetTokenDetailInput input,
   }) async {
     final result = await _metaverseClient.query(
-      QueryOptions(document: getTokenQuery,
+      QueryOptions(
+        document: getTokenQuery,
         variables: input.toJson(),
         parserFn: (data) {
-          if(data['getToken'] == null) {
+          if (data['getToken'] == null) {
             return null;
-          } 
+          }
           return TokenDetail.fromDto(
-          TokenDetailDto.fromJson(
-            data['getToken'],
-          ),
-        );
+            TokenDetailDto.fromJson(
+              data['getToken'],
+            ),
+          );
         },
       ),
     );
 
-    if(result.hasException) return Left(Failure());
+    if (result.hasException) return Left(Failure());
     return Right(result.parsedData);
   }
 
