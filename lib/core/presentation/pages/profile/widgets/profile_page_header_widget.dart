@@ -15,6 +15,7 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:share_plus/share_plus.dart';
 
 class ProfilePageHeader extends StatelessWidget {
@@ -39,11 +40,11 @@ class ProfilePageHeader extends StatelessWidget {
               _ProfileUserNameAndTitle(user: user),
             ],
           ),
-          SizedBox(height: Spacing.smMedium),
+          SizedBox(height: 21.h),
           _ProfileUserFollow(user: user),
-          SizedBox(height: Spacing.smMedium),
+          SizedBox(height: 21.h),
           _ActionButtons(user: user),
-          SizedBox(height: Spacing.smMedium),
+          SizedBox(height: Spacing.xSmall),
         ],
       ),
     );
@@ -169,7 +170,7 @@ class _ProfileUserFollow extends StatelessWidget {
           Text(
             '${user.tagline}',
             style: Typo.medium.copyWith(
-                color: LemonColor.paleViolet, fontWeight: FontWeight.w400),
+                color: LemonColor.white72, fontWeight: FontWeight.w400),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
@@ -206,26 +207,16 @@ class _ProfileUserNameAndTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
-    return Flexible(
-      child: Column(
+    return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 200),
-                child: Text(
-                  displayName ?? t.common.anonymous,
-                  style: Typo.large,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 2,
-                ),
-              ),
-              SizedBox(width: Spacing.superExtraSmall),
-              if (user.username?.isNotEmpty == true)
+          if (user.username?.isNotEmpty == true)
                 TextBadge(label: '@${user.username}'),
-            ],
+          Text(
+            displayName ?? t.common.anonymous,
+            style: Typo.extraMedium,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 2,
           ),
           Text(
             user.jobTitle ?? user.tagline ?? '...',
@@ -234,7 +225,6 @@ class _ProfileUserNameAndTitle extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
           )
         ],
-      ),
     );
   }
 }
