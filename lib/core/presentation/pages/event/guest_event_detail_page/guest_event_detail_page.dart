@@ -102,18 +102,21 @@ class _GuestEventDetailPageViewState extends State<_GuestEventDetailPageView> {
                           ),
                         ),
                       ),
-                      SliverPadding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-                        sliver: SliverToBoxAdapter(
-                          child: GuestEventLocation(event: event),
+                      if (event.latitude != null &&
+                          event.longitude != null) ...[
+                        SliverPadding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: Spacing.smMedium),
+                          sliver: SliverToBoxAdapter(
+                            child: GuestEventLocation(event: event),
+                          ),
                         ),
-                      ),
-                      SliverPadding(
-                        padding: EdgeInsets.symmetric(
-                          vertical: Spacing.smMedium,
+                        SliverPadding(
+                          padding: EdgeInsets.symmetric(
+                            vertical: Spacing.smMedium,
+                          ),
                         ),
-                      ),
+                      ],
                       SliverToBoxAdapter(
                         child: GuestEventDetailPhotos(event: event),
                       ),

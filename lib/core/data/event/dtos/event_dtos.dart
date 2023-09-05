@@ -9,23 +9,24 @@ part 'event_dtos.g.dart';
 @freezed
 class EventDto with _$EventDto {
   @JsonSerializable(explicitToJson: true)
-  factory EventDto({
-    @JsonKey(name: '_id') String? id,
-    @JsonKey(name: 'host_expanded') UserDto? hostExpanded,
-    @JsonKey(name: 'new_new_photos_expanded')
-    List<DbFileDto?>? newNewPhotosExpanded,
-    @JsonKey(name: 'cohosts_expanded') List<UserDto?>? cohostsExpanded,
-    String? title,
-    String? slug,
-    String? host,
-    List<BroadcastDto>? broadcasts,
-    String? description,
-    DateTime? start,
-    DateTime? end,
-    double? cost,
-    Currency? currency,
-    List<String>? accepted,
-  }) = _EventDto;
+  factory EventDto(
+      {@JsonKey(name: '_id') String? id,
+      @JsonKey(name: 'host_expanded') UserDto? hostExpanded,
+      @JsonKey(name: 'new_new_photos_expanded')
+      List<DbFileDto?>? newNewPhotosExpanded,
+      @JsonKey(name: 'cohosts_expanded') List<UserDto?>? cohostsExpanded,
+      String? title,
+      String? slug,
+      String? host,
+      List<BroadcastDto>? broadcasts,
+      String? description,
+      DateTime? start,
+      DateTime? end,
+      double? cost,
+      Currency? currency,
+      List<String>? accepted,
+      double? latitude,
+      double? longitude}) = _EventDto;
 
   factory EventDto.fromJson(Map<String, dynamic> json) =>
       _$EventDtoFromJson(json);

@@ -42,4 +42,7 @@ class AppConfig {
       dotenv.env['PUSH_NOTIFICATION_GATEWAY_URL'];
 
   static get hideTypingUsernames => false;
+
+  // Google map
+  static get googleMapKey => dotenv.env['GOOGLE_MAP_KEY'];
 }

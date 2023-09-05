@@ -415,10 +415,6 @@ class $AssetsImagesGen {
   AssetGenImage get bgGetStarted3x =>
       const AssetGenImage('assets/images/bg_get_started@3x.png');
 
-  /// File path: assets/images/fake_event_location.png
-  AssetGenImage get fakeEventLocation =>
-      const AssetGenImage('assets/images/fake_event_location.png');
-
   /// List of all assets
   List<AssetGenImage> get values => [
         bgChat,
@@ -429,8 +425,7 @@ class $AssetsImagesGen {
         bgCircle3x,
         bgGetStarted,
         bgGetStarted2x,
-        bgGetStarted3x,
-        fakeEventLocation
+        bgGetStarted3x
       ];
 }
 

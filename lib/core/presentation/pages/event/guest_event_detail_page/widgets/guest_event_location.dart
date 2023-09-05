@@ -1,51 +1,34 @@
+import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/presentation/pages/event/guest_event_detail_page/widgets/ripple_marker.dart';
+import 'package:app/core/utils/map_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-// TODO
-// import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class GuestEventLocation extends StatefulWidget {
+class GuestEventLocation extends StatelessWidget {
   const GuestEventLocation({
     super.key,
     required this.event,
   });
 
   final Event event;
-  // TODO
-  // static const CameraPosition _kGooglePlex = CameraPosition(
-  //   target: LatLng(10.809382096561233, 106.61644131717077),
-  //   zoom: 14.4746,
-  // );
-
-  @override
-  State<GuestEventLocation> createState() => _GuestEventLocationState();
-}
-
-class _GuestEventLocationState extends State<GuestEventLocation> {
-  // TODO:
-  // late final String _mapStyle = Assets.googleMap.googleMapCustomStyle;
-  // late GoogleMapController _mapController;
-
-  @override
-  void initState() {
-    super.initState();
-    // TODO:
-    // DefaultAssetBundle.of(context).loadString(
-    //   Assets.googleMap.googleMapCustomStyle,
-    //   ).then((value) {
-    //   _mapStyle = value;
-    // });
-  }
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
+    final userId = context.read<AuthBloc>().state.maybeWhen(
+        authenticated: (authSession) => authSession.userId, orElse: () => '');
+    final isAttending = (event.accepted ?? []).contains(userId);
+
     return SizedBox(
       width: double.infinity,
       height: 144.w,
@@ -54,25 +37,31 @@ class _GuestEventLocationState extends State<GuestEventLocation> {
           SizedBox(
             width: 144.w,
             child: ClipRRect(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(15.sp),
-                bottomLeft: Radius.circular(15.sp),
-              ),
-              child: Assets.images.fakeEventLocation.image(
-                fit: BoxFit.cover,
-                width: 144.w,
-                height: 144.w,
-              ),
-              // TODO:
-              // child: GoogleMap(
-              //   initialCameraPosition: GuestEventLocation._kGooglePlex,
-              //   onMapCreated: (controller) async {
-              //     _mapController = controller;
-              //     _mapController.setMapStyle(_mapStyle);
-              //   },
-              //   myLocationButtonEnabled: false,
-              // ),
-            ),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(15.sp),
+                  bottomLeft: Radius.circular(15.sp),
+                ),
+                child: Stack(
+                  children: [
+                    Positioned.fill(
+                      child: CachedNetworkImage(
+                        fit: BoxFit.cover,
+                        imageUrl: MapUtils.createGoogleMapsURL(
+                          lat: event.latitude ?? 0,
+                          lng: event.longitude ?? 0,
+                          attended: isAttending,
+                        ),
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: RippleMarker(
+                        size: 90.w,
+                        color: LemonColor.rippleMarkerColor,
+                      ),
+                    )
+                  ],
+                )),
           ),
           Flexible(
             child: Container(

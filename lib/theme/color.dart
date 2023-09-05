@@ -67,6 +67,9 @@ class LemonColor {
   static const femaleActiveColor = Color(0xFFF691B5);
   static const maleActiveColor = Color(0xFF91C0F6);
   static const ambiguousActiveColor = Color(0xFFA591F6);
+
+  // ripple marker
+  static const rippleMarkerColor = Color.fromRGBO(89, 210, 116, 0.24);
 }
 
 final ColorScheme lemonadeLightThemeColorScheme = ColorScheme.light(
