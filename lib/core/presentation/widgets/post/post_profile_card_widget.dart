@@ -144,22 +144,26 @@ class PostProfileCard extends StatelessWidget {
   }
 
   Widget _buildActions(ColorScheme colorScheme) {
-    final hasReactionColor =
-        hasReaction ?? false ? colorScheme.tertiary : colorScheme.onSecondary;
+    final svgIcon = hasReaction ?? false
+        ? ThemeSvgIcon(
+            builder: (filter) => Assets.icons.icHeartFillled.svg(
+              width: 18.w,
+              height: 18.w,
+            ),
+          )
+        : ThemeSvgIcon(
+            builder: (filter) => Assets.icons.icHeart.svg(
+              width: 18.w,
+              height: 18.w,
+            ),
+          );
     return Padding(
       padding: EdgeInsets.only(top: Spacing.xSmall),
       child: Row(
         children: [
           Row(
             children: [
-              ThemeSvgIcon(
-                color: hasReactionColor,
-                builder: (filter) => Assets.icons.icHeart.svg(
-                  colorFilter: filter,
-                  width: 18.w,
-                  height: 18.w,
-                ),
-              ),
+              svgIcon,
               const SizedBox(width: 3),
               Text(
                 reactions != null ? '$reactions' : '',
