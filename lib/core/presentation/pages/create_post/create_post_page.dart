@@ -8,7 +8,7 @@ import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:slang/builder/utils/string_extensions.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../i18n/i18n.g.dart';
 import '../../../../injection/register_module.dart';
@@ -46,38 +46,12 @@ class CreatePostPage extends StatelessWidget {
           if (state.status == CreatePostStatus.error) {}
         },
         builder: (context, state) {
+          final sendDisabled = createPostBloc.state.postDescription?.isEmpty ?? true;
           return Scaffold(
             backgroundColor: colorScheme.primary,
             appBar: AppBar(
               leading: const LemonBackButton(),
               actions: [
-                Row(
-                  children: [
-                    ElevatedButton(
-                      onPressed:
-                          createPostBloc.state.postDescription?.isEmpty ?? true
-                              ? null
-                              : createPostBloc.createNewPost,
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(32),
-                        ),
-                        padding: EdgeInsets.symmetric(
-                          horizontal: Spacing.smMedium,
-                          vertical: Spacing.superExtraSmall,
-                        ),
-                        backgroundColor: colorScheme.onTertiary,
-                        disabledBackgroundColor:
-                            colorScheme.onSecondaryContainer,
-                      ),
-                      child: Text(
-                        t.post.post,
-                        style:
-                            Typo.medium.copyWith(fontWeight: FontWeight.w700),
-                      ),
-                    ),
-                  ],
-                ),
                 SizedBox(width: Spacing.smMedium),
               ],
               elevation: 0,
@@ -173,31 +147,55 @@ class CreatePostPage extends StatelessWidget {
                             ],
                           ),
                         ),
-                        InkWell(
-                          onTap: () => createPostBloc
-                              .onPostPrivacyChange(state.postPrivacy),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: colorScheme.primary,
-                              borderRadius: BorderRadius.circular(32),
-                              border: Border.all(
-                                color: colorScheme.outline,
+                        state.status == CreatePostStatus.loading
+                            ? Container(
+                                width: 80.w,
+                                height: 36.h,
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: Spacing.medium,
+                                  vertical: Spacing.superExtraSmall,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: colorScheme.onTertiary,
+                                  borderRadius: BorderRadius.circular(LemonRadius.small),
+                                ),
+                                child: Center(
+                                  child: CircularProgressIndicator(
+                                    color: colorScheme.onPrimary,
+                                  ),
+                                ),
+                              )
+                            : SizedBox(
+                                width: 80.w,
+                                height: 36.h,
+                                child: ElevatedButton(
+                                  onPressed: sendDisabled ? null : createPostBloc.createNewPost,
+                                  style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(LemonRadius.small),
+                                    ),
+                                    alignment: Alignment.center,
+                                    backgroundColor: colorScheme.onTertiary,
+                                    disabledBackgroundColor: colorScheme.onSecondaryContainer,
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        t.post.post,
+                                        style: Typo.medium.copyWith(fontWeight: FontWeight.w700),
+                                      ),
+                                      SizedBox(width: Spacing.extraSmall),
+                                      ThemeSvgIcon(
+                                        color: sendDisabled
+                                            ? colorScheme.onSurfaceVariant
+                                            : colorScheme.onPrimary,
+                                        builder: (filter) =>
+                                            Assets.icons.icSendMessage.svg(colorFilter: filter),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ),
-                            ),
-                            padding: EdgeInsets.symmetric(
-                              vertical: Spacing.superExtraSmall,
-                              horizontal: Spacing.small,
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Assets.icons.icPublic.svg(),
-                                SizedBox(width: Spacing.superExtraSmall),
-                                Text(state.postPrivacy.name.capitalize()),
-                              ],
-                            ),
-                          ),
-                        ),
                       ],
                     ),
                   ),
