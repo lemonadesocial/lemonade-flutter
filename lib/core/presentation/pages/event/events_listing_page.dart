@@ -194,13 +194,15 @@ class _EventsListingViewState extends State<_EventsListingView> {
                   LemonChip(
                     label: t.event.attending,
                     isActive: eventListingType == EventListingType.attending,
-                    onTap: () => _selectEventListingType(EventListingType.attending),
+                    onTap: () =>
+                        _selectEventListingType(EventListingType.attending),
                   ),
                   SizedBox(width: Spacing.superExtraSmall),
                   LemonChip(
                     label: t.event.hosting,
                     isActive: eventListingType == EventListingType.hosting,
-                    onTap: () => _selectEventListingType(EventListingType.hosting),
+                    onTap: () =>
+                        _selectEventListingType(EventListingType.hosting),
                   ),
                 ],
               ),

@@ -167,9 +167,9 @@ class EventPostCard extends StatelessWidget {
               Text(
                 DateFormatUtils.fullDateWithTime(event.start),
                 style: Typo.small.copyWith(
-                    color: colorScheme.onSurface,
-                    height: 1.5,
-                    fontFamily: FontFamily.circularStd,
+                  color: colorScheme.onSurface,
+                  height: 1.5,
+                  fontFamily: FontFamily.circularStd,
                 ),
               )
             ],

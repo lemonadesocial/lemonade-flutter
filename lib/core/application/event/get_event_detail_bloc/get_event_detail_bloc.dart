@@ -7,7 +7,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'get_event_detail_bloc.freezed.dart';
 
-class GetEventDetailBloc extends Bloc<GetEventDetailEvent, GetEventDetailState> {
+class GetEventDetailBloc
+    extends Bloc<GetEventDetailEvent, GetEventDetailState> {
   GetEventDetailBloc() : super(const GetEventDetailStateLoading()) {
     on<GetEventDetailEventFetch>(_onFetch);
   }

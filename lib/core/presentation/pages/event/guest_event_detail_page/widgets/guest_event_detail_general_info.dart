@@ -23,7 +23,10 @@ class GuestEventDetailGeneralInfo extends StatelessWidget {
       children: [
         Text(
           event.title ?? '',
-          style: Typo.extraLarge.copyWith(fontFamily: FontFamily.nohemiVariable, color: colorScheme.onPrimary),
+          style: Typo.extraLarge.copyWith(
+            fontFamily: FontFamily.nohemiVariable,
+            color: colorScheme.onPrimary,
+          ),
         ),
         SizedBox(height: Spacing.superExtraSmall / 2),
         Text(

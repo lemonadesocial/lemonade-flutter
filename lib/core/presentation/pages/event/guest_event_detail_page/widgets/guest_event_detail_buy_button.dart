@@ -27,22 +27,23 @@ class GuestEventDetailBuyButton extends StatelessWidget {
         ? NumberUtils.formatCurrency(
             amount: event.cost!,
             currency: event.currency,
-            freeText: '${t.event.tickets}  •  ${StringUtils.capitalize(t.event.free)}',
+            freeText:
+                '${t.event.tickets}  •  ${StringUtils.capitalize(t.event.free)}',
             prefix: '${t.event.tickets}  •  ',
           )
         : t.event.free;
     return SafeArea(
       child: Container(
         color: colorScheme.primary,
-        padding: EdgeInsets.symmetric(vertical: Spacing.smMedium, horizontal: Spacing.smMedium),
+        padding: EdgeInsets.symmetric(
+            vertical: Spacing.smMedium, horizontal: Spacing.smMedium),
         child: SizedBox(
           height: Sizing.large,
           child: LinearGradientButton(
             leading: ThemeSvgIcon(
               color: colorScheme.onPrimary,
-              builder: (filter) => Assets.icons.icTicketBold.svg(
-                colorFilter: filter
-              ),
+              builder: (filter) =>
+                  Assets.icons.icTicketBold.svg(colorFilter: filter),
             ),
             radius: BorderRadius.circular(LemonRadius.small * 2),
             mode: GradientButtonMode.lavenderMode,

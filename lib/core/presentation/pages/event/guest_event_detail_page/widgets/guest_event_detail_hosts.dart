@@ -1,4 +1,3 @@
-
 import 'dart:ui';
 
 import 'package:app/core/domain/event/entities/event.dart';
@@ -122,8 +121,10 @@ class _EventHostItem extends StatelessWidget {
                             borderRadius: BorderRadius.circular(60.r),
                             child: CachedNetworkImage(
                               fit: BoxFit.cover,
-                              placeholder: (_, __) => ImagePlaceholder.eventCard(),
-                              errorWidget: (_, __, ___) => ImagePlaceholder.eventCard(),
+                              placeholder: (_, __) =>
+                                  ImagePlaceholder.eventCard(),
+                              errorWidget: (_, __, ___) =>
+                                  ImagePlaceholder.eventCard(),
                               imageUrl: ImageUtils.generateUrl(
                                 file: host?.newPhotosExpanded?.first,
                                 imageConfig: ImageConfig.eventPhoto,

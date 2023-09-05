@@ -43,7 +43,8 @@ class _GuestEventDetailPageView extends StatefulWidget {
   const _GuestEventDetailPageView();
 
   @override
-  State<_GuestEventDetailPageView> createState() => _GuestEventDetailPageViewState();
+  State<_GuestEventDetailPageView> createState() =>
+      _GuestEventDetailPageViewState();
 }
 
 class _GuestEventDetailPageViewState extends State<_GuestEventDetailPageView> {
@@ -54,7 +55,8 @@ class _GuestEventDetailPageViewState extends State<_GuestEventDetailPageView> {
   void initState() {
     super.initState();
     _scrollController.addListener(() {
-      final mIsSliverAppBarCollapsed = _scrollController.hasClients && _scrollController.offset > 150.w;
+      final mIsSliverAppBarCollapsed =
+          _scrollController.hasClients && _scrollController.offset > 150.w;
       if (_isSliverAppBarCollapsed == mIsSliverAppBarCollapsed) return;
       setState(() {
         _isSliverAppBarCollapsed = mIsSliverAppBarCollapsed;
@@ -92,7 +94,8 @@ class _GuestEventDetailPageViewState extends State<_GuestEventDetailPageView> {
                         padding: EdgeInsets.only(top: Spacing.large),
                       ),
                       SliverPadding(
-                        padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: Spacing.smMedium),
                         sliver: SliverToBoxAdapter(
                           child: GuestEventDetailGeneralInfo(
                             event: event,
@@ -100,7 +103,8 @@ class _GuestEventDetailPageViewState extends State<_GuestEventDetailPageView> {
                         ),
                       ),
                       SliverPadding(
-                        padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: Spacing.smMedium),
                         sliver: SliverToBoxAdapter(
                           child: GuestEventLocation(event: event),
                         ),
@@ -138,14 +142,19 @@ class _GuestEventDetailPageViewState extends State<_GuestEventDetailPageView> {
                         children: [
                           BlurCircle(
                             child: LemonBackButton(
-                              color: _isSliverAppBarCollapsed ? colorScheme.onPrimary : colorScheme.onSurface,
+                              color: _isSliverAppBarCollapsed
+                                  ? colorScheme.onPrimary
+                                  : colorScheme.onSurface,
                             ),
                           ),
                           BlurCircle(
                             child: Center(
                               child: ThemeSvgIcon(
-                                color: _isSliverAppBarCollapsed ? colorScheme.onPrimary : colorScheme.onSurface,
-                                builder: (filter) => Assets.icons.icMoreHoriz.svg(
+                                color: _isSliverAppBarCollapsed
+                                    ? colorScheme.onPrimary
+                                    : colorScheme.onSurface,
+                                builder: (filter) =>
+                                    Assets.icons.icMoreHoriz.svg(
                                   colorFilter: filter,
                                 ),
                               ),

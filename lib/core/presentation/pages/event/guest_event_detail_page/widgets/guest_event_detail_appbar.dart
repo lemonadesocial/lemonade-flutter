@@ -11,7 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class GuestEventDetailAppBar extends StatelessWidget {
-  const GuestEventDetailAppBar({super.key, 
+  const GuestEventDetailAppBar({
+    super.key,
     required this.event,
     required this.isCollapsed,
   });
@@ -28,17 +29,16 @@ class GuestEventDetailAppBar extends StatelessWidget {
       collapsedHeight: 60.w,
       expandedHeight: 188.w,
       centerTitle: true,
-      title: 
-          AnimatedOpacity(
-            duration: const Duration(milliseconds: 300),
-            opacity: isCollapsed ? 1 : 0,  
-            child: Text(
-              event.title ?? '',
-              style: Typo.extraMedium.copyWith(
-                fontFamily: FontFamily.switzerVariable,
-              ),
-            ),
+      title: AnimatedOpacity(
+        duration: const Duration(milliseconds: 300),
+        opacity: isCollapsed ? 1 : 0,
+        child: Text(
+          event.title ?? '',
+          style: Typo.extraMedium.copyWith(
+            fontFamily: FontFamily.switzerVariable,
           ),
+        ),
+      ),
       flexibleSpace: FlexibleSpaceBar(
         expandedTitleScale: 1,
         collapseMode: CollapseMode.pin,
@@ -48,14 +48,14 @@ class GuestEventDetailAppBar extends StatelessWidget {
   }
 }
 
-
 class _EventDetailCover extends StatelessWidget {
   const _EventDetailCover({required this.event});
 
   final Event event;
 
   DbFile? get cover {
-    if (event.newNewPhotosExpanded == null || event.newNewPhotosExpanded!.isEmpty) {
+    if (event.newNewPhotosExpanded == null ||
+        event.newNewPhotosExpanded!.isEmpty) {
       return null;
     }
     return event.newNewPhotosExpanded!.first;
@@ -73,7 +73,8 @@ class _EventDetailCover extends StatelessWidget {
               fit: BoxFit.cover,
               placeholder: (_, __) => ImagePlaceholder.eventCard(),
               errorWidget: (_, __, ___) => ImagePlaceholder.eventCard(),
-              imageUrl: ImageUtils.generateUrl(file: cover, imageConfig: ImageConfig.eventPoster),
+              imageUrl: ImageUtils.generateUrl(
+                  file: cover, imageConfig: ImageConfig.eventPoster),
             ),
           ),
         ],
@@ -81,7 +82,6 @@ class _EventDetailCover extends StatelessWidget {
     );
   }
 }
-
 
 class BlurCircle extends StatelessWidget {
   const BlurCircle({
