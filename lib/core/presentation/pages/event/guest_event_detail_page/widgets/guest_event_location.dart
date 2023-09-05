@@ -94,8 +94,7 @@ class _GuestEventLocationState extends State<GuestEventLocation> {
                   const Spacer(),
                   Text(
                     t.event.eventLocation,
-                    style: TextStyle(
-                      fontSize: 16.sp,
+                    style: Typo.mediumPlus.copyWith(
                       fontFamily: FontFamily.switzerVariable,
                       fontWeight: FontWeight.w600,
                     ),

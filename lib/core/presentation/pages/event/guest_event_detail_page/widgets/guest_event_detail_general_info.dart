@@ -1,5 +1,5 @@
 import 'package:app/core/domain/event/entities/event.dart';
-import 'package:app/core/presentation/pages/event/guest_event_detail_page/widgets/more_less_description.dart';
+import 'package:app/core/presentation/widgets/common/readmore/readmore_widget.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/theme/spacing.dart';
@@ -36,9 +36,7 @@ class GuestEventDetailGeneralInfo extends StatelessWidget {
           height: Spacing.smMedium,
         ),
         if (event.description != null && event.description!.isNotEmpty) ...[
-          MoreLessDescription(
-            description: event.description ?? '',
-          ),
+          ReadMoreWidget(body: event.description ?? ''),
           SizedBox(
             height: Spacing.xSmall * 3,
           ),

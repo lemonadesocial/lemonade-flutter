@@ -5,6 +5,7 @@ import 'package:app/core/utils/image_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:app/theme/typo.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -33,8 +34,7 @@ class GuestEventDetailPhotos extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
           child: Text(
             StringUtils.capitalize(t.common.photo(n: 2)),
-            style: TextStyle(
-              fontSize: 16.sp,
+            style: Typo.mediumPlus.copyWith(
               fontWeight: FontWeight.w600,
               color: colorScheme.onPrimary,
             ),
