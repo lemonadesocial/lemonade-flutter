@@ -59,6 +59,7 @@ class _LemonadeAppViewState extends State<LemonadeApp> {
   Widget build(BuildContext context) {
     ScreenUtil.init(
       context,
+      minTextAdapt: true,
       designSize: getDeviceType() == DeviceType.phone
           ? const Size(375, 812) //Iphone X screen size, match Figma
           : const Size(1024, 1366), //Ipad Pro 12.9 inches
