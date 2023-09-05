@@ -4,6 +4,7 @@ import 'package:app/core/presentation/pages/event/guest_event_detail_page/widget
 import 'package:app/core/presentation/pages/event/guest_event_detail_page/widgets/guest_event_detail_general_info.dart';
 import 'package:app/core/presentation/pages/event/guest_event_detail_page/widgets/guest_event_detail_hosts.dart';
 import 'package:app/core/presentation/pages/event/guest_event_detail_page/widgets/guest_event_detail_photos.dart';
+import 'package:app/core/presentation/pages/event/guest_event_detail_page/widgets/guest_event_location.dart';
 import 'package:app/core/presentation/widgets/back_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
@@ -96,6 +97,17 @@ class _GuestEventDetailPageViewState extends State<_GuestEventDetailPageView> {
                           child: GuestEventDetailGeneralInfo(
                             event: event,
                           ),
+                        ),
+                      ),
+                      SliverPadding(
+                        padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+                        sliver: SliverToBoxAdapter(
+                          child: GuestEventLocation(event: event),
+                        ),
+                      ),
+                      SliverPadding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: Spacing.smMedium,
                         ),
                       ),
                       SliverToBoxAdapter(

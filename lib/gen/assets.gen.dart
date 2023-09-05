@@ -51,6 +51,17 @@ class $AssetsFontsGen {
       ];
 }
 
+class $AssetsGoogleMapGen {
+  const $AssetsGoogleMapGen();
+
+  /// File path: assets/google-map/google-map-custom-style.json
+  String get googleMapCustomStyle =>
+      'assets/google-map/google-map-custom-style.json';
+
+  /// List of all assets
+  List<String> get values => [googleMapCustomStyle];
+}
+
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
@@ -203,6 +214,9 @@ class $AssetsIconsGen {
   SvgGenImage get icLinkedin =>
       const SvgGenImage('assets/icons/ic_linkedin.svg');
 
+  /// File path: assets/icons/ic_lock.svg
+  SvgGenImage get icLock => const SvgGenImage('assets/icons/ic_lock.svg');
+
   /// File path: assets/icons/ic_matches.svg
   SvgGenImage get icMatches => const SvgGenImage('assets/icons/ic_matches.svg');
 
@@ -338,6 +352,7 @@ class $AssetsIconsGen {
         icLemonOutline,
         icLemonadeWhite,
         icLinkedin,
+        icLock,
         icMatches,
         icMenu,
         icMessage,
@@ -406,6 +421,10 @@ class $AssetsImagesGen {
   AssetGenImage get bgGetStarted3x =>
       const AssetGenImage('assets/images/bg_get_started@3x.png');
 
+  /// File path: assets/images/fake_event_location.png
+  AssetGenImage get fakeEventLocation =>
+      const AssetGenImage('assets/images/fake_event_location.png');
+
   /// List of all assets
   List<AssetGenImage> get values => [
         bgChat,
@@ -416,7 +435,8 @@ class $AssetsImagesGen {
         bgCircle3x,
         bgGetStarted,
         bgGetStarted2x,
-        bgGetStarted3x
+        bgGetStarted3x,
+        fakeEventLocation
       ];
 }
 
@@ -434,6 +454,7 @@ class Assets {
   Assets._();
 
   static const $AssetsFontsGen fonts = $AssetsFontsGen();
+  static const $AssetsGoogleMapGen googleMap = $AssetsGoogleMapGen();
   static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
   static const String index = 'assets/index.html';

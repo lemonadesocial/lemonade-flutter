@@ -11,5 +11,7 @@
     "empty_attending_events": "You are currently not attending any events $time",
     "empty_hosting_events": "You are currently not hosting any events $time",
     "noEvents": "No events yet",
-    "buyTickets": "Buy tickets"
+    "buyTickets": "Buy tickets",
+    "rsvpToUnlock": "RSVP to this event to unlock the location",
+    "eventLocation": "Location"
 }

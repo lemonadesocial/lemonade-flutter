@@ -30,7 +30,7 @@ const eventFragment = '''
   cohosts_expanded(limit: 25) {
     ...eventHostExpandedFragment
   }
-  new_new_photos_expanded(limit: 1) {
+  new_new_photos_expanded(limit: 25) {
     key
     bucket
   }

@@ -1,9 +1,9 @@
 /// Generated file. Do not edit.
 ///
 /// Locales: 1
-/// Strings: 188
+/// Strings: 190
 ///
-/// Built on 2023-08-31 at 09:31 UTC
+/// Built on 2023-09-05 at 06:52 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -361,6 +361,8 @@ class _I18nEventEn {
 	String empty_hosting_events({required Object time}) => 'You are currently not hosting any events ${time}';
 	String get noEvents => 'No events yet';
 	String get buyTickets => 'Buy tickets';
+	String get rsvpToUnlock => 'RSVP to this event to unlock the location';
+	String get eventLocation => 'Location';
 }
 
 // Path: onboarding
@@ -791,6 +793,8 @@ extension on _I18nEn {
 			case 'event.empty_hosting_events': return ({required Object time}) => 'You are currently not hosting any events ${time}';
 			case 'event.noEvents': return 'No events yet';
 			case 'event.buyTickets': return 'Buy tickets';
+			case 'event.rsvpToUnlock': return 'RSVP to this event to unlock the location';
+			case 'event.eventLocation': return 'Location';
 			case 'onboarding.pickUsername': return 'Pick username';
 			case 'onboarding.pickUsernameDesc': return 'Claim your unique username before someone else does!';
 			case 'onboarding.username': return 'Username';
