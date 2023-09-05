@@ -73,6 +73,9 @@ class AppRouter extends $AppRouter {
           page: EventSelectingRoute.page,
         ),
         AutoRoute(
+          page: PhotosGalleryRoute.page,
+        ),
+        AutoRoute(
           page: OnboardingWrapperRoute.page,
           children: [
             AutoRoute(
