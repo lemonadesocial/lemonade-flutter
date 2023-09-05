@@ -6,7 +6,8 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+// TODO
+// import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class GuestEventLocation extends StatefulWidget {
   const GuestEventLocation({
@@ -15,11 +16,11 @@ class GuestEventLocation extends StatefulWidget {
   });
 
   final Event event;
-
-  static const CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(10.809382096561233, 106.61644131717077),
-    zoom: 14.4746,
-  );
+  // TODO
+  // static const CameraPosition _kGooglePlex = CameraPosition(
+  //   target: LatLng(10.809382096561233, 106.61644131717077),
+  //   zoom: 14.4746,
+  // );
 
   @override
   State<GuestEventLocation> createState() => _GuestEventLocationState();
@@ -28,7 +29,7 @@ class GuestEventLocation extends StatefulWidget {
 class _GuestEventLocationState extends State<GuestEventLocation> {
   // TODO:
   // late final String _mapStyle = Assets.googleMap.googleMapCustomStyle;
-  late GoogleMapController _mapController;
+  // late GoogleMapController _mapController;
 
   @override
   void initState() {

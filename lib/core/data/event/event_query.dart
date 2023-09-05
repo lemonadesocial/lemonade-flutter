@@ -38,6 +38,7 @@ const eventFragment = '''
   end
   cost
   currency
+  description
   broadcasts {
     provider_id
   }
