@@ -46,13 +46,18 @@ abstract class $GetPostsInputCopyWith<$Res> {
       _$GetPostsInputCopyWithImpl<$Res, GetPostsInput>;
   @useResult
   $Res call(
-      {@JsonKey(name: '_id', includeIfNull: false) String? id,
-      @JsonKey(includeIfNull: false) String? user,
-      @JsonKey(includeIfNull: false) bool? published,
+      {@JsonKey(name: '_id', includeIfNull: false)
+          String? id,
+      @JsonKey(includeIfNull: false)
+          String? user,
+      @JsonKey(includeIfNull: false)
+          bool? published,
       @JsonKey(name: 'created_at', includeIfNull: false)
-      GetPostCreatedAtInput? createdAt,
-      @JsonKey(includeIfNull: false) int? skip,
-      @JsonKey(includeIfNull: false) int? limit});
+          GetPostCreatedAtInput? createdAt,
+      @JsonKey(includeIfNull: false)
+          int? skip,
+      @JsonKey(includeIfNull: false)
+          int? limit});
 
   $GetPostCreatedAtInputCopyWith<$Res>? get createdAt;
 }
@@ -127,13 +132,18 @@ abstract class _$$_GetPostsInputCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {@JsonKey(name: '_id', includeIfNull: false) String? id,
-      @JsonKey(includeIfNull: false) String? user,
-      @JsonKey(includeIfNull: false) bool? published,
+      {@JsonKey(name: '_id', includeIfNull: false)
+          String? id,
+      @JsonKey(includeIfNull: false)
+          String? user,
+      @JsonKey(includeIfNull: false)
+          bool? published,
       @JsonKey(name: 'created_at', includeIfNull: false)
-      GetPostCreatedAtInput? createdAt,
-      @JsonKey(includeIfNull: false) int? skip,
-      @JsonKey(includeIfNull: false) int? limit});
+          GetPostCreatedAtInput? createdAt,
+      @JsonKey(includeIfNull: false)
+          int? skip,
+      @JsonKey(includeIfNull: false)
+          int? limit});
 
   @override
   $GetPostCreatedAtInputCopyWith<$Res>? get createdAt;
@@ -261,13 +271,18 @@ class _$_GetPostsInput implements _GetPostsInput {
 
 abstract class _GetPostsInput implements GetPostsInput {
   const factory _GetPostsInput(
-      {@JsonKey(name: '_id', includeIfNull: false) final String? id,
-      @JsonKey(includeIfNull: false) final String? user,
-      @JsonKey(includeIfNull: false) final bool? published,
+      {@JsonKey(name: '_id', includeIfNull: false)
+          final String? id,
+      @JsonKey(includeIfNull: false)
+          final String? user,
+      @JsonKey(includeIfNull: false)
+          final bool? published,
       @JsonKey(name: 'created_at', includeIfNull: false)
-      final GetPostCreatedAtInput? createdAt,
-      @JsonKey(includeIfNull: false) final int? skip,
-      @JsonKey(includeIfNull: false) final int? limit}) = _$_GetPostsInput;
+          final GetPostCreatedAtInput? createdAt,
+      @JsonKey(includeIfNull: false)
+          final int? skip,
+      @JsonKey(includeIfNull: false)
+          final int? limit}) = _$_GetPostsInput;
 
   factory _GetPostsInput.fromJson(Map<String, dynamic> json) =
       _$_GetPostsInput.fromJson;

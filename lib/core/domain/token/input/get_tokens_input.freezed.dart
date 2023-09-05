@@ -226,17 +226,25 @@ class __$$_GetTokensInputCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_GetTokensInput implements _GetTokensInput {
   const _$_GetTokensInput(
-      {@JsonKey(includeIfNull: false) this.owner,
+      {@JsonKey(includeIfNull: false)
+          this.owner,
       @JsonKey(name: 'owner_in', includeIfNull: false)
-      final List<String>? ownerIn,
-      @JsonKey(includeIfNull: false) this.tokenId,
-      @JsonKey(includeIfNull: false) this.contract,
-      @JsonKey(includeIfNull: false) this.id,
-      @JsonKey(includeIfNull: false, name: 'id_in') final List<String>? idIn,
-      @JsonKey(includeIfNull: false) this.creator,
-      @JsonKey(includeIfNull: false) this.network,
+          final List<String>? ownerIn,
+      @JsonKey(includeIfNull: false)
+          this.tokenId,
+      @JsonKey(includeIfNull: false)
+          this.contract,
+      @JsonKey(includeIfNull: false)
+          this.id,
+      @JsonKey(includeIfNull: false, name: 'id_in')
+          final List<String>? idIn,
+      @JsonKey(includeIfNull: false)
+          this.creator,
+      @JsonKey(includeIfNull: false)
+          this.network,
       this.skip = 0,
-      @JsonKey(includeIfNull: false) this.limit})
+      @JsonKey(includeIfNull: false)
+          this.limit})
       : _ownerIn = ownerIn,
         _idIn = idIn;
 
@@ -344,17 +352,25 @@ class _$_GetTokensInput implements _GetTokensInput {
 
 abstract class _GetTokensInput implements GetTokensInput {
   const factory _GetTokensInput(
-      {@JsonKey(includeIfNull: false) final String? owner,
+      {@JsonKey(includeIfNull: false)
+          final String? owner,
       @JsonKey(name: 'owner_in', includeIfNull: false)
-      final List<String>? ownerIn,
-      @JsonKey(includeIfNull: false) final String? tokenId,
-      @JsonKey(includeIfNull: false) final String? contract,
-      @JsonKey(includeIfNull: false) final String? id,
-      @JsonKey(includeIfNull: false, name: 'id_in') final List<String>? idIn,
-      @JsonKey(includeIfNull: false) final String? creator,
-      @JsonKey(includeIfNull: false) final String? network,
+          final List<String>? ownerIn,
+      @JsonKey(includeIfNull: false)
+          final String? tokenId,
+      @JsonKey(includeIfNull: false)
+          final String? contract,
+      @JsonKey(includeIfNull: false)
+          final String? id,
+      @JsonKey(includeIfNull: false, name: 'id_in')
+          final List<String>? idIn,
+      @JsonKey(includeIfNull: false)
+          final String? creator,
+      @JsonKey(includeIfNull: false)
+          final String? network,
       final int skip,
-      @JsonKey(includeIfNull: false) final int? limit}) = _$_GetTokensInput;
+      @JsonKey(includeIfNull: false)
+          final int? limit}) = _$_GetTokensInput;
 
   factory _GetTokensInput.fromJson(Map<String, dynamic> json) =
       _$_GetTokensInput.fromJson;
