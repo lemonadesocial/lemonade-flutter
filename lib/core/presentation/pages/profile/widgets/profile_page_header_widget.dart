@@ -208,23 +208,23 @@ class _ProfileUserNameAndTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
     return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (user.username?.isNotEmpty == true)
-                TextBadge(label: '@${user.username}'),
-          Text(
-            displayName ?? t.common.anonymous,
-            style: Typo.extraMedium,
-            overflow: TextOverflow.ellipsis,
-            maxLines: 2,
-          ),
-          Text(
-            user.jobTitle ?? user.tagline ?? '...',
-            style: Typo.medium.copyWith(color: colorScheme.onSecondary),
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          )
-        ],
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (user.username?.isNotEmpty == true)
+          TextBadge(label: '@${user.username}'),
+        Text(
+          displayName ?? t.common.anonymous,
+          style: Typo.extraMedium,
+          overflow: TextOverflow.ellipsis,
+          maxLines: 2,
+        ),
+        Text(
+          user.jobTitle ?? user.tagline ?? '...',
+          style: Typo.medium.copyWith(color: colorScheme.onSecondary),
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+        )
+      ],
     );
   }
 }
