@@ -51,17 +51,6 @@ class $AssetsFontsGen {
       ];
 }
 
-class $AssetsGoogleMapGen {
-  const $AssetsGoogleMapGen();
-
-  /// File path: assets/google-map/google-map-custom-style.json
-  String get googleMapCustomStyle =>
-      'assets/google-map/google-map-custom-style.json';
-
-  /// List of all assets
-  List<String> get values => [googleMapCustomStyle];
-}
-
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
@@ -459,7 +448,6 @@ class Assets {
   Assets._();
 
   static const $AssetsFontsGen fonts = $AssetsFontsGen();
-  static const $AssetsGoogleMapGen googleMap = $AssetsGoogleMapGen();
   static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
   static const String index = 'assets/index.html';
