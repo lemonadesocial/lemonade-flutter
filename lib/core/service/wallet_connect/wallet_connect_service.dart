@@ -27,7 +27,8 @@ enum SupportedSessionEvent {
 @lazySingleton
 class WalletConnectService {
   static const String defaultNamespace = 'eip155';
-  static String defaultRequiredChainId = AppConfig.isProduction ? ETHEREUM.chainId : GOERLI.chainId;
+  static String defaultRequiredChainId =
+      AppConfig.isProduction ? ETHEREUM.chainId : GOERLI.chainId;
 
   static const defaultMethods = [
     "personal_sign",
@@ -63,10 +64,12 @@ class WalletConnectService {
       // Register event handler for all chain in active session if available;
       final activeSession = await getActiveSession();
 
-      _registerEventHandler(WCUtils.getSessionsChains(activeSession?.namespaces));
+      _registerEventHandler(
+          WCUtils.getSessionsChains(activeSession?.namespaces));
 
       // Register event handler of all supported chains
-      _registerEventHandler(Chains.allChains.map((chain) => chain.chainId).toList());
+      _registerEventHandler(
+          Chains.allChains.map((chain) => chain.chainId).toList());
 
       _app!.onSessionEvent.subscribe(_onSessionEvent);
       _app!.onSessionUpdate.subscribe(_onSessionUpdate);
@@ -87,7 +90,8 @@ class WalletConnectService {
     if (!initialized) {
       await init();
     }
-    var activeSessions = _app?.getActiveSessions().entries.map((entry) => entry.value).toList();
+    var activeSessions =
+        _app?.getActiveSessions().entries.map((entry) => entry.value).toList();
 
     if (activeSessions?.isEmpty == true) return null;
 
@@ -103,7 +107,10 @@ class WalletConnectService {
         await init();
       }
       final optionalChainIds =
-          (AppConfig.isProduction ? Chains.mainnet : Chains.testnet).sublist(1).map((item) => item.chainId).toList();
+          (AppConfig.isProduction ? Chains.mainnet : Chains.testnet)
+              .sublist(1)
+              .map((item) => item.chainId)
+              .toList();
       final supportedEvents = defaultEvents.map((item) => item.name).toList();
       final requiredNamespace = RequiredNamespace(
         chains: [defaultRequiredChainId],
@@ -158,7 +165,8 @@ class WalletConnectService {
   }) async {
     try {
       if (_shouldChangeAccount(wallet)) {
-        SnackBarUtils.showSnackbar("Should change account to ${Web3Utils.formatIdentifier(wallet, length: 4)}");
+        SnackBarUtils.showSnackbar(
+            "Should change account to ${Web3Utils.formatIdentifier(wallet, length: 4)}");
         return null;
       }
       final chainId = _currentWalletChainId ?? defaultRequiredChainId;
@@ -186,13 +194,15 @@ class WalletConnectService {
     }
   }
 
-  String _getDeepLinkUrl(String? walletAppScheme) => '${walletAppScheme ?? 'metamask'}://wc?uri=$_url';
+  String _getDeepLinkUrl(String? walletAppScheme) =>
+      '${walletAppScheme ?? 'metamask'}://wc?uri=$_url';
 
   _onSessionEvent(SessionEvent? sessionEvent) {
     var eventName = sessionEvent?.name;
     if (eventName == 'accountsChanged') {
       if (sessionEvent?.data is List) {
-        _currentWalletAccount = NamespaceUtils.getAccount(sessionEvent?.data[0]);
+        _currentWalletAccount =
+            NamespaceUtils.getAccount(sessionEvent?.data[0]);
       }
     }
     if (eventName == 'chainChanged') {

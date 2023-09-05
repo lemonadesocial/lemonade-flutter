@@ -13,6 +13,7 @@ import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -52,7 +53,7 @@ class ProfilePageHeader extends StatelessWidget {
 class _ActionButtons extends StatelessWidget {
   final User user;
 
-  _ActionButtons({required this.user});
+  const _ActionButtons({required this.user});
 
   _shareProfileLink(context, {required User user}) async {
     try {
@@ -61,7 +62,11 @@ class _ActionButtons extends StatelessWidget {
         '${AppConfig.webUrl}/${user.username}',
         sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
       );
-    } catch (e) {}
+    } catch (e) {
+      if (kDebugMode) {
+        print("Error _shareProfileLink $e");
+      }
+    }
   }
 
   _buildMyActionsButton(BuildContext context) {
@@ -103,6 +108,7 @@ class _ActionButtons extends StatelessWidget {
     // TODO: follow feature not implemented
     var isFollowed = false;
     return isFollowed
+        // ignore: dead_code
         ? LemonOutlineButton(
             label: t.common.followed,
             leading: ThemeSvgIcon(
@@ -130,7 +136,7 @@ class _ActionButtons extends StatelessWidget {
 class _ProfileAvatar extends StatelessWidget {
   final User user;
 
-  _ProfileAvatar({required this.user});
+  const _ProfileAvatar({required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -162,7 +168,8 @@ class _ProfileUserFollow extends StatelessWidget {
         if (user.tagline?.isNotEmpty == true) ...[
           Text(
             '${user.tagline}',
-            style: Typo.medium.copyWith(color: LemonColor.paleViolet, fontWeight: FontWeight.w400),
+            style: Typo.medium.copyWith(
+                color: LemonColor.paleViolet, fontWeight: FontWeight.w400),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
@@ -188,12 +195,12 @@ class _ProfileUserFollow extends StatelessWidget {
 class _ProfileUserNameAndTitle extends StatelessWidget {
   final User user;
 
-  _ProfileUserNameAndTitle({
+  const _ProfileUserNameAndTitle({
     required this.user,
   });
 
   String? get displayName {
-    return user.displayName ?? user.username ?? null;
+    return user.displayName ?? user.username;
   }
 
   @override
@@ -207,7 +214,7 @@ class _ProfileUserNameAndTitle extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             children: [
               ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: 200),
+                constraints: const BoxConstraints(maxWidth: 200),
                 child: Text(
                   displayName ?? t.common.anonymous,
                   style: Typo.large,
@@ -216,7 +223,8 @@ class _ProfileUserNameAndTitle extends StatelessWidget {
                 ),
               ),
               SizedBox(width: Spacing.superExtraSmall),
-              if (user.username?.isNotEmpty == true) TextBadge(label: '@${user.username}'),
+              if (user.username?.isNotEmpty == true)
+                TextBadge(label: '@${user.username}'),
             ],
           ),
           Text(

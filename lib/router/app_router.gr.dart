@@ -8,7 +8,7 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:app/core/domain/event/entities/event.dart' as _i27;
+import 'package:app/core/domain/event/entities/event.dart' as _i28;
 import 'package:app/core/presentation/pages/auth/login_page.dart' as _i7;
 import 'package:app/core/presentation/pages/chat/chat_list/chat_list_page.dart'
     as _i4;
@@ -50,8 +50,9 @@ import 'package:app/core/presentation/pages/root/root_page.dart' as _i15;
 import 'package:app/core/presentation/pages/wallet/wallet_page.dart' as _i14;
 import 'package:app/core/presentation/pages/webview/webview_page.dart' as _i10;
 import 'package:auto_route/auto_route.dart' as _i25;
-import 'package:flutter/cupertino.dart' as _i28;
-import 'package:flutter/material.dart' as _i26;
+import 'package:flutter/cupertino.dart' as _i29;
+import 'package:flutter/foundation.dart' as _i26;
+import 'package:flutter/material.dart' as _i27;
 
 abstract class $AppRouter extends _i25.RootStackRouter {
   $AppRouter({super.navigatorKey});
@@ -108,9 +109,11 @@ abstract class $AppRouter extends _i25.RootStackRouter {
       );
     },
     NotificationRoute.name: (routeData) {
+      final args = routeData.argsAs<NotificationRouteArgs>(
+          orElse: () => const NotificationRouteArgs());
       return _i25.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i8.NotificationPage(),
+        child: _i8.NotificationPage(key: args.key),
       );
     },
     CreatePostRoute.name: (routeData) {
@@ -324,7 +327,7 @@ class ChatStackRoute extends _i25.PageRouteInfo<void> {
 class ChatRoute extends _i25.PageRouteInfo<ChatRouteArgs> {
   ChatRoute({
     _i26.Key? key,
-    _i26.Widget? sideView,
+    _i27.Widget? sideView,
     required String roomId,
     List<_i25.PageRouteInfo>? children,
   }) : super(
@@ -353,7 +356,7 @@ class ChatRouteArgs {
 
   final _i26.Key? key;
 
-  final _i26.Widget? sideView;
+  final _i27.Widget? sideView;
 
   final String roomId;
 
@@ -379,23 +382,38 @@ class LoginRoute extends _i25.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i8.NotificationPage]
-class NotificationRoute extends _i25.PageRouteInfo<void> {
-  const NotificationRoute({List<_i25.PageRouteInfo>? children})
-      : super(
+class NotificationRoute extends _i25.PageRouteInfo<NotificationRouteArgs> {
+  NotificationRoute({
+    _i27.Key? key,
+    List<_i25.PageRouteInfo>? children,
+  }) : super(
           NotificationRoute.name,
+          args: NotificationRouteArgs(key: key),
           initialChildren: children,
         );
 
   static const String name = 'NotificationRoute';
 
-  static const _i25.PageInfo<void> page = _i25.PageInfo<void>(name);
+  static const _i25.PageInfo<NotificationRouteArgs> page =
+      _i25.PageInfo<NotificationRouteArgs>(name);
+}
+
+class NotificationRouteArgs {
+  const NotificationRouteArgs({this.key});
+
+  final _i27.Key? key;
+
+  @override
+  String toString() {
+    return 'NotificationRouteArgs{key: $key}';
+  }
 }
 
 /// generated route for
 /// [_i9.CreatePostPage]
 class CreatePostRoute extends _i25.PageRouteInfo<CreatePostRouteArgs> {
   CreatePostRoute({
-    _i26.Key? key,
+    _i27.Key? key,
     required void Function() onPostCreated,
     List<_i25.PageRouteInfo>? children,
   }) : super(
@@ -419,7 +437,7 @@ class CreatePostRouteArgs {
     required this.onPostCreated,
   });
 
-  final _i26.Key? key;
+  final _i27.Key? key;
 
   final void Function() onPostCreated;
 
@@ -471,7 +489,7 @@ class WebviewRouteArgs {
 /// [_i11.PoapListingPage]
 class PoapListingRoute extends _i25.PageRouteInfo<PoapListingRouteArgs> {
   PoapListingRoute({
-    _i26.Key? key,
+    _i27.Key? key,
     List<_i25.PageRouteInfo>? children,
   }) : super(
           PoapListingRoute.name,
@@ -488,7 +506,7 @@ class PoapListingRoute extends _i25.PageRouteInfo<PoapListingRouteArgs> {
 class PoapListingRouteArgs {
   const PoapListingRouteArgs({this.key});
 
-  final _i26.Key? key;
+  final _i27.Key? key;
 
   @override
   String toString() {
@@ -514,7 +532,7 @@ class MyProfileRoute extends _i25.PageRouteInfo<void> {
 /// [_i13.ProfilePage]
 class ProfileRoute extends _i25.PageRouteInfo<ProfileRouteArgs> {
   ProfileRoute({
-    _i26.Key? key,
+    _i27.Key? key,
     required String userId,
     List<_i25.PageRouteInfo>? children,
   }) : super(
@@ -539,7 +557,7 @@ class ProfileRouteArgs {
     required this.userId,
   });
 
-  final _i26.Key? key;
+  final _i27.Key? key;
 
   final String userId;
 
@@ -595,8 +613,8 @@ class EmptyRoute extends _i25.PageRouteInfo<void> {
 /// [_i17.EventSelectingPage]
 class EventSelectingRoute extends _i25.PageRouteInfo<EventSelectingRouteArgs> {
   EventSelectingRoute({
-    _i26.Key? key,
-    required void Function(_i27.Event) onEventTap,
+    _i27.Key? key,
+    required void Function(_i28.Event) onEventTap,
     List<_i25.PageRouteInfo>? children,
   }) : super(
           EventSelectingRoute.name,
@@ -619,9 +637,9 @@ class EventSelectingRouteArgs {
     required this.onEventTap,
   });
 
-  final _i26.Key? key;
+  final _i27.Key? key;
 
-  final void Function(_i27.Event) onEventTap;
+  final void Function(_i28.Event) onEventTap;
 
   @override
   String toString() {
@@ -648,7 +666,7 @@ class EventsListingRoute extends _i25.PageRouteInfo<void> {
 class GuestEventDetailRoute
     extends _i25.PageRouteInfo<GuestEventDetailRouteArgs> {
   GuestEventDetailRoute({
-    _i26.Key? key,
+    _i27.Key? key,
     required String eventId,
     List<_i25.PageRouteInfo>? children,
   }) : super(
@@ -673,7 +691,7 @@ class GuestEventDetailRouteArgs {
     required this.eventId,
   });
 
-  final _i26.Key? key;
+  final _i27.Key? key;
 
   final String eventId;
 
@@ -687,7 +705,7 @@ class GuestEventDetailRouteArgs {
 /// [_i20.EventDetailPage]
 class EventDetailRoute extends _i25.PageRouteInfo<EventDetailRouteArgs> {
   EventDetailRoute({
-    _i28.Key? key,
+    _i29.Key? key,
     required String eventId,
     required String eventName,
     List<_i25.PageRouteInfo>? children,
@@ -718,7 +736,7 @@ class EventDetailRouteArgs {
     required this.eventName,
   });
 
-  final _i28.Key? key;
+  final _i29.Key? key;
 
   final String eventId;
 

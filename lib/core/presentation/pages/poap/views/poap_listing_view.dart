@@ -30,7 +30,8 @@ class PoapListingView extends StatefulWidget {
 }
 
 class _PoapListingViewState extends State<PoapListingView> {
-  final DraggableScrollableController dragController = DraggableScrollableController();
+  final DraggableScrollableController dragController =
+      DraggableScrollableController();
   final debouncer = Debouncer(milliseconds: 300);
   final refreshController = RefreshController();
 
@@ -100,12 +101,16 @@ class _PoapListingViewState extends State<PoapListingView> {
               SmartRefresher(
                 enablePullUp: true,
                 onRefresh: () async {
-                  context.read<BadgesListingBloc>().add(BadgesListingEvent.refresh());
+                  context
+                      .read<BadgesListingBloc>()
+                      .add(BadgesListingEvent.refresh());
                   await Future.delayed(const Duration(milliseconds: 500));
                   refreshController.refreshCompleted();
                 },
                 onLoading: () async {
-                  context.read<BadgesListingBloc>().add(BadgesListingEvent.fetch());
+                  context
+                      .read<BadgesListingBloc>()
+                      .add(BadgesListingEvent.fetch());
                   await Future.delayed(const Duration(milliseconds: 500));
                   refreshController.loadComplete();
                 },
@@ -136,7 +141,8 @@ class _PoapListingViewState extends State<PoapListingView> {
                           }
                           return SliverList.separated(
                             itemCount: badges.length,
-                            separatorBuilder: (context, i) => const SizedBox(height: 12),
+                            separatorBuilder: (context, i) =>
+                                const SizedBox(height: 12),
                             itemBuilder: (context, i) => PoapItem(
                               key: ValueKey(badges[i].id),
                               badge: badges[i],
@@ -146,7 +152,8 @@ class _PoapListingViewState extends State<PoapListingView> {
                       ),
                     ),
                     SliverToBoxAdapter(
-                      child: SizedBox(height: MediaQuery.of(context).size.height * 0.2),
+                      child: SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.2),
                     )
                   ],
                 ),

@@ -21,8 +21,8 @@ class AvatarUtils {
     return randomImage(
       id,
       10,
-      (num) =>
-          '${AppConfig.assetPrefix}/assets/images/avatars/lemonade_davatar_${num}.png',
+      (index) =>
+          '${AppConfig.assetPrefix}/assets/images/avatars/lemonade_davatar_$index.png',
     );
   }
 

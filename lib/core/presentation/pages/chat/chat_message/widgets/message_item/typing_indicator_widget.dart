@@ -26,7 +26,7 @@ class TypingIndicators extends StatelessWidget {
         constraints: const BoxConstraints(maxWidth: 360 * 2.5),
         height:
             typingUsers.isEmpty ? 0 : MatrixAvatar.defaultSize + bottomPadding,
-        duration: Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 300),
         curve: Curves.linear,
         alignment: controller.timeline!.events.isNotEmpty &&
                 controller.timeline!.events.first.senderId == client.userID

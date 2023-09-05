@@ -1,9 +1,9 @@
 /// Generated file. Do not edit.
 ///
 /// Locales: 1
-/// Strings: 190
+/// Strings: 191
 ///
-/// Built on 2023-09-05 at 06:52 UTC
+/// Built on 2023-09-05 at 07:28 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -363,6 +363,7 @@ class _I18nEventEn {
 	String get buyTickets => 'Buy tickets';
 	String get rsvpToUnlock => 'RSVP to this event to unlock the location';
 	String get eventLocation => 'Location';
+	String get tickets => 'tickets';
 }
 
 // Path: onboarding
@@ -795,6 +796,7 @@ extension on _I18nEn {
 			case 'event.buyTickets': return 'Buy tickets';
 			case 'event.rsvpToUnlock': return 'RSVP to this event to unlock the location';
 			case 'event.eventLocation': return 'Location';
+			case 'event.tickets': return 'tickets';
 			case 'onboarding.pickUsername': return 'Pick username';
 			case 'onboarding.pickUsernameDesc': return 'Claim your unique username before someone else does!';
 			case 'onboarding.username': return 'Username';

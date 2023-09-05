@@ -5,9 +5,11 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'notifications_listing_bloc.freezed.dart';
 
-class NotificationsListingBloc extends Bloc<NotificationsListingEvent, NotificationsListingState> {
+class NotificationsListingBloc
+    extends Bloc<NotificationsListingEvent, NotificationsListingState> {
   final NotificationService notificationService;
-  NotificationsListingBloc(this.notificationService) : super(NotificationsListingState.loading()) {
+  NotificationsListingBloc(this.notificationService)
+      : super(NotificationsListingState.loading()) {
     on<NotificationsListingEventFetch>(_onFetch);
     on<NotificationsListingEventRemoveItem>(_onRemoveItem);
   }
@@ -29,18 +31,21 @@ class NotificationsListingBloc extends Bloc<NotificationsListingEvent, Notificat
       fetched: (notifications) => notifications,
       orElse: () => [],
     );
-    List<Notification> newList = currentList.where((item) => item.id != event.notification.id).toList();
+    List<Notification> newList =
+        currentList.where((item) => item.id != event.notification.id).toList();
     emit(NotificationsListingState.fetched(notifications: newList));
   }
 }
 
 @freezed
 class NotificationsListingState with _$NotificationsListingState {
-  factory NotificationsListingState.loading() = NotificationsListingStateLoading;
+  factory NotificationsListingState.loading() =
+      NotificationsListingStateLoading;
   factory NotificationsListingState.fetched({
     required List<Notification> notifications,
   }) = NotificationsListingStateFetched;
-  factory NotificationsListingState.failure() = NotificationsListingStateFailure;
+  factory NotificationsListingState.failure() =
+      NotificationsListingStateFailure;
 }
 
 @freezed

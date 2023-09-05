@@ -49,25 +49,27 @@ class OrderComplex {
   });
 
   factory OrderComplex.fromDto(OrderComplexDto dto) => OrderComplex(
-    id: dto.id,
-    orderId: dto.orderId,
-    contract: dto.contract,
-    kind: dto.kind,
-    maker: dto.maker,
-    network: dto.network,
-    open: dto.open,
-    price: dto.price,
-    token: TokenSimple.fromDto(dto.token),
-    typename: dto.typename,
-    bidAmount: dto.bidAmount,
-    bidder: dto.bidder,
-    currency: dto.currency != null ? OrderCurrency.fromDto(dto.currency!) : null,
-    makerExpanded: dto.makerExpanded != null ? User.fromDto(dto.makerExpanded!) : null,
-    openFrom: dto.openFrom,
-    openTo: dto.openTo,
-    paidAmount: dto.paidAmount,
-    taker: dto.taker,
-    createdAt: dto.createdAt,
-    updatedAt: dto.updatedAt,
-  );
+        id: dto.id,
+        orderId: dto.orderId,
+        contract: dto.contract,
+        kind: dto.kind,
+        maker: dto.maker,
+        network: dto.network,
+        open: dto.open,
+        price: dto.price,
+        token: TokenSimple.fromDto(dto.token),
+        typename: dto.typename,
+        bidAmount: dto.bidAmount,
+        bidder: dto.bidder,
+        currency:
+            dto.currency != null ? OrderCurrency.fromDto(dto.currency!) : null,
+        makerExpanded:
+            dto.makerExpanded != null ? User.fromDto(dto.makerExpanded!) : null,
+        openFrom: dto.openFrom,
+        openTo: dto.openTo,
+        paidAmount: dto.paidAmount,
+        taker: dto.taker,
+        createdAt: dto.createdAt,
+        updatedAt: dto.updatedAt,
+      );
 }

@@ -62,7 +62,9 @@ class OnboardingUsernamePage extends StatelessWidget {
                       LemonTextField(
                         onChange: bloc.onUsernameChange,
                         hintText: t.onboarding.username,
-                        borderColor: state.usernameExisted ?? false ? LemonColor.errorRedBg : null,
+                        borderColor: state.usernameExisted ?? false
+                            ? LemonColor.errorRedBg
+                            : null,
                         statusWidget: state.usernameExisted == null
                             ? null
                             : statusWidget(context, state.usernameExisted!),
@@ -71,10 +73,10 @@ class OnboardingUsernamePage extends StatelessWidget {
                   ),
                 ),
                 LinearGradientButton(
-                  onTap:
-                      (bloc.state.username?.isEmpty ?? true) || (bloc.state.usernameExisted ?? true)
-                          ? null
-                          : bloc.updateProfile,
+                  onTap: (bloc.state.username?.isEmpty ?? true) ||
+                          (bloc.state.usernameExisted ?? true)
+                      ? null
+                      : bloc.updateProfile,
                   label: t.onboarding.claim,
                   textStyle: Typo.medium.copyWith(
                     fontFamily: FontFamily.nohemiVariable,
@@ -93,7 +95,8 @@ class OnboardingUsernamePage extends StatelessWidget {
   }
 
   Widget statusWidget(BuildContext context, bool usernameExisted) {
-    final color = usernameExisted ? LemonColor.errorRedBg : LemonColor.usernameApproved;
+    final color =
+        usernameExisted ? LemonColor.errorRedBg : LemonColor.usernameApproved;
     final t = Translations.of(context);
     return Row(
       children: [
@@ -103,7 +106,9 @@ class OnboardingUsernamePage extends StatelessWidget {
         ),
         SizedBox(width: Spacing.superExtraSmall),
         Text(
-          usernameExisted ? t.onboarding.usernameTaken : t.onboarding.usernameAvailable,
+          usernameExisted
+              ? t.onboarding.usernameTaken
+              : t.onboarding.usernameAvailable,
           style: TextStyle(
             color: color,
           ),

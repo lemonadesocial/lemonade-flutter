@@ -17,8 +17,9 @@ class GetBadgesInput with _$GetBadgesInput {
     String? country,
     double? distance,
   }) = _GetBadgesInput;
-  
-  factory GetBadgesInput.fromJson(Map<String, dynamic> json) => _$GetBadgesInputFromJson(json);
+
+  factory GetBadgesInput.fromJson(Map<String, dynamic> json) =>
+      _$GetBadgesInputFromJson(json);
 }
 
 @freezed
@@ -32,8 +33,9 @@ class GetBadgeListsInput with _$GetBadgeListsInput {
     String? user,
     String? title,
   }) = _GetBadgeListsInput;
-  
-  factory GetBadgeListsInput.fromJson(Map<String, dynamic> json) => _$GetBadgeListsInputFromJson(json);  
+
+  factory GetBadgeListsInput.fromJson(Map<String, dynamic> json) =>
+      _$GetBadgeListsInputFromJson(json);
 }
 
 @freezed
@@ -47,6 +49,7 @@ class GetBadgeCitiesInput with _$GetBadgeCitiesInput {
     String? user,
     String? title,
   }) = _GetBadgeCitiesInput;
-  
-  factory GetBadgeCitiesInput.fromJson(Map<String, dynamic> json) => _$GetBadgeCitiesInputFromJson(json);  
+
+  factory GetBadgeCitiesInput.fromJson(Map<String, dynamic> json) =>
+      _$GetBadgeCitiesInputFromJson(json);
 }

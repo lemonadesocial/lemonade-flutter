@@ -291,6 +291,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_ticket.svg
   SvgGenImage get icTicket => const SvgGenImage('assets/icons/ic_ticket.svg');
 
+  /// File path: assets/icons/ic_ticket_bold.svg
+  SvgGenImage get icTicketBold =>
+      const SvgGenImage('assets/icons/ic_ticket_bold.svg');
+
   /// File path: assets/icons/ic_twitter.svg
   SvgGenImage get icTwitter => const SvgGenImage('assets/icons/ic_twitter.svg');
 
@@ -375,6 +379,7 @@ class $AssetsIconsGen {
         icStore,
         icSupport,
         icTicket,
+        icTicketBold,
         icTwitter,
         icWallet,
         icWalletFilled,

@@ -31,5 +31,6 @@ class OrderComplexDto with _$OrderComplexDto {
     DateTime? updatedAt,
   }) = _OrderComplexDto;
 
-  factory OrderComplexDto.fromJson(Map<String, dynamic> json) => _$OrderComplexDtoFromJson(json);
+  factory OrderComplexDto.fromJson(Map<String, dynamic> json) =>
+      _$OrderComplexDtoFromJson(json);
 }

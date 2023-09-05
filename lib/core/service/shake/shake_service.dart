@@ -17,12 +17,12 @@ class ShakeService {
 
   void startShakeDetection(BuildContext context) {
     _detector ??= ShakeDetector.autoStart(
-        onPhoneShake: () {
-          if (!_isDialogShowing) {
-            showDebugInfoDialog(context);
-          }
-        },
-      );
+      onPhoneShake: () {
+        if (!_isDialogShowing) {
+          showDebugInfoDialog(context);
+        }
+      },
+    );
   }
 
   void stopShakeDetection() {
@@ -47,16 +47,17 @@ class ShakeService {
                   children: [
                     const Text(
                       'Debug info',
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      'Environment: ' + AppConfig.env,
+                      'Environment: ${AppConfig.env}',
                       textAlign: TextAlign.left,
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      'Backend url: ' + AppConfig.backedUrl,
+                      'Backend url: ${AppConfig.backedUrl}',
                       textAlign: TextAlign.left,
                     ),
                     const SizedBox(height: 16),
@@ -89,11 +90,13 @@ class ShakeService {
                       ),
                     const SizedBox(height: 16),
                     FutureBuilder<PackageInfo>(
-                        future: PackageInfo.fromPlatform(),
-                        builder: (context, snapshot) {
-                          return Text(
-                              'App version: ${snapshot.data?.version}\nBuild number: ${snapshot.data?.buildNumber}',);
-                        },),
+                      future: PackageInfo.fromPlatform(),
+                      builder: (context, snapshot) {
+                        return Text(
+                          'App version: ${snapshot.data?.version}\nBuild number: ${snapshot.data?.buildNumber}',
+                        );
+                      },
+                    ),
                     const SizedBox(height: 16),
                     SizedBox(
                       width: double.infinity,

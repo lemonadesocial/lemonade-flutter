@@ -22,7 +22,9 @@ class EventDiscoverItem extends StatelessWidget {
   });
   final Event event;
 
-  DbFile? get eventPhoto => event.newNewPhotosExpanded?.isNotEmpty ?? false ? event.newNewPhotosExpanded!.first : null;
+  DbFile? get eventPhoto => event.newNewPhotosExpanded?.isNotEmpty ?? false
+      ? event.newNewPhotosExpanded!.first
+      : null;
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +60,8 @@ class EventDiscoverItem extends StatelessWidget {
                 fit: BoxFit.cover,
                 imageUrl: imageUrl,
                 placeholder: (_, __) => ImagePlaceholder.defaultPlaceholder(),
-                errorWidget: (_, __, ___) => ImagePlaceholder.defaultPlaceholder(),
+                errorWidget: (_, __, ___) =>
+                    ImagePlaceholder.defaultPlaceholder(),
               ),
             ),
           ),
@@ -77,11 +80,12 @@ class EventDiscoverItem extends StatelessWidget {
             ),
           ),
           // TODO:
-          if(event.accepted?.isNotEmpty == true) Positioned(
-            top: Spacing.superExtraSmall,
-            right: Spacing.superExtraSmall,
-            child: _EventJoinCount(count: event.accepted?.length ?? 0),
-          ),
+          if (event.accepted?.isNotEmpty == true)
+            Positioned(
+              top: Spacing.superExtraSmall,
+              right: Spacing.superExtraSmall,
+              child: _EventJoinCount(count: event.accepted?.length ?? 0),
+            ),
           Positioned(
             left: Spacing.xSmall,
             bottom: Spacing.xSmall,
@@ -153,7 +157,8 @@ class _EventJoinCount extends StatelessWidget {
             children: [
               ThemeSvgIcon(
                 color: colorScheme.onPrimary,
-                builder: (filter) => Assets.icons.icProfile.svg(colorFilter: filter),
+                builder: (filter) =>
+                    Assets.icons.icProfile.svg(colorFilter: filter),
               ),
               SizedBox(width: Spacing.superExtraSmall / 2),
               Text(

@@ -21,11 +21,10 @@ import 'package:app/injection/register_module.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-List<String> get _mockLocations => ['New york', 'California', 'Washington'];
 
 class PoapFilterBottomSheetView extends StatefulWidget {
   const PoapFilterBottomSheetView({
@@ -37,15 +36,18 @@ class PoapFilterBottomSheetView extends StatefulWidget {
   final List<double> snapSizes;
 
   @override
-  State<PoapFilterBottomSheetView> createState() => _PoapFilterBottomSheetViewState();
+  State<PoapFilterBottomSheetView> createState() =>
+      _PoapFilterBottomSheetViewState();
 }
 
-class _PoapFilterBottomSheetViewState extends State<PoapFilterBottomSheetView> with TickerProviderStateMixin {
+class _PoapFilterBottomSheetViewState extends State<PoapFilterBottomSheetView>
+    with TickerProviderStateMixin {
   late AnimationController animationController = AnimationController(
     vsync: this,
     duration: _animationDuration,
   );
-  late final animation = Tween<double>(begin: 0, end: 1).animate(animationController);
+  late final animation =
+      Tween<double>(begin: 0, end: 1).animate(animationController);
 
   final Duration _animationDuration = const Duration(milliseconds: 300);
 
@@ -56,8 +58,6 @@ class _PoapFilterBottomSheetViewState extends State<PoapFilterBottomSheetView> w
   List<double> get snapSizes => widget.snapSizes; //const [.2, .8, 1];
 
   bool get _visibleWhenExpanded => animation.value > 0.4;
-
-  List<int> get _mockPoapList => List.generate(10, (index) => index);
 
   @override
   void initState() {
@@ -82,7 +82,8 @@ class _PoapFilterBottomSheetViewState extends State<PoapFilterBottomSheetView> w
     animationController.animateTo(interpolatedValue);
   }
 
-  Offset _calculateGridRowOffset({required int index, required double maxWidth}) {
+  Offset _calculateGridRowOffset(
+      {required int index, required double maxWidth}) {
     final x = index * (maxWidth - (animation.value * maxWidth));
     final y = -((index + 1) * (1 - animation.value) * 50);
 
@@ -108,7 +109,8 @@ class _PoapFilterBottomSheetViewState extends State<PoapFilterBottomSheetView> w
                   controller: scrollController,
                   slivers: [
                     SliverPadding(
-                      padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: Spacing.smMedium),
                       sliver: AnimatedBuilder(
                         animation: animation,
                         builder: (context, child) {
@@ -184,25 +186,28 @@ class _PoapFilterBottomSheetViewState extends State<PoapFilterBottomSheetView> w
                 fetched: (collections, selectedCollections) {
                   return ListView.separated(
                     padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-                    separatorBuilder: (context, index) => SizedBox(width: Spacing.extraSmall),
+                    separatorBuilder: (context, index) =>
+                        SizedBox(width: Spacing.extraSmall),
                     scrollDirection: Axis.horizontal,
                     itemCount: collections.length,
                     itemBuilder: (context, i) {
                       final collection = collections[i];
-                      final selected = selectedCollections.any((element) => element.id == collection.id);
+                      final selected = selectedCollections
+                          .any((element) => element.id == collection.id);
                       return PoapCollectionItem(
                         badgeCollection: collections[i],
                         selected: selected,
                         onTap: (collection) {
-                          final selected = selectedCollections.any((element) => element.id == collection.id);
+                          final selected = selectedCollections
+                              .any((element) => element.id == collection.id);
                           if (selected) {
-                            context
-                                .read<BadgeCollectionsBloc>()
-                                .add(BadgeCollectionsEvent.deselect(collection: collection));
+                            context.read<BadgeCollectionsBloc>().add(
+                                BadgeCollectionsEvent.deselect(
+                                    collection: collection));
                           } else {
-                            context
-                                .read<BadgeCollectionsBloc>()
-                                .add(BadgeCollectionsEvent.select(collection: collection));
+                            context.read<BadgeCollectionsBloc>().add(
+                                BadgeCollectionsEvent.select(
+                                    collection: collection));
                           }
                         },
                       );
@@ -231,9 +236,10 @@ class _PoapFilterBottomSheetViewState extends State<PoapFilterBottomSheetView> w
             return SliverLayoutBuilder(
               builder: (context, constraints) {
                 var maxWidth = constraints.crossAxisExtent;
-                final fourItemInRowWidth = _poapCreatorItemWidth * 4 + (4 * Spacing.small);
+                final fourItemInRowWidth =
+                    _poapCreatorItemWidth * 4 + (4 * Spacing.small);
                 final isLargeDevice = maxWidth >= 500;
-                if(isLargeDevice) {
+                if (isLargeDevice) {
                   maxWidth = min(maxWidth, fourItemInRowWidth);
                 }
                 final numOfItems = AnimationUtils.calculateMaxItemsInRow(
@@ -246,9 +252,11 @@ class _PoapFilterBottomSheetViewState extends State<PoapFilterBottomSheetView> w
                   chunkSize: numOfItems,
                 );
                 return SliverPadding(
-                  padding: EdgeInsets.symmetric(horizontal: isLargeDevice ? fourItemInRowWidth / 4 : 0),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: isLargeDevice ? fourItemInRowWidth / 4 : 0),
                   sliver: SliverList.separated(
-                    separatorBuilder: (context, item) => SizedBox(height: Spacing.xSmall),
+                    separatorBuilder: (context, item) =>
+                        SizedBox(height: Spacing.xSmall),
                     itemCount: chunkListResult.length + 1,
                     itemBuilder: (context, index) {
                       // Render bottom space for list
@@ -272,34 +280,39 @@ class _PoapFilterBottomSheetViewState extends State<PoapFilterBottomSheetView> w
                       return AnimatedBuilder(
                         animation: animation,
                         builder: (context, child) => Transform.translate(
-                          offset: index == 0 ? Offset.zero : _calculateGridRowOffset(index: index, maxWidth: maxWidth),
+                          offset: index == 0
+                              ? Offset.zero
+                              : _calculateGridRowOffset(
+                                  index: index, maxWidth: maxWidth),
                           child: child,
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: List<BadgeList>.from(chunkPortion).map(
                             (collection) {
-                              final selected = selectedCollections.any((element) => element.id == collection.id);
+                              final selected = selectedCollections.any(
+                                  (element) => element.id == collection.id);
                               return Container(
                                 margin: EdgeInsets.only(
                                   right: isLargeDevice ? Spacing.extraSmall : 0,
                                 ),
                                 child: PoapCollectionItem(
-                                        badgeCollection: collection,
-                                        selected: selected,
-                                        visible: collection.id != null && collection.id!.isNotEmpty,
-                                        onTap: (collection) {
-                                          if (selected) {
-                                            context
-                                                .read<BadgeCollectionsBloc>()
-                                                .add(BadgeCollectionsEvent.deselect(collection: collection));
-                                          } else {
-                                            context
-                                                .read<BadgeCollectionsBloc>()
-                                                .add(BadgeCollectionsEvent.select(collection: collection));
-                                          }
-                                        },
-                                      ),
+                                  badgeCollection: collection,
+                                  selected: selected,
+                                  visible: collection.id != null &&
+                                      collection.id!.isNotEmpty,
+                                  onTap: (collection) {
+                                    if (selected) {
+                                      context.read<BadgeCollectionsBloc>().add(
+                                          BadgeCollectionsEvent.deselect(
+                                              collection: collection));
+                                    } else {
+                                      context.read<BadgeCollectionsBloc>().add(
+                                          BadgeCollectionsEvent.select(
+                                              collection: collection));
+                                    }
+                                  },
+                                ),
                               );
                             },
                           ).toList(),
@@ -354,42 +367,56 @@ class LocationFilter extends StatelessWidget {
             SizedBox(height: Spacing.medium),
             SizedBox(
               height: Sizing.medium,
-              child: BlocBuilder<BadgeLocationsListingBloc, BadgeLocationsListingState>(
+              child: BlocBuilder<BadgeLocationsListingBloc,
+                  BadgeLocationsListingState>(
                 builder: (context, state) => state.when(
                   initial: (_, __) => Loading.defaultLoading(context),
                   failure: () => const Center(child: Text('error')),
                   fetched: (locations, selectedLocation, _) {
                     return ListView.separated(
-                      padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: Spacing.smMedium),
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, index) {
                         var isSelected = false;
                         if (index == 0) {
-                          isSelected = selectedLocation?.isMyLocation != null && selectedLocation!.isMyLocation == true;
+                          isSelected = selectedLocation?.isMyLocation != null &&
+                              selectedLocation!.isMyLocation == true;
                           return isSelected
                               ? LemonFilledButton(
                                   onTap: () {
-                                    context.read<BadgeLocationsListingBloc>().add(
+                                    context
+                                        .read<BadgeLocationsListingBloc>()
+                                        .add(
                                           BadgeLocationsListingEvent.select(),
                                         );
                                   },
                                   leading: ThemeSvgIcon(
-                                    color: isSelected ? colorScheme.primary : colorScheme.onSecondary,
-                                    builder: (filter) => Assets.icons.icMyLocation.svg(colorFilter: filter),
+                                    color: isSelected
+                                        ? colorScheme.primary
+                                        : colorScheme.onSecondary,
+                                    builder: (filter) => Assets
+                                        .icons.icMyLocation
+                                        .svg(colorFilter: filter),
                                   ),
                                   label: t.common.nearMe,
                                 )
                               : LemonOutlineButton(
                                   onTap: () async {
                                     try {
-                                      final position = await getIt<LocationUtils>().getCurrentLocation(
+                                      final position =
+                                          await getIt<LocationUtils>()
+                                              .getCurrentLocation(
                                         onPermissionDeniedForever: () {
                                           LocationUtils.goToSetting(context);
                                         },
                                       );
-                                      context.read<BadgeLocationsListingBloc>().add(
+                                      context
+                                          .read<BadgeLocationsListingBloc>()
+                                          .add(
                                             BadgeLocationsListingEvent.select(
-                                              location: BadgeLocation.myLocation(
+                                              location:
+                                                  BadgeLocation.myLocation(
                                                 geoPoint: GeoPoint(
                                                   lat: position.latitude,
                                                   lng: position.longitude,
@@ -398,18 +425,23 @@ class LocationFilter extends StatelessWidget {
                                             ),
                                           );
                                     } catch (error) {
-                                      print(error);
+                                      if (kDebugMode) {
+                                        print(error);
+                                      }
                                     }
                                   },
                                   leading: ThemeSvgIcon(
                                     color: colorScheme.onSecondary,
-                                    builder: (filter) => Assets.icons.icMyLocation.svg(colorFilter: filter),
+                                    builder: (filter) => Assets
+                                        .icons.icMyLocation
+                                        .svg(colorFilter: filter),
                                   ),
                                   label: t.common.nearMe,
                                 );
                         }
                         final location = locations[index - 1];
-                        isSelected = selectedLocation?.badgeCity?.city == location.badgeCity?.city;
+                        isSelected = selectedLocation?.badgeCity?.city ==
+                            location.badgeCity?.city;
                         return isSelected
                             ? LemonFilledButton(
                                 onTap: () {
@@ -417,15 +449,18 @@ class LocationFilter extends StatelessWidget {
                                         BadgeLocationsListingEvent.select(),
                                       );
                                 },
-                                label: location.badgeCity?.city ?? location.badgeCity?.country,
+                                label: location.badgeCity?.city ??
+                                    location.badgeCity?.country,
                               )
                             : LemonOutlineButton(
                                 onTap: () {
                                   context.read<BadgeLocationsListingBloc>().add(
-                                        BadgeLocationsListingEvent.select(location: location),
+                                        BadgeLocationsListingEvent.select(
+                                            location: location),
                                       );
                                 },
-                                label: location.badgeCity?.city ?? location.badgeCity?.country,
+                                label: location.badgeCity?.city ??
+                                    location.badgeCity?.country,
                               );
                       },
                       separatorBuilder: (context, index) => SizedBox(
@@ -448,15 +483,18 @@ class LocationFilter extends StatelessWidget {
                     children: [
                       Text(
                         t.common.maximumDistance,
-                        style: Typo.medium.copyWith(color: colorScheme.onSurface),
+                        style:
+                            Typo.medium.copyWith(color: colorScheme.onSurface),
                       ),
-                      BlocBuilder<BadgeLocationsListingBloc, BadgeLocationsListingState>(
+                      BlocBuilder<BadgeLocationsListingBloc,
+                          BadgeLocationsListingState>(
                         builder: (context, state) => Text(
                           state.maybeWhen(
                             fetched: (_, __, distance) => '${distance.toInt()}',
                             orElse: () => '1',
                           ),
-                          style: Typo.medium.copyWith(color: colorScheme.onSurface),
+                          style: Typo.medium
+                              .copyWith(color: colorScheme.onSurface),
                         ),
                       ),
                     ],
@@ -467,7 +505,8 @@ class LocationFilter extends StatelessWidget {
                     max: 100,
                     onChange: (value) {
                       context.read<BadgeLocationsListingBloc>().add(
-                            BadgeLocationsListingEvent.updateDistance(distance: value),
+                            BadgeLocationsListingEvent.updateDistance(
+                                distance: value),
                           );
                     },
                     defaultValue: getIt<BadgeService>().distance,
@@ -478,11 +517,13 @@ class LocationFilter extends StatelessWidget {
                     children: [
                       Text(
                         '1${t.common.unit.km}',
-                        style: Typo.small.copyWith(color: colorScheme.onSurfaceVariant),
+                        style: Typo.small
+                            .copyWith(color: colorScheme.onSurfaceVariant),
                       ),
                       Text(
                         '100${t.common.unit.km}',
-                        style: Typo.small.copyWith(color: colorScheme.onSurfaceVariant),
+                        style: Typo.small
+                            .copyWith(color: colorScheme.onSurfaceVariant),
                       ),
                     ],
                   ),

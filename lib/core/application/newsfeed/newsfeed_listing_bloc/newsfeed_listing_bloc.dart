@@ -9,7 +9,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'newsfeed_listing_bloc.freezed.dart';
 
-class NewsfeedListingBloc extends Bloc<NewsfeedListingEvent, NewsfeedListingState> {
+class NewsfeedListingBloc
+    extends Bloc<NewsfeedListingEvent, NewsfeedListingState> {
   NewsfeedListingBloc(
     this.newsfeedService, {
     required this.defaultInput,
@@ -18,8 +19,8 @@ class NewsfeedListingBloc extends Bloc<NewsfeedListingEvent, NewsfeedListingStat
   }
 
   final NewsfeedService newsfeedService;
-  late final OffsetPaginationService<Post, GetNewsfeedInput> offsetPaginationService =
-      OffsetPaginationService(
+  late final OffsetPaginationService<Post, GetNewsfeedInput>
+      offsetPaginationService = OffsetPaginationService(
     getDataFuture: _getNewsfeed,
   );
   final GetNewsfeedInput defaultInput;
@@ -29,7 +30,8 @@ class NewsfeedListingBloc extends Bloc<NewsfeedListingEvent, NewsfeedListingStat
     bool endReached, {
     GetNewsfeedInput? input,
   }) async {
-    final result = await newsfeedService.getNewsfeed(input: input?.copyWith(offset: offset));
+    final result = await newsfeedService.getNewsfeed(
+        input: input?.copyWith(offset: offset));
     return result.fold(
       Left.new,
       (newsfeed) {
@@ -53,7 +55,7 @@ class NewsfeedListingBloc extends Bloc<NewsfeedListingEvent, NewsfeedListingStat
 
 @freezed
 class NewsfeedListingState with _$NewsfeedListingState {
-  factory  NewsfeedListingState.initial() = NewsfeedListingStateInitial;
+  factory NewsfeedListingState.initial() = NewsfeedListingStateInitial;
   factory NewsfeedListingState.loading() = NewsfeedListingStateLoading;
   factory NewsfeedListingState.fetched({
     required List<Post> posts,

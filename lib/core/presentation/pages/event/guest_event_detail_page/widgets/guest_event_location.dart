@@ -57,7 +57,11 @@ class _GuestEventLocationState extends State<GuestEventLocation> {
                 topLeft: Radius.circular(15.sp),
                 bottomLeft: Radius.circular(15.sp),
               ),
-              child: Assets.images.fakeEventLocation.image(),
+              child: Assets.images.fakeEventLocation.image(
+                fit: BoxFit.cover,
+                width: 144.w,
+                height: 144.w,
+              ),
               // TODO:
               // child: GoogleMap(
               //   initialCameraPosition: GuestEventLocation._kGooglePlex,

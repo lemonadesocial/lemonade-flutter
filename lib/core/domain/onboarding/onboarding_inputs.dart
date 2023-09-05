@@ -9,7 +9,8 @@ part 'onboarding_inputs.g.dart';
 class GetProfileInput with _$GetProfileInput {
   factory GetProfileInput({String? id, String? username}) = _GetProfileInput;
 
-  factory GetProfileInput.fromJson(Map<String, dynamic> json) => _$GetProfileInputFromJson(json);
+  factory GetProfileInput.fromJson(Map<String, dynamic> json) =>
+      _$GetProfileInputFromJson(json);
 }
 
 @freezed

@@ -54,11 +54,13 @@ class InputBar extends StatelessWidget {
   RegExp get replaceMentionRoomMatchRegex => RegExp(r'(\s|^)(#[-\w]+)$');
 
   List<Map<String, String?>> getSuggestions(String text) {
-    if (controller!.selection.baseOffset != controller!.selection.extentOffset ||
+    if (controller!.selection.baseOffset !=
+            controller!.selection.extentOffset ||
         controller!.selection.baseOffset < 0) {
       return []; // no entries if there is selected text
     }
-    final searchText = controller!.text.substring(0, controller!.selection.baseOffset);
+    final searchText =
+        controller!.text.substring(0, controller!.selection.baseOffset);
     final List<Map<String, String?>> ret = <Map<String, String?>>[];
     const maxResults = 30;
 
@@ -109,8 +111,10 @@ class InputBar extends StatelessWidget {
               'type': 'emote',
               'name': emote.key,
               'pack': packSearch,
-              'pack_avatar_url': emotePacks[packSearch]!.pack.avatarUrl?.toString(),
-              'pack_display_name': emotePacks[packSearch]!.pack.displayName ?? packSearch,
+              'pack_avatar_url':
+                  emotePacks[packSearch]!.pack.avatarUrl?.toString(),
+              'pack_display_name':
+                  emotePacks[packSearch]!.pack.displayName ?? packSearch,
               'mxc': emote.value.url.toString(),
             });
           }
@@ -163,7 +167,8 @@ class InputBar extends StatelessWidget {
       for (final user in room.getParticipants()) {
         if ((user.displayName != null &&
                 (user.displayName!.toLowerCase().contains(userSearch) ||
-                    slugify(user.displayName!.toLowerCase()).contains(userSearch))) ||
+                    slugify(user.displayName!.toLowerCase())
+                        .contains(userSearch))) ||
             user.id.split(':')[0].toLowerCase().contains(userSearch)) {
           ret.add({
             'type': 'user',
@@ -188,10 +193,19 @@ class InputBar extends StatelessWidget {
         final state = r.getState(EventTypes.RoomCanonicalAlias);
         if ((state != null &&
                 ((state.content['alias'] is String &&
-                        state.content.tryGet<String>('alias')!.split(':')[0].toLowerCase().contains(roomSearch)) ||
+                        state.content
+                            .tryGet<String>('alias')!
+                            .split(':')[0]
+                            .toLowerCase()
+                            .contains(roomSearch)) ||
                     (state.content['alt_aliases'] is List &&
                         (state.content['alt_aliases'] as List).any(
-                          (l) => l is String && l.split(':')[0].toLowerCase().contains(roomSearch),
+                          (l) =>
+                              l is String &&
+                              l
+                                  .split(':')[0]
+                                  .toLowerCase()
+                                  .contains(roomSearch),
                         )))) ||
             (r.name.toLowerCase().contains(roomSearch))) {
           ret.add({
@@ -210,10 +224,12 @@ class InputBar extends StatelessWidget {
   }
 
   void insertSuggestion(_, Map<String, String?> suggestion) {
-    final replaceText = controller!.text.substring(0, controller!.selection.baseOffset);
+    final replaceText =
+        controller!.text.substring(0, controller!.selection.baseOffset);
     var startText = '';
-    final afterText =
-        replaceText == controller!.text ? '' : controller!.text.substring(controller!.selection.baseOffset + 1);
+    final afterText = replaceText == controller!.text
+        ? ''
+        : controller!.text.substring(controller!.selection.baseOffset + 1);
     var insertText = '';
     if (suggestion['type'] == 'command') {
       insertText = '${suggestion['name']!} ';
@@ -307,14 +323,16 @@ class InputBar extends StatelessWidget {
         },
         textCapitalization: TextCapitalization.sentences,
       ),
-      suggestionsBoxDecoration: SuggestionsBoxDecoration(
+      suggestionsBoxDecoration: const SuggestionsBoxDecoration(
         color: Colors.black,
         constraints: BoxConstraints(maxHeight: 300),
       ),
       suggestionsCallback: getSuggestions,
       itemBuilder: (c, s) => InputBarSuggestionBox(suggestion: s),
-      onSuggestionSelected: (Map<String, String?> suggestion) => insertSuggestion(context, suggestion),
-      errorBuilder: (BuildContext context, Object? error) => const SizedBox.shrink(),
+      onSuggestionSelected: (Map<String, String?> suggestion) =>
+          insertSuggestion(context, suggestion),
+      errorBuilder: (BuildContext context, Object? error) =>
+          const SizedBox.shrink(),
       loadingBuilder: (BuildContext context) => const SizedBox.shrink(),
       // fix loading briefly flickering a dark box
       noItemsFoundBuilder: (BuildContext context) =>

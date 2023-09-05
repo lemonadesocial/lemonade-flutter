@@ -12,8 +12,9 @@ class WalletPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => WalletBloc()..add(WalletEvent.initWalletConnect()),
-      child: WalletPageView(),
+      create: (context) =>
+          WalletBloc()..add(const WalletEvent.initWalletConnect()),
+      child: const WalletPageView(),
     );
   }
 }
@@ -27,7 +28,7 @@ class WalletPageView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: LemonColor.black,
-      body: Center(
+      body: const Center(
         child: ConnectWalletButton(),
       ),
     );

@@ -6,10 +6,8 @@ class EmptyTabView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Center(
-        child: Text('🍋', style: Typo.large),
-      ),
+    return Center(
+      child: Text('🍋', style: Typo.large),
     );
   }
 }

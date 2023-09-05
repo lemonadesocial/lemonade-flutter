@@ -264,4 +264,3 @@ final updateUserProfileQuery = gql('''
   }
 }
 ''');
-

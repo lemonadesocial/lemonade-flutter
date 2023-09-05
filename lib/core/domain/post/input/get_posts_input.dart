@@ -10,11 +10,13 @@ class GetPostsInput with _$GetPostsInput {
     @JsonKey(name: '_id', includeIfNull: false) String? id,
     @JsonKey(includeIfNull: false) String? user,
     @JsonKey(includeIfNull: false) bool? published,
-    @JsonKey(name: 'created_at', includeIfNull: false) GetPostCreatedAtInput? createdAt,
+    @JsonKey(name: 'created_at', includeIfNull: false)
+    GetPostCreatedAtInput? createdAt,
     @JsonKey(includeIfNull: false) int? skip,
     @JsonKey(includeIfNull: false) int? limit,
   }) = _GetPostsInput;
-  factory GetPostsInput.fromJson(Map<String, dynamic> json) => _$GetPostsInputFromJson(json);
+  factory GetPostsInput.fromJson(Map<String, dynamic> json) =>
+      _$GetPostsInputFromJson(json);
 }
 
 @freezed
@@ -23,5 +25,6 @@ class GetPostCreatedAtInput with _$GetPostCreatedAtInput {
     @JsonKey(includeIfNull: false) DateTime? gte,
     @JsonKey(includeIfNull: false) DateTime? lte,
   }) = _GetPostCreatedAtInput;
-  factory GetPostCreatedAtInput.fromJson(Map<String, dynamic> json) => _$GetPostCreatedAtInputFromJson(json);
+  factory GetPostCreatedAtInput.fromJson(Map<String, dynamic> json) =>
+      _$GetPostCreatedAtInputFromJson(json);
 }

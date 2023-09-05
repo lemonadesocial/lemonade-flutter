@@ -1,6 +1,7 @@
 import 'package:app/core/application/badge/badge_detail_bloc/badge_detail_bloc.dart';
 import 'package:app/core/application/poap/claim_poap_bloc/claim_poap_bloc.dart';
-import 'package:app/core/domain/badge/entities/badge_entities.dart' as badgeEntities;
+import 'package:app/core/domain/badge/entities/badge_entities.dart'
+    as badge_entities;
 import 'package:app/core/domain/poap/input/poap_input.dart';
 import 'package:app/core/domain/token/entities/token_entities.dart';
 import 'package:app/core/domain/token/input/get_tokens_input.dart';
@@ -31,7 +32,7 @@ class PoapItem extends StatelessWidget {
     super.key,
     required this.badge,
   });
-  final badgeEntities.Badge badge;
+  final badge_entities.Badge badge;
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +67,8 @@ class _PoapItemView extends StatelessWidget {
           ),
         );
       },
-      listenWhen: (prev, cur) => prev.failure != cur.failure && cur.failure != null,
+      listenWhen: (prev, cur) =>
+          prev.failure != cur.failure && cur.failure != null,
       child: BlocBuilder<BadgeDetailBloc, BadgeDetailState>(
         builder: (context, badgeDetailState) {
           final badge = badgeDetailState.badge;
@@ -99,7 +101,8 @@ class _PoapItemView extends StatelessWidget {
                   );
                 },
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: Spacing.small, vertical: Spacing.small),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: Spacing.small, vertical: Spacing.small),
                   decoration: ShapeDecoration(
                     color: colorScheme.surfaceVariant,
                     shape: RoundedRectangleBorder(
@@ -155,7 +158,8 @@ class _PoapItemImage extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
         child: FutureBuilder<Media>(
-          future: MediaUtils.getNftMedia(tokenMetadata?.image, tokenMetadata?.animation_url),
+          future: MediaUtils.getNftMedia(
+              tokenMetadata?.image, tokenMetadata?.animation_url),
           builder: (context, snapshot) => CachedNetworkImage(
             fit: BoxFit.cover,
             imageUrl: snapshot.data?.url ?? '',
@@ -176,7 +180,7 @@ class _PoapItemInfo extends StatelessWidget {
   const _PoapItemInfo({
     required this.metadata,
   });
-  
+
   final TokenMetadata? metadata;
 
   @override
@@ -211,7 +215,7 @@ class _PoapItemButtons extends StatelessWidget {
     required this.badge,
   });
 
-  final badgeEntities.Badge badge;
+  final badge_entities.Badge badge;
 
   @override
   Widget build(BuildContext context) {
@@ -249,9 +253,11 @@ class _PoapItemButtons extends StatelessWidget {
             onTap: () {},
             leading: ThemeSvgIcon(
               color: colorScheme.onSecondary,
-              builder: (filter) => Assets.icons.icNavigationLine.svg(colorFilter: filter),
+              builder: (filter) =>
+                  Assets.icons.icNavigationLine.svg(colorFilter: filter),
             ),
-            label: '$displayDistance ${distanceInKm >= 1 ? t.common.unit.km : t.common.unit.m}',
+            label:
+                '$displayDistance ${distanceInKm >= 1 ? t.common.unit.km : t.common.unit.m}',
             radius: BorderRadius.circular(LemonRadius.extraSmall),
             padding: EdgeInsets.symmetric(
               horizontal: Spacing.extraSmall,
@@ -262,8 +268,10 @@ class _PoapItemButtons extends StatelessWidget {
           PoapClaimBuilder(
             badge: badge,
             builder: (context, claimPoapState, locationEnabled) {
-              final buttonDisabled =
-                  !locationEnabled || badge.claimable != true || claimPoapState.claimed || claimPoapState.claiming;
+              final buttonDisabled = !locationEnabled ||
+                  badge.claimable != true ||
+                  claimPoapState.claimed ||
+                  claimPoapState.claiming;
               return Opacity(
                 opacity: buttonDisabled ? 0.36 : 1,
                 child: LinearGradientButton(
@@ -272,7 +280,8 @@ class _PoapItemButtons extends StatelessWidget {
                           context.read<ClaimPoapBloc>().add(
                                 ClaimPoapEvent.claim(
                                   input: ClaimInput(
-                                    address: badge.contract?.toLowerCase() ?? '',
+                                    address:
+                                        badge.contract?.toLowerCase() ?? '',
                                     network: badge.network ?? '',
                                   ),
                                 ),

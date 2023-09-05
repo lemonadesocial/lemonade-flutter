@@ -36,9 +36,11 @@ class BaseGQL {
     required this.wssUrl,
     this.customLinks = const [],
   }) {
-    _authLink = AuthLink(getToken: () async {
-      return await appOauth.getTokenForGql();
-    },);
+    _authLink = AuthLink(
+      getToken: () async {
+        return await appOauth.getTokenForGql();
+      },
+    );
     _errorLink = ErrorLink(
       onException: (request, forward, exception) {
         FirebaseCrashlytics.instance.log(exception.toString());
@@ -49,12 +51,13 @@ class BaseGQL {
         return null;
       },
     );
-    
+
     _client = GraphQLClient(
       defaultPolicies: DefaultPolicies(
-          query: Policies(
-        fetch: FetchPolicy.cacheAndNetwork,
-      ),),
+        query: Policies(
+          fetch: FetchPolicy.cacheAndNetwork,
+        ),
+      ),
       link: Link.from([
         _errorLink,
         ...customLinks,
@@ -115,10 +118,11 @@ class AppGQL extends BaseGQL {
 
 @lazySingleton
 class WalletGQL extends BaseGQL {
-  WalletGQL(): super(
-    httpUrl: AppConfig.walletUrl,
-    wssUrl: AppConfig.walletUrl,
-  );
+  WalletGQL()
+      : super(
+          httpUrl: AppConfig.walletUrl,
+          wssUrl: AppConfig.walletUrl,
+        );
 }
 
 class GeoLocationBasedGQL extends BaseGQL {

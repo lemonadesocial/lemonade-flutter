@@ -54,7 +54,8 @@ class ClaimDto with _$ClaimDto {
     String? tokenId,
   }) = _ClaimDto;
 
-  factory ClaimDto.fromJson(Map<String, dynamic> json) => _$ClaimDtoFromJson(json);
+  factory ClaimDto.fromJson(Map<String, dynamic> json) =>
+      _$ClaimDtoFromJson(json);
 }
 
 @freezed
@@ -64,17 +65,20 @@ class ClaimArgsDto with _$ClaimArgsDto {
     String? tokenURI,
   }) = _ClaimArgsDto;
 
-  factory ClaimArgsDto.fromJson(Map<String, dynamic> json) => _$ClaimArgsDtoFromJson(json);
+  factory ClaimArgsDto.fromJson(Map<String, dynamic> json) =>
+      _$ClaimArgsDtoFromJson(json);
 }
 
 @freezed
 class PoapPolicyNodeDto with _$PoapPolicyNodeDto {
   const factory PoapPolicyNodeDto({
     required String value,
-    @JsonKey(defaultValue: <PoapPolicyNodeDto>[]) List<PoapPolicyNodeDto>? children,
+    @JsonKey(defaultValue: <PoapPolicyNodeDto>[])
+    List<PoapPolicyNodeDto>? children,
   }) = _PoapPolicyNodeDto;
 
-  factory PoapPolicyNodeDto.fromJson(Map<String, dynamic> json) => _$PoapPolicyNodeDtoFromJson(json);
+  factory PoapPolicyNodeDto.fromJson(Map<String, dynamic> json) =>
+      _$PoapPolicyNodeDtoFromJson(json);
 }
 
 @freezed
@@ -84,7 +88,8 @@ class PoapPolicyErrorDto with _$PoapPolicyErrorDto {
     String? path,
   }) = _PoapPolicyErrorDto;
 
-  factory PoapPolicyErrorDto.fromJson(Map<String, dynamic> json) => _$PoapPolicyErrorDtoFromJson(json);
+  factory PoapPolicyErrorDto.fromJson(Map<String, dynamic> json) =>
+      _$PoapPolicyErrorDtoFromJson(json);
 }
 
 @freezed
@@ -92,10 +97,12 @@ class PoapPolicyResultDto with _$PoapPolicyResultDto {
   factory PoapPolicyResultDto({
     bool? boolean,
     PoapPolicyNodeDto? node,
-    @JsonKey(defaultValue: <PoapPolicyErrorDto>[]) List<PoapPolicyErrorDto>? errors,
+    @JsonKey(defaultValue: <PoapPolicyErrorDto>[])
+    List<PoapPolicyErrorDto>? errors,
   }) = _PoapPolicyResultDto;
 
-  factory PoapPolicyResultDto.fromJson(Map<String, dynamic> json) => _$PoapPolicyResultDtoFromJson(json);
+  factory PoapPolicyResultDto.fromJson(Map<String, dynamic> json) =>
+      _$PoapPolicyResultDtoFromJson(json);
 }
 
 @freezed
@@ -108,5 +115,6 @@ class PoapPolicyDto with _$PoapPolicyDto {
     PoapPolicyResultDto? result,
   }) = _PoapPolicyDto;
 
-  factory PoapPolicyDto.fromJson(Map<String, dynamic> json) => _$PoapPolicyDtoFromJson(json);
+  factory PoapPolicyDto.fromJson(Map<String, dynamic> json) =>
+      _$PoapPolicyDtoFromJson(json);
 }

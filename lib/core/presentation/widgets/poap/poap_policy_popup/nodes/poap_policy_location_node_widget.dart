@@ -18,16 +18,18 @@ class PoapPolicyLocationNodeWidget extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
     return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(t.nft.poapPolicy.locationPolicy.title),
-          Text(
-            result ? t.nft.poapPolicy.locationPolicy.qualified : t.nft.poapPolicy.locationPolicy.nonQualified,
-            style: Typo.small.copyWith(
-              color: colorScheme.onSecondary,
-            ),
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(t.nft.poapPolicy.locationPolicy.title),
+        Text(
+          result
+              ? t.nft.poapPolicy.locationPolicy.qualified
+              : t.nft.poapPolicy.locationPolicy.nonQualified,
+          style: Typo.small.copyWith(
+            color: colorScheme.onSecondary,
           ),
-        ],
-      );
+        ),
+      ],
+    );
   }
 }

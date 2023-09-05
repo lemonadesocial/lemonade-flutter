@@ -84,7 +84,9 @@ class PoapPolicyNode {
 
   factory PoapPolicyNode.fromDto(PoapPolicyNodeDto dto) => PoapPolicyNode(
         value: dto.value,
-        children: List<PoapPolicyNodeDto>.from(dto.children ?? []).map(PoapPolicyNode.fromDto).toList(),
+        children: List<PoapPolicyNodeDto>.from(dto.children ?? [])
+            .map(PoapPolicyNode.fromDto)
+            .toList(),
       );
 
   final String value;
@@ -116,7 +118,9 @@ class PoapPolicyResult {
   factory PoapPolicyResult.fromDto(PoapPolicyResultDto dto) => PoapPolicyResult(
         boolean: dto.boolean ?? false,
         node: dto.node != null ? PoapPolicyNode.fromDto(dto.node!) : null,
-        errors: List<PoapPolicyErrorDto>.from(dto.errors ?? []).map(PoapPolicyError.fromDto).toList(),
+        errors: List<PoapPolicyErrorDto>.from(dto.errors ?? [])
+            .map(PoapPolicyError.fromDto)
+            .toList(),
       );
 
   final bool boolean;
@@ -138,7 +142,8 @@ class PoapPolicy {
         network: dto.network,
         address: dto.address,
         node: dto.node != null ? PoapPolicyNode.fromDto(dto.node!) : null,
-        result: dto.result != null ? PoapPolicyResult.fromDto(dto.result!) : null,
+        result:
+            dto.result != null ? PoapPolicyResult.fromDto(dto.result!) : null,
       );
 
   final String? id;

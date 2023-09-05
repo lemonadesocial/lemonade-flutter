@@ -16,7 +16,8 @@ class TextBadge extends StatelessWidget {
       padding: EdgeInsets.all(Spacing.superExtraSmall),
       decoration: ShapeDecoration(
         color: colorScheme.surface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(LemonRadius.xSmall)),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(LemonRadius.xSmall)),
       ),
       child: Center(
         child: Text(

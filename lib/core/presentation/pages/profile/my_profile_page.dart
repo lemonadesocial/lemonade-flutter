@@ -13,10 +13,14 @@ class MyProfilePage extends StatelessWidget {
   const MyProfilePage({super.key});
 
   _walletBlocProviderBuilder({required Widget child}) {
-    return BlocProvider(create: (context) => WalletBloc()..add(WalletEventInitWalletConnect()), child: child);
+    return BlocProvider(
+        create: (context) =>
+            WalletBloc()..add(const WalletEventInitWalletConnect()),
+        child: child);
   }
 
-  _profileBlocProviderBuilder({required Widget Function(BuildContext context, String userId) builder}) {
+  _profileBlocProviderBuilder(
+      {required Widget Function(BuildContext context, String userId) builder}) {
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, authState) {
         final userId = authState.maybeWhen(

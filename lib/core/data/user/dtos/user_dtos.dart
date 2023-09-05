@@ -15,23 +15,26 @@ class UserDto with _$UserDto {
     @JsonKey(name: 'first_name', includeIfNull: false) String? firstName,
     @JsonKey(name: 'last_name', includeIfNull: false) String? lastName,
     @JsonKey(name: 'image_avatar', includeIfNull: false) String? imageAvatar,
-    @JsonKey(name: 'new_photos_expanded', includeIfNull: false) List<DbFileDto>? newPhotosExpanded,
+    @JsonKey(name: 'new_photos_expanded', includeIfNull: false)
+    List<DbFileDto>? newPhotosExpanded,
     @JsonKey(name: 'date_of_birth', includeIfNull: false) DateTime? dateOfBirth,
     @JsonKey(name: 'phone_verified', includeIfNull: false) bool? phoneVerified,
-    @JsonKey(name: 'google_user_info', includeIfNull: false) GoogleUserInfoDto? googleUserInfo,
-    @JsonKey(name: 'discord_user_info', includeIfNull: false) DiscordUserInfoDto? discordUserInfo,
-    @JsonKey(name: 'shopify_user_info', includeIfNull: false) ShopifyUserInfoDto? shopifyUserInfo,
-    @JsonKey(name: 'twitch_user_info', includeIfNull: false) TwitchUserInfoDto? twitchUserInfo,
-    @JsonKey(name: 'zoom_user_info', includeIfNull: false) ZoomUserInfoDto? zoomUserInfo,
-    
+    @JsonKey(name: 'google_user_info', includeIfNull: false)
+    GoogleUserInfoDto? googleUserInfo,
+    @JsonKey(name: 'discord_user_info', includeIfNull: false)
+    DiscordUserInfoDto? discordUserInfo,
+    @JsonKey(name: 'shopify_user_info', includeIfNull: false)
+    ShopifyUserInfoDto? shopifyUserInfo,
+    @JsonKey(name: 'twitch_user_info', includeIfNull: false)
+    TwitchUserInfoDto? twitchUserInfo,
+    @JsonKey(name: 'zoom_user_info', includeIfNull: false)
+    ZoomUserInfoDto? zoomUserInfo,
     @JsonKey(name: 'handle_twitter') String? handleTwitter,
     @JsonKey(name: 'handle_instagram') String? handleInstagram,
     @JsonKey(name: 'handle_facebook') String? handleFacebook,
     @JsonKey(name: 'handle_linkedin') String? handleLinkedin,
-
     List<String>? wallets,
     @JsonKey(name: 'wallet_custodial') String? walletCustodial,
-
     String? name,
     String? username,
     String? phone,
@@ -47,14 +50,13 @@ class UserDto with _$UserDto {
     int? friends,
     int? following,
     int? followers,
-    
     @JsonKey(name: 'job_title') String? jobTitle,
     String? tagline,
-
     Currency? currency,
   }) = _UserDto;
 
-  factory UserDto.fromJson(Map<String, dynamic> json) => _$UserDtoFromJson(json);
+  factory UserDto.fromJson(Map<String, dynamic> json) =>
+      _$UserDtoFromJson(json);
 }
 
 @freezed
@@ -63,7 +65,8 @@ class DiscordUserInfoDto with _$DiscordUserInfoDto {
     String? username,
   }) = _DiscordUserInfoDto;
 
-  factory DiscordUserInfoDto.fromJson(Map<String, dynamic> json) => _$DiscordUserInfoDtoFromJson(json);
+  factory DiscordUserInfoDto.fromJson(Map<String, dynamic> json) =>
+      _$DiscordUserInfoDtoFromJson(json);
 }
 
 @freezed
@@ -72,7 +75,8 @@ class ShopifyUserInfoDto with _$ShopifyUserInfoDto {
     @JsonKey(name: 'shop_name', includeIfNull: false) String? shopName,
   }) = _ShopifyUserInfoDto;
 
-  factory ShopifyUserInfoDto.fromJson(Map<String, dynamic> json) => _$ShopifyUserInfoDtoFromJson(json);
+  factory ShopifyUserInfoDto.fromJson(Map<String, dynamic> json) =>
+      _$ShopifyUserInfoDtoFromJson(json);
 }
 
 @freezed
@@ -88,10 +92,12 @@ class GoogleUserInfoDto with _$GoogleUserInfoDto {
     String? link,
     String? locale,
     String? picture,
-    @JsonKey(name: 'verified_email', includeIfNull: false) String? verifiedEmail,
+    @JsonKey(name: 'verified_email', includeIfNull: false)
+    String? verifiedEmail,
   }) = _GoogleUserInfoDto;
 
-  factory GoogleUserInfoDto.fromJson(Map<String, dynamic> json) => _$GoogleUserInfoDtoFromJson(json);
+  factory GoogleUserInfoDto.fromJson(Map<String, dynamic> json) =>
+      _$GoogleUserInfoDtoFromJson(json);
 }
 
 @freezed
@@ -103,7 +109,8 @@ class TwitchUserInfoDto with _$TwitchUserInfoDto {
     String? name,
   }) = _TwitchUserInfoDto;
 
-  factory TwitchUserInfoDto.fromJson(Map<String, dynamic> json) => _$TwitchUserInfoDtoFromJson(json);
+  factory TwitchUserInfoDto.fromJson(Map<String, dynamic> json) =>
+      _$TwitchUserInfoDtoFromJson(json);
 }
 
 @freezed
@@ -115,5 +122,6 @@ class ZoomUserInfoDto with _$ZoomUserInfoDto {
     String? email,
   }) = _ZoomUserInfoDto;
 
-  factory ZoomUserInfoDto.fromJson(Map<String, dynamic> json) => _$ZoomUserInfoDtoFromJson(json);
+  factory ZoomUserInfoDto.fromJson(Map<String, dynamic> json) =>
+      _$ZoomUserInfoDtoFromJson(json);
 }

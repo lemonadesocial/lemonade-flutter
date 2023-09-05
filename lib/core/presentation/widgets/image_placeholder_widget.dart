@@ -11,13 +11,14 @@ class ImagePlaceholder {
       width: double.infinity,
       child: Center(
         child: ThemeSvgIcon(
-          builder: (filter) => Assets.icons.icLemonOutline.svg(colorFilter: filter, width: 50, height: 50),
+          builder: (filter) => Assets.icons.icLemonOutline
+              .svg(colorFilter: filter, width: 50, height: 50),
         ),
       ),
     );
   }
 
-  static Widget defaultPlaceholder({ BorderRadius? radius }) {
+  static Widget defaultPlaceholder({BorderRadius? radius}) {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -26,7 +27,8 @@ class ImagePlaceholder {
       ),
       child: Center(
         child: ThemeSvgIcon(
-          builder: (filter) => Assets.icons.icLemonOutline.svg(colorFilter: filter, width: 50, height: 50),
+          builder: (filter) => Assets.icons.icLemonOutline
+              .svg(colorFilter: filter, width: 50, height: 50),
         ),
       ),
     );

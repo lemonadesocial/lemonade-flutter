@@ -1,4 +1,3 @@
-import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/notification/notifications_listing_bloc.dart';
 import 'package:app/core/data/notification/repository/notification_repository_impl.dart';
 import 'package:app/core/domain/notification/entities/notification.dart'
@@ -12,7 +11,6 @@ import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/service/notification/notification_service.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/router/app_router.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:auto_route/auto_route.dart';
@@ -26,6 +24,8 @@ class NotificationPage extends StatelessWidget {
   late final NotificationService notificationService =
       NotificationService(NotificationRepositoryImpl());
 
+  NotificationPage({super.key});
+
   Widget _notificationsListingBlocProvider(Widget child) {
     return BlocProvider<NotificationsListingBloc>(
       create: (context) => NotificationsListingBloc(notificationService)
@@ -37,7 +37,7 @@ class NotificationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _notificationsListingBlocProvider(
-      _NotificationsListingView(),
+      const _NotificationsListingView(),
     );
   }
 }
@@ -51,9 +51,8 @@ class _NotificationsListingView extends StatefulWidget {
 }
 
 class _NotificationsListingViewState extends State<_NotificationsListingView> {
-  GlobalKey<AnimatedListState> _notificationList =
+  final GlobalKey<AnimatedListState> _notificationList =
       GlobalKey<AnimatedListState>();
-  final _appRouter = AppRouter();
 
   removeItem(
     int index, {
@@ -77,7 +76,7 @@ class _NotificationsListingViewState extends State<_NotificationsListingView> {
                   animation: animation,
                   builder: (context, child) => AnimatedOpacity(
                     opacity: animation.value,
-                    duration: Duration(milliseconds: 300),
+                    duration: const Duration(milliseconds: 300),
                     child: child,
                   ),
                   child: NotificationCard(notification: notification),
@@ -200,7 +199,7 @@ class _NotificationSlidable extends StatelessWidget {
           },
         ),
         extentRatio: 0.2,
-        motion: ScrollMotion(),
+        motion: const ScrollMotion(),
         children: [
           SlidableAction(
             onPressed: (context) {

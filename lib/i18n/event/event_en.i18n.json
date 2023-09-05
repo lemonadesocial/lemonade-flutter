@@ -13,5 +13,6 @@
     "noEvents": "No events yet",
     "buyTickets": "Buy tickets",
     "rsvpToUnlock": "RSVP to this event to unlock the location",
-    "eventLocation": "Location"
+    "eventLocation": "Location",
+    "tickets": "tickets"
 }

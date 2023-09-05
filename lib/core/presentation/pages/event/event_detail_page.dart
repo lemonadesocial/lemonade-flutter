@@ -6,6 +6,7 @@ import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.
 import 'package:app/core/service/webview/webview_token_service.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
@@ -23,7 +24,8 @@ class EventDetailPage extends StatefulWidget {
   State<EventDetailPage> createState() => _EventDetailPageState();
 }
 
-class _EventDetailPageState extends State<EventDetailPage> with WidgetsBindingObserver {
+class _EventDetailPageState extends State<EventDetailPage>
+    with WidgetsBindingObserver {
   bool isReady = false;
   bool isLoaded = false;
 
@@ -31,13 +33,14 @@ class _EventDetailPageState extends State<EventDetailPage> with WidgetsBindingOb
   int maxSendTokenAttempt = 5;
   int sendTokenAttempt = 0;
 
-  late WebviewTokenService webviewTokenService = WebviewTokenService(onTokenChanged: (_token) {
-      token = _token;
-      _sendTokenToWebview();
-    },);
+  late WebviewTokenService webviewTokenService =
+      WebviewTokenService(onTokenChanged: (t) {
+    token = t;
+    _sendTokenToWebview();
+  });
 
   final GlobalKey webViewKey = GlobalKey();
-  
+
   URLRequest? initialRequest;
 
   InAppWebViewController? webViewController;
@@ -93,10 +96,13 @@ class _EventDetailPageState extends State<EventDetailPage> with WidgetsBindingOb
   Future<void> _sendTokenToWebview() async {
     sendTokenAttempt++;
     try {
-      webViewController?.evaluateJavascript(source: 'document.mobileAuthToken = "$token"');
+      webViewController?.evaluateJavascript(
+          source: 'document.mobileAuthToken = "$token"');
     } catch (e) {
       if (sendTokenAttempt >= maxSendTokenAttempt) return;
-      print('Retry times: $sendTokenAttempt');
+      if (kDebugMode) {
+        print('Retry times: $sendTokenAttempt');
+      }
       await Future.delayed(const Duration(milliseconds: 5000));
       _sendTokenToWebview();
     }
@@ -104,12 +110,17 @@ class _EventDetailPageState extends State<EventDetailPage> with WidgetsBindingOb
 
   _getInitialRequest() async {
     try {
-      final headers = await webviewTokenService.generateHeaderWithToken();
-      if(headers == null) {
+      var headers = await webviewTokenService.generateHeaderWithToken();
+      if (headers == null) {
         await _clearWebStorage();
       }
-      initialRequest = URLRequest(url: Uri.parse(_getEventWebUrl()), headers: headers);
-    } catch (e) {}
+      initialRequest =
+          URLRequest(url: Uri.parse(_getEventWebUrl()), headers: headers);
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error _getInitialRequest: $e');
+      }
+    }
   }
 
   String _getEventWebUrl() {
@@ -150,19 +161,20 @@ class _EventDetailPageState extends State<EventDetailPage> with WidgetsBindingOb
       ),
       body: Stack(
         children: [
-          if(isReady) InAppWebView(
-            key: webViewKey,
-            initialUrlRequest: initialRequest,
-            initialOptions: options,
-            onWebViewCreated: (controller) {
-              webViewController = controller;
-            },
-            onProgressChanged: (context, progress) {
-              if(progress == 100) {
-                _oWebViewLoaded();
-              }
-            },
-          ),
+          if (isReady)
+            InAppWebView(
+              key: webViewKey,
+              initialUrlRequest: initialRequest,
+              initialOptions: options,
+              onWebViewCreated: (controller) {
+                webViewController = controller;
+              },
+              onProgressChanged: (context, progress) {
+                if (progress == 100) {
+                  _oWebViewLoaded();
+                }
+              },
+            ),
           if (!isReady || !isLoaded)
             Container(
               color: colorScheme.primary,

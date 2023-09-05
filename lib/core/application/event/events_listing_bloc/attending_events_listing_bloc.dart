@@ -6,15 +6,14 @@ import 'package:app/core/service/event/event_service.dart';
 import 'package:dartz/dartz.dart';
 
 class AttendingEventListingBloc extends BaseEventListingBloc<GetEventsInput> {
-  final EventService eventService;
-  final GetEventsInput defaultInput;
   AttendingEventListingBloc(
-    this.eventService, {
-    required this.defaultInput,
+    final EventService eventService, {
+    required GetEventsInput defaultInput,
   }) : super(eventService, defaultInput: defaultInput);
 
   @override
-  Future<Either<Failure, List<Event>>> getEvents(int skip, bool endReached, {required GetEventsInput input}) async {
+  Future<Either<Failure, List<Event>>> getEvents(int skip, bool endReached,
+      {required GetEventsInput input}) async {
     return eventService.getEvents(input: input.copyWith(skip: skip));
   }
 }

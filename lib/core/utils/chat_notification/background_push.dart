@@ -39,7 +39,6 @@ class BackgroundPush {
       FlutterLocalNotificationsPlugin();
   final Client client;
   String? _fcmToken;
-  BuildContext? _context;
   AppRouter? _router;
   final dynamic firebase = FcmSharedIsolate();
   StreamSubscription<SyncUpdate>? onRoomSync;
@@ -52,7 +51,6 @@ class BackgroundPush {
     required BuildContext context,
   }) {
     _router = router;
-    _context = context;
   }
 
   Future<void> onMessage(Map<dynamic, dynamic> message) async {
