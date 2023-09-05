@@ -472,7 +472,7 @@ abstract class $PoapPolicyNodeDtoCopyWith<$Res> {
   $Res call(
       {String value,
       @JsonKey(defaultValue: <PoapPolicyNodeDto>[])
-          List<PoapPolicyNodeDto>? children});
+      List<PoapPolicyNodeDto>? children});
 }
 
 /// @nodoc
@@ -515,7 +515,7 @@ abstract class _$$_PoapPolicyNodeDtoCopyWith<$Res>
   $Res call(
       {String value,
       @JsonKey(defaultValue: <PoapPolicyNodeDto>[])
-          List<PoapPolicyNodeDto>? children});
+      List<PoapPolicyNodeDto>? children});
 }
 
 /// @nodoc
@@ -551,7 +551,7 @@ class _$_PoapPolicyNodeDto implements _PoapPolicyNodeDto {
   const _$_PoapPolicyNodeDto(
       {required this.value,
       @JsonKey(defaultValue: <PoapPolicyNodeDto>[])
-          final List<PoapPolicyNodeDto>? children})
+      final List<PoapPolicyNodeDto>? children})
       : _children = children;
 
   factory _$_PoapPolicyNodeDto.fromJson(Map<String, dynamic> json) =>
@@ -608,7 +608,7 @@ abstract class _PoapPolicyNodeDto implements PoapPolicyNodeDto {
   const factory _PoapPolicyNodeDto(
       {required final String value,
       @JsonKey(defaultValue: <PoapPolicyNodeDto>[])
-          final List<PoapPolicyNodeDto>? children}) = _$_PoapPolicyNodeDto;
+      final List<PoapPolicyNodeDto>? children}) = _$_PoapPolicyNodeDto;
 
   factory _PoapPolicyNodeDto.fromJson(Map<String, dynamic> json) =
       _$_PoapPolicyNodeDto.fromJson;
@@ -805,7 +805,7 @@ abstract class $PoapPolicyResultDtoCopyWith<$Res> {
       {bool? boolean,
       PoapPolicyNodeDto? node,
       @JsonKey(defaultValue: <PoapPolicyErrorDto>[])
-          List<PoapPolicyErrorDto>? errors});
+      List<PoapPolicyErrorDto>? errors});
 
   $PoapPolicyNodeDtoCopyWith<$Res>? get node;
 }
@@ -868,7 +868,7 @@ abstract class _$$_PoapPolicyResultDtoCopyWith<$Res>
       {bool? boolean,
       PoapPolicyNodeDto? node,
       @JsonKey(defaultValue: <PoapPolicyErrorDto>[])
-          List<PoapPolicyErrorDto>? errors});
+      List<PoapPolicyErrorDto>? errors});
 
   @override
   $PoapPolicyNodeDtoCopyWith<$Res>? get node;
@@ -913,7 +913,7 @@ class _$_PoapPolicyResultDto implements _PoapPolicyResultDto {
       {this.boolean,
       this.node,
       @JsonKey(defaultValue: <PoapPolicyErrorDto>[])
-          final List<PoapPolicyErrorDto>? errors})
+      final List<PoapPolicyErrorDto>? errors})
       : _errors = errors;
 
   factory _$_PoapPolicyResultDto.fromJson(Map<String, dynamic> json) =>
@@ -974,7 +974,7 @@ abstract class _PoapPolicyResultDto implements PoapPolicyResultDto {
       {final bool? boolean,
       final PoapPolicyNodeDto? node,
       @JsonKey(defaultValue: <PoapPolicyErrorDto>[])
-          final List<PoapPolicyErrorDto>? errors}) = _$_PoapPolicyResultDto;
+      final List<PoapPolicyErrorDto>? errors}) = _$_PoapPolicyResultDto;
 
   factory _PoapPolicyResultDto.fromJson(Map<String, dynamic> json) =
       _$_PoapPolicyResultDto.fromJson;
