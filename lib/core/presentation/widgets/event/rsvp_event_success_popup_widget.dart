@@ -1,4 +1,5 @@
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/presentation/widgets/animation/ripple_animation.dart';
 import 'package:app/core/presentation/widgets/back_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -128,23 +129,11 @@ class _SuccessCircle extends StatelessWidget {
             alignment: Alignment.center,
             child: LayoutBuilder(
               builder: (context, constraints) => Transform.scale(
-                scale: 1.2,
-                child: Container(
-                  decoration: BoxDecoration(
-                    gradient: const RadialGradient(
-                      colors: [
-                        Colors.black,
-                        Color.fromRGBO(5, 10, 7, 1),
-                      ],
-                      stops: [
-                        0.8,
-                        1,
-                      ],
-                    ),
-                    borderRadius: BorderRadius.circular(constraints.maxWidth),
-                  ),
-                  width: constraints.maxWidth,
-                  height: constraints.maxWidth,
+                scale: 1.5,
+                child: RippleAnimation(
+                  size: constraints.maxWidth,
+                  color: const Color.fromRGBO(12, 20, 17, 1),
+                  scaleTween: Tween<double>(begin: 0.3, end: 1),
                 ),
               ),
             ),
