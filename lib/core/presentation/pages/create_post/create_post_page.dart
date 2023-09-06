@@ -9,6 +9,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:slang/builder/utils/string_extensions.dart';
 
 import '../../../../i18n/i18n.g.dart';
 import '../../../../injection/register_module.dart';
@@ -52,6 +53,35 @@ class CreatePostPage extends StatelessWidget {
             appBar: AppBar(
               leading: const LemonBackButton(),
               actions: [
+                Row(
+                  children: [
+                    InkWell(
+                      onTap: () => createPostBloc
+                          .onPostPrivacyChange(state.postPrivacy),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: colorScheme.primary,
+                          borderRadius: BorderRadius.circular(32),
+                          border: Border.all(
+                            color: colorScheme.outline,
+                          ),
+                        ),
+                        padding: EdgeInsets.symmetric(
+                          vertical: Spacing.superExtraSmall,
+                          horizontal: Spacing.small,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Assets.icons.icPublic.svg(),
+                            SizedBox(width: Spacing.superExtraSmall),
+                            Text(state.postPrivacy.name.capitalize()),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
                 SizedBox(width: Spacing.smMedium),
               ],
               elevation: 0,
