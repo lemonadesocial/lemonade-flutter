@@ -45,6 +45,10 @@ class HomeNewsfeedListView extends StatelessWidget {
               context.read<NewsfeedListingBloc>().add(NewsfeedListingEvent.fetch());
               refreshController.loadComplete();
             },
+            footer: const ClassicFooter(
+              height: 100,
+              loadStyle: LoadStyle.ShowWhenLoading,
+            ),
             child: ListView.separated(
               padding:
               EdgeInsetsDirectional.symmetric(vertical: Spacing.xSmall),
