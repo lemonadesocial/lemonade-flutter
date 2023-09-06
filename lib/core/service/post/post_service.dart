@@ -1,4 +1,3 @@
-import 'package:app/core/data/post/dtos/post_dtos.dart';
 import 'package:app/core/domain/post/entities/post_entities.dart';
 import 'package:app/core/domain/post/input/get_posts_input.dart';
 import 'package:app/core/domain/post/post_repository.dart';
@@ -17,7 +16,7 @@ class PostService {
     return postRepository.getPosts(input: input);
   }
 
-  Future<Either<Failure, PostDto>> createPost({
+  Future<Either<Failure, Post>> createPost({
     required String postDescription,
     required PostPrivacy postPrivacy,
     PostRefType? postRefType,

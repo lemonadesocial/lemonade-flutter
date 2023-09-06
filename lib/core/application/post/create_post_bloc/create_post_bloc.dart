@@ -80,10 +80,10 @@ class CreatePostBloc extends Cubit<CreatePostState> {
     );
     response.fold(
       (l) => emit(state.copyWith(status: CreatePostStatus.error)),
-      (postDto) => emit(
+      (newPost) => emit(
         state.copyWith(
           status: CreatePostStatus.postCreated,
-          newPost: Post.fromDto(postDto),
+          newPost: newPost,
         ),
       ),
     );
