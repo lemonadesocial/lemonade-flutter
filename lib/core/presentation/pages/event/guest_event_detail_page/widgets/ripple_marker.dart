@@ -12,7 +12,7 @@ class RippleMarker extends StatefulWidget {
   final double size;
   final Color color;
   final VoidCallback? onPressed;
-  
+
   @override
   RippleMarkerState createState() => RippleMarkerState();
 }
