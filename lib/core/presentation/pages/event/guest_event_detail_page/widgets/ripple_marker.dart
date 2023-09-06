@@ -12,11 +12,12 @@ class RippleMarker extends StatefulWidget {
   final double size;
   final Color color;
   final VoidCallback? onPressed;
+  
   @override
-  _RippleMarkerState createState() => _RippleMarkerState();
+  RippleMarkerState createState() => RippleMarkerState();
 }
 
-class _RippleMarkerState extends State<RippleMarker>
+class RippleMarkerState extends State<RippleMarker>
     with TickerProviderStateMixin {
   late final AnimationController _controller;
 
