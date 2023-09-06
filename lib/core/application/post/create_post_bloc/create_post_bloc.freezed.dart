@@ -18,6 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$CreatePostState {
   CreatePostStatus get status => throw _privateConstructorUsedError;
   PostPrivacy get postPrivacy => throw _privateConstructorUsedError;
+  Post? get newPost => throw _privateConstructorUsedError;
   String? get postDescription => throw _privateConstructorUsedError;
   Event? get selectEvent => throw _privateConstructorUsedError;
   XFile? get uploadImage => throw _privateConstructorUsedError;
@@ -37,6 +38,7 @@ abstract class $CreatePostStateCopyWith<$Res> {
   $Res call(
       {CreatePostStatus status,
       PostPrivacy postPrivacy,
+      Post? newPost,
       String? postDescription,
       Event? selectEvent,
       XFile? uploadImage,
@@ -58,6 +60,7 @@ class _$CreatePostStateCopyWithImpl<$Res, $Val extends CreatePostState>
   $Res call({
     Object? status = null,
     Object? postPrivacy = null,
+    Object? newPost = freezed,
     Object? postDescription = freezed,
     Object? selectEvent = freezed,
     Object? uploadImage = freezed,
@@ -72,6 +75,10 @@ class _$CreatePostStateCopyWithImpl<$Res, $Val extends CreatePostState>
           ? _value.postPrivacy
           : postPrivacy // ignore: cast_nullable_to_non_nullable
               as PostPrivacy,
+      newPost: freezed == newPost
+          ? _value.newPost
+          : newPost // ignore: cast_nullable_to_non_nullable
+              as Post?,
       postDescription: freezed == postDescription
           ? _value.postDescription
           : postDescription // ignore: cast_nullable_to_non_nullable
@@ -103,6 +110,7 @@ abstract class _$$_CreatePostStateCopyWith<$Res>
   $Res call(
       {CreatePostStatus status,
       PostPrivacy postPrivacy,
+      Post? newPost,
       String? postDescription,
       Event? selectEvent,
       XFile? uploadImage,
@@ -122,6 +130,7 @@ class __$$_CreatePostStateCopyWithImpl<$Res>
   $Res call({
     Object? status = null,
     Object? postPrivacy = null,
+    Object? newPost = freezed,
     Object? postDescription = freezed,
     Object? selectEvent = freezed,
     Object? uploadImage = freezed,
@@ -136,6 +145,10 @@ class __$$_CreatePostStateCopyWithImpl<$Res>
           ? _value.postPrivacy
           : postPrivacy // ignore: cast_nullable_to_non_nullable
               as PostPrivacy,
+      newPost: freezed == newPost
+          ? _value.newPost
+          : newPost // ignore: cast_nullable_to_non_nullable
+              as Post?,
       postDescription: freezed == postDescription
           ? _value.postDescription
           : postDescription // ignore: cast_nullable_to_non_nullable
@@ -162,6 +175,7 @@ class _$_CreatePostState implements _CreatePostState {
   const _$_CreatePostState(
       {this.status = CreatePostStatus.initial,
       this.postPrivacy = PostPrivacy.public,
+      this.newPost,
       this.postDescription,
       this.selectEvent,
       this.uploadImage,
@@ -174,6 +188,8 @@ class _$_CreatePostState implements _CreatePostState {
   @JsonKey()
   final PostPrivacy postPrivacy;
   @override
+  final Post? newPost;
+  @override
   final String? postDescription;
   @override
   final Event? selectEvent;
@@ -184,7 +200,7 @@ class _$_CreatePostState implements _CreatePostState {
 
   @override
   String toString() {
-    return 'CreatePostState(status: $status, postPrivacy: $postPrivacy, postDescription: $postDescription, selectEvent: $selectEvent, uploadImage: $uploadImage, error: $error)';
+    return 'CreatePostState(status: $status, postPrivacy: $postPrivacy, newPost: $newPost, postDescription: $postDescription, selectEvent: $selectEvent, uploadImage: $uploadImage, error: $error)';
   }
 
   @override
@@ -195,6 +211,7 @@ class _$_CreatePostState implements _CreatePostState {
             (identical(other.status, status) || other.status == status) &&
             (identical(other.postPrivacy, postPrivacy) ||
                 other.postPrivacy == postPrivacy) &&
+            (identical(other.newPost, newPost) || other.newPost == newPost) &&
             (identical(other.postDescription, postDescription) ||
                 other.postDescription == postDescription) &&
             (identical(other.selectEvent, selectEvent) ||
@@ -205,7 +222,7 @@ class _$_CreatePostState implements _CreatePostState {
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, status, postPrivacy,
+  int get hashCode => Object.hash(runtimeType, status, postPrivacy, newPost,
       postDescription, selectEvent, uploadImage, error);
 
   @JsonKey(ignore: true)
@@ -219,6 +236,7 @@ abstract class _CreatePostState implements CreatePostState {
   const factory _CreatePostState(
       {final CreatePostStatus status,
       final PostPrivacy postPrivacy,
+      final Post? newPost,
       final String? postDescription,
       final Event? selectEvent,
       final XFile? uploadImage,
@@ -228,6 +246,8 @@ abstract class _CreatePostState implements CreatePostState {
   CreatePostStatus get status;
   @override
   PostPrivacy get postPrivacy;
+  @override
+  Post? get newPost;
   @override
   String? get postDescription;
   @override

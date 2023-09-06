@@ -16,7 +16,7 @@ class PostService {
     return postRepository.getPosts(input: input);
   }
 
-  Future<Either<Failure, bool>> createPost({
+  Future<Either<Failure, Post>> createPost({
     required String postDescription,
     required PostPrivacy postPrivacy,
     PostRefType? postRefType,
