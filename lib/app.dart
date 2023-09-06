@@ -1,5 +1,4 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
-import 'package:app/core/presentation/widgets/app_limit_layout_builder_widget.dart';
 import 'package:app/core/service/firebase/firebase_service.dart';
 import 'package:app/core/service/matrix/matrix_service.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
@@ -51,24 +50,19 @@ class _LemonadeAppViewState extends State<LemonadeApp> {
         child: child,
       );
 
-  Widget _limitAppLayoutBuilder(Widget child) => AppLimitLayoutBuilder(
-        child: child,
-      );
-
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(
+    ScreenUtil.init(
+      context,
       minTextAdapt: true,
-      designSize: const Size(375, 812), //Iphone X screen size, match Figma
-      builder: (context, state) {
-        return _limitAppLayoutBuilder(
-          _translationProviderBuilder(
-            _portalBuilder(
-              _globalBlocProviderBuilder(_App(_appRouter)),
-            ),
-          ),
-        );
-      },
+      designSize: getDeviceType() == DeviceType.phone
+          ? const Size(375, 812) //Iphone X screen size, match Figma
+          : const Size(1024, 1366), //Ipad Pro 12.9 inches
+    );
+    return _translationProviderBuilder(
+      _portalBuilder(
+        _globalBlocProviderBuilder(_App(_appRouter)),
+      ),
     );
   }
 
@@ -89,6 +83,11 @@ class _LemonadeAppViewState extends State<LemonadeApp> {
         }
       }
     }
+  }
+
+  DeviceType getDeviceType() {
+    final data = MediaQueryData.fromWindow(WidgetsBinding.instance.window);
+    return data.size.shortestSide < 600 ? DeviceType.phone : DeviceType.tablet;
   }
 }
 
@@ -120,3 +119,5 @@ class _App extends StatelessWidget {
   Locale _getCurrentLocale(BuildContext context) =>
       TranslationProvider.of(context).flutterLocale;
 }
+
+enum DeviceType { phone, tablet }
