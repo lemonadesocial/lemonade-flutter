@@ -89,69 +89,66 @@ class _EventHostItem extends StatelessWidget {
         child: Stack(
           children: [
             Positioned.fill(
-              child: CachedNetworkImage(
-                fit: BoxFit.cover,
-                placeholder: (_, __) => ImagePlaceholder.eventCard(),
-                errorWidget: (_, __, ___) => ImagePlaceholder.eventCard(),
-                imageUrl: ImageUtils.generateUrl(
-                  file: host?.newPhotosExpanded?.first,
-                  imageConfig: ImageConfig.eventPhoto,
-                ),
-              ),
-            ),
-            ClipRRect(
-              child: BackdropFilter(
-                filter: ImageFilter.blur(
+              child: ImageFiltered(
+                imageFilter: ImageFilter.blur(
                   sigmaX: 100,
                   sigmaY: 50,
                 ),
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: Spacing.extraSmall),
-                  child: Center(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(60.w),
-                          ),
-                          width: 60.w,
-                          height: 60.w,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(60.r),
-                            child: CachedNetworkImage(
-                              fit: BoxFit.cover,
-                              placeholder: (_, __) =>
-                                  ImagePlaceholder.eventCard(),
-                              errorWidget: (_, __, ___) =>
-                                  ImagePlaceholder.eventCard(),
-                              imageUrl: ImageUtils.generateUrl(
-                                file: host?.newPhotosExpanded?.first,
-                                imageConfig: ImageConfig.eventPhoto,
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: Spacing.xSmall),
-                        Text(
-                          host?.displayName ?? host?.name ?? '',
-                          style: Typo.small.copyWith(
-                            color: colorScheme.onPrimary,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        Text(
-                          host?.jobTitle ?? '',
-                          style: Typo.small.copyWith(
-                            color: colorScheme.onSecondary,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        )
-                      ],
-                    ),
+                child: CachedNetworkImage(
+                  fit: BoxFit.cover,
+                  placeholder: (_, __) => ImagePlaceholder.eventCard(),
+                  errorWidget: (_, __, ___) => ImagePlaceholder.eventCard(),
+                  imageUrl: ImageUtils.generateUrl(
+                    file: host?.newPhotosExpanded?.first,
+                    imageConfig: ImageConfig.eventPhoto,
                   ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: Spacing.extraSmall),
+              child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(60.w),
+                      ),
+                      width: 60.w,
+                      height: 60.w,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(60.r),
+                        child: CachedNetworkImage(
+                          fit: BoxFit.cover,
+                          placeholder: (_, __) => ImagePlaceholder.eventCard(),
+                          errorWidget: (_, __, ___) =>
+                              ImagePlaceholder.eventCard(),
+                          imageUrl: ImageUtils.generateUrl(
+                            file: host?.newPhotosExpanded?.first,
+                            imageConfig: ImageConfig.eventPhoto,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: Spacing.xSmall),
+                    Text(
+                      host?.displayName ?? host?.name ?? '',
+                      style: Typo.small.copyWith(
+                        color: colorScheme.onPrimary,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      host?.jobTitle ?? '',
+                      style: Typo.small.copyWith(
+                        color: colorScheme.onSecondary,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    )
+                  ],
                 ),
               ),
             ),
