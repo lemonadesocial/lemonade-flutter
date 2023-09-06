@@ -1,3 +1,4 @@
+import 'package:app/theme/color.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math show sin, pi, sqrt;
 
@@ -5,13 +6,11 @@ class RippleMarker extends StatefulWidget {
   const RippleMarker({
     super.key,
     this.size = 40.0,
-    this.color = Colors.green,
+    this.color = LemonColor.rippleMarkerColor,
     this.onPressed,
-    // required this.child,
   });
   final double size;
   final Color color;
-  // final Widget child;
   final VoidCallback? onPressed;
   @override
   _RippleMarkerState createState() => _RippleMarkerState();
@@ -36,7 +35,7 @@ class _RippleMarkerState extends State<RippleMarker>
     super.dispose();
   }
 
-  Widget _button() {
+  Widget _center() {
     return Center(
       child: ClipRRect(
         borderRadius: BorderRadius.circular(widget.size),
@@ -72,7 +71,7 @@ class _RippleMarkerState extends State<RippleMarker>
       child: SizedBox(
         width: widget.size,
         height: widget.size,
-        child: _button(),
+        child: _center(),
       ),
     );
   }
