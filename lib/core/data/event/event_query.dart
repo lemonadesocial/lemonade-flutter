@@ -49,6 +49,8 @@ const eventFragment = '''
     region
   }
   accepted
+  latitude
+  longitude
 }
 ''';
 
