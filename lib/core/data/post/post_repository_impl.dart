@@ -44,7 +44,7 @@ class PostRepositoryImpl implements PostRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> createNewPost({
+  Future<Either<Failure, PostDto>> createNewPost({
     required String postDescription,
     required PostPrivacy postPrivacy,
     PostRefType? postRefType,
@@ -66,7 +66,7 @@ class PostRepositoryImpl implements PostRepository {
     if (result.hasException) {
       return Left(Failure());
     }
-    return Right(result.parsedData == true);
+    return Right(PostDto.fromJson(result.parsedData));
   }
 
   @override

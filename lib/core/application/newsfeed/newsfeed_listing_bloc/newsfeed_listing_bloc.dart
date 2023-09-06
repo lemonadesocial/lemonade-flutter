@@ -15,6 +15,7 @@ class NewsfeedListingBloc extends Bloc<NewsfeedListingEvent, NewsfeedListingStat
     required this.defaultInput,
   }) : super(NewsfeedListingState.initial()) {
     on<NewsfeedListingEventFetch>(_onFetch);
+    on<NewsfeedListingEventNewPost>(_onNewPostAdded);
   }
 
   final NewsfeedService newsfeedService;
@@ -29,7 +30,8 @@ class NewsfeedListingBloc extends Bloc<NewsfeedListingEvent, NewsfeedListingStat
     bool endReached, {
     GetNewsfeedInput? input,
   }) async {
-    final result = await newsfeedService.getNewsfeed(input: input?.copyWith(offset: offset));
+    final result = await newsfeedService.getNewsfeed(
+        input: input?.copyWith(offset: offset));
     return result.fold(
       Left.new,
       (newsfeed) {
@@ -40,12 +42,26 @@ class NewsfeedListingBloc extends Bloc<NewsfeedListingEvent, NewsfeedListingStat
   }
 
   Future<void> _onFetch(NewsfeedListingEventFetch event, Emitter emit) async {
-    emit(NewsfeedListingState.loading());
+    emit(state.copyWith(status: NewsfeedStatus.loading));
     final result = await offsetPaginationService.fetch(defaultInput);
     result.fold(
-      (l) => emit(NewsfeedListingState.failure()),
+      (l) => emit(state.copyWith(status: NewsfeedStatus.failure)),
       (posts) => emit(
-        NewsfeedListingState.fetched(posts: posts),
+        state.copyWith(
+          status: NewsfeedStatus.fetched,
+          posts: posts,
+        ),
+      ),
+    );
+  }
+
+  void _onNewPostAdded(NewsfeedListingEventNewPost event, Emitter emit) {
+    final newPostList = List.of(state.posts);
+    newPostList.insert(0, event.post);
+    emit(
+      state.copyWith(
+        status: NewsfeedStatus.fetched,
+        posts: newPostList,
       ),
     );
   }
@@ -53,16 +69,24 @@ class NewsfeedListingBloc extends Bloc<NewsfeedListingEvent, NewsfeedListingStat
 
 @freezed
 class NewsfeedListingState with _$NewsfeedListingState {
-  factory  NewsfeedListingState.initial() = NewsfeedListingStateInitial;
-  factory NewsfeedListingState.loading() = NewsfeedListingStateLoading;
-  factory NewsfeedListingState.fetched({
-    required List<Post> posts,
-  }) = NewsfeedListingStateFetched;
-  factory NewsfeedListingState.failure() = NewsfeedListingStateFailure;
+  const factory NewsfeedListingState({
+    @Default(NewsfeedStatus.initial) NewsfeedStatus status,
+    @Default([]) List<Post> posts,
+  }) = NewsfeedListingStatus;
+
+  factory NewsfeedListingState.initial() => const NewsfeedListingState();
 }
 
 @freezed
 class NewsfeedListingEvent with _$NewsfeedListingEvent {
-  factory NewsfeedListingEvent.fetch({GetNewsfeedInput? input}) =
-      NewsfeedListingEventFetch;
+  factory NewsfeedListingEvent.fetch({GetNewsfeedInput? input}) = NewsfeedListingEventFetch;
+
+  factory NewsfeedListingEvent.newPostAdded({required Post post}) = NewsfeedListingEventNewPost;
+}
+
+enum NewsfeedStatus {
+  initial,
+  loading,
+  fetched,
+  failure,
 }

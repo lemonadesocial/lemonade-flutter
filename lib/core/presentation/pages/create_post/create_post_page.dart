@@ -1,4 +1,5 @@
 import 'package:app/core/application/post/create_post_bloc/create_post_bloc.dart';
+import 'package:app/core/domain/post/entities/post_entities.dart';
 import 'package:app/core/presentation/pages/create_post/widgets/create_post_event_card_widget.dart';
 import 'package:app/core/presentation/pages/event/event_selecting_page.dart';
 import 'package:app/core/presentation/widgets/back_button_widget.dart';
@@ -24,7 +25,7 @@ class CreatePostPage extends StatelessWidget {
     required this.onPostCreated,
   }) : super(key: key);
 
-  final VoidCallback onPostCreated;
+  final ValueChanged<Post> onPostCreated;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +41,7 @@ class CreatePostPage extends StatelessWidget {
             // showDialog(context: context, builder: Loading.defaultLoading);
           }
           if (state.status == CreatePostStatus.postCreated) {
-            onPostCreated();
+            onPostCreated(state.newPost!);
             context.router.pop();
           }
           if (state.status == CreatePostStatus.error) {}
