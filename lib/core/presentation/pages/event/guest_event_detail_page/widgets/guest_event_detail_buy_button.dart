@@ -1,5 +1,6 @@
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
+import 'package:app/core/presentation/widgets/event/rsvp_event_success_popup_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/number_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
@@ -40,6 +41,11 @@ class GuestEventDetailBuyButton extends StatelessWidget {
         child: SizedBox(
           height: Sizing.large,
           child: LinearGradientButton(
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => RSVPEventSuccessPopupWidget(event: event),
+              ),
+            ),
             leading: ThemeSvgIcon(
               color: colorScheme.onPrimary,
               builder: (filter) =>
