@@ -1359,7 +1359,7 @@ packages:
     source: hosted
     version: "0.22.1"
   matrix_api_lite:
-    dependency: "direct overridden"
+    dependency: "direct main"
     description:
       path: "."
       ref: main
