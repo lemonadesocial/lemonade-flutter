@@ -50,16 +50,20 @@ class LemonDrawer extends StatelessWidget {
                   children: [
                     ThemeSvgIcon(
                       color: colorScheme.onSecondary,
-                      builder: (filter) => Assets.icons.icBack.svg(colorFilter: filter),
+                      builder: (filter) =>
+                          Assets.icons.icBack.svg(colorFilter: filter),
                     )
                   ],
                 ),
               ),
             ),
             ...[
-              DrawerItem(icon: Assets.icons.icPeopleAlt, label: t.common.community),
-              DrawerItem(icon: Assets.icons.icTicket, label: t.common.ticket(n: 2)),
-              DrawerItem(icon: Assets.icons.icInsights, label: t.common.dashboard),
+              DrawerItem(
+                  icon: Assets.icons.icPeopleAlt, label: t.common.community),
+              DrawerItem(
+                  icon: Assets.icons.icTicket, label: t.common.ticket(n: 2)),
+              DrawerItem(
+                  icon: Assets.icons.icInsights, label: t.common.dashboard),
               DrawerItem(icon: Assets.icons.icQr, label: t.common.qrCode),
             ].map((item) => _buildDrawerItem(context, item: item)),
             SizedBox(height: Spacing.xSmall),
@@ -67,7 +71,8 @@ class LemonDrawer extends StatelessWidget {
             SizedBox(height: Spacing.xSmall),
             _buildDrawerItem(
               context,
-              item: DrawerItem(icon: Assets.icons.icSupport, label: t.common.support),
+              item: DrawerItem(
+                  icon: Assets.icons.icSupport, label: t.common.support),
             ),
             const Spacer(),
             _buildUser(context),
@@ -156,7 +161,8 @@ class LemonDrawer extends StatelessWidget {
             },
             child: ThemeSvgIcon(
               color: colorScheme.onSecondary,
-              builder: (filter) => Assets.icons.icMoreHoriz.svg(colorFilter: filter),
+              builder: (filter) =>
+                  Assets.icons.icMoreHoriz.svg(colorFilter: filter),
             ),
           ),
         ],

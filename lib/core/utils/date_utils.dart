@@ -1,11 +1,13 @@
-
 class DateUtils {
   static DateTime get today => DateTime.now();
 
   /// return [start, end] of current week
   static List<DateTime> get thisWeek {
-    DateTime thisWeekStart = DateTime(today.year, today.month, today.day - today.weekday + 1);
-    DateTime thisWeekEnd = thisWeekStart.add(const Duration(days: 7)).subtract(const Duration(days: 1));
+    DateTime thisWeekStart =
+        DateTime(today.year, today.month, today.day - today.weekday + 1);
+    DateTime thisWeekEnd = thisWeekStart
+        .add(const Duration(days: 7))
+        .subtract(const Duration(days: 1));
 
     return [thisWeekStart, thisWeekEnd];
   }
@@ -17,10 +19,11 @@ class DateUtils {
 
     DateTime thisWeekendStart;
 
-    if(todayWeekday <= DateTime.friday) {
-      thisWeekendStart = startWeek.add(Duration(days: DateTime.saturday - startWeek.weekday));
+    if (todayWeekday <= DateTime.friday) {
+      thisWeekendStart =
+          startWeek.add(Duration(days: DateTime.saturday - startWeek.weekday));
     } else {
-      thisWeekendStart = endWeek.subtract(Duration(days: 1));
+      thisWeekendStart = endWeek.subtract(const Duration(days: 1));
     }
 
     DateTime thisWeekendEnd = thisWeekendStart.add(const Duration(days: 1));
@@ -31,7 +34,8 @@ class DateUtils {
   /// return [start, end] of current weekend
   static List<DateTime> get nextMonth {
     DateTime nextMonthStart = DateTime(today.year, today.month + 1);
-    DateTime nextMonthEnd = DateTime(today.year, today.month + 2).subtract(const Duration(days: 1));
+    DateTime nextMonthEnd =
+        DateTime(today.year, today.month + 2).subtract(const Duration(days: 1));
 
     return [nextMonthStart, nextMonthEnd];
   }
@@ -39,7 +43,9 @@ class DateUtils {
   static bool isToday(DateTime? date) {
     if (date == null) return false;
     final DateTime now = DateTime.now();
-    return date.year == now.year && date.month == now.month && date.day == now.day;
+    return date.year == now.year &&
+        date.month == now.month &&
+        date.day == now.day;
   }
 
   static bool isTomorrow(DateTime? date) {
@@ -94,8 +100,8 @@ class DateUtils {
   }
 
   static bool isPast(DateTime? date) {
-    if(date == null) return false;
-    final originToday = new DateTime(today.year, today.month, today.day);
+    if (date == null) return false;
+    final originToday = DateTime(today.year, today.month, today.day);
     return date.isBefore(originToday);
   }
 }

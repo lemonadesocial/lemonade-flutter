@@ -9,7 +9,8 @@ class GetNewsfeedInput with _$GetNewsfeedInput {
   const factory GetNewsfeedInput({
     @JsonKey(includeIfNull: false) int? offset,
   }) = _GetNewsfeedInput;
-  factory GetNewsfeedInput.fromJson(Map<String, dynamic> json) => _$GetNewsfeedInputFromJson(json);
+  factory GetNewsfeedInput.fromJson(Map<String, dynamic> json) =>
+      _$GetNewsfeedInputFromJson(json);
 }
 
 @freezed
@@ -18,5 +19,6 @@ class GetNewsfeedCreatedAtInput with _$GetNewsfeedCreatedAtInput {
     @JsonKey(includeIfNull: false) DateTime? gte,
     @JsonKey(includeIfNull: false) DateTime? lte,
   }) = _GetNewsfeedCreatedAtInput;
-  factory GetNewsfeedCreatedAtInput.fromJson(Map<String, dynamic> json) => _$GetNewsfeedCreatedAtInputFromJson(json);
+  factory GetNewsfeedCreatedAtInput.fromJson(Map<String, dynamic> json) =>
+      _$GetNewsfeedCreatedAtInputFromJson(json);
 }

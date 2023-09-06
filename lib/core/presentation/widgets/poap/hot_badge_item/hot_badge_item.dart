@@ -1,7 +1,8 @@
 // ignore_for_file: unused_element
 
 import 'dart:ui';
-import 'package:app/core/domain/badge/entities/badge_entities.dart' as badge_entities;
+import 'package:app/core/domain/badge/entities/badge_entities.dart'
+    as badge_entities;
 import 'package:app/core/domain/poap/input/poap_input.dart';
 import 'package:app/core/domain/poap/poap_repository.dart';
 import 'package:app/core/domain/token/entities/token_entities.dart';
@@ -88,7 +89,8 @@ class _BadgeLocationTag extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final displayDistance = BadgeUtils.getDisplayDistance(distanceInMeter: badge.distance ?? 0);
+    final displayDistance =
+        BadgeUtils.getDisplayDistance(distanceInMeter: badge.distance ?? 0);
 
     final colorScheme = Theme.of(context).colorScheme;
     return Container(
@@ -104,24 +106,23 @@ class _BadgeLocationTag extends StatelessWidget {
       child: ClipRRect(
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
-          child: Container(
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                ThemeSvgIcon(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ThemeSvgIcon(
+                color: colorScheme.onPrimary,
+                builder: (filter) =>
+                    Assets.icons.icNavigationFilled.svg(colorFilter: filter),
+              ),
+              SizedBox(width: Spacing.superExtraSmall / 2),
+              Text(
+                '${displayDistance.text} ${displayDistance.unit == DistanceUnit.kilometer ? t.common.unit.km : t.common.unit.m}',
+                style: Typo.xSmall.copyWith(
                   color: colorScheme.onPrimary,
-                  builder: (filter) => Assets.icons.icNavigationFilled.svg(colorFilter: filter),
+                  fontWeight: FontWeight.w600,
                 ),
-                SizedBox(width: Spacing.superExtraSmall / 2),
-                Text(
-                  '${displayDistance.text} ${displayDistance.unit == DistanceUnit.kilometer ? t.common.unit.km : t.common.unit.m}',
-                  style: Typo.xSmall.copyWith(
-                    color: colorScheme.onPrimary,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -164,7 +165,8 @@ class _BadgeName extends StatelessWidget {
               ),
             ),
             builder: (context, snapshot) {
-              final poapViewSupply = snapshot.data?.fold((l) => null, (poapView) => poapView);
+              final poapViewSupply =
+                  snapshot.data?.fold((l) => null, (poapView) => poapView);
               final claimedQuantity = poapViewSupply?.claimedQuantity ?? 0;
               final quantity = poapViewSupply?.quantity ?? 0;
               return Text(
@@ -234,7 +236,8 @@ class _BadgeThumbnail extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(LemonRadius.xSmall),
         child: FutureBuilder<Media>(
-          future: MediaUtils.getNftMedia(tokenMetadata?.image, tokenMetadata?.animation_url),
+          future: MediaUtils.getNftMedia(
+              tokenMetadata?.image, tokenMetadata?.animation_url),
           builder: (context, snapshot) => CachedNetworkImage(
             fit: BoxFit.cover,
             imageUrl: snapshot.data?.url ?? '',

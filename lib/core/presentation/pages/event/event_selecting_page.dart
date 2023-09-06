@@ -141,7 +141,8 @@ class _EventsListingViewState extends State<_EventsListingView> {
     setState(() {
       eventTimeFilter = mEventTimeFilter;
     });
-    _selectedEventsBloc.add(BaseEventsListingEvent.filter(eventTimeFilter: eventTimeFilter));
+    _selectedEventsBloc
+        .add(BaseEventsListingEvent.filter(eventTimeFilter: eventTimeFilter));
   }
 
   BaseEventListingBloc get _selectedEventsBloc {
@@ -220,7 +221,8 @@ class _EventsListingViewState extends State<_EventsListingView> {
                     controller: textCtrl,
                     cursorColor: colorScheme.onPrimary,
                     style: Typo.medium.copyWith(fontWeight: FontWeight.normal),
-                    decoration: InputDecoration.collapsed(hintText: t.post.searchEventHint),
+                    decoration: InputDecoration.collapsed(
+                        hintText: t.post.searchEventHint),
                   ),
                 ),
               ],
@@ -248,14 +250,18 @@ class _EventsListingViewState extends State<_EventsListingView> {
                           SizedBox(width: Spacing.superExtraSmall),
                           LemonChip(
                             label: t.event.attending,
-                            isActive: eventListingType == EventListingType.attending,
-                            onTap: () => _selectEventListingType(EventListingType.attending),
+                            isActive:
+                                eventListingType == EventListingType.attending,
+                            onTap: () => _selectEventListingType(
+                                EventListingType.attending),
                           ),
                           SizedBox(width: Spacing.superExtraSmall),
                           LemonChip(
                             label: t.event.hosting,
-                            isActive: eventListingType == EventListingType.hosting,
-                            onTap: () => _selectEventListingType(EventListingType.hosting),
+                            isActive:
+                                eventListingType == EventListingType.hosting,
+                            onTap: () => _selectEventListingType(
+                                EventListingType.hosting),
                           ),
                         ],
                       ),
@@ -286,7 +292,8 @@ class _EventsListingViewState extends State<_EventsListingView> {
           NotificationListener<ScrollNotification>(
             onNotification: (notification) {
               if (notification is ScrollEndNotification) {
-                if (notification.metrics.pixels == notification.metrics.maxScrollExtent) {
+                if (notification.metrics.pixels ==
+                    notification.metrics.maxScrollExtent) {
                   _selectedEventsBloc.add(
                     BaseEventsListingEvent.fetch(
                       eventTimeFilter: eventTimeFilter,
@@ -329,7 +336,8 @@ class _EventsListingViewState extends State<_EventsListingView> {
     }
 
     return BlocProvider.value(
-      value: widget.homeEventListingBloc..add(_getInitialEvent(widget.homeEventListingBloc)),
+      value: widget.homeEventListingBloc
+        ..add(_getInitialEvent(widget.homeEventListingBloc)),
       child: _EventList<HomeEventListingBloc>(
         eventListingType: eventListingType,
         eventTimeFilter: eventTimeFilter,
@@ -398,10 +406,10 @@ class _EventList<T extends BaseEventListingBloc> extends StatelessWidget {
                 itemBuilder: (ctx, index) => index == filteredEvents.length
                     ? const SizedBox(height: 80)
                     : EventTileWidget(
-                      key: Key(filteredEvents[index].id ?? ''),
-                      event: filteredEvents[index],
-                      onTap: () => onEventTap(filteredEvents[index]),
-                    ),
+                        key: Key(filteredEvents[index].id ?? ''),
+                        event: filteredEvents[index],
+                        onTap: () => onEventTap(filteredEvents[index]),
+                      ),
                 separatorBuilder: (ctx, index) => Divider(
                   color: Theme.of(context).colorScheme.outline,
                 ),

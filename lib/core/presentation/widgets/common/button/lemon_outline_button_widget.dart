@@ -28,7 +28,9 @@ class LemonOutlineButton extends StatelessWidget {
       onTap: onTap,
       child: Container(
         height: height ?? Sizing.medium,
-        padding: padding ?? EdgeInsets.symmetric(horizontal: Spacing.xSmall, vertical: Spacing.extraSmall),
+        padding: padding ??
+            EdgeInsets.symmetric(
+                horizontal: Spacing.xSmall, vertical: Spacing.extraSmall),
         decoration: ShapeDecoration(
           shape: RoundedRectangleBorder(
             side: BorderSide(color: colorScheme.outline),
@@ -47,7 +49,9 @@ class LemonOutlineButton extends StatelessWidget {
               if (label != null)
                 Text(
                   label!,
-                  style: Typo.small.copyWith(color: colorScheme.onSecondary, fontWeight: FontWeight.w600),
+                  style: Typo.small.copyWith(
+                      color: colorScheme.onSecondary,
+                      fontWeight: FontWeight.w600),
                 ),
             ],
           ),

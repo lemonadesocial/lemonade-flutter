@@ -22,7 +22,9 @@ class Badge {
         claimable: dto.claimable,
         distance: dto.distance,
         list: dto.list,
-        listExpanded: dto.listExpanded != null ? BadgeList.fromDto(dto.listExpanded!) : null,
+        listExpanded: dto.listExpanded != null
+            ? BadgeList.fromDto(dto.listExpanded!)
+            : null,
         contract: dto.contract,
         network: dto.network,
       );
@@ -47,15 +49,16 @@ class BadgeList {
   });
 
   factory BadgeList.empty() => BadgeList(
-    id: '',
-  );
+        id: '',
+      );
 
   factory BadgeList.fromDto(BadgeListDto dto) => BadgeList(
         id: dto.id,
         imageUrl: dto.imageUrl,
         title: dto.title,
         user: dto.user,
-        userExpanded: dto.userExpanded != null ? User.fromDto(dto.userExpanded!) : null,
+        userExpanded:
+            dto.userExpanded != null ? User.fromDto(dto.userExpanded!) : null,
       );
   final String? id;
   final String? imageUrl;
@@ -106,7 +109,7 @@ class BadgeLocation {
 
   @override
   bool operator ==(Object other) {
-    if(identical(this, other)) return true;
+    if (identical(this, other)) return true;
 
     return other is BadgeLocation &&
         other.badgeCity?.city == badgeCity?.city &&
@@ -117,5 +120,6 @@ class BadgeLocation {
   }
 
   @override
-  int get hashCode => badgeCity.hashCode ^ isMyLocation.hashCode ^ geoPoint.hashCode;
+  int get hashCode =>
+      badgeCity.hashCode ^ isMyLocation.hashCode ^ geoPoint.hashCode;
 }

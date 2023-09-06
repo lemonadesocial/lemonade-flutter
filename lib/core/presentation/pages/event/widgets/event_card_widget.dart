@@ -41,17 +41,19 @@ class EventCard extends StatelessWidget {
   }
 
   _buildCardHeader() => Padding(
-        padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall, vertical: Spacing.xSmall),
+        padding: EdgeInsets.symmetric(
+            horizontal: Spacing.xSmall, vertical: Spacing.xSmall),
         child: LemonCircleAvatar(
           url: ImageUtils.generateUrl(
-              file: event.hostExpanded?.newPhotosExpanded?.first, imageConfig: ImageConfig.profile),
+              file: event.hostExpanded?.newPhotosExpanded?.first,
+              imageConfig: ImageConfig.profile),
           label: event.hostExpanded?.name ?? '',
         ),
       );
 
   _buildCardBody() => event.newNewPhotosExpanded?.isNotEmpty == true
       ? Container(
-          constraints: BoxConstraints(maxHeight: 300),
+          constraints: const BoxConstraints(maxHeight: 300),
           width: double.infinity,
           height: 200,
           child: CachedNetworkImage(
@@ -59,14 +61,16 @@ class EventCard extends StatelessWidget {
             fit: BoxFit.cover,
             placeholder: (_, __) => ImagePlaceholder.eventCard(),
             errorWidget: (_, __, ___) => ImagePlaceholder.eventCard(),
-            imageUrl:
-                ImageUtils.generateUrl(file: event.newNewPhotosExpanded?.first, imageConfig: ImageConfig.eventPhoto),
+            imageUrl: ImageUtils.generateUrl(
+                file: event.newNewPhotosExpanded?.first,
+                imageConfig: ImageConfig.eventPhoto),
           ),
         )
       : ImagePlaceholder.eventCard();
 
   _buildCardFooter(BuildContext context, ColorScheme colorScheme) => Padding(
-        padding: EdgeInsets.symmetric(horizontal: Spacing.small, vertical: Spacing.small),
+        padding: EdgeInsets.symmetric(
+            horizontal: Spacing.small, vertical: Spacing.small),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           mainAxisSize: MainAxisSize.max,
@@ -89,7 +93,7 @@ class EventCard extends StatelessWidget {
                 ],
               ),
             ),
-            Spacer(),
+            const Spacer(),
             EventBuyTicketButton(event: event),
           ],
         ),

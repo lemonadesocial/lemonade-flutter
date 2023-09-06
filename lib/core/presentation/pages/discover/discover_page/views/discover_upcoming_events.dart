@@ -97,9 +97,8 @@ class _DiscoverEventsList extends StatelessWidget {
                   onTap: () {
                     final eventItem = upcomingEvents[index];
                     AutoRouter.of(context).navigate(
-                      EventDetailRoute(
+                      GuestEventDetailRoute(
                         eventId: eventItem.id ?? '',
-                        eventName: eventItem.title ?? '',
                       ),
                     );
                   },

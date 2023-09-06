@@ -21,19 +21,22 @@ class ClaimPoapBloc extends Bloc<ClaimPoapEvent, ClaimPoapState> {
     on<ClaimPoapEventClaim>(
       _onClaim,
       transformer: (events, mapper) {
-        return events.debounceTime(const Duration(milliseconds: 300)).asyncExpand(mapper);
+        return events
+            .debounceTime(const Duration(milliseconds: 300))
+            .asyncExpand(mapper);
       },
     );
   }
   final Badge badge;
   final _poapRepository = getIt<PoapRepository>();
 
-  Future<void> _onCheckHasClaimed(ClaimPoapEventCheckHasClaimed event, Emitter emit) async {
-    final userWallet = getIt<AuthBloc>()
-        .state
-        .maybeWhen(authenticated: (authSession) => authSession.walletCustodial, orElse: () => null);
+  Future<void> _onCheckHasClaimed(
+      ClaimPoapEventCheckHasClaimed event, Emitter emit) async {
+    final userWallet = getIt<AuthBloc>().state.maybeWhen(
+        authenticated: (authSession) => authSession.walletCustodial,
+        orElse: () => null);
     if (userWallet == null) return;
-    
+
     Either<Failure, PoapPolicy>? poapPolicyData;
     if (badge.claimable != true) {
       poapPolicyData = await _poapRepository.getPoapPolicy(

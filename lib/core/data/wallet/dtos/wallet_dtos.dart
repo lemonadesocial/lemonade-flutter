@@ -1,4 +1,3 @@
-
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'wallet_dtos.freezed.dart';
@@ -10,6 +9,7 @@ class UserWalletRequestDto with _$UserWalletRequestDto {
     required String message,
     required String token,
   }) = _UserWalletRequestDto;
-  
-  factory UserWalletRequestDto.fromJson(Map<String, dynamic> json) => _$UserWalletRequestDtoFromJson(json);
+
+  factory UserWalletRequestDto.fromJson(Map<String, dynamic> json) =>
+      _$UserWalletRequestDtoFromJson(json);
 }

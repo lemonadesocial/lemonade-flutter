@@ -18,20 +18,25 @@ class BadgesListingBloc extends Bloc<BadgesListingEvent, BadgesListingState> {
     on<BadgesListingEventFetch>(
       _onFetch,
       transformer: (events, mapper) {
-        return events.debounceTime(const Duration(milliseconds: 300)).asyncExpand(mapper);
+        return events
+            .debounceTime(const Duration(milliseconds: 300))
+            .asyncExpand(mapper);
       },
     );
     on<BadgesListingEventRefresh>(
       _onRefresh,
       transformer: (events, mapper) {
-        return events.debounceTime(const Duration(milliseconds: 300)).asyncExpand(mapper);
+        return events
+            .debounceTime(const Duration(milliseconds: 300))
+            .asyncExpand(mapper);
       },
     );
   }
   final BadgeService _badgeService = getIt<BadgeService>();
   final BadgeRepository _badgeRepository = getIt<BadgeRepository>();
   late GetBadgesInput defaultInput;
-  late final PaginationService<Badge, GetBadgesInput?> _paginationService = PaginationService(
+  late final PaginationService<Badge, GetBadgesInput?> _paginationService =
+      PaginationService(
     getDataFuture: _getBadges,
   );
 
@@ -39,11 +44,14 @@ class BadgesListingBloc extends Bloc<BadgesListingEvent, BadgesListingState> {
     defaultInput = GetBadgesInput(
       limit: 25,
       list: _badgeService.selectedCollections.isNotEmpty
-          ? _badgeService.selectedCollections.map((item) => item.id ?? '').toList()
+          ? _badgeService.selectedCollections
+              .map((item) => item.id ?? '')
+              .toList()
           : null,
       city: _badgeService.selectedLocation?.badgeCity?.city,
       country: _badgeService.selectedLocation?.badgeCity?.country,
-      distance: _badgeService.selectedLocation != null && _badgeService.selectedLocation!.isMyLocation
+      distance: _badgeService.selectedLocation != null &&
+              _badgeService.selectedLocation!.isMyLocation
           ? _badgeService.distance
           : null,
     );

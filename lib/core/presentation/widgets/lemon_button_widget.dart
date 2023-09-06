@@ -40,7 +40,9 @@ class LemonButton extends StatelessWidget {
               icon!,
               const SizedBox(width: 6),
             ],
-            Text(label, style: Typo.medium.copyWith(fontWeight: FontWeight.w400, color: colorScheme.onSurface)),
+            Text(label,
+                style: Typo.medium.copyWith(
+                    fontWeight: FontWeight.w400, color: colorScheme.onSurface)),
           ],
         ),
       ),

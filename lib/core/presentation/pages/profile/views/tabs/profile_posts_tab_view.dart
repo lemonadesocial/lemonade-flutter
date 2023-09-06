@@ -42,9 +42,11 @@ class ProfilePostsTabView extends StatelessWidget {
           value: postsListingBloc..add(PostsListingEvent.fetch()),
           child: BlocListener<ScrollNotificationBloc, ScrollNotificationState>(
             listener: (context, scrollState) {
-              scrollState.whenOrNull(endReached: () {
-                postsListingBloc.add(PostsListingEvent.fetch());
-              },);
+              scrollState.whenOrNull(
+                endReached: () {
+                  postsListingBloc.add(PostsListingEvent.fetch());
+                },
+              );
             },
             child: ProfilePostsListView(user: user),
           ),

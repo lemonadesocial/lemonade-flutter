@@ -19,7 +19,8 @@ class BadgeDto with _$BadgeDto {
     String? network,
   }) = _BadgeDto;
 
-  factory BadgeDto.fromJson(Map<String, dynamic> json) => _$BadgeDtoFromJson(json);
+  factory BadgeDto.fromJson(Map<String, dynamic> json) =>
+      _$BadgeDtoFromJson(json);
 }
 
 @freezed
@@ -33,7 +34,8 @@ class BadgeListDto with _$BadgeListDto {
     UserDto? userExpanded,
   }) = _BadgeListDto;
 
-  factory BadgeListDto.fromJson(Map<String, dynamic> json) => _$BadgeListDtoFromJson(json);
+  factory BadgeListDto.fromJson(Map<String, dynamic> json) =>
+      _$BadgeListDtoFromJson(json);
 }
 
 @freezed
@@ -43,5 +45,6 @@ class BadgeCityDto with _$BadgeCityDto {
     String? country,
   }) = _BadgeCityDto;
 
-  factory BadgeCityDto.fromJson(Map<String, dynamic> json) => _$BadgeCityDtoFromJson(json);
+  factory BadgeCityDto.fromJson(Map<String, dynamic> json) =>
+      _$BadgeCityDtoFromJson(json);
 }

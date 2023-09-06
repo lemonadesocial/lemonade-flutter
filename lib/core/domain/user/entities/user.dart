@@ -4,7 +4,6 @@ import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/payment/payment_enums.dart';
 
 class AuthUser {
-
   AuthUser({
     required this.id,
     this.imageAvatar,
@@ -19,12 +18,12 @@ class AuthUser {
       id: dto.id!,
       imageAvatar: dto.imageAvatar,
       displayName: dto.displayName,
-      username: dto.username, 
+      username: dto.username,
       wallets: dto.wallets,
       walletCustodial: dto.walletCustodial,
     );
   }
-  
+
   String id;
   String? imageAvatar;
   String? displayName;
@@ -34,7 +33,6 @@ class AuthUser {
 }
 
 class User {
-
   User({
     this.id,
     this.createdAt,
@@ -89,11 +87,21 @@ class User {
           : null,
       dateOfBirth: dto.dateOfBirth,
       phoneVerified: dto.phoneVerified,
-      googleUserInfo: dto.googleUserInfo != null ? GoogleUserInfo.fromDto(dto.googleUserInfo!) : null,
-      discordUserInfo: dto.discordUserInfo != null ? DiscordUserInfo.fromDto(dto.discordUserInfo!) : null,
-      shopifyUserInfo: dto.shopifyUserInfo != null ? ShopifyUserInfo.fromDto(dto.shopifyUserInfo!) : null,
-      twitchUserInfo: dto.twitchUserInfo != null ? TwitchUserInfo.fromDto(dto.twitchUserInfo!) : null,
-      zoomUserInfo: dto.zoomUserInfo != null ? ZoomUserInfo.fromDto(dto.zoomUserInfo!) : null,
+      googleUserInfo: dto.googleUserInfo != null
+          ? GoogleUserInfo.fromDto(dto.googleUserInfo!)
+          : null,
+      discordUserInfo: dto.discordUserInfo != null
+          ? DiscordUserInfo.fromDto(dto.discordUserInfo!)
+          : null,
+      shopifyUserInfo: dto.shopifyUserInfo != null
+          ? ShopifyUserInfo.fromDto(dto.shopifyUserInfo!)
+          : null,
+      twitchUserInfo: dto.twitchUserInfo != null
+          ? TwitchUserInfo.fromDto(dto.twitchUserInfo!)
+          : null,
+      zoomUserInfo: dto.zoomUserInfo != null
+          ? ZoomUserInfo.fromDto(dto.zoomUserInfo!)
+          : null,
       name: dto.name,
       username: dto.username,
       phone: dto.phone,
@@ -103,7 +111,9 @@ class User {
       cover: dto.cover,
       type: dto.type,
       industry: dto.industry,
-      addresses: dto.addresses != null ? dto.addresses!.map(Address.fromDto).toList() : null,
+      addresses: dto.addresses != null
+          ? dto.addresses!.map(Address.fromDto).toList()
+          : null,
       hosted: dto.hosted,
       attended: dto.attended,
       friends: dto.friends,
@@ -164,7 +174,6 @@ class User {
 }
 
 class DiscordUserInfo {
-
   DiscordUserInfo({this.username});
   final String? username;
 
@@ -174,7 +183,6 @@ class DiscordUserInfo {
 }
 
 class ShopifyUserInfo {
-
   ShopifyUserInfo({this.shopName});
   final String? shopName;
 
@@ -184,7 +192,6 @@ class ShopifyUserInfo {
 }
 
 class GoogleUserInfo {
-
   GoogleUserInfo({
     this.id,
     this.name,
@@ -228,7 +235,6 @@ class GoogleUserInfo {
 }
 
 class TwitchUserInfo {
-
   TwitchUserInfo({this.id, this.displayName, this.logoUrl, this.name});
   final String? id;
   final String? displayName;
@@ -246,7 +252,6 @@ class TwitchUserInfo {
 }
 
 class ZoomUserInfo {
-
   ZoomUserInfo({this.id, this.firstName, this.lastName, this.email});
   final String? id;
   final String? firstName;

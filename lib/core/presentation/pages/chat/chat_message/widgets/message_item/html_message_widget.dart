@@ -214,7 +214,8 @@ class FontColorExtension extends HtmlExtension {
   InlineSpan build(
     ExtensionContext context,
   ) {
-    final colorText = context.element?.attributes[colorAttribute] ?? context.element?.attributes[mxColorAttribute];
+    final colorText = context.element?.attributes[colorAttribute] ??
+        context.element?.attributes[mxColorAttribute];
     final bgColor = context.element?.attributes[bgColorAttribute];
     return TextSpan(
       style: TextStyle(
@@ -272,7 +273,8 @@ class SpoilerExtension extends HtmlExtension {
   @override
   bool matches(ExtensionContext context) {
     if (context.elementName != 'span') return false;
-    return context.element?.attributes.containsKey(customDataAttribute) ?? false;
+    return context.element?.attributes.containsKey(customDataAttribute) ??
+        false;
   }
 
   @override
@@ -310,7 +312,9 @@ class RoomPillExtension extends HtmlExtension {
   @override
   bool matches(ExtensionContext context) {
     if (context.elementName != 'a') return false;
-    final userId = context.element?.attributes['href']?.parseIdentifierIntoParts()?.primaryIdentifier;
+    final userId = context.element?.attributes['href']
+        ?.parseIdentifierIntoParts()
+        ?.primaryIdentifier;
     return userId != null;
   }
 
@@ -332,7 +336,9 @@ class RoomPillExtension extends HtmlExtension {
           future: _fetchUser(matrixId),
           builder: (context, snapshot) => MatrixPill(
             key: Key('user_pill_$matrixId'),
-            name: _cachedUsers[room.id + matrixId]?.calcDisplayname() ?? matrixId.localpart ?? matrixId,
+            name: _cachedUsers[room.id + matrixId]?.calcDisplayname() ??
+                matrixId.localpart ??
+                matrixId,
             avatar: _cachedUsers[room.id + matrixId]?.avatarUrl,
             uri: href,
             outerContext: this.context,
@@ -341,8 +347,9 @@ class RoomPillExtension extends HtmlExtension {
       );
     }
     if (matrixId.sigil == '#' || matrixId.sigil == '!') {
-      final room =
-          matrixId.sigil == '!' ? this.room.client.getRoomById(matrixId) : this.room.client.getRoomByAlias(matrixId);
+      final room = matrixId.sigil == '!'
+          ? this.room.client.getRoomById(matrixId)
+          : this.room.client.getRoomByAlias(matrixId);
       if (room != null) {
         return WidgetSpan(
           child: MatrixPill(
@@ -380,12 +387,8 @@ class MatrixPill extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            '@$name',
-            style: Typo.medium.copyWith(
-              fontWeight: FontWeight.w700
-            )
-          ),
+          Text('@$name',
+              style: Typo.medium.copyWith(fontWeight: FontWeight.w700)),
         ],
       ),
     );

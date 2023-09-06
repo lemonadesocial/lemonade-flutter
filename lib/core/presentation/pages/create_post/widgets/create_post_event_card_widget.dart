@@ -97,7 +97,8 @@ class CreatePostEventCardWidget extends StatelessWidget {
               ),
               child: ThemeSvgIcon(
                 color: colorScheme.onSurface,
-                builder: (filter) => Assets.icons.icClose.svg(colorFilter: filter),
+                builder: (filter) =>
+                    Assets.icons.icClose.svg(colorFilter: filter),
               ),
             ),
           ),

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 class _ProfileTabBar extends StatefulWidget {
   final TabController controller;
-  _ProfileTabBar({
+  const _ProfileTabBar({
     required this.controller,
   });
 
@@ -19,7 +19,7 @@ class _ProfileTabBarState extends State<_ProfileTabBar> {
   @override
   initState() {
     widget.controller.addListener(() {
-      if(widget.controller.indexIsChanging) return;
+      if (widget.controller.indexIsChanging) return;
       setState(() {
         currentIndex = widget.controller.index;
       });
@@ -43,7 +43,9 @@ class _ProfileTabBarState extends State<_ProfileTabBar> {
       return Tab(
         child: SizedBox(
           child: ThemeSvgIcon(
-            color: !isSelected ? colorScheme.onSurfaceVariant : colorScheme.onPrimary,
+            color: !isSelected
+                ? colorScheme.onSurfaceVariant
+                : colorScheme.onPrimary,
             builder: (filter) => svgIcon.svg(colorFilter: filter),
           ),
         ),
@@ -61,7 +63,7 @@ class _ProfileTabBarState extends State<_ProfileTabBar> {
         child: TabBar(
           controller: widget.controller,
           tabs: _renderTabs(context),
-          indicatorColor: LemonColor.lavender,
+          indicatorColor: LemonColor.paleViolet,
         ),
       ),
     );
@@ -75,7 +77,7 @@ class ProfileTabBarDelegate extends SliverPersistentHeaderDelegate {
   });
 
   @override
-  Widget build(BuildContext context, _, __) {
+  Widget build(BuildContext context, shrinkOffset, overlapsContent) {
     return _ProfileTabBar(controller: controller);
   }
 

@@ -1,5 +1,6 @@
 import 'package:app/core/application/poap/claim_poap_bloc/claim_poap_bloc.dart';
-import 'package:app/core/domain/badge/entities/badge_entities.dart' as badge_entities;
+import 'package:app/core/domain/badge/entities/badge_entities.dart'
+    as badge_entities;
 import 'package:app/core/utils/location_utils.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,8 @@ class PoapClaimBuilder extends StatelessWidget {
     required this.builder,
   });
   final badge_entities.Badge badge;
-  final Widget Function(BuildContext context, ClaimPoapState state, bool locationEnabled) builder;
+  final Widget Function(
+      BuildContext context, ClaimPoapState state, bool locationEnabled) builder;
 
   @override
   Widget build(BuildContext context) {

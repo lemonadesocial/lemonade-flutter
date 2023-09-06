@@ -16,7 +16,7 @@ class LemonEmojiPicker extends StatelessWidget {
       defaultSnapSize: 0.7,
       minSnapSize: 0.7,
       maxSnapSize: 0.7,
-      snapSizes: [0.7],
+      snapSizes: const [0.7],
       builder: (controller) => Flexible(
         child: SafeArea(
           child: SizedBox(

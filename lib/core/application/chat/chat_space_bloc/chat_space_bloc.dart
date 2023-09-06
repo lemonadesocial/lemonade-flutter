@@ -12,7 +12,7 @@ class ChatSpaceBloc extends Bloc<ChatSpaceEvent, ChatSpaceState> {
   final matrixService = getIt<MatrixService>();
   ChatSpaceBloc()
       : super(
-          ChatSpaceState(
+          const ChatSpaceState(
             spaces: [],
           ),
         ) {
@@ -24,7 +24,8 @@ class ChatSpaceBloc extends Bloc<ChatSpaceEvent, ChatSpaceState> {
     await matrixService.client.roomsLoading;
     await matrixService.client.accountDataLoading;
     var storedActiveSpaceId = await matrixService.getActiveChatSpaceId();
-    var activeSpace = matrixService.client.getRoomById(storedActiveSpaceId ?? '');
+    var activeSpace =
+        matrixService.client.getRoomById(storedActiveSpaceId ?? '');
 
     emit(state.copyWith(
       activeSpace: activeSpace,
@@ -50,7 +51,8 @@ class ChatSpaceBloc extends Bloc<ChatSpaceEvent, ChatSpaceState> {
 
 @freezed
 class ChatSpaceEvent with _$ChatSpaceEvent {
-  const factory ChatSpaceEvent.fetchChatSpaces() = ChatSpaceEventFetchChatSpaces;
+  const factory ChatSpaceEvent.fetchChatSpaces() =
+      ChatSpaceEventFetchChatSpaces;
   const factory ChatSpaceEvent.setActiveSpace({
     Room? space,
   }) = ChatSpaceEventSetActiveSpace;

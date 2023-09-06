@@ -39,6 +39,8 @@ mixin _$EventDto {
   double? get cost => throw _privateConstructorUsedError;
   Currency? get currency => throw _privateConstructorUsedError;
   List<String>? get accepted => throw _privateConstructorUsedError;
+  double? get latitude => throw _privateConstructorUsedError;
+  double? get longitude => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -52,14 +54,11 @@ abstract class $EventDtoCopyWith<$Res> {
       _$EventDtoCopyWithImpl<$Res, EventDto>;
   @useResult
   $Res call(
-      {@JsonKey(name: '_id')
-          String? id,
-      @JsonKey(name: 'host_expanded')
-          UserDto? hostExpanded,
+      {@JsonKey(name: '_id') String? id,
+      @JsonKey(name: 'host_expanded') UserDto? hostExpanded,
       @JsonKey(name: 'new_new_photos_expanded')
-          List<DbFileDto?>? newNewPhotosExpanded,
-      @JsonKey(name: 'cohosts_expanded')
-          List<UserDto?>? cohostsExpanded,
+      List<DbFileDto?>? newNewPhotosExpanded,
+      @JsonKey(name: 'cohosts_expanded') List<UserDto?>? cohostsExpanded,
       String? title,
       String? slug,
       String? host,
@@ -69,7 +68,9 @@ abstract class $EventDtoCopyWith<$Res> {
       DateTime? end,
       double? cost,
       Currency? currency,
-      List<String>? accepted});
+      List<String>? accepted,
+      double? latitude,
+      double? longitude});
 
   $UserDtoCopyWith<$Res>? get hostExpanded;
 }
@@ -101,6 +102,8 @@ class _$EventDtoCopyWithImpl<$Res, $Val extends EventDto>
     Object? cost = freezed,
     Object? currency = freezed,
     Object? accepted = freezed,
+    Object? latitude = freezed,
+    Object? longitude = freezed,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -159,6 +162,14 @@ class _$EventDtoCopyWithImpl<$Res, $Val extends EventDto>
           ? _value.accepted
           : accepted // ignore: cast_nullable_to_non_nullable
               as List<String>?,
+      latitude: freezed == latitude
+          ? _value.latitude
+          : latitude // ignore: cast_nullable_to_non_nullable
+              as double?,
+      longitude: freezed == longitude
+          ? _value.longitude
+          : longitude // ignore: cast_nullable_to_non_nullable
+              as double?,
     ) as $Val);
   }
 
@@ -183,14 +194,11 @@ abstract class _$$_EventDtoCopyWith<$Res> implements $EventDtoCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {@JsonKey(name: '_id')
-          String? id,
-      @JsonKey(name: 'host_expanded')
-          UserDto? hostExpanded,
+      {@JsonKey(name: '_id') String? id,
+      @JsonKey(name: 'host_expanded') UserDto? hostExpanded,
       @JsonKey(name: 'new_new_photos_expanded')
-          List<DbFileDto?>? newNewPhotosExpanded,
-      @JsonKey(name: 'cohosts_expanded')
-          List<UserDto?>? cohostsExpanded,
+      List<DbFileDto?>? newNewPhotosExpanded,
+      @JsonKey(name: 'cohosts_expanded') List<UserDto?>? cohostsExpanded,
       String? title,
       String? slug,
       String? host,
@@ -200,7 +208,9 @@ abstract class _$$_EventDtoCopyWith<$Res> implements $EventDtoCopyWith<$Res> {
       DateTime? end,
       double? cost,
       Currency? currency,
-      List<String>? accepted});
+      List<String>? accepted,
+      double? latitude,
+      double? longitude});
 
   @override
   $UserDtoCopyWith<$Res>? get hostExpanded;
@@ -231,6 +241,8 @@ class __$$_EventDtoCopyWithImpl<$Res>
     Object? cost = freezed,
     Object? currency = freezed,
     Object? accepted = freezed,
+    Object? latitude = freezed,
+    Object? longitude = freezed,
   }) {
     return _then(_$_EventDto(
       id: freezed == id
@@ -289,6 +301,14 @@ class __$$_EventDtoCopyWithImpl<$Res>
           ? _value._accepted
           : accepted // ignore: cast_nullable_to_non_nullable
               as List<String>?,
+      latitude: freezed == latitude
+          ? _value.latitude
+          : latitude // ignore: cast_nullable_to_non_nullable
+              as double?,
+      longitude: freezed == longitude
+          ? _value.longitude
+          : longitude // ignore: cast_nullable_to_non_nullable
+              as double?,
     ));
   }
 }
@@ -298,14 +318,11 @@ class __$$_EventDtoCopyWithImpl<$Res>
 @JsonSerializable(explicitToJson: true)
 class _$_EventDto implements _EventDto {
   _$_EventDto(
-      {@JsonKey(name: '_id')
-          this.id,
-      @JsonKey(name: 'host_expanded')
-          this.hostExpanded,
+      {@JsonKey(name: '_id') this.id,
+      @JsonKey(name: 'host_expanded') this.hostExpanded,
       @JsonKey(name: 'new_new_photos_expanded')
-          final List<DbFileDto?>? newNewPhotosExpanded,
-      @JsonKey(name: 'cohosts_expanded')
-          final List<UserDto?>? cohostsExpanded,
+      final List<DbFileDto?>? newNewPhotosExpanded,
+      @JsonKey(name: 'cohosts_expanded') final List<UserDto?>? cohostsExpanded,
       this.title,
       this.slug,
       this.host,
@@ -315,7 +332,9 @@ class _$_EventDto implements _EventDto {
       this.end,
       this.cost,
       this.currency,
-      final List<String>? accepted})
+      final List<String>? accepted,
+      this.latitude,
+      this.longitude})
       : _newNewPhotosExpanded = newNewPhotosExpanded,
         _cohostsExpanded = cohostsExpanded,
         _broadcasts = broadcasts,
@@ -390,8 +409,13 @@ class _$_EventDto implements _EventDto {
   }
 
   @override
+  final double? latitude;
+  @override
+  final double? longitude;
+
+  @override
   String toString() {
-    return 'EventDto(id: $id, hostExpanded: $hostExpanded, newNewPhotosExpanded: $newNewPhotosExpanded, cohostsExpanded: $cohostsExpanded, title: $title, slug: $slug, host: $host, broadcasts: $broadcasts, description: $description, start: $start, end: $end, cost: $cost, currency: $currency, accepted: $accepted)';
+    return 'EventDto(id: $id, hostExpanded: $hostExpanded, newNewPhotosExpanded: $newNewPhotosExpanded, cohostsExpanded: $cohostsExpanded, title: $title, slug: $slug, host: $host, broadcasts: $broadcasts, description: $description, start: $start, end: $end, cost: $cost, currency: $currency, accepted: $accepted, latitude: $latitude, longitude: $longitude)';
   }
 
   @override
@@ -418,7 +442,11 @@ class _$_EventDto implements _EventDto {
             (identical(other.cost, cost) || other.cost == cost) &&
             (identical(other.currency, currency) ||
                 other.currency == currency) &&
-            const DeepCollectionEquality().equals(other._accepted, _accepted));
+            const DeepCollectionEquality().equals(other._accepted, _accepted) &&
+            (identical(other.latitude, latitude) ||
+                other.latitude == latitude) &&
+            (identical(other.longitude, longitude) ||
+                other.longitude == longitude));
   }
 
   @JsonKey(ignore: true)
@@ -438,7 +466,9 @@ class _$_EventDto implements _EventDto {
       end,
       cost,
       currency,
-      const DeepCollectionEquality().hash(_accepted));
+      const DeepCollectionEquality().hash(_accepted),
+      latitude,
+      longitude);
 
   @JsonKey(ignore: true)
   @override
@@ -456,14 +486,11 @@ class _$_EventDto implements _EventDto {
 
 abstract class _EventDto implements EventDto {
   factory _EventDto(
-      {@JsonKey(name: '_id')
-          final String? id,
-      @JsonKey(name: 'host_expanded')
-          final UserDto? hostExpanded,
+      {@JsonKey(name: '_id') final String? id,
+      @JsonKey(name: 'host_expanded') final UserDto? hostExpanded,
       @JsonKey(name: 'new_new_photos_expanded')
-          final List<DbFileDto?>? newNewPhotosExpanded,
-      @JsonKey(name: 'cohosts_expanded')
-          final List<UserDto?>? cohostsExpanded,
+      final List<DbFileDto?>? newNewPhotosExpanded,
+      @JsonKey(name: 'cohosts_expanded') final List<UserDto?>? cohostsExpanded,
       final String? title,
       final String? slug,
       final String? host,
@@ -473,7 +500,9 @@ abstract class _EventDto implements EventDto {
       final DateTime? end,
       final double? cost,
       final Currency? currency,
-      final List<String>? accepted}) = _$_EventDto;
+      final List<String>? accepted,
+      final double? latitude,
+      final double? longitude}) = _$_EventDto;
 
   factory _EventDto.fromJson(Map<String, dynamic> json) = _$_EventDto.fromJson;
 
@@ -509,6 +538,10 @@ abstract class _EventDto implements EventDto {
   Currency? get currency;
   @override
   List<String>? get accepted;
+  @override
+  double? get latitude;
+  @override
+  double? get longitude;
   @override
   @JsonKey(ignore: true)
   _$$_EventDtoCopyWith<_$_EventDto> get copyWith =>
@@ -647,7 +680,7 @@ class _$_BroadcastDto implements _BroadcastDto {
 abstract class _BroadcastDto implements BroadcastDto {
   factory _BroadcastDto(
       {@JsonKey(name: 'provider_id', includeIfNull: false)
-          final String? providerId}) = _$_BroadcastDto;
+      final String? providerId}) = _$_BroadcastDto;
 
   factory _BroadcastDto.fromJson(Map<String, dynamic> json) =
       _$_BroadcastDto.fromJson;

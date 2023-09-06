@@ -16,10 +16,12 @@ class AddressDto with _$AddressDto {
     String? title,
     double? latitude,
     double? longitude,
-    @JsonKey(name: 'recipient_name', includeIfNull: false) String? recipientName,
+    @JsonKey(name: 'recipient_name', includeIfNull: false)
+    String? recipientName,
   }) = _AddressDto;
 
-  factory AddressDto.fromJson(Map<String, dynamic> json) => _$AddressDtoFromJson(json);
+  factory AddressDto.fromJson(Map<String, dynamic> json) =>
+      _$AddressDtoFromJson(json);
 }
 
 @freezed
@@ -38,5 +40,6 @@ class DbFileDto with _$DbFileDto {
     String? type,
   }) = _DbFileDto;
 
-  factory DbFileDto.fromJson(Map<String, dynamic> json) => _$DbFileDtoFromJson(json);
+  factory DbFileDto.fromJson(Map<String, dynamic> json) =>
+      _$DbFileDtoFromJson(json);
 }

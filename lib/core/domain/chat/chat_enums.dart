@@ -11,11 +11,9 @@ enum RoomTypeFilter {
       case RoomTypeFilter.allChats:
         return (room) => !room.isSpace;
       case RoomTypeFilter.groups:
-        return (room) =>
-            !room.isSpace && !room.isDirectChat;
+        return (room) => !room.isSpace && !room.isDirectChat;
       case RoomTypeFilter.messages:
-        return (room) =>
-            !room.isSpace && room.isDirectChat;
+        return (room) => !room.isSpace && room.isDirectChat;
       case RoomTypeFilter.spaces:
         return (r) => r.isSpace;
     }

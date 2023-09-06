@@ -8,7 +8,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'badge_collections_bloc.freezed.dart';
 
-class BadgeCollectionsBloc extends Bloc<BadgeCollectionsEvent, BadgeCollectionsState> {
+class BadgeCollectionsBloc
+    extends Bloc<BadgeCollectionsEvent, BadgeCollectionsState> {
   BadgeCollectionsBloc() : super(BadgeCollectionsStateInitial()) {
     on<BadgeCollectionsEventFetch>(_onFetch);
     on<BadgeCollectionsEventSelect>(_onSelect);
@@ -31,27 +32,31 @@ class BadgeCollectionsBloc extends Bloc<BadgeCollectionsEvent, BadgeCollectionsS
           selectedCollections: _badgeService.selectedCollections,
         ),
       ),
-    );  
+    );
   }
 
-  Future<void> _onSelect(BadgeCollectionsEventSelect event, Emitter emit) async {
+  Future<void> _onSelect(
+      BadgeCollectionsEventSelect event, Emitter emit) async {
     final selectedCollections = _badgeService.addCollection(event.collection);
     state.whenOrNull(
       fetched: (collections, _) => emit(
-        BadgeCollectionsState.fetched(collections: collections, selectedCollections: selectedCollections),
+        BadgeCollectionsState.fetched(
+            collections: collections, selectedCollections: selectedCollections),
       ),
     );
   }
 
-  Future<void> _onDeselect(BadgeCollectionsEventDeselect event, Emitter emit) async {
-    final selectedCollections = _badgeService.removeCollection(event.collection);
+  Future<void> _onDeselect(
+      BadgeCollectionsEventDeselect event, Emitter emit) async {
+    final selectedCollections =
+        _badgeService.removeCollection(event.collection);
     state.whenOrNull(
       fetched: (collections, _) => emit(
-        BadgeCollectionsState.fetched(collections: collections, selectedCollections: selectedCollections),
+        BadgeCollectionsState.fetched(
+            collections: collections, selectedCollections: selectedCollections),
       ),
     );
   }
-
 }
 
 @freezed

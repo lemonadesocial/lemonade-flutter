@@ -24,9 +24,9 @@ class ConnectWalletButton extends StatelessWidget {
       builder: (context, authState) {
         return authState.maybeWhen(
           authenticated: (authSession) {
-            return _Button();
+            return const _Button();
           },
-          orElse: () => SizedBox.shrink(),
+          orElse: () => const SizedBox.shrink(),
         );
       },
     );
@@ -41,7 +41,8 @@ class _Button extends StatelessWidget {
     final onSurfaceColor = Theme.of(context).colorScheme.onSurface;
 
     String getWalletAddress(SessionData sessionData) {
-      final sessionAccount = sessionData.namespaces.entries.first.value.accounts.first;
+      final sessionAccount =
+          sessionData.namespaces.entries.first.value.accounts.first;
       return NamespaceUtils.getAccount(sessionAccount);
     }
 
@@ -51,14 +52,15 @@ class _Button extends StatelessWidget {
         if (activeSession == null) {
           return LemonButton(
             onTap: () {
-              context.read<WalletBloc>().add(WalletEventConnectWallet(
+              context.read<WalletBloc>().add(const WalletEventConnectWallet(
                     walletApp: SupportedWalletApp.metamask,
                   ));
             },
             label: t.common.actions.connect,
             icon: ThemeSvgIcon(
               color: onSurfaceColor,
-              builder: (filter) => Assets.icons.icWallet.svg(colorFilter: filter),
+              builder: (filter) =>
+                  Assets.icons.icWallet.svg(colorFilter: filter),
             ),
           );
         }
@@ -82,7 +84,8 @@ class _Button extends StatelessWidget {
             ),
             icon: ThemeSvgIcon(
               color: onSurfaceColor,
-              builder: (filter) => Assets.icons.icWallet.svg(colorFilter: filter),
+              builder: (filter) =>
+                  Assets.icons.icWallet.svg(colorFilter: filter),
             ),
           ),
         );

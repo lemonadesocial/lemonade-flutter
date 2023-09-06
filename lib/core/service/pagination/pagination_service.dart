@@ -10,8 +10,10 @@ class PaginationService<T, I> {
   bool _reachedEnd = false;
   int _skip = 0;
 
-  Future<Either<Failure, List<T>>> Function(int skip, bool reachedEnd, {required I input})? getDataFuture;
-  Stream<Either<Failure, List<T>>> Function(int skip, bool reachedEnd, {required I input})? getDataStream;
+  Future<Either<Failure, List<T>>> Function(int skip, bool reachedEnd,
+      {required I input})? getDataFuture;
+  Stream<Either<Failure, List<T>>> Function(int skip, bool reachedEnd,
+      {required I input})? getDataStream;
 
   List<T> get items => _items;
 
@@ -59,7 +61,9 @@ class PaginationService<T, I> {
   Stream<Either<Failure, List<T>>> _processGetDataStream(I input) {
     if (getDataStream == null) throw Exception('getDataStream is required');
 
-    return getDataStream!.call(skip, reachedEnd, input: input).asyncMap((streamEvent) {
+    return getDataStream!
+        .call(skip, reachedEnd, input: input)
+        .asyncMap((streamEvent) {
       if (reachedEnd) {
         return Right(_items);
       }

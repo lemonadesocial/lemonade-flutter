@@ -6,10 +6,8 @@ final addUserFcmTokenMutation = gql('''
   }
 ''');
 
-
 final removeUserFcmTokenMutation = gql('''
   mutation RemoveUserFcmToken(\$token: String!) {
     removeUserFcmToken(token: \$token)
   }
 ''');
-

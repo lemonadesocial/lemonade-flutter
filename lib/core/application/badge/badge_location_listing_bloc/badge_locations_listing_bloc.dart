@@ -8,7 +8,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'badge_locations_listing_bloc.freezed.dart';
 
-class BadgeLocationsListingBloc extends Bloc<BadgeLocationsListingEvent, BadgeLocationsListingState> {
+class BadgeLocationsListingBloc
+    extends Bloc<BadgeLocationsListingEvent, BadgeLocationsListingState> {
   BadgeLocationsListingBloc()
       : super(
           BadgeLocationsListingStateInitial(
@@ -32,7 +33,9 @@ class BadgeLocationsListingBloc extends Bloc<BadgeLocationsListingEvent, BadgeLo
       (l) => emit(BadgeLocationsListingState.failure()),
       (badgeCities) => emit(
         BadgeLocationsListingState.fetched(
-          locations: badgeCities.map((city) => BadgeLocation.city(city: city)).toList(),
+          locations: badgeCities
+              .map((city) => BadgeLocation.city(city: city))
+              .toList(),
           selectedLocation: _badgeService.selectedLocation,
           distance: _badgeService.distance,
         ),
@@ -93,5 +96,6 @@ class BadgeLocationsListingState with _$BadgeLocationsListingState {
     BadgeLocation? selectedLocation,
     required double distance,
   }) = BadgeLocationsListingStateFetched;
-  factory BadgeLocationsListingState.failure() = BadgeLocationsListingStateFailure;
+  factory BadgeLocationsListingState.failure() =
+      BadgeLocationsListingStateFailure;
 }

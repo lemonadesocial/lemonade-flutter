@@ -10,7 +10,9 @@ abstract class BadgeRepository {
     GeoPoint? geoPoint,
   });
 
-  Future<Either<Failure, List<BadgeList>>> getBadgeCollections(GetBadgeListsInput? input);
+  Future<Either<Failure, List<BadgeList>>> getBadgeCollections(
+      GetBadgeListsInput? input);
 
-  Future<Either<Failure, List<BadgeCity>>> getBadgeCities(GetBadgeCitiesInput? input);
+  Future<Either<Failure, List<BadgeCity>>> getBadgeCities(
+      GetBadgeCitiesInput? input);
 }

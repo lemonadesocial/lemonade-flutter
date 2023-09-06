@@ -18,16 +18,17 @@ class ProfileCollectibleTabView extends StatefulWidget {
   });
 
   @override
-  State<ProfileCollectibleTabView> createState() => _ProfileCollectibleTabViewState();
+  State<ProfileCollectibleTabView> createState() =>
+      _ProfileCollectibleTabViewState();
 }
 
 class _ProfileCollectibleTabViewState extends State<ProfileCollectibleTabView> {
   double get _filterBarHeight => 72;
   TokensListingType tokensListingType = TokensListingType.created;
 
-  _selectTokenListingType(TokensListingType _type) {
+  _selectTokenListingType(TokensListingType type) {
     setState(() {
-      tokensListingType = _type;
+      tokensListingType = type;
     });
   }
 
@@ -42,7 +43,7 @@ class _ProfileCollectibleTabViewState extends State<ProfileCollectibleTabView> {
           padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
           sliver: SliverAppBar(
             pinned: true,
-            leading: SizedBox.shrink(),
+            leading: const SizedBox.shrink(),
             collapsedHeight: _filterBarHeight,
             expandedHeight: _filterBarHeight,
             flexibleSpace: GestureDetector(
@@ -52,17 +53,20 @@ class _ProfileCollectibleTabViewState extends State<ProfileCollectibleTabView> {
                 child: Column(
                   children: [
                     SizedBox(height: Spacing.smMedium),
-                    Row(
-                      children: TokensListingType.values.map((item) {
-                        return Container(
-                          margin: EdgeInsets.only(right: Spacing.superExtraSmall),
-                          child: LemonChip(
-                            onTap: () => _selectTokenListingType(item),
-                            label: t['nft.${item.name}'],
-                            isActive: tokensListingType == item,
-                          ),
-                        );
-                      }).toList(),
+                    Flexible(
+                      child: Row(
+                        children: TokensListingType.values.map((item) {
+                          return Container(
+                            margin:
+                                EdgeInsets.only(right: Spacing.superExtraSmall),
+                            child: LemonChip(
+                              onTap: () => _selectTokenListingType(item),
+                              label: t['nft.${item.name}'],
+                              isActive: tokensListingType == item,
+                            ),
+                          );
+                        }).toList(),
+                      ),
                     ),
                     SizedBox(height: Spacing.smMedium),
                   ],
@@ -71,11 +75,15 @@ class _ProfileCollectibleTabViewState extends State<ProfileCollectibleTabView> {
             ),
           ),
         ),
-        if(tokensListingType == TokensListingType.onSale) ProfileNftOnSaleListView(user: widget.user),
-        if(tokensListingType == TokensListingType.created) ProfileNftCreatedListView(user: widget.user),
-        if(tokensListingType == TokensListingType.collected) ProfileNftCollectedListView(user: widget.user),
-        if(tokensListingType == TokensListingType.sold) ProfileNftSoldListView(user: widget.user),
-        SliverToBoxAdapter(
+        if (tokensListingType == TokensListingType.onSale)
+          ProfileNftOnSaleListView(user: widget.user),
+        if (tokensListingType == TokensListingType.created)
+          ProfileNftCreatedListView(user: widget.user),
+        if (tokensListingType == TokensListingType.collected)
+          ProfileNftCollectedListView(user: widget.user),
+        if (tokensListingType == TokensListingType.sold)
+          ProfileNftSoldListView(user: widget.user),
+        const SliverToBoxAdapter(
           child: SizedBox(height: 92),
         )
       ],

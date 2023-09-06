@@ -19,6 +19,12 @@ class Typo {
     fontWeight: FontWeight.w700,
   );
 
+  static final mediumPlus = TextStyle(
+    fontSize: 16.sp,
+    height: (20 / 16).w,
+    fontWeight: FontWeight.w500,
+  );
+
   static final medium = TextStyle(
     fontSize: 14.sp,
     height: (18 / 14).w,
@@ -41,7 +47,7 @@ final lemonadeTextTheme = TextTheme(
   titleLarge: Typo.large,
   titleSmall: Typo.medium,
   bodyMedium: Typo.medium,
-  bodySmall: Typo.small, 
+  bodySmall: Typo.small,
   labelLarge: Typo.medium,
   labelMedium: Typo.small,
 );

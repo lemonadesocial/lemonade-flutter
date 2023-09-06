@@ -11,24 +11,25 @@ class OrderWhereComplex with _$OrderWhereComplex {
     @JsonKey(name: 'maker_in', includeIfNull: false) List<String>? makerIn,
     @JsonKey(name: 'open_eq', includeIfNull: false) bool? openEq,
     @JsonKey(name: 'taker_exists', includeIfNull: false) bool? takerExists,
-  }) = _OrderWhereComplex; 
+  }) = _OrderWhereComplex;
 
-  factory OrderWhereComplex.fromJson(Map<String, dynamic> json) => _$OrderWhereComplexFromJson(json);
+  factory OrderWhereComplex.fromJson(Map<String, dynamic> json) =>
+      _$OrderWhereComplexFromJson(json);
 }
 
 @freezed
 class OrderSort with _$OrderSort {
   const factory OrderSort({
     @JsonKey(includeIfNull: false) OrderSortBy? by,
-    @JsonKey(includeIfNull: false) SortDirection? direction ,
-  }) = _OrderSort; 
+    @JsonKey(includeIfNull: false) SortDirection? direction,
+  }) = _OrderSort;
 
-  factory OrderSort.fromJson(Map<String, dynamic> json) => _$OrderSortFromJson(json);
+  factory OrderSort.fromJson(Map<String, dynamic> json) =>
+      _$OrderSortFromJson(json);
 }
 
 @freezed
 class WatchOrdersInput with _$WatchOrdersInput {
-
   @JsonSerializable(explicitToJson: true)
   const factory WatchOrdersInput({
     @JsonKey(includeIfNull: false) OrderWhereComplex? where,
@@ -38,6 +39,6 @@ class WatchOrdersInput with _$WatchOrdersInput {
     @JsonKey(includeIfNull: false) int? limit,
   }) = _WatchOrdersInput;
 
-  factory WatchOrdersInput.fromJson(Map<String, dynamic> json) => _$WatchOrdersInputFromJson(json);
+  factory WatchOrdersInput.fromJson(Map<String, dynamic> json) =>
+      _$WatchOrdersInputFromJson(json);
 }
-

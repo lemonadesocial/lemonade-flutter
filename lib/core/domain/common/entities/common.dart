@@ -2,7 +2,6 @@ import 'package:app/core/data/common/dtos/common_dtos.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 
 class Address {
-
   Address({
     this.street1,
     this.street2,
@@ -43,7 +42,6 @@ class Address {
 }
 
 class DbFile {
-
   DbFile({
     this.id,
     this.url,
@@ -75,7 +73,8 @@ class DbFile {
       url: dto.url,
       owner: dto.owner,
       bucket: dto.bucket,
-      ownerExpanded: dto.ownerExpanded != null ? User.fromDto(dto.ownerExpanded!) : null,
+      ownerExpanded:
+          dto.ownerExpanded != null ? User.fromDto(dto.ownerExpanded!) : null,
       stamp: dto.stamp,
       likes: dto.likes,
       liked: dto.liked,

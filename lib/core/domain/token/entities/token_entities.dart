@@ -4,7 +4,6 @@ import 'package:app/core/domain/token/token_enums.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 
 class TokenComplex {
-
   const TokenComplex({
     required this.id,
     required this.network,
@@ -36,16 +35,24 @@ class TokenComplex {
         order: dto.order,
         createdAt: dto.createdAt,
         creator: dto.creator,
-        creatorExpanded: dto.creatorExpanded != null ? User.fromDto(dto.creatorExpanded!) : null,
+        creatorExpanded: dto.creatorExpanded != null
+            ? User.fromDto(dto.creatorExpanded!)
+            : null,
         enrichCount: dto.enrichCount,
         enrichedAt: dto.enrichedAt,
         founder: dto.founder,
-        founderExpanded: dto.founderExpanded != null ? User.fromDto(dto.founderExpanded!) : null,
-        metadata: dto.metadata != null ? TokenMetadata.fromDto(dto.metadata!) : null,
+        founderExpanded: dto.founderExpanded != null
+            ? User.fromDto(dto.founderExpanded!)
+            : null,
+        metadata:
+            dto.metadata != null ? TokenMetadata.fromDto(dto.metadata!) : null,
         metadataCreatorsExpanded: dto.metadataCreatorsExpanded,
         owner: dto.owner,
-        ownerExpanded: dto.ownerExpanded != null ? User.fromDto(dto.ownerExpanded!) : null,
-        royalties: List<TokenRoyaltyDto>.from(dto.royalties ?? []).map(TokenRoyalty.fromDto).toList(),
+        ownerExpanded:
+            dto.ownerExpanded != null ? User.fromDto(dto.ownerExpanded!) : null,
+        royalties: List<TokenRoyaltyDto>.from(dto.royalties ?? [])
+            .map(TokenRoyalty.fromDto)
+            .toList(),
         uri: dto.uri,
       );
   final String id;
@@ -78,11 +85,12 @@ class TokenDetail {
   });
 
   factory TokenDetail.fromDto(TokenDetailDto dto) => TokenDetail(
-    id: dto.id,
-    network: dto.network,
-    tokenId: dto.tokenId,
-    metadata: dto.metadata != null ? TokenMetadata.fromDto(dto.metadata!) : null,
-  );
+        id: dto.id,
+        network: dto.network,
+        tokenId: dto.tokenId,
+        metadata:
+            dto.metadata != null ? TokenMetadata.fromDto(dto.metadata!) : null,
+      );
 
   final String? id;
   final String? network;
@@ -91,7 +99,6 @@ class TokenDetail {
 }
 
 class Registry {
-
   const Registry({
     this.id,
     this.network,
@@ -121,7 +128,6 @@ class Registry {
 }
 
 class OrderSimple {
-
   const OrderSimple({
     required this.id,
     required this.contract,
@@ -157,8 +163,10 @@ class OrderSimple {
         token: dto.token,
         bidAmount: dto.bidAmount,
         bidder: dto.bidder,
-        currency: dto.currency != null ? OrderCurrency.fromDto(dto.currency!) : null,
-        makerExpanded: dto.makerExpanded != null ? User.fromDto(dto.makerExpanded!) : null,
+        currency:
+            dto.currency != null ? OrderCurrency.fromDto(dto.currency!) : null,
+        makerExpanded:
+            dto.makerExpanded != null ? User.fromDto(dto.makerExpanded!) : null,
         openFrom: dto.openFrom,
         openTo: dto.openTo,
         paidAmount: dto.paidAmount,
@@ -187,7 +195,6 @@ class OrderSimple {
 }
 
 class OrderCurrency {
-
   const OrderCurrency({
     required this.id,
     this.name,
@@ -205,7 +212,6 @@ class OrderCurrency {
 }
 
 class TokenRoyalty {
-
   const TokenRoyalty({
     required this.account,
     required this.value,
@@ -220,7 +226,6 @@ class TokenRoyalty {
 }
 
 class TokenMetadata {
-
   const TokenMetadata({
     this.name,
     this.description,
@@ -248,7 +253,6 @@ class TokenMetadata {
 }
 
 class TokenSimple {
-
   const TokenSimple({
     required this.id,
     required this.network,
@@ -277,16 +281,25 @@ class TokenSimple {
         contract: dto.contract,
         createdAt: dto.createdAt,
         creator: dto.creator,
-        creatorExpanded: dto.creatorExpanded != null ? User.fromDto(dto.creatorExpanded!) : null,
+        creatorExpanded: dto.creatorExpanded != null
+            ? User.fromDto(dto.creatorExpanded!)
+            : null,
         enrichCount: dto.enrichCount,
         enrichedAt: dto.enrichedAt,
         founder: dto.founder,
-        founderExpanded: dto.founderExpanded != null ? User.fromDto(dto.founderExpanded!) : null,
-        metadata: dto.metadata != null ? TokenMetadata.fromDto(dto.metadata!) : null,
+        founderExpanded: dto.founderExpanded != null
+            ? User.fromDto(dto.founderExpanded!)
+            : null,
+        metadata:
+            dto.metadata != null ? TokenMetadata.fromDto(dto.metadata!) : null,
         metadataCreatorsExpanded:
-            List<UserDto>.from(dto.metadataCreatorsExpanded ?? []).map(User.fromDto).toList(),
+            List<UserDto>.from(dto.metadataCreatorsExpanded ?? [])
+                .map(User.fromDto)
+                .toList(),
         order: dto.order,
-        royalties: List<TokenRoyaltyDto>.from(dto.royalties ?? []).map(TokenRoyalty.fromDto).toList(),
+        royalties: List<TokenRoyaltyDto>.from(dto.royalties ?? [])
+            .map(TokenRoyalty.fromDto)
+            .toList(),
         uri: dto.uri,
       );
   final String id;

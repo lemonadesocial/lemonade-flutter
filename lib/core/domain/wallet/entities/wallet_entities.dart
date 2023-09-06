@@ -6,7 +6,8 @@ class UserWalletRequest {
 
   UserWalletRequest({required this.message, required this.token});
 
-  factory UserWalletRequest.fromDto(UserWalletRequestDto dto) => UserWalletRequest(
+  factory UserWalletRequest.fromDto(UserWalletRequestDto dto) =>
+      UserWalletRequest(
         message: dto.message,
         token: dto.token,
       );
