@@ -100,8 +100,9 @@ class ProfileInfoTabView extends StatelessWidget {
         user.handleFacebook,
         user.handleLinkedin
       ].asMap().entries.map((entry) {
-        if (entry.value == null || entry.value?.isEmpty == true)
+        if (entry.value == null || entry.value?.isEmpty == true) {
           return const SizedBox.shrink();
+        }
         return GestureDetector(
           onTap: () async {
             AutoRouter.of(context).navigate(WebviewRoute(
