@@ -203,6 +203,9 @@ class $AssetsIconsGen {
   SvgGenImage get icLinkedin =>
       const SvgGenImage('assets/icons/ic_linkedin.svg');
 
+  /// File path: assets/icons/ic_lock.svg
+  SvgGenImage get icLock => const SvgGenImage('assets/icons/ic_lock.svg');
+
   /// File path: assets/icons/ic_matches.svg
   SvgGenImage get icMatches => const SvgGenImage('assets/icons/ic_matches.svg');
 
@@ -277,6 +280,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_ticket.svg
   SvgGenImage get icTicket => const SvgGenImage('assets/icons/ic_ticket.svg');
 
+  /// File path: assets/icons/ic_ticket_bold.svg
+  SvgGenImage get icTicketBold =>
+      const SvgGenImage('assets/icons/ic_ticket_bold.svg');
+
   /// File path: assets/icons/ic_twitter.svg
   SvgGenImage get icTwitter => const SvgGenImage('assets/icons/ic_twitter.svg');
 
@@ -338,6 +345,7 @@ class $AssetsIconsGen {
         icLemonOutline,
         icLemonadeWhite,
         icLinkedin,
+        icLock,
         icMatches,
         icMenu,
         icMessage,
@@ -360,6 +368,7 @@ class $AssetsIconsGen {
         icStore,
         icSupport,
         icTicket,
+        icTicketBold,
         icTwitter,
         icWallet,
         icWalletFilled,
@@ -406,6 +415,10 @@ class $AssetsImagesGen {
   AssetGenImage get bgGetStarted3x =>
       const AssetGenImage('assets/images/bg_get_started@3x.png');
 
+  /// File path: assets/images/fake_event_location.png
+  AssetGenImage get fakeEventLocation =>
+      const AssetGenImage('assets/images/fake_event_location.png');
+
   /// List of all assets
   List<AssetGenImage> get values => [
         bgChat,
@@ -416,7 +429,8 @@ class $AssetsImagesGen {
         bgCircle3x,
         bgGetStarted,
         bgGetStarted2x,
-        bgGetStarted3x
+        bgGetStarted3x,
+        fakeEventLocation
       ];
 }
 

@@ -5,7 +5,12 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 class LemonBackButton extends StatelessWidget {
-  const LemonBackButton({super.key});
+  const LemonBackButton({
+    super.key,
+    this.color,
+  });
+
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +20,7 @@ class LemonBackButton extends StatelessWidget {
       },
       child: Center(
         child: ThemeSvgIcon(
+          color: color,
           builder: (filter) => Assets.icons.icBack.svg(
             colorFilter: filter,
             // fit: BoxFit.scaleDown,

@@ -11,6 +11,7 @@ const eventHostExpandedFragment = '''
       key
       bucket
     }
+    job_title
     __typename
   }
 ''';
@@ -26,7 +27,10 @@ const eventFragment = '''
   host_expanded {
     ...eventHostExpandedFragment
   }
-  new_new_photos_expanded(limit: 1) {
+  cohosts_expanded(limit: 25) {
+    ...eventHostExpandedFragment
+  }
+  new_new_photos_expanded(limit: 25) {
     key
     bucket
   }
@@ -34,6 +38,7 @@ const eventFragment = '''
   end
   cost
   currency
+  description
   broadcasts {
     provider_id
   }
