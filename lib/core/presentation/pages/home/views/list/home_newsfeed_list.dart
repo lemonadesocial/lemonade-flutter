@@ -37,12 +37,16 @@ class HomeNewsfeedListView extends StatelessWidget {
             controller: refreshController,
             enablePullUp: true,
             onRefresh: () {
-              context.read<NewsfeedListingBloc>().add(NewsfeedListingEvent.fetch());
+              context
+                  .read<NewsfeedListingBloc>()
+                  .add(NewsfeedListingEvent.fetch());
               refreshController.refreshCompleted();
             },
             onLoading: () {
               // add load more here
-              context.read<NewsfeedListingBloc>().add(NewsfeedListingEvent.fetch());
+              context
+                  .read<NewsfeedListingBloc>()
+                  .add(NewsfeedListingEvent.fetch());
               refreshController.loadComplete();
             },
             footer: const ClassicFooter(
@@ -51,7 +55,7 @@ class HomeNewsfeedListView extends StatelessWidget {
             ),
             child: ListView.separated(
               padding:
-              EdgeInsetsDirectional.symmetric(vertical: Spacing.xSmall),
+                  EdgeInsetsDirectional.symmetric(vertical: Spacing.xSmall),
               itemBuilder: (ctx, index) => Padding(
                 padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
                 child: PostProfileCard(

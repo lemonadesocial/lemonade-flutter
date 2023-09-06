@@ -9,7 +9,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'newsfeed_listing_bloc.freezed.dart';
 
-class NewsfeedListingBloc extends Bloc<NewsfeedListingEvent, NewsfeedListingState> {
+class NewsfeedListingBloc
+    extends Bloc<NewsfeedListingEvent, NewsfeedListingState> {
   NewsfeedListingBloc(
     this.newsfeedService, {
     required this.defaultInput,
@@ -19,8 +20,8 @@ class NewsfeedListingBloc extends Bloc<NewsfeedListingEvent, NewsfeedListingStat
   }
 
   final NewsfeedService newsfeedService;
-  late final OffsetPaginationService<Post, GetNewsfeedInput> offsetPaginationService =
-      OffsetPaginationService(
+  late final OffsetPaginationService<Post, GetNewsfeedInput>
+      offsetPaginationService = OffsetPaginationService(
     getDataFuture: _getNewsfeed,
   );
   final GetNewsfeedInput defaultInput;
@@ -79,9 +80,11 @@ class NewsfeedListingState with _$NewsfeedListingState {
 
 @freezed
 class NewsfeedListingEvent with _$NewsfeedListingEvent {
-  factory NewsfeedListingEvent.fetch({GetNewsfeedInput? input}) = NewsfeedListingEventFetch;
+  factory NewsfeedListingEvent.fetch({GetNewsfeedInput? input}) =
+      NewsfeedListingEventFetch;
 
-  factory NewsfeedListingEvent.newPostAdded({required Post post}) = NewsfeedListingEventNewPost;
+  factory NewsfeedListingEvent.newPostAdded({required Post post}) =
+      NewsfeedListingEventNewPost;
 }
 
 enum NewsfeedStatus {
