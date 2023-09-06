@@ -100,9 +100,6 @@ dependencies:
   lottie: ^2.6.0
   
 dependency_overrides:
-  # widget visibile detector
-  visibility_detector: ^0.4.0+2
-
   matrix_api_lite:
     git:
       url: https://github.com/mthinh/dart_matrix_api_lite.git
