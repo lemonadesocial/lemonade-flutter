@@ -19,10 +19,13 @@ class PhotosGalleryPage extends StatefulWidget {
     super.key,
     required this.photos,
     this.initialIndex = 0,
+    this.title,
   });
 
   final List<String> photos;
   final int initialIndex;
+  final Widget? title;
+
   late final PageController pageController =
       PageController(initialPage: initialIndex);
 
@@ -51,6 +54,8 @@ class _PhotosGalleryPageState extends State<PhotosGalleryPage> {
     return Scaffold(
       backgroundColor: colorScheme.primary,
       appBar: AppBar(
+        title: widget.title,
+        centerTitle: true,
         leading: LemonBackButton(
           color: colorScheme.onPrimary,
         ),
@@ -130,7 +135,7 @@ class _PhotosGalleryPageState extends State<PhotosGalleryPage> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(3.r),
                             border: Border.all(
-                              width: isActive ? 1.w : 0.5.w,
+                              width: isActive ? 2.w : 1.w,
                               color: isActive
                                   ? colorScheme.onPrimary
                                   : colorScheme.outline,

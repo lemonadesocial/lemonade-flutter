@@ -68,7 +68,16 @@ class GuestEventDetailPhotos extends StatelessWidget {
                   onTap: () {
                     AutoRouter.of(context).push(
                       PhotosGalleryRoute(
-                          initialIndex: index, photos: photoUrls),
+                        initialIndex: index,
+                        photos: photoUrls,
+                        title: Text(
+                          event.title ?? '',
+                          style: Typo.extraMedium.copyWith(
+                            fontWeight: FontWeight.w500,
+                            color: colorScheme.onPrimary,
+                          ),
+                        ),
+                      ),
                     );
                   },
                   child: Container(

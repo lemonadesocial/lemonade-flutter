@@ -259,6 +259,7 @@ abstract class $AppRouter extends _i26.RootStackRouter {
           key: args.key,
           photos: args.photos,
           initialIndex: args.initialIndex,
+          title: args.title,
         ),
       );
     },
@@ -824,6 +825,7 @@ class PhotosGalleryRoute extends _i26.PageRouteInfo<PhotosGalleryRouteArgs> {
     _i28.Key? key,
     required List<String> photos,
     int initialIndex = 0,
+    _i28.Widget? title,
     List<_i26.PageRouteInfo>? children,
   }) : super(
           PhotosGalleryRoute.name,
@@ -831,6 +833,7 @@ class PhotosGalleryRoute extends _i26.PageRouteInfo<PhotosGalleryRouteArgs> {
             key: key,
             photos: photos,
             initialIndex: initialIndex,
+            title: title,
           ),
           initialChildren: children,
         );
@@ -846,6 +849,7 @@ class PhotosGalleryRouteArgs {
     this.key,
     required this.photos,
     this.initialIndex = 0,
+    this.title,
   });
 
   final _i28.Key? key;
@@ -854,8 +858,10 @@ class PhotosGalleryRouteArgs {
 
   final int initialIndex;
 
+  final _i28.Widget? title;
+
   @override
   String toString() {
-    return 'PhotosGalleryRouteArgs{key: $key, photos: $photos, initialIndex: $initialIndex}';
+    return 'PhotosGalleryRouteArgs{key: $key, photos: $photos, initialIndex: $initialIndex, title: $title}';
   }
 }
