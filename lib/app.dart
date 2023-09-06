@@ -51,10 +51,6 @@ class _LemonadeAppViewState extends State<LemonadeApp> {
         child: child,
       );
 
-  Widget _limitAppLayoutBuilder(Widget child) => AppLimitLayoutBuilder(
-        child: child,
-      );
-
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(
