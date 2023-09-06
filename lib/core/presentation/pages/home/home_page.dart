@@ -92,8 +92,8 @@ class _HomePageViewState extends State<_HomeListingView> {
         child: FloatingCreateButton(
           onTap: () => context.router.push(
             CreatePostRoute(
-              onPostCreated: () => context.read<NewsfeedListingBloc>().add(
-                    NewsfeedListingEvent.fetch(),
+              onPostCreated: (newPost) => context.read<NewsfeedListingBloc>().add(
+                    NewsfeedListingEvent.newPostAdded(post: newPost),
                   ),
             ),
           ),
