@@ -16,7 +16,13 @@ printSuccess() {
 printError() {
     printf "${RED} ❌ Lemonade : $1${ENDCOLOR}\n"
 }
+
 printMessage "Running local Lemonade pre-commit hook."
+
+# Check Dart formatting
+dart format --set-exit-if-changed .
+
+printMessage "Auto formatted code ..."
 
 #flutter format .
 ##https://gist.github.com/benmccallum/28e4f216d9d72f5965133e6c43aaff6e
