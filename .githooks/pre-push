@@ -21,9 +21,6 @@ printMessage "Running local Lemonade pre-push hook."
 
 printMessage "Auto formatting code ..."
 
-# Run dart format
-dart format .
-
 # Check if there are any dart analyze issues
 analyze_output=$(dart analyze 2>&1)
 if [[ "$analyze_output" != *"No issues found!"* ]]; then
