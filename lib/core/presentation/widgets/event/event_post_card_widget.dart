@@ -12,6 +12,7 @@ import 'package:app/core/utils/image_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/router/app_router.gr.dart';
+import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -165,12 +166,34 @@ class EventPostCard extends StatelessWidget {
                 '${event.title}',
                 style: Typo.medium.copyWith(fontFamily: FontFamily.circularStd),
               ),
-              Text(
-                DateFormatUtils.fullDateWithTime(event.start),
-                style: Typo.small.copyWith(
-                    color: colorScheme.onSurface,
-                    height: 1.5,
-                    fontFamily: FontFamily.circularStd),
+              Row(
+                children: [
+                  Text(
+                    DateFormatUtils.dateOnly(event.start),
+                    style: Typo.small.copyWith(
+                        color: colorScheme.onSecondary,
+                        height: 1.5,
+                        fontFamily: FontFamily.circularStd),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 5.w),
+                    child: Container(
+                      width: 3.r,
+                      height: 3.r,
+                      decoration: ShapeDecoration(
+                        color: colorScheme.outlineVariant,
+                        shape: const OvalBorder(),
+                      ),
+                    ),
+                  ),
+                  Text(
+                    DateFormatUtils.timeOnly(event.start),
+                    style: Typo.small.copyWith(
+                        color: colorScheme.onSecondary,
+                        height: 1.5,
+                        fontFamily: FontFamily.circularStd),
+                  )
+                ],
               )
             ],
           ),
