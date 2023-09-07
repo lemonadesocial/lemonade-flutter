@@ -11,6 +11,7 @@ import 'package:app/core/utils/avatar_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/router/app_router.gr.dart';
+import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -74,18 +75,18 @@ class PostProfileCard extends StatelessWidget {
                   Text(
                     postName,
                     style: Typo.medium.copyWith(
-                      color: colorScheme.onPrimary,
+                      color: LemonColor.white87,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
                   if (postCreatedAt != null)
                     Text(
                       '  •  ${timeago.format(postCreatedAt!)}',
-                      style: Typo.medium.copyWith(color: colorScheme.onSurface),
+                      style: Typo.medium.copyWith(color: colorScheme.onSurfaceVariant),
                     ),
                   const Spacer(),
                   ThemeSvgIcon(
-                    color: colorScheme.onSurface,
+                    color: colorScheme.onSurfaceVariant,
                     builder: (filter) => Assets.icons.icMoreHoriz.svg(
                       colorFilter: filter,
                       width: 18.w,
@@ -99,7 +100,7 @@ class PostProfileCard extends StatelessWidget {
                 Text(
                   postText,
                   style: Typo.medium.copyWith(
-                    color: colorScheme.onPrimary,
+                    color: LemonColor.white87,
                     fontWeight: FontWeight.w400,
                   ),
                 ),
