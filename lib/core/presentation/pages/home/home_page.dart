@@ -23,6 +23,7 @@ import '../../../application/auth/auth_bloc.dart';
 
 @RoutePage()
 class HomePage extends StatelessWidget {
+
   const HomePage({super.key});
 
   @override
