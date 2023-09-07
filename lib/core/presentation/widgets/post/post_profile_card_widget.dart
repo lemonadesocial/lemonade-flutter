@@ -82,7 +82,8 @@ class PostProfileCard extends StatelessWidget {
                   if (postCreatedAt != null)
                     Text(
                       '  •  ${timeago.format(postCreatedAt!)}',
-                      style: Typo.medium.copyWith(color: colorScheme.onSurfaceVariant),
+                      style: Typo.medium
+                          .copyWith(color: colorScheme.onSurfaceVariant),
                     ),
                   const Spacer(),
                   ThemeSvgIcon(
@@ -153,7 +154,9 @@ class PostProfileCard extends StatelessWidget {
             ),
           )
         : ThemeSvgIcon(
+            color: colorScheme.onSecondary,
             builder: (filter) => Assets.icons.icHeart.svg(
+              colorFilter: filter,
               width: 18.w,
               height: 18.w,
             ),
