@@ -38,32 +38,6 @@ class RippleMarkerState extends State<RippleAnimation>
     super.dispose();
   }
 
-  Widget _center() {
-    return Center(
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(widget.size),
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            gradient: RadialGradient(
-              colors: <Color>[
-                widget.color,
-                Colors.black,
-              ],
-            ),
-          ),
-          child: ScaleTransition(
-            scale: (widget.scaleTween ?? Tween(begin: 0.5, end: 1.0)).animate(
-              CurvedAnimation(
-                parent: _controller,
-                curve: CurveWave(),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
@@ -75,7 +49,30 @@ class RippleMarkerState extends State<RippleAnimation>
       child: SizedBox(
         width: widget.size,
         height: widget.size,
-        child: _center(),
+        child: Center(
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(widget.size),
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: RadialGradient(
+                  colors: <Color>[
+                    widget.color,
+                    Colors.black,
+                  ],
+                ),
+              ),
+              child: ScaleTransition(
+                scale:
+                    (widget.scaleTween ?? Tween(begin: 0.5, end: 1.0)).animate(
+                  CurvedAnimation(
+                    parent: _controller,
+                    curve: CurveWave(),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }

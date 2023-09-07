@@ -8,11 +8,13 @@ import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class RSVPEventSuccessPopupWidget extends StatelessWidget {
-  const RSVPEventSuccessPopupWidget({
+@RoutePage()
+class RSVPEventSuccessPopupPage extends StatelessWidget {
+  const RSVPEventSuccessPopupPage({
     super.key,
     required this.event,
   });
@@ -77,31 +79,37 @@ class RSVPEventSuccessPopupWidget extends StatelessWidget {
             ),
             Positioned(
               top: 0,
-              left: Spacing.smMedium,
-              height: Sizing.xLarge,
-              child: LemonBackButton(
-                color: colorScheme.onPrimary,
-              ),
-            ),
-            Positioned(
-              top: Spacing.smMedium / 2,
-              right: Spacing.smMedium,
-              child: Container(
-                width: 125.w,
-                height: Sizing.medium,
-                decoration: BoxDecoration(
-                  color: colorScheme.onPrimary.withOpacity(0.09),
-                  borderRadius: BorderRadius.circular(LemonRadius.normal),
-                ),
+              left: 0,
+              right: 0,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Assets.icons.icUserAdd.svg(),
-                    SizedBox(width: Spacing.extraSmall),
-                    Text(
-                      t.event.inviteFriends,
-                      style: Typo.small.copyWith(
-                        color: colorScheme.onSecondary,
+                    LemonBackButton(
+                      color: colorScheme.onPrimary,
+                    ),
+                    Container(
+                      width: 125.w,
+                      height: Sizing.medium,
+                      decoration: BoxDecoration(
+                        color: colorScheme.onPrimary.withOpacity(0.09),
+                        borderRadius: BorderRadius.circular(LemonRadius.normal),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Assets.icons.icUserAdd.svg(),
+                          SizedBox(width: Spacing.extraSmall),
+                          Text(
+                            t.event.inviteFriends,
+                            style: Typo.small.copyWith(
+                              color: colorScheme.onSecondary,
+                            ),
+                          )
+                        ],
                       ),
                     )
                   ],
