@@ -16,10 +16,6 @@ import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:auto_route/auto_route.dart';
 
-
-
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -32,7 +28,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final newFeedBloc = NewsfeedListingBloc(
       NewsfeedService(NewsfeedRepositoryImpl()),
-      defaultInput: GetNewsfeedInput(),
+      defaultInput: const GetNewsfeedInput(),
     );
     return MultiBlocProvider(
       providers: [
@@ -43,7 +39,7 @@ class HomePage extends StatelessWidget {
       ],
       child: Builder(
         builder: (context) {
-          return _HomeListingView();
+          return const _HomeListingView();
         },
       ),
     );
@@ -70,7 +66,7 @@ class _HomePageViewState extends State<_HomeListingView> {
     return Scaffold(
       appBar: LemonAppBar(
         title: t.home.newsfeed,
-        leading: AppBarLogo(),
+        leading: const AppBarLogo(),
         actions: [
           GestureDetector(
             behavior: HitTestBehavior.translucent,
@@ -91,11 +87,6 @@ class _HomePageViewState extends State<_HomeListingView> {
         ],
       ),
       backgroundColor: LemonColor.black,
-
-
-
-
-
       body: const HomeNewsfeedListView(),
       floatingActionButton: Padding(
         padding: EdgeInsets.only(bottom: BottomBar.bottomBarHeight),
