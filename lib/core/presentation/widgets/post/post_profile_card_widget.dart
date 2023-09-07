@@ -11,7 +11,6 @@ import 'package:app/core/utils/avatar_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/router/app_router.gr.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -75,7 +74,7 @@ class PostProfileCard extends StatelessWidget {
                   Text(
                     postName,
                     style: Typo.medium.copyWith(
-                      color: LemonColor.white87,
+                      color: colorScheme.onPrimary.withOpacity(0.87),
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -101,7 +100,7 @@ class PostProfileCard extends StatelessWidget {
                 Text(
                   postText,
                   style: Typo.medium.copyWith(
-                    color: LemonColor.white87,
+                    color: colorScheme.onPrimary.withOpacity(0.87),
                     fontWeight: FontWeight.w400,
                   ),
                 ),
