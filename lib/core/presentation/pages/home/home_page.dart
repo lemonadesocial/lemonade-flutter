@@ -24,16 +24,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
-
-
-
-
-
-
-
-
-
-
   @override
   Widget build(BuildContext context) {
     final newFeedBloc = NewsfeedListingBloc(
@@ -41,6 +31,14 @@ class HomePage extends StatelessWidget {
       defaultInput: const GetNewsfeedInput(),
     );
     return MultiBlocProvider(
+
+
+
+
+
+
+
+      
       providers: [
         BlocProvider<NewsfeedListingBloc>(
           create: (context) => newFeedBloc..add(NewsfeedListingEvent.fetch()),
