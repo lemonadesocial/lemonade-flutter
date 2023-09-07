@@ -15,6 +15,7 @@ import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:auto_route/auto_route.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -92,9 +93,10 @@ class _HomePageViewState extends State<_HomeListingView> {
         child: FloatingCreateButton(
           onTap: () => context.router.push(
             CreatePostRoute(
-              onPostCreated: () => context.read<NewsfeedListingBloc>().add(
-                    NewsfeedListingEvent.fetch(),
-                  ),
+              onPostCreated: (newPost) =>
+                  context.read<NewsfeedListingBloc>().add(
+                        NewsfeedListingEvent.newPostAdded(post: newPost),
+                      ),
             ),
           ),
         ),

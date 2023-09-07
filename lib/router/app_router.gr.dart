@@ -8,7 +8,8 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:app/core/domain/event/entities/event.dart' as _i30;
+import 'package:app/core/domain/event/entities/event.dart' as _i31;
+import 'package:app/core/domain/post/entities/post_entities.dart' as _i30;
 import 'package:app/core/presentation/pages/auth/login_page.dart' as _i7;
 import 'package:app/core/presentation/pages/chat/chat_list/chat_list_page.dart'
     as _i4;
@@ -54,7 +55,7 @@ import 'package:app/core/presentation/widgets/common/photos_gallery_page/photos_
 import 'package:app/core/presentation/widgets/event/rsvp_event_success_popup_widget.dart'
     as _i26;
 import 'package:auto_route/auto_route.dart' as _i27;
-import 'package:flutter/cupertino.dart' as _i31;
+import 'package:flutter/cupertino.dart' as _i32;
 import 'package:flutter/foundation.dart' as _i28;
 import 'package:flutter/material.dart' as _i29;
 
@@ -440,7 +441,7 @@ class NotificationRouteArgs {
 class CreatePostRoute extends _i27.PageRouteInfo<CreatePostRouteArgs> {
   CreatePostRoute({
     _i29.Key? key,
-    required void Function() onPostCreated,
+    required void Function(_i30.Post) onPostCreated,
     List<_i27.PageRouteInfo>? children,
   }) : super(
           CreatePostRoute.name,
@@ -465,7 +466,7 @@ class CreatePostRouteArgs {
 
   final _i29.Key? key;
 
-  final void Function() onPostCreated;
+  final void Function(_i30.Post) onPostCreated;
 
   @override
   String toString() {
@@ -640,7 +641,7 @@ class EmptyRoute extends _i27.PageRouteInfo<void> {
 class EventSelectingRoute extends _i27.PageRouteInfo<EventSelectingRouteArgs> {
   EventSelectingRoute({
     _i29.Key? key,
-    required void Function(_i30.Event) onEventTap,
+    required void Function(_i31.Event) onEventTap,
     List<_i27.PageRouteInfo>? children,
   }) : super(
           EventSelectingRoute.name,
@@ -665,7 +666,7 @@ class EventSelectingRouteArgs {
 
   final _i29.Key? key;
 
-  final void Function(_i30.Event) onEventTap;
+  final void Function(_i31.Event) onEventTap;
 
   @override
   String toString() {
@@ -731,7 +732,7 @@ class GuestEventDetailRouteArgs {
 /// [_i20.EventDetailPage]
 class EventDetailRoute extends _i27.PageRouteInfo<EventDetailRouteArgs> {
   EventDetailRoute({
-    _i31.Key? key,
+    _i32.Key? key,
     required String eventId,
     required String eventName,
     List<_i27.PageRouteInfo>? children,
@@ -762,7 +763,7 @@ class EventDetailRouteArgs {
     required this.eventName,
   });
 
-  final _i31.Key? key;
+  final _i32.Key? key;
 
   final String eventId;
 
@@ -884,7 +885,7 @@ class RSVPEventSuccessPopupRoute
     extends _i27.PageRouteInfo<RSVPEventSuccessPopupRouteArgs> {
   RSVPEventSuccessPopupRoute({
     _i29.Key? key,
-    required _i30.Event event,
+    required _i31.Event event,
     List<_i27.PageRouteInfo>? children,
   }) : super(
           RSVPEventSuccessPopupRoute.name,
@@ -909,7 +910,7 @@ class RSVPEventSuccessPopupRouteArgs {
 
   final _i29.Key? key;
 
-  final _i30.Event event;
+  final _i31.Event event;
 
   @override
   String toString() {
