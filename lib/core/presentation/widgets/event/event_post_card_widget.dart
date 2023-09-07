@@ -93,16 +93,19 @@ class EventPostCard extends StatelessWidget {
         _buildHostsAvatars(colorScheme),
         SizedBox(width: Spacing.extraSmall),
         ThemeSvgIcon(
-          color: colorScheme.onSurface,
+          color: colorScheme.onSecondary,
           builder: (filter) => Assets.icons.icHostFilled.svg(
             colorFilter: filter,
-            width: Sizing.xSmall,
-            height: Sizing.xSmall,
+            width: 15.w,
+            height: 15.w,
           ),
         ),
-        SizedBox(width: Spacing.superExtraSmall),
+        SizedBox(width: 5.w),
         Text.rich(
-          style: Typo.small.copyWith(color: colorScheme.onSurface, height: 1.5),
+          style: Typo.small.copyWith(
+            color: colorScheme.onSecondary,
+            height: 1.5,
+          ),
           TextSpan(
             text: hostName,
             children: [
@@ -168,7 +171,7 @@ class EventPostCard extends StatelessWidget {
                         fontFamily: FontFamily.circularStd),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 5.w),
+                    padding: EdgeInsets.only(left: 5.w, right: 5.w, top: 2.h),
                     child: Container(
                       width: 3.r,
                       height: 3.r,
