@@ -14,5 +14,9 @@
     "buyTickets": "Buy tickets",
     "rsvpToUnlock": "RSVP to this event to unlock the location",
     "eventLocation": "Location",
-    "tickets": "tickets"
+    "tickets": "tickets",
+    "youreIn": "You're in! 🎉",
+    "rsvpSuccessful": "Congrats! You have successfully RSVP’d to $eventName.",
+    "takeMeToEvent": "Take me to the event",
+    "inviteFriends": "Invite friends"
 }

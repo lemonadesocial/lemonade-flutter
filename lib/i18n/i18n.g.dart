@@ -1,9 +1,9 @@
 /// Generated file. Do not edit.
 ///
 /// Locales: 1
-/// Strings: 191
+/// Strings: 195
 ///
-/// Built on 2023-09-05 at 07:28 UTC
+/// Built on 2023-09-06 at 12:27 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -429,6 +429,11 @@ class _I18nEventEn {
   String get rsvpToUnlock => 'RSVP to this event to unlock the location';
   String get eventLocation => 'Location';
   String get tickets => 'tickets';
+  String get youreIn => 'You\'re in! 🎉';
+  String rsvpSuccessful({required Object eventName}) =>
+      'Congrats! You have successfully RSVP’d to ${eventName}.';
+  String get takeMeToEvent => 'Take me to the event';
+  String get inviteFriends => 'Invite friends';
 }
 
 // Path: onboarding
@@ -1065,6 +1070,15 @@ extension on _I18nEn {
         return 'Location';
       case 'event.tickets':
         return 'tickets';
+      case 'event.youreIn':
+        return 'You\'re in! 🎉';
+      case 'event.rsvpSuccessful':
+        return ({required Object eventName}) =>
+            'Congrats! You have successfully RSVP’d to ${eventName}.';
+      case 'event.takeMeToEvent':
+        return 'Take me to the event';
+      case 'event.inviteFriends':
+        return 'Invite friends';
       case 'onboarding.pickUsername':
         return 'Pick username';
       case 'onboarding.pickUsernameDesc':
