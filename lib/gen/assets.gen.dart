@@ -26,6 +26,18 @@ class $AssetsFontsGen {
   /// File path: assets/fonts/CircularStd-Medium.ttf
   String get circularStdMedium => 'assets/fonts/CircularStd-Medium.ttf';
 
+  /// File path: assets/fonts/Nohemi-Black.ttf
+  String get nohemiBlack => 'assets/fonts/Nohemi-Black.ttf';
+
+  /// File path: assets/fonts/Nohemi-Bold.ttf
+  String get nohemiBold => 'assets/fonts/Nohemi-Bold.ttf';
+
+  /// File path: assets/fonts/Nohemi-Medium.ttf
+  String get nohemiMedium => 'assets/fonts/Nohemi-Medium.ttf';
+
+  /// File path: assets/fonts/Nohemi-Regular.ttf
+  String get nohemiRegular => 'assets/fonts/Nohemi-Regular.ttf';
+
   /// File path: assets/fonts/Nohemi-VF.ttf
   String get nohemiVF => 'assets/fonts/Nohemi-VF.ttf';
 
@@ -44,6 +56,10 @@ class $AssetsFontsGen {
         circularStdBold,
         circularStdBook,
         circularStdMedium,
+        nohemiBlack,
+        nohemiBold,
+        nohemiMedium,
+        nohemiRegular,
         nohemiVF,
         spaceGroteskRegular,
         spaceGroteskSemiBold,
@@ -274,6 +290,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_store.svg
   SvgGenImage get icStore => const SvgGenImage('assets/icons/ic_store.svg');
 
+  /// File path: assets/icons/ic_success.svg
+  SvgGenImage get icSuccess => const SvgGenImage('assets/icons/ic_success.svg');
+
   /// File path: assets/icons/ic_support.svg
   SvgGenImage get icSupport => const SvgGenImage('assets/icons/ic_support.svg');
 
@@ -286,6 +305,10 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/ic_twitter.svg
   SvgGenImage get icTwitter => const SvgGenImage('assets/icons/ic_twitter.svg');
+
+  /// File path: assets/icons/ic_user_add.svg
+  SvgGenImage get icUserAdd =>
+      const SvgGenImage('assets/icons/ic_user_add.svg');
 
   /// File path: assets/icons/ic_wallet.svg
   SvgGenImage get icWallet => const SvgGenImage('assets/icons/ic_wallet.svg');
@@ -366,10 +389,12 @@ class $AssetsIconsGen {
         icSelectImage,
         icShare,
         icStore,
+        icSuccess,
         icSupport,
         icTicket,
         icTicketBold,
         icTwitter,
+        icUserAdd,
         icWallet,
         icWalletFilled,
         icoCreateSpace,

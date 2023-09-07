@@ -74,18 +74,19 @@ class PostProfileCard extends StatelessWidget {
                   Text(
                     postName,
                     style: Typo.medium.copyWith(
-                      color: colorScheme.onPrimary,
+                      color: colorScheme.onPrimary.withOpacity(0.87),
                       fontWeight: FontWeight.w600,
                     ),
                   ),
                   if (postCreatedAt != null)
                     Text(
                       '  •  ${timeago.format(postCreatedAt!)}',
-                      style: Typo.medium.copyWith(color: colorScheme.onSurface),
+                      style: Typo.medium
+                          .copyWith(color: colorScheme.onSurfaceVariant),
                     ),
                   const Spacer(),
                   ThemeSvgIcon(
-                    color: colorScheme.onSurface,
+                    color: colorScheme.onSurfaceVariant,
                     builder: (filter) => Assets.icons.icMoreHoriz.svg(
                       colorFilter: filter,
                       width: 18.w,
@@ -99,7 +100,7 @@ class PostProfileCard extends StatelessWidget {
                 Text(
                   postText,
                   style: Typo.medium.copyWith(
-                    color: colorScheme.onPrimary,
+                    color: colorScheme.onPrimary.withOpacity(0.87),
                     fontWeight: FontWeight.w400,
                   ),
                 ),
@@ -125,10 +126,13 @@ class PostProfileCard extends StatelessWidget {
       width: double.infinity,
       height: 270,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(LemonRadius.normal),
+        border: Border.all(
+          color: colorScheme.outline,
+        ),
+        borderRadius: BorderRadius.circular(LemonRadius.xSmall),
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(LemonRadius.normal),
+        borderRadius: BorderRadius.circular(LemonRadius.xSmall),
         child: HeroImageViewer(
           tag: file?.key ?? '',
           imageUrl: ImageUtils.generateUrl(file: file),
@@ -152,7 +156,9 @@ class PostProfileCard extends StatelessWidget {
             ),
           )
         : ThemeSvgIcon(
+            color: colorScheme.onSecondary,
             builder: (filter) => Assets.icons.icHeart.svg(
+              colorFilter: filter,
               width: 18.w,
               height: 18.w,
             ),

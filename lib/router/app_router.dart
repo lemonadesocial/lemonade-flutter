@@ -42,14 +42,6 @@ class AppRouter extends $AppRouter {
           ],
         ),
         AutoRoute(
-          path: '/events',
-          page: EventsListingRoute.page,
-        ),
-        AutoRoute(
-          path: '/events/:id',
-          page: GuestEventDetailRoute.page,
-        ),
-        AutoRoute(
           path: '/profile/:id',
           page: ProfileRoute.page,
         ),
@@ -58,22 +50,7 @@ class AppRouter extends $AppRouter {
           page: PoapListingRoute.page,
         ),
         AutoRoute(
-          path: '/404',
-          page: EmptyRoute.page,
-        ),
-        AutoRoute(
-          path: '/browser',
-          page: WebviewRoute.page,
-          fullscreenDialog: true,
-        ),
-        AutoRoute(
           page: CreatePostRoute.page,
-        ),
-        AutoRoute(
-          page: EventSelectingRoute.page,
-        ),
-        AutoRoute(
-          page: PhotosGalleryRoute.page,
         ),
         AutoRoute(
           page: OnboardingWrapperRoute.page,
@@ -90,6 +67,8 @@ class AppRouter extends $AppRouter {
           ],
         ),
         chatRoutes,
+        ...eventRoutes,
+        ...commonRoutes,
       ];
 }
 
@@ -109,3 +88,33 @@ final chatRoutes = AutoRoute(
     ),
   ],
 );
+
+final eventRoutes = [
+  AutoRoute(
+    path: '/events',
+    page: EventsListingRoute.page,
+  ),
+  AutoRoute(
+    path: '/events/:id',
+    page: GuestEventDetailRoute.page,
+  ),
+  AutoRoute(
+    page: EventSelectingRoute.page,
+  ),
+  AutoRoute(page: RSVPEventSuccessPopupRoute.page)
+];
+
+final commonRoutes = [
+  AutoRoute(
+    page: PhotosGalleryRoute.page,
+  ),
+  AutoRoute(
+    path: '/404',
+    page: EmptyRoute.page,
+  ),
+  AutoRoute(
+    path: '/browser',
+    page: WebviewRoute.page,
+    fullscreenDialog: true,
+  ),
+];

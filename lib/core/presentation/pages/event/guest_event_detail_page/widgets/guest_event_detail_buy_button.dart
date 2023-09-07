@@ -6,9 +6,11 @@ import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 class GuestEventDetailBuyButton extends StatelessWidget {
@@ -40,6 +42,9 @@ class GuestEventDetailBuyButton extends StatelessWidget {
         child: SizedBox(
           height: Sizing.large,
           child: LinearGradientButton(
+            onTap: () => AutoRouter.of(context).navigate(
+              RSVPEventSuccessPopupRoute(event: event),
+            ),
             leading: ThemeSvgIcon(
               color: colorScheme.onPrimary,
               builder: (filter) =>

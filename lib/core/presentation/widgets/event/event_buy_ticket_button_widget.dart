@@ -58,7 +58,6 @@ class EventBuyTicketButton extends StatelessWidget {
                       amount: event.cost!,
                       currency: event.currency,
                       freeText: t.event.free,
-                      prefix: '${t.event.buy} • ',
                     )
                   : t.event.free,
               style: Typo.small.copyWith(color: colorScheme.onPrimary),
