@@ -24,9 +24,10 @@ import '../../../application/auth/auth_bloc.dart';
 @RoutePage()
 class HomePage extends StatelessWidget {
 
-  const HomePage({super.key});
 
-  @override
+        const HomePage({super.key});
+
+              @override
   Widget build(BuildContext context) {
     final newFeedBloc =
         NewsfeedListingBloc(NewsfeedService(NewsfeedRepositoryImpl()));
