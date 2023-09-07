@@ -50,46 +50,40 @@ class EventPostCard extends StatelessWidget {
           ),
         );
       },
-      child: Container(
-        decoration: BoxDecoration(
-          color: colorScheme.surfaceVariant,
-          borderRadius: BorderRadius.circular(LemonRadius.xSmall),
-        ),
-        child: Stack(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: colorScheme.outline,
-                ),
-                borderRadius: BorderRadius.circular(LemonRadius.xSmall),
+      child: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: colorScheme.outline,
               ),
-              child: Column(
-                children: [
-                  _buildEventPhoto(),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      vertical: Spacing.small,
-                      horizontal: Spacing.small,
-                    ),
-                    child: Column(
-                      children: [
-                        _buildEventTitleAndTime(colorScheme),
-                        SizedBox(height: Spacing.xSmall),
-                        _buildEventHost(colorScheme),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+              borderRadius: BorderRadius.circular(LemonRadius.xSmall),
             ),
-            Positioned(
-              top: Spacing.extraSmall,
-              right: Spacing.extraSmall,
-              child: _buildEventBadge(colorScheme),
-            )
-          ],
-        ),
+            child: Column(
+              children: [
+                _buildEventPhoto(),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    vertical: Spacing.small,
+                    horizontal: Spacing.small,
+                  ),
+                  child: Column(
+                    children: [
+                      _buildEventTitleAndTime(colorScheme),
+                      SizedBox(height: Spacing.xSmall),
+                      _buildEventHost(colorScheme),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Positioned(
+            top: Spacing.extraSmall,
+            right: Spacing.extraSmall,
+            child: _buildEventBadge(colorScheme),
+          )
+        ],
       ),
     );
   }
@@ -217,8 +211,8 @@ class EventPostCard extends StatelessWidget {
       width: double.infinity,
       child: ClipRRect(
         borderRadius: BorderRadius.only(
-          topRight: Radius.circular(LemonRadius.normal),
-          topLeft: Radius.circular(LemonRadius.normal),
+          topRight: Radius.circular(LemonRadius.xSmall),
+          topLeft: Radius.circular(LemonRadius.xSmall),
         ),
         child: CachedNetworkImage(
           imageUrl: imageUrl,

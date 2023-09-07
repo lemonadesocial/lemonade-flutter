@@ -127,10 +127,13 @@ class PostProfileCard extends StatelessWidget {
       width: double.infinity,
       height: 270,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(LemonRadius.normal),
+        border: Border.all(
+          color: colorScheme.outline,
+        ),
+        borderRadius: BorderRadius.circular(LemonRadius.xSmall),
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(LemonRadius.normal),
+        borderRadius: BorderRadius.circular(LemonRadius.xSmall),
         child: HeroImageViewer(
           tag: file?.key ?? '',
           imageUrl: ImageUtils.generateUrl(file: file),
