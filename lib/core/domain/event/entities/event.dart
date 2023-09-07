@@ -19,6 +19,8 @@ class Event {
     this.currency,
     this.newNewPhotosExpanded,
     this.accepted,
+    this.latitude,
+    this.longitude,
   });
 
   factory Event.fromDto(EventDto dto) {
@@ -45,6 +47,8 @@ class Event {
       currency: dto.currency,
       accepted:
           List<String>.from(dto.accepted ?? []).map((item) => item).toList(),
+      latitude: dto.latitude,
+      longitude: dto.longitude,
     );
   }
   String? id;
@@ -61,6 +65,8 @@ class Event {
   double? cost;
   Currency? currency;
   List<String>? accepted;
+  double? latitude;
+  double? longitude;
 }
 
 class Broadcast {

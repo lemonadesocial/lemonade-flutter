@@ -211,6 +211,9 @@ class $AssetsIconsGen {
   SvgGenImage get icLinkedin =>
       const SvgGenImage('assets/icons/ic_linkedin.svg');
 
+  /// File path: assets/icons/ic_lock.svg
+  SvgGenImage get icLock => const SvgGenImage('assets/icons/ic_lock.svg');
+
   /// File path: assets/icons/ic_matches.svg
   SvgGenImage get icMatches => const SvgGenImage('assets/icons/ic_matches.svg');
 
@@ -289,6 +292,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_ticket.svg
   SvgGenImage get icTicket => const SvgGenImage('assets/icons/ic_ticket.svg');
 
+  /// File path: assets/icons/ic_ticket_bold.svg
+  SvgGenImage get icTicketBold =>
+      const SvgGenImage('assets/icons/ic_ticket_bold.svg');
+
   /// File path: assets/icons/ic_twitter.svg
   SvgGenImage get icTwitter => const SvgGenImage('assets/icons/ic_twitter.svg');
 
@@ -352,6 +359,7 @@ class $AssetsIconsGen {
         icLemonOutline,
         icLemonadeWhite,
         icLinkedin,
+        icLock,
         icMatches,
         icMenu,
         icMessage,
@@ -375,6 +383,7 @@ class $AssetsIconsGen {
         icStore,
         icSupport,
         icTicket,
+        icTicketBold,
         icTwitter,
         icWallet,
         icWalletFilled,

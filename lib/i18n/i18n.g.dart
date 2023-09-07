@@ -1,9 +1,9 @@
 /// Generated file. Do not edit.
 ///
 /// Locales: 1
-/// Strings: 181
+/// Strings: 191
 ///
-/// Built on 2023-08-30 at 03:41 UTC
+/// Built on 2023-09-05 at 07:28 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -387,6 +387,20 @@ class _I18nCommonEn {
   String get lemonade => 'Lemonade';
   String get requestLocation =>
       'Location Services are currently disabled. Please enable Location Services in your device settings.';
+  String get showMore => 'more';
+  String get showLess => 'show less';
+  String photo({required num n}) =>
+      (_root.$meta.ordinalResolver ?? PluralResolvers.ordinal('en'))(
+        n,
+        one: 'photo',
+        other: 'photos',
+      );
+  String host({required num n}) =>
+      (_root.$meta.ordinalResolver ?? PluralResolvers.ordinal('en'))(
+        n,
+        one: 'host',
+        other: 'hosts',
+      );
 }
 
 // Path: event
@@ -411,6 +425,10 @@ class _I18nEventEn {
   String empty_hosting_events({required Object time}) =>
       'You are currently not hosting any events ${time}';
   String get noEvents => 'No events yet';
+  String get buyTickets => 'Buy tickets';
+  String get rsvpToUnlock => 'RSVP to this event to unlock the location';
+  String get eventLocation => 'Location';
+  String get tickets => 'tickets';
 }
 
 // Path: onboarding
@@ -995,6 +1013,24 @@ extension on _I18nEn {
         return 'Lemonade';
       case 'common.requestLocation':
         return 'Location Services are currently disabled. Please enable Location Services in your device settings.';
+      case 'common.showMore':
+        return 'more';
+      case 'common.showLess':
+        return 'show less';
+      case 'common.photo':
+        return ({required num n}) =>
+            (_root.$meta.ordinalResolver ?? PluralResolvers.ordinal('en'))(
+              n,
+              one: 'photo',
+              other: 'photos',
+            );
+      case 'common.host':
+        return ({required num n}) =>
+            (_root.$meta.ordinalResolver ?? PluralResolvers.ordinal('en'))(
+              n,
+              one: 'host',
+              other: 'hosts',
+            );
       case 'event.events':
         return 'Events';
       case 'event.all':
@@ -1021,6 +1057,14 @@ extension on _I18nEn {
             'You are currently not hosting any events ${time}';
       case 'event.noEvents':
         return 'No events yet';
+      case 'event.buyTickets':
+        return 'Buy tickets';
+      case 'event.rsvpToUnlock':
+        return 'RSVP to this event to unlock the location';
+      case 'event.eventLocation':
+        return 'Location';
+      case 'event.tickets':
+        return 'tickets';
       case 'onboarding.pickUsername':
         return 'Pick username';
       case 'onboarding.pickUsernameDesc':

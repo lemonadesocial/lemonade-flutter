@@ -46,8 +46,8 @@ class AppRouter extends $AppRouter {
           page: EventsListingRoute.page,
         ),
         AutoRoute(
-          path: '/events/:id/:name',
-          page: EventDetailRoute.page,
+          path: '/events/:id',
+          page: GuestEventDetailRoute.page,
         ),
         AutoRoute(
           path: '/profile/:id',
@@ -71,6 +71,9 @@ class AppRouter extends $AppRouter {
         ),
         AutoRoute(
           page: EventSelectingRoute.page,
+        ),
+        AutoRoute(
+          page: PhotosGalleryRoute.page,
         ),
         AutoRoute(
           page: OnboardingWrapperRoute.page,

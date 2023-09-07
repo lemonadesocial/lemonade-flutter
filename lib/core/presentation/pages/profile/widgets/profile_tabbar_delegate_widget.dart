@@ -63,7 +63,7 @@ class _ProfileTabBarState extends State<_ProfileTabBar> {
         child: TabBar(
           controller: widget.controller,
           tabs: _renderTabs(context),
-          indicatorColor: LemonColor.lavender,
+          indicatorColor: LemonColor.paleViolet,
         ),
       ),
     );

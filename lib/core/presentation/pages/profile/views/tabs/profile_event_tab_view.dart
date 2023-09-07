@@ -240,8 +240,7 @@ class _EventItem extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         AutoRouter.of(context).navigate(
-          EventDetailRoute(
-              eventId: event.id ?? '', eventName: event.title ?? ''),
+          GuestEventDetailRoute(eventId: event.id ?? ''),
         );
       },
       child: Container(
