@@ -63,8 +63,8 @@ class EventPostCard extends StatelessWidget {
                 _buildEventPhoto(),
                 Padding(
                   padding: EdgeInsets.symmetric(
-                    vertical: Spacing.small,
-                    horizontal: Spacing.small,
+                    vertical: 14.h,
+                    horizontal: Spacing.xSmall,
                   ),
                   child: Column(
                     children: [
