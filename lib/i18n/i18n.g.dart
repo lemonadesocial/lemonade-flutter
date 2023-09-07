@@ -3,7 +3,7 @@
 /// Locales: 1
 /// Strings: 195
 ///
-/// Built on 2023-09-06 at 12:27 UTC
+/// Built on 2023-09-07 at 10:07 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -417,7 +417,7 @@ class _I18nEventEn {
   String get created => 'created';
   String get hosting => 'hosting';
   String get buy => 'buy';
-  String get free => 'free';
+  String get free => 'Free';
   String empty_home_events({required Object time}) =>
       'There\'s no events ${time}';
   String empty_attending_events({required Object time}) =>
@@ -1051,7 +1051,7 @@ extension on _I18nEn {
       case 'event.buy':
         return 'buy';
       case 'event.free':
-        return 'free';
+        return 'Free';
       case 'event.empty_home_events':
         return ({required Object time}) => 'There\'s no events ${time}';
       case 'event.empty_attending_events':

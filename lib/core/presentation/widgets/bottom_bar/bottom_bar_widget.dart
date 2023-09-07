@@ -57,9 +57,9 @@ class BottomBarState extends State<BottomBar>
     return Container(
       height: BottomBar.bottomBarHeight,
       decoration: BoxDecoration(
-        color: Colors.black54,
+        color: colorScheme.surfaceVariant,
         border: Border(
-          top: BorderSide(color: colorScheme.secondary),
+          top: BorderSide(color: LemonColor.white09),
         ),
       ),
       child: ClipRect(
