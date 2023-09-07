@@ -9,7 +9,7 @@ part of 'redeem_event_ticket_input.dart';
 _$_RedeemEventTicketInput _$$_RedeemEventTicketInputFromJson(
         Map<String, dynamic> json) =>
     _$_RedeemEventTicketInput(
-      event: json['event'] as String,
+      id: json['id'] as String,
       count: (json['count'] as num).toDouble(),
       type: json['type'] as String?,
       address: json['address'] as String?,
@@ -18,7 +18,7 @@ _$_RedeemEventTicketInput _$$_RedeemEventTicketInputFromJson(
 Map<String, dynamic> _$$_RedeemEventTicketInputToJson(
     _$_RedeemEventTicketInput instance) {
   final val = <String, dynamic>{
-    'event': instance.event,
+    'id': instance.id,
     'count': instance.count,
   };
 

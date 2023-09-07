@@ -7,7 +7,7 @@ part 'redeem_event_ticket_input.g.dart';
 class RedeemEventTicketInput with _$RedeemEventTicketInput {
   @JsonSerializable(includeIfNull: false)
   factory RedeemEventTicketInput({
-    required String event,
+    required String id,
     required double count,
     String? type,
     String? address,

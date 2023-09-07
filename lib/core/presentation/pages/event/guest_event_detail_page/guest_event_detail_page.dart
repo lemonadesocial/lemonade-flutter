@@ -1,3 +1,4 @@
+import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/presentation/pages/event/guest_event_detail_page/widgets/guest_event_detail_appbar.dart';
 import 'package:app/core/presentation/pages/event/guest_event_detail_page/widgets/guest_event_detail_buy_button.dart';
@@ -9,8 +10,10 @@ import 'package:app/core/presentation/widgets/back_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/utils/event_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -68,6 +71,10 @@ class _GuestEventDetailPageViewState extends State<_GuestEventDetailPageView> {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
+    final userId = context.read<AuthBloc>().state.maybeWhen(
+          authenticated: (session) => session.userId,
+          orElse: () => '',
+        );
     return Scaffold(
       backgroundColor: colorScheme.primary,
       body: BlocBuilder<GetEventDetailBloc, GetEventDetailState>(
@@ -79,6 +86,8 @@ class _GuestEventDetailPageViewState extends State<_GuestEventDetailPageView> {
           ),
           loading: () => Loading.defaultLoading(context),
           fetched: (event) {
+            final isAttending =
+                EventUtils.isAttending(event: event, userId: userId);
             return SafeArea(
               child: Stack(
                 children: [
@@ -167,10 +176,22 @@ class _GuestEventDetailPageViewState extends State<_GuestEventDetailPageView> {
                       ),
                     ),
                   ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: GuestEventDetailBuyButton(event: event),
-                  ),
+                  if (!isAttending)
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: GuestEventDetailBuyButton(
+                        event: event,
+                        onBuySuccess: () {
+                          context.read<GetEventDetailBloc>().add(
+                              GetEventDetailEvent.fetch(eventId: event.id!));
+                          AutoRouter.of(context).replace(
+                            RSVPEventSuccessPopupRoute(
+                              event: event,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
                 ],
               ),
             );

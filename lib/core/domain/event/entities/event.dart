@@ -11,6 +11,8 @@ class Event {
     this.title,
     this.slug,
     this.host,
+    this.cohosts,
+    this.speakerUsers,
     this.broadcasts,
     this.description,
     this.start,
@@ -36,6 +38,11 @@ class Event {
           .toList(),
       title: dto.title,
       slug: dto.slug,
+      speakerUsers: List<String>.from(dto.speakerUsers ?? [])
+          .map((item) => item)
+          .toList(),
+      cohosts:
+          List<String>.from(dto.cohosts ?? []).map((item) => item).toList(),
       host: dto.host,
       broadcasts: List<BroadcastDto>.from(dto.broadcasts ?? [])
           .map(Broadcast.fromDto)
@@ -57,6 +64,8 @@ class Event {
   List<DbFile?>? newNewPhotosExpanded;
   String? title;
   String? slug;
+  List<String>? speakerUsers;
+  List<String>? cohosts;
   String? host;
   List<Broadcast>? broadcasts;
   String? description;

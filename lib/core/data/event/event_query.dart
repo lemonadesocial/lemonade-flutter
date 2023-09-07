@@ -37,6 +37,8 @@ const eventFragment = '''
   start
   end
   cost
+  cohosts
+  speaker_users
   currency
   description
   broadcasts {

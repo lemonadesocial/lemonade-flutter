@@ -20,10 +20,9 @@ AcceptEventInput _$AcceptEventInputFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$AcceptEventInput {
-  @JsonKey(name: '_id')
   String get id => throw _privateConstructorUsedError;
-  @JsonKey(name: 'skip_payment', defaultValue: true)
-  bool? get skipPayment => throw _privateConstructorUsedError;
+  @JsonKey(defaultValue: false)
+  bool? get skip => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -37,9 +36,7 @@ abstract class $AcceptEventInputCopyWith<$Res> {
           AcceptEventInput value, $Res Function(AcceptEventInput) then) =
       _$AcceptEventInputCopyWithImpl<$Res, AcceptEventInput>;
   @useResult
-  $Res call(
-      {@JsonKey(name: '_id') String id,
-      @JsonKey(name: 'skip_payment', defaultValue: true) bool? skipPayment});
+  $Res call({String id, @JsonKey(defaultValue: false) bool? skip});
 }
 
 /// @nodoc
@@ -56,16 +53,16 @@ class _$AcceptEventInputCopyWithImpl<$Res, $Val extends AcceptEventInput>
   @override
   $Res call({
     Object? id = null,
-    Object? skipPayment = freezed,
+    Object? skip = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      skipPayment: freezed == skipPayment
-          ? _value.skipPayment
-          : skipPayment // ignore: cast_nullable_to_non_nullable
+      skip: freezed == skip
+          ? _value.skip
+          : skip // ignore: cast_nullable_to_non_nullable
               as bool?,
     ) as $Val);
   }
@@ -79,9 +76,7 @@ abstract class _$$_AcceptEventInputCopyWith<$Res>
       __$$_AcceptEventInputCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {@JsonKey(name: '_id') String id,
-      @JsonKey(name: 'skip_payment', defaultValue: true) bool? skipPayment});
+  $Res call({String id, @JsonKey(defaultValue: false) bool? skip});
 }
 
 /// @nodoc
@@ -96,16 +91,16 @@ class __$$_AcceptEventInputCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
-    Object? skipPayment = freezed,
+    Object? skip = freezed,
   }) {
     return _then(_$_AcceptEventInput(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      skipPayment: freezed == skipPayment
-          ? _value.skipPayment
-          : skipPayment // ignore: cast_nullable_to_non_nullable
+      skip: freezed == skip
+          ? _value.skip
+          : skip // ignore: cast_nullable_to_non_nullable
               as bool?,
     ));
   }
@@ -116,22 +111,20 @@ class __$$_AcceptEventInputCopyWithImpl<$Res>
 @JsonSerializable(includeIfNull: false)
 class _$_AcceptEventInput implements _AcceptEventInput {
   _$_AcceptEventInput(
-      {@JsonKey(name: '_id') required this.id,
-      @JsonKey(name: 'skip_payment', defaultValue: true) this.skipPayment});
+      {required this.id, @JsonKey(defaultValue: false) this.skip});
 
   factory _$_AcceptEventInput.fromJson(Map<String, dynamic> json) =>
       _$$_AcceptEventInputFromJson(json);
 
   @override
-  @JsonKey(name: '_id')
   final String id;
   @override
-  @JsonKey(name: 'skip_payment', defaultValue: true)
-  final bool? skipPayment;
+  @JsonKey(defaultValue: false)
+  final bool? skip;
 
   @override
   String toString() {
-    return 'AcceptEventInput(id: $id, skipPayment: $skipPayment)';
+    return 'AcceptEventInput(id: $id, skip: $skip)';
   }
 
   @override
@@ -140,13 +133,12 @@ class _$_AcceptEventInput implements _AcceptEventInput {
         (other.runtimeType == runtimeType &&
             other is _$_AcceptEventInput &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.skipPayment, skipPayment) ||
-                other.skipPayment == skipPayment));
+            (identical(other.skip, skip) || other.skip == skip));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, skipPayment);
+  int get hashCode => Object.hash(runtimeType, id, skip);
 
   @JsonKey(ignore: true)
   @override
@@ -164,19 +156,17 @@ class _$_AcceptEventInput implements _AcceptEventInput {
 
 abstract class _AcceptEventInput implements AcceptEventInput {
   factory _AcceptEventInput(
-      {@JsonKey(name: '_id') required final String id,
-      @JsonKey(name: 'skip_payment', defaultValue: true)
-      final bool? skipPayment}) = _$_AcceptEventInput;
+      {required final String id,
+      @JsonKey(defaultValue: false) final bool? skip}) = _$_AcceptEventInput;
 
   factory _AcceptEventInput.fromJson(Map<String, dynamic> json) =
       _$_AcceptEventInput.fromJson;
 
   @override
-  @JsonKey(name: '_id')
   String get id;
   @override
-  @JsonKey(name: 'skip_payment', defaultValue: true)
-  bool? get skipPayment;
+  @JsonKey(defaultValue: false)
+  bool? get skip;
   @override
   @JsonKey(ignore: true)
   _$$_AcceptEventInputCopyWith<_$_AcceptEventInput> get copyWith =>

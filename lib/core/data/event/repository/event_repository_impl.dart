@@ -84,6 +84,7 @@ class EventRepositoryImpl implements EventRepository {
       QueryOptions(
         document: getEventDetailQuery,
         variables: input.toJson(),
+        fetchPolicy: FetchPolicy.networkOnly,
         parserFn: (data) => Event.fromDto(
           EventDto.fromJson(data['getEvent']),
         ),

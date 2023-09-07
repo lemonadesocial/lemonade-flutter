@@ -27,10 +27,13 @@ mixin _$EventDto {
   @JsonKey(name: 'new_new_photos_expanded')
   List<DbFileDto?>? get newNewPhotosExpanded =>
       throw _privateConstructorUsedError;
+  List<String>? get cohosts => throw _privateConstructorUsedError;
   @JsonKey(name: 'cohosts_expanded')
   List<UserDto?>? get cohostsExpanded => throw _privateConstructorUsedError;
   String? get title => throw _privateConstructorUsedError;
   String? get slug => throw _privateConstructorUsedError;
+  @JsonKey(name: 'speaker_users')
+  List<String>? get speakerUsers => throw _privateConstructorUsedError;
   String? get host => throw _privateConstructorUsedError;
   List<BroadcastDto>? get broadcasts => throw _privateConstructorUsedError;
   String? get description => throw _privateConstructorUsedError;
@@ -58,9 +61,11 @@ abstract class $EventDtoCopyWith<$Res> {
       @JsonKey(name: 'host_expanded') UserDto? hostExpanded,
       @JsonKey(name: 'new_new_photos_expanded')
       List<DbFileDto?>? newNewPhotosExpanded,
+      List<String>? cohosts,
       @JsonKey(name: 'cohosts_expanded') List<UserDto?>? cohostsExpanded,
       String? title,
       String? slug,
+      @JsonKey(name: 'speaker_users') List<String>? speakerUsers,
       String? host,
       List<BroadcastDto>? broadcasts,
       String? description,
@@ -91,9 +96,11 @@ class _$EventDtoCopyWithImpl<$Res, $Val extends EventDto>
     Object? id = freezed,
     Object? hostExpanded = freezed,
     Object? newNewPhotosExpanded = freezed,
+    Object? cohosts = freezed,
     Object? cohostsExpanded = freezed,
     Object? title = freezed,
     Object? slug = freezed,
+    Object? speakerUsers = freezed,
     Object? host = freezed,
     Object? broadcasts = freezed,
     Object? description = freezed,
@@ -118,6 +125,10 @@ class _$EventDtoCopyWithImpl<$Res, $Val extends EventDto>
           ? _value.newNewPhotosExpanded
           : newNewPhotosExpanded // ignore: cast_nullable_to_non_nullable
               as List<DbFileDto?>?,
+      cohosts: freezed == cohosts
+          ? _value.cohosts
+          : cohosts // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
       cohostsExpanded: freezed == cohostsExpanded
           ? _value.cohostsExpanded
           : cohostsExpanded // ignore: cast_nullable_to_non_nullable
@@ -130,6 +141,10 @@ class _$EventDtoCopyWithImpl<$Res, $Val extends EventDto>
           ? _value.slug
           : slug // ignore: cast_nullable_to_non_nullable
               as String?,
+      speakerUsers: freezed == speakerUsers
+          ? _value.speakerUsers
+          : speakerUsers // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
       host: freezed == host
           ? _value.host
           : host // ignore: cast_nullable_to_non_nullable
@@ -198,9 +213,11 @@ abstract class _$$_EventDtoCopyWith<$Res> implements $EventDtoCopyWith<$Res> {
       @JsonKey(name: 'host_expanded') UserDto? hostExpanded,
       @JsonKey(name: 'new_new_photos_expanded')
       List<DbFileDto?>? newNewPhotosExpanded,
+      List<String>? cohosts,
       @JsonKey(name: 'cohosts_expanded') List<UserDto?>? cohostsExpanded,
       String? title,
       String? slug,
+      @JsonKey(name: 'speaker_users') List<String>? speakerUsers,
       String? host,
       List<BroadcastDto>? broadcasts,
       String? description,
@@ -230,9 +247,11 @@ class __$$_EventDtoCopyWithImpl<$Res>
     Object? id = freezed,
     Object? hostExpanded = freezed,
     Object? newNewPhotosExpanded = freezed,
+    Object? cohosts = freezed,
     Object? cohostsExpanded = freezed,
     Object? title = freezed,
     Object? slug = freezed,
+    Object? speakerUsers = freezed,
     Object? host = freezed,
     Object? broadcasts = freezed,
     Object? description = freezed,
@@ -257,6 +276,10 @@ class __$$_EventDtoCopyWithImpl<$Res>
           ? _value._newNewPhotosExpanded
           : newNewPhotosExpanded // ignore: cast_nullable_to_non_nullable
               as List<DbFileDto?>?,
+      cohosts: freezed == cohosts
+          ? _value._cohosts
+          : cohosts // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
       cohostsExpanded: freezed == cohostsExpanded
           ? _value._cohostsExpanded
           : cohostsExpanded // ignore: cast_nullable_to_non_nullable
@@ -269,6 +292,10 @@ class __$$_EventDtoCopyWithImpl<$Res>
           ? _value.slug
           : slug // ignore: cast_nullable_to_non_nullable
               as String?,
+      speakerUsers: freezed == speakerUsers
+          ? _value._speakerUsers
+          : speakerUsers // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
       host: freezed == host
           ? _value.host
           : host // ignore: cast_nullable_to_non_nullable
@@ -322,9 +349,11 @@ class _$_EventDto implements _EventDto {
       @JsonKey(name: 'host_expanded') this.hostExpanded,
       @JsonKey(name: 'new_new_photos_expanded')
       final List<DbFileDto?>? newNewPhotosExpanded,
+      final List<String>? cohosts,
       @JsonKey(name: 'cohosts_expanded') final List<UserDto?>? cohostsExpanded,
       this.title,
       this.slug,
+      @JsonKey(name: 'speaker_users') final List<String>? speakerUsers,
       this.host,
       final List<BroadcastDto>? broadcasts,
       this.description,
@@ -336,7 +365,9 @@ class _$_EventDto implements _EventDto {
       this.latitude,
       this.longitude})
       : _newNewPhotosExpanded = newNewPhotosExpanded,
+        _cohosts = cohosts,
         _cohostsExpanded = cohostsExpanded,
+        _speakerUsers = speakerUsers,
         _broadcasts = broadcasts,
         _accepted = accepted;
 
@@ -361,6 +392,16 @@ class _$_EventDto implements _EventDto {
     return EqualUnmodifiableListView(value);
   }
 
+  final List<String>? _cohosts;
+  @override
+  List<String>? get cohosts {
+    final value = _cohosts;
+    if (value == null) return null;
+    if (_cohosts is EqualUnmodifiableListView) return _cohosts;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
   final List<UserDto?>? _cohostsExpanded;
   @override
   @JsonKey(name: 'cohosts_expanded')
@@ -376,6 +417,17 @@ class _$_EventDto implements _EventDto {
   final String? title;
   @override
   final String? slug;
+  final List<String>? _speakerUsers;
+  @override
+  @JsonKey(name: 'speaker_users')
+  List<String>? get speakerUsers {
+    final value = _speakerUsers;
+    if (value == null) return null;
+    if (_speakerUsers is EqualUnmodifiableListView) return _speakerUsers;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
   @override
   final String? host;
   final List<BroadcastDto>? _broadcasts;
@@ -415,7 +467,7 @@ class _$_EventDto implements _EventDto {
 
   @override
   String toString() {
-    return 'EventDto(id: $id, hostExpanded: $hostExpanded, newNewPhotosExpanded: $newNewPhotosExpanded, cohostsExpanded: $cohostsExpanded, title: $title, slug: $slug, host: $host, broadcasts: $broadcasts, description: $description, start: $start, end: $end, cost: $cost, currency: $currency, accepted: $accepted, latitude: $latitude, longitude: $longitude)';
+    return 'EventDto(id: $id, hostExpanded: $hostExpanded, newNewPhotosExpanded: $newNewPhotosExpanded, cohosts: $cohosts, cohostsExpanded: $cohostsExpanded, title: $title, slug: $slug, speakerUsers: $speakerUsers, host: $host, broadcasts: $broadcasts, description: $description, start: $start, end: $end, cost: $cost, currency: $currency, accepted: $accepted, latitude: $latitude, longitude: $longitude)';
   }
 
   @override
@@ -428,10 +480,13 @@ class _$_EventDto implements _EventDto {
                 other.hostExpanded == hostExpanded) &&
             const DeepCollectionEquality()
                 .equals(other._newNewPhotosExpanded, _newNewPhotosExpanded) &&
+            const DeepCollectionEquality().equals(other._cohosts, _cohosts) &&
             const DeepCollectionEquality()
                 .equals(other._cohostsExpanded, _cohostsExpanded) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.slug, slug) || other.slug == slug) &&
+            const DeepCollectionEquality()
+                .equals(other._speakerUsers, _speakerUsers) &&
             (identical(other.host, host) || other.host == host) &&
             const DeepCollectionEquality()
                 .equals(other._broadcasts, _broadcasts) &&
@@ -456,9 +511,11 @@ class _$_EventDto implements _EventDto {
       id,
       hostExpanded,
       const DeepCollectionEquality().hash(_newNewPhotosExpanded),
+      const DeepCollectionEquality().hash(_cohosts),
       const DeepCollectionEquality().hash(_cohostsExpanded),
       title,
       slug,
+      const DeepCollectionEquality().hash(_speakerUsers),
       host,
       const DeepCollectionEquality().hash(_broadcasts),
       description,
@@ -490,9 +547,11 @@ abstract class _EventDto implements EventDto {
       @JsonKey(name: 'host_expanded') final UserDto? hostExpanded,
       @JsonKey(name: 'new_new_photos_expanded')
       final List<DbFileDto?>? newNewPhotosExpanded,
+      final List<String>? cohosts,
       @JsonKey(name: 'cohosts_expanded') final List<UserDto?>? cohostsExpanded,
       final String? title,
       final String? slug,
+      @JsonKey(name: 'speaker_users') final List<String>? speakerUsers,
       final String? host,
       final List<BroadcastDto>? broadcasts,
       final String? description,
@@ -516,12 +575,17 @@ abstract class _EventDto implements EventDto {
   @JsonKey(name: 'new_new_photos_expanded')
   List<DbFileDto?>? get newNewPhotosExpanded;
   @override
+  List<String>? get cohosts;
+  @override
   @JsonKey(name: 'cohosts_expanded')
   List<UserDto?>? get cohostsExpanded;
   @override
   String? get title;
   @override
   String? get slug;
+  @override
+  @JsonKey(name: 'speaker_users')
+  List<String>? get speakerUsers;
   @override
   String? get host;
   @override

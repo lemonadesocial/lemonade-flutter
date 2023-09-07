@@ -21,7 +21,7 @@ RedeemEventTicketInput _$RedeemEventTicketInputFromJson(
 
 /// @nodoc
 mixin _$RedeemEventTicketInput {
-  String get event => throw _privateConstructorUsedError;
+  String get id => throw _privateConstructorUsedError;
   double get count => throw _privateConstructorUsedError;
   String? get type => throw _privateConstructorUsedError;
   String? get address => throw _privateConstructorUsedError;
@@ -38,7 +38,7 @@ abstract class $RedeemEventTicketInputCopyWith<$Res> {
           $Res Function(RedeemEventTicketInput) then) =
       _$RedeemEventTicketInputCopyWithImpl<$Res, RedeemEventTicketInput>;
   @useResult
-  $Res call({String event, double count, String? type, String? address});
+  $Res call({String id, double count, String? type, String? address});
 }
 
 /// @nodoc
@@ -55,15 +55,15 @@ class _$RedeemEventTicketInputCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? event = null,
+    Object? id = null,
     Object? count = null,
     Object? type = freezed,
     Object? address = freezed,
   }) {
     return _then(_value.copyWith(
-      event: null == event
-          ? _value.event
-          : event // ignore: cast_nullable_to_non_nullable
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
               as String,
       count: null == count
           ? _value.count
@@ -89,7 +89,7 @@ abstract class _$$_RedeemEventTicketInputCopyWith<$Res>
       __$$_RedeemEventTicketInputCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String event, double count, String? type, String? address});
+  $Res call({String id, double count, String? type, String? address});
 }
 
 /// @nodoc
@@ -104,15 +104,15 @@ class __$$_RedeemEventTicketInputCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? event = null,
+    Object? id = null,
     Object? count = null,
     Object? type = freezed,
     Object? address = freezed,
   }) {
     return _then(_$_RedeemEventTicketInput(
-      event: null == event
-          ? _value.event
-          : event // ignore: cast_nullable_to_non_nullable
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
               as String,
       count: null == count
           ? _value.count
@@ -135,13 +135,13 @@ class __$$_RedeemEventTicketInputCopyWithImpl<$Res>
 @JsonSerializable(includeIfNull: false)
 class _$_RedeemEventTicketInput implements _RedeemEventTicketInput {
   _$_RedeemEventTicketInput(
-      {required this.event, required this.count, this.type, this.address});
+      {required this.id, required this.count, this.type, this.address});
 
   factory _$_RedeemEventTicketInput.fromJson(Map<String, dynamic> json) =>
       _$$_RedeemEventTicketInputFromJson(json);
 
   @override
-  final String event;
+  final String id;
   @override
   final double count;
   @override
@@ -151,7 +151,7 @@ class _$_RedeemEventTicketInput implements _RedeemEventTicketInput {
 
   @override
   String toString() {
-    return 'RedeemEventTicketInput(event: $event, count: $count, type: $type, address: $address)';
+    return 'RedeemEventTicketInput(id: $id, count: $count, type: $type, address: $address)';
   }
 
   @override
@@ -159,7 +159,7 @@ class _$_RedeemEventTicketInput implements _RedeemEventTicketInput {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_RedeemEventTicketInput &&
-            (identical(other.event, event) || other.event == event) &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.count, count) || other.count == count) &&
             (identical(other.type, type) || other.type == type) &&
             (identical(other.address, address) || other.address == address));
@@ -167,7 +167,7 @@ class _$_RedeemEventTicketInput implements _RedeemEventTicketInput {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, event, count, type, address);
+  int get hashCode => Object.hash(runtimeType, id, count, type, address);
 
   @JsonKey(ignore: true)
   @override
@@ -186,7 +186,7 @@ class _$_RedeemEventTicketInput implements _RedeemEventTicketInput {
 
 abstract class _RedeemEventTicketInput implements RedeemEventTicketInput {
   factory _RedeemEventTicketInput(
-      {required final String event,
+      {required final String id,
       required final double count,
       final String? type,
       final String? address}) = _$_RedeemEventTicketInput;
@@ -195,7 +195,7 @@ abstract class _RedeemEventTicketInput implements RedeemEventTicketInput {
       _$_RedeemEventTicketInput.fromJson;
 
   @override
-  String get event;
+  String get id;
   @override
   double get count;
   @override

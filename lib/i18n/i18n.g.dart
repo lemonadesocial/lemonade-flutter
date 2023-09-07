@@ -1,9 +1,9 @@
 /// Generated file. Do not edit.
 ///
 /// Locales: 1
-/// Strings: 195
+/// Strings: 196
 ///
-/// Built on 2023-09-07 at 10:07 UTC
+/// Built on 2023-09-07 at 13:35 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -434,6 +434,7 @@ class _I18nEventEn {
       'Congrats! You have successfully RSVP’d to ${eventName}.';
   String get takeMeToEvent => 'Take me to the event';
   String get inviteFriends => 'Invite friends';
+  String get processing => 'Processing...';
 }
 
 // Path: onboarding
@@ -1079,6 +1080,8 @@ extension on _I18nEn {
         return 'Take me to the event';
       case 'event.inviteFriends':
         return 'Invite friends';
+      case 'event.processing':
+        return 'Processing...';
       case 'onboarding.pickUsername':
         return 'Pick username';
       case 'onboarding.pickUsernameDesc':

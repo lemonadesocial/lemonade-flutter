@@ -15,12 +15,17 @@ _$_EventDto _$$_EventDtoFromJson(Map<String, dynamic> json) => _$_EventDto(
           ?.map((e) =>
               e == null ? null : DbFileDto.fromJson(e as Map<String, dynamic>))
           .toList(),
+      cohosts:
+          (json['cohosts'] as List<dynamic>?)?.map((e) => e as String).toList(),
       cohostsExpanded: (json['cohosts_expanded'] as List<dynamic>?)
           ?.map((e) =>
               e == null ? null : UserDto.fromJson(e as Map<String, dynamic>))
           .toList(),
       title: json['title'] as String?,
       slug: json['slug'] as String?,
+      speakerUsers: (json['speaker_users'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
       host: json['host'] as String?,
       broadcasts: (json['broadcasts'] as List<dynamic>?)
           ?.map((e) => BroadcastDto.fromJson(e as Map<String, dynamic>))
@@ -45,10 +50,12 @@ Map<String, dynamic> _$$_EventDtoToJson(_$_EventDto instance) =>
       'host_expanded': instance.hostExpanded?.toJson(),
       'new_new_photos_expanded':
           instance.newNewPhotosExpanded?.map((e) => e?.toJson()).toList(),
+      'cohosts': instance.cohosts,
       'cohosts_expanded':
           instance.cohostsExpanded?.map((e) => e?.toJson()).toList(),
       'title': instance.title,
       'slug': instance.slug,
+      'speaker_users': instance.speakerUsers,
       'host': instance.host,
       'broadcasts': instance.broadcasts?.map((e) => e.toJson()).toList(),
       'description': instance.description,

@@ -8,13 +8,13 @@ part of 'accept_event_input.dart';
 
 _$_AcceptEventInput _$$_AcceptEventInputFromJson(Map<String, dynamic> json) =>
     _$_AcceptEventInput(
-      id: json['_id'] as String,
-      skipPayment: json['skip_payment'] as bool? ?? true,
+      id: json['id'] as String,
+      skip: json['skip'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$$_AcceptEventInputToJson(_$_AcceptEventInput instance) {
   final val = <String, dynamic>{
-    '_id': instance.id,
+    'id': instance.id,
   };
 
   void writeNotNull(String key, dynamic value) {
@@ -23,6 +23,6 @@ Map<String, dynamic> _$$_AcceptEventInputToJson(_$_AcceptEventInput instance) {
     }
   }
 
-  writeNotNull('skip_payment', instance.skipPayment);
+  writeNotNull('skip', instance.skip);
   return val;
 }

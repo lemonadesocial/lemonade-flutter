@@ -7,8 +7,8 @@ part 'accept_event_input.g.dart';
 class AcceptEventInput with _$AcceptEventInput {
   @JsonSerializable(includeIfNull: false)
   factory AcceptEventInput({
-    @JsonKey(name: '_id') required String id,
-    @JsonKey(name: 'skip_payment', defaultValue: true) bool? skipPayment,
+    required String id,
+    @JsonKey(defaultValue: false) bool? skip,
   }) = _AcceptEventInput;
 
   factory AcceptEventInput.fromJson(Map<String, dynamic> json) =>
