@@ -27,18 +27,16 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final newFeedBloc = NewsfeedListingBloc(
+
+
       NewsfeedService(NewsfeedRepositoryImpl()),
       defaultInput: const GetNewsfeedInput(),
     );
+
+
+
+    
     return MultiBlocProvider(
-
-
-
-
-
-
-
-      
       providers: [
         BlocProvider<NewsfeedListingBloc>(
           create: (context) => newFeedBloc..add(NewsfeedListingEvent.fetch()),
