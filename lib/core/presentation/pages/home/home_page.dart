@@ -29,13 +29,26 @@ class HomePage extends StatelessWidget {
     final newFeedBloc = NewsfeedListingBloc(
 
 
+
+
+
+
       NewsfeedService(NewsfeedRepositoryImpl()),
       defaultInput: const GetNewsfeedInput(),
     );
 
 
 
+
+
+
+
+
+
+
+
     
+
     return MultiBlocProvider(
       providers: [
         BlocProvider<NewsfeedListingBloc>(
