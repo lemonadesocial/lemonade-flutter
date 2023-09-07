@@ -53,7 +53,7 @@ class EventPostCard extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: colorScheme.surfaceVariant,
-          borderRadius: BorderRadius.circular(LemonRadius.normal),
+          borderRadius: BorderRadius.circular(LemonRadius.xSmall),
         ),
         child: Stack(
           children: [
@@ -62,7 +62,7 @@ class EventPostCard extends StatelessWidget {
                 border: Border.all(
                   color: colorScheme.outline,
                 ),
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(LemonRadius.xSmall),
               ),
               child: Column(
                 children: [
