@@ -1,6 +1,7 @@
 import 'dart:convert';
-
+import 'package:http/http.dart' as http;
 import 'package:app/core/domain/common/entities/common.dart';
+import 'package:image_picker/image_picker.dart';
 
 class EditProps {
   final Map<String, dynamic>? resize;
@@ -63,5 +64,10 @@ class ImageUtils {
       params['edits'] = {'resize': editMap[imageConfig]!.resize};
     }
     return '$url/${base64.encode(utf8.encode(json.encode(params)))}';
+  }
+
+  static Future<XFile> urlToFile(String imageUrl) async {
+    http.Response response = await http.get(Uri.parse(imageUrl));
+    return XFile.fromData(response.bodyBytes, mimeType: 'image/png');
   }
 }

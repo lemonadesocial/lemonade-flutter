@@ -12,13 +12,13 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 @RoutePage()
 class EventDetailPage extends StatefulWidget {
-  final String eventId;
-  final String eventName;
   const EventDetailPage({
     super.key,
     @PathParam('id') required this.eventId,
     @PathParam('name') required this.eventName,
   });
+  final String eventId;
+  final String eventName;
 
   @override
   State<EventDetailPage> createState() => _EventDetailPageState();
@@ -45,18 +45,18 @@ class _EventDetailPageState extends State<EventDetailPage>
 
   InAppWebViewController? webViewController;
   InAppWebViewGroupOptions options = InAppWebViewGroupOptions(
-      crossPlatform: InAppWebViewOptions(
-        useShouldOverrideUrlLoading: true,
-        mediaPlaybackRequiresUserGesture: false,
-        javaScriptEnabled: true,
-        transparentBackground: true,
-      ),
-      android: AndroidInAppWebViewOptions(
-        useHybridComposition: true,
-      ),
-      ios: IOSInAppWebViewOptions(
-        allowsInlineMediaPlayback: true,
-      ));
+    crossPlatform: InAppWebViewOptions(
+      useShouldOverrideUrlLoading: true,
+      mediaPlaybackRequiresUserGesture: false,
+      transparentBackground: true,
+    ),
+    android: AndroidInAppWebViewOptions(
+      useHybridComposition: true,
+    ),
+    ios: IOSInAppWebViewOptions(
+      allowsInlineMediaPlayback: true,
+    ),
+  );
 
   @override
   void initState() {
@@ -94,7 +94,7 @@ class _EventDetailPageState extends State<EventDetailPage>
     });
   }
 
-  _sendTokenToWebview() async {
+  Future<void> _sendTokenToWebview() async {
     sendTokenAttempt++;
     try {
       webViewController?.evaluateJavascript(
@@ -129,10 +129,10 @@ class _EventDetailPageState extends State<EventDetailPage>
   }
 
   Future<void> _clearWebStorage() async {
-    WebStorageManager webStorageManager = WebStorageManager.instance();
+    final webStorageManager = WebStorageManager.instance();
     if (Platform.isIOS) {
       // if current platform is iOS, delete all data for "flutter.dev".
-      var records = await webStorageManager.ios.fetchDataRecords(
+      final records = await webStorageManager.ios.fetchDataRecords(
         dataTypes: IOSWKWebsiteDataType.values,
       );
       await webStorageManager.ios.removeDataFor(
@@ -181,7 +181,6 @@ class _EventDetailPageState extends State<EventDetailPage>
               color: colorScheme.primary,
               child: Center(
                 child: CupertinoActivityIndicator(
-                  animating: true,
                   color: colorScheme.onPrimary,
                 ),
               ),

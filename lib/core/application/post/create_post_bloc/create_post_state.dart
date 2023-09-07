@@ -5,6 +5,7 @@ class CreatePostState with _$CreatePostState {
   const factory CreatePostState({
     @Default(CreatePostStatus.initial) CreatePostStatus status,
     @Default(PostPrivacy.public) PostPrivacy postPrivacy,
+    Post? newPost,
     String? postDescription,
     Event? selectEvent,
     XFile? uploadImage,

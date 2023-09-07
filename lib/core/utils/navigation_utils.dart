@@ -21,7 +21,7 @@ class NavigationUtils {
       DialogUtils.showAlert(context: context, title: 'Redirect to store order');
     } else if (notification?.refEvent != null) {
       appRouter.navigate(
-        EventDetailRoute(eventId: notification?.refEvent ?? '', eventName: ''),
+        GuestEventDetailRoute(eventId: notification?.refEvent ?? ''),
       );
     } else if (notification?.refUser != null) {
       appRouter.navigate(ProfileRoute(userId: notification?.refUser ?? ''));

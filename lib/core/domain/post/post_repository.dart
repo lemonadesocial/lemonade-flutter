@@ -9,7 +9,7 @@ import '../../application/post/create_post_bloc/create_post_bloc.dart';
 abstract class PostRepository {
   Future<Either<Failure, List<Post>>> getPosts({GetPostsInput? input});
 
-  Future<Either<Failure, bool>> createNewPost({
+  Future<Either<Failure, Post>> createNewPost({
     required String postDescription,
     required PostPrivacy postPrivacy,
     PostRefType? postRefType,

@@ -44,7 +44,7 @@ class PostRepositoryImpl implements PostRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> createNewPost({
+  Future<Either<Failure, Post>> createNewPost({
     required String postDescription,
     required PostPrivacy postPrivacy,
     PostRefType? postRefType,
@@ -59,14 +59,16 @@ class PostRepositoryImpl implements PostRepository {
           'ref_type': postRefType?.name.toUpperCase(),
           'ref_id': postRefId,
         }..removeWhere((key, value) => value == null),
-        parserFn: (data) => data['createPost'],
+        parserFn: (data) => Post.fromDto(
+          PostDto.fromJson(data['createPost']),
+        ),
       ),
     );
 
     if (result.hasException) {
       return Left(Failure());
     }
-    return Right(result.parsedData == true);
+    return Right(result.parsedData!);
   }
 
   @override

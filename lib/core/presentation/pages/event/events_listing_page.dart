@@ -73,7 +73,7 @@ class _EventsListingViewState extends State<_EventsListingView> {
   EventListingType eventListingType = EventListingType.all;
   EventTimeFilter? eventTimeFilter;
 
-  _onAuthStateChanged(AuthState authState) {
+  void _onAuthStateChanged(AuthState authState) {
     authState.maybeWhen(
       unauthenticated: (_) {
         setState(() {
@@ -84,15 +84,15 @@ class _EventsListingViewState extends State<_EventsListingView> {
     );
   }
 
-  _selectEventListingType(EventListingType eventListingType) {
+  void _selectEventListingType(EventListingType mEventListingType) {
     setState(() {
-      eventListingType = eventListingType;
+      eventListingType = mEventListingType;
     });
   }
 
-  _selectEventTimeFilter(EventTimeFilter? eventTimeFilter) {
+  void _selectEventTimeFilter(EventTimeFilter? mEventTimeFilter) {
     setState(() {
-      eventTimeFilter = eventTimeFilter;
+      eventTimeFilter = mEventTimeFilter;
     });
     _selectedEventsBloc
         .add(BaseEventsListingEvent.filter(eventTimeFilter: eventTimeFilter));
@@ -310,9 +310,8 @@ class _EventList<T extends BaseEventListingBloc> extends StatelessWidget {
                         event: filteredEvents[index],
                         onTap: () {
                           AutoRouter.of(context).navigate(
-                            EventDetailRoute(
+                            GuestEventDetailRoute(
                               eventId: filteredEvents[index].id!,
-                              eventName: filteredEvents[index].title ?? '',
                             ),
                           );
                         },
