@@ -19,8 +19,7 @@ class ProfilePostsTabView extends StatelessWidget {
 
   final User user;
 
-  GetPostsInput get input =>
-      GetPostsInput(
+  GetPostsInput get input => GetPostsInput(
         user: user.id,
         limit: 10,
       );

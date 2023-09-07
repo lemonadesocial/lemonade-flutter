@@ -92,35 +92,47 @@ abstract class $UserDtoCopyWith<$Res> {
       _$UserDtoCopyWithImpl<$Res, UserDto>;
   @useResult
   $Res call(
-      {@JsonKey(name: '_id') String? id,
-      @JsonKey(name: 'created_at', includeIfNull: false) DateTime? createdAt,
-      @JsonKey(name: 'user_name', includeIfNull: false) String? userName,
-      @JsonKey(name: 'display_name', includeIfNull: false) String? displayName,
-      @JsonKey(name: 'first_name', includeIfNull: false) String? firstName,
-      @JsonKey(name: 'last_name', includeIfNull: false) String? lastName,
-      @JsonKey(name: 'image_avatar', includeIfNull: false) String? imageAvatar,
+      {@JsonKey(name: '_id')
+          String? id,
+      @JsonKey(name: 'created_at', includeIfNull: false)
+          DateTime? createdAt,
+      @JsonKey(name: 'user_name', includeIfNull: false)
+          String? userName,
+      @JsonKey(name: 'display_name', includeIfNull: false)
+          String? displayName,
+      @JsonKey(name: 'first_name', includeIfNull: false)
+          String? firstName,
+      @JsonKey(name: 'last_name', includeIfNull: false)
+          String? lastName,
+      @JsonKey(name: 'image_avatar', includeIfNull: false)
+          String? imageAvatar,
       @JsonKey(name: 'new_photos_expanded', includeIfNull: false)
-      List<DbFileDto>? newPhotosExpanded,
+          List<DbFileDto>? newPhotosExpanded,
       @JsonKey(name: 'date_of_birth', includeIfNull: false)
-      DateTime? dateOfBirth,
+          DateTime? dateOfBirth,
       @JsonKey(name: 'phone_verified', includeIfNull: false)
-      bool? phoneVerified,
+          bool? phoneVerified,
       @JsonKey(name: 'google_user_info', includeIfNull: false)
-      GoogleUserInfoDto? googleUserInfo,
+          GoogleUserInfoDto? googleUserInfo,
       @JsonKey(name: 'discord_user_info', includeIfNull: false)
-      DiscordUserInfoDto? discordUserInfo,
+          DiscordUserInfoDto? discordUserInfo,
       @JsonKey(name: 'shopify_user_info', includeIfNull: false)
-      ShopifyUserInfoDto? shopifyUserInfo,
+          ShopifyUserInfoDto? shopifyUserInfo,
       @JsonKey(name: 'twitch_user_info', includeIfNull: false)
-      TwitchUserInfoDto? twitchUserInfo,
+          TwitchUserInfoDto? twitchUserInfo,
       @JsonKey(name: 'zoom_user_info', includeIfNull: false)
-      ZoomUserInfoDto? zoomUserInfo,
-      @JsonKey(name: 'handle_twitter') String? handleTwitter,
-      @JsonKey(name: 'handle_instagram') String? handleInstagram,
-      @JsonKey(name: 'handle_facebook') String? handleFacebook,
-      @JsonKey(name: 'handle_linkedin') String? handleLinkedin,
+          ZoomUserInfoDto? zoomUserInfo,
+      @JsonKey(name: 'handle_twitter')
+          String? handleTwitter,
+      @JsonKey(name: 'handle_instagram')
+          String? handleInstagram,
+      @JsonKey(name: 'handle_facebook')
+          String? handleFacebook,
+      @JsonKey(name: 'handle_linkedin')
+          String? handleLinkedin,
       List<String>? wallets,
-      @JsonKey(name: 'wallet_custodial') String? walletCustodial,
+      @JsonKey(name: 'wallet_custodial')
+          String? walletCustodial,
       String? name,
       String? username,
       String? phone,
@@ -136,7 +148,8 @@ abstract class $UserDtoCopyWith<$Res> {
       int? friends,
       int? following,
       int? followers,
-      @JsonKey(name: 'job_title') String? jobTitle,
+      @JsonKey(name: 'job_title')
+          String? jobTitle,
       String? tagline,
       Currency? currency});
 
@@ -429,35 +442,47 @@ abstract class _$$_UserDtoCopyWith<$Res> implements $UserDtoCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {@JsonKey(name: '_id') String? id,
-      @JsonKey(name: 'created_at', includeIfNull: false) DateTime? createdAt,
-      @JsonKey(name: 'user_name', includeIfNull: false) String? userName,
-      @JsonKey(name: 'display_name', includeIfNull: false) String? displayName,
-      @JsonKey(name: 'first_name', includeIfNull: false) String? firstName,
-      @JsonKey(name: 'last_name', includeIfNull: false) String? lastName,
-      @JsonKey(name: 'image_avatar', includeIfNull: false) String? imageAvatar,
+      {@JsonKey(name: '_id')
+          String? id,
+      @JsonKey(name: 'created_at', includeIfNull: false)
+          DateTime? createdAt,
+      @JsonKey(name: 'user_name', includeIfNull: false)
+          String? userName,
+      @JsonKey(name: 'display_name', includeIfNull: false)
+          String? displayName,
+      @JsonKey(name: 'first_name', includeIfNull: false)
+          String? firstName,
+      @JsonKey(name: 'last_name', includeIfNull: false)
+          String? lastName,
+      @JsonKey(name: 'image_avatar', includeIfNull: false)
+          String? imageAvatar,
       @JsonKey(name: 'new_photos_expanded', includeIfNull: false)
-      List<DbFileDto>? newPhotosExpanded,
+          List<DbFileDto>? newPhotosExpanded,
       @JsonKey(name: 'date_of_birth', includeIfNull: false)
-      DateTime? dateOfBirth,
+          DateTime? dateOfBirth,
       @JsonKey(name: 'phone_verified', includeIfNull: false)
-      bool? phoneVerified,
+          bool? phoneVerified,
       @JsonKey(name: 'google_user_info', includeIfNull: false)
-      GoogleUserInfoDto? googleUserInfo,
+          GoogleUserInfoDto? googleUserInfo,
       @JsonKey(name: 'discord_user_info', includeIfNull: false)
-      DiscordUserInfoDto? discordUserInfo,
+          DiscordUserInfoDto? discordUserInfo,
       @JsonKey(name: 'shopify_user_info', includeIfNull: false)
-      ShopifyUserInfoDto? shopifyUserInfo,
+          ShopifyUserInfoDto? shopifyUserInfo,
       @JsonKey(name: 'twitch_user_info', includeIfNull: false)
-      TwitchUserInfoDto? twitchUserInfo,
+          TwitchUserInfoDto? twitchUserInfo,
       @JsonKey(name: 'zoom_user_info', includeIfNull: false)
-      ZoomUserInfoDto? zoomUserInfo,
-      @JsonKey(name: 'handle_twitter') String? handleTwitter,
-      @JsonKey(name: 'handle_instagram') String? handleInstagram,
-      @JsonKey(name: 'handle_facebook') String? handleFacebook,
-      @JsonKey(name: 'handle_linkedin') String? handleLinkedin,
+          ZoomUserInfoDto? zoomUserInfo,
+      @JsonKey(name: 'handle_twitter')
+          String? handleTwitter,
+      @JsonKey(name: 'handle_instagram')
+          String? handleInstagram,
+      @JsonKey(name: 'handle_facebook')
+          String? handleFacebook,
+      @JsonKey(name: 'handle_linkedin')
+          String? handleLinkedin,
       List<String>? wallets,
-      @JsonKey(name: 'wallet_custodial') String? walletCustodial,
+      @JsonKey(name: 'wallet_custodial')
+          String? walletCustodial,
       String? name,
       String? username,
       String? phone,
@@ -473,7 +498,8 @@ abstract class _$$_UserDtoCopyWith<$Res> implements $UserDtoCopyWith<$Res> {
       int? friends,
       int? following,
       int? followers,
-      @JsonKey(name: 'job_title') String? jobTitle,
+      @JsonKey(name: 'job_title')
+          String? jobTitle,
       String? tagline,
       Currency? currency});
 
@@ -704,32 +730,47 @@ class __$$_UserDtoCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_UserDto implements _UserDto {
   const _$_UserDto(
-      {@JsonKey(name: '_id') this.id,
-      @JsonKey(name: 'created_at', includeIfNull: false) this.createdAt,
-      @JsonKey(name: 'user_name', includeIfNull: false) this.userName,
-      @JsonKey(name: 'display_name', includeIfNull: false) this.displayName,
-      @JsonKey(name: 'first_name', includeIfNull: false) this.firstName,
-      @JsonKey(name: 'last_name', includeIfNull: false) this.lastName,
-      @JsonKey(name: 'image_avatar', includeIfNull: false) this.imageAvatar,
+      {@JsonKey(name: '_id')
+          this.id,
+      @JsonKey(name: 'created_at', includeIfNull: false)
+          this.createdAt,
+      @JsonKey(name: 'user_name', includeIfNull: false)
+          this.userName,
+      @JsonKey(name: 'display_name', includeIfNull: false)
+          this.displayName,
+      @JsonKey(name: 'first_name', includeIfNull: false)
+          this.firstName,
+      @JsonKey(name: 'last_name', includeIfNull: false)
+          this.lastName,
+      @JsonKey(name: 'image_avatar', includeIfNull: false)
+          this.imageAvatar,
       @JsonKey(name: 'new_photos_expanded', includeIfNull: false)
-      final List<DbFileDto>? newPhotosExpanded,
-      @JsonKey(name: 'date_of_birth', includeIfNull: false) this.dateOfBirth,
-      @JsonKey(name: 'phone_verified', includeIfNull: false) this.phoneVerified,
+          final List<DbFileDto>? newPhotosExpanded,
+      @JsonKey(name: 'date_of_birth', includeIfNull: false)
+          this.dateOfBirth,
+      @JsonKey(name: 'phone_verified', includeIfNull: false)
+          this.phoneVerified,
       @JsonKey(name: 'google_user_info', includeIfNull: false)
-      this.googleUserInfo,
+          this.googleUserInfo,
       @JsonKey(name: 'discord_user_info', includeIfNull: false)
-      this.discordUserInfo,
+          this.discordUserInfo,
       @JsonKey(name: 'shopify_user_info', includeIfNull: false)
-      this.shopifyUserInfo,
+          this.shopifyUserInfo,
       @JsonKey(name: 'twitch_user_info', includeIfNull: false)
-      this.twitchUserInfo,
-      @JsonKey(name: 'zoom_user_info', includeIfNull: false) this.zoomUserInfo,
-      @JsonKey(name: 'handle_twitter') this.handleTwitter,
-      @JsonKey(name: 'handle_instagram') this.handleInstagram,
-      @JsonKey(name: 'handle_facebook') this.handleFacebook,
-      @JsonKey(name: 'handle_linkedin') this.handleLinkedin,
+          this.twitchUserInfo,
+      @JsonKey(name: 'zoom_user_info', includeIfNull: false)
+          this.zoomUserInfo,
+      @JsonKey(name: 'handle_twitter')
+          this.handleTwitter,
+      @JsonKey(name: 'handle_instagram')
+          this.handleInstagram,
+      @JsonKey(name: 'handle_facebook')
+          this.handleFacebook,
+      @JsonKey(name: 'handle_linkedin')
+          this.handleLinkedin,
       final List<String>? wallets,
-      @JsonKey(name: 'wallet_custodial') this.walletCustodial,
+      @JsonKey(name: 'wallet_custodial')
+          this.walletCustodial,
       this.name,
       this.username,
       this.phone,
@@ -745,7 +786,8 @@ class _$_UserDto implements _UserDto {
       this.friends,
       this.following,
       this.followers,
-      @JsonKey(name: 'job_title') this.jobTitle,
+      @JsonKey(name: 'job_title')
+          this.jobTitle,
       this.tagline,
       this.currency})
       : _newPhotosExpanded = newPhotosExpanded,
@@ -1020,39 +1062,47 @@ class _$_UserDto implements _UserDto {
 
 abstract class _UserDto implements UserDto {
   const factory _UserDto(
-      {@JsonKey(name: '_id') final String? id,
+      {@JsonKey(name: '_id')
+          final String? id,
       @JsonKey(name: 'created_at', includeIfNull: false)
-      final DateTime? createdAt,
-      @JsonKey(name: 'user_name', includeIfNull: false) final String? userName,
+          final DateTime? createdAt,
+      @JsonKey(name: 'user_name', includeIfNull: false)
+          final String? userName,
       @JsonKey(name: 'display_name', includeIfNull: false)
-      final String? displayName,
+          final String? displayName,
       @JsonKey(name: 'first_name', includeIfNull: false)
-      final String? firstName,
-      @JsonKey(name: 'last_name', includeIfNull: false) final String? lastName,
+          final String? firstName,
+      @JsonKey(name: 'last_name', includeIfNull: false)
+          final String? lastName,
       @JsonKey(name: 'image_avatar', includeIfNull: false)
-      final String? imageAvatar,
+          final String? imageAvatar,
       @JsonKey(name: 'new_photos_expanded', includeIfNull: false)
-      final List<DbFileDto>? newPhotosExpanded,
+          final List<DbFileDto>? newPhotosExpanded,
       @JsonKey(name: 'date_of_birth', includeIfNull: false)
-      final DateTime? dateOfBirth,
+          final DateTime? dateOfBirth,
       @JsonKey(name: 'phone_verified', includeIfNull: false)
-      final bool? phoneVerified,
+          final bool? phoneVerified,
       @JsonKey(name: 'google_user_info', includeIfNull: false)
-      final GoogleUserInfoDto? googleUserInfo,
+          final GoogleUserInfoDto? googleUserInfo,
       @JsonKey(name: 'discord_user_info', includeIfNull: false)
-      final DiscordUserInfoDto? discordUserInfo,
+          final DiscordUserInfoDto? discordUserInfo,
       @JsonKey(name: 'shopify_user_info', includeIfNull: false)
-      final ShopifyUserInfoDto? shopifyUserInfo,
+          final ShopifyUserInfoDto? shopifyUserInfo,
       @JsonKey(name: 'twitch_user_info', includeIfNull: false)
-      final TwitchUserInfoDto? twitchUserInfo,
+          final TwitchUserInfoDto? twitchUserInfo,
       @JsonKey(name: 'zoom_user_info', includeIfNull: false)
-      final ZoomUserInfoDto? zoomUserInfo,
-      @JsonKey(name: 'handle_twitter') final String? handleTwitter,
-      @JsonKey(name: 'handle_instagram') final String? handleInstagram,
-      @JsonKey(name: 'handle_facebook') final String? handleFacebook,
-      @JsonKey(name: 'handle_linkedin') final String? handleLinkedin,
+          final ZoomUserInfoDto? zoomUserInfo,
+      @JsonKey(name: 'handle_twitter')
+          final String? handleTwitter,
+      @JsonKey(name: 'handle_instagram')
+          final String? handleInstagram,
+      @JsonKey(name: 'handle_facebook')
+          final String? handleFacebook,
+      @JsonKey(name: 'handle_linkedin')
+          final String? handleLinkedin,
       final List<String>? wallets,
-      @JsonKey(name: 'wallet_custodial') final String? walletCustodial,
+      @JsonKey(name: 'wallet_custodial')
+          final String? walletCustodial,
       final String? name,
       final String? username,
       final String? phone,
@@ -1068,7 +1118,8 @@ abstract class _UserDto implements UserDto {
       final int? friends,
       final int? following,
       final int? followers,
-      @JsonKey(name: 'job_title') final String? jobTitle,
+      @JsonKey(name: 'job_title')
+          final String? jobTitle,
       final String? tagline,
       final Currency? currency}) = _$_UserDto;
 
@@ -1450,7 +1501,7 @@ class _$_ShopifyUserInfoDto implements _ShopifyUserInfoDto {
 abstract class _ShopifyUserInfoDto implements ShopifyUserInfoDto {
   const factory _ShopifyUserInfoDto(
       {@JsonKey(name: 'shop_name', includeIfNull: false)
-      final String? shopName}) = _$_ShopifyUserInfoDto;
+          final String? shopName}) = _$_ShopifyUserInfoDto;
 
   factory _ShopifyUserInfoDto.fromJson(Map<String, dynamic> json) =
       _$_ShopifyUserInfoDto.fromJson;
@@ -1501,15 +1552,17 @@ abstract class $GoogleUserInfoDtoCopyWith<$Res> {
       {String? id,
       String? name,
       String? email,
-      @JsonKey(name: 'family_age', includeIfNull: false) String? familyName,
+      @JsonKey(name: 'family_age', includeIfNull: false)
+          String? familyName,
       String? gender,
-      @JsonKey(name: 'given_name', includeIfNull: false) String? givenName,
+      @JsonKey(name: 'given_name', includeIfNull: false)
+          String? givenName,
       String? hd,
       String? link,
       String? locale,
       String? picture,
       @JsonKey(name: 'verified_email', includeIfNull: false)
-      String? verifiedEmail});
+          String? verifiedEmail});
 }
 
 /// @nodoc
@@ -1598,15 +1651,17 @@ abstract class _$$_GoogleUserInfoDtoCopyWith<$Res>
       {String? id,
       String? name,
       String? email,
-      @JsonKey(name: 'family_age', includeIfNull: false) String? familyName,
+      @JsonKey(name: 'family_age', includeIfNull: false)
+          String? familyName,
       String? gender,
-      @JsonKey(name: 'given_name', includeIfNull: false) String? givenName,
+      @JsonKey(name: 'given_name', includeIfNull: false)
+          String? givenName,
       String? hd,
       String? link,
       String? locale,
       String? picture,
       @JsonKey(name: 'verified_email', includeIfNull: false)
-      String? verifiedEmail});
+          String? verifiedEmail});
 }
 
 /// @nodoc
@@ -1688,15 +1743,17 @@ class _$_GoogleUserInfoDto implements _GoogleUserInfoDto {
       {this.id,
       this.name,
       this.email,
-      @JsonKey(name: 'family_age', includeIfNull: false) this.familyName,
+      @JsonKey(name: 'family_age', includeIfNull: false)
+          this.familyName,
       this.gender,
-      @JsonKey(name: 'given_name', includeIfNull: false) this.givenName,
+      @JsonKey(name: 'given_name', includeIfNull: false)
+          this.givenName,
       this.hd,
       this.link,
       this.locale,
       this.picture,
       @JsonKey(name: 'verified_email', includeIfNull: false)
-      this.verifiedEmail});
+          this.verifiedEmail});
 
   factory _$_GoogleUserInfoDto.fromJson(Map<String, dynamic> json) =>
       _$$_GoogleUserInfoDtoFromJson(json);
@@ -1779,16 +1836,16 @@ abstract class _GoogleUserInfoDto implements GoogleUserInfoDto {
       final String? name,
       final String? email,
       @JsonKey(name: 'family_age', includeIfNull: false)
-      final String? familyName,
+          final String? familyName,
       final String? gender,
       @JsonKey(name: 'given_name', includeIfNull: false)
-      final String? givenName,
+          final String? givenName,
       final String? hd,
       final String? link,
       final String? locale,
       final String? picture,
       @JsonKey(name: 'verified_email', includeIfNull: false)
-      final String? verifiedEmail}) = _$_GoogleUserInfoDto;
+          final String? verifiedEmail}) = _$_GoogleUserInfoDto;
 
   factory _GoogleUserInfoDto.fromJson(Map<String, dynamic> json) =
       _$_GoogleUserInfoDto.fromJson;
@@ -2010,8 +2067,9 @@ abstract class _TwitchUserInfoDto implements TwitchUserInfoDto {
   const factory _TwitchUserInfoDto(
       {final String? id,
       @JsonKey(name: 'display_name', includeIfNull: false)
-      final String? displayName,
-      @JsonKey(name: 'logo_url', includeIfNull: false) final String? logoUrl,
+          final String? displayName,
+      @JsonKey(name: 'logo_url', includeIfNull: false)
+          final String? logoUrl,
       final String? name}) = _$_TwitchUserInfoDto;
 
   factory _TwitchUserInfoDto.fromJson(Map<String, dynamic> json) =
@@ -2219,8 +2277,9 @@ abstract class _ZoomUserInfoDto implements ZoomUserInfoDto {
   const factory _ZoomUserInfoDto(
       {final String? id,
       @JsonKey(name: 'first_name', includeIfNull: false)
-      final String? firstName,
-      @JsonKey(name: 'last_name', includeIfNull: false) final String? lastName,
+          final String? firstName,
+      @JsonKey(name: 'last_name', includeIfNull: false)
+          final String? lastName,
       final String? email}) = _$_ZoomUserInfoDto;
 
   factory _ZoomUserInfoDto.fromJson(Map<String, dynamic> json) =

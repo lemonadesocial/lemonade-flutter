@@ -789,10 +789,12 @@ abstract class $FilterEventInputCopyWith<$Res> {
       _$FilterEventInputCopyWithImpl<$Res, FilterEventInput>;
   @useResult
   $Res call(
-      {@JsonKey(includeIfNull: false) EventState? eq,
-      @JsonKey(name: 'in', includeIfNull: false) List<EventState>? include,
+      {@JsonKey(includeIfNull: false)
+          EventState? eq,
+      @JsonKey(name: 'in', includeIfNull: false)
+          List<EventState>? include,
       @JsonKey(name: 'nin', includeIfNull: false)
-      List<EventState>? notInclude});
+          List<EventState>? notInclude});
 }
 
 /// @nodoc
@@ -838,10 +840,12 @@ abstract class _$$_FilterEventInputCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {@JsonKey(includeIfNull: false) EventState? eq,
-      @JsonKey(name: 'in', includeIfNull: false) List<EventState>? include,
+      {@JsonKey(includeIfNull: false)
+          EventState? eq,
+      @JsonKey(name: 'in', includeIfNull: false)
+          List<EventState>? include,
       @JsonKey(name: 'nin', includeIfNull: false)
-      List<EventState>? notInclude});
+          List<EventState>? notInclude});
 }
 
 /// @nodoc
@@ -880,11 +884,12 @@ class __$$_FilterEventInputCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_FilterEventInput implements _FilterEventInput {
   const _$_FilterEventInput(
-      {@JsonKey(includeIfNull: false) this.eq,
+      {@JsonKey(includeIfNull: false)
+          this.eq,
       @JsonKey(name: 'in', includeIfNull: false)
-      final List<EventState>? include,
+          final List<EventState>? include,
       @JsonKey(name: 'nin', includeIfNull: false)
-      final List<EventState>? notInclude})
+          final List<EventState>? notInclude})
       : _include = include,
         _notInclude = notInclude;
 
@@ -956,11 +961,12 @@ class _$_FilterEventInput implements _FilterEventInput {
 
 abstract class _FilterEventInput implements FilterEventInput {
   const factory _FilterEventInput(
-      {@JsonKey(includeIfNull: false) final EventState? eq,
+      {@JsonKey(includeIfNull: false)
+          final EventState? eq,
       @JsonKey(name: 'in', includeIfNull: false)
-      final List<EventState>? include,
+          final List<EventState>? include,
       @JsonKey(name: 'nin', includeIfNull: false)
-      final List<EventState>? notInclude}) = _$_FilterEventInput;
+          final List<EventState>? notInclude}) = _$_FilterEventInput;
 
   factory _FilterEventInput.fromJson(Map<String, dynamic> json) =
       _$_FilterEventInput.fromJson;

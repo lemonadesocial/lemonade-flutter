@@ -79,7 +79,7 @@ class _FrostedGlassDropdownController<T>
         child: Row(
           mainAxisSize: MainAxisSize.max,
           children: [
-            if (item.leadingIcon != null)...[
+            if (item.leadingIcon != null) ...[
               item.leadingIcon!,
               SizedBox(width: 9.75.w),
             ],

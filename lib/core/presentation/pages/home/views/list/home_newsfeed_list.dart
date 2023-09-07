@@ -55,8 +55,7 @@ class HomeNewsfeedListView extends StatelessWidget {
             loadStyle: LoadStyle.ShowWhenLoading,
           ),
           child: ListView.separated(
-            padding:
-                EdgeInsetsDirectional.symmetric(vertical: Spacing.xSmall),
+            padding: EdgeInsetsDirectional.symmetric(vertical: Spacing.xSmall),
             itemBuilder: (ctx, index) => Padding(
               padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
               child: PostProfileCard(

@@ -130,9 +130,11 @@ class __$$_OrderWhereComplexCopyWithImpl<$Res>
 class _$_OrderWhereComplex implements _OrderWhereComplex {
   const _$_OrderWhereComplex(
       {@JsonKey(name: 'maker_in', includeIfNull: false)
-      final List<String>? makerIn,
-      @JsonKey(name: 'open_eq', includeIfNull: false) this.openEq,
-      @JsonKey(name: 'taker_exists', includeIfNull: false) this.takerExists})
+          final List<String>? makerIn,
+      @JsonKey(name: 'open_eq', includeIfNull: false)
+          this.openEq,
+      @JsonKey(name: 'taker_exists', includeIfNull: false)
+          this.takerExists})
       : _makerIn = makerIn;
 
   factory _$_OrderWhereComplex.fromJson(Map<String, dynamic> json) =>
@@ -195,10 +197,11 @@ class _$_OrderWhereComplex implements _OrderWhereComplex {
 abstract class _OrderWhereComplex implements OrderWhereComplex {
   const factory _OrderWhereComplex(
       {@JsonKey(name: 'maker_in', includeIfNull: false)
-      final List<String>? makerIn,
-      @JsonKey(name: 'open_eq', includeIfNull: false) final bool? openEq,
+          final List<String>? makerIn,
+      @JsonKey(name: 'open_eq', includeIfNull: false)
+          final bool? openEq,
       @JsonKey(name: 'taker_exists', includeIfNull: false)
-      final bool? takerExists}) = _$_OrderWhereComplex;
+          final bool? takerExists}) = _$_OrderWhereComplex;
 
   factory _OrderWhereComplex.fromJson(Map<String, dynamic> json) =
       _$_OrderWhereComplex.fromJson;
