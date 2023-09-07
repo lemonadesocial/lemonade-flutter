@@ -19,57 +19,53 @@ class HomeNewsfeedListView extends StatelessWidget {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
     final refreshController = RefreshController();
-    return Padding(
-      padding: EdgeInsets.only(bottom: BottomBar.bottomBarHeight),
-      child: BlocBuilder<NewsfeedListingBloc, NewsfeedListingState>(
-        builder: (context, state) {
-          if (state.posts.isEmpty) {
-            return Center(
-              child: EmptyList(emptyText: t.notification.emptyNotifications),
-            );
-          }
-          if (state.status == NewsfeedStatus.failure) {
-            return Center(
-              child: Text(t.common.somethingWrong),
-            );
-          }
-          return SmartRefresher(
-            controller: refreshController,
-            enablePullUp: true,
-            onRefresh: () {
-              context
-                  .read<NewsfeedListingBloc>()
-                  .add(NewsfeedListingEvent.fetch());
-              refreshController.refreshCompleted();
-            },
-            onLoading: () {
-              // add load more here
-              context
-                  .read<NewsfeedListingBloc>()
-                  .add(NewsfeedListingEvent.fetch());
-              refreshController.loadComplete();
-            },
-            footer: const ClassicFooter(
-              height: 100,
-              loadStyle: LoadStyle.ShowWhenLoading,
-            ),
-            child: ListView.separated(
-              padding:
-                  EdgeInsetsDirectional.symmetric(vertical: Spacing.xSmall),
-              itemBuilder: (ctx, index) => Padding(
-                padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
-                child: PostProfileCard(
-                  key: Key(state.posts[index].id),
-                  post: state.posts[index],
-                ),
-              ),
-              separatorBuilder: (ctx, index) =>
-                  Divider(color: colorScheme.outline),
-              itemCount: state.posts.length,
-            ),
+    return BlocBuilder<NewsfeedListingBloc, NewsfeedListingState>(
+      builder: (context, state) {
+        if (state.posts.isEmpty) {
+          return Center(
+            child: EmptyList(emptyText: t.notification.emptyNotifications),
           );
-        },
-      ),
+        }
+        if (state.status == NewsfeedStatus.failure) {
+          return Center(
+            child: Text(t.common.somethingWrong),
+          );
+        }
+        return SmartRefresher(
+          controller: refreshController,
+          enablePullUp: true,
+          onRefresh: () {
+            context
+                .read<NewsfeedListingBloc>()
+                .add(NewsfeedListingEvent.fetch());
+            refreshController.refreshCompleted();
+          },
+          onLoading: () {
+            // add load more here
+            context
+                .read<NewsfeedListingBloc>()
+                .add(NewsfeedListingEvent.fetch());
+            refreshController.loadComplete();
+          },
+          footer: const ClassicFooter(
+            height: 100,
+            loadStyle: LoadStyle.ShowWhenLoading,
+          ),
+          child: ListView.separated(
+            padding: EdgeInsetsDirectional.symmetric(vertical: Spacing.xSmall),
+            itemBuilder: (ctx, index) => Padding(
+              padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
+              child: PostProfileCard(
+                key: Key(state.posts[index].id),
+                post: state.posts[index],
+              ),
+            ),
+            separatorBuilder: (ctx, index) =>
+                Divider(color: colorScheme.outline),
+            itemCount: state.posts.length,
+          ),
+        );
+      },
     );
   }
 }
