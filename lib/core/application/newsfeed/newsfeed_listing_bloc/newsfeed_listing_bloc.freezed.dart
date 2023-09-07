@@ -16,55 +16,11 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$NewsfeedListingState {
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(List<Post> posts) fetched,
-    required TResult Function() failure,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(List<Post> posts)? fetched,
-    TResult? Function()? failure,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(List<Post> posts)? fetched,
-    TResult Function()? failure,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(NewsfeedListingStateInitial value) initial,
-    required TResult Function(NewsfeedListingStateLoading value) loading,
-    required TResult Function(NewsfeedListingStateFetched value) fetched,
-    required TResult Function(NewsfeedListingStateFailure value) failure,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(NewsfeedListingStateInitial value)? initial,
-    TResult? Function(NewsfeedListingStateLoading value)? loading,
-    TResult? Function(NewsfeedListingStateFetched value)? fetched,
-    TResult? Function(NewsfeedListingStateFailure value)? failure,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(NewsfeedListingStateInitial value)? initial,
-    TResult Function(NewsfeedListingStateLoading value)? loading,
-    TResult Function(NewsfeedListingStateFetched value)? fetched,
-    TResult Function(NewsfeedListingStateFailure value)? failure,
-    required TResult orElse(),
-  }) =>
+  NewsfeedStatus get status => throw _privateConstructorUsedError;
+  List<Post> get posts => throw _privateConstructorUsedError;
+
+  @JsonKey(ignore: true)
+  $NewsfeedListingStateCopyWith<NewsfeedListingState> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -73,6 +29,8 @@ abstract class $NewsfeedListingStateCopyWith<$Res> {
   factory $NewsfeedListingStateCopyWith(NewsfeedListingState value,
           $Res Function(NewsfeedListingState) then) =
       _$NewsfeedListingStateCopyWithImpl<$Res, NewsfeedListingState>;
+  @useResult
+  $Res call({NewsfeedStatus status, List<Post> posts});
 }
 
 /// @nodoc
@@ -85,270 +43,56 @@ class _$NewsfeedListingStateCopyWithImpl<$Res,
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? status = null,
+    Object? posts = null,
+  }) {
+    return _then(_value.copyWith(
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as NewsfeedStatus,
+      posts: null == posts
+          ? _value.posts
+          : posts // ignore: cast_nullable_to_non_nullable
+              as List<Post>,
+    ) as $Val);
+  }
 }
 
 /// @nodoc
-abstract class _$$NewsfeedListingStateInitialCopyWith<$Res> {
-  factory _$$NewsfeedListingStateInitialCopyWith(
-          _$NewsfeedListingStateInitial value,
-          $Res Function(_$NewsfeedListingStateInitial) then) =
-      __$$NewsfeedListingStateInitialCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$NewsfeedListingStateInitialCopyWithImpl<$Res>
-    extends _$NewsfeedListingStateCopyWithImpl<$Res,
-        _$NewsfeedListingStateInitial>
-    implements _$$NewsfeedListingStateInitialCopyWith<$Res> {
-  __$$NewsfeedListingStateInitialCopyWithImpl(
-      _$NewsfeedListingStateInitial _value,
-      $Res Function(_$NewsfeedListingStateInitial) _then)
-      : super(_value, _then);
-}
-
-/// @nodoc
-
-class _$NewsfeedListingStateInitial implements NewsfeedListingStateInitial {
-  _$NewsfeedListingStateInitial();
-
+abstract class _$$NewsfeedListingStatusCopyWith<$Res>
+    implements $NewsfeedListingStateCopyWith<$Res> {
+  factory _$$NewsfeedListingStatusCopyWith(_$NewsfeedListingStatus value,
+          $Res Function(_$NewsfeedListingStatus) then) =
+      __$$NewsfeedListingStatusCopyWithImpl<$Res>;
   @override
-  String toString() {
-    return 'NewsfeedListingState.initial()';
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$NewsfeedListingStateInitial);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(List<Post> posts) fetched,
-    required TResult Function() failure,
-  }) {
-    return initial();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(List<Post> posts)? fetched,
-    TResult? Function()? failure,
-  }) {
-    return initial?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(List<Post> posts)? fetched,
-    TResult Function()? failure,
-    required TResult orElse(),
-  }) {
-    if (initial != null) {
-      return initial();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(NewsfeedListingStateInitial value) initial,
-    required TResult Function(NewsfeedListingStateLoading value) loading,
-    required TResult Function(NewsfeedListingStateFetched value) fetched,
-    required TResult Function(NewsfeedListingStateFailure value) failure,
-  }) {
-    return initial(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(NewsfeedListingStateInitial value)? initial,
-    TResult? Function(NewsfeedListingStateLoading value)? loading,
-    TResult? Function(NewsfeedListingStateFetched value)? fetched,
-    TResult? Function(NewsfeedListingStateFailure value)? failure,
-  }) {
-    return initial?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(NewsfeedListingStateInitial value)? initial,
-    TResult Function(NewsfeedListingStateLoading value)? loading,
-    TResult Function(NewsfeedListingStateFetched value)? fetched,
-    TResult Function(NewsfeedListingStateFailure value)? failure,
-    required TResult orElse(),
-  }) {
-    if (initial != null) {
-      return initial(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class NewsfeedListingStateInitial implements NewsfeedListingState {
-  factory NewsfeedListingStateInitial() = _$NewsfeedListingStateInitial;
-}
-
-/// @nodoc
-abstract class _$$NewsfeedListingStateLoadingCopyWith<$Res> {
-  factory _$$NewsfeedListingStateLoadingCopyWith(
-          _$NewsfeedListingStateLoading value,
-          $Res Function(_$NewsfeedListingStateLoading) then) =
-      __$$NewsfeedListingStateLoadingCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$NewsfeedListingStateLoadingCopyWithImpl<$Res>
-    extends _$NewsfeedListingStateCopyWithImpl<$Res,
-        _$NewsfeedListingStateLoading>
-    implements _$$NewsfeedListingStateLoadingCopyWith<$Res> {
-  __$$NewsfeedListingStateLoadingCopyWithImpl(
-      _$NewsfeedListingStateLoading _value,
-      $Res Function(_$NewsfeedListingStateLoading) _then)
-      : super(_value, _then);
-}
-
-/// @nodoc
-
-class _$NewsfeedListingStateLoading implements NewsfeedListingStateLoading {
-  _$NewsfeedListingStateLoading();
-
-  @override
-  String toString() {
-    return 'NewsfeedListingState.loading()';
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$NewsfeedListingStateLoading);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(List<Post> posts) fetched,
-    required TResult Function() failure,
-  }) {
-    return loading();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(List<Post> posts)? fetched,
-    TResult? Function()? failure,
-  }) {
-    return loading?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(List<Post> posts)? fetched,
-    TResult Function()? failure,
-    required TResult orElse(),
-  }) {
-    if (loading != null) {
-      return loading();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(NewsfeedListingStateInitial value) initial,
-    required TResult Function(NewsfeedListingStateLoading value) loading,
-    required TResult Function(NewsfeedListingStateFetched value) fetched,
-    required TResult Function(NewsfeedListingStateFailure value) failure,
-  }) {
-    return loading(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(NewsfeedListingStateInitial value)? initial,
-    TResult? Function(NewsfeedListingStateLoading value)? loading,
-    TResult? Function(NewsfeedListingStateFetched value)? fetched,
-    TResult? Function(NewsfeedListingStateFailure value)? failure,
-  }) {
-    return loading?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(NewsfeedListingStateInitial value)? initial,
-    TResult Function(NewsfeedListingStateLoading value)? loading,
-    TResult Function(NewsfeedListingStateFetched value)? fetched,
-    TResult Function(NewsfeedListingStateFailure value)? failure,
-    required TResult orElse(),
-  }) {
-    if (loading != null) {
-      return loading(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class NewsfeedListingStateLoading implements NewsfeedListingState {
-  factory NewsfeedListingStateLoading() = _$NewsfeedListingStateLoading;
-}
-
-/// @nodoc
-abstract class _$$NewsfeedListingStateFetchedCopyWith<$Res> {
-  factory _$$NewsfeedListingStateFetchedCopyWith(
-          _$NewsfeedListingStateFetched value,
-          $Res Function(_$NewsfeedListingStateFetched) then) =
-      __$$NewsfeedListingStateFetchedCopyWithImpl<$Res>;
   @useResult
-  $Res call({List<Post> posts});
+  $Res call({NewsfeedStatus status, List<Post> posts});
 }
 
 /// @nodoc
-class __$$NewsfeedListingStateFetchedCopyWithImpl<$Res>
-    extends _$NewsfeedListingStateCopyWithImpl<$Res,
-        _$NewsfeedListingStateFetched>
-    implements _$$NewsfeedListingStateFetchedCopyWith<$Res> {
-  __$$NewsfeedListingStateFetchedCopyWithImpl(
-      _$NewsfeedListingStateFetched _value,
-      $Res Function(_$NewsfeedListingStateFetched) _then)
+class __$$NewsfeedListingStatusCopyWithImpl<$Res>
+    extends _$NewsfeedListingStateCopyWithImpl<$Res, _$NewsfeedListingStatus>
+    implements _$$NewsfeedListingStatusCopyWith<$Res> {
+  __$$NewsfeedListingStatusCopyWithImpl(_$NewsfeedListingStatus _value,
+      $Res Function(_$NewsfeedListingStatus) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? status = null,
     Object? posts = null,
   }) {
-    return _then(_$NewsfeedListingStateFetched(
+    return _then(_$NewsfeedListingStatus(
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as NewsfeedStatus,
       posts: null == posts
           ? _value._posts
           : posts // ignore: cast_nullable_to_non_nullable
@@ -359,12 +103,17 @@ class __$$NewsfeedListingStateFetchedCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$NewsfeedListingStateFetched implements NewsfeedListingStateFetched {
-  _$NewsfeedListingStateFetched({required final List<Post> posts})
+class _$NewsfeedListingStatus implements NewsfeedListingStatus {
+  const _$NewsfeedListingStatus(
+      {this.status = NewsfeedStatus.initial, final List<Post> posts = const []})
       : _posts = posts;
 
+  @override
+  @JsonKey()
+  final NewsfeedStatus status;
   final List<Post> _posts;
   @override
+  @JsonKey()
   List<Post> get posts {
     if (_posts is EqualUnmodifiableListView) return _posts;
     // ignore: implicit_dynamic_type
@@ -373,269 +122,90 @@ class _$NewsfeedListingStateFetched implements NewsfeedListingStateFetched {
 
   @override
   String toString() {
-    return 'NewsfeedListingState.fetched(posts: $posts)';
+    return 'NewsfeedListingState(status: $status, posts: $posts)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$NewsfeedListingStateFetched &&
+            other is _$NewsfeedListingStatus &&
+            (identical(other.status, status) || other.status == status) &&
             const DeepCollectionEquality().equals(other._posts, _posts));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(_posts));
+  int get hashCode => Object.hash(
+      runtimeType, status, const DeepCollectionEquality().hash(_posts));
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$NewsfeedListingStateFetchedCopyWith<_$NewsfeedListingStateFetched>
-      get copyWith => __$$NewsfeedListingStateFetchedCopyWithImpl<
-          _$NewsfeedListingStateFetched>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(List<Post> posts) fetched,
-    required TResult Function() failure,
-  }) {
-    return fetched(posts);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(List<Post> posts)? fetched,
-    TResult? Function()? failure,
-  }) {
-    return fetched?.call(posts);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(List<Post> posts)? fetched,
-    TResult Function()? failure,
-    required TResult orElse(),
-  }) {
-    if (fetched != null) {
-      return fetched(posts);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(NewsfeedListingStateInitial value) initial,
-    required TResult Function(NewsfeedListingStateLoading value) loading,
-    required TResult Function(NewsfeedListingStateFetched value) fetched,
-    required TResult Function(NewsfeedListingStateFailure value) failure,
-  }) {
-    return fetched(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(NewsfeedListingStateInitial value)? initial,
-    TResult? Function(NewsfeedListingStateLoading value)? loading,
-    TResult? Function(NewsfeedListingStateFetched value)? fetched,
-    TResult? Function(NewsfeedListingStateFailure value)? failure,
-  }) {
-    return fetched?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(NewsfeedListingStateInitial value)? initial,
-    TResult Function(NewsfeedListingStateLoading value)? loading,
-    TResult Function(NewsfeedListingStateFetched value)? fetched,
-    TResult Function(NewsfeedListingStateFailure value)? failure,
-    required TResult orElse(),
-  }) {
-    if (fetched != null) {
-      return fetched(this);
-    }
-    return orElse();
-  }
+  _$$NewsfeedListingStatusCopyWith<_$NewsfeedListingStatus> get copyWith =>
+      __$$NewsfeedListingStatusCopyWithImpl<_$NewsfeedListingStatus>(
+          this, _$identity);
 }
 
-abstract class NewsfeedListingStateFetched implements NewsfeedListingState {
-  factory NewsfeedListingStateFetched({required final List<Post> posts}) =
-      _$NewsfeedListingStateFetched;
+abstract class NewsfeedListingStatus implements NewsfeedListingState {
+  const factory NewsfeedListingStatus(
+      {final NewsfeedStatus status,
+      final List<Post> posts}) = _$NewsfeedListingStatus;
 
+  @override
+  NewsfeedStatus get status;
+  @override
   List<Post> get posts;
+  @override
   @JsonKey(ignore: true)
-  _$$NewsfeedListingStateFetchedCopyWith<_$NewsfeedListingStateFetched>
-      get copyWith => throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class _$$NewsfeedListingStateFailureCopyWith<$Res> {
-  factory _$$NewsfeedListingStateFailureCopyWith(
-          _$NewsfeedListingStateFailure value,
-          $Res Function(_$NewsfeedListingStateFailure) then) =
-      __$$NewsfeedListingStateFailureCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$NewsfeedListingStateFailureCopyWithImpl<$Res>
-    extends _$NewsfeedListingStateCopyWithImpl<$Res,
-        _$NewsfeedListingStateFailure>
-    implements _$$NewsfeedListingStateFailureCopyWith<$Res> {
-  __$$NewsfeedListingStateFailureCopyWithImpl(
-      _$NewsfeedListingStateFailure _value,
-      $Res Function(_$NewsfeedListingStateFailure) _then)
-      : super(_value, _then);
-}
-
-/// @nodoc
-
-class _$NewsfeedListingStateFailure implements NewsfeedListingStateFailure {
-  _$NewsfeedListingStateFailure();
-
-  @override
-  String toString() {
-    return 'NewsfeedListingState.failure()';
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$NewsfeedListingStateFailure);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(List<Post> posts) fetched,
-    required TResult Function() failure,
-  }) {
-    return failure();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(List<Post> posts)? fetched,
-    TResult? Function()? failure,
-  }) {
-    return failure?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(List<Post> posts)? fetched,
-    TResult Function()? failure,
-    required TResult orElse(),
-  }) {
-    if (failure != null) {
-      return failure();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(NewsfeedListingStateInitial value) initial,
-    required TResult Function(NewsfeedListingStateLoading value) loading,
-    required TResult Function(NewsfeedListingStateFetched value) fetched,
-    required TResult Function(NewsfeedListingStateFailure value) failure,
-  }) {
-    return failure(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(NewsfeedListingStateInitial value)? initial,
-    TResult? Function(NewsfeedListingStateLoading value)? loading,
-    TResult? Function(NewsfeedListingStateFetched value)? fetched,
-    TResult? Function(NewsfeedListingStateFailure value)? failure,
-  }) {
-    return failure?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(NewsfeedListingStateInitial value)? initial,
-    TResult Function(NewsfeedListingStateLoading value)? loading,
-    TResult Function(NewsfeedListingStateFetched value)? fetched,
-    TResult Function(NewsfeedListingStateFailure value)? failure,
-    required TResult orElse(),
-  }) {
-    if (failure != null) {
-      return failure(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class NewsfeedListingStateFailure implements NewsfeedListingState {
-  factory NewsfeedListingStateFailure() = _$NewsfeedListingStateFailure;
+  _$$NewsfeedListingStatusCopyWith<_$NewsfeedListingStatus> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 mixin _$NewsfeedListingEvent {
-  GetNewsfeedInput? get input => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(GetNewsfeedInput? input) fetch,
+    required TResult Function(GetNewsfeedInput? input) refresh,
+    required TResult Function(Post post) newPostAdded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(GetNewsfeedInput? input)? fetch,
+    TResult? Function(GetNewsfeedInput? input)? refresh,
+    TResult? Function(Post post)? newPostAdded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(GetNewsfeedInput? input)? fetch,
+    TResult Function(GetNewsfeedInput? input)? refresh,
+    TResult Function(Post post)? newPostAdded,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(NewsfeedListingEventFetch value) fetch,
+    required TResult Function(NewsfeedListingEventRefresh value) refresh,
+    required TResult Function(NewsfeedListingEventNewPost value) newPostAdded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(NewsfeedListingEventFetch value)? fetch,
+    TResult? Function(NewsfeedListingEventRefresh value)? refresh,
+    TResult? Function(NewsfeedListingEventNewPost value)? newPostAdded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(NewsfeedListingEventFetch value)? fetch,
+    TResult Function(NewsfeedListingEventRefresh value)? refresh,
+    TResult Function(NewsfeedListingEventNewPost value)? newPostAdded,
     required TResult orElse(),
   }) =>
-      throw _privateConstructorUsedError;
-
-  @JsonKey(ignore: true)
-  $NewsfeedListingEventCopyWith<NewsfeedListingEvent> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -644,10 +214,6 @@ abstract class $NewsfeedListingEventCopyWith<$Res> {
   factory $NewsfeedListingEventCopyWith(NewsfeedListingEvent value,
           $Res Function(NewsfeedListingEvent) then) =
       _$NewsfeedListingEventCopyWithImpl<$Res, NewsfeedListingEvent>;
-  @useResult
-  $Res call({GetNewsfeedInput? input});
-
-  $GetNewsfeedInputCopyWith<$Res>? get input;
 }
 
 /// @nodoc
@@ -660,45 +226,17 @@ class _$NewsfeedListingEventCopyWithImpl<$Res,
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
-
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? input = freezed,
-  }) {
-    return _then(_value.copyWith(
-      input: freezed == input
-          ? _value.input
-          : input // ignore: cast_nullable_to_non_nullable
-              as GetNewsfeedInput?,
-    ) as $Val);
-  }
-
-  @override
-  @pragma('vm:prefer-inline')
-  $GetNewsfeedInputCopyWith<$Res>? get input {
-    if (_value.input == null) {
-      return null;
-    }
-
-    return $GetNewsfeedInputCopyWith<$Res>(_value.input!, (value) {
-      return _then(_value.copyWith(input: value) as $Val);
-    });
-  }
 }
 
 /// @nodoc
-abstract class _$$NewsfeedListingEventFetchCopyWith<$Res>
-    implements $NewsfeedListingEventCopyWith<$Res> {
+abstract class _$$NewsfeedListingEventFetchCopyWith<$Res> {
   factory _$$NewsfeedListingEventFetchCopyWith(
           _$NewsfeedListingEventFetch value,
           $Res Function(_$NewsfeedListingEventFetch) then) =
       __$$NewsfeedListingEventFetchCopyWithImpl<$Res>;
-  @override
   @useResult
   $Res call({GetNewsfeedInput? input});
 
-  @override
   $GetNewsfeedInputCopyWith<$Res>? get input;
 }
 
@@ -722,6 +260,18 @@ class __$$NewsfeedListingEventFetchCopyWithImpl<$Res>
           : input // ignore: cast_nullable_to_non_nullable
               as GetNewsfeedInput?,
     ));
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $GetNewsfeedInputCopyWith<$Res>? get input {
+    if (_value.input == null) {
+      return null;
+    }
+
+    return $GetNewsfeedInputCopyWith<$Res>(_value.input!, (value) {
+      return _then(_value.copyWith(input: value));
+    });
   }
 }
 
@@ -760,6 +310,8 @@ class _$NewsfeedListingEventFetch implements NewsfeedListingEventFetch {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(GetNewsfeedInput? input) fetch,
+    required TResult Function(GetNewsfeedInput? input) refresh,
+    required TResult Function(Post post) newPostAdded,
   }) {
     return fetch(input);
   }
@@ -768,6 +320,8 @@ class _$NewsfeedListingEventFetch implements NewsfeedListingEventFetch {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(GetNewsfeedInput? input)? fetch,
+    TResult? Function(GetNewsfeedInput? input)? refresh,
+    TResult? Function(Post post)? newPostAdded,
   }) {
     return fetch?.call(input);
   }
@@ -776,6 +330,8 @@ class _$NewsfeedListingEventFetch implements NewsfeedListingEventFetch {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(GetNewsfeedInput? input)? fetch,
+    TResult Function(GetNewsfeedInput? input)? refresh,
+    TResult Function(Post post)? newPostAdded,
     required TResult orElse(),
   }) {
     if (fetch != null) {
@@ -788,6 +344,8 @@ class _$NewsfeedListingEventFetch implements NewsfeedListingEventFetch {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(NewsfeedListingEventFetch value) fetch,
+    required TResult Function(NewsfeedListingEventRefresh value) refresh,
+    required TResult Function(NewsfeedListingEventNewPost value) newPostAdded,
   }) {
     return fetch(this);
   }
@@ -796,6 +354,8 @@ class _$NewsfeedListingEventFetch implements NewsfeedListingEventFetch {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(NewsfeedListingEventFetch value)? fetch,
+    TResult? Function(NewsfeedListingEventRefresh value)? refresh,
+    TResult? Function(NewsfeedListingEventNewPost value)? newPostAdded,
   }) {
     return fetch?.call(this);
   }
@@ -804,6 +364,8 @@ class _$NewsfeedListingEventFetch implements NewsfeedListingEventFetch {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(NewsfeedListingEventFetch value)? fetch,
+    TResult Function(NewsfeedListingEventRefresh value)? refresh,
+    TResult Function(NewsfeedListingEventNewPost value)? newPostAdded,
     required TResult orElse(),
   }) {
     if (fetch != null) {
@@ -817,10 +379,310 @@ abstract class NewsfeedListingEventFetch implements NewsfeedListingEvent {
   factory NewsfeedListingEventFetch({final GetNewsfeedInput? input}) =
       _$NewsfeedListingEventFetch;
 
-  @override
   GetNewsfeedInput? get input;
-  @override
   @JsonKey(ignore: true)
   _$$NewsfeedListingEventFetchCopyWith<_$NewsfeedListingEventFetch>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$NewsfeedListingEventRefreshCopyWith<$Res> {
+  factory _$$NewsfeedListingEventRefreshCopyWith(
+          _$NewsfeedListingEventRefresh value,
+          $Res Function(_$NewsfeedListingEventRefresh) then) =
+      __$$NewsfeedListingEventRefreshCopyWithImpl<$Res>;
+  @useResult
+  $Res call({GetNewsfeedInput? input});
+
+  $GetNewsfeedInputCopyWith<$Res>? get input;
+}
+
+/// @nodoc
+class __$$NewsfeedListingEventRefreshCopyWithImpl<$Res>
+    extends _$NewsfeedListingEventCopyWithImpl<$Res,
+        _$NewsfeedListingEventRefresh>
+    implements _$$NewsfeedListingEventRefreshCopyWith<$Res> {
+  __$$NewsfeedListingEventRefreshCopyWithImpl(
+      _$NewsfeedListingEventRefresh _value,
+      $Res Function(_$NewsfeedListingEventRefresh) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? input = freezed,
+  }) {
+    return _then(_$NewsfeedListingEventRefresh(
+      input: freezed == input
+          ? _value.input
+          : input // ignore: cast_nullable_to_non_nullable
+              as GetNewsfeedInput?,
+    ));
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $GetNewsfeedInputCopyWith<$Res>? get input {
+    if (_value.input == null) {
+      return null;
+    }
+
+    return $GetNewsfeedInputCopyWith<$Res>(_value.input!, (value) {
+      return _then(_value.copyWith(input: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$NewsfeedListingEventRefresh implements NewsfeedListingEventRefresh {
+  _$NewsfeedListingEventRefresh({this.input});
+
+  @override
+  final GetNewsfeedInput? input;
+
+  @override
+  String toString() {
+    return 'NewsfeedListingEvent.refresh(input: $input)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$NewsfeedListingEventRefresh &&
+            (identical(other.input, input) || other.input == input));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, input);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$NewsfeedListingEventRefreshCopyWith<_$NewsfeedListingEventRefresh>
+      get copyWith => __$$NewsfeedListingEventRefreshCopyWithImpl<
+          _$NewsfeedListingEventRefresh>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(GetNewsfeedInput? input) fetch,
+    required TResult Function(GetNewsfeedInput? input) refresh,
+    required TResult Function(Post post) newPostAdded,
+  }) {
+    return refresh(input);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(GetNewsfeedInput? input)? fetch,
+    TResult? Function(GetNewsfeedInput? input)? refresh,
+    TResult? Function(Post post)? newPostAdded,
+  }) {
+    return refresh?.call(input);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(GetNewsfeedInput? input)? fetch,
+    TResult Function(GetNewsfeedInput? input)? refresh,
+    TResult Function(Post post)? newPostAdded,
+    required TResult orElse(),
+  }) {
+    if (refresh != null) {
+      return refresh(input);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(NewsfeedListingEventFetch value) fetch,
+    required TResult Function(NewsfeedListingEventRefresh value) refresh,
+    required TResult Function(NewsfeedListingEventNewPost value) newPostAdded,
+  }) {
+    return refresh(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(NewsfeedListingEventFetch value)? fetch,
+    TResult? Function(NewsfeedListingEventRefresh value)? refresh,
+    TResult? Function(NewsfeedListingEventNewPost value)? newPostAdded,
+  }) {
+    return refresh?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(NewsfeedListingEventFetch value)? fetch,
+    TResult Function(NewsfeedListingEventRefresh value)? refresh,
+    TResult Function(NewsfeedListingEventNewPost value)? newPostAdded,
+    required TResult orElse(),
+  }) {
+    if (refresh != null) {
+      return refresh(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class NewsfeedListingEventRefresh implements NewsfeedListingEvent {
+  factory NewsfeedListingEventRefresh({final GetNewsfeedInput? input}) =
+      _$NewsfeedListingEventRefresh;
+
+  GetNewsfeedInput? get input;
+  @JsonKey(ignore: true)
+  _$$NewsfeedListingEventRefreshCopyWith<_$NewsfeedListingEventRefresh>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$NewsfeedListingEventNewPostCopyWith<$Res> {
+  factory _$$NewsfeedListingEventNewPostCopyWith(
+          _$NewsfeedListingEventNewPost value,
+          $Res Function(_$NewsfeedListingEventNewPost) then) =
+      __$$NewsfeedListingEventNewPostCopyWithImpl<$Res>;
+  @useResult
+  $Res call({Post post});
+}
+
+/// @nodoc
+class __$$NewsfeedListingEventNewPostCopyWithImpl<$Res>
+    extends _$NewsfeedListingEventCopyWithImpl<$Res,
+        _$NewsfeedListingEventNewPost>
+    implements _$$NewsfeedListingEventNewPostCopyWith<$Res> {
+  __$$NewsfeedListingEventNewPostCopyWithImpl(
+      _$NewsfeedListingEventNewPost _value,
+      $Res Function(_$NewsfeedListingEventNewPost) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? post = null,
+  }) {
+    return _then(_$NewsfeedListingEventNewPost(
+      post: null == post
+          ? _value.post
+          : post // ignore: cast_nullable_to_non_nullable
+              as Post,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$NewsfeedListingEventNewPost implements NewsfeedListingEventNewPost {
+  _$NewsfeedListingEventNewPost({required this.post});
+
+  @override
+  final Post post;
+
+  @override
+  String toString() {
+    return 'NewsfeedListingEvent.newPostAdded(post: $post)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$NewsfeedListingEventNewPost &&
+            (identical(other.post, post) || other.post == post));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, post);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$NewsfeedListingEventNewPostCopyWith<_$NewsfeedListingEventNewPost>
+      get copyWith => __$$NewsfeedListingEventNewPostCopyWithImpl<
+          _$NewsfeedListingEventNewPost>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(GetNewsfeedInput? input) fetch,
+    required TResult Function(GetNewsfeedInput? input) refresh,
+    required TResult Function(Post post) newPostAdded,
+  }) {
+    return newPostAdded(post);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(GetNewsfeedInput? input)? fetch,
+    TResult? Function(GetNewsfeedInput? input)? refresh,
+    TResult? Function(Post post)? newPostAdded,
+  }) {
+    return newPostAdded?.call(post);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(GetNewsfeedInput? input)? fetch,
+    TResult Function(GetNewsfeedInput? input)? refresh,
+    TResult Function(Post post)? newPostAdded,
+    required TResult orElse(),
+  }) {
+    if (newPostAdded != null) {
+      return newPostAdded(post);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(NewsfeedListingEventFetch value) fetch,
+    required TResult Function(NewsfeedListingEventRefresh value) refresh,
+    required TResult Function(NewsfeedListingEventNewPost value) newPostAdded,
+  }) {
+    return newPostAdded(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(NewsfeedListingEventFetch value)? fetch,
+    TResult? Function(NewsfeedListingEventRefresh value)? refresh,
+    TResult? Function(NewsfeedListingEventNewPost value)? newPostAdded,
+  }) {
+    return newPostAdded?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(NewsfeedListingEventFetch value)? fetch,
+    TResult Function(NewsfeedListingEventRefresh value)? refresh,
+    TResult Function(NewsfeedListingEventNewPost value)? newPostAdded,
+    required TResult orElse(),
+  }) {
+    if (newPostAdded != null) {
+      return newPostAdded(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class NewsfeedListingEventNewPost implements NewsfeedListingEvent {
+  factory NewsfeedListingEventNewPost({required final Post post}) =
+      _$NewsfeedListingEventNewPost;
+
+  Post get post;
+  @JsonKey(ignore: true)
+  _$$NewsfeedListingEventNewPostCopyWith<_$NewsfeedListingEventNewPost>
       get copyWith => throw _privateConstructorUsedError;
 }

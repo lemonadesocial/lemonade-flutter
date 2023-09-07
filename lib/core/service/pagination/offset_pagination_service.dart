@@ -26,6 +26,7 @@ class OffsetPaginationService<T, I> {
   Future<Either<Failure, List<T>>> refresh(I input) async {
     _reachedEnd = false;
     _offset = 0;
+    _items = [];
     return _processGetDataFuture(input);
   }
 

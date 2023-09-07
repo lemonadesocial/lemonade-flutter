@@ -11,11 +11,11 @@ part 'newsfeed_listing_bloc.freezed.dart';
 
 class NewsfeedListingBloc
     extends Bloc<NewsfeedListingEvent, NewsfeedListingState> {
-  NewsfeedListingBloc(
-    this.newsfeedService, {
-    required this.defaultInput,
-  }) : super(NewsfeedListingState.initial()) {
+  NewsfeedListingBloc(this.newsfeedService)
+      : super(NewsfeedListingState.initial()) {
     on<NewsfeedListingEventFetch>(_onFetch);
+    on<NewsfeedListingEventNewPost>(_onNewPostAdded);
+    on<NewsfeedListingEventRefresh>(_onRefresh);
   }
 
   final NewsfeedService newsfeedService;
@@ -23,7 +23,7 @@ class NewsfeedListingBloc
       offsetPaginationService = OffsetPaginationService(
     getDataFuture: _getNewsfeed,
   );
-  final GetNewsfeedInput defaultInput;
+  final defaultInput = const GetNewsfeedInput();
 
   Future<Either<Failure, List<Post>>> _getNewsfeed(
     int? offset,
@@ -42,12 +42,43 @@ class NewsfeedListingBloc
   }
 
   Future<void> _onFetch(NewsfeedListingEventFetch event, Emitter emit) async {
-    emit(NewsfeedListingState.loading());
+    emit(state.copyWith(status: NewsfeedStatus.loading));
     final result = await offsetPaginationService.fetch(defaultInput);
     result.fold(
-      (l) => emit(NewsfeedListingState.failure()),
+      (l) => emit(state.copyWith(status: NewsfeedStatus.failure)),
       (posts) => emit(
-        NewsfeedListingState.fetched(posts: posts),
+        state.copyWith(
+          status: NewsfeedStatus.fetched,
+          posts: posts,
+        ),
+      ),
+    );
+  }
+
+  Future<void> _onRefresh(
+    NewsfeedListingEventRefresh event,
+    Emitter emit,
+  ) async {
+    emit(state.copyWith(status: NewsfeedStatus.loading));
+    final result = await offsetPaginationService.refresh(defaultInput);
+    result.fold(
+      (l) => emit(state.copyWith(status: NewsfeedStatus.failure)),
+      (posts) => emit(
+        state.copyWith(
+          status: NewsfeedStatus.fetched,
+          posts: posts,
+        ),
+      ),
+    );
+  }
+
+  void _onNewPostAdded(NewsfeedListingEventNewPost event, Emitter emit) {
+    final newPostList = List.of(state.posts);
+    newPostList.insert(0, event.post);
+    emit(
+      state.copyWith(
+        status: NewsfeedStatus.fetched,
+        posts: newPostList,
       ),
     );
   }
@@ -55,16 +86,29 @@ class NewsfeedListingBloc
 
 @freezed
 class NewsfeedListingState with _$NewsfeedListingState {
-  factory NewsfeedListingState.initial() = NewsfeedListingStateInitial;
-  factory NewsfeedListingState.loading() = NewsfeedListingStateLoading;
-  factory NewsfeedListingState.fetched({
-    required List<Post> posts,
-  }) = NewsfeedListingStateFetched;
-  factory NewsfeedListingState.failure() = NewsfeedListingStateFailure;
+  const factory NewsfeedListingState({
+    @Default(NewsfeedStatus.initial) NewsfeedStatus status,
+    @Default([]) List<Post> posts,
+  }) = NewsfeedListingStatus;
+
+  factory NewsfeedListingState.initial() => const NewsfeedListingState();
 }
 
 @freezed
 class NewsfeedListingEvent with _$NewsfeedListingEvent {
   factory NewsfeedListingEvent.fetch({GetNewsfeedInput? input}) =
       NewsfeedListingEventFetch;
+
+  factory NewsfeedListingEvent.refresh({GetNewsfeedInput? input}) =
+      NewsfeedListingEventRefresh;
+
+  factory NewsfeedListingEvent.newPostAdded({required Post post}) =
+      NewsfeedListingEventNewPost;
+}
+
+enum NewsfeedStatus {
+  initial,
+  loading,
+  fetched,
+  failure,
 }

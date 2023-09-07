@@ -1,6 +1,5 @@
 import 'package:app/core/application/newsfeed/newsfeed_listing_bloc/newsfeed_listing_bloc.dart';
 import 'package:app/core/data/post/newsfeed_repository_impl.dart';
-import 'package:app/core/domain/newsfeed/input/get_newsfeed_input.dart';
 import 'package:app/core/presentation/pages/home/views/list/home_newsfeed_list.dart';
 import 'package:app/core/presentation/widgets/bottom_bar/bottom_bar_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/appbar_logo.dart';
@@ -25,10 +24,8 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final newFeedBloc = NewsfeedListingBloc(
-      NewsfeedService(NewsfeedRepositoryImpl()),
-      defaultInput: const GetNewsfeedInput(),
-    );
+    final newFeedBloc =
+        NewsfeedListingBloc(NewsfeedService(NewsfeedRepositoryImpl()));
     return MultiBlocProvider(
       providers: [
         BlocProvider<NewsfeedListingBloc>(
