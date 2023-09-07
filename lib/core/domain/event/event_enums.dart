@@ -61,3 +61,10 @@ enum BroadcastRecordingStatus {
   recorded,
   recording,
 }
+
+enum EventRsvpState {
+  accepted,
+  declined,
+  payment,
+  pending,
+}

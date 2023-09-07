@@ -1,7 +1,11 @@
 import 'package:app/core/data/event/dtos/event_dtos.dart';
+import 'package:app/core/data/event/dtos/event_rsvp_dto/event_rsvp_dto.dart';
+import 'package:app/core/data/event/event_mutation.dart';
 import 'package:app/core/data/event/event_query.dart';
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/entities/event_rsvp.dart';
 import 'package:app/core/domain/event/event_repository.dart';
+import 'package:app/core/domain/event/input/accept_event_input/accept_event_input.dart';
 import 'package:app/core/domain/event/input/get_event_detail_input.dart';
 import 'package:app/core/domain/event/input/get_events_listing_input.dart';
 import 'package:app/core/failure.dart';
@@ -82,6 +86,22 @@ class EventRepositoryImpl implements EventRepository {
         variables: input.toJson(),
         parserFn: (data) => Event.fromDto(
           EventDto.fromJson(data['getEvent']),
+        ),
+      ),
+    );
+    if (result.hasException) return Left(Failure());
+    return Right(result.parsedData!);
+  }
+
+  @override
+  Future<Either<Failure, EventRsvp>> acceptEvent(
+      {required AcceptEventInput input}) async {
+    final result = await client.mutate(
+      MutationOptions(
+        document: acceptEventMutation,
+        variables: input.toJson(),
+        parserFn: (data) => EventRsvp.fromDto(
+          EventRsvpDto.fromJson(data['acceptEvent']),
         ),
       ),
     );

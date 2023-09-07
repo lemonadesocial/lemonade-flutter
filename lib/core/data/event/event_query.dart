@@ -127,3 +127,13 @@ final getHostingEventsQuery = gql('''
     }
   }
 ''');
+
+final getEventTicketPricingQuery = gql('''
+  query GetEventTicketPricing(\$event: MongoID!, \$type: MongoID) {
+    getEventTicketPricing(event: \$event, type: \$type) {
+      amount
+      currency
+      limit
+    }
+  }
+''');
