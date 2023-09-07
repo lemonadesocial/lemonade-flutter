@@ -19,6 +19,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../application/auth/auth_bloc.dart';
+
 @RoutePage()
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -51,6 +53,11 @@ class _HomeListingView extends StatefulWidget {
 }
 
 class _HomePageViewState extends State<_HomeListingView> {
+  final userId = getIt<AuthBloc>().state.maybeWhen(
+        authenticated: (authSession) => authSession.userId,
+        orElse: () => null,
+      );
+
   @override
   void initState() {
     super.initState();
@@ -85,19 +92,21 @@ class _HomePageViewState extends State<_HomeListingView> {
       ),
       backgroundColor: LemonColor.black,
       body: const HomeNewsfeedListView(),
-      floatingActionButton: Padding(
-        padding: EdgeInsets.only(bottom: BottomBar.bottomBarHeight),
-        child: FloatingCreateButton(
-          onTap: () => context.router.push(
-            CreatePostRoute(
-              onPostCreated: (newPost) =>
-                  context.read<NewsfeedListingBloc>().add(
-                        NewsfeedListingEvent.newPostAdded(post: newPost),
-                      ),
+      floatingActionButton: userId == null
+          ? null
+          : Padding(
+              padding: EdgeInsets.only(bottom: BottomBar.bottomBarHeight),
+              child: FloatingCreateButton(
+                onTap: () => context.router.push(
+                  CreatePostRoute(
+                    onPostCreated: (newPost) =>
+                        context.read<NewsfeedListingBloc>().add(
+                              NewsfeedListingEvent.newPostAdded(post: newPost),
+                            ),
+                  ),
+                ),
+              ),
             ),
-          ),
-        ),
-      ),
     );
   }
 }
