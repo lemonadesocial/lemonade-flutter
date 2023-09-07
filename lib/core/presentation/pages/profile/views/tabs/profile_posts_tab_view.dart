@@ -11,8 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
-import '../../../../../application/profile/user_profile_bloc/user_profile_bloc.dart';
-
 class ProfilePostsTabView extends StatelessWidget {
   ProfilePostsTabView({
     super.key,
@@ -41,10 +39,11 @@ class ProfilePostsTabView extends StatelessWidget {
       child: VisibilityDetector(
         key: const Key('ProfilePostsTabViewDetector'),
         onVisibilityChanged: (info) {
-          // if (info.visibleFraction == 1) {
-          //   //Whenever this screen is appear on screen, fetch latest news feed
-          //   postsListingBloc.add(PostsListingEvent.fetch());
-          // }
+          if (info.visibleFraction == 1) {
+            // Whenever this widget is appeared on screen,
+            // fetch latest list
+            postsListingBloc.add(PostsListingEvent.refresh());
+          }
         },
         child: BaseSliverTabView(
           name: 'posts',
