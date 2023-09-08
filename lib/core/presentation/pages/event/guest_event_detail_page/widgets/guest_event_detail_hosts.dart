@@ -6,8 +6,10 @@ import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/utils/image_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -77,82 +79,88 @@ class _EventHostItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 130.w,
-      decoration: ShapeDecoration(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15.r),
+    return InkWell(
+      onTap: () {
+        AutoRouter.of(context).navigate(ProfileRoute(userId: host?.id ?? ''));
+      },
+      child: Container(
+        width: 130.w,
+        decoration: ShapeDecoration(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.r),
+          ),
         ),
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(15.r),
-        child: Stack(
-          children: [
-            Positioned.fill(
-              child: ImageFiltered(
-                imageFilter: ImageFilter.blur(
-                  sigmaX: 100,
-                  sigmaY: 50,
-                ),
-                child: CachedNetworkImage(
-                  fit: BoxFit.cover,
-                  placeholder: (_, __) => ImagePlaceholder.eventCard(),
-                  errorWidget: (_, __, ___) => ImagePlaceholder.eventCard(),
-                  imageUrl: ImageUtils.generateUrl(
-                    file: host?.newPhotosExpanded?.first,
-                    imageConfig: ImageConfig.eventPhoto,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(15.r),
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: ImageFiltered(
+                  imageFilter: ImageFilter.blur(
+                    sigmaX: 100,
+                    sigmaY: 50,
+                  ),
+                  child: CachedNetworkImage(
+                    fit: BoxFit.cover,
+                    placeholder: (_, __) => ImagePlaceholder.eventCard(),
+                    errorWidget: (_, __, ___) => ImagePlaceholder.eventCard(),
+                    imageUrl: ImageUtils.generateUrl(
+                      file: host?.newPhotosExpanded?.first,
+                      imageConfig: ImageConfig.eventPhoto,
+                    ),
                   ),
                 ),
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: Spacing.extraSmall),
-              child: Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(60.w),
-                      ),
-                      width: 60.w,
-                      height: 60.w,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(60.r),
-                        child: CachedNetworkImage(
-                          fit: BoxFit.cover,
-                          placeholder: (_, __) => ImagePlaceholder.eventCard(),
-                          errorWidget: (_, __, ___) =>
-                              ImagePlaceholder.eventCard(),
-                          imageUrl: ImageUtils.generateUrl(
-                            file: host?.newPhotosExpanded?.first,
-                            imageConfig: ImageConfig.eventPhoto,
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: Spacing.extraSmall),
+                child: Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(60.w),
+                        ),
+                        width: 60.w,
+                        height: 60.w,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(60.r),
+                          child: CachedNetworkImage(
+                            fit: BoxFit.cover,
+                            placeholder: (_, __) =>
+                                ImagePlaceholder.eventCard(),
+                            errorWidget: (_, __, ___) =>
+                                ImagePlaceholder.eventCard(),
+                            imageUrl: ImageUtils.generateUrl(
+                              file: host?.newPhotosExpanded?.first,
+                              imageConfig: ImageConfig.eventPhoto,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    SizedBox(height: Spacing.xSmall),
-                    Text(
-                      host?.displayName ?? host?.name ?? '',
-                      style: Typo.small.copyWith(
-                        color: colorScheme.onPrimary,
+                      SizedBox(height: Spacing.xSmall),
+                      Text(
+                        host?.displayName ?? host?.name ?? '',
+                        style: Typo.small.copyWith(
+                          color: colorScheme.onPrimary,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Text(
-                      host?.jobTitle ?? '',
-                      style: Typo.small.copyWith(
-                        color: colorScheme.onSecondary,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    )
-                  ],
+                      Text(
+                        host?.jobTitle ?? '',
+                        style: Typo.small.copyWith(
+                          color: colorScheme.onSecondary,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      )
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

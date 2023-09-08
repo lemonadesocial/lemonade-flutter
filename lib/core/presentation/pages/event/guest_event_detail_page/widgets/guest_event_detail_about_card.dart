@@ -36,105 +36,103 @@ class GuestEventDetailAboutCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-    return Flexible(
-      child: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15.r),
-        ),
-        child: Stack(
-          children: [
-            Positioned.fill(
-              child: ClipRRect(
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15.r),
+      ),
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(15.r),
+              child: CachedNetworkImage(
+                fit: BoxFit.cover,
+                imageUrl: photoUrl,
+                errorWidget: (_, __, ___) => ImagePlaceholder.eventCard(),
+                placeholder: (_, __) => ImagePlaceholder.eventCard(),
+              ),
+            ),
+          ),
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15.r),
-                child: CachedNetworkImage(
-                  fit: BoxFit.cover,
-                  imageUrl: photoUrl,
-                  errorWidget: (_, __, ___) => ImagePlaceholder.eventCard(),
-                  placeholder: (_, __) => ImagePlaceholder.eventCard(),
-                ),
+                color: colorScheme.primary.withOpacity(0.9),
               ),
             ),
-            Positioned.fill(
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15.r),
-                  color: colorScheme.primary.withOpacity(0.9),
-                ),
-              ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(
+              top: Spacing.large,
+              right: Spacing.medium,
+              bottom: Spacing.medium,
+              left: Spacing.medium,
             ),
-            Padding(
-              padding: EdgeInsets.only(
-                top: Spacing.large,
-                right: Spacing.medium,
-                bottom: Spacing.medium,
-                left: Spacing.medium,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    t.event.aboutTheEvent,
-                    style: Typo.extraMedium.copyWith(
-                      fontFamily: FontFamily.nohemiVariable,
-                      fontWeight: FontWeight.w800,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  t.event.aboutTheEvent,
+                  style: Typo.extraMedium.copyWith(
+                    fontFamily: FontFamily.nohemiVariable,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                SizedBox(height: 3.w),
+                Text(
+                  '${event.title ?? ''}  •  ${DateFormatUtils.dateOnly(event.start)}',
+                  style: Typo.medium.copyWith(
+                    color: colorScheme.onSecondary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  maxLines: 2,
+                ),
+                SizedBox(
+                  height: Spacing.smMedium,
+                ),
+                Text(
+                  event.description ?? '',
+                  style: Typo.mediumPlus.copyWith(
+                    color: colorScheme.onSurface,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                SizedBox(
+                  height: Spacing.medium,
+                ),
+                InkWell(
+                  onTap: () {
+                    BottomSheetUtils.showSnapBottomSheet(
+                      context,
+                      builder: (context) =>
+                          GuestEventDetailAboutBottomSheet(event: event),
+                    );
+                  },
+                  child: Container(
+                    height: 42.w,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(LemonRadius.button),
+                      color: colorScheme.secondary,
                     ),
-                  ),
-                  SizedBox(height: 3.w),
-                  Text(
-                    '${event.title ?? ''}  •  ${DateFormatUtils.dateOnly(event.start)}',
-                    style: Typo.medium.copyWith(
-                      color: colorScheme.onSecondary,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    maxLines: 2,
-                  ),
-                  SizedBox(
-                    height: Spacing.smMedium,
-                  ),
-                  Text(
-                    event.description ?? '',
-                    style: Typo.mediumPlus.copyWith(
-                      color: colorScheme.onSurface,
-                    ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  SizedBox(
-                    height: Spacing.medium,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      BottomSheetUtils.showSnapBottomSheet(
-                        context,
-                        builder: (context) =>
-                            GuestEventDetailAboutBottomSheet(event: event),
-                      );
-                    },
-                    child: Container(
-                      height: 42.w,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(LemonRadius.button),
-                        color: colorScheme.secondary,
-                      ),
-                      child: Center(
-                        child: Text(
-                          t.common.viewMore,
-                          style: Typo.small.copyWith(
-                            color: colorScheme.onSurfaceVariant,
-                            fontFamily: FontFamily.switzerVariable,
-                            fontWeight: FontWeight.w600,
-                          ),
+                    child: Center(
+                      child: Text(
+                        t.common.viewMore,
+                        style: Typo.small.copyWith(
+                          color: colorScheme.onSurfaceVariant,
+                          fontFamily: FontFamily.switzerVariable,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
-                  )
-                ],
-              ),
+                  ),
+                )
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
