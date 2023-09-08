@@ -18,5 +18,6 @@
     "youreIn": "You're in! 🎉",
     "rsvpSuccessful": "Congrats! You have successfully RSVP’d to $eventName.",
     "takeMeToEvent": "Take me to the event",
-    "inviteFriends": "Invite friends"
+    "inviteFriends": "Invite friends",
+    "processing": "Processing..."
 }

@@ -37,6 +37,8 @@ const eventFragment = '''
   start
   end
   cost
+  cohosts
+  speaker_users
   currency
   description
   broadcasts {
@@ -124,6 +126,16 @@ final getHostingEventsQuery = gql('''
       order: \$order
     ) {
       ...eventFields
+    }
+  }
+''');
+
+final getEventTicketPricingQuery = gql('''
+  query GetEventTicketPricing(\$event: MongoID!, \$type: MongoID) {
+    getEventTicketPricing(event: \$event, type: \$type) {
+      amount
+      currency
+      limit
     }
   }
 ''');

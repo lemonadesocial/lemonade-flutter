@@ -99,6 +99,9 @@ final eventRoutes = [
     page: GuestEventDetailRoute.page,
   ),
   AutoRoute(
+    page: EventDetailRoute.page,
+  ),
+  AutoRoute(
     page: EventSelectingRoute.page,
   ),
   AutoRoute(page: RSVPEventSuccessPopupRoute.page)
