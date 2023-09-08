@@ -6,7 +6,7 @@
     "created": "created",
     "hosting": "hosting",
     "buy": "buy",
-    "free": "free",
+    "free": "Free",
     "empty_home_events": "There's no events $time",
     "empty_attending_events": "You are currently not attending any events $time",
     "empty_hosting_events": "You are currently not hosting any events $time",
@@ -14,5 +14,9 @@
     "buyTickets": "Buy tickets",
     "rsvpToUnlock": "RSVP to this event to unlock the location",
     "eventLocation": "Location",
-    "tickets": "tickets"
+    "tickets": "tickets",
+    "youreIn": "You're in! 🎉",
+    "rsvpSuccessful": "Congrats! You have successfully RSVP’d to $eventName.",
+    "takeMeToEvent": "Take me to the event",
+    "inviteFriends": "Invite friends"
 }
