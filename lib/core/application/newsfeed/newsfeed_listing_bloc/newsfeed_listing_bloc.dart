@@ -4,8 +4,10 @@ import 'package:app/core/failure.dart';
 import 'package:app/core/service/newsfeed/newsfeed_service.dart';
 import 'package:app/core/service/pagination/offset_pagination_service.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 part 'newsfeed_listing_bloc.freezed.dart';
 
@@ -16,6 +18,7 @@ class NewsfeedListingBloc
     on<NewsfeedListingEventFetch>(_onFetch);
     on<NewsfeedListingEventNewPost>(_onNewPostAdded);
     on<NewsfeedListingEventRefresh>(_onRefresh);
+    on<NewsfeedListingEventScrollTop>(_onScroll);
   }
 
   final NewsfeedService newsfeedService;
@@ -24,6 +27,8 @@ class NewsfeedListingBloc
     getDataFuture: _getNewsfeed,
   );
   final defaultInput = const GetNewsfeedInput();
+  final refreshController = RefreshController();
+  final scrollController = ScrollController();
 
   Future<Either<Failure, List<Post>>> _getNewsfeed(
     int? offset,
@@ -77,10 +82,21 @@ class NewsfeedListingBloc
     newPostList.insert(0, event.post);
     emit(
       state.copyWith(
-        status: NewsfeedStatus.fetched,
-        posts: newPostList,
-      ),
+          status: NewsfeedStatus.fetched,
+          posts: newPostList,
+          scrollToTopEvent: true),
     );
+  }
+
+  void _onScroll(NewsfeedListingEventScrollTop event, Emitter emit) {
+    emit(state.copyWith(scrollToTopEvent: event.scrollToTopEvent));
+  }
+
+  @override
+  Future<void> close() {
+    refreshController.dispose();
+    scrollController.dispose();
+    return super.close();
   }
 }
 
@@ -89,6 +105,7 @@ class NewsfeedListingState with _$NewsfeedListingState {
   const factory NewsfeedListingState({
     @Default(NewsfeedStatus.initial) NewsfeedStatus status,
     @Default([]) List<Post> posts,
+    @Default(false) bool scrollToTopEvent,
   }) = NewsfeedListingStatus;
 
   factory NewsfeedListingState.initial() => const NewsfeedListingState();
@@ -104,6 +121,9 @@ class NewsfeedListingEvent with _$NewsfeedListingEvent {
 
   factory NewsfeedListingEvent.newPostAdded({required Post post}) =
       NewsfeedListingEventNewPost;
+
+  factory NewsfeedListingEvent.scrollToTop({required bool scrollToTopEvent}) =
+      NewsfeedListingEventScrollTop;
 }
 
 enum NewsfeedStatus {

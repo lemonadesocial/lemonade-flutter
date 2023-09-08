@@ -7,6 +7,10 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../application/newsfeed/newsfeed_listing_bloc/newsfeed_listing_bloc.dart';
+import '../../../data/post/newsfeed_repository_impl.dart';
+import '../../../service/newsfeed/newsfeed_service.dart';
+
 @RoutePage(name: 'RootRoute')
 class RootPage extends StatelessWidget {
   const RootPage({super.key});
@@ -15,31 +19,41 @@ class RootPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).colorScheme.primary;
     return BlocBuilder<AuthBloc, AuthState>(
-      builder: (context, authState) => AutoTabsScaffold(
-        extendBody: true,
-        scaffoldKey: DrawerUtils.drawerGlobalKey,
-        backgroundColor: primaryColor,
-        routes: [
-          const HomeRoute(),
-          const DiscoverRoute(),
-          authState.maybeWhen(
-            authenticated: (session) => NotificationRoute(),
-            orElse: EmptyRoute.new,
+      builder: (context, authState) => MultiBlocProvider(
+        providers: [
+          BlocProvider<NewsfeedListingBloc>(
+            create: (context) =>
+                NewsfeedListingBloc(NewsfeedService(NewsfeedRepositoryImpl()))
+                  ..add(NewsfeedListingEvent.fetch()),
           ),
-          authState.maybeWhen(
-            authenticated: (session) => const WalletRoute(),
-            orElse: EmptyRoute.new,
-          ),
-          authState.maybeWhen(
-            authenticated: (session) => const MyProfileRoute(),
-            orElse: EmptyRoute.new,
-          )
+          // Add other Blocs here if needed.
         ],
-        drawer: const LemonDrawer(),
-        endDrawer: const LemonDrawer(),
-        bottomNavigationBuilder: (_, tabsRouter) {
-          return const BottomBar();
-        },
+        child: AutoTabsScaffold(
+          extendBody: true,
+          scaffoldKey: DrawerUtils.drawerGlobalKey,
+          backgroundColor: primaryColor,
+          routes: [
+            const HomeRoute(),
+            const DiscoverRoute(),
+            authState.maybeWhen(
+              authenticated: (session) => NotificationRoute(),
+              orElse: EmptyRoute.new,
+            ),
+            authState.maybeWhen(
+              authenticated: (session) => const WalletRoute(),
+              orElse: EmptyRoute.new,
+            ),
+            authState.maybeWhen(
+              authenticated: (session) => const MyProfileRoute(),
+              orElse: EmptyRoute.new,
+            )
+          ],
+          drawer: const LemonDrawer(),
+          endDrawer: const LemonDrawer(),
+          bottomNavigationBuilder: (_, tabsRouter) {
+            return const BottomBar();
+          },
+        ),
       ),
     );
   }

@@ -18,6 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$NewsfeedListingState {
   NewsfeedStatus get status => throw _privateConstructorUsedError;
   List<Post> get posts => throw _privateConstructorUsedError;
+  bool get scrollToTopEvent => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $NewsfeedListingStateCopyWith<NewsfeedListingState> get copyWith =>
@@ -30,7 +31,7 @@ abstract class $NewsfeedListingStateCopyWith<$Res> {
           $Res Function(NewsfeedListingState) then) =
       _$NewsfeedListingStateCopyWithImpl<$Res, NewsfeedListingState>;
   @useResult
-  $Res call({NewsfeedStatus status, List<Post> posts});
+  $Res call({NewsfeedStatus status, List<Post> posts, bool scrollToTopEvent});
 }
 
 /// @nodoc
@@ -49,6 +50,7 @@ class _$NewsfeedListingStateCopyWithImpl<$Res,
   $Res call({
     Object? status = null,
     Object? posts = null,
+    Object? scrollToTopEvent = null,
   }) {
     return _then(_value.copyWith(
       status: null == status
@@ -59,6 +61,10 @@ class _$NewsfeedListingStateCopyWithImpl<$Res,
           ? _value.posts
           : posts // ignore: cast_nullable_to_non_nullable
               as List<Post>,
+      scrollToTopEvent: null == scrollToTopEvent
+          ? _value.scrollToTopEvent
+          : scrollToTopEvent // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -71,7 +77,7 @@ abstract class _$$NewsfeedListingStatusCopyWith<$Res>
       __$$NewsfeedListingStatusCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({NewsfeedStatus status, List<Post> posts});
+  $Res call({NewsfeedStatus status, List<Post> posts, bool scrollToTopEvent});
 }
 
 /// @nodoc
@@ -87,6 +93,7 @@ class __$$NewsfeedListingStatusCopyWithImpl<$Res>
   $Res call({
     Object? status = null,
     Object? posts = null,
+    Object? scrollToTopEvent = null,
   }) {
     return _then(_$NewsfeedListingStatus(
       status: null == status
@@ -97,6 +104,10 @@ class __$$NewsfeedListingStatusCopyWithImpl<$Res>
           ? _value._posts
           : posts // ignore: cast_nullable_to_non_nullable
               as List<Post>,
+      scrollToTopEvent: null == scrollToTopEvent
+          ? _value.scrollToTopEvent
+          : scrollToTopEvent // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -105,7 +116,9 @@ class __$$NewsfeedListingStatusCopyWithImpl<$Res>
 
 class _$NewsfeedListingStatus implements NewsfeedListingStatus {
   const _$NewsfeedListingStatus(
-      {this.status = NewsfeedStatus.initial, final List<Post> posts = const []})
+      {this.status = NewsfeedStatus.initial,
+      final List<Post> posts = const [],
+      this.scrollToTopEvent = false})
       : _posts = posts;
 
   @override
@@ -121,8 +134,12 @@ class _$NewsfeedListingStatus implements NewsfeedListingStatus {
   }
 
   @override
+  @JsonKey()
+  final bool scrollToTopEvent;
+
+  @override
   String toString() {
-    return 'NewsfeedListingState(status: $status, posts: $posts)';
+    return 'NewsfeedListingState(status: $status, posts: $posts, scrollToTopEvent: $scrollToTopEvent)';
   }
 
   @override
@@ -131,12 +148,14 @@ class _$NewsfeedListingStatus implements NewsfeedListingStatus {
         (other.runtimeType == runtimeType &&
             other is _$NewsfeedListingStatus &&
             (identical(other.status, status) || other.status == status) &&
-            const DeepCollectionEquality().equals(other._posts, _posts));
+            const DeepCollectionEquality().equals(other._posts, _posts) &&
+            (identical(other.scrollToTopEvent, scrollToTopEvent) ||
+                other.scrollToTopEvent == scrollToTopEvent));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, status, const DeepCollectionEquality().hash(_posts));
+  int get hashCode => Object.hash(runtimeType, status,
+      const DeepCollectionEquality().hash(_posts), scrollToTopEvent);
 
   @JsonKey(ignore: true)
   @override
@@ -149,12 +168,15 @@ class _$NewsfeedListingStatus implements NewsfeedListingStatus {
 abstract class NewsfeedListingStatus implements NewsfeedListingState {
   const factory NewsfeedListingStatus(
       {final NewsfeedStatus status,
-      final List<Post> posts}) = _$NewsfeedListingStatus;
+      final List<Post> posts,
+      final bool scrollToTopEvent}) = _$NewsfeedListingStatus;
 
   @override
   NewsfeedStatus get status;
   @override
   List<Post> get posts;
+  @override
+  bool get scrollToTopEvent;
   @override
   @JsonKey(ignore: true)
   _$$NewsfeedListingStatusCopyWith<_$NewsfeedListingStatus> get copyWith =>
@@ -168,6 +190,7 @@ mixin _$NewsfeedListingEvent {
     required TResult Function(GetNewsfeedInput? input) fetch,
     required TResult Function(GetNewsfeedInput? input) refresh,
     required TResult Function(Post post) newPostAdded,
+    required TResult Function(bool scrollToTopEvent) scrollToTop,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -175,6 +198,7 @@ mixin _$NewsfeedListingEvent {
     TResult? Function(GetNewsfeedInput? input)? fetch,
     TResult? Function(GetNewsfeedInput? input)? refresh,
     TResult? Function(Post post)? newPostAdded,
+    TResult? Function(bool scrollToTopEvent)? scrollToTop,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -182,6 +206,7 @@ mixin _$NewsfeedListingEvent {
     TResult Function(GetNewsfeedInput? input)? fetch,
     TResult Function(GetNewsfeedInput? input)? refresh,
     TResult Function(Post post)? newPostAdded,
+    TResult Function(bool scrollToTopEvent)? scrollToTop,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -190,6 +215,7 @@ mixin _$NewsfeedListingEvent {
     required TResult Function(NewsfeedListingEventFetch value) fetch,
     required TResult Function(NewsfeedListingEventRefresh value) refresh,
     required TResult Function(NewsfeedListingEventNewPost value) newPostAdded,
+    required TResult Function(NewsfeedListingEventScrollTop value) scrollToTop,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -197,6 +223,7 @@ mixin _$NewsfeedListingEvent {
     TResult? Function(NewsfeedListingEventFetch value)? fetch,
     TResult? Function(NewsfeedListingEventRefresh value)? refresh,
     TResult? Function(NewsfeedListingEventNewPost value)? newPostAdded,
+    TResult? Function(NewsfeedListingEventScrollTop value)? scrollToTop,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -204,6 +231,7 @@ mixin _$NewsfeedListingEvent {
     TResult Function(NewsfeedListingEventFetch value)? fetch,
     TResult Function(NewsfeedListingEventRefresh value)? refresh,
     TResult Function(NewsfeedListingEventNewPost value)? newPostAdded,
+    TResult Function(NewsfeedListingEventScrollTop value)? scrollToTop,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -312,6 +340,7 @@ class _$NewsfeedListingEventFetch implements NewsfeedListingEventFetch {
     required TResult Function(GetNewsfeedInput? input) fetch,
     required TResult Function(GetNewsfeedInput? input) refresh,
     required TResult Function(Post post) newPostAdded,
+    required TResult Function(bool scrollToTopEvent) scrollToTop,
   }) {
     return fetch(input);
   }
@@ -322,6 +351,7 @@ class _$NewsfeedListingEventFetch implements NewsfeedListingEventFetch {
     TResult? Function(GetNewsfeedInput? input)? fetch,
     TResult? Function(GetNewsfeedInput? input)? refresh,
     TResult? Function(Post post)? newPostAdded,
+    TResult? Function(bool scrollToTopEvent)? scrollToTop,
   }) {
     return fetch?.call(input);
   }
@@ -332,6 +362,7 @@ class _$NewsfeedListingEventFetch implements NewsfeedListingEventFetch {
     TResult Function(GetNewsfeedInput? input)? fetch,
     TResult Function(GetNewsfeedInput? input)? refresh,
     TResult Function(Post post)? newPostAdded,
+    TResult Function(bool scrollToTopEvent)? scrollToTop,
     required TResult orElse(),
   }) {
     if (fetch != null) {
@@ -346,6 +377,7 @@ class _$NewsfeedListingEventFetch implements NewsfeedListingEventFetch {
     required TResult Function(NewsfeedListingEventFetch value) fetch,
     required TResult Function(NewsfeedListingEventRefresh value) refresh,
     required TResult Function(NewsfeedListingEventNewPost value) newPostAdded,
+    required TResult Function(NewsfeedListingEventScrollTop value) scrollToTop,
   }) {
     return fetch(this);
   }
@@ -356,6 +388,7 @@ class _$NewsfeedListingEventFetch implements NewsfeedListingEventFetch {
     TResult? Function(NewsfeedListingEventFetch value)? fetch,
     TResult? Function(NewsfeedListingEventRefresh value)? refresh,
     TResult? Function(NewsfeedListingEventNewPost value)? newPostAdded,
+    TResult? Function(NewsfeedListingEventScrollTop value)? scrollToTop,
   }) {
     return fetch?.call(this);
   }
@@ -366,6 +399,7 @@ class _$NewsfeedListingEventFetch implements NewsfeedListingEventFetch {
     TResult Function(NewsfeedListingEventFetch value)? fetch,
     TResult Function(NewsfeedListingEventRefresh value)? refresh,
     TResult Function(NewsfeedListingEventNewPost value)? newPostAdded,
+    TResult Function(NewsfeedListingEventScrollTop value)? scrollToTop,
     required TResult orElse(),
   }) {
     if (fetch != null) {
@@ -470,6 +504,7 @@ class _$NewsfeedListingEventRefresh implements NewsfeedListingEventRefresh {
     required TResult Function(GetNewsfeedInput? input) fetch,
     required TResult Function(GetNewsfeedInput? input) refresh,
     required TResult Function(Post post) newPostAdded,
+    required TResult Function(bool scrollToTopEvent) scrollToTop,
   }) {
     return refresh(input);
   }
@@ -480,6 +515,7 @@ class _$NewsfeedListingEventRefresh implements NewsfeedListingEventRefresh {
     TResult? Function(GetNewsfeedInput? input)? fetch,
     TResult? Function(GetNewsfeedInput? input)? refresh,
     TResult? Function(Post post)? newPostAdded,
+    TResult? Function(bool scrollToTopEvent)? scrollToTop,
   }) {
     return refresh?.call(input);
   }
@@ -490,6 +526,7 @@ class _$NewsfeedListingEventRefresh implements NewsfeedListingEventRefresh {
     TResult Function(GetNewsfeedInput? input)? fetch,
     TResult Function(GetNewsfeedInput? input)? refresh,
     TResult Function(Post post)? newPostAdded,
+    TResult Function(bool scrollToTopEvent)? scrollToTop,
     required TResult orElse(),
   }) {
     if (refresh != null) {
@@ -504,6 +541,7 @@ class _$NewsfeedListingEventRefresh implements NewsfeedListingEventRefresh {
     required TResult Function(NewsfeedListingEventFetch value) fetch,
     required TResult Function(NewsfeedListingEventRefresh value) refresh,
     required TResult Function(NewsfeedListingEventNewPost value) newPostAdded,
+    required TResult Function(NewsfeedListingEventScrollTop value) scrollToTop,
   }) {
     return refresh(this);
   }
@@ -514,6 +552,7 @@ class _$NewsfeedListingEventRefresh implements NewsfeedListingEventRefresh {
     TResult? Function(NewsfeedListingEventFetch value)? fetch,
     TResult? Function(NewsfeedListingEventRefresh value)? refresh,
     TResult? Function(NewsfeedListingEventNewPost value)? newPostAdded,
+    TResult? Function(NewsfeedListingEventScrollTop value)? scrollToTop,
   }) {
     return refresh?.call(this);
   }
@@ -524,6 +563,7 @@ class _$NewsfeedListingEventRefresh implements NewsfeedListingEventRefresh {
     TResult Function(NewsfeedListingEventFetch value)? fetch,
     TResult Function(NewsfeedListingEventRefresh value)? refresh,
     TResult Function(NewsfeedListingEventNewPost value)? newPostAdded,
+    TResult Function(NewsfeedListingEventScrollTop value)? scrollToTop,
     required TResult orElse(),
   }) {
     if (refresh != null) {
@@ -614,6 +654,7 @@ class _$NewsfeedListingEventNewPost implements NewsfeedListingEventNewPost {
     required TResult Function(GetNewsfeedInput? input) fetch,
     required TResult Function(GetNewsfeedInput? input) refresh,
     required TResult Function(Post post) newPostAdded,
+    required TResult Function(bool scrollToTopEvent) scrollToTop,
   }) {
     return newPostAdded(post);
   }
@@ -624,6 +665,7 @@ class _$NewsfeedListingEventNewPost implements NewsfeedListingEventNewPost {
     TResult? Function(GetNewsfeedInput? input)? fetch,
     TResult? Function(GetNewsfeedInput? input)? refresh,
     TResult? Function(Post post)? newPostAdded,
+    TResult? Function(bool scrollToTopEvent)? scrollToTop,
   }) {
     return newPostAdded?.call(post);
   }
@@ -634,6 +676,7 @@ class _$NewsfeedListingEventNewPost implements NewsfeedListingEventNewPost {
     TResult Function(GetNewsfeedInput? input)? fetch,
     TResult Function(GetNewsfeedInput? input)? refresh,
     TResult Function(Post post)? newPostAdded,
+    TResult Function(bool scrollToTopEvent)? scrollToTop,
     required TResult orElse(),
   }) {
     if (newPostAdded != null) {
@@ -648,6 +691,7 @@ class _$NewsfeedListingEventNewPost implements NewsfeedListingEventNewPost {
     required TResult Function(NewsfeedListingEventFetch value) fetch,
     required TResult Function(NewsfeedListingEventRefresh value) refresh,
     required TResult Function(NewsfeedListingEventNewPost value) newPostAdded,
+    required TResult Function(NewsfeedListingEventScrollTop value) scrollToTop,
   }) {
     return newPostAdded(this);
   }
@@ -658,6 +702,7 @@ class _$NewsfeedListingEventNewPost implements NewsfeedListingEventNewPost {
     TResult? Function(NewsfeedListingEventFetch value)? fetch,
     TResult? Function(NewsfeedListingEventRefresh value)? refresh,
     TResult? Function(NewsfeedListingEventNewPost value)? newPostAdded,
+    TResult? Function(NewsfeedListingEventScrollTop value)? scrollToTop,
   }) {
     return newPostAdded?.call(this);
   }
@@ -668,6 +713,7 @@ class _$NewsfeedListingEventNewPost implements NewsfeedListingEventNewPost {
     TResult Function(NewsfeedListingEventFetch value)? fetch,
     TResult Function(NewsfeedListingEventRefresh value)? refresh,
     TResult Function(NewsfeedListingEventNewPost value)? newPostAdded,
+    TResult Function(NewsfeedListingEventScrollTop value)? scrollToTop,
     required TResult orElse(),
   }) {
     if (newPostAdded != null) {
@@ -684,5 +730,156 @@ abstract class NewsfeedListingEventNewPost implements NewsfeedListingEvent {
   Post get post;
   @JsonKey(ignore: true)
   _$$NewsfeedListingEventNewPostCopyWith<_$NewsfeedListingEventNewPost>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$NewsfeedListingEventScrollTopCopyWith<$Res> {
+  factory _$$NewsfeedListingEventScrollTopCopyWith(
+          _$NewsfeedListingEventScrollTop value,
+          $Res Function(_$NewsfeedListingEventScrollTop) then) =
+      __$$NewsfeedListingEventScrollTopCopyWithImpl<$Res>;
+  @useResult
+  $Res call({bool scrollToTopEvent});
+}
+
+/// @nodoc
+class __$$NewsfeedListingEventScrollTopCopyWithImpl<$Res>
+    extends _$NewsfeedListingEventCopyWithImpl<$Res,
+        _$NewsfeedListingEventScrollTop>
+    implements _$$NewsfeedListingEventScrollTopCopyWith<$Res> {
+  __$$NewsfeedListingEventScrollTopCopyWithImpl(
+      _$NewsfeedListingEventScrollTop _value,
+      $Res Function(_$NewsfeedListingEventScrollTop) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? scrollToTopEvent = null,
+  }) {
+    return _then(_$NewsfeedListingEventScrollTop(
+      scrollToTopEvent: null == scrollToTopEvent
+          ? _value.scrollToTopEvent
+          : scrollToTopEvent // ignore: cast_nullable_to_non_nullable
+              as bool,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$NewsfeedListingEventScrollTop implements NewsfeedListingEventScrollTop {
+  _$NewsfeedListingEventScrollTop({required this.scrollToTopEvent});
+
+  @override
+  final bool scrollToTopEvent;
+
+  @override
+  String toString() {
+    return 'NewsfeedListingEvent.scrollToTop(scrollToTopEvent: $scrollToTopEvent)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$NewsfeedListingEventScrollTop &&
+            (identical(other.scrollToTopEvent, scrollToTopEvent) ||
+                other.scrollToTopEvent == scrollToTopEvent));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, scrollToTopEvent);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$NewsfeedListingEventScrollTopCopyWith<_$NewsfeedListingEventScrollTop>
+      get copyWith => __$$NewsfeedListingEventScrollTopCopyWithImpl<
+          _$NewsfeedListingEventScrollTop>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(GetNewsfeedInput? input) fetch,
+    required TResult Function(GetNewsfeedInput? input) refresh,
+    required TResult Function(Post post) newPostAdded,
+    required TResult Function(bool scrollToTopEvent) scrollToTop,
+  }) {
+    return scrollToTop(scrollToTopEvent);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(GetNewsfeedInput? input)? fetch,
+    TResult? Function(GetNewsfeedInput? input)? refresh,
+    TResult? Function(Post post)? newPostAdded,
+    TResult? Function(bool scrollToTopEvent)? scrollToTop,
+  }) {
+    return scrollToTop?.call(scrollToTopEvent);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(GetNewsfeedInput? input)? fetch,
+    TResult Function(GetNewsfeedInput? input)? refresh,
+    TResult Function(Post post)? newPostAdded,
+    TResult Function(bool scrollToTopEvent)? scrollToTop,
+    required TResult orElse(),
+  }) {
+    if (scrollToTop != null) {
+      return scrollToTop(scrollToTopEvent);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(NewsfeedListingEventFetch value) fetch,
+    required TResult Function(NewsfeedListingEventRefresh value) refresh,
+    required TResult Function(NewsfeedListingEventNewPost value) newPostAdded,
+    required TResult Function(NewsfeedListingEventScrollTop value) scrollToTop,
+  }) {
+    return scrollToTop(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(NewsfeedListingEventFetch value)? fetch,
+    TResult? Function(NewsfeedListingEventRefresh value)? refresh,
+    TResult? Function(NewsfeedListingEventNewPost value)? newPostAdded,
+    TResult? Function(NewsfeedListingEventScrollTop value)? scrollToTop,
+  }) {
+    return scrollToTop?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(NewsfeedListingEventFetch value)? fetch,
+    TResult Function(NewsfeedListingEventRefresh value)? refresh,
+    TResult Function(NewsfeedListingEventNewPost value)? newPostAdded,
+    TResult Function(NewsfeedListingEventScrollTop value)? scrollToTop,
+    required TResult orElse(),
+  }) {
+    if (scrollToTop != null) {
+      return scrollToTop(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class NewsfeedListingEventScrollTop implements NewsfeedListingEvent {
+  factory NewsfeedListingEventScrollTop(
+      {required final bool scrollToTopEvent}) = _$NewsfeedListingEventScrollTop;
+
+  bool get scrollToTopEvent;
+  @JsonKey(ignore: true)
+  _$$NewsfeedListingEventScrollTopCopyWith<_$NewsfeedListingEventScrollTop>
       get copyWith => throw _privateConstructorUsedError;
 }

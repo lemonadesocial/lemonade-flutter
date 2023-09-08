@@ -16,8 +16,24 @@ class HomeNewsfeedListView extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-    final refreshController = RefreshController();
-    return BlocBuilder<NewsfeedListingBloc, NewsfeedListingState>(
+    final bloc = context.read<NewsfeedListingBloc>();
+    return BlocConsumer<NewsfeedListingBloc, NewsfeedListingState>(
+      listener: (context, state) {
+        if (state.scrollToTopEvent) {
+          bloc.scrollController
+              .animateTo(
+                bloc.scrollController.position.minScrollExtent,
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.easeIn,
+              )
+              //Reset state
+              .then(
+                (_) => bloc.add(
+                  NewsfeedListingEvent.scrollToTop(scrollToTopEvent: false),
+                ),
+              );
+        }
+      },
       builder: (context, state) {
         if (state.posts.isEmpty) {
           return Center(
@@ -30,26 +46,27 @@ class HomeNewsfeedListView extends StatelessWidget {
           );
         }
         return SmartRefresher(
-          controller: refreshController,
+          controller: bloc.refreshController,
           enablePullUp: true,
           onRefresh: () {
             context
                 .read<NewsfeedListingBloc>()
                 .add(NewsfeedListingEvent.fetch());
-            refreshController.refreshCompleted();
+            bloc.refreshController.refreshCompleted();
           },
           onLoading: () {
             // add load more here
             context
                 .read<NewsfeedListingBloc>()
                 .add(NewsfeedListingEvent.fetch());
-            refreshController.loadComplete();
+            bloc.refreshController.loadComplete();
           },
           footer: const ClassicFooter(
             height: 100,
             loadStyle: LoadStyle.ShowWhenLoading,
           ),
           child: ListView.separated(
+            controller: bloc.scrollController,
             padding: EdgeInsetsDirectional.symmetric(vertical: Spacing.xSmall),
             itemBuilder: (ctx, index) => Padding(
               padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),

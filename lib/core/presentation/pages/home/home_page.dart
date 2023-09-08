@@ -1,12 +1,10 @@
 import 'package:app/core/application/newsfeed/newsfeed_listing_bloc/newsfeed_listing_bloc.dart';
-import 'package:app/core/data/post/newsfeed_repository_impl.dart';
 import 'package:app/core/presentation/pages/home/views/list/home_newsfeed_list.dart';
 import 'package:app/core/presentation/widgets/bottom_bar/bottom_bar_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/appbar_logo.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/home/floating_create_button.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
-import 'package:app/core/service/newsfeed/newsfeed_service.dart';
 import 'package:app/core/service/shake/shake_service.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -22,37 +20,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../application/auth/auth_bloc.dart';
 
 @RoutePage()
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final newFeedBloc =
-        NewsfeedListingBloc(NewsfeedService(NewsfeedRepositoryImpl()));
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<NewsfeedListingBloc>(
-          create: (context) => newFeedBloc..add(NewsfeedListingEvent.fetch()),
-        ),
-        // Add other Blocs here if needed.
-      ],
-      child: Builder(
-        builder: (context) {
-          return const _HomeListingView();
-        },
-      ),
-    );
-  }
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _HomeListingView extends StatefulWidget {
-  const _HomeListingView();
-
-  @override
-  State<_HomeListingView> createState() => _HomePageViewState();
-}
-
-class _HomePageViewState extends State<_HomeListingView> {
+class _HomePageState extends State<HomePage> {
   final userId = getIt<AuthBloc>().state.maybeWhen(
         authenticated: (authSession) => authSession.userId,
         orElse: () => null,
