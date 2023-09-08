@@ -51,4 +51,3 @@ app.*.map.json
 
 # Ignore commit lint
 .githooks/gitlint
-/flutter_format.sh
