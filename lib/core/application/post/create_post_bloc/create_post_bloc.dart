@@ -32,17 +32,7 @@ class CreatePostBloc extends Cubit<CreatePostState> {
   }
 
   void onPostPrivacyChange(PostPrivacy privacy) {
-    switch (privacy) {
-      case PostPrivacy.public:
-        emit(state.copyWith(postPrivacy: PostPrivacy.friends));
-        break;
-      case PostPrivacy.friends:
-        emit(state.copyWith(postPrivacy: PostPrivacy.followers));
-        break;
-      case PostPrivacy.followers:
-        emit(state.copyWith(postPrivacy: PostPrivacy.public));
-        break;
-    }
+    emit(state.copyWith(postPrivacy: privacy));
   }
 
   Future<void> onImagePick() async {

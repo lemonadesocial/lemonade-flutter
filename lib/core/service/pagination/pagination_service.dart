@@ -28,6 +28,7 @@ class PaginationService<T, I> {
   Future<Either<Failure, List<T>>> refresh(I input) async {
     _reachedEnd = false;
     _skip = 0;
+    _items = [];
     return _processGetDataFuture(input);
   }
 

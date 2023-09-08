@@ -20,6 +20,7 @@ class NewsfeedRepositoryImpl implements NewsfeedRepository {
     final result = await _client.query(
       QueryOptions(
           document: getNewsfeedQuery,
+          fetchPolicy: FetchPolicy.networkOnly,
           variables: input?.offset == 0 ? {} : input?.toJson() ?? {},
           parserFn: (data) {
             if (data['getNewsfeed'] == null) {

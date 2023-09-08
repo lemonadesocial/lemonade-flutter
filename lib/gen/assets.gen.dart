@@ -144,6 +144,10 @@ class $AssetsIconsGen {
   SvgGenImage get icFilterOutline =>
       const SvgGenImage('assets/icons/ic_filter_outline.svg');
 
+  /// File path: assets/icons/ic_followers.svg
+  SvgGenImage get icFollowers =>
+      const SvgGenImage('assets/icons/ic_followers.svg');
+
   /// File path: assets/icons/ic_gender_ambiguous.svg
   SvgGenImage get icGenderAmbiguous =>
       const SvgGenImage('assets/icons/ic_gender_ambiguous.svg');
@@ -158,6 +162,10 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/ic_grid.svg
   SvgGenImage get icGrid => const SvgGenImage('assets/icons/ic_grid.svg');
+
+  /// File path: assets/icons/ic_handshake.svg
+  SvgGenImage get icHandshake =>
+      const SvgGenImage('assets/icons/ic_handshake.svg');
 
   /// File path: assets/icons/ic_hash_symbol.svg
   SvgGenImage get icHashSymbol =>
@@ -284,6 +292,10 @@ class $AssetsIconsGen {
   SvgGenImage get icSelectImage =>
       const SvgGenImage('assets/icons/ic_select_image.svg');
 
+  /// File path: assets/icons/ic_send_message.svg
+  SvgGenImage get icSendMessage =>
+      const SvgGenImage('assets/icons/ic_send_message.svg');
+
   /// File path: assets/icons/ic_share.svg
   SvgGenImage get icShare => const SvgGenImage('assets/icons/ic_share.svg');
 
@@ -348,10 +360,12 @@ class $AssetsIconsGen {
         icFacebook,
         icFilter,
         icFilterOutline,
+        icFollowers,
         icGenderAmbiguous,
         icGenderFemale,
         icGenderMale,
         icGrid,
+        icHandshake,
         icHashSymbol,
         icHeart,
         icHeartFillled,
@@ -387,6 +401,7 @@ class $AssetsIconsGen {
         icQr,
         icSearch,
         icSelectImage,
+        icSendMessage,
         icShare,
         icStore,
         icSuccess,
