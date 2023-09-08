@@ -17,6 +17,8 @@ class HomeNewsfeedListView extends StatelessWidget {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
     final bloc = context.read<NewsfeedListingBloc>();
+    final refreshController = RefreshController();
+
     return BlocConsumer<NewsfeedListingBloc, NewsfeedListingState>(
       listener: (context, state) {
         if (state.scrollToTopEvent) {
@@ -46,20 +48,20 @@ class HomeNewsfeedListView extends StatelessWidget {
           );
         }
         return SmartRefresher(
-          controller: bloc.refreshController,
+          controller: refreshController,
           enablePullUp: true,
           onRefresh: () {
             context
                 .read<NewsfeedListingBloc>()
                 .add(NewsfeedListingEvent.fetch());
-            bloc.refreshController.refreshCompleted();
+            refreshController.refreshCompleted();
           },
           onLoading: () {
             // add load more here
             context
                 .read<NewsfeedListingBloc>()
                 .add(NewsfeedListingEvent.fetch());
-            bloc.refreshController.loadComplete();
+            refreshController.loadComplete();
           },
           footer: const ClassicFooter(
             height: 100,
