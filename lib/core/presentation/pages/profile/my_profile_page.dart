@@ -12,38 +12,24 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class MyProfilePage extends StatelessWidget {
   const MyProfilePage({super.key});
 
-  _walletBlocProviderBuilder({required Widget child}) {
-    return BlocProvider(
-        create: (context) =>
-            WalletBloc()..add(const WalletEventInitWalletConnect()),
-        child: child);
-  }
-
-  _profileBlocProviderBuilder(
-      {required Widget Function(BuildContext context, String userId) builder}) {
-    return BlocBuilder<AuthBloc, AuthState>(
-      builder: (context, authState) {
-        final userId = authState.maybeWhen(
+  @override
+  Widget build(BuildContext context) {
+    final userId = getIt<AuthBloc>().state.maybeWhen(
           authenticated: (authSession) => authSession.userId,
           orElse: () => '',
         );
-        return BlocProvider(
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
           create: (context) => UserProfileBloc(getIt<UserRepository>())
-            ..add(
-              UserProfileEvent.fetch(userId: userId),
-            ),
-          child: builder(context, userId),
-        );
-      },
+            ..add(UserProfileEvent.fetch(userId: userId)),
+        ),
+        BlocProvider(
+          create: (context) =>
+              WalletBloc()..add(const WalletEventInitWalletConnect()),
+        ),
+      ],
+      child: ProfilePageView(userId: userId),
     );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return _profileBlocProviderBuilder(builder: (context, userId) {
-      return _walletBlocProviderBuilder(
-        child: ProfilePageView(userId: userId),
-      );
-    });
   }
 }

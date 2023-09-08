@@ -22,6 +22,7 @@ class PostsListingBloc extends Bloc<PostsListingEvent, PostsListingState> {
     required this.defaultInput,
   }) : super(PostsListingState.loading()) {
     on<PostsListingEventFetch>(_onFetch);
+    on<PostsListingEventRefresh>(_onRefresh);
   }
 
   Future<Either<Failure, List<Post>>> _getPosts(int skip, bool endReached,
@@ -29,8 +30,20 @@ class PostsListingBloc extends Bloc<PostsListingEvent, PostsListingState> {
     return postService.getPosts(input: input?.copyWith(skip: skip));
   }
 
-  _onFetch(PostsListingEventFetch event, Emitter emit) async {
+  Future<void> _onFetch(PostsListingEventFetch event, Emitter emit) async {
     final result = await paginationService.fetch(defaultInput);
+    result.fold(
+      (l) => emit(PostsListingState.failure()),
+      (posts) => emit(
+        PostsListingState.fetched(
+          posts: posts,
+        ),
+      ),
+    );
+  }
+
+  Future<void> _onRefresh(PostsListingEventRefresh event, Emitter emit) async {
+    final result = await paginationService.refresh(defaultInput);
     result.fold(
       (l) => emit(PostsListingState.failure()),
       (posts) => emit(
@@ -55,4 +68,6 @@ class PostsListingState with _$PostsListingState {
 class PostsListingEvent with _$PostsListingEvent {
   factory PostsListingEvent.fetch({GetPostsInput? input}) =
       PostsListingEventFetch;
+
+  factory PostsListingEvent.refresh() = PostsListingEventRefresh;
 }

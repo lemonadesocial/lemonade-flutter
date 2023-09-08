@@ -9,12 +9,15 @@ import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:slang/builder/utils/string_extensions.dart';
+import 'package:app/core/presentation/dpos/common/dropdown_item_dpo.dart';
 
 import '../../../../i18n/i18n.g.dart';
 import '../../../../injection/register_module.dart';
 import '../../../domain/post/post_repository.dart';
 import '../../../service/post/post_service.dart';
+import '../../widgets/floating_frosted_glass_dropdown_widget.dart';
 import '../../widgets/theme_svg_icon_widget.dart';
 import 'widgets/create_post_image_widget.dart';
 
@@ -47,6 +50,8 @@ class CreatePostPage extends StatelessWidget {
           if (state.status == CreatePostStatus.error) {}
         },
         builder: (context, state) {
+          final sendDisabled =
+              createPostBloc.state.postDescription?.isEmpty ?? true;
           return Scaffold(
             backgroundColor: colorScheme.primary,
             appBar: AppBar(
@@ -54,27 +59,46 @@ class CreatePostPage extends StatelessWidget {
               actions: [
                 Row(
                   children: [
-                    ElevatedButton(
-                      onPressed:
-                          createPostBloc.state.postDescription?.isEmpty ?? true
-                              ? null
-                              : createPostBloc.createNewPost,
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
+                    FloatingFrostedGlassDropdown(
+                      items: <DropdownItemDpo<PostPrivacy>>[
+                        DropdownItemDpo(
+                          label: PostPrivacy.public.name.capitalize(),
+                          value: PostPrivacy.public,
+                          leadingIcon: Assets.icons.icPublic.svg(),
+                        ),
+                        DropdownItemDpo(
+                          label: PostPrivacy.followers.name.capitalize(),
+                          value: PostPrivacy.followers,
+                          leadingIcon: Assets.icons.icFollowers.svg(),
+                        ),
+                        DropdownItemDpo(
+                          label: PostPrivacy.friends.name.capitalize(),
+                          value: PostPrivacy.friends,
+                          leadingIcon: Assets.icons.icHandshake.svg(),
+                        ),
+                      ],
+                      onItemPressed: (item) =>
+                          createPostBloc.onPostPrivacyChange(item!.value!),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: colorScheme.primary,
                           borderRadius: BorderRadius.circular(32),
+                          border: Border.all(
+                            color: colorScheme.outline,
+                          ),
                         ),
                         padding: EdgeInsets.symmetric(
-                          horizontal: Spacing.smMedium,
                           vertical: Spacing.superExtraSmall,
+                          horizontal: Spacing.small,
                         ),
-                        backgroundColor: colorScheme.onTertiary,
-                        disabledBackgroundColor:
-                            colorScheme.onSecondaryContainer,
-                      ),
-                      child: Text(
-                        t.post.post,
-                        style:
-                            Typo.medium.copyWith(fontWeight: FontWeight.w700),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            postPrivacyIcon(state.postPrivacy),
+                            SizedBox(width: Spacing.superExtraSmall),
+                            Text(state.postPrivacy.name.capitalize()),
+                          ],
+                        ),
                       ),
                     ),
                   ],
@@ -174,31 +198,62 @@ class CreatePostPage extends StatelessWidget {
                             ],
                           ),
                         ),
-                        InkWell(
-                          onTap: () => createPostBloc
-                              .onPostPrivacyChange(state.postPrivacy),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: colorScheme.primary,
-                              borderRadius: BorderRadius.circular(32),
-                              border: Border.all(
-                                color: colorScheme.outline,
+                        state.status == CreatePostStatus.loading
+                            ? Container(
+                                width: 80.w,
+                                height: 36.h,
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: Spacing.medium,
+                                  vertical: Spacing.superExtraSmall,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: colorScheme.onTertiary,
+                                  borderRadius:
+                                      BorderRadius.circular(LemonRadius.small),
+                                ),
+                                child: Center(
+                                  child: CircularProgressIndicator(
+                                    color: colorScheme.onPrimary,
+                                  ),
+                                ),
+                              )
+                            : SizedBox(
+                                width: 80.w,
+                                height: 36.h,
+                                child: ElevatedButton(
+                                  onPressed: sendDisabled
+                                      ? null
+                                      : createPostBloc.createNewPost,
+                                  style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(
+                                          LemonRadius.small),
+                                    ),
+                                    alignment: Alignment.center,
+                                    backgroundColor: colorScheme.onTertiary,
+                                    disabledBackgroundColor:
+                                        colorScheme.onSecondaryContainer,
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        t.post.post,
+                                        style: Typo.medium.copyWith(
+                                            fontWeight: FontWeight.w700),
+                                      ),
+                                      SizedBox(width: Spacing.extraSmall),
+                                      ThemeSvgIcon(
+                                        color: sendDisabled
+                                            ? colorScheme.onSurfaceVariant
+                                            : colorScheme.onPrimary,
+                                        builder: (filter) => Assets
+                                            .icons.icSendMessage
+                                            .svg(colorFilter: filter),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ),
-                            ),
-                            padding: EdgeInsets.symmetric(
-                              vertical: Spacing.superExtraSmall,
-                              horizontal: Spacing.small,
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Assets.icons.icPublic.svg(),
-                                SizedBox(width: Spacing.superExtraSmall),
-                                Text(state.postPrivacy.name.capitalize()),
-                              ],
-                            ),
-                          ),
-                        ),
                       ],
                     ),
                   ),
@@ -210,5 +265,16 @@ class CreatePostPage extends StatelessWidget {
         },
       ),
     );
+  }
+
+  Widget postPrivacyIcon(PostPrivacy privacy) {
+    switch (privacy) {
+      case PostPrivacy.public:
+        return Assets.icons.icPublic.svg();
+      case PostPrivacy.followers:
+        return Assets.icons.icFollowers.svg();
+      case PostPrivacy.friends:
+        return Assets.icons.icHandshake.svg();
+    }
   }
 }

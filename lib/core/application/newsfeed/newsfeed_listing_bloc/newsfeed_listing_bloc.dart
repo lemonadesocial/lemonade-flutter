@@ -11,12 +11,11 @@ part 'newsfeed_listing_bloc.freezed.dart';
 
 class NewsfeedListingBloc
     extends Bloc<NewsfeedListingEvent, NewsfeedListingState> {
-  NewsfeedListingBloc(
-    this.newsfeedService, {
-    required this.defaultInput,
-  }) : super(NewsfeedListingState.initial()) {
+  NewsfeedListingBloc(this.newsfeedService)
+      : super(NewsfeedListingState.initial()) {
     on<NewsfeedListingEventFetch>(_onFetch);
     on<NewsfeedListingEventNewPost>(_onNewPostAdded);
+    on<NewsfeedListingEventRefresh>(_onRefresh);
   }
 
   final NewsfeedService newsfeedService;
@@ -24,7 +23,7 @@ class NewsfeedListingBloc
       offsetPaginationService = OffsetPaginationService(
     getDataFuture: _getNewsfeed,
   );
-  final GetNewsfeedInput defaultInput;
+  final defaultInput = const GetNewsfeedInput();
 
   Future<Either<Failure, List<Post>>> _getNewsfeed(
     int? offset,
@@ -45,6 +44,23 @@ class NewsfeedListingBloc
   Future<void> _onFetch(NewsfeedListingEventFetch event, Emitter emit) async {
     emit(state.copyWith(status: NewsfeedStatus.loading));
     final result = await offsetPaginationService.fetch(defaultInput);
+    result.fold(
+      (l) => emit(state.copyWith(status: NewsfeedStatus.failure)),
+      (posts) => emit(
+        state.copyWith(
+          status: NewsfeedStatus.fetched,
+          posts: posts,
+        ),
+      ),
+    );
+  }
+
+  Future<void> _onRefresh(
+    NewsfeedListingEventRefresh event,
+    Emitter emit,
+  ) async {
+    emit(state.copyWith(status: NewsfeedStatus.loading));
+    final result = await offsetPaginationService.refresh(defaultInput);
     result.fold(
       (l) => emit(state.copyWith(status: NewsfeedStatus.failure)),
       (posts) => emit(
@@ -82,6 +98,9 @@ class NewsfeedListingState with _$NewsfeedListingState {
 class NewsfeedListingEvent with _$NewsfeedListingEvent {
   factory NewsfeedListingEvent.fetch({GetNewsfeedInput? input}) =
       NewsfeedListingEventFetch;
+
+  factory NewsfeedListingEvent.refresh({GetNewsfeedInput? input}) =
+      NewsfeedListingEventRefresh;
 
   factory NewsfeedListingEvent.newPostAdded({required Post post}) =
       NewsfeedListingEventNewPost;

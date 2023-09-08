@@ -166,18 +166,21 @@ mixin _$NewsfeedListingEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(GetNewsfeedInput? input) fetch,
+    required TResult Function(GetNewsfeedInput? input) refresh,
     required TResult Function(Post post) newPostAdded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(GetNewsfeedInput? input)? fetch,
+    TResult? Function(GetNewsfeedInput? input)? refresh,
     TResult? Function(Post post)? newPostAdded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(GetNewsfeedInput? input)? fetch,
+    TResult Function(GetNewsfeedInput? input)? refresh,
     TResult Function(Post post)? newPostAdded,
     required TResult orElse(),
   }) =>
@@ -185,18 +188,21 @@ mixin _$NewsfeedListingEvent {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(NewsfeedListingEventFetch value) fetch,
+    required TResult Function(NewsfeedListingEventRefresh value) refresh,
     required TResult Function(NewsfeedListingEventNewPost value) newPostAdded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(NewsfeedListingEventFetch value)? fetch,
+    TResult? Function(NewsfeedListingEventRefresh value)? refresh,
     TResult? Function(NewsfeedListingEventNewPost value)? newPostAdded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(NewsfeedListingEventFetch value)? fetch,
+    TResult Function(NewsfeedListingEventRefresh value)? refresh,
     TResult Function(NewsfeedListingEventNewPost value)? newPostAdded,
     required TResult orElse(),
   }) =>
@@ -304,6 +310,7 @@ class _$NewsfeedListingEventFetch implements NewsfeedListingEventFetch {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(GetNewsfeedInput? input) fetch,
+    required TResult Function(GetNewsfeedInput? input) refresh,
     required TResult Function(Post post) newPostAdded,
   }) {
     return fetch(input);
@@ -313,6 +320,7 @@ class _$NewsfeedListingEventFetch implements NewsfeedListingEventFetch {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(GetNewsfeedInput? input)? fetch,
+    TResult? Function(GetNewsfeedInput? input)? refresh,
     TResult? Function(Post post)? newPostAdded,
   }) {
     return fetch?.call(input);
@@ -322,6 +330,7 @@ class _$NewsfeedListingEventFetch implements NewsfeedListingEventFetch {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(GetNewsfeedInput? input)? fetch,
+    TResult Function(GetNewsfeedInput? input)? refresh,
     TResult Function(Post post)? newPostAdded,
     required TResult orElse(),
   }) {
@@ -335,6 +344,7 @@ class _$NewsfeedListingEventFetch implements NewsfeedListingEventFetch {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(NewsfeedListingEventFetch value) fetch,
+    required TResult Function(NewsfeedListingEventRefresh value) refresh,
     required TResult Function(NewsfeedListingEventNewPost value) newPostAdded,
   }) {
     return fetch(this);
@@ -344,6 +354,7 @@ class _$NewsfeedListingEventFetch implements NewsfeedListingEventFetch {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(NewsfeedListingEventFetch value)? fetch,
+    TResult? Function(NewsfeedListingEventRefresh value)? refresh,
     TResult? Function(NewsfeedListingEventNewPost value)? newPostAdded,
   }) {
     return fetch?.call(this);
@@ -353,6 +364,7 @@ class _$NewsfeedListingEventFetch implements NewsfeedListingEventFetch {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(NewsfeedListingEventFetch value)? fetch,
+    TResult Function(NewsfeedListingEventRefresh value)? refresh,
     TResult Function(NewsfeedListingEventNewPost value)? newPostAdded,
     required TResult orElse(),
   }) {
@@ -370,6 +382,164 @@ abstract class NewsfeedListingEventFetch implements NewsfeedListingEvent {
   GetNewsfeedInput? get input;
   @JsonKey(ignore: true)
   _$$NewsfeedListingEventFetchCopyWith<_$NewsfeedListingEventFetch>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$NewsfeedListingEventRefreshCopyWith<$Res> {
+  factory _$$NewsfeedListingEventRefreshCopyWith(
+          _$NewsfeedListingEventRefresh value,
+          $Res Function(_$NewsfeedListingEventRefresh) then) =
+      __$$NewsfeedListingEventRefreshCopyWithImpl<$Res>;
+  @useResult
+  $Res call({GetNewsfeedInput? input});
+
+  $GetNewsfeedInputCopyWith<$Res>? get input;
+}
+
+/// @nodoc
+class __$$NewsfeedListingEventRefreshCopyWithImpl<$Res>
+    extends _$NewsfeedListingEventCopyWithImpl<$Res,
+        _$NewsfeedListingEventRefresh>
+    implements _$$NewsfeedListingEventRefreshCopyWith<$Res> {
+  __$$NewsfeedListingEventRefreshCopyWithImpl(
+      _$NewsfeedListingEventRefresh _value,
+      $Res Function(_$NewsfeedListingEventRefresh) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? input = freezed,
+  }) {
+    return _then(_$NewsfeedListingEventRefresh(
+      input: freezed == input
+          ? _value.input
+          : input // ignore: cast_nullable_to_non_nullable
+              as GetNewsfeedInput?,
+    ));
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $GetNewsfeedInputCopyWith<$Res>? get input {
+    if (_value.input == null) {
+      return null;
+    }
+
+    return $GetNewsfeedInputCopyWith<$Res>(_value.input!, (value) {
+      return _then(_value.copyWith(input: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$NewsfeedListingEventRefresh implements NewsfeedListingEventRefresh {
+  _$NewsfeedListingEventRefresh({this.input});
+
+  @override
+  final GetNewsfeedInput? input;
+
+  @override
+  String toString() {
+    return 'NewsfeedListingEvent.refresh(input: $input)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$NewsfeedListingEventRefresh &&
+            (identical(other.input, input) || other.input == input));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, input);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$NewsfeedListingEventRefreshCopyWith<_$NewsfeedListingEventRefresh>
+      get copyWith => __$$NewsfeedListingEventRefreshCopyWithImpl<
+          _$NewsfeedListingEventRefresh>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(GetNewsfeedInput? input) fetch,
+    required TResult Function(GetNewsfeedInput? input) refresh,
+    required TResult Function(Post post) newPostAdded,
+  }) {
+    return refresh(input);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(GetNewsfeedInput? input)? fetch,
+    TResult? Function(GetNewsfeedInput? input)? refresh,
+    TResult? Function(Post post)? newPostAdded,
+  }) {
+    return refresh?.call(input);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(GetNewsfeedInput? input)? fetch,
+    TResult Function(GetNewsfeedInput? input)? refresh,
+    TResult Function(Post post)? newPostAdded,
+    required TResult orElse(),
+  }) {
+    if (refresh != null) {
+      return refresh(input);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(NewsfeedListingEventFetch value) fetch,
+    required TResult Function(NewsfeedListingEventRefresh value) refresh,
+    required TResult Function(NewsfeedListingEventNewPost value) newPostAdded,
+  }) {
+    return refresh(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(NewsfeedListingEventFetch value)? fetch,
+    TResult? Function(NewsfeedListingEventRefresh value)? refresh,
+    TResult? Function(NewsfeedListingEventNewPost value)? newPostAdded,
+  }) {
+    return refresh?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(NewsfeedListingEventFetch value)? fetch,
+    TResult Function(NewsfeedListingEventRefresh value)? refresh,
+    TResult Function(NewsfeedListingEventNewPost value)? newPostAdded,
+    required TResult orElse(),
+  }) {
+    if (refresh != null) {
+      return refresh(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class NewsfeedListingEventRefresh implements NewsfeedListingEvent {
+  factory NewsfeedListingEventRefresh({final GetNewsfeedInput? input}) =
+      _$NewsfeedListingEventRefresh;
+
+  GetNewsfeedInput? get input;
+  @JsonKey(ignore: true)
+  _$$NewsfeedListingEventRefreshCopyWith<_$NewsfeedListingEventRefresh>
       get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -442,6 +612,7 @@ class _$NewsfeedListingEventNewPost implements NewsfeedListingEventNewPost {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(GetNewsfeedInput? input) fetch,
+    required TResult Function(GetNewsfeedInput? input) refresh,
     required TResult Function(Post post) newPostAdded,
   }) {
     return newPostAdded(post);
@@ -451,6 +622,7 @@ class _$NewsfeedListingEventNewPost implements NewsfeedListingEventNewPost {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(GetNewsfeedInput? input)? fetch,
+    TResult? Function(GetNewsfeedInput? input)? refresh,
     TResult? Function(Post post)? newPostAdded,
   }) {
     return newPostAdded?.call(post);
@@ -460,6 +632,7 @@ class _$NewsfeedListingEventNewPost implements NewsfeedListingEventNewPost {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(GetNewsfeedInput? input)? fetch,
+    TResult Function(GetNewsfeedInput? input)? refresh,
     TResult Function(Post post)? newPostAdded,
     required TResult orElse(),
   }) {
@@ -473,6 +646,7 @@ class _$NewsfeedListingEventNewPost implements NewsfeedListingEventNewPost {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(NewsfeedListingEventFetch value) fetch,
+    required TResult Function(NewsfeedListingEventRefresh value) refresh,
     required TResult Function(NewsfeedListingEventNewPost value) newPostAdded,
   }) {
     return newPostAdded(this);
@@ -482,6 +656,7 @@ class _$NewsfeedListingEventNewPost implements NewsfeedListingEventNewPost {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(NewsfeedListingEventFetch value)? fetch,
+    TResult? Function(NewsfeedListingEventRefresh value)? refresh,
     TResult? Function(NewsfeedListingEventNewPost value)? newPostAdded,
   }) {
     return newPostAdded?.call(this);
@@ -491,6 +666,7 @@ class _$NewsfeedListingEventNewPost implements NewsfeedListingEventNewPost {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(NewsfeedListingEventFetch value)? fetch,
+    TResult Function(NewsfeedListingEventRefresh value)? refresh,
     TResult Function(NewsfeedListingEventNewPost value)? newPostAdded,
     required TResult orElse(),
   }) {

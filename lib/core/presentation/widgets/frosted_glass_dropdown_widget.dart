@@ -6,6 +6,7 @@ import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class FrostedGlassDropdown<T> extends StatefulWidget {
   final List<DropdownItemDpo<T>> items;
@@ -78,6 +79,10 @@ class _FrostedGlassDropdownController<T>
         child: Row(
           mainAxisSize: MainAxisSize.max,
           children: [
+            if (item.leadingIcon != null) ...[
+              item.leadingIcon!,
+              SizedBox(width: 9.75.w),
+            ],
             Text(item.label),
             const Spacer(),
             if (isSelected)

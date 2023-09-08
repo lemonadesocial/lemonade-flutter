@@ -1,6 +1,5 @@
 import 'package:app/core/application/newsfeed/newsfeed_listing_bloc/newsfeed_listing_bloc.dart';
 import 'package:app/core/data/post/newsfeed_repository_impl.dart';
-import 'package:app/core/domain/newsfeed/input/get_newsfeed_input.dart';
 import 'package:app/core/presentation/pages/home/views/list/home_newsfeed_list.dart';
 import 'package:app/core/presentation/widgets/bottom_bar/bottom_bar_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/appbar_logo.dart';
@@ -20,17 +19,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../application/auth/auth_bloc.dart';
+
 @RoutePage()
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final newFeedBloc = NewsfeedListingBloc(
-      NewsfeedService(NewsfeedRepositoryImpl()),
-      defaultInput: const GetNewsfeedInput(),
-    );
-
+    final newFeedBloc =
+        NewsfeedListingBloc(NewsfeedService(NewsfeedRepositoryImpl()));
     return MultiBlocProvider(
       providers: [
         BlocProvider<NewsfeedListingBloc>(
@@ -55,6 +53,11 @@ class _HomeListingView extends StatefulWidget {
 }
 
 class _HomePageViewState extends State<_HomeListingView> {
+  final userId = getIt<AuthBloc>().state.maybeWhen(
+        authenticated: (authSession) => authSession.userId,
+        orElse: () => null,
+      );
+
   @override
   void initState() {
     super.initState();
@@ -89,19 +92,21 @@ class _HomePageViewState extends State<_HomeListingView> {
       ),
       backgroundColor: LemonColor.black,
       body: const HomeNewsfeedListView(),
-      floatingActionButton: Padding(
-        padding: EdgeInsets.only(bottom: BottomBar.bottomBarHeight),
-        child: FloatingCreateButton(
-          onTap: () => context.router.push(
-            CreatePostRoute(
-              onPostCreated: (newPost) =>
-                  context.read<NewsfeedListingBloc>().add(
-                        NewsfeedListingEvent.newPostAdded(post: newPost),
-                      ),
+      floatingActionButton: userId == null
+          ? null
+          : Padding(
+              padding: EdgeInsets.only(bottom: BottomBar.bottomBarHeight),
+              child: FloatingCreateButton(
+                onTap: () => context.router.push(
+                  CreatePostRoute(
+                    onPostCreated: (newPost) =>
+                        context.read<NewsfeedListingBloc>().add(
+                              NewsfeedListingEvent.newPostAdded(post: newPost),
+                            ),
+                  ),
+                ),
+              ),
             ),
-          ),
-        ),
-      ),
     );
   }
 }

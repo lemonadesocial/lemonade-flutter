@@ -449,42 +449,43 @@ abstract class PostsListingStateFailure implements PostsListingState {
 
 /// @nodoc
 mixin _$PostsListingEvent {
-  GetPostsInput? get input => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(GetPostsInput? input) fetch,
+    required TResult Function() refresh,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(GetPostsInput? input)? fetch,
+    TResult? Function()? refresh,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(GetPostsInput? input)? fetch,
+    TResult Function()? refresh,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(PostsListingEventFetch value) fetch,
+    required TResult Function(PostsListingEventRefresh value) refresh,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(PostsListingEventFetch value)? fetch,
+    TResult? Function(PostsListingEventRefresh value)? refresh,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(PostsListingEventFetch value)? fetch,
+    TResult Function(PostsListingEventRefresh value)? refresh,
     required TResult orElse(),
   }) =>
-      throw _privateConstructorUsedError;
-
-  @JsonKey(ignore: true)
-  $PostsListingEventCopyWith<PostsListingEvent> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -493,10 +494,6 @@ abstract class $PostsListingEventCopyWith<$Res> {
   factory $PostsListingEventCopyWith(
           PostsListingEvent value, $Res Function(PostsListingEvent) then) =
       _$PostsListingEventCopyWithImpl<$Res, PostsListingEvent>;
-  @useResult
-  $Res call({GetPostsInput? input});
-
-  $GetPostsInputCopyWith<$Res>? get input;
 }
 
 /// @nodoc
@@ -508,44 +505,16 @@ class _$PostsListingEventCopyWithImpl<$Res, $Val extends PostsListingEvent>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
-
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? input = freezed,
-  }) {
-    return _then(_value.copyWith(
-      input: freezed == input
-          ? _value.input
-          : input // ignore: cast_nullable_to_non_nullable
-              as GetPostsInput?,
-    ) as $Val);
-  }
-
-  @override
-  @pragma('vm:prefer-inline')
-  $GetPostsInputCopyWith<$Res>? get input {
-    if (_value.input == null) {
-      return null;
-    }
-
-    return $GetPostsInputCopyWith<$Res>(_value.input!, (value) {
-      return _then(_value.copyWith(input: value) as $Val);
-    });
-  }
 }
 
 /// @nodoc
-abstract class _$$PostsListingEventFetchCopyWith<$Res>
-    implements $PostsListingEventCopyWith<$Res> {
+abstract class _$$PostsListingEventFetchCopyWith<$Res> {
   factory _$$PostsListingEventFetchCopyWith(_$PostsListingEventFetch value,
           $Res Function(_$PostsListingEventFetch) then) =
       __$$PostsListingEventFetchCopyWithImpl<$Res>;
-  @override
   @useResult
   $Res call({GetPostsInput? input});
 
-  @override
   $GetPostsInputCopyWith<$Res>? get input;
 }
 
@@ -568,6 +537,18 @@ class __$$PostsListingEventFetchCopyWithImpl<$Res>
           : input // ignore: cast_nullable_to_non_nullable
               as GetPostsInput?,
     ));
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $GetPostsInputCopyWith<$Res>? get input {
+    if (_value.input == null) {
+      return null;
+    }
+
+    return $GetPostsInputCopyWith<$Res>(_value.input!, (value) {
+      return _then(_value.copyWith(input: value));
+    });
   }
 }
 
@@ -606,6 +587,7 @@ class _$PostsListingEventFetch implements PostsListingEventFetch {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(GetPostsInput? input) fetch,
+    required TResult Function() refresh,
   }) {
     return fetch(input);
   }
@@ -614,6 +596,7 @@ class _$PostsListingEventFetch implements PostsListingEventFetch {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(GetPostsInput? input)? fetch,
+    TResult? Function()? refresh,
   }) {
     return fetch?.call(input);
   }
@@ -622,6 +605,7 @@ class _$PostsListingEventFetch implements PostsListingEventFetch {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(GetPostsInput? input)? fetch,
+    TResult Function()? refresh,
     required TResult orElse(),
   }) {
     if (fetch != null) {
@@ -634,6 +618,7 @@ class _$PostsListingEventFetch implements PostsListingEventFetch {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(PostsListingEventFetch value) fetch,
+    required TResult Function(PostsListingEventRefresh value) refresh,
   }) {
     return fetch(this);
   }
@@ -642,6 +627,7 @@ class _$PostsListingEventFetch implements PostsListingEventFetch {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(PostsListingEventFetch value)? fetch,
+    TResult? Function(PostsListingEventRefresh value)? refresh,
   }) {
     return fetch?.call(this);
   }
@@ -650,6 +636,7 @@ class _$PostsListingEventFetch implements PostsListingEventFetch {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(PostsListingEventFetch value)? fetch,
+    TResult Function(PostsListingEventRefresh value)? refresh,
     required TResult orElse(),
   }) {
     if (fetch != null) {
@@ -663,10 +650,111 @@ abstract class PostsListingEventFetch implements PostsListingEvent {
   factory PostsListingEventFetch({final GetPostsInput? input}) =
       _$PostsListingEventFetch;
 
-  @override
   GetPostsInput? get input;
-  @override
   @JsonKey(ignore: true)
   _$$PostsListingEventFetchCopyWith<_$PostsListingEventFetch> get copyWith =>
       throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$PostsListingEventRefreshCopyWith<$Res> {
+  factory _$$PostsListingEventRefreshCopyWith(_$PostsListingEventRefresh value,
+          $Res Function(_$PostsListingEventRefresh) then) =
+      __$$PostsListingEventRefreshCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$PostsListingEventRefreshCopyWithImpl<$Res>
+    extends _$PostsListingEventCopyWithImpl<$Res, _$PostsListingEventRefresh>
+    implements _$$PostsListingEventRefreshCopyWith<$Res> {
+  __$$PostsListingEventRefreshCopyWithImpl(_$PostsListingEventRefresh _value,
+      $Res Function(_$PostsListingEventRefresh) _then)
+      : super(_value, _then);
+}
+
+/// @nodoc
+
+class _$PostsListingEventRefresh implements PostsListingEventRefresh {
+  _$PostsListingEventRefresh();
+
+  @override
+  String toString() {
+    return 'PostsListingEvent.refresh()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$PostsListingEventRefresh);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(GetPostsInput? input) fetch,
+    required TResult Function() refresh,
+  }) {
+    return refresh();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(GetPostsInput? input)? fetch,
+    TResult? Function()? refresh,
+  }) {
+    return refresh?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(GetPostsInput? input)? fetch,
+    TResult Function()? refresh,
+    required TResult orElse(),
+  }) {
+    if (refresh != null) {
+      return refresh();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(PostsListingEventFetch value) fetch,
+    required TResult Function(PostsListingEventRefresh value) refresh,
+  }) {
+    return refresh(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(PostsListingEventFetch value)? fetch,
+    TResult? Function(PostsListingEventRefresh value)? refresh,
+  }) {
+    return refresh?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(PostsListingEventFetch value)? fetch,
+    TResult Function(PostsListingEventRefresh value)? refresh,
+    required TResult orElse(),
+  }) {
+    if (refresh != null) {
+      return refresh(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class PostsListingEventRefresh implements PostsListingEvent {
+  factory PostsListingEventRefresh() = _$PostsListingEventRefresh;
 }
