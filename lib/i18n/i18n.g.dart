@@ -1,9 +1,9 @@
 /// Generated file. Do not edit.
 ///
 /// Locales: 1
-/// Strings: 196
+/// Strings: 198
 ///
-/// Built on 2023-09-07 at 13:35 UTC
+/// Built on 2023-09-08 at 14:15 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -401,6 +401,7 @@ class _I18nCommonEn {
         one: 'host',
         other: 'hosts',
       );
+  String get viewMore => 'View more';
 }
 
 // Path: event
@@ -435,6 +436,7 @@ class _I18nEventEn {
   String get takeMeToEvent => 'Take me to the event';
   String get inviteFriends => 'Invite friends';
   String get processing => 'Processing...';
+  String get aboutTheEvent => 'About the event';
 }
 
 // Path: onboarding
@@ -1037,6 +1039,8 @@ extension on _I18nEn {
               one: 'host',
               other: 'hosts',
             );
+      case 'common.viewMore':
+        return 'View more';
       case 'event.events':
         return 'Events';
       case 'event.all':
@@ -1082,6 +1086,8 @@ extension on _I18nEn {
         return 'Invite friends';
       case 'event.processing':
         return 'Processing...';
+      case 'event.aboutTheEvent':
+        return 'About the event';
       case 'onboarding.pickUsername':
         return 'Pick username';
       case 'onboarding.pickUsernameDesc':
