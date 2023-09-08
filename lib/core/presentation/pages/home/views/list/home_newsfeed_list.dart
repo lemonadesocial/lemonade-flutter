@@ -7,8 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
-import '../../../../widgets/loading_widget.dart';
-
 class HomeNewsfeedListView extends StatelessWidget {
   const HomeNewsfeedListView({
     super.key,
@@ -22,12 +20,9 @@ class HomeNewsfeedListView extends StatelessWidget {
     return BlocBuilder<NewsfeedListingBloc, NewsfeedListingState>(
       builder: (context, state) {
         if (state.posts.isEmpty) {
-          return state.status == NewsfeedStatus.loading
-              ? Loading.defaultLoading(context)
-              : Center(
-                  child:
-                      EmptyList(emptyText: t.notification.emptyNotifications),
-                );
+          return Center(
+            child: EmptyList(emptyText: t.notification.emptyNotifications),
+          );
         }
         if (state.status == NewsfeedStatus.failure) {
           return Center(
@@ -40,7 +35,7 @@ class HomeNewsfeedListView extends StatelessWidget {
           onRefresh: () {
             context
                 .read<NewsfeedListingBloc>()
-                .add(NewsfeedListingEvent.refresh());
+                .add(NewsfeedListingEvent.fetch());
             refreshController.refreshCompleted();
           },
           onLoading: () {
