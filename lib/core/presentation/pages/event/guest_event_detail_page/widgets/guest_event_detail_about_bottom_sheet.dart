@@ -79,12 +79,10 @@ class GuestEventDetailAboutBottomSheet extends StatelessWidget {
                 SliverToBoxAdapter(
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-                    child: Flexible(
-                      child: Text(
-                        event.description ?? '',
-                        style: Typo.mediumPlus.copyWith(
-                          color: colorScheme.onSurface,
-                        ),
+                    child: Text(
+                      event.description ?? '',
+                      style: Typo.mediumPlus.copyWith(
+                        color: colorScheme.onSurface,
                       ),
                     ),
                   ),

@@ -20,5 +20,7 @@
     "takeMeToEvent": "Take me to the event",
     "inviteFriends": "Invite friends",
     "processing": "Processing...",
-    "aboutTheEvent": "About the event"
+    "aboutTheEvent": "About the event",
+    "eventStartIn": "Starting in $time",
+    "eventEnded": "Event ended"
 }

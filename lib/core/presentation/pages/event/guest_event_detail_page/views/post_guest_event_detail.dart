@@ -1,5 +1,6 @@
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/presentation/pages/event/guest_event_detail_page/widgets/guest_event_detail_about_card.dart';
+import 'package:app/core/presentation/pages/event/guest_event_detail_page/widgets/guest_event_detail_clock.dart';
 import 'package:app/core/presentation/pages/event/guest_event_detail_page/widgets/guest_event_detail_hosts.dart';
 import 'package:app/core/presentation/pages/event/guest_event_detail_page/widgets/guest_event_detail_photos.dart';
 import 'package:app/core/presentation/pages/event/guest_event_detail_page/widgets/guest_event_location.dart';
@@ -34,7 +35,14 @@ class PostGuestEventDetail extends StatelessWidget {
                     physics: const BouncingScrollPhysics(),
                     slivers: [
                       SliverPadding(
-                        padding: EdgeInsets.only(top: Spacing.large),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+                        sliver: SliverToBoxAdapter(
+                          child: GuestEventDetailClock(event: event),
+                        ),
+                      ),
+                      SliverPadding(
+                        padding: EdgeInsets.only(top: Spacing.smMedium * 2),
                       ),
                       if (event.latitude != null &&
                           event.longitude != null) ...[

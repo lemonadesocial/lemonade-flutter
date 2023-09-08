@@ -1,9 +1,9 @@
 /// Generated file. Do not edit.
 ///
 /// Locales: 1
-/// Strings: 198
+/// Strings: 200
 ///
-/// Built on 2023-09-08 at 14:15 UTC
+/// Built on 2023-09-08 at 16:06 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -437,6 +437,8 @@ class _I18nEventEn {
   String get inviteFriends => 'Invite friends';
   String get processing => 'Processing...';
   String get aboutTheEvent => 'About the event';
+  String eventStartIn({required Object time}) => 'Starting in ${time}';
+  String get eventEnded => 'Event ended';
 }
 
 // Path: onboarding
@@ -1088,6 +1090,10 @@ extension on _I18nEn {
         return 'Processing...';
       case 'event.aboutTheEvent':
         return 'About the event';
+      case 'event.eventStartIn':
+        return ({required Object time}) => 'Starting in ${time}';
+      case 'event.eventEnded':
+        return 'Event ended';
       case 'onboarding.pickUsername':
         return 'Pick username';
       case 'onboarding.pickUsernameDesc':
