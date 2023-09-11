@@ -1,9 +1,9 @@
 /// Generated file. Do not edit.
 ///
 /// Locales: 1
-/// Strings: 204
+/// Strings: 206
 ///
-/// Built on 2023-09-11 at 06:36 UTC
+/// Built on 2023-09-11 at 11:16 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -472,6 +472,8 @@ class _I18nOnboardingEn {
       'Pick what you are passionate about & unlock a world of tailored content';
   String get usernameAvailable => 'Username available';
   String get usernameTaken => 'Username unavailable';
+  String get selectImage => 'Select image';
+  String get deleteImage => 'Remove photo';
 }
 
 // Path: discover.cardSections
@@ -1154,6 +1156,10 @@ extension on _I18nEn {
         return 'Username available';
       case 'onboarding.usernameTaken':
         return 'Username unavailable';
+      case 'onboarding.selectImage':
+        return 'Select image';
+      case 'onboarding.deleteImage':
+        return 'Remove photo';
       default:
         return null;
     }

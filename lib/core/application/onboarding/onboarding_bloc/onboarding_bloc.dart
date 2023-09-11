@@ -86,6 +86,15 @@ class OnboardingBloc extends Cubit<OnboardingState> {
     }
   }
 
+  void removeImage() {
+    emit(
+      state.copyWith(
+        status: OnboardingStatus.initial,
+        profilePhoto: null,
+      ),
+    );
+  }
+
   Future<void> uploadImage() async {
     final response = await postService.uploadImage(
       state.profilePhoto!,

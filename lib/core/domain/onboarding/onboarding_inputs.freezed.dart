@@ -176,6 +176,7 @@ UpdateUserProfileInput _$UpdateUserProfileInputFromJson(
 /// @nodoc
 mixin _$UpdateUserProfileInput {
   String get username => throw _privateConstructorUsedError;
+  @JsonKey(name: 'new_photos')
   List<String>? get uploadPhoto => throw _privateConstructorUsedError;
   OnboardingGender? get gender => throw _privateConstructorUsedError;
   String? get displayName => throw _privateConstructorUsedError;
@@ -195,7 +196,7 @@ abstract class $UpdateUserProfileInputCopyWith<$Res> {
   @useResult
   $Res call(
       {String username,
-      List<String>? uploadPhoto,
+      @JsonKey(name: 'new_photos') List<String>? uploadPhoto,
       OnboardingGender? gender,
       String? displayName,
       String? shortBio});
@@ -256,7 +257,7 @@ abstract class _$$_UpdateUserProfileInputCopyWith<$Res>
   @useResult
   $Res call(
       {String username,
-      List<String>? uploadPhoto,
+      @JsonKey(name: 'new_photos') List<String>? uploadPhoto,
       OnboardingGender? gender,
       String? displayName,
       String? shortBio});
@@ -310,7 +311,7 @@ class __$$_UpdateUserProfileInputCopyWithImpl<$Res>
 class _$_UpdateUserProfileInput implements _UpdateUserProfileInput {
   _$_UpdateUserProfileInput(
       {required this.username,
-      final List<String>? uploadPhoto,
+      @JsonKey(name: 'new_photos') final List<String>? uploadPhoto,
       this.gender,
       this.displayName,
       this.shortBio})
@@ -323,6 +324,7 @@ class _$_UpdateUserProfileInput implements _UpdateUserProfileInput {
   final String username;
   final List<String>? _uploadPhoto;
   @override
+  @JsonKey(name: 'new_photos')
   List<String>? get uploadPhoto {
     final value = _uploadPhoto;
     if (value == null) return null;
@@ -387,7 +389,7 @@ class _$_UpdateUserProfileInput implements _UpdateUserProfileInput {
 abstract class _UpdateUserProfileInput implements UpdateUserProfileInput {
   factory _UpdateUserProfileInput(
       {required final String username,
-      final List<String>? uploadPhoto,
+      @JsonKey(name: 'new_photos') final List<String>? uploadPhoto,
       final OnboardingGender? gender,
       final String? displayName,
       final String? shortBio}) = _$_UpdateUserProfileInput;
@@ -398,6 +400,7 @@ abstract class _UpdateUserProfileInput implements UpdateUserProfileInput {
   @override
   String get username;
   @override
+  @JsonKey(name: 'new_photos')
   List<String>? get uploadPhoto;
   @override
   OnboardingGender? get gender;

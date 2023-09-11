@@ -99,6 +99,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_crystal.svg
   SvgGenImage get icCrystal => const SvgGenImage('assets/icons/ic_crystal.svg');
 
+  /// File path: assets/icons/ic_delete.svg
+  SvgGenImage get icDelete => const SvgGenImage('assets/icons/ic_delete.svg');
+
   /// File path: assets/icons/ic_discover.svg
   SvgGenImage get icDiscover =>
       const SvgGenImage('assets/icons/ic_discover.svg');
@@ -285,6 +288,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_person.svg
   SvgGenImage get icPerson => const SvgGenImage('assets/icons/ic_person.svg');
 
+  /// File path: assets/icons/ic_photos.svg
+  SvgGenImage get icPhotos => const SvgGenImage('assets/icons/ic_photos.svg');
+
   /// File path: assets/icons/ic_poll.svg
   SvgGenImage get icPoll => const SvgGenImage('assets/icons/ic_poll.svg');
 
@@ -296,6 +302,9 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/ic_qr.svg
   SvgGenImage get icQr => const SvgGenImage('assets/icons/ic_qr.svg');
+
+  /// File path: assets/icons/ic_refresh.svg
+  SvgGenImage get icRefresh => const SvgGenImage('assets/icons/ic_refresh.svg');
 
   /// File path: assets/icons/ic_search.svg
   SvgGenImage get icSearch => const SvgGenImage('assets/icons/ic_search.svg');
@@ -364,6 +373,7 @@ class $AssetsIconsGen {
         icChatBubbleGradient,
         icClose,
         icCrystal,
+        icDelete,
         icDiscover,
         icDiscoverBadges,
         icDiscoverEvents,
@@ -414,10 +424,12 @@ class $AssetsIconsGen {
         icNotificationFilled,
         icPeopleAlt,
         icPerson,
+        icPhotos,
         icPoll,
         icProfile,
         icPublic,
         icQr,
+        icRefresh,
         icSearch,
         icSelectImage,
         icSendMessage,

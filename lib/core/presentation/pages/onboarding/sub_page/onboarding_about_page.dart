@@ -145,7 +145,9 @@ class OnboardingAboutPage extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                       ),
                       radius: BorderRadius.circular(LemonRadius.large),
-                      mode: GradientButtonMode.lavenderMode,
+                      mode: state.gender == null
+                          ? GradientButtonMode.defaultMode
+                          : GradientButtonMode.lavenderMode,
                     ),
                     SizedBox(height: 24.h),
                   ],

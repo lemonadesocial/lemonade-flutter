@@ -5,6 +5,7 @@ import 'package:app/core/presentation/dpos/common/dropdown_item_dpo.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -30,6 +31,7 @@ class FrostedGlassDropdown<T> extends StatefulWidget {
 class _FrostedGlassDropdownController<T>
     extends State<FrostedGlassDropdown<T>> {
   DropdownItemDpo<T>? selectedItem;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -83,7 +85,12 @@ class _FrostedGlassDropdownController<T>
               item.leadingIcon!,
               SizedBox(width: 9.75.w),
             ],
-            Text(item.label),
+            Text(
+              item.label,
+              style: Typo.medium.copyWith(
+                color: item.customColor,
+              ),
+            ),
             const Spacer(),
             if (isSelected)
               ThemeSvgIcon(

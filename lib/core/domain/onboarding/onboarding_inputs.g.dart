@@ -22,7 +22,7 @@ _$_UpdateUserProfileInput _$$_UpdateUserProfileInputFromJson(
         Map<String, dynamic> json) =>
     _$_UpdateUserProfileInput(
       username: json['username'] as String,
-      uploadPhoto: (json['uploadPhoto'] as List<dynamic>?)
+      uploadPhoto: (json['new_photos'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
       gender: $enumDecodeNullable(_$OnboardingGenderEnumMap, json['gender']),
@@ -34,7 +34,7 @@ Map<String, dynamic> _$$_UpdateUserProfileInputToJson(
         _$_UpdateUserProfileInput instance) =>
     <String, dynamic>{
       'username': instance.username,
-      'uploadPhoto': instance.uploadPhoto,
+      'new_photos': instance.uploadPhoto,
       'gender': _$OnboardingGenderEnumMap[instance.gender],
       'displayName': instance.displayName,
       'shortBio': instance.shortBio,

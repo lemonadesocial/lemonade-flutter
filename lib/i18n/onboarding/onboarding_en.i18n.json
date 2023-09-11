@@ -17,5 +17,7 @@
   "interest": "Interests",
   "interestDesc": "Pick what you are passionate about & unlock a world of tailored content",
   "usernameAvailable" : "Username available",
-  "usernameTaken": "Username unavailable"
+  "usernameTaken": "Username unavailable",
+  "selectImage": "Select image",
+  "deleteImage": "Remove photo"
 }

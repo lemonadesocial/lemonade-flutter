@@ -17,7 +17,7 @@ class GetProfileInput with _$GetProfileInput {
 class UpdateUserProfileInput with _$UpdateUserProfileInput {
   factory UpdateUserProfileInput({
     required String username,
-    List<String>? uploadPhoto,
+    @JsonKey(name: 'new_photos') List<String>? uploadPhoto,
     OnboardingGender? gender,
     String? displayName,
     String? shortBio,
