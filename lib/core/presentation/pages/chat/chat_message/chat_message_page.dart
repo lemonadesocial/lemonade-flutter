@@ -68,8 +68,6 @@ class ChatController extends State<ChatPageWithRoom> {
   bool get showScrollDownButton =>
       _scrolledUp || timeline?.allowNewEvent == false;
 
-  final int _loadHistoryCount = 100;
-
   String inputText = '';
 
   String pendingText = '';
@@ -138,7 +136,7 @@ class ChatController extends State<ChatPageWithRoom> {
     if (!timeline!.canRequestHistory) return;
     Logs().v('Requesting history...');
     try {
-      await timeline?.requestHistory(historyCount: _loadHistoryCount);
+      await timeline?.requestHistory();
     } catch (err) {
       rethrow;
     }
@@ -151,7 +149,7 @@ class ChatController extends State<ChatPageWithRoom> {
     Logs().v('Requesting future...');
     try {
       final mostRecentEventId = timeline.events.first.eventId;
-      await timeline.requestFuture(historyCount: _loadHistoryCount);
+      await timeline.requestFuture();
       setReadMarker(eventId: mostRecentEventId);
     } catch (err) {
       rethrow;

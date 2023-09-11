@@ -4,10 +4,12 @@ import 'package:app/core/presentation/pages/chat/chat_message/chat_message_page.
 import 'package:app/core/presentation/pages/chat/chat_message/widgets/chat_input/message_actions_widget.dart';
 import 'package:app/core/presentation/pages/chat/chat_message/widgets/message_item/message_item_widget.dart';
 import 'package:app/core/presentation/pages/chat/chat_message/widgets/message_item/typing_indicator_widget.dart';
+import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/utils/bottomsheet_utils.dart';
 import 'package:app/core/utils/chat/filter_event_timeline_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:matrix/matrix.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
 class MessagesList extends StatelessWidget {
@@ -48,7 +50,7 @@ class MessagesList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final eventsKeyMap = _createEventsKeyMap();
-
+    final timeline = controller.timeline!;
     return ListView.custom(
       padding: EdgeInsets.only(bottom: 10.h),
       reverse: true,
@@ -58,10 +60,13 @@ class MessagesList extends StatelessWidget {
           : ScrollViewKeyboardDismissBehavior.manual,
       childrenDelegate: SliverChildBuilderDelegate(
         (BuildContext context, int i) {
+          if (timeline.events[i].relationshipEventId != null) {
+            return Container();
+          }
           // Footer to display typing indicator and read receipts:
           if (i == 0) {
             if (controller.timeline?.isRequestingFuture == true) {
-              return _buildLoading();
+              return _buildLoading(context);
             }
             if (controller.timeline?.canRequestFuture == true) {
               return _buildRefreshButton(
@@ -72,9 +77,9 @@ class MessagesList extends StatelessWidget {
           }
 
           // Request history button or progress indicator:
-          if (i == controller.timeline!.events.length + 1) {
+          if (i == controller.timeline!.events.length - 1) {
             if (controller.timeline!.isRequestingHistory) {
-              return _buildLoading();
+              return _buildLoading(context);
             }
             if (controller.timeline!.canRequestHistory) {
               return _buildRefreshButton(action: controller.requestHistory);
@@ -82,11 +87,10 @@ class MessagesList extends StatelessWidget {
             return const SizedBox.shrink();
           }
 
-          // The message at this index:
-          final event = controller.timeline!.events[i - 1];
+          final event = i == 0 ? timeline.events[0] : timeline.events[i - 1];
           return AutoScrollTag(
             key: ValueKey(event.eventId),
-            index: i - 1,
+            index: i,
             controller: controller.scrollController,
             child: event.isVisibleInGui
                 ? MessageItem(
@@ -96,14 +100,15 @@ class MessagesList extends StatelessWidget {
                       BottomSheetUtils.showSnapBottomSheet(
                         context,
                         builder: (context) => MessageActions(
-                            event: event,
-                            onEdit: () {
-                              controller.selectEditEventAction(event);
-                            },
-                            onReact: (emoji) {
-                              controller.sendEmojiAction(
-                                  event: event, emoji: emoji);
-                            }),
+                          event: event,
+                          onEdit: () {
+                            controller.selectEditEventAction(event);
+                          },
+                          onReact: (emoji) {
+                            controller.sendEmojiAction(
+                                event: event, emoji: emoji);
+                          },
+                        ),
                       );
                     },
                     onReact: (event, emoji) {
@@ -133,7 +138,7 @@ class MessagesList extends StatelessWidget {
                 : const SizedBox.shrink(),
           );
         },
-        childCount: controller.timeline!.events.length + 2,
+        childCount: timeline.events.length,
         findChildIndexCallback: (key) =>
             findChildIndexCallback(key, eventsKeyMap),
       ),
@@ -158,18 +163,15 @@ class MessagesList extends StatelessWidget {
       builder: (context) {
         WidgetsBinding.instance.addPostFrameCallback((_) => action());
         return Center(
-          child: IconButton(
-            onPressed: action,
-            icon: const Icon(Icons.refresh_outlined),
-          ),
+          child: Loading.defaultLoading(context),
         );
       },
     );
   }
 
-  Center _buildLoading() {
-    return const Center(
-      child: CircularProgressIndicator.adaptive(strokeWidth: 2),
+  Center _buildLoading(BuildContext context) {
+    return Center(
+      child: Loading.defaultLoading(context),
     );
   }
 }
