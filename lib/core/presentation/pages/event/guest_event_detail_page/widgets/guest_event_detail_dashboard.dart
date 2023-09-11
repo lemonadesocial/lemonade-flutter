@@ -25,11 +25,16 @@ class GuestEventDetailDashboard extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         EventDashboardItem(
-          title: t.event.dashboard.liveChat,
-          icon: Assets.icons.icChatBubbleGradient.svg(),
-          child: const SizedBox.shrink(),
-          onTap: () => AutoRouter.of(context).navigate(const ChatListRoute()),
-        ),
+            title: t.event.dashboard.liveChat,
+            icon: Assets.icons.icChatBubbleGradient.svg(),
+            child: const SizedBox.shrink(),
+            onTap: () {
+              if (event.matrixEventRoomId == null ||
+                  event.matrixEventRoomId!.isEmpty) return;
+              AutoRouter.of(context).navigate(
+                ChatRoute(roomId: event.matrixEventRoomId ?? ''),
+              );
+            }),
         SizedBox(width: 10.w),
         EventDashboardItem(
             title: t.event.dashboard.invite,

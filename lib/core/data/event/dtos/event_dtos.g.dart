@@ -46,6 +46,7 @@ _$_EventDto _$$_EventDtoFromJson(Map<String, dynamic> json) => _$_EventDto(
           (json['pending'] as List<dynamic>?)?.map((e) => e as String).toList(),
       latitude: (json['latitude'] as num?)?.toDouble(),
       longitude: (json['longitude'] as num?)?.toDouble(),
+      matrixEventRoomId: json['matrix_event_room_id'] as String?,
     );
 
 Map<String, dynamic> _$$_EventDtoToJson(_$_EventDto instance) =>
@@ -72,6 +73,7 @@ Map<String, dynamic> _$$_EventDtoToJson(_$_EventDto instance) =>
       'pending': instance.pending,
       'latitude': instance.latitude,
       'longitude': instance.longitude,
+      'matrix_event_room_id': instance.matrixEventRoomId,
     };
 
 const _$CurrencyEnumMap = {

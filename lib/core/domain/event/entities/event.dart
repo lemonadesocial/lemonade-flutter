@@ -4,28 +4,28 @@ import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 
 class Event {
-  Event({
-    this.id,
-    this.hostExpanded,
-    this.cohostsExpanded,
-    this.title,
-    this.slug,
-    this.host,
-    this.cohosts,
-    this.speakerUsers,
-    this.broadcasts,
-    this.description,
-    this.start,
-    this.end,
-    this.cost,
-    this.currency,
-    this.newNewPhotosExpanded,
-    this.accepted,
-    this.invited,
-    this.pending,
-    this.latitude,
-    this.longitude,
-  });
+  Event(
+      {this.id,
+      this.hostExpanded,
+      this.cohostsExpanded,
+      this.title,
+      this.slug,
+      this.host,
+      this.cohosts,
+      this.speakerUsers,
+      this.broadcasts,
+      this.description,
+      this.start,
+      this.end,
+      this.cost,
+      this.currency,
+      this.newNewPhotosExpanded,
+      this.accepted,
+      this.invited,
+      this.pending,
+      this.latitude,
+      this.longitude,
+      this.matrixEventRoomId});
 
   factory Event.fromDto(EventDto dto) {
     return Event(
@@ -62,6 +62,7 @@ class Event {
           List<String>.from(dto.pending ?? []).map((item) => item).toList(),
       latitude: dto.latitude,
       longitude: dto.longitude,
+      matrixEventRoomId: dto.matrixEventRoomId,
     );
   }
   String? id;
@@ -84,6 +85,7 @@ class Event {
   List<String>? pending;
   double? latitude;
   double? longitude;
+  String? matrixEventRoomId;
 }
 
 class Broadcast {

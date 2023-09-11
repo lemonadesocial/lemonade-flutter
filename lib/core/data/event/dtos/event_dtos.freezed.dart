@@ -46,6 +46,8 @@ mixin _$EventDto {
   List<String>? get pending => throw _privateConstructorUsedError;
   double? get latitude => throw _privateConstructorUsedError;
   double? get longitude => throw _privateConstructorUsedError;
+  @JsonKey(name: 'matrix_event_room_id')
+  String? get matrixEventRoomId => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -79,7 +81,8 @@ abstract class $EventDtoCopyWith<$Res> {
       List<String>? invited,
       List<String>? pending,
       double? latitude,
-      double? longitude});
+      double? longitude,
+      @JsonKey(name: 'matrix_event_room_id') String? matrixEventRoomId});
 
   $UserDtoCopyWith<$Res>? get hostExpanded;
 }
@@ -117,6 +120,7 @@ class _$EventDtoCopyWithImpl<$Res, $Val extends EventDto>
     Object? pending = freezed,
     Object? latitude = freezed,
     Object? longitude = freezed,
+    Object? matrixEventRoomId = freezed,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -199,6 +203,10 @@ class _$EventDtoCopyWithImpl<$Res, $Val extends EventDto>
           ? _value.longitude
           : longitude // ignore: cast_nullable_to_non_nullable
               as double?,
+      matrixEventRoomId: freezed == matrixEventRoomId
+          ? _value.matrixEventRoomId
+          : matrixEventRoomId // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 
@@ -243,7 +251,8 @@ abstract class _$$_EventDtoCopyWith<$Res> implements $EventDtoCopyWith<$Res> {
       List<String>? invited,
       List<String>? pending,
       double? latitude,
-      double? longitude});
+      double? longitude,
+      @JsonKey(name: 'matrix_event_room_id') String? matrixEventRoomId});
 
   @override
   $UserDtoCopyWith<$Res>? get hostExpanded;
@@ -280,6 +289,7 @@ class __$$_EventDtoCopyWithImpl<$Res>
     Object? pending = freezed,
     Object? latitude = freezed,
     Object? longitude = freezed,
+    Object? matrixEventRoomId = freezed,
   }) {
     return _then(_$_EventDto(
       id: freezed == id
@@ -362,6 +372,10 @@ class __$$_EventDtoCopyWithImpl<$Res>
           ? _value.longitude
           : longitude // ignore: cast_nullable_to_non_nullable
               as double?,
+      matrixEventRoomId: freezed == matrixEventRoomId
+          ? _value.matrixEventRoomId
+          : matrixEventRoomId // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -391,7 +405,8 @@ class _$_EventDto implements _EventDto {
       final List<String>? invited,
       final List<String>? pending,
       this.latitude,
-      this.longitude})
+      this.longitude,
+      @JsonKey(name: 'matrix_event_room_id') this.matrixEventRoomId})
       : _newNewPhotosExpanded = newNewPhotosExpanded,
         _cohosts = cohosts,
         _cohostsExpanded = cohostsExpanded,
@@ -514,10 +529,13 @@ class _$_EventDto implements _EventDto {
   final double? latitude;
   @override
   final double? longitude;
+  @override
+  @JsonKey(name: 'matrix_event_room_id')
+  final String? matrixEventRoomId;
 
   @override
   String toString() {
-    return 'EventDto(id: $id, hostExpanded: $hostExpanded, newNewPhotosExpanded: $newNewPhotosExpanded, cohosts: $cohosts, cohostsExpanded: $cohostsExpanded, title: $title, slug: $slug, speakerUsers: $speakerUsers, host: $host, broadcasts: $broadcasts, description: $description, start: $start, end: $end, cost: $cost, currency: $currency, accepted: $accepted, invited: $invited, pending: $pending, latitude: $latitude, longitude: $longitude)';
+    return 'EventDto(id: $id, hostExpanded: $hostExpanded, newNewPhotosExpanded: $newNewPhotosExpanded, cohosts: $cohosts, cohostsExpanded: $cohostsExpanded, title: $title, slug: $slug, speakerUsers: $speakerUsers, host: $host, broadcasts: $broadcasts, description: $description, start: $start, end: $end, cost: $cost, currency: $currency, accepted: $accepted, invited: $invited, pending: $pending, latitude: $latitude, longitude: $longitude, matrixEventRoomId: $matrixEventRoomId)';
   }
 
   @override
@@ -553,7 +571,9 @@ class _$_EventDto implements _EventDto {
             (identical(other.latitude, latitude) ||
                 other.latitude == latitude) &&
             (identical(other.longitude, longitude) ||
-                other.longitude == longitude));
+                other.longitude == longitude) &&
+            (identical(other.matrixEventRoomId, matrixEventRoomId) ||
+                other.matrixEventRoomId == matrixEventRoomId));
   }
 
   @JsonKey(ignore: true)
@@ -579,7 +599,8 @@ class _$_EventDto implements _EventDto {
         const DeepCollectionEquality().hash(_invited),
         const DeepCollectionEquality().hash(_pending),
         latitude,
-        longitude
+        longitude,
+        matrixEventRoomId
       ]);
 
   @JsonKey(ignore: true)
@@ -618,7 +639,9 @@ abstract class _EventDto implements EventDto {
       final List<String>? invited,
       final List<String>? pending,
       final double? latitude,
-      final double? longitude}) = _$_EventDto;
+      final double? longitude,
+      @JsonKey(name: 'matrix_event_room_id')
+      final String? matrixEventRoomId}) = _$_EventDto;
 
   factory _EventDto.fromJson(Map<String, dynamic> json) = _$_EventDto.fromJson;
 
@@ -667,6 +690,9 @@ abstract class _EventDto implements EventDto {
   double? get latitude;
   @override
   double? get longitude;
+  @override
+  @JsonKey(name: 'matrix_event_room_id')
+  String? get matrixEventRoomId;
   @override
   @JsonKey(ignore: true)
   _$$_EventDtoCopyWith<_$_EventDto> get copyWith =>

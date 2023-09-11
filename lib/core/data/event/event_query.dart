@@ -26,9 +26,16 @@ const eventPeopleFragment = '''
   }
 ''';
 
+const eventMatrixFragment = '''
+  fragment eventMatrixFragment on Event {
+    matrix_event_room_id
+  }
+''';
+
 const eventFragment = '''
   $eventHostExpandedFragment
   $eventPeopleFragment
+  $eventMatrixFragment
 
   fragment eventFields on Event {
   _id
@@ -46,6 +53,7 @@ const eventFragment = '''
     bucket
   }
   ...eventPeopleFragment
+  ...eventMatrixFragment
   start
   end
   cost
