@@ -1,16 +1,23 @@
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
+import 'package:app/core/config.dart';
 import 'package:app/core/presentation/pages/event/guest_event_detail_page/widgets/guest_event_detail_about_card.dart';
 import 'package:app/core/presentation/pages/event/guest_event_detail_page/widgets/guest_event_detail_clock.dart';
 import 'package:app/core/presentation/pages/event/guest_event_detail_page/widgets/guest_event_detail_dashboard.dart';
 import 'package:app/core/presentation/pages/event/guest_event_detail_page/widgets/guest_event_detail_hosts.dart';
 import 'package:app/core/presentation/pages/event/guest_event_detail_page/widgets/guest_event_detail_photos.dart';
 import 'package:app/core/presentation/pages/event/guest_event_detail_page/widgets/guest_event_location.dart';
+import 'package:app/core/presentation/widgets/common/appbar/lemon_animated_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
+import 'package:app/core/presentation/widgets/lemon_back_button_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:share_plus/share_plus.dart';
 
 class PostGuestEventDetail extends StatelessWidget {
   const PostGuestEventDetail({super.key});
@@ -35,6 +42,31 @@ class PostGuestEventDetail extends StatelessWidget {
                   CustomScrollView(
                     physics: const BouncingScrollPhysics(),
                     slivers: [
+                      SliverPersistentHeader(
+                        pinned: true,
+                        delegate: LemonAnimatedAppBar(
+                          title: event.title ?? '',
+                          leading:
+                              LemonBackButton(color: colorScheme.onPrimary),
+                          actions: [
+                            InkWell(
+                              onTap: () {
+                                Share.share(
+                                    '${AppConfig.webUrl}/event/${event.id}');
+                              },
+                              child: SizedBox(
+                                height: Sizing.small,
+                                width: Sizing.small,
+                                child: ThemeSvgIcon(
+                                  color: colorScheme.onPrimary,
+                                  builder: (filter) => Assets.icons.icShare
+                                      .svg(colorFilter: filter),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
                       SliverPadding(
                         padding:
                             EdgeInsets.symmetric(horizontal: Spacing.smMedium),
@@ -48,8 +80,8 @@ class PostGuestEventDetail extends StatelessWidget {
                       SliverPadding(
                           padding: EdgeInsets.symmetric(
                               horizontal: Spacing.smMedium),
-                          sliver: const SliverToBoxAdapter(
-                            child: GuestEventDetailDashboard(),
+                          sliver: SliverToBoxAdapter(
+                            child: GuestEventDetailDashboard(event: event),
                           )),
                       SliverPadding(
                         padding: EdgeInsets.only(top: Spacing.smMedium),

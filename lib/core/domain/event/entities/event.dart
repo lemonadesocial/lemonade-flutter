@@ -21,6 +21,8 @@ class Event {
     this.currency,
     this.newNewPhotosExpanded,
     this.accepted,
+    this.invited,
+    this.pending,
     this.latitude,
     this.longitude,
   });
@@ -54,6 +56,10 @@ class Event {
       currency: dto.currency,
       accepted:
           List<String>.from(dto.accepted ?? []).map((item) => item).toList(),
+      invited:
+          List<String>.from(dto.invited ?? []).map((item) => item).toList(),
+      pending:
+          List<String>.from(dto.pending ?? []).map((item) => item).toList(),
       latitude: dto.latitude,
       longitude: dto.longitude,
     );
@@ -74,6 +80,8 @@ class Event {
   double? cost;
   Currency? currency;
   List<String>? accepted;
+  List<String>? invited;
+  List<String>? pending;
   double? latitude;
   double? longitude;
 }

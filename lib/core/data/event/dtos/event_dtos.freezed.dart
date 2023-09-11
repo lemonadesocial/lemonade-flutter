@@ -42,6 +42,8 @@ mixin _$EventDto {
   double? get cost => throw _privateConstructorUsedError;
   Currency? get currency => throw _privateConstructorUsedError;
   List<String>? get accepted => throw _privateConstructorUsedError;
+  List<String>? get invited => throw _privateConstructorUsedError;
+  List<String>? get pending => throw _privateConstructorUsedError;
   double? get latitude => throw _privateConstructorUsedError;
   double? get longitude => throw _privateConstructorUsedError;
 
@@ -74,6 +76,8 @@ abstract class $EventDtoCopyWith<$Res> {
       double? cost,
       Currency? currency,
       List<String>? accepted,
+      List<String>? invited,
+      List<String>? pending,
       double? latitude,
       double? longitude});
 
@@ -109,6 +113,8 @@ class _$EventDtoCopyWithImpl<$Res, $Val extends EventDto>
     Object? cost = freezed,
     Object? currency = freezed,
     Object? accepted = freezed,
+    Object? invited = freezed,
+    Object? pending = freezed,
     Object? latitude = freezed,
     Object? longitude = freezed,
   }) {
@@ -177,6 +183,14 @@ class _$EventDtoCopyWithImpl<$Res, $Val extends EventDto>
           ? _value.accepted
           : accepted // ignore: cast_nullable_to_non_nullable
               as List<String>?,
+      invited: freezed == invited
+          ? _value.invited
+          : invited // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
+      pending: freezed == pending
+          ? _value.pending
+          : pending // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
       latitude: freezed == latitude
           ? _value.latitude
           : latitude // ignore: cast_nullable_to_non_nullable
@@ -226,6 +240,8 @@ abstract class _$$_EventDtoCopyWith<$Res> implements $EventDtoCopyWith<$Res> {
       double? cost,
       Currency? currency,
       List<String>? accepted,
+      List<String>? invited,
+      List<String>? pending,
       double? latitude,
       double? longitude});
 
@@ -260,6 +276,8 @@ class __$$_EventDtoCopyWithImpl<$Res>
     Object? cost = freezed,
     Object? currency = freezed,
     Object? accepted = freezed,
+    Object? invited = freezed,
+    Object? pending = freezed,
     Object? latitude = freezed,
     Object? longitude = freezed,
   }) {
@@ -328,6 +346,14 @@ class __$$_EventDtoCopyWithImpl<$Res>
           ? _value._accepted
           : accepted // ignore: cast_nullable_to_non_nullable
               as List<String>?,
+      invited: freezed == invited
+          ? _value._invited
+          : invited // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
+      pending: freezed == pending
+          ? _value._pending
+          : pending // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
       latitude: freezed == latitude
           ? _value.latitude
           : latitude // ignore: cast_nullable_to_non_nullable
@@ -362,6 +388,8 @@ class _$_EventDto implements _EventDto {
       this.cost,
       this.currency,
       final List<String>? accepted,
+      final List<String>? invited,
+      final List<String>? pending,
       this.latitude,
       this.longitude})
       : _newNewPhotosExpanded = newNewPhotosExpanded,
@@ -369,7 +397,9 @@ class _$_EventDto implements _EventDto {
         _cohostsExpanded = cohostsExpanded,
         _speakerUsers = speakerUsers,
         _broadcasts = broadcasts,
-        _accepted = accepted;
+        _accepted = accepted,
+        _invited = invited,
+        _pending = pending;
 
   factory _$_EventDto.fromJson(Map<String, dynamic> json) =>
       _$$_EventDtoFromJson(json);
@@ -460,6 +490,26 @@ class _$_EventDto implements _EventDto {
     return EqualUnmodifiableListView(value);
   }
 
+  final List<String>? _invited;
+  @override
+  List<String>? get invited {
+    final value = _invited;
+    if (value == null) return null;
+    if (_invited is EqualUnmodifiableListView) return _invited;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  final List<String>? _pending;
+  @override
+  List<String>? get pending {
+    final value = _pending;
+    if (value == null) return null;
+    if (_pending is EqualUnmodifiableListView) return _pending;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
   @override
   final double? latitude;
   @override
@@ -467,7 +517,7 @@ class _$_EventDto implements _EventDto {
 
   @override
   String toString() {
-    return 'EventDto(id: $id, hostExpanded: $hostExpanded, newNewPhotosExpanded: $newNewPhotosExpanded, cohosts: $cohosts, cohostsExpanded: $cohostsExpanded, title: $title, slug: $slug, speakerUsers: $speakerUsers, host: $host, broadcasts: $broadcasts, description: $description, start: $start, end: $end, cost: $cost, currency: $currency, accepted: $accepted, latitude: $latitude, longitude: $longitude)';
+    return 'EventDto(id: $id, hostExpanded: $hostExpanded, newNewPhotosExpanded: $newNewPhotosExpanded, cohosts: $cohosts, cohostsExpanded: $cohostsExpanded, title: $title, slug: $slug, speakerUsers: $speakerUsers, host: $host, broadcasts: $broadcasts, description: $description, start: $start, end: $end, cost: $cost, currency: $currency, accepted: $accepted, invited: $invited, pending: $pending, latitude: $latitude, longitude: $longitude)';
   }
 
   @override
@@ -498,6 +548,8 @@ class _$_EventDto implements _EventDto {
             (identical(other.currency, currency) ||
                 other.currency == currency) &&
             const DeepCollectionEquality().equals(other._accepted, _accepted) &&
+            const DeepCollectionEquality().equals(other._invited, _invited) &&
+            const DeepCollectionEquality().equals(other._pending, _pending) &&
             (identical(other.latitude, latitude) ||
                 other.latitude == latitude) &&
             (identical(other.longitude, longitude) ||
@@ -506,26 +558,29 @@ class _$_EventDto implements _EventDto {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      hostExpanded,
-      const DeepCollectionEquality().hash(_newNewPhotosExpanded),
-      const DeepCollectionEquality().hash(_cohosts),
-      const DeepCollectionEquality().hash(_cohostsExpanded),
-      title,
-      slug,
-      const DeepCollectionEquality().hash(_speakerUsers),
-      host,
-      const DeepCollectionEquality().hash(_broadcasts),
-      description,
-      start,
-      end,
-      cost,
-      currency,
-      const DeepCollectionEquality().hash(_accepted),
-      latitude,
-      longitude);
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        id,
+        hostExpanded,
+        const DeepCollectionEquality().hash(_newNewPhotosExpanded),
+        const DeepCollectionEquality().hash(_cohosts),
+        const DeepCollectionEquality().hash(_cohostsExpanded),
+        title,
+        slug,
+        const DeepCollectionEquality().hash(_speakerUsers),
+        host,
+        const DeepCollectionEquality().hash(_broadcasts),
+        description,
+        start,
+        end,
+        cost,
+        currency,
+        const DeepCollectionEquality().hash(_accepted),
+        const DeepCollectionEquality().hash(_invited),
+        const DeepCollectionEquality().hash(_pending),
+        latitude,
+        longitude
+      ]);
 
   @JsonKey(ignore: true)
   @override
@@ -560,6 +615,8 @@ abstract class _EventDto implements EventDto {
       final double? cost,
       final Currency? currency,
       final List<String>? accepted,
+      final List<String>? invited,
+      final List<String>? pending,
       final double? latitude,
       final double? longitude}) = _$_EventDto;
 
@@ -602,6 +659,10 @@ abstract class _EventDto implements EventDto {
   Currency? get currency;
   @override
   List<String>? get accepted;
+  @override
+  List<String>? get invited;
+  @override
+  List<String>? get pending;
   @override
   double? get latitude;
   @override

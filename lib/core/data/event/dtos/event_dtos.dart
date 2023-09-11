@@ -27,6 +27,8 @@ class EventDto with _$EventDto {
       double? cost,
       Currency? currency,
       List<String>? accepted,
+      List<String>? invited,
+      List<String>? pending,
       double? latitude,
       double? longitude}) = _EventDto;
 

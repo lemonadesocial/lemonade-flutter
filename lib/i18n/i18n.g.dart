@@ -1,9 +1,9 @@
 /// Generated file. Do not edit.
 ///
 /// Locales: 1
-/// Strings: 203
+/// Strings: 204
 ///
-/// Built on 2023-09-11 at 04:00 UTC
+/// Built on 2023-09-11 at 06:36 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -440,6 +440,7 @@ class _I18nEventEn {
   String eventStartIn({required Object time}) => 'Starting in ${time}';
   String get eventEnded => 'Event ended';
   late final _I18nEventDashboardEn dashboard = _I18nEventDashboardEn._(_root);
+  String get confirmed => 'confirmed';
 }
 
 // Path: onboarding
@@ -1113,6 +1114,8 @@ extension on _I18nEn {
         return 'Invite';
       case 'event.dashboard.leaderBoard':
         return 'Leaderboard';
+      case 'event.confirmed':
+        return 'confirmed';
       case 'onboarding.pickUsername':
         return 'Pick username';
       case 'onboarding.pickUsernameDesc':
