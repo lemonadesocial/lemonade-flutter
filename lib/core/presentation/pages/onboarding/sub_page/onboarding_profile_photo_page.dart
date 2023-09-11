@@ -89,7 +89,9 @@ class OnboardingProfilePhotoPage extends StatelessWidget {
                     fontWeight: FontWeight.w600,
                   ),
                   radius: BorderRadius.circular(LemonRadius.large),
-                  mode: GradientButtonMode.lavenderMode,
+                  mode: state.profilePhoto == null
+                      ? GradientButtonMode.defaultMode
+                      : GradientButtonMode.lavenderMode,
                 ),
                 SizedBox(height: 24.h),
               ],
