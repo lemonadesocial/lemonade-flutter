@@ -19,8 +19,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:share_plus/share_plus.dart';
 
-class PostGuestEventDetail extends StatelessWidget {
-  const PostGuestEventDetail({super.key});
+class PostGuestEventDetailView extends StatelessWidget {
+  const PostGuestEventDetailView({super.key});
 
   @override
   Widget build(BuildContext context) {
