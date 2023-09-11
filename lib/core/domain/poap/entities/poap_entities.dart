@@ -76,6 +76,51 @@ class ClaimArgs {
   final String? tokenURI;
 }
 
+class Transfer {
+  Transfer({
+    this.id,
+    this.network,
+    this.state,
+    this.errorMessage,
+    this.args,
+    this.address,
+    this.tokenId,
+  });
+
+  factory Transfer.fromDto(TransferDto dto) => Transfer(
+        id: dto.id,
+        network: dto.network,
+        state: dto.state,
+        errorMessage: dto.errorMessage,
+        args: dto.args != null ? TransferArgs.fromDto(dto.args!) : null,
+        address: dto.address,
+        tokenId: dto.tokenId,
+      );
+
+  final String? id;
+  final String? network;
+  final TransferState? state;
+  final String? errorMessage;
+  final TransferArgs? args;
+  final String? address;
+  final String? tokenId;
+}
+
+class TransferArgs {
+  TransferArgs({
+    this.claimer,
+    this.tokenURI,
+  });
+
+  factory TransferArgs.fromDto(TransferArgsDto dto) => TransferArgs(
+        claimer: dto.claimer,
+        tokenURI: dto.tokenURI,
+      );
+
+  final String? claimer;
+  final String? tokenURI;
+}
+
 class PoapPolicyNode {
   const PoapPolicyNode({
     required this.value,
