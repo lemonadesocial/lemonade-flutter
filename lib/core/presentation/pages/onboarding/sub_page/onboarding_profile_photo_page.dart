@@ -76,7 +76,6 @@ class OnboardingProfilePhotoPage extends StatelessWidget {
                       ),
                       SizedBox(height: Spacing.medium),
                       OnboardingPhotoPicker(
-                        onTap: bloc.selectProfileImage,
                         imageFile: state.profilePhoto,
                       ),
                     ],
