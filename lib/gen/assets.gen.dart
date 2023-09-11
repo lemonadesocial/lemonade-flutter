@@ -235,6 +235,10 @@ class $AssetsIconsGen {
   SvgGenImage get icLinkedin =>
       const SvgGenImage('assets/icons/ic_linkedin.svg');
 
+  /// File path: assets/icons/ic_location_pin.svg
+  SvgGenImage get icLocationPin =>
+      const SvgGenImage('assets/icons/ic_location_pin.svg');
+
   /// File path: assets/icons/ic_lock.svg
   SvgGenImage get icLock => const SvgGenImage('assets/icons/ic_lock.svg');
 
@@ -396,6 +400,7 @@ class $AssetsIconsGen {
         icLemonOutline,
         icLemonadeWhite,
         icLinkedin,
+        icLocationPin,
         icLock,
         icMatches,
         icMenu,
