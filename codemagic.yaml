@@ -73,6 +73,12 @@ definitions:
       name: Get Flutter packages
       script: |
         flutter packages pub get
+    - &generate_gen_files
+      name: Generate gen files
+      script: |
+        #!/bin/sh
+        flutter packages pub run build_runner build
+        sh gen_i18n.sh
     - &install_firebase_crashlytics
       name: Install firebase crashlytics
       script: |
@@ -499,6 +505,7 @@ workflows:
       - *load_env_files
       - *use_profiles
       - *get_flutter_packages
+      - *generate_gen_files
       - *install_firebase_crashlytics
       - *install_pods
       - *build_ipa_staging
@@ -531,6 +538,7 @@ workflows:
       - *load_env_files
       - *setup_local_properties
       - *get_flutter_packages
+      - *generate_gen_files
       - *build_apk_staging
       - *build_aab_staging
     artifacts:
@@ -566,6 +574,7 @@ workflows:
       - *load_env_files
       - *use_profiles
       - *get_flutter_packages
+      - *generate_gen_files
       - *install_firebase_crashlytics
       - *install_pods
       - *build_ipa_production
