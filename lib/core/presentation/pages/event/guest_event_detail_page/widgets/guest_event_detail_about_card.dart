@@ -55,7 +55,7 @@ class GuestEventDetailAboutCard extends StatelessWidget {
             ),
           ),
           Positioned.fill(
-            child: Container(
+            child: DecoratedBox(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15.r),
                 color: colorScheme.primary.withOpacity(0.9),

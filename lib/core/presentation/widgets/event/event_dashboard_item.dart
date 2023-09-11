@@ -39,7 +39,7 @@ class EventDashboardItem extends StatelessWidget {
             children: [
               Expanded(
                 child: Container(
-                  height: 111,
+                  height: 111.w,
                   padding: const EdgeInsets.all(15),
                   clipBehavior: Clip.antiAlias,
                   decoration: ShapeDecoration(
@@ -49,7 +49,7 @@ class EventDashboardItem extends StatelessWidget {
                       colors: [LemonColor.chineseBlack, Colors.black],
                     ),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
+                      borderRadius: BorderRadius.circular(15.r),
                     ),
                   ),
                   child: Column(

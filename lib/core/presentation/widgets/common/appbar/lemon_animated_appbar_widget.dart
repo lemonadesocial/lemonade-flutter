@@ -1,4 +1,5 @@
 import 'package:app/core/presentation/widgets/lemon_back_button_widget.dart';
+import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -25,10 +26,10 @@ class LemonAnimatedAppBar extends SliverPersistentHeaderDelegate {
   Size get preferredSize => Size.fromHeight(60.w);
 
   @override
-  double get maxExtent => 60;
+  double get maxExtent => 60.w;
 
   @override
-  double get minExtent => 60;
+  double get minExtent => 60.w;
 
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>
@@ -59,9 +60,8 @@ class LemonAnimatedAppBar extends SliverPersistentHeaderDelegate {
       offset: Offset(0, maxExtent - shrinkOffset),
       child: Text(
         title,
-        style: const TextStyle(
+        style: Typo.extraMedium.copyWith(
           fontWeight: FontWeight.w600,
-          fontSize: 18,
         ),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
