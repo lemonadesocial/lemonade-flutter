@@ -51,3 +51,9 @@ app.*.map.json
 
 # Ignore commit lint
 .githooks/gitlint
+
+*.g.dart
+*.freezed.dart
+*.gr.dart
+*.gen.dart
+
