@@ -89,6 +89,10 @@ class $AssetsIconsGen {
   SvgGenImage get icChatBubble =>
       const SvgGenImage('assets/icons/ic_chat_bubble.svg');
 
+  /// File path: assets/icons/ic_chat_bubble_gradient.svg
+  SvgGenImage get icChatBubbleGradient =>
+      const SvgGenImage('assets/icons/ic_chat_bubble_gradient.svg');
+
   /// File path: assets/icons/ic_close.svg
   SvgGenImage get icClose => const SvgGenImage('assets/icons/ic_close.svg');
 
@@ -210,6 +214,10 @@ class $AssetsIconsGen {
   SvgGenImage get icJoinSpace =>
       const SvgGenImage('assets/icons/ic_join_space.svg');
 
+  /// File path: assets/icons/ic_leaderboard_gradient.svg
+  SvgGenImage get icLeaderboardGradient =>
+      const SvgGenImage('assets/icons/ic_leaderboard_gradient.svg');
+
   /// File path: assets/icons/ic_lemon_filled_background.png
   AssetGenImage get icLemonFilledBackground =>
       const AssetGenImage('assets/icons/ic_lemon_filled_background.png');
@@ -229,6 +237,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_linkedin.svg
   SvgGenImage get icLinkedin =>
       const SvgGenImage('assets/icons/ic_linkedin.svg');
+
+  /// File path: assets/icons/ic_location_pin.svg
+  SvgGenImage get icLocationPin =>
+      const SvgGenImage('assets/icons/ic_location_pin.svg');
 
   /// File path: assets/icons/ic_lock.svg
   SvgGenImage get icLock => const SvgGenImage('assets/icons/ic_lock.svg');
@@ -331,6 +343,10 @@ class $AssetsIconsGen {
   SvgGenImage get icUserAdd =>
       const SvgGenImage('assets/icons/ic_user_add.svg');
 
+  /// File path: assets/icons/ic_user_add_gradient.svg
+  SvgGenImage get icUserAddGradient =>
+      const SvgGenImage('assets/icons/ic_user_add_gradient.svg');
+
   /// File path: assets/icons/ic_wallet.svg
   SvgGenImage get icWallet => const SvgGenImage('assets/icons/ic_wallet.svg');
 
@@ -354,6 +370,7 @@ class $AssetsIconsGen {
         icCamera,
         icChat,
         icChatBubble,
+        icChatBubbleGradient,
         icClose,
         icCrystal,
         icDelete,
@@ -387,11 +404,13 @@ class $AssetsIconsGen {
         icInsights,
         icInstagram,
         icJoinSpace,
+        icLeaderboardGradient,
         icLemonFilledBackground,
         icLemonFilledStart,
         icLemonOutline,
         icLemonadeWhite,
         icLinkedin,
+        icLocationPin,
         icLock,
         icMatches,
         icMenu,
@@ -422,6 +441,7 @@ class $AssetsIconsGen {
         icTicketBold,
         icTwitter,
         icUserAdd,
+        icUserAddGradient,
         icWallet,
         icWalletFilled,
         icoCreateSpace,

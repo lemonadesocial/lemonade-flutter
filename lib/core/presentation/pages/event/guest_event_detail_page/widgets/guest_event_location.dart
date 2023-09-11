@@ -29,14 +29,20 @@ class GuestEventLocation extends StatelessWidget {
         authenticated: (authSession) => authSession.userId, orElse: () => '');
     final isAttending = (event.accepted ?? []).contains(userId);
 
-    return SizedBox(
-      width: double.infinity,
-      height: 144.w,
-      child: Row(
-        children: [
-          SizedBox(
-            width: 144.w,
-            child: ClipRRect(
+    return FutureBuilder(
+      future: isAttending
+          ? MapUtils.getLocationName(
+              lat: event.latitude ?? 0, lng: event.longitude ?? 0)
+          : Future.delayed(const Duration(milliseconds: 300), () => ''),
+      builder: (context, snapshot) => SizedBox(
+        width: double.infinity,
+        height: 144.w,
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            SizedBox(
+              width: 144.w,
+              child: ClipRRect(
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(15.sp),
                   bottomLeft: Radius.circular(15.sp),
@@ -61,45 +67,59 @@ class GuestEventLocation extends StatelessWidget {
                       ),
                     )
                   ],
-                )),
-          ),
-          Flexible(
-            child: Container(
-              padding: EdgeInsets.symmetric(
-                vertical: Spacing.smMedium,
-                horizontal: Spacing.small,
-              ),
-              decoration: BoxDecoration(
-                color: colorScheme.surfaceVariant,
-                borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(15.sp),
-                  bottomRight: Radius.circular(15.sp),
                 ),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Assets.icons.icLock.svg(),
-                  const Spacer(),
-                  Text(
-                    t.event.eventLocation,
-                    style: Typo.mediumPlus.copyWith(
-                      fontFamily: FontFamily.switzerVariable,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  SizedBox(height: Spacing.superExtraSmall),
-                  Text(
-                    t.event.rsvpToUnlock,
-                    style: Typo.small.copyWith(
-                      color: colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                ],
-              ),
             ),
-          )
-        ],
+            Expanded(
+              child: Container(
+                padding: EdgeInsets.symmetric(
+                  vertical: Spacing.smMedium,
+                  horizontal: Spacing.small,
+                ),
+                decoration: BoxDecoration(
+                  color: colorScheme.surfaceVariant,
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(15.sp),
+                    bottomRight: Radius.circular(15.sp),
+                  ),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    isAttending
+                        ? Assets.icons.icLocationPin.svg()
+                        : Assets.icons.icLock.svg(),
+                    const Spacer(),
+                    Text(
+                      t.event.eventLocation,
+                      style: Typo.mediumPlus.copyWith(
+                        fontFamily: FontFamily.switzerVariable,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    SizedBox(height: Spacing.superExtraSmall),
+                    if (isAttending)
+                      Text(
+                        snapshot.connectionState == ConnectionState.done
+                            ? snapshot.data ?? ''
+                            : '...',
+                        style: Typo.small.copyWith(
+                          color: colorScheme.onSurfaceVariant,
+                        ),
+                      )
+                    else
+                      Text(
+                        t.event.rsvpToUnlock,
+                        style: Typo.small.copyWith(
+                          color: colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

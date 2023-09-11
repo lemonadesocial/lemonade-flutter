@@ -16,8 +16,26 @@ const eventHostExpandedFragment = '''
   }
 ''';
 
+const eventPeopleFragment = '''
+  fragment eventPeopleFragment on Event {
+    cohosts
+    speaker_users
+    accepted
+    invited
+    pending
+  }
+''';
+
+const eventMatrixFragment = '''
+  fragment eventMatrixFragment on Event {
+    matrix_event_room_id
+  }
+''';
+
 const eventFragment = '''
   $eventHostExpandedFragment
+  $eventPeopleFragment
+  $eventMatrixFragment
 
   fragment eventFields on Event {
   _id
@@ -34,11 +52,11 @@ const eventFragment = '''
     key
     bucket
   }
+  ...eventPeopleFragment
+  ...eventMatrixFragment
   start
   end
   cost
-  cohosts
-  speaker_users
   currency
   description
   broadcasts {
@@ -50,7 +68,6 @@ const eventFragment = '''
     title
     region
   }
-  accepted
   latitude
   longitude
 }

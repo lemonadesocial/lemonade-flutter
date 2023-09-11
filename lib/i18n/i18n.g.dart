@@ -1,9 +1,9 @@
 /// Generated file. Do not edit.
 ///
 /// Locales: 1
-/// Strings: 198
+/// Strings: 206
 ///
-/// Built on 2023-09-11 at 05:16 UTC
+/// Built on 2023-09-11 at 11:38 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -401,6 +401,7 @@ class _I18nCommonEn {
         one: 'host',
         other: 'hosts',
       );
+  String get viewMore => 'View more';
 }
 
 // Path: event
@@ -435,6 +436,11 @@ class _I18nEventEn {
   String get takeMeToEvent => 'Take me to the event';
   String get inviteFriends => 'Invite friends';
   String get processing => 'Processing...';
+  String get aboutTheEvent => 'About the event';
+  String eventStartIn({required Object time}) => 'Starting in ${time}';
+  String get eventEnded => 'Event ended';
+  late final _I18nEventDashboardEn dashboard = _I18nEventDashboardEn._(_root);
+  String get confirmed => 'confirmed';
 }
 
 // Path: onboarding
@@ -577,6 +583,18 @@ class _I18nCommonUnitEn {
   // Translations
   String get m => 'm';
   String get km => 'km';
+}
+
+// Path: event.dashboard
+class _I18nEventDashboardEn {
+  _I18nEventDashboardEn._(this._root);
+
+  final _I18nEn _root; // ignore: unused_field
+
+  // Translations
+  String get liveChat => 'Live chat';
+  String get invite => 'Invite';
+  String get leaderBoard => 'Leaderboard';
 }
 
 // Path: discover.cardSections.events
@@ -1039,6 +1057,8 @@ extension on _I18nEn {
               one: 'host',
               other: 'hosts',
             );
+      case 'common.viewMore':
+        return 'View more';
       case 'event.events':
         return 'Events';
       case 'event.all':
@@ -1084,6 +1104,20 @@ extension on _I18nEn {
         return 'Invite friends';
       case 'event.processing':
         return 'Processing...';
+      case 'event.aboutTheEvent':
+        return 'About the event';
+      case 'event.eventStartIn':
+        return ({required Object time}) => 'Starting in ${time}';
+      case 'event.eventEnded':
+        return 'Event ended';
+      case 'event.dashboard.liveChat':
+        return 'Live chat';
+      case 'event.dashboard.invite':
+        return 'Invite';
+      case 'event.dashboard.leaderBoard':
+        return 'Leaderboard';
+      case 'event.confirmed':
+        return 'confirmed';
       case 'onboarding.pickUsername':
         return 'Pick username';
       case 'onboarding.pickUsernameDesc':

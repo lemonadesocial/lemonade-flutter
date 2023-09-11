@@ -23,24 +23,24 @@ import 'package:app/core/presentation/pages/create_post/create_post_page.dart'
 import 'package:app/core/presentation/pages/discover/discover_page/discover_page.dart'
     as _i2;
 import 'package:app/core/presentation/pages/event/event_detail_page.dart'
-    as _i19;
+    as _i20;
 import 'package:app/core/presentation/pages/event/event_selecting_page.dart'
     as _i17;
 import 'package:app/core/presentation/pages/event/events_listing_page.dart'
     as _i18;
 import 'package:app/core/presentation/pages/event/guest_event_detail_page/guest_event_detail_page.dart'
-    as _i24;
+    as _i19;
 import 'package:app/core/presentation/pages/home/home_page.dart' as _i1;
 import 'package:app/core/presentation/pages/notification/notifications_listing_page.dart'
     as _i8;
 import 'package:app/core/presentation/pages/onboarding/onboarding_wrapper_page.dart'
-    as _i20;
-import 'package:app/core/presentation/pages/onboarding/sub_page/onboarding_about_page.dart'
     as _i21;
-import 'package:app/core/presentation/pages/onboarding/sub_page/onboarding_profile_photo_page.dart'
-    as _i23;
-import 'package:app/core/presentation/pages/onboarding/sub_page/onboarding_username_page.dart'
+import 'package:app/core/presentation/pages/onboarding/sub_page/onboarding_about_page.dart'
     as _i22;
+import 'package:app/core/presentation/pages/onboarding/sub_page/onboarding_profile_photo_page.dart'
+    as _i24;
+import 'package:app/core/presentation/pages/onboarding/sub_page/onboarding_username_page.dart'
+    as _i23;
 import 'package:app/core/presentation/pages/poap/popap_listing_page.dart'
     as _i11;
 import 'package:app/core/presentation/pages/profile/my_profile_page.dart'
@@ -201,6 +201,19 @@ abstract class $AppRouter extends _i27.RootStackRouter {
         child: const _i18.EventsListingPage(),
       );
     },
+    GuestEventDetailRoute.name: (routeData) {
+      final pathParams = routeData.inheritedPathParams;
+      final args = routeData.argsAs<GuestEventDetailRouteArgs>(
+          orElse: () =>
+              GuestEventDetailRouteArgs(eventId: pathParams.getString('id')));
+      return _i27.AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: _i19.GuestEventDetailPage(
+          key: args.key,
+          eventId: args.eventId,
+        ),
+      );
+    },
     EventDetailRoute.name: (routeData) {
       final pathParams = routeData.inheritedPathParams;
       final args = routeData.argsAs<EventDetailRouteArgs>(
@@ -210,7 +223,7 @@ abstract class $AppRouter extends _i27.RootStackRouter {
               ));
       return _i27.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i19.EventDetailPage(
+        child: _i20.EventDetailPage(
           key: args.key,
           eventId: args.eventId,
           eventName: args.eventName,
@@ -220,38 +233,25 @@ abstract class $AppRouter extends _i27.RootStackRouter {
     OnboardingWrapperRoute.name: (routeData) {
       return _i27.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i27.WrappedRoute(child: const _i20.OnboardingWrapperPage()),
+        child: _i27.WrappedRoute(child: const _i21.OnboardingWrapperPage()),
       );
     },
     OnboardingAboutRoute.name: (routeData) {
       return _i27.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i21.OnboardingAboutPage(),
+        child: const _i22.OnboardingAboutPage(),
       );
     },
     OnboardingUsernameRoute.name: (routeData) {
       return _i27.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i22.OnboardingUsernamePage(),
+        child: const _i23.OnboardingUsernamePage(),
       );
     },
     OnboardingProfilePhotoRoute.name: (routeData) {
       return _i27.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i23.OnboardingProfilePhotoPage(),
-      );
-    },
-    GuestEventDetailRoute.name: (routeData) {
-      final pathParams = routeData.inheritedPathParams;
-      final args = routeData.argsAs<GuestEventDetailRouteArgs>(
-          orElse: () =>
-              GuestEventDetailRouteArgs(eventId: pathParams.getString('id')));
-      return _i27.AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: _i24.GuestEventDetailPage(
-          key: args.key,
-          eventId: args.eventId,
-        ),
+        child: const _i24.OnboardingProfilePhotoPage(),
       );
     },
     PhotosGalleryRoute.name: (routeData) {
@@ -689,7 +689,47 @@ class EventsListingRoute extends _i27.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i19.EventDetailPage]
+/// [_i19.GuestEventDetailPage]
+class GuestEventDetailRoute
+    extends _i27.PageRouteInfo<GuestEventDetailRouteArgs> {
+  GuestEventDetailRoute({
+    _i29.Key? key,
+    required String eventId,
+    List<_i27.PageRouteInfo>? children,
+  }) : super(
+          GuestEventDetailRoute.name,
+          args: GuestEventDetailRouteArgs(
+            key: key,
+            eventId: eventId,
+          ),
+          rawPathParams: {'id': eventId},
+          initialChildren: children,
+        );
+
+  static const String name = 'GuestEventDetailRoute';
+
+  static const _i27.PageInfo<GuestEventDetailRouteArgs> page =
+      _i27.PageInfo<GuestEventDetailRouteArgs>(name);
+}
+
+class GuestEventDetailRouteArgs {
+  const GuestEventDetailRouteArgs({
+    this.key,
+    required this.eventId,
+  });
+
+  final _i29.Key? key;
+
+  final String eventId;
+
+  @override
+  String toString() {
+    return 'GuestEventDetailRouteArgs{key: $key, eventId: $eventId}';
+  }
+}
+
+/// generated route for
+/// [_i20.EventDetailPage]
 class EventDetailRoute extends _i27.PageRouteInfo<EventDetailRouteArgs> {
   EventDetailRoute({
     _i32.Key? key,
@@ -736,7 +776,7 @@ class EventDetailRouteArgs {
 }
 
 /// generated route for
-/// [_i20.OnboardingWrapperPage]
+/// [_i21.OnboardingWrapperPage]
 class OnboardingWrapperRoute extends _i27.PageRouteInfo<void> {
   const OnboardingWrapperRoute({List<_i27.PageRouteInfo>? children})
       : super(
@@ -750,7 +790,7 @@ class OnboardingWrapperRoute extends _i27.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i21.OnboardingAboutPage]
+/// [_i22.OnboardingAboutPage]
 class OnboardingAboutRoute extends _i27.PageRouteInfo<void> {
   const OnboardingAboutRoute({List<_i27.PageRouteInfo>? children})
       : super(
@@ -764,7 +804,7 @@ class OnboardingAboutRoute extends _i27.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i22.OnboardingUsernamePage]
+/// [_i23.OnboardingUsernamePage]
 class OnboardingUsernameRoute extends _i27.PageRouteInfo<void> {
   const OnboardingUsernameRoute({List<_i27.PageRouteInfo>? children})
       : super(
@@ -778,7 +818,7 @@ class OnboardingUsernameRoute extends _i27.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i23.OnboardingProfilePhotoPage]
+/// [_i24.OnboardingProfilePhotoPage]
 class OnboardingProfilePhotoRoute extends _i27.PageRouteInfo<void> {
   const OnboardingProfilePhotoRoute({List<_i27.PageRouteInfo>? children})
       : super(
@@ -789,46 +829,6 @@ class OnboardingProfilePhotoRoute extends _i27.PageRouteInfo<void> {
   static const String name = 'OnboardingProfilePhotoRoute';
 
   static const _i27.PageInfo<void> page = _i27.PageInfo<void>(name);
-}
-
-/// generated route for
-/// [_i24.GuestEventDetailPage]
-class GuestEventDetailRoute
-    extends _i27.PageRouteInfo<GuestEventDetailRouteArgs> {
-  GuestEventDetailRoute({
-    _i29.Key? key,
-    required String eventId,
-    List<_i27.PageRouteInfo>? children,
-  }) : super(
-          GuestEventDetailRoute.name,
-          args: GuestEventDetailRouteArgs(
-            key: key,
-            eventId: eventId,
-          ),
-          rawPathParams: {'id': eventId},
-          initialChildren: children,
-        );
-
-  static const String name = 'GuestEventDetailRoute';
-
-  static const _i27.PageInfo<GuestEventDetailRouteArgs> page =
-      _i27.PageInfo<GuestEventDetailRouteArgs>(name);
-}
-
-class GuestEventDetailRouteArgs {
-  const GuestEventDetailRouteArgs({
-    this.key,
-    required this.eventId,
-  });
-
-  final _i29.Key? key;
-
-  final String eventId;
-
-  @override
-  String toString() {
-    return 'GuestEventDetailRouteArgs{key: $key, eventId: $eventId}';
-  }
 }
 
 /// generated route for
