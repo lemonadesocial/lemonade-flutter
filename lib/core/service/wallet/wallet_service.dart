@@ -26,8 +26,9 @@ class WalletService {
     walletConnectService.close();
   }
 
-  Future<Either<Failure, bool>> connectWallet(
-      {required SupportedWalletApp walletApp}) async {
+  Future<Either<Failure, bool>> connectWallet({
+    required SupportedWalletApp walletApp,
+  }) async {
     var success =
         await walletConnectService.connectWallet(walletApp: walletApp);
     if (success) return Right(success);
@@ -38,7 +39,8 @@ class WalletService {
     required String wallet,
   }) async {
     final requestResult = await walletRepository.getUserWalletRequest(
-        wallet: wallet.toLowerCase());
+      wallet: wallet.toLowerCase(),
+    );
     if (requestResult.isLeft()) {
       return Left(Failure());
     }

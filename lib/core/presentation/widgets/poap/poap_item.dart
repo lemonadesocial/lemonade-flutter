@@ -102,7 +102,9 @@ class _PoapItemView extends StatelessWidget {
                 },
                 child: Container(
                   padding: EdgeInsets.symmetric(
-                      horizontal: Spacing.small, vertical: Spacing.small),
+                    horizontal: Spacing.small,
+                    vertical: Spacing.small,
+                  ),
                   decoration: ShapeDecoration(
                     color: colorScheme.surfaceVariant,
                     shape: RoundedRectangleBorder(
@@ -159,7 +161,9 @@ class _PoapItemImage extends StatelessWidget {
         borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
         child: FutureBuilder<Media>(
           future: MediaUtils.getNftMedia(
-              tokenMetadata?.image, tokenMetadata?.animation_url),
+            tokenMetadata?.image,
+            tokenMetadata?.animation_url,
+          ),
           builder: (context, snapshot) => CachedNetworkImage(
             fit: BoxFit.cover,
             imageUrl: snapshot.data?.url ?? '',

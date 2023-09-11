@@ -117,9 +117,10 @@ class ChatListPageView extends StatelessWidget {
                     ),
                   ),
                   _ChatListSection(
-                      title: StringUtils.capitalize(t.chat.directMessages),
-                      rooms: chatListState.dmRooms,
-                      itemBuilder: (room) => ChatListItem(room: room)),
+                    title: StringUtils.capitalize(t.chat.directMessages),
+                    rooms: chatListState.dmRooms,
+                    itemBuilder: (room) => ChatListItem(room: room),
+                  ),
                 ],
               );
             },

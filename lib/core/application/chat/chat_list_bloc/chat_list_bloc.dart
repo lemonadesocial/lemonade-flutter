@@ -59,7 +59,8 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
               .where(
                 (room) =>
                     RoomTypeFilter.getRoomByRoomTypeFilter(
-                        RoomTypeFilter.messages)(room) &&
+                      RoomTypeFilter.messages,
+                    )(room) &&
                     room.isUnread,
               )
               .toList(),
@@ -69,7 +70,8 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
               .where(
                 (room) =>
                     RoomTypeFilter.getRoomByRoomTypeFilter(
-                        RoomTypeFilter.messages)(room) &&
+                      RoomTypeFilter.messages,
+                    )(room) &&
                     !room.isUnread,
               )
               .toList(),

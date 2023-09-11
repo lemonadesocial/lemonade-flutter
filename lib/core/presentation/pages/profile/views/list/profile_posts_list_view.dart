@@ -23,9 +23,11 @@ class ProfilePostsListView extends StatelessWidget {
       builder: (context, postsState) {
         return postsState.when(
           loading: () => SliverFillRemaining(
-              child: Center(child: Loading.defaultLoading(context))),
+            child: Center(child: Loading.defaultLoading(context)),
+          ),
           failure: () => SliverToBoxAdapter(
-              child: Center(child: Text(t.common.somethingWrong))),
+            child: Center(child: Text(t.common.somethingWrong)),
+          ),
           fetched: (posts) {
             if (posts.isEmpty) {
               return SliverFillRemaining(

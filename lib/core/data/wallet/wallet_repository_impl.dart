@@ -21,12 +21,14 @@ class WalletRepositoryImpl implements WalletRepository {
   }) async {
     final result = await _gqlClient.query(
       QueryOptions(
-          document: getUserWalletRequestQuery,
-          variables: {
-            'wallet': wallet,
-          },
-          parserFn: (data) => UserWalletRequest.fromDto(
-              UserWalletRequestDto.fromJson(data['getUserWalletRequest']))),
+        document: getUserWalletRequestQuery,
+        variables: {
+          'wallet': wallet,
+        },
+        parserFn: (data) => UserWalletRequest.fromDto(
+          UserWalletRequestDto.fromJson(data['getUserWalletRequest']),
+        ),
+      ),
     );
     if (result.hasException) return Left(Failure());
     return Right(result.parsedData);

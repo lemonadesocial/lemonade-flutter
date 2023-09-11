@@ -33,7 +33,9 @@ class LemonFilledButton extends StatelessWidget {
         height: height ?? Sizing.medium,
         padding: padding ??
             EdgeInsets.symmetric(
-                horizontal: Spacing.xSmall, vertical: Spacing.extraSmall),
+              horizontal: Spacing.xSmall,
+              vertical: Spacing.extraSmall,
+            ),
         decoration: ShapeDecoration(
           color: color ?? colorScheme.onPrimary.withOpacity(0.87),
           shape: RoundedRectangleBorder(

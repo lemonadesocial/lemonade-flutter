@@ -12,8 +12,11 @@ class AttendingEventListingBloc extends BaseEventListingBloc<GetEventsInput> {
   }) : super(eventService, defaultInput: defaultInput);
 
   @override
-  Future<Either<Failure, List<Event>>> getEvents(int skip, bool endReached,
-      {required GetEventsInput input}) async {
+  Future<Either<Failure, List<Event>>> getEvents(
+    int skip,
+    bool endReached, {
+    required GetEventsInput input,
+  }) async {
     return eventService.getEvents(input: input.copyWith(skip: skip));
   }
 }

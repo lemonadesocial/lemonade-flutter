@@ -376,14 +376,16 @@ class SwipeableState extends State<Swipeable>
         }
         _dragExtent = flingVelocity.sign;
         await _moveController.fling(
-            velocity: flingVelocity.abs() * _kFlingVelocityScale);
+          velocity: flingVelocity.abs() * _kFlingVelocityScale,
+        );
         break;
       case _FlingGestureKind.reverse:
         assert(_dragExtent != 0.0);
         assert(!_moveController.isDismissed);
         _dragExtent = flingVelocity.sign;
         await _moveController.fling(
-            velocity: -flingVelocity.abs() * _kFlingVelocityScale);
+          velocity: -flingVelocity.abs() * _kFlingVelocityScale,
+        );
         break;
       case _FlingGestureKind.none:
         if (!_moveController.isDismissed) {
@@ -449,18 +451,20 @@ class SwipeableState extends State<Swipeable>
     );
 
     if (background != null) {
-      content = Stack(children: <Widget>[
-        if (!_moveAnimation.isDismissed)
-          Positioned.fill(
-            child: ClipRect(
-              clipper: _SwipeableClipper(
-                moveAnimation: _moveAnimation,
+      content = Stack(
+        children: <Widget>[
+          if (!_moveAnimation.isDismissed)
+            Positioned.fill(
+              child: ClipRect(
+                clipper: _SwipeableClipper(
+                  moveAnimation: _moveAnimation,
+                ),
+                child: background,
               ),
-              child: background,
             ),
-          ),
-        content,
-      ]);
+          content,
+        ],
+      );
     }
     // We are not swiping but we may be being dragging in widget.direction.
     return Listener(

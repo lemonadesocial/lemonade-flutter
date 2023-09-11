@@ -166,9 +166,10 @@ class EventPostCard extends StatelessWidget {
                   Text(
                     DateFormatUtils.dateOnly(event.start),
                     style: Typo.small.copyWith(
-                        color: colorScheme.onSecondary,
-                        height: 1.5,
-                        fontFamily: FontFamily.circularStd),
+                      color: colorScheme.onSecondary,
+                      height: 1.5,
+                      fontFamily: FontFamily.circularStd,
+                    ),
                   ),
                   Padding(
                     padding: EdgeInsets.only(left: 5.w, right: 5.w, top: 2.h),
@@ -184,9 +185,10 @@ class EventPostCard extends StatelessWidget {
                   Text(
                     DateFormatUtils.timeOnly(event.start),
                     style: Typo.small.copyWith(
-                        color: colorScheme.onSecondary,
-                        height: 1.5,
-                        fontFamily: FontFamily.circularStd),
+                      color: colorScheme.onSecondary,
+                      height: 1.5,
+                      fontFamily: FontFamily.circularStd,
+                    ),
                   )
                 ],
               )

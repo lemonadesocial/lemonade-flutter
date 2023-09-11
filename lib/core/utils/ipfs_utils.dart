@@ -25,8 +25,9 @@ class IpfsUtils {
         var hostname = parts[0].toString();
         var pathname = parts.length >= 2 ? parts[1].toString() : '';
         return FetchableUrl(
-            protocol: protocol,
-            href: 'https://ipfs.io/ipfs/$hostname/$pathname');
+          protocol: protocol,
+          href: 'https://ipfs.io/ipfs/$hostname/$pathname',
+        );
       default:
         throw Exception('Unsupported protocol $protocol');
     }

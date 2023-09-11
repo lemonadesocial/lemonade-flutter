@@ -1,15 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../gen/assets.gen.dart';
-import '../../../../../theme/spacing.dart';
-import '../../../../../theme/typo.dart';
-import '../../../../domain/event/entities/event.dart';
-import '../../../../utils/date_format_utils.dart';
-import '../../../../utils/image_utils.dart';
-import '../../../widgets/image_placeholder_widget.dart';
-import '../../../widgets/lemon_circle_avatar_widget.dart';
-import '../../../widgets/theme_svg_icon_widget.dart';
+import 'package:app/gen/assets.gen.dart';
+import 'package:app/theme/spacing.dart';
+import 'package:app/theme/typo.dart';
+import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/utils/date_format_utils.dart';
+import 'package:app/core/utils/image_utils.dart';
+import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
+import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 
 class CreatePostEventCardWidget extends StatelessWidget {
   const CreatePostEventCardWidget({
@@ -75,8 +75,9 @@ class CreatePostEventCardWidget extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
                 child: LemonCircleAvatar(
                   url: ImageUtils.generateUrl(
-                      file: event.hostExpanded?.newPhotosExpanded?.first,
-                      imageConfig: ImageConfig.profile),
+                    file: event.hostExpanded?.newPhotosExpanded?.first,
+                    imageConfig: ImageConfig.profile,
+                  ),
                   label: event.hostExpanded?.name ?? '',
                 ),
               ),

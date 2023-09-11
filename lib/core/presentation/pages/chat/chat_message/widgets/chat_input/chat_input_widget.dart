@@ -31,28 +31,29 @@ class ChatInput extends StatelessWidget {
             Expanded(
               child: Theme(
                 data: Theme.of(context).copyWith(
-                    inputDecorationTheme: InputDecorationTheme(
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(21),
-                        borderSide: BorderSide(
-                          color: colorScheme.outline,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(21),
-                        borderSide: BorderSide(
-                          color: colorScheme.outline,
-                        ),
-                      ),
-                      contentPadding: EdgeInsets.symmetric(
-                        vertical: Spacing.extraSmall,
-                        horizontal: Spacing.smMedium,
+                  inputDecorationTheme: InputDecorationTheme(
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(21),
+                      borderSide: BorderSide(
+                        color: colorScheme.outline,
                       ),
                     ),
-                    textSelectionTheme: TextSelectionThemeData(
-                      cursorColor: colorScheme.surface,
-                      selectionColor: colorScheme.secondary,
-                    )),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(21),
+                      borderSide: BorderSide(
+                        color: colorScheme.outline,
+                      ),
+                    ),
+                    contentPadding: EdgeInsets.symmetric(
+                      vertical: Spacing.extraSmall,
+                      horizontal: Spacing.smMedium,
+                    ),
+                  ),
+                  textSelectionTheme: TextSelectionThemeData(
+                    cursorColor: colorScheme.surface,
+                    selectionColor: colorScheme.secondary,
+                  ),
+                ),
                 child: InputBar(
                   room: controller.room,
                   minLines: 1,

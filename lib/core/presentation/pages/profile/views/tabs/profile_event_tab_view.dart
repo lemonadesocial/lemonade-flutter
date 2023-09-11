@@ -155,7 +155,8 @@ class _EventList<T extends BaseEventListingBloc> extends StatelessWidget {
 
             final upcomingEvents = events
                 .where(
-                    (event) => !core_date_utils.DateUtils.isPast(event.start))
+                  (event) => !core_date_utils.DateUtils.isPast(event.start),
+                )
                 .toList();
             final pastEvents = events
                 .where((event) => core_date_utils.DateUtils.isPast(event.start))

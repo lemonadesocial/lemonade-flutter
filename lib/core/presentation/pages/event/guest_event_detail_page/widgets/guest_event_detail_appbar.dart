@@ -74,7 +74,9 @@ class _EventDetailCover extends StatelessWidget {
               placeholder: (_, __) => ImagePlaceholder.eventCard(),
               errorWidget: (_, __, ___) => ImagePlaceholder.eventCard(),
               imageUrl: ImageUtils.generateUrl(
-                  file: cover, imageConfig: ImageConfig.eventPoster),
+                file: cover,
+                imageConfig: ImageConfig.eventPoster,
+              ),
             ),
           ),
         ],
