@@ -7,7 +7,6 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 part 'newsfeed_listing_bloc.freezed.dart';
 
@@ -27,7 +26,6 @@ class NewsfeedListingBloc
     getDataFuture: _getNewsfeed,
   );
   final defaultInput = const GetNewsfeedInput();
-  final refreshController = RefreshController();
   final scrollController = ScrollController();
 
   Future<Either<Failure, List<Post>>> _getNewsfeed(
@@ -94,7 +92,6 @@ class NewsfeedListingBloc
 
   @override
   Future<void> close() {
-    refreshController.dispose();
     scrollController.dispose();
     return super.close();
   }

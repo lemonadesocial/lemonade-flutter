@@ -1,5 +1,6 @@
 import 'package:app/core/application/newsfeed/newsfeed_listing_bloc/newsfeed_listing_bloc.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
+import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/post/post_profile_card_widget.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
@@ -17,6 +18,8 @@ class HomeNewsfeedListView extends StatelessWidget {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
     final bloc = context.read<NewsfeedListingBloc>();
+    final refreshController = RefreshController();
+
     return BlocConsumer<NewsfeedListingBloc, NewsfeedListingState>(
       listener: (context, state) {
         if (state.scrollToTopEvent) {
@@ -36,9 +39,13 @@ class HomeNewsfeedListView extends StatelessWidget {
       },
       builder: (context, state) {
         if (state.posts.isEmpty) {
-          return Center(
-            child: EmptyList(emptyText: t.notification.emptyNotifications),
-          );
+          if (state.status != NewsfeedStatus.fetched) {
+            return Loading.defaultLoading(context);
+          } else {
+            return Center(
+              child: EmptyList(emptyText: t.notification.emptyNotifications),
+            );
+          }
         }
         if (state.status == NewsfeedStatus.failure) {
           return Center(
@@ -46,20 +53,20 @@ class HomeNewsfeedListView extends StatelessWidget {
           );
         }
         return SmartRefresher(
-          controller: bloc.refreshController,
+          controller: refreshController,
           enablePullUp: true,
           onRefresh: () {
             context
                 .read<NewsfeedListingBloc>()
                 .add(NewsfeedListingEvent.fetch());
-            bloc.refreshController.refreshCompleted();
+            refreshController.refreshCompleted();
           },
           onLoading: () {
             // add load more here
             context
                 .read<NewsfeedListingBloc>()
                 .add(NewsfeedListingEvent.fetch());
-            bloc.refreshController.loadComplete();
+            refreshController.loadComplete();
           },
           footer: const ClassicFooter(
             height: 100,
