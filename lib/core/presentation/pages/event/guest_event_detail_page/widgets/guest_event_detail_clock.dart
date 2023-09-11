@@ -39,7 +39,6 @@ class GuestEventDetailClock extends StatelessWidget {
     final t = Translations.of(context);
     return Container(
       decoration: BoxDecoration(
-        // color: Colors.red,
         borderRadius: BorderRadius.circular(15.r),
       ),
       child: Stack(
@@ -64,9 +63,10 @@ class GuestEventDetailClock extends StatelessWidget {
             ),
           ),
           Positioned.fill(
-              child: Container(
-            color: Colors.black.withOpacity(0.7),
-          )),
+            child: Container(
+              color: Colors.black.withOpacity(0.7),
+            ),
+          ),
           Padding(
             padding: EdgeInsets.symmetric(
               vertical: Spacing.smMedium,

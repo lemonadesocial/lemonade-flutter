@@ -37,7 +37,10 @@ class LemonAnimatedAppBar extends SliverPersistentHeaderDelegate {
 
   @override
   Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
     final primary = Theme.of(context).colorScheme.primary;
     return AppBar(
       backgroundColor: backgroundColor ?? primary,

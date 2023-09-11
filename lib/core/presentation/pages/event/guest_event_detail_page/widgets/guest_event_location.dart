@@ -43,31 +43,32 @@ class GuestEventLocation extends StatelessWidget {
             SizedBox(
               width: 144.w,
               child: ClipRRect(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(15.sp),
-                    bottomLeft: Radius.circular(15.sp),
-                  ),
-                  child: Stack(
-                    children: [
-                      Positioned.fill(
-                        child: CachedNetworkImage(
-                          fit: BoxFit.cover,
-                          imageUrl: MapUtils.createGoogleMapsURL(
-                            lat: event.latitude ?? 0,
-                            lng: event.longitude ?? 0,
-                            attended: isAttending,
-                          ),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(15.sp),
+                  bottomLeft: Radius.circular(15.sp),
+                ),
+                child: Stack(
+                  children: [
+                    Positioned.fill(
+                      child: CachedNetworkImage(
+                        fit: BoxFit.cover,
+                        imageUrl: MapUtils.createGoogleMapsURL(
+                          lat: event.latitude ?? 0,
+                          lng: event.longitude ?? 0,
+                          attended: isAttending,
                         ),
                       ),
-                      Align(
-                        alignment: Alignment.center,
-                        child: RippleMarker(
-                          size: 90.w,
-                          color: LemonColor.rippleMarkerColor,
-                        ),
-                      )
-                    ],
-                  )),
+                    ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: RippleMarker(
+                        size: 90.w,
+                        color: LemonColor.rippleMarkerColor,
+                      ),
+                    )
+                  ],
+                ),
+              ),
             ),
             Expanded(
               child: Container(
