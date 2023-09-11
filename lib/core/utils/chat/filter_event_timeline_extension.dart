@@ -21,11 +21,11 @@ extension IsStateExtension on Event {
       (isEventTypeKnown) &&
       // hide unimportant state events
       (!isState || importantStateEvents.contains(type));
-      // hide simple join/leave member events in public rooms
-      // (type != EventTypes.RoomMember ||
-      //     room.joinRules != JoinRules.public ||
-      //     content.tryGet<String>('membership') == 'ban' ||
-      //     stateKey != senderId);
+  // hide simple join/leave member events in public rooms
+  // (type != EventTypes.RoomMember ||
+  //     room.joinRules != JoinRules.public ||
+  //     content.tryGet<String>('membership') == 'ban' ||
+  //     stateKey != senderId);
 
   static const Set<String> importantStateEvents = {
     EventTypes.Encryption,
