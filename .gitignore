@@ -52,6 +52,7 @@ app.*.map.json
 # Ignore commit lint
 .githooks/gitlint
 
+# Ignore generated files
 *.g.dart
 *.freezed.dart
 *.gr.dart
