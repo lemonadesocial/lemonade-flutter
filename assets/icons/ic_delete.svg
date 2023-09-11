@@ -1,0 +1,10 @@
+<svg width="15" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="ic_delete">
+<g id="Vector">
+<path d="M9.375 2.375V3.625H13.125V4.875H1.875V3.625H5.625V2.375H9.375Z" fill="#FF6565"/>
+<path d="M6.875 8H5.625V11.75H6.875V8Z" fill="#FF6565"/>
+<path d="M8.125 8H9.375V11.75H8.125V8Z" fill="#FF6565"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M4.375 14.25C3.68562 14.25 3.125 13.6894 3.125 13V5.5H11.875V13C11.875 13.6894 11.3144 14.25 10.625 14.25H4.375ZM10.625 6.75H4.375V13H10.6256L10.625 6.75Z" fill="#FF6565"/>
+</g>
+</g>
+</svg>
