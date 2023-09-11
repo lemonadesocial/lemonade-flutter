@@ -285,6 +285,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_qr.svg
   SvgGenImage get icQr => const SvgGenImage('assets/icons/ic_qr.svg');
 
+  /// File path: assets/icons/ic_refresh.svg
+  SvgGenImage get icRefresh => const SvgGenImage('assets/icons/ic_refresh.svg');
+
   /// File path: assets/icons/ic_search.svg
   SvgGenImage get icSearch => const SvgGenImage('assets/icons/ic_search.svg');
 
@@ -399,6 +402,7 @@ class $AssetsIconsGen {
         icProfile,
         icPublic,
         icQr,
+        icRefresh,
         icSearch,
         icSelectImage,
         icSendMessage,
