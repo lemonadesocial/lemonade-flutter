@@ -1,9 +1,9 @@
 /// Generated file. Do not edit.
 ///
 /// Locales: 1
-/// Strings: 200
+/// Strings: 203
 ///
-/// Built on 2023-09-08 at 16:06 UTC
+/// Built on 2023-09-11 at 04:00 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -439,6 +439,7 @@ class _I18nEventEn {
   String get aboutTheEvent => 'About the event';
   String eventStartIn({required Object time}) => 'Starting in ${time}';
   String get eventEnded => 'Event ended';
+  late final _I18nEventDashboardEn dashboard = _I18nEventDashboardEn._(_root);
 }
 
 // Path: onboarding
@@ -579,6 +580,18 @@ class _I18nCommonUnitEn {
   // Translations
   String get m => 'm';
   String get km => 'km';
+}
+
+// Path: event.dashboard
+class _I18nEventDashboardEn {
+  _I18nEventDashboardEn._(this._root);
+
+  final _I18nEn _root; // ignore: unused_field
+
+  // Translations
+  String get liveChat => 'Live chat';
+  String get invite => 'Invite';
+  String get leaderBoard => 'Leaderboard';
 }
 
 // Path: discover.cardSections.events
@@ -1094,6 +1107,12 @@ extension on _I18nEn {
         return ({required Object time}) => 'Starting in ${time}';
       case 'event.eventEnded':
         return 'Event ended';
+      case 'event.dashboard.liveChat':
+        return 'Live chat';
+      case 'event.dashboard.invite':
+        return 'Invite';
+      case 'event.dashboard.leaderBoard':
+        return 'Leaderboard';
       case 'onboarding.pickUsername':
         return 'Pick username';
       case 'onboarding.pickUsernameDesc':

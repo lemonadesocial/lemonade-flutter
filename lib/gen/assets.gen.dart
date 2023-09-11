@@ -89,6 +89,10 @@ class $AssetsIconsGen {
   SvgGenImage get icChatBubble =>
       const SvgGenImage('assets/icons/ic_chat_bubble.svg');
 
+  /// File path: assets/icons/ic_chat_bubble_gradient.svg
+  SvgGenImage get icChatBubbleGradient =>
+      const SvgGenImage('assets/icons/ic_chat_bubble_gradient.svg');
+
   /// File path: assets/icons/ic_close.svg
   SvgGenImage get icClose => const SvgGenImage('assets/icons/ic_close.svg');
 
@@ -207,6 +211,10 @@ class $AssetsIconsGen {
   SvgGenImage get icJoinSpace =>
       const SvgGenImage('assets/icons/ic_join_space.svg');
 
+  /// File path: assets/icons/ic_leaderboard_gradient.svg
+  SvgGenImage get icLeaderboardGradient =>
+      const SvgGenImage('assets/icons/ic_leaderboard_gradient.svg');
+
   /// File path: assets/icons/ic_lemon_filled_background.png
   AssetGenImage get icLemonFilledBackground =>
       const AssetGenImage('assets/icons/ic_lemon_filled_background.png');
@@ -322,6 +330,10 @@ class $AssetsIconsGen {
   SvgGenImage get icUserAdd =>
       const SvgGenImage('assets/icons/ic_user_add.svg');
 
+  /// File path: assets/icons/ic_user_add_gradient.svg
+  SvgGenImage get icUserAddGradient =>
+      const SvgGenImage('assets/icons/ic_user_add_gradient.svg');
+
   /// File path: assets/icons/ic_wallet.svg
   SvgGenImage get icWallet => const SvgGenImage('assets/icons/ic_wallet.svg');
 
@@ -345,6 +357,7 @@ class $AssetsIconsGen {
         icCamera,
         icChat,
         icChatBubble,
+        icChatBubbleGradient,
         icClose,
         icCrystal,
         icDiscover,
@@ -377,6 +390,7 @@ class $AssetsIconsGen {
         icInsights,
         icInstagram,
         icJoinSpace,
+        icLeaderboardGradient,
         icLemonFilledBackground,
         icLemonFilledStart,
         icLemonOutline,
@@ -410,6 +424,7 @@ class $AssetsIconsGen {
         icTicketBold,
         icTwitter,
         icUserAdd,
+        icUserAddGradient,
         icWallet,
         icWalletFilled,
         icoCreateSpace,

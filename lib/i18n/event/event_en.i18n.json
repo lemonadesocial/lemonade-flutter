@@ -22,5 +22,10 @@
     "processing": "Processing...",
     "aboutTheEvent": "About the event",
     "eventStartIn": "Starting in $time",
-    "eventEnded": "Event ended"
+    "eventEnded": "Event ended",
+    "dashboard": {
+        "liveChat": "Live chat",
+        "invite": "Invite",
+        "leaderBoard": "Leaderboard"
+    }
 }

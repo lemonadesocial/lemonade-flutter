@@ -1,6 +1,7 @@
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/presentation/pages/event/guest_event_detail_page/widgets/guest_event_detail_about_card.dart';
 import 'package:app/core/presentation/pages/event/guest_event_detail_page/widgets/guest_event_detail_clock.dart';
+import 'package:app/core/presentation/pages/event/guest_event_detail_page/widgets/guest_event_detail_dashboard.dart';
 import 'package:app/core/presentation/pages/event/guest_event_detail_page/widgets/guest_event_detail_hosts.dart';
 import 'package:app/core/presentation/pages/event/guest_event_detail_page/widgets/guest_event_detail_photos.dart';
 import 'package:app/core/presentation/pages/event/guest_event_detail_page/widgets/guest_event_location.dart';
@@ -44,8 +45,20 @@ class PostGuestEventDetail extends StatelessWidget {
                       SliverPadding(
                         padding: EdgeInsets.only(top: Spacing.smMedium * 2),
                       ),
+                      SliverPadding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: Spacing.smMedium),
+                          sliver: const SliverToBoxAdapter(
+                            child: GuestEventDetailDashboard(),
+                          )),
+                      SliverPadding(
+                        padding: EdgeInsets.only(top: Spacing.smMedium),
+                      ),
                       if (event.latitude != null &&
                           event.longitude != null) ...[
+                        SliverPadding(
+                          padding: EdgeInsets.only(top: Spacing.smMedium),
+                        ),
                         SliverPadding(
                           padding: EdgeInsets.symmetric(
                               horizontal: Spacing.smMedium),
@@ -54,8 +67,8 @@ class PostGuestEventDetail extends StatelessWidget {
                           ),
                         ),
                         SliverPadding(
-                          padding: EdgeInsets.symmetric(
-                            vertical: Spacing.smMedium,
+                          padding: EdgeInsets.only(
+                            bottom: Spacing.smMedium,
                           ),
                         ),
                       ],
@@ -66,6 +79,11 @@ class PostGuestEventDetail extends StatelessWidget {
                         ),
                         sliver: SliverToBoxAdapter(
                           child: GuestEventDetailAboutCard(event: event),
+                        ),
+                      ),
+                      SliverPadding(
+                        padding: EdgeInsets.only(
+                          top: Spacing.smMedium,
                         ),
                       ),
                       SliverToBoxAdapter(
