@@ -43,6 +43,33 @@ class PoapViewCheckHasClaimedDto {
 }
 
 @freezed
+class TransferDto with _$TransferDto {
+  const factory TransferDto({
+    @JsonKey(name: '_id') String? id,
+    String? network,
+    TransferState? state,
+    String? errorMessage,
+    TransferArgsDto? args,
+    String? address,
+    String? tokenId,
+  }) = _TransferDto;
+
+  factory TransferDto.fromJson(Map<String, dynamic> json) =>
+      _$TransferDtoFromJson(json);
+}
+
+@freezed
+class TransferArgsDto with _$TransferArgsDto {
+  const factory TransferArgsDto({
+    String? claimer,
+    String? tokenURI,
+  }) = _TransferArgsDto;
+
+  factory TransferArgsDto.fromJson(Map<String, dynamic> json) =>
+      _$TransferArgsDtoFromJson(json);
+}
+
+@freezed
 class ClaimDto with _$ClaimDto {
   const factory ClaimDto({
     @JsonKey(name: '_id') String? id,

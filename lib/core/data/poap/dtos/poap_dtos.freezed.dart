@@ -14,6 +14,442 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
+TransferDto _$TransferDtoFromJson(Map<String, dynamic> json) {
+  return _TransferDto.fromJson(json);
+}
+
+/// @nodoc
+mixin _$TransferDto {
+  @JsonKey(name: '_id')
+  String? get id => throw _privateConstructorUsedError;
+  String? get network => throw _privateConstructorUsedError;
+  TransferState? get state => throw _privateConstructorUsedError;
+  String? get errorMessage => throw _privateConstructorUsedError;
+  TransferArgsDto? get args => throw _privateConstructorUsedError;
+  String? get address => throw _privateConstructorUsedError;
+  String? get tokenId => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $TransferDtoCopyWith<TransferDto> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $TransferDtoCopyWith<$Res> {
+  factory $TransferDtoCopyWith(
+          TransferDto value, $Res Function(TransferDto) then) =
+      _$TransferDtoCopyWithImpl<$Res, TransferDto>;
+  @useResult
+  $Res call(
+      {@JsonKey(name: '_id') String? id,
+      String? network,
+      TransferState? state,
+      String? errorMessage,
+      TransferArgsDto? args,
+      String? address,
+      String? tokenId});
+
+  $TransferArgsDtoCopyWith<$Res>? get args;
+}
+
+/// @nodoc
+class _$TransferDtoCopyWithImpl<$Res, $Val extends TransferDto>
+    implements $TransferDtoCopyWith<$Res> {
+  _$TransferDtoCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = freezed,
+    Object? network = freezed,
+    Object? state = freezed,
+    Object? errorMessage = freezed,
+    Object? args = freezed,
+    Object? address = freezed,
+    Object? tokenId = freezed,
+  }) {
+    return _then(_value.copyWith(
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String?,
+      network: freezed == network
+          ? _value.network
+          : network // ignore: cast_nullable_to_non_nullable
+              as String?,
+      state: freezed == state
+          ? _value.state
+          : state // ignore: cast_nullable_to_non_nullable
+              as TransferState?,
+      errorMessage: freezed == errorMessage
+          ? _value.errorMessage
+          : errorMessage // ignore: cast_nullable_to_non_nullable
+              as String?,
+      args: freezed == args
+          ? _value.args
+          : args // ignore: cast_nullable_to_non_nullable
+              as TransferArgsDto?,
+      address: freezed == address
+          ? _value.address
+          : address // ignore: cast_nullable_to_non_nullable
+              as String?,
+      tokenId: freezed == tokenId
+          ? _value.tokenId
+          : tokenId // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $TransferArgsDtoCopyWith<$Res>? get args {
+    if (_value.args == null) {
+      return null;
+    }
+
+    return $TransferArgsDtoCopyWith<$Res>(_value.args!, (value) {
+      return _then(_value.copyWith(args: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$_TransferDtoCopyWith<$Res>
+    implements $TransferDtoCopyWith<$Res> {
+  factory _$$_TransferDtoCopyWith(
+          _$_TransferDto value, $Res Function(_$_TransferDto) then) =
+      __$$_TransferDtoCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {@JsonKey(name: '_id') String? id,
+      String? network,
+      TransferState? state,
+      String? errorMessage,
+      TransferArgsDto? args,
+      String? address,
+      String? tokenId});
+
+  @override
+  $TransferArgsDtoCopyWith<$Res>? get args;
+}
+
+/// @nodoc
+class __$$_TransferDtoCopyWithImpl<$Res>
+    extends _$TransferDtoCopyWithImpl<$Res, _$_TransferDto>
+    implements _$$_TransferDtoCopyWith<$Res> {
+  __$$_TransferDtoCopyWithImpl(
+      _$_TransferDto _value, $Res Function(_$_TransferDto) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = freezed,
+    Object? network = freezed,
+    Object? state = freezed,
+    Object? errorMessage = freezed,
+    Object? args = freezed,
+    Object? address = freezed,
+    Object? tokenId = freezed,
+  }) {
+    return _then(_$_TransferDto(
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String?,
+      network: freezed == network
+          ? _value.network
+          : network // ignore: cast_nullable_to_non_nullable
+              as String?,
+      state: freezed == state
+          ? _value.state
+          : state // ignore: cast_nullable_to_non_nullable
+              as TransferState?,
+      errorMessage: freezed == errorMessage
+          ? _value.errorMessage
+          : errorMessage // ignore: cast_nullable_to_non_nullable
+              as String?,
+      args: freezed == args
+          ? _value.args
+          : args // ignore: cast_nullable_to_non_nullable
+              as TransferArgsDto?,
+      address: freezed == address
+          ? _value.address
+          : address // ignore: cast_nullable_to_non_nullable
+              as String?,
+      tokenId: freezed == tokenId
+          ? _value.tokenId
+          : tokenId // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$_TransferDto implements _TransferDto {
+  const _$_TransferDto(
+      {@JsonKey(name: '_id') this.id,
+      this.network,
+      this.state,
+      this.errorMessage,
+      this.args,
+      this.address,
+      this.tokenId});
+
+  factory _$_TransferDto.fromJson(Map<String, dynamic> json) =>
+      _$$_TransferDtoFromJson(json);
+
+  @override
+  @JsonKey(name: '_id')
+  final String? id;
+  @override
+  final String? network;
+  @override
+  final TransferState? state;
+  @override
+  final String? errorMessage;
+  @override
+  final TransferArgsDto? args;
+  @override
+  final String? address;
+  @override
+  final String? tokenId;
+
+  @override
+  String toString() {
+    return 'TransferDto(id: $id, network: $network, state: $state, errorMessage: $errorMessage, args: $args, address: $address, tokenId: $tokenId)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_TransferDto &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.network, network) || other.network == network) &&
+            (identical(other.state, state) || other.state == state) &&
+            (identical(other.errorMessage, errorMessage) ||
+                other.errorMessage == errorMessage) &&
+            (identical(other.args, args) || other.args == args) &&
+            (identical(other.address, address) || other.address == address) &&
+            (identical(other.tokenId, tokenId) || other.tokenId == tokenId));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType, id, network, state, errorMessage, args, address, tokenId);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$_TransferDtoCopyWith<_$_TransferDto> get copyWith =>
+      __$$_TransferDtoCopyWithImpl<_$_TransferDto>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_TransferDtoToJson(
+      this,
+    );
+  }
+}
+
+abstract class _TransferDto implements TransferDto {
+  const factory _TransferDto(
+      {@JsonKey(name: '_id') final String? id,
+      final String? network,
+      final TransferState? state,
+      final String? errorMessage,
+      final TransferArgsDto? args,
+      final String? address,
+      final String? tokenId}) = _$_TransferDto;
+
+  factory _TransferDto.fromJson(Map<String, dynamic> json) =
+      _$_TransferDto.fromJson;
+
+  @override
+  @JsonKey(name: '_id')
+  String? get id;
+  @override
+  String? get network;
+  @override
+  TransferState? get state;
+  @override
+  String? get errorMessage;
+  @override
+  TransferArgsDto? get args;
+  @override
+  String? get address;
+  @override
+  String? get tokenId;
+  @override
+  @JsonKey(ignore: true)
+  _$$_TransferDtoCopyWith<_$_TransferDto> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+TransferArgsDto _$TransferArgsDtoFromJson(Map<String, dynamic> json) {
+  return _TransferArgsDto.fromJson(json);
+}
+
+/// @nodoc
+mixin _$TransferArgsDto {
+  String? get claimer => throw _privateConstructorUsedError;
+  String? get tokenURI => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $TransferArgsDtoCopyWith<TransferArgsDto> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $TransferArgsDtoCopyWith<$Res> {
+  factory $TransferArgsDtoCopyWith(
+          TransferArgsDto value, $Res Function(TransferArgsDto) then) =
+      _$TransferArgsDtoCopyWithImpl<$Res, TransferArgsDto>;
+  @useResult
+  $Res call({String? claimer, String? tokenURI});
+}
+
+/// @nodoc
+class _$TransferArgsDtoCopyWithImpl<$Res, $Val extends TransferArgsDto>
+    implements $TransferArgsDtoCopyWith<$Res> {
+  _$TransferArgsDtoCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? claimer = freezed,
+    Object? tokenURI = freezed,
+  }) {
+    return _then(_value.copyWith(
+      claimer: freezed == claimer
+          ? _value.claimer
+          : claimer // ignore: cast_nullable_to_non_nullable
+              as String?,
+      tokenURI: freezed == tokenURI
+          ? _value.tokenURI
+          : tokenURI // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$_TransferArgsDtoCopyWith<$Res>
+    implements $TransferArgsDtoCopyWith<$Res> {
+  factory _$$_TransferArgsDtoCopyWith(
+          _$_TransferArgsDto value, $Res Function(_$_TransferArgsDto) then) =
+      __$$_TransferArgsDtoCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({String? claimer, String? tokenURI});
+}
+
+/// @nodoc
+class __$$_TransferArgsDtoCopyWithImpl<$Res>
+    extends _$TransferArgsDtoCopyWithImpl<$Res, _$_TransferArgsDto>
+    implements _$$_TransferArgsDtoCopyWith<$Res> {
+  __$$_TransferArgsDtoCopyWithImpl(
+      _$_TransferArgsDto _value, $Res Function(_$_TransferArgsDto) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? claimer = freezed,
+    Object? tokenURI = freezed,
+  }) {
+    return _then(_$_TransferArgsDto(
+      claimer: freezed == claimer
+          ? _value.claimer
+          : claimer // ignore: cast_nullable_to_non_nullable
+              as String?,
+      tokenURI: freezed == tokenURI
+          ? _value.tokenURI
+          : tokenURI // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$_TransferArgsDto implements _TransferArgsDto {
+  const _$_TransferArgsDto({this.claimer, this.tokenURI});
+
+  factory _$_TransferArgsDto.fromJson(Map<String, dynamic> json) =>
+      _$$_TransferArgsDtoFromJson(json);
+
+  @override
+  final String? claimer;
+  @override
+  final String? tokenURI;
+
+  @override
+  String toString() {
+    return 'TransferArgsDto(claimer: $claimer, tokenURI: $tokenURI)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_TransferArgsDto &&
+            (identical(other.claimer, claimer) || other.claimer == claimer) &&
+            (identical(other.tokenURI, tokenURI) ||
+                other.tokenURI == tokenURI));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, claimer, tokenURI);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$_TransferArgsDtoCopyWith<_$_TransferArgsDto> get copyWith =>
+      __$$_TransferArgsDtoCopyWithImpl<_$_TransferArgsDto>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_TransferArgsDtoToJson(
+      this,
+    );
+  }
+}
+
+abstract class _TransferArgsDto implements TransferArgsDto {
+  const factory _TransferArgsDto(
+      {final String? claimer, final String? tokenURI}) = _$_TransferArgsDto;
+
+  factory _TransferArgsDto.fromJson(Map<String, dynamic> json) =
+      _$_TransferArgsDto.fromJson;
+
+  @override
+  String? get claimer;
+  @override
+  String? get tokenURI;
+  @override
+  @JsonKey(ignore: true)
+  _$$_TransferArgsDtoCopyWith<_$_TransferArgsDto> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
 ClaimDto _$ClaimDtoFromJson(Map<String, dynamic> json) {
   return _ClaimDto.fromJson(json);
 }

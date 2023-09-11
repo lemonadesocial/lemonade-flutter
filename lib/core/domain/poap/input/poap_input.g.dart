@@ -81,6 +81,46 @@ Map<String, dynamic> _$$_ClaimArgsInputToJson(_$_ClaimArgsInput instance) =>
       'tokenURI': instance.tokenURI,
     };
 
+_$_TransferInput _$$_TransferInputFromJson(Map<String, dynamic> json) =>
+    _$_TransferInput(
+      network: json['network'] as String,
+      address: json['address'] as String,
+      input: json['input'] == null
+          ? null
+          : ClaimArgsInput.fromJson(json['input'] as Map<String, dynamic>),
+      to: json['to'] as String?,
+    );
+
+Map<String, dynamic> _$$_TransferInputToJson(_$_TransferInput instance) {
+  final val = <String, dynamic>{
+    'network': instance.network,
+    'address': instance.address,
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('input', instance.input?.toJson());
+  writeNotNull('to', instance.to);
+  return val;
+}
+
+_$_TransferArgsInput _$$_TransferArgsInputFromJson(Map<String, dynamic> json) =>
+    _$_TransferArgsInput(
+      claimer: json['claimer'] as String?,
+      tokenURI: json['tokenURI'] as String?,
+    );
+
+Map<String, dynamic> _$$_TransferArgsInputToJson(
+        _$_TransferArgsInput instance) =>
+    <String, dynamic>{
+      'claimer': instance.claimer,
+      'tokenURI': instance.tokenURI,
+    };
+
 _$_GetPoapPolicyInput _$$_GetPoapPolicyInputFromJson(
         Map<String, dynamic> json) =>
     _$_GetPoapPolicyInput(

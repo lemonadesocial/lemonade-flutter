@@ -26,3 +26,24 @@ final claimPoapMutation = gql('''
   }
 }
 ''');
+
+final transferMutation = gql('''
+  mutation transfer(
+    \$input: TransferArgsInput!
+    \$network: String!
+    \$address: Address!
+  ) {
+    transfer(input: \$input, network: \$network, address: \$address) {
+      _id
+      network
+      state
+      to
+      errorMessage
+      address
+      args {
+        to
+        tokenId
+      }
+    }
+  }
+''');

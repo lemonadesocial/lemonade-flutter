@@ -773,6 +773,370 @@ abstract class _ClaimArgsInput implements ClaimArgsInput {
       throw _privateConstructorUsedError;
 }
 
+TransferInput _$TransferInputFromJson(Map<String, dynamic> json) {
+  return _TransferInput.fromJson(json);
+}
+
+/// @nodoc
+mixin _$TransferInput {
+  String get network => throw _privateConstructorUsedError;
+  String get address => throw _privateConstructorUsedError;
+  ClaimArgsInput? get input => throw _privateConstructorUsedError;
+  String? get to => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $TransferInputCopyWith<TransferInput> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $TransferInputCopyWith<$Res> {
+  factory $TransferInputCopyWith(
+          TransferInput value, $Res Function(TransferInput) then) =
+      _$TransferInputCopyWithImpl<$Res, TransferInput>;
+  @useResult
+  $Res call(
+      {String network, String address, ClaimArgsInput? input, String? to});
+
+  $ClaimArgsInputCopyWith<$Res>? get input;
+}
+
+/// @nodoc
+class _$TransferInputCopyWithImpl<$Res, $Val extends TransferInput>
+    implements $TransferInputCopyWith<$Res> {
+  _$TransferInputCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? network = null,
+    Object? address = null,
+    Object? input = freezed,
+    Object? to = freezed,
+  }) {
+    return _then(_value.copyWith(
+      network: null == network
+          ? _value.network
+          : network // ignore: cast_nullable_to_non_nullable
+              as String,
+      address: null == address
+          ? _value.address
+          : address // ignore: cast_nullable_to_non_nullable
+              as String,
+      input: freezed == input
+          ? _value.input
+          : input // ignore: cast_nullable_to_non_nullable
+              as ClaimArgsInput?,
+      to: freezed == to
+          ? _value.to
+          : to // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $ClaimArgsInputCopyWith<$Res>? get input {
+    if (_value.input == null) {
+      return null;
+    }
+
+    return $ClaimArgsInputCopyWith<$Res>(_value.input!, (value) {
+      return _then(_value.copyWith(input: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$_TransferInputCopyWith<$Res>
+    implements $TransferInputCopyWith<$Res> {
+  factory _$$_TransferInputCopyWith(
+          _$_TransferInput value, $Res Function(_$_TransferInput) then) =
+      __$$_TransferInputCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {String network, String address, ClaimArgsInput? input, String? to});
+
+  @override
+  $ClaimArgsInputCopyWith<$Res>? get input;
+}
+
+/// @nodoc
+class __$$_TransferInputCopyWithImpl<$Res>
+    extends _$TransferInputCopyWithImpl<$Res, _$_TransferInput>
+    implements _$$_TransferInputCopyWith<$Res> {
+  __$$_TransferInputCopyWithImpl(
+      _$_TransferInput _value, $Res Function(_$_TransferInput) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? network = null,
+    Object? address = null,
+    Object? input = freezed,
+    Object? to = freezed,
+  }) {
+    return _then(_$_TransferInput(
+      network: null == network
+          ? _value.network
+          : network // ignore: cast_nullable_to_non_nullable
+              as String,
+      address: null == address
+          ? _value.address
+          : address // ignore: cast_nullable_to_non_nullable
+              as String,
+      input: freezed == input
+          ? _value.input
+          : input // ignore: cast_nullable_to_non_nullable
+              as ClaimArgsInput?,
+      to: freezed == to
+          ? _value.to
+          : to // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
+  }
+}
+
+/// @nodoc
+
+@JsonSerializable(includeIfNull: false, explicitToJson: true)
+class _$_TransferInput implements _TransferInput {
+  _$_TransferInput(
+      {required this.network, required this.address, this.input, this.to});
+
+  factory _$_TransferInput.fromJson(Map<String, dynamic> json) =>
+      _$$_TransferInputFromJson(json);
+
+  @override
+  final String network;
+  @override
+  final String address;
+  @override
+  final ClaimArgsInput? input;
+  @override
+  final String? to;
+
+  @override
+  String toString() {
+    return 'TransferInput(network: $network, address: $address, input: $input, to: $to)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_TransferInput &&
+            (identical(other.network, network) || other.network == network) &&
+            (identical(other.address, address) || other.address == address) &&
+            (identical(other.input, input) || other.input == input) &&
+            (identical(other.to, to) || other.to == to));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, network, address, input, to);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$_TransferInputCopyWith<_$_TransferInput> get copyWith =>
+      __$$_TransferInputCopyWithImpl<_$_TransferInput>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_TransferInputToJson(
+      this,
+    );
+  }
+}
+
+abstract class _TransferInput implements TransferInput {
+  factory _TransferInput(
+      {required final String network,
+      required final String address,
+      final ClaimArgsInput? input,
+      final String? to}) = _$_TransferInput;
+
+  factory _TransferInput.fromJson(Map<String, dynamic> json) =
+      _$_TransferInput.fromJson;
+
+  @override
+  String get network;
+  @override
+  String get address;
+  @override
+  ClaimArgsInput? get input;
+  @override
+  String? get to;
+  @override
+  @JsonKey(ignore: true)
+  _$$_TransferInputCopyWith<_$_TransferInput> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+TransferArgsInput _$TransferArgsInputFromJson(Map<String, dynamic> json) {
+  return _TransferArgsInput.fromJson(json);
+}
+
+/// @nodoc
+mixin _$TransferArgsInput {
+  String? get claimer => throw _privateConstructorUsedError;
+  String? get tokenURI => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $TransferArgsInputCopyWith<TransferArgsInput> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $TransferArgsInputCopyWith<$Res> {
+  factory $TransferArgsInputCopyWith(
+          TransferArgsInput value, $Res Function(TransferArgsInput) then) =
+      _$TransferArgsInputCopyWithImpl<$Res, TransferArgsInput>;
+  @useResult
+  $Res call({String? claimer, String? tokenURI});
+}
+
+/// @nodoc
+class _$TransferArgsInputCopyWithImpl<$Res, $Val extends TransferArgsInput>
+    implements $TransferArgsInputCopyWith<$Res> {
+  _$TransferArgsInputCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? claimer = freezed,
+    Object? tokenURI = freezed,
+  }) {
+    return _then(_value.copyWith(
+      claimer: freezed == claimer
+          ? _value.claimer
+          : claimer // ignore: cast_nullable_to_non_nullable
+              as String?,
+      tokenURI: freezed == tokenURI
+          ? _value.tokenURI
+          : tokenURI // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$_TransferArgsInputCopyWith<$Res>
+    implements $TransferArgsInputCopyWith<$Res> {
+  factory _$$_TransferArgsInputCopyWith(_$_TransferArgsInput value,
+          $Res Function(_$_TransferArgsInput) then) =
+      __$$_TransferArgsInputCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({String? claimer, String? tokenURI});
+}
+
+/// @nodoc
+class __$$_TransferArgsInputCopyWithImpl<$Res>
+    extends _$TransferArgsInputCopyWithImpl<$Res, _$_TransferArgsInput>
+    implements _$$_TransferArgsInputCopyWith<$Res> {
+  __$$_TransferArgsInputCopyWithImpl(
+      _$_TransferArgsInput _value, $Res Function(_$_TransferArgsInput) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? claimer = freezed,
+    Object? tokenURI = freezed,
+  }) {
+    return _then(_$_TransferArgsInput(
+      claimer: freezed == claimer
+          ? _value.claimer
+          : claimer // ignore: cast_nullable_to_non_nullable
+              as String?,
+      tokenURI: freezed == tokenURI
+          ? _value.tokenURI
+          : tokenURI // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$_TransferArgsInput implements _TransferArgsInput {
+  const _$_TransferArgsInput({this.claimer, this.tokenURI});
+
+  factory _$_TransferArgsInput.fromJson(Map<String, dynamic> json) =>
+      _$$_TransferArgsInputFromJson(json);
+
+  @override
+  final String? claimer;
+  @override
+  final String? tokenURI;
+
+  @override
+  String toString() {
+    return 'TransferArgsInput(claimer: $claimer, tokenURI: $tokenURI)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_TransferArgsInput &&
+            (identical(other.claimer, claimer) || other.claimer == claimer) &&
+            (identical(other.tokenURI, tokenURI) ||
+                other.tokenURI == tokenURI));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, claimer, tokenURI);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$_TransferArgsInputCopyWith<_$_TransferArgsInput> get copyWith =>
+      __$$_TransferArgsInputCopyWithImpl<_$_TransferArgsInput>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_TransferArgsInputToJson(
+      this,
+    );
+  }
+}
+
+abstract class _TransferArgsInput implements TransferArgsInput {
+  const factory _TransferArgsInput(
+      {final String? claimer, final String? tokenURI}) = _$_TransferArgsInput;
+
+  factory _TransferArgsInput.fromJson(Map<String, dynamic> json) =
+      _$_TransferArgsInput.fromJson;
+
+  @override
+  String? get claimer;
+  @override
+  String? get tokenURI;
+  @override
+  @JsonKey(ignore: true)
+  _$$_TransferArgsInputCopyWith<_$_TransferArgsInput> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
 GetPoapPolicyInput _$GetPoapPolicyInputFromJson(Map<String, dynamic> json) {
   return _GetPoapPolicyInput.fromJson(json);
 }
