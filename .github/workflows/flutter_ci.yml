@@ -21,6 +21,10 @@ jobs:
           touch .env.staging
           touch .env.production
 
+      - name: Run build_runner
+        run: |
+          flutter packages pub run build_runner build --delete-conflicting-outputs
+
       # Check for any formatting issues in the code.
       - name: Format code
         run: dart format --set-exit-if-changed .  
