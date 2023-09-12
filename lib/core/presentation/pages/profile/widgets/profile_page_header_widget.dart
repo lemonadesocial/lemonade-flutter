@@ -1,5 +1,6 @@
 import 'package:app/core/config.dart';
 import 'package:app/core/domain/user/entities/user.dart';
+import 'package:app/core/presentation/pages/edit_profile/edit_profile_page.dart';
 import 'package:app/core/presentation/widgets/common/badge/username_badge_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
@@ -10,9 +11,11 @@ import 'package:app/core/utils/number_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -77,9 +80,9 @@ class _ActionButtons extends StatelessWidget {
       children: [
         Expanded(
           child: LinearGradientButton(
-            onTap: () {},
+            onTap: () =>
+                context.router.push(EditProfileRoute(userProfile: user)),
             label: t.common.actions.editProfile,
-            radius: BorderRadius.circular(LemonRadius.xSmall),
             textStyle: Typo.small.copyWith(
               fontWeight: FontWeight.w600,
               letterSpacing: 0.24,
@@ -92,7 +95,6 @@ class _ActionButtons extends StatelessWidget {
           child: LinearGradientButton(
             onTap: () => _shareProfileLink(context, user: user),
             label: t.common.actions.shareProfile,
-            radius: BorderRadius.circular(LemonRadius.xSmall),
             textStyle: Typo.small.copyWith(
               fontWeight: FontWeight.w600,
               letterSpacing: 0.24,
