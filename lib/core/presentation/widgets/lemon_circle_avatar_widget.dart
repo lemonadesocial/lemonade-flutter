@@ -34,21 +34,22 @@ class LemonCircleAvatar extends StatelessWidget {
 
   Container _buildAvatar(ColorScheme themeColor) {
     return Container(
-        width: avatarSize,
-        height: avatarSize,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(avatarSize),
-          border: Border.all(color: themeColor.outline),
+      width: avatarSize,
+      height: avatarSize,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(avatarSize),
+        border: Border.all(color: themeColor.outline),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(avatarSize),
+        child: CachedNetworkImage(
+          fit: BoxFit.cover,
+          imageUrl: url,
+          placeholder: (ctx, url) => _buildPlaceHolder(),
+          errorWidget: (ctx, url, error) => _buildPlaceHolder(),
         ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(avatarSize),
-          child: CachedNetworkImage(
-            fit: BoxFit.cover,
-            imageUrl: url,
-            placeholder: (ctx, url) => _buildPlaceHolder(),
-            errorWidget: (ctx, url, error) => _buildPlaceHolder(),
-          ),
-        ));
+      ),
+    );
   }
 
   Widget _buildPlaceHolder() => Center(

@@ -2,7 +2,7 @@ import 'package:app/core/config.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:flutter/widgets.dart';
 import 'package:matrix/matrix.dart';
-import 'date_time_extension.dart';
+import 'package:app/core/utils/chat/date_time_extension.dart';
 
 extension RoomStatusExtension on Room {
   CachedPresence? get directChatPresence =>

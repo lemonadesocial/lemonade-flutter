@@ -64,13 +64,14 @@ class ChatListItem extends StatelessWidget {
     }
     return FutureBuilder<String>(
       future: room.lastEvent?.calcLocalizedBody(
-              const MatrixDefaultLocalizations(),
-              hideReply: true,
-              hideEdit: true,
-              plaintextBody: true,
-              removeMarkdown: true,
-              withSenderNamePrefix: !room.isDirectChat ||
-                  room.directChatMatrixID != room.lastEvent?.senderId) ??
+            const MatrixDefaultLocalizations(),
+            hideReply: true,
+            hideEdit: true,
+            plaintextBody: true,
+            removeMarkdown: true,
+            withSenderNamePrefix: !room.isDirectChat ||
+                room.directChatMatrixID != room.lastEvent?.senderId,
+          ) ??
           Future.value(t.chat.emptyChat),
       builder: (context, snapshot) {
         return Text(
@@ -78,14 +79,14 @@ class ChatListItem extends StatelessWidget {
               ? t.chat.youAreInvitedToThisChat
               : snapshot.data ??
                   room.lastEvent?.calcLocalizedBodyFallback(
-                      const MatrixDefaultLocalizations(),
-                      hideReply: true,
-                      hideEdit: true,
-                      plaintextBody: true,
-                      removeMarkdown: true,
-                      withSenderNamePrefix: !room.isDirectChat ||
-                          room.directChatMatrixID !=
-                              room.lastEvent?.senderId) ??
+                    const MatrixDefaultLocalizations(),
+                    hideReply: true,
+                    hideEdit: true,
+                    plaintextBody: true,
+                    removeMarkdown: true,
+                    withSenderNamePrefix: !room.isDirectChat ||
+                        room.directChatMatrixID != room.lastEvent?.senderId,
+                  ) ??
                   t.chat.emptyChat,
           softWrap: false,
           maxLines: 1,

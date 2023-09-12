@@ -237,7 +237,9 @@ class _BadgeThumbnail extends StatelessWidget {
         borderRadius: BorderRadius.circular(LemonRadius.xSmall),
         child: FutureBuilder<Media>(
           future: MediaUtils.getNftMedia(
-              tokenMetadata?.image, tokenMetadata?.animation_url),
+            tokenMetadata?.image,
+            tokenMetadata?.animation_url,
+          ),
           builder: (context, snapshot) => CachedNetworkImage(
             fit: BoxFit.cover,
             imageUrl: snapshot.data?.url ?? '',

@@ -25,8 +25,11 @@ class PostsListingBloc extends Bloc<PostsListingEvent, PostsListingState> {
     on<PostsListingEventRefresh>(_onRefresh);
   }
 
-  Future<Either<Failure, List<Post>>> _getPosts(int skip, bool endReached,
-      {GetPostsInput? input}) async {
+  Future<Either<Failure, List<Post>>> _getPosts(
+    int skip,
+    bool endReached, {
+    GetPostsInput? input,
+  }) async {
     return postService.getPosts(input: input?.copyWith(skip: skip));
   }
 

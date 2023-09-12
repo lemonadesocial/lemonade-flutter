@@ -33,11 +33,12 @@ class _EventDetailPageState extends State<EventDetailPage>
   int maxSendTokenAttempt = 5;
   int sendTokenAttempt = 0;
 
-  late WebviewTokenService webviewTokenService =
-      WebviewTokenService(onTokenChanged: (t) {
-    token = t;
-    _sendTokenToWebview();
-  });
+  late WebviewTokenService webviewTokenService = WebviewTokenService(
+    onTokenChanged: (t) {
+      token = t;
+      _sendTokenToWebview();
+    },
+  );
 
   final GlobalKey webViewKey = GlobalKey();
 
@@ -98,7 +99,8 @@ class _EventDetailPageState extends State<EventDetailPage>
     sendTokenAttempt++;
     try {
       webViewController?.evaluateJavascript(
-          source: 'document.mobileAuthToken = "$token"');
+        source: 'document.mobileAuthToken = "$token"',
+      );
     } catch (e) {
       if (sendTokenAttempt >= maxSendTokenAttempt) return;
       if (kDebugMode) {

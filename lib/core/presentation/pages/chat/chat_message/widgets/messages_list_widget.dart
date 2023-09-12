@@ -106,7 +106,9 @@ class MessagesList extends StatelessWidget {
                           },
                           onReact: (emoji) {
                             controller.sendEmojiAction(
-                                event: event, emoji: emoji);
+                              event: event,
+                              emoji: emoji,
+                            );
                           },
                         ),
                       );

@@ -4,7 +4,7 @@ import 'package:app/core/failure.dart';
 import 'package:dartz/dartz.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../application/post/create_post_bloc/create_post_bloc.dart';
+import 'package:app/core/application/post/create_post_bloc/create_post_bloc.dart';
 
 abstract class PostRepository {
   Future<Either<Failure, List<Post>>> getPosts({GetPostsInput? input});

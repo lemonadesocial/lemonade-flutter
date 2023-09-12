@@ -24,8 +24,11 @@ abstract class BaseEventListingBloc<I>
     on<BaseEventsListingEventFilter>(_onFilter);
   }
 
-  Future<Either<Failure, List<Event>>> getEvents(int skip, bool endReached,
-      {required I input});
+  Future<Either<Failure, List<Event>>> getEvents(
+    int skip,
+    bool endReached, {
+    required I input,
+  });
 
   _onFetch(BaseEventsListingEventFetch blocEvent, Emitter emit) async {
     final timeFilterType = blocEvent.eventTimeFilter;
@@ -37,7 +40,9 @@ abstract class BaseEventListingBloc<I>
         BaseEventsListingState.fetched(
           events: events,
           filteredEvents: eventService.filterEventByTime(
-              source: events, selectedFilter: timeFilterType),
+            source: events,
+            selectedFilter: timeFilterType,
+          ),
         ),
       ),
     );
@@ -45,12 +50,19 @@ abstract class BaseEventListingBloc<I>
 
   _onFilter(BaseEventsListingEventFilter blocEvent, Emitter emit) async {
     final timeFilterType = blocEvent.eventTimeFilter;
-    state.whenOrNull(fetched: (events, _) {
-      emit(BaseEventsListingState.fetched(
-          events: events,
-          filteredEvents: eventService.filterEventByTime(
-              source: events, selectedFilter: timeFilterType)));
-    });
+    state.whenOrNull(
+      fetched: (events, _) {
+        emit(
+          BaseEventsListingState.fetched(
+            events: events,
+            filteredEvents: eventService.filterEventByTime(
+              source: events,
+              selectedFilter: timeFilterType,
+            ),
+          ),
+        );
+      },
+    );
   }
 }
 

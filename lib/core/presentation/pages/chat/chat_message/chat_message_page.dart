@@ -257,8 +257,10 @@ class ChatController extends State<ChatPageWithRoom> {
     });
   }
 
-  Future<void> sendEmojiAction(
-      {required Event event, required String emoji}) async {
+  Future<void> sendEmojiAction({
+    required Event event,
+    required String emoji,
+  }) async {
     Iterable<Event> allReactionEvents = event
         .aggregatedEvents(
           timeline!,

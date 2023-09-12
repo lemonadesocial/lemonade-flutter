@@ -13,13 +13,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:slang/builder/utils/string_extensions.dart';
 import 'package:app/core/presentation/dpos/common/dropdown_item_dpo.dart';
 
-import '../../../../i18n/i18n.g.dart';
-import '../../../../injection/register_module.dart';
-import '../../../domain/post/post_repository.dart';
-import '../../../service/post/post_service.dart';
-import '../../widgets/floating_frosted_glass_dropdown_widget.dart';
-import '../../widgets/theme_svg_icon_widget.dart';
-import 'widgets/create_post_image_widget.dart';
+import 'package:app/i18n/i18n.g.dart';
+import 'package:app/injection/register_module.dart';
+import 'package:app/core/domain/post/post_repository.dart';
+import 'package:app/core/service/post/post_service.dart';
+import 'package:app/core/presentation/widgets/floating_frosted_glass_dropdown_widget.dart';
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/presentation/pages/create_post/widgets/create_post_image_widget.dart';
 
 @RoutePage()
 class CreatePostPage extends StatelessWidget {
@@ -227,7 +227,8 @@ class CreatePostPage extends StatelessWidget {
                                   style: ElevatedButton.styleFrom(
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(
-                                          LemonRadius.small),
+                                        LemonRadius.small,
+                                      ),
                                     ),
                                     alignment: Alignment.center,
                                     backgroundColor: colorScheme.onTertiary,
@@ -239,7 +240,8 @@ class CreatePostPage extends StatelessWidget {
                                       Text(
                                         t.post.post,
                                         style: Typo.medium.copyWith(
-                                            fontWeight: FontWeight.w700),
+                                          fontWeight: FontWeight.w700,
+                                        ),
                                       ),
                                       SizedBox(width: Spacing.extraSmall),
                                       ThemeSvgIcon(

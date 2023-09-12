@@ -62,8 +62,10 @@ class PoapQuantityBar extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('$claimedQuantity ${t.nft.claimed}',
-                    style: smallTextStyle),
+                Text(
+                  '$claimedQuantity ${t.nft.claimed}',
+                  style: smallTextStyle,
+                ),
                 Text('$quantity', style: smallTextStyle),
               ],
             ),

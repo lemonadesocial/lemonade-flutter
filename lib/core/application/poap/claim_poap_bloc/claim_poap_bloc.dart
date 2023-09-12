@@ -31,10 +31,13 @@ class ClaimPoapBloc extends Bloc<ClaimPoapEvent, ClaimPoapState> {
   final _poapRepository = getIt<PoapRepository>();
 
   Future<void> _onCheckHasClaimed(
-      ClaimPoapEventCheckHasClaimed event, Emitter emit) async {
+    ClaimPoapEventCheckHasClaimed event,
+    Emitter emit,
+  ) async {
     final userWallet = getIt<AuthBloc>().state.maybeWhen(
-        authenticated: (authSession) => authSession.walletCustodial,
-        orElse: () => null);
+          authenticated: (authSession) => authSession.walletCustodial,
+          orElse: () => null,
+        );
     if (userWallet == null) return;
 
     Either<Failure, PoapPolicy>? poapPolicyData;

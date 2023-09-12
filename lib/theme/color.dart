@@ -4,9 +4,10 @@ class LemonColor {
   static Color black = const Color(0xff000000);
   static Color black50 = const Color.fromRGBO(0, 0, 0, 0.5);
   static Color black87 = const Color(0x000f0f0f).withOpacity(0.87);
+  static Color atomicBlack = const Color(0xff0f0f0f);
   static Color raisinBlack = const Color(0xff212121);
   static Color raisinBlack0 = const Color(0xff212121).withOpacity(0);
-  static Color chineseBlack = const Color(0xff117171);
+  static Color chineseBlack = const Color(0xff171717);
   static Color oliveBlack = const Color(0xff404040);
   static Color tertiaryBlack = const Color(0x4Debebf5);
   static Color white = const Color(0xffffffff);
@@ -33,6 +34,7 @@ class LemonColor {
   static Color online = const Color(0xFF5FCB90);
   static Color ownMessage = const Color(0xFF8F71B2);
   static Color otherMessage = const Color(0xFF272727);
+  static Color shadow5b = const Color(0x5B000000);
 
   // UI specific
   static Color dropdownBackground = const Color.fromARGB(221, 32, 32, 32);
@@ -70,6 +72,9 @@ class LemonColor {
 
   // ripple marker
   static const rippleMarkerColor = Color.fromRGBO(89, 210, 116, 0.24);
+
+  // custom red error
+  static const onboardingRed = Color(0xFFFF6565);
 }
 
 final ColorScheme lemonadeLightThemeColorScheme = ColorScheme.light(

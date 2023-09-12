@@ -62,5 +62,6 @@
     "host(ordinal)": {
         "one": "host",
         "other": "hosts"
-    }
+    },
+    "viewMore": "View more"
 }

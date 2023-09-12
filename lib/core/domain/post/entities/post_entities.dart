@@ -65,9 +65,9 @@ class Newsfeed {
 
   static Newsfeed fromDto(NewsfeedDto dto) {
     return Newsfeed(
-        offset: dto.offset,
-        posts: List.from(dto.posts ?? [])
-            .map((item) => Post.fromDto(item))
-            .toList());
+      offset: dto.offset,
+      posts:
+          List.from(dto.posts ?? []).map((item) => Post.fromDto(item)).toList(),
+    );
   }
 }

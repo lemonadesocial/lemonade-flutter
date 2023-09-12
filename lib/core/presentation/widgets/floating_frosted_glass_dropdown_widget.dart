@@ -32,7 +32,9 @@ class _FloatingFrostedGlassDropdown<T>
   double y = 0;
 
   late final AnimationController _animationController = AnimationController(
-      vsync: this, duration: const Duration(milliseconds: 200));
+    vsync: this,
+    duration: const Duration(milliseconds: 200),
+  );
   late final Animation<double> _animation =
       CurvedAnimation(parent: _animationController, curve: Curves.easeInOut);
 

@@ -403,8 +403,11 @@ class _MessageItemState extends State<MessageItem> {
             widget.timeline,
             RelationshipTypes.edit,
           )) ...[
-            Icon(Icons.edit_outlined,
-                color: textColor, size: Typo.small.fontSize!),
+            Icon(
+              Icons.edit_outlined,
+              color: textColor,
+              size: Typo.small.fontSize!,
+            ),
             const SizedBox(width: 6),
           ],
           Text(

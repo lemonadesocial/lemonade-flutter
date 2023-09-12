@@ -17,11 +17,11 @@ import 'package:dartz/dartz.dart' as dartz;
 class ProfileNftCollectedListView extends StatelessWidget {
   final User user;
   late final tokensListingBloc = TokensListingBloc(
-      TokenService(
-        getIt<TokenRepository>(),
-      ),
-      defaultInput: GetTokensInput(ownerIn: user.wallets))
-    ..add(const TokensListingEvent.fetch());
+    TokenService(
+      getIt<TokenRepository>(),
+    ),
+    defaultInput: GetTokensInput(ownerIn: user.wallets),
+  )..add(const TokensListingEvent.fetch());
 
   ProfileNftCollectedListView({
     super.key,
@@ -31,19 +31,21 @@ class ProfileNftCollectedListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
-        value: tokensListingBloc,
-        child: BlocListener<ScrollNotificationBloc, ScrollNotificationState>(
-          listener: (context, scrollState) {
-            scrollState.maybeWhen(
-                endReached: () {
-                  tokensListingBloc.add(
-                    const TokensListingEvent.fetch(),
-                  );
-                },
-                orElse: () {});
-          },
-          child: const _ProfileNftCollectedList(),
-        ));
+      value: tokensListingBloc,
+      child: BlocListener<ScrollNotificationBloc, ScrollNotificationState>(
+        listener: (context, scrollState) {
+          scrollState.maybeWhen(
+            endReached: () {
+              tokensListingBloc.add(
+                const TokensListingEvent.fetch(),
+              );
+            },
+            orElse: () {},
+          );
+        },
+        child: const _ProfileNftCollectedList(),
+      ),
+    );
   }
 }
 
@@ -64,32 +66,35 @@ class _ProfileNftCreatedListViewState extends State<_ProfileNftCollectedList> {
       sliver: BlocBuilder<TokensListingBloc, TokensListingState>(
         builder: (context, tokenListingState) {
           return tokenListingState.when(
-              loading: () => SliverFillRemaining(
-                  child: Center(child: Loading.defaultLoading(context))),
-              failure: () => SliverToBoxAdapter(
-                  child: Center(child: Text(t.common.somethingWrong))),
-              fetched: (tokens) {
-                if (tokens.isEmpty) {
-                  return SliverFillRemaining(
-                    hasScrollBody: false,
-                    child: EmptyList(emptyText: t.nft.noCollectible),
-                  );
-                }
-                return SliverGrid(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: Spacing.superExtraSmall,
-                    mainAxisSpacing: Spacing.superExtraSmall,
-                  ),
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      final nftToken = tokens[index];
-                      return ProfileNftItem(nftToken: dartz.Left(nftToken));
-                    },
-                    childCount: tokens.length,
-                  ),
+            loading: () => SliverFillRemaining(
+              child: Center(child: Loading.defaultLoading(context)),
+            ),
+            failure: () => SliverToBoxAdapter(
+              child: Center(child: Text(t.common.somethingWrong)),
+            ),
+            fetched: (tokens) {
+              if (tokens.isEmpty) {
+                return SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: EmptyList(emptyText: t.nft.noCollectible),
                 );
-              });
+              }
+              return SliverGrid(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: Spacing.superExtraSmall,
+                  mainAxisSpacing: Spacing.superExtraSmall,
+                ),
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final nftToken = tokens[index];
+                    return ProfileNftItem(nftToken: dartz.Left(nftToken));
+                  },
+                  childCount: tokens.length,
+                ),
+              );
+            },
+          );
         },
       ),
     );

@@ -89,7 +89,8 @@ class SpacesDrawer extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: Spacing.small),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(
-              10), // Set the border radius for the blue container
+            10,
+          ), // Set the border radius for the blue container
           child: Container(
             padding: EdgeInsets.symmetric(
               vertical: Spacing.xSmall,
@@ -123,9 +124,11 @@ class SpacesDrawer extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        StringUtils.capitalize(isRoot
-                            ? t.common.lemonade
-                            : space?.getLocalizedDisplayname()),
+                        StringUtils.capitalize(
+                          isRoot
+                              ? t.common.lemonade
+                              : space?.getLocalizedDisplayname(),
+                        ),
                         style: Typo.medium.copyWith(
                           color: colorScheme.onPrimary.withOpacity(0.87),
                         ),

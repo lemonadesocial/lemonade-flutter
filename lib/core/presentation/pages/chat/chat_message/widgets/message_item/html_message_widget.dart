@@ -387,8 +387,10 @@ class MatrixPill extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text('@$name',
-              style: Typo.medium.copyWith(fontWeight: FontWeight.w700)),
+          Text(
+            '@$name',
+            style: Typo.medium.copyWith(fontWeight: FontWeight.w700),
+          ),
         ],
       ),
     );

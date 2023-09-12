@@ -5,6 +5,7 @@ import 'package:app/core/presentation/dpos/common/dropdown_item_dpo.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -30,6 +31,7 @@ class FrostedGlassDropdown<T> extends StatefulWidget {
 class _FrostedGlassDropdownController<T>
     extends State<FrostedGlassDropdown<T>> {
   DropdownItemDpo<T>? selectedItem;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -46,9 +48,10 @@ class _FrostedGlassDropdownController<T>
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: List.generate(
-                  widget.items.length,
-                  (index) =>
-                      _buildItem(context, index, item: widget.items[index])),
+                widget.items.length,
+                (index) =>
+                    _buildItem(context, index, item: widget.items[index]),
+              ),
             ),
           ),
         ),
@@ -75,7 +78,9 @@ class _FrostedGlassDropdownController<T>
         color:
             isSelected ? Colors.white.withOpacity(6 / 100) : Colors.transparent,
         padding: EdgeInsets.symmetric(
-            horizontal: Spacing.small, vertical: Spacing.small),
+          horizontal: Spacing.small,
+          vertical: Spacing.small,
+        ),
         child: Row(
           mainAxisSize: MainAxisSize.max,
           children: [
@@ -83,12 +88,18 @@ class _FrostedGlassDropdownController<T>
               item.leadingIcon!,
               SizedBox(width: 9.75.w),
             ],
-            Text(item.label),
+            Text(
+              item.label,
+              style: Typo.medium.copyWith(
+                color: item.customColor,
+              ),
+            ),
             const Spacer(),
             if (isSelected)
               ThemeSvgIcon(
-                  builder: (filter) => Assets.icons.icDone
-                      .svg(colorFilter: filter, width: 18, height: 18)),
+                builder: (filter) => Assets.icons.icDone
+                    .svg(colorFilter: filter, width: 18, height: 18),
+              ),
           ],
         ),
       ),

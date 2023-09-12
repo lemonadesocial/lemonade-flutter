@@ -7,12 +7,13 @@ class ChatRoom {
   final bool? isPrivate;
   final bool? isMuted;
 
-  ChatRoom(
-      {this.avatarUrl,
-      this.name,
-      this.latestMessage,
-      this.createdAt,
-      this.unseenMessageCount,
-      this.isPrivate,
-      this.isMuted});
+  ChatRoom({
+    this.avatarUrl,
+    this.name,
+    this.latestMessage,
+    this.createdAt,
+    this.unseenMessageCount,
+    this.isPrivate,
+    this.isMuted,
+  });
 }

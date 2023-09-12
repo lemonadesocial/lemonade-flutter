@@ -10,7 +10,7 @@ import 'package:dartz/dartz.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:injectable/injectable.dart';
 
-import '../onboarding/onboarding_query.dart';
+import 'package:app/core/data/onboarding/onboarding_query.dart';
 
 @LazySingleton(as: UserRepository)
 class UserRepositoryImpl implements UserRepository {
@@ -18,12 +18,14 @@ class UserRepositoryImpl implements UserRepository {
 
   @override
   Future<Either<Failure, AuthUser>> getMe() async {
-    final result = await _gqlClient.query(QueryOptions(
-      document: getMeQuery,
-      parserFn: (data) {
-        return AuthUser.fromDto(UserDto.fromJson(data['getMe']));
-      },
-    ));
+    final result = await _gqlClient.query(
+      QueryOptions(
+        document: getMeQuery,
+        parserFn: (data) {
+          return AuthUser.fromDto(UserDto.fromJson(data['getMe']));
+        },
+      ),
+    );
 
     if (result.hasException) return Left(Failure());
     return Right(result.parsedData!);
@@ -47,7 +49,8 @@ class UserRepositoryImpl implements UserRepository {
 
   @override
   Future<Either<Failure, bool>> updateUserProfile(
-      UpdateUserProfileInput input) async {
+    UpdateUserProfileInput input,
+  ) async {
     final result = await _gqlClient.mutate(
       MutationOptions(
         document: updateUserProfileQuery,
@@ -65,8 +68,9 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> checkValidUsername(
-      {required String username}) async {
+  Future<Either<Failure, bool>> checkValidUsername({
+    required String username,
+  }) async {
     final result = await _gqlClient.query(
       QueryOptions(
         document: checkValidUsernameQuery,

@@ -87,18 +87,21 @@ class _GuestEventDetailBuyButtonView extends StatelessWidget {
         child: Container(
           color: colorScheme.primary,
           padding: EdgeInsets.symmetric(
-              vertical: Spacing.smMedium, horizontal: Spacing.smMedium),
+            vertical: Spacing.smMedium,
+            horizontal: Spacing.smMedium,
+          ),
           child: SizedBox(
             height: Sizing.large,
             child: LinearGradientButton(
               onTap: () => {
                 state.maybeWhen(
-                    loading: () => null,
-                    orElse: () {
-                      context
-                          .read<BuyEventTicketBloc>()
-                          .add(BuyEventTicketEvent.buy());
-                    })
+                  loading: () => null,
+                  orElse: () {
+                    context
+                        .read<BuyEventTicketBloc>()
+                        .add(BuyEventTicketEvent.buy());
+                  },
+                )
               },
               leading: state.maybeWhen(
                 loading: () => null,

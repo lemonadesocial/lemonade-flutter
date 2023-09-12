@@ -68,7 +68,8 @@ class _ProfilePageViewState extends State<ProfilePageView>
                   headerSliverBuilder: (context, innerBoxIsScrolled) => [
                     SliverOverlapAbsorber(
                       handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                          context),
+                        context,
+                      ),
                       sliver: MultiSliver(
                         children: [
                           SliverPersistentHeader(

@@ -30,9 +30,10 @@ class LemonSnapBottomSheet extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     return Padding(
       padding: EdgeInsets.only(
-          bottom: resizeToAvoidBottomInset == true
-              ? MediaQuery.of(context).viewInsets.bottom
-              : 0),
+        bottom: resizeToAvoidBottomInset == true
+            ? MediaQuery.of(context).viewInsets.bottom
+            : 0,
+      ),
       child: DraggableScrollableSheet(
         snapAnimationDuration: const Duration(milliseconds: 300),
         initialChildSize: defaultSnapSize ?? 0.5,
@@ -45,13 +46,14 @@ class LemonSnapBottomSheet extends StatelessWidget {
         builder: (BuildContext context, ScrollController scrollController) {
           return Container(
             decoration: ShapeDecoration(
-                color: backgroundColor ?? colorScheme.secondary,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(LemonRadius.small),
-                    topLeft: Radius.circular(LemonRadius.small),
-                  ),
-                )),
+              color: backgroundColor ?? colorScheme.secondary,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(LemonRadius.small),
+                  topLeft: Radius.circular(LemonRadius.small),
+                ),
+              ),
+            ),
             child: Column(
               children: [
                 _buildIndicator(),

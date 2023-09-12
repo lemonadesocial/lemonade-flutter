@@ -10,10 +10,16 @@ class PaginationService<T, I> {
   bool _reachedEnd = false;
   int _skip = 0;
 
-  Future<Either<Failure, List<T>>> Function(int skip, bool reachedEnd,
-      {required I input})? getDataFuture;
-  Stream<Either<Failure, List<T>>> Function(int skip, bool reachedEnd,
-      {required I input})? getDataStream;
+  Future<Either<Failure, List<T>>> Function(
+    int skip,
+    bool reachedEnd, {
+    required I input,
+  })? getDataFuture;
+  Stream<Either<Failure, List<T>>> Function(
+    int skip,
+    bool reachedEnd, {
+    required I input,
+  })? getDataStream;
 
   List<T> get items => _items;
 
