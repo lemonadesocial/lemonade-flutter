@@ -78,7 +78,7 @@ definitions:
       script: |
         flutter packages pub run build_runner build --delete-conflicting-outputs
     - &generate_i18_file
-      name: Generate gen files
+      name: Generate i18n files
       script: |
         #!/bin/sh
         sh gen_i18n.sh
