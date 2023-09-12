@@ -95,13 +95,14 @@ class PoapRepositoryImpl implements PoapRepository {
   Stream<Either<Failure, Claim?>> watchClaimModification() {
     final stream = _walletClient.subscribe(
       SubscriptionOptions(
-          document: claimModifiedSubscription,
-          fetchPolicy: FetchPolicy.networkOnly,
-          parserFn: (data) {
-            final rawClaimModification = data['claimModified'];
-            if (rawClaimModification == null) return null;
-            return Claim.fromDto(ClaimDto.fromJson(rawClaimModification));
-          }),
+        document: claimModifiedSubscription,
+        fetchPolicy: FetchPolicy.networkOnly,
+        parserFn: (data) {
+          final rawClaimModification = data['claimModified'];
+          if (rawClaimModification == null) return null;
+          return Claim.fromDto(ClaimDto.fromJson(rawClaimModification));
+        },
+      ),
     );
 
     return stream.asyncMap((resultEvent) {

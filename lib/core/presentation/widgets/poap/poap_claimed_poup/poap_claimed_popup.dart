@@ -54,8 +54,10 @@ class PoapClaimedPopup extends StatelessWidget {
                   children: [
                     Positioned.fill(
                       child: FutureBuilder(
-                        future: MediaUtils.getNftMedia(token?.metadata?.image,
-                            token?.metadata?.animation_url),
+                        future: MediaUtils.getNftMedia(
+                          token?.metadata?.image,
+                          token?.metadata?.animation_url,
+                        ),
                         builder: (context, snapshot) => CachedNetworkImage(
                           fit: BoxFit.cover,
                           imageUrl: snapshot.data?.url ?? '',
@@ -115,7 +117,8 @@ class PoapClaimedPopup extends StatelessWidget {
                       SizedBox(height: Spacing.xSmall),
                       Text(
                         t.nft.collectibleClaimedMintedAndDeposited(
-                            tokenName: token?.metadata?.name ?? ''),
+                          tokenName: token?.metadata?.name ?? '',
+                        ),
                         style: Typo.medium.copyWith(
                           color: colorScheme.onSecondary,
                         ),

@@ -35,7 +35,9 @@ class PoapClaimTransferSubscriptionBloc extends Bloc<
   }
 
   Future<void> _onStartWatchClaimModification(
-      PoapClaimTransferSubscriptionEventStart event, Emitter emit) async {
+    PoapClaimTransferSubscriptionEventStart event,
+    Emitter emit,
+  ) async {
     _streamSubscription =
         _poapRepository.watchClaimModification().listen(_onClaimData);
   }
@@ -67,10 +69,12 @@ class PoapClaimTransferSubscriptionBloc extends Bloc<
           return add(PoapClaimTransferSubscriptionEvent.clear());
         }
 
-        add(PoapClaimTransferSubscriptionEvent.update(
-          claimModification: claim,
-          token: token,
-        ));
+        add(
+          PoapClaimTransferSubscriptionEvent.update(
+            claimModification: claim,
+            token: token,
+          ),
+        );
       } else {
         add(
           PoapClaimTransferSubscriptionEvent.update(
@@ -84,10 +88,12 @@ class PoapClaimTransferSubscriptionBloc extends Bloc<
   }
 
   void _onUpdate(PoapClaimTransferSubscriptionEventUpdate event, Emitter emit) {
-    emit(PoapClaimTransferSubscriptionState.hasClaimModification(
-      claimModification: event.claimModification,
-      token: event.token,
-    ));
+    emit(
+      PoapClaimTransferSubscriptionState.hasClaimModification(
+        claimModification: event.claimModification,
+        token: event.token,
+      ),
+    );
   }
 
   void _onClear(PoapClaimTransferSubscriptionEventClear event, Emitter emit) {

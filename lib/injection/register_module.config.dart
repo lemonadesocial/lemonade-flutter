@@ -64,13 +64,15 @@ extension GetItInjectableX on _i1.GetIt {
     gh.lazySingleton<_i8.BadgeService>(() => _i8.BadgeService());
     gh.lazySingleton<_i9.EventRepository>(() => _i10.EventRepositoryImpl());
     gh.lazySingleton<_i11.EventTicketRepository>(
-        () => _i12.EventTicketRepositoryImpl());
+      () => _i12.EventTicketRepositoryImpl(),
+    );
     gh.lazySingleton<_i13.FirebaseService>(() => _i13.FirebaseService());
     gh.lazySingleton<_i14.LocationUtils>(() => _i14.LocationUtils());
     gh.lazySingleton<_i15.MatrixService>(() => _i15.MatrixService());
     gh.lazySingleton<_i3.MetaverseGQL>(() => _i3.MetaverseGQL());
     gh.lazySingleton<_i16.NewsfeedRepository>(
-        () => _i17.NewsfeedRepositoryImpl());
+      () => _i17.NewsfeedRepositoryImpl(),
+    );
     gh.lazySingleton<_i18.PoapRepository>(() => _i19.PoapRepositoryImpl());
     gh.lazySingleton<_i20.PostRepository>(() => _i21.PostRepositoryImpl());
     gh.lazySingleton<_i22.ShakeService>(() => _i22.ShakeService());
@@ -78,13 +80,16 @@ extension GetItInjectableX on _i1.GetIt {
     gh.lazySingleton<_i25.UserRepository>(() => _i26.UserRepositoryImpl());
     gh.lazySingleton<_i27.UserService>(() => _i27.UserService());
     gh.lazySingleton<_i28.WalletConnectService>(
-        () => _i28.WalletConnectService());
+      () => _i28.WalletConnectService(),
+    );
     gh.lazySingleton<_i3.WalletGQL>(() => _i3.WalletGQL());
     gh.lazySingleton<_i29.WalletRepository>(() => _i30.WalletRepositoryImpl());
-    gh.lazySingleton<_i31.AuthBloc>(() => _i31.AuthBloc(
-          userService: gh<_i27.UserService>(),
-          authService: gh<_i5.AuthService>(),
-        ));
+    gh.lazySingleton<_i31.AuthBloc>(
+      () => _i31.AuthBloc(
+        userService: gh<_i27.UserService>(),
+        authService: gh<_i5.AuthService>(),
+      ),
+    );
     return this;
   }
 }

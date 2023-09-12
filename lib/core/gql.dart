@@ -90,12 +90,14 @@ class BaseGQL {
   late final HttpLink _httpLink = HttpLink(httpUrl);
   late final WebSocketLink _webSocketLink = WebSocketLink(
     wssUrl,
-    config: SocketClientConfig(initialPayload: () async {
-      var token = await appOauth.getTokenForGql();
-      return {
-        'token': token,
-      };
-    }),
+    config: SocketClientConfig(
+      initialPayload: () async {
+        var token = await appOauth.getTokenForGql();
+        return {
+          'token': token,
+        };
+      },
+    ),
     subProtocol: GraphQLProtocol.graphqlTransportWs,
   );
   final List<Link> customLinks;
