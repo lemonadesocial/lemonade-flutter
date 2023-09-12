@@ -25,7 +25,8 @@ class PoapRepositoryImpl implements PoapRepository {
         fetchPolicy: FetchPolicy.networkOnly,
         variables: input.toJson(),
         parserFn: (data) => PoapViewSupply.fromDto(
-            PoapViewSupplyDto.fromJson(data['poapView'])),
+          PoapViewSupplyDto.fromJson(data['poapView']),
+        ),
       ),
     );
     if (result.hasException) return Left(Failure());
@@ -43,7 +44,8 @@ class PoapRepositoryImpl implements PoapRepository {
         fetchPolicy: fromServer ? FetchPolicy.networkOnly : null,
         variables: input.toJson(),
         parserFn: (data) => PoapViewCheckHasClaimed.fromDto(
-            PoapViewCheckHasClaimedDto.fromJson(data['poapView'])),
+          PoapViewCheckHasClaimedDto.fromJson(data['poapView']),
+        ),
       ),
     );
     if (result.hasException) return Left(Failure());

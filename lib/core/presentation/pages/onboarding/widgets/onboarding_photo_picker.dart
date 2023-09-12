@@ -10,10 +10,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../../../../gen/assets.gen.dart';
-import '../../../../../i18n/i18n.g.dart';
-import '../../../dpos/common/dropdown_item_dpo.dart';
-import '../../../widgets/theme_svg_icon_widget.dart';
+import 'package:app/gen/assets.gen.dart';
+import 'package:app/i18n/i18n.g.dart';
+import 'package:app/core/presentation/dpos/common/dropdown_item_dpo.dart';
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 
 class OnboardingPhotoPicker extends StatelessWidget {
   const OnboardingPhotoPicker({

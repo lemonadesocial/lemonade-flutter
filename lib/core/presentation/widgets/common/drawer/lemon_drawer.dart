@@ -59,11 +59,17 @@ class LemonDrawer extends StatelessWidget {
             ),
             ...[
               DrawerItem(
-                  icon: Assets.icons.icPeopleAlt, label: t.common.community),
+                icon: Assets.icons.icPeopleAlt,
+                label: t.common.community,
+              ),
               DrawerItem(
-                  icon: Assets.icons.icTicket, label: t.common.ticket(n: 2)),
+                icon: Assets.icons.icTicket,
+                label: t.common.ticket(n: 2),
+              ),
               DrawerItem(
-                  icon: Assets.icons.icInsights, label: t.common.dashboard),
+                icon: Assets.icons.icInsights,
+                label: t.common.dashboard,
+              ),
               DrawerItem(icon: Assets.icons.icQr, label: t.common.qrCode),
             ].map((item) => _buildDrawerItem(context, item: item)),
             SizedBox(height: Spacing.xSmall),
@@ -72,7 +78,9 @@ class LemonDrawer extends StatelessWidget {
             _buildDrawerItem(
               context,
               item: DrawerItem(
-                  icon: Assets.icons.icSupport, label: t.common.support),
+                icon: Assets.icons.icSupport,
+                label: t.common.support,
+              ),
             ),
             const Spacer(),
             _buildUser(context),

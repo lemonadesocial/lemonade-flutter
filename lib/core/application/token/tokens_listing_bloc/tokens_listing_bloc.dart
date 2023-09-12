@@ -37,9 +37,11 @@ class TokensListingBloc extends Bloc<TokensListingEvent, TokensListingState> {
     result.fold((l) {
       emit(const TokensListingState.failure());
     }, (tokens) {
-      emit(TokensListingState.fetched(
-        tokens: tokens,
-      ));
+      emit(
+        TokensListingState.fetched(
+          tokens: tokens,
+        ),
+      );
     });
   }
 }

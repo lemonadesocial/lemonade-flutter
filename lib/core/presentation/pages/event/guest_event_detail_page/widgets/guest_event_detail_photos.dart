@@ -15,9 +15,11 @@ class GuestEventDetailPhotos extends StatelessWidget {
   const GuestEventDetailPhotos({
     super.key,
     required this.event,
+    this.showTitle = true,
   });
 
   final Event event;
+  final bool? showTitle;
 
   List<String> get photoUrls {
     return (event.newNewPhotosExpanded ?? [])
@@ -38,19 +40,21 @@ class GuestEventDetailPhotos extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-          child: Text(
-            StringUtils.capitalize(t.common.photo(n: 2)),
-            style: Typo.mediumPlus.copyWith(
-              fontWeight: FontWeight.w600,
-              color: colorScheme.onPrimary,
+        if (showTitle!) ...[
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+            child: Text(
+              StringUtils.capitalize(t.common.photo(n: 2)),
+              style: Typo.mediumPlus.copyWith(
+                fontWeight: FontWeight.w600,
+                color: colorScheme.onPrimary,
+              ),
             ),
           ),
-        ),
-        SizedBox(
-          height: Spacing.xSmall,
-        ),
+          SizedBox(
+            height: Spacing.xSmall,
+          )
+        ],
         SizedBox(
           height: 144.w,
           child: ListView.separated(

@@ -82,8 +82,10 @@ class _PoapFilterBottomSheetViewState extends State<PoapFilterBottomSheetView>
     animationController.animateTo(interpolatedValue);
   }
 
-  Offset _calculateGridRowOffset(
-      {required int index, required double maxWidth}) {
+  Offset _calculateGridRowOffset({
+    required int index,
+    required double maxWidth,
+  }) {
     final x = index * (maxWidth - (animation.value * maxWidth));
     final y = -((index + 1) * (1 - animation.value) * 50);
 
@@ -202,12 +204,16 @@ class _PoapFilterBottomSheetViewState extends State<PoapFilterBottomSheetView>
                               .any((element) => element.id == collection.id);
                           if (selected) {
                             context.read<BadgeCollectionsBloc>().add(
-                                BadgeCollectionsEvent.deselect(
-                                    collection: collection));
+                                  BadgeCollectionsEvent.deselect(
+                                    collection: collection,
+                                  ),
+                                );
                           } else {
                             context.read<BadgeCollectionsBloc>().add(
-                                BadgeCollectionsEvent.select(
-                                    collection: collection));
+                                  BadgeCollectionsEvent.select(
+                                    collection: collection,
+                                  ),
+                                );
                           }
                         },
                       );
@@ -253,7 +259,8 @@ class _PoapFilterBottomSheetViewState extends State<PoapFilterBottomSheetView>
                 );
                 return SliverPadding(
                   padding: EdgeInsets.symmetric(
-                      horizontal: isLargeDevice ? fourItemInRowWidth / 4 : 0),
+                    horizontal: isLargeDevice ? fourItemInRowWidth / 4 : 0,
+                  ),
                   sliver: SliverList.separated(
                     separatorBuilder: (context, item) =>
                         SizedBox(height: Spacing.xSmall),
@@ -283,7 +290,9 @@ class _PoapFilterBottomSheetViewState extends State<PoapFilterBottomSheetView>
                           offset: index == 0
                               ? Offset.zero
                               : _calculateGridRowOffset(
-                                  index: index, maxWidth: maxWidth),
+                                  index: index,
+                                  maxWidth: maxWidth,
+                                ),
                           child: child,
                         ),
                         child: Row(
@@ -291,7 +300,8 @@ class _PoapFilterBottomSheetViewState extends State<PoapFilterBottomSheetView>
                           children: List<BadgeList>.from(chunkPortion).map(
                             (collection) {
                               final selected = selectedCollections.any(
-                                  (element) => element.id == collection.id);
+                                (element) => element.id == collection.id,
+                              );
                               return Container(
                                 margin: EdgeInsets.only(
                                   right: isLargeDevice ? Spacing.extraSmall : 0,
@@ -304,12 +314,16 @@ class _PoapFilterBottomSheetViewState extends State<PoapFilterBottomSheetView>
                                   onTap: (collection) {
                                     if (selected) {
                                       context.read<BadgeCollectionsBloc>().add(
-                                          BadgeCollectionsEvent.deselect(
-                                              collection: collection));
+                                            BadgeCollectionsEvent.deselect(
+                                              collection: collection,
+                                            ),
+                                          );
                                     } else {
                                       context.read<BadgeCollectionsBloc>().add(
-                                          BadgeCollectionsEvent.select(
-                                              collection: collection));
+                                            BadgeCollectionsEvent.select(
+                                              collection: collection,
+                                            ),
+                                          );
                                     }
                                   },
                                 ),
@@ -456,7 +470,8 @@ class LocationFilter extends StatelessWidget {
                                 onTap: () {
                                   context.read<BadgeLocationsListingBloc>().add(
                                         BadgeLocationsListingEvent.select(
-                                            location: location),
+                                          location: location,
+                                        ),
                                       );
                                 },
                                 label: location.badgeCity?.city ??
@@ -506,7 +521,8 @@ class LocationFilter extends StatelessWidget {
                     onChange: (value) {
                       context.read<BadgeLocationsListingBloc>().add(
                             BadgeLocationsListingEvent.updateDistance(
-                                distance: value),
+                              distance: value,
+                            ),
                           );
                     },
                     defaultValue: getIt<BadgeService>().distance,

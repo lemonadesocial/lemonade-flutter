@@ -8,9 +8,9 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../application/newsfeed/newsfeed_listing_bloc/newsfeed_listing_bloc.dart';
-import '../../../data/post/newsfeed_repository_impl.dart';
-import '../../../service/newsfeed/newsfeed_service.dart';
+import 'package:app/core/application/newsfeed/newsfeed_listing_bloc/newsfeed_listing_bloc.dart';
+import 'package:app/core/data/post/newsfeed_repository_impl.dart';
+import 'package:app/core/service/newsfeed/newsfeed_service.dart';
 
 @RoutePage(name: 'RootRoute')
 class RootPage extends StatelessWidget {

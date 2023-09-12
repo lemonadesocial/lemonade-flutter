@@ -19,5 +19,14 @@
     "rsvpSuccessful": "Congrats! You have successfully RSVP’d to $eventName.",
     "takeMeToEvent": "Take me to the event",
     "inviteFriends": "Invite friends",
-    "processing": "Processing..."
+    "processing": "Processing...",
+    "aboutTheEvent": "About the event",
+    "eventStartIn": "Starting in $time",
+    "eventEnded": "Event ended",
+    "dashboard": {
+        "liveChat": "Live chat",
+        "invite": "Invite",
+        "leaderBoard": "Leaderboard"
+    },
+    "confirmed": "confirmed"
 }

@@ -6,9 +6,11 @@ import 'package:app/core/failure.dart';
 import 'package:dartz/dartz.dart';
 
 abstract class EventTicketRepository {
-  Future<Either<Failure, EventTicketPricing>> getEventTicketPricing(
-      {required GetEventTicketPricingInput input});
+  Future<Either<Failure, EventTicketPricing>> getEventTicketPricing({
+    required GetEventTicketPricingInput input,
+  });
 
-  Future<Either<Failure, Payment>> redeemEventTickets(
-      {required RedeemEventTicketInput input});
+  Future<Either<Failure, Payment>> redeemEventTickets({
+    required RedeemEventTicketInput input,
+  });
 }

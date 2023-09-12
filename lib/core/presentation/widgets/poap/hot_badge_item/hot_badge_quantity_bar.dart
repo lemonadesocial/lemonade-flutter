@@ -53,7 +53,9 @@ class HotBadgeQuantityBar extends StatelessWidget {
                 tween: Tween<double>(begin: 0, end: claimProgress),
                 builder: (context, animationValue, _) => CustomPaint(
                   painter: _BadgeQuantityBarPainter(
-                      isGradient: true, progress: animationValue),
+                    isGradient: true,
+                    progress: animationValue,
+                  ),
                   size: _badgeQuantityBarSize,
                 ),
               );

@@ -43,7 +43,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   Future<void> _onAuthenticated(
-      AuthEventAuthenticated event, Emitter emit) async {
+    AuthEventAuthenticated event,
+    Emitter emit,
+  ) async {
     emit(const AuthState.processing());
     await Future.delayed(const Duration(milliseconds: 500));
     final session = await _createSession();

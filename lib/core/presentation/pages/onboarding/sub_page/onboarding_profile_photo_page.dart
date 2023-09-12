@@ -8,11 +8,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../../gen/fonts.gen.dart';
-import '../../../../../i18n/i18n.g.dart';
-import '../../../../../theme/color.dart';
-import '../../../../application/onboarding/onboarding_bloc/onboarding_bloc.dart';
-import '../../../widgets/common/button/linear_gradient_button_widget.dart';
+import 'package:app/gen/fonts.gen.dart';
+import 'package:app/i18n/i18n.g.dart';
+import 'package:app/theme/color.dart';
+import 'package:app/core/application/onboarding/onboarding_bloc/onboarding_bloc.dart';
+import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 
 @RoutePage()
 class OnboardingProfilePhotoPage extends StatelessWidget {

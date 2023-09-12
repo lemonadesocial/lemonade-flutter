@@ -385,6 +385,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.3.2"
+  duration:
+    dependency: "direct main"
+    description:
+      name: duration
+      sha256: "0548a12d235dab185c677ef660995f23fdc06a02a2b984aa23805f6a03d82815"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.13"
   ed25519_edwards:
     dependency: transitive
     description:

@@ -22,7 +22,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:slang/builder/utils/string_extensions.dart';
 
-import '../../../domain/event/entities/event.dart';
+import 'package:app/core/domain/event/entities/event.dart';
 
 @RoutePage()
 class EventSelectingPage extends StatelessWidget {
@@ -222,7 +222,8 @@ class _EventsListingViewState extends State<_EventsListingView> {
                     cursorColor: colorScheme.onPrimary,
                     style: Typo.medium.copyWith(fontWeight: FontWeight.normal),
                     decoration: InputDecoration.collapsed(
-                        hintText: t.post.searchEventHint),
+                      hintText: t.post.searchEventHint,
+                    ),
                   ),
                 ),
               ],
@@ -253,7 +254,8 @@ class _EventsListingViewState extends State<_EventsListingView> {
                             isActive:
                                 eventListingType == EventListingType.attending,
                             onTap: () => _selectEventListingType(
-                                EventListingType.attending),
+                              EventListingType.attending,
+                            ),
                           ),
                           SizedBox(width: Spacing.superExtraSmall),
                           LemonChip(
@@ -261,7 +263,8 @@ class _EventsListingViewState extends State<_EventsListingView> {
                             isActive:
                                 eventListingType == EventListingType.hosting,
                             onTap: () => _selectEventListingType(
-                                EventListingType.hosting),
+                              EventListingType.hosting,
+                            ),
                           ),
                         ],
                       ),

@@ -15,7 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../widgets/common/button/linear_gradient_button_widget.dart';
+import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 
 @RoutePage()
 class OnboardingAboutPage extends StatelessWidget {

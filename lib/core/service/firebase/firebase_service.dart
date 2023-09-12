@@ -17,9 +17,9 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:injectable/injectable.dart';
 import 'package:matrix/matrix.dart';
 
-import '../../../firebase_options_production.dart'
+import 'package:app/firebase_options_production.dart'
     as firebase_options_production;
-import '../../../firebase_options_staging.dart' as firebase_options_staging;
+import 'package:app/firebase_options_staging.dart' as firebase_options_staging;
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   if (kDebugMode) {
@@ -151,18 +151,19 @@ class FirebaseService {
     AndroidNotification? android = message.notification?.android;
     if (notification != null && android != null && !kIsWeb) {
       flutterLocalNotificationsPlugin.show(
-          notification.hashCode,
-          notification.title,
-          notification.body,
-          NotificationDetails(
-            android: AndroidNotificationDetails(
-              channel.id,
-              channel.name,
-              channelDescription: channel.description,
-              icon: '@mipmap/ic_launcher',
-            ),
+        notification.hashCode,
+        notification.title,
+        notification.body,
+        NotificationDetails(
+          android: AndroidNotificationDetails(
+            channel.id,
+            channel.name,
+            channelDescription: channel.description,
+            icon: '@mipmap/ic_launcher',
           ),
-          payload: json.encode(message.data));
+        ),
+        payload: json.encode(message.data),
+      );
     }
   }
 

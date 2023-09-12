@@ -19,26 +19,35 @@ class EventTicketRepositoryImpl implements EventTicketRepository {
   final _client = getIt<AppGQL>().client;
 
   @override
-  Future<Either<Failure, EventTicketPricing>> getEventTicketPricing(
-      {required GetEventTicketPricingInput input}) async {
-    final result = await _client.query(QueryOptions(
+  Future<Either<Failure, EventTicketPricing>> getEventTicketPricing({
+    required GetEventTicketPricingInput input,
+  }) async {
+    final result = await _client.query(
+      QueryOptions(
         document: getEventTicketPricingQuery,
         variables: input.toJson(),
         parserFn: (data) => EventTicketPricing.fromDto(
-            EventTicketPricingDto.fromJson(data['getEventTicketPricing']))));
+          EventTicketPricingDto.fromJson(data['getEventTicketPricing']),
+        ),
+      ),
+    );
 
     if (result.hasException) return Left(Failure());
     return Right(result.parsedData!);
   }
 
   @override
-  Future<Either<Failure, Payment>> redeemEventTickets(
-      {required RedeemEventTicketInput input}) async {
-    final result = await _client.mutate(MutationOptions(
+  Future<Either<Failure, Payment>> redeemEventTickets({
+    required RedeemEventTicketInput input,
+  }) async {
+    final result = await _client.mutate(
+      MutationOptions(
         document: redeemEventTicketsMutation,
         variables: input.toJson(),
         parserFn: (data) =>
-            Payment.fromDto(PaymentDto.fromJson(data['redeemEventTickets']))));
+            Payment.fromDto(PaymentDto.fromJson(data['redeemEventTickets'])),
+      ),
+    );
 
     if (result.hasException) return Left(Failure());
     return Right(result.parsedData!);

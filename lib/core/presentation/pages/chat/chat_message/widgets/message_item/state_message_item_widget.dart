@@ -29,7 +29,8 @@ class StateMessageItem extends StatelessWidget {
               return Text(
                 snapshot.data ??
                     event.calcLocalizedBodyFallback(
-                        const MatrixDefaultLocalizations()),
+                      const MatrixDefaultLocalizations(),
+                    ),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.onSecondary,
