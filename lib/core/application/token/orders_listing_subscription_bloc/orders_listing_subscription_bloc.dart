@@ -33,25 +33,30 @@ class OrdersListingSubscriptionBloc extends Bloc<OrdersListingSubscriptionEvent,
   }
 
   _onStartSubscription(
-      OrdersListingSubscriptionEventStart event, Emitter emit) async {
-    await emit.forEach(paginationService.fetchStream(defaultInput),
-        onData: (streamEvent) {
-      return streamEvent.fold(
-        (l) {
-          return const OrdersListingSubscriptionState.failure();
-        },
-        (orders) {
-          return OrdersListingSubscriptionState.fetched(orders: orders);
-        },
-      );
-    });
+    OrdersListingSubscriptionEventStart event,
+    Emitter emit,
+  ) async {
+    await emit.forEach(
+      paginationService.fetchStream(defaultInput),
+      onData: (streamEvent) {
+        return streamEvent.fold(
+          (l) {
+            return const OrdersListingSubscriptionState.failure();
+          },
+          (orders) {
+            return OrdersListingSubscriptionState.fetched(orders: orders);
+          },
+        );
+      },
+    );
   }
 }
 
 @freezed
 class OrdersListingSubscriptionEvent with _$OrdersListingSubscriptionEvent {
-  const factory OrdersListingSubscriptionEvent.start(
-      {WatchOrdersInput? input}) = OrdersListingSubscriptionEventStart;
+  const factory OrdersListingSubscriptionEvent.start({
+    WatchOrdersInput? input,
+  }) = OrdersListingSubscriptionEventStart;
 }
 
 @freezed

@@ -13,8 +13,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:matrix/matrix.dart';
 
-import 'famedlysdk_store.dart';
-import 'push_helper.dart';
+import 'package:app/core/utils/chat_notification/famedlysdk_store.dart';
+import 'package:app/core/utils/chat_notification/push_helper.dart';
 
 // ignore: unused_element
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {

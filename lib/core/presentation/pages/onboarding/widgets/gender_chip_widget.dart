@@ -4,7 +4,7 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../gen/assets.gen.dart';
+import 'package:app/gen/assets.gen.dart';
 
 class GenderChipWidget extends StatelessWidget {
   const GenderChipWidget({

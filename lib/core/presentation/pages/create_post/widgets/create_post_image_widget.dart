@@ -4,8 +4,8 @@ import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../../../../gen/assets.gen.dart';
-import '../../../widgets/theme_svg_icon_widget.dart';
+import 'package:app/gen/assets.gen.dart';
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 
 class CreatePostImageWidget extends StatelessWidget {
   const CreatePostImageWidget({

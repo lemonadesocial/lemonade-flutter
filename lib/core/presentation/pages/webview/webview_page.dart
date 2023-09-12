@@ -16,9 +16,11 @@ class WebviewPage extends StatefulWidget {
 }
 
 class _WebviewPageState extends State<WebviewPage> {
-  late final _MyBrowser inAppBrowser = _MyBrowser(onClose: () {
-    close();
-  });
+  late final _MyBrowser inAppBrowser = _MyBrowser(
+    onClose: () {
+      close();
+    },
+  );
 
   @override
   initState() {
@@ -36,8 +38,9 @@ class _WebviewPageState extends State<WebviewPage> {
     try {
       await inAppBrowser.openUrlRequest(
         options: InAppBrowserClassOptions(
-            crossPlatform:
-                InAppBrowserOptions(toolbarTopBackgroundColor: Colors.white)),
+          crossPlatform:
+              InAppBrowserOptions(toolbarTopBackgroundColor: Colors.white),
+        ),
         urlRequest: URLRequest(url: widget.uri),
       );
     } catch (e) {

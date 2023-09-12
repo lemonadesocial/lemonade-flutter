@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../../utils/debouncer.dart';
+import 'package:app/core/utils/debouncer.dart';
 
 part 'onboarding_state.dart';
 
@@ -64,13 +64,18 @@ class OnboardingBloc extends Cubit<OnboardingState> {
   }
 
   void onDisplayNameChange(String input) {
-    emit(state.copyWith(
-        status: OnboardingStatus.initial, aboutDisplayName: input));
+    emit(
+      state.copyWith(
+        status: OnboardingStatus.initial,
+        aboutDisplayName: input,
+      ),
+    );
   }
 
   void onShortBioChange(String input) {
     emit(
-        state.copyWith(status: OnboardingStatus.initial, aboutShortBio: input));
+      state.copyWith(status: OnboardingStatus.initial, aboutShortBio: input),
+    );
   }
 
   Future<void> selectProfileImage() async {

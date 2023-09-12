@@ -15,19 +15,21 @@ class NewsfeedRepositoryImpl implements NewsfeedRepository {
   final _client = getIt<AppGQL>().client;
 
   @override
-  Future<Either<Failure, Newsfeed>> getNewsfeed(
-      {GetNewsfeedInput? input}) async {
+  Future<Either<Failure, Newsfeed>> getNewsfeed({
+    GetNewsfeedInput? input,
+  }) async {
     final result = await _client.query(
       QueryOptions(
-          document: getNewsfeedQuery,
-          fetchPolicy: FetchPolicy.networkOnly,
-          variables: input?.offset == 0 ? {} : input?.toJson() ?? {},
-          parserFn: (data) {
-            if (data['getNewsfeed'] == null) {
-              return Newsfeed();
-            }
-            return Newsfeed.fromDto(NewsfeedDto.fromJson(data['getNewsfeed']));
-          }),
+        document: getNewsfeedQuery,
+        fetchPolicy: FetchPolicy.networkOnly,
+        variables: input?.offset == 0 ? {} : input?.toJson() ?? {},
+        parserFn: (data) {
+          if (data['getNewsfeed'] == null) {
+            return Newsfeed();
+          }
+          return Newsfeed.fromDto(NewsfeedDto.fromJson(data['getNewsfeed']));
+        },
+      ),
     );
     if (result.hasException) return Left(Failure());
     return Right(result.parsedData!);

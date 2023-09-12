@@ -24,7 +24,9 @@ class PoapPolicyPopup extends StatelessWidget {
           ),
         ),
         padding: EdgeInsets.symmetric(
-            vertical: Spacing.xSmall, horizontal: Spacing.medium),
+          vertical: Spacing.xSmall,
+          horizontal: Spacing.medium,
+        ),
         width: double.infinity,
         child: PoapPolicyNodeWidget(node: policyResult.node),
       ),

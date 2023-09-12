@@ -99,7 +99,8 @@ class PreGuestEventDetailViewState extends State<PreGuestEventDetailView> {
                           event.longitude != null) ...[
                         SliverPadding(
                           padding: EdgeInsets.symmetric(
-                              horizontal: Spacing.smMedium),
+                            horizontal: Spacing.smMedium,
+                          ),
                           sliver: SliverToBoxAdapter(
                             child: GuestEventLocation(event: event),
                           ),
@@ -167,7 +168,8 @@ class PreGuestEventDetailViewState extends State<PreGuestEventDetailView> {
                         event: event,
                         onBuySuccess: () {
                           context.read<GetEventDetailBloc>().add(
-                              GetEventDetailEvent.fetch(eventId: event.id!));
+                                GetEventDetailEvent.fetch(eventId: event.id!),
+                              );
                           AutoRouter.of(context).replace(
                             RSVPEventSuccessPopupRoute(
                               event: event,

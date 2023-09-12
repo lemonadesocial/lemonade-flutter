@@ -14,7 +14,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 
-import '../../../application/newsfeed/newsfeed_listing_bloc/newsfeed_listing_bloc.dart';
+import 'package:app/core/application/newsfeed/newsfeed_listing_bloc/newsfeed_listing_bloc.dart';
 
 class BottomBar extends StatefulWidget {
   const BottomBar({super.key});

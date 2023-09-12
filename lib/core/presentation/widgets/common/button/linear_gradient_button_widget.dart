@@ -31,16 +31,17 @@ class LinearGradientButton extends StatelessWidget {
   final BorderRadius? radius;
   final TextStyle? textStyle;
 
-  const LinearGradientButton(
-      {super.key,
-      required this.label,
-      this.leading,
-      this.mode = GradientButtonMode.defaultMode,
-      this.onTap,
-      this.height,
-      this.padding,
-      this.radius,
-      this.textStyle});
+  const LinearGradientButton({
+    super.key,
+    required this.label,
+    this.leading,
+    this.mode = GradientButtonMode.defaultMode,
+    this.onTap,
+    this.height,
+    this.padding,
+    this.radius,
+    this.textStyle,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +51,9 @@ class LinearGradientButton extends StatelessWidget {
         height: height ?? Sizing.medium,
         padding: padding ??
             EdgeInsets.symmetric(
-                horizontal: Spacing.xSmall, vertical: Spacing.extraSmall),
+              horizontal: Spacing.xSmall,
+              vertical: Spacing.extraSmall,
+            ),
         decoration: ShapeDecoration(
           gradient: LinearGradient(
             begin: const Alignment(0.00, -1.00),
@@ -66,10 +69,11 @@ class LinearGradientButton extends StatelessWidget {
             borderRadius: radius ?? BorderRadius.circular(LemonRadius.xSmall),
             boxShadow: [
               BoxShadow(
-                  color: LemonColor.black.withOpacity(0.30),
-                  offset: const Offset(0, 2),
-                  blurRadius: 18.r,
-                  spreadRadius: 2)
+                color: LemonColor.black.withOpacity(0.30),
+                offset: const Offset(0, 2),
+                blurRadius: 18.r,
+                spreadRadius: 2,
+              )
             ],
           ),
           child: Row(

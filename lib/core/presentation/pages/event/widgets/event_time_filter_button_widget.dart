@@ -26,7 +26,9 @@ class _EventTimeFilterButtonState extends State<EventTimeFilterButton>
   double y = 0;
 
   late final AnimationController _animationController = AnimationController(
-      vsync: this, duration: const Duration(milliseconds: 200));
+    vsync: this,
+    duration: const Duration(milliseconds: 200),
+  );
   late final Animation<double> _animation =
       CurvedAnimation(parent: _animationController, curve: Curves.easeInOut);
 
@@ -89,10 +91,12 @@ class _EventTimeFilterButtonState extends State<EventTimeFilterButton>
             child: FrostedGlassDropdown<EventTimeFilter>(
               isEqual: (a, b) => a.value == b.value,
               items: EventTimeFilter.values
-                  .map((filter) => DropdownItemDpo<EventTimeFilter>(
-                        label: t['common.${filter.labelKey}'],
-                        value: filter,
-                      ))
+                  .map(
+                    (filter) => DropdownItemDpo<EventTimeFilter>(
+                      label: t['common.${filter.labelKey}'],
+                      value: filter,
+                    ),
+                  )
                   .toList(),
               onItemPressed: (filterItem) {
                 widget.onSelect?.call(filterItem?.value);

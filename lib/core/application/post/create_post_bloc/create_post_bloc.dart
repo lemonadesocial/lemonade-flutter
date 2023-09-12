@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../../domain/event/entities/event.dart';
-import '../../../domain/post/entities/post_entities.dart';
+import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/post/entities/post_entities.dart';
 
 part 'create_post_state.dart';
 

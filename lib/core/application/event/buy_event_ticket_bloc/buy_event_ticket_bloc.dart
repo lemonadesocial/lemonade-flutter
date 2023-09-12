@@ -19,7 +19,9 @@ class BuyEventTicketBloc
   final _eventRepository = getIt<EventRepository>();
 
   Future<void> _onBuyTicket(
-      BuyEventTicketEventBuy blocEvent, Emitter emit) async {
+    BuyEventTicketEventBuy blocEvent,
+    Emitter emit,
+  ) async {
     emit(BuyEventTicketState.loading());
 
     if (event.cost != null && event.cost != 0) {
@@ -27,7 +29,8 @@ class BuyEventTicketBloc
     }
 
     final result = await _eventRepository.acceptEvent(
-        input: AcceptEventInput(id: event.id!));
+      input: AcceptEventInput(id: event.id!),
+    );
 
     result.fold(
       (failure) => emit(BuyEventTicketState.failure()),

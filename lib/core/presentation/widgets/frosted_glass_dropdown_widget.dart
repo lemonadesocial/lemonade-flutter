@@ -48,9 +48,10 @@ class _FrostedGlassDropdownController<T>
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: List.generate(
-                  widget.items.length,
-                  (index) =>
-                      _buildItem(context, index, item: widget.items[index])),
+                widget.items.length,
+                (index) =>
+                    _buildItem(context, index, item: widget.items[index]),
+              ),
             ),
           ),
         ),
@@ -77,7 +78,9 @@ class _FrostedGlassDropdownController<T>
         color:
             isSelected ? Colors.white.withOpacity(6 / 100) : Colors.transparent,
         padding: EdgeInsets.symmetric(
-            horizontal: Spacing.small, vertical: Spacing.small),
+          horizontal: Spacing.small,
+          vertical: Spacing.small,
+        ),
         child: Row(
           mainAxisSize: MainAxisSize.max,
           children: [
@@ -94,8 +97,9 @@ class _FrostedGlassDropdownController<T>
             const Spacer(),
             if (isSelected)
               ThemeSvgIcon(
-                  builder: (filter) => Assets.icons.icDone
-                      .svg(colorFilter: filter, width: 18, height: 18)),
+                builder: (filter) => Assets.icons.icDone
+                    .svg(colorFilter: filter, width: 18, height: 18),
+              ),
           ],
         ),
       ),

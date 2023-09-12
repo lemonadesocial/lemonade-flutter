@@ -10,9 +10,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../../i18n/i18n.g.dart';
-import '../../../../../theme/color.dart';
-import '../../../widgets/back_button_widget.dart';
+import 'package:app/i18n/i18n.g.dart';
+import 'package:app/theme/color.dart';
+import 'package:app/core/presentation/widgets/back_button_widget.dart';
 
 @RoutePage()
 class OnboardingUsernamePage extends StatelessWidget {

@@ -106,7 +106,8 @@ class AppOauth {
   }
 
   Future<AccessTokenResponse?> manuallyRefreshToken(
-          AccessTokenResponse tokenResponse) async =>
+    AccessTokenResponse tokenResponse,
+  ) async =>
       helper.refreshToken(tokenResponse);
 
   Future<AccessTokenResponse?> getTokenFromStorage() =>
@@ -142,7 +143,8 @@ class AppOauth {
   }
 
   Future<AccessTokenResponse?> _processTokenState(
-      Future<AccessTokenResponse?> future) async {
+    Future<AccessTokenResponse?> future,
+  ) async {
     try {
       final token = await future;
       if (token == null || !token.isValid() || token.isExpired()) {

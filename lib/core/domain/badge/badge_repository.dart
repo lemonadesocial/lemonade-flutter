@@ -11,8 +11,10 @@ abstract class BadgeRepository {
   });
 
   Future<Either<Failure, List<BadgeList>>> getBadgeCollections(
-      GetBadgeListsInput? input);
+    GetBadgeListsInput? input,
+  );
 
   Future<Either<Failure, List<BadgeCity>>> getBadgeCities(
-      GetBadgeCitiesInput? input);
+    GetBadgeCitiesInput? input,
+  );
 }

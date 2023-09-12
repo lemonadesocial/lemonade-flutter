@@ -21,7 +21,9 @@ class Media {
 
 class MediaUtils {
   static Future<Media> getNftMedia(
-      String? imageUrl, String? animationUrl) async {
+    String? imageUrl,
+    String? animationUrl,
+  ) async {
     try {
       if (imageUrl == null && animationUrl == null) {
         return Media(type: MediaType.unknown);

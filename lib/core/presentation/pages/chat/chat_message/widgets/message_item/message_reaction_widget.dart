@@ -90,17 +90,20 @@ class MessageReactions extends StatelessWidget {
         if (reactions.isNotEmpty)
           InkWell(
             onTap: () {
-              BottomSheetUtils.showSnapBottomSheet(context, builder: (_) {
-                return LemonEmojiPicker(
-                  onEmojiSelected: (emoji) {
-                    Navigator.of(context).pop();
-                    onReact?.call(
-                      event: event,
-                      emoji: emoji.emoji,
-                    );
-                  },
-                );
-              });
+              BottomSheetUtils.showSnapBottomSheet(
+                context,
+                builder: (_) {
+                  return LemonEmojiPicker(
+                    onEmojiSelected: (emoji) {
+                      Navigator.of(context).pop();
+                      onReact?.call(
+                        event: event,
+                        emoji: emoji.emoji,
+                      );
+                    },
+                  );
+                },
+              );
             },
             borderRadius: BorderRadius.circular(LemonRadius.small),
             child: Container(

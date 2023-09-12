@@ -17,11 +17,11 @@ import 'package:dartz/dartz.dart' as dartz;
 class ProfileNftCreatedListView extends StatelessWidget {
   final User user;
   late final tokensListingBloc = TokensListingBloc(
-      TokenService(
-        getIt<TokenRepository>(),
-      ),
-      defaultInput: GetTokensInput(creator: user.wallets?[0]))
-    ..add(const TokensListingEvent.fetch());
+    TokenService(
+      getIt<TokenRepository>(),
+    ),
+    defaultInput: GetTokensInput(creator: user.wallets?[0]),
+  )..add(const TokensListingEvent.fetch());
 
   ProfileNftCreatedListView({
     super.key,
@@ -35,12 +35,13 @@ class ProfileNftCreatedListView extends StatelessWidget {
       child: BlocListener<ScrollNotificationBloc, ScrollNotificationState>(
         listener: (context, scrollState) {
           scrollState.maybeWhen(
-              endReached: () {
-                tokensListingBloc.add(
-                  const TokensListingEvent.fetch(),
-                );
-              },
-              orElse: () {});
+            endReached: () {
+              tokensListingBloc.add(
+                const TokensListingEvent.fetch(),
+              );
+            },
+            orElse: () {},
+          );
         },
         child: const _ProfileNftCreatedList(),
       ),
@@ -66,9 +67,11 @@ class _ProfileNftCreatedListViewState extends State<_ProfileNftCreatedList> {
         builder: (context, tokenListingState) {
           return tokenListingState.when(
             loading: () => SliverFillRemaining(
-                child: Center(child: Loading.defaultLoading(context))),
+              child: Center(child: Loading.defaultLoading(context)),
+            ),
             failure: () => SliverToBoxAdapter(
-                child: Center(child: Text(t.common.somethingWrong))),
+              child: Center(child: Text(t.common.somethingWrong)),
+            ),
             fetched: (tokens) {
               if (tokens.isEmpty) {
                 return SliverFillRemaining(

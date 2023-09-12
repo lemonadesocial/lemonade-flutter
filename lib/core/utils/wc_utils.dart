@@ -9,6 +9,7 @@ class WCUtils {
   static List<String> getSessionsChains(Map<String, Namespace>? namespaces) {
     if (namespaces == null) return [];
     return NamespaceUtils.getChainsFromAccounts(
-        getSessionsAccounts(namespaces));
+      getSessionsAccounts(namespaces),
+    );
   }
 }
