@@ -1,6 +1,5 @@
 import 'package:app/core/config.dart';
 import 'package:app/core/domain/user/entities/user.dart';
-import 'package:app/core/presentation/pages/edit_profile/edit_profile_page.dart';
 import 'package:app/core/presentation/widgets/common/badge/username_badge_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';

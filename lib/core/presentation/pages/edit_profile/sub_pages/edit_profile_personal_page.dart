@@ -1,7 +1,4 @@
-import 'dart:ffi';
-
 import 'package:app/core/presentation/pages/edit_profile/widgets/dropdown_widget.dart';
-import 'package:app/core/presentation/pages/edit_profile/widgets/edit_profile_social_tile.dart';
 import 'package:app/core/presentation/pages/edit_profile/widgets/profile_textfield_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_bottom_sheet_mixin.dart';
@@ -60,7 +57,7 @@ class EditProfilePersonalDialog extends StatelessWidget with LemonBottomSheet {
                     DropdownWidget(
                       label: t.profile.industry,
                       hintText: 'Select industry',
-                      listItem: ['Artist', 'Programing'],
+                      listItem: const ['Artist', 'Programing'],
                       onValueChange: (value) {},
                     ),
                     ProfileTextFieldWidget(
@@ -70,13 +67,13 @@ class EditProfilePersonalDialog extends StatelessWidget with LemonBottomSheet {
                     DropdownWidget(
                       label: t.profile.gender,
                       hintText: 'Select gender',
-                      listItem: ['Artist', 'Programing'],
+                      listItem: const ['Artist', 'Programing'],
                       onValueChange: (value) {},
                     ),
                     DropdownWidget(
                       label: t.profile.ethnicity,
                       hintText: 'Select ethnicity',
-                      listItem: ['Artist', 'Programing'],
+                      listItem: const ['Artist', 'Programing'],
                       onValueChange: (value) {},
                     ),
                   ],
