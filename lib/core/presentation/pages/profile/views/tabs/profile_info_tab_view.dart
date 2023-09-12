@@ -47,7 +47,9 @@ class ProfileInfoTabView extends StatelessWidget {
         SliverToBoxAdapter(
           child: Container(
             padding: EdgeInsets.symmetric(
-                vertical: Spacing.medium, horizontal: Spacing.smMedium),
+              vertical: Spacing.medium,
+              horizontal: Spacing.smMedium,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -58,9 +60,11 @@ class ProfileInfoTabView extends StatelessWidget {
                 ],
                 if (user.description != null &&
                     user.description?.isNotEmpty == true) ...[
-                  Text(StringUtils.capitalize(t.common.description),
-                      style: Typo.small
-                          .copyWith(color: colorScheme.onSurfaceVariant)),
+                  Text(
+                    StringUtils.capitalize(t.common.description),
+                    style: Typo.small
+                        .copyWith(color: colorScheme.onSurfaceVariant),
+                  ),
                   SizedBox(height: Spacing.superExtraSmall),
                   Text(user.description!),
                   SizedBox(height: Spacing.smMedium),
@@ -70,7 +74,8 @@ class ProfileInfoTabView extends StatelessWidget {
                 Text(
                   StringUtils.capitalize(
                     t.common.joinedOn(
-                        date: DateFormatUtils.monthYearOnly(user.createdAt)),
+                      date: DateFormatUtils.monthYearOnly(user.createdAt),
+                    ),
                   ),
                   style:
                       Typo.small.copyWith(color: colorScheme.onSurfaceVariant),
@@ -105,8 +110,11 @@ class ProfileInfoTabView extends StatelessWidget {
         }
         return GestureDetector(
           onTap: () async {
-            AutoRouter.of(context).navigate(WebviewRoute(
-                uri: Uri.parse('${_socialUrls[entry.key]}/${entry.value}}')));
+            AutoRouter.of(context).navigate(
+              WebviewRoute(
+                uri: Uri.parse('${_socialUrls[entry.key]}/${entry.value}}'),
+              ),
+            );
           },
           child: Container(
             width: 42,

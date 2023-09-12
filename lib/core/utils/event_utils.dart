@@ -17,7 +17,8 @@ class EventUtils {
       return '';
     }
     return ImageUtils.generateUrl(
-        file: event.newNewPhotosExpanded!.first,
-        imageConfig: ImageConfig.eventPhoto);
+      file: event.newNewPhotosExpanded!.first,
+      imageConfig: ImageConfig.eventPhoto,
+    );
   }
 }

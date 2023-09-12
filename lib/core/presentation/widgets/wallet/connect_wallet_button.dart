@@ -52,9 +52,11 @@ class _Button extends StatelessWidget {
         if (activeSession == null) {
           return LemonButton(
             onTap: () {
-              context.read<WalletBloc>().add(const WalletEventConnectWallet(
-                    walletApp: SupportedWalletApp.metamask,
-                  ));
+              context.read<WalletBloc>().add(
+                    const WalletEventConnectWallet(
+                      walletApp: SupportedWalletApp.metamask,
+                    ),
+                  );
             },
             label: t.common.actions.connect,
             icon: ThemeSvgIcon(
@@ -73,9 +75,11 @@ class _Button extends StatelessWidget {
           ],
           offset: Offset(0, Spacing.extraSmall),
           onItemPressed: (item) {
-            context.read<WalletBloc>().add(WalletEvent.updateUserWallet(
-                  wallet: walletAddress,
-                ));
+            context.read<WalletBloc>().add(
+                  WalletEvent.updateUserWallet(
+                    wallet: walletAddress,
+                  ),
+                );
           },
           child: LemonButton(
             label: Web3Utils.formatIdentifier(

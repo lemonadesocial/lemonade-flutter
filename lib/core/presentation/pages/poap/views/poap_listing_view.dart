@@ -153,7 +153,8 @@ class _PoapListingViewState extends State<PoapListingView> {
                     ),
                     SliverToBoxAdapter(
                       child: SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.2),
+                        height: MediaQuery.of(context).size.height * 0.2,
+                      ),
                     )
                   ],
                 ),

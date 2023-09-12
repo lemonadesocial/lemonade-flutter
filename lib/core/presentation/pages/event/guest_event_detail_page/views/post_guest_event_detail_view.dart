@@ -31,9 +31,10 @@ class PostGuestEventDetailView extends StatelessWidget {
       body: BlocBuilder<GetEventDetailBloc, GetEventDetailState>(
         builder: (context, state) => state.when(
           failure: () => Center(
-              child: EmptyList(
-            emptyText: t.common.somethingWrong,
-          )),
+            child: EmptyList(
+              emptyText: t.common.somethingWrong,
+            ),
+          ),
           loading: () => Loading.defaultLoading(context),
           fetched: (event) {
             return SafeArea(
@@ -49,7 +50,8 @@ class PostGuestEventDetailView extends StatelessWidget {
                         InkWell(
                           onTap: () {
                             Share.share(
-                                '${AppConfig.webUrl}/event/${event.id}');
+                              '${AppConfig.webUrl}/event/${event.id}',
+                            );
                           },
                           child: SizedBox(
                             height: Sizing.small,
@@ -85,8 +87,9 @@ class PostGuestEventDetailView extends StatelessWidget {
                   if (event.latitude != null && event.longitude != null) ...[
                     SliverPadding(
                       padding: EdgeInsets.symmetric(
-                          vertical: Spacing.smMedium,
-                          horizontal: Spacing.smMedium),
+                        vertical: Spacing.smMedium,
+                        horizontal: Spacing.smMedium,
+                      ),
                       sliver: SliverToBoxAdapter(
                         child: GuestEventLocation(event: event),
                       ),

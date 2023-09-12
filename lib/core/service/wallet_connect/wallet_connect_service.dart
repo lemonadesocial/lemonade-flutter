@@ -52,24 +52,27 @@ class WalletConnectService {
     try {
       if (initialized) return true;
       _app = await Web3App.createInstance(
-          projectId: AppConfig.walletConnectProjectId,
-          metadata: PairingMetadata(
-            name: 'Lemonade test',
-            description: 'Lemonade test',
-            url: AppConfig.webUrl,
-            icons: [
-              'https://walletconnect.com/walletconnect-logo.png',
-            ],
-          ));
+        projectId: AppConfig.walletConnectProjectId,
+        metadata: PairingMetadata(
+          name: 'Lemonade test',
+          description: 'Lemonade test',
+          url: AppConfig.webUrl,
+          icons: [
+            'https://walletconnect.com/walletconnect-logo.png',
+          ],
+        ),
+      );
       // Register event handler for all chain in active session if available;
       final activeSession = await getActiveSession();
 
       _registerEventHandler(
-          WCUtils.getSessionsChains(activeSession?.namespaces));
+        WCUtils.getSessionsChains(activeSession?.namespaces),
+      );
 
       // Register event handler of all supported chains
       _registerEventHandler(
-          Chains.allChains.map((chain) => chain.chainId).toList());
+        Chains.allChains.map((chain) => chain.chainId).toList(),
+      );
 
       _app!.onSessionEvent.subscribe(_onSessionEvent);
       _app!.onSessionUpdate.subscribe(_onSessionUpdate);
@@ -166,7 +169,8 @@ class WalletConnectService {
     try {
       if (_shouldChangeAccount(wallet)) {
         SnackBarUtils.showSnackbar(
-            "Should change account to ${Web3Utils.formatIdentifier(wallet, length: 4)}");
+          "Should change account to ${Web3Utils.formatIdentifier(wallet, length: 4)}",
+        );
         return null;
       }
       final chainId = _currentWalletChainId ?? defaultRequiredChainId;

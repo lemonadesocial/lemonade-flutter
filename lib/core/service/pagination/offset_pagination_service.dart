@@ -6,10 +6,16 @@ class OffsetPaginationService<T, I> {
   bool _reachedEnd = false;
   int? _offset = 0;
 
-  Future<Either<Failure, List<T>>> Function(int? offset, bool reachedEnd,
-      {required I input})? getDataFuture;
-  Stream<Either<Failure, List<T>>> Function(int? offset, bool reachedEnd,
-      {required I input})? getDataStream;
+  Future<Either<Failure, List<T>>> Function(
+    int? offset,
+    bool reachedEnd, {
+    required I input,
+  })? getDataFuture;
+  Stream<Either<Failure, List<T>>> Function(
+    int? offset,
+    bool reachedEnd, {
+    required I input,
+  })? getDataStream;
 
   OffsetPaginationService({this.getDataFuture, this.getDataStream});
 

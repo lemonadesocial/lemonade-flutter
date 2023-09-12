@@ -26,13 +26,17 @@ class GuestEventLocation extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
     final userId = context.read<AuthBloc>().state.maybeWhen(
-        authenticated: (authSession) => authSession.userId, orElse: () => '');
+          authenticated: (authSession) => authSession.userId,
+          orElse: () => '',
+        );
     final isAttending = (event.accepted ?? []).contains(userId);
 
     return FutureBuilder(
       future: isAttending
           ? MapUtils.getLocationName(
-              lat: event.latitude ?? 0, lng: event.longitude ?? 0)
+              lat: event.latitude ?? 0,
+              lng: event.longitude ?? 0,
+            )
           : Future.delayed(const Duration(milliseconds: 300), () => ''),
       builder: (context, snapshot) => SizedBox(
         width: double.infinity,

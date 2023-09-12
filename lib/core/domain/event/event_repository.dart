@@ -23,6 +23,7 @@ abstract class EventRepository {
     required GetEventDetailInput input,
   });
 
-  Future<Either<Failure, EventRsvp>> acceptEvent(
-      {required AcceptEventInput input});
+  Future<Either<Failure, EventRsvp>> acceptEvent({
+    required AcceptEventInput input,
+  });
 }

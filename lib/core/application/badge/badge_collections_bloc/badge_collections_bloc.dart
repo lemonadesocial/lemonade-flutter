@@ -36,24 +36,32 @@ class BadgeCollectionsBloc
   }
 
   Future<void> _onSelect(
-      BadgeCollectionsEventSelect event, Emitter emit) async {
+    BadgeCollectionsEventSelect event,
+    Emitter emit,
+  ) async {
     final selectedCollections = _badgeService.addCollection(event.collection);
     state.whenOrNull(
       fetched: (collections, _) => emit(
         BadgeCollectionsState.fetched(
-            collections: collections, selectedCollections: selectedCollections),
+          collections: collections,
+          selectedCollections: selectedCollections,
+        ),
       ),
     );
   }
 
   Future<void> _onDeselect(
-      BadgeCollectionsEventDeselect event, Emitter emit) async {
+    BadgeCollectionsEventDeselect event,
+    Emitter emit,
+  ) async {
     final selectedCollections =
         _badgeService.removeCollection(event.collection);
     state.whenOrNull(
       fetched: (collections, _) => emit(
         BadgeCollectionsState.fetched(
-            collections: collections, selectedCollections: selectedCollections),
+          collections: collections,
+          selectedCollections: selectedCollections,
+        ),
       ),
     );
   }

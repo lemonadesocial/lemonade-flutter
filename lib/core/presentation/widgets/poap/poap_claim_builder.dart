@@ -14,7 +14,10 @@ class PoapClaimBuilder extends StatelessWidget {
   });
   final badge_entities.Badge badge;
   final Widget Function(
-      BuildContext context, ClaimPoapState state, bool locationEnabled) builder;
+    BuildContext context,
+    ClaimPoapState state,
+    bool locationEnabled,
+  ) builder;
 
   @override
   Widget build(BuildContext context) {

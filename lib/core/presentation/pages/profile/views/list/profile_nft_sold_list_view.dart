@@ -71,32 +71,35 @@ class _ProfileNftSoldList extends StatelessWidget {
           OrdersListingSubscriptionState>(
         builder: (context, tokenListingState) {
           return tokenListingState.when(
-              loading: () => SliverFillRemaining(
-                  child: Center(child: Loading.defaultLoading(context))),
-              failure: () => SliverToBoxAdapter(
-                  child: Center(child: Text(t.common.somethingWrong))),
-              fetched: (orders) {
-                if (orders.isEmpty) {
-                  return SliverFillRemaining(
-                    hasScrollBody: false,
-                    child: EmptyList(emptyText: t.nft.noCollectible),
-                  );
-                }
-                return SliverGrid(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: Spacing.superExtraSmall,
-                    mainAxisSpacing: Spacing.superExtraSmall,
-                  ),
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      final order = orders[index];
-                      return ProfileNftItem(nftToken: dartz.Right(order.token));
-                    },
-                    childCount: orders.length,
-                  ),
+            loading: () => SliverFillRemaining(
+              child: Center(child: Loading.defaultLoading(context)),
+            ),
+            failure: () => SliverToBoxAdapter(
+              child: Center(child: Text(t.common.somethingWrong)),
+            ),
+            fetched: (orders) {
+              if (orders.isEmpty) {
+                return SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: EmptyList(emptyText: t.nft.noCollectible),
                 );
-              });
+              }
+              return SliverGrid(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: Spacing.superExtraSmall,
+                  mainAxisSpacing: Spacing.superExtraSmall,
+                ),
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final order = orders[index];
+                    return ProfileNftItem(nftToken: dartz.Right(order.token));
+                  },
+                  childCount: orders.length,
+                ),
+              );
+            },
+          );
         },
       ),
     );

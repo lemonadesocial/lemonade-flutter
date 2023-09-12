@@ -30,7 +30,8 @@ class MapUtils {
     final lngOff = Random().nextDouble() * 0.01;
     try {
       var response = await Dio().get(
-          'https://maps.googleapis.com/maps/api/distancematrix/json?destinations=$lat,$lng&origins=${lat + latOff},${lng + lngOff}&key=${AppConfig.googleMapKey}');
+        'https://maps.googleapis.com/maps/api/distancematrix/json?destinations=$lat,$lng&origins=${lat + latOff},${lng + lngOff}&key=${AppConfig.googleMapKey}',
+      );
       String destinationAddresses =
           List<String>.from(response.data?["destination_addresses"] ?? [])
               .map((item) => item)

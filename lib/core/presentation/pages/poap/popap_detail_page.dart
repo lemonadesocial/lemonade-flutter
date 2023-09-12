@@ -84,7 +84,9 @@ class _PopapDetailPageState extends State<PopapDetailPage> {
                           ),
                           SliverToBoxAdapter(
                             child: _PoapInfo(
-                                tokenDetail: widget.tokenDetail, badge: badge),
+                              tokenDetail: widget.tokenDetail,
+                              badge: badge,
+                            ),
                           ),
                           SliverToBoxAdapter(
                             child: SizedBox(height: Spacing.medium),
@@ -97,7 +99,8 @@ class _PopapDetailPageState extends State<PopapDetailPage> {
                           ),
                           SliverToBoxAdapter(
                             child: _PoapDescription(
-                                tokenDetail: widget.tokenDetail),
+                              tokenDetail: widget.tokenDetail,
+                            ),
                           ),
                         ],
                       ),
@@ -237,8 +240,10 @@ class _PoapImage extends StatelessWidget {
             LemonRadius.extraSmall,
           ),
           child: FutureBuilder(
-            future: MediaUtils.getNftMedia(tokenDetail?.metadata?.image,
-                tokenDetail?.metadata?.animation_url),
+            future: MediaUtils.getNftMedia(
+              tokenDetail?.metadata?.image,
+              tokenDetail?.metadata?.animation_url,
+            ),
             builder: (context, snapshot) => CachedNetworkImage(
               imageUrl: snapshot.data?.url ?? '',
               fit: BoxFit.cover,
@@ -317,9 +322,12 @@ class _PoapDetailFooterState extends State<PoapDetailFooter>
             bottom: 2 * Spacing.smMedium,
           ),
           decoration: BoxDecoration(
-              border: Border(
-                  top: BorderSide(
-                      color: colorScheme.onPrimary.withOpacity(0.09)))),
+            border: Border(
+              top: BorderSide(
+                color: colorScheme.onPrimary.withOpacity(0.09),
+              ),
+            ),
+          ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -347,7 +355,8 @@ class _PoapDetailFooterState extends State<PoapDetailFooter>
                               }
                               if (!ableToClaim) {
                                 widget.onPressViewRequirements(
-                                    claimPoapState.policy);
+                                  claimPoapState.policy,
+                                );
                               }
                             },
                         )

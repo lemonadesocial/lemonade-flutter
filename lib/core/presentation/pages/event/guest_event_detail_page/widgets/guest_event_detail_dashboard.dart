@@ -25,32 +25,35 @@ class GuestEventDetailDashboard extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         EventDashboardItem(
-            title: t.event.dashboard.liveChat,
-            icon: Assets.icons.icChatBubbleGradient.svg(),
-            child: const SizedBox.shrink(),
-            onTap: () {
-              if (event.matrixEventRoomId == null ||
-                  event.matrixEventRoomId!.isEmpty) return;
-              AutoRouter.of(context).navigate(
-                ChatRoute(roomId: event.matrixEventRoomId ?? ''),
-              );
-            }),
+          title: t.event.dashboard.liveChat,
+          icon: Assets.icons.icChatBubbleGradient.svg(),
+          child: const SizedBox.shrink(),
+          onTap: () {
+            if (event.matrixEventRoomId == null ||
+                event.matrixEventRoomId!.isEmpty) return;
+            AutoRouter.of(context).navigate(
+              ChatRoute(roomId: event.matrixEventRoomId ?? ''),
+            );
+          },
+        ),
         SizedBox(width: 10.w),
         EventDashboardItem(
-            title: t.event.dashboard.invite,
-            icon: Assets.icons.icUserAddGradient.svg(),
-            child: EventTotalJoinWidget(event: event),
-            onTap: () {
-              // TODO: upcoming feature
-            }),
+          title: t.event.dashboard.invite,
+          icon: Assets.icons.icUserAddGradient.svg(),
+          child: EventTotalJoinWidget(event: event),
+          onTap: () {
+            // TODO: upcoming feature
+          },
+        ),
         SizedBox(width: 10.w),
         EventDashboardItem(
-            title: t.event.dashboard.leaderBoard,
-            icon: Assets.icons.icLeaderboardGradient.svg(),
-            child: const SizedBox.shrink(),
-            onTap: () {
-              // TODO: upcoming feature
-            }),
+          title: t.event.dashboard.leaderBoard,
+          icon: Assets.icons.icLeaderboardGradient.svg(),
+          child: const SizedBox.shrink(),
+          onTap: () {
+            // TODO: upcoming feature
+          },
+        ),
       ],
     );
   }

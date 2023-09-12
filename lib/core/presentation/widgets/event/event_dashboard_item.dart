@@ -27,7 +27,11 @@ class EventDashboardItem extends StatelessWidget {
         onTap: onTap,
         child: Container(
           padding: EdgeInsets.only(
-              top: 1.w, left: 1.w, right: 1.w, bottom: Spacing.superExtraSmall),
+            top: 1.w,
+            left: 1.w,
+            right: 1.w,
+            bottom: Spacing.superExtraSmall,
+          ),
           decoration: ShapeDecoration(
             color: LemonColor.chineseBlack,
             shape: RoundedRectangleBorder(

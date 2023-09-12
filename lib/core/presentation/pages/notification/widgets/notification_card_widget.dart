@@ -24,20 +24,21 @@ class NotificationCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return GestureDetector(
-        onTap: onTap,
-        child: Container(
-          padding: EdgeInsets.all(Spacing.small),
-          decoration: BoxDecoration(
-            border: Border(bottom: BorderSide(color: colorScheme.outline)),
-          ),
-          child: Row(
-            children: [
-              _buildAvatar(),
-              Expanded(child: _buildMessage(colorScheme)),
-              _buildOptionsButton(colorScheme),
-            ],
-          ),
-        ));
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.all(Spacing.small),
+        decoration: BoxDecoration(
+          border: Border(bottom: BorderSide(color: colorScheme.outline)),
+        ),
+        child: Row(
+          children: [
+            _buildAvatar(),
+            Expanded(child: _buildMessage(colorScheme)),
+            _buildOptionsButton(colorScheme),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _buildAvatar() {
@@ -47,20 +48,22 @@ class NotificationCard extends StatelessWidget {
         padding: EdgeInsets.only(right: Spacing.small),
         child: LemonCircleAvatar(
           url: ImageUtils.generateUrl(
-              file: notification.fromExpanded?.newPhotosExpanded?.first,
-              imageConfig: ImageConfig.profile),
+            file: notification.fromExpanded?.newPhotosExpanded?.first,
+            imageConfig: ImageConfig.profile,
+          ),
           size: 42,
         ),
       );
     }
     if (notification.type == NotificationType.userDiscoveryMatch) {
       return Container(
-          padding: EdgeInsets.only(right: Spacing.small),
-          child: ThemeSvgIcon(
-            color: const Color(0xFFC69DF7),
-            builder: (filter) => Assets.icons.icMatches
-                .svg(colorFilter: filter, width: 42, height: 42),
-          ));
+        padding: EdgeInsets.only(right: Spacing.small),
+        child: ThemeSvgIcon(
+          color: const Color(0xFFC69DF7),
+          builder: (filter) => Assets.icons.icMatches
+              .svg(colorFilter: filter, width: 42, height: 42),
+        ),
+      );
     }
     return Container();
   }
@@ -69,16 +72,20 @@ class NotificationCard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(notification.message ?? '',
-            style: Typo.medium.copyWith(
-              color: colorScheme.onPrimary,
-              fontWeight: FontWeight.w700,
-            )),
-        Text(timeago.format(notification.createdAt!, locale: 'en_short'),
-            style: Typo.medium.copyWith(
-              color: colorScheme.onSurfaceVariant,
-              fontWeight: FontWeight.w700,
-            ))
+        Text(
+          notification.message ?? '',
+          style: Typo.medium.copyWith(
+            color: colorScheme.onPrimary,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        Text(
+          timeago.format(notification.createdAt!, locale: 'en_short'),
+          style: Typo.medium.copyWith(
+            color: colorScheme.onSurfaceVariant,
+            fontWeight: FontWeight.w700,
+          ),
+        )
       ],
     );
   }

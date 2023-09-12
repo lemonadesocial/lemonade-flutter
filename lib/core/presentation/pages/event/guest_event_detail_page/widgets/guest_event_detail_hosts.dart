@@ -130,7 +130,9 @@ class _EventHostItem extends StatelessWidget {
               ),
               Padding(
                 padding: EdgeInsets.symmetric(
-                    vertical: Spacing.small, horizontal: Spacing.extraSmall),
+                  vertical: Spacing.small,
+                  horizontal: Spacing.extraSmall,
+                ),
                 child: Center(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -181,7 +183,8 @@ class _EventHostItem extends StatelessWidget {
                             Container(
                               height: 30.w,
                               padding: EdgeInsets.symmetric(
-                                  horizontal: Spacing.xSmall),
+                                horizontal: Spacing.xSmall,
+                              ),
                               decoration: ShapeDecoration(
                                 color: colorScheme.onPrimary.withOpacity(0.06),
                                 shape: RoundedRectangleBorder(
@@ -208,7 +211,8 @@ class _EventHostItem extends StatelessWidget {
                               child: Container(
                                 height: 30.w,
                                 padding: EdgeInsets.symmetric(
-                                    horizontal: Spacing.superExtraSmall),
+                                  horizontal: Spacing.superExtraSmall,
+                                ),
                                 decoration: ShapeDecoration(
                                   color:
                                       colorScheme.onPrimary.withOpacity(0.06),

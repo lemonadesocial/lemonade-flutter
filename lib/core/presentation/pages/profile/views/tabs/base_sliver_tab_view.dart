@@ -54,8 +54,10 @@ class BaseSliverTabView extends StatelessWidget {
                 key: PageStorageKey<String>(name.toString()),
                 slivers: <Widget>[
                   SliverPinnedOverlapInjector(
-                      handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                          context)),
+                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                      context,
+                    ),
+                  ),
                   ...children
                 ],
               ),

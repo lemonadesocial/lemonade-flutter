@@ -2,10 +2,10 @@ import 'package:app/theme/typo.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../domain/event/entities/event.dart';
-import '../../../../utils/date_format_utils.dart';
-import '../../../../utils/image_utils.dart';
-import '../../../widgets/image_placeholder_widget.dart';
+import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/utils/date_format_utils.dart';
+import 'package:app/core/utils/image_utils.dart';
+import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 
 class EventTileWidget extends StatelessWidget {
   const EventTileWidget({

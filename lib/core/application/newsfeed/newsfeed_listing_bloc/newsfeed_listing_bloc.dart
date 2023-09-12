@@ -36,7 +36,8 @@ class NewsfeedListingBloc
     GetNewsfeedInput? input,
   }) async {
     final result = await newsfeedService.getNewsfeed(
-        input: input?.copyWith(offset: offset));
+      input: input?.copyWith(offset: offset),
+    );
     return result.fold(
       Left.new,
       (newsfeed) {
@@ -82,9 +83,10 @@ class NewsfeedListingBloc
     newPostList.insert(0, event.post);
     emit(
       state.copyWith(
-          status: NewsfeedStatus.fetched,
-          posts: newPostList,
-          scrollToTopEvent: true),
+        status: NewsfeedStatus.fetched,
+        posts: newPostList,
+        scrollToTopEvent: true,
+      ),
     );
   }
 

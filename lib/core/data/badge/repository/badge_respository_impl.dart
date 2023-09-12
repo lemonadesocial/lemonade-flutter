@@ -51,7 +51,8 @@ class BadgeRepositoryImpl implements BadgeRepository {
 
   @override
   Future<Either<Failure, List<BadgeList>>> getBadgeCollections(
-      GetBadgeListsInput? input) async {
+    GetBadgeListsInput? input,
+  ) async {
     final result = await _client.query(
       QueryOptions(
         document: getBadgeListsQuery,
@@ -73,7 +74,8 @@ class BadgeRepositoryImpl implements BadgeRepository {
 
   @override
   Future<Either<Failure, List<BadgeCity>>> getBadgeCities(
-      GetBadgeCitiesInput? input) async {
+    GetBadgeCitiesInput? input,
+  ) async {
     final result = await _client.query(
       QueryOptions(
         document: getBadgeCitiesQuery,

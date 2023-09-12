@@ -27,14 +27,16 @@ class ChatSpaceBloc extends Bloc<ChatSpaceEvent, ChatSpaceState> {
     var activeSpace =
         matrixService.client.getRoomById(storedActiveSpaceId ?? '');
 
-    emit(state.copyWith(
-      activeSpace: activeSpace,
-      spaces: matrixService.client.rooms
-          .where(
-            RoomTypeFilter.getRoomByRoomTypeFilter(RoomTypeFilter.spaces),
-          )
-          .toList(),
-    ));
+    emit(
+      state.copyWith(
+        activeSpace: activeSpace,
+        spaces: matrixService.client.rooms
+            .where(
+              RoomTypeFilter.getRoomByRoomTypeFilter(RoomTypeFilter.spaces),
+            )
+            .toList(),
+      ),
+    );
   }
 
   _onSetActiveSpace(ChatSpaceEventSetActiveSpace event, Emitter emit) async {

@@ -95,8 +95,9 @@ class EventRepositoryImpl implements EventRepository {
   }
 
   @override
-  Future<Either<Failure, EventRsvp>> acceptEvent(
-      {required AcceptEventInput input}) async {
+  Future<Either<Failure, EventRsvp>> acceptEvent({
+    required AcceptEventInput input,
+  }) async {
     final result = await client.mutate(
       MutationOptions(
         document: acceptEventMutation,

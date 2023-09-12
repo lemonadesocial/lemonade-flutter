@@ -170,7 +170,9 @@ class _ProfileUserFollow extends StatelessWidget {
           Text(
             '${user.tagline}',
             style: Typo.medium.copyWith(
-                color: LemonColor.white72, fontWeight: FontWeight.w400),
+              color: LemonColor.white72,
+              fontWeight: FontWeight.w400,
+            ),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),

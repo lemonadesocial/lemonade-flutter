@@ -23,7 +23,9 @@ class EventBuyTicketButton extends StatelessWidget {
     return GestureDetector(
       child: Container(
         padding: EdgeInsets.symmetric(
-            horizontal: Spacing.xSmall, vertical: Spacing.extraSmall),
+          horizontal: Spacing.xSmall,
+          vertical: Spacing.extraSmall,
+        ),
         decoration: ShapeDecoration(
           gradient: LinearGradient(
             begin: const Alignment(0.00, -1.00),
@@ -31,7 +33,8 @@ class EventBuyTicketButton extends StatelessWidget {
             colors: [LemonColor.arsenic, LemonColor.charlestonGreen],
           ),
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(LemonRadius.normal)),
+            borderRadius: BorderRadius.circular(LemonRadius.normal),
+          ),
           shadows: [
             BoxShadow(
               color: LemonColor.shadow,
