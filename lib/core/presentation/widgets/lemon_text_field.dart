@@ -48,6 +48,7 @@ class LemonTextField extends StatelessWidget {
             focusedBorder: border,
             errorBorder: border,
             border: border,
+            contentPadding: EdgeInsets.all(Spacing.smMedium),
           ),
         ),
         Visibility(
