@@ -9,7 +9,6 @@ import 'package:app/core/utils/bottomsheet_utils.dart';
 import 'package:app/core/utils/chat/filter_event_timeline_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:matrix/matrix.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
 class MessagesList extends StatelessWidget {
