@@ -25,5 +25,34 @@ jobs:
       - name: Format code
         run: dart format --set-exit-if-changed .  
 
-      - name: Analyze Dart
-        uses: zgosalvez/github-actions-analyze-dart@v2
+      - name: Run build_runner
+        run: |
+          flutter packages pub run build_runner build --delete-conflicting-outputs
+      
+      - name: Generate i18n files
+        run: |
+          #!/bin/sh
+          sh gen_i18n.sh          
+
+      - uses: invertase/github-action-dart-analyzer@v1
+        with:
+          # (Optional) Treat info level issues as fatal.
+          fatal-infos: false
+
+          # (Optional) Treat warning level issues as fatal
+          # (defaults to true).
+          fatal-warnings: false
+
+          # (Optional) Whether to add annotations to GitHub actions summary / PR
+          # review files.
+          # (defaults to true).
+          annotate: true
+
+          # (Optional) If set to true only annotations will be created and the
+          # GitHub action itself will not fail on Dart analyzer problems. 
+          # (defaults to false).
+          annotate-only: false
+
+          # (Optional) The working directory to run the Dart analyzer in 
+          # (defaults to `./`).
+          working-directory: ./
