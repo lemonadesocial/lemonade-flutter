@@ -17,6 +17,7 @@ _$_TransferDto _$$_TransferDtoFromJson(Map<String, dynamic> json) =>
           : TransferArgsDto.fromJson(json['args'] as Map<String, dynamic>),
       address: json['address'] as String?,
       tokenId: json['tokenId'] as String?,
+      to: json['to'] as String?,
     );
 
 Map<String, dynamic> _$$_TransferDtoToJson(_$_TransferDto instance) =>
@@ -28,6 +29,7 @@ Map<String, dynamic> _$$_TransferDtoToJson(_$_TransferDto instance) =>
       'args': instance.args,
       'address': instance.address,
       'tokenId': instance.tokenId,
+      'to': instance.to,
     };
 
 const _$TransferStateEnumMap = {
@@ -58,6 +60,11 @@ _$_ClaimDto _$$_ClaimDtoFromJson(Map<String, dynamic> json) => _$_ClaimDto(
           : ClaimArgsDto.fromJson(json['args'] as Map<String, dynamic>),
       address: json['address'] as String?,
       tokenId: json['tokenId'] as String?,
+      to: json['to'] as String?,
+      chainlinkRequest: json['chainlinkRequest'] == null
+          ? null
+          : ChainlinkRequestDto.fromJson(
+              json['chainlinkRequest'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$_ClaimDtoToJson(_$_ClaimDto instance) =>
@@ -69,6 +76,8 @@ Map<String, dynamic> _$$_ClaimDtoToJson(_$_ClaimDto instance) =>
       'args': instance.args,
       'address': instance.address,
       'tokenId': instance.tokenId,
+      'to': instance.to,
+      'chainlinkRequest': instance.chainlinkRequest,
     };
 
 const _$ClaimStateEnumMap = {
@@ -87,6 +96,18 @@ Map<String, dynamic> _$$_ClaimArgsDtoToJson(_$_ClaimArgsDto instance) =>
     <String, dynamic>{
       'claimer': instance.claimer,
       'tokenURI': instance.tokenURI,
+    };
+
+_$_ChainlinkRequestDto _$$_ChainlinkRequestDtoFromJson(
+        Map<String, dynamic> json) =>
+    _$_ChainlinkRequestDto(
+      fulfilled: json['fulfilled'] as bool?,
+    );
+
+Map<String, dynamic> _$$_ChainlinkRequestDtoToJson(
+        _$_ChainlinkRequestDto instance) =>
+    <String, dynamic>{
+      'fulfilled': instance.fulfilled,
     };
 
 _$_PoapPolicyNodeDto _$$_PoapPolicyNodeDtoFromJson(Map<String, dynamic> json) =>

@@ -1,6 +1,7 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/presentation/widgets/bottom_bar/bottom_bar_widget.dart';
 import 'package:app/core/presentation/widgets/common/drawer/lemon_drawer.dart';
+import 'package:app/core/presentation/widgets/poap/poap_claim_transfer_controller_widget/poap_claim_transfer_controller_widget.dart';
 import 'package:app/core/utils/drawer_utils.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:auto_route/auto_route.dart';
@@ -28,31 +29,39 @@ class RootPage extends StatelessWidget {
           ),
           // Add other Blocs here if needed.
         ],
-        child: AutoTabsScaffold(
-          extendBody: true,
-          scaffoldKey: DrawerUtils.drawerGlobalKey,
-          backgroundColor: primaryColor,
-          routes: [
-            const HomeRoute(),
-            const DiscoverRoute(),
-            authState.maybeWhen(
-              authenticated: (session) => NotificationRoute(),
-              orElse: EmptyRoute.new,
+        child: Stack(
+          children: [
+            const Align(
+              alignment: Alignment.bottomCenter,
+              child: PoapClaimTransferControllerWidget(),
             ),
-            authState.maybeWhen(
-              authenticated: (session) => const WalletRoute(),
-              orElse: EmptyRoute.new,
+            AutoTabsScaffold(
+              extendBody: true,
+              scaffoldKey: DrawerUtils.drawerGlobalKey,
+              backgroundColor: primaryColor,
+              routes: [
+                const HomeRoute(),
+                const DiscoverRoute(),
+                authState.maybeWhen(
+                  authenticated: (session) => NotificationRoute(),
+                  orElse: EmptyRoute.new,
+                ),
+                authState.maybeWhen(
+                  authenticated: (session) => const WalletRoute(),
+                  orElse: EmptyRoute.new,
+                ),
+                authState.maybeWhen(
+                  authenticated: (session) => const MyProfileRoute(),
+                  orElse: EmptyRoute.new,
+                )
+              ],
+              drawer: const LemonDrawer(),
+              endDrawer: const LemonDrawer(),
+              bottomNavigationBuilder: (_, tabsRouter) {
+                return const BottomBar();
+              },
             ),
-            authState.maybeWhen(
-              authenticated: (session) => const MyProfileRoute(),
-              orElse: EmptyRoute.new,
-            )
           ],
-          drawer: const LemonDrawer(),
-          endDrawer: const LemonDrawer(),
-          bottomNavigationBuilder: (_, tabsRouter) {
-            return const BottomBar();
-          },
         ),
       ),
     );

@@ -38,7 +38,8 @@ class BaseGQL {
   }) {
     _authLink = AuthLink(
       getToken: () async {
-        return await appOauth.getTokenForGql();
+        var token = await appOauth.getTokenForGql();
+        return 'Bearer $token';
       },
     );
     _errorLink = ErrorLink(
@@ -74,6 +75,7 @@ class BaseGQL {
 
     tokenStateSubscription = appOauth.tokenStateStream.listen((tokenState) {
       if (tokenState == OAuthTokenState.invalid) {
+        _webSocketLink.dispose();
         _client.resetStore();
       }
     });
@@ -88,6 +90,12 @@ class BaseGQL {
   late final HttpLink _httpLink = HttpLink(httpUrl);
   late final WebSocketLink _webSocketLink = WebSocketLink(
     wssUrl,
+    config: SocketClientConfig(initialPayload: () async {
+      var token = await appOauth.getTokenForGql();
+      return {
+        'token': token,
+      };
+    }),
     subProtocol: GraphQLProtocol.graphqlTransportWs,
   );
   final List<Link> customLinks;
@@ -121,7 +129,7 @@ class WalletGQL extends BaseGQL {
   WalletGQL()
       : super(
           httpUrl: AppConfig.walletUrl,
-          wssUrl: AppConfig.walletUrl,
+          wssUrl: AppConfig.wssWalletUrl,
         );
 }
 

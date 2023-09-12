@@ -1,9 +1,9 @@
 /// Generated file. Do not edit.
 ///
 /// Locales: 1
-/// Strings: 198
+/// Strings: 202
 ///
-/// Built on 2023-09-11 at 05:16 UTC
+/// Built on 2023-09-11 at 17:56 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -302,6 +302,11 @@ class _I18nNftEn {
   String get badges => 'badges';
   String get noBadges => 'No badges found';
   late final _I18nNftPoapPolicyEn poapPolicy = _I18nNftPoapPolicyEn._(_root);
+  String get collectibleClaimed => 'Collectible claimed! 🎉';
+  String collectibleClaimedMintedAndDeposited({required Object tokenName}) =>
+      '${tokenName} has been minted and deposited in your Lemonade Wallet';
+  String get viewInWallet => 'View in Wallet';
+  String get transfer => 'Transfer';
 }
 
 // Path: auth
@@ -908,6 +913,15 @@ extension on _I18nEn {
         return 'following account';
       case 'nft.poapPolicy.userPolicy.nonQualified':
         return 'not following account';
+      case 'nft.collectibleClaimed':
+        return 'Collectible claimed! 🎉';
+      case 'nft.collectibleClaimedMintedAndDeposited':
+        return ({required Object tokenName}) =>
+            '${tokenName} has been minted and deposited in your Lemonade Wallet';
+      case 'nft.viewInWallet':
+        return 'View in Wallet';
+      case 'nft.transfer':
+        return 'Transfer';
       case 'auth.login.success':
         return 'Logged in successfully';
       case 'auth.login.fail':

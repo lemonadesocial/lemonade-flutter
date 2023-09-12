@@ -52,6 +52,7 @@ class TransferDto with _$TransferDto {
     TransferArgsDto? args,
     String? address,
     String? tokenId,
+    String? to,
   }) = _TransferDto;
 
   factory TransferDto.fromJson(Map<String, dynamic> json) =>
@@ -79,6 +80,8 @@ class ClaimDto with _$ClaimDto {
     ClaimArgsDto? args,
     String? address,
     String? tokenId,
+    String? to,
+    ChainlinkRequestDto? chainlinkRequest,
   }) = _ClaimDto;
 
   factory ClaimDto.fromJson(Map<String, dynamic> json) =>
@@ -94,6 +97,16 @@ class ClaimArgsDto with _$ClaimArgsDto {
 
   factory ClaimArgsDto.fromJson(Map<String, dynamic> json) =>
       _$ClaimArgsDtoFromJson(json);
+}
+
+@freezed
+class ChainlinkRequestDto with _$ChainlinkRequestDto {
+  factory ChainlinkRequestDto({
+    bool? fulfilled,
+  }) = _ChainlinkRequestDto;
+
+  factory ChainlinkRequestDto.fromJson(Map<String, dynamic> json) =>
+      _$ChainlinkRequestDtoFromJson(json);
 }
 
 @freezed

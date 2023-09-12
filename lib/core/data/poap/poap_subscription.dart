@@ -1,6 +1,6 @@
 import 'package:graphql_flutter/graphql_flutter.dart';
 
-final claimModified = gql('''
+final claimModifiedSubscription = gql('''
   subscription claimModified {
     claimModified {
       to
@@ -20,7 +20,7 @@ final claimModified = gql('''
   }
 ''');
 
-final transferModified = gql('''
+final transferModifiedSubscription = gql('''
   subscription transferModified {
     transferModified {
       to

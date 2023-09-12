@@ -28,6 +28,7 @@ mixin _$TransferDto {
   TransferArgsDto? get args => throw _privateConstructorUsedError;
   String? get address => throw _privateConstructorUsedError;
   String? get tokenId => throw _privateConstructorUsedError;
+  String? get to => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -48,7 +49,8 @@ abstract class $TransferDtoCopyWith<$Res> {
       String? errorMessage,
       TransferArgsDto? args,
       String? address,
-      String? tokenId});
+      String? tokenId,
+      String? to});
 
   $TransferArgsDtoCopyWith<$Res>? get args;
 }
@@ -73,6 +75,7 @@ class _$TransferDtoCopyWithImpl<$Res, $Val extends TransferDto>
     Object? args = freezed,
     Object? address = freezed,
     Object? tokenId = freezed,
+    Object? to = freezed,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -102,6 +105,10 @@ class _$TransferDtoCopyWithImpl<$Res, $Val extends TransferDto>
       tokenId: freezed == tokenId
           ? _value.tokenId
           : tokenId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      to: freezed == to
+          ? _value.to
+          : to // ignore: cast_nullable_to_non_nullable
               as String?,
     ) as $Val);
   }
@@ -134,7 +141,8 @@ abstract class _$$_TransferDtoCopyWith<$Res>
       String? errorMessage,
       TransferArgsDto? args,
       String? address,
-      String? tokenId});
+      String? tokenId,
+      String? to});
 
   @override
   $TransferArgsDtoCopyWith<$Res>? get args;
@@ -158,6 +166,7 @@ class __$$_TransferDtoCopyWithImpl<$Res>
     Object? args = freezed,
     Object? address = freezed,
     Object? tokenId = freezed,
+    Object? to = freezed,
   }) {
     return _then(_$_TransferDto(
       id: freezed == id
@@ -188,6 +197,10 @@ class __$$_TransferDtoCopyWithImpl<$Res>
           ? _value.tokenId
           : tokenId // ignore: cast_nullable_to_non_nullable
               as String?,
+      to: freezed == to
+          ? _value.to
+          : to // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -202,7 +215,8 @@ class _$_TransferDto implements _TransferDto {
       this.errorMessage,
       this.args,
       this.address,
-      this.tokenId});
+      this.tokenId,
+      this.to});
 
   factory _$_TransferDto.fromJson(Map<String, dynamic> json) =>
       _$$_TransferDtoFromJson(json);
@@ -222,10 +236,12 @@ class _$_TransferDto implements _TransferDto {
   final String? address;
   @override
   final String? tokenId;
+  @override
+  final String? to;
 
   @override
   String toString() {
-    return 'TransferDto(id: $id, network: $network, state: $state, errorMessage: $errorMessage, args: $args, address: $address, tokenId: $tokenId)';
+    return 'TransferDto(id: $id, network: $network, state: $state, errorMessage: $errorMessage, args: $args, address: $address, tokenId: $tokenId, to: $to)';
   }
 
   @override
@@ -240,13 +256,14 @@ class _$_TransferDto implements _TransferDto {
                 other.errorMessage == errorMessage) &&
             (identical(other.args, args) || other.args == args) &&
             (identical(other.address, address) || other.address == address) &&
-            (identical(other.tokenId, tokenId) || other.tokenId == tokenId));
+            (identical(other.tokenId, tokenId) || other.tokenId == tokenId) &&
+            (identical(other.to, to) || other.to == to));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, id, network, state, errorMessage, args, address, tokenId);
+  int get hashCode => Object.hash(runtimeType, id, network, state, errorMessage,
+      args, address, tokenId, to);
 
   @JsonKey(ignore: true)
   @override
@@ -270,7 +287,8 @@ abstract class _TransferDto implements TransferDto {
       final String? errorMessage,
       final TransferArgsDto? args,
       final String? address,
-      final String? tokenId}) = _$_TransferDto;
+      final String? tokenId,
+      final String? to}) = _$_TransferDto;
 
   factory _TransferDto.fromJson(Map<String, dynamic> json) =
       _$_TransferDto.fromJson;
@@ -290,6 +308,8 @@ abstract class _TransferDto implements TransferDto {
   String? get address;
   @override
   String? get tokenId;
+  @override
+  String? get to;
   @override
   @JsonKey(ignore: true)
   _$$_TransferDtoCopyWith<_$_TransferDto> get copyWith =>
@@ -464,6 +484,9 @@ mixin _$ClaimDto {
   ClaimArgsDto? get args => throw _privateConstructorUsedError;
   String? get address => throw _privateConstructorUsedError;
   String? get tokenId => throw _privateConstructorUsedError;
+  String? get to => throw _privateConstructorUsedError;
+  ChainlinkRequestDto? get chainlinkRequest =>
+      throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -483,9 +506,12 @@ abstract class $ClaimDtoCopyWith<$Res> {
       String? errorMessage,
       ClaimArgsDto? args,
       String? address,
-      String? tokenId});
+      String? tokenId,
+      String? to,
+      ChainlinkRequestDto? chainlinkRequest});
 
   $ClaimArgsDtoCopyWith<$Res>? get args;
+  $ChainlinkRequestDtoCopyWith<$Res>? get chainlinkRequest;
 }
 
 /// @nodoc
@@ -508,6 +534,8 @@ class _$ClaimDtoCopyWithImpl<$Res, $Val extends ClaimDto>
     Object? args = freezed,
     Object? address = freezed,
     Object? tokenId = freezed,
+    Object? to = freezed,
+    Object? chainlinkRequest = freezed,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -538,6 +566,14 @@ class _$ClaimDtoCopyWithImpl<$Res, $Val extends ClaimDto>
           ? _value.tokenId
           : tokenId // ignore: cast_nullable_to_non_nullable
               as String?,
+      to: freezed == to
+          ? _value.to
+          : to // ignore: cast_nullable_to_non_nullable
+              as String?,
+      chainlinkRequest: freezed == chainlinkRequest
+          ? _value.chainlinkRequest
+          : chainlinkRequest // ignore: cast_nullable_to_non_nullable
+              as ChainlinkRequestDto?,
     ) as $Val);
   }
 
@@ -550,6 +586,19 @@ class _$ClaimDtoCopyWithImpl<$Res, $Val extends ClaimDto>
 
     return $ClaimArgsDtoCopyWith<$Res>(_value.args!, (value) {
       return _then(_value.copyWith(args: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $ChainlinkRequestDtoCopyWith<$Res>? get chainlinkRequest {
+    if (_value.chainlinkRequest == null) {
+      return null;
+    }
+
+    return $ChainlinkRequestDtoCopyWith<$Res>(_value.chainlinkRequest!,
+        (value) {
+      return _then(_value.copyWith(chainlinkRequest: value) as $Val);
     });
   }
 }
@@ -568,10 +617,14 @@ abstract class _$$_ClaimDtoCopyWith<$Res> implements $ClaimDtoCopyWith<$Res> {
       String? errorMessage,
       ClaimArgsDto? args,
       String? address,
-      String? tokenId});
+      String? tokenId,
+      String? to,
+      ChainlinkRequestDto? chainlinkRequest});
 
   @override
   $ClaimArgsDtoCopyWith<$Res>? get args;
+  @override
+  $ChainlinkRequestDtoCopyWith<$Res>? get chainlinkRequest;
 }
 
 /// @nodoc
@@ -592,6 +645,8 @@ class __$$_ClaimDtoCopyWithImpl<$Res>
     Object? args = freezed,
     Object? address = freezed,
     Object? tokenId = freezed,
+    Object? to = freezed,
+    Object? chainlinkRequest = freezed,
   }) {
     return _then(_$_ClaimDto(
       id: freezed == id
@@ -622,6 +677,14 @@ class __$$_ClaimDtoCopyWithImpl<$Res>
           ? _value.tokenId
           : tokenId // ignore: cast_nullable_to_non_nullable
               as String?,
+      to: freezed == to
+          ? _value.to
+          : to // ignore: cast_nullable_to_non_nullable
+              as String?,
+      chainlinkRequest: freezed == chainlinkRequest
+          ? _value.chainlinkRequest
+          : chainlinkRequest // ignore: cast_nullable_to_non_nullable
+              as ChainlinkRequestDto?,
     ));
   }
 }
@@ -636,7 +699,9 @@ class _$_ClaimDto implements _ClaimDto {
       this.errorMessage,
       this.args,
       this.address,
-      this.tokenId});
+      this.tokenId,
+      this.to,
+      this.chainlinkRequest});
 
   factory _$_ClaimDto.fromJson(Map<String, dynamic> json) =>
       _$$_ClaimDtoFromJson(json);
@@ -656,10 +721,14 @@ class _$_ClaimDto implements _ClaimDto {
   final String? address;
   @override
   final String? tokenId;
+  @override
+  final String? to;
+  @override
+  final ChainlinkRequestDto? chainlinkRequest;
 
   @override
   String toString() {
-    return 'ClaimDto(id: $id, network: $network, state: $state, errorMessage: $errorMessage, args: $args, address: $address, tokenId: $tokenId)';
+    return 'ClaimDto(id: $id, network: $network, state: $state, errorMessage: $errorMessage, args: $args, address: $address, tokenId: $tokenId, to: $to, chainlinkRequest: $chainlinkRequest)';
   }
 
   @override
@@ -674,13 +743,16 @@ class _$_ClaimDto implements _ClaimDto {
                 other.errorMessage == errorMessage) &&
             (identical(other.args, args) || other.args == args) &&
             (identical(other.address, address) || other.address == address) &&
-            (identical(other.tokenId, tokenId) || other.tokenId == tokenId));
+            (identical(other.tokenId, tokenId) || other.tokenId == tokenId) &&
+            (identical(other.to, to) || other.to == to) &&
+            (identical(other.chainlinkRequest, chainlinkRequest) ||
+                other.chainlinkRequest == chainlinkRequest));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, id, network, state, errorMessage, args, address, tokenId);
+  int get hashCode => Object.hash(runtimeType, id, network, state, errorMessage,
+      args, address, tokenId, to, chainlinkRequest);
 
   @JsonKey(ignore: true)
   @override
@@ -704,7 +776,9 @@ abstract class _ClaimDto implements ClaimDto {
       final String? errorMessage,
       final ClaimArgsDto? args,
       final String? address,
-      final String? tokenId}) = _$_ClaimDto;
+      final String? tokenId,
+      final String? to,
+      final ChainlinkRequestDto? chainlinkRequest}) = _$_ClaimDto;
 
   factory _ClaimDto.fromJson(Map<String, dynamic> json) = _$_ClaimDto.fromJson;
 
@@ -723,6 +797,10 @@ abstract class _ClaimDto implements ClaimDto {
   String? get address;
   @override
   String? get tokenId;
+  @override
+  String? get to;
+  @override
+  ChainlinkRequestDto? get chainlinkRequest;
   @override
   @JsonKey(ignore: true)
   _$$_ClaimDtoCopyWith<_$_ClaimDto> get copyWith =>
@@ -880,6 +958,145 @@ abstract class _ClaimArgsDto implements ClaimArgsDto {
   @override
   @JsonKey(ignore: true)
   _$$_ClaimArgsDtoCopyWith<_$_ClaimArgsDto> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+ChainlinkRequestDto _$ChainlinkRequestDtoFromJson(Map<String, dynamic> json) {
+  return _ChainlinkRequestDto.fromJson(json);
+}
+
+/// @nodoc
+mixin _$ChainlinkRequestDto {
+  bool? get fulfilled => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $ChainlinkRequestDtoCopyWith<ChainlinkRequestDto> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $ChainlinkRequestDtoCopyWith<$Res> {
+  factory $ChainlinkRequestDtoCopyWith(
+          ChainlinkRequestDto value, $Res Function(ChainlinkRequestDto) then) =
+      _$ChainlinkRequestDtoCopyWithImpl<$Res, ChainlinkRequestDto>;
+  @useResult
+  $Res call({bool? fulfilled});
+}
+
+/// @nodoc
+class _$ChainlinkRequestDtoCopyWithImpl<$Res, $Val extends ChainlinkRequestDto>
+    implements $ChainlinkRequestDtoCopyWith<$Res> {
+  _$ChainlinkRequestDtoCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? fulfilled = freezed,
+  }) {
+    return _then(_value.copyWith(
+      fulfilled: freezed == fulfilled
+          ? _value.fulfilled
+          : fulfilled // ignore: cast_nullable_to_non_nullable
+              as bool?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$_ChainlinkRequestDtoCopyWith<$Res>
+    implements $ChainlinkRequestDtoCopyWith<$Res> {
+  factory _$$_ChainlinkRequestDtoCopyWith(_$_ChainlinkRequestDto value,
+          $Res Function(_$_ChainlinkRequestDto) then) =
+      __$$_ChainlinkRequestDtoCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({bool? fulfilled});
+}
+
+/// @nodoc
+class __$$_ChainlinkRequestDtoCopyWithImpl<$Res>
+    extends _$ChainlinkRequestDtoCopyWithImpl<$Res, _$_ChainlinkRequestDto>
+    implements _$$_ChainlinkRequestDtoCopyWith<$Res> {
+  __$$_ChainlinkRequestDtoCopyWithImpl(_$_ChainlinkRequestDto _value,
+      $Res Function(_$_ChainlinkRequestDto) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? fulfilled = freezed,
+  }) {
+    return _then(_$_ChainlinkRequestDto(
+      fulfilled: freezed == fulfilled
+          ? _value.fulfilled
+          : fulfilled // ignore: cast_nullable_to_non_nullable
+              as bool?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$_ChainlinkRequestDto implements _ChainlinkRequestDto {
+  _$_ChainlinkRequestDto({this.fulfilled});
+
+  factory _$_ChainlinkRequestDto.fromJson(Map<String, dynamic> json) =>
+      _$$_ChainlinkRequestDtoFromJson(json);
+
+  @override
+  final bool? fulfilled;
+
+  @override
+  String toString() {
+    return 'ChainlinkRequestDto(fulfilled: $fulfilled)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_ChainlinkRequestDto &&
+            (identical(other.fulfilled, fulfilled) ||
+                other.fulfilled == fulfilled));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, fulfilled);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$_ChainlinkRequestDtoCopyWith<_$_ChainlinkRequestDto> get copyWith =>
+      __$$_ChainlinkRequestDtoCopyWithImpl<_$_ChainlinkRequestDto>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_ChainlinkRequestDtoToJson(
+      this,
+    );
+  }
+}
+
+abstract class _ChainlinkRequestDto implements ChainlinkRequestDto {
+  factory _ChainlinkRequestDto({final bool? fulfilled}) =
+      _$_ChainlinkRequestDto;
+
+  factory _ChainlinkRequestDto.fromJson(Map<String, dynamic> json) =
+      _$_ChainlinkRequestDto.fromJson;
+
+  @override
+  bool? get fulfilled;
+  @override
+  @JsonKey(ignore: true)
+  _$$_ChainlinkRequestDtoCopyWith<_$_ChainlinkRequestDto> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
