@@ -63,5 +63,7 @@
         "one": "host",
         "other": "hosts"
     },
-    "viewMore": "View more"
+    "viewMore": "View more",
+    "done": "Done",
+    "processing": "Processing"
 }
