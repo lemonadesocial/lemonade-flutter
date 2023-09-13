@@ -1,5 +1,6 @@
 import 'package:app/core/presentation/pages/chat/chat_list/widgets/unseen_message_count_widget.dart';
 import 'package:app/core/presentation/widgets/chat/matrix_avatar.dart';
+import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 import 'package:app/core/service/matrix/matrix_service.dart';
 import 'package:app/core/utils/chat/date_time_extension.dart';
 import 'package:app/core/utils/chat/room_status_extension.dart';
@@ -37,6 +38,24 @@ class ChatListItem extends StatelessWidget {
       presence: presence,
       isDirectChat: isDirectChat,
     );
+  }
+
+  void clickAction(BuildContext context) async {
+    if (room.membership == Membership.invite) {
+      final joinResult = await showFutureLoadingDialog(
+        context: context,
+        future: () async {
+          final waitForRoom = room.client.waitForRoomInSync(
+            room.id,
+            join: true,
+          );
+          await room.join();
+          await waitForRoom;
+        },
+      );
+      if (joinResult.error != null) return;
+    }
+    AutoRouter.of(context).navigateNamed('/chat/detail/${room.id}');
   }
 
   Widget _buildSubtitle(BuildContext context) {
@@ -112,9 +131,7 @@ class ChatListItem extends StatelessWidget {
     final color = room.isUnread ? colorScheme.onPrimary : colorScheme.onSurface;
 
     return InkWell(
-      onTap: () {
-        AutoRouter.of(context).navigateNamed('/chat/detail/${room.id}');
-      },
+      onTap: () => clickAction(context),
       child: Padding(
         padding: EdgeInsets.symmetric(
           vertical: Spacing.extraSmall,

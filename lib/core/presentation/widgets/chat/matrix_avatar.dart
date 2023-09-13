@@ -100,6 +100,7 @@ class MatrixAvatar extends StatelessWidget {
   }
 
   Widget _buildBottomRightCorner(ColorScheme colorScheme) {
+    // Render online/offline dot
     if (isDirectChat == true) {
       final isOnline = presence == PresenceType.online;
       return Positioned(
@@ -118,6 +119,7 @@ class MatrixAvatar extends StatelessWidget {
         ),
       );
     }
+    // For chat group case
     return Positioned(
       bottom: -3.w,
       right: -3.w,
