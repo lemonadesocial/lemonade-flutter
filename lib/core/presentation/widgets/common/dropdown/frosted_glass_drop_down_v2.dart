@@ -4,18 +4,18 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class DropdownWidget extends StatelessWidget {
-  const DropdownWidget({
+class FrostedGlassDropDownV2 extends StatelessWidget {
+  const FrostedGlassDropDownV2({
     Key? key,
-    required this.label,
-    required this.hintText,
     required this.listItem,
     required this.onValueChange,
     this.selectedValue,
+    this.label,
+    this.hintText,
   }) : super(key: key);
 
-  final String label;
-  final String hintText;
+  final String? label;
+  final String? hintText;
   final List<String> listItem;
   final String? selectedValue;
   final ValueChanged<String?> onValueChange;
@@ -26,14 +26,15 @@ class DropdownWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: Spacing.medium),
-        Text(
-          label,
-          style: Typo.small.copyWith(
-            color: colorScheme.onPrimary.withOpacity(0.36),
+        if (label != null) ...[
+          Text(
+            label!,
+            style: Typo.small.copyWith(
+              color: colorScheme.onPrimary.withOpacity(0.36),
+            ),
           ),
-        ),
-        SizedBox(height: Spacing.superExtraSmall),
+          SizedBox(height: Spacing.superExtraSmall),
+        ],
         Container(
           width: 1.sw,
           padding: EdgeInsets.symmetric(
@@ -62,7 +63,7 @@ class DropdownWidget extends StatelessWidget {
                   )
                   .toList(),
               hint: Text(
-                hintText,
+                hintText ?? '',
                 style: Typo.medium.copyWith(
                   color: colorScheme.onPrimary.withOpacity(0.36),
                 ),
