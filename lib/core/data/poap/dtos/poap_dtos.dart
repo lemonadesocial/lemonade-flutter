@@ -53,6 +53,7 @@ class TransferDto with _$TransferDto {
     String? address,
     String? tokenId,
     String? to,
+    Map<String, String>? errorDescription,
   }) = _TransferDto;
 
   factory TransferDto.fromJson(Map<String, dynamic> json) =>
@@ -82,6 +83,7 @@ class ClaimDto with _$ClaimDto {
     String? tokenId,
     String? to,
     ChainlinkRequestDto? chainlinkRequest,
+    Map<String, String>? errorDescription,
   }) = _ClaimDto;
 
   factory ClaimDto.fromJson(Map<String, dynamic> json) =>

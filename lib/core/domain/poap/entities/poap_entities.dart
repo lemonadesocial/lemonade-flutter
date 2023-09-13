@@ -42,6 +42,7 @@ class Claim {
     this.tokenId,
     this.to,
     this.chainlinkRequest,
+    this.errorDescription,
   });
 
   factory Claim.fromDto(ClaimDto dto) => Claim(
@@ -56,6 +57,7 @@ class Claim {
         chainlinkRequest: dto.chainlinkRequest != null
             ? ChainlinkRequest.fromDto(dto.chainlinkRequest!)
             : null,
+        errorDescription: dto.errorDescription,
       );
 
   final String? id;
@@ -67,6 +69,7 @@ class Claim {
   final String? tokenId;
   final String? to;
   final ChainlinkRequest? chainlinkRequest;
+  final Map<String, String>? errorDescription;
 }
 
 class ClaimArgs {
@@ -105,6 +108,7 @@ class Transfer {
     this.address,
     this.tokenId,
     this.to,
+    this.errorDescription,
   });
 
   factory Transfer.fromDto(TransferDto dto) => Transfer(
@@ -116,6 +120,7 @@ class Transfer {
         address: dto.address,
         tokenId: dto.tokenId,
         to: dto.to,
+        errorDescription: dto.errorDescription,
       );
 
   final String? id;
@@ -126,6 +131,7 @@ class Transfer {
   final String? address;
   final String? tokenId;
   final String? to;
+  final Map<String, String>? errorDescription;
 }
 
 class TransferArgs {

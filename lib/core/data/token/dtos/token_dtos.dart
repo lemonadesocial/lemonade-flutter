@@ -37,8 +37,9 @@ class TokenComplexDto with _$TokenComplexDto {
 class TokenDetailDto with _$TokenDetailDto {
   const factory TokenDetailDto({
     String? id,
-    String? network,
     String? tokenId,
+    String? contract,
+    String? network,
     TokenMetadataDto? metadata,
   }) = _TokenDetailDto;
 

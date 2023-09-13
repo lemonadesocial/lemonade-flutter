@@ -73,6 +73,24 @@ class PoapRepositoryImpl implements PoapRepository {
   }
 
   @override
+  Future<Either<Failure, Transfer>> transfer({
+    required TransferInput input,
+  }) async {
+    final result = await _walletClient.mutate(
+      MutationOptions(
+        document: transferMutation,
+        fetchPolicy: FetchPolicy.networkOnly,
+        variables: input.toJson(),
+        parserFn: (data) =>
+            Transfer.fromDto(TransferDto.fromJson(data['transfer'])),
+      ),
+    );
+
+    if (result.hasException) return Left(Failure());
+    return Right(result.parsedData!);
+  }
+
+  @override
   Future<Either<Failure, PoapPolicy>> getPoapPolicy({
     required GetPoapPolicyInput input,
   }) async {
@@ -101,6 +119,27 @@ class PoapRepositoryImpl implements PoapRepository {
           final rawClaimModification = data['claimModified'];
           if (rawClaimModification == null) return null;
           return Claim.fromDto(ClaimDto.fromJson(rawClaimModification));
+        },
+      ),
+    );
+
+    return stream.asyncMap((resultEvent) {
+      if (resultEvent.hasException) return Left(Failure());
+      return Right(resultEvent.parsedData);
+    });
+  }
+
+  @override
+  Stream<Either<Failure, Transfer?>> watchTransferModification() {
+    final stream = _walletClient.subscribe(
+      SubscriptionOptions(
+        document: transferModifiedSubscription,
+        fetchPolicy: FetchPolicy.networkOnly,
+        parserFn: (data) {
+          final rawTransferModification = data['transferModified'];
+          if (rawTransferModification == null) return null;
+          return Transfer.fromDto(
+              TransferDto.fromJson(rawTransferModification));
         },
       ),
     );
