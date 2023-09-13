@@ -16,6 +16,7 @@ class MatrixAvatar extends StatelessWidget {
   final Client? client;
   final double fontSize;
   final double? radius;
+  final bool? isDirectChat;
   final PresenceType? presence;
 
   const MatrixAvatar({
@@ -26,6 +27,7 @@ class MatrixAvatar extends StatelessWidget {
     this.client,
     this.fontSize = 18,
     this.radius,
+    this.isDirectChat,
     this.presence,
     Key? key,
   }) : super(key: key);
@@ -98,43 +100,45 @@ class MatrixAvatar extends StatelessWidget {
   }
 
   Widget _buildBottomRightCorner(ColorScheme colorScheme) {
-    final isOnline = presence == PresenceType.online;
-    if (presence == null) {
+    // Render online/offline dot
+    if (isDirectChat == true) {
+      final isOnline = presence == PresenceType.online;
       return Positioned(
-        bottom: -3.w,
-        right: -3.w,
+        bottom: -2.h,
+        right: -2.w,
         child: Container(
-          width: 21.w,
-          height: 21.w,
+          width: 15.w,
+          height: 15.w,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
-            color: LemonColor.chineseBlack,
+            shape: BoxShape.circle,
+            color: isOnline ? LemonColor.online : Colors.grey,
             border: Border.all(
               width: 3.w,
-            ),
-          ),
-          child: Center(
-            child: Text(
-              '#',
-              style: Typo.xSmall.copyWith(
-                color: colorScheme.onSecondary,
-              ),
             ),
           ),
         ),
       );
     }
+    // For chat group case
     return Positioned(
-      bottom: -2.h,
-      right: -2.w,
+      bottom: -3.w,
+      right: -3.w,
       child: Container(
-        width: 15.w,
-        height: 15.w,
+        width: 21.w,
+        height: 21.w,
         decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: isOnline ? LemonColor.online : Colors.grey,
+          borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
+          color: LemonColor.chineseBlack,
           border: Border.all(
             width: 3.w,
+          ),
+        ),
+        child: Center(
+          child: Text(
+            '#',
+            style: Typo.xSmall.copyWith(
+              color: colorScheme.onSecondary,
+            ),
           ),
         ),
       ),

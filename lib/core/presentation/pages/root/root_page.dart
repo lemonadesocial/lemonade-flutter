@@ -32,7 +32,6 @@ class RootPage extends StatelessWidget {
         child: Stack(
           children: [
             const Align(
-              alignment: Alignment.bottomCenter,
               child: PoapClaimTransferControllerWidget(),
             ),
             AutoTabsScaffold(

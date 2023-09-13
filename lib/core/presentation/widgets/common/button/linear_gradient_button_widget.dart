@@ -1,3 +1,4 @@
+import 'package:app/core/presentation/widgets/lemon_inner_shadow.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
@@ -30,6 +31,7 @@ class LinearGradientButton extends StatelessWidget {
   final EdgeInsets? padding;
   final BorderRadius? radius;
   final TextStyle? textStyle;
+  final Offset? shadowOffset;
 
   const LinearGradientButton({
     super.key,
@@ -41,55 +43,56 @@ class LinearGradientButton extends StatelessWidget {
     this.padding,
     this.radius,
     this.textStyle,
+    this.shadowOffset,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        height: height ?? Sizing.medium,
-        padding: padding ??
-            EdgeInsets.symmetric(
-              horizontal: Spacing.xSmall,
-              vertical: Spacing.extraSmall,
-            ),
-        decoration: ShapeDecoration(
-          gradient: LinearGradient(
-            begin: const Alignment(0.00, -1.00),
-            end: const Alignment(0, 1),
-            colors: mode.gradients,
-          ),
-          shape: RoundedRectangleBorder(
-            borderRadius: radius ?? BorderRadius.circular(LemonRadius.xSmall),
-          ),
-        ),
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: radius ?? BorderRadius.circular(LemonRadius.xSmall),
-            boxShadow: [
-              BoxShadow(
-                color: LemonColor.black.withOpacity(0.30),
-                offset: const Offset(0, 2),
-                blurRadius: 18.r,
-                spreadRadius: 2,
-              )
-            ],
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              if (leading != null) ...[
-                leading!,
-                SizedBox(width: Spacing.extraSmall)
+      child: ClipRRect(
+        borderRadius: radius ?? BorderRadius.circular(LemonRadius.xSmall),
+        child: InnerShadow(
+          color: Colors.white.withOpacity(0.36),
+          offset: shadowOffset ?? const Offset(0, 4),
+          blur: 4,
+          child: Container(
+            height: height ?? Sizing.medium,
+            padding: padding ??
+                EdgeInsets.symmetric(
+                  horizontal: Spacing.xSmall,
+                  vertical: Spacing.extraSmall,
+                ),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: mode.gradients,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: LemonColor.black.withOpacity(0.30),
+                  offset: const Offset(0, 2),
+                  blurRadius: 18.r,
+                  spreadRadius: 2,
+                )
               ],
-              Text(
-                label,
-                style: textStyle ??
-                    Typo.small.copyWith(fontWeight: FontWeight.w600),
-              )
-            ],
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                if (leading != null) ...[
+                  leading!,
+                  SizedBox(width: Spacing.extraSmall)
+                ],
+                Text(
+                  label,
+                  style: textStyle ??
+                      Typo.small.copyWith(fontWeight: FontWeight.w600),
+                )
+              ],
+            ),
           ),
         ),
       ),

@@ -7,6 +7,7 @@ analyzer:
     - "**/*.gr.dart"
     - "**/*.gen.dart"
     - "**/*_enums.dart"
+    - "**/*.config.dart"
     - "lib/firebase_options_staging.dart"
     - "lib/firebase_options_production.dart"
 
