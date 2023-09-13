@@ -1,4 +1,5 @@
 import 'package:app/theme/spacing.dart';
+import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -12,6 +13,7 @@ class LemonTextField extends StatelessWidget {
     this.maxLines,
     this.borderColor,
     this.statusWidget,
+    this.label,
   }) : super(key: key);
 
   final ValueChanged<String> onChange;
@@ -21,6 +23,7 @@ class LemonTextField extends StatelessWidget {
   final int? maxLines;
   final Color? borderColor;
   final Widget? statusWidget;
+  final String? label;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +35,17 @@ class LemonTextField extends StatelessWidget {
     );
     return Column(
       mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        if (label != null) ...[
+          Text(
+            label!,
+            style: Typo.small.copyWith(
+              color: theme.colorScheme.onPrimary.withOpacity(0.36),
+            ),
+          ),
+          SizedBox(height: Spacing.superExtraSmall),
+        ],
         TextField(
           onChanged: onChange,
           style: theme.textTheme.bodyMedium!
@@ -48,16 +61,13 @@ class LemonTextField extends StatelessWidget {
             focusedBorder: border,
             errorBorder: border,
             border: border,
+            contentPadding: EdgeInsets.all(Spacing.smMedium),
           ),
         ),
-        Visibility(
-          visible: statusWidget != null,
-          child: SizedBox(height: Spacing.xSmall),
-        ),
-        Visibility(
-          visible: statusWidget != null,
-          child: statusWidget ?? const SizedBox.shrink(),
-        ),
+        if (statusWidget != null) ...[
+          SizedBox(height: Spacing.xSmall),
+          statusWidget!,
+        ]
       ],
     );
   }
