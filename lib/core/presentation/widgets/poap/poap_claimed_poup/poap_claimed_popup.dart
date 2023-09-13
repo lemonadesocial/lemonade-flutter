@@ -32,7 +32,6 @@ class PoapClaimedPopup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final screenHeight = MediaQuery.of(context).size.height;
     final t = Translations.of(context);
     return Dialog(
       backgroundColor: colorScheme.primary,
@@ -41,7 +40,7 @@ class PoapClaimedPopup extends StatelessWidget {
         right: Spacing.smMedium,
       ),
       child: SizedBox(
-        height: 0.6465 * screenHeight,
+        height: 0.6465.sh,
         child: ClipRRect(
           borderRadius: BorderRadius.circular(
             LemonRadius.small,

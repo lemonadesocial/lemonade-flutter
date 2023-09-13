@@ -34,7 +34,7 @@ class _PoapClaimTransferControllerWidgetView extends StatefulWidget {
 
 class _PoapClaimTransferControllerWidgetViewState
     extends State<_PoapClaimTransferControllerWidgetView> {
-  _clear() {
+  void _clear() {
     context
         .read<PoapClaimTransferSubscriptionBloc>()
         .add(PoapClaimTransferSubscriptionEvent.clear());
