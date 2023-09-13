@@ -20,12 +20,12 @@ extension IsStateExtension on Event {
       // if we enabled to hide all unknown events, don't show those
       (isEventTypeKnown) &&
       // hide unimportant state events
-      (!isState || importantStateEvents.contains(type)) &&
-      // hide simple join/leave member events in public rooms
-      (type != EventTypes.RoomMember ||
-          room.joinRules != JoinRules.public ||
-          content.tryGet<String>('membership') == 'ban' ||
-          stateKey != senderId);
+      (!isState || importantStateEvents.contains(type));
+  // hide simple join/leave member events in public rooms
+  // (type != EventTypes.RoomMember ||
+  //     room.joinRules != JoinRules.public ||
+  //     content.tryGet<String>('membership') == 'ban' ||
+  //     stateKey != senderId);
 
   static const Set<String> importantStateEvents = {
     EventTypes.Encryption,
