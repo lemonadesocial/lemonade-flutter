@@ -1,8 +1,8 @@
-import 'package:app/core/presentation/pages/edit_profile/widgets/dropdown_widget.dart';
-import 'package:app/core/presentation/pages/edit_profile/widgets/profile_textfield_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
+import 'package:app/core/presentation/widgets/common/dropdown/frosted_glass_drop_down_v2.dart';
 import 'package:app/core/presentation/widgets/lemon_bottom_sheet_mixin.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
+import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/sizing.dart';
@@ -45,32 +45,53 @@ class EditProfilePersonalDialog extends StatelessWidget with LemonBottomSheet {
                         color: colorScheme.onPrimary.withOpacity(0.56),
                       ),
                     ),
-                    ProfileTextFieldWidget(
+                    SizedBox(height: Spacing.smMedium),
+                    LemonTextField(
                       label: t.profile.jobTitle,
                       onChange: (value) {},
                       hintText: 'Senior engineer',
                     ),
-                    ProfileTextFieldWidget(
+                    SizedBox(height: Spacing.smMedium),
+                    LemonTextField(
                       label: t.profile.organization,
                       onChange: (value) {},
                     ),
-                    DropdownWidget(
+                    SizedBox(height: Spacing.smMedium),
+                    FrostedGlassDropDownV2(
                       label: t.profile.industry,
                       hintText: 'Select industry',
-                      listItem: const ['Artist', 'Programing'],
+                      listItem: const [
+                        'Artist',
+                        'Programing',
+                        'Artist',
+                        'Programing',
+                        'Artist',
+                        'Programing',
+                        'Artist',
+                        'Programing',
+                        'Artist',
+                        'Programing',
+                        'Artist',
+                        'Programing',
+                        'Artist',
+                        'Programing'
+                      ],
                       onValueChange: (value) {},
                     ),
-                    ProfileTextFieldWidget(
+                    SizedBox(height: Spacing.smMedium),
+                    LemonTextField(
                       label: t.profile.organization,
                       onChange: (value) {},
                     ),
-                    DropdownWidget(
+                    SizedBox(height: Spacing.smMedium),
+                    FrostedGlassDropDownV2(
                       label: t.profile.gender,
                       hintText: 'Select gender',
                       listItem: const ['Artist', 'Programing'],
                       onValueChange: (value) {},
                     ),
-                    DropdownWidget(
+                    SizedBox(height: Spacing.smMedium),
+                    FrostedGlassDropDownV2(
                       label: t.profile.ethnicity,
                       hintText: 'Select ethnicity',
                       listItem: const ['Artist', 'Programing'],

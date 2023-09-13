@@ -1,12 +1,13 @@
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/pages/edit_profile/sub_pages/edit_profile_personal_page.dart';
 import 'package:app/core/presentation/pages/edit_profile/sub_pages/edit_profile_social_page.dart';
-import 'package:app/core/presentation/pages/edit_profile/widgets/profile_textfield_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
+import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/annotations.dart';
@@ -51,7 +52,7 @@ class EditProfilePage extends StatelessWidget {
                         ),
                         SizedBox(width: 15.w),
                         Expanded(
-                          child: ProfileTextFieldWidget(
+                          child: LemonTextField(
                             label: t.onboarding.displayName,
                             onChange: (value) {},
                           ),
@@ -59,17 +60,17 @@ class EditProfilePage extends StatelessWidget {
                       ],
                     ),
                     SizedBox(height: Spacing.smMedium),
-                    ProfileTextFieldWidget(
+                    LemonTextField(
                       label: t.onboarding.username,
                       onChange: (value) {},
                     ),
                     SizedBox(height: Spacing.smMedium),
-                    ProfileTextFieldWidget(
+                    LemonTextField(
                       label: t.profile.tagline,
                       onChange: (value) {},
                     ),
                     SizedBox(height: Spacing.smMedium),
-                    ProfileTextFieldWidget(
+                    LemonTextField(
                       label: t.onboarding.shortBio,
                       onChange: (value) {},
                     ),
@@ -130,7 +131,7 @@ class EditProfilePage extends StatelessWidget {
                   fontFamily: FontFamily.nohemiVariable,
                   fontWeight: FontWeight.w600,
                 ),
-                // padding: EdgeInsets.symmetric(vertical: Spacing.smMedium),
+                height: Sizing.large,
                 radius: BorderRadius.circular(LemonRadius.large),
                 mode: GradientButtonMode.lavenderMode,
               ),
