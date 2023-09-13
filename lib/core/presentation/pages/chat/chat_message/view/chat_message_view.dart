@@ -36,6 +36,7 @@ class ChatMessageView extends StatelessWidget {
                   name: controller.room.name,
                   radius: 27,
                   fontSize: Typo.small.fontSize!,
+                  isDirectChat: controller.room.isDirectChat,
                   presence: controller.room.directChatPresence?.presence,
                 ),
                 SizedBox(width: Spacing.xSmall),

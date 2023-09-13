@@ -24,6 +24,7 @@ class ChatListItem extends StatelessWidget {
 
   Widget _buildAvatar() {
     final avatarUrl = room.avatar;
+    final isDirectChat = room.isDirectChat;
     final presence = room.directChatPresence?.presence;
     final radius = isChannel ? 6.r : 42.r;
     return MatrixAvatar(
@@ -34,6 +35,7 @@ class ChatListItem extends StatelessWidget {
       fontSize: Typo.small.fontSize!,
       radius: radius,
       presence: presence,
+      isDirectChat: isDirectChat,
     );
   }
 
