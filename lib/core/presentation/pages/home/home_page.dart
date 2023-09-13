@@ -51,9 +51,11 @@ class _HomePageState extends State<HomePage> {
             behavior: HitTestBehavior.translucent,
             onTap: () {
               context.read<AuthBloc>().state.maybeWhen(
-                authenticated: (session) => AutoRouter.of(context).navigate(const ChatListRoute()),
-                orElse: () => AutoRouter.of(context).navigate(const LoginRoute()),
-              );
+                    authenticated: (session) =>
+                        AutoRouter.of(context).navigate(const ChatListRoute()),
+                    orElse: () =>
+                        AutoRouter.of(context).navigate(const LoginRoute()),
+                  );
             },
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 15.w),
