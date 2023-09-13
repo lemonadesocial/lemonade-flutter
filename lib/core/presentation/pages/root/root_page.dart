@@ -46,7 +46,7 @@ class RootPage extends StatelessWidget {
             authState.maybeWhen(
               authenticated: (session) => const MyProfileRoute(),
               orElse: EmptyRoute.new,
-            )
+            ),
           ],
           drawer: const LemonDrawer(),
           endDrawer: const LemonDrawer(),
