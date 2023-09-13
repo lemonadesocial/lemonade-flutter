@@ -1,3 +1,4 @@
+import 'package:app/core/domain/common/common_enums.dart';
 import 'package:app/core/domain/onboarding/onboarding_inputs.dart';
 import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/service/post/post_service.dart';
@@ -59,7 +60,7 @@ class OnboardingBloc extends Cubit<OnboardingState> {
     });
   }
 
-  void onGenderSelect(OnboardingGender gender) {
+  void onGenderSelect(LemonGender gender) {
     emit(state.copyWith(status: OnboardingStatus.initial, gender: gender));
   }
 

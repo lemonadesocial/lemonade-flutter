@@ -1,4 +1,4 @@
-import 'package:app/core/application/onboarding/onboarding_bloc/onboarding_bloc.dart';
+import 'package:app/core/domain/common/common_enums.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'onboarding_inputs.freezed.dart';
@@ -18,7 +18,7 @@ class UpdateUserProfileInput with _$UpdateUserProfileInput {
   factory UpdateUserProfileInput({
     required String username,
     @JsonKey(name: 'new_photos') List<String>? uploadPhoto,
-    OnboardingGender? gender,
+    LemonGender? gender,
     String? displayName,
     String? shortBio,
   }) = _UpdateUserProfileInput;
