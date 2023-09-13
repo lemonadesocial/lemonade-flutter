@@ -50,12 +50,10 @@ class _HomePageState extends State<HomePage> {
           GestureDetector(
             behavior: HitTestBehavior.translucent,
             onTap: () {
-              final authState = BlocProvider.of<AuthBloc>(context).state;
-              if (authState is AuthStateAuthenticated) {
-                AutoRouter.of(context).navigate(const ChatListRoute());
-              } else {
-                AutoRouter.of(context).navigate(const LoginRoute());
-              }
+              context.read<AuthBloc>().state.maybeWhen(
+                authenticated: (session) => AutoRouter.of(context).navigate(const ChatListRoute()),
+                orElse: () => AutoRouter.of(context).navigate(const LoginRoute()),
+              );
             },
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 15.w),
