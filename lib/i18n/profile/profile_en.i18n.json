@@ -15,5 +15,17 @@
     "educationQualification" : "Educational qualifications",
     "gender": "Gender",
     "ethnicity": "Ethnicity",
-    "saveChanges": "Save changes"
+    "saveChanges": "Save changes",
+    "hint": {
+        "username": "john.01",
+        "tagline":  "Typical creator. Bacon guru. Zombie advocate. Gamer.",
+        "displayName": "John Doe",
+        "shortBio": "I've previously worked on cloud computing products at Google in San Francisco. Recently I relocated to Boulder and am open to remote roles.",
+        "jobTitle": "Senior engineer",
+        "organization": "Lemonade Social",
+        "educationQualification": "CA, CFA",
+        "industry": "Select industry",
+        "gender": "Select gender",
+        "ethnicity": "Select ethnicity"
+    }
 }

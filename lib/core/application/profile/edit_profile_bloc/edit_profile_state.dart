@@ -4,12 +4,19 @@ part of 'edit_profile_bloc.dart';
 class EditProfileState with _$EditProfileState {
   const factory EditProfileState({
     @Default(EditProfileStatus.initial) EditProfileStatus status,
-    bool? usernameExisted,
     String? username,
+    LemonPronoun? pronoun,
+    String? companyName,
+    DateTime? dob,
+    String? displayName,
+    String? education,
+    String? industry,
+    String? gender,
+    String? ethnicity,
+    String? jobTitle,
+    String? tagline,
+    String? shortBio,
     XFile? profilePhoto,
-    LemonGender? gender,
-    String? aboutDisplayName,
-    String? aboutShortBio,
     List<dynamic>? interestList,
   }) = _EditProfileState;
 

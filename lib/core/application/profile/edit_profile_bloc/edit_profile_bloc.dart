@@ -1,6 +1,5 @@
 import 'package:app/core/domain/common/common_enums.dart';
 import 'package:app/core/domain/user/user_repository.dart';
-import 'package:app/core/service/post/post_service.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -12,11 +11,9 @@ part 'edit_profile_bloc.freezed.dart';
 class EditProfileBloc extends Cubit<EditProfileState> {
   EditProfileBloc(
     this.userRepository,
-    this.postService,
   ) : super(EditProfileState.initial());
 
   final UserRepository userRepository;
-  final PostService postService;
 
   Future<void> selectProfileImage() async {
     final imagePicker = ImagePicker();
@@ -24,10 +21,51 @@ class EditProfileBloc extends Cubit<EditProfileState> {
     if (pickImage != null) {
       emit(
         state.copyWith(
-          status: EditProfileStatus.initial,
           profilePhoto: pickImage,
         ),
       );
     }
+  }
+
+  void onShortBioChange(String input) {
+    emit(state.copyWith(shortBio: input));
+  }
+
+  void onDisplayNameChange(String input) {
+    emit(state.copyWith(displayName: input));
+  }
+
+  void onTaglineChange(String input) {
+    emit(state.copyWith(tagline: input));
+  }
+
+  void onJobTitleChange(String input) {
+    emit(state.copyWith(jobTitle: input));
+  }
+
+  void onOrganizationChange(String input) {
+    emit(state.copyWith(companyName: input));
+  }
+
+  void onEducationChange(String input) {
+    emit(state.copyWith(education: input));
+  }
+
+  void onGenderSelect(String? gender) {
+    emit(state.copyWith(gender: gender));
+  }
+
+  void onIndustrySelect(String? industry) {
+    emit(state.copyWith(industry: industry));
+  }
+
+  void onEthnicitySelect(String? ethnicity) {
+    emit(state.copyWith(ethnicity: ethnicity));
+  }
+
+  void onBirthdaySelect() {}
+
+  void editProfile() {
+    print('current: $state');
   }
 }
