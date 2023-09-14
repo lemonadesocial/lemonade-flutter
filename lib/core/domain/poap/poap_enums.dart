@@ -4,6 +4,12 @@ enum ClaimState {
   FAILED,
 }
 
+enum TransferState {
+  PENDING,
+  CONFIRMED,
+  FAILED,
+}
+
 enum PoapNodeValueType {
   and(value: 'and'),
   or(value: 'or'),

@@ -125,9 +125,7 @@ class AppOauth {
       refreshTokenFuture ??= getToken().then((tokenRes) async {
         _processTokenState(Future.value(tokenRes));
         refreshTokenFuture = null;
-        return tokenRes?.accessToken != null
-            ? 'Bearer ${tokenRes?.accessToken}'
-            : '';
+        return tokenRes?.accessToken != null ? '${tokenRes?.accessToken}' : '';
       }).catchError((e) {
         _reset();
         return '';
@@ -135,7 +133,7 @@ class AppOauth {
       return refreshTokenFuture!;
     }
     _processTokenState(Future.value(tokenRes));
-    return tokenRes.accessToken != null ? 'Bearer ${tokenRes.accessToken}' : '';
+    return tokenRes.accessToken != null ? '${tokenRes.accessToken}' : '';
   }
 
   _checkTokenState() async {

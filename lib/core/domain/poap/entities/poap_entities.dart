@@ -40,6 +40,8 @@ class Claim {
     this.args,
     this.address,
     this.tokenId,
+    this.to,
+    this.chainlinkRequest,
   });
 
   factory Claim.fromDto(ClaimDto dto) => Claim(
@@ -50,6 +52,10 @@ class Claim {
         args: dto.args != null ? ClaimArgs.fromDto(dto.args!) : null,
         address: dto.address,
         tokenId: dto.tokenId,
+        to: dto.to,
+        chainlinkRequest: dto.chainlinkRequest != null
+            ? ChainlinkRequest.fromDto(dto.chainlinkRequest!)
+            : null,
       );
 
   final String? id;
@@ -59,6 +65,8 @@ class Claim {
   final ClaimArgs? args;
   final String? address;
   final String? tokenId;
+  final String? to;
+  final ChainlinkRequest? chainlinkRequest;
 }
 
 class ClaimArgs {
@@ -68,6 +76,65 @@ class ClaimArgs {
   });
 
   factory ClaimArgs.fromDto(ClaimArgsDto dto) => ClaimArgs(
+        claimer: dto.claimer,
+        tokenURI: dto.tokenURI,
+      );
+
+  final String? claimer;
+  final String? tokenURI;
+}
+
+class ChainlinkRequest {
+  ChainlinkRequest({
+    this.fulfilled,
+  });
+  final bool? fulfilled;
+
+  factory ChainlinkRequest.fromDto(ChainlinkRequestDto dto) => ChainlinkRequest(
+        fulfilled: dto.fulfilled,
+      );
+}
+
+class Transfer {
+  Transfer({
+    this.id,
+    this.network,
+    this.state,
+    this.errorMessage,
+    this.args,
+    this.address,
+    this.tokenId,
+    this.to,
+  });
+
+  factory Transfer.fromDto(TransferDto dto) => Transfer(
+        id: dto.id,
+        network: dto.network,
+        state: dto.state,
+        errorMessage: dto.errorMessage,
+        args: dto.args != null ? TransferArgs.fromDto(dto.args!) : null,
+        address: dto.address,
+        tokenId: dto.tokenId,
+        to: dto.to,
+      );
+
+  final String? id;
+  final String? network;
+  final TransferState? state;
+  final String? errorMessage;
+  final TransferArgs? args;
+  final String? address;
+  final String? tokenId;
+  final String? to;
+}
+
+class TransferArgs {
+  TransferArgs({
+    this.claimer,
+    this.tokenURI,
+  });
+
+  factory TransferArgs.fromDto(TransferArgsDto dto) => TransferArgs(
         claimer: dto.claimer,
         tokenURI: dto.tokenURI,
       );

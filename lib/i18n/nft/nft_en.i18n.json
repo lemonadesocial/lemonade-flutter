@@ -45,5 +45,9 @@
             "qualified": "following account",
             "nonQualified": "not following account"
         }
-    }
+    },
+    "collectibleClaimed": "Collectible claimed! 🎉",
+    "collectibleClaimedMintedAndDeposited": "$tokenName has been minted and deposited in your Lemonade Wallet",
+    "viewInWallet": "View in Wallet",
+    "transfer": "Transfer"
 }
