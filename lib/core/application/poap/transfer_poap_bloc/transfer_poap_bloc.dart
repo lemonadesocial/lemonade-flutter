@@ -15,11 +15,13 @@ class TransferPoapBloc extends Bloc<TransferPoapEvent, TransferPoapState> {
   final _poapRepository = getIt<PoapRepository>();
 
   Future<void> _onTransfer(
-      TransferPoapEventTransfer event, Emitter emit) async {
+    TransferPoapEventTransfer event,
+    Emitter emit,
+  ) async {
     emit(TransferPoapState.loading());
     final result = await _poapRepository.transfer(input: event.input);
     result.fold(
-      (l) => emit(TransferPoapState.failure()),
+      (failure) => emit(TransferPoapState.failure(message: failure.message)),
       (transfer) => emit(
         TransferPoapState.success(transfer: transfer),
       ),
@@ -41,5 +43,7 @@ class TransferPoapState with _$TransferPoapState {
   factory TransferPoapState.success({
     required Transfer transfer,
   }) = TransferPoapStateSuccess;
-  factory TransferPoapState.failure() = TransferPoapStateFailure;
+  factory TransferPoapState.failure({
+    String? message,
+  }) = TransferPoapStateFailure;
 }

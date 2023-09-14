@@ -84,7 +84,8 @@ class PoapTransferSuccessPopup extends StatelessWidget {
                           SizedBox(height: Spacing.extraSmall),
                           Text(
                             t.nft.transferSuccess(
-                                tokenName: token?.metadata?.name ?? ''),
+                              tokenName: token?.metadata?.name ?? '',
+                            ),
                             style: Typo.mediumPlus.copyWith(
                               color: colorScheme.onSecondary,
                             ),

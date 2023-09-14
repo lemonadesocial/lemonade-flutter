@@ -26,6 +26,7 @@ class TokenRepositoryImpl implements TokenRepository {
         operationName: 'getTokens',
         document: getTokensQuery,
         variables: input.toJson(),
+        fetchPolicy: FetchPolicy.networkOnly,
         parserFn: (data) {
           return List.from(data['tokens'] ?? [])
               .map(

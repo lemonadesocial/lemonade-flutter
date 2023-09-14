@@ -86,7 +86,9 @@ class PoapRepositoryImpl implements PoapRepository {
       ),
     );
 
-    if (result.hasException) return Left(Failure());
+    if (result.hasException) {
+      return Left(Failure.withGqlException(result.exception));
+    }
     return Right(result.parsedData!);
   }
 
@@ -139,7 +141,8 @@ class PoapRepositoryImpl implements PoapRepository {
           final rawTransferModification = data['transferModified'];
           if (rawTransferModification == null) return null;
           return Transfer.fromDto(
-              TransferDto.fromJson(rawTransferModification));
+            TransferDto.fromJson(rawTransferModification),
+          );
         },
       ),
     );

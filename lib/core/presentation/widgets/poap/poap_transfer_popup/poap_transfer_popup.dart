@@ -81,7 +81,7 @@ class _PoapTransferPopupState extends State<_PoapTransferPopupView> {
           TransferPoapEvent.transfer(
             input: TransferInput(
               input: TransferArgsInput(
-                to: walletAddress,
+                to: walletAddress.toLowerCase(),
                 tokenId: widget.token?.tokenId,
               ),
               network: widget.token?.network ?? '',
@@ -95,6 +95,15 @@ class _PoapTransferPopupState extends State<_PoapTransferPopupView> {
     Navigator.of(context).pop();
   }
 
+  void onTransferFailed(String? message) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: Text(message ?? t.common.somethingWrong),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -105,6 +114,7 @@ class _PoapTransferPopupState extends State<_PoapTransferPopupView> {
         state.maybeWhen(
           orElse: () => null,
           success: onTransferSuccess,
+          failure: onTransferFailed,
         );
       },
       child: SingleChildScrollView(
@@ -118,6 +128,9 @@ class _PoapTransferPopupState extends State<_PoapTransferPopupView> {
           duration: const Duration(milliseconds: 100),
           child: Center(
             child: Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(LemonRadius.small),
+              ),
               backgroundColor: colorScheme.primary,
               insetPadding: EdgeInsets.only(
                 left: Spacing.smMedium,
@@ -216,7 +229,9 @@ class _PoapTransferPopupState extends State<_PoapTransferPopupView> {
                               BlocBuilder<TransferPoapBloc, TransferPoapState>(
                                 builder: (context, state) {
                                   final isProcessing = state.maybeWhen(
-                                      loading: () => true, orElse: () => false);
+                                    loading: () => true,
+                                    orElse: () => false,
+                                  );
                                   return SizedBox(
                                     height: 42.w,
                                     child: Opacity(
