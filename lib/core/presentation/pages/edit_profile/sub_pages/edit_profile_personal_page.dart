@@ -1,13 +1,17 @@
 import 'package:app/core/application/profile/edit_profile_bloc/edit_profile_bloc.dart';
 import 'package:app/core/domain/common/common_enums.dart';
+import 'package:app/core/domain/post/post_repository.dart';
 import 'package:app/core/domain/user/entities/user.dart';
+import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/dropdown/frosted_glass_drop_down_v2.dart';
 import 'package:app/core/presentation/widgets/lemon_bottom_sheet_mixin.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
+import 'package:app/core/service/post/post_service.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -15,19 +19,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class EditProfilePersonalDialog extends StatelessWidget with LemonBottomSheet {
-  const EditProfilePersonalDialog(
-    this.bloc, {
+  const EditProfilePersonalDialog({
     required this.userProfile,
     Key? key,
   }) : super(key: key);
 
   final User userProfile;
-  final EditProfileBloc bloc;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
+    final bloc = EditProfileBloc(
+      getIt<UserRepository>(),
+      PostService(getIt<PostRepository>()),
+    );
     return BlocProvider(
       create: (context) => bloc,
       child: BlocBuilder<EditProfileBloc, EditProfileState>(

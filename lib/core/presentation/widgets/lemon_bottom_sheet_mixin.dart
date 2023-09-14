@@ -6,6 +6,7 @@ mixin LemonBottomSheet<T extends StatelessWidget> on Widget {
         isScrollControlled: true,
         backgroundColor: Theme.of(context).colorScheme.primary,
         isDismissible: false,
+        useRootNavigator: true,
         builder: (context) => Container(
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),

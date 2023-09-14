@@ -15,8 +15,9 @@ class GetProfileInput with _$GetProfileInput {
 
 @freezed
 class UpdateUserProfileInput with _$UpdateUserProfileInput {
+  @JsonSerializable(fieldRename: FieldRename.snake)
   factory UpdateUserProfileInput({
-    required String username,
+    String? username,
     @JsonKey(name: 'new_photos') List<String>? uploadPhoto,
     LemonPronoun? pronoun,
     String? displayName,
@@ -28,6 +29,7 @@ class UpdateUserProfileInput with _$UpdateUserProfileInput {
     String? newGender,
     String? tagline,
     @JsonKey(name: 'date_of_birth') DateTime? dob,
+    String? companyName,
   }) = _UpdateUserProfileInput;
 
   factory UpdateUserProfileInput.fromJson(Map<String, dynamic> json) =>

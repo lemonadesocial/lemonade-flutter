@@ -4,6 +4,7 @@ import 'package:app/core/application/profile/edit_profile_bloc/edit_profile_bloc
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/theme/color.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,9 +13,11 @@ import 'package:image_picker/image_picker.dart';
 class EditProfileAvatar extends StatelessWidget {
   const EditProfileAvatar({
     Key? key,
+    this.imageUrl,
     this.imageFile,
   }) : super(key: key);
 
+  final String? imageUrl;
   final XFile? imageFile;
 
   @override
@@ -24,17 +27,19 @@ class EditProfileAvatar extends StatelessWidget {
     return SizedBox(
       width: 80.w,
       height: 80.w,
-      child: imageFile != null
+      child: imageFile != null || imageUrl != null
           ? Stack(
               children: [
                 Positioned.fill(
                   child: Container(
                     clipBehavior: Clip.hardEdge,
                     decoration: const BoxDecoration(shape: BoxShape.circle),
-                    child: Image.file(
-                      File(imageFile!.path),
-                      fit: BoxFit.fill,
-                    ),
+                    child: imageFile != null
+                        ? Image.file(
+                            File(imageFile!.path),
+                            fit: BoxFit.fill,
+                          )
+                        : CachedNetworkImage(imageUrl: imageUrl!),
                   ),
                 ),
                 Positioned(

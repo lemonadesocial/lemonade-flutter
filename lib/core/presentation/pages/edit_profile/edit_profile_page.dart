@@ -1,4 +1,5 @@
 import 'package:app/core/application/profile/edit_profile_bloc/edit_profile_bloc.dart';
+import 'package:app/core/domain/post/post_repository.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/presentation/pages/edit_profile/sub_pages/edit_profile_personal_page.dart';
@@ -7,6 +8,7 @@ import 'package:app/core/presentation/pages/edit_profile/widgets/edit_profile_av
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
+import 'package:app/core/service/post/post_service.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -32,7 +34,10 @@ class EditProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
-    final bloc = EditProfileBloc(getIt<UserRepository>());
+    final bloc = EditProfileBloc(
+      getIt<UserRepository>(),
+      PostService(getIt<PostRepository>()),
+    );
     return BlocProvider(
       create: (context) => bloc,
       child: BlocBuilder<EditProfileBloc, EditProfileState>(
@@ -52,7 +57,10 @@ class EditProfilePage extends StatelessWidget {
                           SizedBox(height: 30.h),
                           Row(
                             children: [
-                              EditProfileAvatar(imageFile: state.profilePhoto),
+                              EditProfileAvatar(
+                                imageFile: state.profilePhoto,
+                                imageUrl: userProfile.imageAvatar,
+                              ),
                               SizedBox(width: 15.w),
                               Expanded(
                                 child: LemonTextField(
@@ -69,7 +77,7 @@ class EditProfilePage extends StatelessWidget {
                             label: t.onboarding.username,
                             hintText: t.profile.hint.username,
                             initialText: userProfile.username,
-                            onChange: (value) {},
+                            onChange: (value) {}, // TODO: add flow
                           ),
                           SizedBox(height: Spacing.smMedium),
                           LemonTextField(
@@ -112,7 +120,6 @@ class EditProfilePage extends StatelessWidget {
                           SizedBox(height: Spacing.smMedium),
                           InkWell(
                             onTap: () => EditProfilePersonalDialog(
-                              bloc,
                               userProfile: userProfile,
                             ).showAsBottomSheet(context),
                             child: Container(
@@ -140,7 +147,7 @@ class EditProfilePage extends StatelessWidget {
                   Container(
                     margin: EdgeInsets.symmetric(vertical: Spacing.smMedium),
                     child: LinearGradientButton(
-                      onTap: () {},
+                      onTap: bloc.editProfile,
                       label: t.profile.saveChanges,
                       textStyle: Typo.medium.copyWith(
                         fontFamily: FontFamily.nohemiVariable,
