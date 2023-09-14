@@ -67,10 +67,12 @@ class PoapClaimSubscriptionBloc
           return add(PoapClaimSubscriptionEvent.clear());
         }
 
+        final claimedToken = token.copyWith(tokenId: claim.tokenId);
+
         add(
           PoapClaimSubscriptionEvent.update(
             claimModification: claim,
-            token: token,
+            token: claimedToken,
           ),
         );
       } else {

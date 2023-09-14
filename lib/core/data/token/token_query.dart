@@ -61,6 +61,7 @@ final getTokenQuery = gql('''
       tokenId
       contract
       metadata
+      network
     }
   }
 ''');

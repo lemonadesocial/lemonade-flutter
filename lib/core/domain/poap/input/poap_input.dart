@@ -65,10 +65,9 @@ class TransferInput with _$TransferInput {
     explicitToJson: true,
   )
   factory TransferInput({
+    TransferArgsInput? input,
     required String network,
     required String address,
-    TransferArgsInput? input,
-    String? to,
   }) = _TransferInput;
 
   factory TransferInput.fromJson(Map<String, dynamic> json) =>
