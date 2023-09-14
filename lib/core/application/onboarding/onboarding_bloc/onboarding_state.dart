@@ -7,7 +7,7 @@ class OnboardingState with _$OnboardingState {
     bool? usernameExisted,
     String? username,
     XFile? profilePhoto,
-    LemonGender? gender,
+    LemonPronoun? gender,
     String? aboutDisplayName,
     String? aboutShortBio,
     List<dynamic>? interestList,

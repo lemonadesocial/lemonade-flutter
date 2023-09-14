@@ -18,9 +18,16 @@ class UpdateUserProfileInput with _$UpdateUserProfileInput {
   factory UpdateUserProfileInput({
     required String username,
     @JsonKey(name: 'new_photos') List<String>? uploadPhoto,
-    LemonGender? gender,
+    LemonPronoun? pronoun,
     String? displayName,
-    String? shortBio,
+    @JsonKey(name: 'description') String? shortBio,
+    String? ethnicity,
+    String? educationTitle,
+    String? industry,
+    String? jobTitle,
+    String? newGender,
+    String? tagline,
+    @JsonKey(name: 'date_of_birth') DateTime? dob,
   }) = _UpdateUserProfileInput;
 
   factory UpdateUserProfileInput.fromJson(Map<String, dynamic> json) =>

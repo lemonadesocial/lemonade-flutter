@@ -91,10 +91,10 @@ class OnboardingAboutPage extends StatelessWidget {
                                 inActiveColor: LemonColor.femaleDefault,
                                 defaultColor: LemonColor.femaleDefault,
                                 onSelect: () =>
-                                    bloc.onGenderSelect(LemonGender.she),
+                                    bloc.onGenderSelect(LemonPronoun.she),
                                 isSelected: state.gender == null
                                     ? null
-                                    : state.gender == LemonGender.she,
+                                    : state.gender == LemonPronoun.she,
                               ),
                               SizedBox(width: Spacing.superExtraSmall),
                               GenderChipWidget(
@@ -104,10 +104,10 @@ class OnboardingAboutPage extends StatelessWidget {
                                 inActiveColor: LemonColor.maleDefault,
                                 defaultColor: LemonColor.maleDefault,
                                 onSelect: () =>
-                                    bloc.onGenderSelect(LemonGender.he),
+                                    bloc.onGenderSelect(LemonPronoun.he),
                                 isSelected: state.gender == null
                                     ? null
-                                    : state.gender == LemonGender.he,
+                                    : state.gender == LemonPronoun.he,
                               ),
                               SizedBox(width: Spacing.superExtraSmall),
                               GenderChipWidget(
@@ -117,10 +117,10 @@ class OnboardingAboutPage extends StatelessWidget {
                                 inActiveColor: LemonColor.ambiguousDefault,
                                 defaultColor: LemonColor.ambiguousDefault,
                                 onSelect: () =>
-                                    bloc.onGenderSelect(LemonGender.they),
+                                    bloc.onGenderSelect(LemonPronoun.they),
                                 isSelected: state.gender == null
                                     ? null
-                                    : state.gender == LemonGender.they,
+                                    : state.gender == LemonPronoun.they,
                               ),
                             ],
                           ),
