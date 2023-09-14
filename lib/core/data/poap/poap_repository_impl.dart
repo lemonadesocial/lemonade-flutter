@@ -1,4 +1,5 @@
 import 'package:app/core/data/poap/dtos/poap_dtos.dart';
+import 'package:app/core/data/poap/poap_subscription.dart';
 import 'package:app/core/data/poap/poap_mutation.dart';
 import 'package:app/core/data/poap/poap_query.dart';
 import 'package:app/core/domain/poap/entities/poap_entities.dart';
@@ -88,5 +89,25 @@ class PoapRepositoryImpl implements PoapRepository {
       return Left(Failure());
     }
     return Right(result.parsedData!);
+  }
+
+  @override
+  Stream<Either<Failure, Claim?>> watchClaimModification() {
+    final stream = _walletClient.subscribe(
+      SubscriptionOptions(
+        document: claimModifiedSubscription,
+        fetchPolicy: FetchPolicy.networkOnly,
+        parserFn: (data) {
+          final rawClaimModification = data['claimModified'];
+          if (rawClaimModification == null) return null;
+          return Claim.fromDto(ClaimDto.fromJson(rawClaimModification));
+        },
+      ),
+    );
+
+    return stream.asyncMap((resultEvent) {
+      if (resultEvent.hasException) return Left(Failure());
+      return Right(resultEvent.parsedData);
+    });
   }
 }

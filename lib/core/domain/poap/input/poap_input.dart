@@ -59,6 +59,34 @@ class ClaimArgsInput with _$ClaimArgsInput {
 }
 
 @freezed
+class TransferInput with _$TransferInput {
+  @JsonSerializable(
+    includeIfNull: false,
+    explicitToJson: true,
+  )
+  factory TransferInput({
+    required String network,
+    required String address,
+    ClaimArgsInput? input,
+    String? to,
+  }) = _TransferInput;
+
+  factory TransferInput.fromJson(Map<String, dynamic> json) =>
+      _$TransferInputFromJson(json);
+}
+
+@freezed
+class TransferArgsInput with _$TransferArgsInput {
+  const factory TransferArgsInput({
+    String? claimer,
+    String? tokenURI,
+  }) = _TransferArgsInput;
+
+  factory TransferArgsInput.fromJson(Map<String, dynamic> json) =>
+      _$TransferArgsInputFromJson(json);
+}
+
+@freezed
 class GetPoapPolicyInput with _$GetPoapPolicyInput {
   const factory GetPoapPolicyInput({
     required String network,

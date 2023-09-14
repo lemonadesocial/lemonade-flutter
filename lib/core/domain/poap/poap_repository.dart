@@ -20,4 +20,6 @@ abstract class PoapRepository {
   Future<Either<Failure, PoapPolicy>> getPoapPolicy({
     required GetPoapPolicyInput input,
   });
+
+  Stream<Either<Failure, Claim?>> watchClaimModification();
 }
