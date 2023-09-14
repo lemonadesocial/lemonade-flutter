@@ -76,6 +76,9 @@ class LemonColor {
 
   // custom red error
   static const onboardingRed = Color(0xFFFF6565);
+
+  // Progress indicator
+  static const progressBg = Color(0xFF5E4E70);
 }
 
 final ColorScheme lemonadeLightThemeColorScheme = ColorScheme.light(

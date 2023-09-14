@@ -142,9 +142,11 @@ class EditProfilePersonalDialog extends StatelessWidget with LemonBottomSheet {
                       ),
                       height: Sizing.large,
                       radius: BorderRadius.circular(LemonRadius.large),
-                      mode: bloc.state.status == EditProfileStatus.editing
+                      mode: bloc.state.status != EditProfileStatus.editing
                           ? GradientButtonMode.lavenderMode
                           : GradientButtonMode.defaultMode,
+                      loadingWhen:
+                          bloc.state.status == EditProfileStatus.loading,
                     ),
                   ),
                   SizedBox(height: Spacing.smMedium),
