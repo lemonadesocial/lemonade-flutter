@@ -72,6 +72,10 @@ class User {
     this.handleLinkedin,
     this.wallets,
     this.walletCustodial,
+    this.gender,
+    this.ethnicity,
+    this.education,
+    this.companyName,
   });
 
   factory User.fromDto(UserDto dto) {
@@ -128,6 +132,10 @@ class User {
       handleLinkedin: dto.handleLinkedin,
       wallets: dto.wallets,
       walletCustodial: dto.walletCustodial,
+      gender: dto.newGender,
+      companyName: dto.companyName,
+      education: dto.educationTitle,
+      ethnicity: dto.ethnicity,
     );
   }
   final String? id;
@@ -152,7 +160,6 @@ class User {
   final bool? active;
   final String? cover;
   final UserType? type;
-  final String? industry;
   final List<Address>? addresses;
   final int? hosted;
   final int? attended;
@@ -162,7 +169,13 @@ class User {
   final Currency? currency;
 
   final String? jobTitle;
+  final String? companyName;
   final String? tagline;
+
+  final String? industry;
+  final String? education;
+  final String? ethnicity;
+  final String? gender;
 
   final String? handleTwitter;
   final String? handleInstagram;

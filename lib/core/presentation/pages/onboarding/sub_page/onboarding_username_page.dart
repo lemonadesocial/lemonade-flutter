@@ -3,6 +3,7 @@ import 'package:app/core/presentation/widgets/common/button/linear_gradient_butt
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/router/app_router.gr.dart';
+import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
@@ -16,7 +17,12 @@ import 'package:app/core/presentation/widgets/back_button_widget.dart';
 
 @RoutePage()
 class OnboardingUsernamePage extends StatelessWidget {
-  const OnboardingUsernamePage({Key? key}) : super(key: key);
+  const OnboardingUsernamePage({
+    Key? key,
+    this.onboardingFlow = true,
+  }) : super(key: key);
+
+  final bool onboardingFlow;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +32,11 @@ class OnboardingUsernamePage extends StatelessWidget {
     return BlocConsumer<OnboardingBloc, OnboardingState>(
       listener: (context, state) {
         if (state.status == OnboardingStatus.success) {
-          context.router.push(const OnboardingProfilePhotoRoute());
+          if (onboardingFlow) {
+            context.router.push(const OnboardingProfilePhotoRoute());
+          } else {
+            context.router.pop(state.username);
+          }
         }
       },
       builder: (context, state) {
@@ -82,11 +92,13 @@ class OnboardingUsernamePage extends StatelessWidget {
                     fontFamily: FontFamily.nohemiVariable,
                     fontWeight: FontWeight.w600,
                   ),
+                  height: Sizing.large,
                   radius: BorderRadius.circular(LemonRadius.large),
                   mode: (bloc.state.username?.isEmpty ?? true) ||
                           (bloc.state.usernameExisted ?? true)
                       ? GradientButtonMode.defaultMode
                       : GradientButtonMode.lavenderMode,
+                  loadingWhen: state.status == OnboardingStatus.loading,
                 ),
                 SizedBox(height: 24.h),
               ],

@@ -1,3 +1,4 @@
+import 'package:app/core/domain/common/common_enums.dart';
 import 'package:app/core/domain/onboarding/onboarding_inputs.dart';
 import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/service/post/post_service.dart';
@@ -59,7 +60,7 @@ class OnboardingBloc extends Cubit<OnboardingState> {
     });
   }
 
-  void onGenderSelect(OnboardingGender gender) {
+  void onGenderSelect(LemonPronoun gender) {
     emit(state.copyWith(status: OnboardingStatus.initial, gender: gender));
   }
 
@@ -118,7 +119,7 @@ class OnboardingBloc extends Cubit<OnboardingState> {
     final response = await userRepository.updateUserProfile(
       UpdateUserProfileInput(
         username: state.username!,
-        gender: state.gender,
+        pronoun: state.gender,
         displayName: state.aboutDisplayName,
         shortBio: state.aboutShortBio,
         uploadPhoto: imageId != null ? [imageId] : null,

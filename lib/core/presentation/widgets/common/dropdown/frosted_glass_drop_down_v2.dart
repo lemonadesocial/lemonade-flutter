@@ -1,3 +1,5 @@
+import 'package:app/i18n/i18n.g.dart';
+import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -55,7 +57,7 @@ class FrostedGlassDropDownV2 extends StatelessWidget {
                       child: Text(
                         item,
                         style: Typo.medium.copyWith(
-                          color: colorScheme.onPrimary.withOpacity(0.36),
+                          color: colorScheme.onPrimary,
                         ),
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -63,7 +65,7 @@ class FrostedGlassDropDownV2 extends StatelessWidget {
                   )
                   .toList(),
               hint: Text(
-                hintText ?? '',
+                hintText ?? Translations.of(context).common.selectItem,
                 style: Typo.medium.copyWith(
                   color: colorScheme.onPrimary.withOpacity(0.36),
                 ),
@@ -84,20 +86,12 @@ class FrostedGlassDropDownV2 extends StatelessWidget {
                 offset: Offset(-18.w, 0),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12.r),
-                  color: colorScheme.onPrimary.withOpacity(0.36),
-                ),
-                scrollbarTheme: ScrollbarThemeData(
-                  radius: const Radius.circular(40),
-                  thickness: MaterialStateProperty.all(6),
-                  thumbVisibility: MaterialStateProperty.all(true),
+                  color: LemonColor.dropdownBackground,
                 ),
               ),
               menuItemStyleData: MenuItemStyleData(
-                overlayColor: MaterialStatePropertyAll(
-                  colorScheme.onPrimary.withOpacity(
-                    0.06,
-                  ),
-                ),
+                overlayColor:
+                    MaterialStatePropertyAll(LemonColor.dropdownBackground),
               ),
             ),
           ),

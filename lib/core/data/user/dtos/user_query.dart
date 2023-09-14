@@ -49,6 +49,11 @@ const userProfileFragment = '''
   following
   followers
   friends
+  email
+  company_name
+  ethnicity
+  new_gender
+  industry
   handle_facebook
   handle_instagram
   handle_linkedin

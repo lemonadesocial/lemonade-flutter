@@ -35,7 +35,7 @@ class LoginPageState extends State<LoginPage> {
             },
             onBoardingRequired: (authSession) {
               context.router.push(
-                const OnboardingWrapperRoute(
+                OnboardingWrapperRoute(
                   children: [OnboardingUsernameRoute()],
                 ),
               );

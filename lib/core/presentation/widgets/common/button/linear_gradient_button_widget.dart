@@ -32,6 +32,7 @@ class LinearGradientButton extends StatelessWidget {
   final BorderRadius? radius;
   final TextStyle? textStyle;
   final Offset? shadowOffset;
+  final bool loadingWhen;
 
   const LinearGradientButton({
     super.key,
@@ -44,6 +45,7 @@ class LinearGradientButton extends StatelessWidget {
     this.radius,
     this.textStyle,
     this.shadowOffset,
+    this.loadingWhen = false,
   });
 
   @override
@@ -52,50 +54,66 @@ class LinearGradientButton extends StatelessWidget {
       onTap: onTap,
       child: ClipRRect(
         borderRadius: radius ?? BorderRadius.circular(LemonRadius.xSmall),
-        child: InnerShadow(
-          color: Colors.white.withOpacity(0.36),
-          offset: shadowOffset ?? const Offset(0, 4),
-          blur: 4,
-          child: Container(
-            height: height ?? Sizing.medium,
-            padding: padding ??
-                EdgeInsets.symmetric(
-                  horizontal: Spacing.xSmall,
-                  vertical: Spacing.extraSmall,
-                ),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: mode.gradients,
+        child: onTap == null && !loadingWhen
+            ? _childButton
+            : InnerShadow(
+                color: Colors.white.withOpacity(0.36),
+                offset: shadowOffset ?? const Offset(0, 4),
+                blur: 4,
+                child: _childButton,
               ),
-              boxShadow: [
-                BoxShadow(
-                  color: LemonColor.black.withOpacity(0.30),
-                  offset: const Offset(0, 2),
-                  blurRadius: 18.r,
-                  spreadRadius: 2,
-                )
-              ],
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                if (leading != null) ...[
-                  leading!,
-                  SizedBox(width: Spacing.extraSmall)
-                ],
-                Text(
-                  label,
-                  style: textStyle ??
-                      Typo.small.copyWith(fontWeight: FontWeight.w600),
-                )
-              ],
-            ),
-          ),
-        ),
       ),
     );
   }
+
+  Widget get _childButton => Container(
+        height: height ?? Sizing.medium,
+        padding: padding ??
+            EdgeInsets.symmetric(
+              horizontal: Spacing.xSmall,
+              vertical: Spacing.extraSmall,
+            ),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: mode.gradients,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: LemonColor.black.withOpacity(0.30),
+              offset: const Offset(0, 2),
+              blurRadius: 18.r,
+              spreadRadius: 2,
+            )
+          ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: loadingWhen
+              ? [
+                  SizedBox(
+                    width: Sizing.xSmall,
+                    height: Sizing.xSmall,
+                    child: CircularProgressIndicator(
+                      // Loading button should be black and white and are not affected by theme
+                      backgroundColor: LemonColor.black.withOpacity(0.36),
+                      color: LemonColor.white.withOpacity(0.72),
+                    ),
+                  ),
+                ]
+              : [
+                  if (leading != null) ...[
+                    leading!,
+                    SizedBox(width: Spacing.extraSmall)
+                  ],
+                  Text(
+                    label,
+                    style: textStyle ??
+                        Typo.small.copyWith(fontWeight: FontWeight.w600),
+                  )
+                ],
+        ),
+      );
 }

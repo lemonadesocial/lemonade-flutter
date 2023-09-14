@@ -46,13 +46,14 @@ class LemonTextField extends StatelessWidget {
           ),
           SizedBox(height: Spacing.superExtraSmall),
         ],
-        TextField(
+        TextFormField(
           onChanged: onChange,
           style: theme.textTheme.bodyMedium!
               .copyWith(color: theme.colorScheme.onPrimary),
           minLines: minLines,
           maxLines: maxLines ?? minLines,
           cursorColor: theme.colorScheme.onPrimary,
+          initialValue: initialText,
           decoration: InputDecoration(
             hintText: hintText,
             hintStyle: theme.textTheme.bodyMedium!

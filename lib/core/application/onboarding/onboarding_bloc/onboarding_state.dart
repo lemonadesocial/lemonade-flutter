@@ -7,7 +7,7 @@ class OnboardingState with _$OnboardingState {
     bool? usernameExisted,
     String? username,
     XFile? profilePhoto,
-    OnboardingGender? gender,
+    LemonPronoun? gender,
     String? aboutDisplayName,
     String? aboutShortBio,
     List<dynamic>? interestList,
@@ -21,10 +21,4 @@ enum OnboardingStatus {
   loading,
   success,
   error,
-}
-
-enum OnboardingGender {
-  he,
-  she,
-  they,
 }
