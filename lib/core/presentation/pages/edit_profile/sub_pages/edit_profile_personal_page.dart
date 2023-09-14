@@ -15,6 +15,7 @@ import 'package:app/injection/register_module.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -36,7 +37,12 @@ class EditProfilePersonalDialog extends StatelessWidget with LemonBottomSheet {
     );
     return BlocProvider(
       create: (context) => bloc,
-      child: BlocBuilder<EditProfileBloc, EditProfileState>(
+      child: BlocConsumer<EditProfileBloc, EditProfileState>(
+        listener: (context, state) {
+          if (state.status == EditProfileStatus.success) {
+            context.router.popUntilRoot();
+          }
+        },
         builder: (context, state) {
           return Scaffold(
             appBar: LemonAppBar(
@@ -126,7 +132,9 @@ class EditProfilePersonalDialog extends StatelessWidget with LemonBottomSheet {
                   Container(
                     margin: EdgeInsets.symmetric(vertical: Spacing.smMedium),
                     child: LinearGradientButton(
-                      onTap: bloc.editProfile,
+                      onTap: bloc.state.status == EditProfileStatus.editing
+                          ? bloc.editProfile
+                          : null,
                       label: t.profile.saveChanges,
                       textStyle: Typo.medium.copyWith(
                         fontFamily: FontFamily.nohemiVariable,
@@ -134,7 +142,9 @@ class EditProfilePersonalDialog extends StatelessWidget with LemonBottomSheet {
                       ),
                       height: Sizing.large,
                       radius: BorderRadius.circular(LemonRadius.large),
-                      mode: GradientButtonMode.lavenderMode,
+                      mode: bloc.state.status == EditProfileStatus.editing
+                          ? GradientButtonMode.lavenderMode
+                          : GradientButtonMode.defaultMode,
                     ),
                   ),
                   SizedBox(height: Spacing.smMedium),

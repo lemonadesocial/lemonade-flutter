@@ -27,6 +27,7 @@ class EditProfileBloc extends Cubit<EditProfileState> {
     if (pickImage != null) {
       emit(
         state.copyWith(
+          status: EditProfileStatus.editing,
           profilePhoto: pickImage,
         ),
       );
@@ -34,39 +35,93 @@ class EditProfileBloc extends Cubit<EditProfileState> {
   }
 
   void onShortBioChange(String input) {
-    emit(state.copyWith(shortBio: input));
+    emit(
+      state.copyWith(
+        status: EditProfileStatus.editing,
+        shortBio: input,
+      ),
+    );
   }
 
   void onDisplayNameChange(String input) {
-    emit(state.copyWith(displayName: input));
+    emit(
+      state.copyWith(
+        status: EditProfileStatus.editing,
+        displayName: input,
+      ),
+    );
   }
 
   void onTaglineChange(String input) {
-    emit(state.copyWith(tagline: input));
+    emit(
+      state.copyWith(
+        status: EditProfileStatus.editing,
+        tagline: input,
+      ),
+    );
   }
 
   void onJobTitleChange(String input) {
-    emit(state.copyWith(jobTitle: input));
+    emit(
+      state.copyWith(
+        status: EditProfileStatus.editing,
+        jobTitle: input,
+      ),
+    );
   }
 
   void onOrganizationChange(String input) {
-    emit(state.copyWith(companyName: input));
+    emit(
+      state.copyWith(
+        status: EditProfileStatus.editing,
+        companyName: input,
+      ),
+    );
   }
 
   void onEducationChange(String input) {
-    emit(state.copyWith(education: input));
+    emit(
+      state.copyWith(
+        status: EditProfileStatus.editing,
+        education: input,
+      ),
+    );
   }
 
   void onGenderSelect(String? gender) {
-    emit(state.copyWith(gender: gender));
+    emit(
+      state.copyWith(
+        status: EditProfileStatus.editing,
+        gender: gender,
+      ),
+    );
   }
 
   void onIndustrySelect(String? industry) {
-    emit(state.copyWith(industry: industry));
+    emit(
+      state.copyWith(
+        status: EditProfileStatus.editing,
+        industry: industry,
+      ),
+    );
   }
 
   void onEthnicitySelect(String? ethnicity) {
-    emit(state.copyWith(ethnicity: ethnicity));
+    emit(
+      state.copyWith(
+        status: EditProfileStatus.editing,
+        ethnicity: ethnicity,
+      ),
+    );
+  }
+
+  void onUsernameChange(String input) {
+    emit(
+      state.copyWith(
+        status: EditProfileStatus.editing,
+        username: input,
+      ),
+    );
   }
 
   void onBirthdaySelect() {}
@@ -77,13 +132,21 @@ class EditProfileBloc extends Cubit<EditProfileState> {
       directory: 'photos',
     );
     response.fold(
-      (l) => emit(state.copyWith(status: EditProfileStatus.error)),
+      (l) => emit(
+        state.copyWith(
+          status: EditProfileStatus.error,
+        ),
+      ),
       (imageId) => mImageId = imageId,
     );
   }
 
   Future<void> editProfile() async {
-    emit(state.copyWith(status: EditProfileStatus.loading));
+    emit(
+      state.copyWith(
+        status: EditProfileStatus.loading,
+      ),
+    );
     if (state.profilePhoto != null) {
       await uploadImage();
     }
@@ -111,9 +174,17 @@ class EditProfileBloc extends Cubit<EditProfileState> {
       ),
       (success) {
         if (success) {
-          emit(state.copyWith(status: EditProfileStatus.success));
+          emit(
+            state.copyWith(
+              status: EditProfileStatus.success,
+            ),
+          );
         } else {
-          emit(state.copyWith(status: EditProfileStatus.error));
+          emit(
+            state.copyWith(
+              status: EditProfileStatus.error,
+            ),
+          );
         }
       },
     );

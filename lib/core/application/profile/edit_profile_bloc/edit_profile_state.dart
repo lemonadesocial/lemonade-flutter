@@ -25,6 +25,7 @@ class EditProfileState with _$EditProfileState {
 
 enum EditProfileStatus {
   initial,
+  editing,
   loading,
   success,
   error,

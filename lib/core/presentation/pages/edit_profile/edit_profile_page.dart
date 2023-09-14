@@ -13,10 +13,11 @@ import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
-import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -40,7 +41,12 @@ class EditProfilePage extends StatelessWidget {
     );
     return BlocProvider(
       create: (context) => bloc,
-      child: BlocBuilder<EditProfileBloc, EditProfileState>(
+      child: BlocConsumer<EditProfileBloc, EditProfileState>(
+        listener: (context, state) {
+          if (state.status == EditProfileStatus.success) {
+            context.router.popUntilRoot();
+          }
+        },
         builder: (context, state) {
           return Scaffold(
             appBar: LemonAppBar(title: t.profile.editProfile),
@@ -73,11 +79,10 @@ class EditProfilePage extends StatelessWidget {
                             ],
                           ),
                           SizedBox(height: Spacing.smMedium),
-                          LemonTextField(
-                            label: t.onboarding.username,
-                            hintText: t.profile.hint.username,
-                            initialText: userProfile.username,
-                            onChange: (value) {}, // TODO: add flow
+                          _UserEditor(
+                            bloc,
+                            userName:
+                                state.username ?? userProfile.username ?? '',
                           ),
                           SizedBox(height: Spacing.smMedium),
                           LemonTextField(
@@ -147,7 +152,9 @@ class EditProfilePage extends StatelessWidget {
                   Container(
                     margin: EdgeInsets.symmetric(vertical: Spacing.smMedium),
                     child: LinearGradientButton(
-                      onTap: bloc.editProfile,
+                      onTap: bloc.state.status == EditProfileStatus.editing
+                          ? bloc.editProfile
+                          : null,
                       label: t.profile.saveChanges,
                       textStyle: Typo.medium.copyWith(
                         fontFamily: FontFamily.nohemiVariable,
@@ -155,7 +162,9 @@ class EditProfilePage extends StatelessWidget {
                       ),
                       height: Sizing.large,
                       radius: BorderRadius.circular(LemonRadius.large),
-                      mode: GradientButtonMode.lavenderMode,
+                      mode: bloc.state.status == EditProfileStatus.editing
+                          ? GradientButtonMode.lavenderMode
+                          : GradientButtonMode.defaultMode,
                     ),
                   ),
                   SizedBox(height: Spacing.smMedium),
@@ -241,6 +250,61 @@ class _PersonalCardWidget extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _UserEditor extends StatelessWidget {
+  const _UserEditor(
+    this.bloc, {
+    Key? key,
+    required this.userName,
+  }) : super(key: key);
+
+  final EditProfileBloc bloc;
+  final String userName;
+
+  @override
+  Widget build(BuildContext context) {
+    final t = Translations.of(context);
+    final colorScheme = Theme.of(context).colorScheme;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          t.onboarding.username,
+          style: Typo.small.copyWith(
+            color: colorScheme.onPrimary.withOpacity(0.36),
+          ),
+        ),
+        SizedBox(height: Spacing.superExtraSmall),
+        InkWell(
+          onTap: () async {
+            final userName = await context.router.push(
+              OnboardingWrapperRoute(
+                children: [OnboardingUsernameRoute(onboardingFlow: false)],
+              ),
+            ) as String?;
+            if (userName != null) {
+              bloc.onUsernameChange(userName);
+            }
+          },
+          child: Container(
+            width: 1.sw,
+            padding: EdgeInsets.all(Spacing.smMedium),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12.r),
+              border: Border.all(color: colorScheme.outlineVariant),
+            ),
+            child: Text(
+              userName,
+              style: Typo.medium.copyWith(
+                color: colorScheme.onPrimary,
+              ),
+            ),
+          ),
+        )
+      ],
     );
   }
 }
