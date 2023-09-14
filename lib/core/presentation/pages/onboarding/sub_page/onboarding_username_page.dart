@@ -98,6 +98,7 @@ class OnboardingUsernamePage extends StatelessWidget {
                           (bloc.state.usernameExisted ?? true)
                       ? GradientButtonMode.defaultMode
                       : GradientButtonMode.lavenderMode,
+                  loadingWhen: state.status == OnboardingStatus.loading,
                 ),
                 SizedBox(height: 24.h),
               ],

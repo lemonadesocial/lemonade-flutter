@@ -151,6 +151,7 @@ class OnboardingAboutPage extends StatelessWidget {
                       mode: state.gender == null
                           ? GradientButtonMode.defaultMode
                           : GradientButtonMode.lavenderMode,
+                      loadingWhen: state.status == OnboardingStatus.loading,
                     ),
                     SizedBox(height: 24.h),
                   ],

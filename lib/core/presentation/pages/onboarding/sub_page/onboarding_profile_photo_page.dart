@@ -94,6 +94,7 @@ class OnboardingProfilePhotoPage extends StatelessWidget {
                   mode: state.profilePhoto == null
                       ? GradientButtonMode.defaultMode
                       : GradientButtonMode.lavenderMode,
+                  loadingWhen: state.status == OnboardingStatus.loading,
                 ),
                 SizedBox(height: 24.h),
               ],
