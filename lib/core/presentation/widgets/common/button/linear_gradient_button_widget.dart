@@ -97,8 +97,9 @@ class LinearGradientButton extends StatelessWidget {
                     width: Sizing.xSmall,
                     height: Sizing.xSmall,
                     child: CircularProgressIndicator(
-                      backgroundColor: LemonColor.progressBg,
-                      color: LemonColor.white,
+                      // Loading button should be black and white and are not affected by theme
+                      backgroundColor: LemonColor.black.withOpacity(0.36),
+                      color: LemonColor.white.withOpacity(0.72),
                     ),
                   ),
                 ]
