@@ -39,29 +39,21 @@ class PoapTransferSuccessPopup extends StatelessWidget {
           ),
           child: Stack(
             children: [
-              Transform.translate(
-                offset: const Offset(0, -100),
-                child: Stack(
-                  children: [
-                    Align(
-                      alignment: Alignment.center,
-                      child: LayoutBuilder(
-                        builder: (context, constraints) => Transform.scale(
-                          scale: 1.8,
-                          child: RippleAnimation(
-                            size: constraints.maxWidth,
-                            color: const Color.fromRGBO(32, 41, 38, 1),
-                            scaleTween: Tween<double>(begin: 0.3, end: 1),
-                          ),
-                        ),
+              Stack(
+                alignment: Alignment.center,
+                children: [
+                  LayoutBuilder(
+                    builder: (context, constraints) => Transform.scale(
+                      scale: 1.8,
+                      child: RippleAnimation(
+                        size: constraints.maxWidth,
+                        color: LemonColor.rippleDark,
+                        scaleTween: Tween<double>(begin: 0.3, end: 1),
                       ),
                     ),
-                    Align(
-                      alignment: Alignment.center,
-                      child: Assets.icons.icSuccess.svg(),
-                    ),
-                  ],
-                ),
+                  ),
+                  Assets.icons.icSuccess.svg(),
+                ],
               ),
               Transform.translate(
                 offset: Offset(0, -Spacing.medium),
