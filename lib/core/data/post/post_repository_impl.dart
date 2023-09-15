@@ -98,7 +98,7 @@ class PostRepositoryImpl implements PostRepository {
           'Content-Type': 'multipart/form-data',
           'Accept': '*/*',
           'Connection': 'keep-alive',
-          'Authorization': token,
+          'Authorization': 'Bearer $token',
         },
       ),
       data: formData,
