@@ -103,6 +103,7 @@ dependencies:
   flutter_openssl_crypto: ^0.1.0
   flutter_chat_bubble: ^2.0.2
   duration: ^3.0.13
+  web3dart: ^2.6.1
   
 dependency_overrides:
   matrix_api_lite:

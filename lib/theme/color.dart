@@ -71,8 +71,9 @@ class LemonColor {
   static const maleActiveColor = Color(0xFF91C0F6);
   static const ambiguousActiveColor = Color(0xFFA591F6);
 
-  // ripple marker
+  // ripple animation
   static const rippleMarkerColor = Color.fromRGBO(89, 210, 116, 0.24);
+  static const rippleDark = Color.fromRGBO(32, 41, 38, 1);
 
   // custom red error
   static const onboardingRed = Color(0xFFFF6565);

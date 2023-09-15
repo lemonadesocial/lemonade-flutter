@@ -58,7 +58,10 @@ final getTokenQuery = gql('''
   query(\$id: String!, \$network: String) {
     getToken(id: \$id, network: \$network) {
       id
+      tokenId
+      contract
       metadata
+      network
     }
   }
 ''');
