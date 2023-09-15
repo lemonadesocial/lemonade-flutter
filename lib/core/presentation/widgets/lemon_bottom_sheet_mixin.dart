@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
 mixin LemonBottomSheet<T extends StatelessWidget> on Widget {
-  void show(BuildContext context) => showModalBottomSheet(
+  void showAsBottomSheet(BuildContext context) => showModalBottomSheet(
         context: context,
         isScrollControlled: true,
         backgroundColor: Theme.of(context).colorScheme.primary,
         isDismissible: false,
+        useRootNavigator: true,
         builder: (context) => Container(
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),

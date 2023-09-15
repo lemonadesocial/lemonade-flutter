@@ -1,6 +1,7 @@
 import 'package:app/core/presentation/pages/onboarding/widgets/onboarding_photo_picker.dart';
 import 'package:app/core/presentation/widgets/back_button_widget.dart';
 import 'package:app/router/app_router.gr.dart';
+import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
@@ -88,10 +89,12 @@ class OnboardingProfilePhotoPage extends StatelessWidget {
                     fontFamily: FontFamily.nohemiVariable,
                     fontWeight: FontWeight.w600,
                   ),
+                  height: Sizing.large,
                   radius: BorderRadius.circular(LemonRadius.large),
                   mode: state.profilePhoto == null
                       ? GradientButtonMode.defaultMode
                       : GradientButtonMode.lavenderMode,
+                  loadingWhen: state.status == OnboardingStatus.loading,
                 ),
                 SizedBox(height: 24.h),
               ],

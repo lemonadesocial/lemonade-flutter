@@ -1,5 +1,6 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/onboarding/onboarding_bloc/onboarding_bloc.dart';
+import 'package:app/core/domain/common/common_enums.dart';
 import 'package:app/core/presentation/pages/onboarding/widgets/gender_chip_widget.dart';
 import 'package:app/core/presentation/widgets/back_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
@@ -8,6 +9,7 @@ import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
+import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
@@ -90,10 +92,10 @@ class OnboardingAboutPage extends StatelessWidget {
                                 inActiveColor: LemonColor.femaleDefault,
                                 defaultColor: LemonColor.femaleDefault,
                                 onSelect: () =>
-                                    bloc.onGenderSelect(OnboardingGender.she),
+                                    bloc.onGenderSelect(LemonPronoun.she),
                                 isSelected: state.gender == null
                                     ? null
-                                    : state.gender == OnboardingGender.she,
+                                    : state.gender == LemonPronoun.she,
                               ),
                               SizedBox(width: Spacing.superExtraSmall),
                               GenderChipWidget(
@@ -103,10 +105,10 @@ class OnboardingAboutPage extends StatelessWidget {
                                 inActiveColor: LemonColor.maleDefault,
                                 defaultColor: LemonColor.maleDefault,
                                 onSelect: () =>
-                                    bloc.onGenderSelect(OnboardingGender.he),
+                                    bloc.onGenderSelect(LemonPronoun.he),
                                 isSelected: state.gender == null
                                     ? null
-                                    : state.gender == OnboardingGender.he,
+                                    : state.gender == LemonPronoun.he,
                               ),
                               SizedBox(width: Spacing.superExtraSmall),
                               GenderChipWidget(
@@ -116,10 +118,10 @@ class OnboardingAboutPage extends StatelessWidget {
                                 inActiveColor: LemonColor.ambiguousDefault,
                                 defaultColor: LemonColor.ambiguousDefault,
                                 onSelect: () =>
-                                    bloc.onGenderSelect(OnboardingGender.they),
+                                    bloc.onGenderSelect(LemonPronoun.they),
                                 isSelected: state.gender == null
                                     ? null
-                                    : state.gender == OnboardingGender.they,
+                                    : state.gender == LemonPronoun.they,
                               ),
                             ],
                           ),
@@ -144,10 +146,12 @@ class OnboardingAboutPage extends StatelessWidget {
                         fontFamily: FontFamily.nohemiVariable,
                         fontWeight: FontWeight.w600,
                       ),
+                      height: Sizing.large,
                       radius: BorderRadius.circular(LemonRadius.large),
                       mode: state.gender == null
                           ? GradientButtonMode.defaultMode
                           : GradientButtonMode.lavenderMode,
+                      loadingWhen: state.status == OnboardingStatus.loading,
                     ),
                     SizedBox(height: 24.h),
                   ],

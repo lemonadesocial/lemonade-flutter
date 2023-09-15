@@ -53,6 +53,10 @@ class UserDto with _$UserDto {
     @JsonKey(name: 'job_title') String? jobTitle,
     String? tagline,
     Currency? currency,
+    @JsonKey(name: 'new_gender') String? newGender,
+    String? ethnicity,
+    @JsonKey(name: 'company_name') String? companyName,
+    @JsonKey(name: 'education_title') String? educationTitle,
   }) = _UserDto;
 
   factory UserDto.fromJson(Map<String, dynamic> json) =>

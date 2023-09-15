@@ -1,4 +1,4 @@
-import 'package:app/core/application/onboarding/onboarding_bloc/onboarding_bloc.dart';
+import 'package:app/core/domain/common/common_enums.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'onboarding_inputs.freezed.dart';
@@ -15,12 +15,21 @@ class GetProfileInput with _$GetProfileInput {
 
 @freezed
 class UpdateUserProfileInput with _$UpdateUserProfileInput {
+  @JsonSerializable(fieldRename: FieldRename.snake)
   factory UpdateUserProfileInput({
-    required String username,
+    String? username,
     @JsonKey(name: 'new_photos') List<String>? uploadPhoto,
-    OnboardingGender? gender,
+    LemonPronoun? pronoun,
     String? displayName,
-    String? shortBio,
+    @JsonKey(name: 'description') String? shortBio,
+    String? ethnicity,
+    String? educationTitle,
+    String? industry,
+    String? jobTitle,
+    String? newGender,
+    String? tagline,
+    @JsonKey(name: 'date_of_birth') DateTime? dob,
+    String? companyName,
   }) = _UpdateUserProfileInput;
 
   factory UpdateUserProfileInput.fromJson(Map<String, dynamic> json) =>
