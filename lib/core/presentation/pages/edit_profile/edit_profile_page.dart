@@ -48,129 +48,134 @@ class EditProfilePage extends StatelessWidget {
           }
         },
         builder: (context, state) {
-          return Scaffold(
-            appBar: LemonAppBar(title: t.profile.editProfile),
-            backgroundColor: colorScheme.primary,
-            body: Padding(
-              padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-              child: Column(
-                children: [
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          _PersonalCardWidget(userProfile: userProfile),
-                          SizedBox(height: 30.h),
-                          Row(
-                            children: [
-                              EditProfileAvatar(
-                                imageFile: state.profilePhoto,
-                                imageUrl: userProfile.imageAvatar,
-                              ),
-                              SizedBox(width: 15.w),
-                              Expanded(
-                                child: LemonTextField(
-                                  label: t.onboarding.displayName,
-                                  hintText: t.profile.hint.displayName,
-                                  initialText: userProfile.displayName,
-                                  onChange: bloc.onDisplayNameChange,
+          return GestureDetector(
+            onTap: () => FocusScope.of(context).unfocus(),
+            child: Scaffold(
+              appBar: LemonAppBar(title: t.profile.editProfile),
+              backgroundColor: colorScheme.primary,
+              body: Padding(
+                padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            _PersonalCardWidget(userProfile: userProfile),
+                            SizedBox(height: 30.h),
+                            Row(
+                              children: [
+                                EditProfileAvatar(
+                                  imageFile: state.profilePhoto,
+                                  imageUrl: userProfile.imageAvatar,
                                 ),
-                              )
-                            ],
-                          ),
-                          SizedBox(height: Spacing.smMedium),
-                          _UserEditor(
-                            bloc,
-                            userName:
-                                state.username ?? userProfile.username ?? '',
-                          ),
-                          SizedBox(height: Spacing.smMedium),
-                          LemonTextField(
-                            label: t.profile.tagline,
-                            hintText: t.profile.hint.tagline,
-                            initialText: userProfile.tagline,
-                            minLines: 2,
-                            onChange: bloc.onTaglineChange,
-                          ),
-                          SizedBox(height: Spacing.smMedium),
-                          LemonTextField(
-                            label: t.onboarding.shortBio,
-                            hintText: t.profile.hint.shortBio,
-                            initialText: userProfile.description,
-                            minLines: 4,
-                            onChange: bloc.onShortBioChange,
-                          ),
-                          SizedBox(height: Spacing.smMedium),
-                          InkWell(
-                            onTap: () => const EditProfileSocialDialog()
-                                .showAsBottomSheet(context),
-                            child: Container(
-                              padding: EdgeInsets.all(Spacing.xSmall),
-                              decoration: BoxDecoration(
-                                color: colorScheme.onPrimary.withOpacity(0.06),
-                                borderRadius: BorderRadius.circular(
-                                  LemonRadius.normal,
+                                SizedBox(width: 15.w),
+                                Expanded(
+                                  child: LemonTextField(
+                                    label: t.onboarding.displayName,
+                                    hintText: t.profile.hint.displayName,
+                                    initialText: userProfile.displayName,
+                                    onChange: bloc.onDisplayNameChange,
+                                  ),
+                                )
+                              ],
+                            ),
+                            SizedBox(height: Spacing.smMedium),
+                            _UserEditor(
+                              bloc,
+                              userName:
+                                  state.username ?? userProfile.username ?? '',
+                            ),
+                            SizedBox(height: Spacing.smMedium),
+                            LemonTextField(
+                              label: t.profile.tagline,
+                              hintText: t.profile.hint.tagline,
+                              initialText: userProfile.tagline,
+                              minLines: 2,
+                              onChange: bloc.onTaglineChange,
+                            ),
+                            SizedBox(height: Spacing.smMedium),
+                            LemonTextField(
+                              label: t.onboarding.shortBio,
+                              hintText: t.profile.hint.shortBio,
+                              initialText: userProfile.description,
+                              minLines: 4,
+                              onChange: bloc.onShortBioChange,
+                            ),
+                            SizedBox(height: Spacing.smMedium),
+                            InkWell(
+                              onTap: () => const EditProfileSocialDialog()
+                                  .showAsBottomSheet(context),
+                              child: Container(
+                                padding: EdgeInsets.all(Spacing.xSmall),
+                                decoration: BoxDecoration(
+                                  color:
+                                      colorScheme.onPrimary.withOpacity(0.06),
+                                  borderRadius: BorderRadius.circular(
+                                    LemonRadius.normal,
+                                  ),
                                 ),
-                              ),
-                              child: ListTile(
-                                title: Text(t.profile.socialHandle),
-                                subtitle: Text(t.profile.socialHandleDesc),
-                                trailing: Assets.icons.icArrowBack.svg(
-                                  width: 18.w,
-                                  height: 18.w,
+                                child: ListTile(
+                                  title: Text(t.profile.socialHandle),
+                                  subtitle: Text(t.profile.socialHandleDesc),
+                                  trailing: Assets.icons.icArrowBack.svg(
+                                    width: 18.w,
+                                    height: 18.w,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          SizedBox(height: Spacing.smMedium),
-                          InkWell(
-                            onTap: () => EditProfilePersonalDialog(
-                              userProfile: userProfile,
-                            ).showAsBottomSheet(context),
-                            child: Container(
-                              padding: EdgeInsets.all(Spacing.xSmall),
-                              decoration: BoxDecoration(
-                                color: colorScheme.onPrimary.withOpacity(0.06),
-                                borderRadius: BorderRadius.circular(
-                                  LemonRadius.normal,
+                            SizedBox(height: Spacing.smMedium),
+                            InkWell(
+                              onTap: () => EditProfilePersonalDialog(
+                                userProfile: userProfile,
+                              ).showAsBottomSheet(context),
+                              child: Container(
+                                padding: EdgeInsets.all(Spacing.xSmall),
+                                decoration: BoxDecoration(
+                                  color:
+                                      colorScheme.onPrimary.withOpacity(0.06),
+                                  borderRadius: BorderRadius.circular(
+                                    LemonRadius.normal,
+                                  ),
                                 ),
-                              ),
-                              child: ListTile(
-                                title: Text(t.profile.personalInfo),
-                                subtitle: Text(t.profile.personalInfoDesc),
-                                trailing: Assets.icons.icArrowBack.svg(
-                                  width: 18.w,
-                                  height: 18.w,
+                                child: ListTile(
+                                  title: Text(t.profile.personalInfo),
+                                  subtitle: Text(t.profile.personalInfoDesc),
+                                  trailing: Assets.icons.icArrowBack.svg(
+                                    width: 18.w,
+                                    height: 18.w,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.symmetric(vertical: Spacing.smMedium),
-                    child: LinearGradientButton(
-                      onTap: bloc.state.status == EditProfileStatus.editing
-                          ? bloc.editProfile
-                          : null,
-                      label: t.profile.saveChanges,
-                      textStyle: Typo.medium.copyWith(
-                        fontFamily: FontFamily.nohemiVariable,
-                        fontWeight: FontWeight.w600,
+                    Container(
+                      margin: EdgeInsets.symmetric(vertical: Spacing.smMedium),
+                      child: LinearGradientButton(
+                        onTap: bloc.state.status == EditProfileStatus.editing
+                            ? bloc.editProfile
+                            : null,
+                        label: t.profile.saveChanges,
+                        textStyle: Typo.medium.copyWith(
+                          fontFamily: FontFamily.nohemiVariable,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        height: Sizing.large,
+                        radius: BorderRadius.circular(LemonRadius.large),
+                        mode: bloc.state.status != EditProfileStatus.initial
+                            ? GradientButtonMode.lavenderMode
+                            : GradientButtonMode.defaultMode,
+                        loadingWhen:
+                            bloc.state.status == EditProfileStatus.loading,
                       ),
-                      height: Sizing.large,
-                      radius: BorderRadius.circular(LemonRadius.large),
-                      mode: bloc.state.status != EditProfileStatus.initial
-                          ? GradientButtonMode.lavenderMode
-                          : GradientButtonMode.defaultMode,
-                      loadingWhen:
-                          bloc.state.status == EditProfileStatus.loading,
                     ),
-                  ),
-                  SizedBox(height: Spacing.smMedium),
-                ],
+                    SizedBox(height: Spacing.smMedium),
+                  ],
+                ),
               ),
             ),
           );
