@@ -45,5 +45,7 @@
     "userAndOthersAreTyping": "$username and $count others are typing...",
     "isTyping": "is typing...",
     "emptyChat": "Empty chat",
-    "youAreInvitedToThisChat": "You are invited to this chat"
+    "youAreInvitedToThisChat": "You are invited to this chat",
+    "unknownDevice": "Unknown device",
+    "newMessage": "New message"
 }
