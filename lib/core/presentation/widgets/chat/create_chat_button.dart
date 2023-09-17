@@ -1,3 +1,4 @@
+import 'package:app/core/presentation/pages/chat/new_chat/new_chat_page.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/theme/color.dart';
@@ -54,13 +55,13 @@ class CreateChatButton extends StatelessWidget {
       child: DropdownButton2(
         customButton: buildCustomButton(),
         items: menuItems.map((item) {
-          return DropdownMenuItem<String>(
-            value: item.text,
+          return DropdownMenuItem<MenuItemType>(
+            value: item.type,
             child: MenuItems.buildItem(item),
           );
         }).toList(),
         onChanged: (value) {
-          MenuItems.onChanged(context, value! as MenuItem);
+          MenuItems.onChanged(context, value!);
         },
         dropdownStyleData: DropdownStyleData(
           width: 200.w,
@@ -77,23 +78,36 @@ class CreateChatButton extends StatelessWidget {
   }
 }
 
+enum MenuItemType { createChat, createRoom, exploreRooms }
+
 class MenuItem {
   const MenuItem({
-    required this.text,
+    required this.type,
     required this.icon,
   });
 
-  final String text;
+  final MenuItemType type;
   final IconData icon;
+
+  String get text {
+    switch (type) {
+      case MenuItemType.createChat:
+        return 'Create chat';
+      case MenuItemType.createRoom:
+        return 'Create room';
+      case MenuItemType.exploreRooms:
+        return 'Explore rooms';
+    }
+  }
 }
 
 abstract class MenuItems {
   static const MenuItem createChat =
-      MenuItem(text: 'Create chat', icon: Icons.chat);
+      MenuItem(type: MenuItemType.createChat, icon: Icons.chat);
   static const MenuItem createRoom =
-      MenuItem(text: 'Create room', icon: Icons.add_box);
+      MenuItem(type: MenuItemType.createRoom, icon: Icons.add_box);
   static const MenuItem exploreRooms =
-      MenuItem(text: 'Explore rooms', icon: Icons.explore);
+      MenuItem(type: MenuItemType.exploreRooms, icon: Icons.explore);
 
   static Widget buildItem(MenuItem item) {
     return Row(
@@ -114,16 +128,16 @@ abstract class MenuItems {
     );
   }
 
-  static void onChanged(BuildContext context, MenuItem item) {
-    switch (item) {
-      case MenuItems.createChat:
-        //Do something
+  static void onChanged(BuildContext context, MenuItemType type) {
+    switch (type) {
+      case MenuItemType.createChat:
+        const NewChatPageDialog().showAsBottomSheet(context);
         break;
-      case MenuItems.createRoom:
-        //Do something
+      case MenuItemType.createRoom:
+        // Do something
         break;
-      case MenuItems.exploreRooms:
-        //Do something
+      case MenuItemType.exploreRooms:
+        // Do something
         break;
     }
   }
