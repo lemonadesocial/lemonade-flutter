@@ -88,10 +88,12 @@ class MenuItem {
 }
 
 abstract class MenuItems {
-
-  static const MenuItem createChat = MenuItem(text: 'Create chat', icon: Icons.chat);
-  static const MenuItem createRoom = MenuItem(text: 'Create room', icon: Icons.add_box);
-  static const MenuItem exploreRooms = MenuItem(text: 'Explore rooms', icon: Icons.explore);
+  static const MenuItem createChat =
+      MenuItem(text: 'Create chat', icon: Icons.chat);
+  static const MenuItem createRoom =
+      MenuItem(text: 'Create room', icon: Icons.add_box);
+  static const MenuItem exploreRooms =
+      MenuItem(text: 'Explore rooms', icon: Icons.explore);
 
   static Widget buildItem(MenuItem item) {
     return Row(
