@@ -5,16 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SearchUserItem extends StatelessWidget {
-  const SearchUserItem({
-    super.key,
-    required this.name,
-    this.avatarUrl,
-    // required this.onPress,
-  });
-
   final String name;
   final Uri? avatarUrl;
-  // final void Function() onPress;
+  final bool isSelected;
+  final void Function() onTap;
+
+  SearchUserItem({
+    required this.name,
+    this.avatarUrl,
+    required this.isSelected,
+    required this.onTap,
+  });
 
   Widget _buildAvatar() {
     return MatrixAvatar(
@@ -26,14 +27,11 @@ class SearchUserItem extends StatelessWidget {
     );
   }
 
-  void clickAction(BuildContext context) async {}
-
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-
     return InkWell(
-      onTap: () => clickAction(context),
+      onTap: onTap,
       child: Padding(
         padding: EdgeInsets.symmetric(
           vertical: Spacing.extraSmall,
@@ -42,9 +40,7 @@ class SearchUserItem extends StatelessWidget {
         child: Row(
           children: [
             _buildAvatar(),
-            SizedBox(
-              width: Spacing.xSmall,
-            ),
+            SizedBox(width: Spacing.xSmall),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -52,23 +48,31 @@ class SearchUserItem extends StatelessWidget {
                   Text(
                     name,
                     style: Typo.medium.copyWith(
-                      color: colorScheme.onPrimary,
+                      color: Theme.of(context).colorScheme.onPrimary,
                       fontWeight: FontWeight.w800,
                     ),
                   ),
                 ],
               ),
             ),
-            SizedBox(
-              width: Spacing.xSmall,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                SizedBox(
-                  height: 4.h,
+            SizedBox(width: Spacing.xSmall),
+            Container(
+              width: 24.w,
+              height: 24.w,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: colorScheme.onPrimary,
+                  width: 2.0,
                 ),
-              ],
+              ),
+              child: isSelected
+                  ? Icon(
+                      Icons.check,
+                      size: 18.w,
+                      color: colorScheme.onPrimary,
+                    )
+                  : null,
             ),
           ],
         ),

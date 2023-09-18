@@ -11,11 +11,11 @@ class NewChatBloc extends Bloc<NewChatEvent, NewChatState> {
 
   NewChatBloc()
       : super(
-          const NewChatState(
-            userSearchResult: null,
-          ),
+          const NewChatState(userSearchResult: null, selectedUsers: []),
         ) {
     on<NewChatEventSearchUsers>(_onSearchUsers);
+    on<NewChatEventSelectUser>(_onSelectUser);
+    on<NewChatEventDeselectUser>(_onDeselectUser);
   }
 
   _onSearchUsers(NewChatEventSearchUsers event, Emitter emit) async {
@@ -26,6 +26,18 @@ class NewChatBloc extends Bloc<NewChatEvent, NewChatState> {
     );
     emit(state.copyWith(userSearchResult: result));
   }
+
+  _onSelectUser(NewChatEventSelectUser event, Emitter emit) {
+    final selectedUsers = List<String>.from(state.selectedUsers);
+    selectedUsers.add(event.userId);
+    emit(state.copyWith(selectedUsers: selectedUsers));
+  }
+
+  _onDeselectUser(NewChatEventDeselectUser event, Emitter emit) {
+    final selectedUsers = List<String>.from(state.selectedUsers);
+    selectedUsers.remove(event.userId);
+    emit(state.copyWith(selectedUsers: selectedUsers));
+  }
 }
 
 @freezed
@@ -33,11 +45,19 @@ class NewChatEvent with _$NewChatEvent {
   const factory NewChatEvent.searchUsers({
     String? text,
   }) = NewChatEventSearchUsers;
+
+  const factory NewChatEvent.selectUser({
+    required String userId,
+  }) = NewChatEventSelectUser;
+
+  const factory NewChatEvent.deselectUser({
+    required String userId,
+  }) = NewChatEventDeselectUser;
 }
 
 @freezed
 class NewChatState with _$NewChatState {
-  const factory NewChatState({
-    required SearchUserDirectoryResponse? userSearchResult,
-  }) = _NewChatState;
+  const factory NewChatState(
+      {required SearchUserDirectoryResponse? userSearchResult,
+      required List<String> selectedUsers,}) = _NewChatState;
 }
