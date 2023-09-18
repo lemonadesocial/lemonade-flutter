@@ -86,4 +86,26 @@ class TokenRepositoryImpl implements TokenRepository {
       return Right(result.parsedData ?? []);
     });
   }
+
+  @override
+  Future<Either<Failure, List<TokenComplex>>> tokens({
+    required GetTokenComplexInput input,
+  }) async {
+    final result = await _metaverseClient.query(
+      QueryOptions(
+        document: tokensQuery,
+        variables: input.toJson(),
+        parserFn: (data) {
+          return List.from(data['tokens'] ?? [])
+              .map(
+                (item) => TokenComplex.fromDto(TokenComplexDto.fromJson(item)),
+              )
+              .toList();
+        },
+      ),
+    );
+
+    if (result.hasException) return Left(Failure());
+    return Right(result.parsedData ?? []);
+  }
 }

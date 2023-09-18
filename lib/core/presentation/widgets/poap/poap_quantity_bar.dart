@@ -1,5 +1,3 @@
-import 'package:app/core/domain/badge/entities/badge_entities.dart'
-    as badge_entities;
 import 'package:app/core/domain/poap/input/poap_input.dart';
 import 'package:app/core/domain/poap/poap_repository.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -14,10 +12,18 @@ final _poapRepository = getIt<PoapRepository>();
 class PoapQuantityBar extends StatelessWidget {
   const PoapQuantityBar({
     super.key,
-    required this.badge,
+    required this.network,
+    required this.contract,
+    this.height,
+    this.color,
+    this.backgroundColor,
   });
 
-  final badge_entities.Badge badge;
+  final String network;
+  final String contract;
+  final double? height;
+  final Color? color;
+  final Color? backgroundColor;
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +35,8 @@ class PoapQuantityBar extends StatelessWidget {
     return FutureBuilder(
       future: _poapRepository.getPoapViewSupply(
         input: GetPoapViewSupplyInput(
-          network: badge.network ?? '',
-          address: badge.contract?.toLowerCase() ?? '',
+          network: network,
+          address: contract.toLowerCase(),
         ),
       ),
       builder: (context, snapshot) {
@@ -52,9 +58,9 @@ class PoapQuantityBar extends StatelessWidget {
                 ),
                 builder: (context, value, _) => LinearProgressIndicator(
                   value: value,
-                  color: LemonColor.paleViolet,
-                  backgroundColor: LemonColor.paleViolet18,
-                  minHeight: 2,
+                  color: color ?? LemonColor.paleViolet,
+                  backgroundColor: backgroundColor ?? LemonColor.paleViolet18,
+                  minHeight: height ?? 2,
                 ),
               ),
             ),

@@ -1,4 +1,5 @@
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/event_enums.dart';
 import 'package:app/core/utils/image_utils.dart';
 
 class EventUtils {
@@ -20,5 +21,12 @@ class EventUtils {
       file: event.newNewPhotosExpanded!.first,
       imageConfig: ImageConfig.eventPhoto,
     );
+  }
+
+  static bool hasPoapOffers(Event event) {
+    return (event.offers ?? [])
+        .where((item) => item.provider == OfferProvider.poap)
+        .toList()
+        .isNotEmpty;
   }
 }

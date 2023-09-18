@@ -10,6 +10,7 @@ class LemonOutlineButton extends StatelessWidget {
   final double? height;
   final EdgeInsets? padding;
   final BorderRadius? radius;
+  final TextStyle? textStyle;
 
   const LemonOutlineButton({
     super.key,
@@ -19,6 +20,7 @@ class LemonOutlineButton extends StatelessWidget {
     this.padding,
     this.height,
     this.radius,
+    this.textStyle,
   });
 
   @override
@@ -51,10 +53,11 @@ class LemonOutlineButton extends StatelessWidget {
               if (label != null)
                 Text(
                   label!,
-                  style: Typo.small.copyWith(
-                    color: colorScheme.onSecondary,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: textStyle ??
+                      Typo.small.copyWith(
+                        color: colorScheme.onSecondary,
+                        fontWeight: FontWeight.w600,
+                      ),
                 ),
             ],
           ),

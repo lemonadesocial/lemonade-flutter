@@ -1,0 +1,278 @@
+import 'dart:ui';
+
+import 'package:app/core/application/poap/claim_poap_bloc/claim_poap_bloc.dart';
+import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/poap/input/poap_input.dart';
+import 'package:app/core/domain/token/entities/token_entities.dart';
+import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
+import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
+import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
+import 'package:app/core/presentation/widgets/poap/poap_quantity_bar.dart';
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/utils/media_utils.dart';
+import 'package:app/core/utils/string_utils.dart';
+import 'package:app/gen/assets.gen.dart';
+import 'package:app/gen/fonts.gen.dart';
+import 'package:app/i18n/i18n.g.dart';
+import 'package:app/theme/sizing.dart';
+import 'package:app/theme/spacing.dart';
+import 'package:app/theme/typo.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+class GuestEventPoapOfferItem extends StatelessWidget {
+  const GuestEventPoapOfferItem({
+    super.key,
+    required this.offer,
+    this.token,
+  });
+
+  final EventOffer offer;
+  final TokenComplex? token;
+
+  @override
+  Widget build(BuildContext context) {
+    if (token == null) return const SizedBox.shrink();
+
+    return BlocProvider(
+      create: (context) => ClaimPoapBloc(
+        network: token?.network ?? '',
+        contract: token?.contract ?? '',
+      )..add(
+          const ClaimPoapEvent.checkHasClaimed(),
+        ),
+      child: GuestEventPoapOfferItemView(
+        offer: offer,
+        token: token,
+      ),
+    );
+  }
+}
+
+class GuestEventPoapOfferItemView extends StatefulWidget {
+  const GuestEventPoapOfferItemView({
+    super.key,
+    required this.offer,
+    this.token,
+  });
+
+  final EventOffer offer;
+  final TokenComplex? token;
+
+  @override
+  State<GuestEventPoapOfferItemView> createState() =>
+      GuestEventPoapOfferItemState();
+}
+
+class GuestEventPoapOfferItemState extends State<GuestEventPoapOfferItemView>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    final t = Translations.of(context);
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return SizedBox(
+      width: 315.w,
+      height: 229.w,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(15.r),
+        child: Stack(
+          children: [
+            Positioned(
+              top: Spacing.smMedium,
+              left: Spacing.smMedium,
+              child: SizedBox(
+                child: FutureBuilder(
+                  future: MediaUtils.getNftMedia(
+                    widget.token?.metadata?.image,
+                    widget.token?.metadata?.animation_url,
+                  ),
+                  builder: (context, snapshot) => Container(
+                    width: Sizing.medium * 2,
+                    height: Sizing.medium * 2,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(
+                        LemonRadius.small,
+                      ),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(LemonRadius.xSmall),
+                      child: CachedNetworkImage(
+                        fit: BoxFit.cover,
+                        imageUrl: snapshot.data?.url ?? '',
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            BackdropFilter(
+              filter: ImageFilter.blur(
+                sigmaX: 50,
+                sigmaY: 50,
+              ),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: colorScheme.onPrimary.withOpacity(0.05),
+                  borderRadius: BorderRadius.circular(15.r),
+                ),
+                padding: EdgeInsets.symmetric(
+                  horizontal: Spacing.medium,
+                  vertical: Spacing.medium,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        FutureBuilder(
+                          future: MediaUtils.getNftMedia(
+                            widget.token?.metadata?.image,
+                            widget.token?.metadata?.animation_url,
+                          ),
+                          builder: (context, snapshot) => Container(
+                            width: Sizing.medium * 2,
+                            height: Sizing.medium * 2,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(
+                                LemonRadius.small,
+                              ),
+                            ),
+                            child: ClipRRect(
+                              borderRadius:
+                                  BorderRadius.circular(LemonRadius.xSmall),
+                              child: CachedNetworkImage(
+                                fit: BoxFit.cover,
+                                errorWidget: (_, __, ___) =>
+                                    ImagePlaceholder.defaultPlaceholder(),
+                                placeholder: (_, __) =>
+                                    ImagePlaceholder.defaultPlaceholder(),
+                                imageUrl: snapshot.data?.url ?? '',
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: Spacing.smMedium,
+                        ),
+                        Flexible(
+                          flex: 1,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                widget.token?.metadata?.name ?? '',
+                                style: Typo.mediumPlus.copyWith(
+                                  color: colorScheme.onPrimary,
+                                  fontFamily: FontFamily.nohemiVariable,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              SizedBox(height: Spacing.superExtraSmall),
+                              Text(
+                                widget.token?.metadata?.description ?? '',
+                                style: Typo.medium.copyWith(
+                                  color: colorScheme.onSecondary,
+                                ),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: Spacing.medium,
+                    ),
+                    PoapQuantityBar(
+                      network: widget.token?.network ?? '',
+                      contract: widget.token?.contract?.toLowerCase() ?? '',
+                      height: Sizing.xxSmall / 2,
+                      color: colorScheme.onPrimary,
+                      backgroundColor: colorScheme.onPrimary.withOpacity(0.09),
+                    ),
+                    SizedBox(
+                      height: Spacing.small,
+                    ),
+                    BlocBuilder<ClaimPoapBloc, ClaimPoapState>(
+                      builder: (context, state) {
+                        final claiming = state.claiming;
+                        final hasClaimed = state.claimed;
+                        final claimable = state.policy != null
+                            ? state.policy?.result?.boolean ?? false
+                            : !hasClaimed;
+
+                        if (hasClaimed) {
+                          return SizedBox(
+                            height: 42.w,
+                            child: LemonOutlineButton(
+                              leading: ThemeSvgIcon(
+                                color: colorScheme.onSurfaceVariant,
+                                builder: (filter) => Assets.icons.icDone
+                                    .svg(colorFilter: filter),
+                              ),
+                              label: StringUtils.capitalize(t.nft.claimed),
+                              textStyle: Typo.medium.copyWith(
+                                fontWeight: FontWeight.w600,
+                                fontFamily: FontFamily.nohemiVariable,
+                                color: colorScheme.onSurfaceVariant,
+                              ),
+                            ),
+                          );
+                        }
+
+                        return SizedBox(
+                          height: 42.w,
+                          child: Opacity(
+                            opacity: claimable && !claiming ? 1 : 0.5,
+                            child: LinearGradientButton(
+                              onTap: !claimable || claiming
+                                  ? null
+                                  : () {
+                                      context.read<ClaimPoapBloc>().add(
+                                            ClaimPoapEvent.claim(
+                                              input: ClaimInput(
+                                                address:
+                                                    widget.token?.contract ??
+                                                        '',
+                                                network:
+                                                    widget.token?.network ?? '',
+                                              ),
+                                            ),
+                                          );
+                                    },
+                              mode: GradientButtonMode.lavenderMode,
+                              label: claiming
+                                  ? t.common.processing
+                                  : StringUtils.capitalize(t.nft.claim),
+                              textStyle: Typo.medium.copyWith(
+                                fontWeight: FontWeight.w600,
+                                fontFamily: FontFamily.nohemiVariable,
+                                color: colorScheme.onPrimary.withOpacity(0.87),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

@@ -1,5 +1,4 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
-import 'package:app/core/domain/badge/entities/badge_entities.dart';
 import 'package:app/core/domain/poap/entities/poap_entities.dart';
 import 'package:app/core/domain/poap/input/poap_input.dart';
 import 'package:app/core/domain/poap/poap_enums.dart';
@@ -15,7 +14,8 @@ part 'claim_poap_bloc.freezed.dart';
 
 class ClaimPoapBloc extends Bloc<ClaimPoapEvent, ClaimPoapState> {
   ClaimPoapBloc({
-    required this.badge,
+    required this.network,
+    required this.contract,
   }) : super(const ClaimPoapState()) {
     on<ClaimPoapEventCheckHasClaimed>(_onCheckHasClaimed);
     on<ClaimPoapEventClaim>(
@@ -27,7 +27,9 @@ class ClaimPoapBloc extends Bloc<ClaimPoapEvent, ClaimPoapState> {
       },
     );
   }
-  final Badge badge;
+  final String network;
+  final String contract;
+
   final _poapRepository = getIt<PoapRepository>();
 
   Future<void> _onCheckHasClaimed(
@@ -40,21 +42,20 @@ class ClaimPoapBloc extends Bloc<ClaimPoapEvent, ClaimPoapState> {
         );
     if (userWallet == null) return;
 
-    Either<Failure, PoapPolicy>? poapPolicyData;
-    if (badge.claimable != true) {
-      poapPolicyData = await _poapRepository.getPoapPolicy(
-        input: GetPoapPolicyInput(
-          network: badge.network ?? '',
-          address: badge.contract?.toLowerCase() ?? '',
-          target: userWallet.toLowerCase(),
-        ),
-      );
-    }
+    Either<Failure, PoapPolicy?>? poapPolicyData;
+
+    poapPolicyData = await _poapRepository.getPoapPolicy(
+      input: GetPoapPolicyInput(
+        network: network,
+        address: contract.toLowerCase(),
+        target: userWallet.toLowerCase(),
+      ),
+    );
 
     final hasClaimedData = await _poapRepository.checkHasClaimedPoap(
       input: CheckHasClaimedPoapViewInput(
-        network: badge.network ?? '',
-        address: badge.contract?.toLowerCase() ?? '',
+        network: network,
+        address: contract.toLowerCase(),
         args: [
           [
             userWallet.toLowerCase(),
@@ -64,7 +65,7 @@ class ClaimPoapBloc extends Bloc<ClaimPoapEvent, ClaimPoapState> {
       fromServer: event.fromServer,
     );
 
-    final poapPolicy = poapPolicyData?.fold((l) => null, (r) => r);
+    final poapPolicy = poapPolicyData.fold((l) => null, (r) => r);
     final hasClaimed = hasClaimedData.fold((l) => null, (r) => r);
     emit(
       state.copyWith(

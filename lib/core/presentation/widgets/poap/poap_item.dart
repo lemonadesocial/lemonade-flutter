@@ -39,8 +39,10 @@ class PoapItem extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => ClaimPoapBloc(badge: badge)
-            ..add(
+          create: (context) => ClaimPoapBloc(
+            network: badge.network ?? '',
+            contract: badge.contract ?? '',
+          )..add(
               const ClaimPoapEvent.checkHasClaimed(),
             ),
         ),
@@ -122,7 +124,10 @@ class _PoapItemView extends StatelessWidget {
                           children: [
                             _PoapItemInfo(metadata: tokenDetail?.metadata),
                             SizedBox(height: Spacing.xSmall),
-                            PoapQuantityBar(badge: badge),
+                            PoapQuantityBar(
+                              network: badge.network ?? '',
+                              contract: badge.contract ?? '',
+                            ),
                             SizedBox(height: Spacing.small),
                             _PoapItemButtons(badge: badge),
                           ],
