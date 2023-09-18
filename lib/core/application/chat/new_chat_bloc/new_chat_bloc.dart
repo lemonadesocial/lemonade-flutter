@@ -57,7 +57,8 @@ class NewChatEvent with _$NewChatEvent {
 
 @freezed
 class NewChatState with _$NewChatState {
-  const factory NewChatState(
-      {required SearchUserDirectoryResponse? userSearchResult,
-      required List<String> selectedUsers,}) = _NewChatState;
+  const factory NewChatState({
+    required SearchUserDirectoryResponse? userSearchResult,
+    required List<String> selectedUsers,
+  }) = _NewChatState;
 }

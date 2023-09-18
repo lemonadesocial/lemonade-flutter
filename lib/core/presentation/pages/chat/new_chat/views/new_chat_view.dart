@@ -106,17 +106,19 @@ class NewChatView extends StatelessWidget {
 
         return SearchUserItem(
           isSelected: isSelected,
-          name: userResult?.displayName ?? userId.localpart ?? t.chat.unknownDevice,
+          name: userResult?.displayName ??
+              userId.localpart ??
+              t.chat.unknownDevice,
           avatarUrl: userResult?.avatarUrl,
           onTap: () {
             if (isSelected) {
               context.read<NewChatBloc>().add(
-                NewChatEvent.deselectUser(userId: userId),
-              );
+                    NewChatEvent.deselectUser(userId: userId),
+                  );
             } else {
               context.read<NewChatBloc>().add(
-                NewChatEvent.selectUser(userId: userId),
-              );
+                    NewChatEvent.selectUser(userId: userId),
+                  );
             }
           },
         );
