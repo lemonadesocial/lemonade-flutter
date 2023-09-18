@@ -45,17 +45,12 @@ class SearchUserItem extends StatelessWidget {
             buildAvatar(),
             SizedBox(width: Spacing.xSmall),
             Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    name,
-                    style: Typo.medium.copyWith(
-                      color: colorScheme.onPrimary,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                ],
+              child: Text(
+                name,
+                style: Typo.medium.copyWith(
+                  color: colorScheme.onPrimary,
+                  fontWeight: FontWeight.w800,
+                ),
               ),
             ),
             SizedBox(width: Spacing.xSmall),

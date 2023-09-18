@@ -9,15 +9,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class CreateChatButton extends StatelessWidget {
   const CreateChatButton({
     super.key,
-    this.onTap,
   });
-  final Function()? onTap;
 
   buildCustomButton() {
     return Container(
       width: 54.h,
       height: 54.h,
-      padding: const EdgeInsets.all(15),
+      padding: EdgeInsets.all(15.w),
       decoration: const BoxDecoration(
         shape: BoxShape.circle,
         gradient: LinearGradient(
@@ -134,10 +132,8 @@ abstract class MenuItems {
         const NewChatPageDialog().showAsBottomSheet(context);
         break;
       case MenuItemType.createRoom:
-        // Do something
         break;
       case MenuItemType.exploreRooms:
-        // Do something
         break;
     }
   }

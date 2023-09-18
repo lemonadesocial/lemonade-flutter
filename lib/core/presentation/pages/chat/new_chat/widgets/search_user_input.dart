@@ -1,5 +1,6 @@
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
+import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:matrix/matrix.dart';
@@ -54,17 +55,13 @@ class SearchUserInput extends StatelessWidget {
           TextField(
             cursorColor: colorScheme.onSurfaceVariant,
             onChanged: onChanged,
-            style: TextStyle(
-              fontWeight: FontWeight.w400,
-              color: colorScheme.onSurfaceVariant,
-            ),
+            style: Typo.medium.copyWith(color: colorScheme.onSurfaceVariant),
             decoration: InputDecoration(
               hintText: t.chat.searchPeople,
               hintStyle: TextStyle(
                 color: colorScheme.onSurfaceVariant,
               ),
               border: InputBorder.none,
-              hoverColor: Colors.red,
               contentPadding: EdgeInsets.symmetric(horizontal: 12.w),
             ),
           ),

@@ -11,6 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:matrix/matrix.dart' as sdk;
 import 'package:matrix/matrix.dart';
+import 'package:app/theme/typo.dart';
 
 class NewChatView extends StatelessWidget {
   final debouncer = Debouncer(milliseconds: 300);
@@ -137,10 +138,7 @@ class StartButton extends StatelessWidget {
         alignment: Alignment.centerRight,
         child: Text(
           t.common.start,
-          style: TextStyle(
-            color: colorScheme.onSurface,
-            fontSize: 16.0, // Adjust the font size as needed
-          ),
+          style: Typo.mediumPlus.copyWith(color: colorScheme.onSurface),
         ),
       ),
     );
