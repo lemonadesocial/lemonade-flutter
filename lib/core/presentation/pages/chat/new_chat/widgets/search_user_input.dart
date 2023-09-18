@@ -8,9 +8,11 @@ class SearchUserInput extends StatelessWidget {
   final ValueChanged<String> onChanged;
   final List<Profile> selectedUsers;
 
-  const SearchUserInput(
-      {Key? key, required this.onChanged, required this.selectedUsers})
-      : super(key: key);
+  const SearchUserInput({
+    Key? key,
+    required this.onChanged,
+    required this.selectedUsers,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
