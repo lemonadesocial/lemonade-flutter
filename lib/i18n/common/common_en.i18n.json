@@ -64,6 +64,8 @@
         "other": "hosts"
     },
     "viewMore": "View more",
+    "done": "Done",
+    "processing": "Processing",
     "selectItem": "Select item",
     "start": "Start"
 }

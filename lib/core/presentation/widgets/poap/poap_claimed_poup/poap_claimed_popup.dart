@@ -1,4 +1,3 @@
-import 'package:app/core/domain/poap/entities/poap_entities.dart';
 import 'package:app/core/domain/token/entities/token_entities.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
@@ -16,14 +15,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class PoapClaimedPopup extends StatelessWidget {
   const PoapClaimedPopup({
     super.key,
-    this.claim,
     this.token,
     this.onClose,
     this.onTransfer,
     this.onView,
   });
 
-  final Claim? claim;
   final TokenDetail? token;
   final Function()? onClose;
   final Function()? onTransfer;

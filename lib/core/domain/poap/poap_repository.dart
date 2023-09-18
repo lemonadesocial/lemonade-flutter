@@ -17,9 +17,15 @@ abstract class PoapRepository {
     required ClaimInput input,
   });
 
+  Future<Either<Failure, Transfer>> transfer({
+    required TransferInput input,
+  });
+
   Future<Either<Failure, PoapPolicy>> getPoapPolicy({
     required GetPoapPolicyInput input,
   });
 
   Stream<Either<Failure, Claim?>> watchClaimModification();
+
+  Stream<Either<Failure, Transfer?>> watchTransferModification();
 }
