@@ -31,6 +31,7 @@ class BottomBarState extends State<BottomBar>
   late AnimationController _animationController;
   late Animation<double> _animation;
   bool _isTabChanged = false; // for initial render didn't change any tab yet
+  var _isHomeScreenFocused = true;
 
   @override
   void initState() {
@@ -97,11 +98,6 @@ class BottomBarState extends State<BottomBar>
         onTap: () {
           _handleTabTap(context, tabData);
         },
-        onDoubleTap: tabData.tab != AppTab.home
-            ? null
-            : () => context
-                .read<NewsfeedListingBloc>()
-                .add(NewsfeedListingEvent.scrollToTop(scrollToTopEvent: true)),
         child: Container(
           color: Colors.transparent,
           child: Stack(
@@ -147,6 +143,16 @@ class BottomBarState extends State<BottomBar>
 
   void _handleTabTap(BuildContext context, TabData tabData) {
     Vibrate.feedback(FeedbackType.light);
+
+    /// Handle scroll to top on Home Screen
+    if (_isHomeScreenFocused && tabData.tab == AppTab.home) {
+      context
+          .read<NewsfeedListingBloc>()
+          .add(NewsfeedListingEvent.scrollToTop(scrollToTopEvent: true));
+    }
+    _isHomeScreenFocused = tabData.tab == AppTab.home;
+
+    /// Handle navigation
     final authState = BlocProvider.of<AuthBloc>(context).state;
     if (tabData.tab == AppTab.profile ||
         tabData.tab == AppTab.notification ||
@@ -166,7 +172,7 @@ class BottomBarState extends State<BottomBar>
     }
   }
 
-  void _triggerAnimation(tabData) {
+  void _triggerAnimation(TabData tabData) {
     setState(() {
       _isTabChanged = true;
       _selectedTab = tabData.tab;
