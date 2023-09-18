@@ -55,7 +55,6 @@ class ChatListItem extends StatelessWidget {
       );
       if (joinResult.error != null) return;
     }
-    print("room.id : ${room.id}");
     AutoRouter.of(context).navigateNamed('/chat/detail/${room.id}');
   }
 

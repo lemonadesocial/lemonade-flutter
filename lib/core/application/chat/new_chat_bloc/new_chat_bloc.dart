@@ -73,9 +73,10 @@ class NewChatBloc extends Bloc<NewChatEvent, NewChatState> {
       context: context,
       future: () async {
         final roomId = await matrixService.client.createGroupChat(
-            visibility: sdk.Visibility.private,
-            preset: sdk.CreateRoomPreset.privateChat,
-            invite: selectedUserIds);
+          visibility: sdk.Visibility.private,
+          preset: sdk.CreateRoomPreset.privateChat,
+          invite: selectedUserIds,
+        );
         await matrixService.client.joinRoom(roomId);
         return roomId;
       },

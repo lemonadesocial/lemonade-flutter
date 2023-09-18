@@ -10,7 +10,8 @@ class SearchUserItem extends StatelessWidget {
   final bool isSelected;
   final void Function() onTap;
 
-  SearchUserItem({
+  const SearchUserItem({
+    super.key,
     required this.name,
     this.avatarUrl,
     required this.isSelected,
