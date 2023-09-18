@@ -1,4 +1,6 @@
 import 'package:app/core/presentation/widgets/chat/matrix_avatar.dart';
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/gen/assets.gen.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
@@ -11,14 +13,14 @@ class SearchUserItem extends StatelessWidget {
   final void Function() onTap;
 
   const SearchUserItem({
-    super.key,
     required this.name,
     this.avatarUrl,
     required this.isSelected,
     required this.onTap,
-  });
+    Key? key,
+  }) : super(key: key);
 
-  Widget _buildAvatar() {
+  Widget buildAvatar() {
     return MatrixAvatar(
       size: 27.w,
       radius: 6.w,
@@ -40,7 +42,7 @@ class SearchUserItem extends StatelessWidget {
         ),
         child: Row(
           children: [
-            _buildAvatar(),
+            buildAvatar(),
             SizedBox(width: Spacing.xSmall),
             Expanded(
               child: Column(
@@ -49,7 +51,7 @@ class SearchUserItem extends StatelessWidget {
                   Text(
                     name,
                     style: Typo.medium.copyWith(
-                      color: Theme.of(context).colorScheme.onPrimary,
+                      color: colorScheme.onPrimary,
                       fontWeight: FontWeight.w800,
                     ),
                   ),
@@ -58,22 +60,13 @@ class SearchUserItem extends StatelessWidget {
             ),
             SizedBox(width: Spacing.xSmall),
             Container(
-              width: 24.w,
-              height: 24.w,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: colorScheme.onPrimary,
-                  width: 2.0,
-                ),
-              ),
               child: isSelected
-                  ? Icon(
-                      Icons.check,
-                      size: 18.w,
-                      color: colorScheme.onPrimary,
+                  ? ThemeSvgIcon(
+                      builder: (filter) => Assets.icons.icChecked.svg(),
                     )
-                  : null,
+                  : ThemeSvgIcon(
+                      builder: (filter) => Assets.icons.icUncheck.svg(),
+                    ),
             ),
           ],
         ),

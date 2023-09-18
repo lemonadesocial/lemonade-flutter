@@ -27,50 +27,55 @@ class NewChatView extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
-
-    return Scaffold(
-      appBar: LemonAppBar(
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context)
+            .unfocus(); // Dismiss keyboard when tapped outside
+      },
+      child: Scaffold(
+        appBar: LemonAppBar(
+          backgroundColor: colorScheme.onPrimaryContainer,
+          title: t.chat.newMessage,
+          actions: [
+            StartButton(
+              onTap: () async {
+                context.read<NewChatBloc>().startChat(context);
+              },
+            ),
+          ],
+        ),
         backgroundColor: colorScheme.onPrimaryContainer,
-        title: t.chat.newMessage,
-        actions: [
-          StartButton(
-            onTap: () async {
-              context.read<NewChatBloc>().startChat(context);
-            },
-          ),
-        ],
-      ),
-      backgroundColor: colorScheme.onPrimaryContainer,
-      body: BlocBuilder<NewChatBloc, NewChatState>(
-        builder: (context, newChatState) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: EdgeInsets.only(
-                  top: 6.h,
-                  bottom: 12.h,
-                  left: 18.w,
-                  right: 18.w,
-                ),
-                child: SearchUserInput(
-                  selectedUsers: newChatState.selectedUsers,
-                  onChanged: (value) => onSearchChanged(context, value),
-                ),
-              ),
-              if (newChatState.isSearching) ...[
+        body: BlocBuilder<NewChatBloc, NewChatState>(
+          builder: (context, newChatState) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
                 Padding(
-                  padding: EdgeInsets.only(top: Spacing.medium),
-                  child: Loading.defaultLoading(context),
-                )
-              ] else if (newChatState.userSearchResult != null) ...[
-                Expanded(
-                  child: _buildUserList(newChatState, context),
+                  padding: EdgeInsets.only(
+                    top: 6.h,
+                    bottom: 12.h,
+                    left: 18.w,
+                    right: 18.w,
+                  ),
+                  child: SearchUserInput(
+                    selectedUsers: newChatState.selectedUsers,
+                    onChanged: (value) => onSearchChanged(context, value),
+                  ),
                 ),
+                if (newChatState.isSearching) ...[
+                  Padding(
+                    padding: EdgeInsets.only(top: Spacing.medium),
+                    child: Loading.defaultLoading(context),
+                  )
+                ] else if (newChatState.userSearchResult != null) ...[
+                  Expanded(
+                    child: _buildUserList(newChatState, context),
+                  ),
+                ],
               ],
-            ],
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }
