@@ -1,6 +1,7 @@
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LemonButton extends StatelessWidget {
   final String label;
@@ -21,8 +22,7 @@ class LemonButton extends StatelessWidget {
       behavior: HitTestBehavior.translucent,
       onTap: onTap,
       child: Container(
-        width: 107,
-        height: 42,
+        width: 107.w,
         padding: EdgeInsets.symmetric(vertical: Spacing.xSmall),
         clipBehavior: Clip.antiAlias,
         decoration: ShapeDecoration(
