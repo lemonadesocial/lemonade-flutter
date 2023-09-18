@@ -19,27 +19,27 @@ class DynamicSliverAppBar extends SliverAppBar {
 
 class DynamicSliverAppBarState extends State<DynamicSliverAppBar> {
   final GlobalKey _childKey = GlobalKey();
-  bool isHeightCalculated = false;
   double? height;
 
   @override
-  Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      if (!isHeightCalculated) {
-        isHeightCalculated = true;
-        setState(() {
-          height = (_childKey.currentContext?.findRenderObject() as RenderBox)
-              .size
-              .height;
-        });
-      }
-    });
+  void initState() {
+    super.initState();
+    calculateHeight();
+  }
 
+  @override
+  void didUpdateWidget(DynamicSliverAppBar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    calculateHeight();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return SliverAppBar(
       leading: const SizedBox.shrink(),
       floating: widget.floating,
       forceElevated: widget.forceElevated,
-      expandedHeight: isHeightCalculated ? height : widget.maxHeight,
+      expandedHeight: height ?? widget.maxHeight,
       flexibleSpace: FlexibleSpaceBar(
         background: Column(
           children: [
@@ -52,5 +52,15 @@ class DynamicSliverAppBarState extends State<DynamicSliverAppBar> {
         ),
       ),
     );
+  }
+
+  void calculateHeight() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      setState(() {
+        height = (_childKey.currentContext?.findRenderObject() as RenderBox)
+            .size
+            .height;
+      });
+    });
   }
 }
