@@ -24,7 +24,6 @@ class LemonChip extends StatelessWidget {
           horizontal: Spacing.xSmall,
           vertical: Spacing.extraSmall,
         ),
-        height: Sizing.medium,
         constraints: BoxConstraints(minWidth: Sizing.large),
         decoration: BoxDecoration(
           color: isActive ? themeColor.onSurface : themeColor.surface,
