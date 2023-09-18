@@ -20,8 +20,8 @@ class SearchUserItem extends StatelessWidget {
 
   Widget _buildAvatar() {
     return MatrixAvatar(
-      size: 42.w,
-      radius: 42.w,
+      size: 27.w,
+      radius: 6.w,
       mxContent: avatarUrl,
       name: name,
       fontSize: Typo.small.fontSize!,

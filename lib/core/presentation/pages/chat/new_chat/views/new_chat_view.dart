@@ -1,9 +1,11 @@
 import 'package:app/core/application/chat/new_chat_bloc/new_chat_bloc.dart';
+import 'package:app/core/presentation/pages/chat/new_chat/widgets/search_user_input.dart';
 import 'package:app/core/presentation/pages/chat/new_chat/widgets/search_user_item.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/utils/debouncer.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -44,11 +46,23 @@ class NewChatView extends StatelessWidget {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SearchField(
-                onChanged: (value) => onSearchChanged(context, value),
+              Padding(
+                padding: EdgeInsets.only(
+                  top: 6.h,
+                  bottom: 12.h,
+                  left: 18.w,
+                  right: 18.w,
+                ),
+                child: SearchUserInput(
+                  selectedUsers: newChatState.selectedUsers,
+                  onChanged: (value) => onSearchChanged(context, value),
+                ),
               ),
               if (newChatState.isSearching) ...[
-                Loading.defaultLoading(context),
+                Padding(
+                  padding: EdgeInsets.only(top: Spacing.medium),
+                  child: Loading.defaultLoading(context),
+                )
               ] else if (newChatState.userSearchResult != null) ...[
                 Expanded(
                   child: _buildUserList(newChatState, context),
@@ -96,23 +110,6 @@ class NewChatView extends StatelessWidget {
   }
 }
 
-class SearchField extends StatelessWidget {
-  final ValueChanged<String> onChanged;
-
-  const SearchField({super.key, required this.onChanged});
-
-  @override
-  Widget build(BuildContext context) {
-    return TextField(
-      onChanged: onChanged,
-      decoration: const InputDecoration(
-        hintText: 'Search users',
-        prefixIcon: Icon(Icons.search),
-      ),
-    );
-  }
-}
-
 class StartButton extends StatelessWidget {
   final Function() onTap;
 
@@ -128,7 +125,7 @@ class StartButton extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 15.w),
         alignment: Alignment.centerRight,
         child: Text(
-          "Start",
+          t.common.start,
           style: TextStyle(
             color: colorScheme.onSurface,
             fontSize: 16.0, // Adjust the font size as needed
