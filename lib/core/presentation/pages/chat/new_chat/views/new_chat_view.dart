@@ -60,6 +60,11 @@ class NewChatView extends StatelessWidget {
                   child: SearchUserInput(
                     selectedUsers: newChatState.selectedUsers,
                     onChanged: (value) => onSearchChanged(context, value),
+                    onUserTap: (Profile user) {
+                      context.read<NewChatBloc>().add(
+                            NewChatEvent.deselectUser(user: user),
+                          );
+                    },
                   ),
                 ),
                 if (newChatState.isSearching) ...[
@@ -99,6 +104,7 @@ class NewChatView extends StatelessWidget {
               t.chat.unknownDevice,
           avatarUrl: userResult?.avatarUrl,
           onTap: () {
+            FocusScope.of(context).unfocus();
             if (isSelected) {
               context.read<NewChatBloc>().add(
                     NewChatEvent.deselectUser(user: userResult!),

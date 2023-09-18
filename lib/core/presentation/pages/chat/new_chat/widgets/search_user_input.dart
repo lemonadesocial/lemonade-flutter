@@ -7,11 +7,13 @@ import 'package:matrix/matrix.dart';
 class SearchUserInput extends StatelessWidget {
   final ValueChanged<String> onChanged;
   final List<Profile> selectedUsers;
+  final Function(Profile) onUserTap;
 
   const SearchUserInput({
     Key? key,
     required this.onChanged,
     required this.selectedUsers,
+    required this.onUserTap,
   }) : super(key: key);
 
   @override
@@ -42,7 +44,9 @@ class SearchUserInput extends StatelessWidget {
                       borderRadius: BorderRadius.all(Radius.circular(6.r)),
                       side: BorderSide(color: LemonColor.white09),
                     ),
-                    onSelected: (bool value) {},
+                    onSelected: (bool value) {
+                      onUserTap(user);
+                    },
                   ),
               ],
             ),
