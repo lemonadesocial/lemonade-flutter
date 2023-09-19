@@ -86,7 +86,10 @@ class _ProfileNftCreatedListViewState extends State<_ProfileNftCreatedList> {
                 ),
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
-                    return ProfileNftItem(media: mediaList[index]);
+                    return ProfileNftItem(
+                      mediaList: mediaList,
+                      index: index,
+                    );
                   },
                   childCount: mediaList.length,
                 ),
