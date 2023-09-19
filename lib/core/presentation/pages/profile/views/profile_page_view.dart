@@ -18,6 +18,7 @@ import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
 class ProfilePageView extends StatefulWidget {
@@ -40,11 +41,6 @@ class _ProfilePageViewState extends State<ProfilePageView>
     vsync: this,
     initialIndex: 0,
   );
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   void dispose() {
@@ -98,7 +94,7 @@ class _ProfilePageViewState extends State<ProfilePageView>
                             ),
                           ),
                           DynamicSliverAppBar(
-                            maxHeight: 250,
+                            maxHeight: 250.h,
                             floating: true,
                             forceElevated: innerBoxIsScrolled,
                             child: ProfilePageHeader(user: userProfile),

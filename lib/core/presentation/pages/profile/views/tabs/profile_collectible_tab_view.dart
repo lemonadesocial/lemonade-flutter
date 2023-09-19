@@ -5,13 +5,11 @@ import 'package:app/core/presentation/pages/profile/views/list/profile_nft_creat
 import 'package:app/core/presentation/pages/profile/views/list/profile_nft_on_sale_list_view.dart';
 import 'package:app/core/presentation/pages/profile/views/list/profile_nft_sold_list_view.dart';
 import 'package:app/core/presentation/pages/profile/views/tabs/base_sliver_tab_view.dart';
-import 'package:app/core/presentation/widgets/lemon_chip_widget.dart';
-import 'package:app/i18n/i18n.g.dart';
-import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 
 class ProfileCollectibleTabView extends StatefulWidget {
   final User user;
+
   const ProfileCollectibleTabView({
     super.key,
     required this.user,
@@ -23,58 +21,42 @@ class ProfileCollectibleTabView extends StatefulWidget {
 }
 
 class _ProfileCollectibleTabViewState extends State<ProfileCollectibleTabView> {
-  double get _filterBarHeight => 72;
+  // double get _filterBarHeight => 72.h;
   TokensListingType tokensListingType = TokensListingType.created;
-
-  _selectTokenListingType(TokensListingType type) {
-    setState(() {
-      tokensListingType = type;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final t = Translations.of(context);
     return BaseSliverTabView(
       name: "collectible",
       children: [
-        SliverPadding(
-          padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
-          sliver: SliverAppBar(
-            pinned: true,
-            leading: const SizedBox.shrink(),
-            collapsedHeight: _filterBarHeight,
-            expandedHeight: _filterBarHeight,
-            flexibleSpace: GestureDetector(
-              onTap: () {},
-              child: Container(
-                color: colorScheme.primary,
-                child: Column(
-                  children: [
-                    SizedBox(height: Spacing.smMedium),
-                    Flexible(
-                      child: Row(
-                        children: TokensListingType.values.map((item) {
-                          return Container(
-                            margin:
-                                EdgeInsets.only(right: Spacing.superExtraSmall),
-                            child: LemonChip(
-                              onTap: () => _selectTokenListingType(item),
-                              label: t['nft.${item.name}'],
-                              isActive: tokensListingType == item,
-                            ),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                    SizedBox(height: Spacing.smMedium),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
+        // TODO(Ron): temporary remove this section to match design
+        // SliverPadding(
+        //   padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
+        //   sliver: SliverAppBar(
+        //     pinned: true,
+        //     leading: const SizedBox.shrink(),
+        //     collapsedHeight: _filterBarHeight,
+        //     expandedHeight: _filterBarHeight,
+        //     flexibleSpace: Container(
+        //       color: colorScheme.primary,
+        //       child: ListView.separated(
+        //         padding: EdgeInsets.symmetric(vertical: Spacing.small),
+        //         itemBuilder: (context, index) => LemonChip(
+        //           onTap: () => setState(() {
+        //             tokensListingType = TokensListingType.values[index];
+        //           }),
+        //           label: t['nft.${TokensListingType.values[index].name}'],
+        //           isActive:
+        //               tokensListingType == TokensListingType.values[index],
+        //         ),
+        //         separatorBuilder: (_, __) =>
+        //             SizedBox(width: Spacing.superExtraSmall),
+        //         itemCount: TokensListingType.values.length,
+        //         scrollDirection: Axis.horizontal,
+        //       ),
+        //     ),
+        //   ),
+        // ),
         if (tokensListingType == TokensListingType.onSale)
           ProfileNftOnSaleListView(user: widget.user),
         if (tokensListingType == TokensListingType.created)
