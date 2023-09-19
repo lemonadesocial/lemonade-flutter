@@ -3,6 +3,7 @@ import 'package:app/core/domain/token/input/watch_orders_input.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/core/service/pagination/pagination_service.dart';
 import 'package:app/core/service/token/token_service.dart';
+import 'package:app/core/utils/media_utils.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -22,6 +23,7 @@ class OrdersListingSubscriptionBloc extends Bloc<OrdersListingSubscriptionEvent,
     required this.defaultInput,
   }) : super(const OrdersListingSubscriptionState.loading()) {
     on<OrdersListingSubscriptionEventStart>(_onStartSubscription);
+    on<OrdersListingSubscriptionEventFetchComplete>(_onFetchComplete);
   }
 
   Stream<Either<Failure, List<OrderComplex>>> _watchOrders(
@@ -32,23 +34,38 @@ class OrdersListingSubscriptionBloc extends Bloc<OrdersListingSubscriptionEvent,
     return tokenService.watchOrders(input: input.copyWith(skip: skip));
   }
 
-  _onStartSubscription(
+  Future<void> _onStartSubscription(
     OrdersListingSubscriptionEventStart event,
     Emitter emit,
   ) async {
-    await emit.forEach(
-      paginationService.fetchStream(defaultInput),
-      onData: (streamEvent) {
-        return streamEvent.fold(
-          (l) {
-            return const OrdersListingSubscriptionState.failure();
-          },
-          (orders) {
-            return OrdersListingSubscriptionState.fetched(orders: orders);
-          },
-        );
-      },
-    );
+    final result = paginationService.fetchStream(defaultInput);
+    result.listen((streamEvent) {
+      return streamEvent.fold(
+        (l) => const OrdersListingSubscriptionState.failure(),
+        (orders) async {
+          final mediaList = <Media>[];
+          await Future.forEach<OrderComplex>(orders, (order) async {
+            await MediaUtils.getNftMedia(
+              order.token.metadata?.image,
+              order.token.metadata?.animation_url,
+            ).then((media) => mediaList.add(media));
+          }).whenComplete(
+            () => add(
+              OrdersListingSubscriptionEvent.fetchComplete(
+                mediaList: mediaList,
+              ),
+            ),
+          );
+        },
+      );
+    });
+  }
+
+  void _onFetchComplete(
+    OrdersListingSubscriptionEventFetchComplete event,
+    Emitter emit,
+  ) {
+    emit(OrdersListingSubscriptionState.fetched(mediaList: event.mediaList));
   }
 }
 
@@ -57,15 +74,21 @@ class OrdersListingSubscriptionEvent with _$OrdersListingSubscriptionEvent {
   const factory OrdersListingSubscriptionEvent.start({
     WatchOrdersInput? input,
   }) = OrdersListingSubscriptionEventStart;
+
+  const factory OrdersListingSubscriptionEvent.fetchComplete({
+    required List<Media> mediaList,
+  }) = OrdersListingSubscriptionEventFetchComplete;
 }
 
 @freezed
 class OrdersListingSubscriptionState with _$OrdersListingSubscriptionState {
   const factory OrdersListingSubscriptionState.loading() =
       OrdersListingSubscriptionStateLoading;
+
   const factory OrdersListingSubscriptionState.fetched({
-    required List<OrderComplex> orders,
+    required List<Media> mediaList,
   }) = OrdersListingSubscriptionStateFetched;
+
   const factory OrdersListingSubscriptionState.failure() =
       OrdersListingSubscriptionStateFailure;
 }

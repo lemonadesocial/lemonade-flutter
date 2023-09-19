@@ -21,28 +21,6 @@ class Media {
 }
 
 class MediaUtils {
-  static Media getMediaType(
-    String? imageUrl,
-    String? animationUrl,
-  ) {
-    if (imageUrl == null && animationUrl == null) {
-      return Media(type: MediaType.unknown);
-    }
-    if (imageUrl != null && animationUrl == null) {
-      return Media(
-        type: MediaType.image,
-        url: IpfsUtils.getFetchableUrl(imageUrl).href,
-      );
-    }
-    FetchableUrl fetchableUrl = IpfsUtils.getFetchableUrl(animationUrl ?? '');
-    String protocol = fetchableUrl.protocol;
-    String href = fetchableUrl.href;
-
-    final type = imageUrl?.split('.');
-    print('type: ${type?.last}');
-    return Media(type: MediaType.unknown);
-  }
-
   static Future<Media> getNftMedia(
     String? imageUrl,
     String? animationUrl,
@@ -68,7 +46,6 @@ class MediaUtils {
         HttpClientResponse response = await request.close();
         ContentType? contentType = response.headers.contentType;
 
-        print('contentType: ${contentType?.value}');
         if (contentType != null && contentType.value.startsWith('video/')) {
           return Media(
             type: MediaType.video,

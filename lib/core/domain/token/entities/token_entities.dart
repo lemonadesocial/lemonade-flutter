@@ -55,10 +55,6 @@ class TokenComplex {
             .toList(),
         uri: dto.uri,
       );
-  @override
-  String toString() {
-    return 'TokenComplex{metadata: $metadata}';
-  }
 
   final String? id;
   final String? network;
@@ -348,9 +344,4 @@ class TokenSimple {
   final String? order;
   final List<TokenRoyalty>? royalties;
   final String? uri;
-
-  @override
-  String toString() {
-    return 'TokenSimple{metadata: $metadata}';
-  }
 }

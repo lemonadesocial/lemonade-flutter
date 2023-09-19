@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:app/core/application/common/scroll_notification_bloc/scroll_notification_bloc.dart';
 import 'package:app/core/application/token/tokens_listing_bloc/tokens_listing_bloc.dart';
 import 'package:app/core/domain/token/input/get_tokens_input.dart';
@@ -9,13 +7,11 @@ import 'package:app/core/presentation/pages/profile/widgets/profile_nft_item.dar
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/service/token/token_service.dart';
-import 'package:app/core/utils/media_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:dartz/dartz.dart' as dartz;
 
 class ProfileNftCollectedListView extends StatelessWidget {
   final User user;
@@ -75,8 +71,8 @@ class _ProfileNftCreatedListViewState extends State<_ProfileNftCollectedList> {
             failure: () => SliverToBoxAdapter(
               child: Center(child: Text(t.common.somethingWrong)),
             ),
-            fetched: (tokens) {
-              if (tokens.isEmpty) {
+            fetched: (mediaList) {
+              if (mediaList.isEmpty) {
                 return SliverFillRemaining(
                   hasScrollBody: false,
                   child: EmptyList(emptyText: t.nft.noCollectible),
@@ -90,12 +86,9 @@ class _ProfileNftCreatedListViewState extends State<_ProfileNftCollectedList> {
                 ),
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
-                    final nftToken = tokens[index];
-                    log('nftToken: ${nftToken.toString()}');
-                    print('index: $index');
-                    return ProfileNftItem(nftToken: dartz.Left(nftToken));
+                    return ProfileNftItem(media: mediaList[index]);
                   },
-                  childCount: tokens.length,
+                  childCount: mediaList.length,
                 ),
               );
             },

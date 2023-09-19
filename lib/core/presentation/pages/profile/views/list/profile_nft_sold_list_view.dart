@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:app/core/application/common/scroll_notification_bloc/scroll_notification_bloc.dart';
 import 'package:app/core/application/token/orders_listing_subscription_bloc/orders_listing_subscription_bloc.dart';
 import 'package:app/core/domain/common/common_enums.dart';
@@ -16,7 +14,6 @@ import 'package:app/injection/register_module.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:dartz/dartz.dart' as dartz;
 
 class ProfileNftSoldListView extends StatelessWidget {
   final User user;
@@ -79,8 +76,8 @@ class _ProfileNftSoldList extends StatelessWidget {
             failure: () => SliverToBoxAdapter(
               child: Center(child: Text(t.common.somethingWrong)),
             ),
-            fetched: (orders) {
-              if (orders.isEmpty) {
+            fetched: (mediaList) {
+              if (mediaList.isEmpty) {
                 return SliverFillRemaining(
                   hasScrollBody: false,
                   child: EmptyList(emptyText: t.nft.noCollectible),
@@ -94,11 +91,9 @@ class _ProfileNftSoldList extends StatelessWidget {
                 ),
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
-                    final order = orders[index];
-                    log('nftToken: ${order.token.toString()}');
-                    return ProfileNftItem(nftToken: dartz.Right(order.token));
+                    return ProfileNftItem(media: mediaList[index]);
                   },
-                  childCount: orders.length,
+                  childCount: mediaList.length,
                 ),
               );
             },

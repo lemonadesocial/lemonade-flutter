@@ -3,6 +3,7 @@ import 'package:app/core/domain/token/input/get_tokens_input.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/core/service/pagination/pagination_service.dart';
 import 'package:app/core/service/token/token_service.dart';
+import 'package:app/core/utils/media_utils.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,28 +22,41 @@ class TokensListingBloc extends Bloc<TokensListingEvent, TokensListingState> {
     required this.defaultInput,
   }) : super(const TokensListingState.loading()) {
     on<TokensListingEventFetch>(_onFetch, transformer: droppable());
+    on<TokensListingEventFetchComplete>(_onFetchComplete);
   }
 
   Future<Either<Failure, List<TokenComplex>>> _getTokens(
     int skip,
     endReached, {
     required GetTokensInput input,
-  }) async {
-    return await tokenService.getTokens(input: input.copyWith(skip: skip));
+  }) {
+    return tokenService.getTokens(input: input.copyWith(skip: skip));
   }
 
-  _onFetch(TokensListingEventFetch event, Emitter emit) async {
+  Future<void> _onFetch(TokensListingEventFetch event, Emitter emit) async {
     final result = await paginationService.fetch(defaultInput);
 
     result.fold((l) {
       emit(const TokensListingState.failure());
-    }, (tokens) {
-      emit(
-        TokensListingState.fetched(
-          tokens: tokens,
-        ),
+    }, (tokenList) async {
+      final mediaList = <Media>[];
+      await Future.forEach<TokenComplex>(tokenList, (token) async {
+        await MediaUtils.getNftMedia(
+          token.metadata?.image,
+          token.metadata?.animation_url,
+        ).then((media) => mediaList.add(media));
+      }).whenComplete(
+        () => add(TokensListingEvent.fetchComplete(mediaList: mediaList)),
       );
     });
+  }
+
+  void _onFetchComplete(TokensListingEventFetchComplete event, Emitter emit) {
+    emit(
+      TokensListingState.fetched(
+        mediaList: event.mediaList,
+      ),
+    );
   }
 }
 
@@ -50,13 +64,19 @@ class TokensListingBloc extends Bloc<TokensListingEvent, TokensListingState> {
 class TokensListingEvent with _$TokensListingEvent {
   const factory TokensListingEvent.fetch({GetTokensInput? input}) =
       TokensListingEventFetch;
+
+  const factory TokensListingEvent.fetchComplete({
+    required List<Media> mediaList,
+  }) = TokensListingEventFetchComplete;
 }
 
 @freezed
 class TokensListingState with _$TokensListingState {
   const factory TokensListingState.loading() = TokensListingStateLoading;
+
   const factory TokensListingState.fetched({
-    required List<TokenComplex> tokens,
+    required List<Media> mediaList,
   }) = TokensListingStateFetched;
+
   const factory TokensListingState.failure() = TokensListingStateFailure;
 }

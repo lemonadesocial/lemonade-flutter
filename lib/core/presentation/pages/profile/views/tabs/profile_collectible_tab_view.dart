@@ -5,12 +5,11 @@ import 'package:app/core/presentation/pages/profile/views/list/profile_nft_creat
 import 'package:app/core/presentation/pages/profile/views/list/profile_nft_on_sale_list_view.dart';
 import 'package:app/core/presentation/pages/profile/views/list/profile_nft_sold_list_view.dart';
 import 'package:app/core/presentation/pages/profile/views/tabs/base_sliver_tab_view.dart';
+import 'package:app/core/presentation/widgets/lemon_chip_widget.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import '../../../../widgets/lemon_chip_widget.dart';
 
 class ProfileCollectibleTabView extends StatefulWidget {
   final User user;
@@ -73,7 +72,7 @@ class _ProfileCollectibleTabViewState extends State<ProfileCollectibleTabView> {
           ProfileNftSoldListView(user: widget.user),
         const SliverToBoxAdapter(
           child: SizedBox(height: 92),
-        )
+        ),
       ],
     );
   }
