@@ -9,7 +9,6 @@ import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/utils/chat/room_status_extension.dart';
 import 'package:app/core/utils/stream_extension.dart';
 import 'package:app/gen/assets.gen.dart';
-import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +21,6 @@ class ChatMessageView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final t = Translations.of(context);
     return Scaffold(
       backgroundColor: colorScheme.primary,
       appBar: LemonAppBar(
