@@ -28,5 +28,8 @@
         "invite": "Invite",
         "leaderBoard": "Leaderboard"
     },
-    "confirmed": "confirmed"
+    "confirmed": "confirmed",
+    "eventBuyTickets": {
+        "selectTickets": "Select tickets"
+    }
 }
