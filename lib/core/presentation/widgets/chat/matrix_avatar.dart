@@ -100,6 +100,7 @@ class MatrixAvatar extends StatelessWidget {
   }
 
   Widget _buildBottomRightCorner(ColorScheme colorScheme) {
+    if (isDirectChat == null) return const SizedBox();
     // Render online/offline dot
     if (isDirectChat == true) {
       final isOnline = presence == PresenceType.online;
