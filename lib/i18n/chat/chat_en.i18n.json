@@ -48,5 +48,7 @@
     "youAreInvitedToThisChat": "You are invited to this chat",
     "unknownDevice": "Unknown device",
     "newMessage": "New message",
-    "searchPeople": "Search people"
+    "searchPeople": "Search people",
+    "chatDetails": "Chat details",
+    "leave": "Leave"
 }
