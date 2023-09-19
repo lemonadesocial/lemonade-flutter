@@ -29,7 +29,8 @@
         "shareProfile": "Share profile",
         "follow": "Follow",
         "cancel": "Cancel",
-        "goToSettings": "Go to settings"
+        "goToSettings": "Go to settings",
+        "ok": "Ok"
     },
     "followed": "Followed",
     "anonymous": "anonymous",
@@ -67,5 +68,6 @@
     "done": "Done",
     "processing": "Processing",
     "selectItem": "Select item",
-    "start": "Start"
+    "start": "Start",
+    "areYouSure": "Are you sure ?"
 }

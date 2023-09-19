@@ -104,6 +104,7 @@ dependencies:
   flutter_chat_bubble: ^2.0.2
   duration: ^3.0.13
   web3dart: ^2.6.1
+  adaptive_dialog: ^1.9.0+2
   
 dependency_overrides:
   matrix_api_lite:

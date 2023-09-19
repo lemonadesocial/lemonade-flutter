@@ -1,14 +1,15 @@
 import 'package:app/core/presentation/pages/chat/chat_message/chat_message_page.dart';
 import 'package:app/core/presentation/pages/chat/chat_message/widgets/chat_input/chat_input_widget.dart';
 import 'package:app/core/presentation/pages/chat/chat_message/widgets/chat_input/reply_display_widget.dart';
+import 'package:app/core/presentation/pages/chat/chat_message/widgets/chat_settings_popup_menu.dart';
 import 'package:app/core/presentation/pages/chat/chat_message/widgets/messages_list_widget.dart';
 import 'package:app/core/presentation/widgets/chat/matrix_avatar.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
-import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/chat/room_status_extension.dart';
 import 'package:app/core/utils/stream_extension.dart';
 import 'package:app/gen/assets.gen.dart';
+import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,7 @@ class ChatMessageView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final t = Translations.of(context);
     return Scaffold(
       backgroundColor: colorScheme.primary,
       appBar: LemonAppBar(
@@ -53,16 +55,9 @@ class ChatMessageView extends StatelessWidget {
           ),
         ),
         actions: [
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 15.w),
-            alignment: Alignment.centerRight,
-            child: ThemeSvgIcon(
-              color: colorScheme.onSurface,
-              builder: (filter) => Assets.icons.icMoreHoriz.svg(
-                colorFilter: filter,
-              ),
-            ),
-          ),
+          ChatSettingsPopupMenu(
+            room: controller.room,
+          )
         ],
       ),
       body: GestureDetector(
