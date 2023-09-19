@@ -30,6 +30,19 @@ class ChatSettingsPopupMenuState extends State<ChatSettingsPopupMenu> {
   StreamSubscription? notificationChangeSub;
 
   @override
+  void initState() {
+    super.initState();
+    notificationChangeSub = getIt<MatrixService>()
+        .client
+        .onAccountData
+        .stream
+        .where((u) => u.type == 'm.push_rules')
+        .listen(
+          (u) => setState(() {}),
+        );
+  }
+
+  @override
   void dispose() {
     notificationChangeSub?.cancel();
     super.dispose();
@@ -39,14 +52,6 @@ class ChatSettingsPopupMenuState extends State<ChatSettingsPopupMenu> {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
-    notificationChangeSub ??= getIt<MatrixService>()
-        .client
-        .onAccountData
-        .stream
-        .where((u) => u.type == 'm.push_rules')
-        .listen(
-          (u) => setState(() {}),
-        );
     return FloatingFrostedGlassDropdown(
       items: <DropdownItemDpo<ChatOptions>>[
         DropdownItemDpo(
