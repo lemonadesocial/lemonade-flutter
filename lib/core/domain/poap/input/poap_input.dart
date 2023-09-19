@@ -65,10 +65,9 @@ class TransferInput with _$TransferInput {
     explicitToJson: true,
   )
   factory TransferInput({
+    TransferArgsInput? input,
     required String network,
     required String address,
-    ClaimArgsInput? input,
-    String? to,
   }) = _TransferInput;
 
   factory TransferInput.fromJson(Map<String, dynamic> json) =>
@@ -78,8 +77,8 @@ class TransferInput with _$TransferInput {
 @freezed
 class TransferArgsInput with _$TransferArgsInput {
   const factory TransferArgsInput({
-    String? claimer,
-    String? tokenURI,
+    String? to,
+    String? tokenId,
   }) = _TransferArgsInput;
 
   factory TransferArgsInput.fromJson(Map<String, dynamic> json) =>

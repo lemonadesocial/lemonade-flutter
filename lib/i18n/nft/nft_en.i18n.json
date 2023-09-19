@@ -49,5 +49,11 @@
     "collectibleClaimed": "Collectible claimed! 🎉",
     "collectibleClaimedMintedAndDeposited": "$tokenName has been minted and deposited in your Lemonade Wallet",
     "viewInWallet": "View in Wallet",
-    "transfer": "Transfer"
+    "transfer": "Transfer",
+    "transferring": "Transferring",
+    "transferred": "Transferred!",
+    "transferCollectible": "Transfer collectible",
+    "enterWalletId": "Enter wallet ID",
+    "transferCollectibleTo": "Transfer collectible to",
+    "transferSuccess": "$tokenName was successfully transferred to your preferred wallet"
 }

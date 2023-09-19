@@ -79,6 +79,7 @@ class TokenComplex {
 class TokenDetail {
   TokenDetail({
     this.id,
+    this.contract,
     this.network,
     this.tokenId,
     this.metadata,
@@ -86,13 +87,31 @@ class TokenDetail {
 
   factory TokenDetail.fromDto(TokenDetailDto dto) => TokenDetail(
         id: dto.id,
-        network: dto.network,
         tokenId: dto.tokenId,
+        contract: dto.contract,
+        network: dto.network,
         metadata:
             dto.metadata != null ? TokenMetadata.fromDto(dto.metadata!) : null,
       );
 
+  TokenDetail copyWith({
+    String? id,
+    String? contract,
+    String? network,
+    String? tokenId,
+    TokenMetadata? metadata,
+  }) {
+    return TokenDetail(
+      id: id ?? this.id,
+      contract: contract ?? this.contract,
+      network: network ?? this.network,
+      tokenId: tokenId ?? this.tokenId,
+      metadata: metadata ?? this.metadata,
+    );
+  }
+
   final String? id;
+  final String? contract;
   final String? network;
   final String? tokenId;
   final TokenMetadata? metadata;

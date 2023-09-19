@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:app/core/data/poap/poap_repository_impl.dart';
 import 'package:app/core/domain/poap/entities/poap_entities.dart';
 import 'package:app/core/domain/poap/poap_enums.dart';
 import 'package:app/core/domain/poap/poap_repository.dart';
@@ -13,17 +12,16 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'poap_claim_transfer_subscription_bloc.freezed.dart';
+part 'poap_claim_subscription_bloc.freezed.dart';
 
-class PoapClaimTransferSubscriptionBloc extends Bloc<
-    PoapClaimTransferSubscriptionEvent, PoapClaimTransferSubscriptionState> {
-  PoapClaimTransferSubscriptionBloc()
-      : super(PoapClaimTransferSubscriptionStateInitial()) {
-    on<PoapClaimTransferSubscriptionEventStart>(_onStartWatchClaimModification);
-    on<PoapClaimTransferSubscriptionEventClear>(_onClear);
-    on<PoapClaimTransferSubscriptionEventUpdate>(_onUpdate);
+class PoapClaimSubscriptionBloc
+    extends Bloc<PoapClaimSubscriptionEvent, PoapClaimSubscriptionState> {
+  PoapClaimSubscriptionBloc() : super(PoapClaimSubscriptionStateInitial()) {
+    on<PoapClaimSubscriptionEventStart>(_onStartWatchClaimModification);
+    on<PoapClaimSubscriptionEventClear>(_onClear);
+    on<PoapClaimSubscriptionEventUpdate>(_onUpdate);
   }
-  final PoapRepository _poapRepository = PoapRepositoryImpl();
+  final PoapRepository _poapRepository = getIt<PoapRepository>();
   final _tokenRepository = getIt<TokenRepository>();
   StreamSubscription<Either<Failure, Claim?>>? _streamSubscription;
 
@@ -35,7 +33,7 @@ class PoapClaimTransferSubscriptionBloc extends Bloc<
   }
 
   Future<void> _onStartWatchClaimModification(
-    PoapClaimTransferSubscriptionEventStart event,
+    PoapClaimSubscriptionEventStart event,
     Emitter emit,
   ) async {
     _streamSubscription =
@@ -44,7 +42,7 @@ class PoapClaimTransferSubscriptionBloc extends Bloc<
 
   Future<void> _onClaimData(Either<Failure, Claim?> result) async {
     if (result.isLeft()) {
-      return add(PoapClaimTransferSubscriptionEvent.clear());
+      return add(PoapClaimSubscriptionEvent.clear());
     }
 
     final claim = result.getOrElse(() => null);
@@ -54,7 +52,7 @@ class PoapClaimTransferSubscriptionBloc extends Bloc<
         TokenDetail? token;
         if (claim.chainlinkRequest != null &&
             !claim.chainlinkRequest!.fulfilled!) {
-          return add(PoapClaimTransferSubscriptionEvent.clear());
+          return add(PoapClaimSubscriptionEvent.clear());
         }
 
         token = (await _tokenRepository.getToken(
@@ -66,63 +64,61 @@ class PoapClaimTransferSubscriptionBloc extends Bloc<
             .fold((l) => null, (mToken) => mToken);
 
         if (token == null) {
-          return add(PoapClaimTransferSubscriptionEvent.clear());
+          return add(PoapClaimSubscriptionEvent.clear());
         }
 
+        final claimedToken = token.copyWith(tokenId: claim.tokenId);
+
         add(
-          PoapClaimTransferSubscriptionEvent.update(
+          PoapClaimSubscriptionEvent.update(
             claimModification: claim,
-            token: token,
+            token: claimedToken,
           ),
         );
       } else {
         add(
-          PoapClaimTransferSubscriptionEvent.update(
+          PoapClaimSubscriptionEvent.update(
             claimModification: claim,
           ),
         );
       }
     } else {
-      add(PoapClaimTransferSubscriptionEvent.clear());
+      add(PoapClaimSubscriptionEvent.clear());
     }
   }
 
-  void _onUpdate(PoapClaimTransferSubscriptionEventUpdate event, Emitter emit) {
+  void _onUpdate(PoapClaimSubscriptionEventUpdate event, Emitter emit) {
     emit(
-      PoapClaimTransferSubscriptionState.hasClaimModification(
+      PoapClaimSubscriptionState.hasClaimModification(
         claimModification: event.claimModification,
         token: event.token,
       ),
     );
   }
 
-  void _onClear(PoapClaimTransferSubscriptionEventClear event, Emitter emit) {
+  void _onClear(PoapClaimSubscriptionEventClear event, Emitter emit) {
     emit(
-      PoapClaimTransferSubscriptionState.initial(),
+      PoapClaimSubscriptionState.initial(),
     );
   }
 }
 
 @freezed
-class PoapClaimTransferSubscriptionEvent
-    with _$PoapClaimTransferSubscriptionEvent {
-  factory PoapClaimTransferSubscriptionEvent.start() =
-      PoapClaimTransferSubscriptionEventStart;
-  factory PoapClaimTransferSubscriptionEvent.update({
+class PoapClaimSubscriptionEvent with _$PoapClaimSubscriptionEvent {
+  factory PoapClaimSubscriptionEvent.start() = PoapClaimSubscriptionEventStart;
+  factory PoapClaimSubscriptionEvent.update({
     required Claim claimModification,
     TokenDetail? token,
-  }) = PoapClaimTransferSubscriptionEventUpdate;
-  factory PoapClaimTransferSubscriptionEvent.clear() =
-      PoapClaimTransferSubscriptionEventClear;
+  }) = PoapClaimSubscriptionEventUpdate;
+  factory PoapClaimSubscriptionEvent.clear() = PoapClaimSubscriptionEventClear;
 }
 
 @freezed
-class PoapClaimTransferSubscriptionState
-    with _$PoapClaimTransferSubscriptionState {
-  factory PoapClaimTransferSubscriptionState.initial() =
-      PoapClaimTransferSubscriptionStateInitial;
-  factory PoapClaimTransferSubscriptionState.hasClaimModification({
+class PoapClaimSubscriptionState with _$PoapClaimSubscriptionState {
+  factory PoapClaimSubscriptionState.initial() =
+      PoapClaimSubscriptionStateInitial;
+  factory PoapClaimSubscriptionState.hasClaimModification({
     required Claim claimModification,
     TokenDetail? token,
-  }) = PoapClaimTransferSubscriptionStateHasClaimModication;
+  }) = PoapClaimSubscriptionStateHasClaimModication;
 }
