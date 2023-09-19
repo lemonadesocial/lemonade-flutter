@@ -128,7 +128,7 @@ class ChatListPageView extends StatelessWidget {
           ),
         ),
       ),
-      floatingActionButton: CreateChatButton(),
+      floatingActionButton: const CreateChatButton(),
     );
   }
 }

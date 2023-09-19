@@ -15,11 +15,12 @@ class NewChatBloc extends Bloc<NewChatEvent, NewChatState> {
   NewChatBloc()
       : super(
           const NewChatState(
-              userSearchResult: null,
-              selectedUsers: [],
-              isSearching: false,
-              isCreating: false,
-              createdRoomId: null),
+            userSearchResult: null,
+            selectedUsers: [],
+            isSearching: false,
+            isCreating: false,
+            createdRoomId: null,
+          ),
         ) {
     on<NewChatEventSearchUsers>(_onSearchUsers);
     on<NewChatEventSelectUser>(_onSelectUser);
