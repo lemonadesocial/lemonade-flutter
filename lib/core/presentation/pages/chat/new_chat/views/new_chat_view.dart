@@ -6,6 +6,7 @@ import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/utils/debouncer.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -30,59 +31,75 @@ class NewChatView extends StatelessWidget {
     final t = Translations.of(context);
     return GestureDetector(
       onTap: () {
-        FocusScope.of(context)
-            .unfocus(); // Dismiss keyboard when tapped outside
+        // Dismiss keyboard when tapped outside
+        FocusScope.of(context).unfocus();
       },
-      child: Scaffold(
-        appBar: LemonAppBar(
+      child: BlocListener<NewChatBloc, NewChatState>(
+        listener: (context, state) async {
+          if (state.createdRoomId != null) {
+            AutoRouter.of(context)
+                .navigateNamed('/chat/detail/${state.createdRoomId}');
+            await Future.delayed(const Duration(milliseconds: 400));
+            Navigator.of(context).pop();
+          }
+        },
+        child: Scaffold(
+          appBar: LemonAppBar(
+            backgroundColor: colorScheme.onPrimaryContainer,
+            title: t.chat.newMessage,
+            actions: [
+              StartButton(
+                onTap: () async {
+                  context
+                      .read<NewChatBloc>()
+                      .add(const NewChatEvent.startChat());
+                },
+              ),
+            ],
+          ),
           backgroundColor: colorScheme.onPrimaryContainer,
-          title: t.chat.newMessage,
-          actions: [
-            StartButton(
-              onTap: () async {
-                context.read<NewChatBloc>().startChat(context);
-              },
-            ),
-          ],
-        ),
-        backgroundColor: colorScheme.onPrimaryContainer,
-        body: BlocBuilder<NewChatBloc, NewChatState>(
-          builder: (context, newChatState) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(
-                    top: 6.h,
-                    bottom: 12.h,
-                    left: 18.w,
-                    right: 18.w,
-                  ),
-                  child: SearchUserInput(
-                    selectedUsers: newChatState.selectedUsers,
-                    onChanged: (value) => onSearchChanged(context, value),
-                    onUserTap: (Profile user) {
-                      context.read<NewChatBloc>().add(
-                            NewChatEvent.deselectUser(user: user),
-                          );
-                    },
-                  ),
-                ),
-                if (newChatState.isSearching) ...[
-                  Padding(
-                    padding: EdgeInsets.only(top: Spacing.medium),
-                    child: Loading.defaultLoading(context),
-                  )
-                ] else if (newChatState.userSearchResult != null) ...[
-                  Expanded(
-                    child: _buildUserList(newChatState, context),
-                  ),
-                ],
-              ],
-            );
-          },
+          body: _buildContent(context),
         ),
       ),
+    );
+  }
+
+  Widget _buildContent(BuildContext context) {
+    return BlocBuilder<NewChatBloc, NewChatState>(
+      builder: (context, newChatState) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(
+                top: 6.h,
+                bottom: 12.h,
+                left: 18.w,
+                right: 18.w,
+              ),
+              child: SearchUserInput(
+                selectedUsers: newChatState.selectedUsers,
+                onChanged: (value) => onSearchChanged(context, value),
+                onUserTap: (Profile user) {
+                  context.read<NewChatBloc>().add(
+                        NewChatEvent.deselectUser(user: user),
+                      );
+                },
+              ),
+            ),
+            if (newChatState.isSearching) ...[
+              Padding(
+                padding: EdgeInsets.only(top: Spacing.medium),
+                child: Loading.defaultLoading(context),
+              )
+            ] else if (newChatState.userSearchResult != null) ...[
+              Expanded(
+                child: _buildUserList(newChatState, context),
+              ),
+            ],
+          ],
+        );
+      },
     );
   }
 

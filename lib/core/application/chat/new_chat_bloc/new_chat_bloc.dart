@@ -1,15 +1,14 @@
-import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 import 'package:app/core/service/matrix/matrix_service.dart';
 import 'package:app/injection/register_module.dart';
-import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:injectable/injectable.dart';
 import 'package:matrix/matrix.dart';
 import 'package:matrix/matrix.dart' as sdk;
 
 part 'new_chat_bloc.freezed.dart';
 
+@lazySingleton
 class NewChatBloc extends Bloc<NewChatEvent, NewChatState> {
   final matrixService = getIt<MatrixService>();
 
@@ -19,11 +18,14 @@ class NewChatBloc extends Bloc<NewChatEvent, NewChatState> {
             userSearchResult: null,
             selectedUsers: [],
             isSearching: false,
+            isCreating: false,
+            createdRoomId: null
           ),
         ) {
     on<NewChatEventSearchUsers>(_onSearchUsers);
     on<NewChatEventSelectUser>(_onSelectUser);
     on<NewChatEventDeselectUser>(_onDeselectUser);
+    on<NewChatEventStartChat>(_onStartChat);
   }
 
   _onSearchUsers(NewChatEventSearchUsers event, Emitter emit) async {
@@ -57,42 +59,68 @@ class NewChatBloc extends Bloc<NewChatEvent, NewChatState> {
     emit(state.copyWith(selectedUsers: selectedUsers));
   }
 
-  startChat(BuildContext context) async {
+  _onStartChat(NewChatEventStartChat event, Emitter emit) async {
+    emit(
+      state.copyWith(isCreating: true),
+    );
     final List<String> selectedUserIds =
         state.selectedUsers.map((profile) => profile.userId).toList();
-    // Direct 1 on 1 chat
+    // Create direct 1 vs 1 chat
     if (selectedUserIds.length == 1) {
-      final roomID = await showFutureLoadingDialog<String>(
-        context: context,
-        future: () => matrixService.client.startDirectChat(
-          context.read<NewChatBloc>().state.selectedUsers[0].userId,
+      final roomId = await matrixService.client.startDirectChat(
+        state.selectedUsers[0].userId,
+      );
+      emit(
+        state.copyWith(
+          createdRoomId: roomId,
+          isCreating: false,
         ),
       );
-      if (roomID.error == null) {
-        AutoRouter.of(context).navigateNamed('/chat/detail/${roomID.result}');
-        await Future.delayed(const Duration(milliseconds: 400));
-        Navigator.of(context).pop();
-        return;
-      }
+      return;
     }
-    // Group chat
-    final roomID = await showFutureLoadingDialog(
-      context: context,
-      future: () async {
-        final roomId = await matrixService.client.createGroupChat(
-          visibility: sdk.Visibility.private,
-          preset: sdk.CreateRoomPreset.privateChat,
-          invite: selectedUserIds,
-        );
-        await matrixService.client.joinRoom(roomId);
-        return roomId;
-      },
+    // Create group chat
+    final roomId = await matrixService.client.createGroupChat(
+      visibility: sdk.Visibility.private,
+      preset: sdk.CreateRoomPreset.privateChat,
+      invite: selectedUserIds,
     );
-    if (roomID.error == null) {
-      AutoRouter.of(context).navigateNamed('/chat/detail/${roomID.result}');
-      await Future.delayed(const Duration(milliseconds: 400));
-      Navigator.of(context).pop();
-    }
+    await matrixService.client.joinRoom(roomId);
+    emit(
+      state.copyWith(
+        createdRoomId: roomId,
+        isCreating: false,
+      ),
+    );
+    // final roomID = await showFutureLoadingDialog<String>(
+    //   context: context,
+    //   future: () => matrixService.client.startDirectChat(
+    //     context.read<NewChatBloc>().state.selectedUsers[0].userId,
+    //   ),
+    // );
+    // if (roomID.error == null) {
+    //   AutoRouter.of(context).navigateNamed('/chat/detail/${roomID.result}');
+    //   await Future.delayed(const Duration(milliseconds: 400));
+    //   Navigator.of(context).pop();
+    //   return;
+    // }
+    // Group chat
+    // final roomID = await showFutureLoadingDialog(
+    //   context: context,
+    //   future: () async {
+    //     final roomId = await matrixService.client.createGroupChat(
+    //       visibility: sdk.Visibility.private,
+    //       preset: sdk.CreateRoomPreset.privateChat,
+    //       invite: selectedUserIds,
+    //     );
+    //     await matrixService.client.joinRoom(roomId);
+    //     return roomId;
+    //   },
+    // );
+    // if (roomID.error == null) {
+    //   AutoRouter.of(context).navigateNamed('/chat/detail/${roomID.result}');
+    //   await Future.delayed(const Duration(milliseconds: 400));
+    //   Navigator.of(context).pop();
+    // }
   }
 }
 
@@ -119,5 +147,7 @@ class NewChatState with _$NewChatState {
     required SearchUserDirectoryResponse? userSearchResult,
     required List<Profile> selectedUsers,
     required bool isSearching,
+    required bool isCreating,
+    required String? createdRoomId,
   }) = _NewChatState;
 }
