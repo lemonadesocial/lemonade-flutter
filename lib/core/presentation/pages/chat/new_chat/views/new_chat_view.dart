@@ -43,63 +43,65 @@ class NewChatView extends StatelessWidget {
             Navigator.of(context).pop();
           }
         },
-        child: Scaffold(
-          appBar: LemonAppBar(
-            backgroundColor: colorScheme.onPrimaryContainer,
-            title: t.chat.newMessage,
-            actions: [
-              StartButton(
-                onTap: () async {
-                  context
-                      .read<NewChatBloc>()
-                      .add(const NewChatEvent.startChat());
-                },
+        child: BlocBuilder<NewChatBloc, NewChatState>(
+          builder: (context, newChatState) {
+            return Scaffold(
+              appBar: LemonAppBar(
+                backgroundColor: colorScheme.onPrimaryContainer,
+                title: t.chat.newMessage,
+                actions: [
+                  StartButton(
+                    isLoading:
+                        context.read<NewChatBloc>().state.isCreating == true,
+                    onTap: () async {
+                      context
+                          .read<NewChatBloc>()
+                          .add(const NewChatEvent.startChat());
+                    },
+                  ),
+                ],
               ),
-            ],
-          ),
-          backgroundColor: colorScheme.onPrimaryContainer,
-          body: _buildContent(context),
+              backgroundColor: colorScheme.onPrimaryContainer,
+              body: _buildContent(newChatState, context),
+            );
+          },
         ),
       ),
     );
   }
 
-  Widget _buildContent(BuildContext context) {
-    return BlocBuilder<NewChatBloc, NewChatState>(
-      builder: (context, newChatState) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: EdgeInsets.only(
-                top: 6.h,
-                bottom: 12.h,
-                left: 18.w,
-                right: 18.w,
-              ),
-              child: SearchUserInput(
-                selectedUsers: newChatState.selectedUsers,
-                onChanged: (value) => onSearchChanged(context, value),
-                onUserTap: (Profile user) {
-                  context.read<NewChatBloc>().add(
-                        NewChatEvent.deselectUser(user: user),
-                      );
-                },
-              ),
-            ),
-            if (newChatState.isSearching) ...[
-              Padding(
-                padding: EdgeInsets.only(top: Spacing.medium),
-                child: Loading.defaultLoading(context),
-              )
-            ] else if (newChatState.userSearchResult != null) ...[
-              Expanded(
-                child: _buildUserList(newChatState, context),
-              ),
-            ],
-          ],
-        );
-      },
+  Widget _buildContent(NewChatState newChatState, BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(
+            top: 6.h,
+            bottom: 12.h,
+            left: 18.w,
+            right: 18.w,
+          ),
+          child: SearchUserInput(
+            selectedUsers: newChatState.selectedUsers,
+            onChanged: (value) => onSearchChanged(context, value),
+            onUserTap: (Profile user) {
+              context.read<NewChatBloc>().add(
+                    NewChatEvent.deselectUser(user: user),
+                  );
+            },
+          ),
+        ),
+        if (newChatState.isSearching) ...[
+          Padding(
+            padding: EdgeInsets.only(top: Spacing.medium),
+            child: Loading.defaultLoading(context),
+          )
+        ] else if (newChatState.userSearchResult != null) ...[
+          Expanded(
+            child: _buildUserList(newChatState, context),
+          ),
+        ],
+      ],
     );
   }
 
@@ -141,8 +143,9 @@ class NewChatView extends StatelessWidget {
 
 class StartButton extends StatelessWidget {
   final Function() onTap;
+  final bool isLoading;
 
-  const StartButton({super.key, required this.onTap});
+  const StartButton({super.key, required this.onTap, required this.isLoading});
 
   @override
   Widget build(BuildContext context) {
@@ -153,10 +156,12 @@ class StartButton extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 15.w),
         alignment: Alignment.centerRight,
-        child: Text(
-          t.common.start,
-          style: Typo.mediumPlus.copyWith(color: colorScheme.onSurface),
-        ),
+        child: isLoading
+            ? Loading.defaultLoading(context)
+            : Text(
+                t.common.start,
+                style: Typo.mediumPlus.copyWith(color: colorScheme.onSurface),
+              ),
       ),
     );
   }
