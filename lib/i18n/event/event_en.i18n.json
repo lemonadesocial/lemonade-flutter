@@ -30,6 +30,19 @@
     },
     "confirmed": "confirmed",
     "eventBuyTickets": {
-        "selectTickets": "Select tickets"
+        "selectTickets": "Select tickets",
+        "orderSummary": "Order summary",
+        "enterPromoCode": "Enter promo code"
+    },
+    "eventOrder": {
+        "itemTotal": "Item total",
+        "taxes": "Taxes",
+        "convenienceFees": "Convenience fees",
+        "grandTotal": "Grand total"
+    },
+    "eventPayment": {
+        "payUsing": "Pay using",
+        "cardEnding": "Card ending $lastCardNumber",
+        "slideToPay": "Slide to pay"
     }
 }

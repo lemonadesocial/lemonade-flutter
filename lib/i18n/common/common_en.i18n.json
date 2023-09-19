@@ -71,5 +71,7 @@
     "start": "Start",
     "areYouSure": "Are you sure ?",
     "next": "Next",
-    "viewProduct": "View product"
+    "viewProduct": "View product",
+    "apply": "Apply",
+    "applied": "Applied"
 }

@@ -81,6 +81,10 @@ class LemonColor {
 
   // Progress indicator
   static const progressBg = Color(0xFF5E4E70);
+
+  // event buy tickets
+  static const promoApplied = Color(0xff5fcb90);
+  static const promoAppliedBackground = Color(0x2D5ECA90);
 }
 
 final ColorScheme lemonadeLightThemeColorScheme = ColorScheme.light(

@@ -14,6 +14,7 @@ class LemonTextField extends StatelessWidget {
     this.borderColor,
     this.statusWidget,
     this.label,
+    this.suffixIcon,
   }) : super(key: key);
 
   final ValueChanged<String> onChange;
@@ -24,6 +25,7 @@ class LemonTextField extends StatelessWidget {
   final Color? borderColor;
   final Widget? statusWidget;
   final String? label;
+  final Widget? suffixIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -63,6 +65,7 @@ class LemonTextField extends StatelessWidget {
             errorBorder: border,
             border: border,
             contentPadding: EdgeInsets.all(Spacing.smMedium),
+            suffixIcon: suffixIcon,
           ),
         ),
         if (statusWidget != null) ...[
