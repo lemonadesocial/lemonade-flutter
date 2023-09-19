@@ -34,8 +34,12 @@ class NewChatBloc extends Bloc<NewChatEvent, NewChatState> {
         text!,
         limit: 20,
       );
-      emit(state.copyWith(isSearching: false));
-      emit(state.copyWith(userSearchResult: result));
+      emit(
+        state.copyWith(
+          isSearching: false,
+          userSearchResult: result,
+        ),
+      );
     } catch (e) {
       emit(state.copyWith(isSearching: false));
     }
