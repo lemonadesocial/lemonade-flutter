@@ -35,3 +35,31 @@ class GetTokenDetailInput with _$GetTokenDetailInput {
   factory GetTokenDetailInput.fromJson(Map<String, dynamic> json) =>
       _$GetTokenDetailInputFromJson(json);
 }
+
+@freezed
+class GetTokenComplexInput with _$GetTokenComplexInput {
+  @JsonSerializable(
+    includeIfNull: false,
+  )
+  factory GetTokenComplexInput({
+    TokenWhereComplex? where,
+  }) = _GetTokenComplexInput;
+
+  factory GetTokenComplexInput.fromJson(Map<String, dynamic> json) =>
+      _$GetTokenComplexInputFromJson(json);
+}
+
+@freezed
+class TokenWhereComplex with _$TokenWhereComplex {
+  @JsonSerializable(
+    includeIfNull: false,
+  )
+  factory TokenWhereComplex({
+    @JsonKey(name: 'network_in') List<String>? networkIn,
+    @JsonKey(name: 'contract_in') List<String>? contractIn,
+    @JsonKey(name: 'tokenId_eq') String? tokenIdEq,
+  }) = _TokenWhereComplex;
+
+  factory TokenWhereComplex.fromJson(Map<String, dynamic> json) =>
+      _$TokenWhereComplexFromJson(json);
+}

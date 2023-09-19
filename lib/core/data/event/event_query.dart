@@ -32,10 +32,25 @@ const eventMatrixFragment = '''
   }
 ''';
 
+const eventOfferFragment = '''
+  fragment eventOfferFragment on Event {
+    offers {
+      _id
+      auto
+      broadcast_rooms
+      position
+      provider
+      provider_id
+      provider_network 
+    }
+  }
+''';
+
 const eventFragment = '''
   $eventHostExpandedFragment
   $eventPeopleFragment
   $eventMatrixFragment
+  $eventOfferFragment
 
   fragment eventFields on Event {
   _id
@@ -54,6 +69,7 @@ const eventFragment = '''
   }
   ...eventPeopleFragment
   ...eventMatrixFragment
+  ...eventOfferFragment
   start
   end
   cost

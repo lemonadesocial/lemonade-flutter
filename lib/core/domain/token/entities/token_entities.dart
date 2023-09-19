@@ -5,11 +5,11 @@ import 'package:app/core/domain/user/entities/user.dart';
 
 class TokenComplex {
   const TokenComplex({
-    required this.id,
-    required this.network,
-    required this.tokenId,
-    required this.registry,
-    required this.contract,
+    this.id,
+    this.network,
+    this.tokenId,
+    this.registry,
+    this.contract,
     this.order,
     this.createdAt,
     this.creator,
@@ -30,7 +30,7 @@ class TokenComplex {
         id: dto.id,
         network: dto.network,
         tokenId: dto.tokenId,
-        registry: dto.registry,
+        registry: dto.registry != null ? Registry.fromDto(dto.registry!) : null,
         contract: dto.contract,
         order: dto.order,
         createdAt: dto.createdAt,
@@ -55,11 +55,11 @@ class TokenComplex {
             .toList(),
         uri: dto.uri,
       );
-  final String id;
-  final String network;
-  final String tokenId;
-  final RegistryDto registry;
-  final String contract;
+  final String? id;
+  final String? network;
+  final String? tokenId;
+  final Registry? registry;
+  final String? contract;
   final OrderSimpleDto? order;
   final DateTime? createdAt;
   final String? creator;
