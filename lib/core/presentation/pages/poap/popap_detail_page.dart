@@ -92,7 +92,10 @@ class _PopapDetailPageState extends State<PopapDetailPage> {
                             child: SizedBox(height: Spacing.medium),
                           ),
                           SliverToBoxAdapter(
-                            child: PoapQuantityBar(badge: badge),
+                            child: PoapQuantityBar(
+                              network: badge.network ?? '',
+                              contract: badge.contract ?? '',
+                            ),
                           ),
                           SliverToBoxAdapter(
                             child: SizedBox(height: Spacing.medium),

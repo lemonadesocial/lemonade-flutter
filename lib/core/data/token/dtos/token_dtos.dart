@@ -8,11 +8,11 @@ part 'token_dtos.g.dart';
 @freezed
 class TokenComplexDto with _$TokenComplexDto {
   const factory TokenComplexDto({
-    required String id,
-    required String network,
-    required String tokenId,
-    required RegistryDto registry,
-    required String contract,
+    String? id,
+    String? network,
+    String? tokenId,
+    RegistryDto? registry,
+    String? contract,
     OrderSimpleDto? order,
     DateTime? createdAt,
     String? creator,

@@ -17,4 +17,8 @@ abstract class TokenRepository {
   Stream<Either<Failure, List<OrderComplex>>> watchOrders({
     required WatchOrdersInput input,
   });
+
+  Future<Either<Failure, List<TokenComplex>>> tokens({
+    required GetTokenComplexInput input,
+  });
 }

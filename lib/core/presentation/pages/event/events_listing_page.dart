@@ -312,6 +312,7 @@ class _EventList<T extends BaseEventListingBloc> extends StatelessWidget {
                           AutoRouter.of(context).navigate(
                             GuestEventDetailRoute(
                               eventId: filteredEvents[index].id!,
+                              // eventId: '62c69ad50274062292d24479',
                             ),
                           );
                         },

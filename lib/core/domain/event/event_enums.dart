@@ -1,3 +1,5 @@
+import 'package:json_annotation/json_annotation.dart';
+
 enum EventTense {
   Current,
   Future,
@@ -34,8 +36,6 @@ enum EventTimeFilter {
   });
 }
 
-enum OfferProvider { token, order, claimable, poap }
-
 enum BroadcastProvider {
   local,
   twitch,
@@ -67,4 +67,14 @@ enum EventRsvpState {
   declined,
   payment,
   pending,
+}
+
+enum OfferProvider {
+  claimable,
+  @JsonValue('festival_heads')
+  festivalHeads,
+  metaverse,
+  order,
+  poap,
+  token,
 }

@@ -1,5 +1,6 @@
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/config.dart';
+import 'package:app/core/presentation/pages/event/guest_event_detail_page/widgets/guest_event_poap_offers.dart';
 import 'package:app/core/presentation/pages/event/guest_event_detail_page/widgets/guest_event_detail_about_card.dart';
 import 'package:app/core/presentation/pages/event/guest_event_detail_page/widgets/guest_event_detail_clock.dart';
 import 'package:app/core/presentation/pages/event/guest_event_detail_page/widgets/guest_event_detail_dashboard.dart';
@@ -11,6 +12,7 @@ import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart
 import 'package:app/core/presentation/widgets/lemon_back_button_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/utils/event_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/sizing.dart';
@@ -81,6 +83,22 @@ class PostGuestEventDetailView extends StatelessWidget {
                       child: GuestEventDetailDashboard(event: event),
                     ),
                   ),
+                  if (EventUtils.hasPoapOffers(event)) ...[
+                    SliverPadding(
+                      padding: EdgeInsets.only(
+                        top: Spacing.smMedium * 2,
+                      ),
+                    ),
+                    SliverPadding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+                      sliver: SliverToBoxAdapter(
+                        child: GuestEventPoapOffers(
+                          event: event,
+                        ),
+                      ),
+                    )
+                  ],
                   SliverPadding(
                     padding: EdgeInsets.only(top: Spacing.smMedium),
                   ),

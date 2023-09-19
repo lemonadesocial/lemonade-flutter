@@ -51,7 +51,7 @@ class PoapClaimSubscriptionBloc
       if (claim.state == ClaimState.CONFIRMED) {
         TokenDetail? token;
         if (claim.chainlinkRequest != null &&
-            !claim.chainlinkRequest!.fulfilled!) {
+            claim.chainlinkRequest?.fulfilled != true) {
           return add(PoapClaimSubscriptionEvent.clear());
         }
 

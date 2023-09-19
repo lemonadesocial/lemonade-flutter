@@ -1,5 +1,6 @@
 import 'package:app/core/data/common/dtos/common_dtos.dart';
 import 'package:app/core/data/user/dtos/user_dtos.dart';
+import 'package:app/core/domain/event/event_enums.dart';
 import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -32,10 +33,27 @@ class EventDto with _$EventDto {
     double? latitude,
     double? longitude,
     @JsonKey(name: 'matrix_event_room_id') String? matrixEventRoomId,
+    List<EventOfferDto>? offers,
   }) = _EventDto;
 
   factory EventDto.fromJson(Map<String, dynamic> json) =>
       _$EventDtoFromJson(json);
+}
+
+@freezed
+class EventOfferDto with _$EventOfferDto {
+  factory EventOfferDto({
+    @JsonKey(name: '_id') String? id,
+    bool? auto,
+    @JsonKey(name: 'broadcast_rooms') List<String>? broadcastRooms,
+    double? position,
+    OfferProvider? provider,
+    @JsonKey(name: 'provider_id') String? providerId,
+    @JsonKey(name: 'provider_network') String? providerNetwork,
+  }) = _EventOfferDto;
+
+  factory EventOfferDto.fromJson(Map<String, dynamic> json) =>
+      _$EventOfferDtoFromJson(json);
 }
 
 @freezed

@@ -66,6 +66,26 @@ final getTokenQuery = gql('''
   }
 ''');
 
+final tokensQuery = gql('''
+  query tokens(\$limit: Int, \$skip: Int, \$sample: Int, \$where: TokenWhereComplex) {
+  tokens(limit: \$limit, skip: \$skip, sample: \$sample, where: \$where) {
+    id
+    contract
+    tokenId
+    uri
+    creator
+    creatorExpanded {
+      _id
+      name
+      username
+      image_avatar
+    }
+    metadata
+    network
+  }
+}
+''');
+
 final watchOrdersSubscription = gql('''
   subscription WatchOrders(
   \$where: OrderWhereComplex

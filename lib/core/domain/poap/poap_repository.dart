@@ -21,7 +21,7 @@ abstract class PoapRepository {
     required TransferInput input,
   });
 
-  Future<Either<Failure, PoapPolicy>> getPoapPolicy({
+  Future<Either<Failure, PoapPolicy?>> getPoapPolicy({
     required GetPoapPolicyInput input,
   });
 

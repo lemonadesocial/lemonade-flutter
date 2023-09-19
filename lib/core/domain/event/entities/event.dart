@@ -1,5 +1,6 @@
 import 'package:app/core/data/event/dtos/event_dtos.dart';
 import 'package:app/core/domain/common/entities/common.dart';
+import 'package:app/core/domain/event/event_enums.dart';
 import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 
@@ -26,6 +27,7 @@ class Event {
     this.latitude,
     this.longitude,
     this.matrixEventRoomId,
+    this.offers,
   });
 
   factory Event.fromDto(EventDto dto) {
@@ -64,6 +66,9 @@ class Event {
       latitude: dto.latitude,
       longitude: dto.longitude,
       matrixEventRoomId: dto.matrixEventRoomId,
+      offers: List.from(dto.offers ?? [])
+          .map((item) => EventOffer.fromDto(item))
+          .toList(),
     );
   }
   String? id;
@@ -87,6 +92,37 @@ class Event {
   double? latitude;
   double? longitude;
   String? matrixEventRoomId;
+  List<EventOffer>? offers;
+}
+
+class EventOffer {
+  const EventOffer({
+    this.id,
+    this.auto,
+    this.broadcastRooms,
+    this.position,
+    this.provider,
+    this.providerId,
+    this.providerNetwork,
+  });
+
+  final String? id;
+  final bool? auto;
+  final List<String>? broadcastRooms;
+  final double? position;
+  final OfferProvider? provider;
+  final String? providerId;
+  final String? providerNetwork;
+
+  factory EventOffer.fromDto(EventOfferDto dto) => EventOffer(
+        id: dto.id,
+        auto: dto.auto,
+        broadcastRooms: dto.broadcastRooms,
+        position: dto.position,
+        provider: dto.provider,
+        providerId: dto.providerId,
+        providerNetwork: dto.providerNetwork,
+      );
 }
 
 class Broadcast {
