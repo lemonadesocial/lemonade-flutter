@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:app/core/application/common/scroll_notification_bloc/scroll_notification_bloc.dart';
 import 'package:app/core/application/token/orders_listing_subscription_bloc/orders_listing_subscription_bloc.dart';
 import 'package:app/core/domain/common/common_enums.dart';
@@ -93,6 +95,7 @@ class _ProfileNftSoldList extends StatelessWidget {
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
                     final order = orders[index];
+                    log('nftToken: ${order.token.toString()}');
                     return ProfileNftItem(nftToken: dartz.Right(order.token));
                   },
                   childCount: orders.length,

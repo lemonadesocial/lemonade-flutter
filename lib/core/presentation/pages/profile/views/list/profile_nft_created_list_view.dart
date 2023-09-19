@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:app/core/application/common/scroll_notification_bloc/scroll_notification_bloc.dart';
 import 'package:app/core/application/token/tokens_listing_bloc/tokens_listing_bloc.dart';
 import 'package:app/core/domain/token/input/get_tokens_input.dart';
@@ -88,6 +90,7 @@ class _ProfileNftCreatedListViewState extends State<_ProfileNftCreatedList> {
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
                     final nftToken = tokens[index];
+                    log('nftToken: ${nftToken.toString()}');
                     return ProfileNftItem(nftToken: dartz.Left(nftToken));
                   },
                   childCount: tokens.length,
