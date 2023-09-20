@@ -1,3 +1,4 @@
+import 'package:app/core/application/newsfeed/newsfeed_listing_bloc/newsfeed_listing_bloc.dart';
 import 'package:app/core/presentation/pages/home/views/list/home_newsfeed_list.dart';
 import 'package:app/core/presentation/widgets/bottom_bar/bottom_bar_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/appbar_logo.dart';
@@ -76,19 +77,14 @@ class _HomePageState extends State<HomePage> {
           : Padding(
               padding: EdgeInsets.only(bottom: BottomBar.bottomBarHeight),
               child: FloatingCreateButton(
-                // onTap: () => context.router.push(
-                //   CreatePostRoute(
-                //     onPostCreated: (newPost) =>
-                //         context.read<NewsfeedListingBloc>().add(
-                //               NewsfeedListingEvent.newPostAdded(post: newPost),
-                //             ),
-                //   ),
-                // ),
-                onTap: () {
-                  AutoRouter.of(context).navigate(
-                    const EventBuyTicketsRoute(),
-                  );
-                },
+                onTap: () => context.router.push(
+                  CreatePostRoute(
+                    onPostCreated: (newPost) =>
+                        context.read<NewsfeedListingBloc>().add(
+                              NewsfeedListingEvent.newPostAdded(post: newPost),
+                            ),
+                  ),
+                ),
               ),
             ),
     );
