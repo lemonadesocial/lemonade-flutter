@@ -48,6 +48,17 @@
         "pickYourTicket": "Pick your ticket",
         "pickYourTicketDescription": "Select the ticket type you want to assign to this account. This is permanent and cannot be changed later!"
     },
+    "eventTicketManagement": {
+        "myTicket": "My ticket",
+        "myTicketDescription": "Download or manage your ticket",
+        "assignTicketTitle": "Additional tickets",
+        "assignTicketDescription": "You can assign additional tickets now or later inside the event",
+        "assignTicket": "Assign",
+        "reassignTicket": "Reassign",
+        "ticketUnassigned": "Unassigned",
+        "ticketAssignmentPending": "Pending",
+        "ticketAssignmentClaimed": "Claimed"
+    },
     "tickets(ordinal)": {
         "one": "ticket",
         "other": "tickets"
