@@ -51,7 +51,9 @@ class EventOrderSummary extends StatelessWidget {
                       child: SummaryRow(
                         label: item,
                         value: NumberUtils.formatCurrency(
-                            amount: 10000, currency: Currency.USD),
+                          amount: 10000,
+                          currency: Currency.USD,
+                        ),
                       ),
                     ),
                   )
@@ -63,7 +65,9 @@ class EventOrderSummary extends StatelessWidget {
           ),
           Container(
             padding: EdgeInsets.symmetric(
-                vertical: Spacing.medium, horizontal: Spacing.medium),
+              vertical: Spacing.medium,
+              horizontal: Spacing.medium,
+            ),
             decoration: BoxDecoration(
               color: colorScheme.onPrimary.withOpacity(0.06),
               borderRadius: BorderRadius.only(
@@ -74,7 +78,9 @@ class EventOrderSummary extends StatelessWidget {
             child: SummaryRow(
               label: t.event.eventOrder.grandTotal,
               value: NumberUtils.formatCurrency(
-                  amount: 100000, currency: Currency.USD),
+                amount: 100000,
+                currency: Currency.USD,
+              ),
             ),
           ),
           Transform.flip(

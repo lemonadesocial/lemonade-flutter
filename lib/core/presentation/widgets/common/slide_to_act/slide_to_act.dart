@@ -234,7 +234,8 @@ class SlideActionState extends State<SlideAction>
                                       width: 48.w,
                                       height: 48.w,
                                       padding: EdgeInsets.all(
-                                          widget.sliderButtonIconPadding),
+                                        widget.sliderButtonIconPadding,
+                                      ),
                                       child: Transform.rotate(
                                         angle: widget.sliderRotate
                                             ? -pi * _progress
