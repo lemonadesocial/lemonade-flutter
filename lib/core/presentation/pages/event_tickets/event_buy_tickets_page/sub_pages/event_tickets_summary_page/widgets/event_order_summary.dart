@@ -1,5 +1,5 @@
 import 'package:app/core/domain/payment/payment_enums.dart';
-import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary/widgets/ticket_wave_custom_paint.dart';
+import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/ticket_wave_custom_paint.dart';
 import 'package:app/core/presentation/widgets/common/dotted_line/dotted_line.dart';
 import 'package:app/core/utils/number_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
