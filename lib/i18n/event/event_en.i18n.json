@@ -14,7 +14,6 @@
     "buyTickets": "Buy tickets",
     "rsvpToUnlock": "RSVP to this event to unlock the location",
     "eventLocation": "Location",
-    "tickets": "tickets",
     "youreIn": "You're in! 🎉",
     "rsvpSuccessful": "Congrats! You have successfully RSVP’d to $eventName.",
     "takeMeToEvent": "Take me to the event",
@@ -28,5 +27,40 @@
         "invite": "Invite",
         "leaderBoard": "Leaderboard"
     },
-    "confirmed": "confirmed"
+    "confirmed": "confirmed",
+    "eventBuyTickets": {
+        "selectTickets": "Select tickets",
+        "orderSummary": "Order summary",
+        "enterPromoCode": "Enter promo code"
+    },
+    "eventOrder": {
+        "itemTotal": "Item total",
+        "taxes": "Taxes",
+        "convenienceFees": "Convenience fees",
+        "grandTotal": "Grand total"
+    },
+    "eventPayment": {
+        "payUsing": "Pay using",
+        "cardEnding": "Card ending $lastCardNumber",
+        "slideToPay": "Slide to pay"
+    },
+    "eventPickMyTickets": {
+        "pickYourTicket": "Pick your ticket",
+        "pickYourTicketDescription": "Select the ticket type you want to assign to this account. This is permanent and cannot be changed later!"
+    },
+    "eventTicketManagement": {
+        "myTicket": "My ticket",
+        "myTicketDescription": "Download or manage your ticket",
+        "assignTicketTitle": "Additional tickets",
+        "assignTicketDescription": "You can assign additional tickets now or later inside the event",
+        "assignTicket": "Assign",
+        "reassignTicket": "Reassign",
+        "ticketUnassigned": "Unassigned",
+        "ticketAssignmentPending": "Pending",
+        "ticketAssignmentClaimed": "Claimed"
+    },
+    "tickets(ordinal)": {
+        "one": "ticket",
+        "other": "tickets"
+    }
 }

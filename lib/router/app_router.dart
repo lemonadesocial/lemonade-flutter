@@ -71,6 +71,7 @@ class AppRouter extends $AppRouter {
         ),
         chatRoutes,
         ...eventRoutes,
+        eventBuyTicketsRoutes,
         ...commonRoutes,
       ];
 }
@@ -109,6 +110,25 @@ final eventRoutes = [
   ),
   AutoRoute(page: RSVPEventSuccessPopupRoute.page)
 ];
+
+final eventBuyTicketsRoutes = AutoRoute(
+  page: EventBuyTicketsRoute.page,
+  children: [
+    AutoRoute(
+      initial: true,
+      page: SelectTicketsRoute.page,
+    ),
+    AutoRoute(
+      page: EventTicketsSummaryRoute.page,
+    ),
+    AutoRoute(
+      page: EventPickMyTicketRoute.page,
+    ),
+    AutoRoute(
+      page: EventTicketManagementRoute.page,
+    )
+  ],
+);
 
 final commonRoutes = [
   AutoRoute(

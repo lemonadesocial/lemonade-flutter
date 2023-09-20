@@ -69,5 +69,10 @@
     "processing": "Processing",
     "selectItem": "Select item",
     "start": "Start",
-    "areYouSure": "Are you sure ?"
+    "areYouSure": "Are you sure ?",
+    "next": "Next",
+    "viewProduct": "View product",
+    "apply": "Apply",
+    "applied": "Applied",
+    "confirm": "Confirm"
 }
