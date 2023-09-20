@@ -55,8 +55,8 @@ class _GuestEventDetailBuyButtonView extends StatelessWidget {
             amount: event.cost!,
             currency: event.currency,
             freeText:
-                '${t.event.tickets}  •  ${StringUtils.capitalize(t.event.free)}',
-            prefix: '${t.event.tickets}  •  ',
+                '${t.event.tickets(n: 1)}  •  ${StringUtils.capitalize(t.event.free)}',
+            prefix: '${t.event.tickets(n: 1)}  •  ',
           )
         : t.event.free;
     return BlocConsumer<BuyEventTicketBloc, BuyEventTicketState>(

@@ -14,7 +14,6 @@
     "buyTickets": "Buy tickets",
     "rsvpToUnlock": "RSVP to this event to unlock the location",
     "eventLocation": "Location",
-    "tickets": "tickets",
     "youreIn": "You're in! 🎉",
     "rsvpSuccessful": "Congrats! You have successfully RSVP’d to $eventName.",
     "takeMeToEvent": "Take me to the event",
@@ -44,5 +43,13 @@
         "payUsing": "Pay using",
         "cardEnding": "Card ending $lastCardNumber",
         "slideToPay": "Slide to pay"
+    },
+    "eventPickMyTickets": {
+        "pickYourTicket": "Pick your ticket",
+        "pickYourTicketDescription": "Select the ticket type you want to assign to this account. This is permanent and cannot be changed later!"
+    },
+    "tickets(ordinal)": {
+        "one": "ticket",
+        "other": "tickets"
     }
 }
