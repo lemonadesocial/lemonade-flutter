@@ -93,7 +93,7 @@ definitions:
     - &install_pods
       name: Install pods
       script: |
-        find . -name "Podfile" -execdir pod install \;
+        find . -name "Podfile" -execdir pod install --repo-update \;
     - &build_ipa_staging
       name: Build ipa staging
       script: |
