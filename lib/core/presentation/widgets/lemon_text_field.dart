@@ -15,6 +15,7 @@ class LemonTextField extends StatelessWidget {
     this.statusWidget,
     this.label,
     this.suffixIcon,
+    this.autofocus = false,
   }) : super(key: key);
 
   final ValueChanged<String> onChange;
@@ -26,6 +27,7 @@ class LemonTextField extends StatelessWidget {
   final Widget? statusWidget;
   final String? label;
   final Widget? suffixIcon;
+  final bool autofocus;
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +51,7 @@ class LemonTextField extends StatelessWidget {
           SizedBox(height: Spacing.superExtraSmall),
         ],
         TextFormField(
+          autofocus: autofocus,
           onChanged: onChange,
           style: theme.textTheme.bodyMedium!
               .copyWith(color: theme.colorScheme.onPrimary),
