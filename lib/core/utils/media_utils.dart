@@ -13,6 +13,7 @@ enum MediaType {
 class Media {
   final MediaType type;
   final String? url;
+
   Media({
     required this.type,
     this.url,
