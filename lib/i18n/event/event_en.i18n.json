@@ -57,7 +57,8 @@
         "reassignTicket": "Reassign",
         "ticketUnassigned": "Unassigned",
         "ticketAssignmentPending": "Pending",
-        "ticketAssignmentClaimed": "Claimed"
+        "ticketAssignmentClaimed": "Claimed",
+        "ticketHolderEmail": "Email of ticket holder"
     },
     "tickets(ordinal)": {
         "one": "ticket",
