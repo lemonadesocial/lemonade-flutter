@@ -1,8 +1,11 @@
+import 'package:app/core/data/event/dtos/event_list_ticket_types_dto/event_list_ticket_types_dto.dart';
 import 'package:app/core/data/event/dtos/event_ticket_pricing_dto/event_ticket_pricing_dto.dart';
 import 'package:app/core/data/event/gql/event_mutation.dart';
 import 'package:app/core/data/event/gql/event_query.dart';
 import 'package:app/core/data/payment/dtos/payment_dtos.dart';
+import 'package:app/core/domain/event/entities/event_list_ticket_types.dart';
 import 'package:app/core/domain/event/entities/event_ticket_pricing.dart';
+import 'package:app/core/domain/event/input/get_event_list_ticket_types_input/get_event_list_ticket_types_input.dart';
 import 'package:app/core/domain/event/input/get_event_ticket_pricing_input/get_event_ticket_pricing_input.dart';
 import 'package:app/core/domain/event/input/redeem_event_ticket_input/redeem_event_ticket_input.dart';
 import 'package:app/core/domain/event/repository/event_ticket_repository.dart';
@@ -46,6 +49,24 @@ class EventTicketRepositoryImpl implements EventTicketRepository {
         variables: input.toJson(),
         parserFn: (data) =>
             Payment.fromDto(PaymentDto.fromJson(data['redeemEventTickets'])),
+      ),
+    );
+
+    if (result.hasException) return Left(Failure());
+    return Right(result.parsedData!);
+  }
+
+  @override
+  Future<Either<Failure, EventListTicketTypes>> getEventListTicketTypes({
+    required GetEventListTicketTypesInput input,
+  }) async {
+    final result = await _client.query(
+      QueryOptions(
+        document: getEventTicketPricingQuery,
+        variables: input.toJson(),
+        parserFn: (data) => EventListTicketTypes.fromDto(
+          EventListTicketTypesDto.fromJson(data['listTicketTypes']),
+        ),
       ),
     );
 
