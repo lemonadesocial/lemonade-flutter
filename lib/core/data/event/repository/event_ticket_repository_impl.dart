@@ -49,7 +49,7 @@ class EventTicketRepositoryImpl implements EventTicketRepository {
     final result = await _client.query(
       QueryOptions(
         document: getEventListTicketTypesQuery,
-        variables: input.toJson(),
+        variables: {'input': input.toJson()},
         fetchPolicy: FetchPolicy.networkOnly,
         parserFn: (data) => EventListTicketTypes.fromDto(
           EventListTicketTypesDto.fromJson(data['listTicketTypes']),

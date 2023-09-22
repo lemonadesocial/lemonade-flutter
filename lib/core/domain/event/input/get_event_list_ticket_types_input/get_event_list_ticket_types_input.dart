@@ -7,7 +7,7 @@ part 'get_event_list_ticket_types_input.g.dart';
 class GetEventListTicketTypesInput with _$GetEventListTicketTypesInput {
   factory GetEventListTicketTypesInput({
     required String event,
-    String? discount,
+    @JsonSerializable(includeIfNull: false) String? discount,
   }) = _GetEventListTicketTypesInput;
 
   factory GetEventListTicketTypesInput.fromJson(Map<String, dynamic> json) =>

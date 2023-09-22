@@ -1,6 +1,10 @@
+import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/entities/event_list_ticket_types.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/utils/number_utils.dart';
 import 'package:app/gen/assets.gen.dart';
+import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -11,11 +15,22 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class SelectTicketItem extends StatelessWidget {
   const SelectTicketItem({
     super.key,
+    required this.ticketType,
+    required this.event,
   });
+
+  final PurchasableTicketType ticketType;
+  final Event event;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final t = Translations.of(context);
+    final costText = NumberUtils.formatCurrency(
+      amount: (ticketType.cost?.toDouble() ?? 0),
+      currency: event.currency,
+      freeText: t.event.free,
+    );
     return Padding(
       padding: EdgeInsets.all(Spacing.smMedium),
       child: Row(
@@ -31,8 +46,8 @@ class SelectTicketItem extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
               child: CachedNetworkImage(
-                imageUrl:
-                    "https://s3-alpha-sig.figma.com/img/bceb/64a8/1944e0cbe8118bcba599a4dcd49dbae5?Expires=1696204800&Signature=DCVTcs0f10zt4oihidwZ~Dmax86HmZBR8E7e4zVJdjgKZvBvx6wX9nosEyuWC4OPHhPyvVxHbzLnYGYfOHYVOVn4tMI67IKIYtFc22iafH77z~KLneTFtpC8ynL0qm7~2-DE3Qui7hb~3u4ry7ZKQZnf~gLlQkJEqDKMuXrO-yR7ByBbGlFdgXXpfvQr639ihftYa8SufCeN8WwoDNZxbaD4ome2KxMY6LIy7cbuMFYqbug3zgsATRonbqw7RL5NmLstv-1UNSlONYBQiP8f-MGiLB1HM7PLXbP2dIp-3kIWalPCpMaACAaY5CiMEAmbvDg~JzYPzTLq-XnubKg4hA__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4",
+                // TODO: api does not support yet
+                imageUrl: "",
                 placeholder: (_, __) => ImagePlaceholder.defaultPlaceholder(),
                 errorWidget: (_, __, ___) =>
                     ImagePlaceholder.defaultPlaceholder(),
@@ -41,32 +56,35 @@ class SelectTicketItem extends StatelessWidget {
           ),
           SizedBox(width: Spacing.xSmall),
           // ticket type name and description
-          Flexible(
+          Expanded(
+            flex: 1,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  "Regular - Free",
+                  "${ticketType.title}  •  $costText",
                   style: Typo.medium.copyWith(
                     color: colorScheme.onPrimary.withOpacity(0.87),
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                SizedBox(height: 2.w),
-                Text(
-                  "Access to all zones, stages + 20% discount on all purchases through pop-up shops",
-                  style: Typo.medium.copyWith(
-                    color: colorScheme.onSecondary,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  maxLines: 4,
-                  overflow: TextOverflow.ellipsis,
-                )
+                if (ticketType.description != null &&
+                    ticketType.description!.isNotEmpty) ...[
+                  SizedBox(height: 2.w),
+                  Text(
+                    ticketType.description ?? '',
+                    style: Typo.medium.copyWith(
+                      color: colorScheme.onSecondary,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    maxLines: 4,
+                    overflow: TextOverflow.ellipsis,
+                  )
+                ]
               ],
             ),
           ),
-          SizedBox(width: Spacing.smMedium),
           // quantity selection
           InkWell(
             child: Container(
