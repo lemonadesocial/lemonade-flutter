@@ -155,7 +155,7 @@ class WalletConnectService {
       }
       return false;
     } on JsonRpcError catch (e) {
-      SnackBarUtils.showSnackbar(e.message);
+      SnackBarUtils.showSnackbar(e.message ?? '');
       return false;
     } catch (e) {
       return false;
