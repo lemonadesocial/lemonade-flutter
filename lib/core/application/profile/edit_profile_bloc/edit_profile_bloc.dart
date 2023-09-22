@@ -2,6 +2,7 @@ import 'package:app/core/domain/common/common_enums.dart';
 import 'package:app/core/domain/onboarding/onboarding_inputs.dart';
 import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/service/post/post_service.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -18,6 +19,7 @@ class EditProfileBloc extends Cubit<EditProfileState> {
 
   final UserRepository userRepository;
   final PostService postService;
+  final birthDayCtrl = TextEditingController();
 
   String? mImageId;
 
@@ -124,7 +126,16 @@ class EditProfileBloc extends Cubit<EditProfileState> {
     );
   }
 
-  void onBirthdaySelect() {}
+  void onBirthdayChange(String input) {
+    print('input: $input');
+    birthDayCtrl.text = input;
+    emit(
+      state.copyWith(
+        status: EditProfileStatus.editing,
+        dob: input,
+      ),
+    );
+  }
 
   Future<void> uploadImage() async {
     final response = await postService.uploadImage(
