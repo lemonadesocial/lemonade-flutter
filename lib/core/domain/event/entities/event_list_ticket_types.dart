@@ -1,19 +1,21 @@
 import 'package:app/core/data/event/dtos/event_list_ticket_types_dto/event_list_ticket_types_dto.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 
-class EventListTicketTypes {
+class EventListTicketTypesResponse {
   final TicketDiscount? discount;
   final int? limit;
   final List<PurchasableTicketType>? ticketTypes;
 
-  const EventListTicketTypes({
+  const EventListTicketTypesResponse({
     this.discount,
     this.limit,
     this.ticketTypes,
   });
 
-  factory EventListTicketTypes.fromDto(EventListTicketTypesDto dto) =>
-      EventListTicketTypes(
+  factory EventListTicketTypesResponse.fromDto(
+    EventListTicketTypesResponseDto dto,
+  ) =>
+      EventListTicketTypesResponse(
         discount:
             dto.discount != null ? TicketDiscount.fromDto(dto.discount!) : null,
         limit: dto.limit,

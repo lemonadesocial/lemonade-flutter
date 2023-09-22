@@ -4,12 +4,15 @@ part 'get_event_list_ticket_types_input.freezed.dart';
 part 'get_event_list_ticket_types_input.g.dart';
 
 @freezed
-class GetEventListTicketTypesInput with _$GetEventListTicketTypesInput {
-  factory GetEventListTicketTypesInput({
+class GetEventListTicketTypesResponseInput
+    with _$GetEventListTicketTypesResponseInput {
+  factory GetEventListTicketTypesResponseInput({
     required String event,
     @JsonSerializable(includeIfNull: false) String? discount,
-  }) = _GetEventListTicketTypesInput;
+  }) = _GetEventListTicketTypesResponseInput;
 
-  factory GetEventListTicketTypesInput.fromJson(Map<String, dynamic> json) =>
-      _$GetEventListTicketTypesInputFromJson(json);
+  factory GetEventListTicketTypesResponseInput.fromJson(
+    Map<String, dynamic> json,
+  ) =>
+      _$GetEventListTicketTypesResponseInputFromJson(json);
 }

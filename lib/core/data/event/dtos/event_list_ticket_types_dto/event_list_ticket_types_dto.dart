@@ -5,15 +5,15 @@ part 'event_list_ticket_types_dto.freezed.dart';
 part 'event_list_ticket_types_dto.g.dart';
 
 @freezed
-class EventListTicketTypesDto with _$EventListTicketTypesDto {
-  factory EventListTicketTypesDto({
+class EventListTicketTypesResponseDto with _$EventListTicketTypesResponseDto {
+  factory EventListTicketTypesResponseDto({
     TicketDiscountDto? discount,
     int? limit,
     @JsonKey(name: 'ticket_types') List<PurchasableTicketTypeDto>? ticketTypes,
-  }) = _EventListTicketTypesDto;
+  }) = _EventListTicketTypesResponseDto;
 
-  factory EventListTicketTypesDto.fromJson(Map<String, dynamic> json) =>
-      _$EventListTicketTypesDtoFromJson(json);
+  factory EventListTicketTypesResponseDto.fromJson(Map<String, dynamic> json) =>
+      _$EventListTicketTypesResponseDtoFromJson(json);
 }
 
 @freezed

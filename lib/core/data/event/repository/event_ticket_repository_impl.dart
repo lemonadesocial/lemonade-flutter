@@ -43,16 +43,17 @@ class EventTicketRepositoryImpl implements EventTicketRepository {
   }
 
   @override
-  Future<Either<Failure, EventListTicketTypes>> getEventListTicketTypes({
-    required GetEventListTicketTypesInput input,
+  Future<Either<Failure, EventListTicketTypesResponse>>
+      getEventListTicketTypesResponse({
+    required GetEventListTicketTypesResponseInput input,
   }) async {
     final result = await _client.query(
       QueryOptions(
-        document: getEventListTicketTypesQuery,
+        document: getEventListTicketTypesResponseQuery,
         variables: {'input': input.toJson()},
         fetchPolicy: FetchPolicy.networkOnly,
-        parserFn: (data) => EventListTicketTypes.fromDto(
-          EventListTicketTypesDto.fromJson(data['listTicketTypes']),
+        parserFn: (data) => EventListTicketTypesResponse.fromDto(
+          EventListTicketTypesResponseDto.fromJson(data['listTicketTypes']),
         ),
       ),
     );

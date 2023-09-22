@@ -1,18 +1,19 @@
+import 'package:app/core/application/event_tickets/select_event_tickets_bloc/select_event_tickets_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_list_ticket_types.dart';
+import 'package:app/core/domain/event/input/calculate_tickets_pricing_input/calculate_tickets_pricing_input.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
-import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/number_utils.dart';
-import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class SelectTicketItem extends StatelessWidget {
+class SelectTicketItem extends StatefulWidget {
   const SelectTicketItem({
     super.key,
     required this.ticketType,
@@ -23,12 +24,59 @@ class SelectTicketItem extends StatelessWidget {
   final Event event;
 
   @override
+  State<SelectTicketItem> createState() => _SelectTicketItemState();
+}
+
+class _SelectTicketItemState extends State<SelectTicketItem> {
+  double count = 0;
+
+  add() {
+    if (count < (widget.ticketType.limit ?? 0)) {
+      setState(() {
+        count++;
+      });
+      context.read<SelectEventTicketTypesBloc>().add(
+            SelectEventTicketTypesEvent.select(
+              ticketType: PurchasableItem(
+                id: widget.ticketType.id ?? '',
+                count: count,
+              ),
+            ),
+          );
+    }
+  }
+
+  minus() {
+    if (count == 0) return;
+    setState(() {
+      count--;
+    });
+    context.read<SelectEventTicketTypesBloc>().add(
+          SelectEventTicketTypesEvent.select(
+            ticketType: PurchasableItem(
+              id: widget.ticketType.id ?? '',
+              count: count,
+            ),
+          ),
+        );
+  }
+
+  void goToWeb() {
+    showDialog(
+      context: context,
+      builder: (context) => const AlertDialog(
+        content: Text("Paid ticket not supported yet\nPlease use our website"),
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
     final costText = NumberUtils.formatCurrency(
-      amount: (ticketType.cost?.toDouble() ?? 0),
-      currency: event.currency,
+      amount: (widget.ticketType.cost?.toDouble() ?? 0),
+      currency: widget.event.currency,
       freeText: t.event.free,
     );
     return Padding(
@@ -63,17 +111,17 @@ class SelectTicketItem extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  "${ticketType.title}  •  $costText",
+                  "${widget.ticketType.title}  •  $costText",
                   style: Typo.medium.copyWith(
                     color: colorScheme.onPrimary.withOpacity(0.87),
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                if (ticketType.description != null &&
-                    ticketType.description!.isNotEmpty) ...[
+                if (widget.ticketType.description != null &&
+                    widget.ticketType.description!.isNotEmpty) ...[
                   SizedBox(height: 2.w),
                   Text(
-                    ticketType.description ?? '',
+                    widget.ticketType.description ?? '',
                     style: Typo.medium.copyWith(
                       color: colorScheme.onSecondary,
                       fontWeight: FontWeight.w600,
@@ -88,37 +136,71 @@ class SelectTicketItem extends StatelessWidget {
           // quantity selection
           InkWell(
             child: Container(
-              width: 70.w,
+              // TODO:
+              // width: 70.w,
+              width: 120.w,
               height: Sizing.medium,
               decoration: BoxDecoration(
-                color: colorScheme.onPrimary.withOpacity(0.05),
-                // TODO:switch between no quantity and has quantity
-                // color:  Colors.transparent,
+                color: count > 0
+                    ? colorScheme.onPrimary.withOpacity(0.05)
+                    : Colors.transparent,
                 border: Border.all(
-                  color: colorScheme.onPrimary.withOpacity(0.09),
-                  // TODO:switch between no quantity and has quantity
+                  color: count > 0
+                      ? colorScheme.onPrimary.withOpacity(0.005)
+                      : colorScheme.onPrimary.withOpacity(0.09),
                   // color:  colorScheme.onPrimary.withOpacity(0.005),
                 ),
                 borderRadius: BorderRadius.circular(LemonRadius.xSmall),
               ),
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    "0",
-                    style: Typo.medium.copyWith(
-                      color: colorScheme.onSecondary,
-                      // TODO:switch between no quantity and has quantity
-                      // color: colorScheme.onPrimary,
-                      fontWeight: FontWeight.w600,
+                  IconButton(
+                    onPressed: () {
+                      if (widget.ticketType.cost != 0) {
+                        goToWeb();
+                        return;
+                      }
+                      minus();
+                    },
+                    icon: Icon(
+                      Icons.remove,
+                      color: colorScheme.onSurfaceVariant,
                     ),
                   ),
-                  SizedBox(width: Spacing.xSmall),
-                  ThemeSvgIcon(
-                    color: colorScheme.onSurfaceVariant,
-                    builder: (filter) =>
-                        Assets.icons.icArrowDown.svg(colorFilter: filter),
-                  )
+                  Expanded(
+                    child: Center(
+                      child: Text(
+                        "${count.toInt()}",
+                        style: Typo.medium.copyWith(
+                          color: colorScheme.onSecondary,
+                          // TODO:switch between no quantity and has quantity
+                          // color: colorScheme.onPrimary,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                  // TODO: design ui missing the way to input quantity
+                  // SizedBox(width: Spacing.xSmall),
+                  // ThemeSvgIcon(
+                  //   color: colorScheme.onSurfaceVariant,
+                  //   builder: (filter) => Assets.icons.icArrowDown.svg(colorFilter: filter),
+                  // )
+                  IconButton(
+                    onPressed: () {
+                      if (widget.ticketType.cost != 0) {
+                        goToWeb();
+                        return;
+                      }
+                      add();
+                    },
+                    icon: Icon(
+                      Icons.add,
+                      color: colorScheme.onSurfaceVariant,
+                    ),
+                  ),
                 ],
               ),
             ),

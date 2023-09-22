@@ -8,27 +8,30 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'get_event_list_ticket_types_bloc.freezed.dart';
 
-class GetEventListTicketTypesBloc
-    extends Bloc<GetEventListTicketTypesEvent, GetEventListTicketTypesState> {
+class GetEventListTicketTypesResponseBloc extends Bloc<
+    GetEventListTicketTypesResponseEvent,
+    GetEventListTicketTypesResponseState> {
   final Event event;
   final _eventTicketRepository = getIt<EventTicketRepository>();
 
-  GetEventListTicketTypesBloc({
+  GetEventListTicketTypesResponseBloc({
     required this.event,
-  }) : super(GetEventListTicketTypesStateLoading()) {
-    on<GetEventListTicketTypesEventFetch>(_onFetch);
+  }) : super(GetEventListTicketTypesResponseStateLoading()) {
+    on<GetEventListTicketTypesResponseEventFetch>(_onFetch);
   }
 
   Future<void> _onFetch(
-      GetEventListTicketTypesEventFetch blocEvent, Emitter emit) async {
-    final result = await _eventTicketRepository.getEventListTicketTypes(
-      input: GetEventListTicketTypesInput(event: event.id ?? ''),
+    GetEventListTicketTypesResponseEventFetch blocEvent,
+    Emitter emit,
+  ) async {
+    final result = await _eventTicketRepository.getEventListTicketTypesResponse(
+      input: GetEventListTicketTypesResponseInput(event: event.id ?? ''),
     );
     result.fold(
-      (l) => emit(GetEventListTicketTypesState.failure()),
+      (l) => emit(GetEventListTicketTypesResponseState.failure()),
       (data) => emit(
-        GetEventListTicketTypesState.success(
-          listTicketTypes: data,
+        GetEventListTicketTypesResponseState.success(
+          listTicketTypesResponse: data,
         ),
       ),
     );
@@ -36,18 +39,20 @@ class GetEventListTicketTypesBloc
 }
 
 @freezed
-class GetEventListTicketTypesEvent with _$GetEventListTicketTypesEvent {
-  factory GetEventListTicketTypesEvent.fetch() =
-      GetEventListTicketTypesEventFetch;
+class GetEventListTicketTypesResponseEvent
+    with _$GetEventListTicketTypesResponseEvent {
+  factory GetEventListTicketTypesResponseEvent.fetch() =
+      GetEventListTicketTypesResponseEventFetch;
 }
 
 @freezed
-class GetEventListTicketTypesState with _$GetEventListTicketTypesState {
-  factory GetEventListTicketTypesState.loading() =
-      GetEventListTicketTypesStateLoading;
-  factory GetEventListTicketTypesState.success({
-    required EventListTicketTypes listTicketTypes,
-  }) = GetEventListTicketTypesStateSuccess;
-  factory GetEventListTicketTypesState.failure() =
-      GetEventListTicketTypesStateFailure;
+class GetEventListTicketTypesResponseState
+    with _$GetEventListTicketTypesResponseState {
+  factory GetEventListTicketTypesResponseState.loading() =
+      GetEventListTicketTypesResponseStateLoading;
+  factory GetEventListTicketTypesResponseState.success({
+    required EventListTicketTypesResponse listTicketTypesResponse,
+  }) = GetEventListTicketTypesResponseStateSuccess;
+  factory GetEventListTicketTypesResponseState.failure() =
+      GetEventListTicketTypesResponseStateFailure;
 }

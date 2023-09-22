@@ -1,6 +1,6 @@
 import 'package:graphql_flutter/graphql_flutter.dart';
 
-final getEventListTicketTypesQuery = gql('''
+final getEventListTicketTypesResponseQuery = gql('''
   query ListTicketTypes(\$input: ListTicketTypesInput!) {
     listTicketTypes(input: \$input) {
       discount {

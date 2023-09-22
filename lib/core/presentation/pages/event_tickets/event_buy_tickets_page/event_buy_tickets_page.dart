@@ -1,5 +1,6 @@
 import 'package:app/core/application/event/event_provider_bloc/event_provider_bloc.dart';
 import 'package:app/core/application/event_tickets/get_event_list_ticket_types_bloc/get_event_list_ticket_types_bloc.dart';
+import 'package:app/core/application/event_tickets/select_event_tickets_bloc/select_event_tickets_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -21,10 +22,11 @@ class EventBuyTicketsPage extends StatelessWidget implements AutoRouteWrapper {
         BlocProvider(
           create: (context) => EventProviderBloc(event: event),
         ),
+        BlocProvider(create: (context) => SelectEventTicketTypesBloc()),
         BlocProvider(
-          create: (context) => GetEventListTicketTypesBloc(event: event)
+          create: (context) => GetEventListTicketTypesResponseBloc(event: event)
             ..add(
-              GetEventListTicketTypesEvent.fetch(),
+              GetEventListTicketTypesResponseEvent.fetch(),
             ),
         )
       ],

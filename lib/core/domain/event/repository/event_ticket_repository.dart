@@ -14,8 +14,9 @@ abstract class EventTicketRepository {
     required CalculateTicketsPricingInput input,
   });
 
-  Future<Either<Failure, EventListTicketTypes>> getEventListTicketTypes({
-    required GetEventListTicketTypesInput input,
+  Future<Either<Failure, EventListTicketTypesResponse>>
+      getEventListTicketTypesResponse({
+    required GetEventListTicketTypesResponseInput input,
   });
 
   Future<Either<Failure, List<EventTicket>>> redeemTickets({

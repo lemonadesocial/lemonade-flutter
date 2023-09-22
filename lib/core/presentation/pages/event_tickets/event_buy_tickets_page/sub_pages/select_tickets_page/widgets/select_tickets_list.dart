@@ -8,14 +8,14 @@ class SelectTicketsList extends StatelessWidget {
   const SelectTicketsList({
     super.key,
     required this.event,
-    required this.listTicketTypes,
+    required this.listTicketTypesResponse,
   });
 
-  final EventListTicketTypes listTicketTypes;
+  final EventListTicketTypesResponse listTicketTypesResponse;
   final Event event;
 
   List<PurchasableTicketType> get ticketTypes =>
-      listTicketTypes.ticketTypes ?? [];
+      listTicketTypesResponse.ticketTypes ?? [];
 
   @override
   Widget build(BuildContext context) {
