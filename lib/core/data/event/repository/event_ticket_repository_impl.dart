@@ -1,15 +1,15 @@
 import 'package:app/core/data/event/dtos/event_list_ticket_types_dto/event_list_ticket_types_dto.dart';
+import 'package:app/core/data/event/dtos/event_ticket_dto/event_ticket_dto.dart';
 import 'package:app/core/data/event/dtos/event_ticket_pricing_dto/event_ticket_pricing_dto.dart';
-import 'package:app/core/data/event/gql/event_mutation.dart';
 import 'package:app/core/data/event/gql/event_query.dart';
-import 'package:app/core/data/payment/dtos/payment_dtos.dart';
+import 'package:app/core/data/event/gql/event_tickets_mutation.dart';
 import 'package:app/core/domain/event/entities/event_list_ticket_types.dart';
+import 'package:app/core/domain/event/entities/event_ticket.dart';
 import 'package:app/core/domain/event/entities/event_ticket_pricing.dart';
 import 'package:app/core/domain/event/input/get_event_list_ticket_types_input/get_event_list_ticket_types_input.dart';
 import 'package:app/core/domain/event/input/get_event_ticket_pricing_input/get_event_ticket_pricing_input.dart';
-import 'package:app/core/domain/event/input/redeem_event_ticket_input/redeem_event_ticket_input.dart';
+import 'package:app/core/domain/event/input/redeem_tickets_input/redeem_tickets_input.dart';
 import 'package:app/core/domain/event/repository/event_ticket_repository.dart';
-import 'package:app/core/domain/payment/entities/payment.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/core/gql.dart';
 import 'package:app/injection/register_module.dart';
@@ -40,23 +40,6 @@ class EventTicketRepositoryImpl implements EventTicketRepository {
   }
 
   @override
-  Future<Either<Failure, Payment>> redeemEventTickets({
-    required RedeemEventTicketInput input,
-  }) async {
-    final result = await _client.mutate(
-      MutationOptions(
-        document: redeemEventTicketsMutation,
-        variables: input.toJson(),
-        parserFn: (data) =>
-            Payment.fromDto(PaymentDto.fromJson(data['redeemEventTickets'])),
-      ),
-    );
-
-    if (result.hasException) return Left(Failure());
-    return Right(result.parsedData!);
-  }
-
-  @override
   Future<Either<Failure, EventListTicketTypes>> getEventListTicketTypes({
     required GetEventListTicketTypesInput input,
   }) async {
@@ -67,6 +50,24 @@ class EventTicketRepositoryImpl implements EventTicketRepository {
         parserFn: (data) => EventListTicketTypes.fromDto(
           EventListTicketTypesDto.fromJson(data['listTicketTypes']),
         ),
+      ),
+    );
+
+    if (result.hasException) return Left(Failure());
+    return Right(result.parsedData!);
+  }
+
+  @override
+  Future<Either<Failure, List<EventTicket>>> redeemTickets({
+    required RedeemTicketsInput input,
+  }) async {
+    final result = await _client.mutate(
+      MutationOptions(
+        document: redeemTicketsMutation,
+        variables: input.toJson(),
+        parserFn: (data) => List.from(data['redeemTickets'] ?? [])
+            .map((item) => EventTicket.fromDto(EventTicketDto.fromJson(item)))
+            .toList(),
       ),
     );
 
