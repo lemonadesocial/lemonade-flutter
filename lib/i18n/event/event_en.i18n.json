@@ -41,8 +41,16 @@
     },
     "eventPayment": {
         "payUsing": "Pay using",
+        "payUsingDescription": "Choose your preferred payment method",
         "cardEnding": "Card ending $lastCardNumber",
-        "slideToPay": "Slide to pay"
+        "slideToPay": "Slide to pay",
+        "addNewCard": "Add new card",
+        "addNewCardDescription": "Enter your card details below",
+        "cardHolderName": "Cardholder name",
+        "cardNumber": "Card number",
+        "validThrough": "Valid through",
+        "cvc": "CVC",
+        "addCard": "Add card"
     },
     "eventPickMyTickets": {
         "pickYourTicket": "Pick your ticket",
