@@ -12,7 +12,6 @@ import 'package:app/injection/register_module.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:dartz/dartz.dart' as dartz;
 
 class ProfileNftCollectedListView extends StatelessWidget {
   final User user;
@@ -72,8 +71,8 @@ class _ProfileNftCreatedListViewState extends State<_ProfileNftCollectedList> {
             failure: () => SliverToBoxAdapter(
               child: Center(child: Text(t.common.somethingWrong)),
             ),
-            fetched: (tokens) {
-              if (tokens.isEmpty) {
+            fetched: (mediaList) {
+              if (mediaList.isEmpty) {
                 return SliverFillRemaining(
                   hasScrollBody: false,
                   child: EmptyList(emptyText: t.nft.noCollectible),
@@ -87,10 +86,12 @@ class _ProfileNftCreatedListViewState extends State<_ProfileNftCollectedList> {
                 ),
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
-                    final nftToken = tokens[index];
-                    return ProfileNftItem(nftToken: dartz.Left(nftToken));
+                    return ProfileNftItem(
+                      mediaList: mediaList,
+                      index: index,
+                    );
                   },
-                  childCount: tokens.length,
+                  childCount: mediaList.length,
                 ),
               );
             },

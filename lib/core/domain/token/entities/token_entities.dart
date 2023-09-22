@@ -55,6 +55,7 @@ class TokenComplex {
             .toList(),
         uri: dto.uri,
       );
+
   final String? id;
   final String? network;
   final String? tokenId;
@@ -269,6 +270,11 @@ class TokenMetadata {
   final String? animation_url;
   final String? external_url;
   final List<String?>? creators;
+
+  @override
+  String toString() {
+    return 'TokenMetadata{name: $name, description: $description, image: $image, animation_url: $animation_url, external_url: $external_url, creators: $creators}';
+  }
 }
 
 class TokenSimple {
