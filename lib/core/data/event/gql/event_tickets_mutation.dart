@@ -13,3 +13,9 @@ final redeemTicketsMutation = gql('''
     }
   }
 ''');
+
+final assignTicketsMutation = gql('''
+  mutation AssignTickets(\$input: AssignTicketsInput!) {
+    assignTickets(input: \$input)
+  }
+''');
