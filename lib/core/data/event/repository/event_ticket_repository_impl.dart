@@ -1,6 +1,6 @@
 import 'package:app/core/data/event/dtos/event_ticket_pricing_dto/event_ticket_pricing_dto.dart';
-import 'package:app/core/data/event/event_mutation.dart';
-import 'package:app/core/data/event/event_query.dart';
+import 'package:app/core/data/event/gql/event_mutation.dart';
+import 'package:app/core/data/event/gql/event_query.dart';
 import 'package:app/core/data/payment/dtos/payment_dtos.dart';
 import 'package:app/core/domain/event/entities/event_ticket_pricing.dart';
 import 'package:app/core/domain/event/input/get_event_ticket_pricing_input/get_event_ticket_pricing_input.dart';
