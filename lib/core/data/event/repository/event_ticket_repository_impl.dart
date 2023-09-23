@@ -69,14 +69,18 @@ class EventTicketRepositoryImpl implements EventTicketRepository {
     final result = await _client.mutate(
       MutationOptions(
         document: redeemTicketsMutation,
-        variables: input.toJson(),
+        variables: {
+          'input': input.toJson(),
+        },
         parserFn: (data) => List.from(data['redeemTickets'] ?? [])
             .map((item) => EventTicket.fromDto(EventTicketDto.fromJson(item)))
             .toList(),
       ),
     );
 
-    if (result.hasException) return Left(Failure());
+    if (result.hasException) {
+      return Left(Failure.withGqlException(result.exception));
+    }
     return Right(result.parsedData!);
   }
 
@@ -87,12 +91,16 @@ class EventTicketRepositoryImpl implements EventTicketRepository {
     final result = await _client.mutate(
       MutationOptions(
         document: assignTicketsMutation,
-        variables: input.toJson(),
+        variables: {
+          'input': input.toJson(),
+        },
         parserFn: (data) => data['assignTickets'] ?? false,
       ),
     );
 
-    if (result.hasException) return Left(Failure());
+    if (result.hasException) {
+      return Left(Failure.withGqlException(result.exception));
+    }
     return Right(result.parsedData!);
   }
 

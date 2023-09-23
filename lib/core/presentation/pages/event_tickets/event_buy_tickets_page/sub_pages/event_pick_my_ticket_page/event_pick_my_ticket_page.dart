@@ -28,7 +28,9 @@ class EventPickMyTicketView extends StatelessWidget {
     final t = Translations.of(context);
     return Scaffold(
       backgroundColor: colorScheme.background,
-      appBar: const LemonAppBar(),
+      appBar: const LemonAppBar(
+        leading: SizedBox.shrink(),
+      ),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

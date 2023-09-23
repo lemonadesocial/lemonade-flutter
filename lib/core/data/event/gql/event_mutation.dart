@@ -1,8 +1,8 @@
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 final acceptEventMutation = gql('''
-  mutation (\$id: MongoID!, \$skip: Boolean = false) {
-    acceptEvent(_id: \$id, skip_payment: \$skip) {
+  mutation (\$id: MongoID!) {
+    acceptEvent(_id: \$id) {
       messages {
         primary
         secondary

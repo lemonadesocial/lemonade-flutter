@@ -1,11 +1,10 @@
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/entities/event_rsvp.dart';
 import 'package:app/core/presentation/widgets/animation/ripple_animation.dart';
-import 'package:app/core/presentation/widgets/back_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -18,9 +17,15 @@ class RSVPEventSuccessPopupPage extends StatelessWidget {
   const RSVPEventSuccessPopupPage({
     super.key,
     required this.event,
+    this.eventRsvp,
+    this.buttonBuilder,
+    this.onPressed,
   });
 
   final Event event;
+  final EventRsvp? eventRsvp;
+  final Widget? Function(BuildContext context)? buttonBuilder;
+  final Function(BuildContext context)? onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +46,7 @@ class RSVPEventSuccessPopupPage extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: Spacing.xLarge),
                   child: Text(
-                    t.event.youreIn,
+                    eventRsvp?.messages?.primary ?? t.event.youreIn,
                     style: Typo.extraLarge.copyWith(
                       fontFamily: FontFamily.nohemiVariable,
                       fontWeight: FontWeight.w900,
@@ -53,7 +58,8 @@ class RSVPEventSuccessPopupPage extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: Spacing.xLarge),
                   child: Text(
-                    t.event.rsvpSuccessful(eventName: event.title ?? ''),
+                    eventRsvp?.messages?.secondary ??
+                        t.event.rsvpSuccessful(eventName: event.title ?? ''),
                     style: Typo.mediumPlus.copyWith(
                       fontWeight: FontWeight.w400,
                       color: colorScheme.onSecondary,
@@ -64,19 +70,20 @@ class RSVPEventSuccessPopupPage extends StatelessWidget {
                 SizedBox(height: Spacing.xLarge),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: Spacing.xLarge),
-                  child: LinearGradientButton(
-                    onTap: () => AutoRouter.of(context)
-                        .replace(GuestEventDetailRoute(eventId: event.id!)),
-                    mode: GradientButtonMode.lavenderMode,
-                    height: Sizing.large,
-                    textStyle: Typo.medium.copyWith(
-                      fontWeight: FontWeight.w600,
-                      color: colorScheme.onPrimary.withOpacity(0.87),
-                      fontFamily: FontFamily.nohemiVariable,
-                    ),
-                    radius: BorderRadius.circular(LemonRadius.small * 2),
-                    label: t.event.takeMeToEvent,
-                  ),
+                  child: buttonBuilder != null
+                      ? buttonBuilder?.call(context)
+                      : LinearGradientButton(
+                          onTap: () => onPressed?.call(context),
+                          mode: GradientButtonMode.lavenderMode,
+                          height: Sizing.large,
+                          textStyle: Typo.medium.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: colorScheme.onPrimary.withOpacity(0.87),
+                            fontFamily: FontFamily.nohemiVariable,
+                          ),
+                          radius: BorderRadius.circular(LemonRadius.small * 2),
+                          label: t.event.takeMeToEvent,
+                        ),
                 )
               ],
             ),
@@ -91,9 +98,7 @@ class RSVPEventSuccessPopupPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    LemonBackButton(
-                      color: colorScheme.onPrimary,
-                    ),
+                    const Spacer(),
                     Container(
                       width: 125.w,
                       height: Sizing.medium,
