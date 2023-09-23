@@ -71,5 +71,6 @@
     "tickets(ordinal)": {
         "one": "ticket",
         "other": "tickets"
-    }
+    },
+    "remaining": "remaining"
 }

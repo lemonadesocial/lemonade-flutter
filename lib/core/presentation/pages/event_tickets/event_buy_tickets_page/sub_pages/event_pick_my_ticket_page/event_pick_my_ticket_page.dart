@@ -1,13 +1,28 @@
+import 'package:app/core/application/auth/auth_bloc.dart';
+import 'package:app/core/application/event/accept_event_bloc/accept_event_bloc.dart';
+import 'package:app/core/application/event/event_provider_bloc/event_provider_bloc.dart';
+import 'package:app/core/application/event_tickets/assign_tickets_bloc/assign_tickets_bloc.dart';
+import 'package:app/core/application/event_tickets/get_event_list_ticket_types_bloc/get_event_list_ticket_types_bloc.dart';
+import 'package:app/core/application/event_tickets/get_my_tickets_bloc/get_my_tickets_bloc.dart';
+import 'package:app/core/application/event_tickets/select_self_assign_ticket_bloc/select_self_assign_ticket_bloc.dart';
+import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/input/assign_tickets_input/assign_tickets_input.dart';
+import 'package:app/core/domain/event/input/get_tickets_input/get_tickets_input.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_pick_my_ticket_page/widgets/pick_my_tickets_list.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
+import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
+import 'package:app/core/presentation/widgets/loading_widget.dart';
+import 'package:app/core/utils/event_tickets_utils.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 @RoutePage()
 class EventPickMyTicketPage extends StatelessWidget {
@@ -15,70 +30,213 @@ class EventPickMyTicketPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const EventPickMyTicketView();
+    final event = context.read<EventProviderBloc>().event;
+    final userId = context.read<AuthBloc>().state.maybeWhen(
+          orElse: () => '',
+          authenticated: (session) => session.userId,
+        );
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => GetMyTicketsBloc(
+            input: GetTicketsInput(
+              skip: 0,
+              limit: 100,
+              user: userId,
+              event: event.id ?? '',
+            ),
+          )..add(GetMyTicketsEvent.fetch()),
+        ),
+        BlocProvider(
+          create: (context) => SelectSelfAssignTicketBloc(),
+        ),
+        BlocProvider(
+          create: (context) => AssignTicketsBloc(event: event),
+        ),
+        BlocProvider(
+          create: (context) => AcceptEventBloc(event: event),
+        )
+      ],
+      child: EventPickMyTicketView(event: event),
+    );
   }
 }
 
 class EventPickMyTicketView extends StatelessWidget {
-  const EventPickMyTicketView({super.key});
+  final Event event;
+  const EventPickMyTicketView({
+    super.key,
+    required this.event,
+  });
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final assignTicketsState = context.watch<AssignTicketsBloc>().state;
+    final acceptEventState = context.watch<AcceptEventBloc>().state;
+    final userId = context.read<AuthBloc>().state.maybeWhen(
+          orElse: () => '',
+          authenticated: (session) => session.userId,
+        );
+
     final t = Translations.of(context);
-    return Scaffold(
-      backgroundColor: colorScheme.background,
-      appBar: const LemonAppBar(
-        leading: SizedBox.shrink(),
-      ),
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    t.event.eventPickMyTickets.pickYourTicket,
-                    style: Typo.extraLarge.copyWith(
-                      color: colorScheme.onPrimary,
-                      fontFamily: FontFamily.nohemiVariable,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                  Text(
-                    t.event.eventPickMyTickets.pickYourTicketDescription,
-                    style: Typo.mediumPlus.copyWith(
-                      color: colorScheme.onSecondary,
-                    ),
-                  ),
-                ],
-              ),
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<GetMyTicketsBloc, GetMyTicketsState>(
+          listener: (context, state) {
+            state.maybeWhen(
+              orElse: () => null,
+              success: (myTickets) {
+                context.read<SelectSelfAssignTicketBloc>().add(
+                      SelectSelfAssignTicketEvent.onMyTicketsLoaded(
+                        myTickets: myTickets,
+                      ),
+                    );
+              },
+            );
+          },
+        ),
+        BlocListener<AssignTicketsBloc, AssignTicketsState>(
+          listener: (context, state) {
+            state.maybeWhen(
+              orElse: () => null,
+              success: (isSuccess) {
+                if (isSuccess) {
+                  context
+                      .read<AcceptEventBloc>()
+                      .add(AcceptEventBlocEvent.accept());
+                }
+              },
+            );
+          },
+        ),
+        BlocListener<AcceptEventBloc, AcceptEventState>(
+          listener: (context, state) {
+            state.maybeWhen(
+              orElse: () => null,
+              success: (eventRsvp) {
+                AutoRouter.of(context)
+                    .replaceAll([const EventTicketManagementRoute()]);
+              },
+            );
+          },
+        ),
+      ],
+      child: Scaffold(
+        backgroundColor: colorScheme.background,
+        appBar: const LemonAppBar(
+            // leading: SizedBox.shrink(),
             ),
-            SizedBox(height: Spacing.smMedium),
-            const PickMyTicketsList(),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-              child: SizedBox(
-                height: Sizing.large,
-                child: Opacity(
-                  opacity: 1, // 0.5 for disabled state,
-                  child: LinearGradientButton(
-                    radius: BorderRadius.circular(LemonRadius.small * 2),
-                    mode: GradientButtonMode.lavenderMode,
-                    label: t.common.confirm,
-                    textStyle: Typo.medium.copyWith(
-                      fontFamily: FontFamily.nohemiVariable,
-                      fontWeight: FontWeight.w600,
-                      color: colorScheme.onPrimary.withOpacity(0.87),
+        body: SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      t.event.eventPickMyTickets.pickYourTicket,
+                      style: Typo.extraLarge.copyWith(
+                        color: colorScheme.onPrimary,
+                        fontFamily: FontFamily.nohemiVariable,
+                        fontWeight: FontWeight.w800,
+                      ),
                     ),
-                  ),
+                    Text(
+                      t.event.eventPickMyTickets.pickYourTicketDescription,
+                      style: Typo.mediumPlus.copyWith(
+                        color: colorScheme.onSecondary,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            )
-          ],
+              SizedBox(height: Spacing.smMedium),
+              BlocBuilder<GetEventListTicketTypesResponseBloc,
+                  GetEventListTicketTypesResponseState>(
+                builder: (context, state) {
+                  return state.when(
+                    loading: () => Loading.defaultLoading(context),
+                    failure: () => EmptyList(
+                      emptyText: t.common.somethingWrong,
+                    ),
+                    success: (eventListTicketTypesResponse) {
+                      return BlocBuilder<GetMyTicketsBloc, GetMyTicketsState>(
+                        builder: (context, state) => state.when(
+                          loading: () => Loading.defaultLoading(context),
+                          failure: () => EmptyList(
+                            emptyText: t.common.somethingWrong,
+                          ),
+                          success: (myTickets) => PickMyTicketsList(
+                            event: event,
+                            ticketGroupsMap:
+                                EventTicketUtils.groupTicketsByTicketType(
+                              EventTicketUtils.getNotAssignedTicketOnly(
+                                myTickets,
+                              ),
+                            ),
+                            ticketTypes:
+                                eventListTicketTypesResponse.ticketTypes ?? [],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+              const Spacer(),
+              BlocBuilder<SelectSelfAssignTicketBloc,
+                  SelectSelfAssignTicketState>(
+                builder: (context, state) {
+                  final isButtonLoading =
+                      assignTicketsState is AssignTicketsStateLoading ||
+                          acceptEventState is AcceptEventStateLoading;
+                  final isInvalid = state.selectedTicketType == null;
+                  return Padding(
+                    padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+                    child: SizedBox(
+                      height: Sizing.large,
+                      child: Opacity(
+                        opacity: isButtonLoading || isInvalid ? 0.5 : 1,
+                        child: LinearGradientButton(
+                          onTap: () {
+                            if (isButtonLoading || isInvalid) return;
+                            final ticketToAssign = context
+                                .read<SelectSelfAssignTicketBloc>()
+                                .getTicketToAssign();
+                            if (ticketToAssign == null) return;
+
+                            context.read<AssignTicketsBloc>().add(
+                                  AssignTicketsEvent.assign(
+                                    assignees: [
+                                      TicketAssignee(
+                                        ticket: ticketToAssign.id ?? '',
+                                        user: userId,
+                                      )
+                                    ],
+                                  ),
+                                );
+                          },
+                          radius: BorderRadius.circular(LemonRadius.small * 2),
+                          mode: GradientButtonMode.lavenderMode,
+                          label: isButtonLoading
+                              ? '${t.common.processing}...'
+                              : t.common.confirm,
+                          textStyle: Typo.medium.copyWith(
+                            fontFamily: FontFamily.nohemiVariable,
+                            fontWeight: FontWeight.w600,
+                            color: colorScheme.onPrimary.withOpacity(0.87),
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              )
+            ],
+          ),
         ),
       ),
     );

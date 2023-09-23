@@ -115,7 +115,7 @@ final eventBuyTicketsRoutes = AutoRoute(
   page: EventBuyTicketsRoute.page,
   children: [
     AutoRoute(
-      initial: true,
+      // initial: true,
       page: SelectTicketsRoute.page,
     ),
     AutoRoute(
@@ -125,8 +125,9 @@ final eventBuyTicketsRoutes = AutoRoute(
       page: EventTicketsPaymentMethodRoute.page,
     ),
     AutoRoute(
+      initial: true,
       page: EventPickMyTicketRoute.page,
-      meta: const {'popBlocked': true},
+      // meta: const {'popBlocked': true},
     ),
     AutoRoute(
       page: EventTicketManagementRoute.page,
