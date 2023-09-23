@@ -1,6 +1,8 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
+import 'package:app/core/presentation/widgets/bottom_bar/animated_bottom_bar_widget.dart';
 import 'package:app/core/presentation/widgets/bottom_bar/bottom_bar_widget.dart';
 import 'package:app/core/presentation/widgets/common/drawer/lemon_drawer.dart';
+import 'package:app/core/presentation/widgets/home/floating_create_button.dart';
 import 'package:app/core/presentation/widgets/poap/poap_claim_transfer_controller_widget/poap_claim_transfer_controller_widget.dart';
 import 'package:app/core/utils/drawer_utils.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -52,12 +54,24 @@ class RootPage extends StatelessWidget {
                 authState.maybeWhen(
                   authenticated: (session) => const MyProfileRoute(),
                   orElse: EmptyRoute.new,
-                )
+                ),
               ],
               drawer: const LemonDrawer(),
               endDrawer: const LemonDrawer(),
+              floatingActionButton: FloatingCreateButton(
+                onTap: () => context.router.push(
+                  CreatePostRoute(
+                    onPostCreated: (newPost) =>
+                        context.read<NewsfeedListingBloc>().add(
+                              NewsfeedListingEvent.newPostAdded(post: newPost),
+                            ),
+                  ),
+                ),
+              ),
+              floatingActionButtonLocation:
+                  FloatingActionButtonLocation.centerDocked,
               bottomNavigationBuilder: (_, tabsRouter) {
-                return const BottomBar();
+                return const AnimatedBottomBarWidget();
               },
             ),
           ],

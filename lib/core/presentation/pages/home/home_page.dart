@@ -70,23 +70,24 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       backgroundColor: LemonColor.black,
       body: const HomeNewsfeedListView(),
-      floatingActionButton: userId == null
-          ? null
-          : Padding(
-              padding: EdgeInsets.only(bottom: BottomBar.bottomBarHeight),
-              child: FloatingCreateButton(
-                onTap: () => context.router.push(
-                  CreatePostRoute(
-                    onPostCreated: (newPost) =>
-                        context.read<NewsfeedListingBloc>().add(
-                              NewsfeedListingEvent.newPostAdded(post: newPost),
-                            ),
-                  ),
-                ),
-              ),
-            ),
+      // floatingActionButton: userId == null
+      //     ? null
+      //     : Padding(
+      //         padding: EdgeInsets.only(bottom: BottomBar.bottomBarHeight),
+      //         child: FloatingCreateButton(
+      //           onTap: () => context.router.push(
+      //             CreatePostRoute(
+      //               onPostCreated: (newPost) =>
+      //                   context.read<NewsfeedListingBloc>().add(
+      //                         NewsfeedListingEvent.newPostAdded(post: newPost),
+      //                       ),
+      //             ),
+      //           ),
+      //         ),
+      //       ),
     );
   }
 }

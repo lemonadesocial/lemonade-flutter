@@ -1,7 +1,6 @@
-import 'dart:io';
-import 'dart:ui';
-
+import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:app/core/application/auth/auth_bloc.dart';
+import 'package:app/core/application/newsfeed/newsfeed_listing_bloc/newsfeed_listing_bloc.dart';
 import 'package:app/core/presentation/widgets/bottom_bar/app_tabs.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
@@ -14,20 +13,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 
-import 'package:app/core/application/newsfeed/newsfeed_listing_bloc/newsfeed_listing_bloc.dart';
-
-class BottomBar extends StatefulWidget {
-  const BottomBar({super.key});
-
-  static double get bottomBarHeight => Platform.isIOS ? 90.h : 70.h;
+class AnimatedBottomBarWidget extends StatefulWidget {
+  const AnimatedBottomBarWidget({Key? key}) : super(key: key);
 
   @override
-  BottomBarState createState() => BottomBarState();
+  State<AnimatedBottomBarWidget> createState() =>
+      _AnimatedBottomBarWidgetState();
 }
 
-class BottomBarState extends State<BottomBar>
+class _AnimatedBottomBarWidgetState extends State<AnimatedBottomBarWidget>
     with SingleTickerProviderStateMixin {
-  AppTab _selectedTab = AppTab.home;
+  var _selectedIndex = 0;
   late AnimationController _animationController;
   late Animation<double> _animation;
   bool _isTabChanged = false; // for initial render didn't change any tab yet
@@ -56,57 +52,36 @@ class BottomBarState extends State<BottomBar>
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return Container(
-      height: BottomBar.bottomBarHeight,
-      decoration: BoxDecoration(
-        color: colorScheme.surfaceVariant,
-        border: Border(
-          top: BorderSide(color: LemonColor.white09),
-        ),
+    return AnimatedBottomNavigationBar.builder(
+      itemCount: tabs.length,
+      tabBuilder: (index, isActive) => _buildTabItem(
+        context,
+        tabs[index],
+        index,
       ),
-      child: ClipRect(
-        child: BackdropFilter(
-          filter: ImageFilter.blur(
-            sigmaX: 10,
-            sigmaY: 10,
-          ),
-          child: Column(
-            children: [
-              SizedBox(height: 15.h),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: tabs.map((tabData) {
-                  return _buildTabItem(context, tabData);
-                }).toList(),
-              ),
-              SizedBox(height: 18.h),
-            ],
-          ),
-        ),
-      ),
+      activeIndex: _selectedIndex,
+      gapLocation: GapLocation.center,
+      backgroundColor: LemonColor.black,
+      notchSmoothness: NotchSmoothness.defaultEdge,
+      borderColor: Colors.red,
+
+      onTap: (index) => _handleTabTap(context, tabs[index], index),
+      //other params
     );
   }
 
-  Widget _buildTabItem(BuildContext context, TabData tabData) {
-    final isSelected = _selectedTab == tabData.tab;
+  Widget _buildTabItem(BuildContext context, TabData tabData, int index) {
+    final isSelected = _selectedIndex == index;
     final icon = _buildIcon(context, tabData, isSelected);
     return Expanded(
-      child: GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTap: () {
-          _handleTabTap(context, tabData);
-        },
-        child: Container(
-          color: Colors.transparent,
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              _buildAnimatedContainer(isSelected),
-              icon,
-            ],
-          ),
+      child: Container(
+        color: Colors.transparent,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            _buildAnimatedContainer(isSelected),
+            icon,
+          ],
         ),
       ),
     );
@@ -141,7 +116,12 @@ class BottomBarState extends State<BottomBar>
     }
   }
 
-  void _handleTabTap(BuildContext context, TabData tabData) {
+  void _handleTabTap(
+    BuildContext context,
+    TabData tabData,
+    int index,
+  ) {
+    _selectedIndex = index;
     Vibrate.feedback(FeedbackType.light);
 
     /// Handle scroll to top on Home Screen
@@ -159,23 +139,23 @@ class BottomBarState extends State<BottomBar>
         // tabData.tab == AppTab.wallet ||
         tabData.tab == AppTab.discover) {
       if (authState is AuthStateAuthenticated) {
-        _triggerAnimation(tabData);
+        _triggerAnimation(index);
         AutoRouter.of(context)
             .navigateNamed(tabData.route, includePrefixMatches: true);
       } else {
         context.router.navigate(const LoginRoute());
       }
     } else {
-      _triggerAnimation(tabData);
+      _triggerAnimation(index);
       AutoRouter.of(context)
           .navigateNamed(tabData.route, includePrefixMatches: true);
     }
   }
 
-  void _triggerAnimation(TabData tabData) {
+  void _triggerAnimation(int index) {
     setState(() {
       _isTabChanged = true;
-      _selectedTab = tabData.tab;
+      _selectedIndex = index;
     });
     _animationController.reset();
     _animationController.forward();
