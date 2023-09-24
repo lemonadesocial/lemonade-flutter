@@ -1,4 +1,9 @@
+import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/entities/event_list_ticket_types.dart';
+import 'package:app/core/domain/event/entities/event_ticket.dart';
+import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_ticket_management_page/event_ticket_management_page.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_ticket_management_page/widgets/ticket_assignment_item.dart';
+import 'package:app/core/utils/event_tickets_utils.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
@@ -8,7 +13,18 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
 class TicketAssignmentList extends StatelessWidget {
-  const TicketAssignmentList({super.key});
+  final List<EventTicket> eventTickets;
+  final List<PurchasableTicketType> ticketTypes;
+  final Event event;
+  final EventTicketManagementView controller;
+
+  const TicketAssignmentList({
+    super.key,
+    required this.eventTickets,
+    required this.ticketTypes,
+    required this.event,
+    required this.controller,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -18,8 +34,10 @@ class TicketAssignmentList extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
       sliver: MultiSliver(
         children: [
-          SliverToBoxAdapter(
-            child: Column(
+          SliverAppBar(
+            collapsedHeight: 105.w,
+            pinned: true,
+            flexibleSpace: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -45,7 +63,7 @@ class TicketAssignmentList extends StatelessWidget {
                       ),
                       child: Center(
                         child: Text(
-                          '3',
+                          '${eventTickets.length}',
                           style: Typo.small.copyWith(
                             color: colorScheme.onSurfaceVariant,
                           ),
@@ -65,11 +83,27 @@ class TicketAssignmentList extends StatelessWidget {
             ),
           ),
           SliverList.separated(
-            itemBuilder: (context, index) => const TicketAssignmentItem(),
+            itemBuilder: (context, index) {
+              final eventTicket = eventTickets[index];
+              final ticketType = EventTicketUtils.getTicketTypeById(
+                ticketTypes,
+                ticketTypeId: eventTicket.type ?? '',
+              );
+              return TicketAssignmentItem(
+                eventTicket: eventTicket,
+                ticketType: ticketType,
+                currency: event.currency,
+                onPressedAssign: () => controller.showAssignPopup(
+                  context,
+                  eventTicket: eventTicket,
+                  ticketType: ticketType,
+                ),
+              );
+            },
             separatorBuilder: (context, index) => SizedBox(
               height: Spacing.xSmall,
             ),
-            itemCount: 2,
+            itemCount: eventTickets.length,
           ),
         ],
       ),

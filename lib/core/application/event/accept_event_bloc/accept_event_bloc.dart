@@ -29,7 +29,7 @@ class AcceptEventBloc extends Bloc<AcceptEventBlocEvent, AcceptEventState> {
     );
 
     result.fold(
-      (failure) => emit(AcceptEventState.failure()),
+      (failure) => emit(AcceptEventState.failure(message: failure.message)),
       (eventRsvp) {
         if (eventRsvp.state == EventRsvpState.accepted) {
           emit(AcceptEventState.success(eventRsvp: eventRsvp));
@@ -53,5 +53,7 @@ class AcceptEventState with _$AcceptEventState {
   factory AcceptEventState.success({
     required EventRsvp eventRsvp,
   }) = AcceptEventStateSuccess;
-  factory AcceptEventState.failure() = AcceptEventStateFailure;
+  factory AcceptEventState.failure({
+    String? message,
+  }) = AcceptEventStateFailure;
 }

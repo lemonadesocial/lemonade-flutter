@@ -120,7 +120,6 @@ class EventTicketRepositoryImpl implements EventTicketRepository {
     );
 
     if (result.hasException) return Left(Failure());
-
     return Right(result.parsedData!);
   }
 }

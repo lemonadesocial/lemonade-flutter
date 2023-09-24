@@ -21,6 +21,10 @@ class GetMyTicketsBloc extends Bloc<GetMyTicketsEvent, GetMyTicketsState> {
     GetMyTicketsEventFetch event,
     Emitter emit,
   ) async {
+    if (state is! GetMyTicketsStateSuccess) {
+      emit(GetMyTicketsState.loading());
+    }
+
     final result = await _eventTicketRepository.getTickets(input: input);
 
     result.fold(

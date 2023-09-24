@@ -74,5 +74,8 @@
     "viewProduct": "View product",
     "apply": "Apply",
     "applied": "Applied",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "date": "Date",
+    "time": "Time",
+    "location": "Location"
 }

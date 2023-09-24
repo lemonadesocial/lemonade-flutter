@@ -30,7 +30,7 @@ class AssignTicketsBloc extends Bloc<AssignTicketsEvent, AssignTicketsState> {
     );
 
     result.fold(
-      (l) => emit(AssignTicketsState.failure()),
+      (failure) => emit(AssignTicketsState.failure(message: failure.message)),
       (success) => emit(
         AssignTicketsState.success(success: success),
       ),
@@ -52,5 +52,7 @@ class AssignTicketsState with _$AssignTicketsState {
   factory AssignTicketsState.success({
     required bool success,
   }) = AssignTicketsStateSuccess;
-  factory AssignTicketsState.failure() = AssignTicketsStateFailure;
+  factory AssignTicketsState.failure({
+    String? message,
+  }) = AssignTicketsStateFailure;
 }

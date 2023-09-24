@@ -34,7 +34,7 @@ class RedeemTicketsBloc extends Bloc<RedeemTicketsEvent, RedeemTicketsState> {
     );
 
     result.fold(
-      (l) => emit(RedeemTicketsState.failure()),
+      (failure) => emit(RedeemTicketsState.failure(message: failure.message)),
       (data) => emit(
         RedeemTicketsState.success(eventTickets: data),
       ),
@@ -56,5 +56,7 @@ class RedeemTicketsState with _$RedeemTicketsState {
   factory RedeemTicketsState.success({
     required List<EventTicket> eventTickets,
   }) = RedeemTicketsStateSuccess;
-  factory RedeemTicketsState.failure() = RedeemTicketsStateFailure;
+  factory RedeemTicketsState.failure({
+    String? message,
+  }) = RedeemTicketsStateFailure;
 }
