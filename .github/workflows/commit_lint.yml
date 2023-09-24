@@ -10,4 +10,4 @@ jobs:
           fetch-depth: 0
       - uses: wagoid/commitlint-github-action@v5
         with:
-          commitDepth: -1
+          commitDepth: 1

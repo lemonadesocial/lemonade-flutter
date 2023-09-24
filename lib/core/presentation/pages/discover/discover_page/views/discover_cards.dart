@@ -24,10 +24,9 @@ class DiscoverCards extends StatelessWidget {
     final router = AutoRouter.of(context);
     final t = Translations.of(context);
     return SliverGrid.count(
-      crossAxisCount: 2,
-      mainAxisSpacing: 9.w,
+      crossAxisCount: 3,
       crossAxisSpacing: 9.w,
-      childAspectRatio: 1.3,
+      childAspectRatio: (0.9),
       children: [
         DiscoverCard(
           title: t.discover.cardSections.events.title,
@@ -51,15 +50,6 @@ class DiscoverCards extends StatelessWidget {
           icon: Assets.icons.icDiscoverBadges.svg(),
           colors: DiscoverCardGradient.badges.colors,
           onTap: () => router.navigateNamed('/poap'),
-        ),
-        DiscoverCard(
-          title: t.discover.cardSections.music.title,
-          subTitle: t.discover.cardSections.music.subTitle,
-          icon: Assets.icons.icDiscoverMusic.svg(),
-          colors: DiscoverCardGradient.music.colors,
-          onTap: () {
-            alertComingSoon(context);
-          },
         ),
       ],
     );

@@ -1,6 +1,7 @@
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LemonTextField extends StatelessWidget {
@@ -16,6 +17,8 @@ class LemonTextField extends StatelessWidget {
     this.label,
     this.suffixIcon,
     this.autofocus = false,
+    this.inputFormatters,
+    this.controller,
   }) : super(key: key);
 
   final ValueChanged<String> onChange;
@@ -28,6 +31,8 @@ class LemonTextField extends StatelessWidget {
   final String? label;
   final Widget? suffixIcon;
   final bool autofocus;
+  final List<TextInputFormatter>? inputFormatters;
+  final TextEditingController? controller;
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +56,7 @@ class LemonTextField extends StatelessWidget {
           SizedBox(height: Spacing.superExtraSmall),
         ],
         TextFormField(
+          controller: controller,
           autofocus: autofocus,
           onChanged: onChange,
           style: theme.textTheme.bodyMedium!
@@ -70,6 +76,7 @@ class LemonTextField extends StatelessWidget {
             contentPadding: EdgeInsets.all(Spacing.smMedium),
             suffixIcon: suffixIcon,
           ),
+          inputFormatters: inputFormatters,
         ),
         if (statusWidget != null) ...[
           SizedBox(height: Spacing.xSmall),

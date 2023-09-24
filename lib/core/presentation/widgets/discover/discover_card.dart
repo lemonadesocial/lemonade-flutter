@@ -1,3 +1,4 @@
+import 'package:app/gen/fonts.gen.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
@@ -57,7 +58,6 @@ class DiscoverCard extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.all(Spacing.xSmall),
         clipBehavior: Clip.antiAlias,
         decoration: ShapeDecoration(
           shape: RoundedRectangleBorder(
@@ -75,13 +75,18 @@ class DiscoverCard extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            icon,
-            SizedBox(height: Spacing.smMedium),
+            Padding(
+              padding: EdgeInsets.only(top: 6.h, bottom: 18.h),
+              child: icon,
+            ),
             Text(
               title,
-              style: Typo.small.copyWith(fontWeight: FontWeight.w600),
+              style: Typo.small.copyWith(
+                fontWeight: FontWeight.w600,
+                fontFamily: FontFamily.nohemiVariable,
+              ),
             ),
-            const SizedBox(height: 2),
+            SizedBox(height: 2.h),
             Text(
               subTitle,
               style: Typo.xSmall.copyWith(
