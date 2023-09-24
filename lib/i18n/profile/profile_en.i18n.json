@@ -26,6 +26,8 @@
         "educationQualification": "CA, CFA",
         "industry": "Select industry",
         "gender": "Select gender",
-        "ethnicity": "Select ethnicity"
-    }
+        "ethnicity": "Select ethnicity",
+        "dob": "DD/MM/YYYY"
+    },
+    "errorDateTimeFormat": "Invalid date format"
 }

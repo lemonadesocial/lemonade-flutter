@@ -37,6 +37,7 @@ class LemonColor {
   static Color otherMessage = const Color(0xFF272727);
   static Color shadow5b = const Color(0x5B000000);
   static Color greyBg = const Color(0xFF494949);
+  static Color black33 = const Color(0xFF333333);
 
   // UI specific
   static Color dropdownBackground = const Color.fromARGB(221, 32, 32, 32);
