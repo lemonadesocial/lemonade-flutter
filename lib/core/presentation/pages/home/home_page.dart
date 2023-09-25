@@ -1,9 +1,6 @@
-import 'package:app/core/application/newsfeed/newsfeed_listing_bloc/newsfeed_listing_bloc.dart';
 import 'package:app/core/presentation/pages/home/views/list/home_newsfeed_list.dart';
-import 'package:app/core/presentation/widgets/bottom_bar/bottom_bar_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/appbar_logo.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
-import 'package:app/core/presentation/widgets/home/floating_create_button.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/service/shake/shake_service.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -70,24 +67,8 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       backgroundColor: LemonColor.black,
       body: const HomeNewsfeedListView(),
-      // floatingActionButton: userId == null
-      //     ? null
-      //     : Padding(
-      //         padding: EdgeInsets.only(bottom: BottomBar.bottomBarHeight),
-      //         child: FloatingCreateButton(
-      //           onTap: () => context.router.push(
-      //             CreatePostRoute(
-      //               onPostCreated: (newPost) =>
-      //                   context.read<NewsfeedListingBloc>().add(
-      //                         NewsfeedListingEvent.newPostAdded(post: newPost),
-      //                       ),
-      //             ),
-      //           ),
-      //         ),
-      //       ),
     );
   }
 }

@@ -81,7 +81,6 @@ dependencies:
   visibility_detector: ^0.4.0+2
   dropdown_button2: ^2.3.9
   adaptive_dialog: ^1.9.0+2
-  animated_bottom_navigation_bar: ^1.2.1
 
   # Webview
   flutter_inappwebview: ^5.7.2+3

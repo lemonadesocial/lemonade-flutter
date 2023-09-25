@@ -7,7 +7,6 @@ enum AppTab {
   home,
   discover,
   notification,
-  // wallet,
   profile,
 }
 
@@ -74,24 +73,6 @@ final List<TabData> tabs = [
       ),
     ),
   ),
-  // TabData(
-  //   AppTab.wallet,
-  //   '/wallet',
-  //   ThemeSvgIcon(
-  //     builder: (filter) => Assets.icons.icWallet.svg(
-  //       colorFilter: filter,
-  //       width: 24.w,
-  //       height: 24.w,
-  //     ),
-  //   ),
-  //   ThemeSvgIcon(
-  //     builder: (filter) => Assets.icons.icWalletFilled.svg(
-  //       colorFilter: filter,
-  //       width: 24.w,
-  //       height: 24.w,
-  //     ),
-  //   ),
-  // ),
   TabData(
     AppTab.profile,
     '/me',
