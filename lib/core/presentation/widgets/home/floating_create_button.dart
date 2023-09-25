@@ -18,7 +18,7 @@ class FloatingCreateButton extends StatelessWidget {
       child: Container(
         width: 54.h,
         height: 54.h,
-        padding: const EdgeInsets.all(15),
+        padding: EdgeInsets.all(17.w),
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           gradient: LinearGradient(
@@ -34,10 +34,7 @@ class FloatingCreateButton extends StatelessWidget {
             ),
           ],
         ),
-        child: Assets.icons.icFoa.svg(
-          width: 24.w,
-          height: 24.w,
-        ),
+        child: Assets.icons.icFoa.svg(),
       ),
     );
   }
