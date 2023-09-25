@@ -9,6 +9,7 @@ import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/core/utils/avatar_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
+import 'package:app/core/utils/modal_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/sizing.dart';
@@ -113,7 +114,7 @@ class PostProfileCard extends StatelessWidget {
                 SizedBox(height: Spacing.xSmall),
                 _buildFile(colorScheme, postFile),
               ],
-              _buildActions(colorScheme)
+              _buildActions(colorScheme, context)
             ],
           ),
         )
@@ -147,7 +148,7 @@ class PostProfileCard extends StatelessWidget {
     );
   }
 
-  Widget _buildActions(ColorScheme colorScheme) {
+  Widget _buildActions(ColorScheme colorScheme, BuildContext context) {
     final svgIcon = hasReaction ?? false
         ? ThemeSvgIcon(
             builder: (filter) => Assets.icons.icHeartFillled.svg(
@@ -180,22 +181,27 @@ class PostProfileCard extends StatelessWidget {
             ],
           ),
           SizedBox(width: Spacing.xSmall),
-          Row(
-            children: [
-              ThemeSvgIcon(
-                color: colorScheme.onSecondary,
-                builder: (filter) => Assets.icons.icMessage.svg(
-                  colorFilter: filter,
-                  width: 18.w,
-                  height: 18.w,
+          GestureDetector(
+            onTap: () {
+              showComingSoonDialog(context);
+            },
+            child: Row(
+              children: [
+                ThemeSvgIcon(
+                  color: colorScheme.onSecondary,
+                  builder: (filter) => Assets.icons.icMessage.svg(
+                    colorFilter: filter,
+                    width: 18.w,
+                    height: 18.w,
+                  ),
                 ),
-              ),
-              const SizedBox(width: 3),
-              Text(
-                comments != null ? '$comments' : '',
-                style: Typo.small.copyWith(color: colorScheme.onSecondary),
-              ),
-            ],
+                const SizedBox(width: 3),
+                Text(
+                  comments != null ? '$comments' : '',
+                  style: Typo.small.copyWith(color: colorScheme.onSecondary),
+                ),
+              ],
+            ),
           ),
           const Spacer(),
           ThemeSvgIcon(

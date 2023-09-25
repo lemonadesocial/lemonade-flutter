@@ -74,5 +74,8 @@
     "viewProduct": "View product",
     "apply": "Apply",
     "applied": "Applied",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "comingSoon": "Coming soon",
+    "currentlyAvailableOn": "Currently available on ",
+    "comingSoonToIOSAndAndroid": ". Coming soon to iOS and android."
 }
