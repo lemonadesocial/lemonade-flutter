@@ -31,35 +31,39 @@ class ComingSoonModal extends StatelessWidget {
     }
   }
 
-  RichText buildRichText(ColorScheme colorScheme) {
-    return RichText(
-      textAlign: TextAlign.center,
-      text: TextSpan(
-        children: [
-          TextSpan(
-            text: t.common.currentlyAvailableOn,
-            style: Typo.medium.copyWith(
-              color: colorScheme.onSecondary,
-            ),
+  buildRichText(ColorScheme colorScheme) {
+    return Column(
+      children: [
+        Text(
+          t.common.currentlyAvailableOn,
+          style: Typo.medium.copyWith(
+            color: colorScheme.onSecondary,
           ),
-          TextSpan(
-            text: 'https://lemonade.social',
-            style: Typo.medium.copyWith(
-              color: LemonColor.paleViolet,
-            ),
-            recognizer: TapGestureRecognizer()
-              ..onTap = () {
-                openLink();
-              },
+        ),
+        RichText(
+          textAlign: TextAlign.center,
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: 'https://lemonade.social',
+                style: Typo.medium.copyWith(
+                  color: LemonColor.paleViolet,
+                ),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    openLink();
+                  },
+              ),
+              TextSpan(
+                text: t.common.comingSoonToIOSAndAndroid,
+                style: Typo.medium.copyWith(
+                  color: colorScheme.onSecondary,
+                ),
+              ),
+            ],
           ),
-          TextSpan(
-            text: t.common.comingSoonToIOSAndAndroid,
-            style: Typo.medium.copyWith(
-              color: colorScheme.onSecondary,
-            ),
-          ),
-        ],
-      ),
+        )
+      ],
     );
   }
 
