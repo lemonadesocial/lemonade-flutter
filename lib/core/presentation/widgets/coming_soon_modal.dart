@@ -38,6 +38,7 @@ class ComingSoonModal extends StatelessWidget {
           t.common.currentlyAvailableOn,
           style: Typo.medium.copyWith(
             color: colorScheme.onSecondary,
+            fontWeight: FontWeight.w400,
           ),
         ),
         RichText(
@@ -57,8 +58,8 @@ class ComingSoonModal extends StatelessWidget {
               TextSpan(
                 text: t.common.comingSoonToIOSAndAndroid,
                 style: Typo.medium.copyWith(
-                  color: colorScheme.onSecondary,
-                ),
+                    color: colorScheme.onSecondary,
+                    fontWeight: FontWeight.w400),
               ),
             ],
           ),
