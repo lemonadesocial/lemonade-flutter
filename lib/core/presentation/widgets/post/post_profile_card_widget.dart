@@ -204,12 +204,17 @@ class PostProfileCard extends StatelessWidget {
             ),
           ),
           const Spacer(),
-          ThemeSvgIcon(
-            color: colorScheme.onSecondary,
-            builder: (filter) => Assets.icons.icShare.svg(
-              colorFilter: filter,
-              width: 18.w,
-              height: 18.w,
+          GestureDetector(
+            onTap: () {
+              showComingSoonDialog(context);
+            },
+            child: ThemeSvgIcon(
+              color: colorScheme.onSecondary,
+              builder: (filter) => Assets.icons.icShare.svg(
+                colorFilter: filter,
+                width: 18.w,
+                height: 18.w,
+              ),
             ),
           ),
         ],
