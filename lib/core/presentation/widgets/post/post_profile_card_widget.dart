@@ -86,12 +86,17 @@ class PostProfileCard extends StatelessWidget {
                           .copyWith(color: colorScheme.onSurfaceVariant),
                     ),
                   const Spacer(),
-                  ThemeSvgIcon(
-                    color: colorScheme.onSurfaceVariant,
-                    builder: (filter) => Assets.icons.icMoreHoriz.svg(
-                      colorFilter: filter,
-                      width: 18.w,
-                      height: 18.w,
+                  GestureDetector(
+                    onTap: () {
+                      showComingSoonDialog(context);
+                    },
+                    child: ThemeSvgIcon(
+                      color: colorScheme.onSurfaceVariant,
+                      builder: (filter) => Assets.icons.icMoreHoriz.svg(
+                        colorFilter: filter,
+                        width: 18.w,
+                        height: 18.w,
+                      ),
                     ),
                   ),
                 ],
