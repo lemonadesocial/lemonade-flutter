@@ -1,4 +1,3 @@
-import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/theme/color.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +8,7 @@ class FloatingCreateButton extends StatelessWidget {
     super.key,
     this.onTap,
   });
+
   final Function()? onTap;
 
   @override
@@ -18,30 +18,23 @@ class FloatingCreateButton extends StatelessWidget {
       child: Container(
         width: 54.h,
         height: 54.h,
-        padding: const EdgeInsets.all(15),
-        decoration: const BoxDecoration(
+        padding: EdgeInsets.all(17.w),
+        decoration: BoxDecoration(
           shape: BoxShape.circle,
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [LemonColor.fabSecondaryBg, LemonColor.fabFirstBg],
+            colors: [LemonColor.arsenic, LemonColor.charlestonGreen],
           ),
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
               color: LemonColor.fabShadow,
               blurRadius: 8,
               offset: Offset(0, 4),
-            )
+            ),
           ],
         ),
-        child: ThemeSvgIcon(
-          color: LemonColor.white,
-          builder: (filter) => Assets.icons.icAdd.svg(
-            colorFilter: filter,
-            width: 24.w,
-            height: 24.w,
-          ),
-        ),
+        child: Assets.icons.icFoa.svg(),
       ),
     );
   }

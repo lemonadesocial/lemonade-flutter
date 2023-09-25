@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 
 mixin LemonBottomSheet<T extends StatelessWidget> on Widget {
-  void showAsBottomSheet(BuildContext context) => showModalBottomSheet(
+  void showAsBottomSheet(
+    BuildContext context, {
+    double? heightFactor,
+  }) =>
+      showModalBottomSheet(
         context: context,
         isScrollControlled: true,
         backgroundColor: Theme.of(context).colorScheme.primary,
@@ -14,7 +18,7 @@ mixin LemonBottomSheet<T extends StatelessWidget> on Widget {
           ),
           clipBehavior: Clip.hardEdge,
           child: FractionallySizedBox(
-            heightFactor: 0.95,
+            heightFactor: heightFactor ?? 0.95,
             child: Column(
               children: [
                 const SizedBox(height: 10),

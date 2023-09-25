@@ -1,4 +1,16 @@
 {
     "newsfeed": "Newsfeed",
-    "whatOnYourMind": "What's on your mind, Joseph?"
+    "whatOnYourMind": "What's on your mind, Joseph?",
+    "create": "Create",
+    "comingSoon": "Coming soon",
+    "post": "Post",
+    "postDesc": "express yourself to the world",
+    "room": "Room",
+    "roomDesc": "virtual hangouts, discussions, etc",
+    "event": "Event",
+    "eventDesc": "virtual, offline, hybrid events",
+    "poap":"POAP",
+    "poapDesc": "turn tickets into digital collectibles",
+    "collectible": "Collectible",
+    "collectibleDesc": "virtual or IRL collectibles"
 }

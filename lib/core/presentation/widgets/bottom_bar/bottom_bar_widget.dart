@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:ui';
 
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/presentation/widgets/bottom_bar/app_tabs.dart';
@@ -57,33 +56,28 @@ class BottomBarState extends State<BottomBar>
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    return Container(
+    return BottomAppBar(
       height: BottomBar.bottomBarHeight,
-      decoration: BoxDecoration(
-        color: colorScheme.surfaceVariant,
-        border: Border(
-          top: BorderSide(color: LemonColor.white09),
-        ),
-      ),
+      color: colorScheme.surfaceVariant,
+      shape: const CircularNotchedRectangle(),
+      notchMargin: 6.w,
       child: ClipRect(
-        child: BackdropFilter(
-          filter: ImageFilter.blur(
-            sigmaX: 10,
-            sigmaY: 10,
-          ),
-          child: Column(
-            children: [
-              SizedBox(height: 15.h),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: tabs.map((tabData) {
-                  return _buildTabItem(context, tabData);
-                }).toList(),
-              ),
-              SizedBox(height: 18.h),
-            ],
-          ),
+        child: Column(
+          children: [
+            SizedBox(height: 15.h),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                _buildTabItem(context, tabs[0]),
+                _buildTabItem(context, tabs[1]),
+                SizedBox(width: 65.w),
+                _buildTabItem(context, tabs[2]),
+                _buildTabItem(context, tabs[3]),
+              ],
+            ),
+            SizedBox(height: 18.h),
+          ],
         ),
       ),
     );
@@ -156,7 +150,7 @@ class BottomBarState extends State<BottomBar>
     final authState = BlocProvider.of<AuthBloc>(context).state;
     if (tabData.tab == AppTab.profile ||
         tabData.tab == AppTab.notification ||
-        tabData.tab == AppTab.wallet ||
+        // tabData.tab == AppTab.wallet ||
         tabData.tab == AppTab.discover) {
       if (authState is AuthStateAuthenticated) {
         _triggerAnimation(tabData);
