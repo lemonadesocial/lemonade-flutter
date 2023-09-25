@@ -187,6 +187,7 @@ class PostProfileCard extends StatelessWidget {
           ),
           SizedBox(width: Spacing.xSmall),
           GestureDetector(
+            behavior: HitTestBehavior.translucent,
             onTap: () {
               showComingSoonDialog(context);
             },
@@ -210,6 +211,7 @@ class PostProfileCard extends StatelessWidget {
           ),
           const Spacer(),
           GestureDetector(
+            behavior: HitTestBehavior.translucent,
             onTap: () {
               showComingSoonDialog(context);
             },

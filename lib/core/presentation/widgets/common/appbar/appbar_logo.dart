@@ -1,3 +1,4 @@
+import 'package:app/core/utils/modal_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -16,8 +17,14 @@ class AppBarLogo extends StatelessWidget {
           image: Assets.icons.icLemonFilledBackground.provider(),
         ),
       ),
-      child: Center(
-        child: Assets.icons.icLemonFilledStart.svg(),
+      child: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () {
+          showComingSoonDialog(context);
+        },
+        child: Center(
+          child: Assets.icons.icLemonFilledStart.svg(),
+        ),
       ),
     );
   }
