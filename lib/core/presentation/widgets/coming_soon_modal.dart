@@ -32,6 +32,7 @@ class ComingSoonModal extends StatelessWidget {
   }
 
   Column buildRichText(ColorScheme colorScheme) {
+    // Tricky add Column because wanna display entire url inline instead of put everything into RichText
     return Column(
       children: [
         Text(
