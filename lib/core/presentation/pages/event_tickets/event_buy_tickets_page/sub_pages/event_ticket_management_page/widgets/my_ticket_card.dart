@@ -1,5 +1,11 @@
+import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/entities/event_list_ticket_types.dart';
+import 'package:app/core/domain/event/entities/event_ticket.dart';
 import 'package:app/core/presentation/widgets/common/dotted_line/dotted_line.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
+import 'package:app/core/utils/date_format_utils.dart';
+import 'package:app/core/utils/map_utils.dart';
+import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -7,14 +13,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MyTicketCard extends StatelessWidget {
-  const MyTicketCard({super.key});
+  final Event event;
+  final EventTicket? eventTicket;
+  final PurchasableTicketType? ticketType;
+
+  const MyTicketCard({
+    super.key,
+    required this.event,
+    this.eventTicket,
+    this.ticketType,
+  });
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return Column(
       children: [
-        const TicketCardTop(),
+        TicketCardTop(
+          event: event,
+          eventTicket: eventTicket,
+          ticketType: ticketType,
+        ),
         Container(
           margin: EdgeInsets.symmetric(horizontal: 15.w),
           child: DottedLine(
@@ -25,14 +44,27 @@ class MyTicketCard extends StatelessWidget {
             dashColor: colorScheme.background,
           ),
         ),
-        const TicketCardBottom(),
+        TicketCardBottom(
+          event: event,
+          eventTicket: eventTicket,
+          ticketType: ticketType,
+        ),
       ],
     );
   }
 }
 
 class TicketCardTop extends StatelessWidget {
-  const TicketCardTop({super.key});
+  final Event event;
+  final EventTicket? eventTicket;
+  final PurchasableTicketType? ticketType;
+
+  const TicketCardTop({
+    super.key,
+    required this.event,
+    this.eventTicket,
+    this.ticketType,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -60,8 +92,8 @@ class TicketCardTop extends StatelessWidget {
                     borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
                   ),
                   child: CachedNetworkImage(
-                    imageUrl:
-                        "https://s3-alpha-sig.figma.com/img/8448/74ff/afa063f89d78e9f9137eb4b299f6643c?Expires=1696204800&Signature=NRQC5vG1JIAcF9Yd4TeIJTXxU2c1yxQTm-n14IBB6NYqPmX8wWQ5~SbSfuJ-RfDIPUMhJjIBhzUV-ifKCSyDeimfyh0jZ-W5yWawNFyicnAIbKeuA9Fu9qvjebqI2y2mzCkRCi1qa0AWRcN9DZVGnSrWyBHojDyyYEFA5nY-dl263a9P~PDSL4v3G-83CFu2fuX6OIoT3uNUiF4yRXFwjRuYJrLSUrTPM~3onkWkiDTmp6O2R51czghgCJ1MNZeFzlIi8HNJfgmLaq5S-dZKweO6BuPx0vhCCd3OsQSaA8CeXbuyLhCPdtJTGdV8LHigFhLuNYlrTmxamb09zcI8oQ__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4",
+                    // TODO: ticketType.photosExpanded
+                    imageUrl: '',
                     errorWidget: (_, __, ___) =>
                         ImagePlaceholder.defaultPlaceholder(),
                     placeholder: (_, __) =>
@@ -73,7 +105,7 @@ class TicketCardTop extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Culture fest',
+                      event.title ?? '',
                       style: Typo.mediumPlus.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
@@ -82,7 +114,7 @@ class TicketCardTop extends StatelessWidget {
                       height: 2.w,
                     ),
                     Text(
-                      'Festival pass',
+                      ticketType?.title ?? '',
                       style: Typo.medium.copyWith(
                         color: colorScheme.onSecondary,
                       ),
@@ -110,7 +142,16 @@ class TicketCardTop extends StatelessWidget {
 }
 
 class TicketCardBottom extends StatelessWidget {
-  const TicketCardBottom({super.key});
+  final Event event;
+  final EventTicket? eventTicket;
+  final PurchasableTicketType? ticketType;
+
+  const TicketCardBottom({
+    super.key,
+    required this.event,
+    this.eventTicket,
+    this.ticketType,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -121,6 +162,8 @@ class TicketCardBottom extends StatelessWidget {
     final valueTextStyle = Typo.medium.copyWith(
       color: colorScheme.onPrimary.withOpacity(0.87),
     );
+    final t = Translations.of(context);
+
     return Container(
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
@@ -150,12 +193,12 @@ class TicketCardBottom extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Date',
+                                  t.common.date,
                                   style: labelTextStyle,
                                 ),
                                 SizedBox(height: 2.w),
                                 Text(
-                                  '1 Sep, 23 -\n3 Sep, 23',
+                                  '${DateFormatUtils.custom(event.start, pattern: 'dd MMM yy')} -\n${DateFormatUtils.custom(event.end, pattern: 'dd MMM yy')}',
                                   style: valueTextStyle,
                                 ),
                               ],
@@ -168,12 +211,12 @@ class TicketCardBottom extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Time',
+                                  t.common.time,
                                   style: labelTextStyle,
                                 ),
                                 SizedBox(height: 2.w),
                                 Text(
-                                  '8:00PM\nIST',
+                                  DateFormatUtils.timeOnly(event.start),
                                   style: valueTextStyle,
                                 ),
                               ],
@@ -186,13 +229,19 @@ class TicketCardBottom extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Location',
+                            t.common.location,
                             style: labelTextStyle,
                           ),
                           SizedBox(height: 2.w),
-                          Text(
-                            'Nomad bar',
-                            style: valueTextStyle,
+                          FutureBuilder(
+                            future: MapUtils.getLocationName(
+                              lat: event.latitude ?? 0,
+                              lng: event.longitude ?? 0,
+                            ),
+                            builder: (context, snapshot) => Text(
+                              snapshot.data ?? '',
+                              style: valueTextStyle,
+                            ),
                           )
                         ],
                       )

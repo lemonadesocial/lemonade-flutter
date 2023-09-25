@@ -127,7 +127,6 @@ class EditProfileBloc extends Cubit<EditProfileState> {
   }
 
   void onBirthdayChange(String input) {
-    print('input: $input');
     birthDayCtrl.text = input;
     emit(
       state.copyWith(

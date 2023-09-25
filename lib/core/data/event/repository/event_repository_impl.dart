@@ -1,7 +1,7 @@
 import 'package:app/core/data/event/dtos/event_dtos.dart';
 import 'package:app/core/data/event/dtos/event_rsvp_dto/event_rsvp_dto.dart';
-import 'package:app/core/data/event/event_mutation.dart';
-import 'package:app/core/data/event/event_query.dart';
+import 'package:app/core/data/event/gql/event_mutation.dart';
+import 'package:app/core/data/event/gql/event_query.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_rsvp.dart';
 import 'package:app/core/domain/event/event_repository.dart';
@@ -107,7 +107,9 @@ class EventRepositoryImpl implements EventRepository {
         ),
       ),
     );
-    if (result.hasException) return Left(Failure());
+    if (result.hasException) {
+      return Left(Failure.withGqlException(result.exception));
+    }
     return Right(result.parsedData!);
   }
 }

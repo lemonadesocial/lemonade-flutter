@@ -11,4 +11,11 @@ class AuthUtils {
         );
     return user.id == myUserId;
   }
+
+  static String getUserId(BuildContext context) {
+    return context.read<AuthBloc>().state.maybeWhen(
+          orElse: () => '',
+          authenticated: (authSession) => authSession.userId,
+        );
+  }
 }
