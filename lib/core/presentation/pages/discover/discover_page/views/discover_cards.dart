@@ -1,4 +1,5 @@
 import 'package:app/core/presentation/widgets/discover/discover_card.dart';
+import 'package:app/core/utils/modal_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:auto_route/auto_route.dart';
@@ -9,14 +10,7 @@ class DiscoverCards extends StatelessWidget {
   const DiscoverCards({super.key});
 
   void alertComingSoon(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return const AlertDialog(
-          content: Text('Coming soon'),
-        );
-      },
-    );
+    showComingSoonDialog(context);
   }
 
   @override

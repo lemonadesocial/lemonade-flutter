@@ -77,5 +77,8 @@
     "confirm": "Confirm",
     "date": "Date",
     "time": "Time",
-    "location": "Location"
+    "location": "Location",
+    "comingSoon": "Coming soon",
+    "currentlyAvailableOn": "Currently available on ",
+    "comingSoonToIOSAndAndroid": ". Coming soon to iOS and android."
 }
