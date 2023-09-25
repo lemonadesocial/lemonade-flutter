@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:ui';
 
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/presentation/widgets/bottom_bar/app_tabs.dart';
@@ -69,10 +68,10 @@ class BottomBarState extends State<BottomBar>
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children:[
+              children: [
                 _buildTabItem(context, tabs[0]),
                 _buildTabItem(context, tabs[1]),
-                SizedBox(width: 65.w,),
+                SizedBox(width: 65.w),
                 _buildTabItem(context, tabs[2]),
                 _buildTabItem(context, tabs[3]),
               ],

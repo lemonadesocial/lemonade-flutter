@@ -47,8 +47,8 @@ class CreatePopUpPage extends StatelessWidget with LemonBottomSheet {
                 CreatePostRoute(
                   onPostCreated: (newPost) =>
                       context.read<NewsfeedListingBloc>().add(
-                        NewsfeedListingEvent.newPostAdded(post: newPost),
-                      ),
+                            NewsfeedListingEvent.newPostAdded(post: newPost),
+                          ),
                 ),
               ),
               color: colorScheme.onPrimary.withOpacity(0.06),
