@@ -28,4 +28,9 @@ class DateFormatUtils {
     if (date == null) return '';
     return DateFormat(timeOnlyFormat).format(date.toLocal());
   }
+
+  static String custom(DateTime? date, {required String pattern}) {
+    if (date == null) return '';
+    return DateFormat(pattern).format(date.toLocal());
+  }
 }

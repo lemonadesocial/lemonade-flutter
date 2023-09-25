@@ -1,5 +1,5 @@
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:app/core/data/event/event_query.dart';
+import 'package:app/core/data/event/gql/event_query.dart';
 
 const postFragment = '''
   $eventHostExpandedFragment
