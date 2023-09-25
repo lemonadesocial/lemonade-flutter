@@ -31,7 +31,7 @@ class ComingSoonModal extends StatelessWidget {
     }
   }
 
-  buildRichText(ColorScheme colorScheme) {
+  Column buildRichText(ColorScheme colorScheme) {
     return Column(
       children: [
         Text(
