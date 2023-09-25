@@ -58,8 +58,9 @@ class ComingSoonModal extends StatelessWidget {
               TextSpan(
                 text: t.common.comingSoonToIOSAndAndroid,
                 style: Typo.medium.copyWith(
-                    color: colorScheme.onSecondary,
-                    fontWeight: FontWeight.w400),
+                  color: colorScheme.onSecondary,
+                  fontWeight: FontWeight.w400,
+                ),
               ),
             ],
           ),
