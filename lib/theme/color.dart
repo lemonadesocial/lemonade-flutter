@@ -85,6 +85,10 @@ class LemonColor {
   // event buy tickets
   static const promoApplied = Color(0xff5fcb90);
   static const promoAppliedBackground = Color(0x2D5ECA90);
+
+  // Create post dialog
+  static const collectibleIcon = Color(0xFFFFA6C6);
+  static const poapIcon = Color(0xFF9DF7E7);
 }
 
 final ColorScheme lemonadeLightThemeColorScheme = ColorScheme.light(
