@@ -58,7 +58,7 @@ class CreatePopUpPage extends StatelessWidget with LemonBottomSheet {
               color: colorScheme.onPrimary.withOpacity(0.06),
               label: t.home.post,
               content: t.home.postDesc,
-              suffixIcon: Assets.icons.icPenOutlined.svg(),
+              suffixIcon: Assets.icons.icCreatePost.svg(),
               featureAvailable: true,
             ),
             SizedBox(height: Spacing.xSmall),
@@ -66,7 +66,7 @@ class CreatePopUpPage extends StatelessWidget with LemonBottomSheet {
               color: colorScheme.onPrimary.withOpacity(0.06),
               label: t.home.room,
               content: t.home.roomDesc,
-              suffixIcon: Assets.icons.icChatFilled.svg(),
+              suffixIcon: Assets.icons.icCreateRoom.svg(),
             ),
             SizedBox(height: Spacing.xSmall),
             CreatePopUpTile(
@@ -87,7 +87,7 @@ class CreatePopUpPage extends StatelessWidget with LemonBottomSheet {
               color: colorScheme.onPrimary.withOpacity(0.06),
               label: t.home.poap,
               content: t.home.poapDesc,
-              suffixIcon: Assets.icons.icTicketConfirmation.svg(),
+              suffixIcon: Assets.icons.icCreatePoap.svg(),
             ),
             SizedBox(height: Spacing.xSmall),
             CreatePopUpTile(
