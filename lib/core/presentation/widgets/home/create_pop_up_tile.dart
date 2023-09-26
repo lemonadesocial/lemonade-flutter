@@ -42,7 +42,7 @@ class CreatePopUpTile extends StatelessWidget {
                   color,
                   colorScheme.onPrimary.withOpacity(0.06),
                 ],
-                stops: const [0,0.4],
+                stops: const [0, 0.4],
               ),
             ),
             child: Row(

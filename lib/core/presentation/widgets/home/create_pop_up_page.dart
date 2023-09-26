@@ -70,7 +70,7 @@ class CreatePopUpPage extends StatelessWidget with LemonBottomSheet {
             ),
             SizedBox(height: Spacing.xSmall),
             CreatePopUpTile(
-              color:  LemonColor.paleViolet.withOpacity(0.36),
+              color: LemonColor.paleViolet.withOpacity(0.36),
               label: t.home.event,
               content: t.home.eventDesc,
               suffixIcon: ThemeSvgIcon(
