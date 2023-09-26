@@ -1,6 +1,5 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/presentation/widgets/bottom_bar/bottom_bar_widget.dart';
-import 'package:app/core/presentation/widgets/common/drawer/lemon_drawer.dart';
 import 'package:app/core/presentation/widgets/home/create_pop_up_page.dart';
 import 'package:app/core/presentation/widgets/home/floating_create_button.dart';
 import 'package:app/core/presentation/widgets/poap/poap_claim_transfer_controller_widget/poap_claim_transfer_controller_widget.dart';
@@ -56,8 +55,6 @@ class RootPage extends StatelessWidget {
                   orElse: EmptyRoute.new,
                 ),
               ],
-              drawer: const LemonDrawer(),
-              endDrawer: const LemonDrawer(),
               floatingActionButton: FloatingCreateButton(
                 onTap: () => const CreatePopUpPage().showAsBottomSheet(
                   context,

@@ -48,6 +48,11 @@ class Typo {
     fontSize: 10.sp,
     fontWeight: FontWeight.w500,
   );
+
+  static final extraSmall = TextStyle(
+    fontSize: 8.sp,
+    fontWeight: FontWeight.w500,
+  );
 }
 
 final lemonadeTextTheme = TextTheme(
