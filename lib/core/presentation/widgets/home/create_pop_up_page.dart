@@ -29,7 +29,8 @@ class CreatePopUpPage extends StatelessWidget with LemonBottomSheet {
       ),
       backgroundColor: colorScheme.onPrimaryContainer,
       body: Container(
-        padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+        padding:
+            EdgeInsets.only(left: Spacing.smMedium, right: Spacing.smMedium),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(
             LemonRadius.normal,
@@ -55,7 +56,7 @@ class CreatePopUpPage extends StatelessWidget with LemonBottomSheet {
                           ),
                 ),
               ),
-              color: LemonColor.postColor.withOpacity(0.36),
+              colors: CreatePopupGradient.post.colors,
               label: t.home.post,
               content: t.home.postDesc,
               suffixIcon: Assets.icons.icCreatePost.svg(),
@@ -63,14 +64,14 @@ class CreatePopUpPage extends StatelessWidget with LemonBottomSheet {
             ),
             SizedBox(height: Spacing.xSmall),
             CreatePopUpTile(
-              color: LemonColor.roomColor.withOpacity(0.36),
+              colors: CreatePopupGradient.room.colors,
               label: t.home.room,
               content: t.home.roomDesc,
               suffixIcon: Assets.icons.icCreateRoom.svg(),
             ),
             SizedBox(height: Spacing.xSmall),
             CreatePopUpTile(
-              color: LemonColor.paleViolet.withOpacity(0.36),
+              colors: CreatePopupGradient.event.colors,
               label: t.home.event,
               content: t.home.eventDesc,
               suffixIcon: ThemeSvgIcon(
@@ -84,14 +85,14 @@ class CreatePopUpPage extends StatelessWidget with LemonBottomSheet {
             ),
             SizedBox(height: Spacing.xSmall),
             CreatePopUpTile(
-              color: LemonColor.poapColor.withOpacity(0.36),
+              colors: CreatePopupGradient.poap.colors,
               label: t.home.poap,
               content: t.home.poapDesc,
               suffixIcon: Assets.icons.icCreatePoap.svg(),
             ),
             SizedBox(height: Spacing.xSmall),
             CreatePopUpTile(
-              color: LemonColor.collectibleColor.withOpacity(0.36),
+              colors: CreatePopupGradient.collectible.colors,
               label: t.home.collectible,
               content: t.home.collectibleDesc,
               suffixIcon: ThemeSvgIcon(
