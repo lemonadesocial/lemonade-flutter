@@ -3,6 +3,7 @@ import 'package:app/core/domain/event/entities/event_list_ticket_types.dart';
 import 'package:app/core/domain/event/entities/event_ticket.dart';
 import 'package:app/core/presentation/widgets/common/dotted_line/dotted_line.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
+import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/map_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -11,6 +12,7 @@ import 'package:app/theme/typo.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 class MyTicketCard extends StatelessWidget {
   final Event event;
@@ -163,6 +165,7 @@ class TicketCardBottom extends StatelessWidget {
       color: colorScheme.onPrimary.withOpacity(0.87),
     );
     final t = Translations.of(context);
+    final userId = AuthUtils.getUserId(context);
 
     return Container(
       clipBehavior: Clip.hardEdge,
@@ -248,16 +251,16 @@ class TicketCardBottom extends StatelessWidget {
                     ],
                   ),
                 ),
-                //TODO: Fake QR code
                 Expanded(
                   flex: 1,
-                  child: Container(
-                    width: 100.w,
-                    height: 100.w,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius:
-                          BorderRadius.circular(LemonRadius.extraSmall),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
+                    child: QrImageView(
+                      data: userId,
+                      size: 100.w,
+                      version: QrVersions.auto,
+                      foregroundColor: colorScheme.onPrimary,
+                      backgroundColor: colorScheme.surface,
                     ),
                   ),
                 ),
