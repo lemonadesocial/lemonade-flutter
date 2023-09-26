@@ -55,7 +55,7 @@ class CreatePopUpPage extends StatelessWidget with LemonBottomSheet {
                           ),
                 ),
               ),
-              color: colorScheme.onPrimary.withOpacity(0.06),
+              color: LemonColor.postColor.withOpacity(0.36),
               label: t.home.post,
               content: t.home.postDesc,
               suffixIcon: Assets.icons.icCreatePost.svg(),
@@ -63,14 +63,14 @@ class CreatePopUpPage extends StatelessWidget with LemonBottomSheet {
             ),
             SizedBox(height: Spacing.xSmall),
             CreatePopUpTile(
-              color: colorScheme.onPrimary.withOpacity(0.06),
+              color: LemonColor.roomColor.withOpacity(0.36),
               label: t.home.room,
               content: t.home.roomDesc,
               suffixIcon: Assets.icons.icCreateRoom.svg(),
             ),
             SizedBox(height: Spacing.xSmall),
             CreatePopUpTile(
-              color: colorScheme.onPrimary.withOpacity(0.06),
+              color:  LemonColor.paleViolet.withOpacity(0.36),
               label: t.home.event,
               content: t.home.eventDesc,
               suffixIcon: ThemeSvgIcon(
@@ -84,18 +84,18 @@ class CreatePopUpPage extends StatelessWidget with LemonBottomSheet {
             ),
             SizedBox(height: Spacing.xSmall),
             CreatePopUpTile(
-              color: colorScheme.onPrimary.withOpacity(0.06),
+              color: LemonColor.poapColor.withOpacity(0.36),
               label: t.home.poap,
               content: t.home.poapDesc,
               suffixIcon: Assets.icons.icCreatePoap.svg(),
             ),
             SizedBox(height: Spacing.xSmall),
             CreatePopUpTile(
-              color: colorScheme.onPrimary.withOpacity(0.06),
+              color: LemonColor.collectibleColor.withOpacity(0.36),
               label: t.home.collectible,
               content: t.home.collectibleDesc,
               suffixIcon: ThemeSvgIcon(
-                color: LemonColor.collectibleIcon,
+                color: LemonColor.collectibleColor,
                 builder: (colorFilter) => Assets.icons.icCrystal.svg(
                   width: 30.w,
                   height: 30.w,

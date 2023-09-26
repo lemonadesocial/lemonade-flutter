@@ -34,8 +34,16 @@ class CreatePopUpTile extends StatelessWidget {
           Container(
             padding: EdgeInsets.all(Spacing.medium),
             decoration: BoxDecoration(
-              color: color,
               borderRadius: BorderRadius.circular(LemonRadius.normal),
+              gradient: LinearGradient(
+                begin: Alignment.centerRight,
+                end: Alignment.centerLeft,
+                colors: [
+                  color,
+                  colorScheme.onPrimary.withOpacity(0.06),
+                ],
+                stops: const [0,0.4],
+              ),
             ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
