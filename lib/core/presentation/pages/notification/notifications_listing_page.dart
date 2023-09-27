@@ -1,22 +1,23 @@
+import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/notification/notifications_listing_bloc.dart';
 import 'package:app/core/data/notification/repository/notification_repository_impl.dart';
 import 'package:app/core/domain/notification/entities/notification.dart'
     as entities;
 import 'package:app/core/presentation/pages/notification/widgets/notification_card_widget.dart';
-import 'package:app/core/presentation/widgets/common/appbar/appbar_logo.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/service/notification/notification_service.dart';
+import 'package:app/core/utils/drawer_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
+import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 @RoutePage()
@@ -92,19 +93,28 @@ class _NotificationsListingViewState extends State<_NotificationsListingView> {
     final themeColor = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: LemonAppBar(
-        title: t.notification.notifications,
-        leading: const AppBarLogo(),
+        title: t.home.newsfeed,
+        leading: InkWell(
+          onTap: () => DrawerUtils.openDrawer(),
+          child: Icon(
+            Icons.menu_outlined,
+            color: themeColor.onPrimary,
+          ),
+        ),
         actions: [
-          GestureDetector(
-            behavior: HitTestBehavior.translucent,
-            onTap: () {
-              AutoRouter.of(context).navigate(const ChatListRoute());
-            },
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 15.w),
-              alignment: Alignment.centerRight,
+          Padding(
+            padding: EdgeInsets.only(right: Spacing.xSmall),
+            child: InkWell(
+              onTap: () {
+                context.read<AuthBloc>().state.maybeWhen(
+                      authenticated: (session) => AutoRouter.of(context)
+                          .navigate(const ChatListRoute()),
+                      orElse: () =>
+                          AutoRouter.of(context).navigate(const LoginRoute()),
+                    );
+              },
               child: ThemeSvgIcon(
-                color: Theme.of(context).colorScheme.onSurface,
+                color: themeColor.onPrimary,
                 builder: (filter) => Assets.icons.icChatBubble.svg(
                   colorFilter: filter,
                 ),

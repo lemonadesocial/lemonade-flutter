@@ -1,6 +1,5 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/domain/auth/entities/auth_session.dart';
-import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/string_utils.dart';
