@@ -1,6 +1,6 @@
 import 'package:app/core/config.dart';
 import 'package:app/core/data/matrix/matrix_mutation.dart';
-import 'package:app/core/gql.dart';
+import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/core/oauth/oauth.dart';
 import 'package:app/core/service/matrix/matrix_chat_space_extension.dart';
 import 'package:app/core/utils/chat_notification/background_push.dart';

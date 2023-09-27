@@ -34,7 +34,6 @@ import 'package:app/core/domain/post/post_repository.dart' as _i21;
 import 'package:app/core/domain/token/token_repository.dart' as _i24;
 import 'package:app/core/domain/user/user_repository.dart' as _i26;
 import 'package:app/core/domain/wallet/wallet_repository.dart' as _i30;
-import 'package:app/core/gql.dart' as _i3;
 import 'package:app/core/oauth/oauth.dart' as _i4;
 import 'package:app/core/service/auth/auth_service.dart' as _i5;
 import 'package:app/core/service/badge/badge_service.dart' as _i8;
@@ -44,6 +43,7 @@ import 'package:app/core/service/shake/shake_service.dart' as _i23;
 import 'package:app/core/service/user/user_service.dart' as _i28;
 import 'package:app/core/service/wallet_connect/wallet_connect_service.dart'
     as _i29;
+import 'package:app/core/utils/gql/gql.dart' as _i3;
 import 'package:app/core/utils/location_utils.dart' as _i14;
 import 'package:get_it/get_it.dart' as _i1;
 import 'package:injectable/injectable.dart' as _i2;

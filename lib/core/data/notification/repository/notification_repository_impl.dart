@@ -3,7 +3,7 @@ import 'package:app/core/data/notification/notification_query.dart';
 import 'package:app/core/domain/notification/entities/notification.dart';
 import 'package:app/core/domain/notification/notification_repository.dart';
 import 'package:app/core/failure.dart';
-import 'package:app/core/gql.dart';
+import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:dartz/dartz.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';

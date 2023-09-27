@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:app/core/config.dart';
 import 'package:app/core/data/fcm/fcm_mutation.dart';
-import 'package:app/core/gql.dart';
+import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/core/oauth/oauth.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.dart';

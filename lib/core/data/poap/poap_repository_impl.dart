@@ -6,7 +6,7 @@ import 'package:app/core/domain/poap/entities/poap_entities.dart';
 import 'package:app/core/domain/poap/input/poap_input.dart';
 import 'package:app/core/domain/poap/poap_repository.dart';
 import 'package:app/core/failure.dart';
-import 'package:app/core/gql.dart';
+import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:dartz/dartz.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
