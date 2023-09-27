@@ -48,17 +48,20 @@ class NewsfeedListingBloc
   }
 
   Future<void> _onFetch(NewsfeedListingEventFetch event, Emitter emit) async {
-    emit(state.copyWith(status: NewsfeedStatus.loading));
-    final result = await offsetPaginationService.fetch(defaultInput);
-    result.fold(
-      (l) => emit(state.copyWith(status: NewsfeedStatus.failure)),
-      (posts) => emit(
-        state.copyWith(
-          status: NewsfeedStatus.fetched,
-          posts: posts,
+    // Prevent duplicate load when it's already loading
+    if (state.status != NewsfeedStatus.loading) {
+      emit(state.copyWith(status: NewsfeedStatus.loading));
+      final result = await offsetPaginationService.fetch(defaultInput);
+      result.fold(
+        (l) => emit(state.copyWith(status: NewsfeedStatus.failure)),
+        (posts) => emit(
+          state.copyWith(
+            status: NewsfeedStatus.fetched,
+            posts: posts,
+          ),
         ),
-      ),
-    );
+      );
+    }
   }
 
   Future<void> _onRefresh(
