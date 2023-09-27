@@ -13,6 +13,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_portal/flutter_portal.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:app/core/presentation/widgets/custom_error_widget.dart';
 
 class LemonadeApp extends StatefulWidget {
   const LemonadeApp({super.key});
@@ -98,6 +99,7 @@ class _App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SnackBarUtils.init(lemonadeAppDarkThemeData.colorScheme);
+
     return MaterialApp.router(
       scaffoldMessengerKey: SnackBarUtils.rootScaffoldMessengerKey,
       locale: _getCurrentLocale(context), // use provider
@@ -109,6 +111,14 @@ class _App extends StatelessWidget {
       routerDelegate: router.delegate(),
       routeInformationParser:
           router.defaultRouteParser(includePrefixMatches: true),
+      builder: (context, widget) {
+        ErrorWidget.builder = (FlutterErrorDetails errorDetails) {
+          return CustomError(errorDetails: errorDetails);
+        };
+        return Container(
+          child: widget,
+        );
+      },
     );
   }
 

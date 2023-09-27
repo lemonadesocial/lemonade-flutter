@@ -13,7 +13,10 @@ enum GradientButtonMode {
   List<Color> get gradients {
     switch (this) {
       case defaultMode:
-        return [LemonColor.arsenic, LemonColor.charlestonGreen];
+        return [
+          LemonColor.arsenic.withOpacity(0.6),
+          LemonColor.charlestonGreen.withOpacity(0.6)
+        ];
       case lavenderMode:
         return [LemonColor.buttonLinear1, LemonColor.buttonLinear2];
       default:
