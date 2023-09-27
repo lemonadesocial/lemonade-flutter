@@ -1,13 +1,17 @@
+import 'package:app/core/application/event/event_provider_bloc/event_provider_bloc.dart';
 import 'package:app/core/application/event_tickets/select_event_tickets_bloc/select_event_tickets_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_list_ticket_types.dart';
 import 'package:app/core/domain/event/input/calculate_tickets_pricing_input/calculate_tickets_pricing_input.dart';
+import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/utils/number_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -62,10 +66,42 @@ class _SelectTicketItemState extends State<SelectTicketItem> {
   }
 
   void goToWeb() {
+    final colorScheme = Theme.of(context).colorScheme;
+    final event = context.read<EventProviderBloc>().event;
     showDialog(
+      barrierDismissible: true,
       context: context,
-      builder: (context) => const AlertDialog(
-        content: Text("Paid ticket not supported yet\nPlease use our website"),
+      builder: (innerContext) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(LemonRadius.small),
+        ),
+        actionsPadding: EdgeInsets.only(
+          left: Spacing.smMedium,
+          right: Spacing.smMedium,
+          bottom: Spacing.smMedium,
+          // vertical: Spacing.smMedium,
+        ),
+        backgroundColor: colorScheme.surfaceVariant,
+        content:
+            const Text("Paid ticket not supported yet\nPlease use our website"),
+        actions: [
+          LinearGradientButton(
+            onTap: () async {
+              Navigator.of(innerContext).pop();
+              await Future.delayed(
+                const Duration(milliseconds: 300),
+              );
+              AutoRouter.of(context).replaceAll([
+                EventDetailRoute(
+                  eventId: event.id ?? '',
+                  eventName: event.title ?? '',
+                ),
+              ]);
+            },
+            mode: GradientButtonMode.lavenderMode,
+            label: t.common.actions.ok,
+          )
+        ],
       ),
     );
   }
