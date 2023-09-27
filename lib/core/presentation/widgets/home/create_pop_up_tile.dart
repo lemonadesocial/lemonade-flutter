@@ -73,11 +73,6 @@ class CreatePopUpTile extends StatelessWidget {
             clipBehavior: Clip.antiAlias,
             decoration: ShapeDecoration(
               shape: RoundedRectangleBorder(
-                side: BorderSide(
-                  color: LemonColor.white06,
-                  width: 1.0,
-                  style: BorderStyle.solid,
-                ),
                 borderRadius: BorderRadius.circular(
                   LemonRadius.small,
                 ),
@@ -87,6 +82,13 @@ class CreatePopUpTile extends StatelessWidget {
                 center: Alignment.topRight,
                 colors: colors,
               ),
+              shadows: [
+                BoxShadow(
+                  color: LemonColor.white06,
+                  offset: const Offset(-1, -1),
+                  spreadRadius: 1,
+                )
+              ],
             ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -132,7 +134,7 @@ class CreatePopUpTile extends StatelessWidget {
                   color: colorScheme.onPrimary.withOpacity(0.12),
                   borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(LemonRadius.xSmall),
-                    topRight: Radius.circular(LemonRadius.normal),
+                    topRight: Radius.circular(LemonRadius.xSmall),
                   ),
                 ),
                 child: Text(
