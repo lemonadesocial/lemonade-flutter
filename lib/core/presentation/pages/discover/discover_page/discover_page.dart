@@ -5,6 +5,7 @@ import 'package:app/core/presentation/widgets/bottom_bar/bottom_bar_widget.dart'
 import 'package:app/core/presentation/widgets/common/appbar/appbar_logo.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/utils/drawer_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -20,11 +21,18 @@ class DiscoverPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.primary,
+      backgroundColor: colorScheme.primary,
       appBar: LemonAppBar(
         title: t.discover.discover,
-        leading: const AppBarLogo(),
+        leading: InkWell(
+          onTap: () => DrawerUtils.openDrawer(),
+          child: Icon(
+            Icons.menu_outlined,
+            color: colorScheme.onPrimary,
+          ),
+        ),
         actions: [
           GestureDetector(
             behavior: HitTestBehavior.translucent,

@@ -6,15 +6,15 @@ class DrawerUtils {
 
   static GlobalKey<ScaffoldState> get drawerGlobalKey => _drawerGlobalKey;
 
-  static openDrawer() {
+  static void openDrawer() {
     drawerGlobalKey.currentState?.openDrawer();
   }
 
-  static openEndDrawer() {
+  static void openEndDrawer() {
     drawerGlobalKey.currentState?.openEndDrawer();
   }
 
-  static closeDrawer() {
+  static void closeDrawer() {
     drawerGlobalKey.currentState?.closeDrawer();
   }
 }
