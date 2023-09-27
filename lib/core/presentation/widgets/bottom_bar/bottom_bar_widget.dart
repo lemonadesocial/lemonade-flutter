@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/presentation/widgets/bottom_bar/app_tabs.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
