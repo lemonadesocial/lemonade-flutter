@@ -5,7 +5,6 @@ import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/oauth/oauth.dart';
 import 'package:app/core/utils/gql/custom_error_handler.dart';
 import 'package:app/injection/register_module.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:injectable/injectable.dart';
 
