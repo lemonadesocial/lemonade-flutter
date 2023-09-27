@@ -88,8 +88,10 @@ class LemonColor {
   static const promoAppliedBackground = Color(0x2D5ECA90);
 
   // Create post dialog
-  static const collectibleIcon = Color(0xFFFFA6C6);
-  static const poapIcon = Color(0xFF9DF7E7);
+  static const collectibleColor = Color(0xFFFFA6C6);
+  static const poapColor = Color(0xFF9DF7E7);
+  static const roomColor = Color(0xFFF7B39D);
+  static const postColor = Color(0xFF9DC1F7);
 }
 
 final ColorScheme lemonadeLightThemeColorScheme = ColorScheme.light(
