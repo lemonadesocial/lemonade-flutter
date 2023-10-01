@@ -127,7 +127,6 @@ class SettingPage extends StatelessWidget {
                 trailing: Assets.icons.icArrowBack.svg(
                   width: 18.w,
                   height: 18.w,
-                  color: LemonColor.deleteAccountRed,
                 ),
                 onTap: () {},
               ),

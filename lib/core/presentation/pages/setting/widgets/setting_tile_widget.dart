@@ -38,38 +38,49 @@ class SettingTileWidget extends StatelessWidget {
         clipBehavior: Clip.hardEdge,
         child: Stack(
           children: [
-            ListTile(
-              contentPadding: EdgeInsets.symmetric(
-                vertical: Spacing.superExtraSmall,
-                horizontal: Spacing.small,
-              ),
-              leading: Container(
-                width: 42.w,
-                height: 42.w,
-                padding: EdgeInsets.all(Spacing.xSmall),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: colorScheme.secondaryContainer,
-                ),
-                child: leading,
-              ),
-              title: Text(
-                title,
-                style: Typo.medium.copyWith(
-                  color: titleColor ?? colorScheme.onPrimary,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              subtitle: subTitle == null
-                  ? null
-                  : Text(
-                      subTitle!,
-                      style: Typo.small.copyWith(
-                        color: colorScheme.onPrimary.withOpacity(0.36),
-                        fontWeight: FontWeight.w400,
-                      ),
+            Padding(
+              padding: EdgeInsets.all(Spacing.small),
+              child: Row(
+                children: [
+                  Container(
+                    width: 42.w,
+                    height: 42.w,
+                    padding: EdgeInsets.all(Spacing.xSmall),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: colorScheme.secondaryContainer,
                     ),
-              trailing: trailing,
+                    child: leading,
+                  ),
+                  SizedBox(width: Spacing.small),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          title,
+                          style: Typo.medium.copyWith(
+                            color: titleColor ?? colorScheme.onPrimary,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        subTitle == null
+                            ? const SizedBox.shrink()
+                            : Text(
+                                subTitle!,
+                                style: Typo.small.copyWith(
+                                  color:
+                                      colorScheme.onPrimary.withOpacity(0.36),
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(width: Spacing.small),
+                  trailing ?? const SizedBox.shrink(),
+                ],
+              ),
             ),
             if (!featureAvailable)
               Positioned(
