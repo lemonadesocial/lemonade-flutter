@@ -37,7 +37,7 @@ class SettingPage extends StatelessWidget {
             children: [
               SizedBox(height: Spacing.superExtraSmall),
               const SettingProfileTile(),
-              SizedBox(height: 30.h),
+              SizedBox(height: 24.h),
               SettingTileWidget(
                 title: t.common.vault,
                 subTitle: t.setting.vaultDesc,
@@ -61,7 +61,7 @@ class SettingPage extends StatelessWidget {
                 ),
                 onTap: () {},
               ),
-              SizedBox(height: 30.h),
+              SizedBox(height: 24.h),
               Padding(
                 padding: EdgeInsets.symmetric(
                   vertical: Spacing.xSmall,

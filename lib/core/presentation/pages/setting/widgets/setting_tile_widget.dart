@@ -31,7 +31,6 @@ class SettingTileWidget extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: Spacing.extraSmall),
         decoration: BoxDecoration(
           color: colorScheme.onPrimary.withOpacity(0.06),
           borderRadius: BorderRadius.circular(LemonRadius.normal),
@@ -40,6 +39,10 @@ class SettingTileWidget extends StatelessWidget {
         child: Stack(
           children: [
             ListTile(
+              contentPadding: EdgeInsets.symmetric(
+                vertical: Spacing.superExtraSmall,
+                horizontal: Spacing.small,
+              ),
               leading: Container(
                 width: 42.w,
                 height: 42.w,
