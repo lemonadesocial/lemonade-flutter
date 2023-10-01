@@ -1,0 +1,12 @@
+{
+  "setting": "Setting",
+  "vaultDesc": "Manage your treasuries",
+  "notification": "Notifications",
+  "notificationDesc": "Change your notification settings",
+  "policy": "Privacy Policy",
+  "term": "Terms of Service",
+  "logoutDesc": "See you soon!",
+  "deleteAccount": "Delete account",
+  "deleteAccountDesc": "We’re sorry to see you go...",
+  "about": "About"
+}
