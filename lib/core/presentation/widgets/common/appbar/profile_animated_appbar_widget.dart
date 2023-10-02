@@ -1,5 +1,4 @@
 import 'package:app/core/presentation/widgets/lemon_back_button_widget.dart';
-import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +37,7 @@ class ProfileAnimatedAppBar extends SliverPersistentHeaderDelegate {
         height: maxExtent,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             buildLeading(),
             Transform.translate(
@@ -48,7 +48,7 @@ class ProfileAnimatedAppBar extends SliverPersistentHeaderDelegate {
               ),
             ),
             // Spacer(),
-            buildActions()
+            buildActions(),
           ],
         ),
       ),
@@ -64,20 +64,16 @@ class ProfileAnimatedAppBar extends SliverPersistentHeaderDelegate {
   }
 
   Widget buildActions() {
-    return Container(
-      padding: EdgeInsets.only(right: 15.w),
-      child: Row(
-        children: List.from(actions ?? [])
-            .map(
-              (item) => Container(
-                margin: EdgeInsets.only(left: Spacing.medium),
-                width: Sizing.small,
-                height: maxExtent,
-                child: item,
-              ),
-            )
-            .toList(),
-      ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List.from(actions ?? [])
+          .map(
+            (item) => Container(
+              margin: EdgeInsets.only(left: Spacing.medium),
+              child: item,
+            ),
+          )
+          .toList(),
     );
   }
 }
