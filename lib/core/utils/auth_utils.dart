@@ -9,7 +9,7 @@ class AuthUtils {
           authenticated: (authSession) => authSession.userId,
           orElse: () => null,
         );
-    return user.id == myUserId;
+    return user.userId == myUserId;
   }
 
   static String getUserId(BuildContext context) {

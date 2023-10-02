@@ -1,7 +1,5 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
-import 'package:app/core/application/profile/user_profile_bloc/user_profile_bloc.dart';
 import 'package:app/core/application/wallet/wallet_bloc/wallet_bloc.dart';
-import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/presentation/pages/profile/views/profile_page_view.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:auto_route/auto_route.dart';
@@ -20,10 +18,6 @@ class MyProfilePage extends StatelessWidget {
         );
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (context) => UserProfileBloc(getIt<UserRepository>())
-            ..add(UserProfileEvent.fetch(userId: userId)),
-        ),
         BlocProvider(
           create: (context) =>
               WalletBloc()..add(const WalletEventInitWalletConnect()),

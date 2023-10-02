@@ -34,7 +34,7 @@ class AuthUser {
 
 class User {
   User({
-    this.id,
+    required this.userId,
     this.createdAt,
     this.displayName,
     this.firstName,
@@ -80,7 +80,7 @@ class User {
 
   factory User.fromDto(UserDto dto) {
     return User(
-      id: dto.id,
+      userId: dto.id ?? '',
       createdAt: dto.createdAt,
       displayName: dto.displayName,
       firstName: dto.firstName,
@@ -138,7 +138,7 @@ class User {
       ethnicity: dto.ethnicity,
     );
   }
-  final String? id;
+  final String userId;
   final DateTime? createdAt;
   final String? displayName;
   final String? firstName;

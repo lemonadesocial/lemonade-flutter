@@ -116,7 +116,7 @@ class BottomBarState extends State<BottomBar>
               child: LemonCircleAvatar(
                 size: 24.w,
                 url: AvatarUtils.getProfileAvatar(
-                  userAvatar: authState.authSession.userAvatar,
+                  userAvatar: authState.authSession.imageAvatar,
                   userId: authState.authSession.userId,
                 ),
               ),

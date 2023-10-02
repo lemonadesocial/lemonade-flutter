@@ -8,7 +8,7 @@ import 'package:injectable/injectable.dart';
 @lazySingleton
 class UserService {
   final _userRepository = getIt<UserRepository>();
-  Future<Either<Failure, AuthUser>> getMe() async {
-    return await _userRepository.getMe();
+  Future<Either<Failure, User>> getMe() async {
+    return _userRepository.getMe();
   }
 }
