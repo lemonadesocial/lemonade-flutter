@@ -218,6 +218,7 @@ final updateUserProfileQuery = gql('''
   \$tagline: String
   \$music: [String!]
   \$data: JSON
+  \$notification_filters: [JSON!]
 ) {
   updateUser(
     input: {
@@ -255,6 +256,7 @@ final updateUserProfileQuery = gql('''
       tagline: \$tagline
       music: \$music
       data: \$data
+      notification_filters: \$notification_filters
     }
   ) {
     ...listingFragment

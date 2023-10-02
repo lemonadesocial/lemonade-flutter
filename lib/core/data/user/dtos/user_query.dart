@@ -165,6 +165,7 @@ const privateFragment = '''
     lemon_amount
     music
     tag_timeline
+    notification_filters
   }
 ''';
 

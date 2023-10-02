@@ -30,7 +30,7 @@ class SettingProfileTile extends StatelessWidget {
       child: Row(
         children: [
           LemonCircleAvatar(
-            url: authSession!.userAvatar ?? '',
+            url: authSession!.imageAvatar ?? '',
             size: 42.r,
           ),
           SizedBox(width: Spacing.small),
@@ -38,7 +38,7 @@ class SettingProfileTile extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(authSession.userDisplayName ?? ''),
+                Text(authSession.displayName ?? ''),
                 Text(
                   '@${authSession.username ?? ''}',
                   style: Typo.small.copyWith(color: colorScheme.onSecondary),
