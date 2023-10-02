@@ -73,13 +73,13 @@ class LemonDrawer extends StatelessWidget {
               onTap: () {
                 context.router.pop();
                 context.read<AuthBloc>().state.maybeWhen(
-                  authenticated: (authSession) => context.router.push(
-                    EditProfileRoute(userProfile: authSession),
-                  ),
-                  orElse: () => context.router.navigate(
-                    const LoginRoute(),
-                  ),
-                );
+                      authenticated: (authSession) => context.router.push(
+                        EditProfileRoute(userProfile: authSession),
+                      ),
+                      orElse: () => context.router.navigate(
+                        const LoginRoute(),
+                      ),
+                    );
               },
             ),
             SizedBox(height: Spacing.xSmall),
@@ -88,13 +88,13 @@ class LemonDrawer extends StatelessWidget {
               onTap: () {
                 context.router.pop();
                 context.read<AuthBloc>().state.maybeWhen(
-                  authenticated: (authSession) => context.router.push(
-                    const SettingRoute(),
-                  ),
-                  orElse: () => context.router.navigate(
-                    const LoginRoute(),
-                  ),
-                );
+                      authenticated: (authSession) => context.router.push(
+                        const SettingRoute(),
+                      ),
+                      orElse: () => context.router.navigate(
+                        const LoginRoute(),
+                      ),
+                    );
               },
               item: DrawerItem(
                 icon: Assets.icons.icSettings,
@@ -110,10 +110,10 @@ class LemonDrawer extends StatelessWidget {
   }
 
   Widget _buildDrawerItem(
-      BuildContext context, {
-        required DrawerItem item,
-        VoidCallback? onTap,
-      }) {
+    BuildContext context, {
+    required DrawerItem item,
+    VoidCallback? onTap,
+  }) {
     final colorScheme = Theme.of(context).colorScheme;
     return InkWell(
       onTap: onTap,
@@ -160,8 +160,8 @@ class LemonDrawer extends StatelessWidget {
   }
 
   Widget _buildUser(
-      context,
-      ) {
+    context,
+  ) {
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
         return state.when(

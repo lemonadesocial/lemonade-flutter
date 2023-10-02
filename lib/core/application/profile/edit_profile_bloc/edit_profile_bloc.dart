@@ -197,7 +197,7 @@ class EditProfileBloc extends Cubit<EditProfileState> {
         );
       }
     });
-   final response = await userRepository.updateUserProfile(
+    final response = await userRepository.updateUserProfile(
       UpdateUserProfileInput(
         username: state.username,
         pronoun: state.pronoun,

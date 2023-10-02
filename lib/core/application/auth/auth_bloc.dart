@@ -63,7 +63,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(const AuthState.unauthenticated(isChecking: false));
   }
 
-  Future<void> _onRefresh(AuthEventRefresh event, Emitter emit)async{
+  Future<void> _onRefresh(AuthEventRefresh event, Emitter emit) async {
     emit(const AuthState.processing());
     final currentUser = await _createSession();
     emit(AuthState.authenticated(authSession: currentUser!));

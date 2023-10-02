@@ -65,7 +65,7 @@ class NotificationSettingPage extends StatelessWidget {
                                 NotificationSettingType.values[index],
                                 value!,
                               );
-                            } ,
+                            },
                           ),
                           Text(
                             NotificationSettingType.values[index].name
@@ -79,8 +79,7 @@ class NotificationSettingPage extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    margin:
-                        EdgeInsets.symmetric(vertical: Spacing.smMedium),
+                    margin: EdgeInsets.symmetric(vertical: Spacing.smMedium),
                     child: LinearGradientButton(
                       onTap: bloc.state.status == EditProfileStatus.editing
                           ? bloc.editProfile

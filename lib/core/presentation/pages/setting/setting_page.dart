@@ -68,7 +68,8 @@ class SettingPage extends StatelessWidget {
                     width: 18.w,
                     height: 18.w,
                   ),
-                  onTap: () => context.router.push(const NotificationSettingRoute()),
+                  onTap: () =>
+                      context.router.push(const NotificationSettingRoute()),
                 ),
                 SizedBox(height: 24.h),
                 Padding(
@@ -104,7 +105,7 @@ class SettingPage extends StatelessWidget {
                     height: 18.w,
                   ),
                   onTap: () => ChromeSafariBrowser().open(
-                    url:Uri.parse('https://lemonade.social/terms'),
+                    url: Uri.parse('https://lemonade.social/terms'),
                   ),
                 ),
                 SizedBox(height: Spacing.xSmall),
@@ -121,6 +122,7 @@ class SettingPage extends StatelessWidget {
                       ),
                 ),
                 SizedBox(height: Spacing.xSmall),
+
                 /// BE currently handle it too long (more than 60s)
                 /// so I temporary disable it here.
                 SettingTileWidget(
