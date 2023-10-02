@@ -70,6 +70,17 @@ class LemonDrawer extends StatelessWidget {
                 icon: Assets.icons.icEdit,
                 label: t.profile.editProfile,
               ),
+              onTap: () {
+                context.router.pop();
+                context.read<AuthBloc>().state.maybeWhen(
+                  authenticated: (authSession) => context.router.push(
+                    EditProfileRoute(userProfile: authSession),
+                  ),
+                  orElse: () => context.router.navigate(
+                    const LoginRoute(),
+                  ),
+                );
+              },
             ),
             SizedBox(height: Spacing.xSmall),
             _buildDrawerItem(
