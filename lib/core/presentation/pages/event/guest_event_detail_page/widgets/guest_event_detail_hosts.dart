@@ -98,7 +98,8 @@ class _EventHostItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        AutoRouter.of(context).navigate(ProfileRoute(userId: host?.id ?? ''));
+        AutoRouter.of(context)
+            .navigate(ProfileRoute(userId: host?.userId ?? ''));
       },
       child: Container(
         width: 130.w,
