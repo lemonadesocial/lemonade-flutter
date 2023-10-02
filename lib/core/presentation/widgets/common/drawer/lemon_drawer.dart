@@ -32,11 +32,12 @@ class LemonDrawer extends StatelessWidget {
     final t = Translations.of(context);
     return SafeArea(
       child: Drawer(
-        width: 270,
+        width: 270.w,
         backgroundColor: colorScheme.primary,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            SizedBox(height: Spacing.superExtraSmall),
             ...[
               DrawerItem(
                 icon: Assets.icons.icBank,
