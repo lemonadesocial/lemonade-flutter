@@ -121,6 +121,8 @@ class SettingPage extends StatelessWidget {
                       ),
                 ),
                 SizedBox(height: Spacing.xSmall),
+                /// BE currently handle it too long (more than 60s)
+                /// so I temporary disable it here.
                 SettingTileWidget(
                   title: t.setting.deleteAccount,
                   subTitle: t.setting.deleteAccountDesc,
