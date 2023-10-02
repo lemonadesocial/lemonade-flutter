@@ -1,6 +1,7 @@
 import 'package:app/core/domain/common/common_enums.dart';
 import 'package:app/core/domain/onboarding/onboarding_inputs.dart';
 import 'package:app/core/domain/user/user_repository.dart';
+import 'package:app/core/presentation/pages/setting/enums/notification_type.dart';
 import 'package:app/core/service/post/post_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -20,6 +21,7 @@ class EditProfileBloc extends Cubit<EditProfileState> {
   final UserRepository userRepository;
   final PostService postService;
   final birthDayCtrl = TextEditingController();
+  final notificationMap = <NotificationSettingType, bool>{};
 
   String? mImageId;
 
@@ -136,6 +138,31 @@ class EditProfileBloc extends Cubit<EditProfileState> {
     );
   }
 
+  void mapNotificationType(List<String> notificationFilterString) {
+    for (final type in NotificationSettingType.values) {
+      notificationMap.putIfAbsent(
+        type,
+        () => notificationFilterString.any(
+          (filter) => filter.startsWith('${type.name}_'),
+        ),
+      );
+    }
+    emit(state.copyWith(notificationMap: notificationMap));
+  }
+
+  void onNotificationCheck(NotificationSettingType type, bool isChecked) {
+    final newMap =
+        Map<NotificationSettingType, bool>.from(state.notificationMap!);
+    newMap[type] = !state.notificationMap![type]!;
+
+    emit(
+      state.copyWith(
+        status: EditProfileStatus.editing,
+        notificationMap: newMap,
+      ),
+    );
+  }
+
   Future<void> uploadImage() async {
     final response = await postService.uploadImage(
       state.profilePhoto!,
@@ -160,7 +187,17 @@ class EditProfileBloc extends Cubit<EditProfileState> {
     if (state.profilePhoto != null) {
       await uploadImage();
     }
-    final response = await userRepository.updateUserProfile(
+    final notificationFilterInput = <NotificationFilterInput>[];
+    state.notificationMap!.forEach((type, value) {
+      if (value) {
+        notificationFilterInput.addAll(
+          type.notificationDetail
+              .map((e) => NotificationFilterInput(type: e))
+              .toList(),
+        );
+      }
+    });
+   final response = await userRepository.updateUserProfile(
       UpdateUserProfileInput(
         username: state.username,
         pronoun: state.pronoun,
@@ -174,6 +211,8 @@ class EditProfileBloc extends Cubit<EditProfileState> {
         ethnicity: state.ethnicity,
         companyName: state.companyName,
         uploadPhoto: mImageId != null ? [mImageId!] : null,
+        notificationFilterInput:
+            notificationFilterInput.isEmpty ? null : notificationFilterInput,
       ),
     );
     response.fold(

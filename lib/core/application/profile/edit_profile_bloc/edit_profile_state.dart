@@ -18,6 +18,7 @@ class EditProfileState with _$EditProfileState {
     String? shortBio,
     XFile? profilePhoto,
     List<dynamic>? interestList,
+    Map<NotificationSettingType, bool>? notificationMap,
   }) = _EditProfileState;
 
   factory EditProfileState.initial() => const EditProfileState();

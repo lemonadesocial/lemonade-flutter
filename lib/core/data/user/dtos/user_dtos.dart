@@ -2,7 +2,9 @@ import 'package:app/core/data/common/dtos/common_dtos.dart';
 import 'package:app/core/data/user/user_enums.dart';
 import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+
 part 'user_dtos.freezed.dart';
+
 part 'user_dtos.g.dart';
 
 @freezed
@@ -57,6 +59,9 @@ class UserDto with _$UserDto {
     String? ethnicity,
     @JsonKey(name: 'company_name') String? companyName,
     @JsonKey(name: 'education_title') String? educationTitle,
+    @Default([])
+    @JsonKey(name: 'notification_filters')
+    List<NotificationFilterDto> notificationFilter,
   }) = _UserDto;
 
   factory UserDto.fromJson(Map<String, dynamic> json) =>
@@ -128,4 +133,17 @@ class ZoomUserInfoDto with _$ZoomUserInfoDto {
 
   factory ZoomUserInfoDto.fromJson(Map<String, dynamic> json) =>
       _$ZoomUserInfoDtoFromJson(json);
+}
+
+@freezed
+class NotificationFilterDto with _$NotificationFilterDto {
+  @JsonSerializable(fieldRename: FieldRename.snake)
+  const factory NotificationFilterDto({
+    required String type,
+    String? refType,
+    String? refId,
+  }) = _NotificationFilterDto;
+
+  factory NotificationFilterDto.fromJson(Map<String, dynamic> json) =>
+      _$NotificationFilterDtoFromJson(json);
 }

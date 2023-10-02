@@ -22,6 +22,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthEventLogout>(_onLogout);
     on<AuthEventAuthenticated>(_onAuthenticated);
     on<AuthEventUnAuthenticated>(_onUnAuthenticated);
+    on<AuthEventRefresh>(_onRefresh);
   }
 
   final AuthService authService;
@@ -62,6 +63,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(const AuthState.unauthenticated(isChecking: false));
   }
 
+  Future<void> _onRefresh(AuthEventRefresh event, Emitter emit)async{
+    emit(const AuthState.processing());
+    final currentUser = await _createSession();
+    emit(AuthState.authenticated(authSession: currentUser!));
+  }
+
   void _onUnAuthenticated(AuthEventUnAuthenticated event, Emitter emit) {
     emit(const AuthState.unauthenticated(isChecking: false));
   }
@@ -85,6 +92,8 @@ class AuthEvent with _$AuthEvent {
   const factory AuthEvent.login() = AuthEventLogin;
 
   const factory AuthEvent.logout() = AuthEventLogout;
+
+  const factory AuthEvent.refreshData() = AuthEventRefresh;
 
   const factory AuthEvent.authenticated() = AuthEventAuthenticated;
 

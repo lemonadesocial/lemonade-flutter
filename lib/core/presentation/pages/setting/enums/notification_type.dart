@@ -1,4 +1,4 @@
-enum NotificationType {
+enum NotificationSettingType {
   admin([
     'admin_payment_verification',
   ]),
@@ -74,5 +74,5 @@ enum NotificationType {
 
   final List<String> notificationDetail;
 
-  const NotificationType(this.notificationDetail);
+  const NotificationSettingType(this.notificationDetail);
 }

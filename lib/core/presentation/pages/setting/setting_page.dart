@@ -7,14 +7,15 @@ import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/modal_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 @RoutePage()
 class SettingPage extends StatelessWidget {
@@ -67,7 +68,7 @@ class SettingPage extends StatelessWidget {
                     width: 18.w,
                     height: 18.w,
                   ),
-                  onTap: () {},
+                  onTap: () => context.router.push(const NotificationSettingRoute()),
                 ),
                 SizedBox(height: 24.h),
                 Padding(
@@ -90,9 +91,8 @@ class SettingPage extends StatelessWidget {
                     width: 18.w,
                     height: 18.w,
                   ),
-                  onTap: () => launchUrl(
-                    Uri.parse('https://lemonade.social/privacy'),
-                    mode: LaunchMode.inAppWebView,
+                  onTap: () => ChromeSafariBrowser().open(
+                    url: Uri.parse('https://lemonade.social/privacy'),
                   ),
                 ),
                 SizedBox(height: Spacing.xSmall),
@@ -103,9 +103,8 @@ class SettingPage extends StatelessWidget {
                     width: 18.w,
                     height: 18.w,
                   ),
-                  onTap: () => launchUrl(
-                    Uri.parse('https://lemonade.social/terms'),
-                    mode: LaunchMode.inAppWebView,
+                  onTap: () => ChromeSafariBrowser().open(
+                    url:Uri.parse('https://lemonade.social/terms'),
                   ),
                 ),
                 SizedBox(height: Spacing.xSmall),

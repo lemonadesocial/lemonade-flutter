@@ -30,6 +30,8 @@ class UpdateUserProfileInput with _$UpdateUserProfileInput {
     String? tagline,
     @JsonKey(name: 'date_of_birth') DateTime? dob,
     String? companyName,
+    @JsonKey(name: 'notification_filters')
+    List<NotificationFilterInput>? notificationFilterInput,
   }) = _UpdateUserProfileInput;
 
   factory UpdateUserProfileInput.fromJson(Map<String, dynamic> json) =>
