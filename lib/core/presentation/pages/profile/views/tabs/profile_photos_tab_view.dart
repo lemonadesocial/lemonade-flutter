@@ -54,7 +54,7 @@ class ProfilePhotosTabView extends StatelessWidget {
                 childCount: (user.newPhotosExpanded ?? []).length,
               ),
             ),
-          )
+          ),
       ],
     );
   }

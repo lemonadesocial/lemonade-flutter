@@ -1,10 +1,7 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/domain/auth/entities/auth_session.dart';
-import 'package:app/core/presentation/dpos/common/dropdown_item_dpo.dart';
-import 'package:app/core/presentation/widgets/floating_frosted_glass_dropdown_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
-import 'package:app/core/utils/drawer_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -14,17 +11,20 @@ import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DrawerItem {
   DrawerItem({
     required this.icon,
     required this.label,
     this.onPressed,
+    this.featureAvailable = true,
   });
 
   final SvgGenImage icon;
   final String label;
   final Function()? onPressed;
+  final bool featureAvailable;
 }
 
 class LemonDrawer extends StatelessWidget {
@@ -36,32 +36,18 @@ class LemonDrawer extends StatelessWidget {
     final t = Translations.of(context);
     return SafeArea(
       child: Drawer(
-        width: 270,
+        width: 270.w,
         backgroundColor: colorScheme.primary,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            GestureDetector(
-              onTap: DrawerUtils.closeDrawer,
-              child: Container(
-                color: Colors.transparent,
-                padding: EdgeInsets.symmetric(
-                  vertical: Spacing.small,
-                  horizontal: Spacing.smMedium,
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    ThemeSvgIcon(
-                      color: colorScheme.onSecondary,
-                      builder: (filter) =>
-                          Assets.icons.icBack.svg(colorFilter: filter),
-                    )
-                  ],
-                ),
-              ),
-            ),
+            SizedBox(height: Spacing.superExtraSmall),
             ...[
+              DrawerItem(
+                icon: Assets.icons.icBank,
+                label: t.common.vault,
+                featureAvailable: false,
+              ),
               DrawerItem(
                 icon: Assets.icons.icPeopleAlt,
                 label: t.common.community,
@@ -78,17 +64,29 @@ class LemonDrawer extends StatelessWidget {
               DrawerItem(
                 icon: Assets.icons.icInsights,
                 label: t.common.dashboard,
+                featureAvailable: false,
               ),
               DrawerItem(icon: Assets.icons.icQr, label: t.common.qrCode),
-            ].map((item) => _buildDrawerItem(context, item: item)),
+            ].map(
+              (item) =>
+                  _buildDrawerItem(context, item: item, onTap: item.onPressed),
+            ),
             SizedBox(height: Spacing.xSmall),
             Divider(color: colorScheme.outline, height: 2),
             SizedBox(height: Spacing.xSmall),
             _buildDrawerItem(
               context,
               item: DrawerItem(
-                icon: Assets.icons.icSupport,
-                label: t.common.support,
+                icon: Assets.icons.icEdit,
+                label: t.profile.editProfile,
+              ),
+            ),
+            SizedBox(height: Spacing.xSmall),
+            _buildDrawerItem(
+              context,
+              item: DrawerItem(
+                icon: Assets.icons.icSettings,
+                label: t.common.setting,
               ),
             ),
             const Spacer(),
@@ -102,13 +100,11 @@ class LemonDrawer extends StatelessWidget {
   Widget _buildDrawerItem(
     BuildContext context, {
     required DrawerItem item,
+    VoidCallback? onTap,
   }) {
     final colorScheme = Theme.of(context).colorScheme;
     return InkWell(
-      onTap: () {
-        item.onPressed?.call();
-        DrawerUtils.closeDrawer();
-      },
+      onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(
           vertical: Spacing.small,
@@ -120,13 +116,31 @@ class LemonDrawer extends StatelessWidget {
               color: colorScheme.onPrimary,
               builder: (filter) => item.icon.svg(
                 colorFilter: filter,
+                height: 18.w,
+                width: 18.w,
               ),
             ),
             SizedBox(width: Spacing.small),
             Text(
               StringUtils.capitalize(item.label),
               style: Typo.medium.copyWith(color: colorScheme.onSurface),
-            )
+            ),
+            if (!item.featureAvailable) ...[
+              SizedBox(width: Spacing.small),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 5.w),
+                decoration: BoxDecoration(
+                  color: colorScheme.onPrimary.withOpacity(0.09),
+                  borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
+                ),
+                child: Text(
+                  t.common.comingSoon,
+                  style: Typo.extraSmall.copyWith(
+                    color: colorScheme.onPrimary.withOpacity(0.36),
+                  ),
+                ),
+              ),
+            ],
           ],
         ),
       ),
@@ -164,6 +178,7 @@ class LemonDrawer extends StatelessWidget {
           ),
           SizedBox(width: Spacing.xSmall),
           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(authSession.userDisplayName ?? ''),
               Text(
@@ -171,22 +186,6 @@ class LemonDrawer extends StatelessWidget {
                 style: Typo.small.copyWith(color: colorScheme.onSecondary),
               ),
             ],
-          ),
-          const Spacer(),
-          FloatingFrostedGlassDropdown(
-            items: [
-              DropdownItemDpo(
-                label: t.auth.logout,
-              ),
-            ],
-            onItemPressed: (item) {
-              context.read<AuthBloc>().add(const AuthEvent.logout());
-            },
-            child: ThemeSvgIcon(
-              color: colorScheme.onSecondary,
-              builder: (filter) =>
-                  Assets.icons.icMoreHoriz.svg(colorFilter: filter),
-            ),
           ),
         ],
       ),
