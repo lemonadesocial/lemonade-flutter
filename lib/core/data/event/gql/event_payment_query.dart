@@ -3,12 +3,14 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 final getEventPaymentsQuery = gql('''
   query(
         \$user: MongoID,
-        \$event: MongoID!,
         \$ticket_assignees: MongoID,
+        \$skip: Int! = 0,
+        \$limit: Int! = 50,
     ) {
         getPayments(
+            skip: \$skip,
+            limit: \$limit,
             user: \$user,
-            event: \$event,
             ticket_assignees: \$ticket_assignees,
             state: { in: [captured, wiring, wired] }
             type: { eq: ticket }

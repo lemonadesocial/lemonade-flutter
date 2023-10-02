@@ -8,7 +8,9 @@ import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:dartz/dartz.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:injectable/injectable.dart';
 
+@LazySingleton(as: EventPaymentRepository)
 class EventPaymentRepositoryImpl implements EventPaymentRepository {
   final client = getIt<AppGQL>().client;
 

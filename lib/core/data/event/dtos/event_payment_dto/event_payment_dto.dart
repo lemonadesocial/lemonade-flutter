@@ -13,7 +13,7 @@ class EventPaymentDto with _$EventPaymentDto {
     String? user,
     @JsonKey(name: 'ticket_type') String? ticketType,
     @JsonKey(name: 'ticket_count') double? ticketCount,
-    @JsonKey(name: 'ticket_count_remaining') ticketCountRemaining,
+    @JsonKey(name: 'ticket_count_remaining') double? ticketCountRemaining,
     double? amount,
     @JsonKey(name: 'ticket_discount') String? ticketDiscount,
     @JsonKey(name: 'ticket_discount_amount') double? ticketDiscountAmount,

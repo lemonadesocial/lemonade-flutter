@@ -8,8 +8,10 @@ import 'package:app/core/utils/drawer_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -17,10 +19,12 @@ class DrawerItem {
   DrawerItem({
     required this.icon,
     required this.label,
+    this.onPressed,
   });
 
   final SvgGenImage icon;
   final String label;
+  final Function()? onPressed;
 }
 
 class LemonDrawer extends StatelessWidget {
@@ -65,6 +69,11 @@ class LemonDrawer extends StatelessWidget {
               DrawerItem(
                 icon: Assets.icons.icTicket,
                 label: t.common.ticket(n: 2),
+                onPressed: () {
+                  AutoRouter.of(context).navigate(
+                    MyEventTicketsListRoute(),
+                  );
+                },
               ),
               DrawerItem(
                 icon: Assets.icons.icInsights,
@@ -95,25 +104,31 @@ class LemonDrawer extends StatelessWidget {
     required DrawerItem item,
   }) {
     final colorScheme = Theme.of(context).colorScheme;
-    return Container(
-      padding: EdgeInsets.symmetric(
-        vertical: Spacing.small,
-        horizontal: Spacing.smMedium,
-      ),
-      child: Row(
-        children: [
-          ThemeSvgIcon(
-            color: colorScheme.onPrimary,
-            builder: (filter) => item.icon.svg(
-              colorFilter: filter,
+    return InkWell(
+      onTap: () {
+        item.onPressed?.call();
+        DrawerUtils.closeDrawer();
+      },
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          vertical: Spacing.small,
+          horizontal: Spacing.smMedium,
+        ),
+        child: Row(
+          children: [
+            ThemeSvgIcon(
+              color: colorScheme.onPrimary,
+              builder: (filter) => item.icon.svg(
+                colorFilter: filter,
+              ),
             ),
-          ),
-          SizedBox(width: Spacing.small),
-          Text(
-            StringUtils.capitalize(item.label),
-            style: Typo.medium.copyWith(color: colorScheme.onSurface),
-          )
-        ],
+            SizedBox(width: Spacing.small),
+            Text(
+              StringUtils.capitalize(item.label),
+              style: Typo.medium.copyWith(color: colorScheme.onSurface),
+            )
+          ],
+        ),
       ),
     );
   }

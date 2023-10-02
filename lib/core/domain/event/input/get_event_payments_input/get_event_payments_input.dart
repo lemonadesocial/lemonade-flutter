@@ -5,6 +5,7 @@ part 'get_event_payments_input.g.dart';
 
 @freezed
 class GetEventPaymentsInput with _$GetEventPaymentsInput {
+  @JsonSerializable(includeIfNull: false)
   factory GetEventPaymentsInput({
     String? user,
     String? event,

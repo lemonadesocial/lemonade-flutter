@@ -162,3 +162,69 @@ final getHostingEventsQuery = gql('''
     }
   }
 ''');
+
+final getUpcomingEventsQuery = gql('''
+  query (\$id: MongoID!, \$limit: Int = 100, \$skip: Int = 0) {
+  events: getUpcomingEvents(user: \$id, limit: \$limit, skip: \$skip) {
+    _id
+    title
+    slug
+    host
+    host_expanded {
+      _id
+      name
+      new_photos_expanded {
+        _id
+        key
+        bucket
+      }
+    }
+    new_new_photos_expanded(limit: 1) {
+      _id
+      key
+      bucket
+    }
+    start
+    end
+    address {
+      street_1
+      city
+      title
+      region
+    }
+  }
+}
+''');
+
+final getPastEventsQuery = gql('''
+  query (\$id: MongoID!, \$limit: Int = 100, \$skip: Int = 0) {
+  events: getPastEvents(user: \$id, limit: \$limit, skip: \$skip) {
+    _id
+    title
+    slug
+    host
+    host_expanded {
+      _id
+      name
+      new_photos_expanded {
+        _id
+        key
+        bucket
+      }
+    }
+    new_new_photos_expanded(limit: 1) {
+      _id
+      key
+      bucket
+    }
+    start
+    end
+    address {
+      street_1
+      city
+      title
+      region
+    }
+  }
+}
+''');

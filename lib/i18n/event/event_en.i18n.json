@@ -5,6 +5,8 @@
     "attended": "attended",
     "created": "created",
     "hosting": "hosting",
+    "upcoming": "upcoming",
+    "past": "past",
     "buy": "buy",
     "free": "Free",
     "empty_home_events": "There's no events $time",
@@ -71,6 +73,10 @@
     "tickets(ordinal)": {
         "one": "ticket",
         "other": "tickets"
+    },
+    "reservations(ordinal)": {
+        "one": "reservation",
+        "other": "reservations"
     },
     "remaining": "remaining"
 }
