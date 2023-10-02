@@ -460,14 +460,16 @@ definitions:
       recipients:
         - sieu@coderpush.com
         - thinh@coderpush.com
+        - ron@coderpush.com
       notify:
         success: true
-        failure: false
+        failure: true
   email_production: &email_production
     email:
       recipients:
         - sieu@coderpush.com
         - thinh@coderpush.com
+        - ron@coderpush.com
         # - kc@lemonade.social
         # - chris@lemonade.social
         # - jakob@lemonade.social
@@ -476,7 +478,7 @@ definitions:
         # - david@lemonade.social
       notify:
         success: true
-        failure: false
+        failure: true
   ios_app_store_publish: &ios_app_store_publish
     app_store_connect:
       auth: integration
@@ -486,7 +488,7 @@ definitions:
     google_play:
       credentials: $GCLOUD_SERVICE_ACCOUNT_CREDENTIALS
       track: $GOOGLE_PLAY_TRACK
-      submit_as_draft: true
+      submit_as_draft: false
 workflows:
   # Build iOS Staging 
   ios-staging:
