@@ -58,7 +58,7 @@ class HomeNewsfeedListView extends StatelessWidget {
           onRefresh: () {
             context
                 .read<NewsfeedListingBloc>()
-                .add(NewsfeedListingEvent.fetch());
+                .add(NewsfeedListingEvent.refresh());
             refreshController.refreshCompleted();
           },
           onLoading: () {

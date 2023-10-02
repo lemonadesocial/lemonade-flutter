@@ -25,7 +25,20 @@ class SnackBarUtils {
         ),
         behavior: SnackBarBehavior.floating,
         backgroundColor: _colorScheme?.primary ?? LemonColor.black,
-        margin: const EdgeInsets.only(bottom: 50),
+      ),
+    );
+  }
+
+  static showErrorSnackbar(String message) {
+    rootScaffoldMessengerKey.currentState?.showSnackBar(
+      SnackBar(
+        content: Text(
+          message,
+          style: Typo.medium
+              .copyWith(color: _colorScheme?.onPrimary ?? LemonColor.white),
+        ),
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: const Color(0xffc0392b),
       ),
     );
   }

@@ -6,7 +6,7 @@ import 'package:app/core/domain/post/entities/post_entities.dart';
 import 'package:app/core/domain/post/input/get_posts_input.dart';
 import 'package:app/core/domain/post/post_repository.dart';
 import 'package:app/core/failure.dart';
-import 'package:app/core/gql.dart';
+import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';

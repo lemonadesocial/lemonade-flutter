@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:app/core/config.dart';
 import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/oauth/oauth.dart';
+import 'package:app/core/utils/gql/custom_error_handler.dart';
 import 'package:app/injection/register_module.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:injectable/injectable.dart';
 
@@ -43,14 +43,10 @@ class BaseGQL {
       },
     );
     _errorLink = ErrorLink(
-      onException: (request, forward, exception) {
-        FirebaseCrashlytics.instance.log(exception.toString());
-        return null;
-      },
-      onGraphQLError: (request, forward, response) {
-        FirebaseCrashlytics.instance.log(response.errors.toString());
-        return null;
-      },
+      onException: (request, forward, exception) =>
+          CustomErrorHandler.handleExceptionError(request, forward, exception),
+      onGraphQLError: (request, forward, response) =>
+          CustomErrorHandler.handleGraphQLError(request, forward, response),
     );
 
     _client = GraphQLClient(
