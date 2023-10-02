@@ -1,4 +1,5 @@
 import 'package:app/core/data/common/dtos/common_dtos.dart';
+import 'package:app/core/data/event/dtos/event_payment_ticket_type_dto/event_payment_ticket_type_dto.dart';
 import 'package:app/core/data/user/dtos/user_dtos.dart';
 import 'package:app/core/domain/event/event_enums.dart';
 import 'package:app/core/domain/payment/payment_enums.dart';
@@ -33,6 +34,8 @@ class EventDto with _$EventDto {
     double? latitude,
     double? longitude,
     @JsonKey(name: 'matrix_event_room_id') String? matrixEventRoomId,
+    @JsonKey(name: 'payment_ticket_types')
+    List<EventPaymentTicketTypeDto>? paymentTicketTypes,
     List<EventOfferDto>? offers,
   }) = _EventDto;
 
