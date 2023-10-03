@@ -32,8 +32,8 @@ class TicketDiscountDto with _$TicketDiscountDto {
 class PurchasableTicketTypeDto with _$PurchasableTicketTypeDto {
   factory PurchasableTicketTypeDto({
     @JsonKey(name: '_id') String? id,
-    @JsonKey(name: 'address_required') bool? active,
-    bool? addressRequired,
+    bool? active,
+    @JsonKey(name: 'address_required') bool? addressRequired,
     int? cost,
     @JsonKey(name: 'default') bool? isDefault,
     String? description,

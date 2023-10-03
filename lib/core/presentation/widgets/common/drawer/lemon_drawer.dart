@@ -17,11 +17,13 @@ class DrawerItem {
   DrawerItem({
     required this.icon,
     required this.label,
+    this.onPressed,
     this.featureAvailable = true,
   });
 
   final SvgGenImage icon;
   final String label;
+  final Function()? onPressed;
   final bool featureAvailable;
 }
 
@@ -53,6 +55,11 @@ class LemonDrawer extends StatelessWidget {
               DrawerItem(
                 icon: Assets.icons.icTicket,
                 label: t.common.ticket(n: 2),
+                onPressed: () {
+                  AutoRouter.of(context).navigate(
+                    MyEventTicketsListRoute(),
+                  );
+                },
               ),
               DrawerItem(
                 icon: Assets.icons.icInsights,
@@ -60,7 +67,10 @@ class LemonDrawer extends StatelessWidget {
                 featureAvailable: false,
               ),
               DrawerItem(icon: Assets.icons.icQr, label: t.common.qrCode),
-            ].map((item) => _buildDrawerItem(context, item: item)),
+            ].map(
+              (item) =>
+                  _buildDrawerItem(context, item: item, onTap: item.onPressed),
+            ),
             SizedBox(height: Spacing.xSmall),
             Divider(color: colorScheme.outline, height: 2),
             SizedBox(height: Spacing.xSmall),

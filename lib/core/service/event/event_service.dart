@@ -28,6 +28,18 @@ class EventService {
     return await eventRepository.getHostingEvents(input: input);
   }
 
+  Future<Either<Failure, List<Event>>> getUpcomingEvents({
+    required GetUpcomingEventsInput input,
+  }) async {
+    return await eventRepository.getUpcomingEvents(input: input);
+  }
+
+  Future<Either<Failure, List<Event>>> getPastEvents({
+    required GetPastEventsInput input,
+  }) async {
+    return await eventRepository.getPastEvents(input: input);
+  }
+
   List<Event> filterEventByTime({
     required List<Event> source,
     EventTimeFilter? selectedFilter,

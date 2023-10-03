@@ -19,6 +19,14 @@ abstract class EventRepository {
     required GetHostingEventsInput input,
   });
 
+  Future<Either<Failure, List<Event>>> getUpcomingEvents({
+    required GetUpcomingEventsInput input,
+  });
+
+  Future<Either<Failure, List<Event>>> getPastEvents({
+    required GetPastEventsInput input,
+  });
+
   Future<Either<Failure, Event>> getEventDetail({
     required GetEventDetailInput input,
   });
