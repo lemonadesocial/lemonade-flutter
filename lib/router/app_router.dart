@@ -70,6 +70,8 @@ class AppRouter extends $AppRouter {
           page: EditProfileRoute.page,
         ),
         AutoRoute(page: CreatePopUpRoute.page),
+        AutoRoute(page: SettingRoute.page),
+        AutoRoute(page: NotificationSettingRoute.page),
         chatRoutes,
         ...eventRoutes,
         eventBuyTicketsRoutes,

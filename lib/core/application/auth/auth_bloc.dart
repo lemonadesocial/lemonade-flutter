@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:app/core/domain/auth/entities/auth_session.dart';
+import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/oauth/oauth.dart';
 import 'package:app/core/service/auth/auth_service.dart';
 import 'package:app/core/service/user/user_service.dart';
@@ -22,6 +22,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthEventLogout>(_onLogout);
     on<AuthEventAuthenticated>(_onAuthenticated);
     on<AuthEventUnAuthenticated>(_onUnAuthenticated);
+    on<AuthEventRefresh>(_onRefresh);
   }
 
   final AuthService authService;
@@ -48,18 +49,24 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) async {
     emit(const AuthState.processing());
     await Future.delayed(const Duration(milliseconds: 500));
-    final session = await _createSession();
-    if (session != null) {
-      if (session.username?.isEmpty ?? true) {
+    final currentUser = await _createSession();
+    if (currentUser != null) {
+      if (currentUser.username?.isEmpty ?? true) {
         // Authenticated but lacking username
         // Navigate to OnBoarding flow instead
-        emit(AuthState.onBoardingRequired(authSession: session));
+        emit(AuthState.onBoardingRequired(authSession: currentUser));
         return;
       }
-      emit(AuthState.authenticated(authSession: session));
+      emit(AuthState.authenticated(authSession: currentUser));
       return;
     }
     emit(const AuthState.unauthenticated(isChecking: false));
+  }
+
+  Future<void> _onRefresh(AuthEventRefresh event, Emitter emit) async {
+    emit(const AuthState.processing());
+    final currentUser = await _createSession();
+    emit(AuthState.authenticated(authSession: currentUser!));
   }
 
   void _onUnAuthenticated(AuthEventUnAuthenticated event, Emitter emit) {
@@ -74,9 +81,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     await authService.logout();
   }
 
-  Future<AuthSession?> _createSession() async {
+  Future<User?> _createSession() async {
     final getMeResult = await userService.getMe();
-    return getMeResult.fold((l) => null, authService.createSession);
+    return getMeResult.fold((l) => null, (user) => user);
   }
 }
 
@@ -85,6 +92,8 @@ class AuthEvent with _$AuthEvent {
   const factory AuthEvent.login() = AuthEventLogin;
 
   const factory AuthEvent.logout() = AuthEventLogout;
+
+  const factory AuthEvent.refreshData() = AuthEventRefresh;
 
   const factory AuthEvent.authenticated() = AuthEventAuthenticated;
 
@@ -101,10 +110,10 @@ class AuthState with _$AuthState {
       AuthStateUnauthenticated;
 
   const factory AuthState.onBoardingRequired({
-    required AuthSession authSession,
+    required User authSession,
   }) = AuthStateOnBoardingRequired;
 
   const factory AuthState.authenticated({
-    required AuthSession authSession,
+    required User authSession,
   }) = AuthStateAuthenticated;
 }

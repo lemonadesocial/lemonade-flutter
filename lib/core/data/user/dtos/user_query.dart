@@ -121,7 +121,7 @@ const userProfileFragment = '''
 ''';
 
 const privateFragment = '''
-  fragment userPrivateFragment on User {
+  fragment privateFragment on User {
     active
     age
     company_address {
@@ -165,14 +165,20 @@ const privateFragment = '''
     lemon_amount
     music
     tag_timeline
+    notification_filters
   }
 ''';
 
 final getMeQuery = gql('''
   $baseUserFragment
+  $userProfileFragment
+  $privateFragment
+  
   query() {
     getMe() {
       ...baseUserFragment
+      ...userProfileFragment
+      ...privateFragment
     }
 }
 ''');

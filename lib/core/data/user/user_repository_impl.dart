@@ -17,12 +17,13 @@ class UserRepositoryImpl implements UserRepository {
   final _gqlClient = getIt<AppGQL>().client;
 
   @override
-  Future<Either<Failure, AuthUser>> getMe() async {
+  Future<Either<Failure, User>> getMe() async {
     final result = await _gqlClient.query(
       QueryOptions(
         document: getMeQuery,
+        fetchPolicy: FetchPolicy.networkOnly,
         parserFn: (data) {
-          return AuthUser.fromDto(UserDto.fromJson(data['getMe']));
+          return User.fromDto(UserDto.fromJson(data['getMe']));
         },
       ),
     );

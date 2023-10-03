@@ -79,6 +79,7 @@ class LemonColor {
 
   // custom red error
   static const onboardingRed = Color(0xFFFF6565);
+  static const deleteAccountRed = Color(0xFFE58585);
 
   // Progress indicator
   static const progressBg = Color(0xFF5E4E70);

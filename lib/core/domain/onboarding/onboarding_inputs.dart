@@ -30,8 +30,23 @@ class UpdateUserProfileInput with _$UpdateUserProfileInput {
     String? tagline,
     @JsonKey(name: 'date_of_birth') DateTime? dob,
     String? companyName,
+    @JsonKey(name: 'notification_filters')
+    List<NotificationFilterInput>? notificationFilterInput,
   }) = _UpdateUserProfileInput;
 
   factory UpdateUserProfileInput.fromJson(Map<String, dynamic> json) =>
       _$UpdateUserProfileInputFromJson(json);
+}
+
+@freezed
+class NotificationFilterInput with _$NotificationFilterInput {
+  @JsonSerializable(fieldRename: FieldRename.snake)
+  factory NotificationFilterInput({
+    required String type,
+    String? refType,
+    String? refId,
+  }) = _NotificationFilterInput;
+
+  factory NotificationFilterInput.fromJson(Map<String, dynamic> json) =>
+      _$NotificationFilterInputFromJson(json);
 }

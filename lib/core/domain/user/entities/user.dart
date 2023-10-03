@@ -33,8 +33,8 @@ class AuthUser {
 }
 
 class User {
-  User({
-    this.id,
+  const User({
+    required this.userId,
     this.createdAt,
     this.displayName,
     this.firstName,
@@ -76,11 +76,12 @@ class User {
     this.ethnicity,
     this.education,
     this.companyName,
+    this.notificationFilterList,
   });
 
   factory User.fromDto(UserDto dto) {
     return User(
-      id: dto.id,
+      userId: dto.id ?? '',
       createdAt: dto.createdAt,
       displayName: dto.displayName,
       firstName: dto.firstName,
@@ -136,9 +137,12 @@ class User {
       companyName: dto.companyName,
       education: dto.educationTitle,
       ethnicity: dto.ethnicity,
+      notificationFilterList:
+          dto.notificationFilter.map((e) => e.type).toList(),
     );
   }
-  final String? id;
+
+  final String userId;
   final DateTime? createdAt;
   final String? displayName;
   final String? firstName;
@@ -184,10 +188,12 @@ class User {
 
   final List<String>? wallets;
   final String? walletCustodial;
+  final List<String>? notificationFilterList;
 }
 
 class DiscordUserInfo {
   DiscordUserInfo({this.username});
+
   final String? username;
 
   static DiscordUserInfo fromDto(DiscordUserInfoDto dto) {
@@ -197,6 +203,7 @@ class DiscordUserInfo {
 
 class ShopifyUserInfo {
   ShopifyUserInfo({this.shopName});
+
   final String? shopName;
 
   static ShopifyUserInfo fromDto(ShopifyUserInfoDto dto) {
@@ -218,6 +225,7 @@ class GoogleUserInfo {
     this.picture,
     this.verifiedEmail,
   });
+
   final String? id;
   final String? name;
   final String? email;
@@ -249,6 +257,7 @@ class GoogleUserInfo {
 
 class TwitchUserInfo {
   TwitchUserInfo({this.id, this.displayName, this.logoUrl, this.name});
+
   final String? id;
   final String? displayName;
   final String? logoUrl;
@@ -266,6 +275,7 @@ class TwitchUserInfo {
 
 class ZoomUserInfo {
   ZoomUserInfo({this.id, this.firstName, this.lastName, this.email});
+
   final String? id;
   final String? firstName;
   final String? lastName;

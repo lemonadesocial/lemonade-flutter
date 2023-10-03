@@ -40,7 +40,7 @@ class AvatarUtils {
       return user!.imageAvatar!;
     }
     if (useRandomUserImage) {
-      return randomUserImage(user?.id ?? '');
+      return randomUserImage(user?.userId ?? '');
     }
     return '';
   }

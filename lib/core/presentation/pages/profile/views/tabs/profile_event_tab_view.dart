@@ -44,14 +44,14 @@ class _ProfileEventTabViewState extends State<ProfileEventTabView> {
     EventService(
       getIt<EventRepository>(),
     ),
-    defaultInput: GetEventsInput(accepted: widget.user.id),
+    defaultInput: GetEventsInput(accepted: widget.user.userId),
   )..add(BaseEventsListingEvent.fetch());
 
   late final hostingEventsBloc = HostingEventsListingBloc(
     EventService(
       getIt<EventRepository>(),
     ),
-    defaultInput: GetHostingEventsInput(id: widget.user.id),
+    defaultInput: GetHostingEventsInput(id: widget.user.userId),
   )..add(BaseEventsListingEvent.fetch());
 
   @override

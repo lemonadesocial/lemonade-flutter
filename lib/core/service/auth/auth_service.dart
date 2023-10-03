@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'package:app/core/domain/auth/entities/auth_session.dart';
-import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/core/oauth/oauth.dart';
 import 'package:app/core/service/firebase/firebase_service.dart';
@@ -38,17 +36,6 @@ class AuthService {
 
         return Left(Failure());
       },
-    );
-  }
-
-  AuthSession createSession(AuthUser user) {
-    return AuthSession(
-      userId: user.id,
-      userAvatar: user.imageAvatar,
-      userDisplayName: user.displayName,
-      username: user.username,
-      wallets: user.wallets,
-      walletCustodial: user.walletCustodial,
     );
   }
 }

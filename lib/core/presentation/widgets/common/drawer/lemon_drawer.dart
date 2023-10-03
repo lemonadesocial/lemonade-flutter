@@ -1,5 +1,5 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
-import 'package:app/core/domain/auth/entities/auth_session.dart';
+import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/string_utils.dart';
@@ -80,10 +80,32 @@ class LemonDrawer extends StatelessWidget {
                 icon: Assets.icons.icEdit,
                 label: t.profile.editProfile,
               ),
+              onTap: () {
+                context.router.pop();
+                context.read<AuthBloc>().state.maybeWhen(
+                      authenticated: (authSession) => context.router.push(
+                        EditProfileRoute(userProfile: authSession),
+                      ),
+                      orElse: () => context.router.navigate(
+                        const LoginRoute(),
+                      ),
+                    );
+              },
             ),
             SizedBox(height: Spacing.xSmall),
             _buildDrawerItem(
               context,
+              onTap: () {
+                context.router.pop();
+                context.read<AuthBloc>().state.maybeWhen(
+                      authenticated: (authSession) => context.router.push(
+                        const SettingRoute(),
+                      ),
+                      orElse: () => context.router.navigate(
+                        const LoginRoute(),
+                      ),
+                    );
+              },
               item: DrawerItem(
                 icon: Assets.icons.icSettings,
                 label: t.common.setting,
@@ -163,7 +185,7 @@ class LemonDrawer extends StatelessWidget {
     );
   }
 
-  Widget authedUser(BuildContext context, AuthSession authSession) {
+  Widget authedUser(BuildContext context, User authSession) {
     final colorScheme = Theme.of(context).colorScheme;
     return Padding(
       padding: EdgeInsets.symmetric(
@@ -173,14 +195,14 @@ class LemonDrawer extends StatelessWidget {
       child: Row(
         children: [
           LemonCircleAvatar(
-            url: authSession.userAvatar ?? '',
+            url: authSession.imageAvatar ?? '',
             size: 42,
           ),
           SizedBox(width: Spacing.xSmall),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(authSession.userDisplayName ?? ''),
+              Text(authSession.displayName ?? ''),
               Text(
                 '@${authSession.username ?? ''}',
                 style: Typo.small.copyWith(color: colorScheme.onSecondary),

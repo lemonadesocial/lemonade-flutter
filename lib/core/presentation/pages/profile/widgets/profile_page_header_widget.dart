@@ -86,7 +86,7 @@ class _ActionButtons extends StatelessWidget {
                 .then((value) {
               context
                   .read<UserProfileBloc>()
-                  .add(UserProfileEvent.fetch(userId: user.id));
+                  .add(UserProfileEvent.fetch(userId: user.userId));
             }),
             label: t.common.actions.editProfile,
             textStyle: Typo.small.copyWith(

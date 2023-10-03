@@ -1,5 +1,5 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
-import 'package:app/core/application/profile/user_profile_bloc/user_profile_bloc.dart';
+import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/pages/profile/views/tabs/profile_collectible_tab_view.dart';
 import 'package:app/core/presentation/pages/profile/views/tabs/profile_event_tab_view.dart';
 import 'package:app/core/presentation/pages/profile/views/tabs/profile_info_tab_view.dart';
@@ -10,7 +10,6 @@ import 'package:app/core/presentation/pages/profile/widgets/profile_tabbar_deleg
 import 'package:app/core/presentation/widgets/back_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/profile_animated_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/sliver/dynamic_sliver_appbar.dart';
-import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/core/utils/drawer_utils.dart';
@@ -27,10 +26,10 @@ import 'package:sliver_tools/sliver_tools.dart';
 class ProfilePageView extends StatefulWidget {
   const ProfilePageView({
     super.key,
-    required this.userId,
+    required this.userProfile,
   });
 
-  final String userId;
+  final User userProfile;
 
   @override
   State<ProfilePageView> createState() => _ProfilePageViewState();
@@ -56,118 +55,96 @@ class _ProfilePageViewState extends State<ProfilePageView>
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
+    final isMe = AuthUtils.isMe(context, user: widget.userProfile);
     return Scaffold(
-      backgroundColor: colorScheme.primary,
-      body: BlocBuilder<UserProfileBloc, UserProfileState>(
-        builder: (context, state) {
-          return state.when(
-            fetched: (userProfile) {
-              final isMe = AuthUtils.isMe(context, user: userProfile);
-              return SafeArea(
-                child: NestedScrollView(
-                  headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                    SliverOverlapAbsorber(
-                      handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                        context,
-                      ),
-                      sliver: MultiSliver(
-                        children: [
-                          SliverPersistentHeader(
-                            pinned: true,
-                            delegate: ProfileAnimatedAppBar(
-                              title:
-                                  '@${userProfile.username ?? t.common.anonymous}',
-                              leading: isMe
-                                  ? InkWell(
-                                      onTap: () => DrawerUtils.openDrawer(),
-                                      child: Icon(
-                                        Icons.menu_outlined,
-                                        color: colorScheme.onPrimary,
-                                      ),
-                                    )
-                                  : const LemonBackButton(),
-                              actions: [
-                                if (isMe)
-                                  Padding(
-                                    padding:
-                                        EdgeInsets.only(right: Spacing.xSmall),
-                                    child: InkWell(
-                                      onTap: () {
-                                        context
-                                            .read<AuthBloc>()
-                                            .state
-                                            .maybeWhen(
-                                              authenticated: (session) =>
-                                                  AutoRouter.of(context)
-                                                      .navigate(
-                                                const ChatListRoute(),
-                                              ),
-                                              orElse: () => AutoRouter.of(
-                                                context,
-                                              ).navigate(const LoginRoute()),
-                                            );
-                                      },
-                                      child: ThemeSvgIcon(
-                                        color: colorScheme.onPrimary,
-                                        builder: (filter) =>
-                                            Assets.icons.icChatBubble.svg(
-                                          colorFilter: filter,
+        backgroundColor: colorScheme.primary,
+        body: SafeArea(
+          child: NestedScrollView(
+            headerSliverBuilder: (context, innerBoxIsScrolled) => [
+              SliverOverlapAbsorber(
+                handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                  context,
+                ),
+                sliver: MultiSliver(
+                  children: [
+                    SliverPersistentHeader(
+                      pinned: true,
+                      delegate: ProfileAnimatedAppBar(
+                        title:
+                            '@${widget.userProfile.username ?? t.common.anonymous}',
+                        leading: isMe
+                            ? InkWell(
+                                onTap: () => DrawerUtils.openDrawer(),
+                                child: Icon(
+                                  Icons.menu_outlined,
+                                  color: colorScheme.onPrimary,
+                                ),
+                              )
+                            : const LemonBackButton(),
+                        actions: [
+                          if (isMe)
+                            Padding(
+                              padding: EdgeInsets.only(right: Spacing.xSmall),
+                              child: InkWell(
+                                onTap: () {
+                                  context.read<AuthBloc>().state.maybeWhen(
+                                        authenticated: (session) =>
+                                            AutoRouter.of(context).navigate(
+                                          const ChatListRoute(),
                                         ),
-                                      ),
-                                    ),
-                                  )
-                                else
-                                  GestureDetector(
-                                    behavior: HitTestBehavior.translucent,
-                                    onTap: () {},
-                                    child: ThemeSvgIcon(
-                                      color: colorScheme.onPrimary,
-                                      builder: (filter) => Assets
-                                          .icons.icMoreHoriz
-                                          .svg(colorFilter: filter),
-                                    ),
+                                        orElse: () => AutoRouter.of(
+                                          context,
+                                        ).navigate(const LoginRoute()),
+                                      );
+                                },
+                                child: ThemeSvgIcon(
+                                  color: colorScheme.onPrimary,
+                                  builder: (filter) =>
+                                      Assets.icons.icChatBubble.svg(
+                                    colorFilter: filter,
                                   ),
-                              ],
+                                ),
+                              ),
+                            )
+                          else
+                            GestureDetector(
+                              behavior: HitTestBehavior.translucent,
+                              onTap: () {},
+                              child: ThemeSvgIcon(
+                                color: colorScheme.onPrimary,
+                                builder: (filter) => Assets.icons.icMoreHoriz
+                                    .svg(colorFilter: filter),
+                              ),
                             ),
-                          ),
-                          DynamicSliverAppBar(
-                            maxHeight: 250.h,
-                            floating: true,
-                            forceElevated: innerBoxIsScrolled,
-                            child: ProfilePageHeader(user: userProfile),
-                          ),
-                          SliverPersistentHeader(
-                            pinned: true,
-                            delegate:
-                                ProfileTabBarDelegate(controller: _tabCtrl),
-                          ),
                         ],
                       ),
                     ),
+                    DynamicSliverAppBar(
+                      maxHeight: 250.h,
+                      floating: true,
+                      forceElevated: innerBoxIsScrolled,
+                      child: ProfilePageHeader(user: widget.userProfile),
+                    ),
+                    SliverPersistentHeader(
+                      pinned: true,
+                      delegate: ProfileTabBarDelegate(controller: _tabCtrl),
+                    ),
                   ],
-                  body: TabBarView(
-                    controller: _tabCtrl,
-                    children: [
-                      ProfilePostsTabView(user: userProfile),
-                      ProfileCollectibleTabView(user: userProfile),
-                      ProfileEventTabView(user: userProfile),
-                      ProfilePhotosTabView(user: userProfile),
-                      // EmptyTabView(),
-                      ProfileInfoTabView(user: userProfile),
-                    ],
-                  ),
                 ),
-              );
-            },
-            failure: () => Center(
-              child: Text(t.common.somethingWrong),
+              ),
+            ],
+            body: TabBarView(
+              controller: _tabCtrl,
+              children: [
+                ProfilePostsTabView(user: widget.userProfile),
+                ProfileCollectibleTabView(user: widget.userProfile),
+                ProfileEventTabView(user: widget.userProfile),
+                ProfilePhotosTabView(user: widget.userProfile),
+                // EmptyTabView(),
+                ProfileInfoTabView(user: widget.userProfile),
+              ],
             ),
-            loading: () => Center(
-              child: Loading.defaultLoading(context),
-            ),
-          );
-        },
-      ),
-    );
+          ),
+        ));
   }
 }
