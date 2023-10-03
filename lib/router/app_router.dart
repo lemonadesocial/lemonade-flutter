@@ -109,7 +109,12 @@ final eventRoutes = [
   AutoRoute(
     page: EventSelectingRoute.page,
   ),
-  AutoRoute(page: RSVPEventSuccessPopupRoute.page)
+  AutoRoute(
+    page: RSVPEventSuccessPopupRoute.page,
+  ),
+  AutoRoute(
+    page: MyEventTicketsListRoute.page,
+  )
 ];
 
 final eventBuyTicketsRoutes = AutoRoute(

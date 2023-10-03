@@ -112,4 +112,42 @@ class EventRepositoryImpl implements EventRepository {
     }
     return Right(result.parsedData!);
   }
+
+  @override
+  Future<Either<Failure, List<Event>>> getUpcomingEvents({
+    required GetUpcomingEventsInput input,
+  }) async {
+    final result = await client.query<List<Event>>(
+      QueryOptions(
+        document: getUpcomingEventsQuery,
+        variables: input.toJson(),
+        parserFn: (data) => List.from(data['events'])
+            .map(
+              (item) => Event.fromDto(EventDto.fromJson(item)),
+            )
+            .toList(),
+      ),
+    );
+    if (result.hasException) return Left(Failure());
+    return Right(result.parsedData ?? []);
+  }
+
+  @override
+  Future<Either<Failure, List<Event>>> getPastEvents({
+    required GetPastEventsInput input,
+  }) async {
+    final result = await client.query<List<Event>>(
+      QueryOptions(
+        document: getPastEventsQuery,
+        variables: input.toJson(),
+        parserFn: (data) => List.from(data['events'])
+            .map(
+              (item) => Event.fromDto(EventDto.fromJson(item)),
+            )
+            .toList(),
+      ),
+    );
+    if (result.hasException) return Left(Failure());
+    return Right(result.parsedData ?? []);
+  }
 }

@@ -58,3 +58,27 @@ abstract class FilterEventInput with _$FilterEventInput {
   factory FilterEventInput.fromJson(Map<String, dynamic> json) =>
       _$FilterEventInputFromJson(json);
 }
+
+@freezed
+abstract class GetUpcomingEventsInput with _$GetUpcomingEventsInput {
+  const factory GetUpcomingEventsInput({
+    @JsonKey(includeIfNull: false) String? id,
+    @JsonKey(includeIfNull: false) int? skip,
+    @JsonKey(includeIfNull: false) int? limit,
+  }) = _GetUpcomingEventsInput;
+
+  factory GetUpcomingEventsInput.fromJson(Map<String, dynamic> json) =>
+      _$GetUpcomingEventsInputFromJson(json);
+}
+
+@freezed
+abstract class GetPastEventsInput with _$GetPastEventsInput {
+  const factory GetPastEventsInput({
+    @JsonKey(includeIfNull: false) String? id,
+    @JsonKey(includeIfNull: false) int? skip,
+    @JsonKey(includeIfNull: false) int? limit,
+  }) = _GetPastEventsInput;
+
+  factory GetPastEventsInput.fromJson(Map<String, dynamic> json) =>
+      _$GetPastEventsInputFromJson(json);
+}

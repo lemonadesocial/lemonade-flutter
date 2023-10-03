@@ -5,8 +5,10 @@ import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,11 +17,13 @@ class DrawerItem {
   DrawerItem({
     required this.icon,
     required this.label,
+    this.onPressed,
     this.featureAvailable = true,
   });
 
   final SvgGenImage icon;
   final String label;
+  final Function()? onPressed;
   final bool featureAvailable;
 }
 
@@ -51,6 +55,11 @@ class LemonDrawer extends StatelessWidget {
               DrawerItem(
                 icon: Assets.icons.icTicket,
                 label: t.common.ticket(n: 2),
+                onPressed: () {
+                  AutoRouter.of(context).navigate(
+                    MyEventTicketsListRoute(),
+                  );
+                },
               ),
               DrawerItem(
                 icon: Assets.icons.icInsights,
@@ -58,7 +67,10 @@ class LemonDrawer extends StatelessWidget {
                 featureAvailable: false,
               ),
               DrawerItem(icon: Assets.icons.icQr, label: t.common.qrCode),
-            ].map((item) => _buildDrawerItem(context, item: item)),
+            ].map(
+              (item) =>
+                  _buildDrawerItem(context, item: item, onTap: item.onPressed),
+            ),
             SizedBox(height: Spacing.xSmall),
             Divider(color: colorScheme.outline, height: 2),
             SizedBox(height: Spacing.xSmall),
