@@ -1,5 +1,6 @@
 import 'package:app/core/data/event/dtos/event_dtos.dart';
 import 'package:app/core/domain/common/entities/common.dart';
+import 'package:app/core/domain/event/entities/event_payment_ticket_type.dart';
 import 'package:app/core/domain/event/event_enums.dart';
 import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/domain/user/entities/user.dart';
@@ -28,6 +29,8 @@ class Event {
     this.longitude,
     this.matrixEventRoomId,
     this.offers,
+    this.paymentTicketTypes,
+    this.address,
   });
 
   factory Event.fromDto(EventDto dto) {
@@ -69,6 +72,10 @@ class Event {
       offers: List.from(dto.offers ?? [])
           .map((item) => EventOffer.fromDto(item))
           .toList(),
+      paymentTicketTypes: List.from(dto.paymentTicketTypes ?? [])
+          .map((item) => EventPaymentTicketType.fromDto(item))
+          .toList(),
+      address: dto.address != null ? Address.fromDto(dto.address!) : null,
     );
   }
   String? id;
@@ -93,6 +100,8 @@ class Event {
   double? longitude;
   String? matrixEventRoomId;
   List<EventOffer>? offers;
+  List<EventPaymentTicketType>? paymentTicketTypes;
+  Address? address;
 }
 
 class EventOffer {

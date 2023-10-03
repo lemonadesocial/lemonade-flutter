@@ -93,6 +93,19 @@ class LemonColor {
   static const poapColor = Color(0xFF9DF7E7);
   static const roomColor = Color(0xFFF7B39D);
   static const postColor = Color(0xFF9DC1F7);
+
+  // My event ticket
+  static const downloadIcColor = Color(0xffff9500);
+  static Color downloadBgColor = const Color(0xffff9500).withOpacity(0.24);
+
+  static const inviteIcColor = Color(0xffffc50f);
+  static Color inviteBgColor = const Color(0xffffc50f).withOpacity(0.24);
+
+  static const assignIcColor = Color(0xffA667F3);
+  static Color assignBgColor = const Color(0xffba82ff);
+
+  static const mailIcColor = Color(0xffff7979);
+  static Color mailBgColor = const Color(0xffff7979).withOpacity(0.24);
 }
 
 final ColorScheme lemonadeLightThemeColorScheme = ColorScheme.light(

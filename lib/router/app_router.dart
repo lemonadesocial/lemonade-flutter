@@ -116,6 +116,9 @@ final eventRoutes = [
   ),
   AutoRoute(
     page: MyEventTicketsListRoute.page,
+  ),
+  AutoRoute(
+    page: MyEventTicketRoute.page,
   )
 ];
 

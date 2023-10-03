@@ -30,7 +30,12 @@
         "follow": "Follow",
         "cancel": "Cancel",
         "goToSettings": "Go to settings",
-        "ok": "Ok"
+        "ok": "Ok",
+        "download": "download",
+        "qrCode": "QR code",
+        "mail": "mail",
+        "invite": "invite",
+        "assign": "assign"
     },
     "followed": "Followed",
     "anonymous": "anonymous",
@@ -85,5 +90,8 @@
     "looksLikeSomethingWrong": "Looks like something went wrong.",
     "goBack": "Go back",
     "vault": "Vault",
-    "setting": "Setting"
+    "setting": "Setting",
+    "addTo": "Add to",
+    "calendar": "calendar",
+    "appleWallet": "Apple Wallet"
 }
