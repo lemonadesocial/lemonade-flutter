@@ -1,10 +1,15 @@
 import 'dart:async';
 
 import 'package:app/core/config.dart';
+import 'package:app/core/data/user/dtos/user_query.dart';
+import 'package:app/core/failure.dart';
 import 'package:app/core/oauth/custom_oauth_helper.dart';
+import 'package:app/core/utils/gql/gql.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:injectable/injectable.dart';
 import 'package:oauth2_client/access_token_response.dart';
 import 'package:oauth2_client/oauth2_client.dart';
@@ -36,6 +41,7 @@ class AppOauth {
   Future<String>? refreshTokenFuture;
 
   Stream<OAuthTokenState> get tokenStateStream => _tokenStateStreamCtrl.stream;
+
   OAuthTokenState get tokenState => _tokenState;
 
   late final OAuth2Client client = OAuth2Client(
@@ -99,6 +105,23 @@ class AppOauth {
       await _reset();
       return const Right(true);
     }
+  }
+
+  Future<Either<Failure, bool>> deleteAccount() async {
+    logout();
+    final gqlClient = getIt<AppGQL>().client;
+    final result = await gqlClient.mutate(
+      MutationOptions(
+        document: deleteUserQuery,
+        fetchPolicy: FetchPolicy.networkOnly,
+        parserFn: (data) {
+          return data['deleteUser'] as bool;
+        },
+      ),
+    );
+
+    if (result.hasException) return Left(Failure());
+    return Right(result.parsedData!);
   }
 
   Future<void> forceLogout() async {

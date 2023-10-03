@@ -23,6 +23,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthEventAuthenticated>(_onAuthenticated);
     on<AuthEventUnAuthenticated>(_onUnAuthenticated);
     on<AuthEventRefresh>(_onRefresh);
+    on<AuthEventDelete>(_onDeleteAccount);
   }
 
   final AuthService authService;
@@ -81,6 +82,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     await authService.logout();
   }
 
+  Future<void> _onDeleteAccount(AuthEventDelete event, Emitter emit) async {
+    emit(const AuthState.processing());
+    await authService.deleteAccount().whenComplete(
+          () => emit(
+            const AuthState.unauthenticated(isChecking: true),
+          ),
+        );
+  }
+
   Future<User?> _createSession() async {
     final getMeResult = await userService.getMe();
     return getMeResult.fold((l) => null, (user) => user);
@@ -98,6 +108,8 @@ class AuthEvent with _$AuthEvent {
   const factory AuthEvent.authenticated() = AuthEventAuthenticated;
 
   const factory AuthEvent.unauthenticated() = AuthEventUnAuthenticated;
+
+  const factory AuthEvent.deleteAccount() = AuthEventDelete;
 }
 
 @freezed

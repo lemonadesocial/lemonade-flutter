@@ -11,6 +11,7 @@ import 'package:injectable/injectable.dart';
 class AuthService {
   final appOAuth = getIt<AppOauth>();
   final firebaseService = getIt<FirebaseService>();
+
   Stream<OAuthTokenState> get tokenStateStream => appOAuth.tokenStateStream;
 
   Future<Either<Failure, bool>> login() async {
@@ -37,5 +38,10 @@ class AuthService {
         return Left(Failure());
       },
     );
+  }
+
+  Future<Either<Failure, bool>> deleteAccount() async {
+    firebaseService.removeFcmToken();
+    return appOAuth.deleteAccount();
   }
 }

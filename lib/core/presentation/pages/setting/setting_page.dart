@@ -1,4 +1,5 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
+import 'package:app/core/presentation/pages/setting/widgets/setting_delete_account_dialog.dart';
 import 'package:app/core/presentation/pages/setting/widgets/setting_profile_tile.dart';
 import 'package:app/core/presentation/pages/setting/widgets/setting_tile_widget.dart';
 import 'package:app/core/presentation/widgets/back_button_widget.dart';
@@ -14,6 +15,7 @@ import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -25,11 +27,16 @@ class SettingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+    EasyLoading.show();
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         state.maybeWhen(
-          unauthenticated: (isChecking) => context.router.popUntilRoot(),
-          orElse: () {},
+          processing: EasyLoading.show,
+          unauthenticated: (_) {
+            EasyLoading.dismiss();
+            context.router.popUntilRoot();
+          },
+          orElse: EasyLoading.dismiss,
         );
       },
       child: Scaffold(
@@ -122,9 +129,6 @@ class SettingPage extends StatelessWidget {
                       ),
                 ),
                 SizedBox(height: Spacing.xSmall),
-
-                /// BE currently handle it too long (more than 60s)
-                /// so I temporary disable it here.
                 SettingTileWidget(
                   title: t.setting.deleteAccount,
                   subTitle: t.setting.deleteAccountDesc,
@@ -139,7 +143,20 @@ class SettingPage extends StatelessWidget {
                     width: 18.w,
                     height: 18.w,
                   ),
-                  onTap: () => showComingSoonDialog(context),
+                  onTap: () async {
+                    final deleteAccount = await showDialog(
+                      context: context,
+                      barrierDismissible: true,
+                      builder: (BuildContext context) {
+                        return const SettingDeleteAccountDialog();
+                      },
+                    ) as bool;
+                    if (deleteAccount) {
+                      context
+                          .read<AuthBloc>()
+                          .add(const AuthEvent.deleteAccount());
+                    }
+                  },
                 ),
               ],
             ),

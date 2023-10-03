@@ -8,5 +8,9 @@
   "logoutDesc": "See you soon!",
   "deleteAccount": "Delete account",
   "deleteAccountDesc": "We’re sorry to see you go...",
-  "about": "About"
+  "about": "About",
+  "deleteAccountDialog": "Are you 100% sure?",
+  "deleteAccountDialogDesc": "Your account will be gone forever!",
+  "deleteAccountDialogHint": "Type 'yes please' to confirm ...",
+  "deleteAccountConfirmText": "yes please"
 }
