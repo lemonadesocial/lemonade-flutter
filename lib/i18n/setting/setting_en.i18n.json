@@ -12,5 +12,11 @@
   "deleteAccountDialog": "Are you 100% sure?",
   "deleteAccountDialogDesc": "Your account will be gone forever!",
   "deleteAccountDialogHint": "Type 'yes please' to confirm ...",
-  "deleteAccountConfirmText": "yes please"
+  "deleteAccountConfirmText": "yes please",
+  "community": "Community",
+  "crew": "Crew",
+  "tribe": "Tribe",
+  "friend": "Friends",
+  "follower": "Followers",
+  "searchCommunity": "Search community"
 }

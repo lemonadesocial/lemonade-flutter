@@ -51,6 +51,7 @@ class LemonDrawer extends StatelessWidget {
               DrawerItem(
                 icon: Assets.icons.icPeopleAlt,
                 label: t.common.community,
+                onPressed: () => context.router.push(const CommunityRoute()),
               ),
               DrawerItem(
                 icon: Assets.icons.icTicket,
