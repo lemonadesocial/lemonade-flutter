@@ -6,6 +6,7 @@ import 'package:app/core/presentation/pages/event/my_event_ticket_page/widgets/a
 import 'package:app/core/presentation/pages/event/my_event_ticket_page/widgets/add_ticket_to_calendar_button.dart';
 import 'package:app/core/presentation/pages/event/my_event_ticket_page/widgets/my_ticket_card.dart';
 import 'package:app/core/presentation/pages/event/my_event_ticket_page/widgets/ticket_actions.dart';
+import 'package:app/core/presentation/pages/event/my_event_ticket_page/widgets/tickets_cost_summary.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/theme/spacing.dart';
@@ -71,6 +72,15 @@ class MyEventTicketPage extends StatelessWidget {
                     event: event,
                     eventPayment: eventPayment,
                   ),
+                  if (eventPayment != null) ...[
+                    SizedBox(
+                      height: Spacing.medium,
+                    ),
+                    TicketCostSummary(
+                      event: event,
+                      eventPayment: eventPayment!,
+                    ),
+                  ]
                 ],
               ),
             )
