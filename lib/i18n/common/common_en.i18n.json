@@ -91,6 +91,7 @@
     "goBack": "Go back",
     "vault": "Vault",
     "setting": "Setting",
+    "appVersion": "App version: $appVersion",
     "addTo": "Add to",
     "calendar": "calendar",
     "appleWallet": "Apple Wallet"

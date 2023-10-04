@@ -18,10 +18,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 @RoutePage()
 class SettingPage extends StatelessWidget {
   const SettingPage({Key? key}) : super(key: key);
+
+  Future<String> getVersion() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    return '${packageInfo.version}-${packageInfo.buildNumber}';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -154,6 +160,34 @@ class SettingPage extends StatelessWidget {
                       context
                           .read<AuthBloc>()
                           .add(const AuthEvent.deleteAccount());
+                    }
+                  },
+                ),
+                // Display version information
+                FutureBuilder<String>(
+                  future: getVersion(),
+                  builder:
+                      (BuildContext context, AsyncSnapshot<String> snapshot) {
+                    if (snapshot.hasData) {
+                      return Padding(
+                        padding: EdgeInsets.only(
+                          top: Spacing.large,
+                          bottom: Spacing.xLarge,
+                        ),
+                        child: Center(
+                          child: Text(
+                            t.common.appVersion(
+                              appVersion: snapshot.data as String,
+                            ),
+                            style: Typo.medium.copyWith(
+                              color: colorScheme.onSurfaceVariant,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                      );
+                    } else {
+                      return const SizedBox.shrink();
                     }
                   },
                 ),
