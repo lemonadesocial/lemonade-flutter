@@ -1,5 +1,7 @@
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/my_event_tickets_list_page/widgets/event_reservations_list_item_widget.dart';
+import 'package:app/router/app_router.gr.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -17,8 +19,17 @@ class EventReservationsListView extends StatelessWidget {
     return Expanded(
       child: ListView.separated(
         itemBuilder: (context, index) {
-          return EventReservationsListItemWidget(
-            event: eventsList[index],
+          return InkWell(
+            onTap: () {
+              AutoRouter.of(context).navigate(
+                MyEventTicketRoute(
+                  event: eventsList[index],
+                ),
+              );
+            },
+            child: EventReservationsListItemWidget(
+              event: eventsList[index],
+            ),
           );
         },
         itemCount: eventsList.length,

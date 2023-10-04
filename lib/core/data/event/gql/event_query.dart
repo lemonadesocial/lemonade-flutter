@@ -84,6 +84,12 @@ const eventFragment = '''
     title
     region
   }
+  payment_ticket_types {
+      _id
+      title
+      cost
+      description
+    }
   latitude
   longitude
 }
