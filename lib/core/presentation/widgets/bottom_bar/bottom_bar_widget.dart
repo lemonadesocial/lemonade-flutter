@@ -16,7 +16,7 @@ import 'package:app/core/application/newsfeed/newsfeed_listing_bloc/newsfeed_lis
 class BottomBar extends StatefulWidget {
   const BottomBar({super.key});
 
-  static double get bottomBarHeight => 60.h;
+  static double get bottomBarHeight => 70.h;
 
   @override
   BottomBarState createState() => BottomBarState();
@@ -61,8 +61,8 @@ class BottomBarState extends State<BottomBar>
       notchMargin: 6.w,
       child: ClipRect(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            SizedBox(height: 15.h),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -74,6 +74,7 @@ class BottomBarState extends State<BottomBar>
                 _buildTabItem(context, tabs[3]),
               ],
             ),
+            SizedBox(height: 18.h),
           ],
         ),
       ),
