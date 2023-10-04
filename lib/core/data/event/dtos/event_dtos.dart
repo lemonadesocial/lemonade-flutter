@@ -37,6 +37,7 @@ class EventDto with _$EventDto {
     @JsonKey(name: 'payment_ticket_types')
     List<EventPaymentTicketTypeDto>? paymentTicketTypes,
     List<EventOfferDto>? offers,
+    AddressDto? address,
   }) = _EventDto;
 
   factory EventDto.fromJson(Map<String, dynamic> json) =>

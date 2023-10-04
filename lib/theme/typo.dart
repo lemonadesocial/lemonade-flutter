@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Typo {
+  /// 30sp
+  static final superLarge = TextStyle(
+    fontSize: 30.sp,
+    fontWeight: FontWeight.w700,
+  );
+
   /// 26 sp
   static final extraLarge = TextStyle(
     fontSize: 26.sp,
