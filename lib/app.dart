@@ -5,11 +5,13 @@ import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.dart';
+import 'package:app/theme/color.dart';
 import 'package:app/theme/theme.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_portal/flutter_portal.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -39,6 +41,13 @@ class _LemonadeAppViewState extends State<LemonadeApp> {
       );
       setupInteractedMessage();
     });
+    EasyLoading.instance
+      ..indicatorType = EasyLoadingIndicatorType.ring
+      ..loadingStyle = EasyLoadingStyle.dark
+      ..maskType = EasyLoadingMaskType.black
+      ..maskColor = LemonColor.black.withOpacity(0.5)
+      ..userInteractions = false
+      ..dismissOnTap = false;
   }
 
   Widget _translationProviderBuilder(Widget child) =>
@@ -115,9 +124,7 @@ class _App extends StatelessWidget {
         ErrorWidget.builder = (FlutterErrorDetails errorDetails) {
           return CustomError(errorDetails: errorDetails);
         };
-        return Container(
-          child: widget,
-        );
+        return FlutterEasyLoading(child: widget);
       },
     );
   }
