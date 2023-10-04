@@ -64,6 +64,9 @@ class SettingTileWidget extends StatelessWidget {
                             fontWeight: FontWeight.w600,
                           ),
                         ),
+                        SizedBox(
+                          height: 2.h,
+                        ),
                         subTitle == null
                             ? const SizedBox.shrink()
                             : Text(

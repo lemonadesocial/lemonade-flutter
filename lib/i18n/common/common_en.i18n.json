@@ -85,5 +85,6 @@
     "looksLikeSomethingWrong": "Looks like something went wrong.",
     "goBack": "Go back",
     "vault": "Vault",
-    "setting": "Setting"
+    "setting": "Setting",
+    "appVersion": "App version: $appVersion"
 }
