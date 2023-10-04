@@ -87,19 +87,6 @@ class _SettingDeleteAccountDialogState
         ),
         SizedBox(height: Spacing.superExtraSmall),
       ],
-      // child: Column(
-      //   children: [
-      //
-      //     SizedBox(height: Spacing.superExtraSmall),
-      //
-      //     // Row(
-      //     //   crossAxisAlignment: CrossAxisAlignment.end,
-      //     //   children: [
-      //     //
-      //     //   ],
-      //     // )
-      //   ],
-      // ),
     );
   }
 }

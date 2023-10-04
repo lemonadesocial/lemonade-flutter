@@ -143,14 +143,14 @@ class SettingPage extends StatelessWidget {
                     height: 18.w,
                   ),
                   onTap: () async {
-                    final deleteAccount = await showDialog(
+                    final confirmDeleteAccount = await showDialog(
                       context: context,
                       barrierDismissible: true,
                       builder: (BuildContext context) {
                         return const SettingDeleteAccountDialog();
                       },
                     ) as bool;
-                    if (deleteAccount) {
+                    if (confirmDeleteAccount) {
                       context
                           .read<AuthBloc>()
                           .add(const AuthEvent.deleteAccount());
