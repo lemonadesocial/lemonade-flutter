@@ -106,6 +106,8 @@ class LemonColor {
 
   static const mailIcColor = Color(0xffff7979);
   static Color mailBgColor = const Color(0xffff7979).withOpacity(0.24);
+
+  static const accessCodeColor = Color(0xffABD611);
 }
 
 final ColorScheme lemonadeLightThemeColorScheme = ColorScheme.light(
