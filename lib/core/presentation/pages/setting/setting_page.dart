@@ -177,7 +177,8 @@ class SettingPage extends StatelessWidget {
                         child: Center(
                           child: Text(
                             t.common.appVersion(
-                                appVersion: snapshot.data as String),
+                              appVersion: snapshot.data as String,
+                            ),
                             style: Typo.medium.copyWith(
                               color: colorScheme.onSurfaceVariant,
                               fontWeight: FontWeight.w400,

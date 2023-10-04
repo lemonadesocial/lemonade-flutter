@@ -57,94 +57,95 @@ class _ProfilePageViewState extends State<ProfilePageView>
     final t = Translations.of(context);
     final isMe = AuthUtils.isMe(context, user: widget.userProfile);
     return Scaffold(
-        backgroundColor: colorScheme.primary,
-        body: SafeArea(
-          child: NestedScrollView(
-            headerSliverBuilder: (context, innerBoxIsScrolled) => [
-              SliverOverlapAbsorber(
-                handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                  context,
-                ),
-                sliver: MultiSliver(
-                  children: [
-                    SliverPersistentHeader(
-                      pinned: true,
-                      delegate: ProfileAnimatedAppBar(
-                        title:
-                            '@${widget.userProfile.username ?? t.common.anonymous}',
-                        leading: isMe
-                            ? InkWell(
-                                onTap: () => DrawerUtils.openDrawer(),
-                                child: Icon(
-                                  Icons.menu_outlined,
-                                  color: colorScheme.onPrimary,
-                                ),
-                              )
-                            : const LemonBackButton(),
-                        actions: [
-                          if (isMe)
-                            Padding(
-                              padding: EdgeInsets.only(right: Spacing.xSmall),
-                              child: InkWell(
-                                onTap: () {
-                                  context.read<AuthBloc>().state.maybeWhen(
-                                        authenticated: (session) =>
-                                            AutoRouter.of(context).navigate(
-                                          const ChatListRoute(),
-                                        ),
-                                        orElse: () => AutoRouter.of(
-                                          context,
-                                        ).navigate(const LoginRoute()),
-                                      );
-                                },
-                                child: ThemeSvgIcon(
-                                  color: colorScheme.onPrimary,
-                                  builder: (filter) =>
-                                      Assets.icons.icChatBubble.svg(
-                                    colorFilter: filter,
-                                  ),
-                                ),
+      backgroundColor: colorScheme.primary,
+      body: SafeArea(
+        child: NestedScrollView(
+          headerSliverBuilder: (context, innerBoxIsScrolled) => [
+            SliverOverlapAbsorber(
+              handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                context,
+              ),
+              sliver: MultiSliver(
+                children: [
+                  SliverPersistentHeader(
+                    pinned: true,
+                    delegate: ProfileAnimatedAppBar(
+                      title:
+                          '@${widget.userProfile.username ?? t.common.anonymous}',
+                      leading: isMe
+                          ? InkWell(
+                              onTap: () => DrawerUtils.openDrawer(),
+                              child: Icon(
+                                Icons.menu_outlined,
+                                color: colorScheme.onPrimary,
                               ),
                             )
-                          else
-                            GestureDetector(
-                              behavior: HitTestBehavior.translucent,
-                              onTap: () {},
+                          : const LemonBackButton(),
+                      actions: [
+                        if (isMe)
+                          Padding(
+                            padding: EdgeInsets.only(right: Spacing.xSmall),
+                            child: InkWell(
+                              onTap: () {
+                                context.read<AuthBloc>().state.maybeWhen(
+                                      authenticated: (session) =>
+                                          AutoRouter.of(context).navigate(
+                                        const ChatListRoute(),
+                                      ),
+                                      orElse: () => AutoRouter.of(
+                                        context,
+                                      ).navigate(const LoginRoute()),
+                                    );
+                              },
                               child: ThemeSvgIcon(
                                 color: colorScheme.onPrimary,
-                                builder: (filter) => Assets.icons.icMoreHoriz
-                                    .svg(colorFilter: filter),
+                                builder: (filter) =>
+                                    Assets.icons.icChatBubble.svg(
+                                  colorFilter: filter,
+                                ),
                               ),
                             ),
-                        ],
-                      ),
+                          )
+                        else
+                          GestureDetector(
+                            behavior: HitTestBehavior.translucent,
+                            onTap: () {},
+                            child: ThemeSvgIcon(
+                              color: colorScheme.onPrimary,
+                              builder: (filter) => Assets.icons.icMoreHoriz
+                                  .svg(colorFilter: filter),
+                            ),
+                          ),
+                      ],
                     ),
-                    DynamicSliverAppBar(
-                      maxHeight: 250.h,
-                      floating: true,
-                      forceElevated: innerBoxIsScrolled,
-                      child: ProfilePageHeader(user: widget.userProfile),
-                    ),
-                    SliverPersistentHeader(
-                      pinned: true,
-                      delegate: ProfileTabBarDelegate(controller: _tabCtrl),
-                    ),
-                  ],
-                ),
+                  ),
+                  DynamicSliverAppBar(
+                    maxHeight: 250.h,
+                    floating: true,
+                    forceElevated: innerBoxIsScrolled,
+                    child: ProfilePageHeader(user: widget.userProfile),
+                  ),
+                  SliverPersistentHeader(
+                    pinned: true,
+                    delegate: ProfileTabBarDelegate(controller: _tabCtrl),
+                  ),
+                ],
               ),
-            ],
-            body: TabBarView(
-              controller: _tabCtrl,
-              children: [
-                ProfilePostsTabView(user: widget.userProfile),
-                ProfileCollectibleTabView(user: widget.userProfile),
-                ProfileEventTabView(user: widget.userProfile),
-                ProfilePhotosTabView(user: widget.userProfile),
-                // EmptyTabView(),
-                ProfileInfoTabView(user: widget.userProfile),
-              ],
             ),
+          ],
+          body: TabBarView(
+            controller: _tabCtrl,
+            children: [
+              ProfilePostsTabView(user: widget.userProfile),
+              ProfileCollectibleTabView(user: widget.userProfile),
+              ProfileEventTabView(user: widget.userProfile),
+              ProfilePhotosTabView(user: widget.userProfile),
+              // EmptyTabView(),
+              ProfileInfoTabView(user: widget.userProfile),
+            ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 }
