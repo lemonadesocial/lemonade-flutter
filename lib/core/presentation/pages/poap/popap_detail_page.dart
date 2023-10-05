@@ -9,8 +9,9 @@ import 'package:app/core/presentation/widgets/common/bottomsheet/lemon_snap_bott
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/poap/poap_claim_builder.dart';
-import 'package:app/core/presentation/widgets/poap/poap_policy_popup/poap_policy_popup.dart';
+import 'package:app/core/presentation/widgets/poap/poap_policy_bottom_sheet/poap_policy_bottom_sheet.dart';
 import 'package:app/core/presentation/widgets/poap/poap_quantity_bar.dart';
+import 'package:app/core/utils/bottomsheet_utils.dart';
 import 'package:app/core/utils/location_utils.dart';
 import 'package:app/core/utils/media_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
@@ -141,10 +142,19 @@ class _PopapDetailPageState extends State<PopapDetailPage> {
                     },
                     onPressViewRequirements: (policy) {
                       if (policy?.result == null) return;
-                      showDialog(
-                        context: context,
-                        builder: (context) =>
-                            PoapPolicyPopup(policyResult: policy!.result!),
+                      BottomSheetUtils.showSnapBottomSheet(
+                        context,
+                        builder: (_) => MultiBlocProvider(
+                          providers: [
+                            BlocProvider.value(
+                              value: BlocProvider.of<ClaimPoapBloc>(context),
+                            ),
+                            BlocProvider.value(
+                              value: BlocProvider.of<BadgeDetailBloc>(context),
+                            ),
+                          ],
+                          child: const PoapPolicyBottomSheet(),
+                        ),
                       );
                     },
                   ),
@@ -334,41 +344,42 @@ class _PoapDetailFooterState extends State<PoapDetailFooter>
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Flexible(
-                child: Text.rich(
-                  TextSpan(
-                    text: !locationEnabled
-                        ? t.nft.needLocationToClaimPoap
-                        : !ableToClaim
-                            ? t.nft.ineligibleToClaimPoap
-                            : t.nft.ableToClaimPoap,
-                    children: [
-                      if (!locationEnabled || !ableToClaim)
-                        TextSpan(
-                          text: !locationEnabled
-                              ? t.common.grantAccess
-                              : t.common.viewRequirements,
-                          style:
-                              Typo.small.copyWith(color: LemonColor.paleViolet),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () async {
-                              if (!locationEnabled) {
-                                await widget.onPressGrantAccess();
-                                setState(() {});
-                              }
-                              if (!ableToClaim) {
-                                widget.onPressViewRequirements(
-                                  claimPoapState.policy,
-                                );
-                              }
-                            },
-                        )
-                    ],
+              if (!claimPoapState.claimed)
+                Flexible(
+                  child: Text.rich(
+                    TextSpan(
+                      text: !locationEnabled
+                          ? t.nft.needLocationToClaimPoap
+                          : !ableToClaim
+                              ? t.nft.ineligibleToClaimPoap
+                              : t.nft.ableToClaimPoap,
+                      children: [
+                        if (!locationEnabled || !ableToClaim)
+                          TextSpan(
+                            text: !locationEnabled
+                                ? t.common.grantAccess
+                                : t.common.viewRequirements,
+                            style: Typo.small
+                                .copyWith(color: LemonColor.paleViolet),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () async {
+                                if (!locationEnabled) {
+                                  await widget.onPressGrantAccess();
+                                  setState(() {});
+                                }
+                                if (!ableToClaim) {
+                                  widget.onPressViewRequirements(
+                                    claimPoapState.policy,
+                                  );
+                                }
+                              },
+                          )
+                      ],
+                    ),
+                    style: Typo.small
+                        .copyWith(color: colorScheme.onSurfaceVariant),
                   ),
-                  style:
-                      Typo.small.copyWith(color: colorScheme.onSurfaceVariant),
                 ),
-              ),
               SizedBox(
                 width: Spacing.medium * 2,
               ),
