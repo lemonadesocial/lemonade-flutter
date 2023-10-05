@@ -47,12 +47,12 @@ class SwipeConfiguration {
 }
 
 class SwipeDetector extends StatelessWidget {
-  Widget child;
-  Function() onSwipeUp;
-  Function() onSwipeDown;
-  Function() onSwipeLeft;
-  Function() onSwipeRight;
-  SwipeConfiguration swipeConfiguration;
+  final Widget child;
+  final Function() onSwipeUp;
+  final Function() onSwipeDown;
+  final Function() onSwipeLeft;
+  final Function() onSwipeRight;
+  final SwipeConfiguration swipeConfiguration;
 
   SwipeDetector({
     super.key,
