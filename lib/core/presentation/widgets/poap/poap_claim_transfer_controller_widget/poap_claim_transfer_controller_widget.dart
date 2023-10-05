@@ -6,6 +6,7 @@ import 'package:app/core/domain/token/entities/token_entities.dart';
 import 'package:app/core/presentation/widgets/poap/poap_claimed_poup/poap_claimed_popup.dart';
 import 'package:app/core/presentation/widgets/poap/poap_transfer_popup/poap_transfer_popup.dart';
 import 'package:app/core/presentation/widgets/poap/poap_transfer_success_poup/poap_transfer_success_popup.dart';
+import 'package:app/core/presentation/widgets/poap/popap_busy_popup/poap_busy_popup.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -105,8 +106,8 @@ class _PoapClaimTransferControllerWidgetViewState
                   showDialog(
                     context: context,
                     builder: (context) {
-                      return AlertDialog(
-                        content: Text('${t.nft.claiming}...'),
+                      return PoapBusyPopup(
+                        title: '${t.nft.claiming}...',
                       );
                     },
                   );
@@ -131,8 +132,8 @@ class _PoapClaimTransferControllerWidgetViewState
                   showDialog(
                     context: context,
                     builder: (context) {
-                      return AlertDialog(
-                        content: Text('${t.nft.transferring}...'),
+                      return PoapBusyPopup(
+                        title: '${t.nft.transferring}...',
                       );
                     },
                   );

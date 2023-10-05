@@ -3,6 +3,7 @@ import 'package:app/core/domain/poap/input/poap_input.dart';
 import 'package:app/core/domain/token/entities/token_entities.dart';
 import 'package:app/core/domain/poap/entities/poap_entities.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
+import 'package:app/core/presentation/widgets/common/dialog/lemon_alert_dialog.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
@@ -89,6 +90,7 @@ class _PoapTransferPopupState extends State<_PoapTransferPopupView> {
             ),
           ),
         );
+    Navigator.of(context).pop();
   }
 
   void onTransferSuccess(Transfer transfer) {
@@ -98,8 +100,8 @@ class _PoapTransferPopupState extends State<_PoapTransferPopupView> {
   void onTransferFailed(String? message) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        content: Text(message ?? t.common.somethingWrong),
+      builder: (context) => LemonAlertDialog(
+        child: Text(message ?? t.common.somethingWrong),
       ),
     );
   }
