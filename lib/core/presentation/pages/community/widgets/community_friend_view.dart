@@ -1,4 +1,5 @@
 import 'package:app/core/presentation/widgets/common/searchbar/lemon_search_bar_widget.dart';
+import 'package:app/core/presentation/widgets/discover/discover_card.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -32,6 +33,40 @@ class CommunityFriendView extends StatelessWidget {
               hintText: t.setting.searchCommunity,
               contentPadding: EdgeInsets.all(Spacing.small),
               onChange: (value) {},
+            ),
+            SizedBox(height: Spacing.small),
+            Row(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: DiscoverCard(
+                    title: t.setting.crew,
+                    subTitle: '0/5',
+                    icon: Assets.icons.icCrew.svg(),
+                    colors: DiscoverCardGradient.events.colors,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: Spacing.medium,
+                      vertical: Spacing.smMedium,
+                    ),
+                    onTap: () {},
+                  ),
+                ),
+                SizedBox(width: Spacing.extraSmall),
+                Expanded(
+                  flex: 1,
+                  child: DiscoverCard(
+                    title: t.setting.tribe,
+                    subTitle: '0/25',
+                    icon: Assets.icons.icDiscoverPeople.svg(),
+                    colors: DiscoverCardGradient.collaborators.colors,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: Spacing.medium,
+                      vertical: Spacing.smMedium,
+                    ),
+                    onTap: () {},
+                  ),
+                ),
+              ],
             ),
           ],
         ),

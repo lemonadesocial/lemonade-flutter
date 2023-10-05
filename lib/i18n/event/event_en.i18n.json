@@ -39,7 +39,10 @@
         "itemTotal": "Item total",
         "taxes": "Taxes",
         "convenienceFees": "Convenience fees",
-        "grandTotal": "Grand total"
+        "grandTotal": "Grand total",
+        "subTotal": "Subtotal",
+        "total": "Total",
+        "accessCode": "Access code"
     },
     "eventPayment": {
         "payUsing": "Pay using",
@@ -78,5 +81,6 @@
         "one": "reservation",
         "other": "reservations"
     },
-    "remaining": "remaining"
+    "remaining": "remaining",
+    "summary": "summary"
 }

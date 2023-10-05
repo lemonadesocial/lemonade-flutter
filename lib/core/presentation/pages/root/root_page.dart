@@ -21,7 +21,17 @@ class RootPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).colorScheme.primary;
-    return BlocBuilder<AuthBloc, AuthState>(
+    return BlocConsumer<AuthBloc, AuthState>(
+      listener: (context, state) {
+        state.maybeWhen(
+          onBoardingRequired: (authSession) => context.router.push(
+            OnboardingWrapperRoute(
+              children: [OnboardingUsernameRoute()],
+            ),
+          ),
+          orElse: () {},
+        );
+      },
       builder: (context, authState) => MultiBlocProvider(
         providers: [
           BlocProvider<NewsfeedListingBloc>(
@@ -57,7 +67,6 @@ class RootPage extends StatelessWidget {
                 ),
               ],
               drawer: const LemonDrawer(),
-              endDrawer: const LemonDrawer(),
               floatingActionButton: FloatingCreateButton(
                 onTap: () => const CreatePopUpPage().showAsBottomSheet(
                   context,

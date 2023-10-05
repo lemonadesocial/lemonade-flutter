@@ -8,6 +8,7 @@ import 'package:app/theme/theme.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 @RoutePage()
 class CommunityPage extends StatelessWidget {
@@ -21,7 +22,7 @@ class CommunityPage extends StatelessWidget {
       theme: lemonadeAppDarkThemeData,
       home: DefaultTabController(
         initialIndex: 1,
-        length: 4,
+        length: 3,
         child: Scaffold(
           backgroundColor: colorScheme.primary,
           appBar: LemonAppBar(
@@ -30,7 +31,6 @@ class CommunityPage extends StatelessWidget {
           body: Column(
             children: [
               TabBar(
-                isScrollable: true,
                 labelStyle: Typo.medium.copyWith(
                   color: colorScheme.onPrimary,
                   fontWeight: FontWeight.w500,
@@ -40,13 +40,11 @@ class CommunityPage extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                 ),
                 indicator: CustomTabIndicator(color: LemonColor.paleViolet),
-                indicatorPadding:
-                    EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+                indicatorPadding: EdgeInsets.symmetric(horizontal: 32.w),
                 tabs: <Widget>[
                   Tab(text: t.setting.friend),
                   Tab(text: t.setting.follower),
-                  Tab(text: t.setting.friend),
-                  Tab(text: t.setting.friend),
+                  Tab(text: t.setting.following),
                 ],
               ),
               Expanded(
@@ -55,7 +53,6 @@ class CommunityPage extends StatelessWidget {
                   CommunityFriendView(),
                   CommunityFriendView(),
                   CommunityFriendView(),
-                  CommunityFriendView()
                 ],
               )),
             ],

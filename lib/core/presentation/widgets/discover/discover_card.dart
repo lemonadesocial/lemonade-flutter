@@ -46,12 +46,14 @@ class DiscoverCard extends StatelessWidget {
     required this.subTitle,
     required this.icon,
     required this.onTap,
+    this.padding,
   });
   final List<Color> colors;
   final String title;
   final String subTitle;
   final Widget icon;
   final Function() onTap;
+  final EdgeInsets? padding;
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +61,7 @@ class DiscoverCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         clipBehavior: Clip.antiAlias,
+        padding: padding,
         decoration: ShapeDecoration(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(
