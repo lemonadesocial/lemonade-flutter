@@ -50,7 +50,6 @@ const eventFragment = '''
   $eventHostExpandedFragment
   $eventPeopleFragment
   $eventMatrixFragment
-  $eventOfferFragment
 
   fragment eventFields on Event {
   _id
@@ -69,7 +68,6 @@ const eventFragment = '''
   }
   ...eventPeopleFragment
   ...eventMatrixFragment
-  ...eventOfferFragment
   start
   end
   cost
@@ -97,10 +95,12 @@ const eventFragment = '''
 
 final getEventDetailQuery = gql('''
   $eventFragment
+  $eventOfferFragment
 
   query(\$id: MongoID!) {
     getEvent(_id: \$id) {
       ...eventFields
+      ...eventOfferFragment
     }
   }
 ''');
