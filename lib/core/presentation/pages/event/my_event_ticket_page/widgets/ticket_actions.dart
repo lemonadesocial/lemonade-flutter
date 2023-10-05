@@ -1,5 +1,6 @@
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_payment.dart';
+import 'package:app/core/presentation/pages/event/my_event_ticket_page/widgets/ticket_qr_code_popup.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -67,8 +68,12 @@ class EventTicketActions extends StatelessWidget {
               height: 27.w,
             ),
           ),
-          // TODO: show qr code modal
-          // onPressed: ,
+          onPressed: () => {
+            showDialog(
+              context: context,
+              builder: (context) => const TicketQRCodePopup(),
+            ),
+          },
         ),
         if (eventPayment != null)
           ActionItem(
