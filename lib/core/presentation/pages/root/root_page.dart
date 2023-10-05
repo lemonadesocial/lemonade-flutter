@@ -57,7 +57,6 @@ class RootPage extends StatelessWidget {
                 ),
               ],
               drawer: const LemonDrawer(),
-              endDrawer: const LemonDrawer(),
               floatingActionButton: FloatingCreateButton(
                 onTap: () => const CreatePopUpPage().showAsBottomSheet(
                   context,
