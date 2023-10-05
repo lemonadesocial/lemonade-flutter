@@ -8,6 +8,7 @@ import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/utils/number_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
+import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -66,7 +67,6 @@ class _SelectTicketItemState extends State<SelectTicketItem> {
   }
 
   void goToWeb() {
-    final colorScheme = Theme.of(context).colorScheme;
     final event = context.read<EventProviderBloc>().event;
     showDialog(
       barrierDismissible: true,
@@ -81,7 +81,7 @@ class _SelectTicketItemState extends State<SelectTicketItem> {
           bottom: Spacing.smMedium,
           // vertical: Spacing.smMedium,
         ),
-        backgroundColor: colorScheme.surfaceVariant,
+        backgroundColor: LemonColor.atomicBlack,
         content:
             const Text("Paid ticket not supported yet\nPlease use our website"),
         actions: [

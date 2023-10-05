@@ -9,6 +9,7 @@ import 'package:app/core/domain/token/token_repository.dart';
 import 'package:app/core/presentation/pages/poap/popap_detail_page.dart';
 import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
+import 'package:app/core/presentation/widgets/common/dialog/lemon_alert_dialog.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/poap/poap_claim_builder.dart';
 import 'package:app/core/presentation/widgets/poap/poap_quantity_bar.dart';
@@ -64,8 +65,8 @@ class _PoapItemView extends StatelessWidget {
       listener: (_, state) {
         showDialog(
           context: context,
-          builder: (context) => AlertDialog(
-            content: Text(state.failure?.message ?? ''),
+          builder: (context) => LemonAlertDialog(
+            child: Text(state.failure?.message ?? ''),
           ),
         );
       },
