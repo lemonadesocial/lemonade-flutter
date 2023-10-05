@@ -13,6 +13,7 @@ import 'package:app/core/presentation/widgets/common/sliver/dynamic_sliver_appba
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/core/utils/drawer_utils.dart';
+import 'package:app/core/utils/swipe_detector.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -58,93 +59,106 @@ class _ProfilePageViewState extends State<ProfilePageView>
     final isMe = AuthUtils.isMe(context, user: widget.userProfile);
     return Scaffold(
       backgroundColor: colorScheme.primary,
-      body: SafeArea(
-        child: NestedScrollView(
-          headerSliverBuilder: (context, innerBoxIsScrolled) => [
-            SliverOverlapAbsorber(
-              handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                context,
-              ),
-              sliver: MultiSliver(
-                children: [
-                  SliverPersistentHeader(
-                    pinned: true,
-                    delegate: ProfileAnimatedAppBar(
-                      title:
-                          '@${widget.userProfile.username ?? t.common.anonymous}',
-                      leading: isMe
-                          ? InkWell(
-                              onTap: () => DrawerUtils.openDrawer(),
-                              child: Icon(
-                                Icons.menu_outlined,
-                                color: colorScheme.onPrimary,
-                              ),
-                            )
-                          : const LemonBackButton(),
-                      actions: [
-                        if (isMe)
-                          Padding(
-                            padding: EdgeInsets.only(right: Spacing.xSmall),
-                            child: InkWell(
-                              onTap: () {
-                                context.read<AuthBloc>().state.maybeWhen(
-                                      authenticated: (session) =>
-                                          AutoRouter.of(context).navigate(
-                                        const ChatListRoute(),
-                                      ),
-                                      orElse: () => AutoRouter.of(
-                                        context,
-                                      ).navigate(const LoginRoute()),
-                                    );
-                              },
-                              child: ThemeSvgIcon(
-                                color: colorScheme.onPrimary,
-                                builder: (filter) =>
-                                    Assets.icons.icChatBubble.svg(
-                                  colorFilter: filter,
+      body: SwipeDetector(
+        child: SafeArea(
+          child: NestedScrollView(
+            headerSliverBuilder: (context, innerBoxIsScrolled) => [
+              SliverOverlapAbsorber(
+                handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                  context,
+                ),
+                sliver: MultiSliver(
+                  children: [
+                    SliverPersistentHeader(
+                      pinned: true,
+                      delegate: ProfileAnimatedAppBar(
+                        title:
+                            '@${widget.userProfile.username ?? t.common.anonymous}',
+                        leading: isMe
+                            ? InkWell(
+                                onTap: () => DrawerUtils.openDrawer(),
+                                child: Icon(
+                                  Icons.menu_outlined,
+                                  color: colorScheme.onPrimary,
+                                ),
+                              )
+                            : const LemonBackButton(),
+                        actions: [
+                          if (isMe)
+                            Padding(
+                              padding: EdgeInsets.only(right: Spacing.xSmall),
+                              child: InkWell(
+                                onTap: () {
+                                  context.read<AuthBloc>().state.maybeWhen(
+                                        authenticated: (session) =>
+                                            AutoRouter.of(context).navigate(
+                                          const ChatListRoute(),
+                                        ),
+                                        orElse: () => AutoRouter.of(
+                                          context,
+                                        ).navigate(const LoginRoute()),
+                                      );
+                                },
+                                child: ThemeSvgIcon(
+                                  color: colorScheme.onPrimary,
+                                  builder: (filter) =>
+                                      Assets.icons.icChatBubble.svg(
+                                    colorFilter: filter,
+                                  ),
                                 ),
                               ),
+                            )
+                          else
+                            GestureDetector(
+                              behavior: HitTestBehavior.translucent,
+                              onTap: () {},
+                              child: ThemeSvgIcon(
+                                color: colorScheme.onPrimary,
+                                builder: (filter) => Assets.icons.icMoreHoriz
+                                    .svg(colorFilter: filter),
+                              ),
                             ),
-                          )
-                        else
-                          GestureDetector(
-                            behavior: HitTestBehavior.translucent,
-                            onTap: () {},
-                            child: ThemeSvgIcon(
-                              color: colorScheme.onPrimary,
-                              builder: (filter) => Assets.icons.icMoreHoriz
-                                  .svg(colorFilter: filter),
-                            ),
-                          ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  DynamicSliverAppBar(
-                    maxHeight: 250.h,
-                    floating: true,
-                    forceElevated: innerBoxIsScrolled,
-                    child: ProfilePageHeader(user: widget.userProfile),
-                  ),
-                  SliverPersistentHeader(
-                    pinned: true,
-                    delegate: ProfileTabBarDelegate(controller: _tabCtrl),
-                  ),
-                ],
+                    DynamicSliverAppBar(
+                      maxHeight: 250.h,
+                      floating: true,
+                      forceElevated: innerBoxIsScrolled,
+                      child: ProfilePageHeader(user: widget.userProfile),
+                    ),
+                    SliverPersistentHeader(
+                      pinned: true,
+                      delegate: ProfileTabBarDelegate(controller: _tabCtrl),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
-          body: TabBarView(
-            controller: _tabCtrl,
-            children: [
-              ProfilePostsTabView(user: widget.userProfile),
-              ProfileCollectibleTabView(user: widget.userProfile),
-              ProfileEventTabView(user: widget.userProfile),
-              ProfilePhotosTabView(user: widget.userProfile),
-              // EmptyTabView(),
-              ProfileInfoTabView(user: widget.userProfile),
             ],
+            body: TabBarView(
+              controller: _tabCtrl,
+              children: [
+                ProfilePostsTabView(user: widget.userProfile),
+                ProfileCollectibleTabView(user: widget.userProfile),
+                ProfileEventTabView(user: widget.userProfile),
+                ProfilePhotosTabView(user: widget.userProfile),
+                // EmptyTabView(),
+                ProfileInfoTabView(user: widget.userProfile),
+              ],
+            ),
           ),
         ),
+        onSwipeUp: () {},
+        onSwipeDown: () {},
+        onSwipeLeft: () {
+          context.read<AuthBloc>().state.maybeWhen(
+                authenticated: (session) =>
+                    AutoRouter.of(context).navigate(const ChatListRoute()),
+                orElse: () =>
+                    AutoRouter.of(context).navigate(const LoginRoute()),
+              );
+        },
+        onSwipeRight: () {},
       ),
     );
   }

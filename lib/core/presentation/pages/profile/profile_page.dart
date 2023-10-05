@@ -1,9 +1,12 @@
+import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/profile/user_profile_bloc/user_profile_bloc.dart';
 import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/presentation/pages/profile/views/profile_page_view.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
+import 'package:app/core/utils/swipe_detector.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,19 +27,32 @@ class ProfilePage extends StatelessWidget {
         ),
       child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.primary,
-        body: BlocBuilder<UserProfileBloc, UserProfileState>(
-          builder: (context, state) {
-            return state.maybeWhen(
-              fetched: (userProfile) =>
-                  ProfilePageView(userProfile: userProfile),
-              loading: () => Center(
-                child: Loading.defaultLoading(context),
-              ),
-              orElse: () => Center(
-                child: Text(t.common.somethingWrong),
-              ),
-            );
+        body: SwipeDetector(
+          child: BlocBuilder<UserProfileBloc, UserProfileState>(
+            builder: (context, state) {
+              return state.maybeWhen(
+                fetched: (userProfile) =>
+                    ProfilePageView(userProfile: userProfile),
+                loading: () => Center(
+                  child: Loading.defaultLoading(context),
+                ),
+                orElse: () => Center(
+                  child: Text(t.common.somethingWrong),
+                ),
+              );
+            },
+          ),
+          onSwipeUp: () {},
+          onSwipeDown: () {},
+          onSwipeLeft: () {
+            context.read<AuthBloc>().state.maybeWhen(
+                  authenticated: (session) =>
+                      AutoRouter.of(context).navigate(const ChatListRoute()),
+                  orElse: () =>
+                      AutoRouter.of(context).navigate(const LoginRoute()),
+                );
           },
+          onSwipeRight: () {},
         ),
       ),
     );
