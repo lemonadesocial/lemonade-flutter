@@ -80,15 +80,18 @@ class _PoapListingViewState extends State<PoapListingView> {
         appBar: LemonAppBar(
           title: StringUtils.capitalize(t.nft.badges),
           actions: [
-            GestureDetector(
-              onTap: () {
-                dragController.animateTo(
-                  _snapSizes[1],
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.linear,
-                );
-              },
-              child: Assets.icons.icFilterOutline.svg(),
+            Padding(
+              padding: EdgeInsets.only(right: Spacing.xSmall),
+              child: GestureDetector(
+                onTap: () {
+                  dragController.animateTo(
+                    _snapSizes[1],
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.linear,
+                  );
+                },
+                child: Assets.icons.icFilterOutline.svg(),
+              ),
             ),
           ],
         ),

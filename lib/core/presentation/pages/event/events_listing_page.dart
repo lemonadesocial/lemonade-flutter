@@ -133,13 +133,17 @@ class _EventsListingViewState extends State<_EventsListingView> {
       appBar: LemonAppBar(
         title: t.event.events,
         actions: [
-          GestureDetector(
-            onTap: () {
-              AutoRouter.of(context).navigateNamed('/chat');
-            },
-            child: ThemeSvgIcon(
-              color: themeColor.onSurface,
-              builder: (filter) => Assets.icons.icChat.svg(colorFilter: filter),
+          Padding(
+            padding: EdgeInsets.only(right: Spacing.xSmall),
+            child: GestureDetector(
+              onTap: () {
+                AutoRouter.of(context).navigateNamed('/chat');
+              },
+              child: ThemeSvgIcon(
+                color: themeColor.onSurface,
+                builder: (filter) =>
+                    Assets.icons.icChat.svg(colorFilter: filter),
+              ),
             ),
           ),
         ],

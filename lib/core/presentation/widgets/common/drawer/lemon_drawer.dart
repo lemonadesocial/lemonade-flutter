@@ -12,6 +12,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:app/core/utils/modal_utils.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 
 class DrawerItem {
   DrawerItem({
@@ -47,10 +49,18 @@ class LemonDrawer extends StatelessWidget {
                 icon: Assets.icons.icBank,
                 label: t.common.vault,
                 featureAvailable: false,
+                onPressed: () {
+                  Vibrate.feedback(FeedbackType.light);
+                  showComingSoonDialog(context);
+                },
               ),
               DrawerItem(
                 icon: Assets.icons.icPeopleAlt,
                 label: t.common.community,
+                onPressed: () {
+                  Vibrate.feedback(FeedbackType.light);
+                  showComingSoonDialog(context);
+                },
               ),
               DrawerItem(
                 icon: Assets.icons.icTicket,
@@ -65,8 +75,19 @@ class LemonDrawer extends StatelessWidget {
                 icon: Assets.icons.icInsights,
                 label: t.common.dashboard,
                 featureAvailable: false,
+                onPressed: () {
+                  Vibrate.feedback(FeedbackType.light);
+                  showComingSoonDialog(context);
+                },
               ),
-              DrawerItem(icon: Assets.icons.icQr, label: t.common.qrCode),
+              DrawerItem(
+                icon: Assets.icons.icQr,
+                label: t.common.qrCode,
+                onPressed: () {
+                  Vibrate.feedback(FeedbackType.light);
+                  showComingSoonDialog(context);
+                },
+              ),
             ].map(
               (item) =>
                   _buildDrawerItem(context, item: item, onTap: item.onPressed),
