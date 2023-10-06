@@ -4,6 +4,7 @@ import 'package:app/core/presentation/widgets/discover/discover_card.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
@@ -18,8 +19,6 @@ class CommunityFriendView extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-
-    // context.read<CommunityBloc>().getListFriend(userId!);
     return Padding(
       padding: EdgeInsets.all(Spacing.xSmall),
       child: Column(
@@ -36,7 +35,12 @@ class CommunityFriendView extends StatelessWidget {
             ),
             hintText: t.setting.searchCommunity,
             contentPadding: EdgeInsets.all(Spacing.small),
-            onChange: (value) {},
+            onChange: (value) =>
+                context.read<CommunityBloc>().onSearchInputChange(
+                      CommunityType.friend,
+                      userId: AuthUtils.getUserId(context),
+                      searchInput: value,
+                    ),
           ),
           SizedBox(height: Spacing.small),
           Expanded(

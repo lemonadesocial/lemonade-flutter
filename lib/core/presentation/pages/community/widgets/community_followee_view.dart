@@ -3,6 +3,7 @@ import 'package:app/core/presentation/pages/community/widgets/community_user_til
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
@@ -33,7 +34,12 @@ class CommunityFolloweeView extends StatelessWidget {
             ),
             hintText: t.setting.searchCommunity,
             contentPadding: EdgeInsets.all(Spacing.small),
-            onChange: (value) {},
+            onChange: (value) =>
+                context.read<CommunityBloc>().onSearchInputChange(
+                      CommunityType.followee,
+                      userId: AuthUtils.getUserId(context),
+                      searchInput: value,
+                    ),
           ),
           SizedBox(height: Spacing.small),
           Expanded(
