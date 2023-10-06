@@ -29,7 +29,6 @@ class CommunityRepositoryImpl extends CommunityRepository {
         },
         parserFn: (data) {
           final receiveList = data['getUserFollows'] as List<dynamic>;
-          print('getListFollower receiveData: ${data['getUserFollows']}');
           return receiveList
               .map(
                 (e) => CommunityUser.fromExpandDto(
@@ -59,7 +58,6 @@ class CommunityRepositoryImpl extends CommunityRepository {
         },
         parserFn: (data) {
           final receiveList = data['getUserFollows'] as List<dynamic>;
-          print('getListFollowee receiveData: ${data['getUserFollows']}');
           return receiveList
               .map(
                 (e) => CommunityUser.fromExpandDto(

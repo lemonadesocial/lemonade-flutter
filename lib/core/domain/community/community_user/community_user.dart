@@ -1,5 +1,7 @@
 import 'package:app/core/data/community/dtos/community_follower_dto/community_follower_dto.dart';
 import 'package:app/core/data/community/dtos/community_friend_dto/community_friend_dto.dart';
+import 'package:app/core/domain/common/entities/common.dart';
+import 'package:app/core/utils/image_utils.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'community_user.freezed.dart';
@@ -15,12 +17,20 @@ class CommunityUser with _$CommunityUser {
   }) = _CommunityUser;
 
   factory CommunityUser.fromFriendDto(CommunityFriendDto dto) {
+    final imageAvatar = dto.otherExpanded!.newPhotosExpanded.isEmpty
+        ? null
+        : ImageUtils.generateUrl(
+            file: DbFile.fromDto(
+              dto.otherExpanded!.newPhotosExpanded[0],
+            ),
+          );
     return CommunityUser(
       id: dto.otherExpanded!.id,
       userName: dto.otherExpanded!.username,
       displayName: dto.otherExpanded!.name,
       newPhotos:
           dto.otherExpanded!.newPhotosExpanded.map((e) => e.url).toList(),
+      imageAvatar: imageAvatar,
     );
   }
 
