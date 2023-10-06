@@ -1,5 +1,5 @@
 import 'package:app/core/domain/event/entities/event.dart';
-import 'package:app/core/domain/event/entities/event_list_ticket_types.dart';
+import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/entities/event_ticket.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_ticket_management_page/event_ticket_management_page.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_ticket_management_page/widgets/ticket_assignment_item.dart';

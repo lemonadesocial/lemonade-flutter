@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:app/core/presentation/pages/chat/chat_message/view/chat_message_view.dart';
+import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
+import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/service/matrix/matrix_service.dart';
 import 'package:app/core/utils/chat/matrix_client_ios_badge_extension.dart';
 import 'package:app/injection/register_module.dart';
@@ -24,8 +26,15 @@ class ChatPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     final room = getIt<MatrixService>().client.getRoomById(roomId);
-    if (room == null) return const SizedBox.shrink();
+    if (room == null) {
+      return Scaffold(
+        backgroundColor: colorScheme.background,
+        appBar: const LemonAppBar(),
+        body: Loading.defaultLoading(context),
+      );
+    }
     return ChatPageWithRoom(sideView: sideView, room: room);
   }
 }

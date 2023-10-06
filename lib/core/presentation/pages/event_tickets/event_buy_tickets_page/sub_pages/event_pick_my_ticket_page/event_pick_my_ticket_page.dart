@@ -2,7 +2,7 @@ import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/event/accept_event_bloc/accept_event_bloc.dart';
 import 'package:app/core/application/event/event_provider_bloc/event_provider_bloc.dart';
 import 'package:app/core/application/event_tickets/assign_tickets_bloc/assign_tickets_bloc.dart';
-import 'package:app/core/application/event_tickets/get_event_list_ticket_types_bloc/get_event_list_ticket_types_bloc.dart';
+import 'package:app/core/application/event_tickets/get_event_ticket_types_bloc/get_event_ticket_types_bloc.dart';
 import 'package:app/core/application/event_tickets/get_my_tickets_bloc/get_my_tickets_bloc.dart';
 import 'package:app/core/application/event_tickets/select_self_assign_ticket_bloc/select_self_assign_ticket_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
@@ -154,15 +154,14 @@ class EventPickMyTicketView extends StatelessWidget {
                 ),
               ),
               SizedBox(height: Spacing.smMedium),
-              BlocBuilder<GetEventListTicketTypesResponseBloc,
-                  GetEventListTicketTypesResponseState>(
+              BlocBuilder<GetEventTicketTypesBloc, GetEventTicketTypesState>(
                 builder: (context, state) {
                   return state.when(
                     loading: () => Loading.defaultLoading(context),
                     failure: () => EmptyList(
                       emptyText: t.common.somethingWrong,
                     ),
-                    success: (eventListTicketTypesResponse) {
+                    success: (eventTicketTypesResponse) {
                       return BlocBuilder<GetMyTicketsBloc, GetMyTicketsState>(
                         builder: (context, state) => state.when(
                           loading: () => Loading.defaultLoading(context),
@@ -178,7 +177,7 @@ class EventPickMyTicketView extends StatelessWidget {
                               ),
                             ),
                             ticketTypes:
-                                eventListTicketTypesResponse.ticketTypes ?? [],
+                                eventTicketTypesResponse.ticketTypes ?? [],
                           ),
                         ),
                       );

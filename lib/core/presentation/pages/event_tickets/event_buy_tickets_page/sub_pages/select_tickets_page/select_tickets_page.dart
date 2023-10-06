@@ -2,7 +2,7 @@ import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/event/accept_event_bloc/accept_event_bloc.dart';
 import 'package:app/core/application/event/event_provider_bloc/event_provider_bloc.dart';
 import 'package:app/core/application/event_tickets/assign_tickets_bloc/assign_tickets_bloc.dart';
-import 'package:app/core/application/event_tickets/get_event_list_ticket_types_bloc/get_event_list_ticket_types_bloc.dart';
+import 'package:app/core/application/event_tickets/get_event_ticket_types_bloc/get_event_ticket_types_bloc.dart';
 import 'package:app/core/application/event_tickets/redeem_tickets_bloc/redeem_tickets_bloc.dart';
 import 'package:app/core/application/event_tickets/select_event_tickets_bloc/select_event_tickets_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
@@ -68,16 +68,15 @@ class SelectTicketView extends StatelessWidget {
 
     return MultiBlocListener(
       listeners: [
-        BlocListener<GetEventListTicketTypesResponseBloc,
-            GetEventListTicketTypesResponseState>(
+        BlocListener<GetEventTicketTypesBloc, GetEventTicketTypesState>(
           listener: (context, state) {
             state.maybeWhen(
               orElse: () => null,
               success: (response) =>
                   context.read<SelectEventTicketTypesBloc>().add(
                         SelectEventTicketTypesEvent
-                            .onEventListTicketTypesResponseLoaded(
-                          listTicketTypesResponse: response,
+                            .onEventTicketTypesResponseLoaded(
+                          eventTicketTypesResponse: response,
                         ),
                       ),
             );
@@ -195,14 +194,13 @@ class SelectTicketView extends StatelessWidget {
                 ),
               ),
               SizedBox(height: Spacing.smMedium),
-              BlocBuilder<GetEventListTicketTypesResponseBloc,
-                  GetEventListTicketTypesResponseState>(
+              BlocBuilder<GetEventTicketTypesBloc, GetEventTicketTypesState>(
                 builder: (context, state) => state.when(
                   loading: () => Loading.defaultLoading(context),
                   failure: () => EmptyList(emptyText: t.common.somethingWrong),
-                  success: (listTicketTypesResponse) => SelectTicketsList(
+                  success: (eventTicketTypesResponse) => SelectTicketsList(
                     event: event,
-                    listTicketTypesResponse: listTicketTypesResponse,
+                    eventTicketTypesResponse: eventTicketTypesResponse,
                   ),
                 ),
               ),

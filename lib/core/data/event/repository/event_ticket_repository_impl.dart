@@ -1,14 +1,14 @@
-import 'package:app/core/data/event/dtos/event_list_ticket_types_dto/event_list_ticket_types_dto.dart';
+import 'package:app/core/data/event/dtos/event_ticket_types_dto/event_ticket_types_dto.dart';
 import 'package:app/core/data/event/dtos/event_ticket_dto/event_ticket_dto.dart';
 import 'package:app/core/data/event/dtos/event_tickets_pricing_info_dto/event_tickets_pricing_info_dto.dart';
 import 'package:app/core/data/event/gql/event_tickets_mutation.dart';
 import 'package:app/core/data/event/gql/event_tickets_query.dart';
-import 'package:app/core/domain/event/entities/event_list_ticket_types.dart';
+import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/entities/event_ticket.dart';
 import 'package:app/core/domain/event/entities/event_tickets_pricing_info.dart';
 import 'package:app/core/domain/event/input/assign_tickets_input/assign_tickets_input.dart';
 import 'package:app/core/domain/event/input/calculate_tickets_pricing_input/calculate_tickets_pricing_input.dart';
-import 'package:app/core/domain/event/input/get_event_list_ticket_types_input/get_event_list_ticket_types_input.dart';
+import 'package:app/core/domain/event/input/get_event_ticket_types_input/get_event_ticket_types_input.dart';
 import 'package:app/core/domain/event/input/get_tickets_input/get_tickets_input.dart';
 import 'package:app/core/domain/event/input/redeem_tickets_input/redeem_tickets_input.dart';
 import 'package:app/core/domain/event/repository/event_ticket_repository.dart';
@@ -43,17 +43,16 @@ class EventTicketRepositoryImpl implements EventTicketRepository {
   }
 
   @override
-  Future<Either<Failure, EventListTicketTypesResponse>>
-      getEventListTicketTypesResponse({
-    required GetEventListTicketTypesResponseInput input,
+  Future<Either<Failure, EventTicketTypesResponse>> getEventTicketTypes({
+    required GetEventTicketTypesInput input,
   }) async {
     final result = await _client.query(
       QueryOptions(
-        document: getEventListTicketTypesResponseQuery,
+        document: getEventTicketTypesQuery,
         variables: {'input': input.toJson()},
         fetchPolicy: FetchPolicy.networkOnly,
-        parserFn: (data) => EventListTicketTypesResponse.fromDto(
-          EventListTicketTypesResponseDto.fromJson(data['listTicketTypes']),
+        parserFn: (data) => EventTicketTypesResponse.fromDto(
+          EventTicketTypesResponseDto.fromJson(data['getEventTicketTypes']),
         ),
       ),
     );

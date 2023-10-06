@@ -1,6 +1,6 @@
 import 'package:app/core/application/event_tickets/assign_tickets_bloc/assign_tickets_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
-import 'package:app/core/domain/event/entities/event_list_ticket_types.dart';
+import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/entities/event_ticket.dart';
 import 'package:app/core/domain/event/input/assign_tickets_input/assign_tickets_input.dart';
 import 'package:app/core/domain/payment/payment_enums.dart';

@@ -2,6 +2,7 @@ import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_rsvp.dart';
 import 'package:app/core/presentation/widgets/animation/ripple_animation.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
+import 'package:app/core/utils/modal_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -91,36 +92,40 @@ class RSVPEventSuccessPopupPage extends StatelessWidget {
               top: 0,
               left: 0,
               right: 0,
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const Spacer(),
-                    Container(
-                      width: 125.w,
-                      height: Sizing.medium,
-                      decoration: BoxDecoration(
-                        color: colorScheme.onPrimary.withOpacity(0.09),
-                        borderRadius: BorderRadius.circular(LemonRadius.normal),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Assets.icons.icUserAdd.svg(),
-                          SizedBox(width: Spacing.extraSmall),
-                          Text(
-                            t.event.inviteFriends,
-                            style: Typo.small.copyWith(
-                              color: colorScheme.onSecondary,
-                            ),
-                          )
-                        ],
-                      ),
-                    )
-                  ],
+              child: InkWell(
+                onTap: () => showComingSoonDialog(context),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Spacer(),
+                      Container(
+                        width: 125.w,
+                        height: Sizing.medium,
+                        decoration: BoxDecoration(
+                          color: colorScheme.onPrimary.withOpacity(0.09),
+                          borderRadius:
+                              BorderRadius.circular(LemonRadius.normal),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Assets.icons.icUserAdd.svg(),
+                            SizedBox(width: Spacing.extraSmall),
+                            Text(
+                              t.event.inviteFriends,
+                              style: Typo.small.copyWith(
+                                color: colorScheme.onSecondary,
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
