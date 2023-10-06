@@ -36,7 +36,8 @@
         "mail": "mail",
         "invite": "invite",
         "assign": "assign",
-        "dismiss": "Dismiss"
+        "dismiss": "Dismiss",
+        "refresh": "Refresh"
     },
     "followed": "Followed",
     "anonymous": "anonymous",

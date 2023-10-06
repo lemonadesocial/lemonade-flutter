@@ -56,5 +56,7 @@
     "enterWalletId": "Enter wallet ID",
     "transferCollectibleTo": "Transfer collectible to",
     "transferSuccess": "$tokenName was successfully transferred to your preferred wallet",
-    "waitingForConfirmation": "Waiting for confirmation"
+    "waitingForConfirmation": "Waiting for confirmation",
+    "requirements": "Requirements",
+    "requirementDescription": "Fulfil all requirements below to claim"
 }

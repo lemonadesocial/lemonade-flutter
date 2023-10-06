@@ -12,5 +12,17 @@
   "deleteAccountDialog": "Are you 100% sure?",
   "deleteAccountDialogDesc": "Your account will be gone forever!",
   "deleteAccountDialogHint": "Type 'yes please' to confirm ...",
-  "deleteAccountConfirmText": "yes please"
+  "deleteAccountConfirmText": "yes please",
+  "community": "Community",
+  "crew": "Crew",
+  "tribe": "Tribe",
+  "friend": "Friends",
+  "follower": "Followers",
+  "following": "Following",
+  "searchCommunity": "Search community",
+  "empty": {
+    "friend": "You don't have any friend.",
+    "follower": "You don't have any follower.",
+    "following": "You haven't followed anyone yet."
+  }
 }
