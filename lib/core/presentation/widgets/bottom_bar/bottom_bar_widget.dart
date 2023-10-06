@@ -60,21 +60,13 @@ class BottomBarState extends State<BottomBar>
       shape: const CircularNotchedRectangle(),
       notchMargin: 6.w,
       child: ClipRect(
-        child: Column(
+        child: Row(
           children: [
-            SizedBox(height: 15.h),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _buildTabItem(context, tabs[0]),
-                _buildTabItem(context, tabs[1]),
-                SizedBox(width: 65.w),
-                _buildTabItem(context, tabs[2]),
-                _buildTabItem(context, tabs[3]),
-              ],
-            ),
-            SizedBox(height: 18.h),
+            _buildTabItem(context, tabs[0]),
+            _buildTabItem(context, tabs[1]),
+            Container(width: 65.w, height: BottomBar.bottomBarHeight, color: Colors.transparent),
+            _buildTabItem(context, tabs[2]),
+            _buildTabItem(context, tabs[3]),
           ],
         ),
       ),
@@ -91,6 +83,7 @@ class BottomBarState extends State<BottomBar>
           _handleTabTap(context, tabData);
         },
         child: Container(
+          height: BottomBar.bottomBarHeight,
           color: Colors.transparent,
           child: Stack(
             alignment: Alignment.center,
