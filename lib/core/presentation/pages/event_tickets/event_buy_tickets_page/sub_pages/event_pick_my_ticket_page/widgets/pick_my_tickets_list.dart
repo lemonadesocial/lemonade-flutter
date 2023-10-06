@@ -1,6 +1,6 @@
 import 'package:app/core/application/event_tickets/select_self_assign_ticket_bloc/select_self_assign_ticket_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
-import 'package:app/core/domain/event/entities/event_list_ticket_types.dart';
+import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/entities/event_ticket.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_pick_my_ticket_page/widgets/pick_ticket_item.dart';
 import 'package:app/theme/spacing.dart';

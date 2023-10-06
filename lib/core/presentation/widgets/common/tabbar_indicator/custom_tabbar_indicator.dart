@@ -14,8 +14,8 @@ class CustomTabIndicator extends Decoration {
   });
 
   @override
-  CustomPainter createBoxPainter([VoidCallback? onChanged]) {
-    return CustomPainter(
+  CustomTabIndicatorPainter createBoxPainter([VoidCallback? onChanged]) {
+    return CustomTabIndicatorPainter(
       this,
       onChanged,
       radius,
@@ -25,13 +25,13 @@ class CustomTabIndicator extends Decoration {
   }
 }
 
-class CustomPainter extends BoxPainter {
+class CustomTabIndicatorPainter extends BoxPainter {
   final CustomTabIndicator decoration;
   final double radius;
   final Color color;
   final double indicatorHeight;
 
-  CustomPainter(
+  CustomTabIndicatorPainter(
     this.decoration,
     VoidCallback? onChanged,
     this.radius,
