@@ -5,9 +5,11 @@ import 'package:app/core/presentation/widgets/poap/hot_badge_item/hot_badge_item
 import 'package:app/core/utils/location_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:auto_route/auto_route.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sliver_tools/sliver_tools.dart';
@@ -88,8 +90,13 @@ class _DiscoverBadgesNearYouView extends StatelessWidget {
                     child: ListView.separated(
                       padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
                       scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) => HotBadgeItem(
-                        badge: badges[index],
+                      itemBuilder: (context, index) => InkWell(
+                        onTap: () {
+                          AutoRouter.of(context).navigate(PoapListingRoute());
+                        },
+                        child: HotBadgeItem(
+                          badge: badges[index],
+                        ),
                       ),
                       separatorBuilder: (context, index) => SizedBox(
                         width: Spacing.xSmall,

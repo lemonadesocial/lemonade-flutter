@@ -1,5 +1,6 @@
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/widgets/event/event_dashboard_item.dart';
+import 'package:app/core/utils/modal_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -42,7 +43,7 @@ class GuestEventDetailDashboard extends StatelessWidget {
           icon: Assets.icons.icUserAddGradient.svg(),
           child: EventTotalJoinWidget(event: event),
           onTap: () {
-            // TODO: upcoming feature
+            showComingSoonDialog(context);
           },
         ),
         SizedBox(width: 10.w),
@@ -51,7 +52,7 @@ class GuestEventDetailDashboard extends StatelessWidget {
           icon: Assets.icons.icLeaderboardGradient.svg(),
           child: const SizedBox.shrink(),
           onTap: () {
-            // TODO: upcoming feature
+            showComingSoonDialog(context);
           },
         ),
       ],
