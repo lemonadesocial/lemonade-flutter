@@ -5,7 +5,6 @@ import 'package:app/core/presentation/widgets/common/dotted_line/dotted_line.dar
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/core/utils/date_format_utils.dart';
-import 'package:app/core/utils/map_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -155,6 +154,12 @@ class TicketCardBottom extends StatelessWidget {
     this.ticketType,
   });
 
+  String get eventDetailAddress {
+    return [event.address?.title, event.address?.city, event.address?.region]
+        .where((item) => item != null)
+        .join(', ');
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -236,15 +241,9 @@ class TicketCardBottom extends StatelessWidget {
                             style: labelTextStyle,
                           ),
                           SizedBox(height: 2.w),
-                          FutureBuilder(
-                            future: MapUtils.getLocationName(
-                              lat: event.latitude ?? 0,
-                              lng: event.longitude ?? 0,
-                            ),
-                            builder: (context, snapshot) => Text(
-                              snapshot.data ?? '',
-                              style: valueTextStyle,
-                            ),
+                          Text(
+                            eventDetailAddress,
+                            style: valueTextStyle,
                           )
                         ],
                       )

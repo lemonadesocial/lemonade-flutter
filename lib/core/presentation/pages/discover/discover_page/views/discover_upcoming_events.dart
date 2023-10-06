@@ -96,11 +96,12 @@ class _DiscoverEventsList extends StatelessWidget {
                 itemBuilder: (context, index) => InkWell(
                   onTap: () {
                     final eventItem = upcomingEvents[index];
-                    AutoRouter.of(context).navigate(
+                    AutoRouter.of(context).pushAll([
+                      const EventsListingRoute(),
                       GuestEventDetailRoute(
                         eventId: eventItem.id ?? '',
                       ),
-                    );
+                    ]);
                   },
                   child: EventDiscoverItem(
                     event: upcomingEvents[index],

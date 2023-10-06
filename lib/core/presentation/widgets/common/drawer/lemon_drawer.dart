@@ -72,9 +72,14 @@ class LemonDrawer extends StatelessWidget {
                 icon: Assets.icons.icTicket,
                 label: t.common.ticket(n: 2),
                 onPressed: () {
-                  AutoRouter.of(context).navigate(
-                    MyEventTicketsListRoute(),
-                  );
+                  context.read<AuthBloc>().state.maybeWhen(
+                        authenticated: (authSession) => context.router.push(
+                          MyEventTicketsListRoute(),
+                        ),
+                        orElse: () => context.router.navigate(
+                          const LoginRoute(),
+                        ),
+                      );
                 },
               ),
               DrawerItem(

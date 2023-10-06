@@ -7,9 +7,11 @@ import 'package:app/core/utils/event_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:duration/duration.dart';
 import 'package:duration/locale.dart';
@@ -73,6 +75,8 @@ class GuestEventDetailClock extends StatelessWidget {
               horizontal: Spacing.smMedium,
             ),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
               children: [
                 Container(
                   width: 42.w,
@@ -94,40 +98,52 @@ class GuestEventDetailClock extends StatelessWidget {
                   ),
                 ),
                 SizedBox(width: Spacing.small),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      event.title ?? '',
-                      style: Typo.small.copyWith(
-                        color: colorScheme.onSecondary,
+                Expanded(
+                  flex: 1,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        event.title ?? '',
+                        style: Typo.small.copyWith(
+                          color: colorScheme.onSecondary,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                    ),
-                    SizedBox(height: 3.w),
-                    Text(
-                      durationToEvent != null
-                          ? t.event.eventStartIn(
-                              time: printDuration(
-                                durationToEvent!,
-                                tersity: DurationTersity.minute,
-                                upperTersity: DurationTersity.day,
-                                abbreviated: true,
-                                spacer: '',
-                                delimiter: ' ',
-                                locale: CustomDurationLocale(),
-                              ),
-                            )
-                          : t.event.eventEnded,
-                      style: Typo.mediumPlus.copyWith(
-                        color: colorScheme.onPrimary,
-                        fontWeight: FontWeight.w800,
-                        fontFamily: FontFamily.nohemiVariable,
-                      ),
-                    )
-                  ],
+                      SizedBox(height: 3.w),
+                      Text(
+                        durationToEvent != null
+                            ? t.event.eventStartIn(
+                                time: printDuration(
+                                  durationToEvent!,
+                                  tersity: DurationTersity.minute,
+                                  upperTersity: DurationTersity.day,
+                                  abbreviated: true,
+                                  spacer: '',
+                                  delimiter: ' ',
+                                  locale: CustomDurationLocale(),
+                                ),
+                              )
+                            : t.event.eventEnded,
+                        style: Typo.mediumPlus.copyWith(
+                          color: colorScheme.onPrimary,
+                          fontWeight: FontWeight.w800,
+                          fontFamily: FontFamily.nohemiVariable,
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-                const Spacer(),
+                SizedBox(width: Spacing.small),
                 InkWell(
+                  onTap: () {
+                    AutoRouter.of(context).navigate(
+                      MyEventTicketRoute(
+                        event: event,
+                      ),
+                    );
+                  },
                   child: Container(
                     width: Sizing.medium,
                     height: Sizing.medium,

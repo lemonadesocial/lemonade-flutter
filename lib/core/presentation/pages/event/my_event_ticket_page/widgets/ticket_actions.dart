@@ -77,11 +77,13 @@ class EventTicketActions extends StatelessWidget {
         ),
         if (eventPayment != null)
           ActionItem(
+            onPressed: () {
+              showComingSoonDialog(context);
+            },
             label: t.common.actions.assign,
             backgroundColor: LemonColor.lavender18,
             icon: ThemeSvgIcon(
               color: LemonColor.lavender,
-              // color: Colors.red,
               builder: (filter) => Assets.icons.icTicket.svg(
                 colorFilter: filter,
                 width: 27.w,
