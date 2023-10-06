@@ -139,6 +139,7 @@ class _NotificationsListingViewState extends State<_NotificationsListingView> {
                   );
                 }
                 return AnimatedList(
+                  // Add more space at bottom of screen
                   padding: EdgeInsets.only(bottom: 150.h),
                   key: _notificationList,
                   itemBuilder: (ctx, index, animation) =>
