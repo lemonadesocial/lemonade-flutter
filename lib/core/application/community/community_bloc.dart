@@ -71,7 +71,7 @@ class CommunityBloc extends Cubit<CommunityState> {
       (receiveList) => emit(
         state.copyWith(
           status: CommunityStatus.loaded,
-          followerList: receiveList,
+          followeeList: receiveList,
         ),
       ),
     );

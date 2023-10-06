@@ -5,6 +5,7 @@ import 'package:app/core/presentation/pages/community/widgets/community_follower
 import 'package:app/core/presentation/pages/community/widgets/community_friend_view.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/tabbar_indicator/custom_tabbar_indicator.dart';
+import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/theme/color.dart';
@@ -22,9 +23,12 @@ class CommunityPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-
+    final userId = AuthUtils.getUserId(context);
     return BlocProvider(
-      create: (context) => CommunityBloc(getIt<CommunityRepository>()),
+      create: (context) => CommunityBloc(getIt<CommunityRepository>())
+        ..getListFriend(userId)
+        ..getListFollower(userId)
+        ..getListFollowee(userId),
       child: DefaultTabController(
         initialIndex: 0,
         length: 3,
@@ -52,14 +56,15 @@ class CommunityPage extends StatelessWidget {
                   Tab(text: t.setting.following),
                 ],
               ),
-              Expanded(
-                  child: TabBarView(
-                children: [
-                  CommunityFriendView(),
-                  CommunityFollowerView(),
-                  CommunityFolloweeView(),
-                ],
-              )),
+              const Expanded(
+                child: TabBarView(
+                  children: [
+                    CommunityFriendView(),
+                    CommunityFollowerView(),
+                    CommunityFolloweeView(),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
