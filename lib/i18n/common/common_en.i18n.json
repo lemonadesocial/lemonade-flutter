@@ -35,7 +35,9 @@
         "qrCode": "QR code",
         "mail": "mail",
         "invite": "invite",
-        "assign": "assign"
+        "assign": "assign",
+        "dismiss": "Dismiss",
+        "refresh": "Refresh"
     },
     "followed": "Followed",
     "anonymous": "anonymous",

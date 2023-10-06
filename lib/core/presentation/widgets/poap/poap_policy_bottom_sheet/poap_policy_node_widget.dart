@@ -1,13 +1,14 @@
 import 'package:app/core/domain/poap/entities/poap_entities.dart';
 import 'package:app/core/domain/poap/poap_enums.dart';
-import 'package:app/core/presentation/widgets/poap/poap_policy_popup/nodes/poap_policy_email_node_widget.dart';
-import 'package:app/core/presentation/widgets/poap/poap_policy_popup/nodes/poap_policy_event_node_widget.dart';
-import 'package:app/core/presentation/widgets/poap/poap_policy_popup/nodes/poap_policy_location_node_widget.dart';
-import 'package:app/core/presentation/widgets/poap/poap_policy_popup/nodes/poap_policy_phone_node_widget.dart';
-import 'package:app/core/presentation/widgets/poap/poap_policy_popup/nodes/poap_policy_twitter_node_widget.dart';
-import 'package:app/core/presentation/widgets/poap/poap_policy_popup/nodes/poap_policy_user_node_widget.dart';
+import 'package:app/core/presentation/widgets/poap/poap_policy_bottom_sheet/nodes/poap_policy_email_node_widget.dart';
+import 'package:app/core/presentation/widgets/poap/poap_policy_bottom_sheet/nodes/poap_policy_event_node_widget.dart';
+import 'package:app/core/presentation/widgets/poap/poap_policy_bottom_sheet/nodes/poap_policy_location_node_widget.dart';
+import 'package:app/core/presentation/widgets/poap/poap_policy_bottom_sheet/nodes/poap_policy_phone_node_widget.dart';
+import 'package:app/core/presentation/widgets/poap/poap_policy_bottom_sheet/nodes/poap_policy_twitter_node_widget.dart';
+import 'package:app/core/presentation/widgets/poap/poap_policy_bottom_sheet/nodes/poap_policy_user_node_widget.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PoapPolicyNodeWidget extends StatelessWidget {
   const PoapPolicyNodeWidget({
@@ -61,8 +62,10 @@ class PoapPolicyNodeWidget extends StatelessWidget {
               );
             }
             return Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 _NodeContainer(
+                  result: result,
                   wrap: false,
                   child: PoapPolicyNodeWidget(node: nodeItem),
                 ),
@@ -78,6 +81,7 @@ class PoapPolicyNodeWidget extends StatelessWidget {
 
       if (node!.value == PoapNodeValueType.or.value) {
         return _NodeContainer(
+          result: result,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
@@ -111,6 +115,7 @@ class PoapPolicyNodeWidget extends StatelessWidget {
     if (node!.value == PoapNodeValueType.userGeolocation.value &&
         !isNodeChildrenEmpty) {
       return _NodeContainer(
+        result: result,
         wrap: wrap,
         child: PoapPolicyLocationNodeWidget(node: node!, result: result),
       );
@@ -119,6 +124,7 @@ class PoapPolicyNodeWidget extends StatelessWidget {
     if (node!.value == PoapNodeValueType.eventAccess.value &&
         !isNodeChildrenEmpty) {
       return _NodeContainer(
+        result: result,
         wrap: wrap,
         child: PoapPolicyEventNodeWidget(node: node!, result: result),
       );
@@ -127,6 +133,7 @@ class PoapPolicyNodeWidget extends StatelessWidget {
     if (node!.value == PoapNodeValueType.twitterFollow.value &&
         !isNodeChildrenEmpty) {
       return _NodeContainer(
+        result: result,
         wrap: wrap,
         child: PoapPolicyTwitterNodeWidget(node: node!, result: result),
       );
@@ -135,6 +142,7 @@ class PoapPolicyNodeWidget extends StatelessWidget {
     if (node!.value == PoapNodeValueType.userFollow.value &&
         !isNodeChildrenEmpty) {
       return _NodeContainer(
+        result: result,
         wrap: wrap,
         child: PoapPolicyUserNodeWidget(node: node!, result: result),
       );
@@ -143,6 +151,7 @@ class PoapPolicyNodeWidget extends StatelessWidget {
     if (node!.value == PoapNodeValueType.userEmailVerified.value) {
       return _NodeContainer(
         wrap: wrap,
+        result: result,
         child: PoapPolicyEmailNodeWidget(node: node!, result: result),
       );
     }
@@ -150,6 +159,7 @@ class PoapPolicyNodeWidget extends StatelessWidget {
     if (node!.value == PoapNodeValueType.userPhoneVerified.value) {
       return _NodeContainer(
         wrap: wrap,
+        result: result,
         child: PoapPolicyPhoneNodeWidget(node: node!, result: result),
       );
     }
@@ -161,11 +171,13 @@ class PoapPolicyNodeWidget extends StatelessWidget {
 class _NodeContainer extends StatelessWidget {
   const _NodeContainer({
     required this.child,
+    required this.result,
     // ignore: unused_element
     this.wrap = true,
   });
 
   final Widget child;
+  final bool result;
   final bool wrap;
 
   @override
@@ -185,10 +197,13 @@ class _NodeContainer extends StatelessWidget {
           decoration: !wrap
               ? null
               : ShapeDecoration(
+                  color: result
+                      ? Colors.transparent
+                      : colorScheme.onPrimary.withOpacity(0.06),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
+                    borderRadius: BorderRadius.circular(15.r),
                     side: BorderSide(
-                      color: colorScheme.outline,
+                      color: result ? colorScheme.outline : Colors.transparent,
                     ),
                   ),
                 ),

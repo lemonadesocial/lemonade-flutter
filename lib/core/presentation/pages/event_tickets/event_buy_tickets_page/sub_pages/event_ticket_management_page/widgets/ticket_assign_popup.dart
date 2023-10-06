@@ -5,6 +5,7 @@ import 'package:app/core/domain/event/entities/event_ticket.dart';
 import 'package:app/core/domain/event/input/assign_tickets_input/assign_tickets_input.dart';
 import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
+import 'package:app/core/presentation/widgets/common/dialog/lemon_alert_dialog.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
@@ -94,8 +95,8 @@ class _TicketAssignPopupViewState extends State<TicketAssignPopupView> {
             showDialog(
               barrierDismissible: true,
               context: context,
-              builder: (context) => AlertDialog(
-                content: Text(message),
+              builder: (context) => LemonAlertDialog(
+                child: Text(message),
               ),
             );
           },
