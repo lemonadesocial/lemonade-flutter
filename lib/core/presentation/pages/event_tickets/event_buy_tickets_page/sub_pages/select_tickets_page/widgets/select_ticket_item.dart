@@ -1,7 +1,7 @@
 import 'package:app/core/application/event/event_provider_bloc/event_provider_bloc.dart';
 import 'package:app/core/application/event_tickets/select_event_tickets_bloc/select_event_tickets_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
-import 'package:app/core/domain/event/entities/event_list_ticket_types.dart';
+import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/input/calculate_tickets_pricing_input/calculate_tickets_pricing_input.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';

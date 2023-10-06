@@ -1,4 +1,4 @@
-import 'package:app/core/domain/event/entities/event_list_ticket_types.dart';
+import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/entities/event_ticket.dart';
 import 'package:collection/collection.dart';
 

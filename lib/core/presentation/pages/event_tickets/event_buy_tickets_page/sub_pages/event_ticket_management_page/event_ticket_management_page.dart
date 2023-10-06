@@ -1,8 +1,8 @@
 import 'package:app/core/application/event/event_provider_bloc/event_provider_bloc.dart';
-import 'package:app/core/application/event_tickets/get_event_list_ticket_types_bloc/get_event_list_ticket_types_bloc.dart';
+import 'package:app/core/application/event_tickets/get_event_ticket_types_bloc/get_event_ticket_types_bloc.dart';
 import 'package:app/core/application/event_tickets/get_my_tickets_bloc/get_my_tickets_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
-import 'package:app/core/domain/event/entities/event_list_ticket_types.dart';
+import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/entities/event_ticket.dart';
 import 'package:app/core/domain/event/input/get_tickets_input/get_tickets_input.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_ticket_management_page/widgets/my_ticket_card.dart';
@@ -89,15 +89,14 @@ class EventTicketManagementView extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       backgroundColor: colorScheme.background,
       appBar: const LemonAppBar(),
-      body: BlocBuilder<GetEventListTicketTypesResponseBloc,
-          GetEventListTicketTypesResponseState>(
+      body: BlocBuilder<GetEventTicketTypesBloc, GetEventTicketTypesState>(
         builder: (context, state) {
           return state.when(
             loading: () => Loading.defaultLoading(context),
             failure: () => EmptyList(
               emptyText: t.common.somethingWrong,
             ),
-            success: (eventListTicketTypesResponse) {
+            success: (eventTicketTypesResponse) {
               return BlocBuilder<GetMyTicketsBloc, GetMyTicketsState>(
                 builder: (context, state) => state.when(
                   loading: () => Loading.defaultLoading(context),
@@ -115,7 +114,7 @@ class EventTicketManagementView extends StatelessWidget {
                     );
                     final myAssignedTicketType =
                         EventTicketUtils.getTicketTypeById(
-                      eventListTicketTypesResponse.ticketTypes ?? [],
+                      eventTicketTypesResponse.ticketTypes ?? [],
                       ticketTypeId: myAssignedTicket.type ?? '',
                     );
 
@@ -184,8 +183,7 @@ class EventTicketManagementView extends StatelessWidget {
                               TicketAssignmentList(
                                 controller: this,
                                 ticketTypes:
-                                    eventListTicketTypesResponse.ticketTypes ??
-                                        [],
+                                    eventTicketTypesResponse.ticketTypes ?? [],
                                 eventTickets: otherTickets,
                                 event: event,
                               ),
