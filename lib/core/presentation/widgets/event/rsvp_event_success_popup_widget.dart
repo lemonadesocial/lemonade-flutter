@@ -1,8 +1,8 @@
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_rsvp.dart';
 import 'package:app/core/presentation/widgets/animation/ripple_animation.dart';
-import 'package:app/core/presentation/widgets/coming_soon_modal.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
+import 'package:app/core/utils/modal_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -93,14 +93,7 @@ class RSVPEventSuccessPopupPage extends StatelessWidget {
               left: 0,
               right: 0,
               child: InkWell(
-                onTap: () => showDialog(
-                  context: context,
-                  builder: (context) => ComingSoonModal(
-                    onClose: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ),
+                onTap: () => showComingSoonDialog(context),
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
                   child: Row(
