@@ -58,8 +58,14 @@ class LemonDrawer extends StatelessWidget {
                 icon: Assets.icons.icPeopleAlt,
                 label: t.common.community,
                 onPressed: () {
-                  Vibrate.feedback(FeedbackType.light);
-                  showComingSoonDialog(context);
+                  context.router.pop();
+                  context.read<AuthBloc>().state.maybeWhen(
+                        authenticated: (authSession) =>
+                            context.router.push(const CommunityRoute()),
+                        orElse: () => context.router.navigate(
+                          const LoginRoute(),
+                        ),
+                      );
                 },
               ),
               DrawerItem(

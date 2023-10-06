@@ -12,6 +12,7 @@ class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.backgroundColor,
     this.padding,
     this.hideLeading,
+    this.bottom,
   }) : super(key: key);
 
   final Widget? leading;
@@ -21,6 +22,7 @@ class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Color? backgroundColor;
   final EdgeInsets? padding;
   final bool? hideLeading;
+  final PreferredSizeWidget? bottom;
 
   @override
   Size get preferredSize => Size.fromHeight(60.w);
@@ -39,6 +41,7 @@ class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: true,
       elevation: 0,
       toolbarHeight: preferredSize.height,
+      bottom: bottom,
     );
   }
 

@@ -16,9 +16,11 @@ class LemonTextField extends StatelessWidget {
     this.statusWidget,
     this.label,
     this.suffixIcon,
+    this.leadingIcon,
     this.autofocus = false,
     this.inputFormatters,
     this.controller,
+    this.contentPadding,
   }) : super(key: key);
 
   final ValueChanged<String> onChange;
@@ -30,9 +32,11 @@ class LemonTextField extends StatelessWidget {
   final Widget? statusWidget;
   final String? label;
   final Widget? suffixIcon;
+  final Widget? leadingIcon;
   final bool autofocus;
   final List<TextInputFormatter>? inputFormatters;
   final TextEditingController? controller;
+  final EdgeInsets? contentPadding;
 
   @override
   Widget build(BuildContext context) {
@@ -73,8 +77,9 @@ class LemonTextField extends StatelessWidget {
             focusedBorder: border,
             errorBorder: border,
             border: border,
-            contentPadding: EdgeInsets.all(Spacing.smMedium),
+            contentPadding: contentPadding ?? EdgeInsets.all(Spacing.smMedium),
             suffixIcon: suffixIcon,
+            prefixIcon: leadingIcon,
           ),
           inputFormatters: inputFormatters,
         ),

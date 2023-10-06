@@ -1,3 +1,4 @@
+import 'package:app/core/presentation/pages/community/community_page.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:auto_route/auto_route.dart';
 
@@ -72,6 +73,7 @@ class AppRouter extends $AppRouter {
         AutoRoute(page: CreatePopUpRoute.page),
         AutoRoute(page: SettingRoute.page),
         AutoRoute(page: NotificationSettingRoute.page),
+        AutoRoute(page: CommunityRoute.page),
         chatRoutes,
         ...eventRoutes,
         eventBuyTicketsRoutes,

@@ -43,8 +43,12 @@ class OnboardingAboutPage extends StatelessWidget {
               Row(
                 children: [
                   InkWell(
-                    onTap: () => context.router
-                        .push(const RootRoute(children: [HomeRoute()])),
+                    onTap: () {
+                      context
+                          .read<AuthBloc>()
+                          .add(const AuthEvent.authenticated());
+                      context.router.replaceAll([const RootRoute()]);
+                    },
                     child: Text(
                       t.onboarding.skip,
                       style: Typo.medium.copyWith(fontWeight: FontWeight.w400),

@@ -72,7 +72,7 @@ class EventTicketActions extends StatelessWidget {
             showDialog(
               context: context,
               builder: (context) => const TicketQRCodePopup(),
-            )
+            ),
           },
         ),
         if (eventPayment != null)
