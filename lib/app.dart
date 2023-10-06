@@ -78,7 +78,8 @@ class _LemonadeAppViewState extends State<LemonadeApp> {
 
   Future<void> setupInteractedMessage() async {
     if (kDebugMode) {
-      print('setupInteractedMessage');
+      print('Not start setupInteractedMessage');
+      return;
     }
     final initialMessage = await FirebaseMessaging.instance.getInitialMessage();
     if (initialMessage != null) {
