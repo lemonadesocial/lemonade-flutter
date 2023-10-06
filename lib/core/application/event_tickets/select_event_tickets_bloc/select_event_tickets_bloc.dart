@@ -1,4 +1,4 @@
-import 'package:app/core/domain/event/entities/event_list_ticket_types.dart';
+import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/input/calculate_tickets_pricing_input/calculate_tickets_pricing_input.dart';
 import 'package:app/core/utils/list/unique_list_extension.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,7 +8,7 @@ part 'select_event_tickets_bloc.freezed.dart';
 
 class SelectEventTicketTypesBloc
     extends Bloc<SelectEventTicketTypesEvent, SelectEventTicketTypesState> {
-  EventListTicketTypesResponse? listTicketTypesResponse;
+  EventTicketTypesResponse? eventTicketTypesResponse;
   double totalSelectedCount = 0;
 
   SelectEventTicketTypesBloc()
@@ -19,7 +19,7 @@ class SelectEventTicketTypesBloc
           ),
         ) {
     on<SelectEventTicketTypesEventOnListTicketTypesLoaded>((event, emit) {
-      listTicketTypesResponse = event.listTicketTypesResponse;
+      eventTicketTypesResponse = event.eventTicketTypesResponse;
     });
     on<SelectEventTicketTypesEventOnSelectTicketType>(_onSelectTicketType);
   }
@@ -51,15 +51,15 @@ class SelectEventTicketTypesBloc
   }
 
   bool _validateTotalSelectedCount() {
-    return totalSelectedCount <= (listTicketTypesResponse?.limit ?? 1) &&
+    return totalSelectedCount <= (eventTicketTypesResponse?.limit ?? 1) &&
         totalSelectedCount > 0;
   }
 }
 
 @freezed
 class SelectEventTicketTypesEvent with _$SelectEventTicketTypesEvent {
-  factory SelectEventTicketTypesEvent.onEventListTicketTypesResponseLoaded({
-    required EventListTicketTypesResponse listTicketTypesResponse,
+  factory SelectEventTicketTypesEvent.onEventTicketTypesResponseLoaded({
+    required EventTicketTypesResponse eventTicketTypesResponse,
   }) = SelectEventTicketTypesEventOnListTicketTypesLoaded;
 
   factory SelectEventTicketTypesEvent.select({

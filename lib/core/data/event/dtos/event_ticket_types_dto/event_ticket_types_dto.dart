@@ -1,19 +1,19 @@
 import 'package:app/core/data/event/dtos/event_dtos.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'event_list_ticket_types_dto.freezed.dart';
-part 'event_list_ticket_types_dto.g.dart';
+part 'event_ticket_types_dto.freezed.dart';
+part 'event_ticket_types_dto.g.dart';
 
 @freezed
-class EventListTicketTypesResponseDto with _$EventListTicketTypesResponseDto {
-  factory EventListTicketTypesResponseDto({
+class EventTicketTypesResponseDto with _$EventTicketTypesResponseDto {
+  factory EventTicketTypesResponseDto({
     TicketDiscountDto? discount,
     int? limit,
     @JsonKey(name: 'ticket_types') List<PurchasableTicketTypeDto>? ticketTypes,
-  }) = _EventListTicketTypesResponseDto;
+  }) = _EventTicketTypesResponseDto;
 
-  factory EventListTicketTypesResponseDto.fromJson(Map<String, dynamic> json) =>
-      _$EventListTicketTypesResponseDtoFromJson(json);
+  factory EventTicketTypesResponseDto.fromJson(Map<String, dynamic> json) =>
+      _$EventTicketTypesResponseDtoFromJson(json);
 }
 
 @freezed

@@ -12,9 +12,6 @@ final acceptEventMutation = gql('''
         currency
         provider
       }
-      reservation {
-        active
-      }
       state
     }
 }
