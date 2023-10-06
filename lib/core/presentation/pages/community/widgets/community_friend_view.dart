@@ -1,4 +1,5 @@
-import 'package:app/core/presentation/widgets/common/searchbar/lemon_search_bar_widget.dart';
+import 'package:app/core/application/auth/auth_bloc.dart';
+import 'package:app/core/application/community/community_bloc.dart';
 import 'package:app/core/presentation/widgets/discover/discover_card.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
@@ -6,6 +7,7 @@ import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CommunityFriendView extends StatelessWidget {
@@ -15,6 +17,11 @@ class CommunityFriendView extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+    final userId = context.read<AuthBloc>().state.maybeWhen(
+          authenticated: (authSession) => authSession.userId,
+          orElse: () => null,
+        );
+    context.read<CommunityBloc>().getListFriend(userId!);
     return SingleChildScrollView(
       child: Padding(
         padding: EdgeInsets.all(Spacing.xSmall),

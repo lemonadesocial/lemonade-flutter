@@ -55,7 +55,7 @@ fragment OtherExpanded on User {
 
 ''');
 
-final getUserFollower = gql('''
+final getUserFollowee = gql('''
   $baseUserFragment
 
   query (\$follower: MongoID, \$followee_search: String) {
@@ -71,7 +71,7 @@ final getUserFollower = gql('''
   }
 ''');
 
-final getUserFollowee = gql('''
+final getUserFollower = gql('''
    $baseUserFragment
   
   query (\$followee: MongoID, \$follower_search: String, \$limit: Int, \$skip: Int) {

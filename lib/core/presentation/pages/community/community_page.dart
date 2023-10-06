@@ -1,13 +1,17 @@
+import 'package:app/core/application/community/community_bloc.dart';
+import 'package:app/core/domain/community/community_repository.dart';
+import 'package:app/core/presentation/pages/community/widgets/community_followee_view.dart';
+import 'package:app/core/presentation/pages/community/widgets/community_follower_view.dart';
 import 'package:app/core/presentation/pages/community/widgets/community_friend_view.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/tabbar_indicator/custom_tabbar_indicator.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:app/theme/color.dart';
-import 'package:app/theme/spacing.dart';
-import 'package:app/theme/theme.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 @RoutePage()
@@ -18,10 +22,11 @@ class CommunityPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-    return MaterialApp(
-      theme: lemonadeAppDarkThemeData,
-      home: DefaultTabController(
-        initialIndex: 1,
+
+    return BlocProvider(
+      create: (context) => CommunityBloc(getIt<CommunityRepository>()),
+      child: DefaultTabController(
+        initialIndex: 0,
         length: 3,
         child: Scaffold(
           backgroundColor: colorScheme.primary,
@@ -51,8 +56,8 @@ class CommunityPage extends StatelessWidget {
                   child: TabBarView(
                 children: [
                   CommunityFriendView(),
-                  CommunityFriendView(),
-                  CommunityFriendView(),
+                  CommunityFollowerView(),
+                  CommunityFolloweeView(),
                 ],
               )),
             ],
