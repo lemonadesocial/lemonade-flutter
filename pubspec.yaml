@@ -156,6 +156,7 @@ flutter:
     - .env
     - .env.staging
     - .env.production
+    - shorebird.yaml
 
   fonts:
     - family: CircularStd
