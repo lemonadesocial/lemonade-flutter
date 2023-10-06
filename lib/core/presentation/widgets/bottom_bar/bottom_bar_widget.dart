@@ -64,7 +64,11 @@ class BottomBarState extends State<BottomBar>
           children: [
             _buildTabItem(context, tabs[0]),
             _buildTabItem(context, tabs[1]),
-            Container(width: 65.w, height: BottomBar.bottomBarHeight, color: Colors.transparent),
+            Container(
+              width: 65.w,
+              height: BottomBar.bottomBarHeight,
+              color: Colors.transparent,
+            ),
             _buildTabItem(context, tabs[2]),
             _buildTabItem(context, tabs[3]),
           ],
