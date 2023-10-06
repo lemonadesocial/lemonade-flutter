@@ -18,6 +18,8 @@ class AppConfig {
   static get walletUrl => dotenv.env['WALLET_URL'];
   static get wssWalletUrl => dotenv.env['WSS_WALLET_URL'];
 
+  static get isProduction => dotenv.env['ENV'] == 'production';
+
   // Social
   static get twitterUrl => 'https://twitter.com';
   static get instagramUrl => 'https://www.instagram.com';
@@ -29,8 +31,6 @@ class AppConfig {
 
   // Matrix
   static get matrixHomeserver => dotenv.env['MATRIX_HOMESERVER'];
-
-  static get isProduction => dotenv.env['ENV'] == 'PROD';
 
   // Legacy api
   static get legacyApi => dotenv.env['LMD_API_LEGACY'];

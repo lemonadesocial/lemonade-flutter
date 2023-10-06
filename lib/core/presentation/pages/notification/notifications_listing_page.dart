@@ -19,6 +19,7 @@ import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 @RoutePage()
@@ -94,7 +95,7 @@ class _NotificationsListingViewState extends State<_NotificationsListingView> {
     final themeColor = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: LemonAppBar(
-        title: t.home.newsfeed,
+        title: t.notification.notifications,
         leading: InkWell(
           onTap: () => DrawerUtils.openDrawer(),
           child: Icon(
@@ -138,6 +139,8 @@ class _NotificationsListingViewState extends State<_NotificationsListingView> {
                   );
                 }
                 return AnimatedList(
+                  // Add more space at bottom of screen
+                  padding: EdgeInsets.only(bottom: 150.h),
                   key: _notificationList,
                   itemBuilder: (ctx, index, animation) =>
                       index == notifications.length

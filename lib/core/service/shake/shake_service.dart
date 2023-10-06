@@ -16,6 +16,10 @@ class ShakeService {
   ShakeDetector? _detector;
 
   void startShakeDetection(BuildContext context) {
+    // Not allow in production build
+    if (AppConfig.isProduction) {
+      return;
+    }
     _detector ??= ShakeDetector.autoStart(
       onPhoneShake: () {
         if (!_isDialogShowing) {
