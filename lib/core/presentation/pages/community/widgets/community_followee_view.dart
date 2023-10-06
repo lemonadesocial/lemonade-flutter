@@ -1,5 +1,6 @@
 import 'package:app/core/application/community/community_bloc.dart';
 import 'package:app/core/presentation/pages/community/widgets/community_user_tile.dart';
+import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
@@ -49,14 +50,20 @@ class CommunityFolloweeView extends StatelessWidget {
                   case CommunityStatus.loading:
                     return Loading.defaultLoading(context);
                   case CommunityStatus.loaded:
-                    return ListView.separated(
-                      itemCount: state.followeeList.length,
-                      itemBuilder: (context, index) => CommunityUserTile(
-                        user: state.followeeList[index],
-                      ),
-                      separatorBuilder: (_, __) =>
-                          SizedBox(height: Spacing.superExtraSmall),
-                    );
+                    return state.followeeList.isEmpty
+                        ? Center(
+                            child: EmptyList(
+                              emptyText: t.setting.empty.following,
+                            ),
+                          )
+                        : ListView.separated(
+                            itemCount: state.followeeList.length,
+                            itemBuilder: (context, index) => CommunityUserTile(
+                              user: state.followeeList[index],
+                            ),
+                            separatorBuilder: (_, __) =>
+                                SizedBox(height: Spacing.superExtraSmall),
+                          );
                   default:
                     return Center(
                       child: Text(t.common.somethingWrong),

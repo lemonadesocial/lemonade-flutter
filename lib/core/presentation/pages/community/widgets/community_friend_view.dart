@@ -1,5 +1,6 @@
 import 'package:app/core/application/community/community_bloc.dart';
 import 'package:app/core/presentation/pages/community/widgets/community_user_tile.dart';
+import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/discover/discover_card.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
@@ -91,14 +92,23 @@ class CommunityFriendView extends StatelessWidget {
                         SliverToBoxAdapter(
                           child: SizedBox(height: Spacing.superExtraSmall),
                         ),
-                        SliverList.separated(
-                          itemCount: state.friendList.length,
-                          itemBuilder: (context, index) => CommunityUserTile(
-                            user: state.friendList[index],
-                          ),
-                          separatorBuilder: (_, __) =>
-                              SizedBox(height: Spacing.superExtraSmall),
-                        ),
+                        state.friendList.isEmpty
+                            ? SliverToBoxAdapter(
+                                child: Center(
+                                  child: EmptyList(
+                                    emptyText: t.setting.empty.friend,
+                                  ),
+                                ),
+                              )
+                            : SliverList.separated(
+                                itemCount: state.friendList.length,
+                                itemBuilder: (context, index) =>
+                                    CommunityUserTile(
+                                  user: state.friendList[index],
+                                ),
+                                separatorBuilder: (_, __) =>
+                                    SizedBox(height: Spacing.superExtraSmall),
+                              ),
                       ],
                     );
                   default:

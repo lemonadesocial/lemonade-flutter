@@ -19,5 +19,10 @@
   "friend": "Friends",
   "follower": "Followers",
   "following": "Following",
-  "searchCommunity": "Search community"
+  "searchCommunity": "Search community",
+  "empty": {
+    "friend": "You don't have any friend.",
+    "follower": "You don't have any follower.",
+    "following": "You haven't followed anyone yet."
+  }
 }
