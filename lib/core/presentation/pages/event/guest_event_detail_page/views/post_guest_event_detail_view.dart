@@ -49,22 +49,25 @@ class PostGuestEventDetailView extends StatelessWidget {
                       title: event.title ?? '',
                       leading: LemonBackButton(color: colorScheme.onPrimary),
                       actions: [
-                        InkWell(
-                          onTap: () {
-                            Share.share(
-                              '${AppConfig.webUrl}/event/${event.id}',
-                            );
-                          },
-                          child: SizedBox(
-                            height: Sizing.small,
-                            width: Sizing.small,
-                            child: ThemeSvgIcon(
-                              color: colorScheme.onPrimary,
-                              builder: (filter) =>
-                                  Assets.icons.icShare.svg(colorFilter: filter),
+                        Padding(
+                          padding: EdgeInsets.only(right: Spacing.xSmall),
+                          child: InkWell(
+                            onTap: () {
+                              Share.share(
+                                '${AppConfig.webUrl}/event/${event.id}',
+                              );
+                            },
+                            child: SizedBox(
+                              height: Sizing.small,
+                              width: Sizing.small,
+                              child: ThemeSvgIcon(
+                                color: colorScheme.onPrimary,
+                                builder: (filter) => Assets.icons.icShare
+                                    .svg(colorFilter: filter),
+                              ),
                             ),
                           ),
-                        )
+                        ),
                       ],
                     ),
                   ),
