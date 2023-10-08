@@ -68,10 +68,16 @@ class RootPage extends StatelessWidget {
               ],
               drawer: const LemonDrawer(),
               floatingActionButton: FloatingCreateButton(
-                onTap: () => const CreatePopUpPage().showAsBottomSheet(
-                  context,
-                  heightFactor: 0.82,
-                ),
+                onTap: () {
+                  authState.maybeWhen(
+                    authenticated: (session) =>
+                        const CreatePopUpPage().showAsBottomSheet(
+                      context,
+                      heightFactor: 0.82,
+                    ),
+                    orElse: () => context.router.navigate(const LoginRoute()),
+                  );
+                },
               ),
               floatingActionButtonLocation:
                   FloatingActionButtonLocation.centerDocked,
