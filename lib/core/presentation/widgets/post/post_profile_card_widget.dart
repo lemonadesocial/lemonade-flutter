@@ -173,17 +173,23 @@ class PostProfileCard extends StatelessWidget {
       padding: EdgeInsets.only(top: Spacing.xSmall),
       child: Row(
         children: [
-          Row(
-            children: [
-              svgIcon,
-              const SizedBox(width: 3),
-              Text(
-                reactions != null ? '$reactions' : '',
-                style: Typo.small.copyWith(
-                  color: colorScheme.onSecondary,
+          GestureDetector(
+            behavior: HitTestBehavior.translucent,
+            onTap: () {
+              showComingSoonDialog(context);
+            },
+            child: Row(
+              children: [
+                svgIcon,
+                const SizedBox(width: 3),
+                Text(
+                  reactions != null ? '$reactions' : '',
+                  style: Typo.small.copyWith(
+                    color: colorScheme.onSecondary,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           SizedBox(width: Spacing.xSmall),
           GestureDetector(
