@@ -16,11 +16,13 @@ void main() async {
 
   // Get the current patch version, or null if no patch is installed.
   final currentPatchversion = await shorebirdCodePush.currentPatchNumber();
+  // ignore: avoid_print
   print("currentPatchversion : $currentPatchversion");
 
   // Check whether a patch is available to install.
   final isUpdateAvailable =
       await shorebirdCodePush.isNewPatchAvailableForDownload();
+  // ignore: avoid_print
   print("isUpdateAvailable : $isUpdateAvailable");
 
   // Download a new patch.
