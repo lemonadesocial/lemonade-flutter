@@ -163,9 +163,15 @@ class _MyEventTicketsListViewState extends State<MyEventTicketsListView> {
                 failure: () => EmptyList(
                   emptyText: t.common.somethingWrong,
                 ),
-                success: (data) => EventPaymentListView(
-                  eventPaymentsList: data,
-                ),
+                success: (data) => data.isEmpty
+                    ? Center(
+                        child: EmptyList(
+                          emptyText: t.event.empty.tickets,
+                        ),
+                      )
+                    : EventPaymentListView(
+                        eventPaymentsList: data,
+                      ),
               ),
             ),
           if (selectedTicketPageMode == TicketPageMode.reservations &&
@@ -176,9 +182,15 @@ class _MyEventTicketsListViewState extends State<MyEventTicketsListView> {
                 failure: () => EmptyList(
                   emptyText: t.common.somethingWrong,
                 ),
-                fetched: (eventsList, _) => EventReservationsListView(
-                  eventsList: eventsList,
-                ),
+                fetched: (eventsList, _) => eventsList.isEmpty
+                    ? Center(
+                        child: EmptyList(
+                          emptyText: t.event.empty.reservations,
+                        ),
+                      )
+                    : EventReservationsListView(
+                        eventsList: eventsList,
+                      ),
               ),
             ),
           if (selectedTicketPageMode == TicketPageMode.reservations &&

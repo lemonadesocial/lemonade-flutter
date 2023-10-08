@@ -82,5 +82,9 @@
         "other": "reservations"
     },
     "remaining": "remaining",
-    "summary": "summary"
+    "summary": "summary",
+    "empty": {
+        "tickets": "You don't have any tickets.",
+        "reservations": "You don't have any reservations."
+    }
 }
