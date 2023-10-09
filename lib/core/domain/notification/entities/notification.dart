@@ -9,6 +9,10 @@ class Notification {
   DateTime? createdAt;
   String? from;
   bool? isSeen;
+  String? refEvent;
+  String? refRoom;
+  String? refStoreOrder;
+  String? refUser;
 
   Notification({
     this.id,
@@ -18,6 +22,10 @@ class Notification {
     this.createdAt,
     this.from,
     this.isSeen,
+    this.refEvent,
+    this.refRoom,
+    this.refStoreOrder,
+    this.refUser,
   });
 
   static Notification fromDto(NotificationDto dto) {
@@ -30,6 +38,10 @@ class Notification {
       createdAt: dto.createdAt,
       from: dto.from,
       isSeen: dto.isSeen,
+      refEvent: dto.refEvent,
+      refRoom: dto.refRoom,
+      refStoreOrder: dto.refStoreOrder,
+      refUser: dto.refUser,
     );
   }
 }

@@ -34,7 +34,6 @@ class NotificationCard extends StatelessWidget {
           children: [
             _buildAvatar(),
             Expanded(child: _buildMessage(colorScheme)),
-            _buildOptionsButton(colorScheme),
           ],
         ),
       ),
@@ -43,7 +42,8 @@ class NotificationCard extends StatelessWidget {
 
   Widget _buildAvatar() {
     if (notification.type == NotificationType.eventCohostRequest ||
-        notification.type == NotificationType.userFriendshipRequest) {
+        notification.type == NotificationType.userFriendshipRequest ||
+        notification.type == NotificationType.eventAnnounce) {
       return Container(
         padding: EdgeInsets.only(right: Spacing.small),
         child: LemonCircleAvatar(
@@ -76,7 +76,7 @@ class NotificationCard extends StatelessWidget {
           notification.message ?? '',
           style: Typo.medium.copyWith(
             color: colorScheme.onPrimary,
-            fontWeight: FontWeight.w700,
+            fontWeight: FontWeight.w500,
           ),
         ),
         Text(
@@ -87,18 +87,6 @@ class NotificationCard extends StatelessWidget {
           ),
         )
       ],
-    );
-  }
-
-  Widget _buildOptionsButton(ColorScheme colorScheme) {
-    return IconButton(
-      icon: ThemeSvgIcon(
-        color: colorScheme.onSurfaceVariant,
-        builder: (filter) => Assets.icons.icMoreHoriz.svg(
-          colorFilter: filter,
-        ),
-      ),
-      onPressed: () {},
     );
   }
 }
