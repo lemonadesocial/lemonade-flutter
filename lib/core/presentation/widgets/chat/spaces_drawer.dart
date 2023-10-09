@@ -1,6 +1,7 @@
 import 'package:app/core/application/chat/chat_space_bloc/chat_space_bloc.dart';
 import 'package:app/core/presentation/widgets/chat/matrix_avatar.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/utils/modal_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -164,46 +165,56 @@ class SpacesDrawer extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: Spacing.small),
       child: Column(
         children: [
-          Container(
-            padding: EdgeInsets.symmetric(
-              vertical: Spacing.xSmall,
-              horizontal: Spacing.xSmall,
-            ),
-            child: Row(
-              children: [
-                ThemeSvgIcon(
-                  color: colorScheme.onPrimary,
-                  builder: (filter) => Assets.icons.icoCreateSpace.svg(
-                    colorFilter: filter,
+          GestureDetector(
+            onTap: () {
+              showComingSoonDialog(context);
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(
+                vertical: Spacing.xSmall,
+                horizontal: Spacing.xSmall,
+              ),
+              child: Row(
+                children: [
+                  ThemeSvgIcon(
+                    color: colorScheme.onPrimary,
+                    builder: (filter) => Assets.icons.icoCreateSpace.svg(
+                      colorFilter: filter,
+                    ),
                   ),
-                ),
-                SizedBox(width: Spacing.small),
-                Text(
-                  "Create space",
-                  style: Typo.medium.copyWith(color: colorScheme.onPrimary),
-                )
-              ],
+                  SizedBox(width: Spacing.small),
+                  Text(
+                    "Create space",
+                    style: Typo.medium.copyWith(color: colorScheme.onPrimary),
+                  )
+                ],
+              ),
             ),
           ),
-          Container(
-            padding: EdgeInsets.symmetric(
-              vertical: Spacing.xSmall,
-              horizontal: Spacing.xSmall,
-            ),
-            child: Row(
-              children: [
-                ThemeSvgIcon(
-                  color: colorScheme.onPrimary,
-                  builder: (filter) => Assets.icons.icJoinSpace.svg(
-                    colorFilter: filter,
+          GestureDetector(
+            onTap: () {
+              showComingSoonDialog(context);
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(
+                vertical: Spacing.xSmall,
+                horizontal: Spacing.xSmall,
+              ),
+              child: Row(
+                children: [
+                  ThemeSvgIcon(
+                    color: colorScheme.onPrimary,
+                    builder: (filter) => Assets.icons.icJoinSpace.svg(
+                      colorFilter: filter,
+                    ),
                   ),
-                ),
-                SizedBox(width: Spacing.small),
-                Text(
-                  "Join space",
-                  style: Typo.medium.copyWith(color: colorScheme.onPrimary),
-                )
-              ],
+                  SizedBox(width: Spacing.small),
+                  Text(
+                    "Join space",
+                    style: Typo.medium.copyWith(color: colorScheme.onPrimary),
+                  )
+                ],
+              ),
             ),
           ),
           SizedBox(
