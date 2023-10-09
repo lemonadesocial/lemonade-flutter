@@ -26,7 +26,8 @@ class OnboardingBloc extends Cubit<OnboardingState> {
     // Reset valid input
     emit(
       state.copyWith(
-        status: OnboardingStatus.initial,
+        status:
+            input.isEmpty ? OnboardingStatus.initial : OnboardingStatus.loading,
         username: input,
         usernameExisted: null,
       ),
@@ -45,7 +46,12 @@ class OnboardingBloc extends Cubit<OnboardingState> {
           ),
           (userExisted) {
             if (userExisted) {
-              emit(state.copyWith(usernameExisted: true));
+              emit(
+                state.copyWith(
+                  status: OnboardingStatus.error,
+                  usernameExisted: true,
+                ),
+              );
             } else {
               emit(
                 state.copyWith(

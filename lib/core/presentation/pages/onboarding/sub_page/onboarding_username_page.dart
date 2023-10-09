@@ -59,7 +59,7 @@ class OnboardingUsernamePage extends StatelessWidget {
                         t.onboarding.pickUsername,
                         style: Typo.extraLarge.copyWith(
                           fontWeight: FontWeight.w800,
-                          color: LemonColor.onboardingTitle,
+                          color: theme.colorScheme.onPrimary,
                           fontFamily: FontFamily.nohemiVariable,
                         ),
                       ),
@@ -76,7 +76,9 @@ class OnboardingUsernamePage extends StatelessWidget {
                             ? LemonColor.errorRedBg
                             : null,
                         statusWidget: state.usernameExisted == null
-                            ? null
+                            ? state.status == OnboardingStatus.loading
+                                ? loadingWidget(context)
+                                : null
                             : statusWidget(context, state.usernameExisted!),
                       ),
                     ],
@@ -126,6 +128,23 @@ class OnboardingUsernamePage extends StatelessWidget {
               : t.onboarding.usernameAvailable,
           style: TextStyle(
             color: color,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget loadingWidget(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        SizedBox(
+          width: Sizing.xSmall,
+          height: Sizing.xSmall,
+          child: CircularProgressIndicator(
+            // Loading button should be black and white and are not affected by theme
+            backgroundColor: LemonColor.black.withOpacity(0.36),
+            color: LemonColor.white.withOpacity(0.72),
           ),
         ),
       ],
