@@ -2,6 +2,7 @@ import 'package:app/core/domain/common/common_enums.dart';
 import 'package:app/core/domain/onboarding/onboarding_inputs.dart';
 import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/service/post/post_service.dart';
+import 'package:app/core/utils/image_utils.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:image_picker/image_picker.dart';
@@ -86,8 +87,7 @@ class OnboardingBloc extends Cubit<OnboardingState> {
   }
 
   Future<void> selectProfileImage() async {
-    final imagePicker = ImagePicker();
-    final pickImage = await imagePicker.pickImage(source: ImageSource.gallery);
+    final pickImage = await getImageFromGallery(cropRequired: true);
     if (pickImage != null) {
       emit(
         state.copyWith(

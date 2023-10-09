@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:app/core/domain/common/entities/common.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
 class EditProps {
@@ -70,4 +72,34 @@ class ImageUtils {
     http.Response response = await http.get(Uri.parse(imageUrl));
     return XFile.fromData(response.bodyBytes, mimeType: 'image/png');
   }
+}
+
+Future<XFile?> getImageFromGallery({bool cropRequired = false}) async {
+  final imagePicker = ImagePicker();
+  final pickImage = await imagePicker.pickImage(source: ImageSource.gallery);
+  if (pickImage == null) return null;
+
+  if (cropRequired) {
+    final croppedFile = await ImageCropper().cropImage(
+      sourcePath: pickImage.path,
+      aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1),
+      uiSettings: [
+        AndroidUiSettings(
+          toolbarTitle: 'Cropper',
+          toolbarColor: Colors.black,
+          toolbarWidgetColor: Colors.white,
+          initAspectRatio: CropAspectRatioPreset.original,
+        ),
+        IOSUiSettings(
+          title: 'Cropper',
+          aspectRatioLockEnabled: true,
+          showCancelConfirmationDialog: true,
+        ),
+      ],
+    );
+    if (croppedFile == null) return null;
+    final xFile = XFile(croppedFile.path);
+    return xFile;
+  }
+  return pickImage;
 }
