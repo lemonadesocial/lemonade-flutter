@@ -1,4 +1,3 @@
-import 'package:app/core/application/newsfeed/newsfeed_listing_bloc/newsfeed_listing_bloc.dart';
 import 'package:app/core/presentation/widgets/back_button_widget.dart';
 import 'package:app/core/presentation/widgets/home/create_pop_up_tile.dart';
 import 'package:app/core/presentation/widgets/lemon_bottom_sheet_mixin.dart';
@@ -12,7 +11,6 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 @RoutePage()
@@ -48,14 +46,10 @@ class CreatePopUpPage extends StatelessWidget with LemonBottomSheet {
             ),
             SizedBox(height: Spacing.small),
             CreatePopUpTile(
-              onTap: () => context.router.push(
-                CreatePostRoute(
-                  onPostCreated: (newPost) =>
-                      context.read<NewsfeedListingBloc>().add(
-                            NewsfeedListingEvent.newPostAdded(post: newPost),
-                          ),
-                ),
-              ),
+              onTap: () {
+                context.router.pop();
+                context.router.push(const CreatePostRoute());
+              },
               colors: CreatePopupGradient.post.colors,
               label: t.home.post,
               content: t.home.postDesc,

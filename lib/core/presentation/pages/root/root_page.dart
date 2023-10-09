@@ -11,8 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:app/core/application/newsfeed/newsfeed_listing_bloc/newsfeed_listing_bloc.dart';
-import 'package:app/core/data/post/newsfeed_repository_impl.dart';
-import 'package:app/core/service/newsfeed/newsfeed_service.dart';
 
 @RoutePage(name: 'RootRoute')
 class RootPage extends StatelessWidget {
@@ -32,16 +30,9 @@ class RootPage extends StatelessWidget {
           orElse: () {},
         );
       },
-      builder: (context, authState) => MultiBlocProvider(
-        providers: [
-          BlocProvider<NewsfeedListingBloc>(
-            create: (context) =>
-                NewsfeedListingBloc(NewsfeedService(NewsfeedRepositoryImpl()))
-                  ..add(NewsfeedListingEvent.fetch()),
-          ),
-          // Add other Blocs here if needed.
-        ],
-        child: Stack(
+      builder: (context, authState) {
+        context.read<NewsfeedListingBloc>().add(NewsfeedListingEvent.fetch());
+        return Stack(
           children: [
             const Align(
               child: PoapClaimTransferControllerWidget(),
@@ -86,8 +77,8 @@ class RootPage extends StatelessWidget {
               },
             ),
           ],
-        ),
-      ),
+        );
+      },
     );
   }
 }

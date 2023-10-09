@@ -1,5 +1,5 @@
+import 'package:app/core/application/newsfeed/newsfeed_listing_bloc/newsfeed_listing_bloc.dart';
 import 'package:app/core/application/post/create_post_bloc/create_post_bloc.dart';
-import 'package:app/core/domain/post/entities/post_entities.dart';
 import 'package:app/core/presentation/pages/create_post/widgets/create_post_event_card_widget.dart';
 import 'package:app/core/presentation/pages/event/event_selecting_page.dart';
 import 'package:app/core/presentation/widgets/back_button_widget.dart';
@@ -25,12 +25,7 @@ import 'package:app/core/presentation/pages/create_post/widgets/create_post_imag
 
 @RoutePage()
 class CreatePostPage extends StatelessWidget {
-  const CreatePostPage({
-    Key? key,
-    required this.onPostCreated,
-  }) : super(key: key);
-
-  final ValueChanged<Post> onPostCreated;
+  const CreatePostPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -42,11 +37,12 @@ class CreatePostPage extends StatelessWidget {
       create: (context) => createPostBloc,
       child: BlocConsumer<CreatePostBloc, CreatePostState>(
         listener: (context, state) {
-          if (state.status == CreatePostStatus.loading) {
-            // showDialog(context: context, builder: Loading.defaultLoading);
-          }
           if (state.status == CreatePostStatus.postCreated) {
-            onPostCreated(state.newPost!);
+            context.read<NewsfeedListingBloc>().add(
+                  NewsfeedListingEvent.newPostAdded(
+                    post: state.newPost!,
+                  ),
+                );
             context.router.pop();
           }
           if (state.status == CreatePostStatus.error) {}
