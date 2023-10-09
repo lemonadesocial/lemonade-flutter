@@ -1,4 +1,5 @@
 import 'package:app/core/application/onboarding/onboarding_bloc/onboarding_bloc.dart';
+import 'package:app/core/presentation/widgets/back_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/gen/fonts.gen.dart';
@@ -40,9 +41,11 @@ class OnboardingUsernamePage extends StatelessWidget {
       },
       builder: (context, state) {
         return WillPopScope(
-          onWillPop: () async => false,
+          onWillPop: () => Future.value(!onboardingFlow),
           child: Scaffold(
-            appBar: AppBar(),
+            appBar: AppBar(
+              leading: onboardingFlow ? null : const LemonBackButton(),
+            ),
             backgroundColor: theme.colorScheme.primary,
             body: Padding(
               padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
