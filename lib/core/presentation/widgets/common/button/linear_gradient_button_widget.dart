@@ -62,7 +62,7 @@ class LinearGradientButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: loadingWhen ? null : onTap,
       child: ClipRRect(
         borderRadius: radius ?? BorderRadius.circular(LemonRadius.xSmall),
         child: onTap == null && !loadingWhen
