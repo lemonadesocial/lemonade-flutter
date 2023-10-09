@@ -8,17 +8,23 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 enum GradientButtonMode {
   defaultMode,
-  lavenderMode;
+  lavenderMode,
+  lavenderDisableMode;
 
   List<Color> get gradients {
     switch (this) {
       case defaultMode:
         return [
           LemonColor.arsenic.withOpacity(0.6),
-          LemonColor.charlestonGreen.withOpacity(0.6)
+          LemonColor.charlestonGreen.withOpacity(0.6),
         ];
       case lavenderMode:
         return [LemonColor.buttonLinear1, LemonColor.buttonLinear2];
+      case lavenderDisableMode:
+        return [
+          LemonColor.disableButtonLavender,
+          LemonColor.disableButtonLavender,
+        ];
       default:
         return [];
     }
@@ -36,6 +42,7 @@ class LinearGradientButton extends StatelessWidget {
   final TextStyle? textStyle;
   final Offset? shadowOffset;
   final bool loadingWhen;
+  final Widget? trailing;
 
   const LinearGradientButton({
     super.key,
@@ -48,6 +55,7 @@ class LinearGradientButton extends StatelessWidget {
     this.radius,
     this.textStyle,
     this.shadowOffset,
+    this.trailing,
     this.loadingWhen = false,
   });
 
@@ -88,7 +96,7 @@ class LinearGradientButton extends StatelessWidget {
               offset: const Offset(0, 2),
               blurRadius: 18.r,
               spreadRadius: 2,
-            )
+            ),
           ],
         ),
         child: Row(
@@ -109,13 +117,17 @@ class LinearGradientButton extends StatelessWidget {
               : [
                   if (leading != null) ...[
                     leading!,
-                    SizedBox(width: Spacing.extraSmall)
+                    SizedBox(width: Spacing.extraSmall),
                   ],
                   Text(
                     label,
                     style: textStyle ??
                         Typo.small.copyWith(fontWeight: FontWeight.w600),
-                  )
+                  ),
+                  if (trailing != null) ...[
+                    SizedBox(width: Spacing.extraSmall),
+                    trailing!,
+                  ],
                 ],
         ),
       );
