@@ -11,6 +11,7 @@ import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/event_utils.dart';
+import 'package:app/core/utils/modal_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -145,14 +146,19 @@ class PreGuestEventDetailViewState extends State<PreGuestEventDetailView> {
                             ),
                           ),
                           BlurCircle(
-                            child: Center(
-                              child: ThemeSvgIcon(
-                                color: _isSliverAppBarCollapsed
-                                    ? colorScheme.onPrimary
-                                    : colorScheme.onSurface,
-                                builder: (filter) =>
-                                    Assets.icons.icMoreHoriz.svg(
-                                  colorFilter: filter,
+                            child: InkWell(
+                              onTap: () {
+                                showComingSoonDialog(context);
+                              },
+                              child: Center(
+                                child: ThemeSvgIcon(
+                                  color: _isSliverAppBarCollapsed
+                                      ? colorScheme.onPrimary
+                                      : colorScheme.onSurface,
+                                  builder: (filter) =>
+                                      Assets.icons.icMoreHoriz.svg(
+                                    colorFilter: filter,
+                                  ),
                                 ),
                               ),
                             ),

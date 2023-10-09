@@ -4,5 +4,6 @@ enum Currency {
   EUR,
   GBP,
   INR,
-  USD;
+  USD,
+  CRC;
 }
