@@ -25,3 +25,5 @@ enum PoapNodeValueType {
 
   final String value;
 }
+
+enum ClaimErrorDescriptionName { AllClaimed, AlreadyClaimed, Forbidden }

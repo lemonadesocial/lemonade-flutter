@@ -128,8 +128,10 @@ class _EventHostItem extends StatelessWidget {
                   ),
                   child: CachedNetworkImage(
                     fit: BoxFit.cover,
-                    placeholder: (_, __) => ImagePlaceholder.eventCard(),
-                    errorWidget: (_, __, ___) => ImagePlaceholder.eventCard(),
+                    placeholder: (_, __) =>
+                        ImagePlaceholder.defaultPlaceholder(),
+                    errorWidget: (_, __, ___) =>
+                        ImagePlaceholder.defaultPlaceholder(),
                     imageUrl: ImageUtils.generateUrl(
                       file: host?.newPhotosExpanded?.first,
                       imageConfig: ImageConfig.eventPhoto,
@@ -157,9 +159,9 @@ class _EventHostItem extends StatelessWidget {
                           child: CachedNetworkImage(
                             fit: BoxFit.cover,
                             placeholder: (_, __) =>
-                                ImagePlaceholder.eventCard(),
+                                ImagePlaceholder.defaultPlaceholder(),
                             errorWidget: (_, __, ___) =>
-                                ImagePlaceholder.eventCard(),
+                                ImagePlaceholder.defaultPlaceholder(),
                             imageUrl: ImageUtils.generateUrl(
                               file: host?.newPhotosExpanded?.first,
                               imageConfig: ImageConfig.eventPhoto,

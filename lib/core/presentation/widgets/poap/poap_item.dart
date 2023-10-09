@@ -11,6 +11,7 @@ import 'package:app/core/presentation/widgets/common/button/lemon_outline_button
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/dialog/lemon_alert_dialog.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
+import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/poap/poap_claim_builder.dart';
 import 'package:app/core/presentation/widgets/poap/poap_quantity_bar.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
@@ -282,6 +283,11 @@ class _PoapItemButtons extends StatelessWidget {
                   badge.claimable != true ||
                   claimPoapState.claimed ||
                   claimPoapState.claiming;
+
+              if (claimPoapState.checking) {
+                return Loading.defaultLoading(context);
+              }
+
               return Opacity(
                 opacity: buttonDisabled ? 0.36 : 1,
                 child: LinearGradientButton(

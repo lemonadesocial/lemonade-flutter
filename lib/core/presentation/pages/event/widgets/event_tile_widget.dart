@@ -30,8 +30,8 @@ class EventTileWidget extends StatelessWidget {
           child: CachedNetworkImage(
             width: double.infinity,
             fit: BoxFit.cover,
-            placeholder: (_, __) => ImagePlaceholder.eventCard(),
-            errorWidget: (_, __, ___) => ImagePlaceholder.eventCard(),
+            placeholder: (_, __) => ImagePlaceholder.defaultPlaceholder(),
+            errorWidget: (_, __, ___) => ImagePlaceholder.defaultPlaceholder(),
             imageUrl: ImageUtils.generateUrl(
               file: event.newNewPhotosExpanded?.firstOrNull,
               imageConfig: ImageConfig.eventPhoto,
