@@ -220,7 +220,8 @@ class EventTicketManagementView extends StatelessWidget {
                                         AutoRouter.of(context)
                                             .root
                                             .popUntilRouteWithPath(
-                                                '/events/${event.id}');
+                                              '/events/${event.id}',
+                                            );
                                         await AutoRouter.of(context).root.pop();
                                         AutoRouter.of(context).root.navigate(
                                               GuestEventDetailRoute(
