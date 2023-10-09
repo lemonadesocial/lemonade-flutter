@@ -5,13 +5,19 @@ import 'package:flutter/material.dart';
 
 class ImagePlaceholder {
   static Widget eventCard() {
-    return SizedBox(
-      height: 200,
+    return Container(
       width: double.infinity,
-      child: Center(
-        child: ThemeSvgIcon(
-          builder: (filter) => Assets.icons.icLemonOutline
-              .svg(colorFilter: filter, width: 50, height: 50),
+      height: 200,
+      clipBehavior: Clip.none,
+      color: const Color.fromRGBO(90, 55, 131, 0.8),
+      child: ImageFiltered(
+        imageFilter: const ColorFilter.mode(
+          Color.fromRGBO(90, 55, 131, 0.5),
+          BlendMode.srcIn,
+        ),
+        child: Image(
+          fit: BoxFit.cover,
+          image: Assets.images.bgChat.provider(),
         ),
       ),
     );

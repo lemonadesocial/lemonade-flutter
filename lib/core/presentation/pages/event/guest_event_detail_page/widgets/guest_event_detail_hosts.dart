@@ -7,6 +7,7 @@ import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/event_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
+import 'package:app/core/utils/modal_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -30,7 +31,9 @@ class GuestEventDetailHosts extends StatelessWidget {
 
   List<User?> get hosts {
     final coHosts = event.cohostsExpanded ?? [];
-    return coHosts.where((item) => item != null).toList();
+    return [event.hostExpanded, ...coHosts]
+        .where((item) => item != null)
+        .toList();
   }
 
   @override
@@ -42,6 +45,11 @@ class GuestEventDetailHosts extends StatelessWidget {
           authenticated: (session) => session.userId,
         );
     final isAttending = EventUtils.isAttending(event: event, userId: userId);
+
+    if (hosts.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
@@ -194,11 +202,16 @@ class _EventHostItem extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              child: Center(
-                                child: Text(
-                                  t.common.actions.follow,
-                                  style: Typo.small.copyWith(
-                                    color: colorScheme.onSecondary,
+                              child: InkWell(
+                                onTap: () {
+                                  showComingSoonDialog(context);
+                                },
+                                child: Center(
+                                  child: Text(
+                                    t.common.actions.follow,
+                                    style: Typo.small.copyWith(
+                                      color: colorScheme.onSecondary,
+                                    ),
                                   ),
                                 ),
                               ),

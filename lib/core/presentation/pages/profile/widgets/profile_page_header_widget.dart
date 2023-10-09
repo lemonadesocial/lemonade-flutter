@@ -7,6 +7,7 @@ import 'package:app/core/presentation/widgets/common/button/linear_gradient_butt
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/auth_utils.dart';
+import 'package:app/core/utils/modal_utils.dart';
 import 'package:app/core/utils/number_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -121,6 +122,9 @@ class _ActionButtons extends StatelessWidget {
     return isFollowed
         // ignore: dead_code
         ? LemonOutlineButton(
+            onTap: () {
+              showComingSoonDialog(context);
+            },
             label: t.common.followed,
             leading: ThemeSvgIcon(
               color: colorScheme.onSecondary,
@@ -128,6 +132,9 @@ class _ActionButtons extends StatelessWidget {
             ),
           )
         : LinearGradientButton(
+            onTap: () {
+              showComingSoonDialog(context);
+            },
             label: t.common.actions.follow,
             mode: GradientButtonMode.lavenderMode,
           );
