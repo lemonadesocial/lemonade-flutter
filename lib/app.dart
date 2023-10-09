@@ -17,6 +17,10 @@ import 'package:flutter_portal/flutter_portal.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:app/core/presentation/widgets/custom_error_widget.dart';
 
+import 'package:app/core/application/newsfeed/newsfeed_listing_bloc/newsfeed_listing_bloc.dart';
+import 'package:app/core/data/post/newsfeed_repository_impl.dart';
+import 'package:app/core/service/newsfeed/newsfeed_service.dart';
+
 class LemonadeApp extends StatefulWidget {
   const LemonadeApp({super.key});
 
@@ -55,8 +59,17 @@ class _LemonadeAppViewState extends State<LemonadeApp> {
 
   Widget _portalBuilder(Widget child) => Portal(child: child);
 
-  Widget _globalBlocProviderBuilder(Widget child) => BlocProvider.value(
-        value: getIt<AuthBloc>(),
+  Widget _globalBlocProviderBuilder(Widget child) => MultiBlocProvider(
+        providers: [
+          BlocProvider.value(
+            value: getIt<AuthBloc>(),
+          ),
+          BlocProvider<NewsfeedListingBloc>(
+            create: (context) => NewsfeedListingBloc(
+              NewsfeedService(NewsfeedRepositoryImpl()),
+            ),
+          ),
+        ],
         child: child,
       );
 
@@ -104,6 +117,7 @@ class _LemonadeAppViewState extends State<LemonadeApp> {
 
 class _App extends StatelessWidget {
   final AppRouter router;
+
   const _App(this.router);
 
   @override

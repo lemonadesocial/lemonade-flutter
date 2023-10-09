@@ -1,8 +1,10 @@
+import 'package:app/core/application/newsfeed/newsfeed_listing_bloc/newsfeed_listing_bloc.dart';
 import 'package:app/core/application/post/create_post_bloc/create_post_bloc.dart';
-import 'package:app/core/domain/post/entities/post_entities.dart';
 import 'package:app/core/presentation/pages/create_post/widgets/create_post_event_card_widget.dart';
 import 'package:app/core/presentation/pages/event/event_selecting_page.dart';
 import 'package:app/core/presentation/widgets/back_button_widget.dart';
+import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
+import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -23,12 +25,7 @@ import 'package:app/core/presentation/pages/create_post/widgets/create_post_imag
 
 @RoutePage()
 class CreatePostPage extends StatelessWidget {
-  const CreatePostPage({
-    Key? key,
-    required this.onPostCreated,
-  }) : super(key: key);
-
-  final ValueChanged<Post> onPostCreated;
+  const CreatePostPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -40,11 +37,12 @@ class CreatePostPage extends StatelessWidget {
       create: (context) => createPostBloc,
       child: BlocConsumer<CreatePostBloc, CreatePostState>(
         listener: (context, state) {
-          if (state.status == CreatePostStatus.loading) {
-            // showDialog(context: context, builder: Loading.defaultLoading);
-          }
           if (state.status == CreatePostStatus.postCreated) {
-            onPostCreated(state.newPost!);
+            context.read<NewsfeedListingBloc>().add(
+                  NewsfeedListingEvent.newPostAdded(
+                    post: state.newPost!,
+                  ),
+                );
             context.router.pop();
           }
           if (state.status == CreatePostStatus.error) {}
@@ -198,64 +196,33 @@ class CreatePostPage extends StatelessWidget {
                             ],
                           ),
                         ),
-                        state.status == CreatePostStatus.loading
-                            ? Container(
-                                width: 80.w,
-                                height: 36.h,
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: Spacing.medium,
-                                  vertical: Spacing.superExtraSmall,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: colorScheme.onTertiary,
-                                  borderRadius:
-                                      BorderRadius.circular(LemonRadius.small),
-                                ),
-                                child: Center(
-                                  child: CircularProgressIndicator(
-                                    color: colorScheme.onPrimary,
-                                  ),
-                                ),
-                              )
-                            : SizedBox(
-                                width: 80.w,
-                                height: 36.h,
-                                child: ElevatedButton(
-                                  onPressed: sendDisabled
-                                      ? null
-                                      : createPostBloc.createNewPost,
-                                  style: ElevatedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(
-                                        LemonRadius.small,
-                                      ),
-                                    ),
-                                    alignment: Alignment.center,
-                                    backgroundColor: colorScheme.onTertiary,
-                                    disabledBackgroundColor:
-                                        colorScheme.onSecondaryContainer,
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        t.post.post,
-                                        style: Typo.medium.copyWith(
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                      SizedBox(width: Spacing.extraSmall),
-                                      ThemeSvgIcon(
-                                        color: sendDisabled
-                                            ? colorScheme.onSurfaceVariant
-                                            : colorScheme.onPrimary,
-                                        builder: (filter) => Assets
-                                            .icons.icSendMessage
-                                            .svg(colorFilter: filter),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
+                        SizedBox(
+                          width: 72.w,
+                          height: 36.h,
+                          child: LinearGradientButton(
+                            label: t.post.post,
+                            onTap: sendDisabled
+                                ? null
+                                : createPostBloc.createNewPost,
+                            trailing: ThemeSvgIcon(
+                              color: sendDisabled
+                                  ? colorScheme.onSurfaceVariant
+                                  : colorScheme.onPrimary,
+                              builder: (filter) => Assets.icons.icSendMessage
+                                  .svg(colorFilter: filter),
+                            ),
+                            mode: state.postDescription.isNullOrEmpty
+                                ? GradientButtonMode.lavenderDisableMode
+                                : GradientButtonMode.lavenderMode,
+                            loadingWhen:
+                                state.status == CreatePostStatus.loading,
+                            radius: BorderRadius.circular(LemonRadius.small),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 12.w,
+                              vertical: 9.w,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
