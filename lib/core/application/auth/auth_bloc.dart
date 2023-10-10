@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:app/core/application/event/accept_event_bloc/accept_event_bloc.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/oauth/oauth.dart';
 import 'package:app/core/service/auth/auth_service.dart';
@@ -80,7 +79,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   Future<void> _onLogout(AuthEventLogout event, Emitter emit) async {
-    emit(AcceptEventState.loading());
     await authService
         .logout()
         .whenComplete(() => emit(const AuthEvent.unauthenticated()));
