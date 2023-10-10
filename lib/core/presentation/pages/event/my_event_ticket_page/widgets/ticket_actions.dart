@@ -77,42 +77,44 @@ class EventTicketActions extends StatelessWidget {
             ),
           },
         ),
-        if (eventPayment != null)
-          ActionItem(
-            onPressed: () {
-              AutoRouter.of(context)
-                  .navigate(MyEventTicketAssignmentRoute(event: event));
-            },
-            label: t.common.actions.assign,
-            backgroundColor: LemonColor.lavender18,
-            icon: ThemeSvgIcon(
-              color: LemonColor.lavender,
-              builder: (filter) => Assets.icons.icTicket.svg(
-                colorFilter: filter,
-                width: 27.w,
-                height: 27.w,
-              ),
+        ActionItem(
+          onPressed: () {
+            AutoRouter.of(context)
+                .navigate(MyEventTicketAssignmentRoute(event: event));
+          },
+          label: t.common.actions.assign,
+          backgroundColor: LemonColor.lavender18,
+          icon: ThemeSvgIcon(
+            color: LemonColor.lavender,
+            builder: (filter) => Assets.icons.icTicket.svg(
+              colorFilter: filter,
+              width: 27.w,
+              height: 27.w,
             ),
-            badgeIcon: Container(
-              width: Sizing.small,
-              height: Sizing.xSmall,
-              decoration: BoxDecoration(
-                color: LemonColor.lavender,
-                borderRadius: BorderRadius.circular(100.r),
-              ),
-              child: Center(
-                child: Text(
-                  '${eventPayment?.ticketCountRemaining?.toInt() ?? 0}',
-                  style: Typo.small.copyWith(
-                    color: colorScheme.onPrimary,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-            ),
-            // TODO: navigate to assign screen
-            // onPressed:,
           ),
+          badgeIcon: eventPayment?.ticketCountRemaining != null &&
+                  eventPayment?.ticketCountRemaining?.toInt() != 0
+              ? Container(
+                  width: Sizing.small,
+                  height: Sizing.xSmall,
+                  decoration: BoxDecoration(
+                    color: LemonColor.lavender,
+                    borderRadius: BorderRadius.circular(100.r),
+                  ),
+                  child: Center(
+                    child: Text(
+                      '${eventPayment?.ticketCountRemaining?.toInt() ?? 0}',
+                      style: Typo.small.copyWith(
+                        color: colorScheme.onPrimary,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                )
+              : null,
+          // TODO: navigate to assign screen
+          // onPressed:,
+        ),
         ActionItem(
           label: t.common.actions.mail,
           backgroundColor: LemonColor.mailBgColor,
