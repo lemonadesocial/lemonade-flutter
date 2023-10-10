@@ -58,5 +58,10 @@
     "transferSuccess": "$tokenName was successfully transferred to your preferred wallet",
     "waitingForConfirmation": "Waiting for confirmation",
     "requirements": "Requirements",
-    "requirementDescription": "Fulfil all requirements below to claim"
+    "requirementDescription": "Fulfil all requirements below to claim",
+    "claimFailedDescription": {
+        "allClaimed": "All POAPs have been claimed.",
+        "alreadyClaimed": "You have already claimed the POAP.",
+        "forbidden": "You are not authorized to perform this action."
+    }
 }

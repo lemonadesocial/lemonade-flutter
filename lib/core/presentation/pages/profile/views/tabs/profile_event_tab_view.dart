@@ -263,10 +263,10 @@ class _EventItem extends StatelessWidget {
                         ),
                         fit: BoxFit.cover,
                         errorWidget: (ctx, _, __) =>
-                            ImagePlaceholder.eventCard(),
+                            ImagePlaceholder.defaultPlaceholder(),
                       ),
                     )
-                  : ImagePlaceholder.eventCard(),
+                  : ImagePlaceholder.defaultPlaceholder(),
             ),
             Positioned(
               bottom: Spacing.xSmall,

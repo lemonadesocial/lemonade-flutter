@@ -3,6 +3,7 @@ import 'package:app/core/application/poap/poap_claim_subscription_bloc/poap_clai
 import 'package:app/core/application/poap/poap_transfer_subscription_bloc/poap_transfer_subscription_bloc.dart';
 import 'package:app/core/domain/poap/poap_enums.dart';
 import 'package:app/core/domain/token/entities/token_entities.dart';
+import 'package:app/core/presentation/widgets/common/dialog/lemon_alert_dialog.dart';
 import 'package:app/core/presentation/widgets/poap/poap_claimed_poup/poap_claimed_popup.dart';
 import 'package:app/core/presentation/widgets/poap/poap_transfer_popup/poap_transfer_popup.dart';
 import 'package:app/core/presentation/widgets/poap/poap_transfer_success_poup/poap_transfer_success_popup.dart';
@@ -102,6 +103,43 @@ class _PoapClaimTransferControllerWidgetViewState
             state.maybeWhen(
               orElse: () => null,
               hasClaimModification: (claimModification, token) {
+                if (claimModification.state == ClaimState.FAILED) {
+                  final errorDescriptionName =
+                      claimModification.errorDescription != null
+                          ? claimModification.errorDescription!['name']
+                          : '';
+                  String errorDescriptionMessage = '';
+                  if (errorDescriptionName ==
+                      ClaimErrorDescriptionName.AllClaimed.name) {
+                    errorDescriptionMessage =
+                        t.nft.claimFailedDescription.allClaimed;
+                  }
+                  if (errorDescriptionName ==
+                      ClaimErrorDescriptionName.AlreadyClaimed.name) {
+                    errorDescriptionMessage =
+                        t.nft.claimFailedDescription.alreadyClaimed;
+                  }
+
+                  if (errorDescriptionName ==
+                      ClaimErrorDescriptionName.Forbidden.name) {
+                    errorDescriptionMessage =
+                        t.nft.claimFailedDescription.forbidden;
+                  } else {
+                    errorDescriptionMessage = errorDescriptionName ?? '';
+                  }
+
+                  if (errorDescriptionMessage.isEmpty) return;
+
+                  showDialog(
+                    context: context,
+                    builder: (context) => LemonAlertDialog(
+                      child: Text(
+                        errorDescriptionMessage,
+                      ),
+                    ),
+                  );
+                }
+
                 if (claimModification.state == ClaimState.PENDING) {
                   showDialog(
                     context: context,
