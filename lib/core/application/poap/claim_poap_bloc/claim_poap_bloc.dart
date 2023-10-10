@@ -36,6 +36,10 @@ class ClaimPoapBloc extends Bloc<ClaimPoapEvent, ClaimPoapState> {
     ClaimPoapEventCheckHasClaimed event,
     Emitter emit,
   ) async {
+    emit(state.copyWith(checking: true));
+
+    await Future.delayed(const Duration(milliseconds: 300));
+
     final userWallet = getIt<AuthBloc>().state.maybeWhen(
           authenticated: (authSession) => authSession.walletCustodial,
           orElse: () => null,
@@ -71,6 +75,7 @@ class ClaimPoapBloc extends Bloc<ClaimPoapEvent, ClaimPoapState> {
       state.copyWith(
         policy: poapPolicy,
         claimed: hasClaimed?.claimed ?? false,
+        checking: false,
       ),
     );
   }
@@ -116,6 +121,7 @@ class ClaimPoapEvent with _$ClaimPoapEvent {
 @freezed
 class ClaimPoapState with _$ClaimPoapState {
   const factory ClaimPoapState({
+    @Default(true) bool checking,
     @Default(false) bool claimed,
     @Default(false) bool claiming,
     Claim? claim,

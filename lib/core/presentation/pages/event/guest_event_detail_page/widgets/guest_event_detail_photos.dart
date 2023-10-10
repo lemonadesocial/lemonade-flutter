@@ -102,9 +102,10 @@ class GuestEventDetailPhotos extends StatelessWidget {
                       child: CachedNetworkImage(
                         width: double.infinity,
                         fit: BoxFit.cover,
-                        placeholder: (_, __) => ImagePlaceholder.eventCard(),
+                        placeholder: (_, __) =>
+                            ImagePlaceholder.defaultPlaceholder(),
                         errorWidget: (_, __, ___) =>
-                            ImagePlaceholder.eventCard(),
+                            ImagePlaceholder.defaultPlaceholder(),
                         imageUrl: photo,
                       ),
                     ),
