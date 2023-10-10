@@ -4,10 +4,12 @@ import 'package:app/core/presentation/pages/event/my_event_ticket_page/widgets/t
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:app/core/utils/modal_utils.dart';
@@ -78,7 +80,8 @@ class EventTicketActions extends StatelessWidget {
         if (eventPayment != null)
           ActionItem(
             onPressed: () {
-              showComingSoonDialog(context);
+              AutoRouter.of(context)
+                  .navigate(MyEventTicketAssignmentRoute(event: event));
             },
             label: t.common.actions.assign,
             backgroundColor: LemonColor.lavender18,
