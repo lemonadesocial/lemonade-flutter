@@ -1,5 +1,4 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
-import 'package:app/core/application/newsfeed/newsfeed_listing_bloc/newsfeed_listing_bloc.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
@@ -33,9 +32,6 @@ class LoginPageState extends State<LoginPage> {
           state.maybeWhen(
             authenticated: (_) {
               AutoRouter.of(context).pop();
-              context
-                  .read<NewsfeedListingBloc>()
-                  .add(NewsfeedListingEvent.refresh());
             },
             onBoardingRequired: (authSession) {
               context.router.push(
