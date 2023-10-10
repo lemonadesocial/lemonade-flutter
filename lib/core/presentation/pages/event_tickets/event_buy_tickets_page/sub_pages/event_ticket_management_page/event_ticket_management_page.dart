@@ -88,7 +88,9 @@ class EventTicketManagementView extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: colorScheme.background,
-      appBar: const LemonAppBar(),
+      appBar: const LemonAppBar(
+        leading: SizedBox.shrink(),
+      ),
       body: BlocBuilder<GetEventTicketTypesBloc, GetEventTicketTypesState>(
         builder: (context, state) {
           return state.when(
