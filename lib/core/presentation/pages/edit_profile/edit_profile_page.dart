@@ -10,11 +10,13 @@ import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/core/service/post/post_service.dart';
+import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
+import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -46,6 +48,11 @@ class EditProfilePage extends StatelessWidget {
         listener: (context, state) {
           if (state.status == EditProfileStatus.success) {
             context.read<AuthBloc>().add(const AuthEvent.refreshData());
+            SnackBarUtils.showSnackbar(
+              t.profile.editProfileSuccess,
+              backgroundColor: LemonColor.usernameApproved,
+            );
+            bloc.clearState();
           }
         },
         builder: (context, state) {
@@ -78,7 +85,7 @@ class EditProfilePage extends StatelessWidget {
                                     initialText: userProfile.displayName,
                                     onChange: bloc.onDisplayNameChange,
                                   ),
-                                )
+                                ),
                               ],
                             ),
                             SizedBox(height: Spacing.smMedium),
@@ -158,7 +165,10 @@ class EditProfilePage extends StatelessWidget {
                       margin: EdgeInsets.symmetric(vertical: Spacing.smMedium),
                       child: LinearGradientButton(
                         onTap: bloc.state.status == EditProfileStatus.editing
-                            ? bloc.editProfile
+                            ? () {
+                                FocusScope.of(context).unfocus();
+                                bloc.editProfile();
+                              }
                             : null,
                         label: t.profile.saveChanges,
                         textStyle: Typo.medium.copyWith(
@@ -225,7 +235,7 @@ class _PersonalCardWidget extends StatelessWidget {
                 ),
               ),
               SizedBox(width: Spacing.xSmall),
-              Assets.icons.icExpand.svg()
+              Assets.icons.icExpand.svg(),
             ],
           ),
           SizedBox(height: Spacing.xSmall),
@@ -311,7 +321,7 @@ class _UserEditor extends StatelessWidget {
               ),
             ),
           ),
-        )
+        ),
       ],
     );
   }

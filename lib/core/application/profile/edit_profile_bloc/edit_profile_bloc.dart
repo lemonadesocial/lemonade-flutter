@@ -163,6 +163,10 @@ class EditProfileBloc extends Cubit<EditProfileState> {
     );
   }
 
+  void clearState() {
+    emit(EditProfileState.initial());
+  }
+
   Future<void> uploadImage() async {
     final response = await postService.uploadImage(
       state.profilePhoto!,

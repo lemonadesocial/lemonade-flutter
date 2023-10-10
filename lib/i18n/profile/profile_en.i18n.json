@@ -29,5 +29,6 @@
         "ethnicity": "Select ethnicity",
         "dob": "DD/MM/YYYY"
     },
-    "errorDateTimeFormat": "Invalid date format"
+    "errorDateTimeFormat": "Invalid date format",
+    "editProfileSuccess": "Edit profile successfully"
 }
