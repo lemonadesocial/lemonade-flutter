@@ -16,7 +16,6 @@ import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -48,10 +47,7 @@ class EditProfilePage extends StatelessWidget {
         listener: (context, state) {
           if (state.status == EditProfileStatus.success) {
             context.read<AuthBloc>().add(const AuthEvent.refreshData());
-            SnackBarUtils.showSnackbar(
-              t.profile.editProfileSuccess,
-              backgroundColor: LemonColor.usernameApproved,
-            );
+            SnackBarUtils.showSuccessSnackbar(t.profile.editProfileSuccess);
             bloc.clearState();
           }
         },

@@ -43,4 +43,18 @@ class SnackBarUtils {
       ),
     );
   }
+
+  static void showSuccessSnackbar(String message) {
+    rootScaffoldMessengerKey.currentState?.showSnackBar(
+      SnackBar(
+        content: Text(
+          message,
+          style: Typo.medium
+              .copyWith(color: _colorScheme?.onPrimary ?? LemonColor.white),
+        ),
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: LemonColor.snackBarSuccess,
+      ),
+    );
+  }
 }
