@@ -2,7 +2,6 @@ import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/onboarding/onboarding_bloc/onboarding_bloc.dart';
 import 'package:app/core/domain/common/common_enums.dart';
 import 'package:app/core/presentation/pages/onboarding/widgets/gender_chip_widget.dart';
-import 'package:app/core/presentation/widgets/back_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
@@ -40,7 +39,6 @@ class OnboardingAboutPage extends StatelessWidget {
           onWillPop: () async => false,
           child: Scaffold(
             appBar: AppBar(
-              leading: const LemonBackButton(),
               actions: [
                 Row(
                   children: [
