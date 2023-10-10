@@ -1,5 +1,4 @@
 import 'package:app/core/presentation/pages/onboarding/widgets/onboarding_photo_picker.dart';
-import 'package:app/core/presentation/widgets/back_button_widget.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
@@ -31,73 +30,77 @@ class OnboardingProfilePhotoPage extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        return Scaffold(
-          appBar: AppBar(
-            leading: const LemonBackButton(),
-            actions: [
-              Row(
+        return WillPopScope(
+          onWillPop: () async => false,
+          child: Scaffold(
+            appBar: AppBar(
+              actions: [
+                Row(
+                  children: [
+                    InkWell(
+                      onTap: () =>
+                          context.router.push(const OnboardingAboutRoute()),
+                      child: Text(
+                        t.onboarding.skip,
+                        style:
+                            Typo.medium.copyWith(fontWeight: FontWeight.w400),
+                      ),
+                    ),
+                    SizedBox(width: Spacing.smMedium),
+                  ],
+                ),
+              ],
+            ),
+            backgroundColor: theme.colorScheme.primary,
+            body: Padding(
+              padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  InkWell(
-                    onTap: () =>
-                        context.router.push(const OnboardingAboutRoute()),
-                    child: Text(
-                      t.onboarding.skip,
-                      style: Typo.medium.copyWith(fontWeight: FontWeight.w400),
+                  SizedBox(height: Spacing.medium),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          t.onboarding.findYourLook,
+                          style: TextStyle(
+                            fontSize: 26.sp,
+                            fontWeight: FontWeight.w800,
+                            color: LemonColor.onboardingTitle,
+                            fontFamily: FontFamily.nohemiVariable,
+                          ),
+                        ),
+                        SizedBox(height: Spacing.extraSmall),
+                        Text(
+                          t.onboarding.findYourLookDesc,
+                          style: theme.textTheme.bodyMedium,
+                        ),
+                        SizedBox(height: Spacing.medium),
+                        OnboardingPhotoPicker(
+                          imageFile: state.profilePhoto,
+                        ),
+                      ],
                     ),
                   ),
-                  SizedBox(width: Spacing.smMedium),
+                  LinearGradientButton(
+                    onTap: state.profilePhoto == null ? null : bloc.uploadImage,
+                    label: t.onboarding.next,
+                    textStyle: Typo.medium.copyWith(
+                      fontFamily: FontFamily.nohemiVariable,
+                      fontWeight: FontWeight.w600,
+                      color: theme.colorScheme.onPrimary,
+                    ),
+                    height: Sizing.large,
+                    radius: BorderRadius.circular(LemonRadius.large),
+                    mode: state.profilePhoto == null
+                        ? GradientButtonMode.defaultMode
+                        : GradientButtonMode.lavenderMode,
+                    loadingWhen: state.status == OnboardingStatus.loading,
+                  ),
+                  SizedBox(height: 24.h),
                 ],
               ),
-            ],
-          ),
-          backgroundColor: theme.colorScheme.primary,
-          body: Padding(
-            padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: Spacing.medium),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        t.onboarding.findYourLook,
-                        style: TextStyle(
-                          fontSize: 26.sp,
-                          fontWeight: FontWeight.w800,
-                          color: LemonColor.onboardingTitle,
-                          fontFamily: FontFamily.nohemiVariable,
-                        ),
-                      ),
-                      SizedBox(height: Spacing.extraSmall),
-                      Text(
-                        t.onboarding.findYourLookDesc,
-                        style: theme.textTheme.bodyMedium,
-                      ),
-                      SizedBox(height: Spacing.medium),
-                      OnboardingPhotoPicker(
-                        imageFile: state.profilePhoto,
-                      ),
-                    ],
-                  ),
-                ),
-                LinearGradientButton(
-                  onTap: state.profilePhoto == null ? null : bloc.uploadImage,
-                  label: t.onboarding.next,
-                  textStyle: Typo.medium.copyWith(
-                    fontFamily: FontFamily.nohemiVariable,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  height: Sizing.large,
-                  radius: BorderRadius.circular(LemonRadius.large),
-                  mode: state.profilePhoto == null
-                      ? GradientButtonMode.defaultMode
-                      : GradientButtonMode.lavenderMode,
-                  loadingWhen: state.status == OnboardingStatus.loading,
-                ),
-                SizedBox(height: 24.h),
-              ],
             ),
           ),
         );
