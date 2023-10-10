@@ -163,6 +163,10 @@ class EditProfileBloc extends Cubit<EditProfileState> {
     );
   }
 
+  void clearState() {
+    emit(EditProfileState.initial());
+  }
+
   Future<void> uploadImage() async {
     final response = await postService.uploadImage(
       state.profilePhoto!,
@@ -188,7 +192,7 @@ class EditProfileBloc extends Cubit<EditProfileState> {
       await uploadImage();
     }
     final notificationFilterInput = <NotificationFilterInput>[];
-    state.notificationMap!.forEach((type, value) {
+    state.notificationMap?.forEach((type, value) {
       if (value) {
         notificationFilterInput.addAll(
           type.notificationDetail

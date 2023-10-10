@@ -15,7 +15,7 @@ class SnackBarUtils {
     _colorScheme = colorScheme;
   }
 
-  static showSnackbar(String message) {
+  static void showSnackbar(String message, {Color? backgroundColor}) {
     rootScaffoldMessengerKey.currentState?.showSnackBar(
       SnackBar(
         content: Text(
@@ -24,12 +24,13 @@ class SnackBarUtils {
               .copyWith(color: _colorScheme?.onPrimary ?? LemonColor.white),
         ),
         behavior: SnackBarBehavior.floating,
-        backgroundColor: _colorScheme?.primary ?? LemonColor.black,
+        backgroundColor:
+            backgroundColor ?? _colorScheme?.primary ?? LemonColor.black,
       ),
     );
   }
 
-  static showErrorSnackbar(String message) {
+  static void showErrorSnackbar(String message) {
     rootScaffoldMessengerKey.currentState?.showSnackBar(
       SnackBar(
         content: Text(
@@ -39,6 +40,20 @@ class SnackBarUtils {
         ),
         behavior: SnackBarBehavior.floating,
         backgroundColor: const Color(0xffc0392b),
+      ),
+    );
+  }
+
+  static void showSuccessSnackbar(String message) {
+    rootScaffoldMessengerKey.currentState?.showSnackBar(
+      SnackBar(
+        content: Text(
+          message,
+          style: Typo.medium
+              .copyWith(color: _colorScheme?.onPrimary ?? LemonColor.white),
+        ),
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: LemonColor.snackBarSuccess,
       ),
     );
   }

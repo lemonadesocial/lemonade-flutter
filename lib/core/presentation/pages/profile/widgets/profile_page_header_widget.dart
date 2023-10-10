@@ -1,4 +1,3 @@
-import 'package:app/core/application/profile/user_profile_bloc/user_profile_bloc.dart';
 import 'package:app/core/config.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/widgets/common/badge/username_badge_widget.dart';
@@ -19,7 +18,6 @@ import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -82,13 +80,8 @@ class _ActionButtons extends StatelessWidget {
       children: [
         Expanded(
           child: LinearGradientButton(
-            onTap: () => context.router
-                .push(EditProfileRoute(userProfile: user))
-                .then((value) {
-              context
-                  .read<UserProfileBloc>()
-                  .add(UserProfileEvent.fetch(userId: user.userId));
-            }),
+            onTap: () =>
+                context.router.push(EditProfileRoute(userProfile: user)),
             label: t.common.actions.editProfile,
             textStyle: Typo.small.copyWith(
               fontWeight: FontWeight.w600,
