@@ -1,5 +1,6 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/newsfeed/newsfeed_listing_bloc/newsfeed_listing_bloc.dart';
+import 'package:app/core/presentation/widgets/bottom_bar/bottom_bar_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/post/post_profile_card_widget.dart';
@@ -90,10 +91,16 @@ class HomeNewsfeedListView extends StatelessWidget {
               padding:
                   EdgeInsetsDirectional.symmetric(vertical: Spacing.xSmall),
               itemBuilder: (ctx, index) => Padding(
-                padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
-                child: PostProfileCard(
-                  key: Key(state.posts[index].id),
-                  post: state.posts[index],
+                //Add a padding for last item to make it float over bottom bar
+                padding: index != state.posts.length - 1
+                    ? EdgeInsets.zero
+                    : EdgeInsets.only(bottom: BottomBar.bottomBarHeight),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
+                  child: PostProfileCard(
+                    key: Key(state.posts[index].id),
+                    post: state.posts[index],
+                  ),
                 ),
               ),
               separatorBuilder: (ctx, index) =>
