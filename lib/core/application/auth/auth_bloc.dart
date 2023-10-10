@@ -79,7 +79,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   Future<void> _onLogout(AuthEventLogout event, Emitter emit) async {
-    await authService.logout();
+    await authService
+        .logout()
+        .whenComplete(() => emit(const AuthEvent.unauthenticated()));
   }
 
   Future<void> _onDeleteAccount(AuthEventDelete event, Emitter emit) async {
