@@ -125,8 +125,8 @@ class EventPickMyTicketView extends StatelessWidget {
       child: Scaffold(
         backgroundColor: colorScheme.background,
         appBar: const LemonAppBar(
-            // leading: SizedBox.shrink(),
-            ),
+          leading: SizedBox.shrink(),
+        ),
         body: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
