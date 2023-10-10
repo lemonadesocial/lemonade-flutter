@@ -1,3 +1,4 @@
+import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/profile/edit_profile_bloc/edit_profile_bloc.dart';
 import 'package:app/core/domain/post/post_repository.dart';
 import 'package:app/core/domain/user/entities/user.dart';
@@ -44,7 +45,7 @@ class EditProfilePage extends StatelessWidget {
       child: BlocConsumer<EditProfileBloc, EditProfileState>(
         listener: (context, state) {
           if (state.status == EditProfileStatus.success) {
-            context.router.popUntilRoot();
+            context.read<AuthBloc>().add(const AuthEvent.refreshData());
           }
         },
         builder: (context, state) {
