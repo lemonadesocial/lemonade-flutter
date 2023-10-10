@@ -4,10 +4,12 @@ import 'package:app/core/presentation/pages/event/my_event_ticket_page/widgets/t
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:app/core/utils/modal_utils.dart';
@@ -75,41 +77,44 @@ class EventTicketActions extends StatelessWidget {
             ),
           },
         ),
-        if (eventPayment != null)
-          ActionItem(
-            onPressed: () {
-              showComingSoonDialog(context);
-            },
-            label: t.common.actions.assign,
-            backgroundColor: LemonColor.lavender18,
-            icon: ThemeSvgIcon(
-              color: LemonColor.lavender,
-              builder: (filter) => Assets.icons.icTicket.svg(
-                colorFilter: filter,
-                width: 27.w,
-                height: 27.w,
-              ),
+        ActionItem(
+          onPressed: () {
+            AutoRouter.of(context)
+                .navigate(MyEventTicketAssignmentRoute(event: event));
+          },
+          label: t.common.actions.assign,
+          backgroundColor: LemonColor.lavender18,
+          icon: ThemeSvgIcon(
+            color: LemonColor.lavender,
+            builder: (filter) => Assets.icons.icTicket.svg(
+              colorFilter: filter,
+              width: 27.w,
+              height: 27.w,
             ),
-            badgeIcon: Container(
-              width: Sizing.small,
-              height: Sizing.xSmall,
-              decoration: BoxDecoration(
-                color: LemonColor.lavender,
-                borderRadius: BorderRadius.circular(100.r),
-              ),
-              child: Center(
-                child: Text(
-                  '${eventPayment?.ticketCountRemaining?.toInt() ?? 0}',
-                  style: Typo.small.copyWith(
-                    color: colorScheme.onPrimary,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-            ),
-            // TODO: navigate to assign screen
-            // onPressed:,
           ),
+          badgeIcon: eventPayment?.ticketCountRemaining != null &&
+                  eventPayment?.ticketCountRemaining?.toInt() != 0
+              ? Container(
+                  width: Sizing.small,
+                  height: Sizing.xSmall,
+                  decoration: BoxDecoration(
+                    color: LemonColor.lavender,
+                    borderRadius: BorderRadius.circular(100.r),
+                  ),
+                  child: Center(
+                    child: Text(
+                      '${eventPayment?.ticketCountRemaining?.toInt() ?? 0}',
+                      style: Typo.small.copyWith(
+                        color: colorScheme.onPrimary,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                )
+              : null,
+          // TODO: navigate to assign screen
+          // onPressed:,
+        ),
         ActionItem(
           label: t.common.actions.mail,
           backgroundColor: LemonColor.mailBgColor,
