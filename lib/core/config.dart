@@ -45,4 +45,7 @@ class AppConfig {
 
   // Google map
   static get googleMapKey => dotenv.env['GOOGLE_MAP_KEY'];
+
+  // Appcast
+  static get appCastUrl => dotenv.env['APPCAST_URL'];
 }
