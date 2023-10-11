@@ -16,9 +16,9 @@ void main() async {
   registerModule();
 
   await getIt<AppOauth>().init();
-  if (!kDebugMode) {
-    await getIt<FirebaseService>().initialize();
-  }
+  // if (!kDebugMode) {
+  await getIt<FirebaseService>().initialize();
+  // }
   await getIt<MatrixService>().init();
 
   runApp(const LemonadeApp());
