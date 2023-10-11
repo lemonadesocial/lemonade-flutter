@@ -42,7 +42,7 @@ class EditProfileBloc extends Cubit<EditProfileState> {
     emit(
       state.copyWith(
         status: EditProfileStatus.editing,
-        shortBio: input,
+        shortBio: input.trim(),
       ),
     );
   }
@@ -51,7 +51,7 @@ class EditProfileBloc extends Cubit<EditProfileState> {
     emit(
       state.copyWith(
         status: EditProfileStatus.editing,
-        displayName: input,
+        displayName: input.trim(),
       ),
     );
   }
@@ -60,7 +60,7 @@ class EditProfileBloc extends Cubit<EditProfileState> {
     emit(
       state.copyWith(
         status: EditProfileStatus.editing,
-        tagline: input,
+        tagline: input.trim(),
       ),
     );
   }
@@ -69,7 +69,7 @@ class EditProfileBloc extends Cubit<EditProfileState> {
     emit(
       state.copyWith(
         status: EditProfileStatus.editing,
-        jobTitle: input,
+        jobTitle: input.trim(),
       ),
     );
   }
@@ -78,7 +78,7 @@ class EditProfileBloc extends Cubit<EditProfileState> {
     emit(
       state.copyWith(
         status: EditProfileStatus.editing,
-        companyName: input,
+        companyName: input.trim(),
       ),
     );
   }
@@ -87,7 +87,7 @@ class EditProfileBloc extends Cubit<EditProfileState> {
     emit(
       state.copyWith(
         status: EditProfileStatus.editing,
-        education: input,
+        education: input.trim(),
       ),
     );
   }
@@ -96,7 +96,7 @@ class EditProfileBloc extends Cubit<EditProfileState> {
     emit(
       state.copyWith(
         status: EditProfileStatus.editing,
-        gender: gender,
+        gender: gender?.trim(),
       ),
     );
   }
@@ -105,7 +105,7 @@ class EditProfileBloc extends Cubit<EditProfileState> {
     emit(
       state.copyWith(
         status: EditProfileStatus.editing,
-        industry: industry,
+        industry: industry?.trim(),
       ),
     );
   }
@@ -114,7 +114,7 @@ class EditProfileBloc extends Cubit<EditProfileState> {
     emit(
       state.copyWith(
         status: EditProfileStatus.editing,
-        ethnicity: ethnicity,
+        ethnicity: ethnicity?.trim(),
       ),
     );
   }
@@ -123,7 +123,7 @@ class EditProfileBloc extends Cubit<EditProfileState> {
     emit(
       state.copyWith(
         status: EditProfileStatus.editing,
-        username: input,
+        username: input.trim(),
       ),
     );
   }
@@ -133,7 +133,7 @@ class EditProfileBloc extends Cubit<EditProfileState> {
     emit(
       state.copyWith(
         status: EditProfileStatus.editing,
-        dob: input,
+        dob: input.trim(),
       ),
     );
   }

@@ -24,11 +24,13 @@ class OnboardingBloc extends Cubit<OnboardingState> {
   final debouncer = Debouncer(milliseconds: 500);
 
   void onUsernameChange(String input) {
+    final mInput = input.trim();
     // Reset valid input
     emit(
       state.copyWith(
-        status:
-            input.isEmpty ? OnboardingStatus.initial : OnboardingStatus.loading,
+        status: mInput.isEmpty
+            ? OnboardingStatus.initial
+            : OnboardingStatus.loading,
         username: input,
         usernameExisted: null,
       ),
@@ -37,7 +39,7 @@ class OnboardingBloc extends Cubit<OnboardingState> {
     debouncer.run(() async {
       if (input.isNotEmpty) {
         final response =
-            await userRepository.checkValidUsername(username: input);
+            await userRepository.checkValidUsername(username: mInput);
         response.fold(
           (l) => emit(
             state.copyWith(
