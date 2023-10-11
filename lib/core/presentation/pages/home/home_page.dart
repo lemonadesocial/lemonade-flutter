@@ -1,3 +1,4 @@
+import 'package:app/core/config.dart';
 import 'package:app/core/presentation/pages/home/views/list/home_newsfeed_list.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
@@ -10,7 +11,11 @@ import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/core/utils/swipe_detector.dart';
+import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:upgrader/upgrader.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -40,6 +45,11 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final appCastConfiguration = AppcastConfiguration(
+      url: AppConfig.appCastUrl,
+      supportedOS: ['android', 'ios'],
+    );
+
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
     return WillPopScope(
@@ -79,19 +89,31 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         backgroundColor: LemonColor.black,
-        body: SwipeDetector(
-          child: const HomeNewsfeedListView(),
-          onSwipeUp: () {},
-          onSwipeDown: () {},
-          onSwipeLeft: () {
-            context.read<AuthBloc>().state.maybeWhen(
-                  authenticated: (session) =>
-                      AutoRouter.of(context).navigate(const ChatListRoute()),
-                  orElse: () =>
-                      AutoRouter.of(context).navigate(const LoginRoute()),
-                );
-          },
-          onSwipeRight: () {},
+        body: UpgradeAlert(
+          upgrader: Upgrader(
+            durationUntilAlertAgain: AppConfig.isProduction
+                ? const Duration(days: 1)
+                : const Duration(minutes: 1),
+            dialogStyle: UpgradeDialogStyle.cupertino,
+            cupertinoButtonTextStyle:
+                TextStyle(color: Colors.white, fontSize: Typo.small.fontSize!),
+            appcastConfig: appCastConfiguration,
+            debugLogging: kDebugMode,
+          ),
+          child: SwipeDetector(
+            child: const HomeNewsfeedListView(),
+            onSwipeUp: () {},
+            onSwipeDown: () {},
+            onSwipeLeft: () {
+              context.read<AuthBloc>().state.maybeWhen(
+                    authenticated: (session) =>
+                        AutoRouter.of(context).navigate(const ChatListRoute()),
+                    orElse: () =>
+                        AutoRouter.of(context).navigate(const LoginRoute()),
+                  );
+            },
+            onSwipeRight: () {},
+          ),
         ),
       ),
     );
