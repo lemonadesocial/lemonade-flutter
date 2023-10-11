@@ -14,7 +14,6 @@ import 'package:app/core/utils/swipe_detector.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:upgrader/upgrader.dart';
 
 import 'package:flutter/material.dart';
