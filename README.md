@@ -45,7 +45,7 @@ After obtaining the debug.keystore, move the file to the `android/app`` folder o
 
 ## Check app version
 
-The class Appcast, in this Flutter package, is used by the upgrader widgets to download app details from an appcast, based on the Sparkle framework by Andy Matuschak. You can read the Sparkle documentation here: https://sparkle-project.org/documentation/publishing/.
+Appcast, in this Flutter package, is used by the upgrader widgets to download app details from an appcast, based on the Sparkle framework by Andy Matuschak. You can read the Sparkle documentation here: https://sparkle-project.org/documentation/publishing/.
 
 An appcast is an RSS feed with one channel that has a collection of items that each describe one app version. The appcast will describe each app version and will provide the latest app version to upgrader that indicates when an upgrade should be recommended.
 
