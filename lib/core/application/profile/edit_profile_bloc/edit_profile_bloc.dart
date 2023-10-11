@@ -164,7 +164,7 @@ class EditProfileBloc extends Cubit<EditProfileState> {
   }
 
   void clearState() {
-    emit(EditProfileState.initial());
+    emit(state.copyWith(status: EditProfileStatus.initial));
   }
 
   Future<void> uploadImage() async {
