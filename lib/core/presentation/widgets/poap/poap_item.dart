@@ -9,7 +9,6 @@ import 'package:app/core/domain/token/token_repository.dart';
 import 'package:app/core/presentation/pages/poap/popap_detail_page.dart';
 import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
-import 'package:app/core/presentation/widgets/common/dialog/lemon_alert_dialog.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/poap/poap_claim_builder.dart';
@@ -62,87 +61,75 @@ class _PoapItemView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    return BlocListener<ClaimPoapBloc, ClaimPoapState>(
-      listener: (_, state) {
-        showDialog(
-          context: context,
-          builder: (context) => LemonAlertDialog(
-            child: Text(state.failure?.message ?? ''),
-          ),
-        );
-      },
-      listenWhen: (prev, cur) =>
-          prev.failure != cur.failure && cur.failure != null,
-      child: BlocBuilder<BadgeDetailBloc, BadgeDetailState>(
-        builder: (context, badgeDetailState) {
-          final badge = badgeDetailState.badge;
-          return FutureBuilder(
-            future: getIt<TokenRepository>().getToken(
-              input: GetTokenDetailInput(
-                id: '${badge.contract!}-0'.toLowerCase(),
-                network: badge.network,
-              ),
+    return BlocBuilder<BadgeDetailBloc, BadgeDetailState>(
+      builder: (context, badgeDetailState) {
+        final badge = badgeDetailState.badge;
+        return FutureBuilder(
+          future: getIt<TokenRepository>().getToken(
+            input: GetTokenDetailInput(
+              id: '${badge.contract!}-0'.toLowerCase(),
+              network: badge.network,
             ),
-            builder: (innerContext, snapshot) {
-              final tokenDetail = snapshot.data?.fold((l) => null, (r) => r);
-              return InkWell(
-                onTap: () {
-                  BottomSheetUtils.showSnapBottomSheet(
-                    innerContext,
-                    builder: (_) => MultiBlocProvider(
-                      providers: [
-                        BlocProvider.value(
-                          value: BlocProvider.of<ClaimPoapBloc>(context),
-                        ),
-                        BlocProvider.value(
-                          value: BlocProvider.of<BadgeDetailBloc>(context),
-                        ),
-                      ],
-                      child: PopapDetailPage(
-                        tokenDetail: tokenDetail,
+          ),
+          builder: (innerContext, snapshot) {
+            final tokenDetail = snapshot.data?.fold((l) => null, (r) => r);
+            return InkWell(
+              onTap: () {
+                BottomSheetUtils.showSnapBottomSheet(
+                  innerContext,
+                  builder: (_) => MultiBlocProvider(
+                    providers: [
+                      BlocProvider.value(
+                        value: BlocProvider.of<ClaimPoapBloc>(context),
                       ),
-                    ),
-                  );
-                },
-                child: Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: Spacing.small,
-                    vertical: Spacing.small,
-                  ),
-                  decoration: ShapeDecoration(
-                    color: colorScheme.surfaceVariant,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(LemonRadius.small),
-                    ),
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _PoapItemImage(tokenMetadata: tokenDetail?.metadata),
-                      SizedBox(width: Spacing.small),
-                      Flexible(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _PoapItemInfo(metadata: tokenDetail?.metadata),
-                            SizedBox(height: Spacing.xSmall),
-                            PoapQuantityBar(
-                              network: badge.network ?? '',
-                              contract: badge.contract ?? '',
-                            ),
-                            SizedBox(height: Spacing.small),
-                            _PoapItemButtons(badge: badge),
-                          ],
-                        ),
-                      )
+                      BlocProvider.value(
+                        value: BlocProvider.of<BadgeDetailBloc>(context),
+                      ),
                     ],
+                    child: PopapDetailPage(
+                      tokenDetail: tokenDetail,
+                    ),
+                  ),
+                );
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: Spacing.small,
+                  vertical: Spacing.small,
+                ),
+                decoration: ShapeDecoration(
+                  color: colorScheme.surfaceVariant,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(LemonRadius.small),
                   ),
                 ),
-              );
-            },
-          );
-        },
-      ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _PoapItemImage(tokenMetadata: tokenDetail?.metadata),
+                    SizedBox(width: Spacing.small),
+                    Flexible(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _PoapItemInfo(metadata: tokenDetail?.metadata),
+                          SizedBox(height: Spacing.xSmall),
+                          PoapQuantityBar(
+                            network: badge.network ?? '',
+                            contract: badge.contract ?? '',
+                          ),
+                          SizedBox(height: Spacing.small),
+                          _PoapItemButtons(badge: badge),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
     );
   }
 }

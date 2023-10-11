@@ -24,10 +24,12 @@ class PoapTransferPopup extends StatelessWidget {
   const PoapTransferPopup({
     super.key,
     this.token,
+    this.onBack,
     this.onClose,
   });
 
   final TokenDetail? token;
+  final Function()? onBack;
   final Function()? onClose;
 
   @override
@@ -36,6 +38,7 @@ class PoapTransferPopup extends StatelessWidget {
       create: (context) => TransferPoapBloc(),
       child: _PoapTransferPopupView(
         token: token,
+        onBack: onBack,
         onClose: onClose,
       ),
     );
@@ -45,10 +48,12 @@ class PoapTransferPopup extends StatelessWidget {
 class _PoapTransferPopupView extends StatefulWidget {
   const _PoapTransferPopupView({
     this.token,
+    this.onBack,
     this.onClose,
   });
 
   final TokenDetail? token;
+  final Function()? onBack;
   final Function()? onClose;
 
   @override
@@ -90,11 +95,11 @@ class _PoapTransferPopupState extends State<_PoapTransferPopupView> {
             ),
           ),
         );
-    Navigator.of(context).pop();
+    widget.onClose?.call();
   }
 
   void onTransferSuccess(Transfer transfer) {
-    Navigator.of(context).pop();
+    widget.onClose?.call();
   }
 
   void onTransferFailed(String? message) {
@@ -184,7 +189,7 @@ class _PoapTransferPopupState extends State<_PoapTransferPopupView> {
                             Align(
                               alignment: Alignment.topLeft,
                               child: InkWell(
-                                onTap: () => widget.onClose?.call(),
+                                onTap: () => widget.onBack?.call(),
                                 child: Container(
                                   width: 42.w,
                                   height: 42.w,

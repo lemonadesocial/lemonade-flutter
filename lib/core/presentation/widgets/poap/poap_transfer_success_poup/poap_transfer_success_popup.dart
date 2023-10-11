@@ -14,9 +14,11 @@ class PoapTransferSuccessPopup extends StatelessWidget {
   const PoapTransferSuccessPopup({
     super.key,
     this.token,
+    required this.onClose,
   });
 
   final TokenDetail? token;
+  final Function() onClose;
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +90,7 @@ class PoapTransferSuccessPopup extends StatelessWidget {
                             height: 42.w,
                             child: LinearGradientButton(
                               label: '${t.common.done}!',
-                              onTap: () => Navigator.of(context).pop(),
+                              onTap: () => onClose.call(),
                             ),
                           )
                         ],

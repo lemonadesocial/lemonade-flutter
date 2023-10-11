@@ -12,9 +12,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PoapBusyPopup extends StatelessWidget {
   final String title;
+  final Function() onClose;
   const PoapBusyPopup({
     super.key,
     required this.title,
+    required this.onClose,
   });
 
   @override
@@ -60,7 +62,7 @@ class PoapBusyPopup extends StatelessWidget {
                 ),
                 SizedBox(height: Spacing.small),
                 LinearGradientButton(
-                  onTap: () => Navigator.of(context).pop(),
+                  onTap: () => onClose.call(),
                   label: t.common.actions.dismiss,
                   mode: GradientButtonMode.lavenderMode,
                 )
