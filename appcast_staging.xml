@@ -3,18 +3,18 @@
     <channel>
         <title>Lemonade Social Staging - Appcast</title>
         <item>
-            <title>Version 1.0.0</title>
+            <title>Version 2.4.0</title>
             <description>Staging - Minor updates and improvements.</description>
             <pubDate>Wed, 11 Oct 2023 12:00:00 +0000</pubDate>
-            <enclosure url="https://apps.apple.com/us/app/lemonade-social-staging/id6450680676" sparkle:version="1.0.0" sparkle:os="ios" />
+            <enclosure url="https://apps.apple.com/us/app/lemonade-social-staging/id6450680676" sparkle:version="2.4.0" sparkle:os="ios" />
             <!-- Force update version -->
             <!-- <sparkle:tags> <sparkle:criticalUpdate /> </sparkle:tags> -->
         </item>
         <item>
-            <title>Version 1.0.0</title>
+            <title>Version 2.4.0</title>
             <description>Staging - Minor updates and improvements.</description>
             <pubDate>Wed, 11 Oct 2023 12:00:00 +0000</pubDate>
-            <enclosure url="https://play.google.com/store/apps/details?id=social.lemonade.app.staging" sparkle:version="1.0.0" sparkle:os="android" />
+            <enclosure url="https://play.google.com/store/apps/details?id=social.lemonade.app.staging" sparkle:version="2.4.0" sparkle:os="android" />
             <!-- Force update version -->
             <!-- <sparkle:tags> <sparkle:criticalUpdate /> </sparkle:tags> -->
         </item>
