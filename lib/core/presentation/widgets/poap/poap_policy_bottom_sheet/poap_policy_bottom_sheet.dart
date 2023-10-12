@@ -31,99 +31,123 @@ class PoapPolicyBottomSheet extends StatelessWidget {
       builder: (context, badgeDetailState) {
         final badge = badgeDetailState.badge;
         return LemonSnapBottomSheet(
-          defaultSnapSize: 0.9,
-          maxSnapSize: 0.9,
-          minSnapSize: 0.5,
-          snapSizes: const [0.5, 0.9],
+          defaultSnapSize: 0.95,
+          maxSnapSize: 0.95,
+          minSnapSize: 0.95,
+          snapSizes: const [0.95],
           backgroundColor: LemonColor.atomicBlack,
-          builder: (_) => Container(
-            height: 0.8.sh,
+          builder: (scrollController) => Container(
+            height: 0.85.sh,
             padding: EdgeInsets.symmetric(horizontal: Spacing.small),
             color: LemonColor.atomicBlack,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.max,
+            child: Stack(
               children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: Spacing.smMedium),
-                  child: Row(
-                    children: [
-                      LemonBackButton(
-                        color: colorScheme.onSecondary,
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 30.w),
-                Text(
-                  t.nft.requirements,
-                  style: Typo.extraLarge.copyWith(
-                    color: colorScheme.onPrimary,
-                    fontWeight: FontWeight.w700,
-                    fontFamily: FontFamily.nohemiVariable,
-                  ),
-                ),
-                SizedBox(height: Spacing.superExtraSmall),
-                Text(
-                  t.nft.requirementDescription,
-                  style: Typo.mediumPlus.copyWith(
-                    color: colorScheme.onSecondary,
-                  ),
-                ),
-                SizedBox(height: Spacing.medium),
-                if (poapPolicy != null && poapPolicy.result != null)
-                  PoapPolicyNodeWidget(node: poapPolicy.result!.node),
-                const Spacer(),
-                if (badge.claimable != true && !badgeDetailState.isLoading)
-                  SafeArea(
-                    child: SizedBox(
-                      height: Sizing.large,
-                      child: LinearGradientButton(
-                        onTap: () {
-                          context
-                              .read<BadgeDetailBloc>()
-                              .add(const BadgeDetailEvent.fetch());
-                          context.read<ClaimPoapBloc>().add(
-                                const ClaimPoapEvent.checkHasClaimed(
-                                  fromServer: true,
+                CustomScrollView(
+                  slivers: [
+                    SliverToBoxAdapter(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                              vertical: Spacing.smMedium,
+                            ),
+                            child: Row(
+                              children: [
+                                LemonBackButton(
+                                  color: colorScheme.onSecondary,
                                 ),
-                              );
-                        },
-                        label: t.common.actions.refresh,
-                        radius: BorderRadius.circular(LemonRadius.small * 2),
+                              ],
+                            ),
+                          ),
+                          Text(
+                            t.nft.requirements,
+                            style: Typo.extraLarge.copyWith(
+                              color: colorScheme.onPrimary,
+                              fontWeight: FontWeight.w700,
+                              fontFamily: FontFamily.nohemiVariable,
+                            ),
+                          ),
+                          SizedBox(height: Spacing.superExtraSmall),
+                          Text(
+                            t.nft.requirementDescription,
+                            style: Typo.mediumPlus.copyWith(
+                              color: colorScheme.onSecondary,
+                            ),
+                          ),
+                          SizedBox(height: Spacing.medium),
+                          if (poapPolicy != null && poapPolicy.result != null)
+                            PoapPolicyNodeWidget(node: poapPolicy.result!.node),
+                        ],
                       ),
                     ),
-                  ),
-                if (badgeDetailState.isLoading)
-                  SafeArea(
-                    child: SizedBox(
-                      height: Sizing.large,
-                      child: Loading.defaultLoading(context),
+                    SliverPadding(
+                      padding: EdgeInsets.only(top: 120.w),
+                    ),
+                  ],
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: Spacing.smMedium),
+                    color: LemonColor.atomicBlack,
+                    // color: Colors.red,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (badge.claimable != true &&
+                            !badgeDetailState.isLoading)
+                          SizedBox(
+                            height: Sizing.large,
+                            child: LinearGradientButton(
+                              onTap: () {
+                                context
+                                    .read<BadgeDetailBloc>()
+                                    .add(const BadgeDetailEvent.fetch());
+                                context.read<ClaimPoapBloc>().add(
+                                      const ClaimPoapEvent.checkHasClaimed(
+                                        fromServer: true,
+                                      ),
+                                    );
+                              },
+                              label: t.common.actions.refresh,
+                              radius:
+                                  BorderRadius.circular(LemonRadius.small * 2),
+                            ),
+                          ),
+                        if (badgeDetailState.isLoading)
+                          SizedBox(
+                            height: Sizing.large,
+                            child: Loading.defaultLoading(context),
+                          ),
+                        if (badge.claimable == true)
+                          SizedBox(
+                            height: Sizing.large,
+                            child: LinearGradientButton(
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                context.read<ClaimPoapBloc>().add(
+                                      ClaimPoapEvent.claim(
+                                        input: ClaimInput(
+                                          address:
+                                              badge.contract?.toLowerCase() ??
+                                                  '',
+                                          network: badge.network ?? '',
+                                        ),
+                                      ),
+                                    );
+                              },
+                              label: t.nft.claim,
+                              radius:
+                                  BorderRadius.circular(LemonRadius.small * 2),
+                              mode: GradientButtonMode.lavenderMode,
+                            ),
+                          )
+                      ],
                     ),
                   ),
-                if (badge.claimable == true)
-                  SafeArea(
-                    child: SizedBox(
-                      height: Sizing.large,
-                      child: LinearGradientButton(
-                        onTap: () {
-                          Navigator.of(context).pop();
-                          context.read<ClaimPoapBloc>().add(
-                                ClaimPoapEvent.claim(
-                                  input: ClaimInput(
-                                    address:
-                                        badge.contract?.toLowerCase() ?? '',
-                                    network: badge.network ?? '',
-                                  ),
-                                ),
-                              );
-                        },
-                        label: t.nft.claim,
-                        radius: BorderRadius.circular(LemonRadius.small * 2),
-                        mode: GradientButtonMode.lavenderMode,
-                      ),
-                    ),
-                  )
+                )
               ],
             ),
           ),
