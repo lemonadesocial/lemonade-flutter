@@ -47,7 +47,7 @@ class _PoapClaimTransferControllerWidgetViewState
     extends State<_PoapClaimTransferControllerWidgetView> {
   bool visible = false;
 
-  void clear() {
+  void clearData() {
     context
         .read<PoapClaimSubscriptionBloc>()
         .add(PoapClaimSubscriptionEvent.clear());
@@ -81,16 +81,16 @@ class _PoapClaimTransferControllerWidgetViewState
         return PoapClaimedPopup(
           token: token,
           onClose: () {
-            clear();
+            clearData();
             close();
           },
           onTransfer: () {
-            clear();
+            clearData();
             close();
             showTransferPopup(token: token);
           },
           onView: () {
-            clear();
+            clearData();
             close();
           },
         );

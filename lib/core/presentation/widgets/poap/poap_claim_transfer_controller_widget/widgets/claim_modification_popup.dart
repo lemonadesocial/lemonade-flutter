@@ -25,25 +25,7 @@ class ClaimModificationPopup extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     if (claimModification?.state == ClaimState.FAILED) {
-      final errorDescriptionName = claimModification?.errorDescription != null
-          ? claimModification?.errorDescription!['name']
-          : '';
-      String errorDescriptionMessage = '';
-      if (errorDescriptionName == ClaimErrorDescriptionName.AllClaimed.name) {
-        errorDescriptionMessage = t.nft.claimFailedDescription.allClaimed;
-      }
-      if (errorDescriptionName ==
-          ClaimErrorDescriptionName.AlreadyClaimed.name) {
-        errorDescriptionMessage = t.nft.claimFailedDescription.alreadyClaimed;
-      }
-
-      if (errorDescriptionName == ClaimErrorDescriptionName.Forbidden.name) {
-        errorDescriptionMessage = t.nft.claimFailedDescription.forbidden;
-      } else {
-        errorDescriptionMessage = errorDescriptionName ?? '';
-      }
-
-      if (errorDescriptionMessage.isEmpty) {
+      if (failedCaseErrorDescriptionMessage.isEmpty) {
         onClose.call();
         return const SizedBox.shrink();
       }
@@ -51,7 +33,7 @@ class ClaimModificationPopup extends StatelessWidget {
       return LemonAlertDialog(
         onClose: onClose,
         child: Text(
-          errorDescriptionMessage,
+          failedCaseErrorDescriptionMessage,
         ),
       );
     }
@@ -79,5 +61,27 @@ class ClaimModificationPopup extends StatelessWidget {
     }
 
     return const SizedBox.shrink();
+  }
+
+  String get failedCaseErrorDescriptionMessage {
+    final errorDescriptionName = claimModification?.errorDescription != null
+        ? claimModification?.errorDescription!['name']
+        : '';
+    String errorDescriptionMessage = '';
+    if (errorDescriptionName == ClaimErrorDescriptionName.AllClaimed.name) {
+      errorDescriptionMessage = t.nft.claimFailedDescription.allClaimed;
+    }
+
+    if (errorDescriptionName == ClaimErrorDescriptionName.AlreadyClaimed.name) {
+      errorDescriptionMessage = t.nft.claimFailedDescription.alreadyClaimed;
+    }
+
+    if (errorDescriptionName == ClaimErrorDescriptionName.Forbidden.name) {
+      errorDescriptionMessage = t.nft.claimFailedDescription.forbidden;
+    } else {
+      errorDescriptionMessage = errorDescriptionName ?? '';
+    }
+
+    return errorDescriptionMessage;
   }
 }
