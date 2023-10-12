@@ -2,6 +2,7 @@ import 'package:app/core/presentation/pages/edit_profile/widgets/edit_profile_so
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_bottom_sheet_mixin.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
+import 'package:app/core/utils/modal_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -47,26 +48,30 @@ class EditProfileSocialDialog extends StatelessWidget with LemonBottomSheet {
                     EditProfileSocialTile(
                       label: 'X',
                       leadingIcon: Assets.icons.icSocialX.svg(),
-                      onClick: () {},
+                      content: 'https://twitter.com/',
+                      onTap: () => showComingSoonDialog(context),
                     ),
                     SizedBox(height: Spacing.medium),
                     EditProfileSocialTile(
                       label: 'LinkedIn',
                       leadingIcon: Assets.icons.icSocialLinkedin.svg(),
-                      onClick: () {},
+                      content: 'https://linkedIn.com/',
+                      onTap: () => showComingSoonDialog(context),
                     ),
                     SizedBox(height: Spacing.medium),
                     EditProfileSocialTile(
                       label: 'Instagram',
                       leadingIcon: Assets.icons.icSocialInstagram.svg(),
-                      onClick: () {},
+                      content: 'https://instagram.com/',
+                      onTap: () => showComingSoonDialog(context),
                     ),
                     SizedBox(height: Spacing.medium),
                     EditProfileSocialTile(
                       label: 'Facebook',
                       leadingIcon: Assets.icons.icSocialFacebook.svg(),
-                      onClick: () {},
-                    )
+                      content: 'https://facebook.com/',
+                      onTap: () => showComingSoonDialog(context),
+                    ),
                   ],
                 ),
               ),
@@ -75,7 +80,7 @@ class EditProfileSocialDialog extends StatelessWidget with LemonBottomSheet {
               margin: EdgeInsets.symmetric(vertical: Spacing.smMedium),
               width: 1.sw,
               child: LinearGradientButton(
-                onTap: () {},
+                onTap: null,
                 label: t.profile.saveChanges,
                 textStyle: Typo.medium.copyWith(
                   fontFamily: FontFamily.nohemiVariable,
@@ -83,7 +88,7 @@ class EditProfileSocialDialog extends StatelessWidget with LemonBottomSheet {
                 ),
                 height: Sizing.large,
                 radius: BorderRadius.circular(LemonRadius.large),
-                mode: GradientButtonMode.lavenderMode,
+                mode: GradientButtonMode.defaultMode,
               ),
             ),
             SizedBox(height: Spacing.smMedium),

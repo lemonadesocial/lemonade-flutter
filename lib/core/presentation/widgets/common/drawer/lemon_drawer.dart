@@ -95,8 +95,15 @@ class LemonDrawer extends StatelessWidget {
                 icon: Assets.icons.icQr,
                 label: t.common.qrCode,
                 onPressed: () {
-                  Vibrate.feedback(FeedbackType.light);
-                  showComingSoonDialog(context);
+                  Navigator.of(context).pop();
+                  context.read<AuthBloc>().state.maybeWhen(
+                        authenticated: (authSession) => context.router.push(
+                          const QrCodeRoute(),
+                        ),
+                        orElse: () => context.router.navigate(
+                          const LoginRoute(),
+                        ),
+                      );
                 },
               ),
             ].map(
