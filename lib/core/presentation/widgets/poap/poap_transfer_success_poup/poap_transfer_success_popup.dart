@@ -61,40 +61,38 @@ class PoapTransferSuccessPopup extends StatelessWidget {
                 offset: Offset(0, -Spacing.medium),
                 child: Align(
                   alignment: Alignment.bottomCenter,
-                  child: Flexible(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: Spacing.medium),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            t.nft.transferred,
-                            style: Typo.extraLarge.copyWith(
-                              fontWeight: FontWeight.w600,
-                              fontFamily: FontFamily.nohemiVariable,
-                            ),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: Spacing.medium),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          t.nft.transferred,
+                          style: Typo.extraLarge.copyWith(
+                            fontWeight: FontWeight.w600,
+                            fontFamily: FontFamily.nohemiVariable,
                           ),
-                          SizedBox(height: Spacing.extraSmall),
-                          Text(
-                            t.nft.transferSuccess(
-                              tokenName: token?.metadata?.name ?? '',
-                            ),
-                            style: Typo.mediumPlus.copyWith(
-                              color: colorScheme.onSecondary,
-                            ),
-                            textAlign: TextAlign.center,
+                        ),
+                        SizedBox(height: Spacing.extraSmall),
+                        Text(
+                          t.nft.transferSuccess(
+                            tokenName: token?.metadata?.name ?? '',
                           ),
-                          SizedBox(height: Spacing.medium),
-                          SizedBox(
-                            height: 42.w,
-                            child: LinearGradientButton(
-                              label: '${t.common.done}!',
-                              onTap: () => onClose.call(),
-                            ),
-                          )
-                        ],
-                      ),
+                          style: Typo.mediumPlus.copyWith(
+                            color: colorScheme.onSecondary,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(height: Spacing.medium),
+                        SizedBox(
+                          height: 42.w,
+                          child: LinearGradientButton(
+                            label: '${t.common.done}!',
+                            onTap: () => onClose.call(),
+                          ),
+                        )
+                      ],
                     ),
                   ),
                 ),

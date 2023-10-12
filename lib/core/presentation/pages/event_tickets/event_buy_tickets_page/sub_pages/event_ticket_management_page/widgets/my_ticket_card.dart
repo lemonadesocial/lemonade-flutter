@@ -102,25 +102,27 @@ class TicketCardTop extends StatelessWidget {
                   ),
                 ),
                 SizedBox(width: Spacing.small),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      event.title ?? '',
-                      style: Typo.mediumPlus.copyWith(
-                        fontWeight: FontWeight.w600,
+                Flexible(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        event.title ?? '',
+                        style: Typo.mediumPlus.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 2.w,
-                    ),
-                    Text(
-                      ticketType?.title ?? '',
-                      style: Typo.medium.copyWith(
-                        color: colorScheme.onSecondary,
+                      SizedBox(
+                        height: 2.w,
                       ),
-                    ),
-                  ],
+                      Text(
+                        ticketType?.title ?? '',
+                        style: Typo.medium.copyWith(
+                          color: colorScheme.onSecondary,
+                        ),
+                      ),
+                    ],
+                  ),
                 )
               ],
             ),
