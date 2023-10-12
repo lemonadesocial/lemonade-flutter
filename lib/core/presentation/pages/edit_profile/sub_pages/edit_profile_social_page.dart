@@ -80,7 +80,7 @@ class EditProfileSocialDialog extends StatelessWidget with LemonBottomSheet {
               margin: EdgeInsets.symmetric(vertical: Spacing.smMedium),
               width: 1.sw,
               child: LinearGradientButton(
-                onTap: () {},
+                onTap: null,
                 label: t.profile.saveChanges,
                 textStyle: Typo.medium.copyWith(
                   fontFamily: FontFamily.nohemiVariable,
@@ -88,7 +88,7 @@ class EditProfileSocialDialog extends StatelessWidget with LemonBottomSheet {
                 ),
                 height: Sizing.large,
                 radius: BorderRadius.circular(LemonRadius.large),
-                mode: GradientButtonMode.lavenderMode,
+                mode: GradientButtonMode.defaultMode,
               ),
             ),
             SizedBox(height: Spacing.smMedium),
