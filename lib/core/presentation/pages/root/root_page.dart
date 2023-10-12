@@ -43,10 +43,9 @@ class RootPage extends StatelessWidget {
         context.read<NewsfeedListingBloc>().add(NewsfeedListingEvent.fetch());
         return UpgradeAlert(
           upgrader: Upgrader(
-            durationUntilAlertAgain: AppConfig.isProduction
-                ? const Duration(days: 1)
-                : const Duration(seconds: 30),
-            dialogStyle: UpgradeDialogStyle.material,
+            showIgnore: false,
+            durationUntilAlertAgain: const Duration(seconds: 30),
+            dialogStyle: UpgradeDialogStyle.cupertino,
             cupertinoButtonTextStyle:
                 TextStyle(color: Colors.white, fontSize: Typo.small.fontSize!),
             appcastConfig: appCastConfiguration,
