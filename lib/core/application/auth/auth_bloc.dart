@@ -4,6 +4,7 @@ import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/oauth/oauth.dart';
 import 'package:app/core/service/auth/auth_service.dart';
 import 'package:app/core/service/user/user_service.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -61,6 +62,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         return;
       }
       if (!kDebugMode) {
+        await FirebaseAnalytics.instance.setUserId(id: currentUser.userId);
         await FirebaseCrashlytics.instance
             .setUserIdentifier(currentUser.userId);
       }
@@ -74,9 +76,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(const AuthState.processing());
     final currentUser = await _createSession();
     if (!kDebugMode) {
+      await FirebaseAnalytics.instance.setUserId(id: currentUser?.userId);
       await FirebaseCrashlytics.instance.setUserIdentifier(currentUser!.userId);
     }
-    emit(AuthState.authenticated(authSession: currentUser));
+    emit(AuthState.authenticated(authSession: currentUser!));
   }
 
   void _onUnAuthenticated(AuthEventUnAuthenticated event, Emitter emit) {
@@ -90,8 +93,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   Future<void> _onLogout(AuthEventLogout event, Emitter emit) async {
     await authService.logout().whenComplete(() {
       if (!kDebugMode) {
-        //Reset crashlytics
+        // Reset crashlytics
         FirebaseCrashlytics.instance.setUserIdentifier('');
+        FirebaseAnalytics.instance.setUserId(id: null);
       }
       emit(const AuthEvent.unauthenticated());
     });
@@ -100,10 +104,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   Future<void> _onDeleteAccount(AuthEventDelete event, Emitter emit) async {
     emit(const AuthState.processing());
     await authService.deleteAccount().whenComplete(
-          () => emit(
-            const AuthState.unauthenticated(isChecking: true),
-          ),
+      () {
+        if (!kDebugMode) {
+          // Reset crashlytics
+          FirebaseCrashlytics.instance.setUserIdentifier('');
+          FirebaseAnalytics.instance.setUserId(id: null);
+        }
+        emit(
+          const AuthState.unauthenticated(isChecking: true),
         );
+      },
+    );
   }
 
   Future<User?> _createSession() async {
