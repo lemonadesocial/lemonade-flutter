@@ -5,6 +5,7 @@ import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.dart';
+import 'package:app/router/my_router_observer.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/theme.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -123,7 +124,6 @@ class _App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SnackBarUtils.init(lemonadeAppDarkThemeData.colorScheme);
-
     return MaterialApp.router(
       scaffoldMessengerKey: SnackBarUtils.rootScaffoldMessengerKey,
       locale: _getCurrentLocale(context), // use provider
@@ -132,7 +132,9 @@ class _App extends StatelessWidget {
       themeMode: ThemeMode.dark,
       darkTheme: lemonadeAppDarkThemeData,
       theme: lemonadeAppLightThemeData,
-      routerDelegate: router.delegate(),
+      routerDelegate: router.delegate(
+        navigatorObservers: () => <NavigatorObserver>[MyRouterObserver()],
+      ),
       routeInformationParser:
           router.defaultRouteParser(includePrefixMatches: true),
       builder: (context, widget) {
