@@ -73,7 +73,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   Future<void> _onRefresh(AuthEventRefresh event, Emitter emit) async {
     emit(const AuthState.processing());
     final currentUser = await _createSession();
-    await FirebaseCrashlytics.instance.setUserIdentifier(currentUser!.userId);
+    if (!kDebugMode) {
+      await FirebaseCrashlytics.instance.setUserIdentifier(currentUser!.userId);
+    }
     emit(AuthState.authenticated(authSession: currentUser));
   }
 
