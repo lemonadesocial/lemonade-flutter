@@ -5,6 +5,7 @@ import 'package:app/core/oauth/oauth.dart';
 import 'package:app/core/service/auth/auth_service.dart';
 import 'package:app/core/service/user/user_service.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
@@ -59,8 +60,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(AuthState.onBoardingRequired(authSession: currentUser));
         return;
       }
-      await FirebaseCrashlytics.instance.setUserIdentifier(currentUser.userId);
-      FirebaseCrashlytics.instance.crash();
+      if (!kDebugMode) {
+        await FirebaseCrashlytics.instance
+            .setUserIdentifier(currentUser.userId);
+      }
       emit(AuthState.authenticated(authSession: currentUser));
       return;
     }
@@ -84,8 +87,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   Future<void> _onLogout(AuthEventLogout event, Emitter emit) async {
     await authService.logout().whenComplete(() {
-      //Reset crashlytics
-      FirebaseCrashlytics.instance.setUserIdentifier('');
+      if (!kDebugMode) {
+        //Reset crashlytics
+        FirebaseCrashlytics.instance.setUserIdentifier('');
+      }
       emit(const AuthEvent.unauthenticated());
     });
   }
