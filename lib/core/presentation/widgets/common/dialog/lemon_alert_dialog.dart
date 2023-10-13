@@ -7,11 +7,13 @@ import 'package:flutter/material.dart';
 class LemonAlertDialog extends StatelessWidget {
   final Widget child;
   final String? buttonLabel;
+  final Function()? onClose;
 
   const LemonAlertDialog({
     super.key,
     required this.child,
     this.buttonLabel,
+    this.onClose,
   });
 
   @override
@@ -31,7 +33,9 @@ class LemonAlertDialog extends StatelessWidget {
             child,
             SizedBox(height: Spacing.small),
             LinearGradientButton(
-              onTap: () => Navigator.of(context).pop(),
+              onTap: () => onClose != null
+                  ? onClose?.call()
+                  : Navigator.of(context).pop(),
               label: buttonLabel ?? t.common.actions.dismiss,
               mode: GradientButtonMode.lavenderMode,
             )

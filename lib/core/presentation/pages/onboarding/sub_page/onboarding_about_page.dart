@@ -37,133 +37,149 @@ class OnboardingAboutPage extends StatelessWidget {
       builder: (context, state) {
         return WillPopScope(
           onWillPop: () async => false,
-          child: Scaffold(
-            appBar: AppBar(
-              actions: [
-                Row(
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        context
-                            .read<AuthBloc>()
-                            .add(const AuthEvent.authenticated());
-                        context.router.replaceAll([const RootRoute()]);
-                      },
-                      child: Text(
-                        t.onboarding.skip,
-                        style:
-                            Typo.medium.copyWith(fontWeight: FontWeight.w400),
-                      ),
-                    ),
-                    SizedBox(width: Spacing.smMedium),
-                  ],
-                ),
-              ],
-            ),
-            backgroundColor: theme.colorScheme.primary,
-            body: BlocBuilder<OnboardingBloc, OnboardingState>(
-              builder: (context, state) {
-                return Padding(
-                  padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+          child: GestureDetector(
+            onTap: () => FocusScope.of(context).unfocus(),
+            child: Scaffold(
+              resizeToAvoidBottomInset: false,
+              appBar: AppBar(
+                actions: [
+                  Row(
                     children: [
-                      SizedBox(height: Spacing.medium),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              t.onboarding.aboutYou,
-                              style: Typo.extraLarge.copyWith(
-                                fontWeight: FontWeight.w800,
-                                color: LemonColor.onboardingTitle,
-                                fontFamily: FontFamily.nohemiVariable,
-                              ),
-                            ),
-                            SizedBox(height: Spacing.extraSmall),
-                            Text(
-                              t.onboarding.aboutYouDesc,
-                              style: theme.textTheme.bodyMedium,
-                            ),
-                            SizedBox(height: Spacing.medium),
-                            // Gender picker
-                            Row(
-                              children: [
-                                GenderChipWidget(
-                                  label: t.onboarding.she,
-                                  leading: Assets.icons.icGenderFemale,
-                                  activeColor: LemonColor.femaleActiveColor,
-                                  inActiveColor: LemonColor.femaleDefault,
-                                  defaultColor: LemonColor.femaleDefault,
-                                  onSelect: () =>
-                                      bloc.onGenderSelect(LemonPronoun.she),
-                                  isSelected: state.gender == null
-                                      ? null
-                                      : state.gender == LemonPronoun.she,
-                                ),
-                                SizedBox(width: Spacing.superExtraSmall),
-                                GenderChipWidget(
-                                  label: t.onboarding.he,
-                                  leading: Assets.icons.icGenderFemale,
-                                  activeColor: LemonColor.maleActiveColor,
-                                  inActiveColor: LemonColor.maleDefault,
-                                  defaultColor: LemonColor.maleDefault,
-                                  onSelect: () =>
-                                      bloc.onGenderSelect(LemonPronoun.he),
-                                  isSelected: state.gender == null
-                                      ? null
-                                      : state.gender == LemonPronoun.he,
-                                ),
-                                SizedBox(width: Spacing.superExtraSmall),
-                                GenderChipWidget(
-                                  label: t.onboarding.they,
-                                  leading: Assets.icons.icGenderAmbiguous,
-                                  activeColor: LemonColor.ambiguousActiveColor,
-                                  inActiveColor: LemonColor.ambiguousDefault,
-                                  defaultColor: LemonColor.ambiguousDefault,
-                                  onSelect: () =>
-                                      bloc.onGenderSelect(LemonPronoun.they),
-                                  isSelected: state.gender == null
-                                      ? null
-                                      : state.gender == LemonPronoun.they,
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: Spacing.medium),
-                            LemonTextField(
-                              onChange: bloc.onDisplayNameChange,
-                              hintText: t.onboarding.displayName,
-                            ),
-                            SizedBox(height: Spacing.xSmall),
-                            LemonTextField(
-                              onChange: bloc.onShortBioChange,
-                              hintText: t.onboarding.shortBio,
-                              minLines: 3,
-                            ),
-                          ],
+                      InkWell(
+                        onTap: () {
+                          context
+                              .read<AuthBloc>()
+                              .add(const AuthEvent.authenticated());
+                          context.router.replaceAll([const RootRoute()]);
+                        },
+                        child: Text(
+                          t.onboarding.skip,
+                          style:
+                              Typo.medium.copyWith(fontWeight: FontWeight.w400),
                         ),
                       ),
-                      LinearGradientButton(
-                        onTap: state.gender == null ? null : bloc.updateProfile,
-                        label: t.onboarding.next,
-                        textStyle: Typo.medium.copyWith(
-                          fontFamily: FontFamily.nohemiVariable,
-                          fontWeight: FontWeight.w600,
-                          color: theme.colorScheme.onPrimary,
-                        ),
-                        height: Sizing.large,
-                        radius: BorderRadius.circular(LemonRadius.large),
-                        mode: state.gender == null
-                            ? GradientButtonMode.defaultMode
-                            : GradientButtonMode.lavenderMode,
-                        loadingWhen: state.status == OnboardingStatus.loading,
-                      ),
-                      SizedBox(height: 24.h),
+                      SizedBox(width: Spacing.smMedium),
                     ],
                   ),
-                );
-              },
+                ],
+              ),
+              backgroundColor: theme.colorScheme.primary,
+              body: SingleChildScrollView(
+                reverse: true,
+                physics: const ClampingScrollPhysics(),
+                child: BlocBuilder<OnboardingBloc, OnboardingState>(
+                  builder: (context, state) {
+                    return Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(height: Spacing.medium),
+                          Text(
+                            t.onboarding.aboutYou,
+                            style: Typo.extraLarge.copyWith(
+                              fontWeight: FontWeight.w800,
+                              color: LemonColor.onboardingTitle,
+                              fontFamily: FontFamily.nohemiVariable,
+                            ),
+                          ),
+                          SizedBox(height: Spacing.extraSmall),
+                          Text(
+                            t.onboarding.aboutYouDesc,
+                            style: theme.textTheme.bodyMedium,
+                          ),
+                          SizedBox(height: Spacing.medium),
+                          // Gender picker
+                          Row(
+                            children: [
+                              GenderChipWidget(
+                                label: t.onboarding.she,
+                                leading: Assets.icons.icGenderFemale,
+                                activeColor: LemonColor.femaleActiveColor,
+                                inActiveColor: LemonColor.femaleDefault,
+                                defaultColor: LemonColor.femaleDefault,
+                                onSelect: () =>
+                                    bloc.onGenderSelect(LemonPronoun.she),
+                                isSelected: state.gender == null
+                                    ? null
+                                    : state.gender == LemonPronoun.she,
+                              ),
+                              SizedBox(width: Spacing.superExtraSmall),
+                              GenderChipWidget(
+                                label: t.onboarding.he,
+                                leading: Assets.icons.icGenderFemale,
+                                activeColor: LemonColor.maleActiveColor,
+                                inActiveColor: LemonColor.maleDefault,
+                                defaultColor: LemonColor.maleDefault,
+                                onSelect: () =>
+                                    bloc.onGenderSelect(LemonPronoun.he),
+                                isSelected: state.gender == null
+                                    ? null
+                                    : state.gender == LemonPronoun.he,
+                              ),
+                              SizedBox(width: Spacing.superExtraSmall),
+                              GenderChipWidget(
+                                label: t.onboarding.they,
+                                leading: Assets.icons.icGenderAmbiguous,
+                                activeColor: LemonColor.ambiguousActiveColor,
+                                inActiveColor: LemonColor.ambiguousDefault,
+                                defaultColor: LemonColor.ambiguousDefault,
+                                onSelect: () =>
+                                    bloc.onGenderSelect(LemonPronoun.they),
+                                isSelected: state.gender == null
+                                    ? null
+                                    : state.gender == LemonPronoun.they,
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: Spacing.medium),
+                          LemonTextField(
+                            onChange: bloc.onDisplayNameChange,
+                            hintText: t.onboarding.displayName,
+                          ),
+                          SizedBox(height: Spacing.xSmall),
+                          LemonTextField(
+                            onChange: bloc.onShortBioChange,
+                            hintText: t.onboarding.shortBio,
+                            minLines: 3,
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).viewInsets.bottom > 0
+                                ? 30.h
+                                : 300.h,
+                          ),
+                          LinearGradientButton(
+                            onTap: state.gender == null
+                                ? null
+                                : bloc.updateProfile,
+                            label: t.onboarding.next,
+                            textStyle: Typo.medium.copyWith(
+                              fontFamily: FontFamily.nohemiVariable,
+                              fontWeight: FontWeight.w600,
+                              color: theme.colorScheme.onPrimary,
+                            ),
+                            height: Sizing.large,
+                            radius: BorderRadius.circular(LemonRadius.large),
+                            mode: state.gender == null
+                                ? GradientButtonMode.defaultMode
+                                : GradientButtonMode.lavenderMode,
+                            loadingWhen:
+                                state.status == OnboardingStatus.loading,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                              bottom: MediaQuery.of(context).viewInsets.bottom +
+                                  24.h,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
             ),
           ),
         );

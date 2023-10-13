@@ -42,69 +42,72 @@ class OnboardingUsernamePage extends StatelessWidget {
       builder: (context, state) {
         return WillPopScope(
           onWillPop: () => Future.value(!onboardingFlow),
-          child: Scaffold(
-            appBar: AppBar(
-              leading: onboardingFlow ? null : const LemonBackButton(),
-            ),
-            backgroundColor: theme.colorScheme.primary,
-            body: Padding(
-              padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: Spacing.medium),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          t.onboarding.pickUsername,
-                          style: Typo.extraLarge.copyWith(
-                            fontWeight: FontWeight.w800,
-                            color: theme.colorScheme.onPrimary,
-                            fontFamily: FontFamily.nohemiVariable,
+          child: GestureDetector(
+            onTap: () => FocusScope.of(context).unfocus(),
+            child: Scaffold(
+              appBar: AppBar(
+                leading: onboardingFlow ? null : const LemonBackButton(),
+              ),
+              backgroundColor: theme.colorScheme.primary,
+              body: Padding(
+                padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: Spacing.medium),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            t.onboarding.pickUsername,
+                            style: Typo.extraLarge.copyWith(
+                              fontWeight: FontWeight.w800,
+                              color: theme.colorScheme.onPrimary,
+                              fontFamily: FontFamily.nohemiVariable,
+                            ),
                           ),
-                        ),
-                        SizedBox(height: Spacing.extraSmall),
-                        Text(
-                          t.onboarding.pickUsernameDesc,
-                          style: theme.textTheme.bodyMedium,
-                        ),
-                        SizedBox(height: Spacing.medium),
-                        LemonTextField(
-                          onChange: bloc.onUsernameChange,
-                          hintText: t.onboarding.username,
-                          borderColor: state.usernameExisted ?? false
-                              ? LemonColor.errorRedBg
-                              : null,
-                          statusWidget: state.usernameExisted == null
-                              ? null
-                              : statusWidget(context, state.usernameExisted!),
-                        ),
-                      ],
+                          SizedBox(height: Spacing.extraSmall),
+                          Text(
+                            t.onboarding.pickUsernameDesc,
+                            style: theme.textTheme.bodyMedium,
+                          ),
+                          SizedBox(height: Spacing.medium),
+                          LemonTextField(
+                            onChange: bloc.onUsernameChange,
+                            hintText: t.onboarding.username,
+                            borderColor: state.usernameExisted ?? false
+                                ? LemonColor.errorRedBg
+                                : null,
+                            statusWidget: state.usernameExisted == null
+                                ? null
+                                : statusWidget(context, state.usernameExisted!),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  LinearGradientButton(
-                    onTap: (bloc.state.username?.isEmpty ?? true) ||
-                            (bloc.state.usernameExisted ?? true)
-                        ? null
-                        : bloc.updateProfile,
-                    label: t.onboarding.claim,
-                    textStyle: Typo.medium.copyWith(
-                      fontFamily: FontFamily.nohemiVariable,
-                      fontWeight: FontWeight.w600,
-                      color: theme.colorScheme.onPrimary,
+                    LinearGradientButton(
+                      onTap: (bloc.state.username?.isEmpty ?? true) ||
+                              (bloc.state.usernameExisted ?? true)
+                          ? null
+                          : bloc.updateProfile,
+                      label: t.onboarding.claim,
+                      textStyle: Typo.medium.copyWith(
+                        fontFamily: FontFamily.nohemiVariable,
+                        fontWeight: FontWeight.w600,
+                        color: theme.colorScheme.onPrimary,
+                      ),
+                      height: Sizing.large,
+                      radius: BorderRadius.circular(LemonRadius.large),
+                      mode: (bloc.state.username?.isEmpty ?? true) ||
+                              (bloc.state.usernameExisted ?? true)
+                          ? GradientButtonMode.defaultMode
+                          : GradientButtonMode.lavenderMode,
+                      loadingWhen: state.status == OnboardingStatus.loading,
                     ),
-                    height: Sizing.large,
-                    radius: BorderRadius.circular(LemonRadius.large),
-                    mode: (bloc.state.username?.isEmpty ?? true) ||
-                            (bloc.state.usernameExisted ?? true)
-                        ? GradientButtonMode.defaultMode
-                        : GradientButtonMode.lavenderMode,
-                    loadingWhen: state.status == OnboardingStatus.loading,
-                  ),
-                  SizedBox(height: 24.h),
-                ],
+                    SizedBox(height: 24.h),
+                  ],
+                ),
               ),
             ),
           ),

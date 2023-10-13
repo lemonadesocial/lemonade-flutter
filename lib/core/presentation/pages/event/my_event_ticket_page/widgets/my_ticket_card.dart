@@ -97,41 +97,39 @@ class TicketCardTop extends StatelessWidget {
             child: Stack(
               children: [
                 Container(
+                  width: double.infinity,
                   margin: EdgeInsets.all(Spacing.medium),
-                  child: Row(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            ticketTitle.toUpperCase(),
-                            style: Typo.mediumPlus.copyWith(
-                              fontWeight: FontWeight.w600,
-                              fontFamily: FontFamily.spaceGrotesk,
-                            ),
-                          ),
-                          SizedBox(height: Spacing.smMedium),
-                          Text(
-                            event.title?.toUpperCase() ?? '',
-                            style: Typo.mediumPlus.copyWith(
-                              fontWeight: FontWeight.w600,
-                              fontFamily: FontFamily.spaceGrotesk,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 2.w,
-                          ),
-                          Text(
-                            DateFormatUtils.custom(
-                              event.start,
-                              pattern: 'EEEE, HH:mma',
-                            ),
-                            style: Typo.medium.copyWith(
-                              color: colorScheme.onSecondary,
-                            ),
-                          ),
-                        ],
-                      )
+                      Text(
+                        ticketTitle.toUpperCase(),
+                        style: Typo.mediumPlus.copyWith(
+                          fontWeight: FontWeight.w600,
+                          fontFamily: FontFamily.spaceGrotesk,
+                        ),
+                      ),
+                      SizedBox(height: Spacing.smMedium),
+                      Text(
+                        event.title?.toUpperCase() ?? '',
+                        style: Typo.mediumPlus.copyWith(
+                          fontWeight: FontWeight.w600,
+                          fontFamily: FontFamily.spaceGrotesk,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 2.w,
+                      ),
+                      Text(
+                        DateFormatUtils.custom(
+                          event.start,
+                          pattern: 'EEEE, HH:mma',
+                        ),
+                        style: Typo.medium.copyWith(
+                          color: colorScheme.onSecondary,
+                        ),
+                      ),
                     ],
                   ),
                 ),

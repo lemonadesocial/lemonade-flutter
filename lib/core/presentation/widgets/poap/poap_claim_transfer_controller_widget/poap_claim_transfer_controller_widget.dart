@@ -1,14 +1,11 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/poap/poap_claim_subscription_bloc/poap_claim_subscription_bloc.dart';
 import 'package:app/core/application/poap/poap_transfer_subscription_bloc/poap_transfer_subscription_bloc.dart';
-import 'package:app/core/domain/poap/poap_enums.dart';
 import 'package:app/core/domain/token/entities/token_entities.dart';
-import 'package:app/core/presentation/widgets/common/dialog/lemon_alert_dialog.dart';
+import 'package:app/core/presentation/widgets/poap/poap_claim_transfer_controller_widget/widgets/claim_modification_popup.dart';
+import 'package:app/core/presentation/widgets/poap/poap_claim_transfer_controller_widget/widgets/transfer_modification_popup.dart';
 import 'package:app/core/presentation/widgets/poap/poap_claimed_poup/poap_claimed_popup.dart';
 import 'package:app/core/presentation/widgets/poap/poap_transfer_popup/poap_transfer_popup.dart';
-import 'package:app/core/presentation/widgets/poap/poap_transfer_success_poup/poap_transfer_success_popup.dart';
-import 'package:app/core/presentation/widgets/poap/popap_busy_popup/poap_busy_popup.dart';
-import 'package:app/i18n/i18n.g.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -48,10 +45,17 @@ class _PoapClaimTransferControllerWidgetView extends StatefulWidget {
 
 class _PoapClaimTransferControllerWidgetViewState
     extends State<_PoapClaimTransferControllerWidgetView> {
-  void _clear() {
+  bool visible = false;
+
+  void clearData() {
     context
         .read<PoapClaimSubscriptionBloc>()
         .add(PoapClaimSubscriptionEvent.clear());
+  }
+
+  void close() {
+    visible = false;
+    Navigator.of(context).pop();
   }
 
   void showTransferPopup({TokenDetail? token}) {
@@ -60,10 +64,11 @@ class _PoapClaimTransferControllerWidgetViewState
       barrierDismissible: false,
       builder: (context) => PoapTransferPopup(
         token: token,
-        onClose: () {
-          Navigator.of(context).pop();
+        onBack: () {
+          close();
           showClaimSuccessPopup(token: token);
         },
+        onClose: close,
       ),
     );
   }
@@ -76,17 +81,17 @@ class _PoapClaimTransferControllerWidgetViewState
         return PoapClaimedPopup(
           token: token,
           onClose: () {
-            _clear();
-            Navigator.of(context).pop();
+            clearData();
+            close();
           },
           onTransfer: () {
-            _clear();
-            Navigator.of(context).pop();
+            clearData();
+            close();
             showTransferPopup(token: token);
           },
           onView: () {
-            _clear();
-            Navigator.of(context).pop();
+            clearData();
+            close();
           },
         );
       },
@@ -95,67 +100,31 @@ class _PoapClaimTransferControllerWidgetViewState
 
   @override
   Widget build(BuildContext context) {
-    final t = Translations.of(context);
     return MultiBlocListener(
       listeners: [
         BlocListener<PoapClaimSubscriptionBloc, PoapClaimSubscriptionState>(
           listener: (context, state) {
             state.maybeWhen(
-              orElse: () => null,
-              hasClaimModification: (claimModification, token) {
-                if (claimModification.state == ClaimState.FAILED) {
-                  final errorDescriptionName =
-                      claimModification.errorDescription != null
-                          ? claimModification.errorDescription!['name']
-                          : '';
-                  String errorDescriptionMessage = '';
-                  if (errorDescriptionName ==
-                      ClaimErrorDescriptionName.AllClaimed.name) {
-                    errorDescriptionMessage =
-                        t.nft.claimFailedDescription.allClaimed;
-                  }
-                  if (errorDescriptionName ==
-                      ClaimErrorDescriptionName.AlreadyClaimed.name) {
-                    errorDescriptionMessage =
-                        t.nft.claimFailedDescription.alreadyClaimed;
-                  }
-
-                  if (errorDescriptionName ==
-                      ClaimErrorDescriptionName.Forbidden.name) {
-                    errorDescriptionMessage =
-                        t.nft.claimFailedDescription.forbidden;
-                  } else {
-                    errorDescriptionMessage = errorDescriptionName ?? '';
-                  }
-
-                  if (errorDescriptionMessage.isEmpty) return;
-
-                  showDialog(
-                    context: context,
-                    builder: (context) => LemonAlertDialog(
-                      child: Text(
-                        errorDescriptionMessage,
-                      ),
-                    ),
-                  );
+              orElse: () => setState(() {
+                visible = false;
+              }),
+              hasClaimModification: (mClaimModification, mToken) {
+                if (visible) {
+                  Navigator.of(context).pop();
                 }
-
-                if (claimModification.state == ClaimState.PENDING) {
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return PoapBusyPopup(
-                        title: '${t.nft.claiming}...',
-                      );
+                visible = true;
+                showDialog(
+                  context: context,
+                  builder: (_) => ClaimModificationPopup(
+                    claimModification: mClaimModification,
+                    token: mToken,
+                    onClose: close,
+                    onPressedTransfer: (token) {
+                      close();
+                      showTransferPopup(token: token);
                     },
-                  );
-                }
-
-                if (claimModification.state == ClaimState.CONFIRMED) {
-                  showClaimSuccessPopup(
-                    token: token,
-                  );
-                }
+                  ),
+                );
               },
             );
           },
@@ -164,29 +133,26 @@ class _PoapClaimTransferControllerWidgetViewState
             PoapTransferSubscriptionState>(
           listener: (context, state) {
             state.maybeWhen(
-              orElse: () => null,
-              hasTransferModification: (transferModification, token) {
-                if (transferModification.state == TransferState.PENDING) {
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return PoapBusyPopup(
-                        title: '${t.nft.transferring}...',
-                      );
-                    },
-                  );
+              orElse: () {
+                visible = false;
+              },
+              hasTransferModification: (mTransferModification, mToken) {
+                if (visible) {
+                  Navigator.of(context).pop();
                 }
-
-                if (transferModification.state == TransferState.CONFIRMED) {
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return PoapTransferSuccessPopup(
-                        token: token,
-                      );
+                visible = true;
+                showDialog(
+                  context: context,
+                  builder: (_) => TransferModificationPopup(
+                    transferModification: mTransferModification,
+                    token: mToken,
+                    onClose: close,
+                    onPressedBack: (token) {
+                      close();
+                      showClaimSuccessPopup(token: token);
                     },
-                  );
-                }
+                  ),
+                );
               },
             );
           },

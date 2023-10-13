@@ -37,7 +37,8 @@
         "invite": "invite",
         "assign": "assign",
         "dismiss": "Dismiss",
-        "refresh": "Refresh"
+        "refresh": "Refresh",
+        "copyLink": "Copy link"
     },
     "followed": "Followed",
     "anonymous": "anonymous",
@@ -56,7 +57,7 @@
     "maximumDistance": "Maximum distance",
     "community": "community",
     "dashboard": "dashboard",
-    "qrCode": "qrCode",
+    "qrCode": "QR code",
     "support": "support",
     "delete": "delete",
     "lemonade": "Lemonade",

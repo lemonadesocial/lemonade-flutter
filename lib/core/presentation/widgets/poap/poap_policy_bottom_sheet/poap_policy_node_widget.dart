@@ -6,6 +6,7 @@ import 'package:app/core/presentation/widgets/poap/poap_policy_bottom_sheet/node
 import 'package:app/core/presentation/widgets/poap/poap_policy_bottom_sheet/nodes/poap_policy_phone_node_widget.dart';
 import 'package:app/core/presentation/widgets/poap/poap_policy_bottom_sheet/nodes/poap_policy_twitter_node_widget.dart';
 import 'package:app/core/presentation/widgets/poap/poap_policy_bottom_sheet/nodes/poap_policy_user_node_widget.dart';
+import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -97,10 +98,7 @@ class PoapPolicyNodeWidget extends StatelessWidget {
                     wrap: false,
                   ),
                   if (index + 1 < excludedResultNodes.length)
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 6),
-                      child: Text('OR'),
-                    ),
+                    const NodeDivider(text: "OR")
                 ],
               );
             }).toList(),
@@ -210,6 +208,57 @@ class _NodeContainer extends StatelessWidget {
           child: child,
         )
       ],
+    );
+  }
+}
+
+class NodeDivider extends StatelessWidget {
+  const NodeDivider({
+    super.key,
+    required this.text,
+  });
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: Spacing.xSmall),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Expanded(
+            child: Divider(
+              height: 1.w,
+              thickness: 1.w,
+              color: colorScheme.onPrimary.withOpacity(0.09),
+            ),
+          ),
+          Container(
+            width: Sizing.regular,
+            height: Sizing.small,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(LemonRadius.normal),
+              color: colorScheme.onPrimary.withOpacity(0.09),
+            ),
+            child: Center(
+              child: Text(
+                text,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Divider(
+              height: 1.w,
+              thickness: 1.w,
+              color: colorScheme.onPrimary.withOpacity(0.09),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
