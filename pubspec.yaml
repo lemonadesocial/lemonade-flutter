@@ -94,6 +94,7 @@ dependencies:
   firebase_messaging: ^14.6.8
   firebase_crashlytics: ^3.3.3
   flutter_local_notifications: ^15.1.0+1
+  firebase_analytics: ^10.5.1
   
   # location tracking
   geolocator: 9.0.2
@@ -112,7 +113,7 @@ dependencies:
 
   # Loading layer
   flutter_easyloading: ^3.0.5
-  
+
 dependency_overrides:
   matrix_api_lite:
     git:

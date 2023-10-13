@@ -42,76 +42,81 @@ class FirebaseService {
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
   Future<void> initialize() async {
-    await Firebase.initializeApp(
-      options: AppConfig.env == 'production'
-          ? firebase_options_production.DefaultFirebaseOptions.currentPlatform
-          : firebase_options_staging.DefaultFirebaseOptions.currentPlatform,
-    );
-    FirebaseService._firebaseMessaging = FirebaseMessaging.instance;
-    channel = const AndroidNotificationChannel(
-      'high_importance_channel',
-      'High Importance Notifications',
-      description: 'This channel is used for important notifications.',
-      importance: Importance.high,
-    );
+    try {
+      await Firebase.initializeApp(
+        options: AppConfig.isProduction
+            ? firebase_options_production.DefaultFirebaseOptions.currentPlatform
+            : firebase_options_staging.DefaultFirebaseOptions.currentPlatform,
+      );
+      FirebaseService._firebaseMessaging = FirebaseMessaging.instance;
+      channel = const AndroidNotificationChannel(
+        'high_importance_channel',
+        'High Importance Notifications',
+        description: 'This channel is used for important notifications.',
+        importance: Importance.high,
+      );
 
-    await flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()
-        ?.createNotificationChannel(channel);
+      await flutterLocalNotificationsPlugin
+          .resolvePlatformSpecificImplementation<
+              AndroidFlutterLocalNotificationsPlugin>()
+          ?.createNotificationChannel(channel);
 
-    await FirebaseMessaging.instance
-        .setForegroundNotificationPresentationOptions(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
+      await FirebaseMessaging.instance
+          .setForegroundNotificationPresentationOptions(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
 
-    const InitializationSettings initializationSettings =
-        InitializationSettings(
-      android: AndroidInitializationSettings("@mipmap/ic_launcher"),
-      iOS: DarwinInitializationSettings(),
-    );
+      const InitializationSettings initializationSettings =
+          InitializationSettings(
+        android: AndroidInitializationSettings("@mipmap/ic_launcher"),
+        iOS: DarwinInitializationSettings(),
+      );
 
-    await flutterLocalNotificationsPlugin.initialize(
-      initializationSettings,
-      onDidReceiveNotificationResponse:
-          (NotificationResponse notificationResponse) {
-        if (kDebugMode) {
-          print('onDidReceiveNotificationResponse');
-        }
-        try {
-          // TODO: Handle notification navigate
-          // var jsonObject = json.decode(notificationResponse.payload ?? '');
-          // String type = jsonObject['type'];
-          // String objectId = jsonObject['object_id'];
-          // String objectType = jsonObject['object_type'];
-
-          // NavigationUtils.handleNotificationNavigate(
-          //     _router!, _context!, type, objectType, objectId);
-        } catch (e) {
+      await flutterLocalNotificationsPlugin.initialize(
+        initializationSettings,
+        onDidReceiveNotificationResponse:
+            (NotificationResponse notificationResponse) {
           if (kDebugMode) {
-            print('Error parsing JSON: $e');
+            print('onDidReceiveNotificationResponse');
           }
-        }
-      },
-    );
-    // Enabled only for signed builds
-    FirebaseCrashlytics.instance
-        .setCrashlyticsCollectionEnabled(kDebugMode == false);
-    FlutterError.onError = (errorDetails) {
-      // If you wish to record a "non-fatal" exception, please use `FirebaseCrashlytics.instance.recordFlutterError` instead
-      FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
-    };
-    PlatformDispatcher.instance.onError = (error, stack) {
-      // If you wish to record a "non-fatal" exception, please remove the "fatal" parameter
-      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-      return true;
-    };
+          try {
+            // TODO: Handle notification navigate
+            // var jsonObject = json.decode(notificationResponse.payload ?? '');
+            // String type = jsonObject['type'];
+            // String objectId = jsonObject['object_id'];
+            // String objectType = jsonObject['object_type'];
 
-    _setUpMessageHandlers();
-    getIt<AppOauth>().tokenStateStream.listen(_onTokenStateChange);
-    getToken();
+            // NavigationUtils.handleNotificationNavigate(
+            //     _router!, _context!, type, objectType, objectId);
+          } catch (e) {
+            if (kDebugMode) {
+              print('Error parsing JSON: $e');
+            }
+          }
+        },
+      );
+      FirebaseCrashlytics.instance
+          .setCrashlyticsCollectionEnabled(kDebugMode == false);
+      FlutterError.onError = (errorDetails) {
+        // If you wish to record a "non-fatal" exception, please use `FirebaseCrashlytics.instance.recordFlutterError` instead
+        FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+      };
+      PlatformDispatcher.instance.onError = (error, stack) {
+        // If you wish to record a "non-fatal" exception, please remove the "fatal" parameter
+        FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+        return true;
+      };
+
+      _setUpMessageHandlers();
+      getIt<AppOauth>().tokenStateStream.listen(_onTokenStateChange);
+      getToken();
+    } catch (e) {
+      if (kDebugMode) {
+        print("error firebase initialize : ${e.toString()}");
+      }
+    }
   }
 
   void setupContextAndRouter({
@@ -138,11 +143,18 @@ class FirebaseService {
   }
 
   Future<String?> getToken() async {
-    final token = await FirebaseMessaging.instance.getToken();
-    if (kDebugMode) {
-      print('Registration Token: $token');
+    try {
+      final token = await FirebaseMessaging.instance.getToken();
+      if (kDebugMode) {
+        print('Registration Token: $token');
+      }
+      return token;
+    } catch (e) {
+      if (kDebugMode) {
+        print('error getToken : ${e.toString()}');
+      }
     }
-    return token;
+    return null;
   }
 
   showFlutterNotification(RemoteMessage message) async {
@@ -194,6 +206,9 @@ class FirebaseService {
 
   void addFcmToken() async {
     String? fcmToken = await getToken();
+    if (fcmToken == null || fcmToken == '') {
+      return;
+    }
     await getIt<AppGQL>().client.mutate(
           MutationOptions(
             document: addUserFcmTokenMutation,
@@ -207,6 +222,9 @@ class FirebaseService {
 
   Future<void> removeFcmToken() async {
     String? fcmToken = await getToken();
+    if (fcmToken == null || fcmToken == '') {
+      return;
+    }
     final response = await getIt<AppGQL>().client.mutate(
           MutationOptions(
             document: removeUserFcmTokenMutation,

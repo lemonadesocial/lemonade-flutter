@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 
 class MyRouterObserver extends AutoRouterObserver {
   @override
@@ -9,7 +10,7 @@ class MyRouterObserver extends AutoRouterObserver {
     if (kDebugMode) {
       print('New route pushed: ${route.settings.name}');
     }
-    FirebaseCrashlytics.instance.log(route.settings.name ?? '');
+    logScreen(route.settings.name);
   }
 
   /// called when a tab route activates
@@ -18,7 +19,7 @@ class MyRouterObserver extends AutoRouterObserver {
     if (kDebugMode) {
       print('Tab route visited: ${route.name}');
     }
-    FirebaseCrashlytics.instance.log(route.name);
+    logScreen(route.name);
   }
 
   /// called when tab route reactivates
@@ -27,6 +28,17 @@ class MyRouterObserver extends AutoRouterObserver {
     if (kDebugMode) {
       print('Tab route re-visited: ${route.name}');
     }
-    FirebaseCrashlytics.instance.log(route.name);
+    logScreen(route.name);
+  }
+
+  void logScreen(screenName) {
+    try {
+      if (screenName == null || screenName == '') {
+        return;
+      }
+      FirebaseCrashlytics.instance.log(screenName);
+      FirebaseAnalytics.instance.setCurrentScreen(screenName: screenName);
+      // ignore: empty_catches
+    } catch (e) {}
   }
 }
