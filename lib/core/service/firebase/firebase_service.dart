@@ -113,7 +113,9 @@ class FirebaseService {
       getIt<AppOauth>().tokenStateStream.listen(_onTokenStateChange);
       getToken();
     } catch (e) {
-      print("error firebase initialize : ${e.toString()}");
+      if (kDebugMode) {
+        print("error firebase initialize : ${e.toString()}");
+      }
     }
   }
 
