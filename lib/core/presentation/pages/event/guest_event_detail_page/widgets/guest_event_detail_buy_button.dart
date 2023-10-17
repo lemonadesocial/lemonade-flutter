@@ -1,9 +1,8 @@
+import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/event/buy_event_ticket_bloc/buy_event_ticket_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
-import 'package:app/core/presentation/pages/event/event_detail_page.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
-import 'package:app/core/utils/bottomsheet_utils.dart';
 import 'package:app/core/utils/number_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -51,6 +50,7 @@ class _GuestEventDetailBuyButtonView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
+    final authState = context.watch<AuthBloc>().state;
     final colorScheme = Theme.of(context).colorScheme;
     final buttonText = event.cost != null
         ? NumberUtils.formatCurrency(
@@ -61,70 +61,43 @@ class _GuestEventDetailBuyButtonView extends StatelessWidget {
             prefix: '${t.event.tickets(n: 1)}  •  ',
           )
         : t.event.free;
-    return BlocConsumer<BuyEventTicketBloc, BuyEventTicketState>(
-      listener: (context, newState) {
-        newState.maybeWhen(
-          success: () {
-            onBuySuccess?.call();
-          },
-          needWebview: () {
-            // TODO:wait for UI
-            // Tell user payment not support, go to webview
-            BottomSheetUtils.showSnapBottomSheet(
-              context,
-              builder: (context) => EventDetailPage(
-                eventId: event.id!,
-                eventName: event.title ?? '',
-              ),
-            );
-          },
-          failure: () {
-            // TODO: wait for UI
-            // Tell user buy ticket fail
-          },
-          orElse: () => null,
-        );
-      },
-      builder: (context, state) => SafeArea(
-        child: Container(
-          color: colorScheme.primary,
-          padding: EdgeInsets.symmetric(
-            vertical: Spacing.smMedium,
-            horizontal: Spacing.smMedium,
-          ),
-          child: SizedBox(
-            height: Sizing.large,
-            child: LinearGradientButton(
-              onTap: () => {
-                state.maybeWhen(
-                  loading: () => null,
-                  orElse: () {
-                    AutoRouter.of(context).navigate(
-                      EventBuyTicketsRoute(event: event),
-                    );
-                  },
-                )
-              },
-              leading: state.maybeWhen(
-                loading: () => null,
-                orElse: () => ThemeSvgIcon(
-                  color: colorScheme.onPrimary,
-                  builder: (filter) =>
-                      Assets.icons.icTicketBold.svg(colorFilter: filter),
-                ),
-              ),
-              label: state.maybeWhen(
-                loading: () => t.event.processing,
-                orElse: () => StringUtils.capitalize(buttonText),
-              ),
-              radius: BorderRadius.circular(LemonRadius.small * 2),
-              mode: GradientButtonMode.lavenderMode,
-              textStyle: Typo.medium.copyWith(
-                fontFamily: FontFamily.nohemiVariable,
-                fontWeight: FontWeight.w600,
-                color: colorScheme.onPrimary.withOpacity(0.87),
-                height: 1.5,
-              ),
+    return SafeArea(
+      child: Container(
+        color: colorScheme.primary,
+        padding: EdgeInsets.symmetric(
+          vertical: Spacing.smMedium,
+          horizontal: Spacing.smMedium,
+        ),
+        child: SizedBox(
+          height: Sizing.large,
+          child: LinearGradientButton(
+            onTap: () {
+              authState.maybeWhen(
+                authenticated: (_) {
+                  AutoRouter.of(context).navigate(
+                    EventBuyTicketsRoute(event: event),
+                  );
+                },
+                orElse: () {
+                  AutoRouter.of(context).navigate(
+                    const LoginRoute(),
+                  );
+                },
+              );
+            },
+            leading: ThemeSvgIcon(
+              color: colorScheme.onPrimary,
+              builder: (filter) =>
+                  Assets.icons.icTicketBold.svg(colorFilter: filter),
+            ),
+            label: StringUtils.capitalize(buttonText),
+            radius: BorderRadius.circular(LemonRadius.small * 2),
+            mode: GradientButtonMode.lavenderMode,
+            textStyle: Typo.medium.copyWith(
+              fontFamily: FontFamily.nohemiVariable,
+              fontWeight: FontWeight.w600,
+              color: colorScheme.onPrimary.withOpacity(0.87),
+              height: 1.5,
             ),
           ),
         ),
