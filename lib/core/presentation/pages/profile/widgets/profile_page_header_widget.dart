@@ -1,15 +1,12 @@
+import 'package:app/core/application/profile/user_follows_bloc/user_follows_bloc.dart';
 import 'package:app/core/config.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/widgets/common/badge/username_badge_widget.dart';
-import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
-import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/auth_utils.dart';
-import 'package:app/core/utils/modal_utils.dart';
 import 'package:app/core/utils/number_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
-import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
@@ -18,6 +15,7 @@ import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -112,25 +110,32 @@ class _ActionButtons extends StatelessWidget {
     final t = Translations.of(context);
     // TODO: follow feature not implemented
     var isFollowed = false;
-    return isFollowed
-        // ignore: dead_code
-        ? LemonOutlineButton(
-            onTap: () {
-              showComingSoonDialog(context);
-            },
-            label: t.common.followed,
-            leading: ThemeSvgIcon(
-              color: colorScheme.onSecondary,
-              builder: (filter) => Assets.icons.icDone.svg(colorFilter: filter),
-            ),
-          )
-        : LinearGradientButton(
-            onTap: () {
-              showComingSoonDialog(context);
-            },
-            label: t.common.actions.follow,
-            mode: GradientButtonMode.lavenderMode,
-          );
+    return BlocBuilder<UserFollowsBloc, UserFollowsState>(
+      builder: (context, userFollowsState) {
+        print(">>>>");
+        print(userFollowsState);
+        return const SizedBox();
+      },
+    );
+    // return isFollowed
+    //     // ignore: dead_code
+    //     ? LemonOutlineButton(
+    //         onTap: () {
+    //           showComingSoonDialog(context);
+    //         },
+    //         label: t.common.followed,
+    //         leading: ThemeSvgIcon(
+    //           color: colorScheme.onSecondary,
+    //           builder: (filter) => Assets.icons.icDone.svg(colorFilter: filter),
+    //         ),
+    //       )
+    //     : LinearGradientButton(
+    //         onTap: () {
+    //           showComingSoonDialog(context);
+    //         },
+    //         label: t.common.actions.follow,
+    //         mode: GradientButtonMode.lavenderMode,
+    //       );
   }
 
   @override
