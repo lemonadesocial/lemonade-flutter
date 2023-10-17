@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
+import 'package:app/core/utils/device_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/theme/typo.dart';
@@ -21,13 +22,14 @@ class GuestEventDetailAppBar extends StatelessWidget {
   final bool isCollapsed;
   @override
   Widget build(BuildContext context) {
+    final isIpad = DeviceUtils.isIpad();
     return SliverAppBar(
       pinned: true,
       stretch: true,
       floating: true,
       leading: const SizedBox.shrink(),
-      collapsedHeight: 60.w,
-      expandedHeight: 188.w,
+      collapsedHeight: 60.h,
+      expandedHeight: isIpad ? 280.h : 188.h,
       centerTitle: true,
       title: AnimatedOpacity(
         duration: const Duration(milliseconds: 300),

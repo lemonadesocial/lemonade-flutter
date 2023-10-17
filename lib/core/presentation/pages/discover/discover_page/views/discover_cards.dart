@@ -1,4 +1,5 @@
 import 'package:app/core/presentation/widgets/discover/discover_card.dart';
+import 'package:app/core/utils/device_utils.dart';
 import 'package:app/core/utils/modal_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -20,7 +21,7 @@ class DiscoverCards extends StatelessWidget {
     return SliverGrid.count(
       crossAxisCount: 3,
       crossAxisSpacing: 9.w,
-      childAspectRatio: (0.9),
+      childAspectRatio: (DeviceUtils.isIpad() ? 2 : 0.9),
       children: [
         DiscoverCard(
           title: t.discover.cardSections.events.title,
