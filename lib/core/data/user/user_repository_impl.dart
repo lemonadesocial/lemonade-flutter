@@ -1,7 +1,9 @@
 import 'package:app/core/data/user/dtos/user_dtos.dart';
+import 'package:app/core/data/user/dtos/user_follows/user_follow_dtos.dart';
 import 'package:app/core/data/user/dtos/user_query.dart';
 import 'package:app/core/domain/onboarding/onboarding_inputs.dart';
 import 'package:app/core/domain/user/entities/user.dart';
+import 'package:app/core/domain/user/entities/user_follow.dart';
 import 'package:app/core/domain/user/input/user_follows_input.dart';
 import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/failure.dart';
@@ -90,23 +92,23 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<Either<Failure, User>> getUserFollows(
+  Future<Either<Failure, List<UserFollow>>> getUserFollows(
     GetUserFollowsInput input,
   ) async {
     final result = await _gqlClient.query(
       QueryOptions(
         document: getUserFollowsQuery,
-        parserFn: (data) {
-          return data['getUserFollows'];
-        },
+        parserFn: (data) => List.from(data['getUserFollows'] ?? [])
+            .map(
+              (item) => UserFollow.fromDto(
+                UserFollowDto.fromJson(item),
+              ),
+            )
+            .toList(),
         variables: input.toJson(),
       ),
     );
-    print("result");
-    print(result);
-    if (result.hasException) {
-      return Left(Failure());
-    }
-    return Right(result.parsedData);
+    if (result.hasException) return Left(Failure());
+    return Right(result.parsedData ?? []);
   }
 }

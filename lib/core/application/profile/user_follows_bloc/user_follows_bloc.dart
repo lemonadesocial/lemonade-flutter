@@ -1,5 +1,6 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/domain/user/entities/user.dart';
+import 'package:app/core/domain/user/entities/user_follow.dart';
 import 'package:app/core/domain/user/input/user_follows_input.dart';
 import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/injection/register_module.dart';
@@ -17,20 +18,20 @@ class UserFollowsBloc extends Bloc<UserFollowsEvent, UserFollowsState> {
   UserRepository userRepository;
 
   Future<void> _onFetch(UserFollowsEventFetch event, Emitter emit) async {
-    final follower = getIt<AuthBloc>().state.maybeWhen(
-          authenticated: (authSession) => authSession.userId,
+    final authSession = getIt<AuthBloc>().state.maybeWhen(
+          authenticated: (authSession) => authSession,
           orElse: () => null,
         );
     final result = await userRepository.getUserFollows(
       GetUserFollowsInput(
         followee: event.followee,
-        follower: follower,
+        follower: authSession?.userId,
       ),
     );
     result.fold(
       (failure) => emit(UserFollowsState.failure()),
-      (userProfile) => emit(
-        UserFollowsState.fetched(userProfile: userProfile),
+      (userFollows) => emit(
+        UserFollowsState.fetched(userFollows: userFollows),
       ),
     );
   }
@@ -47,7 +48,7 @@ class UserFollowsEvent with _$UserFollowsEvent {
 class UserFollowsState with _$UserFollowsState {
   factory UserFollowsState.loading() = UserFollowsStateLoading;
 
-  factory UserFollowsState.fetched({required User userProfile}) =
+  factory UserFollowsState.fetched({required List<UserFollow> userFollows}) =
       UserFollowsStateFetched;
 
   factory UserFollowsState.failure() = UserFollowsStateFailure;
