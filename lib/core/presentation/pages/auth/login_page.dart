@@ -67,7 +67,7 @@ class LoginPageState extends State<LoginPage> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 42.w, vertical: 42.h),
+              padding: EdgeInsets.symmetric(horizontal: 42.w),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
