@@ -210,3 +210,9 @@ final deleteUserQuery = gql('''
     deleteUser
 }
 ''');
+
+final reportUserMutation = gql('''
+  mutation (\$id: MongoID!, \$reason: String!) {
+    flagUser(_id: \$id, reason: \$reason)
+  }
+''');

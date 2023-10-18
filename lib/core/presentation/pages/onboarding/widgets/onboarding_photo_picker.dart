@@ -71,7 +71,7 @@ class OnboardingPhotoPicker extends StatelessWidget {
                           height: 15.w,
                         ),
                         // No need to apply theme here since both dart theme and light theme will use the same error color
-                        customColor: LemonColor.onboardingRed,
+                        customColor: LemonColor.menuRed,
                       ),
                     ],
                     onItemPressed: (item) {

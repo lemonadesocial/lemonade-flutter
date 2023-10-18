@@ -78,7 +78,7 @@ class LemonColor {
   static const rippleDark = Color.fromRGBO(32, 41, 38, 1);
 
   // custom red error
-  static const onboardingRed = Color(0xFFFF6565);
+  static const menuRed = Color(0xFFFF6565);
   static const deleteAccountRed = Color(0xFFE58585);
 
   // Progress indicator
@@ -87,6 +87,7 @@ class LemonColor {
   // event buy tickets
   static const promoApplied = Color(0xff5fcb90);
   static const promoAppliedBackground = Color(0x2D5ECA90);
+  static const darkBackground = Color(0xFF1d1d1d);
 
   // Create post dialog
   static const collectibleColor = Color(0xFFFFA6C6);
@@ -114,6 +115,9 @@ class LemonColor {
 
   // report
   static const report = Color(0xffFF6565);
+
+  //Switch
+  static const switchActive = Color(0xFFABC93D);
 }
 
 final ColorScheme lemonadeLightThemeColorScheme = ColorScheme.light(

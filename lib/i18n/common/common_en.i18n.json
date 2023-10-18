@@ -106,5 +106,6 @@
         "reportPlaceholder": "What's wrong with this $reportName?",
         "reportSuccess": "Your report has been successfully submitted and is now undergoing the review process."
     },
-    "submitted": "Submitted"
+    "submitted": "Submitted",
+    "reportProfileDesc": "Help us keep Lemonade by listing the reason for the report."
 }
