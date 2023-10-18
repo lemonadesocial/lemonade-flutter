@@ -12,6 +12,11 @@ class EventUtils {
         .contains(userId);
   }
 
+  static bool isOwnEvent({required Event event, required String userId}) {
+    if (event.id == null) return false;
+    return event.host == userId;
+  }
+
   static String getEventThumbnailUrl({required Event event}) {
     if (event.newNewPhotosExpanded == null ||
         event.newNewPhotosExpanded!.isEmpty) {
