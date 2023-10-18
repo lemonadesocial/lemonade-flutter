@@ -38,7 +38,8 @@
         "assign": "assign",
         "dismiss": "Dismiss",
         "refresh": "Refresh",
-        "copyLink": "Copy link"
+        "copyLink": "Copy link",
+        "report": "Report"
     },
     "followed": "Followed",
     "anonymous": "anonymous",
@@ -97,5 +98,13 @@
     "appVersion": "App version: $appVersion",
     "addTo": "Add to",
     "calendar": "calendar",
-    "appleWallet": "Apple Wallet"
+    "appleWallet": "Apple Wallet",
+    "report": {
+        "reportPost": "Report post",
+        "reportEvent": "Report event",
+        "reportDescription": "Help us keep Lemonade safe by listing the reason for reporting this $reportName",
+        "reportPlaceholder": "What's wrong with this $reportName?",
+        "reportSuccess": "Your report has been successfully submitted and is now undergoing the review process."
+    },
+    "submitted": "Submitted"
 }

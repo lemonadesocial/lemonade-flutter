@@ -1,32 +1,44 @@
+import 'package:app/core/application/auth/auth_bloc.dart';
+import 'package:app/core/application/report/report_bloc/report_bloc.dart';
 import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/post/entities/post_entities.dart';
+import 'package:app/core/domain/report/input/report_input.dart';
+import 'package:app/core/presentation/dpos/common/dropdown_item_dpo.dart';
 import 'package:app/core/presentation/widgets/event/event_post_card_widget.dart';
+import 'package:app/core/presentation/widgets/floating_frosted_glass_dropdown_widget.dart';
 import 'package:app/core/presentation/widgets/hero_image_viewer_widget.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
+import 'package:app/core/presentation/widgets/report/report_bottom_sheet.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/core/utils/avatar_utils.dart';
+import 'package:app/core/utils/bottomsheet_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
 import 'package:app/core/utils/modal_utils.dart';
 import 'package:app/gen/assets.gen.dart';
+import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
+import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class PostProfileCard extends StatelessWidget {
-  const PostProfileCard({
+  PostProfileCard({
     super.key,
     required this.post,
   });
   final Post post;
+
+  final reportBloc = ReportBloc();
 
   String get postName => post.userExpanded?.name ?? '';
 
@@ -46,7 +58,11 @@ class PostProfileCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userId = AuthUtils.getUserId(context);
     final colorScheme = Theme.of(context).colorScheme;
+    final authState = context.watch<AuthBloc>().state;
+    final t = Translations.of(context);
+    final isOwnPost = userId == post.user;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -90,14 +106,70 @@ class PostProfileCard extends StatelessWidget {
                     onTap: () {
                       showComingSoonDialog(context);
                     },
-                    child: ThemeSvgIcon(
-                      color: colorScheme.onSurfaceVariant,
-                      builder: (filter) => Assets.icons.icMoreHoriz.svg(
-                        colorFilter: filter,
-                        width: 18.w,
-                        height: 18.w,
-                      ),
-                    ),
+                    child: isOwnPost
+                        ? const SizedBox.shrink()
+                        : FloatingFrostedGlassDropdown(
+                            offset: Offset(0, -Sizing.xSmall),
+                            items: [
+                              DropdownItemDpo(
+                                leadingIcon: Assets.icons.icRoundReport.svg(
+                                  width: Sizing.xSmall,
+                                  height: Sizing.xSmall,
+                                ),
+                                label: t.common.actions.report,
+                                value: "report",
+                                customColor: LemonColor.report,
+                              ),
+                            ],
+                            onItemPressed: (item) {
+                              if (item?.value == 'report') {
+                                authState.maybeWhen(
+                                  authenticated: (_) =>
+                                      BottomSheetUtils.showSnapBottomSheet(
+                                    context,
+                                    builder: (_) {
+                                      return BlocProvider.value(
+                                        value: reportBloc,
+                                        child: ReportBottomSheet(
+                                          onPressReport: (reason) {
+                                            reportBloc.add(
+                                              ReportEvent.reportPost(
+                                                input: ReportInput(
+                                                  id: post.id,
+                                                  reason: reason,
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                          title: t.common.report.reportPost,
+                                          description:
+                                              t.common.report.reportDescription(
+                                            reportName:
+                                                t.post.post.toLowerCase(),
+                                          ),
+                                          placeholder:
+                                              t.common.report.reportPlaceholder(
+                                            reportName:
+                                                t.post.post.toLowerCase(),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                  orElse: () => AutoRouter.of(context)
+                                      .navigate(const LoginRoute()),
+                                );
+                              }
+                            },
+                            child: ThemeSvgIcon(
+                              color: colorScheme.onSurfaceVariant,
+                              builder: (filter) => Assets.icons.icMoreHoriz.svg(
+                                colorFilter: filter,
+                                width: 18.w,
+                                height: 18.w,
+                              ),
+                            ),
+                          ),
                   ),
                 ],
               ),
