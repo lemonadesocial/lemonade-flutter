@@ -1,5 +1,4 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
-import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/domain/user/entities/user_follow.dart';
 import 'package:app/core/domain/user/input/user_follows_input.dart';
 import 'package:app/core/domain/user/user_repository.dart';

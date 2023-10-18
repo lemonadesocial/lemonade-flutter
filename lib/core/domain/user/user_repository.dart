@@ -15,5 +15,6 @@ abstract class UserRepository {
   Future<Either<Failure, bool>> checkValidUsername({required String username});
 
   Future<Either<Failure, List<UserFollow>>> getUserFollows(
-      GetUserFollowsInput input);
+    GetUserFollowsInput input,
+  );
 }
