@@ -88,7 +88,7 @@
     "location": "Location",
     "comingSoon": "Coming soon",
     "currentlyAvailableOn": "Currently available on ",
-    "comingSoonToIOSAndAndroid": ". Coming soon to iOS and android.",
+    "comingSoonTo": ". Coming soon to $platform.",
     "oops": "Oops!",
     "looksLikeSomethingWrong": "Looks like something went wrong.",
     "goBack": "Go back",
