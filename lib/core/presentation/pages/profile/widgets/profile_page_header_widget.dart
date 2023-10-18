@@ -117,6 +117,7 @@ class _ActionButtons extends StatelessWidget {
       builder: (context, state) {
         return state.maybeWhen(
           fetched: (userFollows) {
+            // If already follow this user
             if (userFollows.isNotEmpty) {
               return (LemonOutlineButton(
                 onTap: () {
