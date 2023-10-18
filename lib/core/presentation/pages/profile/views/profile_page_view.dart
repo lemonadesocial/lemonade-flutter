@@ -1,5 +1,6 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/domain/user/entities/user.dart';
+import 'package:app/core/presentation/dpos/common/dropdown_item_dpo.dart';
 import 'package:app/core/presentation/pages/profile/views/tabs/profile_collectible_tab_view.dart';
 import 'package:app/core/presentation/pages/profile/views/tabs/profile_event_tab_view.dart';
 import 'package:app/core/presentation/pages/profile/views/tabs/profile_info_tab_view.dart';
@@ -9,7 +10,9 @@ import 'package:app/core/presentation/pages/profile/widgets/profile_page_header_
 import 'package:app/core/presentation/pages/profile/widgets/profile_tabbar_delegate_widget.dart';
 import 'package:app/core/presentation/widgets/back_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/profile_animated_appbar_widget.dart';
+import 'package:app/core/presentation/widgets/common/dialog/report_user_dialog.dart';
 import 'package:app/core/presentation/widgets/common/sliver/dynamic_sliver_appbar.dart';
+import 'package:app/core/presentation/widgets/floating_frosted_glass_dropdown_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/core/utils/drawer_utils.dart';
@@ -17,6 +20,7 @@ import 'package:app/core/utils/swipe_detector.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
+import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -109,9 +113,29 @@ class _ProfilePageViewState extends State<ProfilePageView>
                               ),
                             )
                           else
-                            GestureDetector(
-                              behavior: HitTestBehavior.translucent,
-                              onTap: () {},
+                            FloatingFrostedGlassDropdown(
+                              items: <DropdownItemDpo<MenuOption>>[
+                                DropdownItemDpo<MenuOption>(
+                                  label: t.profile.reportProfile,
+                                  value: MenuOption.report,
+                                  customColor: LemonColor.menuRed,
+                                  leadingIcon: Assets.icons.icReport.svg(),
+                                ),
+                              ],
+                              onItemPressed: (item) {
+                                switch (item?.value) {
+                                  case MenuOption.report:
+                                    ReportUserDialog(
+                                      userId: widget.userProfile.userId,
+                                    ).showAsBottomSheet(
+                                      context,
+                                      heightFactor: 0.79,
+                                    );
+                                    break;
+                                  default:
+                                    break;
+                                }
+                              },
                               child: ThemeSvgIcon(
                                 color: colorScheme.onPrimary,
                                 builder: (filter) => Assets.icons.icMoreHoriz
@@ -162,4 +186,9 @@ class _ProfilePageViewState extends State<ProfilePageView>
       ),
     );
   }
+}
+
+enum MenuOption {
+  share,
+  report,
 }
