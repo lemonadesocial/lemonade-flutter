@@ -115,11 +115,6 @@ class _ProfilePageViewState extends State<ProfilePageView>
                           else
                             FloatingFrostedGlassDropdown(
                               items: <DropdownItemDpo<MenuOption>>[
-                                // DropdownItemDpo<MenuOption>(
-                                //   label: t.common.actions.shareProfile,
-                                //   value: MenuOption.share,
-                                //   leadingIcon: Assets.icons.icShare.svg(),
-                                // ),
                                 DropdownItemDpo<MenuOption>(
                                   label: t.profile.reportProfile,
                                   value: MenuOption.report,
@@ -129,8 +124,6 @@ class _ProfilePageViewState extends State<ProfilePageView>
                               ],
                               onItemPressed: (item) {
                                 switch (item?.value) {
-                                  case MenuOption.share:
-                                    break;
                                   case MenuOption.report:
                                     ReportUserDialog(
                                       userId: widget.userProfile.userId,
