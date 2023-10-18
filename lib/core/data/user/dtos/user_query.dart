@@ -211,6 +211,12 @@ final deleteUserQuery = gql('''
 }
 ''');
 
+final reportUserMutation = gql('''
+  mutation (\$id: MongoID!, \$reason: String!) {
+    flagUser(_id: \$id, reason: \$reason)
+  }
+''');
+
 final getUserFollowsQuery = gql('''
   query GetUserFollows(\$follower: MongoID, \$followee: MongoID, \$limit: Int, \$skip: Int) {
     getUserFollows(
@@ -224,5 +230,4 @@ final getUserFollowsQuery = gql('''
       __typename
     }
   }
-
 ''');

@@ -93,6 +93,27 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
+  Future<Either<Failure, bool>> reportUser({
+    required String userId,
+    required String reason,
+  }) async {
+    final result = await _gqlClient.query(
+      QueryOptions(
+        document: reportUserMutation,
+        variables: {'id': userId, 'reason': reason},
+        parserFn: (data) {
+          return data['flagUser'] as bool?;
+        },
+      ),
+    );
+
+    if (result.hasException) {
+      return Left(Failure());
+    }
+    return Right(result.parsedData == true);
+  }
+
+  @override
   Future<Either<Failure, List<UserFollow>>> getUserFollows(
     GetUserFollowsInput input,
   ) async {

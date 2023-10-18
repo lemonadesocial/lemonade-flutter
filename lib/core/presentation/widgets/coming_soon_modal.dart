@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
@@ -57,7 +59,8 @@ class ComingSoonModal extends StatelessWidget {
                   },
               ),
               TextSpan(
-                text: t.common.comingSoonToIOSAndAndroid,
+                text: t.common
+                    .comingSoonTo(platform: Platform.isIOS ? "iOS" : "Android"),
                 style: Typo.medium.copyWith(
                   color: colorScheme.onSecondary,
                   fontWeight: FontWeight.w400,
@@ -79,97 +82,83 @@ class ComingSoonModal extends StatelessWidget {
         borderRadius: BorderRadius.circular(18.0),
       ),
       child: SingleChildScrollView(
-        child: Stack(
-          children: [
-            Container(
-              alignment: Alignment.center,
-              padding: EdgeInsets.only(
-                top: 60.h,
-                left: 48.w,
-                right: 48.w,
-                bottom: 42.h,
-              ),
-              decoration: BoxDecoration(
-                color: LemonColor.atomicBlack,
-                border: Border.all(
-                  color: LemonColor.white06,
+        child: SizedBox(
+          width: 339.w,
+          child: Stack(
+            children: [
+              Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.only(
+                  top: 60.h,
+                  left: 48.w,
+                  right: 48.w,
+                  bottom: 42.h,
                 ),
-                borderRadius: BorderRadius.circular(18.r),
-              ),
-              child: Column(
-                children: [
-                  Container(
-                    width: 150.w,
-                    height: 150.h,
-                    decoration: ShapeDecoration(
-                      color: LemonColor.chineseBlack,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(90),
+                decoration: BoxDecoration(
+                  color: LemonColor.atomicBlack,
+                  border: Border.all(
+                    color: LemonColor.white06,
+                  ),
+                  borderRadius: BorderRadius.circular(18.r),
+                ),
+                child: Column(
+                  children: [
+                    Container(
+                      width: 60.w,
+                      height: 60.h,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: Assets.images.icComingSoon.provider(),
+                          fit: BoxFit.contain,
+                        ),
                       ),
                     ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: 60.w,
-                          height: 60.h,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: Assets.images.icComingSoon.provider(),
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                        ),
-                      ],
+                    SizedBox(
+                      height: 42.h,
                     ),
-                  ),
-                  SizedBox(
-                    height: 42.h,
-                  ),
-                  Text(
-                    t.common.comingSoon,
-                    textAlign: TextAlign.center,
-                    style: Typo.large.copyWith(
-                      color: colorScheme.onPrimary,
-                      fontSize: 24.sp,
-                      fontWeight: FontWeight.w800,
-                      fontFamily: FontFamily.nohemiVariable,
+                    Text(
+                      t.common.comingSoon,
+                      textAlign: TextAlign.center,
+                      style: Typo.large.copyWith(
+                        color: colorScheme.onPrimary,
+                        fontSize: 24.sp,
+                        fontWeight: FontWeight.w800,
+                        fontFamily: FontFamily.nohemiVariable,
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 9.h,
-                  ),
-                  buildRichText(colorScheme)
-                ],
+                    SizedBox(
+                      height: 9.h,
+                    ),
+                    buildRichText(colorScheme)
+                  ],
+                ),
               ),
-            ),
-            Positioned(
-              top: Spacing.xSmall,
-              right: Spacing.xSmall,
-              child: GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                onTap: () {
-                  onTapClose();
-                },
-                child: Container(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 12.w, vertical: 9.h),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: colorScheme.outline),
-                  ),
-                  child: ThemeSvgIcon(
-                    color: Theme.of(context).colorScheme.onSurface,
-                    builder: (filter) => Assets.icons.icClose.svg(
-                      colorFilter: filter,
+              Positioned(
+                top: Spacing.xSmall,
+                right: Spacing.xSmall,
+                child: GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  onTap: () {
+                    onTapClose();
+                  },
+                  child: Container(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 12.w, vertical: 9.h),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: colorScheme.outline),
+                    ),
+                    child: ThemeSvgIcon(
+                      color: Theme.of(context).colorScheme.onSurface,
+                      builder: (filter) => Assets.icons.icClose.svg(
+                        colorFilter: filter,
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
