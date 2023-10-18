@@ -99,7 +99,6 @@ class UserRepositoryImpl implements UserRepository {
         document: reportUserMutation,
         variables: {'id': userId, 'reason': reason},
         parserFn: (data) {
-          print("data: ${data}");
           return data['flagUser'] as bool?;
         },
       ),
