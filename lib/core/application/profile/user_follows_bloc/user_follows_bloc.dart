@@ -13,6 +13,8 @@ class UserFollowsBloc extends Bloc<UserFollowsEvent, UserFollowsState> {
     this.userRepository,
   ) : super(UserFollowsState.loading()) {
     on<UserFollowsEventFetch>(_onFetch);
+    on<UserFollowsEventFollow>(_onFollow);
+    on<UserFollowsEventUnfollow>(_onUnfollow);
   }
   UserRepository userRepository;
 
@@ -34,6 +36,38 @@ class UserFollowsBloc extends Bloc<UserFollowsEvent, UserFollowsState> {
       ),
     );
   }
+
+  Future<void> _onFollow(UserFollowsEventFollow event, Emitter emit) async {
+    emit(UserFollowsState.loading());
+    final authSession = getIt<AuthBloc>().state.maybeWhen(
+          authenticated: (authSession) => authSession,
+          orElse: () => null,
+        );
+    final result =
+        await userRepository.createUserFollow(followee: event.followee);
+    List<UserFollow> userFollows = [];
+    userFollows.add(
+      UserFollow(followee: event.followee, follower: authSession?.userId),
+    );
+    result.fold(
+      (failure) => emit(UserFollowsState.failure()),
+      (success) => emit(
+        UserFollowsState.fetched(userFollows: userFollows),
+      ),
+    );
+  }
+
+  Future<void> _onUnfollow(UserFollowsEventUnfollow event, Emitter emit) async {
+    emit(UserFollowsState.loading());
+    final result =
+        await userRepository.deleteUserFollow(followee: event.followee);
+    result.fold(
+      (failure) => emit(UserFollowsState.failure()),
+      (success) => emit(
+        UserFollowsState.fetched(userFollows: []),
+      ),
+    );
+  }
 }
 
 @freezed
@@ -41,6 +75,14 @@ class UserFollowsEvent with _$UserFollowsEvent {
   factory UserFollowsEvent.fetch({
     required String followee,
   }) = UserFollowsEventFetch;
+
+  factory UserFollowsEvent.follow({
+    required String followee,
+  }) = UserFollowsEventFollow;
+
+  factory UserFollowsEvent.unfollow({
+    required String followee,
+  }) = UserFollowsEventUnfollow;
 }
 
 @freezed

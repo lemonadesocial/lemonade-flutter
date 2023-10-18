@@ -17,4 +17,8 @@ abstract class UserRepository {
   Future<Either<Failure, List<UserFollow>>> getUserFollows(
     GetUserFollowsInput input,
   );
+
+  Future<Either<Failure, bool>> createUserFollow({required String followee});
+
+  Future<Either<Failure, bool>> deleteUserFollow({required String followee});
 }

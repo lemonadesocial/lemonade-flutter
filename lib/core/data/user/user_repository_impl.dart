@@ -1,6 +1,7 @@
 import 'package:app/core/data/user/dtos/user_dtos.dart';
 import 'package:app/core/data/user/dtos/user_follows/user_follow_dtos.dart';
 import 'package:app/core/data/user/dtos/user_query.dart';
+import 'package:app/core/data/user/gql/user_mutation.dart';
 import 'package:app/core/domain/onboarding/onboarding_inputs.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/domain/user/entities/user_follow.dart';
@@ -110,5 +111,45 @@ class UserRepositoryImpl implements UserRepository {
     );
     if (result.hasException) return Left(Failure());
     return Right(result.parsedData ?? []);
+  }
+
+  @override
+  Future<Either<Failure, bool>> createUserFollow({
+    required String followee,
+  }) async {
+    final result = await _gqlClient.mutate(
+      MutationOptions(
+        document: createUserFollowMutation,
+        variables: {'followee': followee},
+        parserFn: (data) {
+          return data['createUserFollow'];
+        },
+      ),
+    );
+
+    if (result.hasException) {
+      return Left(Failure());
+    }
+    return Right(result.parsedData != null);
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteUserFollow({
+    required String followee,
+  }) async {
+    final result = await _gqlClient.mutate(
+      MutationOptions(
+        document: deleteUserFollowMutation,
+        variables: {'followee': followee},
+        parserFn: (data) {
+          return data['deleteUserFollow'];
+        },
+      ),
+    );
+
+    if (result.hasException) {
+      return Left(Failure());
+    }
+    return Right(result.parsedData != null);
   }
 }

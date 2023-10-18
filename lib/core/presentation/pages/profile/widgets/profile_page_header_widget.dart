@@ -8,7 +8,6 @@ import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/auth_utils.dart';
-import 'package:app/core/utils/modal_utils.dart';
 import 'package:app/core/utils/number_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -22,6 +21,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:share_plus/share_plus.dart';
 
 class ProfilePageHeader extends StatelessWidget {
@@ -121,7 +121,10 @@ class _ActionButtons extends StatelessWidget {
             if (userFollows.isNotEmpty) {
               return (LemonOutlineButton(
                 onTap: () {
-                  showComingSoonDialog(context);
+                  Vibrate.feedback(FeedbackType.light);
+                  context.read<UserFollowsBloc>().add(
+                        UserFollowsEvent.unfollow(followee: user.userId),
+                      );
                 },
                 label: t.common.followed,
                 leading: ThemeSvgIcon(
@@ -133,7 +136,10 @@ class _ActionButtons extends StatelessWidget {
             }
             return LinearGradientButton(
               onTap: () {
-                showComingSoonDialog(context);
+                Vibrate.feedback(FeedbackType.light);
+                context.read<UserFollowsBloc>().add(
+                      UserFollowsEvent.follow(followee: user.userId),
+                    );
               },
               label: t.common.actions.follow,
               mode: GradientButtonMode.lavenderMode,
