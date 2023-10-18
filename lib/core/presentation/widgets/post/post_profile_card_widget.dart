@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/post/entities/post_entities.dart';
@@ -21,109 +23,128 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-class PostProfileCard extends StatelessWidget {
+class PostProfileCard extends StatefulWidget {
   const PostProfileCard({
     super.key,
     required this.post,
+    this.isDetailPost = false,
   });
+
   final Post post;
+  final bool isDetailPost;
 
-  String get postName => post.userExpanded?.name ?? '';
+  @override
+  State<PostProfileCard> createState() => _PostProfileCardState();
+}
 
-  String get postText => post.text ?? '';
+class _PostProfileCardState extends State<PostProfileCard> {
+  String get postName => widget.post.userExpanded?.name ?? '';
 
-  Event? get postEvent => post.refEvent;
+  String get postText => widget.post.text ?? '';
 
-  DateTime? get postCreatedAt => post.createdAt;
+  Event? get postEvent => widget.post.refEvent;
 
-  DbFile? get postFile => post.refFile;
+  DateTime? get postCreatedAt => widget.post.createdAt;
 
-  int? get reactions => post.reactions;
+  DbFile? get postFile => widget.post.refFile;
 
-  int? get comments => post.comments;
+  int? get reactions => widget.post.reactions;
 
-  bool? get hasReaction => post.hasReaction;
+  int? get comments => widget.post.comments;
+
+  late bool? hasReaction = widget.post.hasReaction;
+
+  @override
+  void initState() {
+    log('postData: ${widget.post}');
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        GestureDetector(
-          behavior: HitTestBehavior.translucent,
-          onTap: () {
-            final isMe = AuthUtils.isMe(context, user: post.userExpanded!);
-            if (isMe) {
-              AutoRouter.of(context).navigate(const MyProfileRoute());
-            } else {
-              AutoRouter.of(context).navigate(ProfileRoute(userId: post.user));
-            }
-          },
-          child: LemonCircleAvatar(
-            size: Sizing.medium,
-            url: AvatarUtils.getAvatarUrl(user: post.userExpanded),
+    return InkWell(
+      onTap: () => context.router.push(PostDetailRoute(post: widget.post)),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          GestureDetector(
+            behavior: HitTestBehavior.translucent,
+            onTap: () {
+              final isMe =
+                  AuthUtils.isMe(context, user: widget.post.userExpanded!);
+              if (isMe) {
+                AutoRouter.of(context).navigate(const MyProfileRoute());
+              } else {
+                AutoRouter.of(context)
+                    .navigate(ProfileRoute(userId: widget.post.user));
+              }
+            },
+            child: LemonCircleAvatar(
+              size: Sizing.medium,
+              url: AvatarUtils.getAvatarUrl(user: widget.post.userExpanded),
+            ),
           ),
-        ),
-        const SizedBox(width: 9),
-        Flexible(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
+          const SizedBox(width: 9),
+          Flexible(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      postName,
+                      style: Typo.medium.copyWith(
+                        color: colorScheme.onPrimary.withOpacity(0.87),
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    if (postCreatedAt != null)
+                      Text(
+                        '  •  ${timeago.format(postCreatedAt!)}',
+                        style: Typo.medium
+                            .copyWith(color: colorScheme.onSurfaceVariant),
+                      ),
+                    const Spacer(),
+                    GestureDetector(
+                      onTap: () {
+                        showComingSoonDialog(context);
+                      },
+                      child: ThemeSvgIcon(
+                        color: colorScheme.onSurfaceVariant,
+                        builder: (filter) => Assets.icons.icMoreHoriz.svg(
+                          colorFilter: filter,
+                          width: 18.w,
+                          height: 18.w,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                if (postText.isNotEmpty) ...[
+                  SizedBox(height: Spacing.superExtraSmall),
                   Text(
-                    postName,
+                    postText,
                     style: Typo.medium.copyWith(
                       color: colorScheme.onPrimary.withOpacity(0.87),
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  if (postCreatedAt != null)
-                    Text(
-                      '  •  ${timeago.format(postCreatedAt!)}',
-                      style: Typo.medium
-                          .copyWith(color: colorScheme.onSurfaceVariant),
-                    ),
-                  const Spacer(),
-                  GestureDetector(
-                    onTap: () {
-                      showComingSoonDialog(context);
-                    },
-                    child: ThemeSvgIcon(
-                      color: colorScheme.onSurfaceVariant,
-                      builder: (filter) => Assets.icons.icMoreHoriz.svg(
-                        colorFilter: filter,
-                        width: 18.w,
-                        height: 18.w,
-                      ),
+                      fontWeight: FontWeight.w400,
                     ),
                   ),
                 ],
-              ),
-              if (postText.isNotEmpty) ...[
-                SizedBox(height: Spacing.superExtraSmall),
-                Text(
-                  postText,
-                  style: Typo.medium.copyWith(
-                    color: colorScheme.onPrimary.withOpacity(0.87),
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
+                if (postEvent != null) ...[
+                  SizedBox(height: Spacing.xSmall),
+                  EventPostCard(event: postEvent!),
+                ],
+                if (postFile != null) ...[
+                  SizedBox(height: Spacing.xSmall),
+                  _buildFile(colorScheme, postFile),
+                ],
+                _buildActions(colorScheme, context),
               ],
-              if (postEvent != null) ...[
-                SizedBox(height: Spacing.xSmall),
-                EventPostCard(event: postEvent!),
-              ],
-              if (postFile != null) ...[
-                SizedBox(height: Spacing.xSmall),
-                _buildFile(colorScheme, postFile),
-              ],
-              _buildActions(colorScheme, context)
-            ],
+            ),
           ),
-        )
-      ],
+        ],
+      ),
     );
   }
 
@@ -155,20 +176,9 @@ class PostProfileCard extends StatelessWidget {
 
   Widget _buildActions(ColorScheme colorScheme, BuildContext context) {
     final svgIcon = hasReaction ?? false
-        ? ThemeSvgIcon(
-            builder: (filter) => Assets.icons.icHeartFillled.svg(
-              width: 18.w,
-              height: 18.w,
-            ),
-          )
-        : ThemeSvgIcon(
-            color: colorScheme.onSecondary,
-            builder: (filter) => Assets.icons.icHeart.svg(
-              colorFilter: filter,
-              width: 18.w,
-              height: 18.w,
-            ),
-          );
+        ? Assets.icons.icHeartFillled
+        : Assets.icons.icHeart;
+
     return Padding(
       padding: EdgeInsets.only(top: Spacing.xSmall),
       child: Row(
@@ -180,7 +190,15 @@ class PostProfileCard extends StatelessWidget {
             },
             child: Row(
               children: [
-                svgIcon,
+                InkWell(
+                  onTap: () {},
+                  child: ThemeSvgIcon(
+                    builder: (filter) => svgIcon.svg(
+                      width: 18.w,
+                      height: 18.w,
+                    ),
+                  ),
+                ),
                 const SizedBox(width: 3),
                 Text(
                   reactions != null ? '$reactions' : '',
