@@ -115,11 +115,11 @@ class _ProfilePageViewState extends State<ProfilePageView>
                           else
                             FloatingFrostedGlassDropdown(
                               items: <DropdownItemDpo<MenuOption>>[
-                                DropdownItemDpo<MenuOption>(
-                                  label: t.common.actions.shareProfile,
-                                  value: MenuOption.share,
-                                  leadingIcon: Assets.icons.icShare.svg(),
-                                ),
+                                // DropdownItemDpo<MenuOption>(
+                                //   label: t.common.actions.shareProfile,
+                                //   value: MenuOption.share,
+                                //   leadingIcon: Assets.icons.icShare.svg(),
+                                // ),
                                 DropdownItemDpo<MenuOption>(
                                   label: t.profile.reportProfile,
                                   value: MenuOption.report,
