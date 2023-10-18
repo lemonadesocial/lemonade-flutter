@@ -11,4 +11,9 @@ abstract class UserRepository {
   Future<Either<Failure, bool>> updateUserProfile(UpdateUserProfileInput input);
 
   Future<Either<Failure, bool>> checkValidUsername({required String username});
+
+  Future<Either<Failure, bool>> reportUser({
+    required String userId,
+    required String reason,
+  });
 }

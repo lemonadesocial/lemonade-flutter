@@ -38,7 +38,8 @@
         "assign": "assign",
         "dismiss": "Dismiss",
         "refresh": "Refresh",
-        "copyLink": "Copy link"
+        "copyLink": "Copy link",
+        "report": "Report"
     },
     "followed": "Followed",
     "anonymous": "anonymous",
@@ -97,5 +98,6 @@
     "appVersion": "App version: $appVersion",
     "addTo": "Add to",
     "calendar": "calendar",
-    "appleWallet": "Apple Wallet"
+    "appleWallet": "Apple Wallet",
+    "reportProfileDesc": "Help us keep Lemonade by listing the reason for the report."
 }

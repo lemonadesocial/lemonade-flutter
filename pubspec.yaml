@@ -85,6 +85,7 @@ dependencies:
   dotted_border: ^2.0.0+3
   qr_flutter: ^4.1.0
   upgrader: ^8.1.0
+  flutter_switch: ^0.3.2
 
   # Webview
   flutter_inappwebview: ^5.7.2+3

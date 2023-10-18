@@ -30,5 +30,8 @@
         "dob": "DD/MM/YYYY"
     },
     "errorDateTimeFormat": "Invalid date format",
-    "editProfileSuccess": "Edit profile successfully"
+    "editProfileSuccess": "Edit profile successfully",
+    "blocProfile": "Block this profile",
+    "reportProfile": "Report user",
+    "reportSuccess": "Report success. Thank you for reporting."
 }
