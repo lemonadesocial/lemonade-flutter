@@ -9,6 +9,7 @@ part 'user_dtos.g.dart';
 
 @freezed
 class UserDto with _$UserDto {
+  @JsonSerializable(explicitToJson: true)
   const factory UserDto({
     @JsonKey(name: '_id') String? id,
     @JsonKey(name: 'created_at', includeIfNull: false) DateTime? createdAt,
@@ -70,6 +71,7 @@ class UserDto with _$UserDto {
 
 @freezed
 class DiscordUserInfoDto with _$DiscordUserInfoDto {
+  @JsonSerializable(explicitToJson: true)
   const factory DiscordUserInfoDto({
     String? username,
   }) = _DiscordUserInfoDto;
@@ -80,6 +82,7 @@ class DiscordUserInfoDto with _$DiscordUserInfoDto {
 
 @freezed
 class ShopifyUserInfoDto with _$ShopifyUserInfoDto {
+  @JsonSerializable(explicitToJson: true)
   const factory ShopifyUserInfoDto({
     @JsonKey(name: 'shop_name', includeIfNull: false) String? shopName,
   }) = _ShopifyUserInfoDto;
@@ -90,6 +93,7 @@ class ShopifyUserInfoDto with _$ShopifyUserInfoDto {
 
 @freezed
 class GoogleUserInfoDto with _$GoogleUserInfoDto {
+  @JsonSerializable(explicitToJson: true)
   const factory GoogleUserInfoDto({
     String? id,
     String? name,
@@ -111,6 +115,7 @@ class GoogleUserInfoDto with _$GoogleUserInfoDto {
 
 @freezed
 class TwitchUserInfoDto with _$TwitchUserInfoDto {
+  @JsonSerializable(explicitToJson: true)
   const factory TwitchUserInfoDto({
     String? id,
     @JsonKey(name: 'display_name', includeIfNull: false) String? displayName,
@@ -137,7 +142,7 @@ class ZoomUserInfoDto with _$ZoomUserInfoDto {
 
 @freezed
 class NotificationFilterDto with _$NotificationFilterDto {
-  @JsonSerializable(fieldRename: FieldRename.snake)
+  @JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
   const factory NotificationFilterDto({
     required String type,
     String? refType,

@@ -1,4 +1,3 @@
-import 'package:app/core/presentation/pages/post_detail/post_detail_page.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:auto_route/auto_route.dart';
 
@@ -51,9 +50,6 @@ class AppRouter extends $AppRouter {
           page: PoapListingRoute.page,
         ),
         AutoRoute(
-          page: CreatePostRoute.page,
-        ),
-        AutoRoute(
           page: OnboardingWrapperRoute.page,
           children: [
             AutoRoute(
@@ -75,13 +71,20 @@ class AppRouter extends $AppRouter {
         AutoRoute(page: NotificationSettingRoute.page),
         AutoRoute(page: CommunityRoute.page),
         AutoRoute(page: QrCodeRoute.page),
-        AutoRoute(page: PostDetailRoute.page),
         chatRoutes,
-        ...eventRoutes,
         eventBuyTicketsRoutes,
+        ...postRoutes,
+        ...eventRoutes,
         ...commonRoutes,
       ];
 }
+
+final postRoutes = [
+  AutoRoute(
+    page: CreatePostRoute.page,
+  ),
+  AutoRoute(page: PostDetailRoute.page),
+];
 
 final chatRoutes = AutoRoute(
   page: ChatStackRoute.page,

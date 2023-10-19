@@ -9,6 +9,7 @@ part 'post_dtos.g.dart';
 
 @freezed
 class PostDto with _$PostDto {
+  @JsonSerializable(explicitToJson: true)
   const factory PostDto({
     @JsonKey(name: '_id') required String id,
     @JsonKey(name: 'created_at') required DateTime createdAt,

@@ -1,9 +1,11 @@
 import 'package:app/core/application/post/create_post_bloc/create_post_bloc.dart';
 import 'package:app/core/config.dart';
 import 'package:app/core/data/post/dtos/post_dtos.dart';
+import 'package:app/core/data/post/mutations/post_reaction_mutation.dart';
 import 'package:app/core/data/post/post_query.dart';
 import 'package:app/core/domain/post/entities/post_entities.dart';
 import 'package:app/core/domain/post/input/get_posts_input.dart';
+import 'package:app/core/domain/post/input/post_reaction_input.dart';
 import 'package:app/core/domain/post/post_repository.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/core/utils/gql/gql.dart';
@@ -108,5 +110,62 @@ class PostRepositoryImpl implements PostRepository {
       return Left(Failure());
     }
     return Right(response.data['_id']);
+  }
+
+  @override
+  Future<Either<Failure, bool>> togglePostReaction({
+    required PostReactionInput input,
+  }) async {
+    final result = await _client.mutate(
+      MutationOptions(
+        document: togglePostReactionMutation,
+        variables: {
+          'input': input.toJson(),
+        },
+        update: (cache, result) {
+          if (result == null) return;
+          if (result.hasException == true) return;
+
+          final cachePostFragment = cache.readFragment(
+            FragmentRequest(
+              fragment: Fragment(
+                document: gql(postFragment),
+                fragmentName: 'postFragment',
+              ),
+              idFields: {
+                '__typename': 'Post',
+                'id': input.post,
+              },
+            ),
+          );
+          if (cachePostFragment != null) {
+            final postDto = PostDto.fromJson(cachePostFragment);
+            final updatedPostDto = postDto.copyWith(
+              hasReaction: input.active,
+              reactions:
+                  ((postDto.reactions ?? 0) + (input.active ? 1 : -1)).toInt(),
+            );
+            cache.writeFragment(
+              FragmentRequest(
+                fragment: Fragment(
+                  document: gql(postFragment),
+                  fragmentName: 'postFragment',
+                ),
+                idFields: {
+                  '__typename': 'Post',
+                  'id': input.post,
+                },
+              ),
+              data: updatedPostDto.toJson(),
+              broadcast: false,
+            );
+          }
+        },
+      ),
+    );
+
+    if (result.hasException) return Left(Failure());
+
+    return Right(result.data?['toggleReaction'] == true);
   }
 }

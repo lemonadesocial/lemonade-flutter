@@ -1,4 +1,5 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
+import 'package:app/core/application/post/toggle_post_reaction_bloc/toggle_post_reaction_bloc.dart';
 import 'package:app/core/application/report/report_bloc/report_bloc.dart';
 import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/event/entities/event.dart';
@@ -10,6 +11,7 @@ import 'package:app/core/presentation/widgets/floating_frosted_glass_dropdown_wi
 import 'package:app/core/presentation/widgets/hero_image_viewer_widget.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
+import 'package:app/core/presentation/widgets/post/post_card_actions_widget.dart';
 import 'package:app/core/presentation/widgets/report/report_bottom_sheet.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/auth_utils.dart';
@@ -32,16 +34,38 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class PostProfileCard extends StatelessWidget {
-  PostProfileCard({
+  final Post post;
+  const PostProfileCard({
     super.key,
     required this.post,
-    this.isDetailPost = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => ReportBloc()),
+        BlocProvider(
+          create: (context) => TogglePostReactionBloc(
+            defaultReactions: post.reactions ?? 0,
+            defaultHasReaction: post.hasReaction ?? false,
+          ),
+        ),
+      ],
+      child: PostProfileCardView(
+        post: post,
+      ),
+    );
+  }
+}
+
+class PostProfileCardView extends StatelessWidget {
+  const PostProfileCardView({
+    super.key,
+    required this.post,
   });
 
   final Post post;
-  final bool isDetailPost;
-
-  final reportBloc = ReportBloc();
 
   String get postName => post.userExpanded?.name ?? '';
 
@@ -61,15 +85,20 @@ class PostProfileCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userId = AuthUtils.getUserId(context);
     final colorScheme = Theme.of(context).colorScheme;
-    final authState = context.watch<AuthBloc>().state;
     final t = Translations.of(context);
+    final userId = AuthUtils.getUserId(context);
+    final authState = context.watch<AuthBloc>().state;
     final isOwnPost = userId == post.user;
+    final togglePostReactionBloc = context.watch<TogglePostReactionBloc>();
+
     return InkWell(
-      onTap: isDetailPost
-          ? null
-          : () => context.router.push(PostDetailRoute(post: post)),
+      onTap: () => AutoRouter.of(context).navigate(
+        PostDetailRoute(
+          post: post,
+          togglePostReactionBloc: togglePostReactionBloc,
+        ),
+      ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -137,17 +166,17 @@ class PostProfileCard extends StatelessWidget {
                                       context,
                                       builder: (_) {
                                         return BlocProvider.value(
-                                          value: reportBloc,
+                                          value: context.read<ReportBloc>(),
                                           child: ReportBottomSheet(
                                             onPressReport: (reason) {
-                                              reportBloc.add(
-                                                ReportEvent.reportPost(
-                                                  input: ReportInput(
-                                                    id: post.id,
-                                                    reason: reason,
-                                                  ),
-                                                ),
-                                              );
+                                              context.read<ReportBloc>().add(
+                                                    ReportEvent.reportPost(
+                                                      input: ReportInput(
+                                                        id: post.id,
+                                                        reason: reason,
+                                                      ),
+                                                    ),
+                                                  );
                                             },
                                             title: t.common.report.reportPost,
                                             description: t.common.report
@@ -200,7 +229,7 @@ class PostProfileCard extends StatelessWidget {
                   SizedBox(height: Spacing.xSmall),
                   _buildFile(colorScheme, postFile),
                 ],
-                _buildActions(colorScheme, context),
+                PostCardActions(post: post),
               ],
             ),
           ),
@@ -231,78 +260,6 @@ class PostProfileCard extends StatelessWidget {
             placeholder: (_, __) => ImagePlaceholder.defaultPlaceholder(),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildActions(ColorScheme colorScheme, BuildContext context) {
-    final svgIcon = hasReaction ?? false
-        ? Assets.icons.icHeartFillled
-        : Assets.icons.icHeart;
-
-    return Padding(
-      padding: EdgeInsets.only(top: Spacing.xSmall),
-      child: Row(
-        children: [
-          GestureDetector(
-            behavior: HitTestBehavior.translucent,
-            onTap: () {
-              showComingSoonDialog(context);
-            },
-            child: Row(
-              children: [
-                ThemeSvgIcon(
-                  builder: (filter) => svgIcon.svg(
-                    width: 18.w,
-                    height: 18.w,
-                  ),
-                ),
-                const SizedBox(width: 3),
-                Text(
-                  reactions != null ? '$reactions' : '',
-                  style: Typo.small.copyWith(
-                    color: colorScheme.onSecondary,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(width: Spacing.xSmall),
-          // onPressed have applied on parent widget,
-          // so there no nee to implement here
-          Row(
-            children: [
-              ThemeSvgIcon(
-                color: colorScheme.onSecondary,
-                builder: (filter) => Assets.icons.icMessage.svg(
-                  colorFilter: filter,
-                  width: 18.w,
-                  height: 18.w,
-                ),
-              ),
-              const SizedBox(width: 3),
-              Text(
-                comments != null ? '$comments' : '',
-                style: Typo.small.copyWith(color: colorScheme.onSecondary),
-              ),
-            ],
-          ),
-          const Spacer(),
-          GestureDetector(
-            behavior: HitTestBehavior.translucent,
-            onTap: () {
-              showComingSoonDialog(context);
-            },
-            child: ThemeSvgIcon(
-              color: colorScheme.onSecondary,
-              builder: (filter) => Assets.icons.icShare.svg(
-                colorFilter: filter,
-                width: 18.w,
-                height: 18.w,
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
