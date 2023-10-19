@@ -1,4 +1,5 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
+import 'package:app/core/application/profile/user_follows_bloc/user_follows_bloc.dart';
 import 'package:app/core/application/profile/user_profile_bloc/user_profile_bloc.dart';
 import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/presentation/pages/profile/views/profile_page_view.dart';
@@ -20,11 +21,21 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    return BlocProvider(
-      create: (context) => UserProfileBloc(getIt<UserRepository>())
-        ..add(
-          UserProfileEvent.fetch(userId: userId),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => UserProfileBloc(getIt<UserRepository>())
+            ..add(
+              UserProfileEvent.fetch(userId: userId),
+            ),
         ),
+        BlocProvider(
+          create: (context) => UserFollowsBloc(getIt<UserRepository>())
+            ..add(
+              UserFollowsEvent.fetch(followee: userId),
+            ),
+        ),
+      ],
       child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.primary,
         body: SwipeDetector(
