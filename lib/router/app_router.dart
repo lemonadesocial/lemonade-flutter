@@ -1,3 +1,4 @@
+import 'package:app/core/presentation/pages/post_detail/post_detail_page.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:auto_route/auto_route.dart';
 
@@ -38,7 +39,7 @@ class AppRouter extends $AppRouter {
             AutoRoute(
               path: '404',
               page: EmptyRoute.page,
-            )
+            ),
           ],
         ),
         AutoRoute(
@@ -74,6 +75,7 @@ class AppRouter extends $AppRouter {
         AutoRoute(page: NotificationSettingRoute.page),
         AutoRoute(page: CommunityRoute.page),
         AutoRoute(page: QrCodeRoute.page),
+        AutoRoute(page: PostDetailRoute.page),
         chatRoutes,
         ...eventRoutes,
         eventBuyTicketsRoutes,

@@ -35,8 +35,11 @@ class PostProfileCard extends StatelessWidget {
   PostProfileCard({
     super.key,
     required this.post,
+    this.isDetailPost = false,
   });
+
   final Post post;
+  final bool isDetailPost;
 
   final reportBloc = ReportBloc();
 
@@ -63,139 +66,146 @@ class PostProfileCard extends StatelessWidget {
     final authState = context.watch<AuthBloc>().state;
     final t = Translations.of(context);
     final isOwnPost = userId == post.user;
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        GestureDetector(
-          behavior: HitTestBehavior.translucent,
-          onTap: () {
-            final isMe = AuthUtils.isMe(context, user: post.userExpanded!);
-            if (isMe) {
-              AutoRouter.of(context).navigate(const MyProfileRoute());
-            } else {
-              AutoRouter.of(context).navigate(ProfileRoute(userId: post.user));
-            }
-          },
-          child: LemonCircleAvatar(
-            size: Sizing.medium,
-            url: AvatarUtils.getAvatarUrl(user: post.userExpanded),
+    return InkWell(
+      onTap: isDetailPost
+          ? null
+          : () => context.router.push(PostDetailRoute(post: post)),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          GestureDetector(
+            behavior: HitTestBehavior.translucent,
+            onTap: () {
+              final isMe = AuthUtils.isMe(context, user: post.userExpanded!);
+              if (isMe) {
+                AutoRouter.of(context).navigate(const MyProfileRoute());
+              } else {
+                AutoRouter.of(context)
+                    .navigate(ProfileRoute(userId: post.user));
+              }
+            },
+            child: LemonCircleAvatar(
+              size: Sizing.medium,
+              url: AvatarUtils.getAvatarUrl(user: post.userExpanded),
+            ),
           ),
-        ),
-        const SizedBox(width: 9),
-        Flexible(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Text(
-                    postName,
-                    style: Typo.medium.copyWith(
-                      color: colorScheme.onPrimary.withOpacity(0.87),
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  if (postCreatedAt != null)
+          const SizedBox(width: 9),
+          Flexible(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
                     Text(
-                      '  •  ${timeago.format(postCreatedAt!)}',
-                      style: Typo.medium
-                          .copyWith(color: colorScheme.onSurfaceVariant),
+                      postName,
+                      style: Typo.medium.copyWith(
+                        color: colorScheme.onPrimary.withOpacity(0.87),
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                  const Spacer(),
-                  GestureDetector(
-                    onTap: () {
-                      showComingSoonDialog(context);
-                    },
-                    child: isOwnPost
-                        ? const SizedBox.shrink()
-                        : FloatingFrostedGlassDropdown(
-                            offset: Offset(0, -Sizing.xSmall),
-                            items: [
-                              DropdownItemDpo(
-                                leadingIcon: Assets.icons.icRoundReport.svg(
-                                  width: Sizing.xSmall,
-                                  height: Sizing.xSmall,
-                                ),
-                                label: t.common.actions.report,
-                                value: "report",
-                                customColor: LemonColor.report,
-                              ),
-                            ],
-                            onItemPressed: (item) {
-                              if (item?.value == 'report') {
-                                authState.maybeWhen(
-                                  authenticated: (_) =>
-                                      BottomSheetUtils.showSnapBottomSheet(
-                                    context,
-                                    builder: (_) {
-                                      return BlocProvider.value(
-                                        value: reportBloc,
-                                        child: ReportBottomSheet(
-                                          onPressReport: (reason) {
-                                            reportBloc.add(
-                                              ReportEvent.reportPost(
-                                                input: ReportInput(
-                                                  id: post.id,
-                                                  reason: reason,
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                          title: t.common.report.reportPost,
-                                          description:
-                                              t.common.report.reportDescription(
-                                            reportName:
-                                                t.post.post.toLowerCase(),
-                                          ),
-                                          placeholder:
-                                              t.common.report.reportPlaceholder(
-                                            reportName:
-                                                t.post.post.toLowerCase(),
-                                          ),
-                                        ),
-                                      );
-                                    },
+                    if (postCreatedAt != null)
+                      Text(
+                        '  •  ${timeago.format(postCreatedAt!)}',
+                        style: Typo.medium
+                            .copyWith(color: colorScheme.onSurfaceVariant),
+                      ),
+                    const Spacer(),
+                    GestureDetector(
+                      onTap: () {
+                        showComingSoonDialog(context);
+                      },
+                      child: isOwnPost
+                          ? const SizedBox.shrink()
+                          : FloatingFrostedGlassDropdown(
+                              offset: Offset(0, -Sizing.xSmall),
+                              items: [
+                                DropdownItemDpo(
+                                  leadingIcon: Assets.icons.icRoundReport.svg(
+                                    width: Sizing.xSmall,
+                                    height: Sizing.xSmall,
                                   ),
-                                  orElse: () => AutoRouter.of(context)
-                                      .navigate(const LoginRoute()),
-                                );
-                              }
-                            },
-                            child: ThemeSvgIcon(
-                              color: colorScheme.onSurfaceVariant,
-                              builder: (filter) => Assets.icons.icMoreHoriz.svg(
-                                colorFilter: filter,
-                                width: 18.w,
-                                height: 18.w,
+                                  label: t.common.actions.report,
+                                  value: "report",
+                                  customColor: LemonColor.report,
+                                ),
+                              ],
+                              onItemPressed: (item) {
+                                if (item?.value == 'report') {
+                                  authState.maybeWhen(
+                                    authenticated: (_) =>
+                                        BottomSheetUtils.showSnapBottomSheet(
+                                      context,
+                                      builder: (_) {
+                                        return BlocProvider.value(
+                                          value: reportBloc,
+                                          child: ReportBottomSheet(
+                                            onPressReport: (reason) {
+                                              reportBloc.add(
+                                                ReportEvent.reportPost(
+                                                  input: ReportInput(
+                                                    id: post.id,
+                                                    reason: reason,
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            title: t.common.report.reportPost,
+                                            description: t.common.report
+                                                .reportDescription(
+                                              reportName:
+                                                  t.post.post.toLowerCase(),
+                                            ),
+                                            placeholder: t.common.report
+                                                .reportPlaceholder(
+                                              reportName:
+                                                  t.post.post.toLowerCase(),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                    orElse: () => AutoRouter.of(context)
+                                        .navigate(const LoginRoute()),
+                                  );
+                                }
+                              },
+                              child: ThemeSvgIcon(
+                                color: colorScheme.onSurfaceVariant,
+                                builder: (filter) =>
+                                    Assets.icons.icMoreHoriz.svg(
+                                  colorFilter: filter,
+                                  width: 18.w,
+                                  height: 18.w,
+                                ),
                               ),
                             ),
-                          ),
+                    ),
+                  ],
+                ),
+                if (postText.isNotEmpty) ...[
+                  SizedBox(height: Spacing.superExtraSmall),
+                  Text(
+                    postText,
+                    style: Typo.medium.copyWith(
+                      color: colorScheme.onPrimary.withOpacity(0.87),
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
                 ],
-              ),
-              if (postText.isNotEmpty) ...[
-                SizedBox(height: Spacing.superExtraSmall),
-                Text(
-                  postText,
-                  style: Typo.medium.copyWith(
-                    color: colorScheme.onPrimary.withOpacity(0.87),
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
+                if (postEvent != null) ...[
+                  SizedBox(height: Spacing.xSmall),
+                  EventPostCard(event: postEvent!),
+                ],
+                if (postFile != null) ...[
+                  SizedBox(height: Spacing.xSmall),
+                  _buildFile(colorScheme, postFile),
+                ],
+                _buildActions(colorScheme, context),
               ],
-              if (postEvent != null) ...[
-                SizedBox(height: Spacing.xSmall),
-                EventPostCard(event: postEvent!),
-              ],
-              if (postFile != null) ...[
-                SizedBox(height: Spacing.xSmall),
-                _buildFile(colorScheme, postFile),
-              ],
-              _buildActions(colorScheme, context)
-            ],
+            ),
           ),
-        )
-      ],
+        ],
+      ),
     );
   }
 
@@ -227,20 +237,9 @@ class PostProfileCard extends StatelessWidget {
 
   Widget _buildActions(ColorScheme colorScheme, BuildContext context) {
     final svgIcon = hasReaction ?? false
-        ? ThemeSvgIcon(
-            builder: (filter) => Assets.icons.icHeartFillled.svg(
-              width: 18.w,
-              height: 18.w,
-            ),
-          )
-        : ThemeSvgIcon(
-            color: colorScheme.onSecondary,
-            builder: (filter) => Assets.icons.icHeart.svg(
-              colorFilter: filter,
-              width: 18.w,
-              height: 18.w,
-            ),
-          );
+        ? Assets.icons.icHeartFillled
+        : Assets.icons.icHeart;
+
     return Padding(
       padding: EdgeInsets.only(top: Spacing.xSmall),
       child: Row(
@@ -252,7 +251,12 @@ class PostProfileCard extends StatelessWidget {
             },
             child: Row(
               children: [
-                svgIcon,
+                ThemeSvgIcon(
+                  builder: (filter) => svgIcon.svg(
+                    width: 18.w,
+                    height: 18.w,
+                  ),
+                ),
                 const SizedBox(width: 3),
                 Text(
                   reactions != null ? '$reactions' : '',
@@ -264,28 +268,24 @@ class PostProfileCard extends StatelessWidget {
             ),
           ),
           SizedBox(width: Spacing.xSmall),
-          GestureDetector(
-            behavior: HitTestBehavior.translucent,
-            onTap: () {
-              showComingSoonDialog(context);
-            },
-            child: Row(
-              children: [
-                ThemeSvgIcon(
-                  color: colorScheme.onSecondary,
-                  builder: (filter) => Assets.icons.icMessage.svg(
-                    colorFilter: filter,
-                    width: 18.w,
-                    height: 18.w,
-                  ),
+          // onPressed have applied on parent widget,
+          // so there no nee to implement here
+          Row(
+            children: [
+              ThemeSvgIcon(
+                color: colorScheme.onSecondary,
+                builder: (filter) => Assets.icons.icMessage.svg(
+                  colorFilter: filter,
+                  width: 18.w,
+                  height: 18.w,
                 ),
-                const SizedBox(width: 3),
-                Text(
-                  comments != null ? '$comments' : '',
-                  style: Typo.small.copyWith(color: colorScheme.onSecondary),
-                ),
-              ],
-            ),
+              ),
+              const SizedBox(width: 3),
+              Text(
+                comments != null ? '$comments' : '',
+                style: Typo.small.copyWith(color: colorScheme.onSecondary),
+              ),
+            ],
           ),
           const Spacer(),
           GestureDetector(
