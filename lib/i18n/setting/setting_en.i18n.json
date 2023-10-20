@@ -24,5 +24,7 @@
     "friend": "You don't have any friend.",
     "follower": "You don't have any follower.",
     "following": "You haven't followed anyone yet."
-  }
+  },
+  "blockAccount": "Block Accounts",
+  "blockAccountDesc": "Temporarily restricted accounts"
 }

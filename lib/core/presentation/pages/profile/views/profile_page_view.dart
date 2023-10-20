@@ -116,6 +116,12 @@ class _ProfilePageViewState extends State<ProfilePageView>
                             FloatingFrostedGlassDropdown(
                               items: <DropdownItemDpo<MenuOption>>[
                                 DropdownItemDpo<MenuOption>(
+                                  label: t.common.actions.block,
+                                  value: MenuOption.block,
+                                  customColor: LemonColor.menuRed,
+                                  leadingIcon: Assets.icons.icBlock.svg(),
+                                ),
+                                DropdownItemDpo<MenuOption>(
                                   label: t.profile.reportProfile,
                                   value: MenuOption.report,
                                   customColor: LemonColor.menuRed,
@@ -189,6 +195,7 @@ class _ProfilePageViewState extends State<ProfilePageView>
 }
 
 enum MenuOption {
+  block,
   share,
   report,
 }

@@ -118,7 +118,7 @@ class ReportUserDialog extends StatelessWidget with LemonBottomSheet {
                       children: [
                         Expanded(
                           child: Text(
-                            t.profile.blocProfile,
+                            t.profile.blockProfile,
                             style: Typo.mediumPlus.copyWith(
                               color: colorScheme.onPrimary,
                               fontWeight: FontWeight.w600,

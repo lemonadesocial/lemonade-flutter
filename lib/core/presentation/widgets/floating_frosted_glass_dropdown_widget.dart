@@ -9,6 +9,7 @@ class FloatingFrostedGlassDropdown<T> extends StatefulWidget {
   final Widget child;
   final List<DropdownItemDpo<T>> items;
   final Function(DropdownItemDpo<T>? item)? onItemPressed;
+  final Function()? onEmptyPressed;
   final Offset? offset;
 
   const FloatingFrostedGlassDropdown({
@@ -16,6 +17,7 @@ class FloatingFrostedGlassDropdown<T> extends StatefulWidget {
     required this.items,
     required this.child,
     this.onItemPressed,
+    this.onEmptyPressed,
     this.offset,
   });
 
@@ -59,6 +61,10 @@ class _FloatingFrostedGlassDropdown<T>
       key: _btnKey,
       behavior: HitTestBehavior.translucent,
       onTap: () async {
+        if (widget.items.isEmpty) {
+          widget.onEmptyPressed?.call();
+          return;
+        }
         await _calculatePosition();
         if (isVisible) return _hide();
         _show();

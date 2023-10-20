@@ -31,7 +31,10 @@
     },
     "errorDateTimeFormat": "Invalid date format",
     "editProfileSuccess": "Edit profile successfully",
-    "blocProfile": "Block this profile",
+    "blockProfile": "Block this profile",
     "reportProfile": "Report user",
-    "reportSuccess": "Report success. Thank you for reporting."
+    "reportSuccess": "Report success. Thank you for reporting.",
+    "viewProfile": "View profile",
+    "editComment": "Edit comment",
+    "deleteComment": "Delete comment"
 }

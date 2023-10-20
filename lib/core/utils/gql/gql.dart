@@ -66,7 +66,10 @@ class BaseGQL {
           _httpLink,
         ),
       ]),
-      cache: GraphQLCache(store: HiveStore()),
+      cache: GraphQLCache(
+        partialDataPolicy: PartialDataCachePolicy.accept,
+        store: HiveStore(),
+      ),
     );
 
     tokenStateSubscription = appOauth.tokenStateStream.listen((tokenState) {

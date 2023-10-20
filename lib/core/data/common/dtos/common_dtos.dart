@@ -6,6 +6,7 @@ part 'common_dtos.g.dart';
 
 @freezed
 class AddressDto with _$AddressDto {
+  @JsonSerializable(explicitToJson: true)
   const factory AddressDto({
     String? street1,
     String? street2,
@@ -26,6 +27,7 @@ class AddressDto with _$AddressDto {
 
 @freezed
 class DbFileDto with _$DbFileDto {
+  @JsonSerializable(explicitToJson: true)
   const factory DbFileDto({
     @JsonKey(name: '_id', includeIfNull: false) String? id,
     String? url,

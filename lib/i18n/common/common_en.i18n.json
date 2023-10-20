@@ -39,7 +39,8 @@
         "dismiss": "Dismiss",
         "refresh": "Refresh",
         "copyLink": "Copy link",
-        "report": "Report"
+        "report": "Report",
+        "block": "Block"
     },
     "followed": "Followed",
     "anonymous": "anonymous",
