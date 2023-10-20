@@ -13,6 +13,7 @@ class BlockUserState with _$BlockUserState {
 enum BlockUserStatus {
   initial,
   loading,
-  success,
+  blockSuccess,
+  unblockSuccess,
   error,
 }
