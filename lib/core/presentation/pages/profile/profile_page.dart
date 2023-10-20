@@ -54,7 +54,7 @@ class ProfilePage extends StatelessWidget {
                       appBar: const LemonAppBar(leading: LemonBackButton()),
                       backgroundColor: Theme.of(context).colorScheme.primary,
                       body: Center(
-                        child: Text(t.common.somethingWrong),
+                        child: Text(t.profile.blockedMessage),
                       ),
                     );
                   } else {

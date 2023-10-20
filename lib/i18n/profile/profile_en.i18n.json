@@ -40,5 +40,6 @@
     "blockConfirm": "Are you sure you want to block this profile?",
     "unBlockConfirm": "Are you sure you want to unblock this profile?",
     "blockSuccess": "Block user successfully",
-    "unblockSuccess": "Unblock user successfully"
+    "unblockSuccess": "Unblock user successfully",
+    "blockedMessage": "This content isn't available"
 }
