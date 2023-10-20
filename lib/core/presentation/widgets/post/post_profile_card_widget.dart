@@ -8,7 +8,6 @@ import 'package:app/core/domain/report/input/report_input.dart';
 import 'package:app/core/presentation/dpos/common/dropdown_item_dpo.dart';
 import 'package:app/core/presentation/widgets/event/event_post_card_widget.dart';
 import 'package:app/core/presentation/widgets/floating_frosted_glass_dropdown_widget.dart';
-import 'package:app/core/presentation/widgets/hero_image_viewer_widget.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/core/presentation/widgets/post/post_card_actions_widget.dart';
@@ -93,12 +92,17 @@ class PostProfileCardView extends StatelessWidget {
     final togglePostReactionBloc = context.watch<TogglePostReactionBloc>();
 
     return InkWell(
-      onTap: () => AutoRouter.of(context).navigate(
-        PostDetailRoute(
-          post: post,
-          togglePostReactionBloc: togglePostReactionBloc,
-        ),
-      ),
+      onTap: () {
+        authState.maybeWhen(
+          authenticated: (_) => AutoRouter.of(context).navigate(
+            PostDetailRoute(
+              post: post,
+              togglePostReactionBloc: togglePostReactionBloc,
+            ),
+          ),
+          orElse: () => AutoRouter.of(context).navigate(const LoginRoute()),
+        );
+      },
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -250,15 +254,11 @@ class PostProfileCardView extends StatelessWidget {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(LemonRadius.xSmall),
-        child: HeroImageViewer(
-          tag: file?.key ?? '',
+        child: CachedNetworkImage(
           imageUrl: ImageUtils.generateUrl(file: file),
-          child: CachedNetworkImage(
-            imageUrl: ImageUtils.generateUrl(file: file),
-            fit: BoxFit.cover,
-            errorWidget: (_, __, ___) => ImagePlaceholder.defaultPlaceholder(),
-            placeholder: (_, __) => ImagePlaceholder.defaultPlaceholder(),
-          ),
+          fit: BoxFit.cover,
+          errorWidget: (_, __, ___) => ImagePlaceholder.defaultPlaceholder(),
+          placeholder: (_, __) => ImagePlaceholder.defaultPlaceholder(),
         ),
       ),
     );

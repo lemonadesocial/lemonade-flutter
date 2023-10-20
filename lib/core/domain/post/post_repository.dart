@@ -1,4 +1,6 @@
 import 'package:app/core/domain/post/entities/post_entities.dart';
+import 'package:app/core/domain/post/input/create_post_comment_input.dart';
+import 'package:app/core/domain/post/input/get_post_comments_input.dart';
 import 'package:app/core/domain/post/input/get_posts_input.dart';
 import 'package:app/core/domain/post/input/post_reaction_input.dart';
 import 'package:app/core/failure.dart';
@@ -21,5 +23,13 @@ abstract class PostRepository {
 
   Future<Either<Failure, bool>> togglePostReaction({
     required PostReactionInput input,
+  });
+
+  Future<Either<Failure, List<PostComment>>> getPostComments({
+    required GetPostCommentsInput input,
+  });
+
+  Future<Either<Failure, PostComment>> createPostComment({
+    required CreatePostCommentInput input,
   });
 }

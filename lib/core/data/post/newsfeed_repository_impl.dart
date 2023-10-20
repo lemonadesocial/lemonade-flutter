@@ -1,5 +1,5 @@
 import 'package:app/core/data/post/dtos/newsfeed_dtos.dart';
-import 'package:app/core/data/post/post_query.dart';
+import 'package:app/core/data/post/query/post_query.dart';
 import 'package:app/core/domain/newsfeed/input/get_newsfeed_input.dart';
 import 'package:app/core/domain/newsfeed/newsfeed_repository.dart';
 import 'package:app/core/domain/post/entities/post_entities.dart';
