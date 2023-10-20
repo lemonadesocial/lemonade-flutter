@@ -131,8 +131,7 @@ class _App extends StatelessWidget {
     SnackBarUtils.init(lemonadeAppDarkThemeData.colorScheme);
     return MaterialApp.router(
       scaffoldMessengerKey: SnackBarUtils.rootScaffoldMessengerKey,
-      locale: _getCurrentLocale(context),
-      // use provider
+      locale: _getCurrentLocale(context), // use provider
       supportedLocales: _supportedLocales,
       localizationsDelegates: _localizationsDelegates,
       themeMode: ThemeMode.dark,
