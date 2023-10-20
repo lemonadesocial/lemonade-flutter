@@ -101,7 +101,7 @@ class PostCommentTile extends StatelessWidget {
                         switch (item?.value) {
                           case CommentMenuOption.report:
                             ReportUserDialog(
-                              userId: comment.user ?? '',
+                              user: comment.userExpanded!,
                             ).showAsBottomSheet(
                               context,
                               heightFactor: 0.79,

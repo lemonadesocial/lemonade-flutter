@@ -68,7 +68,8 @@ class _ProfilePageViewState extends State<ProfilePageView>
       listener: (context, state) {
         if (state.status == BlockUserStatus.success) {
           context.router.pop();
-          SnackBarUtils.showSuccessSnackbar(t.profile.reportSuccess);
+          SnackBarUtils.showSuccessSnackbar(t.common.actions.success);
+          AuthUtils.getUser(context)!.blockedList!.add(widget.userProfile);
         }
 
         if (state.status == BlockUserStatus.error) {
@@ -167,7 +168,7 @@ class _ProfilePageViewState extends State<ProfilePageView>
                                       break;
                                     case MenuOption.report:
                                       ReportUserDialog(
-                                        userId: widget.userProfile.userId,
+                                        user: widget.userProfile,
                                       ).showAsBottomSheet(
                                         context,
                                         heightFactor: 0.79,

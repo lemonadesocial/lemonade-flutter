@@ -3,6 +3,8 @@ import 'package:app/core/application/profile/user_follows_bloc/user_follows_bloc
 import 'package:app/core/application/profile/user_profile_bloc/user_profile_bloc.dart';
 import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/presentation/pages/profile/views/profile_page_view.dart';
+import 'package:app/core/presentation/widgets/back_button_widget.dart';
+import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/core/utils/swipe_detector.dart';
@@ -48,8 +50,12 @@ class ProfilePage extends StatelessWidget {
                   final blockedIdList =
                       authSession.blockedList!.map((e) => e.userId).toList();
                   if (blockedIdList.contains(userProfile.userId)) {
-                    return Center(
-                      child: Text(t.common.somethingWrong),
+                    return Scaffold(
+                      appBar: const LemonAppBar(leading: LemonBackButton()),
+                      backgroundColor: Theme.of(context).colorScheme.onPrimary,
+                      body: Center(
+                        child: Text(t.common.somethingWrong),
+                      ),
                     );
                   } else {
                     return ProfilePageView(userProfile: userProfile);

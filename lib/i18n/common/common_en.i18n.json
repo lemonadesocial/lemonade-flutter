@@ -41,7 +41,8 @@
         "copyLink": "Copy link",
         "report": "Report",
         "block": "Block",
-        "unBlock": "Unblock"
+        "unBlock": "Unblock",
+        "success": "Success"
     },
     "followed": "Followed",
     "anonymous": "anonymous",
