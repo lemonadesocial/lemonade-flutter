@@ -40,7 +40,8 @@
         "refresh": "Refresh",
         "copyLink": "Copy link",
         "report": "Report",
-        "block": "Block"
+        "block": "Block",
+        "unBlock": "Unblock"
     },
     "followed": "Followed",
     "anonymous": "anonymous",
@@ -108,5 +109,6 @@
         "reportSuccess": "Your report has been successfully submitted and is now undergoing the review process."
     },
     "submitted": "Submitted",
-    "reportProfileDesc": "Help us keep Lemonade by listing the reason for the report."
+    "reportProfileDesc": "Help us keep Lemonade by listing the reason for the report.",
+    "emptyList": "Nothing here"
 }

@@ -4,7 +4,7 @@ part of 'block_user_bloc.dart';
 class BlockUserState with _$BlockUserState {
   const factory BlockUserState({
     @Default(BlockUserStatus.initial) BlockUserStatus status,
-    @Default([]) List<User> blockList,
+    @Default('') String blockUserId,
   }) = _BlockUserState;
 
   factory BlockUserState.initial() => const BlockUserState();
@@ -13,6 +13,6 @@ class BlockUserState with _$BlockUserState {
 enum BlockUserStatus {
   initial,
   loading,
-  loaded,
+  success,
   error,
 }

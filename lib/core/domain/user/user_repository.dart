@@ -20,6 +20,11 @@ abstract class UserRepository {
     bool isBlock = false,
   });
 
+  Future<Either<Failure, bool>> toggleBlockUser({
+    required String userId,
+    required bool isBlock,
+  });
+
   Future<Either<Failure, List<UserFollow>>> getUserFollows(
     GetUserFollowsInput input,
   );

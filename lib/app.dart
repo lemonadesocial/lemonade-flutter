@@ -1,4 +1,6 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
+import 'package:app/core/application/profile/block_user_bloc/block_user_bloc.dart';
+import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/service/firebase/firebase_service.dart';
 import 'package:app/core/service/matrix/matrix_service.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
@@ -70,6 +72,9 @@ class _LemonadeAppViewState extends State<LemonadeApp> {
               NewsfeedService(NewsfeedRepositoryImpl()),
             ),
           ),
+          BlocProvider(
+            create: (context) => BlockUserBloc(getIt<UserRepository>()),
+          ),
         ],
         child: child,
       );
@@ -126,7 +131,8 @@ class _App extends StatelessWidget {
     SnackBarUtils.init(lemonadeAppDarkThemeData.colorScheme);
     return MaterialApp.router(
       scaffoldMessengerKey: SnackBarUtils.rootScaffoldMessengerKey,
-      locale: _getCurrentLocale(context), // use provider
+      locale: _getCurrentLocale(context),
+      // use provider
       supportedLocales: _supportedLocales,
       localizationsDelegates: _localizationsDelegates,
       themeMode: ThemeMode.dark,

@@ -63,6 +63,10 @@ class UserDto with _$UserDto {
     @Default([])
     @JsonKey(name: 'notification_filters')
     List<NotificationFilterDto> notificationFilter,
+    @Default([]) List<String> blocked,
+    @Default([])
+    @JsonKey(name: 'blocked_expanded')
+    List<UserDto> blockedExpanded,
   }) = _UserDto;
 
   factory UserDto.fromJson(Map<String, dynamic> json) =>

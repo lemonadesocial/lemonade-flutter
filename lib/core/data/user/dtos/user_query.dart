@@ -224,8 +224,8 @@ final reportUserMutation = gql('''
           user: \$id,
           reason: \$reason, 
           block: \$block 
-          }
-      )
+      }
+    )
   }
 ''');
 
@@ -241,5 +241,16 @@ final getUserFollowsQuery = gql('''
       followee
       __typename
     }
+  }
+''');
+
+final toggleBlockUserQuery = gql('''
+  mutation (\$id: MongoID!, \$block: Boolean!) {
+    toggleBlockUser(
+      input: { 
+          user: \$id,
+          block: \$block 
+      }
+    )
   }
 ''');

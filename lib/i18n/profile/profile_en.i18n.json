@@ -36,5 +36,7 @@
     "reportSuccess": "Report success. Thank you for reporting.",
     "viewProfile": "View profile",
     "editComment": "Edit comment",
-    "deleteComment": "Delete comment"
+    "deleteComment": "Delete comment",
+    "blockConfirm": "Are you sure you want to block this profile?",
+    "unBlockConfirm": "Are you sure you want to unblock this profile?"
 }
