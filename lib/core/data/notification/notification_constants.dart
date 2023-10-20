@@ -5,4 +5,5 @@ class NotificationType {
       "user_friendship_request_accept";
   static const String userDiscoveryMatch = "user_discovery_match";
   static const String userContactSignUp = "user_contact_signup";
+  static const String eventAnnounce = "event_announce";
 }

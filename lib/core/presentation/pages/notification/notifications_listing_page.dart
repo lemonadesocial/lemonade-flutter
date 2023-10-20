@@ -10,6 +10,7 @@ import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/service/notification/notification_service.dart';
 import 'package:app/core/utils/drawer_utils.dart';
+import 'package:app/core/utils/navigation_utils.dart';
 import 'package:app/core/utils/swipe_detector.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -164,12 +165,10 @@ class _NotificationsListingViewState extends State<_NotificationsListingView> {
                                 key: Key(notifications[index].id ?? ''),
                                 notification: notifications[index],
                                 onTap: () {
-                                  // TODO: Refactor handle notification navigation
-                                  // NavigationUtils.handleNotificationNavigate(
-                                  //   _appRouter,
-                                  //   context,
-                                  //   notifications[index].type
-                                  // );
+                                  NavigationUtils.handleNotificationNavigate(
+                                    context,
+                                    notifications[index],
+                                  );
                                 },
                               ),
                             ),

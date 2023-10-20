@@ -8,6 +8,7 @@ import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/date_format_utils.dart';
+import 'package:app/core/utils/device_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
@@ -211,7 +212,7 @@ class EventPostCard extends StatelessWidget {
           )
         : '${AppConfig.assetPrefix}/assets/images/no_photo_event.png';
     return SizedBox(
-      height: 170.h,
+      height: DeviceUtils.isIpad() ? 340.h : 170.h,
       width: double.infinity,
       child: ClipRRect(
         borderRadius: BorderRadius.only(

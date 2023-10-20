@@ -59,6 +59,7 @@ dependencies:
   flutter_svg: ^2.0.7
   cached_network_image: ^3.2.3
   image_picker: ^1.0.2
+  image_cropper: ^4.0.1
 
   # UI
   flutter_portal: ^1.1.4
@@ -83,6 +84,8 @@ dependencies:
   adaptive_dialog: ^1.9.0+2
   dotted_border: ^2.0.0+3
   qr_flutter: ^4.1.0
+  upgrader: ^8.1.0
+  flutter_switch: ^0.3.2
 
   # Webview
   flutter_inappwebview: ^5.7.2+3
@@ -92,6 +95,7 @@ dependencies:
   firebase_messaging: ^14.6.8
   firebase_crashlytics: ^3.3.3
   flutter_local_notifications: ^15.1.0+1
+  firebase_analytics: ^10.5.1
   
   # location tracking
   geolocator: 9.0.2

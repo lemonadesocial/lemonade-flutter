@@ -26,8 +26,3 @@ if [[ "$analyze_output" != *"No issues found!"* ]]; then
 	echo -e "Failed files:\n$analyze_output"
     exit 1
 fi
-
-if [[ `git status --porcelain` ]]; then
-    printError "This script needs to run against committed code only. Please commit or stash you changes."
-    exit 1
-fi

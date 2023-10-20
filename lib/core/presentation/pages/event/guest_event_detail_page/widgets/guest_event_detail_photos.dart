@@ -36,6 +36,11 @@ class GuestEventDetailPhotos extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
+
+    if (photoUrls.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
@@ -97,9 +102,10 @@ class GuestEventDetailPhotos extends StatelessWidget {
                       child: CachedNetworkImage(
                         width: double.infinity,
                         fit: BoxFit.cover,
-                        placeholder: (_, __) => ImagePlaceholder.eventCard(),
+                        placeholder: (_, __) =>
+                            ImagePlaceholder.defaultPlaceholder(),
                         errorWidget: (_, __, ___) =>
-                            ImagePlaceholder.eventCard(),
+                            ImagePlaceholder.defaultPlaceholder(),
                         imageUrl: photo,
                       ),
                     ),

@@ -35,6 +35,16 @@ class SelectTicketItem extends StatefulWidget {
 class _SelectTicketItemState extends State<SelectTicketItem> {
   double count = 0;
 
+  @override
+  initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      if (widget.ticketType.cost == 0) {
+        add();
+      }
+    });
+  }
+
   add() {
     if (count < (widget.ticketType.limit ?? 0)) {
       setState(() {

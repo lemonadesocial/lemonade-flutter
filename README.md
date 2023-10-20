@@ -42,3 +42,18 @@ The debug.keystore is a crucial file required for Android app development and de
 If you need access to the debug.keystore for this project, please contact the engineering team responsible for project management. They will provide you with the necessary file for your development purposes.
 
 After obtaining the debug.keystore, move the file to the `android/app`` folder of your Flutter project. This location is where the Android build process expects to find the debug.keystore for signing the app during development and debugging. Placing it there will enable a seamless build process for your Flutter project on Android.
+
+## Check app version
+
+Appcast, in this Flutter package, is used by the upgrader widgets to download app details from an appcast, based on the Sparkle framework by Andy Matuschak. You can read the Sparkle documentation here: https://sparkle-project.org/documentation/publishing/.
+
+An appcast is an RSS feed with one channel that has a collection of items that each describe one app version. The appcast will describe each app version and will provide the latest app version to upgrader that indicates when an upgrade should be recommended.
+
+- Staging : appcast_staging.xml
+- Production : appcast.xml
+
+Uncomment this one to force update app version
+```xml
+<!-- Force update version -->
+<!-- <sparkle:tags> <sparkle:criticalUpdate /> </sparkle:tags> -->
+```

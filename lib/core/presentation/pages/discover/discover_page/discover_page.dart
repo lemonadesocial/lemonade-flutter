@@ -69,7 +69,7 @@ class DiscoverPage extends StatelessWidget {
             const DiscoverBadgesNearYou(),
             const DiscoverUpcomingEvents(),
             SliverToBoxAdapter(
-              child: SizedBox(height: BottomBar.bottomBarHeight),
+              child: SizedBox(height: 2 * BottomBar.bottomBarHeight),
             ),
           ],
         ),

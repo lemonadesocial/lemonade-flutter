@@ -7,6 +7,7 @@ import 'package:app/core/domain/token/entities/token_entities.dart';
 import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
+import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/poap/poap_quantity_bar.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/media_utils.dart';
@@ -209,9 +210,17 @@ class GuestEventPoapOfferItemState extends State<GuestEventPoapOfferItemView>
                       builder: (context, state) {
                         final claiming = state.claiming;
                         final hasClaimed = state.claimed;
+                        final isChecking = state.checking;
                         final claimable = state.policy != null
                             ? state.policy?.result?.boolean ?? false
                             : !hasClaimed;
+
+                        if (isChecking) {
+                          return SizedBox(
+                            height: 42.w,
+                            child: Loading.defaultLoading(context),
+                          );
+                        }
 
                         if (hasClaimed) {
                           return SizedBox(

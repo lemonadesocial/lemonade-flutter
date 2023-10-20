@@ -85,37 +85,39 @@ class EventPaymentListItemWidget extends StatelessWidget {
           ),
           SizedBox(width: Spacing.small),
           // remaining tickets icon
-          Container(
-            padding: EdgeInsets.symmetric(
-              horizontal: Spacing.extraSmall,
-              vertical: Spacing.superExtraSmall,
-            ),
-            decoration: BoxDecoration(
-              color: colorScheme.outline,
-              borderRadius: BorderRadius.circular(LemonRadius.normal),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ThemeSvgIcon(
-                  color: LemonColor.paleViolet,
-                  builder: (filter) => Assets.icons.icTicket.svg(
-                    colorFilter: filter,
-                    width: Sizing.small / 2,
-                    height: Sizing.small / 2,
-                  ),
-                ),
-                SizedBox(width: Spacing.extraSmall / 2),
-                Text(
-                  '+${eventPayment.ticketCountRemaining?.toInt() ?? 0}',
-                  style: Typo.small.copyWith(
+          if (eventPayment.ticketCountRemaining != null &&
+              eventPayment.ticketCountRemaining?.toInt() != 0)
+            Container(
+              padding: EdgeInsets.symmetric(
+                horizontal: Spacing.extraSmall,
+                vertical: Spacing.superExtraSmall,
+              ),
+              decoration: BoxDecoration(
+                color: colorScheme.outline,
+                borderRadius: BorderRadius.circular(LemonRadius.normal),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ThemeSvgIcon(
                     color: LemonColor.paleViolet,
-                    fontWeight: FontWeight.w700,
+                    builder: (filter) => Assets.icons.icTicket.svg(
+                      colorFilter: filter,
+                      width: Sizing.small / 2,
+                      height: Sizing.small / 2,
+                    ),
                   ),
-                ),
-              ],
+                  SizedBox(width: Spacing.extraSmall / 2),
+                  Text(
+                    '+${eventPayment.ticketCountRemaining?.toInt() ?? 0}',
+                    style: Typo.small.copyWith(
+                      color: LemonColor.paleViolet,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
           SizedBox(width: Spacing.xSmall),
           // dot horizontal
           ThemeSvgIcon(

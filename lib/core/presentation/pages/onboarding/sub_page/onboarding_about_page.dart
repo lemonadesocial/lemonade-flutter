@@ -2,7 +2,6 @@ import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/onboarding/onboarding_bloc/onboarding_bloc.dart';
 import 'package:app/core/domain/common/common_enums.dart';
 import 'package:app/core/presentation/pages/onboarding/widgets/gender_chip_widget.dart';
-import 'package:app/core/presentation/widgets/back_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
@@ -36,42 +35,48 @@ class OnboardingAboutPage extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        return Scaffold(
-          appBar: AppBar(
-            leading: const LemonBackButton(),
-            actions: [
-              Row(
-                children: [
-                  InkWell(
-                    onTap: () {
-                      context
-                          .read<AuthBloc>()
-                          .add(const AuthEvent.authenticated());
-                      context.router.replaceAll([const RootRoute()]);
-                    },
-                    child: Text(
-                      t.onboarding.skip,
-                      style: Typo.medium.copyWith(fontWeight: FontWeight.w400),
-                    ),
+        return WillPopScope(
+          onWillPop: () async => false,
+          child: GestureDetector(
+            onTap: () => FocusScope.of(context).unfocus(),
+            child: Scaffold(
+              resizeToAvoidBottomInset: false,
+              appBar: AppBar(
+                actions: [
+                  Row(
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          context
+                              .read<AuthBloc>()
+                              .add(const AuthEvent.authenticated());
+                          context.router.replaceAll([const RootRoute()]);
+                        },
+                        child: Text(
+                          t.onboarding.skip,
+                          style:
+                              Typo.medium.copyWith(fontWeight: FontWeight.w400),
+                        ),
+                      ),
+                      SizedBox(width: Spacing.smMedium),
+                    ],
                   ),
-                  SizedBox(width: Spacing.smMedium),
                 ],
               ),
-            ],
-          ),
-          backgroundColor: theme.colorScheme.primary,
-          body: BlocBuilder<OnboardingBloc, OnboardingState>(
-            builder: (context, state) {
-              return Padding(
-                padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: Spacing.medium),
-                    Expanded(
+              backgroundColor: theme.colorScheme.primary,
+              body: SingleChildScrollView(
+                reverse: true,
+                physics: const ClampingScrollPhysics(),
+                child: BlocBuilder<OnboardingBloc, OnboardingState>(
+                  builder: (context, state) {
+                    return Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: Spacing.smMedium),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+                          SizedBox(height: Spacing.medium),
                           Text(
                             t.onboarding.aboutYou,
                             style: Typo.extraLarge.copyWith(
@@ -140,28 +145,42 @@ class OnboardingAboutPage extends StatelessWidget {
                             hintText: t.onboarding.shortBio,
                             minLines: 3,
                           ),
+                          SizedBox(
+                            height: MediaQuery.of(context).viewInsets.bottom > 0
+                                ? 30.h
+                                : 300.h,
+                          ),
+                          LinearGradientButton(
+                            onTap: state.gender == null
+                                ? null
+                                : bloc.updateProfile,
+                            label: t.onboarding.next,
+                            textStyle: Typo.medium.copyWith(
+                              fontFamily: FontFamily.nohemiVariable,
+                              fontWeight: FontWeight.w600,
+                              color: theme.colorScheme.onPrimary,
+                            ),
+                            height: Sizing.large,
+                            radius: BorderRadius.circular(LemonRadius.large),
+                            mode: state.gender == null
+                                ? GradientButtonMode.defaultMode
+                                : GradientButtonMode.lavenderMode,
+                            loadingWhen:
+                                state.status == OnboardingStatus.loading,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                              bottom: MediaQuery.of(context).viewInsets.bottom +
+                                  24.h,
+                            ),
+                          ),
                         ],
                       ),
-                    ),
-                    LinearGradientButton(
-                      onTap: state.gender == null ? null : bloc.updateProfile,
-                      label: t.onboarding.next,
-                      textStyle: Typo.medium.copyWith(
-                        fontFamily: FontFamily.nohemiVariable,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      height: Sizing.large,
-                      radius: BorderRadius.circular(LemonRadius.large),
-                      mode: state.gender == null
-                          ? GradientButtonMode.defaultMode
-                          : GradientButtonMode.lavenderMode,
-                      loadingWhen: state.status == OnboardingStatus.loading,
-                    ),
-                    SizedBox(height: 24.h),
-                  ],
+                    );
+                  },
                 ),
-              );
-            },
+              ),
+            ),
           ),
         );
       },

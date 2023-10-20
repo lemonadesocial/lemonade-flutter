@@ -29,5 +29,12 @@
         "ethnicity": "Select ethnicity",
         "dob": "DD/MM/YYYY"
     },
-    "errorDateTimeFormat": "Invalid date format"
+    "errorDateTimeFormat": "Invalid date format",
+    "editProfileSuccess": "Edit profile successfully",
+    "blocProfile": "Block this profile",
+    "reportProfile": "Report user",
+    "reportSuccess": "Report success. Thank you for reporting.",
+    "viewProfile": "View profile",
+    "editComment": "Edit comment",
+    "deleteComment": "Delete comment"
 }

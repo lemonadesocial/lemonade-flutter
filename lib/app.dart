@@ -5,6 +5,7 @@ import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.dart';
+import 'package:app/router/my_router_observer.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/theme.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -16,6 +17,10 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_portal/flutter_portal.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:app/core/presentation/widgets/custom_error_widget.dart';
+
+import 'package:app/core/application/newsfeed/newsfeed_listing_bloc/newsfeed_listing_bloc.dart';
+import 'package:app/core/data/post/newsfeed_repository_impl.dart';
+import 'package:app/core/service/newsfeed/newsfeed_service.dart';
 
 class LemonadeApp extends StatefulWidget {
   const LemonadeApp({super.key});
@@ -55,8 +60,17 @@ class _LemonadeAppViewState extends State<LemonadeApp> {
 
   Widget _portalBuilder(Widget child) => Portal(child: child);
 
-  Widget _globalBlocProviderBuilder(Widget child) => BlocProvider.value(
-        value: getIt<AuthBloc>(),
+  Widget _globalBlocProviderBuilder(Widget child) => MultiBlocProvider(
+        providers: [
+          BlocProvider.value(
+            value: getIt<AuthBloc>(),
+          ),
+          BlocProvider<NewsfeedListingBloc>(
+            create: (context) => NewsfeedListingBloc(
+              NewsfeedService(NewsfeedRepositoryImpl()),
+            ),
+          ),
+        ],
         child: child,
       );
 
@@ -104,12 +118,12 @@ class _LemonadeAppViewState extends State<LemonadeApp> {
 
 class _App extends StatelessWidget {
   final AppRouter router;
+
   const _App(this.router);
 
   @override
   Widget build(BuildContext context) {
     SnackBarUtils.init(lemonadeAppDarkThemeData.colorScheme);
-
     return MaterialApp.router(
       scaffoldMessengerKey: SnackBarUtils.rootScaffoldMessengerKey,
       locale: _getCurrentLocale(context), // use provider
@@ -118,7 +132,9 @@ class _App extends StatelessWidget {
       themeMode: ThemeMode.dark,
       darkTheme: lemonadeAppDarkThemeData,
       theme: lemonadeAppLightThemeData,
-      routerDelegate: router.delegate(),
+      routerDelegate: router.delegate(
+        navigatorObservers: () => <NavigatorObserver>[MyRouterObserver()],
+      ),
       routeInformationParser:
           router.defaultRouteParser(includePrefixMatches: true),
       builder: (context, widget) {

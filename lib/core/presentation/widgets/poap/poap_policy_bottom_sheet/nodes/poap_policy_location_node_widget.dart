@@ -1,5 +1,6 @@
 import 'package:app/core/domain/poap/entities/poap_entities.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/utils/map_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/sizing.dart';
@@ -22,6 +23,10 @@ class PoapPolicyLocationNodeWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
+    final lat = double.tryParse(node.children?[0].value ?? '0') ?? 0;
+    final lng = double.tryParse(node.children?[1].value ?? '0') ?? 0;
+    final validDistance =
+        (double.tryParse(node.children?[2].value ?? '0') ?? 0) ~/ 1000;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -44,25 +49,34 @@ class PoapPolicyLocationNodeWidget extends StatelessWidget {
               ),
             ),
             SizedBox(width: Spacing.xSmall),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  t.nft.poapPolicy.locationPolicy.title,
-                  style: Typo.small.copyWith(
-                    fontWeight: FontWeight.w600,
+            Flexible(
+              flex: 6,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  FutureBuilder(
+                    future: MapUtils.getLocationName(lat: lat, lng: lng),
+                    builder: (context, snapshot) => Text(
+                      t.nft.poapPolicy.locationPolicy.title(
+                        distance: validDistance,
+                        address: snapshot.data ?? '',
+                      ),
+                      style: Typo.small.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   ),
-                ),
-                SizedBox(height: 2.w),
-                Text(
-                  result
-                      ? t.nft.poapPolicy.locationPolicy.qualified
-                      : t.nft.poapPolicy.locationPolicy.nonQualified,
-                  style: Typo.small.copyWith(
-                    color: colorScheme.onSecondary,
+                  SizedBox(height: 2.w),
+                  Text(
+                    result
+                        ? t.nft.poapPolicy.locationPolicy.qualified
+                        : t.nft.poapPolicy.locationPolicy.nonQualified,
+                    style: Typo.small.copyWith(
+                      color: colorScheme.onSecondary,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             const Spacer(),
             result

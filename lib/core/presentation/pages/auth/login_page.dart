@@ -59,10 +59,12 @@ class LoginPageState extends State<LoginPage> {
         ),
         Column(
           children: [
-            // Image(image: Assets.images.bgGetStarted.provider()),
-            Transform.translate(
-              offset: Offset(0, -22.h), // Move the image up by 30 pixels
-              child: Image(image: Assets.images.bgGetStarted.provider()),
+            Expanded(
+              flex: 1,
+              child: Image(
+                image: Assets.images.bgGetStarted.provider(),
+                fit: BoxFit.fitWidth,
+              ),
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 42.w),

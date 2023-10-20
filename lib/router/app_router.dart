@@ -38,7 +38,7 @@ class AppRouter extends $AppRouter {
             AutoRoute(
               path: '404',
               page: EmptyRoute.page,
-            )
+            ),
           ],
         ),
         AutoRoute(
@@ -48,9 +48,6 @@ class AppRouter extends $AppRouter {
         AutoRoute(
           path: '/poap',
           page: PoapListingRoute.page,
-        ),
-        AutoRoute(
-          page: CreatePostRoute.page,
         ),
         AutoRoute(
           page: OnboardingWrapperRoute.page,
@@ -73,12 +70,21 @@ class AppRouter extends $AppRouter {
         AutoRoute(page: SettingRoute.page),
         AutoRoute(page: NotificationSettingRoute.page),
         AutoRoute(page: CommunityRoute.page),
+        AutoRoute(page: QrCodeRoute.page),
         chatRoutes,
-        ...eventRoutes,
         eventBuyTicketsRoutes,
+        ...postRoutes,
+        ...eventRoutes,
         ...commonRoutes,
       ];
 }
+
+final postRoutes = [
+  AutoRoute(
+    page: CreatePostRoute.page,
+  ),
+  AutoRoute(page: PostDetailRoute.page),
+];
 
 final chatRoutes = AutoRoute(
   page: ChatStackRoute.page,
@@ -120,7 +126,10 @@ final eventRoutes = [
   ),
   AutoRoute(
     page: MyEventTicketRoute.page,
-  )
+  ),
+  AutoRoute(
+    page: MyEventTicketAssignmentRoute.page,
+  ),
 ];
 
 final eventBuyTicketsRoutes = AutoRoute(

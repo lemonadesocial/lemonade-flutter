@@ -7,6 +7,7 @@ import 'package:app/core/presentation/widgets/event/event_discover_item.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/service/event/event_service.dart';
 import 'package:app/core/utils/date_utils.dart' as date_utils;
+import 'package:app/core/utils/device_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -59,6 +60,8 @@ class _DiscoverEventsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isIpad = DeviceUtils.isIpad();
+    final height = isIpad ? 240.w : 160.w;
     return BlocBuilder<HomeEventListingBloc, BaseEventsListingState>(
       builder: (context, state) => SliverToBoxAdapter(
         child: SizedBox(
@@ -69,10 +72,10 @@ class _DiscoverEventsList extends StatelessWidget {
                     (event) => !date_utils.DateUtils.isPast(event.start),
                   )
                   .toList();
-              return upcomingEvents.isEmpty ? 200.w : 160.w;
+              return upcomingEvents.isEmpty ? 200.w : height;
             },
             failure: () => 200.w,
-            orElse: () => 160.w,
+            orElse: () => height,
           ),
           child: state.when(
             failure: () => EmptyList(
@@ -96,12 +99,11 @@ class _DiscoverEventsList extends StatelessWidget {
                 itemBuilder: (context, index) => InkWell(
                   onTap: () {
                     final eventItem = upcomingEvents[index];
-                    AutoRouter.of(context).pushAll([
-                      const EventsListingRoute(),
+                    AutoRouter.of(context).navigate(
                       GuestEventDetailRoute(
                         eventId: eventItem.id ?? '',
                       ),
-                    ]);
+                    );
                   },
                   child: EventDiscoverItem(
                     event: upcomingEvents[index],

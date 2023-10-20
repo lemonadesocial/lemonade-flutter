@@ -16,7 +16,7 @@
     "poapPolicy": {
         "eventPolicy": {
             "title":  "RSVP to $event",
-            "qualified": "",
+            "qualified": "Completed",
             "nonQualified": "not RSVP'd to the event"
         },
         "emailPolicy": {
@@ -30,12 +30,12 @@
             "nonQualified": "Incomplete"
         },
         "locationPolicy": {
-            "title":  "Location",
+            "title":  "Be within ${distance}km of $address",
             "qualified": "Completed",
             "nonQualified": "Incomplete"
         },
         "twitterPolicy": {
-            "title":  "Follow @$twitter on Twitter",
+            "title":  "Follow @$twitter on X",
             "qualified": "Completed",
             "nonQualified": "Incomplete",
             "error": "account not connected"
@@ -58,5 +58,10 @@
     "transferSuccess": "$tokenName was successfully transferred to your preferred wallet",
     "waitingForConfirmation": "Waiting for confirmation",
     "requirements": "Requirements",
-    "requirementDescription": "Fulfil all requirements below to claim"
+    "requirementDescription": "Fulfil all requirements below to claim",
+    "claimFailedDescription": {
+        "allClaimed": "All POAPs have been claimed.",
+        "alreadyClaimed": "You have already claimed the POAP.",
+        "forbidden": "You are not authorized to perform this action."
+    }
 }

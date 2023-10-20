@@ -3,6 +3,7 @@ import 'package:app/core/domain/onboarding/onboarding_inputs.dart';
 import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/presentation/pages/setting/enums/notification_type.dart';
 import 'package:app/core/service/post/post_service.dart';
+import 'package:app/core/utils/image_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,8 +27,7 @@ class EditProfileBloc extends Cubit<EditProfileState> {
   String? mImageId;
 
   Future<void> selectProfileImage() async {
-    final imagePicker = ImagePicker();
-    final pickImage = await imagePicker.pickImage(source: ImageSource.gallery);
+    final pickImage = await getImageFromGallery(cropRequired: true);
     if (pickImage != null) {
       emit(
         state.copyWith(
@@ -42,7 +42,7 @@ class EditProfileBloc extends Cubit<EditProfileState> {
     emit(
       state.copyWith(
         status: EditProfileStatus.editing,
-        shortBio: input,
+        shortBio: input.trim(),
       ),
     );
   }
@@ -51,7 +51,7 @@ class EditProfileBloc extends Cubit<EditProfileState> {
     emit(
       state.copyWith(
         status: EditProfileStatus.editing,
-        displayName: input,
+        displayName: input.trim(),
       ),
     );
   }
@@ -60,7 +60,7 @@ class EditProfileBloc extends Cubit<EditProfileState> {
     emit(
       state.copyWith(
         status: EditProfileStatus.editing,
-        tagline: input,
+        tagline: input.trim(),
       ),
     );
   }
@@ -69,7 +69,7 @@ class EditProfileBloc extends Cubit<EditProfileState> {
     emit(
       state.copyWith(
         status: EditProfileStatus.editing,
-        jobTitle: input,
+        jobTitle: input.trim(),
       ),
     );
   }
@@ -78,7 +78,7 @@ class EditProfileBloc extends Cubit<EditProfileState> {
     emit(
       state.copyWith(
         status: EditProfileStatus.editing,
-        companyName: input,
+        companyName: input.trim(),
       ),
     );
   }
@@ -87,7 +87,7 @@ class EditProfileBloc extends Cubit<EditProfileState> {
     emit(
       state.copyWith(
         status: EditProfileStatus.editing,
-        education: input,
+        education: input.trim(),
       ),
     );
   }
@@ -96,7 +96,7 @@ class EditProfileBloc extends Cubit<EditProfileState> {
     emit(
       state.copyWith(
         status: EditProfileStatus.editing,
-        gender: gender,
+        gender: gender?.trim(),
       ),
     );
   }
@@ -105,7 +105,7 @@ class EditProfileBloc extends Cubit<EditProfileState> {
     emit(
       state.copyWith(
         status: EditProfileStatus.editing,
-        industry: industry,
+        industry: industry?.trim(),
       ),
     );
   }
@@ -114,7 +114,7 @@ class EditProfileBloc extends Cubit<EditProfileState> {
     emit(
       state.copyWith(
         status: EditProfileStatus.editing,
-        ethnicity: ethnicity,
+        ethnicity: ethnicity?.trim(),
       ),
     );
   }
@@ -123,7 +123,7 @@ class EditProfileBloc extends Cubit<EditProfileState> {
     emit(
       state.copyWith(
         status: EditProfileStatus.editing,
-        username: input,
+        username: input.trim(),
       ),
     );
   }
@@ -133,7 +133,7 @@ class EditProfileBloc extends Cubit<EditProfileState> {
     emit(
       state.copyWith(
         status: EditProfileStatus.editing,
-        dob: input,
+        dob: input.trim(),
       ),
     );
   }
@@ -163,6 +163,10 @@ class EditProfileBloc extends Cubit<EditProfileState> {
     );
   }
 
+  void clearState() {
+    emit(state.copyWith(status: EditProfileStatus.initial));
+  }
+
   Future<void> uploadImage() async {
     final response = await postService.uploadImage(
       state.profilePhoto!,
@@ -188,7 +192,7 @@ class EditProfileBloc extends Cubit<EditProfileState> {
       await uploadImage();
     }
     final notificationFilterInput = <NotificationFilterInput>[];
-    state.notificationMap!.forEach((type, value) {
+    state.notificationMap?.forEach((type, value) {
       if (value) {
         notificationFilterInput.addAll(
           type.notificationDetail

@@ -1,3 +1,4 @@
+import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/profile/edit_profile_bloc/edit_profile_bloc.dart';
 import 'package:app/core/domain/post/post_repository.dart';
 import 'package:app/core/domain/user/entities/user.dart';
@@ -9,6 +10,7 @@ import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/core/service/post/post_service.dart';
+import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -44,7 +46,9 @@ class EditProfilePage extends StatelessWidget {
       child: BlocConsumer<EditProfileBloc, EditProfileState>(
         listener: (context, state) {
           if (state.status == EditProfileStatus.success) {
-            context.router.popUntilRoot();
+            context.read<AuthBloc>().add(const AuthEvent.refreshData());
+            SnackBarUtils.showSuccessSnackbar(t.profile.editProfileSuccess);
+            bloc.clearState();
           }
         },
         builder: (context, state) {
@@ -77,7 +81,7 @@ class EditProfilePage extends StatelessWidget {
                                     initialText: userProfile.displayName,
                                     onChange: bloc.onDisplayNameChange,
                                   ),
-                                )
+                                ),
                               ],
                             ),
                             SizedBox(height: Spacing.smMedium),
@@ -157,7 +161,10 @@ class EditProfilePage extends StatelessWidget {
                       margin: EdgeInsets.symmetric(vertical: Spacing.smMedium),
                       child: LinearGradientButton(
                         onTap: bloc.state.status == EditProfileStatus.editing
-                            ? bloc.editProfile
+                            ? () {
+                                FocusScope.of(context).unfocus();
+                                bloc.editProfile();
+                              }
                             : null,
                         label: t.profile.saveChanges,
                         textStyle: Typo.medium.copyWith(
@@ -224,7 +231,7 @@ class _PersonalCardWidget extends StatelessWidget {
                 ),
               ),
               SizedBox(width: Spacing.xSmall),
-              Assets.icons.icExpand.svg()
+              Assets.icons.icExpand.svg(),
             ],
           ),
           SizedBox(height: Spacing.xSmall),
@@ -310,7 +317,7 @@ class _UserEditor extends StatelessWidget {
               ),
             ),
           ),
-        )
+        ),
       ],
     );
   }

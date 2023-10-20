@@ -6,6 +6,7 @@ import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/date_format_utils.dart';
+import 'package:app/core/utils/device_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/theme/color.dart';
@@ -35,9 +36,9 @@ class EventDiscoverItem extends StatelessWidget {
           )
         : '${AppConfig.assetPrefix}/assets/images/no_photo_event.png';
     final colorScheme = Theme.of(context).colorScheme;
+    final isIpad = DeviceUtils.isIpad();
     return Container(
-      width: 120.w,
-      height: 160.w,
+      width: isIpad ? 180.w : 120.w,
       decoration: ShapeDecoration(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(

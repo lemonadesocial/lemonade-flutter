@@ -88,7 +88,9 @@ class EventTicketManagementView extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: colorScheme.background,
-      appBar: const LemonAppBar(),
+      appBar: const LemonAppBar(
+        leading: SizedBox.shrink(),
+      ),
       body: BlocBuilder<GetEventTicketTypesBloc, GetEventTicketTypesState>(
         builder: (context, state) {
           return state.when(
@@ -219,7 +221,10 @@ class EventTicketManagementView extends StatelessWidget {
                                       onTap: () async {
                                         AutoRouter.of(context)
                                             .root
-                                            .popUntilRouteWithPath('/events');
+                                            .popUntilRouteWithPath(
+                                              '/events/${event.id}',
+                                            );
+                                        await AutoRouter.of(context).root.pop();
                                         AutoRouter.of(context).root.navigate(
                                               GuestEventDetailRoute(
                                                 eventId: event.id ?? '',
