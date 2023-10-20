@@ -1,9 +1,14 @@
 import 'package:app/core/application/post/create_post_bloc/create_post_bloc.dart';
 import 'package:app/core/config.dart';
+import 'package:app/core/data/post/dtos/post_comment_dto.dart';
 import 'package:app/core/data/post/dtos/post_dtos.dart';
+import 'package:app/core/data/post/mutations/create_post_comment_mutation.dart';
 import 'package:app/core/data/post/mutations/post_reaction_mutation.dart';
-import 'package:app/core/data/post/post_query.dart';
+import 'package:app/core/data/post/query/post_query.dart';
+import 'package:app/core/data/post/query/post_comments_query.dart';
 import 'package:app/core/domain/post/entities/post_entities.dart';
+import 'package:app/core/domain/post/input/create_post_comment_input.dart';
+import 'package:app/core/domain/post/input/get_post_comments_input.dart';
 import 'package:app/core/domain/post/input/get_posts_input.dart';
 import 'package:app/core/domain/post/input/post_reaction_input.dart';
 import 'package:app/core/domain/post/post_repository.dart';
@@ -16,6 +21,7 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';
+import 'package:matrix/matrix.dart';
 import 'package:mime/mime.dart';
 
 import 'package:app/core/oauth/oauth.dart';
@@ -167,5 +173,79 @@ class PostRepositoryImpl implements PostRepository {
     if (result.hasException) return Left(Failure());
 
     return Right(result.data?['toggleReaction'] == true);
+  }
+
+  @override
+  Future<Either<Failure, List<PostComment>>> getPostComments({
+    required GetPostCommentsInput input,
+  }) async {
+    final result = await _client.query(
+      QueryOptions(
+        document: getPostCommentsQuery,
+        variables: input.toJson(),
+        parserFn: (data) => List.from(data['getComments'] ?? [])
+            .map((item) => PostComment.fromDto(PostCommentDto.fromJson(item)))
+            .toList(),
+      ),
+    );
+
+    if (result.hasException) {
+      return Left(Failure());
+    }
+
+    return Right(result.parsedData ?? []);
+  }
+
+  @override
+  Future<Either<Failure, PostComment>> createPostComment({
+    required CreatePostCommentInput input,
+  }) async {
+    final result = await _client.mutate(
+      MutationOptions(
+        document: createPostCommentMutation,
+        variables: input.toJson(),
+        parserFn: (data) =>
+            PostComment.fromDto(PostCommentDto.fromJson(data['createComment'])),
+        update: (cache, result) {
+          if (result == null) return;
+          if (result.hasException) return;
+
+          final queryData = cache.readQuery(
+            Request(
+              operation: Operation(document: getPostCommentsQuery),
+              variables: {
+                'skip': 0,
+                'post': input.post,
+              },
+            ),
+          );
+          if (queryData == null) return;
+          queryData.update(
+            'getComments',
+            (value) => [result.data?['createComment'], ...(value ?? [])],
+          );
+          final updatedData = queryData.copy();
+          cache.writeQuery(
+            Request(
+              operation: Operation(
+                document: getPostCommentsQuery,
+                operationName: 'GetComments',
+              ),
+              variables: {
+                'skip': 0,
+                'post': input.post,
+              },
+            ),
+            data: updatedData,
+          );
+        },
+      ),
+    );
+
+    if (result.hasException) {
+      return Left(Failure());
+    }
+
+    return Right(result.parsedData!);
   }
 }

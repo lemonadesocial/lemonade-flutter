@@ -1,4 +1,5 @@
 import 'package:app/core/data/post/dtos/newsfeed_dtos.dart';
+import 'package:app/core/data/post/dtos/post_comment_dto.dart';
 import 'package:app/core/data/post/dtos/post_dtos.dart';
 import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/event/entities/event.dart';
@@ -70,4 +71,32 @@ class Newsfeed {
           List.from(dto.posts ?? []).map((item) => Post.fromDto(item)).toList(),
     );
   }
+}
+
+class PostComment {
+  final String? id;
+  final DateTime? createdAt;
+  final String? user;
+  final String? text;
+  final String? post;
+  final User? userExpanded;
+
+  const PostComment({
+    this.id,
+    this.createdAt,
+    this.user,
+    this.text,
+    this.post,
+    this.userExpanded,
+  });
+
+  factory PostComment.fromDto(PostCommentDto dto) => PostComment(
+        id: dto.id,
+        createdAt: dto.createdAt,
+        user: dto.user,
+        text: dto.text,
+        post: dto.post,
+        userExpanded:
+            dto.userExpanded != null ? User.fromDto(dto.userExpanded!) : null,
+      );
 }
