@@ -24,7 +24,9 @@ class BlockUserBloc extends Cubit<BlockUserState> {
       (failure) => emit(state.copyWith(status: BlockUserStatus.error)),
       (success) => emit(
         state.copyWith(
-          status: BlockUserStatus.success,
+          status: isBlock
+              ? BlockUserStatus.blockSuccess
+              : BlockUserStatus.unblockSuccess,
           blockUserId: userId,
         ),
       ),

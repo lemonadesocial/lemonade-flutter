@@ -66,7 +66,7 @@ class _ProfilePageViewState extends State<ProfilePageView>
     final isMe = AuthUtils.isMe(context, user: widget.userProfile);
     return BlocListener<BlockUserBloc, BlockUserState>(
       listener: (context, state) {
-        if (state.status == BlockUserStatus.success) {
+        if (state.status == BlockUserStatus.blockSuccess) {
           context.router.pop();
           SnackBarUtils.showSuccessSnackbar(t.profile.blockSuccess);
           AuthUtils.getUser(context)!.blockedList!.add(widget.userProfile);
@@ -184,6 +184,7 @@ class _ProfilePageViewState extends State<ProfilePageView>
                                       .svg(colorFilter: filter),
                                 ),
                               ),
+                            SizedBox(width: Spacing.xSmall),
                           ],
                         ),
                       ),
