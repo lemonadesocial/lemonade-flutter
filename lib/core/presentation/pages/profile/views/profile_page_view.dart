@@ -68,7 +68,7 @@ class _ProfilePageViewState extends State<ProfilePageView>
       listener: (context, state) {
         if (state.status == BlockUserStatus.success) {
           context.router.pop();
-          SnackBarUtils.showSuccessSnackbar(t.common.actions.success);
+          SnackBarUtils.showSuccessSnackbar(t.profile.blockSuccess);
           AuthUtils.getUser(context)!.blockedList!.add(widget.userProfile);
         }
 

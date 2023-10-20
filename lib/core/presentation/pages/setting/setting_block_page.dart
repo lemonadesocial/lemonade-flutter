@@ -41,7 +41,7 @@ class _SettingBlockPageState extends State<SettingBlockPage> {
     return BlocListener<BlockUserBloc, BlockUserState>(
       listener: (context, state) {
         if (state.status == BlockUserStatus.success) {
-          SnackBarUtils.showSuccessSnackbar(t.profile.reportSuccess);
+          SnackBarUtils.showSuccessSnackbar(t.profile.unblockSuccess);
           setState(() {
             blockedList.removeWhere((user) => user.userId == state.blockUserId);
           });
