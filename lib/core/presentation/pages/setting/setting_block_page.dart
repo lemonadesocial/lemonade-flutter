@@ -88,7 +88,9 @@ class _SettingBlockPageState extends State<SettingBlockPage> {
                                     .copyWith(color: colorScheme.onPrimary),
                               ),
                               Text(
-                                '@${blockedList[index].username}',
+                                blockedList[index].username != null
+                                    ? '@${blockedList[index].username}'
+                                    : '',
                                 style: Typo.small.copyWith(
                                   color:
                                       colorScheme.onPrimary.withOpacity(0.56),
