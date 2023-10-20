@@ -38,18 +38,22 @@ class UserRepositoryImpl implements UserRepository {
 
   @override
   Future<Either<Failure, User>> getUserProfile(GetProfileInput input) async {
-    final result = await _gqlClient.query(
-      QueryOptions(
-        document: getUserQuery,
-        parserFn: (data) {
-          return User.fromDto(UserDto.fromJson(data['getUser']));
-        },
-        variables: input.toJson(),
-      ),
-    );
+    try {
+      final result = await _gqlClient.query(
+        QueryOptions(
+          document: getUserQuery,
+          parserFn: (data) {
+            return User.fromDto(UserDto.fromJson(data['getUser']));
+          },
+          variables: input.toJson(),
+        ),
+      );
 
-    if (result.hasException) return Left(Failure());
-    return Right(result.parsedData!);
+      if (result.hasException) return Left(Failure());
+      return Right(result.parsedData!);
+    } catch (e) {
+      return Left(Failure());
+    }
   }
 
   @override

@@ -52,7 +52,7 @@ class ProfilePage extends StatelessWidget {
                   if (blockedIdList.contains(userProfile.userId)) {
                     return Scaffold(
                       appBar: const LemonAppBar(leading: LemonBackButton()),
-                      backgroundColor: Theme.of(context).colorScheme.onPrimary,
+                      backgroundColor: Theme.of(context).colorScheme.primary,
                       body: Center(
                         child: Text(t.common.somethingWrong),
                       ),
@@ -61,11 +61,19 @@ class ProfilePage extends StatelessWidget {
                     return ProfilePageView(userProfile: userProfile);
                   }
                 },
-                loading: () => Center(
-                  child: Loading.defaultLoading(context),
+                loading: () => Scaffold(
+                  appBar: const LemonAppBar(leading: LemonBackButton()),
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  body: Center(
+                    child: Loading.defaultLoading(context),
+                  ),
                 ),
-                orElse: () => Center(
-                  child: Text(t.common.somethingWrong),
+                orElse: () => Scaffold(
+                  appBar: const LemonAppBar(leading: LemonBackButton()),
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  body: Center(
+                    child: Text(t.common.somethingWrong),
+                  ),
                 ),
               );
             },
