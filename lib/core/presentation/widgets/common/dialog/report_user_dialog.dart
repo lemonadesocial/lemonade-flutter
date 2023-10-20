@@ -1,9 +1,11 @@
 import 'package:app/core/application/profile/report_user_bloc/report_user_bloc.dart';
+import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/presentation/pages/profile/enum/user_report_reason.dart';
 import 'package:app/core/presentation/widgets/back_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_bottom_sheet_mixin.dart';
+import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -21,10 +23,10 @@ import 'package:flutter_switch/flutter_switch.dart';
 class ReportUserDialog extends StatelessWidget with LemonBottomSheet {
   const ReportUserDialog({
     super.key,
-    required this.userId,
+    required this.user,
   });
 
-  final String userId;
+  final User user;
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +39,7 @@ class ReportUserDialog extends StatelessWidget with LemonBottomSheet {
         listener: (context, state) {
           if (state.status == ReportUserStatus.success) {
             context.router.popUntilRoot();
+            AuthUtils.getUser(context)!.blockedList!.add(user);
             SnackBarUtils.showSuccessSnackbar(t.profile.reportSuccess);
           }
 
@@ -118,7 +121,7 @@ class ReportUserDialog extends StatelessWidget with LemonBottomSheet {
                       children: [
                         Expanded(
                           child: Text(
-                            t.profile.blocProfile,
+                            t.profile.blockProfile,
                             style: Typo.mediumPlus.copyWith(
                               color: colorScheme.onPrimary,
                               fontWeight: FontWeight.w600,
@@ -144,7 +147,7 @@ class ReportUserDialog extends StatelessWidget with LemonBottomSheet {
                   LinearGradientButton(
                     onTap: state.reason == null
                         ? null
-                        : () => bloc.reportUser(userId: userId),
+                        : () => bloc.reportUser(userId: user.userId),
                     label: t.common.actions.report,
                     textStyle: Typo.medium.copyWith(
                       fontFamily: FontFamily.nohemiVariable,

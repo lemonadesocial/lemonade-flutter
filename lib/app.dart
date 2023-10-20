@@ -1,4 +1,6 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
+import 'package:app/core/application/profile/block_user_bloc/block_user_bloc.dart';
+import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/service/firebase/firebase_service.dart';
 import 'package:app/core/service/matrix/matrix_service.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
@@ -69,6 +71,9 @@ class _LemonadeAppViewState extends State<LemonadeApp> {
             create: (context) => NewsfeedListingBloc(
               NewsfeedService(NewsfeedRepositoryImpl()),
             ),
+          ),
+          BlocProvider(
+            create: (context) => BlockUserBloc(getIt<UserRepository>()),
           ),
         ],
         child: child,

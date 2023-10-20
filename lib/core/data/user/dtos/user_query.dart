@@ -10,6 +10,12 @@ const baseUserFragment = '''
   image_avatar
   wallets
   wallet_custodial
+  blocked
+  blocked_expanded {
+      _id,
+      name,
+      image_avatar,
+  }
 }
 ''';
 
@@ -212,8 +218,14 @@ final deleteUserQuery = gql('''
 ''');
 
 final reportUserMutation = gql('''
-  mutation (\$id: MongoID!, \$reason: String!) {
-    flagUser(_id: \$id, reason: \$reason)
+  mutation (\$id: MongoID!, \$reason: String!, \$block: Boolean) {
+    reportUser(
+      input: { 
+          user: \$id,
+          reason: \$reason, 
+          block: \$block 
+      }
+    )
   }
 ''');
 
@@ -229,5 +241,16 @@ final getUserFollowsQuery = gql('''
       followee
       __typename
     }
+  }
+''');
+
+final toggleBlockUserQuery = gql('''
+  mutation (\$id: MongoID!, \$block: Boolean!) {
+    toggleBlockUser(
+      input: { 
+          user: \$id,
+          block: \$block 
+      }
+    )
   }
 ''');
