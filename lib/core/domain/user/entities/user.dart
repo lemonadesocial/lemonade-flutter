@@ -77,6 +77,7 @@ class User {
     this.education,
     this.companyName,
     this.notificationFilterList,
+    this.blockedList,
   });
 
   factory User.fromDto(UserDto dto) {
@@ -139,6 +140,7 @@ class User {
       ethnicity: dto.ethnicity,
       notificationFilterList:
           dto.notificationFilter.map((e) => e.type).toList(),
+      blockedList: dto.blockedExpanded.map((e) => User.fromDto(e)).toList(),
     );
   }
 
@@ -189,6 +191,8 @@ class User {
   final List<String>? wallets;
   final String? walletCustodial;
   final List<String>? notificationFilterList;
+
+  final List<User>? blockedList;
 }
 
 class DiscordUserInfo {

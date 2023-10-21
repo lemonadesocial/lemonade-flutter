@@ -17,6 +17,12 @@ abstract class UserRepository {
   Future<Either<Failure, bool>> reportUser({
     required String userId,
     required String reason,
+    bool isBlock = false,
+  });
+
+  Future<Either<Failure, bool>> toggleBlockUser({
+    required String userId,
+    required bool isBlock,
   });
 
   Future<Either<Failure, List<UserFollow>>> getUserFollows(

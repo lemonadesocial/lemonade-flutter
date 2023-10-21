@@ -16,6 +16,7 @@ class ReportUserBloc extends Cubit<ReportUserState> {
     final response = await _repository.reportUser(
       userId: userId,
       reason: state.reason!.reason,
+      isBlock: state.blockUser,
     );
     response.fold(
       (failure) => emit(state.copyWith(status: ReportUserStatus.error)),

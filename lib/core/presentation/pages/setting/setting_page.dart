@@ -83,6 +83,17 @@ class SettingPage extends StatelessWidget {
                   onTap: () =>
                       context.router.push(const NotificationSettingRoute()),
                 ),
+                SizedBox(height: Spacing.xSmall),
+                SettingTileWidget(
+                  title: t.setting.blockAccount,
+                  subTitle: t.setting.blockAccountDesc,
+                  leading: Assets.icons.icBlock.svg(),
+                  trailing: Assets.icons.icArrowBack.svg(
+                    width: 18.w,
+                    height: 18.w,
+                  ),
+                  onTap: () => context.router.push(const SettingBlockRoute()),
+                ),
                 SizedBox(height: 24.h),
                 Padding(
                   padding: EdgeInsets.symmetric(

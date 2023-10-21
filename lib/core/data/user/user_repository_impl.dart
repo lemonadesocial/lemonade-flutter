@@ -26,7 +26,8 @@ class UserRepositoryImpl implements UserRepository {
         document: getMeQuery,
         fetchPolicy: FetchPolicy.networkOnly,
         parserFn: (data) {
-          return User.fromDto(UserDto.fromJson(data['getMe']));
+          final dto = UserDto.fromJson(data['getMe']);
+          return User.fromDto(dto);
         },
       ),
     );
@@ -37,18 +38,22 @@ class UserRepositoryImpl implements UserRepository {
 
   @override
   Future<Either<Failure, User>> getUserProfile(GetProfileInput input) async {
-    final result = await _gqlClient.query(
-      QueryOptions(
-        document: getUserQuery,
-        parserFn: (data) {
-          return User.fromDto(UserDto.fromJson(data['getUser']));
-        },
-        variables: input.toJson(),
-      ),
-    );
+    try {
+      final result = await _gqlClient.query(
+        QueryOptions(
+          document: getUserQuery,
+          parserFn: (data) {
+            return User.fromDto(UserDto.fromJson(data['getUser']));
+          },
+          variables: input.toJson(),
+        ),
+      );
 
-    if (result.hasException) return Left(Failure());
-    return Right(result.parsedData!);
+      if (result.hasException) return Left(Failure());
+      return Right(result.parsedData!);
+    } catch (e) {
+      return Left(Failure());
+    }
   }
 
   @override
@@ -96,13 +101,14 @@ class UserRepositoryImpl implements UserRepository {
   Future<Either<Failure, bool>> reportUser({
     required String userId,
     required String reason,
+    bool isBlock = false,
   }) async {
-    final result = await _gqlClient.query(
-      QueryOptions(
+    final result = await _gqlClient.mutate(
+      MutationOptions(
         document: reportUserMutation,
-        variables: {'id': userId, 'reason': reason},
+        variables: {'id': userId, 'reason': reason, 'block': isBlock},
         parserFn: (data) {
-          return data['flagUser'] as bool?;
+          return data['reportUser'] as bool?;
         },
       ),
     );
@@ -172,5 +178,26 @@ class UserRepositoryImpl implements UserRepository {
       return Left(Failure());
     }
     return Right(result.parsedData != null);
+  }
+
+  @override
+  Future<Either<Failure, bool>> toggleBlockUser({
+    required String userId,
+    required bool isBlock,
+  }) async {
+    final result = await _gqlClient.mutate(
+      MutationOptions(
+        document: toggleBlockUserQuery,
+        variables: {'id': userId, 'block': isBlock},
+        parserFn: (data) {
+          return data['toggleBlockUser'] as bool?;
+        },
+      ),
+    );
+
+    if (result.hasException) {
+      return Left(Failure());
+    }
+    return Right(result.parsedData == true);
   }
 }

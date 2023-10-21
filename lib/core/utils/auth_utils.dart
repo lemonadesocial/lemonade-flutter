@@ -18,4 +18,10 @@ class AuthUtils {
           authenticated: (authSession) => authSession.userId,
         );
   }
+
+  static User? getUser(BuildContext context) =>
+      context.read<AuthBloc>().state.maybeWhen(
+            orElse: () => null,
+            authenticated: (authSession) => authSession,
+          );
 }

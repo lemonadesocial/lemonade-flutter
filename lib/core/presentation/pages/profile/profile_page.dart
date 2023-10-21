@@ -3,7 +3,10 @@ import 'package:app/core/application/profile/user_follows_bloc/user_follows_bloc
 import 'package:app/core/application/profile/user_profile_bloc/user_profile_bloc.dart';
 import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/presentation/pages/profile/views/profile_page_view.dart';
+import 'package:app/core/presentation/widgets/back_button_widget.dart';
+import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
+import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/core/utils/swipe_detector.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
@@ -42,13 +45,35 @@ class ProfilePage extends StatelessWidget {
           child: BlocBuilder<UserProfileBloc, UserProfileState>(
             builder: (context, state) {
               return state.maybeWhen(
-                fetched: (userProfile) =>
-                    ProfilePageView(userProfile: userProfile),
-                loading: () => Center(
-                  child: Loading.defaultLoading(context),
+                fetched: (userProfile) {
+                  final authSession = AuthUtils.getUser(context)!;
+                  final blockedIdList =
+                      authSession.blockedList!.map((e) => e.userId).toList();
+                  if (blockedIdList.contains(userProfile.userId)) {
+                    return Scaffold(
+                      appBar: const LemonAppBar(leading: LemonBackButton()),
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      body: Center(
+                        child: Text(t.profile.blockedMessage),
+                      ),
+                    );
+                  } else {
+                    return ProfilePageView(userProfile: userProfile);
+                  }
+                },
+                loading: () => Scaffold(
+                  appBar: const LemonAppBar(leading: LemonBackButton()),
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  body: Center(
+                    child: Loading.defaultLoading(context),
+                  ),
                 ),
-                orElse: () => Center(
-                  child: Text(t.common.somethingWrong),
+                orElse: () => Scaffold(
+                  appBar: const LemonAppBar(leading: LemonBackButton()),
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  body: Center(
+                    child: Text(t.common.somethingWrong),
+                  ),
                 ),
               );
             },
