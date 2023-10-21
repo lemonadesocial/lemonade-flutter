@@ -184,7 +184,7 @@ definitions:
         # Add Shorebird to PATH
         echo PATH="$HOME/.shorebird/bin:$PATH" >> $CM_ENV
     - &release_shorebird_ipa_staging
-      name: Build shorebird ipa staging
+      name: Release shorebird ipa staging
       script: |
         BUILD_NUMBER=$(($(app-store-connect get-latest-testflight-build-number "$APP_ID") + 1))
         shorebird release ios-alpha --flavor staging -- \
@@ -193,7 +193,7 @@ definitions:
           --flavor="staging" \
           -t "lib/main_staging.dart"
     - &release_shorebird_apk_staging
-      name: Build shorebird android apk staging
+      name: Release shorebird android apk staging
       script: |
         BUILD_NUMBER=$(($(google-play get-latest-build-number --package-name "$PACKAGE_NAME" --tracks="$GOOGLE_PLAY_TRACK") + 1))      
         shorebird release android --artifact apk --flavor staging -- \
@@ -201,11 +201,11 @@ definitions:
           --flavor="staging" \
           -t "lib/main_staging.dart"
     - &patch_shorebird_ios_staging
-      name: Build shorebird ipa staging
+      name: Patch shorebird ipa staging
       script: |
         shorebird patch ios-alpha --target ./lib/main_staging.dart --flavor staging
     - &patch_shorebird_android_staging
-      name: Build shorebird android apk staging
+      name: Patch shorebird android staging
       script: |
         shorebird patch android --target ./lib/main_staging.dart --flavor staging
     - &github_create_prerelease
@@ -696,8 +696,8 @@ workflows:
       - *run_build_runner
       - *generate_i18_file
       - *setup_shorebird
-      - *install_firebase_crashlytics
-      - *install_pods
-      - *patch_shorebird_ios_staging
+      # - *install_firebase_crashlytics
+      # - *install_pods
+      # - *patch_shorebird_ios_staging
       - *setup_local_properties
       - *patch_shorebird_android_staging
