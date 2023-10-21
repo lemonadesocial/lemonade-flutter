@@ -196,7 +196,7 @@ definitions:
       name: Build shorebird android apk staging
       script: |
         BUILD_NUMBER=$(($(google-play get-latest-build-number --package-name "$PACKAGE_NAME" --tracks="$GOOGLE_PLAY_TRACK") + 1))      
-        shorebird release android --artifact apk \
+        shorebird release android --artifact apk --flavor internal\
           --build-number=$BUILD_NUMBER \
           --flavor="staging" \
           -t "lib/main_staging.dart" \
