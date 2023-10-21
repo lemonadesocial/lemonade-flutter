@@ -671,8 +671,8 @@ workflows:
       # - *xcode_log
       # - *dsym
       # - *app
-      - *apk
-      - *aab
+      - build/app/outputs/apk/**/*.apk    
+      - build/app/outputs/bundle/**/*.aab    
       - *android_log
     # publishing:
       # <<: *ios_app_store_publish
