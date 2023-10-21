@@ -183,7 +183,7 @@ definitions:
 
         # Add Shorebird to PATH
         echo PATH="$HOME/.shorebird/bin:$PATH" >> $CM_ENV
-    - &build_shorebird_ipa_staging
+    - &release_shorebird_ipa_staging
       name: Build shorebird ipa staging
       script: |
         BUILD_NUMBER=$(($(app-store-connect get-latest-testflight-build-number "$APP_ID") + 1))
@@ -192,7 +192,7 @@ definitions:
           --export-options-plist=/Users/builder/export_options.plist \
           --flavor="staging" \
           -t "lib/main_staging.dart"
-    - &build_shorebird_apk_staging
+    - &release_shorebird_apk_staging
       name: Build shorebird android apk staging
       script: |
         BUILD_NUMBER=$(($(google-play get-latest-build-number --package-name "$PACKAGE_NAME" --tracks="$GOOGLE_PLAY_TRACK") + 1))      
@@ -200,6 +200,15 @@ definitions:
           --build-number=$BUILD_NUMBER \
           --flavor="staging" \
           -t "lib/main_staging.dart"
+    - &patch_shorebird_ios_staging
+      name: Build shorebird ipa staging
+      script: |
+        shorebird patch ios-alpha --flavor staging
+    - &patch_shorebird_android_staging
+      name: Build shorebird android apk staging
+      script: |
+        BUILD_NUMBER=$(($(google-play get-latest-build-number --package-name "$PACKAGE_NAME" --tracks="$GOOGLE_PLAY_TRACK") + 1))      
+        shorebird patch android --flavor staging
     - &github_create_prerelease
       name: Github release
       script: | 
@@ -639,8 +648,8 @@ workflows:
   # 
   # Shorebird 
   # 
-  shorebird-staging-test:
-    name: Shorebird Staging test
+  shorebird-release-test:
+    name: Shorebird Release Test
     <<: *instance_mac_mini
     integrations:
       <<: *app_store_connect_integrations
@@ -652,8 +661,8 @@ workflows:
     triggering:
       events:
         - tag
-      branch_patterns:
-        - pattern: '*'
+      tag_patterns:
+        - pattern: '!(*-patch)'
           include: true
           source: true
       cancel_previous_builds: true
@@ -666,9 +675,9 @@ workflows:
       - *setup_shorebird
       - *install_firebase_crashlytics
       - *install_pods
-      - *build_shorebird_ipa_staging
-      # - *setup_local_properties
-      # - *build_shorebird_apk_staging
+      - *release_shorebird_ipa_staging
+      - *setup_local_properties
+      - *release_shorebird_apk_staging
     artifacts:
       - build/ios/ipa/*.ipa
       - build/app/outputs/apk/**/*.apk    
@@ -676,10 +685,54 @@ workflows:
       - *android_log
     publishing:
       <<: *ios_app_store_publish
+      <<: *android_publish
+      <<: *email_staging
+      scripts:
+        - *upload_staging_dsym_to_firebase
+        - *github_create_prerelease
+        - *notify_ios_staging_to_slack
+        - *notify_android_staging_to_slack
+
+  shorebird-patch-test:
+    name: Shorebird Patch Test
+    <<: *instance_mac_mini
+    integrations:
+      <<: *app_store_connect_integrations
+    environment:
+      <<: *env_versions
+      <<: *load_environment_values
+      <<: *ios_signing_staging
+      <<: *android_signing_staging
+    triggering:
+      events:
+        - tag
+      tag_patterns:
+        - pattern: '*-patch'
+          include: true
+          source: true
+      cancel_previous_builds: true
+    scripts:
+      - *load_env_files
+      - *use_profiles
+      - *get_flutter_packages
+      - *run_build_runner
+      - *generate_i18_file
+      - *setup_shorebird
+      - *install_firebase_crashlytics
+      - *install_pods
+      - *patch_shorebird_ios_staging
+      - *setup_local_properties
+      - *patch_shorebird_android_staging
+    # artifacts:
+    #   - build/ios/ipa/*.ipa
+    #   - build/app/outputs/apk/**/*.apk    
+    #   - build/app/outputs/bundle/**/*.aab    
+    #   - *android_log
+    # publishing:
+      # <<: *ios_app_store_publish
       # <<: *android_publish
-      # <<: *email_staging
       # scripts:
-        # - *upload_staging_dsym_to_firebase
-        # - *github_create_prerelease
-        # - *notify_ios_staging_to_slack
-        # - *notify_android_staging_to_slack
+      #   - *upload_staging_dsym_to_firebase
+      #   - *github_create_prerelease
+      #   - *notify_ios_staging_to_slack
+      #   - *notify_android_staging_to_slack
