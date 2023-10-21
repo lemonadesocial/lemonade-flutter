@@ -187,7 +187,7 @@ definitions:
       name: Build shorebird ipa staging
       script: |
         BUILD_NUMBER=$(($(app-store-connect get-latest-testflight-build-number "$APP_ID") + 1))
-        flutter build ipa --release \
+        shorebird release ios-alpha --flavor staging -- \
           --build-number=$BUILD_NUMBER \
           --export-options-plist=/Users/builder/export_options.plist \
           --flavor="staging" \
@@ -201,7 +201,7 @@ definitions:
           --flavor="staging" \
           -t "lib/main_staging.dart" \
           --force
-    - &github_release
+    - &github_create_prerelease
       name: Github release
       script: | 
         # Publish only for tag builds
@@ -212,6 +212,7 @@ definitions:
         gh release create "${CM_TAG}" \
           --title "Lemonade ${CM_TAG}" \
           --generate-notes
+          --prerelease
     - &notify_ios_staging_to_slack
       name: Notify iOS Staging app to slack
       script: | 
@@ -633,10 +634,12 @@ workflows:
       <<: *email_production
       scripts:
         - *upload_production_dsym_to_firebase
-        - *github_release
+        - *github_create_prerelease
         - *notify_ios_production_to_slack
         - *notify_android_production_to_slack
+  # 
   # Shorebird 
+  # 
   shorebird-release-android:
     name: Shorebird release Android
     <<: *instance_mac_mini
@@ -645,8 +648,8 @@ workflows:
     environment:
       <<: *env_versions
       <<: *load_environment_values
-      <<: *ios_signing_production
-      <<: *android_signing_production
+      <<: *ios_signing_staging
+      <<: *android_signing_staging
     triggering:
       events:
         - tag
@@ -668,10 +671,7 @@ workflows:
       - *setup_local_properties
       - *build_shorebird_apk_staging
     artifacts:
-      # - *ipa
-      # - *xcode_log
-      # - *dsym
-      # - *app
+      # - build/ios/ipa/*.ipa
       - build/app/outputs/apk/**/*.apk    
       - build/app/outputs/bundle/**/*.aab    
       - *android_log
@@ -681,6 +681,6 @@ workflows:
       # <<: *email_staging
       # scripts:
         # - *upload_staging_dsym_to_firebase
-        # - *github_release
+        # - *github_create_prerelease
         # - *notify_ios_staging_to_slack
         # - *notify_android_staging_to_slack
