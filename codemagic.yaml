@@ -203,11 +203,11 @@ definitions:
     - &patch_shorebird_ios_staging
       name: Build shorebird ipa staging
       script: |
-        shorebird patch ios-alpha --flavor staging
+        shorebird patch ios-alpha --target ./lib/main_staging.dart --flavor staging
     - &patch_shorebird_android_staging
       name: Build shorebird android apk staging
       script: |
-        shorebird patch android --flavor staging
+        shorebird patch android --target ./lib/main_staging.dart --flavor staging
     - &github_create_prerelease
       name: Github release
       script: | 
