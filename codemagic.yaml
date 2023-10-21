@@ -172,6 +172,35 @@ definitions:
           --build-number=$BUILD_NUMBER \
           --flavor="production" \
           -t "lib/main_production.dart"
+    #
+    # Shorebird
+    #
+    - &setup_shorebird
+      name: 🐦 Setup Shorebird
+      script: |
+        # Install Shorebird
+        curl --proto '=https' --tlsv1.2 https://raw.githubusercontent.com/shorebirdtech/install/main/install.sh -sSf | bash
+
+        # Add Shorebird to PATH
+        echo PATH="$HOME/.shorebird/bin:$PATH" >> $CM_ENV
+    - &build_shorebird_ipa_staging
+      name: Build shorebird ipa staging
+      script: |
+        BUILD_NUMBER=$(($(app-store-connect get-latest-testflight-build-number "$APP_ID") + 1))
+        flutter build ipa --release \
+          --build-number=$BUILD_NUMBER \
+          --export-options-plist=/Users/builder/export_options.plist \
+          --flavor="staging" \
+          -t "lib/main_staging.dart"
+    - &build_shorebird_apk_staging
+      name: Build shorebird android apk staging
+      script: |
+        BUILD_NUMBER=$(($(google-play get-latest-build-number --package-name "$PACKAGE_NAME" --tracks="$GOOGLE_PLAY_TRACK") + 1))      
+        shorebird release android --artifact apk \
+          --build-number=$BUILD_NUMBER \
+          --flavor="staging" \
+          -t "lib/main_staging.dart" \
+          --force
     - &github_release
       name: Github release
       script: | 
@@ -607,3 +636,50 @@ workflows:
         - *github_release
         - *notify_ios_production_to_slack
         - *notify_android_production_to_slack
+  # Shorebird 
+  shorebird-release-android:
+    name: Shorebird release Android
+    <<: *instance_mac_mini
+    integrations:
+      <<: *app_store_connect_integrations
+    environment:
+      <<: *env_versions
+      <<: *load_environment_values
+      <<: *ios_signing_production
+      <<: *android_signing_production
+    triggering:
+      events:
+        - tag
+      branch_patterns:
+        - pattern: '*'
+          include: true
+          source: true
+      cancel_previous_builds: true
+    scripts:
+      - *load_env_files
+      - *use_profiles
+      - *get_flutter_packages
+      - *run_build_runner
+      - *generate_i18_file
+      # - *install_firebase_crashlytics
+      # - *install_pods
+      # - *build_shorebird_ipa_staging
+      - *setup_local_properties
+      - *build_shorebird_apk_staging
+    artifacts:
+      # - *ipa
+      # - *xcode_log
+      # - *dsym
+      # - *app
+      - *apk
+      - *aab
+      - *android_log
+    # publishing:
+      # <<: *ios_app_store_publish
+      # <<: *android_publish
+      # <<: *email_staging
+      # scripts:
+        # - *upload_staging_dsym_to_firebase
+        # - *github_release
+        # - *notify_ios_staging_to_slack
+        # - *notify_android_staging_to_slack
