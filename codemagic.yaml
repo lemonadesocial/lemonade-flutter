@@ -664,6 +664,7 @@ workflows:
       # - *install_firebase_crashlytics
       # - *install_pods
       # - *build_shorebird_ipa_staging
+      - *setup_shorebird
       - *setup_local_properties
       - *build_shorebird_apk_staging
     artifacts:
