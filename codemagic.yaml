@@ -69,7 +69,7 @@ definitions:
       script: |
         #!/bin/sh
         # Extract build name 1.0.0
-        TAG_BUILD_NAME=$(echo $CM_TAG | grep -o '^v[0-9]\+\.[0-9]\+\.[0-9]\+')
+        TAG_BUILD_NAME=$(echo $CM_TAG | grep -o '[0-9]\+\.[0-9]\+\.[0-9]\+')
 
         # Extract build number 141
         TAG_BUILD_NUMBER=$(echo $CM_TAG | grep -o '+[0-9]\+' | tr -d '+')
