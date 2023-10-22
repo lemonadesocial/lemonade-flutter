@@ -64,7 +64,22 @@ definitions:
         echo $GOOGLESERVICE_INFO_PLIST_PRODUCTION | base64 --decode > $CM_BUILD_DIR/ios/config/production/GoogleService-Info.plist
         echo $GOOGLESERVICE_JSON_STAGING | base64 --decode > $CM_BUILD_DIR/android/app/src/staging/google-services.json
         echo $GOOGLESERVICE_JSON_PRODUCTION | base64 --decode > $CM_BUILD_DIR/android/app/src/production/google-services.json
-        
+    - &extract_tag_information
+      name: Setup Staging ENV
+      script: |
+        #!/bin/sh
+        # Extract build name 1.0.0
+        TAG_BUILD_NAME=$(echo $CM_TAG | grep -o '^v[0-9]\+\.[0-9]\+\.[0-9]\+')
+
+        # Extract build number 141
+        TAG_BUILD_NUMBER=$(echo $CM_TAG | grep -o '+[0-9]\+' | tr -d '+')
+
+        echo $TAG_BUILD_NAME
+        echo $TAG_BUILD_NUMBER
+
+        # Write variables to CM_ENV
+        echo "TAG_BUILD_NAME=$TAG_BUILD_NAME" >> $CM_ENV
+        echo "TAG_BUILD_NUMBER=$TAG_BUILD_NUMBER" >> $CM_ENV
     - &use_profiles
       name: Set up code signing settings on Xcode project
       script: |
@@ -203,11 +218,15 @@ definitions:
     - &patch_shorebird_ios_staging
       name: Patch shorebird ipa staging
       script: |
-        shorebird patch ios-alpha --target ./lib/main_staging.dart --flavor staging
+        shorebird patch ios-alpha --target ./lib/main_staging.dart --flavor staging  --force -- \
+          --build-name=$TAG_BUILD_NAME \
+          --build-number=$TAG_BUILD_NUMBER
     - &patch_shorebird_android_staging
       name: Patch shorebird android staging
       script: |
-        shorebird patch android --target ./lib/main_staging.dart --flavor staging
+        shorebird patch android --target ./lib/main_staging.dart --flavor staging  --force -- \
+          --build-name=$TAG_BUILD_NAME \
+          --build-number=$TAG_BUILD_NUMBER
     - &github_create_prerelease
       name: Github release
       script: | 
@@ -689,7 +708,19 @@ workflows:
       <<: *load_environment_values
       <<: *ios_signing_staging
       <<: *android_signing_staging
+    triggering:
+      events:
+        - tag
+      tag_patterns:
+        - pattern: '*-patch*' # v1.0.0+141-patch1
+          include: true
+        - pattern: excluded-tag
+          include: false
+        - pattern: included-tag
+          include: true
+      cancel_previous_builds: true
     scripts:
+      - *extract_tag_information
       - *load_env_files
       - *use_profiles
       - *get_flutter_packages
@@ -701,3 +732,12 @@ workflows:
       # - *patch_shorebird_ios_staging
       - *setup_local_properties
       - *patch_shorebird_android_staging
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - build/app/outputs/apk/**/*.apk    
+      - build/app/outputs/bundle/**/*.aab    
+    # publishing:
+    #   <<: *ios_app_store_publish
+    #   <<: *android_publish
+    #   scripts:
+    #     - *upload_staging_dsym_to_firebase
