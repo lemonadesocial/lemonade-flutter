@@ -220,13 +220,14 @@ definitions:
       script: |
         shorebird patch ios-alpha --target ./lib/main_staging.dart --flavor staging  --force -- \
           --build-name=$TAG_BUILD_NAME \
-          --build-number=$TAG_BUILD_NUMBER
+          --build-number=$TAG_BUILD_NUMBER \
+          --export-options-plist=/Users/builder/export_options.plist
     - &patch_shorebird_android_staging
       name: Patch shorebird android staging
       script: |
         shorebird patch android --target ./lib/main_staging.dart --flavor staging  --force -- \
           --build-name=$TAG_BUILD_NAME \
-          --build-number=$TAG_BUILD_NUMBER
+          --build-number=$TAG_BUILD_NUMBER 
     - &github_create_prerelease
       name: Github release
       script: | 
