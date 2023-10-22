@@ -698,8 +698,8 @@ workflows:
       scripts:
         - *upload_staging_dsym_to_firebase
 
-  shorebird-patch-test:
-    name: Shorebird Patch Test
+  shorebird-patch-ios-test:
+    name: Shorebird Patch iOS Test
     <<: *instance_mac_mini
     integrations:
       <<: *app_store_connect_integrations
@@ -712,7 +712,7 @@ workflows:
       events:
         - tag
       tag_patterns:
-        - pattern: '*-patch*' # v1.0.0+141-patch1
+        - pattern: '*-patch-ios-*' # v1.0.0+141-patch-ios-1
           include: true
         - pattern: excluded-tag
           include: false
@@ -727,17 +727,42 @@ workflows:
       - *run_build_runner
       - *generate_i18_file
       - *setup_shorebird
-      # - *install_firebase_crashlytics
-      # - *install_pods
-      # - *patch_shorebird_ios_staging
+      - *install_firebase_crashlytics
+      - *install_pods
+      - *patch_shorebird_ios_staging
+    artifacts:
+      - build/ios/ipa/*.ipa
+  shorebird-patch-android-test:
+    name: Shorebird Patch Android Test
+    <<: *instance_mac_mini
+    integrations:
+      <<: *app_store_connect_integrations
+    environment:
+      <<: *env_versions
+      <<: *load_environment_values
+      <<: *ios_signing_staging
+      <<: *android_signing_staging
+    triggering:
+      events:
+        - tag
+      tag_patterns:
+        - pattern: '*-patch-android-*' # v1.0.0+141-patch-android-1
+          include: true
+        - pattern: excluded-tag
+          include: false
+        - pattern: included-tag
+          include: true
+      cancel_previous_builds: true
+    scripts:
+      - *extract_tag_information
+      - *load_env_files
+      - *use_profiles
+      - *get_flutter_packages
+      - *run_build_runner
+      - *generate_i18_file
+      - *setup_shorebird
       - *setup_local_properties
       - *patch_shorebird_android_staging
     artifacts:
-      - build/ios/ipa/*.ipa
       - build/app/outputs/apk/**/*.apk    
-      - build/app/outputs/bundle/**/*.aab    
-    # publishing:
-    #   <<: *ios_app_store_publish
-    #   <<: *android_publish
-    #   scripts:
-    #     - *upload_staging_dsym_to_firebase
+      - build/app/outputs/bundle/**/*.aab 
