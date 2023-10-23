@@ -50,8 +50,14 @@ class LemonDrawer extends StatelessWidget {
                 label: t.common.vault,
                 featureAvailable: false,
                 onPressed: () {
-                  Vibrate.feedback(FeedbackType.light);
-                  showComingSoonDialog(context);
+                  context.router.pop();
+                  context.read<AuthBloc>().state.maybeWhen(
+                        authenticated: (authSession) =>
+                            context.router.push(const WalletRoute()),
+                        orElse: () => context.router.navigate(
+                          const LoginRoute(),
+                        ),
+                      );
                 },
               ),
               DrawerItem(

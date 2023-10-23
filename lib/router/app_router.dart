@@ -28,10 +28,6 @@ class AppRouter extends $AppRouter {
               page: NotificationRoute.page,
             ),
             AutoRoute(
-              path: 'wallet',
-              page: WalletRoute.page,
-            ),
-            AutoRoute(
               path: 'me',
               page: MyProfileRoute.page,
             ),
@@ -40,6 +36,10 @@ class AppRouter extends $AppRouter {
               page: EmptyRoute.page,
             ),
           ],
+        ),
+        AutoRoute(
+          path: '/wallet',
+          page: WalletRoute.page,
         ),
         AutoRoute(
           path: '/profile/:id',
