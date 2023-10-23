@@ -21,7 +21,7 @@ class GraphQLErrorCodeStrings {
 }
 
 class CustomErrorHandler {
-  static getErrorMessage(List<GraphQLError>? errors) {
+  static String getErrorMessage(List<GraphQLError>? errors) {
     var errorMessage = "";
     if (errors != null && errors.isNotEmpty) {
       var error = errors[0]; // Get the first error in the list
@@ -116,7 +116,9 @@ class CustomErrorHandler {
           message = "Oops! Something went wrong. Please try again later.";
           break;
       }
-      SnackBarUtils.showErrorSnackbar(message);
+      SnackBarUtils.showErrorSnackbar(
+        errorMessage.isNotEmpty ? errorMessage : message,
+      );
       return;
     }
     // Show detail error code and error message in Staging and development
