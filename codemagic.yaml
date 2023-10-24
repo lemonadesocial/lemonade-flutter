@@ -64,6 +64,8 @@ definitions:
         echo $GOOGLESERVICE_INFO_PLIST_PRODUCTION | base64 --decode > $CM_BUILD_DIR/ios/config/production/GoogleService-Info.plist
         echo $GOOGLESERVICE_JSON_STAGING | base64 --decode > $CM_BUILD_DIR/android/app/src/staging/google-services.json
         echo $GOOGLESERVICE_JSON_PRODUCTION | base64 --decode > $CM_BUILD_DIR/android/app/src/production/google-services.json
+
+        echo $SHOREBIRD_YML | base64 --decode > $CM_BUILD_DIR/shorebird.yml
     - &extract_tag_information
       name: Setup Staging ENV
       script: |
