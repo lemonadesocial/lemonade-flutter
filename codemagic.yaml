@@ -824,7 +824,7 @@ workflows:
       events:
         - tag
       tag_patterns:
-        - pattern: '*-patch-ios-*' # v1.0.0+141-patch-ios-1
+        - pattern: '*-patch-ios.*' # v1.0.0+141-patch-ios.1
           include: true
         - pattern: excluded-tag
           include: false
@@ -859,7 +859,7 @@ workflows:
       events:
         - tag
       tag_patterns:
-        - pattern: '*-patch-android-*' # v1.0.0+141-patch-android-1
+        - pattern: '*-patch-android.*' # v1.0.0+141-patch-android.1
           include: true
         - pattern: excluded-tag
           include: false
