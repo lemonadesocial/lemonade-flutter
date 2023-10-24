@@ -67,7 +67,7 @@ class BottomBarState extends State<BottomBar>
             Container(
               width: 65.w,
               height: BottomBar.bottomBarHeight,
-              color: Colors.red,
+              color: Colors.transparent,
             ),
             _buildTabItem(context, tabs[2]),
             _buildTabItem(context, tabs[3]),
@@ -88,7 +88,7 @@ class BottomBarState extends State<BottomBar>
         },
         child: Container(
           height: BottomBar.bottomBarHeight,
-          color: Colors.red,
+          color: Colors.transparent,
           child: Stack(
             alignment: Alignment.center,
             children: [
