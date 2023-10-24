@@ -67,6 +67,8 @@ class UserDto with _$UserDto {
     @Default([])
     @JsonKey(name: 'blocked_expanded')
     List<UserDto> blockedExpanded,
+    @JsonKey(name: 'terms_accepted_adult') bool? termsAcceptedAdult,
+    @JsonKey(name: 'terms_accepted_conditions') bool? termsAcceptedConditions,
   }) = _UserDto;
 
   factory UserDto.fromJson(Map<String, dynamic> json) =>
