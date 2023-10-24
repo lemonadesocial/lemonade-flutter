@@ -12,6 +12,45 @@ class PaymentBloc extends Cubit<PaymentState> {
   final PaymentRepository _repository;
 
   Future<void> initializeStripePayment() async {
-    final result = _repository.getPublishableKey();
+    final result = await _repository.getPublishableKey();
+    result.fold((l) {}, (publishableKey) {
+      emit(
+        state.copyWith(
+          status: PaymentStatus.initial,
+          publishableKey: publishableKey,
+        ),
+      );
+    });
+  }
+
+  Future<void> getListCard() async {
+    final result = await _repository.getListCard();
+    result.fold((l) {}, (listCard) {
+      emit(
+        state.copyWith(
+          status: PaymentStatus.initial,
+          selectedCard: listCard[0],
+          listCard: listCard,
+        ),
+      );
+    });
+  }
+
+  void initTotalPaymentAmount(double amount) {
+    emit(
+      state.copyWith(
+        status: PaymentStatus.initial,
+        totalAmount: amount,
+      ),
+    );
+  }
+
+  void onCardSelected(dynamic card) {
+    emit(
+      state.copyWith(
+        status: PaymentStatus.initial,
+        selectedCard: card,
+      ),
+    );
   }
 }

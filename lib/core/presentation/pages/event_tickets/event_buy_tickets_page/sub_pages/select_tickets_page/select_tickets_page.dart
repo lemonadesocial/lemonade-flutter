@@ -205,7 +205,9 @@ class SelectTicketView extends StatelessWidget {
                 ),
               ),
               const Spacer(),
-              const SelectTicketSubmitButton()
+              SelectTicketSubmitButton(
+                totalTicketAmount: event.cost,
+              ),
             ],
           ),
         ),
