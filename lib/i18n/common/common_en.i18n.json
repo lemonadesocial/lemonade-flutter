@@ -42,7 +42,8 @@
         "report": "Report",
         "block": "Block",
         "unBlock": "Unblock",
-        "success": "Success"
+        "success": "Success",
+        "setLocation": "Set location services"
     },
     "followed": "Followed",
     "anonymous": "anonymous",
@@ -111,5 +112,9 @@
     },
     "submitted": "Submitted",
     "reportProfileDesc": "Help us keep Lemonade by listing the reason for the report.",
-    "emptyList": "Nothing here"
+    "emptyList": "Nothing here",
+    "locationRequest": {
+        "title": "Set your location services",
+        "description": "We use your location to show you geo-locked collectibles & events around you"
+    }
 }
