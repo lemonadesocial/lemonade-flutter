@@ -32,6 +32,8 @@ class UpdateUserProfileInput with _$UpdateUserProfileInput {
     String? companyName,
     @JsonKey(name: 'notification_filters')
     List<NotificationFilterInput>? notificationFilterInput,
+    @JsonKey(name: 'terms_accepted_adult') bool? termsAcceptedAdult,
+    @JsonKey(name: 'terms_accepted_conditions') bool? termsAcceptedConditions,
   }) = _UpdateUserProfileInput;
 
   factory UpdateUserProfileInput.fromJson(Map<String, dynamic> json) =>

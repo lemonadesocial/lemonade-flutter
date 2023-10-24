@@ -149,4 +149,25 @@ class OnboardingBloc extends Cubit<OnboardingState> {
       },
     );
   }
+
+  Future<void> acceptTerm(UpdateUserProfileInput input) async {
+    emit(state.copyWith(status: OnboardingStatus.loading));
+    final response = await userRepository.updateUserProfile(
+      input,
+    );
+    response.fold(
+      (l) => emit(
+        state.copyWith(
+          status: OnboardingStatus.error,
+        ),
+      ),
+      (success) {
+        if (success) {
+          emit(state.copyWith(status: OnboardingStatus.success));
+        } else {
+          emit(state.copyWith(status: OnboardingStatus.error));
+        }
+      },
+    );
+  }
 }
