@@ -1,5 +1,5 @@
-import 'package:app/core/application/payment/payment_bloc.dart';
-import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_payment_method_page/widgets/payment_cards_list.dart';
+import 'package:app/core/application/payment/payment_bloc/payment_bloc.dart';
+import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_payment_method_page/widgets/add_card_button.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/event_card_tile.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/event_order_slide_to_pay.dart';
 import 'package:app/theme/spacing.dart';
@@ -34,6 +34,7 @@ class EventOrderSummaryFooter extends StatelessWidget {
           children: [
             BlocBuilder<PaymentBloc, PaymentState>(
               builder: (context, state) {
+                print('newSate: ${state.selectedCard}');
                 return state.selectedCard != null
                     ? EventCardTile(paymentCardEntity: state.selectedCard!)
                     : const AddCardButton();

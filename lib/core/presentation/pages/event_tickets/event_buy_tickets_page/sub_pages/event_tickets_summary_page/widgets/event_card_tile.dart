@@ -47,7 +47,9 @@ class EventCardTile extends StatelessWidget {
               ),
               SizedBox(height: 2.w),
               Text(
-                t.event.eventPayment.cardEnding(lastCardNumber: '4258'),
+                t.event.eventPayment.cardEnding(
+                  lastCardNumber: paymentCardEntity.last4,
+                ),
               ),
             ],
           ),

@@ -14,9 +14,8 @@ class PaymentRepositoryImpl extends PaymentRepository {
   final _client = getIt<AppGQL>().client;
 
   @override
-  Future<Either<Failure, dynamic>> createNewCard() {
-    // TODO: implement createNewCard
-    throw UnimplementedError();
+  Future<Either<Failure, bool>> createNewCard() async {
+    return right(true);
   }
 
   @override

@@ -1,100 +1,236 @@
+import 'package:app/core/application/payment/add_new_card_bloc/add_new_card_bloc.dart';
+import 'package:app/core/domain/payment/entities/payment_card_entity/payment_card_entity.dart';
+import 'package:app/core/domain/payment/payment_repository.dart';
 import 'package:app/core/presentation/widgets/back_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_bottom_sheet_mixin.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class AddCardBottomSheet extends StatelessWidget with LemonBottomSheet {
+class AddCardBottomSheet extends StatefulWidget with LemonBottomSheet {
   AddCardBottomSheet({super.key});
 
-  final DraggableScrollableController controller =
-      DraggableScrollableController();
+  @override
+  State<AddCardBottomSheet> createState() => _AddCardBottomSheetState();
+}
+
+class _AddCardBottomSheetState extends State<AddCardBottomSheet> {
+  final expireDateFocusNode = FocusNode();
+  final cvvFocusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-    return SingleChildScrollView(
-      child: Container(
-        padding: EdgeInsets.only(
-          left: Spacing.smMedium,
-          right: Spacing.smMedium,
-          top: Spacing.smMedium,
-          bottom: Spacing.smMedium,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                LemonBackButton(
-                  color: colorScheme.onSecondary,
-                ),
-              ],
-            ),
-            SizedBox(height: Spacing.medium),
-            Text(
-              t.event.eventPayment.addNewCard,
-              style: Typo.extraLarge.copyWith(
-                fontWeight: FontWeight.w800,
-                fontFamily: FontFamily.nohemiVariable,
-              ),
-            ),
-            SizedBox(height: Spacing.superExtraSmall),
-            Text(
-              t.event.eventPayment.addNewCardDescription,
-              style: Typo.mediumPlus.copyWith(
-                color: colorScheme.onSecondary,
-              ),
-            ),
-            SizedBox(height: Spacing.medium),
-            LemonTextField(
-              autofocus: true,
-              onChange: (v) {},
-              hintText: t.event.eventPayment.cardHolderName,
-            ),
-            SizedBox(height: Spacing.xSmall),
-            LemonTextField(
-              onChange: (v) {},
-              hintText: t.event.eventPayment.cardNumber,
-            ),
-            SizedBox(height: Spacing.xSmall),
-            Row(
-              children: [
-                Expanded(
-                  child: LemonTextField(
-                    onChange: (v) {},
-                    hintText: t.event.eventPayment.validThrough,
+    final bloc = AddNewCardBloc(getIt<PaymentRepository>());
+    return BlocProvider(
+      create: (context) => bloc,
+      child: Builder(
+        builder: (context) {
+          return BlocConsumer<AddNewCardBloc, AddNewCardState>(
+            listener: (context, state) {
+              if (state.status == AddNewCardBlocStatus.success) {
+                // Return previous screen with new card data
+                context.router.pop(
+                  PaymentCardEntity(
+                    id: '',
+                    last4: state.cardNumber!
+                        .substring(state.cardNumber!.length - 4),
+                    brand: 'Visa',
+                    providerId: '1234',
+                  ),
+                );
+              }
+            },
+            builder: (context, state) {
+              return SingleChildScrollView(
+                child: Container(
+                  padding: EdgeInsets.only(
+                    left: Spacing.smMedium,
+                    right: Spacing.smMedium,
+                    top: Spacing.smMedium,
+                    bottom: Spacing.smMedium,
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          LemonBackButton(
+                            color: colorScheme.onSecondary,
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: Spacing.medium),
+                      Text(
+                        t.event.eventPayment.addNewCard,
+                        style: Typo.extraLarge.copyWith(
+                          fontWeight: FontWeight.w800,
+                          fontFamily: FontFamily.nohemiVariable,
+                        ),
+                      ),
+                      SizedBox(height: Spacing.superExtraSmall),
+                      Text(
+                        t.event.eventPayment.addNewCardDescription,
+                        style: Typo.mediumPlus.copyWith(
+                          color: colorScheme.onSecondary,
+                        ),
+                      ),
+                      SizedBox(height: Spacing.medium),
+                      LemonTextField(
+                        autofocus: true,
+                        onChange: bloc.onCardHolderNameChange,
+                        hintText: t.event.eventPayment.cardHolderName,
+                      ),
+                      SizedBox(height: Spacing.xSmall),
+                      LemonTextField(
+                        onChange: (value) {
+                          bloc.onCardNumberChange(value);
+                          if (value.length == 19) {
+                            expireDateFocusNode.requestFocus();
+                          }
+                        },
+                        hintText: t.event.eventPayment.cardNumber,
+                        textInputType: TextInputType.number,
+                        inputFormatters: [
+                          LengthLimitingTextInputFormatter(19),
+                          FilteringTextInputFormatter.digitsOnly,
+                          CardNumberFormatter(),
+                        ],
+                      ),
+                      SizedBox(height: Spacing.xSmall),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: LemonTextField(
+                              focusNode: expireDateFocusNode,
+                              onChange: (value) {
+                                bloc.onValidDateChange(value);
+                                if (value.length == 5) {
+                                  cvvFocusNode.requestFocus();
+                                }
+                              },
+                              hintText: t.event.eventPayment.validThrough,
+                              textInputType: TextInputType.number,
+                              inputFormatters: [
+                                LengthLimitingTextInputFormatter(5),
+                                FilteringTextInputFormatter.digitsOnly,
+                                CardDateFormatter(),
+                              ],
+                            ),
+                          ),
+                          SizedBox(width: Spacing.xSmall),
+                          Expanded(
+                            child: LemonTextField(
+                              focusNode: cvvFocusNode,
+                              onChange: (value) {
+                                bloc.onCvvChange(value);
+                                if (value.length == 3) {
+                                  FocusScope.of(context).unfocus();
+                                }
+                              },
+                              hintText: t.event.eventPayment.cvc,
+                              textInputType: TextInputType.number,
+                              inputFormatters: [
+                                LengthLimitingTextInputFormatter(3),
+                                FilteringTextInputFormatter.digitsOnly,
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: Spacing.smMedium * 2),
+                      LinearGradientButton(
+                        onTap: state.fieldValidated ? bloc.addNewCard : null,
+                        radius: BorderRadius.circular(LemonRadius.large),
+                        mode: state.fieldValidated
+                            ? GradientButtonMode.lavenderMode
+                            : GradientButtonMode.lavenderDisableMode,
+                        label: t.event.eventPayment.addCard,
+                        height: Sizing.large,
+                        textStyle: Typo.medium.copyWith(
+                          fontFamily: FontFamily.nohemiVariable,
+                          fontWeight: FontWeight.w600,
+                          color: colorScheme.onPrimary,
+                        ),
+                        loadingWhen:
+                            state.status == AddNewCardBlocStatus.loading,
+                      ),
+                      SizedBox(height: Spacing.smMedium),
+                    ],
                   ),
                 ),
-                SizedBox(width: Spacing.xSmall),
-                Expanded(
-                  child: LemonTextField(
-                    onChange: (v) {},
-                    hintText: t.event.eventPayment.cvc,
-                  ),
-                )
-              ],
-            ),
-            SizedBox(height: Spacing.smMedium * 2),
-            SizedBox(
-              height: Sizing.large,
-              child: LinearGradientButton(
-                radius: BorderRadius.circular(LemonRadius.small * 2),
-                mode: GradientButtonMode.lavenderMode,
-                label: t.event.eventPayment.addCard,
-              ),
-            ),
-            SizedBox(height: Spacing.smMedium),
-          ],
-        ),
+              );
+            },
+          );
+        },
       ),
+    );
+  }
+}
+
+class CardNumberFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    var text = newValue.text;
+
+    if (newValue.selection.baseOffset == 0) {
+      return newValue;
+    }
+
+    var buffer = StringBuffer();
+    for (int i = 0; i < text.length; i++) {
+      buffer.write(text[i]);
+      var nonZeroIndex = i + 1;
+      if (nonZeroIndex % 4 == 0 && nonZeroIndex != text.length) {
+        buffer.write(
+            ' '); // Replace this with anything you want to put after each 4 numbers
+      }
+    }
+
+    var string = buffer.toString();
+    return newValue.copyWith(
+      text: string,
+      selection: TextSelection.collapsed(offset: string.length),
+    );
+  }
+}
+
+class CardDateFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    var text = newValue.text;
+
+    if (newValue.selection.baseOffset == 0) {
+      return newValue;
+    }
+
+    var buffer = StringBuffer();
+    for (int i = 0; i < text.length; i++) {
+      buffer.write(text[i]);
+      var nonZeroIndex = i + 1;
+      if (nonZeroIndex % 2 == 0 && nonZeroIndex != text.length) {
+        buffer.write(
+            '/'); // Replace this with anything you want to put after each 4 numbers
+      }
+    }
+
+    var string = buffer.toString();
+    return newValue.copyWith(
+      text: string,
+      selection: TextSelection.collapsed(offset: string.length),
     );
   }
 }

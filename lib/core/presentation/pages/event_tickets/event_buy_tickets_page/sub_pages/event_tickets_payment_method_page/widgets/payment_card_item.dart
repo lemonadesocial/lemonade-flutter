@@ -1,4 +1,4 @@
-import 'package:app/core/application/payment/payment_bloc.dart';
+import 'package:app/core/application/payment/payment_bloc/payment_bloc.dart';
 import 'package:app/core/domain/payment/entities/payment_card_entity/payment_card_entity.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';

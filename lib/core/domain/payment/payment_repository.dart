@@ -7,7 +7,7 @@ abstract class PaymentRepository {
 
   Future<Either<Failure, List<PaymentCardEntity>>> getListCard();
 
-  Future<Either<Failure, dynamic>> createNewCard();
+  Future<Either<Failure, bool>> createNewCard();
 
   Future<Either<Failure, dynamic>> createNewPayment();
 }

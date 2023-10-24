@@ -68,4 +68,14 @@ class PaymentBloc extends Cubit<PaymentState> {
       ),
     );
   }
+
+  void newCardAdded(PaymentCardEntity card) {
+    emit(
+      state.copyWith(
+        status: PaymentStatus.initial,
+        selectedCard: card,
+        listCard: List.from(state.listCard)..add(card),
+      ),
+    );
+  }
 }
