@@ -46,15 +46,6 @@ class LemonDrawer extends StatelessWidget {
             SizedBox(height: Spacing.superExtraSmall),
             ...[
               DrawerItem(
-                icon: Assets.icons.icBank,
-                label: t.common.vault,
-                featureAvailable: false,
-                onPressed: () {
-                  Vibrate.feedback(FeedbackType.light);
-                  showComingSoonDialog(context);
-                },
-              ),
-              DrawerItem(
                 icon: Assets.icons.icPeopleAlt,
                 label: t.common.community,
                 onPressed: () {

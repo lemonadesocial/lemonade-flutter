@@ -85,19 +85,19 @@ class CreatePopUpPage extends StatelessWidget with LemonBottomSheet {
               suffixIcon: Assets.icons.icCreatePoap.svg(),
             ),
             SizedBox(height: Spacing.xSmall),
-            CreatePopUpTile(
-              colors: CreatePopupGradient.collectible.colors,
-              label: t.home.collectible,
-              content: t.home.collectibleDesc,
-              suffixIcon: ThemeSvgIcon(
-                color: LemonColor.collectibleColor,
-                builder: (colorFilter) => Assets.icons.icCrystal.svg(
-                  width: 30.w,
-                  height: 30.w,
-                  colorFilter: colorFilter,
-                ),
-              ),
-            ),
+            // CreatePopUpTile(
+            //   colors: CreatePopupGradient.collectible.colors,
+            //   label: t.home.collectible,
+            //   content: t.home.collectibleDesc,
+            //   suffixIcon: ThemeSvgIcon(
+            //     color: LemonColor.collectibleColor,
+            //     builder: (colorFilter) => Assets.icons.icCrystal.svg(
+            //       width: 30.w,
+            //       height: 30.w,
+            //       colorFilter: colorFilter,
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),
