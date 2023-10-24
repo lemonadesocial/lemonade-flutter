@@ -18,6 +18,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../../../../../gen/assets.gen.dart';
+import '../../../../../../widgets/theme_svg_icon_widget.dart';
+
 class SelectTicketItem extends StatefulWidget {
   const SelectTicketItem({
     super.key,
@@ -98,15 +101,15 @@ class _SelectTicketItemState extends State<SelectTicketItem> {
           LinearGradientButton(
             onTap: () async {
               Navigator.of(innerContext).pop();
-              await Future.delayed(
-                const Duration(milliseconds: 300),
-              );
-              AutoRouter.of(context).replaceAll([
-                EventDetailRoute(
-                  eventId: event.id ?? '',
-                  eventName: event.title ?? '',
-                ),
-              ]);
+              // await Future.delayed(
+              //   const Duration(milliseconds: 300),
+              // );
+              // AutoRouter.of(context).replaceAll([
+              //   EventDetailRoute(
+              //     eventId: event.id ?? '',
+              //     eventName: event.title ?? '',
+              //   ),
+              // ]);
             },
             mode: GradientButtonMode.lavenderMode,
             label: t.common.actions.ok,
@@ -205,7 +208,7 @@ class _SelectTicketItemState extends State<SelectTicketItem> {
                   IconButton(
                     onPressed: () {
                       if (widget.ticketType.cost != 0) {
-                        goToWeb();
+                        // goToWeb();
                         return;
                       }
                       minus();
@@ -236,10 +239,10 @@ class _SelectTicketItemState extends State<SelectTicketItem> {
                   // )
                   IconButton(
                     onPressed: () {
-                      if (widget.ticketType.cost != 0) {
-                        goToWeb();
-                        return;
-                      }
+                      // if (widget.ticketType.cost != 0) {
+                      //   goToWeb();
+                      //   return;
+                      // }
                       add();
                     },
                     icon: Icon(
