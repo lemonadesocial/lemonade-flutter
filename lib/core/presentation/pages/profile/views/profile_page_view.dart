@@ -66,7 +66,7 @@ class _ProfilePageViewState extends State<ProfilePageView>
     final isMe = AuthUtils.isMe(context, user: widget.userProfile);
     return BlocListener<BlockUserBloc, BlockUserState>(
       listener: (context, state) {
-        if (state.status == BlockUserStatus.success) {
+        if (state.status == BlockUserStatus.blockSuccess) {
           context.router.pop();
           SnackBarUtils.showSuccessSnackbar(t.profile.blockSuccess);
           AuthUtils.getUser(context)!.blockedList!.add(widget.userProfile);
@@ -128,60 +128,64 @@ class _ProfilePageViewState extends State<ProfilePageView>
                                 ),
                               )
                             else
-                              FloatingFrostedGlassDropdown(
-                                items: <DropdownItemDpo<MenuOption>>[
-                                  DropdownItemDpo<MenuOption>(
-                                    label: t.common.actions.block,
-                                    value: MenuOption.block,
-                                    leadingIcon: Assets.icons.icBlock.svg(
-                                      width: 15.w,
-                                      height: 15.w,
+                              Padding(
+                                padding: EdgeInsets.only(right: Spacing.xSmall),
+                                child: FloatingFrostedGlassDropdown(
+                                  items: <DropdownItemDpo<MenuOption>>[
+                                    DropdownItemDpo<MenuOption>(
+                                      label: t.common.actions.block,
+                                      value: MenuOption.block,
+                                      leadingIcon: Assets.icons.icBlock.svg(
+                                        width: 15.w,
+                                        height: 15.w,
+                                      ),
                                     ),
-                                  ),
-                                  DropdownItemDpo<MenuOption>(
-                                    label: t.profile.reportProfile,
-                                    value: MenuOption.report,
-                                    customColor: LemonColor.menuRed,
-                                    leadingIcon: Assets.icons.icReport.svg(
-                                      width: 15.w,
-                                      height: 15.w,
+                                    DropdownItemDpo<MenuOption>(
+                                      label: t.profile.reportProfile,
+                                      value: MenuOption.report,
+                                      customColor: LemonColor.menuRed,
+                                      leadingIcon: Assets.icons.icReport.svg(
+                                        width: 15.w,
+                                        height: 15.w,
+                                      ),
                                     ),
+                                  ],
+                                  onItemPressed: (item) {
+                                    switch (item?.value) {
+                                      case MenuOption.block:
+                                        DialogUtils.showConfirmDialog(
+                                          context,
+                                          message: t.profile.blockConfirm,
+                                          onConfirm: () {
+                                            context.router.pop();
+                                            context
+                                                .read<BlockUserBloc>()
+                                                .blockUser(
+                                                  userId:
+                                                      widget.userProfile.userId,
+                                                  isBlock: true,
+                                                );
+                                          },
+                                        );
+                                        break;
+                                      case MenuOption.report:
+                                        ReportUserDialog(
+                                          user: widget.userProfile,
+                                        ).showAsBottomSheet(
+                                          context,
+                                          heightFactor: 0.79,
+                                        );
+                                        break;
+                                      default:
+                                        break;
+                                    }
+                                  },
+                                  child: ThemeSvgIcon(
+                                    color: colorScheme.onPrimary,
+                                    builder: (filter) => Assets
+                                        .icons.icMoreHoriz
+                                        .svg(colorFilter: filter),
                                   ),
-                                ],
-                                onItemPressed: (item) {
-                                  switch (item?.value) {
-                                    case MenuOption.block:
-                                      DialogUtils.showConfirmDialog(
-                                        context,
-                                        message: t.profile.blockConfirm,
-                                        onConfirm: () {
-                                          context.router.pop();
-                                          context
-                                              .read<BlockUserBloc>()
-                                              .blockUser(
-                                                userId:
-                                                    widget.userProfile.userId,
-                                                isBlock: true,
-                                              );
-                                        },
-                                      );
-                                      break;
-                                    case MenuOption.report:
-                                      ReportUserDialog(
-                                        user: widget.userProfile,
-                                      ).showAsBottomSheet(
-                                        context,
-                                        heightFactor: 0.79,
-                                      );
-                                      break;
-                                    default:
-                                      break;
-                                  }
-                                },
-                                child: ThemeSvgIcon(
-                                  color: colorScheme.onPrimary,
-                                  builder: (filter) => Assets.icons.icMoreHoriz
-                                      .svg(colorFilter: filter),
                                 ),
                               ),
                           ],
