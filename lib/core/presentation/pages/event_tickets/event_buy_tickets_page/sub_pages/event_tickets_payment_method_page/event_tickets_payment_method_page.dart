@@ -56,7 +56,7 @@ class EventTicketsPaymentMethodView extends StatelessWidget {
               ),
             ),
             SizedBox(height: Spacing.smMedium),
-            const PaymentCardsList(),
+            const Expanded(child: PaymentCardsList()),
             SafeArea(
               child: Container(
                 padding: EdgeInsets.only(

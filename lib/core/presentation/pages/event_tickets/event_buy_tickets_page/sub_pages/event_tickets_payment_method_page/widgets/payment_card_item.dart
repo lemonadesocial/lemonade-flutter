@@ -1,14 +1,23 @@
-import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/application/payment/payment_bloc.dart';
+import 'package:app/core/domain/payment/entities/payment_card_entity/payment_card_entity.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PaymentCardItem extends StatelessWidget {
-  const PaymentCardItem({super.key});
+  const PaymentCardItem({
+    super.key,
+    required this.listCard,
+    required this.cardInfo,
+  });
+
+  final List<PaymentCardEntity> listCard;
+  final PaymentCardEntity cardInfo;
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +25,6 @@ class PaymentCardItem extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
       padding: EdgeInsets.all(Spacing.smMedium),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(LemonRadius.small),
@@ -40,34 +48,25 @@ class PaymentCardItem extends StatelessWidget {
             ),
           ),
           SizedBox(width: Spacing.xSmall),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Deutsche Bank Card',
-                style: Typo.medium.copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: colorScheme.onPrimary.withOpacity(0.87),
-                ),
-              ),
-              SizedBox(height: 2.w),
-              Text(
-                t.event.eventPayment.cardEnding(lastCardNumber: '6719'),
-                style: Typo.small.copyWith(
-                  color: colorScheme.onSecondary,
-                ),
-              )
-            ],
+          Text(
+            t.event.eventPayment.cardEnding(lastCardNumber: cardInfo.last4),
+            style: Typo.medium.copyWith(
+              fontWeight: FontWeight.w600,
+              color: colorScheme.onPrimary.withOpacity(0.87),
+            ),
           ),
           const Spacer(),
-          // TODO: selected state
-          // Assets.icons.icInvitedFilled.svg(),
-          ThemeSvgIcon(
-            color: colorScheme.onSurfaceVariant,
-            builder: (filter) =>
-                Assets.icons.icCircleEmpty.svg(colorFilter: filter),
+          BlocBuilder<PaymentBloc, PaymentState>(
+            builder: (context, state) {
+              return Checkbox(
+                value: cardInfo == state.selectedCard,
+                shape: const CircleBorder(),
+                onChanged: (_) =>
+                    context.read<PaymentBloc>().onCardSelected(cardInfo),
+              );
+            },
           ),
-          SizedBox(width: 1.w)
+          SizedBox(width: 1.w),
         ],
       ),
     );

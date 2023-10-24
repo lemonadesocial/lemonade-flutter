@@ -66,3 +66,19 @@ final getTicketsQuery = gql('''
     }
   }
 ''');
+
+final getListCardQuery = gql('''
+  query GetStripeCards(\$skip: Int!, \$limit: Int!, \$provider: PaymentProvider){
+    getStripeCards(skip: \$skip, limit: \$limit, provider: \$provider) {
+      _id
+      active
+      stamp
+      provider
+      provider_id
+      user
+      brand
+      name
+      last4
+    }
+  }
+''');

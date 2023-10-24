@@ -5,9 +5,9 @@ class PaymentState with _$PaymentState {
   const factory PaymentState({
     @Default(PaymentStatus.initial) PaymentStatus status,
     @Default('') String publishableKey,
-    double? totalAmount,
-    dynamic selectedCard,
-    @Default([]) List<dynamic> listCard,
+    EventTicketsPricingInfo? pricingInfo,
+    PaymentCardEntity? selectedCard,
+    @Default([]) List<PaymentCardEntity> listCard,
   }) = _PaymentState;
 
   factory PaymentState.initial() => const PaymentState();
@@ -16,6 +16,10 @@ class PaymentState with _$PaymentState {
 enum PaymentStatus {
   initial,
   loading,
+  loaded,
+  checkout,
+  confirm,
+  buyTicketInProgress,
   success,
   error,
 }
