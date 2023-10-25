@@ -28,7 +28,6 @@ class SelectEventTicketTypesBloc
     SelectEventTicketTypesEventOnSelectTicketType event,
     Emitter emit,
   ) async {
-    print('_onSelectTicketType called');
     final newSelectedTicketTypes = [
       event.ticketType,
       ...state.selectedTicketTypes,
