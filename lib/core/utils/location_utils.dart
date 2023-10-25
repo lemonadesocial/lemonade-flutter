@@ -104,9 +104,9 @@ class LocationUtils {
 
     return await context.router.push<bool>(
           LocationRequestRoute(
-            onPermissionDeniedForever: () {
+            onPermissionDeniedForever: () async {
               if (shouldGoToSettings != true) return;
-              Navigator.of(context).pop();
+              await AutoRouter.of(context).pop();
               LocationUtils.goToSetting(context);
             },
           ),
