@@ -30,77 +30,73 @@ class OnboardingProfilePhotoPage extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        return WillPopScope(
-          onWillPop: () async => false,
-          child: Scaffold(
-            appBar: AppBar(
-              actions: [
-                Row(
-                  children: [
-                    InkWell(
-                      onTap: () =>
-                          context.router.push(const OnboardingAboutRoute()),
-                      child: Text(
-                        t.onboarding.skip,
-                        style:
-                            Typo.medium.copyWith(fontWeight: FontWeight.w400),
-                      ),
-                    ),
-                    SizedBox(width: Spacing.smMedium),
-                  ],
-                ),
-              ],
-            ),
-            backgroundColor: theme.colorScheme.primary,
-            body: Padding(
-              padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+        return Scaffold(
+          appBar: AppBar(
+            actions: [
+              Row(
                 children: [
-                  SizedBox(height: Spacing.medium),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          t.onboarding.findYourLook,
-                          style: TextStyle(
-                            fontSize: 26.sp,
-                            fontWeight: FontWeight.w800,
-                            color: LemonColor.onboardingTitle,
-                            fontFamily: FontFamily.nohemiVariable,
-                          ),
-                        ),
-                        SizedBox(height: Spacing.extraSmall),
-                        Text(
-                          t.onboarding.findYourLookDesc,
-                          style: theme.textTheme.bodyMedium,
-                        ),
-                        SizedBox(height: Spacing.medium),
-                        OnboardingPhotoPicker(
-                          imageFile: state.profilePhoto,
-                        ),
-                      ],
+                  InkWell(
+                    onTap: () =>
+                        context.router.push(const OnboardingAboutRoute()),
+                    child: Text(
+                      t.onboarding.skip,
+                      style: Typo.medium.copyWith(fontWeight: FontWeight.w400),
                     ),
                   ),
-                  LinearGradientButton(
-                    onTap: state.profilePhoto == null ? null : bloc.uploadImage,
-                    label: t.onboarding.next,
-                    textStyle: Typo.medium.copyWith(
-                      fontFamily: FontFamily.nohemiVariable,
-                      fontWeight: FontWeight.w600,
-                      color: theme.colorScheme.onPrimary,
-                    ),
-                    height: Sizing.large,
-                    radius: BorderRadius.circular(LemonRadius.large),
-                    mode: state.profilePhoto == null
-                        ? GradientButtonMode.defaultMode
-                        : GradientButtonMode.lavenderMode,
-                    loadingWhen: state.status == OnboardingStatus.loading,
-                  ),
-                  SizedBox(height: 24.h),
+                  SizedBox(width: Spacing.smMedium),
                 ],
               ),
+            ],
+          ),
+          backgroundColor: theme.colorScheme.primary,
+          body: Padding(
+            padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: Spacing.medium),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        t.onboarding.findYourLook,
+                        style: TextStyle(
+                          fontSize: 26.sp,
+                          fontWeight: FontWeight.w800,
+                          color: LemonColor.onboardingTitle,
+                          fontFamily: FontFamily.nohemiVariable,
+                        ),
+                      ),
+                      SizedBox(height: Spacing.extraSmall),
+                      Text(
+                        t.onboarding.findYourLookDesc,
+                        style: theme.textTheme.bodyMedium,
+                      ),
+                      SizedBox(height: Spacing.medium),
+                      OnboardingPhotoPicker(
+                        imageFile: state.profilePhoto,
+                      ),
+                    ],
+                  ),
+                ),
+                LinearGradientButton(
+                  onTap: state.profilePhoto == null ? null : bloc.uploadImage,
+                  label: t.onboarding.next,
+                  textStyle: Typo.medium.copyWith(
+                    fontFamily: FontFamily.nohemiVariable,
+                    fontWeight: FontWeight.w600,
+                    color: theme.colorScheme.onPrimary,
+                  ),
+                  height: Sizing.large,
+                  radius: BorderRadius.circular(LemonRadius.large),
+                  mode: state.profilePhoto == null
+                      ? GradientButtonMode.defaultMode
+                      : GradientButtonMode.lavenderMode,
+                  loadingWhen: state.status == OnboardingStatus.loading,
+                ),
+                SizedBox(height: 24.h),
+              ],
             ),
           ),
         );
