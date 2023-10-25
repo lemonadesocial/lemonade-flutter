@@ -53,6 +53,12 @@ class AppRouter extends $AppRouter {
           page: OnboardingWrapperRoute.page,
           children: [
             AutoRoute(
+              page: OnboardingTermAdultRoute.page,
+            ),
+            AutoRoute(
+              page: OnboardingTermConditionsRoute.page,
+            ),
+            AutoRoute(
               page: OnboardingUsernameRoute.page,
             ),
             AutoRoute(
@@ -72,6 +78,7 @@ class AppRouter extends $AppRouter {
         AutoRoute(page: CommunityRoute.page),
         AutoRoute(page: QrCodeRoute.page),
         AutoRoute(page: SettingBlockRoute.page),
+        AutoRoute(page: LocationRequestRoute.page),
         chatRoutes,
         eventBuyTicketsRoutes,
         ...postRoutes,

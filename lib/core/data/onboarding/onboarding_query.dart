@@ -1,3 +1,4 @@
+import 'package:app/core/data/user/dtos/user_query.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 const listingFragment = '''
@@ -182,7 +183,8 @@ final updateUserProfileQuery = gql('''
   $listingFragment
   $profileFragment
   $privateFragment
-  
+  $userTermFragment
+
   mutation (
   \$currency: String
   \$date_of_birth: DateTimeISO
@@ -219,6 +221,8 @@ final updateUserProfileQuery = gql('''
   \$music: [String!]
   \$data: JSON
   \$notification_filters: [JSON!]
+  \$terms_accepted_adult: Boolean
+  \$terms_accepted_conditions: Boolean
 ) {
   updateUser(
     input: {
@@ -257,11 +261,14 @@ final updateUserProfileQuery = gql('''
       music: \$music
       data: \$data
       notification_filters: \$notification_filters
+      terms_accepted_adult: \$terms_accepted_adult
+      terms_accepted_conditions: \$terms_accepted_conditions
     }
   ) {
     ...listingFragment
     ...profileFragment
     ...privateFragment
+    ...userTermFragment
     __typename
   }
 }

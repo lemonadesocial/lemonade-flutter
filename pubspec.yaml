@@ -114,6 +114,7 @@ dependencies:
 
   # Loading layer
   flutter_easyloading: ^3.0.5
+  shorebird_code_push: ^1.1.0
 
   # payment
   flutter_stripe: ^9.4.0
@@ -163,6 +164,7 @@ flutter:
     - .env
     - .env.staging
     - .env.production
+    - shorebird.yaml
 
   fonts:
     - family: CircularStd

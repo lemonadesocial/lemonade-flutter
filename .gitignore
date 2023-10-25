@@ -59,3 +59,5 @@ app.*.map.json
 *.gen.dart
 *.config.dart
 
+shorebird.yaml
+

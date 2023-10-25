@@ -16,8 +16,30 @@
   "aboutYouDesc": "Announce yourself to the world!",
   "interest": "Interests",
   "interestDesc": "Pick what you are passionate about & unlock a world of tailored content",
-  "usernameAvailable" : "Username available",
+  "usernameAvailable": "Username available",
   "usernameTaken": "Username unavailable",
   "selectImage": "Select image",
-  "deleteImage": "Remove photo"
+  "deleteImage": "Remove photo",
+  "termAdult": {
+    "title": "Are you over 18?",
+    "description": "You need to be 18 years old or above to access",
+    "action": "Yes, I am 18+"
+  },
+  "termConditions": {
+    "title": "Fostering a positive, inclusive, and safe environment",
+    "description": "We develop and use tools and offer resources to our community members that help to make their experiences positive and inclusive, including when we think they might need help. We also have collaborate with teams that work to combat abuse and violations of our Terms and policies, as well as harmful and deceptive behavior. We use all the information we have-including your information-to try to keep our platform secure.",
+    "action": "I agree"
+  },
+  "termConditionsStaySafe": {
+    "title": "Stay safe",
+    "description": "Don’t be quick to give out personal information"
+  },
+  "termConditionsPlayItCool": {
+    "title": "Play it cool",
+    "description": "Respect others & always be kind"
+  },
+  "termConditionsBeProactive": {
+    "title": "Be proactive",
+    "description": "Always report bad behaviour"
+  }
 }

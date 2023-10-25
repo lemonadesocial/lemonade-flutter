@@ -78,6 +78,8 @@ class User {
     this.companyName,
     this.notificationFilterList,
     this.blockedList,
+    this.termsAcceptedAdult,
+    this.termsAcceptedConditions,
   });
 
   factory User.fromDto(UserDto dto) {
@@ -141,6 +143,8 @@ class User {
       notificationFilterList:
           dto.notificationFilter.map((e) => e.type).toList(),
       blockedList: dto.blockedExpanded.map((e) => User.fromDto(e)).toList(),
+      termsAcceptedAdult: dto.termsAcceptedAdult,
+      termsAcceptedConditions: dto.termsAcceptedConditions,
     );
   }
 
@@ -193,6 +197,8 @@ class User {
   final List<String>? notificationFilterList;
 
   final List<User>? blockedList;
+  final bool? termsAcceptedAdult;
+  final bool? termsAcceptedConditions;
 }
 
 class DiscordUserInfo {

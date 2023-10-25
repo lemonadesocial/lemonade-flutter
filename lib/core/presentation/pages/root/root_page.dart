@@ -6,6 +6,7 @@ import 'package:app/core/presentation/widgets/home/create_pop_up_page.dart';
 import 'package:app/core/presentation/widgets/home/floating_create_button.dart';
 import 'package:app/core/presentation/widgets/poap/poap_claim_transfer_controller_widget/poap_claim_transfer_controller_widget.dart';
 import 'package:app/core/utils/drawer_utils.dart';
+import 'package:app/core/utils/onboarding_utils.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
@@ -31,11 +32,9 @@ class RootPage extends StatelessWidget {
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
         state.maybeWhen(
-          onBoardingRequired: (authSession) => context.router.push(
-            OnboardingWrapperRoute(
-              children: [OnboardingUsernameRoute()],
-            ),
-          ),
+          onBoardingRequired: (user) {
+            OnboardingUtils.startOnboarding(context, user: user);
+          },
           orElse: () {},
         );
       },

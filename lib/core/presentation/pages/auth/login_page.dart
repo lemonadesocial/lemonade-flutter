@@ -2,10 +2,10 @@ import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
+import 'package:app/core/utils/onboarding_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -33,12 +33,8 @@ class LoginPageState extends State<LoginPage> {
             authenticated: (_) {
               AutoRouter.of(context).pop();
             },
-            onBoardingRequired: (authSession) {
-              context.router.push(
-                OnboardingWrapperRoute(
-                  children: [OnboardingUsernameRoute()],
-                ),
-              );
+            onBoardingRequired: (user) {
+              OnboardingUtils.startOnboarding(context, user: user);
             },
             orElse: () {},
           );
