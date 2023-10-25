@@ -82,7 +82,7 @@ class RootPage extends StatelessWidget {
                       authenticated: (session) =>
                           const CreatePopUpPage().showAsBottomSheet(
                         context,
-                        heightFactor: 0.82,
+                        heightFactor: 0.72,
                       ),
                       orElse: () => context.router.navigate(const LoginRoute()),
                     );

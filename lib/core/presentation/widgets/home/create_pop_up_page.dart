@@ -84,7 +84,8 @@ class CreatePopUpPage extends StatelessWidget with LemonBottomSheet {
               content: t.home.poapDesc,
               suffixIcon: Assets.icons.icCreatePoap.svg(),
             ),
-            SizedBox(height: Spacing.xSmall),
+            // TODO: Temporary comment, maybe re-open in future
+            // SizedBox(height: Spacing.xSmall),
             // CreatePopUpTile(
             //   colors: CreatePopupGradient.collectible.colors,
             //   label: t.home.collectible,
