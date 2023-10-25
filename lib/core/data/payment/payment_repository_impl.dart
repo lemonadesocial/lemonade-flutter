@@ -15,6 +15,13 @@ class PaymentRepositoryImpl extends PaymentRepository {
 
   @override
   Future<Either<Failure, bool>> createNewCard() async {
+    // final result = await _client.mutate(
+    //   MutationOptions(
+    //     document: createNewCardQuery,
+    //     //TODO: add another mutation variable here
+    //     variables: {},
+    //   ),
+    // );
     return right(true);
   }
 

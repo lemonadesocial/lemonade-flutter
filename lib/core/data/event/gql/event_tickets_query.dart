@@ -82,3 +82,23 @@ final getListCardQuery = gql('''
     }
   }
 ''');
+
+final createNewCardQuery = gql('''
+  mutation CreateStripeCard(\$paymentAccount: MongoID!, payment_method: \$paymentMethod) {
+    createStripeCard(
+      payment_account: \$paymentAccount
+      payment_method: \$paymentMethod
+    ) {
+      _id
+      active
+      stamp
+      payment_account
+      provider_id
+      user
+      brand
+      name
+      last4
+    }
+  }
+
+''');
