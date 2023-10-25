@@ -49,7 +49,7 @@ class CommunityUser with _$CommunityUser {
       id: dto.id,
       userName: dto.username,
       displayName: dto.name,
-      imageAvatar: dto.imageAvatar
+      imageAvatar: dto.imageAvatar,
     );
   }
 }

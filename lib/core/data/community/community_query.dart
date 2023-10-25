@@ -89,7 +89,6 @@ final getUserFollower = gql('''
 }
 ''');
 
-
 final getUsersSpotlightQuery = gql('''
   $baseUserFragment
   
