@@ -1,8 +1,11 @@
 import 'package:app/core/data/community/community_query.dart';
 import 'package:app/core/data/community/dtos/community_follower_dto/community_follower_dto.dart';
 import 'package:app/core/data/community/dtos/community_friend_dto/community_friend_dto.dart';
+import 'package:app/core/data/community/dtos/community_spotlight_dto/community_spotlight_dto.dart';
+import 'package:app/core/data/user/dtos/user_dtos.dart';
 import 'package:app/core/domain/community/community_repository.dart';
 import 'package:app/core/domain/community/community_user/community_user.dart';
+import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/injection/register_module.dart';
@@ -60,8 +63,8 @@ class CommunityRepositoryImpl extends CommunityRepository {
           final receiveList = data['getUserFollows'] as List<dynamic>;
           return receiveList
               .map(
-                (e) => CommunityUser.fromExpandDto(
-                  CommunityFolloweeDto.fromJson(e).expandDto,
+                (item) => CommunityUser.fromDto(
+                  CommunitySpotlightDto.fromJson(item),
                 ),
               )
               .toList();
@@ -97,6 +100,28 @@ class CommunityRepositoryImpl extends CommunityRepository {
                     (item) => CommunityUser.fromFriendDto(item),
                   )
                   .toList();
+        },
+      ),
+    );
+    if (result.hasException) return Left(Failure());
+    return Right(result.parsedData ?? []);
+  }
+
+  @override
+  Future<Either<Failure, List<CommunityUser>>> getUsersSpotlight() async {
+    final result = await _gqlClient.query(
+      QueryOptions(
+        document: getUsersSpotlightQuery,
+        fetchPolicy: FetchPolicy.networkOnly,
+        parserFn: (data) {
+          final receiveList = data['getUsersSpotlight'] as List<dynamic>;
+          return receiveList
+              .map(
+                (item) => CommunityUser.fromDto(
+                  CommunitySpotlightDto.fromJson(item),
+                ),
+              )
+              .toList();
         },
       ),
     );

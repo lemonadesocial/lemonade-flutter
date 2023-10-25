@@ -7,6 +7,7 @@ class CommunityState with _$CommunityState {
     @Default([]) List<CommunityUser> friendList,
     @Default([]) List<CommunityUser> followerList,
     @Default([]) List<CommunityUser> followeeList,
+    @Default([]) List<CommunityUser> usersSpotlightList,
     String? error,
   }) = _CommunityState;
 

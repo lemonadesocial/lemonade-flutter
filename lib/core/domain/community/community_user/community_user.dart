@@ -1,5 +1,6 @@
 import 'package:app/core/data/community/dtos/community_follower_dto/community_follower_dto.dart';
 import 'package:app/core/data/community/dtos/community_friend_dto/community_friend_dto.dart';
+import 'package:app/core/data/community/dtos/community_spotlight_dto/community_spotlight_dto.dart';
 import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/utils/image_utils.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -41,6 +42,14 @@ class CommunityUser with _$CommunityUser {
       displayName: dto.name,
       newPhotos: dto.newPhotos,
       imageAvatar: dto.imageAvatar,
+    );
+  }
+  factory CommunityUser.fromDto(CommunitySpotlightDto dto) {
+    return CommunityUser(
+      id: dto.id,
+      userName: dto.username,
+      displayName: dto.name,
+      imageAvatar: dto.imageAvatar
     );
   }
 }
