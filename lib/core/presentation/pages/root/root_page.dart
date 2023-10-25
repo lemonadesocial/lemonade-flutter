@@ -30,7 +30,7 @@ class RootPage extends StatelessWidget {
     );
 
     final isIpad = DeviceUtils.isIpad();
-    final heightFactor = isIpad ? 0.45 : 0.72;
+    final heightFactor = isIpad ? 0.35 : 0.60;
     final primaryColor = Theme.of(context).colorScheme.primary;
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
