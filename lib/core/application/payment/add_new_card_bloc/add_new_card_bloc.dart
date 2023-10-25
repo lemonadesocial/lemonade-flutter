@@ -1,5 +1,6 @@
 import 'package:app/core/domain/payment/payment_repository.dart';
 import 'package:bloc/bloc.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'add_new_card_state.dart';
@@ -29,15 +30,32 @@ class AddNewCardBloc extends Cubit<AddNewCardState> {
 
   Future<void> addNewCard() async {
     emit(state.copyWith(status: AddNewCardBlocStatus.loading));
-    final result = await _paymentRepository.createNewCard();
+    // For debugging purpose
+    Stripe.publishableKey = 'pk_test_TYooMQauvdEDq54NiTphI7jx';
+    final cardDetail = CardDetails(
+      number: state.cardNumber,
+      expirationMonth: int.parse(state.validThrough!.substring(0, 2)),
+      expirationYear: int.parse(
+        state.validThrough!.substring(
+          state.validThrough!.length - 2,
+        ),
+      ),
+      cvc: state.cvv,
+    );
+    CardTokenParams cardParams = CardTokenParams(
+      type: TokenType.Card,
+      name: state.cardHolderName,
+    );
+    await Stripe.instance.dangerouslyUpdateCardDetails(cardDetail);
+    final token = await Stripe.instance.createToken(
+      CreateTokenParams.card(params: cardParams),
+    );
+
+    final result = await _paymentRepository.createNewCard(tokenId: token.id);
     result.fold(
       (l) => emit(state.copyWith(status: AddNewCardBlocStatus.error)),
-      (createSuccess) {
-        if (createSuccess) {
-          emit(state.copyWith(status: AddNewCardBlocStatus.success));
-        } else {
-          emit(state.copyWith(status: AddNewCardBlocStatus.error));
-        }
+      (newCardInfo) {
+        emit(state.copyWith(status: AddNewCardBlocStatus.success));
       },
     );
   }
