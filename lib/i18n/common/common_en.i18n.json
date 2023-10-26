@@ -115,6 +115,6 @@
     "emptyList": "Nothing here",
     "locationRequest": {
         "title": "Set your location services",
-        "description": "We use your location to show you geo-locked collectibles & events around you"
+        "description": "We require access to your location to display geo-locked collectibles & events around you. \nWe only access your location while you're using the app and do not collect background location data"
     }
 }

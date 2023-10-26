@@ -5,6 +5,7 @@ import 'package:app/core/presentation/widgets/common/drawer/lemon_drawer.dart';
 import 'package:app/core/presentation/widgets/home/create_pop_up_page.dart';
 import 'package:app/core/presentation/widgets/home/floating_create_button.dart';
 import 'package:app/core/presentation/widgets/poap/poap_claim_transfer_controller_widget/poap_claim_transfer_controller_widget.dart';
+import 'package:app/core/utils/device_utils.dart';
 import 'package:app/core/utils/drawer_utils.dart';
 import 'package:app/core/utils/onboarding_utils.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -28,6 +29,8 @@ class RootPage extends StatelessWidget {
       supportedOS: ['android', 'ios'],
     );
 
+    final isIpad = DeviceUtils.isIpad();
+    final heightFactor = isIpad ? 0.35 : 0.60;
     final primaryColor = Theme.of(context).colorScheme.primary;
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
@@ -82,7 +85,7 @@ class RootPage extends StatelessWidget {
                       authenticated: (session) =>
                           const CreatePopUpPage().showAsBottomSheet(
                         context,
-                        heightFactor: 0.82,
+                        heightFactor: heightFactor,
                       ),
                       orElse: () => context.router.navigate(const LoginRoute()),
                     );
