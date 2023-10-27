@@ -77,27 +77,28 @@ class CreatePopUpPage extends StatelessWidget with LemonBottomSheet {
                 ),
               ),
             ),
-            SizedBox(height: Spacing.xSmall),
-            CreatePopUpTile(
-              colors: CreatePopupGradient.poap.colors,
-              label: t.home.poap,
-              content: t.home.poapDesc,
-              suffixIcon: Assets.icons.icCreatePoap.svg(),
-            ),
-            SizedBox(height: Spacing.xSmall),
-            CreatePopUpTile(
-              colors: CreatePopupGradient.collectible.colors,
-              label: t.home.collectible,
-              content: t.home.collectibleDesc,
-              suffixIcon: ThemeSvgIcon(
-                color: LemonColor.collectibleColor,
-                builder: (colorFilter) => Assets.icons.icCrystal.svg(
-                  width: 30.w,
-                  height: 30.w,
-                  colorFilter: colorFilter,
-                ),
-              ),
-            ),
+            // TODO: Temporary comment, maybe re-open in future
+            // SizedBox(height: Spacing.xSmall),
+            // CreatePopUpTile(
+            //   colors: CreatePopupGradient.poap.colors,
+            //   label: t.home.poap,
+            //   content: t.home.poapDesc,
+            //   suffixIcon: Assets.icons.icCreatePoap.svg(),
+            // ),
+            // SizedBox(height: Spacing.xSmall),
+            // CreatePopUpTile(
+            //   colors: CreatePopupGradient.collectible.colors,
+            //   label: t.home.collectible,
+            //   content: t.home.collectibleDesc,
+            //   suffixIcon: ThemeSvgIcon(
+            //     color: LemonColor.collectibleColor,
+            //     builder: (colorFilter) => Assets.icons.icCrystal.svg(
+            //       width: 30.w,
+            //       height: 30.w,
+            //       colorFilter: colorFilter,
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),

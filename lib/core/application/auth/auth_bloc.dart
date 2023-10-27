@@ -96,7 +96,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         FirebaseCrashlytics.instance.setUserIdentifier('');
         FirebaseAnalytics.instance.setUserId(id: null);
       }
-      emit(const AuthEvent.unauthenticated());
+      emit(const AuthState.unauthenticated(isChecking: false));
     });
   }
 
