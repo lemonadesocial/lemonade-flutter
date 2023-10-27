@@ -8,6 +8,7 @@ import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
+import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -15,6 +16,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AddCardBottomSheet extends StatefulWidget with LemonBottomSheet {
   AddCardBottomSheet({super.key});
@@ -91,6 +93,7 @@ class _AddCardBottomSheetState extends State<AddCardBottomSheet> {
                         autofocus: true,
                         onChange: bloc.onCardHolderNameChange,
                         hintText: t.event.eventPayment.cardHolderName,
+                        errorText: state.error != null ? ' ' : null,
                       ),
                       SizedBox(height: Spacing.xSmall),
                       LemonTextField(
@@ -102,6 +105,7 @@ class _AddCardBottomSheetState extends State<AddCardBottomSheet> {
                         },
                         hintText: t.event.eventPayment.cardNumber,
                         textInputType: TextInputType.number,
+                        errorText: state.error != null ? ' ' : null,
                         inputFormatters: [
                           LengthLimitingTextInputFormatter(19),
                           FilteringTextInputFormatter.digitsOnly,
@@ -122,6 +126,7 @@ class _AddCardBottomSheetState extends State<AddCardBottomSheet> {
                               },
                               hintText: t.event.eventPayment.validThrough,
                               textInputType: TextInputType.number,
+                              errorText: state.error != null ? ' ' : null,
                               inputFormatters: [
                                 LengthLimitingTextInputFormatter(5),
                                 FilteringTextInputFormatter.digitsOnly,
@@ -140,6 +145,7 @@ class _AddCardBottomSheetState extends State<AddCardBottomSheet> {
                                 }
                               },
                               hintText: t.event.eventPayment.cvc,
+                              errorText: state.error != null ? ' ' : null,
                               textInputType: TextInputType.number,
                               inputFormatters: [
                                 LengthLimitingTextInputFormatter(3),
@@ -148,6 +154,19 @@ class _AddCardBottomSheetState extends State<AddCardBottomSheet> {
                             ),
                           ),
                         ],
+                      ),
+                      Visibility(
+                        visible: state.error != null,
+                        child: SizedBox(
+                          width: 1.sw,
+                          child: Text(
+                            state.error ?? '',
+                            textAlign: TextAlign.end,
+                            style: Typo.small.copyWith(
+                              color: LemonColor.errorRedBg,
+                            ),
+                          ),
+                        ),
                       ),
                       SizedBox(height: Spacing.smMedium * 2),
                       LinearGradientButton(
@@ -182,7 +201,9 @@ class _AddCardBottomSheetState extends State<AddCardBottomSheet> {
 class CardNumberFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
     var text = newValue.text;
 
     if (newValue.selection.baseOffset == 0) {
@@ -210,7 +231,9 @@ class CardNumberFormatter extends TextInputFormatter {
 class CardDateFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
     var text = newValue.text;
 
     if (newValue.selection.baseOffset == 0) {
@@ -222,8 +245,7 @@ class CardDateFormatter extends TextInputFormatter {
       buffer.write(text[i]);
       var nonZeroIndex = i + 1;
       if (nonZeroIndex % 2 == 0 && nonZeroIndex != text.length) {
-        buffer.write(
-            '/'); // Replace this with anything you want to put after each 4 numbers
+        buffer.write('/');
       }
     }
 

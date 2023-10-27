@@ -37,7 +37,6 @@ class PaymentMethodScreen extends StatelessWidget {
             ),
           ),
           SizedBox(height: Spacing.medium),
-          // ListView.separated(itemBuilder: itemBuilder, separatorBuilder: separatorBuilder, itemCount: itemCount)
         ],
       ),
     );

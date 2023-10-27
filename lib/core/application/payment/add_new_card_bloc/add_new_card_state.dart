@@ -10,6 +10,7 @@ class AddNewCardState with _$AddNewCardState {
     String? cardNumber,
     String? validThrough,
     String? cvv,
+    String? error,
   }) = _AddNewCardState;
 
   factory AddNewCardState.initial() => AddNewCardState();

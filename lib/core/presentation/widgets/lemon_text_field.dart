@@ -1,3 +1,4 @@
+import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +24,7 @@ class LemonTextField extends StatelessWidget {
     this.contentPadding,
     this.textInputType,
     this.focusNode,
+    this.errorText,
   }) : super(key: key);
 
   final ValueChanged<String> onChange;
@@ -41,6 +43,7 @@ class LemonTextField extends StatelessWidget {
   final EdgeInsets? contentPadding;
   final TextInputType? textInputType;
   final FocusNode? focusNode;
+  final String? errorText;
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +51,10 @@ class LemonTextField extends StatelessWidget {
     final border = OutlineInputBorder(
       borderSide:
           BorderSide(color: borderColor ?? theme.colorScheme.outlineVariant),
+      borderRadius: BorderRadius.circular(12.r),
+    );
+    final errorBorder = OutlineInputBorder(
+      borderSide: const BorderSide(color: LemonColor.errorRedBg),
       borderRadius: BorderRadius.circular(12.r),
     );
     return Column(
@@ -79,9 +86,10 @@ class LemonTextField extends StatelessWidget {
             hintText: hintText,
             hintStyle: theme.textTheme.bodyMedium!
                 .copyWith(color: theme.colorScheme.outlineVariant),
+            errorText: errorText,
             enabledBorder: border,
             focusedBorder: border,
-            errorBorder: border,
+            errorBorder: errorBorder,
             border: border,
             contentPadding: contentPadding ?? EdgeInsets.all(Spacing.smMedium),
             suffixIcon: suffixIcon,

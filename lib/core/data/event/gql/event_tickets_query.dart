@@ -84,9 +84,9 @@ final getListCardQuery = gql('''
 ''');
 
 final createNewCardQuery = gql('''
-  mutation CreateStripeCard(\$paymentAccount: MongoID!, payment_method: \$paymentMethod) {
+  mutation CreateStripeCard(\$provider: PaymentProvider!, \$paymentMethod: String!) {
     createStripeCard(
-      payment_account: \$paymentAccount
+      provider: \$provider
       payment_method: \$paymentMethod
     ) {
       _id
