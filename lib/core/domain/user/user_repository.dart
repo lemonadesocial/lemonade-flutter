@@ -32,4 +32,6 @@ abstract class UserRepository {
   Future<Either<Failure, bool>> createUserFollow({required String followee});
 
   Future<Either<Failure, bool>> deleteUserFollow({required String followee});
+
+  Future<Either<Failure, bool>> deleteUser();
 }

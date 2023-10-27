@@ -1,15 +1,10 @@
 import 'dart:async';
 
 import 'package:app/core/config.dart';
-import 'package:app/core/data/user/dtos/user_query.dart';
-import 'package:app/core/failure.dart';
 import 'package:app/core/oauth/custom_oauth_helper.dart';
-import 'package:app/core/utils/gql/gql.dart';
-import 'package:app/injection/register_module.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:injectable/injectable.dart';
 import 'package:oauth2_client/access_token_response.dart';
 import 'package:oauth2_client/oauth2_client.dart';
@@ -58,10 +53,6 @@ class AppOauth {
     scopes: scopes,
   );
 
-  AppOauth() {
-    init();
-  }
-
   init() async {
     await _checkTokenState();
   }
@@ -107,23 +98,6 @@ class AppOauth {
     }
   }
 
-  Future<Either<Failure, bool>> deleteAccount() async {
-    logout();
-    final gqlClient = getIt<AppGQL>().client;
-    final result = await gqlClient.mutate(
-      MutationOptions(
-        document: deleteUserQuery,
-        fetchPolicy: FetchPolicy.networkOnly,
-        parserFn: (data) {
-          return data['deleteUser'] as bool;
-        },
-      ),
-    );
-
-    if (result.hasException) return Left(Failure());
-    return Right(result.parsedData!);
-  }
-
   Future<void> forceLogout() async {
     _reset();
   }
@@ -141,7 +115,10 @@ class AppOauth {
   Future<String> getTokenForGql() async {
     AccessTokenResponse? tokenRes;
     tokenRes = await getTokenFromStorage();
-    if (tokenRes == null) return '';
+    if (tokenRes == null) {
+      _processTokenState(Future.value(tokenRes));
+      return '';
+    }
     if (tokenRes.refreshNeeded() || tokenRes.isExpired()) {
       // if token is expired, all coming request have to wait only one refresh token request
       // prevent duplicate call refresh token
@@ -150,7 +127,7 @@ class AppOauth {
         refreshTokenFuture = null;
         return tokenRes?.accessToken != null ? '${tokenRes?.accessToken}' : '';
       }).catchError((e) {
-        _reset();
+        _processTokenState(Future.value(null));
         return '';
       });
       return refreshTokenFuture!;
