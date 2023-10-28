@@ -66,7 +66,7 @@ class RootPage extends StatelessWidget {
                   const HomeRoute(),
                   const DiscoverRoute(),
                   authState.maybeWhen(
-                    authenticated: (session) => NotificationRoute(),
+                    authenticated: (session) => const NotificationRoute(),
                     orElse: EmptyRoute.new,
                   ),
                   authState.maybeWhen(
