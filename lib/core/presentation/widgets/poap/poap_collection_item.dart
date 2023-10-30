@@ -25,7 +25,7 @@ class PoapCollectionItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    if (!visible) return SizedBox(width: 78.w);
+    if (!visible) return SizedBox(width: 70.w);
 
     return InkWell(
       onTap: () {
