@@ -66,3 +66,39 @@ final getTicketsQuery = gql('''
     }
   }
 ''');
+
+final getListCardQuery = gql('''
+  query GetStripeCards(\$skip: Int!, \$limit: Int!, \$provider: PaymentProvider){
+    getStripeCards(skip: \$skip, limit: \$limit, provider: \$provider) {
+      _id
+      active
+      stamp
+      provider
+      provider_id
+      user
+      brand
+      name
+      last4
+    }
+  }
+''');
+
+final createNewCardMutation = gql('''
+  mutation CreateStripeCard(\$paymentAccount: MongoID!, payment_method: \$paymentMethod) {
+    createStripeCard(
+      payment_account: \$paymentAccount
+      payment_method: \$paymentMethod
+    ) {
+      _id
+      active
+      stamp
+      payment_account
+      provider_id
+      user
+      brand
+      name
+      last4
+    }
+  }
+
+''');

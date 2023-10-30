@@ -1,0 +1,11 @@
+{
+  "payUsing": "Pay using",
+  "payUsingDesc": "Choose your preferred payment method",
+  "addNewCard": "Add new card",
+  "addNewCardDesc": "Enter your card details below",
+  "name": "Name on card",
+  "number": "Card number",
+  "cardDate": "Valid through",
+  "cvv": "CVV",
+  "addCard": "Add card"
+}

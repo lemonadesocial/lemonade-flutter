@@ -115,7 +115,10 @@ dependencies:
   # Loading layer
   flutter_easyloading: ^3.0.5
   shorebird_code_push: ^1.1.0
-  
+
+  # payment
+  flutter_stripe: ^9.4.0
+
 dependency_overrides:
   matrix_api_lite:
     git:

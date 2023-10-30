@@ -1,3 +1,4 @@
+import 'package:app/core/application/payment/payment_bloc/payment_bloc.dart';
 import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/presentation/widgets/common/slide_to_act/slide_to_act.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
@@ -9,6 +10,7 @@ import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EventOrderSlideToPay extends StatelessWidget {
@@ -20,9 +22,11 @@ class EventOrderSlideToPay extends StatelessWidget {
     final t = Translations.of(context);
     final amountText =
         NumberUtils.formatCurrency(amount: 10000, currency: Currency.USD);
+    final bloc = context.read<PaymentBloc>();
     return SizedBox(
       height: 60.w,
       child: SlideAction(
+        onSubmit: () => bloc.createNewPayment(),
         text: '${t.event.eventPayment.slideToPay} $amountText',
         textStyle: Typo.medium.copyWith(
           color: LemonColor.paleViolet,

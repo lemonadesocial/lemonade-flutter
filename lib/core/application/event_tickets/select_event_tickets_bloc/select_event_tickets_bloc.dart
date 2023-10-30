@@ -30,7 +30,7 @@ class SelectEventTicketTypesBloc
   ) async {
     final newSelectedTicketTypes = [
       event.ticketType,
-      ...state.selectedTicketTypes
+      ...state.selectedTicketTypes,
     ].unique((item) => item.id);
     totalSelectedCount = _calculateTotalSelectedCount(newSelectedTicketTypes);
     emit(
