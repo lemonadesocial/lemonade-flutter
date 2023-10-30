@@ -6,7 +6,6 @@ import 'package:app/core/presentation/widgets/bottom_bar/bottom_bar_widget.dart'
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/drawer_utils.dart';
-import 'package:app/core/utils/swipe_detector.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -56,34 +55,21 @@ class DiscoverPage extends StatelessWidget {
           ),
         ],
       ),
-      body: SwipeDetector(
-        child: CustomScrollView(
-          slivers: [
-            SliverPadding(
-              padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
-              sliver: const DiscoverCards(),
-            ),
-            SliverPadding(
-              padding: EdgeInsets.symmetric(vertical: Spacing.xSmall),
-            ),
-            const DiscoverBadgesNearYou(),
-            const DiscoverUpcomingEvents(),
-            SliverToBoxAdapter(
-              child: SizedBox(height: 2 * BottomBar.bottomBarHeight),
-            ),
-          ],
-        ),
-        onSwipeUp: () {},
-        onSwipeDown: () {},
-        onSwipeLeft: () {
-          context.read<AuthBloc>().state.maybeWhen(
-                authenticated: (session) =>
-                    AutoRouter.of(context).navigate(const ChatListRoute()),
-                orElse: () =>
-                    AutoRouter.of(context).navigate(const LoginRoute()),
-              );
-        },
-        onSwipeRight: () {},
+      body: CustomScrollView(
+        slivers: [
+          SliverPadding(
+            padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
+            sliver: const DiscoverCards(),
+          ),
+          SliverPadding(
+            padding: EdgeInsets.symmetric(vertical: Spacing.xSmall),
+          ),
+          const DiscoverBadgesNearYou(),
+          const DiscoverUpcomingEvents(),
+          SliverToBoxAdapter(
+            child: SizedBox(height: 2 * BottomBar.bottomBarHeight),
+          ),
+        ],
       ),
     );
   }
