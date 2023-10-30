@@ -8,6 +8,7 @@ abstract class PaymentRepository {
   Future<Either<Failure, List<PaymentCard>>> getListCard();
 
   Future<Either<Failure, PaymentCard>> createNewCard({
+    required String userId,
     required String tokenId,
   });
 

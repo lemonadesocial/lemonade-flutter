@@ -29,8 +29,8 @@ class AddPromoCodeInput extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               // TODO: switch between applied badge and apply button
-              // ApplyPromoCodeButton(),
-              AppliedPromoCodeBadge()
+              ApplyPromoCodeButton(),
+              // AppliedPromoCodeBadge()
             ],
           ),
         ),

@@ -1,10 +1,10 @@
 import 'package:app/core/application/payment/add_new_card_bloc/add_new_card_bloc.dart';
-import 'package:app/core/domain/payment/entities/payment_card_entity/payment_card_entity.dart';
 import 'package:app/core/domain/payment/payment_repository.dart';
 import 'package:app/core/presentation/widgets/back_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_bottom_sheet_mixin.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
+import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
@@ -19,7 +19,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AddCardBottomSheet extends StatefulWidget with LemonBottomSheet {
-  AddCardBottomSheet({super.key});
+  AddCardBottomSheet({
+    super.key,
+    required this.publishableKey,
+  });
+
+  final String publishableKey;
 
   @override
   State<AddCardBottomSheet> createState() => _AddCardBottomSheetState();
@@ -33,7 +38,9 @@ class _AddCardBottomSheetState extends State<AddCardBottomSheet> {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-    final bloc = AddNewCardBloc(getIt<PaymentRepository>());
+    final bloc = AddNewCardBloc(
+      getIt<PaymentRepository>(),
+    );
     return BlocProvider(
       create: (context) => bloc,
       child: Builder(
@@ -162,7 +169,12 @@ class _AddCardBottomSheetState extends State<AddCardBottomSheet> {
                       ),
                       SizedBox(height: Spacing.smMedium * 2),
                       LinearGradientButton(
-                        onTap: state.fieldValidated ? bloc.addNewCard : null,
+                        onTap: state.fieldValidated
+                            ? () => bloc.addNewCard(
+                                  widget.publishableKey,
+                                  userId: AuthUtils.getUserId(context),
+                                )
+                            : null,
                         radius: BorderRadius.circular(LemonRadius.large),
                         mode: state.fieldValidated
                             ? GradientButtonMode.lavenderMode

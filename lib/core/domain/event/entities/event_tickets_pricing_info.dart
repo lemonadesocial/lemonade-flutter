@@ -18,7 +18,7 @@ class EventTicketsPricingInfo {
       EventTicketsPricingInfo(
         currency: dto.currency,
         discount: dto.discount,
-        subTotal: dto.subTotal,
+        subTotal: dto.subtotal,
         total: dto.total,
       );
 }

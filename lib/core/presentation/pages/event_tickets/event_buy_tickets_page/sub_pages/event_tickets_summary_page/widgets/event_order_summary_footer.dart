@@ -14,7 +14,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EventOrderSummaryFooter extends StatelessWidget {
-  const EventOrderSummaryFooter({super.key});
+  const EventOrderSummaryFooter({
+    super.key,
+    required this.totalPrice,
+  });
+
+  final double totalPrice;
 
   @override
   Widget build(BuildContext context) {
@@ -43,17 +48,17 @@ class EventOrderSummaryFooter extends StatelessWidget {
                     children: [
                       EventCardTile(paymentCard: state.selectedCard!),
                       SizedBox(height: Spacing.smMedium),
-                      const EventOrderSlideToPay(),
+                      EventOrderSlideToPay(totalPrice: totalPrice),
                     ],
                   )
-                : _emptyPaymentWidget(context);
+                : _emptyPaymentWidget(context, state.publishableKey);
           },
         ),
       ),
     );
   }
 
-  Widget _emptyPaymentWidget(BuildContext context) {
+  Widget _emptyPaymentWidget(BuildContext context, String publishableKey) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
 
@@ -80,8 +85,9 @@ class EventOrderSummaryFooter extends StatelessWidget {
         const Spacer(),
         InkWell(
           onTap: () async {
-            final newCard = await AddCardBottomSheet()
-                .showAsBottomSheet(context) as PaymentCard?;
+            final newCard = await AddCardBottomSheet(
+              publishableKey: publishableKey,
+            ).showAsBottomSheet(context) as PaymentCard?;
             if (newCard != null) {
               context.read<PaymentBloc>().newCardAdded(newCard);
             }

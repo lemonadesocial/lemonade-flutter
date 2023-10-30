@@ -5,6 +5,7 @@ import 'package:app/core/utils/number_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -46,22 +47,26 @@ class TicketSummaryItem extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          Text('${ticket.count} x  '),
           Text(ticket.title ?? ''),
           SizedBox(width: Spacing.extraSmall),
-          Container(
-            width: 21.w,
-            height: 21.w,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
-              color: colorScheme.outline,
-            ),
-            child: Center(
-              child: ThemeSvgIcon(
-                color: colorScheme.onSurfaceVariant,
-                builder: (filter) => Assets.icons.icEdit.svg(
-                  colorFilter: filter,
-                  width: Sizing.small / 2,
-                  height: Sizing.small / 2,
+          InkWell(
+            onTap: () => context.router.pop(),
+            child: Container(
+              width: 21.w,
+              height: 21.w,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
+                color: colorScheme.outline,
+              ),
+              child: Center(
+                child: ThemeSvgIcon(
+                  color: colorScheme.onSurfaceVariant,
+                  builder: (filter) => Assets.icons.icEdit.svg(
+                    colorFilter: filter,
+                    width: Sizing.small / 2,
+                    height: Sizing.small / 2,
+                  ),
                 ),
               ),
             ),

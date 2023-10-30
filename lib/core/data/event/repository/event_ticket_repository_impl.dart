@@ -30,11 +30,14 @@ class EventTicketRepositoryImpl implements EventTicketRepository {
     final result = await _client.query(
       QueryOptions(
         document: calculateTicketsPricingInfoQuery,
-        variables: input.toJson(),
+        variables: {'input': input.toJson()},
         fetchPolicy: FetchPolicy.networkOnly,
-        parserFn: (data) => EventTicketsPricingInfo.fromDto(
-          EventTicketsPricingInfoDto.fromJson(data['calculateTicketsPricing']),
-        ),
+        parserFn: (data) {
+          print('data: $data');
+          return EventTicketsPricingInfo.fromDto(
+            EventTicketsPricingInfoDto.fromJson(data['calculateTicketsPricing']),
+          );
+        } ,
       ),
     );
 

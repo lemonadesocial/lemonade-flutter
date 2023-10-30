@@ -29,7 +29,7 @@ class EventTicketsPaymentMethodView extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
-    return BlocListener<PaymentBloc, PaymentState>(
+    return BlocConsumer<PaymentBloc, PaymentState>(
       listener: (context, state) {
         if (state.status == PaymentStatus.success) {
           context.read<RedeemTicketsBloc>().add(
@@ -39,7 +39,7 @@ class EventTicketsPaymentMethodView extends StatelessWidget {
               );
         }
       },
-      child: Scaffold(
+      builder: (context, state) => Scaffold(
         backgroundColor: colorScheme.background,
         appBar: const LemonAppBar(),
         body: SafeArea(
@@ -85,7 +85,9 @@ class EventTicketsPaymentMethodView extends StatelessWidget {
                       ),
                     ),
                   ),
-                  child: const EventOrderSlideToPay(),
+                  child: EventOrderSlideToPay(
+                    totalPrice: state.pricingInfo?.total ?? 0,
+                  ),
                 ),
               ),
             ],

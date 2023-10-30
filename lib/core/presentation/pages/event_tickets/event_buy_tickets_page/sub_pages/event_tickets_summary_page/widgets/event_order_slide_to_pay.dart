@@ -14,14 +14,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EventOrderSlideToPay extends StatelessWidget {
-  const EventOrderSlideToPay({super.key});
+  const EventOrderSlideToPay({
+    super.key,
+    required this.totalPrice,
+  });
+
+  final double totalPrice;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
     final amountText =
-        NumberUtils.formatCurrency(amount: 10000, currency: Currency.USD);
+        NumberUtils.formatCurrency(amount: totalPrice, currency: Currency.USD);
     final bloc = context.read<PaymentBloc>();
     return SizedBox(
       height: 60.w,

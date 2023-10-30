@@ -15,6 +15,7 @@ class PaymentRepositoryImpl extends PaymentRepository {
 
   @override
   Future<Either<Failure, PaymentCard>> createNewCard({
+    required String userId,
     required String tokenId,
   }) async {
     // TODO: Temporary disable until BE deploy
@@ -28,8 +29,9 @@ class PaymentRepositoryImpl extends PaymentRepository {
     );
     // final result = await _client.mutate(
     //   MutationOptions(
-    //     document: createNewCardQuery,
+    //     document: createNewCardMutation,
     //     variables: {
+    //       'payment_account': userId,
     //       'payment_method': tokenId,
     //     },
     //     parserFn: (data) => PaymentCard.fromDto(
@@ -76,6 +78,6 @@ class PaymentRepositoryImpl extends PaymentRepository {
 
   @override
   Future<Either<Failure, String>> getPublishableKey() async {
-    return Right('');
+    return Right('pk_test_TYooMQauvdEDq54NiTphI7jx');
   }
 }

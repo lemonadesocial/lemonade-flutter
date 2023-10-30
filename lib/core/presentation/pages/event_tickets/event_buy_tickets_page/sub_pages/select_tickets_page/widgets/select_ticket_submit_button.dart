@@ -4,7 +4,6 @@ import 'package:app/core/application/event_tickets/redeem_tickets_bloc/redeem_ti
 import 'package:app/core/application/event_tickets/select_event_tickets_bloc/select_event_tickets_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
-import 'package:app/core/domain/event/input/calculate_tickets_pricing_input/calculate_tickets_pricing_input.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -27,8 +26,6 @@ class SelectTicketSubmitButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final nextTitle =
-        '${t.common.next}${event.cost != 0 ? ' •  ${event.cost}' : ''}';
     final redeemState = context.watch<RedeemTicketsBloc>().state;
     final acceptEventState = context.watch<AcceptEventBloc>().state;
     final assignTicketsState = context.watch<AssignTicketsBloc>().state;
@@ -59,7 +56,7 @@ class SelectTicketSubmitButton extends StatelessWidget {
               }
             },
             radius: BorderRadius.circular(LemonRadius.small * 2),
-            label: isLoading ? t.common.processing : nextTitle,
+            label: isLoading ? t.common.processing : t.common.next,
             mode: GradientButtonMode.lavenderMode,
           ),
         ),

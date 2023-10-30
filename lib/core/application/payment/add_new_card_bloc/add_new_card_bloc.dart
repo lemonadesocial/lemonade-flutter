@@ -9,7 +9,9 @@ part 'add_new_card_state.dart';
 part 'add_new_card_bloc.freezed.dart';
 
 class AddNewCardBloc extends Cubit<AddNewCardState> {
-  AddNewCardBloc(this._paymentRepository) : super(AddNewCardState.initial());
+  AddNewCardBloc(
+    this._paymentRepository,
+  ) : super(AddNewCardState.initial());
 
   final PaymentRepository _paymentRepository;
 
@@ -53,34 +55,40 @@ class AddNewCardBloc extends Cubit<AddNewCardState> {
     );
   }
 
-  Future<void> addNewCard() async {
+  Future<void> addNewCard(
+    String publishableKey, {
+    required String userId,
+  }) async {
     try {
       emit(state.copyWith(status: AddNewCardBlocStatus.loading));
       // For debugging purpose
-      Stripe.publishableKey = 'pk_test_TYooMQauvdEDq54NiTphI7jx';
-      // TODO: Temporary disable until BE deploy
-      // final expirationMonth = int.parse(state.validThrough!.substring(0, 2));
-      // final expirationYear = int.parse(
-      //   state.validThrough!.substring(
-      //     state.validThrough!.length - 2,
-      //   ),
-      // );
-      // final cardDetail = CardDetails(
-      //   number: state.cardNumber,
-      //   expirationMonth: expirationMonth,
-      //   expirationYear: expirationYear,
-      //   cvc: state.cvv,
-      // );
-      // CardTokenParams cardParams = CardTokenParams(
-      //   type: TokenType.Card,
-      //   name: state.cardHolderName,
-      // );
-      // // await Stripe.instance.dangerouslyUpdateCardDetails(cardDetail);
-      // // final token = await Stripe.instance.createToken(
-      // //   CreateTokenParams.card(params: cardParams),
-      // // );
+      Stripe.publishableKey = publishableKey;
 
-      final result = await _paymentRepository.createNewCard(tokenId: '1234');
+      final expirationMonth = int.parse(state.validThrough!.substring(0, 2));
+      final expirationYear = int.parse(
+        state.validThrough!.substring(
+          state.validThrough!.length - 2,
+        ),
+      );
+      final cardDetail = CardDetails(
+        number: state.cardNumber,
+        expirationMonth: expirationMonth,
+        expirationYear: expirationYear,
+        cvc: state.cvv,
+      );
+      CardTokenParams cardParams = CardTokenParams(
+        type: TokenType.Card,
+        name: state.cardHolderName,
+      );
+      await Stripe.instance.dangerouslyUpdateCardDetails(cardDetail);
+      final token = await Stripe.instance.createToken(
+        CreateTokenParams.card(params: cardParams),
+      );
+
+      final result = await _paymentRepository.createNewCard(
+        userId: userId,
+        tokenId: token.id,
+      );
       result.fold(
         (l) => emit(state.copyWith(status: AddNewCardBlocStatus.error)),
         (newCardInfo) {

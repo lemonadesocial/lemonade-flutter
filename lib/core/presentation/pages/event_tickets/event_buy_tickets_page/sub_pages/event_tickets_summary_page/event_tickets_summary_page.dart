@@ -39,10 +39,12 @@ class EventTicketsSummaryPage extends StatelessWidget {
       ..calculatePricing(
         input: CalculateTicketsPricingInput(
           eventId: event.id ?? '',
-          items: [],
+          items: listTicket
+              .map((e) => PurchasableItem(id: e.id ?? '', count: e.count))
+              .toList(),
         ),
       );
-    return BlocListener<PaymentBloc, PaymentState>(
+    return BlocConsumer<PaymentBloc, PaymentState>(
       listener: (context, state) {
         if (state.status == PaymentStatus.success) {
           final redeemTicketBloc = context.read<RedeemTicketsBloc>();
@@ -54,7 +56,7 @@ class EventTicketsSummaryPage extends StatelessWidget {
           );
         }
       },
-      child: Scaffold(
+      builder: (context, state) => Scaffold(
         backgroundColor: colorScheme.background,
         appBar: const LemonAppBar(),
         body: SafeArea(
@@ -92,14 +94,16 @@ class EventTicketsSummaryPage extends StatelessWidget {
                     SizedBox(height: Spacing.smMedium),
                     const AddPromoCodeInput(),
                     SizedBox(height: Spacing.smMedium),
-                    const EventOrderSummary(),
+                    EventOrderSummary(priceDetail: state.pricingInfo),
                     SizedBox(height: 150.w + Spacing.medium),
                   ],
                 ),
               ),
-              const Align(
+              Align(
                 alignment: Alignment.bottomCenter,
-                child: EventOrderSummaryFooter(),
+                child: EventOrderSummaryFooter(
+                  totalPrice: state.pricingInfo?.total ?? 0,
+                ),
               ),
             ],
           ),

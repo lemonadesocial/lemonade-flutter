@@ -41,7 +41,7 @@ class EventBuyTicketsPage extends StatelessWidget implements AutoRouteWrapper {
           create: (context) => PaymentBloc(
             getIt<PaymentRepository>(),
             getIt<EventTicketRepository>(),
-          ),
+          )..initializeStripePayment(),
         ),
         BlocProvider(
           create: (context) => RedeemTicketsBloc(event: event),

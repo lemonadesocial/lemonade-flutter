@@ -19,7 +19,7 @@ class CalculateTicketsPricingInput with _$CalculateTicketsPricingInput {
 class PurchasableItem with _$PurchasableItem {
   factory PurchasableItem({
     required String id,
-    required double count,
+    required int count,
   }) = _PurchasableItem;
 
   factory PurchasableItem.fromJson(Map<String, dynamic> json) =>

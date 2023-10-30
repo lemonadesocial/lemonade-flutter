@@ -9,7 +9,7 @@ class EventTicketsPricingInfoDto with _$EventTicketsPricingInfoDto {
   factory EventTicketsPricingInfoDto({
     Currency? currency,
     double? discount,
-    double? subTotal,
+    double? subtotal,
     double? total,
   }) = _EventTicketsPricingInfoDto;
 
