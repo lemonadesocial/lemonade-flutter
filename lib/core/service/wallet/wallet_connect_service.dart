@@ -1,21 +1,25 @@
+// ignore_for_file: unused_field
+
 import 'package:app/core/config.dart';
 import 'package:app/core/constants/web3/chains.dart';
 import 'package:app/core/utils/wc_utils.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
-import 'package:app/core/utils/web3_utils.dart';
 import 'package:injectable/injectable.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
 
 enum SupportedWalletApp {
-  metamask(scheme: 'metamask'),
-  trust(scheme: 'trust'),
-  rainbow(scheme: 'rainbow');
+  metamask(
+    scheme: 'metamask',
+    url: 'https://metamask.io',
+  );
 
   final String scheme;
+  final String url;
 
   const SupportedWalletApp({
     required this.scheme,
+    required this.url,
   });
 }
 
@@ -30,14 +34,23 @@ class WalletConnectService {
   static String defaultRequiredChainId =
       AppConfig.isProduction ? ETHEREUM.chainId : GOERLI.chainId;
 
+  static final lemonadeDAppMetadata = PairingMetadata(
+    name: 'Lemonade',
+    description: 'Lemonade',
+    url: AppConfig.webUrl,
+    icons: [
+      'https://explorer-api.walletconnect.com/v3/logo/lg/1ab2c2a3-4353-472e-41a1-1ae295473600?projectId=2f05ae7f1116030fde2d36508f472bfb'
+    ],
+    redirect: Redirect(
+      native: '${AppConfig.appScheme}://wallet-callback',
+    ),
+  );
+
   static const defaultMethods = [
-    "personal_sign",
-    "eth_sign",
-    "eth_signTypedData",
-    "eth_sendTransaction",
-    "eth_signTransaction",
-    "eth_chainId",
-    "eth_accounts",
+    'eth_sign',
+    'personal_sign',
+    'eth_signTypedData',
+    'eth_sendTransaction',
   ];
   static const defaultEvents = SupportedSessionEvent.values;
 
@@ -53,14 +66,7 @@ class WalletConnectService {
       if (initialized) return true;
       _app = await Web3App.createInstance(
         projectId: AppConfig.walletConnectProjectId,
-        metadata: PairingMetadata(
-          name: 'Lemonade test',
-          description: 'Lemonade test',
-          url: AppConfig.webUrl,
-          icons: [
-            'https://walletconnect.com/walletconnect-logo.png',
-          ],
-        ),
+        metadata: lemonadeDAppMetadata,
       );
       // Register event handler for all chain in active session if available;
       final activeSession = await getActiveSession();
@@ -109,20 +115,19 @@ class WalletConnectService {
       if (_app == null) {
         await init();
       }
-      final optionalChainIds =
+      final supportedChainIds =
           (AppConfig.isProduction ? Chains.mainnet : Chains.testnet)
-              .sublist(1)
               .map((item) => item.chainId)
               .toList();
       final supportedEvents = defaultEvents.map((item) => item.name).toList();
       final requiredNamespace = RequiredNamespace(
-        chains: [defaultRequiredChainId],
+        chains: [AppConfig.isProduction ? ETHEREUM.chainId : GOERLI.chainId],
         methods: defaultMethods,
         events: supportedEvents,
       );
 
       final optionalNamespaces = RequiredNamespace(
-        chains: optionalChainIds,
+        chains: supportedChainIds,
         methods: defaultMethods,
         events: supportedEvents,
       );
@@ -143,7 +148,7 @@ class WalletConnectService {
         _url = encodedUrl;
 
         await launchUrlString(
-          _getDeepLinkUrl(walletApp.scheme),
+          _getDeepLinkUrl(walletApp),
           mode: LaunchMode.externalApplication,
         );
 
@@ -155,7 +160,7 @@ class WalletConnectService {
       }
       return false;
     } on JsonRpcError catch (e) {
-      SnackBarUtils.showSnackbar(e.message);
+      SnackBarUtils.showSnackbar(e.message ?? '');
       return false;
     } catch (e) {
       return false;
@@ -165,26 +170,19 @@ class WalletConnectService {
   Future<String?> personalSign({
     required String message,
     required String wallet,
+    required SupportedWalletApp walletApp,
   }) async {
     try {
-      if (_shouldChangeAccount(wallet)) {
-        SnackBarUtils.showSnackbar(
-          "Should change account to ${Web3Utils.formatIdentifier(wallet, length: 4)}",
-        );
-        return null;
-      }
-      final chainId = _currentWalletChainId ?? defaultRequiredChainId;
-
       final activeSession = await getActiveSession();
 
       await launchUrlString(
-        _getDeepLinkUrl(null),
+        _getDeepLinkUrl(walletApp),
         mode: LaunchMode.externalApplication,
       );
 
       final data = await _app!.request(
         topic: activeSession!.topic,
-        chainId: chainId,
+        chainId: defaultRequiredChainId,
         request: SessionRequestParams(
           method: 'personal_sign',
           params: [message, wallet],
@@ -198,8 +196,18 @@ class WalletConnectService {
     }
   }
 
-  String _getDeepLinkUrl(String? walletAppScheme) =>
-      '${walletAppScheme ?? 'metamask'}://wc?uri=$_url';
+  Future<void> disconnect() async {
+    final activeSession = await getActiveSession();
+    if (activeSession != null) {
+      await _app?.disconnectSession(
+        topic: activeSession.topic,
+        reason: Errors.getSdkError(Errors.USER_DISCONNECTED),
+      );
+    }
+  }
+
+  String _getDeepLinkUrl(SupportedWalletApp walletApp) =>
+      '${walletApp.scheme}://wc?uri=$_url';
 
   _onSessionEvent(SessionEvent? sessionEvent) {
     var eventName = sessionEvent?.name;
@@ -225,15 +233,5 @@ class WalletConnectService {
         _app!.registerEventHandler(chainId: chainId, event: event.name);
       }
     }
-  }
-
-  // bool _shouldChangeChainId(String chainId) {
-  //   if(_currentWalletChainId == null) return false;
-  //   return chainId != _currentWalletChainId;
-  // }
-
-  bool _shouldChangeAccount(String account) {
-    if (_currentWalletAccount == null) return false;
-    return account != _currentWalletAccount;
   }
 }
