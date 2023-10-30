@@ -43,9 +43,8 @@ class SelectTicketSubmitButton extends StatelessWidget {
                 print('total: $totalTicketAmount}');
                 if (!state.isSelectionValid || isLoading) return;
                 if (totalTicketAmount != 0) {
-                  context.router.push(EventTicketsSummaryRoute());
+                  context.router.push(const EventTicketsSummaryRoute());
                 } else {
-                  print('called');
                   context.read<RedeemTicketsBloc>().add(
                         RedeemTicketsEvent.redeem(
                           ticketItems: state.selectedTicketTypes,
