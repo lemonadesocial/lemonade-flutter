@@ -1,6 +1,7 @@
 import 'package:app/core/domain/badge/entities/badge_entities.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/theme/color.dart';
+import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +32,6 @@ class PoapCollectionItem extends StatelessWidget {
         onTap?.call(badgeCollection);
       },
       child: SizedBox(
-        width: 78.w,
         child: Column(
           children: [
             Container(
@@ -40,11 +40,11 @@ class PoapCollectionItem extends StatelessWidget {
                 border: Border.all(
                   color: selected ? LemonColor.lavender : colorScheme.outline,
                 ),
-                borderRadius: BorderRadius.circular(70),
+                borderRadius: BorderRadius.circular(Sizing.regular * 2),
               ),
               child: LemonCircleAvatar(
                 url: badgeCollection.imageUrl ?? '',
-                size: 70,
+                size: Sizing.regular * 2,
               ),
             ),
             SizedBox(height: Spacing.superExtraSmall),
