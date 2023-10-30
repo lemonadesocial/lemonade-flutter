@@ -34,9 +34,11 @@ class EventTicketRepositoryImpl implements EventTicketRepository {
         fetchPolicy: FetchPolicy.networkOnly,
         parserFn: (data) {
           return EventTicketsPricingInfo.fromDto(
-            EventTicketsPricingInfoDto.fromJson(data['calculateTicketsPricing']),
+            EventTicketsPricingInfoDto.fromJson(
+              data['calculateTicketsPricing'],
+            ),
           );
-        } ,
+        },
       ),
     );
 
