@@ -1,5 +1,9 @@
+import 'package:app/core/presentation/widgets/common/dialog/lemon_alert_dialog.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:app/injection/register_module.dart';
+import 'package:app/router/app_router.gr.dart';
+import 'package:app/theme/typo.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:injectable/injectable.dart';
@@ -13,6 +17,7 @@ class LocationUtils {
 
   Future<Position> getCurrentLocation({
     void Function()? onPermissionDeniedForever,
+    bool? shouldRequestPermission = true,
   }) async {
     if (!(await Geolocator.isLocationServiceEnabled())) {
       throw LocationServiceNotEnabledException();
@@ -20,6 +25,7 @@ class LocationUtils {
 
     if (!await checkAndRequestPermission(
       onPermissionDeniedForever: onPermissionDeniedForever,
+      shouldRequestPermission: shouldRequestPermission,
     )) {
       throw PermissionNotGrantedException();
     }
@@ -35,17 +41,19 @@ class LocationUtils {
 
   Future<bool> checkAndRequestPermission({
     void Function()? onPermissionDeniedForever,
+    bool? shouldRequestPermission = true,
   }) async {
     var status = await Geolocator.checkPermission();
 
-    if (status == LocationPermission.denied) {
-      status = await Geolocator.requestPermission();
-    }
+    if (shouldRequestPermission == true) {
+      if (status == LocationPermission.denied) {
+        status = await Geolocator.requestPermission();
+      }
 
-    if (status == LocationPermission.deniedForever) {
-      onPermissionDeniedForever?.call();
+      if (status == LocationPermission.deniedForever) {
+        onPermissionDeniedForever?.call();
+      }
     }
-
     _permissionStatus = status;
 
     return _permissionStatus == LocationPermission.always ||
@@ -59,29 +67,51 @@ class LocationUtils {
         final t = Translations.of(context);
         return Theme(
           data: ThemeData.dark(),
-          child: CupertinoAlertDialog(
-            content: Text(t.common.requestLocation),
-            actions: [
-              CupertinoDialogAction(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                isDestructiveAction: true,
-                child: Text(t.common.actions.cancel),
-              ),
-              CupertinoDialogAction(
-                isDefaultAction: true,
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  Geolocator.openLocationSettings();
-                },
-                child: Text(t.common.actions.goToSettings),
-              ),
-            ],
+          child: LemonAlertDialog(
+            closable: true,
+            onClose: () {
+              Navigator.of(context).pop();
+              Geolocator.openLocationSettings();
+            },
+            buttonLabel: t.common.actions.goToSettings,
+            child: Text(
+              t.common.requestLocation,
+              style: Typo.medium,
+            ),
           ),
         );
       },
     );
+  }
+
+  static Future<bool> requestLocationPermissionWithPopup(
+    BuildContext context, {
+    bool? shouldGoToSettings = true,
+  }) async {
+    final locationUtils = getIt<LocationUtils>();
+
+    final result = await locationUtils.checkPermission();
+
+    if (result) {
+      return result;
+    }
+
+    if (getIt<LocationUtils>().permissionStatus ==
+            LocationPermission.deniedForever &&
+        shouldGoToSettings != true) {
+      return false;
+    }
+
+    return await context.router.push<bool>(
+          LocationRequestRoute(
+            onPermissionDeniedForever: () async {
+              if (shouldGoToSettings != true) return;
+              await AutoRouter.of(context).pop();
+              LocationUtils.goToSetting(context);
+            },
+          ),
+        ) ??
+        false;
   }
 }
 

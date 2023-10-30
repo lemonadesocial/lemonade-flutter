@@ -4,7 +4,6 @@ import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/poap/hot_badge_item/hot_badge_item.dart';
 import 'package:app/core/utils/location_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -20,7 +19,13 @@ class DiscoverBadgesNearYou extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<bool>(
-      future: getIt<LocationUtils>().checkAndRequestPermission(),
+      future: Future(() async {
+        await Future.delayed(const Duration(milliseconds: 500));
+        return LocationUtils.requestLocationPermissionWithPopup(
+          context,
+          shouldGoToSettings: false,
+        );
+      }),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           final hasLocationAccess = snapshot.data!;

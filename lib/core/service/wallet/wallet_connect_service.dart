@@ -1,7 +1,5 @@
 // ignore_for_file: unused_field
 
-import 'dart:io';
-
 import 'package:app/core/config.dart';
 import 'package:app/core/constants/web3/chains.dart';
 import 'package:app/core/utils/wc_utils.dart';
@@ -12,18 +10,15 @@ import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
 
 enum SupportedWalletApp {
   metamask(
-    iosScheme: 'metamask',
-    androidScheme: 'metamask',
+    scheme: 'metamask',
     url: 'https://metamask.io',
   );
 
-  final String iosScheme;
-  final String androidScheme;
+  final String scheme;
   final String url;
 
   const SupportedWalletApp({
-    required this.iosScheme,
-    required this.androidScheme,
+    required this.scheme,
     required this.url,
   });
 }
@@ -38,6 +33,18 @@ class WalletConnectService {
   static const String defaultNamespace = 'eip155';
   static String defaultRequiredChainId =
       AppConfig.isProduction ? ETHEREUM.chainId : GOERLI.chainId;
+
+  static final lemonadeDAppMetadata = PairingMetadata(
+    name: 'Lemonade',
+    description: 'Lemonade',
+    url: AppConfig.webUrl,
+    icons: [
+      'https://explorer-api.walletconnect.com/v3/logo/lg/1ab2c2a3-4353-472e-41a1-1ae295473600?projectId=2f05ae7f1116030fde2d36508f472bfb'
+    ],
+    redirect: Redirect(
+      native: '${AppConfig.appScheme}://wallet-callback',
+    ),
+  );
 
   static const defaultMethods = [
     'eth_sign',
@@ -59,17 +66,7 @@ class WalletConnectService {
       if (initialized) return true;
       _app = await Web3App.createInstance(
         projectId: AppConfig.walletConnectProjectId,
-        metadata: PairingMetadata(
-          name: 'Lemonade',
-          description: 'Lemonade',
-          url: AppConfig.webUrl,
-          icons: [
-            'https://explorer-api.walletconnect.com/v3/logo/lg/1ab2c2a3-4353-472e-41a1-1ae295473600?projectId=2f05ae7f1116030fde2d36508f472bfb'
-          ],
-          redirect: Redirect(
-            native: '${AppConfig.appScheme}://wallet-callback',
-          ),
-        ),
+        metadata: lemonadeDAppMetadata,
       );
       // Register event handler for all chain in active session if available;
       final activeSession = await getActiveSession();
@@ -209,11 +206,8 @@ class WalletConnectService {
     }
   }
 
-  String _getDeepLinkUrl(SupportedWalletApp walletApp) {
-    final scheme =
-        Platform.isIOS ? walletApp.iosScheme : walletApp.androidScheme;
-    return '$scheme://wc?uri=$_url';
-  }
+  String _getDeepLinkUrl(SupportedWalletApp walletApp) =>
+      '${walletApp.scheme}://wc?uri=$_url';
 
   _onSessionEvent(SessionEvent? sessionEvent) {
     var eventName = sessionEvent?.name;

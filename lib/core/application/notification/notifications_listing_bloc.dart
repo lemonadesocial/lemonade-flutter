@@ -1,5 +1,6 @@
 import 'package:app/core/domain/notification/entities/notification.dart';
-import 'package:app/core/service/notification/notification_service.dart';
+import 'package:app/core/domain/notification/notification_repository.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -7,15 +8,14 @@ part 'notifications_listing_bloc.freezed.dart';
 
 class NotificationsListingBloc
     extends Bloc<NotificationsListingEvent, NotificationsListingState> {
-  final NotificationService notificationService;
-  NotificationsListingBloc(this.notificationService)
-      : super(NotificationsListingState.loading()) {
+  final notificationRepository = getIt<NotificationRepository>();
+  NotificationsListingBloc() : super(NotificationsListingState.loading()) {
     on<NotificationsListingEventFetch>(_onFetch);
     on<NotificationsListingEventRemoveItem>(_onRemoveItem);
   }
 
   _onFetch(NotificationsListingEventFetch event, Emitter emit) async {
-    final result = await notificationService.getNotifications();
+    final result = await notificationRepository.getNotifications();
     result.fold(
       (l) => emit(NotificationsListingState.failure()),
       (notifications) => emit(

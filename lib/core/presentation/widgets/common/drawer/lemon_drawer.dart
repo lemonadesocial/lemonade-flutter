@@ -45,21 +45,15 @@ class LemonDrawer extends StatelessWidget {
           children: [
             SizedBox(height: Spacing.superExtraSmall),
             ...[
-              DrawerItem(
-                icon: Assets.icons.icBank,
-                label: t.common.vault,
-                featureAvailable: false,
-                onPressed: () {
-                  context.router.pop();
-                  context.read<AuthBloc>().state.maybeWhen(
-                        authenticated: (authSession) =>
-                            context.router.push(const WalletRoute()),
-                        orElse: () => context.router.navigate(
-                          const LoginRoute(),
-                        ),
-                      );
-                },
-              ),
+              // DrawerItem(
+              //   icon: Assets.icons.icBank,
+              //   label: t.common.vault,
+              //   featureAvailable: false,
+              //   onPressed: () {
+              //     Vibrate.feedback(FeedbackType.light);
+              //     showComingSoonDialog(context);
+              //   },
+              // ),
               DrawerItem(
                 icon: Assets.icons.icPeopleAlt,
                 label: t.common.community,

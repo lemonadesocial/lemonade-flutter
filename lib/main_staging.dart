@@ -10,6 +10,7 @@ import 'package:app/injection/register_module.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await dotenv.load(fileName: '.env.staging');
   await gql_flutter.initHiveForFlutter();
 

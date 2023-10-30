@@ -16,7 +16,6 @@ import 'package:app/core/utils/location_utils.dart';
 import 'package:app/core/utils/media_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/injection/register_module.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -124,11 +123,12 @@ class _PopapDetailPageState extends State<PopapDetailPage> {
                     },
                     onPressGrantAccess: () async {
                       try {
-                        final isGranted = await getIt<LocationUtils>()
-                            .checkAndRequestPermission(
-                          onPermissionDeniedForever: () =>
-                              LocationUtils.goToSetting(context),
+                        final isGranted = await LocationUtils
+                            .requestLocationPermissionWithPopup(
+                          context,
+                          shouldGoToSettings: true,
                         );
+
                         if (isGranted) {
                           context
                               .read<BadgeDetailBloc>()
@@ -366,6 +366,7 @@ class _PoapDetailFooterState extends State<PoapDetailFooter>
                                 if (!locationEnabled) {
                                   await widget.onPressGrantAccess();
                                   setState(() {});
+                                  return;
                                 }
                                 if (!ableToClaim) {
                                   widget.onPressViewRequirements(

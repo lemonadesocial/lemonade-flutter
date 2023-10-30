@@ -19,5 +19,7 @@
         }
     },
     "hotBadgesNearYou": "Hot badges near you",
-    "upcomingEvents": "Upcoming events"
+    "upcomingEvents": "Upcoming events",
+    "communities": "Communities",
+    "emptyCommunities": "There's no communities"
 }

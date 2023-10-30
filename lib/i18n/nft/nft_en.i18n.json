@@ -69,5 +69,9 @@
     "walletConnectPopup": {
         "title": "Connect Wallet",
         "description": "We do not own your private keys and cannot access your funds without your confirmation."
+    },
+    "signWalletSuccess": "Your wallet successfully signed!",
+    "supportedWalletApps": {
+        "metamask": "Metamask"
     }
 }

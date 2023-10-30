@@ -175,16 +175,25 @@ const privateFragment = '''
   }
 ''';
 
+const userTermFragment = '''
+  fragment userTermFragment on User {
+    terms_accepted_adult
+    terms_accepted_conditions
+  }
+''';
+
 final getMeQuery = gql('''
   $baseUserFragment
   $userProfileFragment
   $privateFragment
-  
+  $userTermFragment
+
   query() {
     getMe() {
       ...baseUserFragment
       ...userProfileFragment
       ...privateFragment
+      ...userTermFragment
     }
 }
 ''');

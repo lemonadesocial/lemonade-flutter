@@ -64,7 +64,24 @@ definitions:
         echo $GOOGLESERVICE_INFO_PLIST_PRODUCTION | base64 --decode > $CM_BUILD_DIR/ios/config/production/GoogleService-Info.plist
         echo $GOOGLESERVICE_JSON_STAGING | base64 --decode > $CM_BUILD_DIR/android/app/src/staging/google-services.json
         echo $GOOGLESERVICE_JSON_PRODUCTION | base64 --decode > $CM_BUILD_DIR/android/app/src/production/google-services.json
-        
+
+        echo $SHOREBIRD_YAML | base64 --decode > $CM_BUILD_DIR/shorebird.yaml
+    - &extract_tag_information
+      name: Setup Staging ENV
+      script: |
+        #!/bin/sh
+        # Extract build name 1.0.0
+        TAG_BUILD_NAME=$(echo $CM_TAG | grep -o '[0-9]\+\.[0-9]\+\.[0-9]\+')
+
+        # Extract build number 141
+        TAG_BUILD_NUMBER=$(echo $CM_TAG | grep -o '+[0-9]\+' | tr -d '+')
+
+        echo $TAG_BUILD_NAME
+        echo $TAG_BUILD_NUMBER
+
+        # Write variables to CM_ENV
+        echo "TAG_BUILD_NAME=$TAG_BUILD_NAME" >> $CM_ENV
+        echo "TAG_BUILD_NUMBER=$TAG_BUILD_NUMBER" >> $CM_ENV
     - &use_profiles
       name: Set up code signing settings on Xcode project
       script: |
@@ -172,7 +189,78 @@ definitions:
           --build-number=$BUILD_NUMBER \
           --flavor="production" \
           -t "lib/main_production.dart"
-    - &github_release
+    #
+    # Shorebird
+    #
+    - &setup_shorebird
+      name: 🐦 Setup Shorebird
+      script: |
+        # Install Shorebird
+        curl --proto '=https' --tlsv1.2 https://raw.githubusercontent.com/shorebirdtech/install/main/install.sh -sSf | bash
+
+        # Add Shorebird to PATH
+        echo PATH="$HOME/.shorebird/bin:$PATH" >> $CM_ENV
+    - &release_shorebird_ipa_staging
+      name: Release shorebird ipa staging
+      script: |
+        BUILD_NUMBER=$(($(app-store-connect get-latest-testflight-build-number "$APP_ID") + 1))
+        shorebird release ios-alpha --flavor staging -- \
+          --build-number=$BUILD_NUMBER \
+          --export-options-plist=/Users/builder/export_options.plist \
+          --flavor="staging" \
+          -t "lib/main_staging.dart"
+    - &release_shorebird_apk_staging
+      name: Release shorebird android apk staging
+      script: |
+        BUILD_NUMBER=$(($(google-play get-latest-build-number --package-name "$PACKAGE_NAME" --tracks="$GOOGLE_PLAY_TRACK") + 1))      
+        shorebird release android --artifact apk --flavor staging -- \
+          --build-number=$BUILD_NUMBER \
+          --flavor="staging" \
+          -t "lib/main_staging.dart"
+    - &release_shorebird_ipa_production
+      name: Release shorebird ipa production
+      script: |
+        BUILD_NUMBER=$(($(app-store-connect get-latest-testflight-build-number "$APP_ID") + 1))
+        shorebird release ios-alpha --flavor production -- \
+          --build-number=$BUILD_NUMBER \
+          --export-options-plist=/Users/builder/export_options.plist \
+          --flavor="production" \
+          -t "lib/main_production.dart"
+    - &release_shorebird_apk_production
+      name: Release shorebird android apk production
+      script: |
+        BUILD_NUMBER=$(($(google-play get-latest-build-number --package-name "$PACKAGE_NAME" --tracks="$GOOGLE_PLAY_TRACK") + 1))      
+        shorebird release android --artifact apk --flavor production -- \
+          --build-number=$BUILD_NUMBER \
+          --flavor="production" \
+          -t "lib/main_production.dart"
+    - &patch_shorebird_ios_staging
+      name: Patch shorebird ipa staging
+      script: |
+        shorebird patch ios-alpha --target ./lib/main_staging.dart --flavor staging --force -- \
+          --build-name=$TAG_BUILD_NAME \
+          --build-number=$TAG_BUILD_NUMBER \
+          --export-options-plist=/Users/builder/export_options.plist
+    - &patch_shorebird_android_staging
+      name: Patch shorebird android staging
+      script: |
+        shorebird patch android --target ./lib/main_staging.dart --flavor staging --force -- \
+          --build-name=$TAG_BUILD_NAME \
+          --build-number=$TAG_BUILD_NUMBER 
+    - &patch_shorebird_ios_production
+      name: Patch shorebird ipa production
+      script: |
+        shorebird patch ios-alpha --target ./lib/main_production.dart --flavor production  --force -- \
+          --build-name=$TAG_BUILD_NAME \
+          --build-number=$TAG_BUILD_NUMBER \
+          --export-options-plist=/Users/builder/export_options.plist
+    - &patch_shorebird_android_production
+      name: Patch shorebird android production
+      script: |
+        shorebird patch android --target ./lib/main_production.dart --flavor production  --force -- \
+          --build-name=$TAG_BUILD_NAME \
+          --build-number=$TAG_BUILD_NUMBER 
+    - &github_create_prerelease
       name: Github release
       script: | 
         # Publish only for tag builds
@@ -183,6 +271,7 @@ definitions:
         gh release create "${CM_TAG}" \
           --title "Lemonade ${CM_TAG}" \
           --generate-notes
+          --prerelease
     - &notify_ios_staging_to_slack
       name: Notify iOS Staging app to slack
       script: | 
@@ -569,14 +658,6 @@ workflows:
       <<: *load_environment_values
       <<: *ios_signing_production
       <<: *android_signing_production
-    # triggering:
-    #   events:
-    #     - tag
-    #   branch_patterns:
-    #     - pattern: '*'
-    #       include: true
-    #       source: true
-    #   cancel_previous_builds: true
     scripts:
       - *load_env_files
       - *use_profiles
@@ -586,7 +667,6 @@ workflows:
       - *install_firebase_crashlytics
       - *install_pods
       - *build_ipa_production
-
       - *setup_local_properties
       - *build_apk_production
       - *build_aab_production
@@ -604,6 +684,200 @@ workflows:
       <<: *email_production
       scripts:
         - *upload_production_dsym_to_firebase
-        - *github_release
+        - *github_create_prerelease
         - *notify_ios_production_to_slack
         - *notify_android_production_to_slack
+  # 
+  # Shorebird 
+  # 
+  shorebird-release-staging:
+    name: Shorebird Release Staging
+    <<: *instance_mac_mini
+    integrations:
+      <<: *app_store_connect_integrations
+    environment:
+      <<: *env_versions
+      <<: *load_environment_values
+      <<: *ios_signing_staging
+      <<: *android_signing_staging
+    scripts:
+      - *load_env_files
+      - *use_profiles
+      - *get_flutter_packages
+      - *run_build_runner
+      - *generate_i18_file
+      - *setup_shorebird
+      - *install_firebase_crashlytics
+      - *install_pods
+      - *release_shorebird_ipa_staging
+      - *setup_local_properties
+      - *release_shorebird_apk_staging
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - build/app/outputs/apk/**/*.apk    
+      - build/app/outputs/bundle/**/*.aab    
+    publishing:
+      <<: *ios_app_store_publish
+      <<: *android_publish
+      scripts:
+        - *upload_staging_dsym_to_firebase
+
+  shorebird-release-production:
+    name: Shorebird Release Production
+    <<: *instance_mac_mini
+    integrations:
+      <<: *app_store_connect_integrations
+    environment:
+      <<: *env_versions
+      <<: *load_environment_values
+      <<: *ios_signing_production
+      <<: *android_signing_production
+    triggering:
+      events:
+        - tag
+      tag_patterns:
+        - pattern: '*-rc*' # v1.0.0-rc.1
+          include: true
+        - pattern: excluded-tag
+          include: false
+        - pattern: included-tag
+          include: true
+    scripts:
+      - *load_env_files
+      - *use_profiles
+      - *get_flutter_packages
+      - *run_build_runner
+      - *generate_i18_file
+      - *setup_shorebird
+      - *install_firebase_crashlytics
+      - *install_pods
+      - *release_shorebird_ipa_production
+      - *setup_local_properties
+      - *release_shorebird_apk_production
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - build/app/outputs/apk/**/*.apk    
+      - build/app/outputs/bundle/**/*.aab    
+    publishing:
+      <<: *ios_app_store_publish
+      <<: *android_publish
+      scripts:
+        - *upload_production_dsym_to_firebase
+
+  shorebird-patch-ios-staging:
+    name: Shorebird Patch iOS Staging
+    <<: *instance_mac_mini
+    integrations:
+      <<: *app_store_connect_integrations
+    environment:
+      <<: *env_versions
+      <<: *load_environment_values
+      <<: *ios_signing_staging
+      <<: *android_signing_staging
+    scripts:
+      - *extract_tag_information
+      - *load_env_files
+      - *use_profiles
+      - *get_flutter_packages
+      - *run_build_runner
+      - *generate_i18_file
+      - *setup_shorebird
+      - *install_firebase_crashlytics
+      - *install_pods
+      - *patch_shorebird_ios_staging
+    artifacts:
+      - build/ios/ipa/*.ipa
+
+  shorebird-patch-android-staging:
+    name: Shorebird Patch Android Staging
+    <<: *instance_mac_mini
+    integrations:
+      <<: *app_store_connect_integrations
+    environment:
+      <<: *env_versions
+      <<: *load_environment_values
+      <<: *ios_signing_staging
+      <<: *android_signing_staging
+    scripts:
+      - *extract_tag_information
+      - *load_env_files
+      - *use_profiles
+      - *get_flutter_packages
+      - *run_build_runner
+      - *generate_i18_file
+      - *setup_shorebird
+      - *setup_local_properties
+      - *patch_shorebird_android_staging
+    artifacts:
+      - build/app/outputs/apk/**/*.apk    
+      - build/app/outputs/bundle/**/*.aab 
+  
+  shorebird-patch-ios-production:
+    name: Shorebird Patch iOS Production
+    <<: *instance_mac_mini
+    integrations:
+      <<: *app_store_connect_integrations
+    environment:
+      <<: *env_versions
+      <<: *load_environment_values
+      <<: *ios_signing_production
+      <<: *android_signing_production
+    triggering:
+      events:
+        - tag
+      tag_patterns:
+        - pattern: '*-patch-ios.*' # v1.0.0+141-patch-ios.1
+          include: true
+        - pattern: excluded-tag
+          include: false
+        - pattern: included-tag
+          include: true
+      cancel_previous_builds: true
+    scripts:
+      - *extract_tag_information
+      - *load_env_files
+      - *use_profiles
+      - *get_flutter_packages
+      - *run_build_runner
+      - *generate_i18_file
+      - *setup_shorebird
+      - *install_firebase_crashlytics
+      - *install_pods
+      - *patch_shorebird_ios_production
+    artifacts:
+      - build/ios/ipa/*.ipa
+
+  shorebird-patch-android-production:
+    name: Shorebird Patch Android Production
+    <<: *instance_mac_mini
+    integrations:
+      <<: *app_store_connect_integrations
+    environment:
+      <<: *env_versions
+      <<: *load_environment_values
+      <<: *ios_signing_production
+      <<: *android_signing_production
+    triggering:
+      events:
+        - tag
+      tag_patterns:
+        - pattern: '*-patch-android.*' # v1.0.0+141-patch-android.1
+          include: true
+        - pattern: excluded-tag
+          include: false
+        - pattern: included-tag
+          include: true
+      cancel_previous_builds: true
+    scripts:
+      - *extract_tag_information
+      - *load_env_files
+      - *use_profiles
+      - *get_flutter_packages
+      - *run_build_runner
+      - *generate_i18_file
+      - *setup_shorebird
+      - *setup_local_properties
+      - *patch_shorebird_android_production
+    artifacts:
+      - build/app/outputs/apk/**/*.apk    
+      - build/app/outputs/bundle/**/*.aab 

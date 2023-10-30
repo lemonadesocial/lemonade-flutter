@@ -97,6 +97,21 @@ class CommunityBloc extends Cubit<CommunityState> {
       }
     });
   }
+
+  Future<void> getUsersSpotlight() async {
+    emit(state.copyWith(status: CommunityStatus.loading));
+    final response = await _repository.getUsersSpotlight();
+
+    response.fold(
+      (l) {},
+      (list) => emit(
+        state.copyWith(
+          status: CommunityStatus.loaded,
+          usersSpotlightList: list,
+        ),
+      ),
+    );
+  }
 }
 
 enum CommunityType {

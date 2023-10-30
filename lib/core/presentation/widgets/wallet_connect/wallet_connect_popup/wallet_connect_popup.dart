@@ -54,7 +54,7 @@ class WalletConnectPopup extends StatelessWidget {
             SizedBox(height: Spacing.medium),
             SelectWalletAppButton(
               onPressed: () => onSelect(SupportedWalletApp.metamask),
-              label: "Metamask",
+              label: t.nft.supportedWalletApps.metamask,
               icon: Assets.icons.icMetamask.svg(),
             ),
           ],

@@ -4,6 +4,7 @@ import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/oauth/oauth.dart';
 import 'package:app/core/service/auth/auth_service.dart';
 import 'package:app/core/service/user/user_service.dart';
+import 'package:app/core/utils/onboarding_utils.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
@@ -55,9 +56,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     await Future.delayed(const Duration(milliseconds: 500));
     final currentUser = await _createSession();
     if (currentUser != null) {
-      if (currentUser.username?.isEmpty ?? true) {
-        // Authenticated but lacking username
-        // Navigate to OnBoarding flow instead
+      if (OnboardingUtils.isOnboardingRequired(currentUser)) {
         emit(AuthState.onBoardingRequired(authSession: currentUser));
         return;
       }
@@ -97,7 +96,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         FirebaseCrashlytics.instance.setUserIdentifier('');
         FirebaseAnalytics.instance.setUserId(id: null);
       }
-      emit(const AuthEvent.unauthenticated());
+      emit(const AuthState.unauthenticated(isChecking: false));
     });
   }
 

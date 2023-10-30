@@ -418,6 +418,12 @@ class LocationFilter extends StatelessWidget {
                               : LemonOutlineButton(
                                   onTap: () async {
                                     try {
+                                      final isGranted = await LocationUtils
+                                          .requestLocationPermissionWithPopup(
+                                        context,
+                                        shouldGoToSettings: true,
+                                      );
+                                      if (!isGranted) return;
                                       final position =
                                           await getIt<LocationUtils>()
                                               .getCurrentLocation(

@@ -40,7 +40,9 @@ class BadgeService {
 
   Future<void> updateMyLocation() async {
     try {
-      final position = await _locationUtils.getCurrentLocation();
+      final position = await _locationUtils.getCurrentLocation(
+        shouldRequestPermission: false,
+      );
       updateGeoPoint(
         GeoPoint(
           lat: position.latitude,
