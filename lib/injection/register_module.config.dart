@@ -55,8 +55,7 @@ import 'package:app/core/service/matrix/matrix_service.dart' as _i19;
 import 'package:app/core/service/shake/shake_service.dart' as _i31;
 import 'package:app/core/service/shorebird_codepush_service.dart' as _i32;
 import 'package:app/core/service/user/user_service.dart' as _i37;
-import 'package:app/core/service/wallet_connect/wallet_connect_service.dart'
-    as _i38;
+import 'package:app/core/service/wallet/wallet_connect_service.dart' as _i38;
 import 'package:app/core/utils/gql/gql.dart' as _i3;
 import 'package:app/core/utils/location_utils.dart' as _i18;
 import 'package:get_it/get_it.dart' as _i1;

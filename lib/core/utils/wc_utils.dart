@@ -1,4 +1,4 @@
-import 'package:app/core/service/wallet_connect/wallet_connect_service.dart';
+import 'package:app/core/service/wallet/wallet_connect_service.dart';
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
 
 class WCUtils {

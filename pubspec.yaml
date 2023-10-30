@@ -103,6 +103,7 @@ dependencies:
 
   # wallet
   walletconnect_flutter_v2: ^2.0.12
+  web3dart: ^2.6.1
 
   # matrix
   matrix: ^0.22.1
@@ -110,7 +111,6 @@ dependencies:
   flutter_openssl_crypto: ^0.1.0
   flutter_chat_bubble: ^2.0.2
   duration: ^3.0.13
-  web3dart: ^2.6.1
 
   # Loading layer
   flutter_easyloading: ^3.0.5
