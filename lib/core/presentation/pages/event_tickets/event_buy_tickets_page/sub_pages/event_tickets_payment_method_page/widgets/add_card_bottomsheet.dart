@@ -38,9 +38,7 @@ class _AddCardBottomSheetState extends State<AddCardBottomSheet> {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-    final bloc = AddNewCardBloc(
-      getIt<PaymentRepository>(),
-    );
+    final bloc = AddNewCardBloc(getIt<PaymentRepository>());
     return BlocProvider(
       create: (context) => bloc,
       child: Builder(
