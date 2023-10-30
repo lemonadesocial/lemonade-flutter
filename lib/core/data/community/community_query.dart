@@ -88,3 +88,14 @@ final getUserFollower = gql('''
   }
 }
 ''');
+
+final getUsersSpotlightQuery = gql('''
+  $baseUserFragment
+  
+  query () {
+    getUsersSpotlight() {
+      ...baseUserFragment
+      __typename
+    }
+  }
+''');
