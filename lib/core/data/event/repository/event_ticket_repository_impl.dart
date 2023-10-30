@@ -33,7 +33,6 @@ class EventTicketRepositoryImpl implements EventTicketRepository {
         variables: {'input': input.toJson()},
         fetchPolicy: FetchPolicy.networkOnly,
         parserFn: (data) {
-          print('data: $data');
           return EventTicketsPricingInfo.fromDto(
             EventTicketsPricingInfoDto.fromJson(data['calculateTicketsPricing']),
           );

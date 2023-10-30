@@ -41,7 +41,7 @@ class SelectTicketsPage extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => AcceptEventBloc(event: event),
-        )
+        ),
       ],
       child: SelectTicketView(event: event),
     );
@@ -194,10 +194,12 @@ class SelectTicketView extends StatelessWidget {
               ),
               SizedBox(height: Spacing.smMedium),
               Expanded(
-                child: BlocBuilder<GetEventTicketTypesBloc, GetEventTicketTypesState>(
+                child: BlocBuilder<GetEventTicketTypesBloc,
+                    GetEventTicketTypesState>(
                   builder: (context, state) => state.when(
                     loading: () => Loading.defaultLoading(context),
-                    failure: () => EmptyList(emptyText: t.common.somethingWrong),
+                    failure: () =>
+                        EmptyList(emptyText: t.common.somethingWrong),
                     success: (response) {
                       final ticketTypes = List<PurchasableTicketType>.from(
                         response.ticketTypes ?? [],

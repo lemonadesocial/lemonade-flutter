@@ -22,8 +22,7 @@ class AddCardButton extends StatelessWidget {
       onTap: () async {
         final newCard = await AddCardBottomSheet(
           publishableKey: paymentBloc.state.publishableKey,
-        ).showAsBottomSheet(context)
-            as PaymentCard?;
+        ).showAsBottomSheet(context) as PaymentCard?;
         if (newCard != null) {
           context.read<PaymentBloc>().newCardAdded(newCard);
         }
