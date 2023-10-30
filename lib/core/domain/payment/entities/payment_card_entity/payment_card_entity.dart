@@ -6,19 +6,19 @@ part 'payment_card_entity.freezed.dart';
 part 'payment_card_entity.g.dart';
 
 @freezed
-class PaymentCardEntity with _$PaymentCardEntity {
-  const factory PaymentCardEntity({
+class PaymentCard with _$PaymentCard {
+  const factory PaymentCard({
     required String id,
     required String last4,
     String? brand,
     String? providerId,
-  }) = _PaymentCardEntity;
+  }) = _PaymentCard;
 
-  factory PaymentCardEntity.fromJson(Map<String, dynamic> json) =>
-      _$PaymentCardEntityFromJson(json);
+  factory PaymentCard.fromJson(Map<String, dynamic> json) =>
+      _$PaymentCardFromJson(json);
 
-  factory PaymentCardEntity.fromDto(PaymentCardDto dto) {
-    return PaymentCardEntity(
+  factory PaymentCard.fromDto(PaymentCardDto dto) {
+    return PaymentCard(
       id: dto.id,
       last4: dto.last4 ?? '',
     );

@@ -40,7 +40,6 @@ class SelectTicketSubmitButton extends StatelessWidget {
             opacity: !state.isSelectionValid || isLoading ? 0.5 : 1,
             child: LinearGradientButton(
               onTap: () {
-                print('total: $totalTicketAmount}');
                 if (!state.isSelectionValid || isLoading) return;
                 if (totalTicketAmount != 0) {
                   context.router.push(const EventTicketsSummaryRoute());

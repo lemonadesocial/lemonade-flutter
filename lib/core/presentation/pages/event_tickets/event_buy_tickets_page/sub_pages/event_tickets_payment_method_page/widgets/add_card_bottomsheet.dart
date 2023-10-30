@@ -41,7 +41,7 @@ class _AddCardBottomSheetState extends State<AddCardBottomSheet> {
               if (state.status == AddNewCardBlocStatus.success) {
                 // Return previous screen with new card data
                 context.router.pop(
-                  PaymentCardEntity(
+                  PaymentCard(
                     id: '',
                     last4: state.cardNumber!
                         .substring(state.cardNumber!.length - 4),

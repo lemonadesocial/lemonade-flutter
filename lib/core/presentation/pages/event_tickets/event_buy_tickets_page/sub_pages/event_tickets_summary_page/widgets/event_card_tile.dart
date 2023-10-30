@@ -16,7 +16,7 @@ class EventCardTile extends StatelessWidget {
     required this.paymentCardEntity,
   }) : super(key: key);
 
-  final PaymentCardEntity paymentCardEntity;
+  final PaymentCard paymentCardEntity;
 
   @override
   Widget build(BuildContext context) {

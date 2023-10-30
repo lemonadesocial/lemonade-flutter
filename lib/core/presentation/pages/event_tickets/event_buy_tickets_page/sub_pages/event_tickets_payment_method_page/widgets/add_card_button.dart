@@ -20,7 +20,7 @@ class AddCardButton extends StatelessWidget {
     return InkWell(
       onTap: () async {
         final newCard = await AddCardBottomSheet().showAsBottomSheet(context)
-            as PaymentCardEntity?;
+            as PaymentCard?;
         if (newCard != null) {
           context.read<PaymentBloc>().newCardAdded(newCard);
         }

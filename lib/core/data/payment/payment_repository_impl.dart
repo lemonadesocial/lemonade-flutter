@@ -14,16 +14,16 @@ class PaymentRepositoryImpl extends PaymentRepository {
   final _client = getIt<AppGQL>().client;
 
   @override
-  Future<Either<Failure, PaymentCardEntity>> createNewCard({
+  Future<Either<Failure, PaymentCard>> createNewCard({
     required String tokenId,
   }) async {
     final result = await _client.mutate(
       MutationOptions(
-        document: createNewCardQuery,
+        document: createNewCardMutation,
         variables: {
           'payment_method': tokenId,
         },
-        parserFn: (data) => PaymentCardEntity.fromDto(
+        parserFn: (data) => PaymentCard.fromDto(
           PaymentCardDto.fromJson(data['createStripeCard']),
         ),
       ),
@@ -40,7 +40,7 @@ class PaymentRepositoryImpl extends PaymentRepository {
   }
 
   @override
-  Future<Either<Failure, List<PaymentCardEntity>>> getListCard() async {
+  Future<Either<Failure, List<PaymentCard>>> getListCard() async {
     final result = await _client.query(
       QueryOptions(
         document: getListCardQuery,
@@ -51,7 +51,7 @@ class PaymentRepositoryImpl extends PaymentRepository {
         },
         parserFn: (data) => List.from(data['getStripeCards'] ?? [])
             .map(
-              (item) => PaymentCardEntity.fromDto(
+              (item) => PaymentCard.fromDto(
                 PaymentCardDto.fromJson(item),
               ),
             )

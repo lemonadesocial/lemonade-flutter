@@ -5,9 +5,9 @@ import 'package:dartz/dartz.dart';
 abstract class PaymentRepository {
   Future<Either<Failure, String>> getPublishableKey();
 
-  Future<Either<Failure, List<PaymentCardEntity>>> getListCard();
+  Future<Either<Failure, List<PaymentCard>>> getListCard();
 
-  Future<Either<Failure, PaymentCardEntity>> createNewCard({
+  Future<Either<Failure, PaymentCard>> createNewCard({
     required String tokenId,
   });
 
