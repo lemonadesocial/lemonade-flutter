@@ -78,4 +78,12 @@ class PaymentBloc extends Cubit<PaymentState> {
       ),
     );
   }
+
+  Future<void> createNewPayment() async {
+    emit(state.copyWith(status: PaymentStatus.loading));
+    final result = await _repository.createNewPayment();
+    result.fold((l) {}, (r) {
+      emit(state.copyWith(status: PaymentStatus.success));
+    });
+  }
 }

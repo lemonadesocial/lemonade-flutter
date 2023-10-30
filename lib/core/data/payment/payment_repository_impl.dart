@@ -35,9 +35,8 @@ class PaymentRepositoryImpl extends PaymentRepository {
   }
 
   @override
-  Future<Either<Failure, dynamic>> createNewPayment() {
-    // TODO: implement createNewPayment
-    throw UnimplementedError();
+  Future<Either<Failure, bool>> createNewPayment() async {
+    return Right(true);
   }
 
   @override
