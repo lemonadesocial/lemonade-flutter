@@ -14,24 +14,33 @@ class PaymentRepositoryImpl extends PaymentRepository {
   final _client = getIt<AppGQL>().client;
 
   @override
-  Future<Either<Failure, PaymentCardEntity>> createNewCard({
+  Future<Either<Failure, PaymentCard>> createNewCard({
     required String tokenId,
   }) async {
-    final result = await _client.mutate(
-      MutationOptions(
-        document: createNewCardQuery,
-        variables: {
-          'payment_method': tokenId,
-        },
-        parserFn: (data) => PaymentCardEntity.fromDto(
-          PaymentCardDto.fromJson(data['createStripeCard']),
-        ),
+    // TODO: Temporary disable until BE deploy
+    return const Right(
+      PaymentCard(
+        id: '',
+        last4: '4242',
+        brand: 'Visa',
+        providerId: '1234',
       ),
     );
-    if (result.hasException) {
-      return Left(Failure.withGqlException(result.exception));
-    }
-    return Right(result.parsedData!);
+    // final result = await _client.mutate(
+    //   MutationOptions(
+    //     document: createNewCardQuery,
+    //     variables: {
+    //       'payment_method': tokenId,
+    //     },
+    //     parserFn: (data) => PaymentCard.fromDto(
+    //       PaymentCardDto.fromJson(data['createStripeCard']),
+    //     ),
+    //   ),
+    // );
+    // if (result.hasException) {
+    //   return Left(Failure.withGqlException(result.exception));
+    // }
+    // return Right(result.parsedData!);
   }
 
   @override
@@ -40,7 +49,7 @@ class PaymentRepositoryImpl extends PaymentRepository {
   }
 
   @override
-  Future<Either<Failure, List<PaymentCardEntity>>> getListCard() async {
+  Future<Either<Failure, List<PaymentCard>>> getListCard() async {
     final result = await _client.query(
       QueryOptions(
         document: getListCardQuery,
@@ -51,7 +60,7 @@ class PaymentRepositoryImpl extends PaymentRepository {
         },
         parserFn: (data) => List.from(data['getStripeCards'] ?? [])
             .map(
-              (item) => PaymentCardEntity.fromDto(
+              (item) => PaymentCard.fromDto(
                 PaymentCardDto.fromJson(item),
               ),
             )

@@ -2,6 +2,9 @@ import 'package:app/core/application/event/accept_event_bloc/accept_event_bloc.d
 import 'package:app/core/application/event_tickets/assign_tickets_bloc/assign_tickets_bloc.dart';
 import 'package:app/core/application/event_tickets/redeem_tickets_bloc/redeem_tickets_bloc.dart';
 import 'package:app/core/application/event_tickets/select_event_tickets_bloc/select_event_tickets_bloc.dart';
+import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/entities/event_ticket_types.dart';
+import 'package:app/core/domain/event/input/calculate_tickets_pricing_input/calculate_tickets_pricing_input.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -13,17 +16,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SelectTicketSubmitButton extends StatelessWidget {
   const SelectTicketSubmitButton({
-    this.totalTicketAmount,
+    required this.event,
+    required this.listTicket,
     super.key,
   });
 
-  final double? totalTicketAmount;
+  final Event event;
+  final List<PurchasableTicketType> listTicket;
 
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final nextTitle =
-        '${t.common.next}${totalTicketAmount != 0 ? ' •  $totalTicketAmount' : ''}';
+        '${t.common.next}${event.cost != 0 ? ' •  ${event.cost}' : ''}';
     final redeemState = context.watch<RedeemTicketsBloc>().state;
     final acceptEventState = context.watch<AcceptEventBloc>().state;
     final assignTicketsState = context.watch<AssignTicketsBloc>().state;
@@ -36,25 +41,26 @@ class SelectTicketSubmitButton extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
         child: SizedBox(
           height: Sizing.large,
-          child: Opacity(
-            opacity: !state.isSelectionValid || isLoading ? 0.5 : 1,
-            child: LinearGradientButton(
-              onTap: () {
-                if (!state.isSelectionValid || isLoading) return;
-                if (totalTicketAmount != 0) {
-                  context.router.push(const EventTicketsSummaryRoute());
-                } else {
-                  context.read<RedeemTicketsBloc>().add(
-                        RedeemTicketsEvent.redeem(
-                          ticketItems: state.selectedTicketTypes,
-                        ),
-                      );
-                }
-              },
-              radius: BorderRadius.circular(LemonRadius.small * 2),
-              label: isLoading ? t.common.processing : nextTitle,
-              mode: GradientButtonMode.lavenderMode,
-            ),
+          child: LinearGradientButton(
+            onTap: () {
+              if (event.cost != 0) {
+                context.router.push(
+                  EventTicketsSummaryRoute(
+                    event: event,
+                    listTicket: listTicket,
+                  ),
+                );
+              } else {
+                context.read<RedeemTicketsBloc>().add(
+                      RedeemTicketsEvent.redeem(
+                        ticketItems: state.selectedTicketTypes,
+                      ),
+                    );
+              }
+            },
+            radius: BorderRadius.circular(LemonRadius.small * 2),
+            label: isLoading ? t.common.processing : nextTitle,
+            mode: GradientButtonMode.lavenderMode,
           ),
         ),
       ),

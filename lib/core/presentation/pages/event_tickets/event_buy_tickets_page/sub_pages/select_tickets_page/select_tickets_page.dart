@@ -35,9 +35,6 @@ class SelectTicketsPage extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => RedeemTicketsBloc(event: event),
-        ),
-        BlocProvider(
           create: (context) => AssignTicketsBloc(event: event),
         ),
         BlocProvider(
@@ -205,8 +202,14 @@ class SelectTicketView extends StatelessWidget {
                 ),
               ),
               const Spacer(),
-              SelectTicketSubmitButton(
-                totalTicketAmount: event.cost,
+              BlocBuilder<GetEventTicketTypesBloc, GetEventTicketTypesState>(
+                builder: (context, state) => SelectTicketSubmitButton(
+                  event: event,
+                  listTicket: state.maybeWhen(
+                    orElse: () => [],
+                    success: (response) => response.ticketTypes ?? [],
+                  ),
+                ),
               ),
             ],
           ),

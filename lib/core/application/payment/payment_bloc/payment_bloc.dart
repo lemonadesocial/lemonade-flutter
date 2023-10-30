@@ -60,7 +60,7 @@ class PaymentBloc extends Cubit<PaymentState> {
     );
   }
 
-  void onCardSelected(PaymentCardEntity card) {
+  void onCardSelected(PaymentCard card) {
     emit(
       state.copyWith(
         status: PaymentStatus.initial,
@@ -69,7 +69,7 @@ class PaymentBloc extends Cubit<PaymentState> {
     );
   }
 
-  void newCardAdded(PaymentCardEntity card) {
+  void newCardAdded(PaymentCard card) {
     emit(
       state.copyWith(
         status: PaymentStatus.initial,

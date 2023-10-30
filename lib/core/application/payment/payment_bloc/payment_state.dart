@@ -6,8 +6,8 @@ class PaymentState with _$PaymentState {
     @Default(PaymentStatus.initial) PaymentStatus status,
     @Default('') String publishableKey,
     EventTicketsPricingInfo? pricingInfo,
-    PaymentCardEntity? selectedCard,
-    @Default([]) List<PaymentCardEntity> listCard,
+    PaymentCard? selectedCard,
+    @Default([]) List<PaymentCard> listCard,
   }) = _PaymentState;
 
   factory PaymentState.initial() => const PaymentState();

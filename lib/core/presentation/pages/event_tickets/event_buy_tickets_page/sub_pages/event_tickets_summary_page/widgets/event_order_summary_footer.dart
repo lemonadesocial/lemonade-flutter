@@ -41,7 +41,7 @@ class EventOrderSummaryFooter extends StatelessWidget {
                 ? Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      EventCardTile(paymentCardEntity: state.selectedCard!),
+                      EventCardTile(paymentCard: state.selectedCard!),
                       SizedBox(height: Spacing.smMedium),
                       const EventOrderSlideToPay(),
                     ],
@@ -81,7 +81,7 @@ class EventOrderSummaryFooter extends StatelessWidget {
         InkWell(
           onTap: () async {
             final newCard = await AddCardBottomSheet()
-                .showAsBottomSheet(context) as PaymentCardEntity?;
+                .showAsBottomSheet(context) as PaymentCard?;
             if (newCard != null) {
               context.read<PaymentBloc>().newCardAdded(newCard);
             }

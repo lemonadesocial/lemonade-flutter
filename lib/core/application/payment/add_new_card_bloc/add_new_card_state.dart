@@ -6,6 +6,7 @@ class AddNewCardState with _$AddNewCardState {
 
   factory AddNewCardState({
     @Default(AddNewCardBlocStatus.initial) AddNewCardBlocStatus status,
+    PaymentCard? paymentCard,
     String? cardHolderName,
     String? cardNumber,
     String? validThrough,

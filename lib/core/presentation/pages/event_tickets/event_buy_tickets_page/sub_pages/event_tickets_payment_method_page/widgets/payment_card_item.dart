@@ -16,8 +16,8 @@ class PaymentCardItem extends StatelessWidget {
     required this.cardInfo,
   });
 
-  final List<PaymentCardEntity> listCard;
-  final PaymentCardEntity cardInfo;
+  final List<PaymentCard> listCard;
+  final PaymentCard cardInfo;
 
   @override
   Widget build(BuildContext context) {

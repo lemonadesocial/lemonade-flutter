@@ -1,5 +1,6 @@
 import 'package:app/core/application/event/event_provider_bloc/event_provider_bloc.dart';
 import 'package:app/core/application/event_tickets/get_event_ticket_types_bloc/get_event_ticket_types_bloc.dart';
+import 'package:app/core/application/event_tickets/redeem_tickets_bloc/redeem_tickets_bloc.dart';
 import 'package:app/core/application/event_tickets/select_event_tickets_bloc/select_event_tickets_bloc.dart';
 import 'package:app/core/application/payment/payment_bloc/payment_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart' as event_entity;
@@ -41,6 +42,9 @@ class EventBuyTicketsPage extends StatelessWidget implements AutoRouteWrapper {
             getIt<PaymentRepository>(),
             getIt<EventTicketRepository>(),
           ),
+        ),
+        BlocProvider(
+          create: (context) => RedeemTicketsBloc(event: event),
         ),
       ],
       child: this,

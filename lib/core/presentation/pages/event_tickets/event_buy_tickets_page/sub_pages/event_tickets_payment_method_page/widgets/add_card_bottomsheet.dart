@@ -42,15 +42,7 @@ class _AddCardBottomSheetState extends State<AddCardBottomSheet> {
             listener: (context, state) {
               if (state.status == AddNewCardBlocStatus.success) {
                 // Return previous screen with new card data
-                context.router.pop(
-                  PaymentCardEntity(
-                    id: '',
-                    last4: state.cardNumber!
-                        .substring(state.cardNumber!.length - 4),
-                    brand: 'Visa',
-                    providerId: '1234',
-                  ),
-                );
+                context.router.pop(state.paymentCard);
               }
             },
             builder: (context, state) {
