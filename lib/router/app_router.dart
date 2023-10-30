@@ -54,12 +54,21 @@ class AppRouter extends $AppRouter {
           children: [
             AutoRoute(
               page: OnboardingTermAdultRoute.page,
+              meta: const {
+                'popBlocked': true,
+              },
             ),
             AutoRoute(
               page: OnboardingTermConditionsRoute.page,
+              meta: const {
+                'popBlocked': true,
+              },
             ),
             AutoRoute(
               page: OnboardingUsernameRoute.page,
+              meta: const {
+                'popBlocked': true,
+              },
             ),
             AutoRoute(
               page: OnboardingProfilePhotoRoute.page,

@@ -296,6 +296,7 @@ class _UserEditor extends StatelessWidget {
           onTap: () async {
             final userName = await context.router.push(
               OnboardingWrapperRoute(
+                onboardingFlow: false,
                 children: [OnboardingUsernameRoute(onboardingFlow: false)],
               ),
             ) as String?;
