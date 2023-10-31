@@ -36,7 +36,7 @@ class PaymentRepositoryImpl extends PaymentRepository {
 
   @override
   Future<Either<Failure, bool>> createNewPayment() async {
-    return Right(true);
+    return const Right(true);
   }
 
   @override
@@ -67,6 +67,6 @@ class PaymentRepositoryImpl extends PaymentRepository {
 
   @override
   Future<Either<Failure, String>> getPublishableKey() async {
-    return Right('');
+    return const Right('');
   }
 }
