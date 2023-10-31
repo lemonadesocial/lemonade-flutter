@@ -1,10 +1,12 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
+import 'package:app/core/application/wallet/sign_wallet_bloc/sign_wallet_bloc.dart';
 import 'package:app/core/application/wallet/wallet_bloc/wallet_bloc.dart';
 import 'package:app/core/presentation/dpos/common/dropdown_item_dpo.dart';
 import 'package:app/core/presentation/widgets/floating_frosted_glass_dropdown_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_button_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
-import 'package:app/core/service/wallet_connect/wallet_connect_service.dart';
+import 'package:app/core/presentation/widgets/wallet_connect/wallet_connect_popup/wallet_connect_popup.dart';
+import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -39,61 +41,96 @@ class _Button extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final onSurfaceColor = Theme.of(context).colorScheme.onSurface;
-
+    final t = Translations.of(context);
     String getWalletAddress(SessionData sessionData) {
       final sessionAccount =
           sessionData.namespaces.entries.first.value.accounts.first;
       return NamespaceUtils.getAccount(sessionAccount);
     }
 
-    return BlocBuilder<WalletBloc, WalletState>(
-      builder: (context, walletState) {
-        final activeSession = walletState.activeSession;
-        if (activeSession == null) {
-          return LemonButton(
-            onTap: () {
-              context.read<WalletBloc>().add(
-                    const WalletEventConnectWallet(
-                      walletApp: SupportedWalletApp.metamask,
-                    ),
-                  );
-            },
-            label: t.common.actions.connect,
-            icon: ThemeSvgIcon(
-              color: onSurfaceColor,
-              builder: (filter) =>
-                  Assets.icons.icWallet.svg(colorFilter: filter),
-            ),
-          );
-        }
-
-        final walletAddress = getWalletAddress(activeSession);
-
-        return FloatingFrostedGlassDropdown(
-          items: [
-            DropdownItemDpo(label: "Sign your wallet"),
-          ],
-          offset: Offset(0, Spacing.extraSmall),
-          onItemPressed: (item) {
+    void showSelectWalletPopup() {
+      showDialog(
+        context: context,
+        builder: (_) => WalletConnectPopup(
+          onSelect: (walletApp) {
+            Navigator.of(context).pop();
             context.read<WalletBloc>().add(
-                  WalletEvent.updateUserWallet(
-                    wallet: walletAddress,
+                  WalletEventConnectWallet(
+                    walletApp: walletApp,
                   ),
                 );
           },
-          child: LemonButton(
-            label: Web3Utils.formatIdentifier(
-              walletAddress,
-              length: 3,
-            ),
-            icon: ThemeSvgIcon(
-              color: onSurfaceColor,
-              builder: (filter) =>
-                  Assets.icons.icWallet.svg(colorFilter: filter),
-            ),
-          ),
+        ),
+      );
+    }
+
+    return BlocListener<SignWalletBloc, SignWalletState>(
+      listener: (context, state) {
+        state.maybeWhen(
+          success: () =>
+              SnackBarUtils.showSuccessSnackbar(t.nft.signWalletSuccess),
+          failure: () =>
+              SnackBarUtils.showErrorSnackbar(t.common.somethingWrong),
+          orElse: () => null,
         );
       },
+      child: BlocBuilder<WalletBloc, WalletState>(
+        builder: (context, walletState) {
+          final activeSession = walletState.activeSession;
+          if (activeSession == null) {
+            return LemonButton(
+              onTap: showSelectWalletPopup,
+              label: t.common.actions.connect,
+              icon: ThemeSvgIcon(
+                color: onSurfaceColor,
+                builder: (filter) =>
+                    Assets.icons.icWallet.svg(colorFilter: filter),
+              ),
+            );
+          }
+
+          final walletAddress = getWalletAddress(activeSession);
+
+          return FloatingFrostedGlassDropdown(
+            items: [
+              DropdownItemDpo(label: t.nft.signWallet, value: 'sign'),
+              DropdownItemDpo(
+                label: t.nft.disconnectWallet,
+                value: "disconnect",
+              ),
+            ],
+            offset: Offset(0, Spacing.extraSmall),
+            onItemPressed: (item) {
+              if (item?.value == "disconnect") {
+                context.read<WalletBloc>().add(
+                      const WalletEvent.disconnect(),
+                    );
+                return;
+              }
+
+              if (item?.value == 'sign') {
+                context.read<SignWalletBloc>().add(
+                      SignWalletEvent.sign(
+                        wallet: walletAddress,
+                      ),
+                    );
+                return;
+              }
+            },
+            child: LemonButton(
+              label: Web3Utils.formatIdentifier(
+                walletAddress,
+                length: 3,
+              ),
+              icon: ThemeSvgIcon(
+                color: onSurfaceColor,
+                builder: (filter) =>
+                    Assets.icons.icWallet.svg(colorFilter: filter),
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 }

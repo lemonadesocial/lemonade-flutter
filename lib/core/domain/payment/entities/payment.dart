@@ -1,4 +1,4 @@
-import 'package:app/core/data/payment/dtos/payment_dtos.dart';
+import 'package:app/core/data/payment/dtos/payment_dtos/payment_dtos.dart';
 import 'package:app/core/domain/payment/payment_enums.dart';
 
 class Payment {

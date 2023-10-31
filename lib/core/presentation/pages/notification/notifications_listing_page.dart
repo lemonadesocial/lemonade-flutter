@@ -9,7 +9,6 @@ import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/drawer_utils.dart';
 import 'package:app/core/utils/navigation_utils.dart';
-import 'package:app/core/utils/swipe_detector.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -117,63 +116,50 @@ class _NotificationsListingViewState extends State<_NotificationsListingView> {
         ],
       ),
       backgroundColor: themeColor.primary,
-      body: SwipeDetector(
-        child: BlocBuilder<NotificationsListingBloc, NotificationsListingState>(
-          builder: (context, state) {
-            return state.when(
-              loading: () => Loading.defaultLoading(context),
-              fetched: (notifications) {
-                if (notifications.isEmpty) {
-                  return Center(
-                    child:
-                        EmptyList(emptyText: t.notification.emptyNotifications),
-                  );
-                }
-                return AnimatedList(
-                  // Add more space at bottom of screen
-                  padding: EdgeInsets.only(bottom: 150.h),
-                  key: _notificationList,
-                  itemBuilder: (ctx, index, animation) =>
-                      index == notifications.length
-                          ? const SizedBox(height: 80)
-                          : NotificationCard(
-                              key: Key(notifications[index].id ?? ''),
-                              index: index,
-                              notification: notifications[index],
-                              onTap: () {
-                                NavigationUtils.handleNotificationNavigate(
-                                  context,
-                                  notifications[index],
-                                );
-                              },
-                              onRemove: (index, notification, isDismiss) {
-                                removeItem(
-                                  index,
-                                  notification: notification,
-                                  isDismiss: isDismiss ?? false,
-                                );
-                              },
-                            ),
-                  initialItemCount: notifications.length,
+      body: BlocBuilder<NotificationsListingBloc, NotificationsListingState>(
+        builder: (context, state) {
+          return state.when(
+            loading: () => Loading.defaultLoading(context),
+            fetched: (notifications) {
+              if (notifications.isEmpty) {
+                return Center(
+                  child:
+                      EmptyList(emptyText: t.notification.emptyNotifications),
                 );
-              },
-              failure: () => Center(
-                child: Text(t.common.somethingWrong),
-              ),
-            );
-          },
-        ),
-        onSwipeUp: () {},
-        onSwipeDown: () {},
-        onSwipeLeft: () {
-          context.read<AuthBloc>().state.maybeWhen(
-                authenticated: (session) =>
-                    AutoRouter.of(context).navigate(const ChatListRoute()),
-                orElse: () =>
-                    AutoRouter.of(context).navigate(const LoginRoute()),
+              }
+              return AnimatedList(
+                // Add more space at bottom of screen
+                padding: EdgeInsets.only(bottom: 150.h),
+                key: _notificationList,
+                itemBuilder: (ctx, index, animation) =>
+                    index == notifications.length
+                        ? const SizedBox(height: 80)
+                        : NotificationCard(
+                            key: Key(notifications[index].id ?? ''),
+                            index: index,
+                            notification: notifications[index],
+                            onTap: () {
+                              NavigationUtils.handleNotificationNavigate(
+                                context,
+                                notifications[index],
+                              );
+                            },
+                            onRemove: (index, notification, isDismiss) {
+                              removeItem(
+                                index,
+                                notification: notification,
+                                isDismiss: isDismiss ?? false,
+                              );
+                            },
+                          ),
+                initialItemCount: notifications.length,
               );
+            },
+            failure: () => Center(
+              child: Text(t.common.somethingWrong),
+            ),
+          );
         },
-        onSwipeRight: () {},
       ),
     );
   }

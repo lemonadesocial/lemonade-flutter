@@ -23,14 +23,15 @@ import 'package:app/core/data/event/repository/event_ticket_repository_impl.dart
     as _i16;
 import 'package:app/core/data/notification/repository/notification_repository_impl.dart'
     as _i24;
-import 'package:app/core/data/poap/poap_repository_impl.dart' as _i26;
+import 'package:app/core/data/payment/payment_repository_impl.dart' as _i26;
+import 'package:app/core/data/poap/poap_repository_impl.dart' as _i28;
 import 'package:app/core/data/post/newsfeed_repository_impl.dart' as _i22;
-import 'package:app/core/data/post/post_repository_impl.dart' as _i28;
+import 'package:app/core/data/post/post_repository_impl.dart' as _i30;
 import 'package:app/core/data/report/repository/report_repository_impl.dart'
-    as _i30;
-import 'package:app/core/data/token/token_repository_impl.dart' as _i34;
-import 'package:app/core/data/user/user_repository_impl.dart' as _i36;
-import 'package:app/core/data/wallet/wallet_repository_impl.dart' as _i39;
+    as _i32;
+import 'package:app/core/data/token/token_repository_impl.dart' as _i36;
+import 'package:app/core/data/user/user_repository_impl.dart' as _i38;
+import 'package:app/core/data/wallet/wallet_repository_impl.dart' as _i41;
 import 'package:app/core/domain/badge/badge_repository.dart' as _i6;
 import 'package:app/core/domain/community/community_repository.dart' as _i9;
 import 'package:app/core/domain/event/event_repository.dart' as _i13;
@@ -41,20 +42,20 @@ import 'package:app/core/domain/event/repository/event_ticket_repository.dart'
 import 'package:app/core/domain/newsfeed/newsfeed_repository.dart' as _i21;
 import 'package:app/core/domain/notification/notification_repository.dart'
     as _i23;
-import 'package:app/core/domain/poap/poap_repository.dart' as _i25;
-import 'package:app/core/domain/post/post_repository.dart' as _i27;
-import 'package:app/core/domain/report/report_repository.dart' as _i29;
-import 'package:app/core/domain/token/token_repository.dart' as _i33;
-import 'package:app/core/domain/user/user_repository.dart' as _i35;
-import 'package:app/core/domain/wallet/wallet_repository.dart' as _i38;
+import 'package:app/core/domain/payment/payment_repository.dart' as _i25;
+import 'package:app/core/domain/poap/poap_repository.dart' as _i27;
+import 'package:app/core/domain/post/post_repository.dart' as _i29;
+import 'package:app/core/domain/report/report_repository.dart' as _i31;
+import 'package:app/core/domain/token/token_repository.dart' as _i35;
+import 'package:app/core/domain/user/user_repository.dart' as _i37;
+import 'package:app/core/domain/wallet/wallet_repository.dart' as _i40;
 import 'package:app/core/oauth/oauth.dart' as _i4;
 import 'package:app/core/service/badge/badge_service.dart' as _i8;
 import 'package:app/core/service/firebase/firebase_service.dart' as _i17;
 import 'package:app/core/service/matrix/matrix_service.dart' as _i19;
-import 'package:app/core/service/shake/shake_service.dart' as _i31;
-import 'package:app/core/service/shorebird_codepush_service.dart' as _i32;
-import 'package:app/core/service/wallet_connect/wallet_connect_service.dart'
-    as _i37;
+import 'package:app/core/service/shake/shake_service.dart' as _i33;
+import 'package:app/core/service/shorebird_codepush_service.dart' as _i34;
+import 'package:app/core/service/wallet/wallet_connect_service.dart' as _i39;
 import 'package:app/core/utils/gql/gql.dart' as _i3;
 import 'package:app/core/utils/location_utils.dart' as _i18;
 import 'package:get_it/get_it.dart' as _i1;
@@ -92,18 +93,20 @@ extension GetItInjectableX on _i1.GetIt {
         () => _i22.NewsfeedRepositoryImpl());
     gh.lazySingleton<_i23.NotificationRepository>(
         () => _i24.NotificationRepositoryImpl());
-    gh.lazySingleton<_i25.PoapRepository>(() => _i26.PoapRepositoryImpl());
-    gh.lazySingleton<_i27.PostRepository>(() => _i28.PostRepositoryImpl());
-    gh.lazySingleton<_i29.ReportRepository>(() => _i30.ReportRepositoryImpl());
-    gh.lazySingleton<_i31.ShakeService>(() => _i31.ShakeService());
-    gh.lazySingleton<_i32.ShorebirdCodePushService>(
-        () => _i32.ShorebirdCodePushService());
-    gh.lazySingleton<_i33.TokenRepository>(() => _i34.TokenRepositoryImpl());
-    gh.lazySingleton<_i35.UserRepository>(() => _i36.UserRepositoryImpl());
-    gh.lazySingleton<_i37.WalletConnectService>(
-        () => _i37.WalletConnectService());
+    gh.lazySingleton<_i25.PaymentRepository>(
+        () => _i26.PaymentRepositoryImpl());
+    gh.lazySingleton<_i27.PoapRepository>(() => _i28.PoapRepositoryImpl());
+    gh.lazySingleton<_i29.PostRepository>(() => _i30.PostRepositoryImpl());
+    gh.lazySingleton<_i31.ReportRepository>(() => _i32.ReportRepositoryImpl());
+    gh.lazySingleton<_i33.ShakeService>(() => _i33.ShakeService());
+    gh.lazySingleton<_i34.ShorebirdCodePushService>(
+        () => _i34.ShorebirdCodePushService());
+    gh.lazySingleton<_i35.TokenRepository>(() => _i36.TokenRepositoryImpl());
+    gh.lazySingleton<_i37.UserRepository>(() => _i38.UserRepositoryImpl());
+    gh.lazySingleton<_i39.WalletConnectService>(
+        () => _i39.WalletConnectService());
     gh.lazySingleton<_i3.WalletGQL>(() => _i3.WalletGQL());
-    gh.lazySingleton<_i38.WalletRepository>(() => _i39.WalletRepositoryImpl());
+    gh.lazySingleton<_i40.WalletRepository>(() => _i41.WalletRepositoryImpl());
     return this;
   }
 }

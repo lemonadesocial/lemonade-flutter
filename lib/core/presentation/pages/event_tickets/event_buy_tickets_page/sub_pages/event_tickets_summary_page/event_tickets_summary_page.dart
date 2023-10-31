@@ -1,3 +1,4 @@
+import 'package:app/core/application/payment/payment_bloc/payment_bloc.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/add_promo_code_input.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/event_order_summary.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/event_order_summary_footer.dart';
@@ -9,6 +10,7 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 @RoutePage()
@@ -28,6 +30,7 @@ class EventTicketsSummaryView extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
+    context.read<PaymentBloc>().getListCard();
     return Scaffold(
       backgroundColor: colorScheme.background,
       appBar: const LemonAppBar(),
@@ -73,7 +76,7 @@ class EventTicketsSummaryView extends StatelessWidget {
             const Align(
               alignment: Alignment.bottomCenter,
               child: EventOrderSummaryFooter(),
-            )
+            ),
           ],
         ),
       ),

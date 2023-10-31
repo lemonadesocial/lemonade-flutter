@@ -21,6 +21,8 @@ class LemonTextField extends StatelessWidget {
     this.inputFormatters,
     this.controller,
     this.contentPadding,
+    this.textInputType,
+    this.focusNode,
   }) : super(key: key);
 
   final ValueChanged<String> onChange;
@@ -37,6 +39,8 @@ class LemonTextField extends StatelessWidget {
   final List<TextInputFormatter>? inputFormatters;
   final TextEditingController? controller;
   final EdgeInsets? contentPadding;
+  final TextInputType? textInputType;
+  final FocusNode? focusNode;
 
   @override
   Widget build(BuildContext context) {
@@ -63,12 +67,14 @@ class LemonTextField extends StatelessWidget {
           controller: controller,
           autofocus: autofocus,
           onChanged: onChange,
+          focusNode: focusNode,
           style: theme.textTheme.bodyMedium!
               .copyWith(color: theme.colorScheme.onPrimary),
           minLines: minLines,
           maxLines: maxLines ?? minLines,
           cursorColor: theme.colorScheme.onPrimary,
           initialValue: initialText,
+          keyboardType: textInputType,
           decoration: InputDecoration(
             hintText: hintText,
             hintStyle: theme.textTheme.bodyMedium!

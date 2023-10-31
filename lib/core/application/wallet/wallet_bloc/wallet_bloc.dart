@@ -1,7 +1,7 @@
 import 'package:app/core/constants/web3/chains.dart';
-import 'package:app/core/service/wallet/wallet_service.dart';
-import 'package:app/core/service/wallet_connect/wallet_connect_service.dart';
-import 'package:app/core/utils/snackbar_utils.dart';
+import 'package:app/core/domain/wallet/wallet_repository.dart';
+import 'package:app/core/service/wallet/wallet_connect_service.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:walletconnect_flutter_v2/apis/sign_api/models/session_models.dart';
@@ -9,56 +9,45 @@ import 'package:walletconnect_flutter_v2/apis/sign_api/models/session_models.dar
 part 'wallet_bloc.freezed.dart';
 
 class WalletBloc extends Bloc<WalletEvent, WalletState> {
-  final WalletService walletService = WalletService();
+  final walletRepository = getIt<WalletRepository>();
+  final walletConnectService = getIt<WalletConnectService>();
 
   WalletBloc() : super(const WalletState()) {
     on<WalletEventInitWalletConnect>(_onInitWalletConnect);
     on<WalletEventGetActiveSessions>(_onGetActiveSessions);
     on<WalletEventConnectWallet>(_onConnectWallet);
-    on<WalletEventUpdateUserWallet>(_onUpdateUserWallet);
+    on<WalletEventDisconnectWallet>(_onDisconnectWallet);
   }
 
   @override
   close() async {
-    walletService.close();
+    walletConnectService.close();
     super.close();
   }
 
   _onInitWalletConnect(WalletEventInitWalletConnect event, Emitter emit) async {
-    final result = await walletService.initWallet();
-    if (result.isRight()) {
+    final success = await walletConnectService.init();
+    if (success) {
       add(const WalletEventGetActiveSessions());
     }
   }
 
   _onGetActiveSessions(WalletEventGetActiveSessions event, Emitter emit) async {
-    final activeSession = await walletService.getActiveSession();
-    if (activeSession != null) {
-      emit(state.copyWith(activeSession: activeSession));
-    }
+    final activeSession = await walletConnectService.getActiveSession();
+    emit(state.copyWith(activeSession: activeSession));
   }
 
   _onConnectWallet(WalletEventConnectWallet event, Emitter emit) async {
-    var result = await walletService.connectWallet(walletApp: event.walletApp);
-    if (result.isRight()) {
+    var success =
+        await walletConnectService.connectWallet(walletApp: event.walletApp);
+    if (success) {
       add(const WalletEvent.getActiveSessions());
     }
   }
 
-  _onUpdateUserWallet(WalletEventUpdateUserWallet event, Emitter emit) async {
-    final result = await walletService.updateUserWallet(wallet: event.wallet);
-    result.fold(
-      (l) {
-        SnackBarUtils.showSnackbar("Sign wallet failed");
-      },
-      (isSuccess) {
-        if (isSuccess) {
-          SnackBarUtils.showSnackbar("Wallet successfully signed");
-        } else {
-          SnackBarUtils.showSnackbar("Sign wallet failed");
-        }
-      },
-    );
+  _onDisconnectWallet(WalletEventDisconnectWallet event, Emitter emit) async {
+    await walletConnectService.disconnect();
+    add(const WalletEvent.getActiveSessions());
   }
 }
 
@@ -70,9 +59,7 @@ class WalletEvent with _$WalletEvent {
     List<Chains>? chains,
   }) = WalletEventConnectWallet;
   const factory WalletEvent.getActiveSessions() = WalletEventGetActiveSessions;
-  const factory WalletEvent.updateUserWallet({
-    required String wallet,
-  }) = WalletEventUpdateUserWallet;
+  const factory WalletEvent.disconnect() = WalletEventDisconnectWallet;
 }
 
 @freezed

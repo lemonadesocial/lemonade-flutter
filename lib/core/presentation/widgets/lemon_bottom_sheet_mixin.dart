@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-mixin LemonBottomSheet<T extends StatelessWidget> on Widget {
-  void showAsBottomSheet(
+mixin LemonBottomSheet<M extends StatelessWidget> on Widget {
+  Future<dynamic> showAsBottomSheet(
     BuildContext context, {
     double? heightFactor,
   }) =>
-      showModalBottomSheet(
+      showModalBottomSheet<dynamic>(
         context: context,
         isScrollControlled: true,
         backgroundColor: Theme.of(context).colorScheme.primary,
