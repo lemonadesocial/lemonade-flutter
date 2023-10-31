@@ -6,9 +6,10 @@ import 'package:app/core/application/event_tickets/get_event_ticket_types_bloc/g
 import 'package:app/core/application/event_tickets/redeem_tickets_bloc/redeem_tickets_bloc.dart';
 import 'package:app/core/application/event_tickets/select_event_tickets_bloc/select_event_tickets_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/input/assign_tickets_input/assign_tickets_input.dart';
+import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/select_tickets_page/widgets/select_ticket_item.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/select_tickets_page/widgets/select_ticket_submit_button.dart';
-import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/select_tickets_page/widgets/select_tickets_list.dart';
 import 'package:app/core/presentation/widgets/back_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
@@ -24,6 +25,7 @@ import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 @RoutePage()
 class SelectTicketsPage extends StatelessWidget {
@@ -35,14 +37,11 @@ class SelectTicketsPage extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => RedeemTicketsBloc(event: event),
-        ),
-        BlocProvider(
           create: (context) => AssignTicketsBloc(event: event),
         ),
         BlocProvider(
           create: (context) => AcceptEventBloc(event: event),
-        )
+        ),
       ],
       child: SelectTicketView(event: event),
     );
@@ -194,19 +193,48 @@ class SelectTicketView extends StatelessWidget {
                 ),
               ),
               SizedBox(height: Spacing.smMedium),
-              BlocBuilder<GetEventTicketTypesBloc, GetEventTicketTypesState>(
-                builder: (context, state) => state.when(
-                  loading: () => Loading.defaultLoading(context),
-                  failure: () => EmptyList(emptyText: t.common.somethingWrong),
-                  success: (eventTicketTypesResponse) => SelectTicketsList(
-                    event: event,
-                    eventTicketTypesResponse: eventTicketTypesResponse,
+              Expanded(
+                child: BlocBuilder<GetEventTicketTypesBloc,
+                    GetEventTicketTypesState>(
+                  builder: (context, state) => state.when(
+                    loading: () => Loading.defaultLoading(context),
+                    failure: () =>
+                        EmptyList(emptyText: t.common.somethingWrong),
+                    success: (response) {
+                      final ticketTypes = List<PurchasableTicketType>.from(
+                        response.ticketTypes ?? [],
+                      );
+                      return Column(
+                        children: [
+                          Expanded(
+                            child: ListView.separated(
+                              itemBuilder: (context, index) => SelectTicketItem(
+                                event: event,
+                                ticketType: ticketTypes[index],
+                                onCountChange: (count) => ticketTypes[index] =
+                                    ticketTypes[index].copyWith(count: count),
+                              ),
+                              shrinkWrap: true,
+                              separatorBuilder: (context, index) => Divider(
+                                height: 1.w,
+                                thickness: 1.w,
+                                color: colorScheme.onPrimary.withOpacity(0.05),
+                              ),
+                              itemCount: ticketTypes.length,
+                            ),
+                          ),
+                          SelectTicketSubmitButton(
+                            event: event,
+                            listTicket: state.maybeWhen(
+                              orElse: () => [],
+                              success: (response) => ticketTypes,
+                            ),
+                          ),
+                        ],
+                      );
+                    },
                   ),
                 ),
-              ),
-              const Spacer(),
-              SelectTicketSubmitButton(
-                totalTicketAmount: event.cost,
               ),
             ],
           ),

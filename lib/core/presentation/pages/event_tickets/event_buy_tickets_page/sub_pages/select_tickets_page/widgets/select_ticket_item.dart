@@ -1,7 +1,5 @@
-import 'package:app/core/application/event_tickets/select_event_tickets_bloc/select_event_tickets_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
-import 'package:app/core/domain/event/input/calculate_tickets_pricing_input/calculate_tickets_pricing_input.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/utils/number_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -10,7 +8,6 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SelectTicketItem extends StatefulWidget {
@@ -18,57 +15,35 @@ class SelectTicketItem extends StatefulWidget {
     super.key,
     required this.ticketType,
     required this.event,
+    required this.onCountChange,
   });
 
   final PurchasableTicketType ticketType;
   final Event event;
+  final ValueChanged<int> onCountChange;
 
   @override
   State<SelectTicketItem> createState() => _SelectTicketItemState();
 }
 
 class _SelectTicketItemState extends State<SelectTicketItem> {
-  double count = 0;
+  var count = 1;
 
-  @override
-  initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      if (widget.ticketType.cost == 0) {
-        add();
-      }
-    });
-  }
-
-  add() {
+  void add() {
     if (count < (widget.ticketType.limit ?? 0)) {
       setState(() {
         count++;
       });
-      context.read<SelectEventTicketTypesBloc>().add(
-            SelectEventTicketTypesEvent.select(
-              ticketType: PurchasableItem(
-                id: widget.ticketType.id ?? '',
-                count: count,
-              ),
-            ),
-          );
+      widget.onCountChange(count);
     }
   }
 
-  minus() {
-    if (count == 0) return;
+  void minus() {
+    if (count == 1) return;
     setState(() {
       count--;
     });
-    context.read<SelectEventTicketTypesBloc>().add(
-          SelectEventTicketTypesEvent.select(
-            ticketType: PurchasableItem(
-              id: widget.ticketType.id ?? '',
-              count: count,
-            ),
-          ),
-        );
+    widget.onCountChange(count);
   }
 
   @override
@@ -137,8 +112,6 @@ class _SelectTicketItemState extends State<SelectTicketItem> {
           // quantity selection
           InkWell(
             child: Container(
-              // TODO:
-              // width: 70.w,
               width: 120.w,
               height: Sizing.medium,
               decoration: BoxDecoration(
@@ -158,13 +131,7 @@ class _SelectTicketItemState extends State<SelectTicketItem> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   IconButton(
-                    onPressed: () {
-                      if (widget.ticketType.cost != 0) {
-                        // goToWeb();
-                        return;
-                      }
-                      minus();
-                    },
+                    onPressed: () => minus(),
                     icon: Icon(
                       Icons.remove,
                       color: colorScheme.onSurfaceVariant,
@@ -183,20 +150,8 @@ class _SelectTicketItemState extends State<SelectTicketItem> {
                       ),
                     ),
                   ),
-                  // TODO: design ui missing the way to input quantity
-                  // SizedBox(width: Spacing.xSmall),
-                  // ThemeSvgIcon(
-                  //   color: colorScheme.onSurfaceVariant,
-                  //   builder: (filter) => Assets.icons.icArrowDown.svg(colorFilter: filter),
-                  // )
                   IconButton(
-                    onPressed: () {
-                      // if (widget.ticketType.cost != 0) {
-                      //   goToWeb();
-                      //   return;
-                      // }
-                      add();
-                    },
+                    onPressed: () => add(),
                     icon: Icon(
                       Icons.add,
                       color: colorScheme.onSurfaceVariant,

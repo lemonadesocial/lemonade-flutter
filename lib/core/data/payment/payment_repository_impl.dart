@@ -15,23 +15,34 @@ class PaymentRepositoryImpl extends PaymentRepository {
 
   @override
   Future<Either<Failure, PaymentCard>> createNewCard({
+    required String userId,
     required String tokenId,
   }) async {
-    final result = await _client.mutate(
-      MutationOptions(
-        document: createNewCardMutation,
-        variables: {
-          'payment_method': tokenId,
-        },
-        parserFn: (data) => PaymentCard.fromDto(
-          PaymentCardDto.fromJson(data['createStripeCard']),
-        ),
+    // TODO: Temporary disable until BE deploy
+    return const Right(
+      PaymentCard(
+        id: '',
+        last4: '4242',
+        brand: 'Visa',
+        providerId: '1234',
       ),
     );
-    if (result.hasException) {
-      return Left(Failure.withGqlException(result.exception));
-    }
-    return Right(result.parsedData!);
+    // final result = await _client.mutate(
+    //   MutationOptions(
+    //     document: createNewCardMutation,
+    //     variables: {
+    //       'payment_account': userId,
+    //       'payment_method': tokenId,
+    //     },
+    //     parserFn: (data) => PaymentCard.fromDto(
+    //       PaymentCardDto.fromJson(data['createStripeCard']),
+    //     ),
+    //   ),
+    // );
+    // if (result.hasException) {
+    //   return Left(Failure.withGqlException(result.exception));
+    // }
+    // return Right(result.parsedData!);
   }
 
   @override
@@ -67,6 +78,6 @@ class PaymentRepositoryImpl extends PaymentRepository {
 
   @override
   Future<Either<Failure, String>> getPublishableKey() async {
-    return const Right('');
+    return const Right('pk_test_TYooMQauvdEDq54NiTphI7jx');
   }
 }

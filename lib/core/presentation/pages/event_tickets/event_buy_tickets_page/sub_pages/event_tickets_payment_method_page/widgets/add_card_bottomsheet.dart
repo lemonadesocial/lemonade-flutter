@@ -1,13 +1,14 @@
 import 'package:app/core/application/payment/add_new_card_bloc/add_new_card_bloc.dart';
-import 'package:app/core/domain/payment/entities/payment_card_entity/payment_card_entity.dart';
 import 'package:app/core/domain/payment/payment_repository.dart';
 import 'package:app/core/presentation/widgets/back_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_bottom_sheet_mixin.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
+import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
+import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -15,9 +16,15 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AddCardBottomSheet extends StatefulWidget with LemonBottomSheet {
-  AddCardBottomSheet({super.key});
+  AddCardBottomSheet({
+    super.key,
+    required this.publishableKey,
+  });
+
+  final String publishableKey;
 
   @override
   State<AddCardBottomSheet> createState() => _AddCardBottomSheetState();
@@ -40,15 +47,7 @@ class _AddCardBottomSheetState extends State<AddCardBottomSheet> {
             listener: (context, state) {
               if (state.status == AddNewCardBlocStatus.success) {
                 // Return previous screen with new card data
-                context.router.pop(
-                  PaymentCard(
-                    id: '',
-                    last4: state.cardNumber!
-                        .substring(state.cardNumber!.length - 4),
-                    brand: 'Visa',
-                    providerId: '1234',
-                  ),
-                );
+                context.router.pop(state.paymentCard);
               }
             },
             builder: (context, state) {
@@ -91,6 +90,7 @@ class _AddCardBottomSheetState extends State<AddCardBottomSheet> {
                         autofocus: true,
                         onChange: bloc.onCardHolderNameChange,
                         hintText: t.event.eventPayment.cardHolderName,
+                        errorText: state.error != null ? ' ' : null,
                       ),
                       SizedBox(height: Spacing.xSmall),
                       LemonTextField(
@@ -102,6 +102,7 @@ class _AddCardBottomSheetState extends State<AddCardBottomSheet> {
                         },
                         hintText: t.event.eventPayment.cardNumber,
                         textInputType: TextInputType.number,
+                        errorText: state.error != null ? ' ' : null,
                         inputFormatters: [
                           LengthLimitingTextInputFormatter(19),
                           FilteringTextInputFormatter.digitsOnly,
@@ -122,6 +123,7 @@ class _AddCardBottomSheetState extends State<AddCardBottomSheet> {
                               },
                               hintText: t.event.eventPayment.validThrough,
                               textInputType: TextInputType.number,
+                              errorText: state.error != null ? ' ' : null,
                               inputFormatters: [
                                 LengthLimitingTextInputFormatter(5),
                                 FilteringTextInputFormatter.digitsOnly,
@@ -140,6 +142,7 @@ class _AddCardBottomSheetState extends State<AddCardBottomSheet> {
                                 }
                               },
                               hintText: t.event.eventPayment.cvc,
+                              errorText: state.error != null ? ' ' : null,
                               textInputType: TextInputType.number,
                               inputFormatters: [
                                 LengthLimitingTextInputFormatter(3),
@@ -149,9 +152,27 @@ class _AddCardBottomSheetState extends State<AddCardBottomSheet> {
                           ),
                         ],
                       ),
+                      Visibility(
+                        visible: state.error != null,
+                        child: SizedBox(
+                          width: 1.sw,
+                          child: Text(
+                            state.error ?? '',
+                            textAlign: TextAlign.end,
+                            style: Typo.small.copyWith(
+                              color: LemonColor.errorRedBg,
+                            ),
+                          ),
+                        ),
+                      ),
                       SizedBox(height: Spacing.smMedium * 2),
                       LinearGradientButton(
-                        onTap: state.fieldValidated ? bloc.addNewCard : null,
+                        onTap: state.fieldValidated
+                            ? () => bloc.addNewCard(
+                                  widget.publishableKey,
+                                  userId: AuthUtils.getUserId(context),
+                                )
+                            : null,
                         radius: BorderRadius.circular(LemonRadius.large),
                         mode: state.fieldValidated
                             ? GradientButtonMode.lavenderMode

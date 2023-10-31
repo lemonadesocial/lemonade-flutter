@@ -55,7 +55,10 @@
         "cardNumber": "Card number",
         "validThrough": "Valid through",
         "cvc": "CVC",
-        "addCard": "Add card"
+        "addCard": "Add card",
+        "howYouPay": "How would you like to pay?",
+        "selectPayment": "Select payment method",
+        "invalidDate": "Invalid date"
     },
     "eventPickMyTickets": {
         "pickYourTicket": "Pick your ticket",

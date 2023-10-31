@@ -1,3 +1,4 @@
+import 'package:app/core/domain/event/entities/event_tickets_pricing_info.dart';
 import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/ticket_wave_custom_paint.dart';
 import 'package:app/core/presentation/widgets/common/dotted_line/dotted_line.dart';
@@ -9,7 +10,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EventOrderSummary extends StatelessWidget {
-  const EventOrderSummary({super.key});
+  const EventOrderSummary({
+    super.key,
+    this.priceDetail,
+  });
+
+  final EventTicketsPricingInfo? priceDetail;
 
   @override
   Widget build(BuildContext context) {
@@ -39,25 +45,12 @@ class EventOrderSummary extends StatelessWidget {
               right: Spacing.medium,
               bottom: Spacing.xSmall,
             ),
-            child: Column(
-              children: [
-                t.event.eventOrder.itemTotal,
-                t.event.eventOrder.taxes,
-                t.event.eventOrder.convenienceFees
-              ]
-                  .map(
-                    (item) => Container(
-                      margin: EdgeInsets.only(bottom: Spacing.xSmall),
-                      child: SummaryRow(
-                        label: item,
-                        value: NumberUtils.formatCurrency(
-                          amount: 10000,
-                          currency: Currency.USD,
-                        ),
-                      ),
-                    ),
-                  )
-                  .toList(),
+            child: SummaryRow(
+              label: t.event.eventOrder.itemTotal,
+              value: NumberUtils.formatCurrency(
+                amount: priceDetail?.subTotal ?? 0,
+                currency: Currency.USD,
+              ),
             ),
           ),
           SizedBox(
@@ -78,7 +71,7 @@ class EventOrderSummary extends StatelessWidget {
             child: SummaryRow(
               label: t.event.eventOrder.grandTotal,
               value: NumberUtils.formatCurrency(
-                amount: 100000,
+                amount: priceDetail?.total ?? 0,
                 currency: Currency.USD,
               ),
             ),

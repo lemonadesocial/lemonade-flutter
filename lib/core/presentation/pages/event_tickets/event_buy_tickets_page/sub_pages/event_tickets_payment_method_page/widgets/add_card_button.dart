@@ -17,10 +17,12 @@ class AddCardButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+    final paymentBloc = context.read<PaymentBloc>();
     return InkWell(
       onTap: () async {
-        final newCard = await AddCardBottomSheet().showAsBottomSheet(context)
-            as PaymentCard?;
+        final newCard = await AddCardBottomSheet(
+          publishableKey: paymentBloc.state.publishableKey,
+        ).showAsBottomSheet(context) as PaymentCard?;
         if (newCard != null) {
           context.read<PaymentBloc>().newCardAdded(newCard);
         }

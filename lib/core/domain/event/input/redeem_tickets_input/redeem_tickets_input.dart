@@ -18,7 +18,7 @@ class RedeemTicketsInput with _$RedeemTicketsInput {
 @freezed
 class RedeemItem with _$RedeemItem {
   factory RedeemItem({
-    required double count,
+    required int count,
     @JsonKey(name: 'ticket_type') required String ticketType,
   }) = _RedeemItem;
 

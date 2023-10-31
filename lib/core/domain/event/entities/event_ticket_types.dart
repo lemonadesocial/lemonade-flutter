@@ -1,5 +1,8 @@
 import 'package:app/core/data/event/dtos/event_ticket_types_dto/event_ticket_types_dto.dart';
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'event_ticket_types.freezed.dart';
 
 class EventTicketTypesResponse {
   final TicketDiscount? discount;
@@ -45,36 +48,24 @@ class TicketDiscount {
       );
 }
 
-class PurchasableTicketType {
-  final String? id;
-  final bool? active;
-  final bool? addressRequired;
-  final int? cost;
-  final bool? isDefault;
-  final String? description;
-  final String? descriptionLine;
-  final bool? discountable;
-  final List<String>? externalIds;
-  final int? limit;
-  final List<EventOffer>? offers;
-  final List<String>? photos;
-  final String? title;
-
-  const PurchasableTicketType({
-    this.id,
-    this.active,
-    this.addressRequired,
-    this.cost,
-    this.isDefault,
-    this.description,
-    this.descriptionLine,
-    this.discountable,
-    this.externalIds,
-    this.limit,
-    this.offers,
-    this.photos,
-    this.title,
-  });
+@freezed
+class PurchasableTicketType with _$PurchasableTicketType {
+  factory PurchasableTicketType({
+    String? id,
+    bool? active,
+    bool? addressRequired,
+    int? cost,
+    bool? isDefault,
+    String? description,
+    String? descriptionLine,
+    bool? discountable,
+    List<String>? externalIds,
+    int? limit,
+    List<EventOffer>? offers,
+    List<String>? photos,
+    String? title,
+    @Default(1) int count,
+  }) = _PurchasableTicketType;
 
   factory PurchasableTicketType.fromDto(PurchasableTicketTypeDto dto) =>
       PurchasableTicketType(

@@ -13,10 +13,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class EventCardTile extends StatelessWidget {
   const EventCardTile({
     Key? key,
-    required this.paymentCardEntity,
+    required this.paymentCard,
   }) : super(key: key);
 
-  final PaymentCard paymentCardEntity;
+  final PaymentCard paymentCard;
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +48,7 @@ class EventCardTile extends StatelessWidget {
               SizedBox(height: 2.w),
               Text(
                 t.event.eventPayment.cardEnding(
-                  lastCardNumber: paymentCardEntity.last4,
+                  lastCardNumber: paymentCard.last4,
                 ),
               ),
             ],

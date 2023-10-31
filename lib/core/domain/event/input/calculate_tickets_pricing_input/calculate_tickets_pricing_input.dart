@@ -6,9 +6,9 @@ part 'calculate_tickets_pricing_input.g.dart';
 @freezed
 class CalculateTicketsPricingInput with _$CalculateTicketsPricingInput {
   factory CalculateTicketsPricingInput({
-    required String event,
-    required String discount,
-    required List<PurchasableItem> items,
+    @JsonKey(name: 'event') required String eventId,
+    String? discount,
+    @Default([]) List<PurchasableItem> items,
   }) = _CalculateTicketsPricingInput;
 
   factory CalculateTicketsPricingInput.fromJson(Map<String, dynamic> json) =>
@@ -19,7 +19,7 @@ class CalculateTicketsPricingInput with _$CalculateTicketsPricingInput {
 class PurchasableItem with _$PurchasableItem {
   factory PurchasableItem({
     required String id,
-    required double count,
+    required int count,
   }) = _PurchasableItem;
 
   factory PurchasableItem.fromJson(Map<String, dynamic> json) =>
