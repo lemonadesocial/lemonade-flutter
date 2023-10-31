@@ -53,7 +53,7 @@ class _PoapFilterBottomSheetViewState extends State<PoapFilterBottomSheetView>
 
   final double _searchBarHeight = 42.w;
 
-  final double _poapCreatorItemWidth = 78.w;
+  final double _poapCreatorItemWidth = 70.w;
 
   List<double> get snapSizes => widget.snapSizes; //const [.2, .8, 1];
 
