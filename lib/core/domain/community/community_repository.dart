@@ -17,4 +17,6 @@ abstract class CommunityRepository {
     String userId, {
     String? searchInput,
   });
+
+  Future<Either<Failure, List<CommunityUser>>> getUsersSpotlight();
 }

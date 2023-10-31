@@ -63,5 +63,15 @@
         "allClaimed": "All POAPs have been claimed.",
         "alreadyClaimed": "You have already claimed the POAP.",
         "forbidden": "You are not authorized to perform this action."
+    },
+    "signWallet": "Sign your wallet",
+    "disconnectWallet": "Disconnect",
+    "walletConnectPopup": {
+        "title": "Connect Wallet",
+        "description": "We do not own your private keys and cannot access your funds without your confirmation."
+    },
+    "signWalletSuccess": "Your wallet successfully signed!",
+    "supportedWalletApps": {
+        "metamask": "Metamask"
     }
 }
