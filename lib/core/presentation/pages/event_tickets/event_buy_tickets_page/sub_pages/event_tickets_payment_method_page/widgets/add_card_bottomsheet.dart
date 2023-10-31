@@ -218,7 +218,8 @@ class CardNumberFormatter extends TextInputFormatter {
       var nonZeroIndex = i + 1;
       if (nonZeroIndex % 4 == 0 && nonZeroIndex != text.length) {
         buffer.write(
-            ' '); // Replace this with anything you want to put after each 4 numbers
+          ' ',
+        ); // Replace this with anything you want to put after each 4 numbers
       }
     }
 
@@ -247,7 +248,9 @@ class CardDateFormatter extends TextInputFormatter {
       buffer.write(text[i]);
       var nonZeroIndex = i + 1;
       if (nonZeroIndex % 2 == 0 && nonZeroIndex != text.length) {
-        buffer.write('/');
+        buffer.write(
+          '/',
+        ); // Replace this with anything you want to put after each 4 numbers
       }
     }
 
