@@ -9,7 +9,6 @@ import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/core/utils/swipe_detector.dart';
 import 'package:auto_route/auto_route.dart';
 
 import 'package:flutter/material.dart';
@@ -42,58 +41,40 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-    return WillPopScope(
-      onWillPop: () async {
-        return false;
-      },
-      child: Scaffold(
-        appBar: LemonAppBar(
-          title: t.home.newsfeed,
-          leading: InkWell(
-            onTap: () => DrawerUtils.openDrawer(),
-            child: Icon(
-              Icons.menu_outlined,
-              color: colorScheme.onPrimary,
-            ),
+    return Scaffold(
+      appBar: LemonAppBar(
+        title: t.home.newsfeed,
+        leading: InkWell(
+          onTap: () => DrawerUtils.openDrawer(),
+          child: Icon(
+            Icons.menu_outlined,
+            color: colorScheme.onPrimary,
           ),
-          actions: [
-            Padding(
-              padding: EdgeInsets.only(right: Spacing.xSmall),
-              child: InkWell(
-                onTap: () {
-                  context.read<AuthBloc>().state.maybeWhen(
-                        authenticated: (session) => AutoRouter.of(context)
-                            .navigate(const ChatListRoute()),
-                        orElse: () =>
-                            AutoRouter.of(context).navigate(const LoginRoute()),
-                      );
-                },
-                child: ThemeSvgIcon(
-                  color: colorScheme.onPrimary,
-                  builder: (filter) => Assets.icons.icChatBubble.svg(
-                    colorFilter: filter,
-                  ),
+        ),
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: Spacing.xSmall),
+            child: InkWell(
+              onTap: () {
+                context.read<AuthBloc>().state.maybeWhen(
+                      authenticated: (session) => AutoRouter.of(context)
+                          .navigate(const ChatListRoute()),
+                      orElse: () =>
+                          AutoRouter.of(context).navigate(const LoginRoute()),
+                    );
+              },
+              child: ThemeSvgIcon(
+                color: colorScheme.onPrimary,
+                builder: (filter) => Assets.icons.icChatBubble.svg(
+                  colorFilter: filter,
                 ),
               ),
             ),
-          ],
-        ),
-        backgroundColor: LemonColor.black,
-        body: SwipeDetector(
-          child: const HomeNewsfeedListView(),
-          onSwipeUp: () {},
-          onSwipeDown: () {},
-          onSwipeLeft: () {
-            context.read<AuthBloc>().state.maybeWhen(
-                  authenticated: (session) =>
-                      AutoRouter.of(context).navigate(const ChatListRoute()),
-                  orElse: () =>
-                      AutoRouter.of(context).navigate(const LoginRoute()),
-                );
-          },
-          onSwipeRight: () {},
-        ),
+          ),
+        ],
       ),
+      backgroundColor: LemonColor.black,
+      body: const HomeNewsfeedListView(),
     );
   }
 }

@@ -34,7 +34,6 @@ class EventOrderSummaryFooter extends StatelessWidget {
           children: [
             BlocBuilder<PaymentBloc, PaymentState>(
               builder: (context, state) {
-                print('newSate: ${state.selectedCard}');
                 return state.selectedCard != null
                     ? EventCardTile(paymentCardEntity: state.selectedCard!)
                     : const AddCardButton();

@@ -182,7 +182,9 @@ class _AddCardBottomSheetState extends State<AddCardBottomSheet> {
 class CardNumberFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
     var text = newValue.text;
 
     if (newValue.selection.baseOffset == 0) {
@@ -195,7 +197,8 @@ class CardNumberFormatter extends TextInputFormatter {
       var nonZeroIndex = i + 1;
       if (nonZeroIndex % 4 == 0 && nonZeroIndex != text.length) {
         buffer.write(
-            ' '); // Replace this with anything you want to put after each 4 numbers
+          ' ',
+        ); // Replace this with anything you want to put after each 4 numbers
       }
     }
 
@@ -210,7 +213,9 @@ class CardNumberFormatter extends TextInputFormatter {
 class CardDateFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
     var text = newValue.text;
 
     if (newValue.selection.baseOffset == 0) {
@@ -223,7 +228,8 @@ class CardDateFormatter extends TextInputFormatter {
       var nonZeroIndex = i + 1;
       if (nonZeroIndex % 2 == 0 && nonZeroIndex != text.length) {
         buffer.write(
-            '/'); // Replace this with anything you want to put after each 4 numbers
+          '/',
+        ); // Replace this with anything you want to put after each 4 numbers
       }
     }
 
