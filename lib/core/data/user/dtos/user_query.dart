@@ -220,7 +220,7 @@ final checkValidUsernameQuery = gql('''
 
 ''');
 
-final deleteUserQuery = gql('''
+final deleteUserMutation = gql('''
   mutation {
     deleteUser
 }

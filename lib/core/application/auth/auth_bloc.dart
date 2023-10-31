@@ -1,10 +1,11 @@
 import 'dart:async';
 
 import 'package:app/core/domain/user/entities/user.dart';
+import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/oauth/oauth.dart';
-import 'package:app/core/service/auth/auth_service.dart';
-import 'package:app/core/service/user/user_service.dart';
+import 'package:app/core/service/firebase/firebase_service.dart';
 import 'package:app/core/utils/onboarding_utils.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
@@ -16,23 +17,21 @@ part 'auth_bloc.freezed.dart';
 
 @lazySingleton
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  AuthBloc({
-    required this.userService,
-    required this.authService,
-  }) : super(const AuthState.unknown()) {
+  final firebaseService = getIt<FirebaseService>();
+  final userRepository = getIt<UserRepository>();
+  final appOauth = getIt<AppOauth>();
+  late StreamSubscription? _tokenStateSubscription;
+
+  AuthBloc() : super(const AuthState.unknown()) {
     _tokenStateSubscription =
-        authService.tokenStateStream.listen(_onTokenStateChange);
+        appOauth.tokenStateStream.listen(_onTokenStateChange);
     on<AuthEventLogin>(_onLogin);
     on<AuthEventLogout>(_onLogout);
+    on<AuthEventForceLogout>(_onForceLogout);
     on<AuthEventAuthenticated>(_onAuthenticated);
     on<AuthEventUnAuthenticated>(_onUnAuthenticated);
     on<AuthEventRefresh>(_onRefresh);
-    on<AuthEventDelete>(_onDeleteAccount);
   }
-
-  final AuthService authService;
-  final UserService userService;
-  late StreamSubscription? _tokenStateSubscription;
 
   @override
   Future<void> close() async {
@@ -53,7 +52,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter emit,
   ) async {
     emit(const AuthState.processing());
-    await Future.delayed(const Duration(milliseconds: 500));
     final currentUser = await _createSession();
     if (currentUser != null) {
       if (OnboardingUtils.isOnboardingRequired(currentUser)) {
@@ -68,6 +66,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(AuthState.authenticated(authSession: currentUser));
       return;
     }
+    // This will trigger token state listener to call _onUnAuthenticated
+    await appOauth.forceLogout();
+  }
+
+  void _onUnAuthenticated(AuthEventUnAuthenticated event, Emitter emit) {
     emit(const AuthState.unauthenticated(isChecking: false));
   }
 
@@ -81,44 +84,39 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(AuthState.authenticated(authSession: currentUser!));
   }
 
-  void _onUnAuthenticated(AuthEventUnAuthenticated event, Emitter emit) {
-    emit(const AuthState.unauthenticated(isChecking: false));
-  }
-
   Future<void> _onLogin(AuthEventLogin event, Emitter emit) async {
-    await authService.login();
+    await appOauth.login();
   }
 
   Future<void> _onLogout(AuthEventLogout event, Emitter emit) async {
-    await authService.logout().whenComplete(() {
-      if (!kDebugMode) {
-        // Reset crashlytics
-        FirebaseCrashlytics.instance.setUserIdentifier('');
-        FirebaseAnalytics.instance.setUserId(id: null);
-      }
-      emit(const AuthState.unauthenticated(isChecking: false));
-    });
-  }
-
-  Future<void> _onDeleteAccount(AuthEventDelete event, Emitter emit) async {
-    emit(const AuthState.processing());
-    await authService.deleteAccount().whenComplete(
-      () {
+    // This will trigger token state listener to call _onUnAuthenticated
+    final result = await appOauth.logout();
+    result.fold((l) => null, (success) async {
+      if (success) {
         if (!kDebugMode) {
           // Reset crashlytics
           FirebaseCrashlytics.instance.setUserIdentifier('');
           FirebaseAnalytics.instance.setUserId(id: null);
         }
-        emit(
-          const AuthState.unauthenticated(isChecking: true),
-        );
-      },
-    );
+        await firebaseService.removeFcmToken();
+      }
+    });
+  }
+
+  Future<void> _onForceLogout(AuthEventForceLogout event, Emitter emit) async {
+    // This will trigger token state listener to call _onUnAuthenticated
+    if (!kDebugMode) {
+      // Reset crashlytics
+      FirebaseCrashlytics.instance.setUserIdentifier('');
+      FirebaseAnalytics.instance.setUserId(id: null);
+    }
+    await firebaseService.removeFcmToken();
+    await appOauth.forceLogout();
   }
 
   Future<User?> _createSession() async {
-    final getMeResult = await userService.getMe();
-    return getMeResult.fold((l) => null, (user) => user);
+    final result = await userRepository.getMe();
+    return result.fold((l) => null, (user) => user);
   }
 }
 
@@ -128,13 +126,13 @@ class AuthEvent with _$AuthEvent {
 
   const factory AuthEvent.logout() = AuthEventLogout;
 
+  const factory AuthEvent.forceLogout() = AuthEventForceLogout;
+
   const factory AuthEvent.refreshData() = AuthEventRefresh;
 
   const factory AuthEvent.authenticated() = AuthEventAuthenticated;
 
   const factory AuthEvent.unauthenticated() = AuthEventUnAuthenticated;
-
-  const factory AuthEvent.deleteAccount() = AuthEventDelete;
 }
 
 @freezed

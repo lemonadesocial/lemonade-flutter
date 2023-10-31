@@ -9,7 +9,7 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:app/core/application/auth/auth_bloc.dart' as _i43;
+import 'package:app/core/application/auth/auth_bloc.dart' as _i5;
 import 'package:app/core/application/chat/new_chat_bloc/new_chat_bloc.dart'
     as _i20;
 import 'package:app/core/data/badge/repository/badge_respository_impl.dart'
@@ -31,7 +31,7 @@ import 'package:app/core/data/report/repository/report_repository_impl.dart'
     as _i32;
 import 'package:app/core/data/token/token_repository_impl.dart' as _i36;
 import 'package:app/core/data/user/user_repository_impl.dart' as _i38;
-import 'package:app/core/data/wallet/wallet_repository_impl.dart' as _i42;
+import 'package:app/core/data/wallet/wallet_repository_impl.dart' as _i41;
 import 'package:app/core/domain/badge/badge_repository.dart' as _i6;
 import 'package:app/core/domain/community/community_repository.dart' as _i9;
 import 'package:app/core/domain/event/event_repository.dart' as _i13;
@@ -48,16 +48,14 @@ import 'package:app/core/domain/post/post_repository.dart' as _i29;
 import 'package:app/core/domain/report/report_repository.dart' as _i31;
 import 'package:app/core/domain/token/token_repository.dart' as _i35;
 import 'package:app/core/domain/user/user_repository.dart' as _i37;
-import 'package:app/core/domain/wallet/wallet_repository.dart' as _i41;
+import 'package:app/core/domain/wallet/wallet_repository.dart' as _i40;
 import 'package:app/core/oauth/oauth.dart' as _i4;
-import 'package:app/core/service/auth/auth_service.dart' as _i5;
 import 'package:app/core/service/badge/badge_service.dart' as _i8;
 import 'package:app/core/service/firebase/firebase_service.dart' as _i17;
 import 'package:app/core/service/matrix/matrix_service.dart' as _i19;
 import 'package:app/core/service/shake/shake_service.dart' as _i33;
 import 'package:app/core/service/shorebird_codepush_service.dart' as _i34;
-import 'package:app/core/service/user/user_service.dart' as _i39;
-import 'package:app/core/service/wallet/wallet_connect_service.dart' as _i40;
+import 'package:app/core/service/wallet/wallet_connect_service.dart' as _i39;
 import 'package:app/core/utils/gql/gql.dart' as _i3;
 import 'package:app/core/utils/location_utils.dart' as _i18;
 import 'package:get_it/get_it.dart' as _i1;
@@ -76,7 +74,7 @@ extension GetItInjectableX on _i1.GetIt {
     );
     gh.lazySingleton<_i3.AppGQL>(() => _i3.AppGQL());
     gh.lazySingleton<_i4.AppOauth>(() => _i4.AppOauth());
-    gh.lazySingleton<_i5.AuthService>(() => _i5.AuthService());
+    gh.lazySingleton<_i5.AuthBloc>(() => _i5.AuthBloc());
     gh.lazySingleton<_i6.BadgeRepository>(() => _i7.BadgeRepositoryImpl());
     gh.lazySingleton<_i8.BadgeService>(() => _i8.BadgeService());
     gh.lazySingleton<_i9.CommunityRepository>(
@@ -105,15 +103,10 @@ extension GetItInjectableX on _i1.GetIt {
         () => _i34.ShorebirdCodePushService());
     gh.lazySingleton<_i35.TokenRepository>(() => _i36.TokenRepositoryImpl());
     gh.lazySingleton<_i37.UserRepository>(() => _i38.UserRepositoryImpl());
-    gh.lazySingleton<_i39.UserService>(() => _i39.UserService());
-    gh.lazySingleton<_i40.WalletConnectService>(
-        () => _i40.WalletConnectService());
+    gh.lazySingleton<_i39.WalletConnectService>(
+        () => _i39.WalletConnectService());
     gh.lazySingleton<_i3.WalletGQL>(() => _i3.WalletGQL());
-    gh.lazySingleton<_i41.WalletRepository>(() => _i42.WalletRepositoryImpl());
-    gh.lazySingleton<_i43.AuthBloc>(() => _i43.AuthBloc(
-          userService: gh<_i39.UserService>(),
-          authService: gh<_i5.AuthService>(),
-        ));
+    gh.lazySingleton<_i40.WalletRepository>(() => _i41.WalletRepositoryImpl());
     return this;
   }
 }

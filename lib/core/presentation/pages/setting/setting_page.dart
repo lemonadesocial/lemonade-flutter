@@ -1,4 +1,5 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
+import 'package:app/core/application/profile/delete_user_bloc/delete_user_bloc.dart';
 import 'package:app/core/presentation/pages/setting/widgets/setting_delete_account_dialog.dart';
 import 'package:app/core/presentation/pages/setting/widgets/setting_profile_tile.dart';
 import 'package:app/core/presentation/pages/setting/widgets/setting_tile_widget.dart';
@@ -22,7 +23,19 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 @RoutePage()
 class SettingPage extends StatelessWidget {
-  const SettingPage({Key? key}) : super(key: key);
+  const SettingPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => DeleteUserBloc(),
+      child: const SettingPageView(),
+    );
+  }
+}
+
+class SettingPageView extends StatelessWidget {
+  const SettingPageView({Key? key}) : super(key: key);
 
   Future<String> getVersion() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
@@ -33,17 +46,34 @@ class SettingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-    return BlocListener<AuthBloc, AuthState>(
-      listener: (context, state) {
-        state.maybeWhen(
-          processing: EasyLoading.show,
-          unauthenticated: (_) {
-            EasyLoading.dismiss();
-            context.router.popUntilRoot();
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<AuthBloc, AuthState>(
+          listener: (context, state) {
+            state.maybeWhen(
+              processing: EasyLoading.show,
+              unauthenticated: (_) async {
+                await EasyLoading.dismiss();
+                context.router.popUntilRoot();
+              },
+              orElse: EasyLoading.dismiss,
+            );
           },
-          orElse: EasyLoading.dismiss,
-        );
-      },
+        ),
+        BlocListener<DeleteUserBloc, DeleteUserState>(
+          listener: (context, state) {
+            state.maybeWhen(
+              loading: EasyLoading.show,
+              success: () async {
+                await EasyLoading.dismiss();
+                context.router.popUntilRoot();
+                context.read<AuthBloc>().add(const AuthEvent.forceLogout());
+              },
+              orElse: EasyLoading.dismiss,
+            );
+          },
+        ),
+      ],
       child: Scaffold(
         backgroundColor: colorScheme.primary,
         appBar: LemonAppBar(
@@ -169,8 +199,8 @@ class SettingPage extends StatelessWidget {
                     ) as bool;
                     if (confirmDeleteAccount) {
                       context
-                          .read<AuthBloc>()
-                          .add(const AuthEvent.deleteAccount());
+                          .read<DeleteUserBloc>()
+                          .add(DeleteUserEvent.delete());
                     }
                   },
                 ),

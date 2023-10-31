@@ -200,4 +200,19 @@ class UserRepositoryImpl implements UserRepository {
     }
     return Right(result.parsedData == true);
   }
+
+  @override
+  Future<Either<Failure, bool>> deleteUser() async {
+    final result = await _gqlClient.mutate(
+      MutationOptions(
+        document: deleteUserMutation,
+        fetchPolicy: FetchPolicy.networkOnly,
+        parserFn: (data) {
+          return data['deleteUser'] ?? false;
+        },
+      ),
+    );
+    if (result.hasException) return Left(Failure());
+    return Right(result.parsedData ?? false);
+  }
 }
