@@ -40,6 +40,10 @@
         <data android:scheme="@string/uri_scheme" android:host="oauth2" android:path="/logout"/>
       </intent-filter>
     </activity>
+    <activity
+        android:name="com.yalantis.ucrop.UCropActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
     <meta-data android:name="com.google.firebase.messaging.default_notification_channel_id" android:value="high_importance_channel"/>
     <service android:name=".FcmPushService" android:exported="false">
       <intent-filter>
