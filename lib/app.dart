@@ -176,8 +176,10 @@ class _AppState extends State<_App> {
               t.common.internetConnectionRestore,
             );
           },
-          notConnected: () =>
-              SnackBarUtils.showErrorSnackbar(t.common.internetLost),
+          notConnected: () {
+            firstInternetCheck = false;
+            SnackBarUtils.showErrorSnackbar(t.common.internetLost);
+          },
           orElse: () {},
         );
       },
