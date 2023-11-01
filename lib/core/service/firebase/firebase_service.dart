@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:app/core/config.dart';
 import 'package:app/core/data/fcm/fcm_mutation.dart';
@@ -100,6 +101,16 @@ class FirebaseService {
       FirebaseCrashlytics.instance
           .setCrashlyticsCollectionEnabled(kDebugMode == false);
       FlutterError.onError = (errorDetails) {
+        /// Bypass [ArgumentError]
+        if (errorDetails.exception is ArgumentError) return;
+        if (errorDetails.exception is HttpException) {
+          final error = errorDetails.exception as HttpException;
+          final statusCode =
+              int.parse(error.message.substring(error.message.length - 3));
+
+          /// Bypass statusCode 404
+          if (statusCode == 404) return;
+        }
         // If you wish to record a "non-fatal" exception, please use `FirebaseCrashlytics.instance.recordFlutterError` instead
         FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
       };
