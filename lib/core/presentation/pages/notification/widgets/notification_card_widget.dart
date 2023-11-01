@@ -3,24 +3,23 @@ import 'package:app/core/data/notification/notification_constants.dart';
 import 'package:app/core/domain/notification/input/delete_notifications_input.dart';
 import 'package:app/core/presentation/pages/notification/widgets/notification_slidable_widget.dart';
 import 'package:app/core/utils/image_utils.dart';
+import 'package:app/graphql/__generated__/notification_card_fragment.data.gql.dart';
 import 'package:flutter/material.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/theme/typo.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/core/domain/notification/entities/notification.dart'
-    as notification_entities;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 
 class NotificationCard extends StatelessWidget {
-  final notification_entities.Notification notification;
+  final GNotificationCard notification;
   final int index;
   final Function()? onTap;
   final Function(
     int index,
-    notification_entities.Notification notification,
+    GNotificationCard notification,
     bool? isDismiss,
   )? onRemove;
 
@@ -47,12 +46,12 @@ class NotificationCard extends StatelessWidget {
 }
 
 class NotificationCardView extends StatelessWidget {
-  final notification_entities.Notification notification;
+  final GNotificationCard notification;
   final int index;
   final Function()? onTap;
   final Function(
     int index,
-    notification_entities.Notification notification,
+    GNotificationCard notification,
     bool? isDismiss,
   )? onRemove;
 
@@ -68,12 +67,12 @@ class NotificationCardView extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return NotificationSlidable(
-      id: notification.id ?? '',
+      id: notification.G_id.value,
       onRemove: () {
         context.read<DeleteNotificationsBloc>().add(
               DeleteNotificationsEvent.delete(
                 input: DeleteNotificationsInput(
-                  ids: [notification.id ?? ''],
+                  ids: [notification.G_id.value],
                 ),
               ),
             );
@@ -87,7 +86,7 @@ class NotificationCardView extends StatelessWidget {
         context.read<DeleteNotificationsBloc>().add(
               DeleteNotificationsEvent.delete(
                 input: DeleteNotificationsInput(
-                  ids: [notification.id ?? ''],
+                  ids: [notification.G_id.value],
                 ),
               ),
             );
@@ -106,7 +105,7 @@ class NotificationCardView extends StatelessWidget {
           ),
           child: Row(
             children: [
-              _buildAvatar(),
+              // _buildAvatar(),
               Expanded(child: _buildMessage(colorScheme)),
             ],
           ),
@@ -115,33 +114,33 @@ class NotificationCardView extends StatelessWidget {
     );
   }
 
-  Widget _buildAvatar() {
-    if (notification.type == NotificationType.eventCohostRequest ||
-        notification.type == NotificationType.userFriendshipRequest ||
-        notification.type == NotificationType.eventAnnounce) {
-      return Container(
-        padding: EdgeInsets.only(right: Spacing.small),
-        child: LemonCircleAvatar(
-          url: ImageUtils.generateUrl(
-            file: notification.fromExpanded?.newPhotosExpanded?.first,
-            imageConfig: ImageConfig.profile,
-          ),
-          size: 42,
-        ),
-      );
-    }
-    if (notification.type == NotificationType.userDiscoveryMatch) {
-      return Container(
-        padding: EdgeInsets.only(right: Spacing.small),
-        child: ThemeSvgIcon(
-          color: const Color(0xFFC69DF7),
-          builder: (filter) => Assets.icons.icMatches
-              .svg(colorFilter: filter, width: 42, height: 42),
-        ),
-      );
-    }
-    return Container();
-  }
+  // Widget _buildAvatar() {
+  //   if (notification.type == NotificationType.eventCohostRequest ||
+  //       notification.type == NotificationType.userFriendshipRequest ||
+  //       notification.type == NotificationType.eventAnnounce) {
+  //     return Container(
+  //       padding: EdgeInsets.only(right: Spacing.small),
+  //       child: LemonCircleAvatar(
+  //         url: ImageUtils.generateUrl(
+  //           file: notification.from_expanded?.new_photos_expanded!.first,
+  //           imageConfig: ImageConfig.profile,
+  //         ),
+  //         size: 42,
+  //       ),
+  //     );
+  //   }
+  //   if (notification.type == NotificationType.userDiscoveryMatch) {
+  //     return Container(
+  //       padding: EdgeInsets.only(right: Spacing.small),
+  //       child: ThemeSvgIcon(
+  //         color: const Color(0xFFC69DF7),
+  //         builder: (filter) => Assets.icons.icMatches
+  //             .svg(colorFilter: filter, width: 42, height: 42),
+  //       ),
+  //     );
+  //   }
+  //   return Container();
+  // }
 
   Widget _buildMessage(ColorScheme colorScheme) {
     return Column(
@@ -155,7 +154,7 @@ class NotificationCardView extends StatelessWidget {
           ),
         ),
         Text(
-          timeago.format(notification.createdAt!, locale: 'en_short'),
+          timeago.format(notification.created_at, locale: 'en_short'),
           style: Typo.medium.copyWith(
             color: colorScheme.onSurfaceVariant,
             fontWeight: FontWeight.w700,

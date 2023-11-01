@@ -1,0 +1,7 @@
+# import './notification_card_fragment.graphql'
+
+query GetNotifications($skip: Int!, $limit: Int!, $type: NotificationTypeFilterInput = {nin: [payment_authorized, payment_failed, payments_wired_summary, admin_payment_verification, payments_captured_summary]}) {
+    getNotifications(skip: $skip, limit: $limit, type: $type) {
+        ...NotificationCard
+    }
+}
