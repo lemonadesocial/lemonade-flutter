@@ -49,7 +49,7 @@ class TicketDiscount {
       );
 }
 
-@freezed
+@unfreezed
 class PurchasableTicketType with _$PurchasableTicketType {
   factory PurchasableTicketType({
     String? id,
@@ -66,7 +66,7 @@ class PurchasableTicketType with _$PurchasableTicketType {
     List<EventOffer>? offers,
     List<String>? photos,
     String? title,
-    @Default(1) int count,
+    @Default(0) int count,
   }) = _PurchasableTicketType;
 
   factory PurchasableTicketType.fromDto(PurchasableTicketTypeDto dto) =>

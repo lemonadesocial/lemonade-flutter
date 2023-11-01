@@ -5,8 +5,8 @@ import 'package:app/core/application/event_tickets/assign_tickets_bloc/assign_ti
 import 'package:app/core/application/event_tickets/get_event_ticket_types_bloc/get_event_ticket_types_bloc.dart';
 import 'package:app/core/application/event_tickets/redeem_tickets_bloc/redeem_tickets_bloc.dart';
 import 'package:app/core/application/event_tickets/select_event_tickets_bloc/select_event_tickets_bloc.dart';
+import 'package:app/core/application/payment/payment_bloc/payment_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
-import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/input/assign_tickets_input/assign_tickets_input.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/select_tickets_page/widgets/select_ticket_item.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/select_tickets_page/widgets/select_ticket_submit_button.dart';
@@ -201,36 +201,40 @@ class SelectTicketView extends StatelessWidget {
                     failure: () =>
                         EmptyList(emptyText: t.common.somethingWrong),
                     success: (response) {
-                      final ticketTypes = List<PurchasableTicketType>.from(
+                      final paymentBloc = context.read<PaymentBloc>();
+                      paymentBloc.onReceiveTicketTypeList(
                         response.ticketTypes ?? [],
                       );
-                      return Column(
-                        children: [
-                          Expanded(
-                            child: ListView.separated(
-                              itemBuilder: (context, index) => SelectTicketItem(
+                      final ticketList =  response.ticketTypes ?? [];
+
+                      return StatefulBuilder(
+                        builder: (context, setState) {
+                          return Column(
+                            children: [
+                              Expanded(
+                                child: ListView.separated(
+                                  itemBuilder: (context, index) => SelectTicketItem(
+                                    ticketType: ticketList[index],
+                                    onCountChange: (count) => setState((){
+                                      ticketList[index].count = count;
+                                    }),
+                                  ),
+                                  shrinkWrap: true,
+                                  separatorBuilder: (context, index) => Divider(
+                                    height: 1.w,
+                                    thickness: 1.w,
+                                    color: colorScheme.onPrimary.withOpacity(0.05),
+                                  ),
+                                  itemCount: ticketList.length,
+                                ),
+                              ),
+                              SelectTicketSubmitButton(
                                 event: event,
-                                ticketType: ticketTypes[index],
-                                onCountChange: (count) => ticketTypes[index] =
-                                    ticketTypes[index].copyWith(count: count),
+                                listTicket: ticketList,
                               ),
-                              shrinkWrap: true,
-                              separatorBuilder: (context, index) => Divider(
-                                height: 1.w,
-                                thickness: 1.w,
-                                color: colorScheme.onPrimary.withOpacity(0.05),
-                              ),
-                              itemCount: ticketTypes.length,
-                            ),
-                          ),
-                          SelectTicketSubmitButton(
-                            event: event,
-                            listTicket: state.maybeWhen(
-                              orElse: () => [],
-                              success: (response) => ticketTypes,
-                            ),
-                          ),
-                        ],
+                            ],
+                          );
+                        },
                       );
                     },
                   ),

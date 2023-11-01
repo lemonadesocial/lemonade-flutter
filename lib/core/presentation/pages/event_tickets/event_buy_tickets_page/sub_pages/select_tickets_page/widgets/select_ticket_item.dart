@@ -1,4 +1,3 @@
-import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/utils/number_utils.dart';
@@ -10,49 +9,23 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class SelectTicketItem extends StatefulWidget {
+class SelectTicketItem extends StatelessWidget {
   const SelectTicketItem({
     super.key,
     required this.ticketType,
-    required this.event,
     required this.onCountChange,
   });
 
   final PurchasableTicketType ticketType;
-  final Event event;
   final ValueChanged<int> onCountChange;
-
-  @override
-  State<SelectTicketItem> createState() => _SelectTicketItemState();
-}
-
-class _SelectTicketItemState extends State<SelectTicketItem> {
-  var count = 1;
-
-  void add() {
-    if (count < (widget.ticketType.limit ?? 0)) {
-      setState(() {
-        count++;
-      });
-      widget.onCountChange(count);
-    }
-  }
-
-  void minus() {
-    if (count == 1) return;
-    setState(() {
-      count--;
-    });
-    widget.onCountChange(count);
-  }
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
     final costText = NumberUtils.formatCurrency(
-      amount: (widget.ticketType.price?.toDouble() ?? 0),
-      currency: widget.ticketType.priceCurrency,
+      amount: (ticketType.price?.toDouble() ?? 0),
+      currency: ticketType.priceCurrency,
       freeText: t.event.free,
     );
     return Padding(
@@ -87,17 +60,17 @@ class _SelectTicketItemState extends State<SelectTicketItem> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  "${widget.ticketType.title}  •  $costText",
+                  "${ticketType.title}  •  $costText",
                   style: Typo.medium.copyWith(
                     color: colorScheme.onPrimary.withOpacity(0.87),
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                if (widget.ticketType.description != null &&
-                    widget.ticketType.description!.isNotEmpty) ...[
+                if (ticketType.description != null &&
+                    ticketType.description!.isNotEmpty) ...[
                   SizedBox(height: 2.w),
                   Text(
-                    widget.ticketType.description ?? '',
+                    ticketType.description ?? '',
                     style: Typo.medium.copyWith(
                       color: colorScheme.onSecondary,
                       fontWeight: FontWeight.w600,
@@ -115,11 +88,11 @@ class _SelectTicketItemState extends State<SelectTicketItem> {
               width: 120.w,
               height: Sizing.medium,
               decoration: BoxDecoration(
-                color: count > 0
+                color: ticketType.count > 0
                     ? colorScheme.onPrimary.withOpacity(0.05)
                     : Colors.transparent,
                 border: Border.all(
-                  color: count > 0
+                  color: ticketType.count > 0
                       ? colorScheme.onPrimary.withOpacity(0.005)
                       : colorScheme.onPrimary.withOpacity(0.09),
                   // color:  colorScheme.onPrimary.withOpacity(0.005),
@@ -131,7 +104,10 @@ class _SelectTicketItemState extends State<SelectTicketItem> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   IconButton(
-                    onPressed: () => minus(),
+                    onPressed: () {
+                      if (ticketType.count == 0) return;
+                      onCountChange(ticketType.count - 1);
+                    },
                     icon: Icon(
                       Icons.remove,
                       color: colorScheme.onSurfaceVariant,
@@ -140,7 +116,7 @@ class _SelectTicketItemState extends State<SelectTicketItem> {
                   Expanded(
                     child: Center(
                       child: Text(
-                        "${count.toInt()}",
+                        ticketType.count.toString(),
                         style: Typo.medium.copyWith(
                           color: colorScheme.onSecondary,
                           // TODO:switch between no quantity and has quantity
@@ -151,7 +127,7 @@ class _SelectTicketItemState extends State<SelectTicketItem> {
                     ),
                   ),
                   IconButton(
-                    onPressed: () => add(),
+                    onPressed: () => onCountChange(ticketType.count + 1),
                     icon: Icon(
                       Icons.add,
                       color: colorScheme.onSurfaceVariant,
