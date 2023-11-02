@@ -34,7 +34,7 @@ class PurchasableTicketTypeDto with _$PurchasableTicketTypeDto {
     @JsonKey(name: '_id') String? id,
     bool? active,
     @JsonKey(name: 'address_required') bool? addressRequired,
-    int? cost,
+    @JsonKey(name: 'prices') Map<String, EventTicketPriceDto>? cost,
     @JsonKey(name: 'default') bool? isDefault,
     String? description,
     @JsonKey(name: 'description_line') String? descriptionLine,
@@ -48,4 +48,14 @@ class PurchasableTicketTypeDto with _$PurchasableTicketTypeDto {
 
   factory PurchasableTicketTypeDto.fromJson(Map<String, dynamic> json) =>
       _$PurchasableTicketTypeDtoFromJson(json);
+}
+
+
+@freezed
+class EventTicketPriceDto with _$EventTicketPriceDto {
+  const factory EventTicketPriceDto({
+    int? cost,
+  }) = _EventTicketPriceDto;
+
+  factory EventTicketPriceDto.fromJson(Map<String, dynamic> json) => _$EventTicketPriceDtoFromJson(json);
 }

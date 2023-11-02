@@ -66,8 +66,9 @@ class PickTicketItem extends StatelessWidget {
               children: [
                 Text(
                   "${ticketType?.title}   •   ${NumberUtils.formatCurrency(
-                    amount: ticketType?.cost?.toDouble() ?? 0,
-                    currency: currency ?? Currency.USD,
+                    amount: ticketType?.price?.toDouble() ?? 0,
+                    currency:
+                        Currency.currencyFromString(ticketType?.priceCurrency),
                     freeText: t.event.free,
                   )}",
                   style: Typo.medium.copyWith(
