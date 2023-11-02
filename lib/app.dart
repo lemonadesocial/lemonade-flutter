@@ -143,7 +143,6 @@ class _App extends StatefulWidget {
 class _AppState extends State<_App> {
   late final connectivityService = ConnectivityService.instance;
   late final t = Translations.of(context);
-  var firstInternetCheck = true;
 
   @override
   void initState() {
@@ -166,20 +165,8 @@ class _AppState extends State<_App> {
     return BlocListener<ConnectivityBloc, ConnectivityState>(
       listener: (context, state) {
         state.maybeWhen(
-          connected: () {
-            if (firstInternetCheck) {
-              // Dismiss snackBar for the first time internet check if it connected
-              firstInternetCheck = false;
-              return;
-            }
-            SnackBarUtils.showSuccessSnackbar(
-              t.common.internetConnectionRestore,
-            );
-          },
-          notConnected: () {
-            firstInternetCheck = false;
-            SnackBarUtils.showErrorSnackbar(t.common.internetLost);
-          },
+          notConnected: () =>
+              SnackBarUtils.showErrorSnackbar(t.common.internetLost),
           orElse: () {},
         );
       },
