@@ -25,9 +25,6 @@ void main() async {
   await getIt<MatrixService>().init();
   await getIt<FerryClient>().init();
 
-  // final client = await initClient();
-  // GetIt.I.registerLazySingleton<TypedLink>(() => client);
-
   runApp(const LemonadeApp());
 
   debugPrint('App is ready!!! ✅');

@@ -1,3 +1,4 @@
+import 'package:app/__generated__/schema.schema.gql.dart';
 import 'package:app/core/application/notification/delete_notifications_bloc/delete_notifications_bloc.dart';
 import 'package:app/core/data/notification/notification_constants.dart';
 import 'package:app/core/domain/notification/input/delete_notifications_input.dart';

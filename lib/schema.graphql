@@ -31,14 +31,13 @@ type Query {
   getProfileEvents(skip: Int! = 0, limit: Int! = 25, user: MongoID): [Event!]!
   getPastEvents(skip: Int! = 0, limit: Int! = 25, user: MongoID): [Event!]!
   getUpcomingEvents(skip: Int! = 0, limit: Int! = 25, user: MongoID): [Event!]!
-  getEventTicketTypes(input: GetEventTicketTypesInput!): GetEventTicketTypesResponse!
   getEventPaymentDonationSummary(event: MongoID!): EventPaymentDonationSummary
   getEventPaymentSummary(event: MongoID!): EventPaymentSummary!
+  getEventTicketTypes(input: GetEventTicketTypesInput!): GetEventTicketTypesResponse!
   getEventQuestions(input: GetEventQuestionsInput!): [EventQuestion!]!
   getEventRewardUses(input: GetEventRewardUsesInput!): [EventRewardUse!]!
   getEventSessionReservations(input: GetEventSessionReservationsInput): [EventSessionReservation!]!
   getEventSessionReservationSummary(input: GetEventSessionReservationSummaryInput!): [EventSessionReservationSummary!]!
-  getEventTicketPricing(event: MongoID!, type: MongoID!, discount: String): EventTicketPricing!
   calculateTicketsPricing(input: CalculateTicketsPricingInput!): PricingInfo!
   getFiles(skip: Int! = 0, limit: Int! = 25, id_lt: MongoID, user: MongoID, links: FileLinkInput): [File!]!
   getFrequentQuestions(input: GetFrequentQuestionsInput!): [FrequentQuestion!]!
@@ -441,7 +440,7 @@ type Event {
   url: String
   url_go: String
   broadcasts: [Broadcast!]
-  payment_ticket_types: [EventPaymentTicketType!]
+  event_ticket_types: [EventTicketType!]
   sessions: [EventSession!]
   has_terms_accepted: Boolean
   data: JSON
@@ -605,11 +604,12 @@ type BroadcastMetaData {
   static_thumbnail: String
 }
 
-type EventPaymentTicketType {
+type EventTicketType {
   _id: MongoID!
-  title: String!
-  cost: Int!
   active: Boolean
+  event: MongoID!
+  title: String!
+  prices: JSON
   default: Boolean
   address_required: Boolean
   description: String
@@ -1033,39 +1033,6 @@ enum EventTense {
   Past
 }
 
-type GetEventTicketTypesResponse {
-  limit: Float!
-  ticket_types: [PurchasableTicketType!]!
-  discount: TicketDiscount
-}
-
-type PurchasableTicketType {
-  _id: MongoID!
-  title: String!
-  cost: Int!
-  active: Boolean
-  default: Boolean
-  address_required: Boolean
-  description: String
-  description_line: String
-  external_ids: [String!]
-  offers: [EventOffer!]
-  photos: [MongoID!]
-  discountable: Boolean!
-  limit: Float!
-}
-
-type TicketDiscount {
-  discount: String!
-  limit: Float!
-  ratio: Float!
-}
-
-input GetEventTicketTypesInput {
-  event: MongoID!
-  discount: String
-}
-
 type EventPaymentDonationSummary {
   currency: String
   message: String
@@ -1095,6 +1062,40 @@ type EventPaymentSummarySplitItem {
   completed_transfer_amount: Float!
   payout_amount: Float!
   user_expanded: User
+}
+
+type GetEventTicketTypesResponse {
+  limit: Float!
+  ticket_types: [PurchasableTicketType!]!
+  discount: TicketDiscount
+}
+
+type PurchasableTicketType {
+  _id: MongoID!
+  active: Boolean
+  event: MongoID!
+  title: String!
+  prices: JSON
+  default: Boolean
+  address_required: Boolean
+  description: String
+  description_line: String
+  external_ids: [String!]
+  offers: [EventOffer!]
+  photos: [MongoID!]
+  discountable: Boolean!
+  limit: Float!
+}
+
+type TicketDiscount {
+  discount: String!
+  limit: Float!
+  ratio: Float!
+}
+
+input GetEventTicketTypesInput {
+  event: MongoID!
+  discount: String
 }
 
 type EventQuestion {
@@ -1159,19 +1160,6 @@ input GetEventSessionReservationSummaryInput {
   session: MongoID
 }
 
-type EventTicketPricing {
-  amount: Float!
-  currency: String!
-  limit: Float
-  discount: EventTicketPricingDiscount
-}
-
-type EventTicketPricingDiscount {
-  amount: Float!
-  ratio: Float!
-  limit: Float
-}
-
 type PricingInfo {
   currency: String!
   discount: Float!
@@ -1180,6 +1168,7 @@ type PricingInfo {
 }
 
 input CalculateTicketsPricingInput {
+  currency: String!
   event: MongoID!
   items: [PurchasableItem!]!
   discount: String
@@ -1187,7 +1176,7 @@ input CalculateTicketsPricingInput {
 
 input PurchasableItem {
   id: MongoID!
-  count: Float!
+  count: Int!
 }
 
 input FileLinkInput {
@@ -1901,9 +1890,9 @@ type Mutation {
   cancelEvent(_id: MongoID!): Event!
   acceptEventTerms(input: AcceptEventTermsInput!): Boolean!
   inviteEvent(input: InviteEventInput!): Event!
-  createEventPaymentTicketType(input: EventPaymentTicketTypeInput!, event: MongoID!): EventPaymentTicketType!
-  updateEventPaymentTicketType(input: EventPaymentTicketTypeInput!, event: MongoID!, _id: MongoID!): EventPaymentTicketType!
-  deleteEventPaymentTicketType(event: MongoID!, _id: MongoID!): Boolean!
+  createEventTicketType(input: EventTicketTypeInput!): EventTicketType!
+  updateEventTicketType(input: EventTicketTypeInput!, _id: MongoID!): EventTicketType!
+  deleteEventTicketType(event: MongoID!, _id: MongoID!): Boolean!
   createEventQuestion(input: CreateEventQuestionsInput!): EventQuestion!
   deleteEventQuestion(_id: MongoID!): Boolean!
   toggleEventQuestionLike(_id: MongoID!): Boolean!
@@ -2214,10 +2203,11 @@ input InviteEventInput {
   emails: [String!]
 }
 
-input EventPaymentTicketTypeInput {
-  title: String
-  cost: Int
+input EventTicketTypeInput {
   active: Boolean
+  event: MongoID
+  title: String
+  prices: JSON
   default: Boolean
   address_required: Boolean
   description: String
@@ -2226,10 +2216,10 @@ input EventPaymentTicketTypeInput {
   photos: [MongoID!]
   ticket_limit: Float
   ticket_limit_per: Float
-  offers: [EventPaymentTicketTypeOffersInput!]
+  offers: [EventTicketTypeOffersInput!]
 }
 
-input EventPaymentTicketTypeOffersInput {
+input EventTicketTypeOffersInput {
   _id: MongoID
   provider: OfferProvider
   provider_network: String

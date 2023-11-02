@@ -41,10 +41,6 @@ class NotificationPage extends StatelessWidget {
     client.requestController.add(nextNotificationsReq);
   }
 
-  onRefresh() {
-    client.requestController.add(getNotificationsReq);
-  }
-
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
@@ -97,20 +93,14 @@ class NotificationPage extends StatelessWidget {
             }
           });
           final notifications = response.data?.getNotifications.toBuiltList();
-          return RefreshIndicator(
-              color: Colors.white,
-              child: ListView.builder(
-                controller: scrollController,
-                itemCount: notifications?.length,
-                itemBuilder: (context, index) => NotificationCard(
-                  notification: notifications![index],
-                  index: index,
-                ),
-              ),
-              onRefresh: () {
-                onRefresh();
-                return Future(() => null);
-              });
+          return ListView.builder(
+            controller: scrollController,
+            itemCount: notifications?.length,
+            itemBuilder: (context, index) => NotificationCard(
+              notification: notifications![index],
+              index: index,
+            ),
+          );
         },
       ),
     );
