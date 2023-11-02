@@ -179,8 +179,10 @@ class _TicketAssignPopupViewState extends State<TicketAssignPopupView> {
                             Text(
                               "${widget.ticketType?.title}   •   ${NumberUtils.formatCurrency(
                                 amount:
-                                    widget.ticketType?.cost?.toDouble() ?? 0,
-                                currency: widget.event.currency ?? Currency.USD,
+                                    widget.ticketType?.price?.toDouble() ?? 0,
+                                currency: Currency.currencyFromString(
+                                  widget.ticketType?.priceCurrency,
+                                ),
                                 freeText: t.event.free,
                               )}",
                               style: Typo.medium.copyWith(

@@ -74,8 +74,8 @@ class TicketSummaryItem extends StatelessWidget {
           const Spacer(),
           Text(
             NumberUtils.formatCurrency(
-              amount: ticket.cost?.toDouble() ?? 0,
-              currency: Currency.USD,
+              amount: ticket.price?.toDouble() ?? 0,
+              currency: Currency.currencyFromString(ticket.priceCurrency),
             ),
           )
         ],

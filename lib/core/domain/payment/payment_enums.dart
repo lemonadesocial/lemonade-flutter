@@ -6,4 +6,10 @@ enum Currency {
   INR,
   USD,
   CRC;
+
+  static Currency currencyFromString(String? input) =>
+      Currency.values.firstWhere(
+        (element) => element.name == input,
+        orElse: () => Currency.USD,
+      );
 }
