@@ -1,6 +1,6 @@
 // ignore_for_file: non_constant_identifier_names
 
-import 'package:app/core/domain/web3/entities/chain_metadata_entity.dart';
+import 'package:app/core/domain/web3/entities/chain_metadata.dart';
 
 // TESTNET
 final GOERLI = ChainMetadata(
@@ -10,6 +10,12 @@ final GOERLI = ChainMetadata(
   icon: "",
   rpcUrl: "https://goerli.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161",
   isTestnet: true,
+  nativeCurrency: NativeCurrency(
+    name: "Ethereum",
+    symbol: "ETH",
+    decimals: 18,
+  ),
+  blockExplorerForTransaction: (hash) => 'https://goerli.etherscan.io/tx/$hash',
 );
 
 final MUMBAI = ChainMetadata(
@@ -19,6 +25,13 @@ final MUMBAI = ChainMetadata(
   icon: "",
   rpcUrl: "https://rpc-mumbai.maticvigil.com/",
   isTestnet: true,
+  nativeCurrency: NativeCurrency(
+    name: 'Matic Token',
+    symbol: 'MATIC',
+    decimals: 18,
+  ),
+  blockExplorerForTransaction: (hash) =>
+      'https://mumbai.polygonscan.com/tx/$hash',
 );
 
 // MAINNET
@@ -28,14 +41,12 @@ final ETHEREUM = ChainMetadata(
   displayName: "Ethereum",
   icon: "",
   rpcUrl: "https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161",
-);
-
-final POLYGON = ChainMetadata(
-  chainId: "eip155:137",
-  name: "polygon",
-  displayName: "POLYGON",
-  icon: "",
-  rpcUrl: "https://polygon-rpc.com/",
+  nativeCurrency: NativeCurrency(
+    name: "Ethereum",
+    symbol: "ETH",
+    decimals: 18,
+  ),
+  blockExplorerForTransaction: (hash) => 'https://etherscan.io/tx/$hash',
 );
 
 class Chains {
@@ -46,7 +57,6 @@ class Chains {
 
   static List<ChainMetadata> get mainnet => [
         ETHEREUM,
-        POLYGON,
       ];
 
   static List<ChainMetadata> get allChains => [

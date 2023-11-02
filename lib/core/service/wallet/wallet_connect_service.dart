@@ -2,6 +2,7 @@
 
 import 'package:app/core/config.dart';
 import 'package:app/core/constants/web3/chains.dart';
+import 'package:app/core/domain/web3/entities/ethereum_transaction.dart';
 import 'package:app/core/utils/wc_utils.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:injectable/injectable.dart';
@@ -60,6 +61,10 @@ class WalletConnectService {
   String? _currentWalletAccount;
 
   bool get initialized => _app != null;
+
+  String? get currentWalletAppAccount => _currentWalletAccount;
+
+  String? get currentWalletAppChainId => _currentWalletChainId;
 
   Future<bool> init() async {
     try {
@@ -175,14 +180,15 @@ class WalletConnectService {
     try {
       final activeSession = await getActiveSession();
 
-      await launchUrlString(
+      launchUrlString(
         _getDeepLinkUrl(walletApp),
         mode: LaunchMode.externalApplication,
       );
 
       final data = await _app!.request(
         topic: activeSession!.topic,
-        chainId: defaultRequiredChainId,
+        chainId: _currentWalletChainId ??
+            WCUtils.getSessionsChains(activeSession.namespaces).first,
         request: SessionRequestParams(
           method: 'personal_sign',
           params: [message, wallet],
@@ -194,6 +200,29 @@ class WalletConnectService {
       SnackBarUtils.showSnackbar(e.toString());
       return null;
     }
+  }
+
+  Future<String> requestTransaction({
+    required String chainId,
+    required EthereumTransaction transaction,
+    required SupportedWalletApp walletApp,
+  }) async {
+    final activeSession = await getActiveSession();
+
+    launchUrlString(
+      _getDeepLinkUrl(walletApp),
+      mode: LaunchMode.externalApplication,
+    );
+
+    final transactionId = await _app!.request(
+      topic: activeSession!.topic,
+      chainId: chainId,
+      request: SessionRequestParams(
+        method: 'eth_sendTransaction',
+        params: [transaction.toJson()],
+      ),
+    );
+    return transactionId;
   }
 
   Future<void> disconnect() async {
@@ -234,4 +263,19 @@ class WalletConnectService {
       }
     }
   }
+}
+
+enum WCRpcErrorCode {
+  userRejected(code: 5000),
+  userRejectedChains(code: 5001),
+  userRejectedMethods(code: 5002),
+  userRejectedEvents(code: 5003),
+  unsupportedChains(code: 5100),
+  unsupportedMethods(code: 5101),
+  unsupportedEvents(code: 5102),
+  unsupportedAccounts(code: 5103),
+  unsupportedNamespaceKey(code: 5104);
+
+  final int code;
+  const WCRpcErrorCode({required this.code});
 }
