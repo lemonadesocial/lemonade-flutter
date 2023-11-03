@@ -46,7 +46,7 @@ final getEventPaymentsQuery = gql('''
                   key,
                   bucket,
               },
-              payment_ticket_types {
+              event_ticket_types {
                 _id,
                 title,
                 cost,
