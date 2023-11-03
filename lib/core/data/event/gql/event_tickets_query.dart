@@ -46,7 +46,7 @@ final calculateTicketsPricingInfoQuery = gql('''
       total,
       subtotal,
       discount,
-      ...paymentAccounts
+      ...paymentAccountFragment
     }
   }
 ''');

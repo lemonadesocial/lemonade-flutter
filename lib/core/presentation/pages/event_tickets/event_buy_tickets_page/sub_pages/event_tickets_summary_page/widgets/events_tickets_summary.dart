@@ -1,5 +1,4 @@
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
-import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/number_utils.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -75,9 +74,9 @@ class TicketSummaryItem extends StatelessWidget {
           Text(
             NumberUtils.formatCurrency(
               amount: ticket.price?.toDouble() ?? 0,
-              currency: Currency.currencyFromString(ticket.priceCurrency),
+              currency: ticket.priceCurrency,
             ),
-          )
+          ),
         ],
       ),
     );

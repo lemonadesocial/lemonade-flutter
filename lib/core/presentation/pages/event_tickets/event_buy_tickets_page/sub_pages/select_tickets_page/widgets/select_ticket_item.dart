@@ -1,6 +1,5 @@
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
-import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/utils/number_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -53,7 +52,7 @@ class _SelectTicketItemState extends State<SelectTicketItem> {
     final t = Translations.of(context);
     final costText = NumberUtils.formatCurrency(
       amount: (widget.ticketType.price?.toDouble() ?? 0),
-      currency: Currency.currencyFromString(widget.ticketType.priceCurrency),
+      currency: widget.ticketType.priceCurrency,
       freeText: t.event.free,
     );
     return Padding(

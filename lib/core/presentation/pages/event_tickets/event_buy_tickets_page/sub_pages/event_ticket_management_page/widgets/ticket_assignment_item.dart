@@ -73,8 +73,7 @@ class TicketAssignmentItem extends StatelessWidget {
               Text(
                 "${ticketType?.title}   •   ${NumberUtils.formatCurrency(
                   amount: ticketType?.price?.toDouble() ?? 0,
-                  currency:
-                      Currency.currencyFromString(ticketType?.priceCurrency),
+                  currency: ticketType?.priceCurrency,
                   freeText: t.event.free,
                 )}",
                 style: Typo.medium.copyWith(

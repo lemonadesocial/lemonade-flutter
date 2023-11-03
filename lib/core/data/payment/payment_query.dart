@@ -53,7 +53,7 @@ const accountInfoFragment = '''
 const paymentAccountFragment = '''
   $accountInfoFragment
 
-  fragment paymentAccounts on NewPaymentAccount{
+  fragment paymentAccountFragment on NewPaymentAccount{
     _id
     active
     created_at

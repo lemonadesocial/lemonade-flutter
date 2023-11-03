@@ -1,5 +1,6 @@
 import 'package:app/core/data/event/dtos/event_ticket_types_dto/event_ticket_types_dto.dart';
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'event_ticket_types.freezed.dart';
@@ -54,7 +55,7 @@ class PurchasableTicketType with _$PurchasableTicketType {
     String? id,
     bool? active,
     bool? addressRequired,
-    String? priceCurrency,
+    Currency? priceCurrency,
     int? price,
     bool? isDefault,
     String? description,
@@ -73,8 +74,8 @@ class PurchasableTicketType with _$PurchasableTicketType {
         id: dto.id,
         active: dto.active,
         addressRequired: dto.addressRequired,
-        priceCurrency: dto.cost?.keys.firstOrNull,
-        price: dto.cost?.values.firstOrNull?.cost,
+        priceCurrency: dto.prices?.keys.firstOrNull,
+        price: dto.prices?.values.firstOrNull?.cost,
         isDefault: dto.isDefault,
         description: dto.description,
         descriptionLine: dto.descriptionLine,
