@@ -1,3 +1,4 @@
+import 'package:app/core/data/payment/payment_query.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 final getEventTicketTypesQuery = gql('''
@@ -37,12 +38,14 @@ final getEventTicketTypesQuery = gql('''
 ''');
 
 final calculateTicketsPricingInfoQuery = gql('''
+  $paymentAccountFragment
+  
   query CalculateTicketsPricing(\$input: CalculateTicketsPricingInput!) {
     calculateTicketsPricing(input: \$input) {
-      currency
-      discount
-      subtotal
-      total
+      total,
+      subtotal,
+      discount,
+      ...paymentAccounts
     }
   }
 ''');
