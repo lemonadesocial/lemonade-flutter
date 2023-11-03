@@ -49,7 +49,7 @@ final getEventPaymentsQuery = gql('''
               event_ticket_types {
                 _id,
                 title,
-                cost,
+                prices,
                 description,
               },
               address {

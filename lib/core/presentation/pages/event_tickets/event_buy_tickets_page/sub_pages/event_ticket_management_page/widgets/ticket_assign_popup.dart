@@ -3,7 +3,6 @@ import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/entities/event_ticket.dart';
 import 'package:app/core/domain/event/input/assign_tickets_input/assign_tickets_input.dart';
-import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/dialog/lemon_alert_dialog.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
@@ -180,9 +179,7 @@ class _TicketAssignPopupViewState extends State<TicketAssignPopupView> {
                               "${widget.ticketType?.title}   •   ${NumberUtils.formatCurrency(
                                 amount:
                                     widget.ticketType?.price?.toDouble() ?? 0,
-                                currency: Currency.currencyFromString(
-                                  widget.ticketType?.priceCurrency,
-                                ),
+                                currency: widget.ticketType?.priceCurrency,
                                 freeText: t.event.free,
                               )}",
                               style: Typo.medium.copyWith(
@@ -200,7 +197,7 @@ class _TicketAssignPopupViewState extends State<TicketAssignPopupView> {
                             ),
                           ],
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -230,7 +227,7 @@ class _TicketAssignPopupViewState extends State<TicketAssignPopupView> {
                               TicketAssignee(
                                 ticket: widget.eventTicket.id ?? '',
                                 email: email,
-                              )
+                              ),
                             ],
                           ),
                         );
@@ -242,7 +239,7 @@ class _TicketAssignPopupViewState extends State<TicketAssignPopupView> {
                           : t.event.eventTicketManagement.assignTicket,
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),
