@@ -5,6 +5,8 @@ class ChainMetadata {
   final String icon;
   final bool isTestnet;
   final String rpcUrl;
+  final NativeCurrency nativeCurrency;
+  final String Function(String txHash) blockExplorerForTransaction;
 
   ChainMetadata({
     required this.chainId,
@@ -13,6 +15,8 @@ class ChainMetadata {
     required this.icon,
     this.isTestnet = false,
     required this.rpcUrl,
+    required this.nativeCurrency,
+    required this.blockExplorerForTransaction,
   });
 
   @override
@@ -35,4 +39,16 @@ class ChainMetadata {
         rpcUrl.hashCode ^
         isTestnet.hashCode;
   }
+}
+
+class NativeCurrency {
+  final String name;
+  final String symbol;
+  final int decimals;
+
+  NativeCurrency({
+    required this.name,
+    required this.symbol,
+    required this.decimals,
+  });
 }

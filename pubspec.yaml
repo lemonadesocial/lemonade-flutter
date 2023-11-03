@@ -105,6 +105,7 @@ dependencies:
   # wallet
   walletconnect_flutter_v2: ^2.0.12
   web3dart: ^2.6.1
+  convert: ^3.1.1
 
   # matrix
   matrix: ^0.22.1
