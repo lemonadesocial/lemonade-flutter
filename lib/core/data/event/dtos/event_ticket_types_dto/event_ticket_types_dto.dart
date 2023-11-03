@@ -2,6 +2,7 @@ import 'package:app/core/data/event/dtos/event_dtos.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'event_ticket_types_dto.freezed.dart';
+
 part 'event_ticket_types_dto.g.dart';
 
 @freezed
@@ -50,12 +51,12 @@ class PurchasableTicketTypeDto with _$PurchasableTicketTypeDto {
       _$PurchasableTicketTypeDtoFromJson(json);
 }
 
-
 @freezed
 class EventTicketPriceDto with _$EventTicketPriceDto {
   const factory EventTicketPriceDto({
     int? cost,
   }) = _EventTicketPriceDto;
 
-  factory EventTicketPriceDto.fromJson(Map<String, dynamic> json) => _$EventTicketPriceDtoFromJson(json);
+  factory EventTicketPriceDto.fromJson(Map<String, dynamic> json) =>
+      _$EventTicketPriceDtoFromJson(json);
 }
