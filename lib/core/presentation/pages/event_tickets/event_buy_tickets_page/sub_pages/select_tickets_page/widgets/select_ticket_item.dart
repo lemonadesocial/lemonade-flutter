@@ -27,8 +27,7 @@ class SelectTicketItem extends StatefulWidget {
 }
 
 class _SelectTicketItemState extends State<SelectTicketItem> {
-  var count = 1;
-
+  var count = 0;
   void add() {
     if (count < (widget.ticketType.limit ?? 0)) {
       setState(() {

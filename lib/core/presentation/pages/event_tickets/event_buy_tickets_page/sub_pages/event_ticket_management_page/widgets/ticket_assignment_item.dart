@@ -156,10 +156,10 @@ class TicketAssignmentItem extends StatelessWidget {
                         style: Typo.xSmall.copyWith(
                           color: colorScheme.onSecondary,
                         ),
-                      )
+                      ),
                     ],
                   ),
-                )
+                ),
             ],
           ),
           const Spacer(),

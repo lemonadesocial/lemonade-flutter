@@ -8,6 +8,7 @@ import 'package:app/core/application/event_tickets/select_event_tickets_bloc/sel
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/input/assign_tickets_input/assign_tickets_input.dart';
+import 'package:app/core/domain/payment/entities/purchasable_item/purchasable_item.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/select_tickets_page/widgets/select_ticket_item.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/select_tickets_page/widgets/select_ticket_submit_button.dart';
 import 'package:app/core/presentation/widgets/back_button_widget.dart';
@@ -193,28 +194,36 @@ class SelectTicketView extends StatelessWidget {
                 ),
               ),
               SizedBox(height: Spacing.smMedium),
-              Expanded(
-                child: BlocBuilder<GetEventTicketTypesBloc,
-                    GetEventTicketTypesState>(
-                  builder: (context, state) => state.when(
-                    loading: () => Loading.defaultLoading(context),
-                    failure: () =>
-                        EmptyList(emptyText: t.common.somethingWrong),
-                    success: (response) {
-                      final ticketTypes = List<PurchasableTicketType>.from(
-                        response.ticketTypes ?? [],
-                      );
-                      return Column(
+              BlocBuilder<GetEventTicketTypesBloc, GetEventTicketTypesState>(
+                builder: (context, state) => state.when(
+                  loading: () => Loading.defaultLoading(context),
+                  failure: () => EmptyList(emptyText: t.common.somethingWrong),
+                  success: (response) {
+                    final ticketTypes = List<PurchasableTicketType>.from(
+                      response.ticketTypes ?? [],
+                    );
+                    return Flexible(
+                      flex: 1,
+                      child: Column(
                         children: [
                           Expanded(
                             child: ListView.separated(
                               itemBuilder: (context, index) => SelectTicketItem(
                                 event: event,
                                 ticketType: ticketTypes[index],
-                                onCountChange: (count) => ticketTypes[index] =
-                                    ticketTypes[index].copyWith(count: count),
+                                onCountChange: (count) {
+                                  context
+                                      .read<SelectEventTicketTypesBloc>()
+                                      .add(
+                                        SelectEventTicketTypesEvent.select(
+                                          ticketType: PurchasableItem(
+                                            count: count,
+                                            id: ticketTypes[index].id ?? '',
+                                          ),
+                                        ),
+                                      );
+                                },
                               ),
-                              shrinkWrap: true,
                               separatorBuilder: (context, index) => Divider(
                                 height: 1.w,
                                 thickness: 1.w,
@@ -223,19 +232,14 @@ class SelectTicketView extends StatelessWidget {
                               itemCount: ticketTypes.length,
                             ),
                           ),
-                          SelectTicketSubmitButton(
-                            event: event,
-                            listTicket: state.maybeWhen(
-                              orElse: () => [],
-                              success: (response) => ticketTypes,
-                            ),
-                          ),
                         ],
-                      );
-                    },
-                  ),
+                      ),
+                    );
+                  },
                 ),
               ),
+              const Spacer(),
+              const SelectTicketSubmitButton(),
             ],
           ),
         ),
