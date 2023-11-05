@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:app/core/application/auth/auth_bloc.dart';
+import 'package:app/core/application/connectivity/connectivity_bloc.dart';
 import 'package:app/core/application/profile/block_user_bloc/block_user_bloc.dart';
 import 'package:app/core/domain/user/user_repository.dart';
+import 'package:app/core/service/connectivity/connectivity_service.dart';
 import 'package:app/core/service/firebase/firebase_service.dart';
 import 'package:app/core/service/matrix/matrix_service.dart';
 import 'package:app/core/service/shorebird_codepush_service.dart';
@@ -80,6 +84,7 @@ class _LemonadeAppViewState extends State<LemonadeApp> {
           BlocProvider(
             create: (context) => BlockUserBloc(getIt<UserRepository>()),
           ),
+          BlocProvider(create: (context) => ConnectivityBloc()),
         ],
         child: child,
       );
@@ -126,33 +131,66 @@ class _LemonadeAppViewState extends State<LemonadeApp> {
   }
 }
 
-class _App extends StatelessWidget {
+class _App extends StatefulWidget {
   final AppRouter router;
 
   const _App(this.router);
 
   @override
+  State<_App> createState() => _AppState();
+}
+
+class _AppState extends State<_App> {
+  late final connectivityService = ConnectivityService.instance;
+  late final t = Translations.of(context);
+
+  @override
+  void initState() {
+    super.initState();
+    connectivityService.initialise();
+    connectivityService.myStream.listen((isConnected) {
+      context.read<ConnectivityBloc>().onConnectivityStatusChange(isConnected);
+    });
+  }
+
+  @override
+  void dispose() {
+    connectivityService.disposeStream();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     SnackBarUtils.init(lemonadeAppDarkThemeData.colorScheme);
-    return MaterialApp.router(
-      scaffoldMessengerKey: SnackBarUtils.rootScaffoldMessengerKey,
-      locale: _getCurrentLocale(context), // use provider
-      supportedLocales: _supportedLocales,
-      localizationsDelegates: _localizationsDelegates,
-      themeMode: ThemeMode.dark,
-      darkTheme: lemonadeAppDarkThemeData,
-      theme: lemonadeAppLightThemeData,
-      routerDelegate: router.delegate(
-        navigatorObservers: () => <NavigatorObserver>[MyRouterObserver()],
-      ),
-      routeInformationParser:
-          router.defaultRouteParser(includePrefixMatches: true),
-      builder: (context, widget) {
-        ErrorWidget.builder = (FlutterErrorDetails errorDetails) {
-          return CustomError(errorDetails: errorDetails);
-        };
-        return FlutterEasyLoading(child: widget);
+    return BlocListener<ConnectivityBloc, ConnectivityState>(
+      listener: (context, state) {
+        state.maybeWhen(
+          notConnected: () =>
+              SnackBarUtils.showErrorSnackbar(t.common.internetLost),
+          orElse: () {},
+        );
       },
+      child: MaterialApp.router(
+        scaffoldMessengerKey: SnackBarUtils.rootScaffoldMessengerKey,
+        locale: _getCurrentLocale(context),
+        // use provider
+        supportedLocales: _supportedLocales,
+        localizationsDelegates: _localizationsDelegates,
+        themeMode: ThemeMode.dark,
+        darkTheme: lemonadeAppDarkThemeData,
+        theme: lemonadeAppLightThemeData,
+        routerDelegate: widget.router.delegate(
+          navigatorObservers: () => <NavigatorObserver>[MyRouterObserver()],
+        ),
+        routeInformationParser:
+            widget.router.defaultRouteParser(includePrefixMatches: true),
+        builder: (context, widget) {
+          ErrorWidget.builder = (FlutterErrorDetails errorDetails) {
+            return CustomError(errorDetails: errorDetails);
+          };
+          return FlutterEasyLoading(child: widget);
+        },
+      ),
     );
   }
 
