@@ -156,7 +156,7 @@ class _ReportBottomSheetState extends State<ReportBottomSheet> {
                         ),
                       );
                     },
-                  )
+                  ),
                 ],
               ),
             ),

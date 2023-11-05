@@ -145,7 +145,7 @@ class SpacesDrawer extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                           maxLines: 2,
                         ),
-                      ]
+                      ],
                     ],
                   ),
                 ),
@@ -186,7 +186,7 @@ class SpacesDrawer extends StatelessWidget {
                   Text(
                     "Create space",
                     style: Typo.medium.copyWith(color: colorScheme.onPrimary),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -212,7 +212,7 @@ class SpacesDrawer extends StatelessWidget {
                   Text(
                     "Join space",
                     style: Typo.medium.copyWith(color: colorScheme.onPrimary),
-                  )
+                  ),
                 ],
               ),
             ),

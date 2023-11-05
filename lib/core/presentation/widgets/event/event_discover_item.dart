@@ -127,7 +127,7 @@ class _EventInfo extends StatelessWidget {
             fontWeight: FontWeight.w400,
             color: Theme.of(context).colorScheme.onSurface,
           ),
-        )
+        ),
       ],
     );
   }

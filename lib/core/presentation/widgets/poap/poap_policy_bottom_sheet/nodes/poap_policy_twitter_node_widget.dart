@@ -78,7 +78,7 @@ class PoapPolicyTwitterNodeWidget extends StatelessWidget {
         if (result) ...[
           const Spacer(),
           Assets.icons.icInvitedFilled.svg(),
-        ]
+        ],
       ],
     );
   }

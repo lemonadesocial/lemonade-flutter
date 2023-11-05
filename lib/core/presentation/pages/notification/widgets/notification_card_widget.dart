@@ -160,7 +160,7 @@ class NotificationCardView extends StatelessWidget {
             color: colorScheme.onSurfaceVariant,
             fontWeight: FontWeight.w700,
           ),
-        )
+        ),
       ],
     );
   }

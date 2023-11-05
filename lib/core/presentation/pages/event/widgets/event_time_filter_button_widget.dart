@@ -104,7 +104,7 @@ class _EventTimeFilterButtonState extends State<EventTimeFilterButton>
               },
             ),
           ),
-        )
+        ),
       ],
     );
   }

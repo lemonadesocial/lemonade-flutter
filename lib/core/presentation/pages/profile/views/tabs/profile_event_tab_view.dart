@@ -120,7 +120,7 @@ class _ProfileEventTabViewState extends State<ProfileEventTabView> {
         ),
         const SliverToBoxAdapter(
           child: SizedBox(height: 92),
-        )
+        ),
       ],
     );
   }
@@ -218,7 +218,7 @@ class _EventList<T extends BaseEventListingBloc> extends StatelessWidget {
                         childCount: pastEvents.length,
                       ),
                     ),
-                  )
+                  ),
                 ],
               ],
             );
@@ -279,11 +279,11 @@ class _EventItem extends StatelessWidget {
                     TextSpan(
                       style: Typo.small.copyWith(color: colorScheme.onSurface),
                       text: DateFormatUtils.dateOnly(event.start),
-                    )
+                    ),
                   ],
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),

@@ -49,7 +49,7 @@ class PoapItem extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => BadgeDetailBloc(defaultBadge: badge),
-        )
+        ),
       ],
       child: const _PoapItemView(),
     );
@@ -122,7 +122,7 @@ class _PoapItemView extends StatelessWidget {
                           _PoapItemButtons(badge: badge),
                         ],
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -202,7 +202,7 @@ class _PoapItemInfo extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
             maxLines: 2,
           ),
-        ]
+        ],
       ],
     );
   }

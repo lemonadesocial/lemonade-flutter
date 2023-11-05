@@ -28,7 +28,7 @@ class CreateChatButton extends StatelessWidget {
             color: LemonColor.fabShadow,
             blurRadius: 8,
             offset: Offset(0, 4),
-          )
+          ),
         ],
       ),
       child: ThemeSvgIcon(
@@ -47,7 +47,7 @@ class CreateChatButton extends StatelessWidget {
     final List<MenuItem> menuItems = [
       MenuItems.createChat,
       MenuItems.createRoom,
-      MenuItems.exploreRooms
+      MenuItems.exploreRooms,
     ];
     return DropdownButtonHideUnderline(
       child: DropdownButton2(

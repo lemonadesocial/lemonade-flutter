@@ -287,7 +287,7 @@ class _EventsListingViewState extends State<_EventsListingView> {
                       ),
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),

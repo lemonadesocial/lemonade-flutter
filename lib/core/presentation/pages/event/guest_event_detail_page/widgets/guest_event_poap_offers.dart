@@ -93,7 +93,7 @@ class GuestEventPoapOffers extends StatelessWidget {
               );
             },
           ),
-        )
+        ),
       ],
     );
   }

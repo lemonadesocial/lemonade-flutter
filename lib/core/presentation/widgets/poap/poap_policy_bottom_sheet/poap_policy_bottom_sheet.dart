@@ -143,11 +143,11 @@ class PoapPolicyBottomSheet extends StatelessWidget {
                                   BorderRadius.circular(LemonRadius.small * 2),
                               mode: GradientButtonMode.lavenderMode,
                             ),
-                          )
+                          ),
                       ],
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),

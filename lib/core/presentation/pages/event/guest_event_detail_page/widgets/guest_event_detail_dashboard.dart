@@ -99,7 +99,7 @@ class EventTotalJoinWidget extends StatelessWidget {
             fontSize: 9.sp,
             color: colorScheme.onSecondary,
           ),
-        )
+        ),
       ],
     );
   }

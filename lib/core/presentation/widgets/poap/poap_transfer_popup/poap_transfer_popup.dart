@@ -208,7 +208,7 @@ class _PoapTransferPopupState extends State<_PoapTransferPopupView> {
                                   ),
                                 ),
                               ),
-                            )
+                            ),
                           ],
                         ),
                       ),
@@ -261,7 +261,7 @@ class _PoapTransferPopupState extends State<_PoapTransferPopupView> {
                             ],
                           ),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),

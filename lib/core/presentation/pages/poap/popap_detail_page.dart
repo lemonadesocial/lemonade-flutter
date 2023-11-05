@@ -192,7 +192,7 @@ class _PoapDescription extends StatelessWidget {
           style: Typo.medium.copyWith(
             color: colorScheme.onPrimary.withOpacity(0.87),
           ),
-        )
+        ),
       ],
     );
   }
@@ -374,7 +374,7 @@ class _PoapDetailFooterState extends State<PoapDetailFooter>
                                   );
                                 }
                               },
-                          )
+                          ),
                       ],
                     ),
                     style: Typo.small

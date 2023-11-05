@@ -100,7 +100,7 @@ class PostGuestEventDetailView extends StatelessWidget {
                           event: event,
                         ),
                       ),
-                    )
+                    ),
                   ],
                   SliverPadding(
                     padding: EdgeInsets.only(top: Spacing.smMedium),

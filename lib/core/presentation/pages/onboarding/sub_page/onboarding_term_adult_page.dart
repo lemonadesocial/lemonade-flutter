@@ -103,7 +103,7 @@ class OnboardingTermAdultPage extends StatelessWidget {
                         onboardingBloc.state.status == OnboardingStatus.loading,
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),

@@ -41,7 +41,7 @@ class EventBuyTicketButton extends StatelessWidget {
               blurRadius: 4,
               offset: const Offset(0, 2),
               spreadRadius: 0,
-            )
+            ),
           ],
         ),
         child: Row(
@@ -64,7 +64,7 @@ class EventBuyTicketButton extends StatelessWidget {
                     )
                   : t.event.free,
               style: Typo.small.copyWith(color: colorScheme.onPrimary),
-            )
+            ),
           ],
         ),
       ),

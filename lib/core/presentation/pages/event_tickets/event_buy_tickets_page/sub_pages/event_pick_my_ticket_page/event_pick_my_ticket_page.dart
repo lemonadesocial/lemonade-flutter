@@ -55,7 +55,7 @@ class EventPickMyTicketPage extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => AcceptEventBloc(event: event),
-        )
+        ),
       ],
       child: EventPickMyTicketView(event: event),
     );
@@ -213,7 +213,7 @@ class EventPickMyTicketView extends StatelessWidget {
                                       TicketAssignee(
                                         ticket: ticketToAssign.id ?? '',
                                         user: userId,
-                                      )
+                                      ),
                                     ],
                                   ),
                                 );
@@ -233,7 +233,7 @@ class EventPickMyTicketView extends StatelessWidget {
                     ),
                   );
                 },
-              )
+              ),
             ],
           ),
         ),

@@ -81,9 +81,9 @@ class PoapPolicyLocationNodeWidget extends StatelessWidget {
             const Spacer(),
             result
                 ? Assets.icons.icInvitedFilled.svg()
-                : const SizedBox.shrink()
+                : const SizedBox.shrink(),
           ],
-        )
+        ),
       ],
     );
   }

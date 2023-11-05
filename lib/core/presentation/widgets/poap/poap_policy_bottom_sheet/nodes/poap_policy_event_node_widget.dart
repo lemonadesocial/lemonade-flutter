@@ -90,7 +90,7 @@ class PoapPolicyEventNodeWidget extends StatelessWidget {
               if (result) ...[
                 const Spacer(),
                 Assets.icons.icInvitedFilled.svg(),
-              ]
+              ],
             ],
           ),
         );

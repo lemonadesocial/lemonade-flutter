@@ -69,7 +69,7 @@ class TicketCostSummary extends StatelessWidget {
                   height: 1.w,
                   thickness: 1.w,
                 ),
-              )
+              ),
             ],
           ),
           SizedBox(height: Spacing.smMedium),
@@ -97,7 +97,7 @@ class TicketCostSummary extends StatelessWidget {
               textStyle: Typo.extraMedium.copyWith(
                 color: LemonColor.accessCodeColor,
               ),
-            )
+            ),
           ],
           Padding(
             padding: EdgeInsets.symmetric(vertical: Spacing.smMedium),
@@ -151,7 +151,7 @@ class RowInfo extends StatelessWidget {
             value,
             style: textStyle,
           ),
-        )
+        ),
       ],
     );
   }

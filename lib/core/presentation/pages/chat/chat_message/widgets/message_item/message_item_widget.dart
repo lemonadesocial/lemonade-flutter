@@ -226,9 +226,9 @@ class _MessageItemState extends State<MessageItem> {
                                 child: _buildMessageEditTime(
                                   colorScheme.onSurfaceVariant,
                                 ),
-                              )
+                              ),
                             ],
-                          )
+                          ),
                         ],
                       ),
                     ),

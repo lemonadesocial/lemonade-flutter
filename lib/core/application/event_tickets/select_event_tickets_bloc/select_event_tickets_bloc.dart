@@ -35,7 +35,9 @@ class SelectEventTicketTypesBloc
   }
 
   void _onSelectCurrency(
-      SelectEventTicketTypesEventOnSelectCurrency event, Emitter emit) {
+    SelectEventTicketTypesEventOnSelectCurrency event,
+    Emitter emit,
+  ) {
     currency = event.currency;
     emit(state.copyWith(selectedCurrency: currency));
   }

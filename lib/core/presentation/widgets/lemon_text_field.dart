@@ -100,7 +100,7 @@ class LemonTextField extends StatelessWidget {
         if (statusWidget != null) ...[
           SizedBox(height: Spacing.xSmall),
           statusWidget!,
-        ]
+        ],
       ],
     );
   }

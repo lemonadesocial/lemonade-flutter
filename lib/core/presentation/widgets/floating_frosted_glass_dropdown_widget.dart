@@ -91,7 +91,7 @@ class _FloatingFrostedGlassDropdown<T>
               },
             ),
           ),
-        )
+        ),
       ],
     );
   }

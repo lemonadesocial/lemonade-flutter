@@ -47,7 +47,7 @@ class ChatMessageView extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -55,7 +55,7 @@ class ChatMessageView extends StatelessWidget {
         actions: [
           ChatSettingsPopupMenu(
             room: controller.room,
-          )
+          ),
         ],
       ),
       body: GestureDetector(
@@ -95,7 +95,7 @@ class ChatMessageView extends StatelessWidget {
                   color: colorScheme.outline,
                   height: 1.h,
                 ),
-                ChatInput(controller)
+                ChatInput(controller),
               ],
             ),
           ),

@@ -79,7 +79,7 @@ class EventPaymentListItemWidget extends StatelessWidget {
                     color: colorScheme.onSecondary,
                     fontWeight: FontWeight.w700,
                   ),
-                )
+                ),
               ],
             ),
           ),

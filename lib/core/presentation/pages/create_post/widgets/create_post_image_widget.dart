@@ -50,7 +50,7 @@ class CreatePostImageWidget extends StatelessWidget {
               ),
             ),
           ),
-        )
+        ),
       ],
     );
   }
