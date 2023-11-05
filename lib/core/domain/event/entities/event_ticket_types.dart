@@ -66,7 +66,9 @@ class PurchasableTicketType with _$PurchasableTicketType {
     List<EventOffer>? offers,
     List<String>? photos,
     String? title,
-    @Default(1) int count,
+    Map<Currency, EventTicketPrice>? prices,
+    Currency? defaultCurrency,
+    EventTicketPrice? defaultPrice,
   }) = _PurchasableTicketType;
 
   factory PurchasableTicketType.fromDto(PurchasableTicketTypeDto dto) =>
@@ -89,5 +91,26 @@ class PurchasableTicketType with _$PurchasableTicketType {
             : [],
         photos: dto.photos,
         title: dto.title,
+        defaultCurrency: dto.prices?.keys.first,
+        defaultPrice: dto.prices?.values.first != null
+            ? EventTicketPrice.fromDto(dto.prices!.values.first)
+            : null,
+        prices: dto.prices != null
+            ? Map.fromEntries(
+                dto.prices!.entries.map(
+                  (e) => MapEntry(e.key, EventTicketPrice.fromDto(e.value)),
+                ),
+              )
+            : null,
       );
+}
+
+class EventTicketPrice {
+  final int? cost;
+  EventTicketPrice({
+    required this.cost,
+  });
+
+  factory EventTicketPrice.fromDto(EventTicketPriceDto dto) =>
+      EventTicketPrice(cost: dto.cost);
 }

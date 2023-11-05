@@ -5,6 +5,7 @@ import 'package:app/core/application/event_tickets/select_event_tickets_bloc/sel
 import 'package:app/core/application/payment/payment_bloc/payment_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart' as event_entity;
 import 'package:app/core/domain/event/repository/event_ticket_repository.dart';
+import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/domain/payment/payment_repository.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:auto_route/auto_route.dart';
@@ -35,7 +36,8 @@ class EventBuyTicketsPage extends StatelessWidget implements AutoRouteWrapper {
             ),
         ),
         BlocProvider(
-          create: (context) => SelectEventTicketTypesBloc(),
+          create: (context) =>
+              SelectEventTicketTypesBloc()..add(SelectEventTicketTypesEvent.selectCurrency(currency: Currency.USD)),
         ),
         BlocProvider(
           create: (context) => PaymentBloc(
