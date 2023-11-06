@@ -1,13 +1,12 @@
+import 'package:app/core/application/event/event_provider_bloc/event_provider_bloc.dart';
 import 'package:app/core/application/event_tickets/redeem_tickets_bloc/redeem_tickets_bloc.dart';
 import 'package:app/core/application/event_tickets/select_event_tickets_bloc/select_event_tickets_bloc.dart';
 import 'package:app/core/application/payment/payment_bloc/payment_bloc.dart';
-import 'package:app/core/domain/event/entities/event.dart';
-import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/input/calculate_tickets_pricing_input/calculate_tickets_pricing_input.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/add_promo_code_input.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/event_order_summary.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/event_order_summary_footer.dart';
-import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/events_tickets_summary.dart';
+import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/event_tickets_summary.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/gen/fonts.gen.dart';
@@ -21,29 +20,54 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 @RoutePage()
 class EventTicketsSummaryPage extends StatelessWidget {
-  const EventTicketsSummaryPage({
-    super.key,
-    required this.event,
-    required this.listTicket,
-  });
-
-  final Event event;
-  final List<PurchasableTicketType> listTicket;
+  const EventTicketsSummaryPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final t = Translations.of(context);
+    return const EventTicketsSummaryPageView();
+  }
+}
+
+class EventTicketsSummaryPageView extends StatefulWidget {
+  const EventTicketsSummaryPageView({
+    super.key,
+  });
+
+  @override
+  State<EventTicketsSummaryPageView> createState() =>
+      _EventTicketsSummaryPageViewState();
+}
+
+class _EventTicketsSummaryPageViewState
+    extends State<EventTicketsSummaryPageView> {
+  @override
+  void initState() {
+    super.initState();
+    final event = context.read<EventProviderBloc>().event;
+    final selectedTickets =
+        context.read<SelectEventTicketTypesBloc>().state.selectedTicketTypes;
+    final selectedCurrency =
+        context.read<SelectEventTicketTypesBloc>().state.selectedCurrency;
+
     context.read<PaymentBloc>()
       ..getListCard()
       ..calculatePricing(
         input: CalculateTicketsPricingInput(
           eventId: event.id ?? '',
-          items: listTicket
-              .map((e) => PurchasableItem(id: e.id ?? '', count: e.count))
-              .toList(),
+          items: selectedTickets,
+          // TODO: In the future, user will select currency to pay, and all the selected ticket types
+          // will be the
+          currency: selectedCurrency!,
         ),
       );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final t = Translations.of(context);
+    final event = context.read<EventProviderBloc>().event;
+
     return BlocConsumer<PaymentBloc, PaymentState>(
       listener: (context, state) {
         if (state.status == PaymentStatus.success) {
@@ -90,7 +114,7 @@ class EventTicketsSummaryPage extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: Spacing.large),
-                    EventsTicketSummary(listTicket: listTicket),
+                    const EventTicketsSummary(),
                     SizedBox(height: Spacing.smMedium),
                     const AddPromoCodeInput(),
                     SizedBox(height: Spacing.smMedium),

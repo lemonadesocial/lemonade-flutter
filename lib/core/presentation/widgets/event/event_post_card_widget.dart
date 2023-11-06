@@ -82,7 +82,7 @@ class EventPostCard extends StatelessWidget {
             top: Spacing.extraSmall,
             right: Spacing.extraSmall,
             child: _buildEventBadge(colorScheme),
-          )
+          ),
         ],
       ),
     );
@@ -190,9 +190,9 @@ class EventPostCard extends StatelessWidget {
                       height: 1.5,
                       fontFamily: FontFamily.circularStd,
                     ),
-                  )
+                  ),
                 ],
-              )
+              ),
             ],
           ),
         ),

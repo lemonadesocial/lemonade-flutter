@@ -131,7 +131,7 @@ class GuestEventDetailClock extends StatelessWidget {
                           fontWeight: FontWeight.w800,
                           fontFamily: FontFamily.nohemiVariable,
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -163,7 +163,7 @@ class GuestEventDetailClock extends StatelessWidget {
                       ),
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),

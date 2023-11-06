@@ -61,7 +61,7 @@ class Swipeable extends StatefulWidget {
     this.allowedPointerKinds = const {
       PointerDeviceKind.invertedStylus,
       PointerDeviceKind.stylus,
-      PointerDeviceKind.touch
+      PointerDeviceKind.touch,
     },
   })  : assert(secondaryBackground == null || background != null),
         super(key: key);

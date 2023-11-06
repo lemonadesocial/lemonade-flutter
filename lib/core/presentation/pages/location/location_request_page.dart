@@ -44,7 +44,7 @@ class LocationRequestPage extends StatelessWidget {
                     size: 300,
                   ),
                 ),
-                Assets.icons.icLocationSolid.svg()
+                Assets.icons.icLocationSolid.svg(),
               ],
             ),
             SizedBox(height: Spacing.xSmall * 5),
@@ -83,7 +83,7 @@ class LocationRequestPage extends StatelessWidget {
                   context.router.pop<bool>(result);
                 },
               ),
-            )
+            ),
           ],
         ),
       ),

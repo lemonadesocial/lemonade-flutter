@@ -43,7 +43,7 @@ class GuestEventDetailGeneralInfo extends StatelessWidget {
           SizedBox(
             height: Spacing.xSmall * 3,
           ),
-        ]
+        ],
       ],
     );
   }

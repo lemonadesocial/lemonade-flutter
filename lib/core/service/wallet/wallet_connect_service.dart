@@ -40,7 +40,7 @@ class WalletConnectService {
     description: 'Lemonade',
     url: AppConfig.webUrl,
     icons: [
-      'https://explorer-api.walletconnect.com/v3/logo/lg/1ab2c2a3-4353-472e-41a1-1ae295473600?projectId=2f05ae7f1116030fde2d36508f472bfb'
+      'https://explorer-api.walletconnect.com/v3/logo/lg/1ab2c2a3-4353-472e-41a1-1ae295473600?projectId=2f05ae7f1116030fde2d36508f472bfb',
     ],
     redirect: Redirect(
       native: '${AppConfig.appScheme}://wallet-callback',

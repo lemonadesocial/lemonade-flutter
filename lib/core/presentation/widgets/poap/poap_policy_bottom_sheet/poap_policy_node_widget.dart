@@ -58,7 +58,7 @@ class PoapPolicyNodeWidget extends StatelessWidget {
                   if (!isLast)
                     SizedBox(
                       height: Spacing.xSmall,
-                    )
+                    ),
                 ],
               );
             }
@@ -73,7 +73,7 @@ class PoapPolicyNodeWidget extends StatelessWidget {
                 if (!isLast)
                   SizedBox(
                     height: Spacing.xSmall,
-                  )
+                  ),
               ],
             );
           }).toList(),
@@ -98,7 +98,7 @@ class PoapPolicyNodeWidget extends StatelessWidget {
                     wrap: false,
                   ),
                   if (index + 1 < excludedResultNodes.length)
-                    const NodeDivider(text: "OR")
+                    const NodeDivider(text: "OR"),
                 ],
               );
             }).toList(),
@@ -206,7 +206,7 @@ class _NodeContainer extends StatelessWidget {
                   ),
                 ),
           child: child,
-        )
+        ),
       ],
     );
   }

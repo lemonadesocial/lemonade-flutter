@@ -160,7 +160,7 @@ class _PhotosGalleryPageState extends State<PhotosGalleryPage> {
                   itemCount: photos.length,
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),

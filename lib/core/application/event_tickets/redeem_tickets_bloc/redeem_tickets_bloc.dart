@@ -1,8 +1,8 @@
 import 'package:app/core/data/event/repository/event_ticket_repository_impl.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_ticket.dart';
-import 'package:app/core/domain/event/input/calculate_tickets_pricing_input/calculate_tickets_pricing_input.dart';
 import 'package:app/core/domain/event/input/redeem_tickets_input/redeem_tickets_input.dart';
+import 'package:app/core/domain/payment/entities/purchasable_item/purchasable_item.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 

@@ -27,8 +27,7 @@ class SelectTicketItem extends StatefulWidget {
 }
 
 class _SelectTicketItemState extends State<SelectTicketItem> {
-  var count = 1;
-
+  var count = 0;
   void add() {
     if (count < (widget.ticketType.limit ?? 0)) {
       setState(() {
@@ -51,8 +50,8 @@ class _SelectTicketItemState extends State<SelectTicketItem> {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
     final costText = NumberUtils.formatCurrency(
-      amount: (widget.ticketType.cost?.toDouble() ?? 0),
-      currency: widget.event.currency,
+      amount: (widget.ticketType.price?.toDouble() ?? 0),
+      currency: widget.ticketType.priceCurrency,
       freeText: t.event.free,
     );
     return Padding(

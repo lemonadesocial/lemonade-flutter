@@ -72,7 +72,7 @@ class _PoapListingViewState extends State<PoapListingView> {
                   );
             });
           },
-        )
+        ),
       ],
       child: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -158,7 +158,7 @@ class _PoapListingViewState extends State<PoapListingView> {
                       child: SizedBox(
                         height: MediaQuery.of(context).size.height * 0.2,
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),

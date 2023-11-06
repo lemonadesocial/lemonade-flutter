@@ -50,9 +50,9 @@ class AddTicketToAppleWalletButton extends StatelessWidget {
                     color: colorScheme.onPrimary,
                     fontWeight: FontWeight.w700,
                   ),
-                )
+                ),
               ],
-            )
+            ),
           ],
         ),
       ),

@@ -186,7 +186,7 @@ class _EventDetailPageState extends State<EventDetailPage>
                   color: colorScheme.onPrimary,
                 ),
               ),
-            )
+            ),
         ],
       ),
     );

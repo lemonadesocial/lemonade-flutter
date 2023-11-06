@@ -58,7 +58,7 @@ class GuestEventDetailPhotos extends StatelessWidget {
           ),
           SizedBox(
             height: Spacing.xSmall,
-          )
+          ),
         ],
         SizedBox(
           height: 144.w,
@@ -114,7 +114,7 @@ class GuestEventDetailPhotos extends StatelessWidget {
               );
             },
           ),
-        )
+        ),
       ],
     );
   }

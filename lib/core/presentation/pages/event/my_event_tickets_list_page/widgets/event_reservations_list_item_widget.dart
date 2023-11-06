@@ -73,7 +73,7 @@ class EventReservationsListItemWidget extends StatelessWidget {
                     color: colorScheme.onSecondary,
                     fontWeight: FontWeight.w700,
                   ),
-                )
+                ),
               ],
             ),
           ),

@@ -68,7 +68,7 @@ class ComingSoonModal extends StatelessWidget {
               ),
             ],
           ),
-        )
+        ),
       ],
     );
   }
@@ -129,7 +129,7 @@ class ComingSoonModal extends StatelessWidget {
                     SizedBox(
                       height: 9.h,
                     ),
-                    buildRichText(colorScheme)
+                    buildRichText(colorScheme),
                   ],
                 ),
               ),

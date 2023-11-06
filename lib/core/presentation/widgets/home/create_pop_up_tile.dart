@@ -87,7 +87,7 @@ class CreatePopUpTile extends StatelessWidget {
                   color: LemonColor.white06,
                   offset: const Offset(-1, -1),
                   spreadRadius: 1,
-                )
+                ),
               ],
             ),
             child: Row(

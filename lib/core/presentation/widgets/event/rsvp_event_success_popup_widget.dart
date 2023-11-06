@@ -85,7 +85,7 @@ class RSVPEventSuccessPopupPage extends StatelessWidget {
                           radius: BorderRadius.circular(LemonRadius.small * 2),
                           label: t.event.takeMeToEvent,
                         ),
-                )
+                ),
               ],
             ),
             Positioned(
@@ -120,10 +120,10 @@ class RSVPEventSuccessPopupPage extends StatelessWidget {
                               style: Typo.small.copyWith(
                                 color: colorScheme.onSecondary,
                               ),
-                            )
+                            ),
                           ],
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),

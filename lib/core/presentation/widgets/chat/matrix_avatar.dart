@@ -89,7 +89,7 @@ class MatrixAvatar extends StatelessWidget {
             ),
           ),
         ),
-        _buildBottomRightCorner(colorScheme)
+        _buildBottomRightCorner(colorScheme),
       ],
     );
     return InkWell(

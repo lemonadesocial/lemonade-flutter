@@ -49,7 +49,7 @@ class DiscoverUpcomingEvents extends StatelessWidget {
               BaseEventsListingEvent.fetch(),
             ),
           child: const _DiscoverEventsList(),
-        )
+        ),
       ],
     );
   }

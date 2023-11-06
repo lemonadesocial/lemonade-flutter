@@ -85,7 +85,7 @@ class GuestEventDetailHosts extends StatelessWidget {
               );
             },
           ),
-        )
+        ),
       ],
     );
   }

@@ -46,7 +46,7 @@ class LemonAlertDialog extends StatelessWidget {
                       width: Sizing.small,
                       height: Sizing.small,
                     ),
-                  )
+                  ),
                 ],
               ),
             child,
@@ -57,7 +57,7 @@ class LemonAlertDialog extends StatelessWidget {
                   : Navigator.of(context).pop(),
               label: buttonLabel ?? t.common.actions.dismiss,
               mode: GradientButtonMode.lavenderMode,
-            )
+            ),
           ],
         ),
       ),

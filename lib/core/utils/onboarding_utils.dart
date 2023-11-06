@@ -24,7 +24,7 @@ class OnboardingUtils {
             const OnboardingTermConditionsRoute(),
           if (user.termsAcceptedAdult == true &&
               user.termsAcceptedConditions == true)
-            OnboardingUsernameRoute()
+            OnboardingUsernameRoute(),
         ],
       ),
     );

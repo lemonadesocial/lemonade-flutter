@@ -147,7 +147,7 @@ class PreGuestEventDetailViewState extends State<PreGuestEventDetailView> {
                           GuestEventMoreActions(
                             event: event,
                             isAppBarCollapsed: _isSliverAppBarCollapsed,
-                          )
+                          ),
                         ],
                       ),
                     ),

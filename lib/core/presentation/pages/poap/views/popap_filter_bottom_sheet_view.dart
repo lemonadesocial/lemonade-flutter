@@ -137,7 +137,7 @@ class _PoapFilterBottomSheetViewState extends State<PoapFilterBottomSheetView>
                     ),
                   ],
                 ),
-                _buildLocationFilter(context)
+                _buildLocationFilter(context),
               ],
             ),
           );

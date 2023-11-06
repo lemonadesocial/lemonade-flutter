@@ -123,7 +123,7 @@ class TicketCardTop extends StatelessWidget {
                       ),
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -246,9 +246,9 @@ class TicketCardBottom extends StatelessWidget {
                           Text(
                             eventDetailAddress,
                             style: valueTextStyle,
-                          )
+                          ),
                         ],
-                      )
+                      ),
                     ],
                   ),
                 ),

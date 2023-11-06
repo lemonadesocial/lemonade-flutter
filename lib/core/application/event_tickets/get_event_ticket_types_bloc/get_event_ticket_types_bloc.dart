@@ -19,6 +19,9 @@ class GetEventTicketTypesBloc
     on<GetEventTicketTypesEventFetch>(_onFetch);
   }
 
+  // TODO: will filter out ticket types by currency
+  // void _onFilterTicketTypesByCurrency(Currency curreny);
+
   Future<void> _onFetch(
     GetEventTicketTypesEventFetch blocEvent,
     Emitter emit,

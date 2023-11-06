@@ -91,7 +91,7 @@ class PoapClaimedPopup extends StatelessWidget {
                           ),
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -139,13 +139,13 @@ class PoapClaimedPopup extends StatelessWidget {
                               mode: GradientButtonMode.lavenderMode,
                               onTap: () => onTransfer?.call(),
                             ),
-                          )
+                          ),
                         ],
-                      )
+                      ),
                     ],
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),
