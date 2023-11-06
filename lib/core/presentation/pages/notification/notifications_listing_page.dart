@@ -30,6 +30,8 @@ class NotificationPage extends StatelessWidget {
       ..vars.limit = 15,
   );
 
+  NotificationPage({super.key});
+
   onLoadMore() {
     final nextNotificationsReq = getNotificationsReq.rebuild(
       (b) => b

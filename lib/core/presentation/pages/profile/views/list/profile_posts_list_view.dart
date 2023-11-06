@@ -56,11 +56,11 @@ class ProfilePostsListView extends StatelessWidget {
           ),
           sliver: SliverList.separated(
             itemBuilder: (context, index) {
-              return PostProfileCard(post: posts![index]);
+              return PostProfileCard(post: posts[index]);
             },
             separatorBuilder: (ctx, index) =>
                 Divider(color: colorScheme.outline),
-            itemCount: posts?.length,
+            itemCount: posts.length,
           ),
         );
       },

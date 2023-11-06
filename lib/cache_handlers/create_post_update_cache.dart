@@ -6,13 +6,16 @@ import 'package:app/graphql/__generated__/get_newsfeed.req.gql.dart';
 import 'package:app/graphql/__generated__/get_posts.data.gql.dart';
 import 'package:app/graphql/__generated__/get_posts.req.gql.dart';
 import 'package:ferry/ferry.dart';
+import 'package:flutter/foundation.dart';
 
 UpdateCacheHandler<GCreatePostData, GCreatePostVars>
     createPostUpdateCacheHandler = (
   proxy,
   response,
 ) {
-  print("createPostUpdateCacheHandler");
+  if (kDebugMode) {
+    print("createPostUpdateCacheHandler");
+  }
   try {
     final authUserId =
         response.operationRequest.updateCacheHandlerContext?["authUserId"];
@@ -57,6 +60,8 @@ UpdateCacheHandler<GCreatePostData, GCreatePostVars>
       );
     }
   } catch (e) {
-    print("Error createPostUpdateCacheHandler : ${e.toString()}");
+    if (kDebugMode) {
+      print("Error createPostUpdateCacheHandler : ${e.toString()}");
+    }
   }
 };

@@ -14,6 +14,7 @@ import 'package:app/graphql/__generated__/create_post.req.gql.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -47,7 +48,9 @@ class CreatePostPageViewState extends State<CreatePostPage> {
     final createPostBloc = CreatePostBloc(PostService(getIt<PostRepository>()));
 
     onCreatePost() {
-      print("onCreatePost");
+      if (kDebugMode) {
+        print("onCreatePost");
+      }
       setState(() {
         _loading = true;
       });
