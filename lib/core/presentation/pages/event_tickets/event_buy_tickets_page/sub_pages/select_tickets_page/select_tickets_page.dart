@@ -205,7 +205,7 @@ class SelectTicketView extends StatelessWidget {
                       paymentBloc.onReceiveTicketTypeList(
                         response.ticketTypes ?? [],
                       );
-                      final ticketList =  response.ticketTypes ?? [];
+                      final ticketList = response.ticketTypes ?? [];
 
                       return StatefulBuilder(
                         builder: (context, setState) {
@@ -213,9 +213,10 @@ class SelectTicketView extends StatelessWidget {
                             children: [
                               Expanded(
                                 child: ListView.separated(
-                                  itemBuilder: (context, index) => SelectTicketItem(
+                                  itemBuilder: (context, index) =>
+                                      SelectTicketItem(
                                     ticketType: ticketList[index],
-                                    onCountChange: (count) => setState((){
+                                    onCountChange: (count) => setState(() {
                                       ticketList[index].count = count;
                                     }),
                                   ),
@@ -223,7 +224,8 @@ class SelectTicketView extends StatelessWidget {
                                   separatorBuilder: (context, index) => Divider(
                                     height: 1.w,
                                     thickness: 1.w,
-                                    color: colorScheme.onPrimary.withOpacity(0.05),
+                                    color:
+                                        colorScheme.onPrimary.withOpacity(0.05),
                                   ),
                                   itemCount: ticketList.length,
                                 ),
