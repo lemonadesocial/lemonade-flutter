@@ -1,9 +1,9 @@
 import 'package:app/core/application/event_tickets/redeem_tickets_bloc/redeem_tickets_bloc.dart';
-import 'package:app/core/application/event_tickets/select_event_tickets_bloc/select_event_tickets_bloc.dart';
 import 'package:app/core/application/payment/payment_bloc/payment_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/input/calculate_tickets_pricing_input/calculate_tickets_pricing_input.dart';
+import 'package:app/core/domain/event/input/redeem_tickets_input/redeem_tickets_input.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/add_promo_code_input.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/event_order_summary.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/event_order_summary_footer.dart';
@@ -47,13 +47,18 @@ class EventTicketsSummaryPage extends StatelessWidget {
     return BlocConsumer<PaymentBloc, PaymentState>(
       listener: (context, state) {
         if (state.status == PaymentStatus.success) {
-          final redeemTicketBloc = context.read<RedeemTicketsBloc>();
-          final selectEventBloc = context.read<SelectEventTicketTypesBloc>();
-          redeemTicketBloc.add(
-            RedeemTicketsEvent.redeem(
-              ticketItems: selectEventBloc.state.selectedTicketTypes,
-            ),
-          );
+          context.read<RedeemTicketsBloc>().add(
+                RedeemTicketsEvent.redeem(
+                  ticketItems: listTicket
+                      .map(
+                        (e) => RedeemItem(
+                          count: e.count,
+                          ticketType: e.id ?? '',
+                        ),
+                      )
+                      .toList(),
+                ),
+              );
         }
       },
       builder: (context, state) => Scaffold(

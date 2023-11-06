@@ -1,7 +1,6 @@
 import 'package:app/core/data/event/repository/event_ticket_repository_impl.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_ticket.dart';
-import 'package:app/core/domain/event/input/calculate_tickets_pricing_input/calculate_tickets_pricing_input.dart';
 import 'package:app/core/domain/event/input/redeem_tickets_input/redeem_tickets_input.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -27,9 +26,7 @@ class RedeemTicketsBloc extends Bloc<RedeemTicketsEvent, RedeemTicketsState> {
     final result = await _eventTicketRepository.redeemTickets(
       input: RedeemTicketsInput(
         event: event.id ?? '',
-        items: blocEvent.ticketItems
-            .map((item) => RedeemItem(count: item.count, ticketType: item.id))
-            .toList(),
+        items: blocEvent.ticketItems,
       ),
     );
 
@@ -45,7 +42,7 @@ class RedeemTicketsBloc extends Bloc<RedeemTicketsEvent, RedeemTicketsState> {
 @freezed
 class RedeemTicketsEvent with _$RedeemTicketsEvent {
   factory RedeemTicketsEvent.redeem({
-    required List<PurchasableItem> ticketItems,
+    required List<RedeemItem> ticketItems,
   }) = RedeemTicketsEventRedeem;
 }
 

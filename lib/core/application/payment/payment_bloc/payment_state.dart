@@ -4,6 +4,7 @@ part of 'payment_bloc.dart';
 class PaymentState with _$PaymentState {
   const factory PaymentState({
     @Default(PaymentStatus.initial) PaymentStatus status,
+    @Default([]) List<PurchasableTicketType> ticketList,
     @Default('') String publishableKey,
     EventTicketsPricingInfo? pricingInfo,
     PaymentCard? selectedCard,

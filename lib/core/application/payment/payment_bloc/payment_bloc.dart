@@ -1,3 +1,4 @@
+import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/entities/event_tickets_pricing_info.dart';
 import 'package:app/core/domain/event/input/calculate_tickets_pricing_input/calculate_tickets_pricing_input.dart';
 import 'package:app/core/domain/event/repository/event_ticket_repository.dart';
@@ -7,14 +8,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'payment_bloc.freezed.dart';
-
 part 'payment_state.dart';
 
 class PaymentBloc extends Cubit<PaymentState> {
-  PaymentBloc(
-    this._repository,
-    this._eventTicketRepository,
-  ) : super(PaymentState.initial());
+  PaymentBloc(this._repository,
+      this._eventTicketRepository,) : super(PaymentState.initial());
 
   final PaymentRepository _repository;
   final EventTicketRepository _eventTicketRepository;
@@ -29,6 +27,26 @@ class PaymentBloc extends Cubit<PaymentState> {
         ),
       );
     });
+  }
+
+  void onReceiveTicketTypeList(List<PurchasableTicketType> ticketList) {
+    emit(
+      state.copyWith(
+        status: PaymentStatus.initial,
+        ticketList: ticketList,
+      ),
+    );
+  }
+
+  void onTicketCountChange(int index, int count) {
+    final mTicketList = List<PurchasableTicketType>.of(state.ticketList);
+    mTicketList[index].count = count;
+    emit(
+      state.copyWith(
+        status: PaymentStatus.initial,
+        ticketList: mTicketList,
+      ),
+    );
   }
 
   Future<void> getListCard() async {
@@ -53,8 +71,8 @@ class PaymentBloc extends Cubit<PaymentState> {
       input: input,
     );
     result.fold(
-      (l) {},
-      (pricingInfo) => emit(
+          (l) {},
+          (pricingInfo) => emit(
         state.copyWith(pricingInfo: pricingInfo),
       ),
     );
