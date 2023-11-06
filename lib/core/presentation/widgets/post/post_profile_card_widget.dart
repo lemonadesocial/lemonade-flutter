@@ -1,31 +1,18 @@
-import 'dart:ffi';
-
-import 'package:app/__generated__/schema.schema.gql.dart';
 import 'package:app/cache_handlers/update_cache_handlers.dart';
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/post/toggle_post_reaction_bloc/toggle_post_reaction_bloc.dart';
 import 'package:app/core/application/report/report_bloc/report_bloc.dart';
-import 'package:app/core/domain/common/entities/common.dart';
-import 'package:app/core/domain/event/entities/event.dart';
-import 'package:app/core/domain/post/entities/post_entities.dart';
 import 'package:app/core/domain/report/input/report_input.dart';
 import 'package:app/core/presentation/dpos/common/dropdown_item_dpo.dart';
-import 'package:app/core/presentation/widgets/event/event_post_card_widget.dart';
 import 'package:app/core/presentation/widgets/floating_frosted_glass_dropdown_widget.dart';
-import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
-import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
-import 'package:app/core/presentation/widgets/post/post_card_actions_widget.dart';
 import 'package:app/core/presentation/widgets/report/report_bottom_sheet.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/auth_utils.dart';
-import 'package:app/core/utils/avatar_utils.dart';
 import 'package:app/core/utils/bottomsheet_utils.dart';
-import 'package:app/core/utils/image_utils.dart';
 import 'package:app/core/utils/modal_utils.dart';
 import 'package:app/ferry_client.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/__generated__/delete_post.req.gql.dart';
-import 'package:app/graphql/__generated__/get_newsfeed.data.gql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -34,7 +21,6 @@ import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -118,8 +104,8 @@ class PostProfileCardView extends StatelessWidget {
     final t = Translations.of(context);
     final userId = AuthUtils.getUserId(context);
     final authState = context.watch<AuthBloc>().state;
-    final isOwnPost = userId == post.user;
-    final togglePostReactionBloc = context.watch<TogglePostReactionBloc>();
+    final isOwnPost = userId == post.user.value;
+    // final togglePostReactionBloc = context.watch<TogglePostReactionBloc>();
 
     return InkWell(
       onTap: () {
@@ -288,25 +274,25 @@ class PostProfileCardView extends StatelessWidget {
     );
   }
 
-  Widget _buildFile(ColorScheme colorScheme, DbFile? file) {
-    return Container(
-      width: double.infinity,
-      height: 270,
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: colorScheme.outline,
-        ),
-        borderRadius: BorderRadius.circular(LemonRadius.xSmall),
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(LemonRadius.xSmall),
-        child: CachedNetworkImage(
-          imageUrl: ImageUtils.generateUrl(file: file),
-          fit: BoxFit.cover,
-          errorWidget: (_, __, ___) => ImagePlaceholder.defaultPlaceholder(),
-          placeholder: (_, __) => ImagePlaceholder.defaultPlaceholder(),
-        ),
-      ),
-    );
-  }
+  // Widget _buildFile(ColorScheme colorScheme, DbFile? file) {
+  //   return Container(
+  //     width: double.infinity,
+  //     height: 270,
+  //     decoration: BoxDecoration(
+  //       border: Border.all(
+  //         color: colorScheme.outline,
+  //       ),
+  //       borderRadius: BorderRadius.circular(LemonRadius.xSmall),
+  //     ),
+  //     child: ClipRRect(
+  //       borderRadius: BorderRadius.circular(LemonRadius.xSmall),
+  //       child: CachedNetworkImage(
+  //         imageUrl: ImageUtils.generateUrl(file: file),
+  //         fit: BoxFit.cover,
+  //         errorWidget: (_, __, ___) => ImagePlaceholder.defaultPlaceholder(),
+  //         placeholder: (_, __) => ImagePlaceholder.defaultPlaceholder(),
+  //       ),
+  //     ),
+  //   );
+  // }
 }

@@ -4,6 +4,7 @@ import 'package:app/graphql/__generated__/delete_post.var.gql.dart';
 import 'package:app/graphql/__generated__/get_newsfeed.req.gql.dart';
 import 'package:app/graphql/__generated__/get_posts.req.gql.dart';
 import 'package:ferry/ferry.dart';
+import 'package:flutter/foundation.dart';
 
 /// this cache handler will add the newly created author to the cached list of authors
 UpdateCacheHandler<GDeletePostData, GDeletePostVars>
@@ -11,7 +12,9 @@ UpdateCacheHandler<GDeletePostData, GDeletePostVars>
   proxy,
   response,
 ) {
-  print("deletePostUpdateCacheHandler");
+  if (kDebugMode) {
+    print("deletePostUpdateCacheHandler");
+  }
   try {
     final postId =
         response.operationRequest.updateCacheHandlerContext?["postId"];
@@ -47,6 +50,8 @@ UpdateCacheHandler<GDeletePostData, GDeletePostVars>
       ),
     );
   } catch (e) {
-    print("error : $e.toString()");
+    if (kDebugMode) {
+      print("error : $e.toString()");
+    }
   }
 };

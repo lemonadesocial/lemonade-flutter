@@ -1,7 +1,3 @@
-import 'package:app/core/application/auth/auth_bloc.dart';
-import 'package:app/core/application/newsfeed/newsfeed_listing_bloc/newsfeed_listing_bloc.dart';
-import 'package:app/core/data/post/query/post_query.dart';
-import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/post/post_profile_card_widget.dart';
 import 'package:app/ferry_client.dart';
@@ -12,9 +8,8 @@ import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:ferry_flutter/ferry_flutter.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 class HomeNewsfeedListView extends StatelessWidget {
   final client = getIt<FerryClient>().client;
@@ -28,12 +23,14 @@ class HomeNewsfeedListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
-    final bloc = context.read<NewsfeedListingBloc>();
-    final refreshController = RefreshController();
+    // final colorScheme = Theme.of(context).colorScheme;
+    // final bloc = context.read<NewsfeedListingBloc>();
+    // final refreshController = RefreshController();
 
     onLoadMore() {
-      print("onLoadMore");
+      if (kDebugMode) {
+        print("onLoadMore");
+      }
     }
 
     return Operation<GGetNewsfeedData, GGetNewsfeedVars>(

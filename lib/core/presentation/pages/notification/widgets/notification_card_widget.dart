@@ -1,18 +1,12 @@
-import 'package:app/__generated__/schema.schema.gql.dart';
 import 'package:app/core/application/notification/delete_notifications_bloc/delete_notifications_bloc.dart';
-import 'package:app/core/data/notification/notification_constants.dart';
 import 'package:app/core/domain/notification/input/delete_notifications_input.dart';
 import 'package:app/core/presentation/pages/notification/widgets/notification_slidable_widget.dart';
-import 'package:app/core/utils/image_utils.dart';
 import 'package:app/graphql/__generated__/notification_card_fragment.data.gql.dart';
 import 'package:flutter/material.dart';
-import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/theme/typo.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:timeago/timeago.dart' as timeago;
-import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
-import 'package:app/gen/assets.gen.dart';
 
 class NotificationCard extends StatelessWidget {
   final GNotificationCard notification;
