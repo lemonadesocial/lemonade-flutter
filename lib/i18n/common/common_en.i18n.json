@@ -117,5 +117,8 @@
         "title": "Set your location services",
         "description": "We require access to your location to display geo-locked collectibles & events around you. \nWe only access your location while you're using the app and do not collect background location data"
     },
-    "internetLost": "No internet connection"
+    "internetConnectionStatus": {
+        "connected": "You're back online",
+        "disconnected": "No internet connection"
+    }
 }

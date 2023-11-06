@@ -22,11 +22,7 @@ class ConnectivityService {
     });
   }
 
-  void _checkStatus(ConnectivityResult result) async {
-    if (result == ConnectivityResult.none) {
-      _controller.sink.add(false);
-      return;
-    }
+  void _checkStatus(ConnectivityResult connectivityResult) async {
     bool isOnline = false;
     try {
       final result = await InternetAddress.lookup('google.com');

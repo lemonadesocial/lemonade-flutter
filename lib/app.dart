@@ -163,10 +163,15 @@ class _AppState extends State<_App> {
   Widget build(BuildContext context) {
     SnackBarUtils.init(lemonadeAppDarkThemeData.colorScheme);
     return BlocListener<ConnectivityBloc, ConnectivityState>(
+      listenWhen: (prev, cur) => prev != cur,
       listener: (context, state) {
         state.maybeWhen(
-          notConnected: () =>
-              SnackBarUtils.showErrorSnackbar(t.common.internetLost),
+          connected: () => SnackBarUtils.showSuccessSnackbar(
+            t.common.internetConnectionStatus.connected,
+          ),
+          notConnected: () => SnackBarUtils.showErrorSnackbar(
+            t.common.internetConnectionStatus.disconnected,
+          ),
           orElse: () {},
         );
       },

@@ -6,7 +6,7 @@ part 'connectivity_bloc.freezed.dart';
 part 'connectivity_state.dart';
 
 class ConnectivityBloc extends Cubit<ConnectivityState> {
-  ConnectivityBloc() : super(const ConnectivityState.initial());
+  ConnectivityBloc() : super(const ConnectivityState.connected());
 
   void onConnectivityStatusChange(bool isConnected) {
     emit(
