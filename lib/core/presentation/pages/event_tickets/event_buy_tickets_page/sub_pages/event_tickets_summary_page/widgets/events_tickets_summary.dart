@@ -21,6 +21,7 @@ class EventsTicketSummary extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: listTicket
+          .where((ticket) => ticket.count > 0)
           .map(
             (item) => TicketSummaryItem(ticket: item),
           )
