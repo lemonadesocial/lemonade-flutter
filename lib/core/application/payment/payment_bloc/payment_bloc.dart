@@ -11,8 +11,10 @@ part 'payment_bloc.freezed.dart';
 part 'payment_state.dart';
 
 class PaymentBloc extends Cubit<PaymentState> {
-  PaymentBloc(this._repository,
-      this._eventTicketRepository,) : super(PaymentState.initial());
+  PaymentBloc(
+    this._repository,
+    this._eventTicketRepository,
+  ) : super(PaymentState.initial());
 
   final PaymentRepository _repository;
   final EventTicketRepository _eventTicketRepository;
@@ -71,8 +73,8 @@ class PaymentBloc extends Cubit<PaymentState> {
       input: input,
     );
     result.fold(
-          (l) {},
-          (pricingInfo) => emit(
+      (l) {},
+      (pricingInfo) => emit(
         state.copyWith(pricingInfo: pricingInfo),
       ),
     );
