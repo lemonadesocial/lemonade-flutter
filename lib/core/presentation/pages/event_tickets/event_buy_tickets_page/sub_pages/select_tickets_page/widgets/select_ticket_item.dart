@@ -1,11 +1,15 @@
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
+import 'package:app/core/presentation/widgets/common/dialog/lemon_alert_dialog.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
+import 'package:app/core/service/feature_flag_service.dart';
 import 'package:app/core/utils/number_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -28,7 +32,22 @@ class SelectTicketItem extends StatefulWidget {
 
 class _SelectTicketItemState extends State<SelectTicketItem> {
   var count = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    if (isFree) {
+      add();
+    }
+  }
+
+  bool get isFree => widget.ticketType.defaultPrice?.cost == 0;
+
   void add() {
+    if (!isFree && !FeatureFlagService.isEventPaymentFeatureEnabled) {
+      return goToWeb();
+    }
+
     if (count < (widget.ticketType.limit ?? 0)) {
       setState(() {
         count++;
@@ -38,11 +57,35 @@ class _SelectTicketItemState extends State<SelectTicketItem> {
   }
 
   void minus() {
-    if (count == 1) return;
+    if (!isFree && !FeatureFlagService.isEventPaymentFeatureEnabled) {
+      return goToWeb();
+    }
+
+    if (count == 1 && isFree) return;
     setState(() {
       count--;
     });
     widget.onCountChange(count);
+  }
+
+  void goToWeb() {
+    showDialog(
+      context: context,
+      builder: (context) => LemonAlertDialog(
+        buttonLabel: t.common.actions.ok,
+        closable: true,
+        onClose: () {
+          Navigator.of(context).pop();
+          AutoRouter.of(context).navigate(
+            EventDetailRoute(
+              eventId: widget.event.id ?? '',
+              eventName: widget.event.title ?? '',
+            ),
+          );
+        },
+        child: Text(t.event.paymentNotSupported),
+      ),
+    );
   }
 
   @override
