@@ -1,0 +1,7 @@
+# import './post_fragment.graphql'
+
+query GetPosts($input: GetPostsInput, $skip: Int!, $limit: Int!) {
+    getPosts(input: $input, skip: $skip, limit: $limit) {
+        ...PostFragment
+    }
+}

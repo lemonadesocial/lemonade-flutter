@@ -1,3 +1,6 @@
+import 'package:app/cache_handlers/create_post_update_cache.dart';
+import 'package:app/cache_handlers/delete_post_update_cache.dart';
+import 'package:app/cache_handlers/update_cache_handlers.dart';
 import 'package:app/core/config.dart';
 import 'package:app/core/oauth/oauth.dart';
 import 'package:app/injection/register_module.dart';
@@ -27,6 +30,11 @@ class FerryClient {
     _client = Client(
       link: link,
       cache: cache,
+      updateCacheHandlers: {
+        // unrelated to the isolate: update the list of authors in the cache when a new author is created
+        UpdateCacheHandlerKeys.createPost: createPostUpdateCacheHandler,
+        UpdateCacheHandlerKeys.deletePost: deletePostUpdateCacheHandler,
+      },
     );
   }
 }

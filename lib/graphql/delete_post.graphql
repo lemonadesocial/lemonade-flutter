@@ -1,0 +1,3 @@
+mutation DeletePost($deletePostId: MongoID!) {
+    deletePost(_id: $deletePostId)
+}

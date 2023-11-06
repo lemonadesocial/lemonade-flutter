@@ -74,7 +74,7 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       backgroundColor: LemonColor.black,
-      body: const HomeNewsfeedListView(),
+      body: HomeNewsfeedListView(),
     );
   }
 }

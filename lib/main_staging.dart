@@ -2,6 +2,7 @@ import 'package:app/app.dart';
 import 'package:app/core/oauth/oauth.dart';
 import 'package:app/core/service/firebase/firebase_service.dart';
 import 'package:app/core/service/matrix/matrix_service.dart';
+import 'package:app/ferry_client.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -21,6 +22,7 @@ void main() async {
     await getIt<FirebaseService>().initialize();
   }
   await getIt<MatrixService>().init();
+  await getIt<FerryClient>().init();
 
   runApp(const LemonadeApp());
 

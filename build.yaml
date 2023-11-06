@@ -8,6 +8,7 @@ targets:
           when_extensions:
             when: true
             maybeWhen: true
+          global_enum_fallbacks: true
           type_overrides:
             DateTimeISO:
               name: DateTime

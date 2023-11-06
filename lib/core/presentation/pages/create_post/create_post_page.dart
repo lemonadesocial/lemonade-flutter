@@ -1,11 +1,16 @@
+import 'package:app/__generated__/schema.schema.gql.dart';
+import 'package:app/cache_handlers/update_cache_handlers.dart';
 import 'package:app/core/application/newsfeed/newsfeed_listing_bloc/newsfeed_listing_bloc.dart';
 import 'package:app/core/application/post/create_post_bloc/create_post_bloc.dart';
 import 'package:app/core/presentation/pages/create_post/widgets/create_post_event_card_widget.dart';
 import 'package:app/core/presentation/pages/event/event_selecting_page.dart';
 import 'package:app/core/presentation/widgets/back_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
+import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
+import 'package:app/ferry_client.dart';
 import 'package:app/gen/assets.gen.dart';
+import 'package:app/graphql/__generated__/create_post.req.gql.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
@@ -24,14 +29,44 @@ import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/presentation/pages/create_post/widgets/create_post_image_widget.dart';
 
 @RoutePage()
-class CreatePostPage extends StatelessWidget {
-  const CreatePostPage({Key? key}) : super(key: key);
+class CreatePostPage extends StatefulWidget {
+  const CreatePostPage({super.key});
+
+  @override
+  CreatePostPageViewState createState() => CreatePostPageViewState();
+}
+
+class CreatePostPageViewState extends State<CreatePostPage> {
+  bool _loading = false;
+  final client = getIt<FerryClient>().client;
 
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
     final createPostBloc = CreatePostBloc(PostService(getIt<PostRepository>()));
+
+    onCreatePost() {
+      print("onCreatePost");
+      setState(() {
+        _loading = true;
+      });
+      final authSession = AuthUtils.getUser(context)!;
+      final createPostReq = GCreatePostReq(
+        (b) => b
+          ..vars.text = createPostBloc.state.postDescription
+          ..vars.visibility = GPostVisibility.PUBLIC
+          ..vars.ref_type = GPostRefType.EVENT
+          ..updateCacheHandlerKey = UpdateCacheHandlerKeys.createPost
+          ..updateCacheHandlerContext = {"authUserId": authSession.userId},
+      );
+      client.request(createPostReq).listen((event) {
+        setState(() {
+          _loading = false;
+        });
+        context.router.pop();
+      });
+    }
 
     return BlocProvider<CreatePostBloc>(
       create: (context) => createPostBloc,
@@ -201,9 +236,7 @@ class CreatePostPage extends StatelessWidget {
                           height: 36.h,
                           child: LinearGradientButton(
                             label: t.post.post,
-                            onTap: sendDisabled
-                                ? null
-                                : createPostBloc.createNewPost,
+                            onTap: sendDisabled ? null : onCreatePost,
                             trailing: ThemeSvgIcon(
                               color: sendDisabled
                                   ? colorScheme.onSurfaceVariant
@@ -214,8 +247,7 @@ class CreatePostPage extends StatelessWidget {
                             mode: state.postDescription.isNullOrEmpty
                                 ? GradientButtonMode.lavenderDisableMode
                                 : GradientButtonMode.lavenderMode,
-                            loadingWhen:
-                                state.status == CreatePostStatus.loading,
+                            loadingWhen: _loading == true,
                             radius: BorderRadius.circular(LemonRadius.small),
                             padding: EdgeInsets.symmetric(
                               horizontal: 12.w,

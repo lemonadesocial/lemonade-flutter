@@ -1,3 +1,7 @@
+import 'dart:ffi';
+
+import 'package:app/__generated__/schema.schema.gql.dart';
+import 'package:app/cache_handlers/update_cache_handlers.dart';
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/post/toggle_post_reaction_bloc/toggle_post_reaction_bloc.dart';
 import 'package:app/core/application/report/report_bloc/report_bloc.dart';
@@ -18,8 +22,12 @@ import 'package:app/core/utils/avatar_utils.dart';
 import 'package:app/core/utils/bottomsheet_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
 import 'package:app/core/utils/modal_utils.dart';
+import 'package:app/ferry_client.dart';
 import 'package:app/gen/assets.gen.dart';
+import 'package:app/graphql/__generated__/delete_post.req.gql.dart';
+import 'package:app/graphql/__generated__/get_newsfeed.data.gql.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
@@ -30,10 +38,15 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:slang/builder/model/enums.dart';
+import 'package:slang/builder/utils/string_extensions.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
+import 'package:app/graphql/__generated__/post_fragment.data.gql.dart';
+
 class PostProfileCard extends StatelessWidget {
-  final Post post;
+  final GPostFragment post;
+
   const PostProfileCard({
     super.key,
     required this.post,
@@ -46,8 +59,9 @@ class PostProfileCard extends StatelessWidget {
         BlocProvider(create: (context) => ReportBloc()),
         BlocProvider(
           create: (context) => TogglePostReactionBloc(
-            defaultReactions: post.reactions ?? 0,
-            defaultHasReaction: post.hasReaction ?? false,
+            // defaultReactions: post.reactions,
+            defaultReactions: 0,
+            defaultHasReaction: post.has_reaction ?? false,
           ),
         ),
       ],
@@ -59,28 +73,44 @@ class PostProfileCard extends StatelessWidget {
 }
 
 class PostProfileCardView extends StatelessWidget {
-  const PostProfileCardView({
+  PostProfileCardView({
     super.key,
     required this.post,
   });
 
-  final Post post;
+  final client = getIt<FerryClient>().client;
 
-  String get postName => post.userExpanded?.name ?? '';
+  final GPostFragment post;
+
+  String get postName => post.user_expanded?.name ?? '';
 
   String get postText => post.text ?? '';
 
-  Event? get postEvent => post.refEvent;
+  // Event? get postEvent => post.ref_event;
 
-  DateTime? get postCreatedAt => post.createdAt;
+  DateTime? get postCreatedAt => post.created_at;
 
-  DbFile? get postFile => post.refFile;
+  // DbFile? get postFile => post.ref_file;
 
-  int? get reactions => post.reactions;
+  // int? get reactions => post.reactions;
 
-  int? get comments => post.comments;
+  // int? get comments => post.comments;
 
-  bool? get hasReaction => post.hasReaction;
+  // bool? get hasReaction => post.has_reaction;
+
+  onDeletePost(BuildContext context) {
+    final authSession = AuthUtils.getUser(context)!;
+    final deletePostReq = GDeletePostReq(
+      (b) => b
+        ..vars.deletePostId = post.G_id.toBuilder()
+        ..updateCacheHandlerKey = UpdateCacheHandlerKeys.deletePost
+        ..updateCacheHandlerContext = {
+          "postId": post.G_id.value,
+          "authUserId": authSession.userId
+        },
+    );
+    client.request(deletePostReq).listen((event) {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,39 +124,42 @@ class PostProfileCardView extends StatelessWidget {
     return InkWell(
       onTap: () {
         authState.maybeWhen(
-          authenticated: (_) => AutoRouter.of(context).navigate(
-            PostDetailRoute(
-              post: post,
-              togglePostReactionBloc: togglePostReactionBloc,
-            ),
-          ),
+          // authenticated: (_) => AutoRouter.of(context).navigate(
+          // PostDetailRoute(
+          //   post: post,
+          //   togglePostReactionBloc: togglePostReactionBloc,
+          // ),
+          // ),
           orElse: () => AutoRouter.of(context).navigate(const LoginRoute()),
         );
       },
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          GestureDetector(
-            behavior: HitTestBehavior.translucent,
-            onTap: () {
-              final isMe = AuthUtils.isMe(context, user: post.userExpanded!);
-              if (isMe) {
-                AutoRouter.of(context).navigate(const MyProfileRoute());
-              } else {
-                AutoRouter.of(context)
-                    .navigate(ProfileRoute(userId: post.user));
-              }
-            },
-            child: LemonCircleAvatar(
-              size: Sizing.medium,
-              url: AvatarUtils.getAvatarUrl(user: post.userExpanded),
-            ),
-          ),
+          // GestureDetector(
+          //   behavior: HitTestBehavior.translucent,
+          //   onTap: () {
+          //     final isMe = AuthUtils.isMe(context, user: post.user_expanded!);
+          //     if (isMe) {
+          //       AutoRouter.of(context).navigate(const MyProfileRoute());
+          //     } else {
+          //       AutoRouter.of(context)
+          //           .navigate(ProfileRoute(userId: post.user));
+          //     }
+          //   },
+          //   child: LemonCircleAvatar(
+          //     size: Sizing.medium,
+          //     url: AvatarUtils.getAvatarUrl(user: post.user_expanded),
+          //   ),
+          // ),
           const SizedBox(width: 9),
           Flexible(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                const SizedBox(
+                  height: 50,
+                ),
                 Row(
                   children: [
                     Text(
@@ -161,8 +194,21 @@ class PostProfileCardView extends StatelessWidget {
                                   value: "report",
                                   customColor: LemonColor.report,
                                 ),
+                                DropdownItemDpo(
+                                  leadingIcon: Assets.icons.icDelete.svg(
+                                    width: Sizing.xSmall,
+                                    height: Sizing.xSmall,
+                                  ),
+                                  label:
+                                      t.common.delete.toCase(CaseStyle.pascal),
+                                  value: "delete",
+                                  customColor: LemonColor.report,
+                                ),
                               ],
                               onItemPressed: (item) {
+                                if (item?.value == 'delete') {
+                                  onDeletePost(context);
+                                }
                                 if (item?.value == 'report') {
                                   authState.maybeWhen(
                                     authenticated: (_) =>
@@ -176,7 +222,7 @@ class PostProfileCardView extends StatelessWidget {
                                               context.read<ReportBloc>().add(
                                                     ReportEvent.reportPost(
                                                       input: ReportInput(
-                                                        id: post.id,
+                                                        id: post.G_id.value,
                                                         reason: reason,
                                                       ),
                                                     ),
@@ -225,15 +271,15 @@ class PostProfileCardView extends StatelessWidget {
                     ),
                   ),
                 ],
-                if (postEvent != null) ...[
-                  SizedBox(height: Spacing.xSmall),
-                  EventPostCard(event: postEvent!),
-                ],
-                if (postFile != null) ...[
-                  SizedBox(height: Spacing.xSmall),
-                  _buildFile(colorScheme, postFile),
-                ],
-                PostCardActions(post: post),
+                // if (postEvent != null) ...[
+                //   SizedBox(height: Spacing.xSmall),
+                //   EventPostCard(event: postEvent!),
+                // ],
+                // if (postFile != null) ...[
+                //   SizedBox(height: Spacing.xSmall),
+                //   _buildFile(colorScheme, postFile),
+                // ],
+                // PostCardActions(post: post),
               ],
             ),
           ),

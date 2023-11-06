@@ -1,0 +1,71 @@
+fragment EventHostExpandedFragment on User {
+    _id
+    name
+    display_name
+    username
+    new_photos_expanded(limit: 1) {
+        _id
+        key
+        bucket
+    }
+    job_title
+    __typename
+}
+
+fragment PostFragment on Post {
+    _id
+    created_at
+    user
+    visibility
+    text
+    reactions
+    ref_type
+    ref_id
+    comments
+    user_expanded {
+        _id
+        name
+        username
+        new_photos_expanded(limit: 1) {
+        _id
+        key
+        bucket
+        }
+    }
+    ref_event {
+        _id
+        title
+        host
+        new_new_photos_expanded(limit: 1) {
+        key
+        bucket
+        }
+        start
+        end
+        cost
+        currency
+        host
+        host_expanded {
+        ...EventHostExpandedFragment
+        }
+        cohosts_expanded(limit: 3) {
+        ...EventHostExpandedFragment
+        }
+        slug
+        latitude
+        longitude
+        address {
+        street_1
+        city
+        title
+        region
+        }
+    }
+    ref_file {
+        _id
+        key
+        bucket
+    }
+    has_reaction
+    published
+}

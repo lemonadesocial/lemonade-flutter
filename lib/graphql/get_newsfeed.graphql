@@ -1,0 +1,10 @@
+# import './post_fragment.graphql'
+
+query GetNewsfeed($offset: Float) {
+    getNewsfeed(offset: $offset) {
+        offset
+        posts {
+            ...PostFragment
+        }
+    }
+}
