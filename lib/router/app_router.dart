@@ -1,4 +1,3 @@
-import 'package:app/core/presentation/pages/shorebird_update_page/shorebird_update_page.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:auto_route/auto_route.dart';
 
