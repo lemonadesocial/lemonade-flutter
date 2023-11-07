@@ -1,3 +1,4 @@
+import 'package:app/core/presentation/pages/shorebird_update_page/shorebird_update_page.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:auto_route/auto_route.dart';
 
@@ -8,6 +9,11 @@ class AppRouter extends $AppRouter {
         AutoRoute(
           path: '/login',
           page: LoginRoute.page,
+          fullscreenDialog: true,
+        ),
+        AutoRoute(
+          path: '/shorebird-update',
+          page: ShorebirdUpdateRoute.page,
           fullscreenDialog: true,
         ),
         AutoRoute(

@@ -5,9 +5,11 @@ import 'package:app/core/presentation/widgets/common/drawer/lemon_drawer.dart';
 import 'package:app/core/presentation/widgets/home/create_pop_up_page.dart';
 import 'package:app/core/presentation/widgets/home/floating_create_button.dart';
 import 'package:app/core/presentation/widgets/poap/poap_claim_transfer_controller_widget/poap_claim_transfer_controller_widget.dart';
+import 'package:app/core/service/shorebird_codepush_service.dart';
 import 'package:app/core/utils/device_utils.dart';
 import 'package:app/core/utils/drawer_utils.dart';
 import 'package:app/core/utils/onboarding_utils.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
@@ -19,8 +21,22 @@ import 'package:upgrader/upgrader.dart';
 import 'package:app/core/application/newsfeed/newsfeed_listing_bloc/newsfeed_listing_bloc.dart';
 
 @RoutePage(name: 'RootRoute')
-class RootPage extends StatelessWidget {
+class RootPage extends StatefulWidget {
   const RootPage({super.key});
+
+  @override
+  State<StatefulWidget> createState() => _RootPageViewState();
+}
+
+class _RootPageViewState extends State<RootPage> {
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      getIt<ShorebirdCodePushService>().checkForUpdate(context);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

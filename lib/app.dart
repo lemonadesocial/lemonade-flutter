@@ -52,10 +52,6 @@ class _LemonadeAppViewState extends State<LemonadeApp> {
         context: context,
       );
       setupInteractedMessage();
-      // Not check shorebird codepush when in local debug mode
-      if (kDebugMode == false) {
-        getIt<ShorebirdCodePushService>().checkForUpdate();
-      }
     });
     EasyLoading.instance
       ..indicatorType = EasyLoadingIndicatorType.ring

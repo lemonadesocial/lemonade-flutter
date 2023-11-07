@@ -120,6 +120,7 @@ dependencies:
 
   # payment
   flutter_stripe: ^9.4.0
+  restart_app: ^1.2.1
 
 dependency_overrides:
   matrix_api_lite:
