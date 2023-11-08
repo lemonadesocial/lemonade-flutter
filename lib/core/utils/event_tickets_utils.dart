@@ -46,14 +46,16 @@ class EventTicketUtils {
   ) =>
       groupBy(tickets, (ticket) => ticket.type ?? '');
 
-  static getTicketTypesByCurrency({
+  static List<PurchasableTicketType> getTicketTypesByCurrency({
     required List<PurchasableTicketType> ticketTypes,
     required Currency currency,
   }) {
-    return ticketTypes.where(
-      (element) =>
-          (element.prices ?? Map.fromEntries([])).keys.contains(currency),
-    );
+    return ticketTypes
+        .where(
+          (element) =>
+              (element.prices ?? Map.fromEntries([])).keys.contains(currency),
+        )
+        .toList();
   }
 
   static getSupportedCurrencies({

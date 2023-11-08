@@ -2,7 +2,6 @@ import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/presentation/widgets/common/dialog/lemon_alert_dialog.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
-import 'package:app/core/service/feature_flag_service.dart';
 import 'package:app/core/utils/number_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -20,52 +19,39 @@ class SelectTicketItem extends StatefulWidget {
     required this.ticketType,
     required this.event,
     required this.onCountChange,
+    required this.disabled,
+    required this.count,
   });
 
   final PurchasableTicketType ticketType;
   final Event event;
   final ValueChanged<int> onCountChange;
+  final bool disabled;
+  final int count;
 
   @override
   State<SelectTicketItem> createState() => _SelectTicketItemState();
 }
 
 class _SelectTicketItemState extends State<SelectTicketItem> {
-  var count = 0;
-
   @override
   void initState() {
     super.initState();
-    if (isFree) {
-      add();
-    }
   }
 
-  bool get isFree => widget.ticketType.defaultPrice?.fiatCost == 0;
-
   void add() {
-    if (!isFree && !FeatureFlagService.isEventPaymentFeatureEnabled) {
-      return goToWeb();
-    }
-
-    if (count < (widget.ticketType.limit ?? 0)) {
-      setState(() {
-        count++;
-      });
-      widget.onCountChange(count);
+    if (widget.disabled) return;
+    if (widget.count < (widget.ticketType.limit ?? 0)) {
+      final newCount = widget.count + 1;
+      widget.onCountChange(newCount);
     }
   }
 
   void minus() {
-    if (!isFree && !FeatureFlagService.isEventPaymentFeatureEnabled) {
-      return goToWeb();
-    }
-
-    if (count == 1 && isFree) return;
-    setState(() {
-      count--;
-    });
-    widget.onCountChange(count);
+    if (widget.disabled) return;
+    if (widget.count == 0) return;
+    final newCount = widget.count - 1;
+    widget.onCountChange(newCount);
   }
 
   void goToWeb() {
@@ -157,11 +143,11 @@ class _SelectTicketItemState extends State<SelectTicketItem> {
               width: 120.w,
               height: Sizing.medium,
               decoration: BoxDecoration(
-                color: count > 0
+                color: widget.count > 0
                     ? colorScheme.onPrimary.withOpacity(0.05)
                     : Colors.transparent,
                 border: Border.all(
-                  color: count > 0
+                  color: widget.count > 0
                       ? colorScheme.onPrimary.withOpacity(0.005)
                       : colorScheme.onPrimary.withOpacity(0.09),
                   // color:  colorScheme.onPrimary.withOpacity(0.005),
@@ -182,7 +168,7 @@ class _SelectTicketItemState extends State<SelectTicketItem> {
                   Expanded(
                     child: Center(
                       child: Text(
-                        "${count.toInt()}",
+                        "${widget.count.toInt()}",
                         style: Typo.medium.copyWith(
                           color: colorScheme.onSecondary,
                           // TODO:switch between no quantity and has quantity

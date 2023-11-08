@@ -2,6 +2,8 @@ import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/input/get_event_ticket_types_input/get_event_ticket_types_input.dart';
 import 'package:app/core/domain/event/repository/event_ticket_repository.dart';
+import 'package:app/core/domain/payment/payment_enums.dart';
+import 'package:app/core/utils/event_tickets_utils.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -19,9 +21,6 @@ class GetEventTicketTypesBloc
     on<GetEventTicketTypesEventFetch>(_onFetch);
   }
 
-  // TODO: will filter out ticket types by currency
-  // void _onFilterTicketTypesByCurrency(Currency curreny);
-
   Future<void> _onFetch(
     GetEventTicketTypesEventFetch blocEvent,
     Emitter emit,
@@ -34,6 +33,9 @@ class GetEventTicketTypesBloc
       (data) => emit(
         GetEventTicketTypesState.success(
           eventTicketTypesResponse: data,
+          supportedCurrencies: EventTicketUtils.getSupportedCurrencies(
+            ticketTypes: data.ticketTypes ?? [],
+          ),
         ),
       ),
     );
@@ -50,6 +52,7 @@ class GetEventTicketTypesState with _$GetEventTicketTypesState {
   factory GetEventTicketTypesState.loading() = GetEventTicketTypesStateLoading;
   factory GetEventTicketTypesState.success({
     required EventTicketTypesResponse eventTicketTypesResponse,
+    required List<Currency> supportedCurrencies,
   }) = GetEventTicketTypesStateSuccess;
   factory GetEventTicketTypesState.failure() = GetEventTicketTypesStateFailure;
 }

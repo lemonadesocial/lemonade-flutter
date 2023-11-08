@@ -20,7 +20,8 @@ class EventTicketsSummary extends StatelessWidget {
   Widget build(BuildContext context) {
     final ticketTypes = context.read<GetEventTicketTypesBloc>().state.maybeWhen(
           orElse: () => [] as List<PurchasableTicketType>,
-          success: (response) => response.ticketTypes ?? [],
+          success: (response, supportedCurrencies) =>
+              response.ticketTypes ?? [],
         );
     final selectedTickets =
         context.read<SelectEventTicketTypesBloc>().state.selectedTicketTypes;

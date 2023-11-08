@@ -8,7 +8,7 @@ class PaymentUtils {
       Currency.USDC,
       Currency.USDT,
       Currency.TCOI,
-      Currency.DCOI,
+      Currency.D2COI,
     ].contains(currency);
   }
 }

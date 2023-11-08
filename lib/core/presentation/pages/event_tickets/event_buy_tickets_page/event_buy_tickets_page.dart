@@ -36,13 +36,7 @@ class EventBuyTicketsPage extends StatelessWidget implements AutoRouteWrapper {
             ),
         ),
         BlocProvider(
-          create: (context) => SelectEventTicketTypesBloc()
-            //TODO: Will remove this and UI will update to let user select currency
-            ..add(
-              SelectEventTicketTypesEvent.selectCurrency(
-                currency: Currency.USD,
-              ),
-            ),
+          create: (context) => SelectEventTicketTypesBloc(),
         ),
         BlocProvider(
           create: (context) => PaymentBloc(

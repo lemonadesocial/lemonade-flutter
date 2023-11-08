@@ -23,7 +23,11 @@ enum Currency {
   @JsonValue('ETH')
   ETH,
   @JsonValue('MATIC')
-  MATIC
+  MATIC,
+  @JsonValue('TCOI')
+  TCOI,
+  @JsonValue('D2COI')
+  D2COI
 }
 
 enum PaymentProvider {
