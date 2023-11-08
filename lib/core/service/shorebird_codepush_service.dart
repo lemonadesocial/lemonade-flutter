@@ -1,4 +1,5 @@
-import 'package:flutter/foundation.dart';
+import 'package:app/router/app_router.gr.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shorebird_code_push/shorebird_code_push.dart';
@@ -6,6 +7,7 @@ import 'package:shorebird_code_push/shorebird_code_push.dart';
 @lazySingleton
 class ShorebirdCodePushService with WidgetsBindingObserver {
   final ShorebirdCodePush _shorebirdCodePush = ShorebirdCodePush();
+  late BuildContext context;
 
   ShorebirdCodePushService() {
     WidgetsBinding.instance.addObserver(this);
@@ -14,10 +16,8 @@ class ShorebirdCodePushService with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      if (kDebugMode) {
-        print('App resumed from background');
-      }
-      checkForUpdate();
+      debugPrint('App resumed from background');
+      checkForUpdate(context);
     }
   }
 
@@ -25,33 +25,30 @@ class ShorebirdCodePushService with WidgetsBindingObserver {
     return _shorebirdCodePush.isShorebirdAvailable();
   }
 
+  Future<bool> isNewPatchReadyToInstall() async {
+    return await _shorebirdCodePush.isNewPatchReadyToInstall();
+  }
+
   Future<int?> getCurrentPatchVersion() async {
     return await _shorebirdCodePush.currentPatchNumber();
   }
 
-  Future<void> checkForUpdate() async {
-    if (kDebugMode) {
-      print('Checking for update...');
-    }
-    bool isUpdateAvailable =
-        await _shorebirdCodePush.isNewPatchAvailableForDownload();
-
-    if (isUpdateAvailable) {
-      if (kDebugMode) {
-        print('Update available');
-      }
-      downloadUpdate();
-    } else {
-      if (kDebugMode) {
-        print('No update available');
-      }
-    }
+  Future<void> downloadUpdateIfAvailable() {
+    return _shorebirdCodePush.downloadUpdateIfAvailable();
   }
 
-  Future<void> downloadUpdate() async {
-    if (kDebugMode) {
-      print('Downloading update...');
+  Future<void> checkForUpdate(BuildContext context) async {
+    debugPrint('Checking for update...');
+    this.context = context;
+    bool isUpdateAvailable =
+        await _shorebirdCodePush.isNewPatchAvailableForDownload();
+    if (isUpdateAvailable) {
+      debugPrint('Update available');
+      AutoRouter.of(context).navigate(
+        const ShorebirdUpdateRoute(),
+      );
+    } else {
+      debugPrint('No update available');
     }
-    await _shorebirdCodePush.downloadUpdateIfAvailable();
   }
 }

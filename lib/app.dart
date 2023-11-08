@@ -7,7 +7,6 @@ import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/service/connectivity/connectivity_service.dart';
 import 'package:app/core/service/firebase/firebase_service.dart';
 import 'package:app/core/service/matrix/matrix_service.dart';
-import 'package:app/core/service/shorebird_codepush_service.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
@@ -52,10 +51,6 @@ class _LemonadeAppViewState extends State<LemonadeApp> {
         context: context,
       );
       setupInteractedMessage();
-      // Not check shorebird codepush when in local debug mode
-      if (kDebugMode == false) {
-        getIt<ShorebirdCodePushService>().checkForUpdate();
-      }
     });
     EasyLoading.instance
       ..indicatorType = EasyLoadingIndicatorType.ring
