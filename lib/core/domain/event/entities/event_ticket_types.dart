@@ -103,13 +103,13 @@ class PurchasableTicketType with _$PurchasableTicketType {
 
 class EventTicketPrice {
   final String? cost;
-  final double? fiatCost;
   final String? blockchainCost;
+  final double? fiatCost;
 
   EventTicketPrice({
     this.cost,
-    this.fiatCost,
     this.blockchainCost,
+    this.fiatCost,
   });
 
   factory EventTicketPrice.fromDto(EventTicketPriceDto dto) => EventTicketPrice(

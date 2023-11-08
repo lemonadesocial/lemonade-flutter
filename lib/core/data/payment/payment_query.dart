@@ -7,27 +7,7 @@ const ethereumAccountFragment = '''
   }
 ''';
 
-const safeAccountFragment = '''
-  fragment safeAccountFragment on SafeAccount {
-    currencies
-    currency_map
-    address
-    network
-    owners
-    threshold
-    funded
-  }
-''';
-
-const digitalAccount = '''
-  fragment digitalAccountFragment on DigitalAccount {
-    currencies
-    currency_map
-    account_id
-  }
-''';
-
-const stripAccountFragment = '''
+const stripeAccountFragment = '''
   fragment stripeAccountFragment on StripeAccount {
     currencies
     currency_map
@@ -38,28 +18,31 @@ const stripAccountFragment = '''
 
 const accountInfoFragment = '''
   $ethereumAccountFragment
-  $safeAccountFragment
-  $digitalAccount
-  $stripAccountFragment
+  $stripeAccountFragment
   
-  fragment accountInfo on AccountInfo{
+  fragment accountInfoFragment on AccountInfo {
+  ...on EthereumAccount {
     ...ethereumAccountFragment
-    ...safeAccountFragment
-    ...digitalAccount
-    ...stripAccountFragment
   }
+
+  ...on StripeAccount {
+    ...stripeAccountFragment
+  }
+}
 ''';
 
 const paymentAccountFragment = '''
   $accountInfoFragment
 
-  fragment paymentAccountFragment on NewPaymentAccount{
+  fragment paymentAccountFragment on NewPaymentAccount {
     _id
     active
     created_at
     user
     type
     provider
-    ...accountInfo
+    account_info {
+      ...accountInfoFragment
+    }
   }
 ''';

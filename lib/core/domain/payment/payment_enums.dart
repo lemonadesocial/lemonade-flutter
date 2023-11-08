@@ -25,3 +25,26 @@ enum Currency {
   @JsonValue('MATIC')
   MATIC
 }
+
+enum PaymentProvider {
+  @JsonValue('Stripe')
+  Stripe,
+  @JsonValue('Safe')
+  Safe
+}
+
+enum PaymentAccountType {
+  @JsonValue('Ethereum')
+  Ethereum,
+  @JsonValue('Digital')
+  Digital
+}
+
+enum PaymentState {
+  @JsonValue('Created')
+  Created,
+  @JsonValue('Failed')
+  Failed,
+  @JsonValue('Succeeded')
+  Succeeded
+}

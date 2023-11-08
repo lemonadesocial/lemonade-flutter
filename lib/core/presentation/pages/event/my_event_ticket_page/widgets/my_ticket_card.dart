@@ -1,6 +1,6 @@
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_payment.dart';
-import 'package:app/core/domain/event/entities/event_payment_ticket_type.dart';
+import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/number_utils.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -51,14 +51,14 @@ class TicketCardTop extends StatelessWidget {
     if (eventPayment == null) {
       return t.event.free.toUpperCase();
     }
-    EventPaymentTicketType? ticketType =
-        List.from(event.paymentTicketTypes ?? []).firstWhere(
+    PurchasableTicketType? ticketType =
+        List.from(event.eventTicketTypes ?? []).firstWhere(
       (item) => item.id == eventPayment?.ticketType,
       orElse: () => null,
     );
 
     return '${ticketType?.title ?? ''} - ${NumberUtils.formatCurrency(
-      amount: ticketType?.cost?.toDouble() ?? 0,
+      amount: ticketType?.defaultPrice?.fiatCost?.toDouble() ?? 0,
       currency: event.currency,
     )}';
   }
