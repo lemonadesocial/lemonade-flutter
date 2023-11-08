@@ -55,7 +55,7 @@ class PurchasableTicketTypeDto with _$PurchasableTicketTypeDto {
 @freezed
 class EventTicketPriceDto with _$EventTicketPriceDto {
   const factory EventTicketPriceDto({
-    int? cost,
+    String? cost,
   }) = _EventTicketPriceDto;
 
   factory EventTicketPriceDto.fromJson(Map<String, dynamic> json) =>

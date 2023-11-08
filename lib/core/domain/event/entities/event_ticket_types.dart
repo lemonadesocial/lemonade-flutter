@@ -55,8 +55,6 @@ class PurchasableTicketType with _$PurchasableTicketType {
     String? id,
     bool? active,
     bool? addressRequired,
-    Currency? priceCurrency,
-    int? price,
     bool? isDefault,
     String? description,
     String? descriptionLine,
@@ -76,8 +74,6 @@ class PurchasableTicketType with _$PurchasableTicketType {
         id: dto.id,
         active: dto.active,
         addressRequired: dto.addressRequired,
-        priceCurrency: dto.prices?.keys.firstOrNull,
-        price: dto.prices?.values.firstOrNull?.cost,
         isDefault: dto.isDefault,
         description: dto.description,
         descriptionLine: dto.descriptionLine,
@@ -106,11 +102,19 @@ class PurchasableTicketType with _$PurchasableTicketType {
 }
 
 class EventTicketPrice {
-  final int? cost;
+  final String? cost;
+  final double? fiatCost;
+  final String? blockchainCost;
+
   EventTicketPrice({
-    required this.cost,
+    this.cost,
+    this.fiatCost,
+    this.blockchainCost,
   });
 
-  factory EventTicketPrice.fromDto(EventTicketPriceDto dto) =>
-      EventTicketPrice(cost: dto.cost);
+  factory EventTicketPrice.fromDto(EventTicketPriceDto dto) => EventTicketPrice(
+        cost: dto.cost,
+        fiatCost: dto.cost != null ? double.tryParse(dto.cost!) : null,
+        blockchainCost: dto.cost,
+      );
 }

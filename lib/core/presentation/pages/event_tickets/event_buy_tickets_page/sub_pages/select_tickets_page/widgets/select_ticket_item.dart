@@ -41,7 +41,7 @@ class _SelectTicketItemState extends State<SelectTicketItem> {
     }
   }
 
-  bool get isFree => widget.ticketType.defaultPrice?.cost == 0;
+  bool get isFree => widget.ticketType.defaultPrice?.fiatCost == 0;
 
   void add() {
     if (!isFree && !FeatureFlagService.isEventPaymentFeatureEnabled) {

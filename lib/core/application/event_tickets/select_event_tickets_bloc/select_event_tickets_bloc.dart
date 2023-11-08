@@ -79,7 +79,7 @@ class SelectEventTicketTypesBloc
       final ticketTypePrice = (eventTicketTypesResponse?.ticketTypes ?? [])
               .firstWhere((element) => element.id == currentItem.id)
               .defaultPrice
-              ?.cost ??
+              ?.fiatCost ??
           0;
       final amountPerTicketType = ticketTypePrice * currentItem.count;
 
