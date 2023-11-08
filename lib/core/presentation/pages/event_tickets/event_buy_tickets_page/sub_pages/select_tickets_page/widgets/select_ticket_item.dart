@@ -93,8 +93,8 @@ class _SelectTicketItemState extends State<SelectTicketItem> {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
     final costText = NumberUtils.formatCurrency(
-      amount: (widget.ticketType.price?.toDouble() ?? 0),
-      currency: widget.ticketType.priceCurrency,
+      amount: (widget.ticketType.defaultPrice?.fiatCost?.toDouble() ?? 0),
+      currency: widget.ticketType.defaultCurrency,
       freeText: t.event.free,
     );
     return Padding(

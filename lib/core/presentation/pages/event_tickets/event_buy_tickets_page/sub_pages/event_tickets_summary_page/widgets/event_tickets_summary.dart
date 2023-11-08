@@ -87,7 +87,8 @@ class TicketSummaryItem extends StatelessWidget {
           const Spacer(),
           Text(
             NumberUtils.formatCurrency(
-              amount: (ticketType.price?.toDouble() ?? 0) * count,
+              amount:
+                  (ticketType.defaultPrice?.fiatCost?.toDouble() ?? 0) * count,
               // TODO: currency maybe flexible
               currency: selectedCurrency,
             ),
