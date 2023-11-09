@@ -1,0 +1,291 @@
+directive @expanded(key: String, model: String!, from: String!, to: String!) on FIELD_DEFINITION
+
+directive @secure(paths: [String!]!) on FIELD_DEFINITION
+
+type Query {
+  config(_id: ObjectId!): Config!
+  configs(filter: ConfigFilter, startAfter: String, endBefore: String, limit: Int = 10): ConfigPaginatedResponse!
+  documents(filter: DocumentFilter, startAfter: String, endBefore: String, limit: Int = 10): DocumentPaginatedResponse!
+}
+
+type Config {
+  _id: ObjectId!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  avatar: String
+  backstory: String
+  description: String!
+  filter: JSON
+  isPublic: Boolean
+  job: String!
+  modelName: String
+  name: String!
+  openaiApiKey: String
+  systemMessage: String
+  temperature: Float
+  topP: Float
+  user: ObjectId
+  welcomeMessage(format: Boolean): String
+  welcomeMetadata: JSON
+  userExpanded: User
+}
+
+scalar ObjectId
+
+"""
+The javascript `Date` as string. Type represents date and time as the ISO Date string.
+"""
+scalar DateTime
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
+
+type User {
+  _id: ObjectId!
+  name: String!
+  image_avatar: String
+}
+
+type ConfigPaginatedResponse {
+  items: [Config!]!
+  pageInfo: PaginatedResponsePageInfo!
+}
+
+type PaginatedResponsePageInfo {
+  startCursor: String
+  endCursor: String
+  hasNextPage: Boolean!
+}
+
+input ConfigFilter {
+  _id_eq: ObjectId
+  _id_exists: Boolean
+  _id_gt: ObjectId
+  _id_gte: ObjectId
+  _id_in: [ObjectId!]
+  _id_lt: ObjectId
+  _id_lte: ObjectId
+  createdAt_eq: DateTime
+  createdAt_exists: Boolean
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_eq: DateTime
+  updatedAt_exists: Boolean
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  avatar_eq: String
+  avatar_exists: Boolean
+  avatar_gt: String
+  avatar_gte: String
+  avatar_in: [String!]
+  avatar_lt: String
+  avatar_lte: String
+  backstory_eq: String
+  backstory_exists: Boolean
+  backstory_gt: String
+  backstory_gte: String
+  backstory_in: [String!]
+  backstory_lt: String
+  backstory_lte: String
+  description_eq: String
+  description_exists: Boolean
+  description_gt: String
+  description_gte: String
+  description_in: [String!]
+  description_lt: String
+  description_lte: String
+  filter_eq: JSON
+  filter_exists: Boolean
+  filter_gt: JSON
+  filter_gte: JSON
+  filter_in: [JSON!]
+  filter_lt: JSON
+  filter_lte: JSON
+  isPublic_eq: Boolean
+  isPublic_exists: Boolean
+  isPublic_gt: Boolean
+  isPublic_gte: Boolean
+  isPublic_in: [Boolean!]
+  isPublic_lt: Boolean
+  isPublic_lte: Boolean
+  job_eq: String
+  job_exists: Boolean
+  job_gt: String
+  job_gte: String
+  job_in: [String!]
+  job_lt: String
+  job_lte: String
+  modelName_eq: String
+  modelName_exists: Boolean
+  modelName_gt: String
+  modelName_gte: String
+  modelName_in: [String!]
+  modelName_lt: String
+  modelName_lte: String
+  name_eq: String
+  name_exists: Boolean
+  name_gt: String
+  name_gte: String
+  name_in: [String!]
+  name_lt: String
+  name_lte: String
+  openaiApiKey_eq: String
+  openaiApiKey_exists: Boolean
+  openaiApiKey_gt: String
+  openaiApiKey_gte: String
+  openaiApiKey_in: [String!]
+  openaiApiKey_lt: String
+  openaiApiKey_lte: String
+  systemMessage_eq: String
+  systemMessage_exists: Boolean
+  systemMessage_gt: String
+  systemMessage_gte: String
+  systemMessage_in: [String!]
+  systemMessage_lt: String
+  systemMessage_lte: String
+  temperature_eq: Float
+  temperature_exists: Boolean
+  temperature_gt: Float
+  temperature_gte: Float
+  temperature_in: [Float!]
+  temperature_lt: Float
+  temperature_lte: Float
+  topP_eq: Float
+  topP_exists: Boolean
+  topP_gt: Float
+  topP_gte: Float
+  topP_in: [Float!]
+  topP_lt: Float
+  topP_lte: Float
+  user_eq: ObjectId
+  user_exists: Boolean
+  user_gt: ObjectId
+  user_gte: ObjectId
+  user_in: [ObjectId!]
+  user_lt: ObjectId
+  user_lte: ObjectId
+  welcomeMessage_eq: String
+  welcomeMessage_exists: Boolean
+  welcomeMessage_gt: String
+  welcomeMessage_gte: String
+  welcomeMessage_in: [String!]
+  welcomeMessage_lt: String
+  welcomeMessage_lte: String
+  welcomeMetadata_eq: JSON
+  welcomeMetadata_exists: Boolean
+  welcomeMetadata_gt: JSON
+  welcomeMetadata_gte: JSON
+  welcomeMetadata_in: [JSON!]
+  welcomeMetadata_lt: JSON
+  welcomeMetadata_lte: JSON
+}
+
+type DocumentPaginatedResponse {
+  items: [Document!]!
+  pageInfo: PaginatedResponsePageInfo!
+}
+
+type Document {
+  _id: ObjectId!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  metadata: JSON
+  text: String!
+  user: ObjectId
+  userExpanded: User
+}
+
+input DocumentFilter {
+  _id_eq: ObjectId
+  _id_exists: Boolean
+  _id_gt: ObjectId
+  _id_gte: ObjectId
+  _id_in: [ObjectId!]
+  _id_lt: ObjectId
+  _id_lte: ObjectId
+  createdAt_eq: DateTime
+  createdAt_exists: Boolean
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_eq: DateTime
+  updatedAt_exists: Boolean
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  metadata_eq: JSON
+  metadata_exists: Boolean
+  metadata_gt: JSON
+  metadata_gte: JSON
+  metadata_in: [JSON!]
+  metadata_lt: JSON
+  metadata_lte: JSON
+  text_eq: String
+  text_exists: Boolean
+  text_gt: String
+  text_gte: String
+  text_in: [String!]
+  text_lt: String
+  text_lte: String
+  user_eq: ObjectId
+  user_exists: Boolean
+  user_gt: ObjectId
+  user_gte: ObjectId
+  user_in: [ObjectId!]
+  user_lt: ObjectId
+  user_lte: ObjectId
+}
+
+type Mutation {
+  createConfig(input: ConfigInput!): Config!
+  updateConfig(input: ConfigInput!, _id: ObjectId!): Config
+  deleteConfig(_id: ObjectId!): Boolean!
+  createDocument(input: DocumentInput!): Document!
+  updateDocument(input: DocumentInput!, _id: ObjectId!): Document
+  deleteDocument(_id: ObjectId!): Boolean!
+  run(session: String, message: String!, config: ObjectId!): RunResult!
+}
+
+input ConfigInput {
+  avatar: String
+  backstory: String
+  description: String!
+  filter: JSON
+  isPublic: Boolean
+  job: String!
+  modelName: String
+  name: String!
+  openaiApiKey: String
+  systemMessage: String
+  temperature: Float
+  topP: Float
+  welcomeMessage: String
+  welcomeMetadata: JSON
+}
+
+input DocumentInput {
+  metadata: JSON
+  text: String!
+}
+
+type RunResult {
+  message: String!
+  metadata: JSON!
+  sourceDocuments: [JSON!]!
+}
+
+type Subscription {
+  sessionToken(session: String!): String!
+}
