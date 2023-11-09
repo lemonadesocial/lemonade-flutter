@@ -61,3 +61,10 @@ app.*.map.json
 
 shorebird.yaml
 
+**/*.ast.gql.dart
+**/*.req.gql.dart
+**/*.data.gql.dart
+**/*.var.gql.dart
+**/*.gql.g.dart
+**/*.schema.gql.dart
+**/*serializers.gql.dart
