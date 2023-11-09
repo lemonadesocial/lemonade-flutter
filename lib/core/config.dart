@@ -18,6 +18,9 @@ class AppConfig {
   static get walletUrl => dotenv.env['WALLET_URL'];
   static get wssWalletUrl => dotenv.env['WSS_WALLET_URL'];
 
+  static get aiUrl => dotenv.env['AI_URL'];
+  static get wssAIUrl => dotenv.env['WSS_AI_URL'];
+
   static get isProduction => dotenv.env['ENV'] == 'production';
 
   // Social
