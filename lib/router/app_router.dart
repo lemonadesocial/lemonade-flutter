@@ -93,6 +93,7 @@ class AppRouter extends $AppRouter {
         AutoRoute(page: QrCodeRoute.page),
         AutoRoute(page: SettingBlockRoute.page),
         AutoRoute(page: LocationRequestRoute.page),
+        AutoRoute(page: AIRoute.page),
         chatRoutes,
         eventBuyTicketsRoutes,
         ...postRoutes,

@@ -53,4 +53,7 @@ class AppConfig {
   static get appCastUrl => dotenv.env['APPCAST_URL'];
 
   static get appScheme => dotenv.env['APP_SCHEME'];
+
+  // Chat AI
+  static get aiConfig => dotenv.env['AI_CONFIG'];
 }

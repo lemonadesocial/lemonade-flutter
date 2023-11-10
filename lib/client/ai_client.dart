@@ -10,7 +10,7 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:injectable/injectable.dart';
 
 @LazySingleton()
-class ChatAIClient {
+class AIClient {
   late Client _client;
   late WebSocketLink _webSocketLink;
   late AuthLink _authLink;

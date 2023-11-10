@@ -1,7 +1,5 @@
 mutation Run($message: String!, $config: ObjectId!) {
     run(message: $message, config: $config) {
         message
-        metadata
-        sourceDocuments
     }
 }
