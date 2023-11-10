@@ -11,8 +11,8 @@ class PaymentDto with _$PaymentDto {
   const factory PaymentDto({
     @JsonKey(name: '_id') String? id,
     String? user,
-    @JsonKey(name: 'transfer_params') dynamic transferParams,
-    @JsonKey(name: 'transfer_metadata') dynamic transferMetadata,
+    @JsonKey(name: 'transfer_params') Map<String, dynamic>? transferParams,
+    @JsonKey(name: 'transfer_metadata') Map<String, dynamic>? transferMetadata,
     PaymentState? state,
     dynamic stamps,
     @JsonKey(name: 'failure_reason') String? failureReason,

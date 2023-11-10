@@ -13,8 +13,8 @@ class Payment with _$Payment {
   factory Payment({
     String? id,
     String? user,
-    dynamic transferParams,
-    dynamic transferMetadata,
+    Map<String, dynamic>? transferParams,
+    Map<String, dynamic>? transferMetadata,
     PaymentState? state,
     dynamic stamps,
     String? failureReason,

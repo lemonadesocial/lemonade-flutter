@@ -113,12 +113,10 @@ class SelectEventTicketTypesBloc
               .firstWhere((element) => element.id == currentItem.id)
               .prices?[selectedCurrency]
               ?.blockchainCost ??
-          '0';
-      final ticketTypePriceInBigInt =
-          BigInt.tryParse(ticketTypePrice) ?? BigInt.from(0);
+          BigInt.zero;
 
       final amountPerTicketType =
-          ticketTypePriceInBigInt * BigInt.from(currentItem.count);
+          ticketTypePrice * BigInt.from(currentItem.count);
 
       return total + amountPerTicketType;
     });

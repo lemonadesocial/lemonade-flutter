@@ -12,10 +12,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class EventOrderSummary extends StatelessWidget {
   const EventOrderSummary({
     super.key,
-    this.priceDetail,
+    this.pricingInfo,
   });
 
-  final EventTicketsPricingInfo? priceDetail;
+  final EventTicketsPricingInfo? pricingInfo;
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +48,7 @@ class EventOrderSummary extends StatelessWidget {
             child: SummaryRow(
               label: t.event.eventOrder.itemTotal,
               value: NumberUtils.formatCurrency(
-                amount: priceDetail?.subTotal ?? 0,
+                amount: pricingInfo?.fiatSubTotal ?? 0,
                 currency: Currency.USD,
               ),
             ),
@@ -71,7 +71,7 @@ class EventOrderSummary extends StatelessWidget {
             child: SummaryRow(
               label: t.event.eventOrder.grandTotal,
               value: NumberUtils.formatCurrency(
-                amount: priceDetail?.total ?? 0,
+                amount: pricingInfo?.fiatTotal ?? 0,
                 currency: Currency.USD,
               ),
             ),

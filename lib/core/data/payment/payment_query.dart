@@ -16,9 +16,18 @@ const stripeAccountFragment = '''
   }
 ''';
 
+const digitalAccountFragment = '''
+  fragment digitalAccountFragment on DigitalAccount {
+    currencies
+    currency_map
+    account_id
+  }
+''';
+
 const accountInfoFragment = '''
   $ethereumAccountFragment
   $stripeAccountFragment
+  $digitalAccountFragment
   
   fragment accountInfoFragment on AccountInfo {
   ...on EthereumAccount {
@@ -27,6 +36,10 @@ const accountInfoFragment = '''
 
   ...on StripeAccount {
     ...stripeAccountFragment
+  }
+
+  ...on DigitalAccount {
+    ...digitalAccountFragment
   }
 }
 ''';
@@ -44,5 +57,30 @@ const paymentAccountFragment = '''
     account_info {
       ...accountInfoFragment
     }
+  }
+''';
+
+const paymentFragment = '''
+  $paymentAccountFragment
+
+  fragment paymentFragment on NewPayment {
+      _id
+      stamps
+      amount
+      currency
+      state
+      user
+      billing_info {
+        _id
+        email
+        firstname
+        lastname
+      }
+      transfer_metadata
+      transfer_params
+      failure_reason
+      account_expanded {
+        ...paymentAccountFragment
+      }
   }
 ''';

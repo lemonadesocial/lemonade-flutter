@@ -1,13 +1,9 @@
-import 'package:app/core/application/payment/payment_bloc/payment_bloc.dart';
-import 'package:app/core/domain/payment/entities/payment_card/payment_card.dart';
-import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_payment_method_page/widgets/add_card_bottomsheet.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AddCardButton extends StatelessWidget {
@@ -17,15 +13,15 @@ class AddCardButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-    final paymentBloc = context.read<PaymentBloc>();
     return InkWell(
       onTap: () async {
-        final newCard = await AddCardBottomSheet(
-          publishableKey: paymentBloc.state.publishableKey,
-        ).showAsBottomSheet(context) as PaymentCard?;
-        if (newCard != null) {
-          context.read<PaymentBloc>().newCardAdded(newCard);
-        }
+        // TODO: will handle add new card later
+        // final newCard = await AddCardBottomSheet(
+        //   publishableKey: paymentBloc.state.publishableKey,
+        // ).showAsBottomSheet(context) as PaymentCard?;
+        // if (newCard != null) {
+        //   context.read<PaymentBloc>().newCardAdded(newCard);
+        // }
       },
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),

@@ -168,17 +168,19 @@ class EventPickMyTicketView extends StatelessWidget {
                           failure: () => EmptyList(
                             emptyText: t.common.somethingWrong,
                           ),
-                          success: (myTickets) => PickMyTicketsList(
-                            event: event,
-                            ticketGroupsMap:
-                                EventTicketUtils.groupTicketsByTicketType(
-                              EventTicketUtils.getNotAssignedTicketOnly(
-                                myTickets,
+                          success: (myTickets) {
+                            return PickMyTicketsList(
+                              event: event,
+                              ticketGroupsMap:
+                                  EventTicketUtils.groupTicketsByTicketType(
+                                EventTicketUtils.getNotAssignedTicketOnly(
+                                  myTickets,
+                                ),
                               ),
-                            ),
-                            ticketTypes:
-                                eventTicketTypesResponse.ticketTypes ?? [],
-                          ),
+                              ticketTypes:
+                                  eventTicketTypesResponse.ticketTypes ?? [],
+                            );
+                          },
                         ),
                       );
                     },

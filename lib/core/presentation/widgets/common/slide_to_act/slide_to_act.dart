@@ -112,6 +112,7 @@ class SlideActionState extends State<SlideAction>
 
   @override
   Widget build(BuildContext context) {
+    debugPrint(_checkAnimationDx.toString());
     return Align(
       alignment: widget.alignment,
       child: Transform(
@@ -150,19 +151,6 @@ class SlideActionState extends State<SlideAction>
                                 color: widget.innerColor ??
                                     Theme.of(context).primaryIconTheme.color,
                               ),
-                          Positioned.fill(
-                            right: 0,
-                            child: Transform(
-                              transform: Matrix4.rotationY(
-                                _checkAnimationDx * (pi / 2),
-                              ),
-                              alignment: Alignment.centerRight,
-                              child: Container(
-                                color: widget.outerColor ??
-                                    Theme.of(context).colorScheme.secondary,
-                              ),
-                            ),
-                          ),
                         ],
                       ),
                     ),

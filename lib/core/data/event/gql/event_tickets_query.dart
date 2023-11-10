@@ -43,7 +43,6 @@ final calculateTicketsPricingInfoQuery = gql('''
 
   query CalculateTicketsPricing(\$input: CalculateTicketsPricingInput!) {
     calculateTicketsPricing(input: \$input) {
-      currency
       total
       subtotal
       discount

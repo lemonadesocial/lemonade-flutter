@@ -1,6 +1,10 @@
 import 'package:app/core/data/event/gql/event_tickets_query.dart';
 import 'package:app/core/data/payment/dtos/payment_card_dto/payment_card_dto.dart';
+import 'package:app/core/data/payment/dtos/payment_dto/payment_dto.dart';
+import 'package:app/core/data/payment/payment_mutation.dart';
+import 'package:app/core/domain/payment/entities/payment.dart';
 import 'package:app/core/domain/payment/entities/payment_card/payment_card.dart';
+import 'package:app/core/domain/payment/input/update_payment_input/update_payment_input.dart';
 import 'package:app/core/domain/payment/payment_repository.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/core/utils/gql/gql.dart';
@@ -46,11 +50,6 @@ class PaymentRepositoryImpl extends PaymentRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> createNewPayment() async {
-    return const Right(true);
-  }
-
-  @override
   Future<Either<Failure, List<PaymentCard>>> getListCard() async {
     final result = await _client.query(
       QueryOptions(
@@ -77,7 +76,27 @@ class PaymentRepositoryImpl extends PaymentRepository {
   }
 
   @override
-  Future<Either<Failure, String>> getPublishableKey() async {
-    return const Right('pk_test_TYooMQauvdEDq54NiTphI7jx');
+  Future<Either<Failure, Payment?>> updatePayment({
+    required UpdatePaymentInput input,
+  }) async {
+    final result = await _client.mutate(
+      MutationOptions(
+        document: updatePaymentMutation,
+        variables: {
+          'input': input.toJson(),
+        },
+        fetchPolicy: FetchPolicy.networkOnly,
+        parserFn: (data) => data['updatePayment'] != null
+            ? Payment.fromDto(
+                PaymentDto.fromJson(
+                  data['updatePayment'],
+                ),
+              )
+            : null,
+      ),
+    );
+
+    if (result.hasException) return Left(Failure());
+    return Right(result.parsedData);
   }
 }

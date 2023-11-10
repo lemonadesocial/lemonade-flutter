@@ -50,5 +50,7 @@ enum PaymentState {
   @JsonValue('Failed')
   Failed,
   @JsonValue('Succeeded')
-  Succeeded
+  Succeeded,
+  @JsonValue('Initialized')
+  Initialized
 }
