@@ -1,24 +1,15 @@
 import 'package:app/client/ai_client.dart';
-import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/config.dart';
-import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/widgets/ai/ai_chat_card.dart';
 import 'package:app/core/presentation/widgets/ai/ai_chat_composer.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
-import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
-import 'package:app/core/presentation/widgets/loading_widget.dart';
-import 'package:app/core/utils/avatar_utils.dart';
-import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/ai/__generated__/run.req.gql.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/schemas/ai/__generated__/schema.schema.gql.dart';
 import 'package:app/theme/color.dart';
-import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 

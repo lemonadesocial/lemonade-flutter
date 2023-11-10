@@ -1,4 +1,3 @@
-import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
