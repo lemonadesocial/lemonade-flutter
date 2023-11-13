@@ -1,4 +1,4 @@
-import 'package:app/client/ai_client.dart';
+import 'package:app/core/utils/gql/ai_gql_client.dart';
 import 'package:app/core/config.dart';
 import 'package:app/core/presentation/widgets/ai/ai_chat_card.dart';
 import 'package:app/core/presentation/widgets/ai/ai_chat_composer.dart';
