@@ -125,5 +125,6 @@
     "shorebird_update_description" :"To ensure the best experience and maintain security, a mandatory app update is now required please click \"Update Now\" to proceed.",
     "update_now": "Update Now",
     "restart": "Restart",
-    "pleaseTryAgain": "There's something wrong, please try again"
+    "pleaseTryAgain": "There's something wrong, please try again",
+    "chatAI": "Chat AI"
 }
