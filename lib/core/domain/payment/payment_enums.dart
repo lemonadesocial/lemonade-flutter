@@ -45,12 +45,12 @@ enum PaymentAccountType {
 }
 
 enum PaymentState {
-  @JsonValue('Created')
-  Created,
-  @JsonValue('Failed')
-  Failed,
-  @JsonValue('Succeeded')
-  Succeeded,
-  @JsonValue('Initialized')
-  Initialized
+  @JsonValue('created')
+  created,
+  @JsonValue('failed')
+  failed,
+  @JsonValue('succeeded')
+  succeeded,
+  @JsonValue('initialized')
+  initialized
 }

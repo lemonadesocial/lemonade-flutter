@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/connectivity/connectivity_bloc.dart';
+import 'package:app/core/application/notification/watch_notifications_bloc/watch_notification_bloc.dart';
 import 'package:app/core/application/profile/block_user_bloc/block_user_bloc.dart';
 import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/service/connectivity/connectivity_service.dart';
@@ -71,13 +72,18 @@ class _LemonadeAppViewState extends State<LemonadeApp> {
           BlocProvider.value(
             value: getIt<AuthBloc>(),
           ),
+          // TODO: newsfeed should not be global
           BlocProvider<NewsfeedListingBloc>(
             create: (context) => NewsfeedListingBloc(
               NewsfeedService(NewsfeedRepositoryImpl()),
             ),
           ),
+          // TODO: blocker user should not be global
           BlocProvider(
             create: (context) => BlockUserBloc(getIt<UserRepository>()),
+          ),
+          BlocProvider(
+            create: (context) => WatchNotificationsBloc(),
           ),
           BlocProvider(create: (context) => ConnectivityBloc()),
         ],

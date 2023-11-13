@@ -9,4 +9,6 @@ abstract class NotificationRepository {
   Future<Either<Failure, bool>> deleteNotifications({
     required DeleteNotificationsInput input,
   });
+
+  Stream<Either<Failure, Notification>> watchNotifications();
 }

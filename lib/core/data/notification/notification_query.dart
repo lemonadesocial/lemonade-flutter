@@ -1,7 +1,7 @@
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 const notificationFragment = '''
-  fragment notificationField on Notification {
+  fragment notificationFragment on Notification {
     _id
     title
     message
@@ -23,6 +23,7 @@ const notificationFragment = '''
     ref_room
     ref_store_order
     ref_user
+    data
     __typename
   }
 ''';
@@ -39,7 +40,7 @@ final getNotificationsQuery = gql('''
       limit: \$limit, 
       type: \$type
     ) {
-      ...notificationField
+      ...notificationFragment
     }
   }
 ''');

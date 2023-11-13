@@ -28,10 +28,18 @@ class BuyTicketsBloc extends Bloc<BuyTicketsEvent, BuyTicketsState> {
   Future<void> _onBuy(StartBuyTickets event, Emitter emit) async {
     final result = await eventTicketRepository.buyTickets(input: event.input);
     result.fold(
-      (l) => emit(BuyTicketsState.failure()),
+      (l) => emit(
+        BuyTicketsState.failure(
+          failureReason: InitPaymentFailure(),
+        ),
+      ),
       (payment) async {
         if (payment == null) {
-          return emit(BuyTicketsState.failure());
+          return emit(
+            BuyTicketsState.failure(
+              failureReason: InitPaymentFailure(),
+            ),
+          );
         }
         add(
           BuyTicketsEvent.processPaymentIntent(payment: payment),
@@ -47,8 +55,8 @@ class BuyTicketsBloc extends Bloc<BuyTicketsEvent, BuyTicketsState> {
     final payment = event.payment;
     currentPayment = payment;
     try {
-      final stripePublicKey = payment.transferMetadata?['publicKey'];
-      final stripeClientSecret = payment.transferMetadata?['clientSecret'];
+      final stripePublicKey = payment.transferMetadata?['public_key'];
+      final stripeClientSecret = payment.transferMetadata?['client_secret'];
 
       Stripe.publishableKey = stripePublicKey;
 
@@ -64,7 +72,18 @@ class BuyTicketsBloc extends Bloc<BuyTicketsEvent, BuyTicketsState> {
         BuyTicketsEvent.processUpdatePayment(payment: payment),
       );
     } catch (e) {
-      emit(BuyTicketsState.failure());
+      if (e is StripeException) {
+        return emit(
+          BuyTicketsState.failure(
+            failureReason: StripePaymentFailure(),
+          ),
+        );
+      }
+      emit(
+        BuyTicketsState.failure(
+          failureReason: InitPaymentFailure(),
+        ),
+      );
     }
   }
 
@@ -73,7 +92,11 @@ class BuyTicketsBloc extends Bloc<BuyTicketsEvent, BuyTicketsState> {
     Emitter emit,
   ) async {
     if (_updatePaymentAttemptCount == maxUpdatePaymentAttempt) {
-      return emit(BuyTicketsState.failure());
+      return emit(
+        BuyTicketsState.failure(
+          failureReason: UpdatePaymentFailure(),
+        ),
+      );
     }
     _updatePaymentAttemptCount++;
     final result = await paymentRepository.updatePayment(
@@ -81,7 +104,9 @@ class BuyTicketsBloc extends Bloc<BuyTicketsEvent, BuyTicketsState> {
     );
     result.fold(
       (l) {
-        emit(BuyTicketsEvent.processUpdatePayment(payment: event.payment));
+        add(
+          BuyTicketsEvent.processUpdatePayment(payment: event.payment),
+        );
       },
       (payment) {
         if (payment != null) {
@@ -113,5 +138,15 @@ class BuyTicketsState with _$BuyTicketsState {
   factory BuyTicketsState.done({
     required Payment payment,
   }) = BuyTicketsStateDone;
-  factory BuyTicketsState.failure() = BuyTicketsStateFailure;
+  factory BuyTicketsState.failure({
+    required BuyTicketsFailure failureReason,
+  }) = BuyTicketsStateFailure;
 }
+
+class BuyTicketsFailure {}
+
+class InitPaymentFailure extends BuyTicketsFailure {}
+
+class StripePaymentFailure extends BuyTicketsFailure {}
+
+class UpdatePaymentFailure extends BuyTicketsFailure {}

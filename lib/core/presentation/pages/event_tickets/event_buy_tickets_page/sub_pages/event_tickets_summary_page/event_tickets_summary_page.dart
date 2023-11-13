@@ -2,6 +2,7 @@ import 'package:app/core/application/event/event_provider_bloc/event_provider_bl
 import 'package:app/core/application/event_tickets/buy_tickets_bloc/buy_tickets_bloc.dart';
 import 'package:app/core/application/event_tickets/calculate_event_tickets_pricing_bloc/calculate_event_tickets_pricing_bloc.dart';
 import 'package:app/core/application/event_tickets/select_event_tickets_bloc/select_event_tickets_bloc.dart';
+import 'package:app/core/application/payment/payment_listener/payment_listener.dart';
 import 'package:app/core/domain/event/input/buy_tickets_input/buy_tickets_input.dart';
 import 'package:app/core/domain/event/input/calculate_tickets_pricing_input/calculate_tickets_pricing_input.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/add_promo_code_input.dart';
@@ -10,6 +11,7 @@ import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/event_tickets_summary.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
+import 'package:app/core/presentation/widgets/common/dialog/lemon_alert_dialog.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/common/slide_to_act/slide_to_act.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
@@ -32,10 +34,10 @@ class EventTicketsSummaryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final eventId = context.read<EventProviderBloc>().event.id;
-    final selectedTickets =
-        context.read<SelectEventTicketTypesBloc>().state.selectedTicketTypes;
-    final selectedCurrency =
-        context.read<SelectEventTicketTypesBloc>().state.selectedCurrency;
+    final selectTicketBlocState =
+        context.read<SelectEventTicketTypesBloc>().state;
+    final selectedTickets = selectTicketBlocState.selectedTicketTypes;
+    final selectedCurrency = selectTicketBlocState.selectedCurrency;
 
     return MultiBlocProvider(
       providers: [
@@ -77,20 +79,49 @@ class EventTicketsSummaryPageView extends StatelessWidget {
       listener: (context, state) {
         state.maybeWhen(
           orElse: () => null,
-          failure: () {
-            // TODO: failure should have reason, if user just cancel, then
-            // should not show popup
-            // showDialog(
-            //   context: context,
-            //   builder: (context) => LemonAlertDialog(
-            //   ),
-            // );
+          failure: (failureReason) {
+            if (failureReason is InitPaymentFailure) {
+              // cannot init payment, ask user to slide again
+              showDialog(
+                context: context,
+                builder: (context) => const LemonAlertDialog(
+                  child: Text('InitPaymentFailure'),
+                ),
+              );
+            }
+
+            if (failureReason is StripePaymentFailure) {
+              // user may just cancel the payment of payment card failed to proceed, need to get stripe error code
+              showDialog(
+                context: context,
+                builder: (context) => const LemonAlertDialog(
+                  child: Text('StripePaymentFailure'),
+                ),
+              );
+            }
+
+            if (failureReason is UpdatePaymentFailure) {
+              // payment cannot be updated in BE side
+              // Still thinking way to backup this case
+              showDialog(
+                context: context,
+                builder: (context) => const LemonAlertDialog(
+                  child: Text('UpdatePaymentFailure'),
+                ),
+              );
+            }
             // reset slide button
             _slideActionKey.currentState?.reset();
           },
           done: (payment) {
-            // TODO: navigtate to waiting for payment confirmation pay
-            // instead of go to RSVPEvent success page
+            // When done, still need to wait for payment success or failed notification below
+          },
+        );
+      },
+      child: PaymentListener(
+        onReceivedPaymentSuccess: (eventId, payment) {
+          final currentPayment = context.read<BuyTicketsBloc>().currentPayment;
+          if (currentPayment?.id == payment.id && eventId == event.id) {
             AutoRouter.of(context).replaceAll(
               [
                 RSVPEventSuccessPopupRoute(
@@ -111,86 +142,90 @@ class EventTicketsSummaryPageView extends StatelessWidget {
                 ),
               ],
             );
-          },
-        );
-      },
-      child: Scaffold(
-        backgroundColor: colorScheme.background,
-        appBar: const LemonAppBar(),
-        body: SafeArea(
-          child: Stack(
-            children: [
-              SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            t.event.eventBuyTickets.orderSummary,
-                            style: Typo.extraLarge.copyWith(
-                              color: colorScheme.onPrimary,
-                              fontFamily: FontFamily.nohemiVariable,
-                              fontWeight: FontWeight.w800,
+          }
+        },
+        child: Scaffold(
+          backgroundColor: colorScheme.background,
+          appBar: const LemonAppBar(),
+          body: SafeArea(
+            child: Stack(
+              children: [
+                SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              t.event.eventBuyTickets.orderSummary,
+                              style: Typo.extraLarge.copyWith(
+                                color: colorScheme.onPrimary,
+                                fontFamily: FontFamily.nohemiVariable,
+                                fontWeight: FontWeight.w800,
+                              ),
                             ),
-                          ),
-                          Text(
-                            "${event.title}  •  ${DateFormatUtils.dateOnly(event.start)}",
-                            style: Typo.mediumPlus.copyWith(
-                              color: colorScheme.onSecondary,
+                            Text(
+                              "${event.title}  •  ${DateFormatUtils.dateOnly(event.start)}",
+                              style: Typo.mediumPlus.copyWith(
+                                color: colorScheme.onSecondary,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    SizedBox(height: Spacing.large),
-                    const EventTicketsSummary(),
-                    SizedBox(height: Spacing.smMedium),
-                    const AddPromoCodeInput(),
-                    SizedBox(height: Spacing.smMedium),
-                    BlocBuilder<CalculateEventTicketPricingBloc,
-                        CalculateEventTicketPricingState>(
-                      builder: (context, state) {
-                        return state.when(
-                          idle: () => const SizedBox.shrink(),
-                          loading: () => Loading.defaultLoading(context),
-                          failure: () => EmptyList(
-                            emptyText: t.common.somethingWrong,
-                          ),
-                          success: (pricingInfo) =>
-                              EventOrderSummary(pricingInfo: pricingInfo),
-                        );
-                      },
-                    ),
-                    SizedBox(height: 150.w + Spacing.medium),
-                  ],
+                      SizedBox(height: Spacing.large),
+                      const EventTicketsSummary(),
+                      SizedBox(height: Spacing.smMedium),
+                      const AddPromoCodeInput(),
+                      SizedBox(height: Spacing.smMedium),
+                      BlocBuilder<CalculateEventTicketPricingBloc,
+                          CalculateEventTicketPricingState>(
+                        builder: (context, state) {
+                          return state.when(
+                            idle: () => const SizedBox.shrink(),
+                            loading: () => Loading.defaultLoading(context),
+                            failure: () => EmptyList(
+                              emptyText: t.common.somethingWrong,
+                            ),
+                            success: (pricingInfo) =>
+                                EventOrderSummary(pricingInfo: pricingInfo),
+                          );
+                        },
+                      ),
+                      SizedBox(height: 150.w + Spacing.medium),
+                    ],
+                  ),
                 ),
-              ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: BlocBuilder<BuyTicketsBloc, BuyTicketsState>(
-                  builder: (context, state) {
-                    return BlocBuilder<CalculateEventTicketPricingBloc,
-                        CalculateEventTicketPricingState>(
-                      builder: (context, state) {
-                        final pricingInfo = state.maybeWhen(
-                          orElse: () => null,
-                          success: (pricingInfo) => pricingInfo,
-                        );
-                        final selectedTickets = context
-                            .read<SelectEventTicketTypesBloc>()
-                            .state
-                            .selectedTicketTypes;
-                        final selectedCurrency = context
-                            .read<SelectEventTicketTypesBloc>()
-                            .state
-                            .selectedCurrency;
-                        return EventOrderSummaryFooter(
-                          onSlideToPay: () =>
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: BlocBuilder<BuyTicketsBloc, BuyTicketsState>(
+                    builder: (context, state) {
+                      return BlocBuilder<CalculateEventTicketPricingBloc,
+                          CalculateEventTicketPricingState>(
+                        builder: (context, state) {
+                          final pricingInfo = state.maybeWhen(
+                            orElse: () => null,
+                            success: (pricingInfo) => pricingInfo,
+                          );
+                          final selectedTickets = context
+                              .read<SelectEventTicketTypesBloc>()
+                              .state
+                              .selectedTicketTypes;
+                          final selectedCurrency = context
+                              .read<SelectEventTicketTypesBloc>()
+                              .state
+                              .selectedCurrency;
+                          return EventOrderSummaryFooter(
+                            onSlideToPay: () {
+                              if (pricingInfo?.paymentAccounts == null ||
+                                  pricingInfo?.paymentAccounts?.isEmpty ==
+                                      true) {
+                                return _slideActionKey.currentState?.reset();
+                              }
                               context.read<BuyTicketsBloc>().add(
                                     BuyTicketsEvent.buy(
                                       input: BuyTicketsInput(
@@ -203,16 +238,30 @@ class EventTicketsSummaryPageView extends StatelessWidget {
                                         total: pricingInfo?.total ?? '0',
                                       ),
                                     ),
-                                  ),
-                          pricingInfo: pricingInfo,
-                          slideActionKey: _slideActionKey,
-                        );
-                      },
-                    );
-                  },
+                                  );
+                            },
+                            pricingInfo: pricingInfo,
+                            slideActionKey: _slideActionKey,
+                          );
+                        },
+                      );
+                    },
+                  ),
                 ),
-              ),
-            ],
+                BlocBuilder<BuyTicketsBloc, BuyTicketsState>(
+                  builder: (context, state) => state.maybeWhen(
+                    idle: () => const SizedBox.shrink(),
+                    failure: (failureReason) => const SizedBox.shrink(),
+                    orElse: () => Positioned.fill(
+                      child: Container(
+                        color: colorScheme.background.withOpacity(0.5),
+                        child: Loading.defaultLoading(context),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

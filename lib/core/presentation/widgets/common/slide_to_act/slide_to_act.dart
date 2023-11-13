@@ -103,7 +103,7 @@ class SlideActionState extends State<SlideAction>
   double _endDx = 0;
   double _dz = 1;
   double? _initialContainerWidth, _containerWidth;
-  double _checkAnimationDx = 0;
+  // double _checkAnimationDx = 0;
   bool submitted = false;
   late AnimationController _checkAnimationController,
       _shrinkAnimationController,
@@ -112,7 +112,6 @@ class SlideActionState extends State<SlideAction>
 
   @override
   Widget build(BuildContext context) {
-    debugPrint(_checkAnimationDx.toString());
     return Align(
       alignment: widget.alignment,
       child: Transform(
@@ -292,7 +291,7 @@ class SlideActionState extends State<SlideAction>
     animation.addListener(() {
       if (mounted) {
         setState(() {
-          _checkAnimationDx = animation.value;
+          // _checkAnimationDx = animation.value;
         });
       }
     });
