@@ -163,7 +163,8 @@ class EventTicketsSummaryPageView extends StatelessWidget {
                         children: [
                           Padding(
                             padding: EdgeInsets.symmetric(
-                                horizontal: Spacing.smMedium),
+                              horizontal: Spacing.smMedium,
+                            ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
