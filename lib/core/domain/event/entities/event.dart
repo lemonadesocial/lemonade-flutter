@@ -1,7 +1,8 @@
 import 'package:app/core/data/event/dtos/event_dtos.dart';
 import 'package:app/core/domain/common/entities/common.dart';
-import 'package:app/core/domain/event/entities/event_payment_ticket_type.dart';
+import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/event_enums.dart';
+import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
 import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 
@@ -29,8 +30,9 @@ class Event {
     this.longitude,
     this.matrixEventRoomId,
     this.offers,
-    this.paymentTicketTypes,
+    this.eventTicketTypes,
     this.address,
+    this.paymentAccountsExpanded,
   });
 
   factory Event.fromDto(EventDto dto) {
@@ -72,10 +74,13 @@ class Event {
       offers: List.from(dto.offers ?? [])
           .map((item) => EventOffer.fromDto(item))
           .toList(),
-      paymentTicketTypes: List.from(dto.paymentTicketTypes ?? [])
-          .map((item) => EventPaymentTicketType.fromDto(item))
+      eventTicketTypes: List.from(dto.eventTicketTypes ?? [])
+          .map((item) => PurchasableTicketType.fromDto(item))
           .toList(),
       address: dto.address != null ? Address.fromDto(dto.address!) : null,
+      paymentAccountsExpanded: List.from(dto.paymentAccountsExpanded ?? [])
+          .map((item) => PaymentAccount.fromDto(item))
+          .toList(),
     );
   }
   String? id;
@@ -100,8 +105,9 @@ class Event {
   double? longitude;
   String? matrixEventRoomId;
   List<EventOffer>? offers;
-  List<EventPaymentTicketType>? paymentTicketTypes;
+  List<PurchasableTicketType>? eventTicketTypes;
   Address? address;
+  List<PaymentAccount>? paymentAccountsExpanded;
 }
 
 class EventOffer {

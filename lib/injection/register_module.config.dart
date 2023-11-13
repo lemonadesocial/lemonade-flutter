@@ -9,7 +9,6 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:app/client/ai_client.dart' as _i3;
 import 'package:app/core/application/auth/auth_bloc.dart' as _i6;
 import 'package:app/core/application/chat/new_chat_bloc/new_chat_bloc.dart'
     as _i21;
@@ -57,6 +56,7 @@ import 'package:app/core/service/matrix/matrix_service.dart' as _i20;
 import 'package:app/core/service/shake/shake_service.dart' as _i34;
 import 'package:app/core/service/shorebird_codepush_service.dart' as _i35;
 import 'package:app/core/service/wallet/wallet_connect_service.dart' as _i40;
+import 'package:app/core/utils/gql/ai_gql_client.dart' as _i3;
 import 'package:app/core/utils/gql/gql.dart' as _i4;
 import 'package:app/core/utils/location_utils.dart' as _i19;
 import 'package:get_it/get_it.dart' as _i1;

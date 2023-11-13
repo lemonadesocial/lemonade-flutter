@@ -1,6 +1,7 @@
 import 'package:app/core/data/notification/notification_mutation.dart';
 import 'package:app/core/data/notification/dtos/notification_dtos.dart';
 import 'package:app/core/data/notification/notification_query.dart';
+import 'package:app/core/data/notification/notification_subscription.dart';
 import 'package:app/core/domain/notification/entities/notification.dart';
 import 'package:app/core/domain/notification/input/delete_notifications_input.dart';
 import 'package:app/core/domain/notification/notification_repository.dart';
@@ -70,5 +71,25 @@ class NotificationRepositoryImpl implements NotificationRepository {
       return Left(Failure());
     }
     return Right(result.parsedData!);
+  }
+
+  @override
+  Stream<Either<Failure, Notification>> watchNotifications() {
+    final stream = client.subscribe(
+      SubscriptionOptions(
+        document: watchNotificationSubscription,
+        fetchPolicy: FetchPolicy.networkOnly,
+        parserFn: (data) {
+          return Notification.fromDto(
+            NotificationDto.fromJson(data['notificationCreated']),
+          );
+        },
+      ),
+    );
+
+    return stream.asyncMap((resultEvent) {
+      if (resultEvent.hasException) return Left(Failure());
+      return Right(resultEvent.parsedData!);
+    });
   }
 }

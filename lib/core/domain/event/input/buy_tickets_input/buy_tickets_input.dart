@@ -1,19 +1,24 @@
 import 'package:app/core/domain/payment/entities/purchasable_item/purchasable_item.dart';
+import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'buy_ticket_input.freezed.dart';
-
-part 'buy_ticket_input.g.dart';
+part 'buy_tickets_input.g.dart';
+part 'buy_tickets_input.freezed.dart';
 
 @freezed
 class BuyTicketsInput with _$BuyTicketsInput {
   factory BuyTicketsInput({
     @JsonKey(name: 'event') required String eventId,
-    double? discount,
-    double? total,
-    List<PurchasableItem>? items,
+    @JsonKey(name: 'account_id') required String accountId,
+    required Currency currency,
+    required String total,
+    required List<PurchasableItem>? items,
     @JsonKey(name: 'billing_info') BillingInfoInput? billingInfo,
+    String? discount,
   }) = _BuyTicketsInput;
+
+  factory BuyTicketsInput.fromJson(Map<String, dynamic> json) =>
+      _$BuyTicketsInputFromJson(json);
 }
 
 @freezed
@@ -30,8 +35,8 @@ class BillingInfoInput with _$BillingInfoInput {
     double? latitude,
     double? longitude,
     String? recipientName,
-    String? firstname,
-    String? lastname,
+    @JsonKey(name: 'firstname') String? firstName,
+    @JsonKey(name: 'lastname') String? lastName,
     String? phone,
   }) = _BillingInfoInput;
 

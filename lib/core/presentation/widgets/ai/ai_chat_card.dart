@@ -58,7 +58,7 @@ class AIChatCard extends StatelessWidget {
               ),
               SizedBox(
                 height: 10.h,
-              )
+              ),
             ],
           );
         } else {

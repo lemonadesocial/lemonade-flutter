@@ -95,7 +95,7 @@ class MyEventTicketAssignmentView extends StatelessWidget {
             failure: () => EmptyList(
               emptyText: t.common.somethingWrong,
             ),
-            success: (eventTicketTypesResponse) {
+            success: (eventTicketTypesResponse, supportedCurrencies) {
               return BlocBuilder<GetMyTicketsBloc, GetMyTicketsState>(
                 builder: (context, state) => state.when(
                   loading: () => Loading.defaultLoading(context),

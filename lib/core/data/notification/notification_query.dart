@@ -1,7 +1,7 @@
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 const notificationFragment = '''
-  fragment notificationField on Notification {
+  fragment notificationFragment on Notification {
     _id
     title
     message
@@ -23,6 +23,7 @@ const notificationFragment = '''
     ref_room
     ref_store_order
     ref_user
+    data
     __typename
   }
 ''';
@@ -32,14 +33,14 @@ final getNotificationsQuery = gql('''
   query(
     \$skip: Int = 0
     \$limit: Int = 50
-    \$type: NotificationTypeFilterInput = {nin: [payment_authorized, payment_failed, payments_wired_summary, admin_payment_verification, payments_captured_summary]}
+    \$type: NotificationTypeFilterInput = {nin: [payment_authorized, payment_failed, payment_succeeded, payments_wired_summary, admin_payment_verification, payments_captured_summary]}
   ) {
     getNotifications(
       skip: \$skip, 
       limit: \$limit, 
       type: \$type
     ) {
-      ...notificationField
+      ...notificationFragment
     }
   }
 ''');

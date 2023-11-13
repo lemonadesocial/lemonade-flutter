@@ -30,7 +30,7 @@ class PickMyTicketsList extends StatelessWidget {
             Expanded(
               child: ListView.separated(
                 itemBuilder: (context, index) {
-                  final group = ticketGroupsMap.entries.first;
+                  final group = ticketGroupsMap.entries.toList()[index];
                   final ticketTypeId = group.key;
                   final total = group.value.length.toDouble();
                   final ticketType = ticketTypes.firstWhereOrNull(

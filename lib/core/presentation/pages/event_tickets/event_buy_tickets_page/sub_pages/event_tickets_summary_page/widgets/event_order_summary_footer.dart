@@ -1,25 +1,20 @@
-import 'package:app/core/application/payment/payment_bloc/payment_bloc.dart';
-import 'package:app/core/domain/payment/entities/payment_card/payment_card.dart';
-import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_payment_method_page/widgets/add_card_bottomsheet.dart';
-import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/event_card_tile.dart';
+import 'package:app/core/domain/event/entities/event_tickets_pricing_info.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/event_order_slide_to_pay.dart';
-import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
-import 'package:app/gen/assets.gen.dart';
-import 'package:app/i18n/i18n.g.dart';
-import 'package:app/theme/sizing.dart';
+import 'package:app/core/presentation/widgets/common/slide_to_act/slide_to_act.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EventOrderSummaryFooter extends StatelessWidget {
   const EventOrderSummaryFooter({
     super.key,
-    required this.totalPrice,
+    this.pricingInfo,
+    required this.onSlideToPay,
+    required this.slideActionKey,
   });
-
-  final double totalPrice;
+  final Function() onSlideToPay;
+  final EventTicketsPricingInfo? pricingInfo;
+  final GlobalKey<SlideActionState> slideActionKey;
 
   @override
   Widget build(BuildContext context) {
@@ -40,78 +35,84 @@ class EventOrderSummaryFooter extends StatelessWidget {
             ),
           ),
         ),
-        child: BlocBuilder<PaymentBloc, PaymentState>(
-          builder: (context, state) {
-            return state.selectedCard != null
-                ? Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      EventCardTile(paymentCard: state.selectedCard!),
-                      SizedBox(height: Spacing.smMedium),
-                      EventOrderSlideToPay(totalPrice: totalPrice),
-                    ],
-                  )
-                : _emptyPaymentWidget(context, state.publishableKey);
-          },
+        child:
+            // true
+            //     ?
+            // TODO: will show add card
+            Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // TODO: will handle add card later
+            // EventCardTile(paymentCard: state.selectedCard!),
+            SizedBox(height: Spacing.smMedium),
+            EventOrderSlideToPay(
+              onSlideToPay: onSlideToPay,
+              pricingInfo: pricingInfo,
+              slideActionKey: slideActionKey,
+            ),
+          ],
         ),
+        // : _emptyPaymentWidget(context, ''),
       ),
     );
   }
 
-  Widget _emptyPaymentWidget(BuildContext context, String publishableKey) {
-    final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+  // TODO: comment to resolve dart analyze
+  // Widget _emptyPaymentWidget(BuildContext context, String publishableKey) {
+  //   final t = Translations.of(context);
+  //   final colorScheme = Theme.of(context).colorScheme;
 
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              t.event.eventPayment.howYouPay,
-              style: Typo.small.copyWith(
-                color: colorScheme.onSecondary,
-              ),
-            ),
-            SizedBox(height: 2.w),
-            Text(
-              t.event.eventPayment.selectPayment,
-              style: Typo.medium.copyWith(color: colorScheme.onPrimary),
-            ),
-          ],
-        ),
-        const Spacer(),
-        InkWell(
-          onTap: () async {
-            final newCard = await AddCardBottomSheet(
-              publishableKey: publishableKey,
-            ).showAsBottomSheet(context) as PaymentCard?;
-            if (newCard != null) {
-              context.read<PaymentBloc>().newCardAdded(newCard);
-            }
-          },
-          child: Container(
-            width: Sizing.medium,
-            height: Sizing.medium,
-            decoration: BoxDecoration(
-              color: colorScheme.onPrimary.withOpacity(0.09),
-              borderRadius: BorderRadius.circular(LemonRadius.normal),
-            ),
-            child: Center(
-              child: ThemeSvgIcon(
-                color: colorScheme.onSurfaceVariant,
-                builder: (filter) => Assets.icons.icAdd.svg(
-                  colorFilter: filter,
-                  height: Sizing.xSmall,
-                  width: Sizing.xSmall,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
+  //   return Row(
+  //     crossAxisAlignment: CrossAxisAlignment.center,
+  //     children: [
+  //       Column(
+  //         crossAxisAlignment: CrossAxisAlignment.start,
+  //         mainAxisSize: MainAxisSize.min,
+  //         children: [
+  //           Text(
+  //             t.event.eventPayment.howYouPay,
+  //             style: Typo.small.copyWith(
+  //               color: colorScheme.onSecondary,
+  //             ),
+  //           ),
+  //           SizedBox(height: 2.w),
+  //           Text(
+  //             t.event.eventPayment.selectPayment,
+  //             style: Typo.medium.copyWith(color: colorScheme.onPrimary),
+  //           ),
+  //         ],
+  //       ),
+  //       const Spacer(),
+  //       InkWell(
+  //         onTap: () async {
+  //           // TODO: will handle add card later
+  //           // final newCard = await AddCardBottomSheet(
+  //           //   publishableKey: publishableKey,
+  //           // ).showAsBottomSheet(context) as PaymentCard?;
+  //           // if (newCard != null) {
+  //           //   context.read<PaymentBloc>().newCardAdded(newCard);
+  //           // }
+  //         },
+  //         child: Container(
+  //           width: Sizing.medium,
+  //           height: Sizing.medium,
+  //           decoration: BoxDecoration(
+  //             color: colorScheme.onPrimary.withOpacity(0.09),
+  //             borderRadius: BorderRadius.circular(LemonRadius.normal),
+  //           ),
+  //           child: Center(
+  //             child: ThemeSvgIcon(
+  //               color: colorScheme.onSurfaceVariant,
+  //               builder: (filter) => Assets.icons.icAdd.svg(
+  //                 colorFilter: filter,
+  //                 height: Sizing.xSmall,
+  //                 width: Sizing.xSmall,
+  //               ),
+  //             ),
+  //           ),
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
 }

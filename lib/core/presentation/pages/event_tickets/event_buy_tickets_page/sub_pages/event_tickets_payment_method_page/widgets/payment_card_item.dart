@@ -1,4 +1,3 @@
-import 'package:app/core/application/payment/payment_bloc/payment_bloc.dart';
 import 'package:app/core/domain/payment/entities/payment_card/payment_card.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -6,7 +5,6 @@ import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PaymentCardItem extends StatelessWidget {
@@ -56,15 +54,10 @@ class PaymentCardItem extends StatelessWidget {
             ),
           ),
           const Spacer(),
-          BlocBuilder<PaymentBloc, PaymentState>(
-            builder: (context, state) {
-              return Checkbox(
-                value: cardInfo == state.selectedCard,
-                shape: const CircleBorder(),
-                onChanged: (_) =>
-                    context.read<PaymentBloc>().onCardSelected(cardInfo),
-              );
-            },
+          Checkbox(
+            value: false, //TODO: will handle select card later
+            shape: const CircleBorder(),
+            onChanged: (_) {},
           ),
           SizedBox(width: 1.w),
         ],

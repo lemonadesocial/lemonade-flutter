@@ -50,15 +50,17 @@ class AIClient {
     );
 
     _client = Client(
-      link: Link.from([
-        _authLink.split(
-          (request) {
-            return request.isSubscription;
-          },
-          _webSocketLink,
-          _httpLink,
-        )
-      ]),
+      link: Link.from(
+        [
+          _authLink.split(
+            (request) {
+              return request.isSubscription;
+            },
+            _webSocketLink,
+            _httpLink,
+          ),
+        ],
+      ),
       cache: cache,
       updateCacheHandlers: {
         // unrelated to the isolate: update the list of authors in the cache when a new author is created

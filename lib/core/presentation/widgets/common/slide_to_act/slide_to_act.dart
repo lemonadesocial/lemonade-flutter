@@ -103,7 +103,7 @@ class SlideActionState extends State<SlideAction>
   double _endDx = 0;
   double _dz = 1;
   double? _initialContainerWidth, _containerWidth;
-  double _checkAnimationDx = 0;
+  // double _checkAnimationDx = 0;
   bool submitted = false;
   late AnimationController _checkAnimationController,
       _shrinkAnimationController,
@@ -150,19 +150,6 @@ class SlideActionState extends State<SlideAction>
                                 color: widget.innerColor ??
                                     Theme.of(context).primaryIconTheme.color,
                               ),
-                          Positioned.fill(
-                            right: 0,
-                            child: Transform(
-                              transform: Matrix4.rotationY(
-                                _checkAnimationDx * (pi / 2),
-                              ),
-                              alignment: Alignment.centerRight,
-                              child: Container(
-                                color: widget.outerColor ??
-                                    Theme.of(context).colorScheme.secondary,
-                              ),
-                            ),
-                          ),
                         ],
                       ),
                     ),
@@ -304,7 +291,7 @@ class SlideActionState extends State<SlideAction>
     animation.addListener(() {
       if (mounted) {
         setState(() {
-          _checkAnimationDx = animation.value;
+          // _checkAnimationDx = animation.value;
         });
       }
     });

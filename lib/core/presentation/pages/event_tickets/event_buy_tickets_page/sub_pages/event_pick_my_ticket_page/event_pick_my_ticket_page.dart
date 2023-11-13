@@ -161,24 +161,26 @@ class EventPickMyTicketView extends StatelessWidget {
                     failure: () => EmptyList(
                       emptyText: t.common.somethingWrong,
                     ),
-                    success: (eventTicketTypesResponse) {
+                    success: (eventTicketTypesResponse, supportedCurrencies) {
                       return BlocBuilder<GetMyTicketsBloc, GetMyTicketsState>(
                         builder: (context, state) => state.when(
                           loading: () => Loading.defaultLoading(context),
                           failure: () => EmptyList(
                             emptyText: t.common.somethingWrong,
                           ),
-                          success: (myTickets) => PickMyTicketsList(
-                            event: event,
-                            ticketGroupsMap:
-                                EventTicketUtils.groupTicketsByTicketType(
-                              EventTicketUtils.getNotAssignedTicketOnly(
-                                myTickets,
+                          success: (myTickets) {
+                            return PickMyTicketsList(
+                              event: event,
+                              ticketGroupsMap:
+                                  EventTicketUtils.groupTicketsByTicketType(
+                                EventTicketUtils.getNotAssignedTicketOnly(
+                                  myTickets,
+                                ),
                               ),
-                            ),
-                            ticketTypes:
-                                eventTicketTypesResponse.ticketTypes ?? [],
-                          ),
+                              ticketTypes:
+                                  eventTicketTypesResponse.ticketTypes ?? [],
+                            );
+                          },
                         ),
                       );
                     },

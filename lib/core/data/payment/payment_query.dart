@@ -7,27 +7,7 @@ const ethereumAccountFragment = '''
   }
 ''';
 
-const safeAccountFragment = '''
-  fragment safeAccountFragment on SafeAccount {
-    currencies
-    currency_map
-    address
-    network
-    owners
-    threshold
-    funded
-  }
-''';
-
-const digitalAccount = '''
-  fragment digitalAccountFragment on DigitalAccount {
-    currencies
-    currency_map
-    account_id
-  }
-''';
-
-const stripAccountFragment = '''
+const stripeAccountFragment = '''
   fragment stripeAccountFragment on StripeAccount {
     currencies
     currency_map
@@ -36,30 +16,71 @@ const stripAccountFragment = '''
   }
 ''';
 
+const digitalAccountFragment = '''
+  fragment digitalAccountFragment on DigitalAccount {
+    currencies
+    currency_map
+    account_id
+  }
+''';
+
 const accountInfoFragment = '''
   $ethereumAccountFragment
-  $safeAccountFragment
-  $digitalAccount
-  $stripAccountFragment
+  $stripeAccountFragment
+  $digitalAccountFragment
   
-  fragment accountInfo on AccountInfo{
+  fragment accountInfoFragment on AccountInfo {
+  ...on EthereumAccount {
     ...ethereumAccountFragment
-    ...safeAccountFragment
-    ...digitalAccount
-    ...stripAccountFragment
   }
+
+  ...on StripeAccount {
+    ...stripeAccountFragment
+  }
+
+  ...on DigitalAccount {
+    ...digitalAccountFragment
+  }
+}
 ''';
 
 const paymentAccountFragment = '''
   $accountInfoFragment
 
-  fragment paymentAccountFragment on NewPaymentAccount{
+  fragment paymentAccountFragment on NewPaymentAccount {
     _id
     active
     created_at
     user
     type
     provider
-    ...accountInfo
+    account_info {
+      ...accountInfoFragment
+    }
+  }
+''';
+
+const paymentFragment = '''
+  $paymentAccountFragment
+
+  fragment paymentFragment on NewPayment {
+      _id
+      stamps
+      amount
+      currency
+      state
+      user
+      billing_info {
+        _id
+        email
+        firstname
+        lastname
+      }
+      transfer_metadata
+      transfer_params
+      failure_reason
+      account_expanded {
+        ...paymentAccountFragment
+      }
   }
 ''';

@@ -23,5 +23,34 @@ enum Currency {
   @JsonValue('ETH')
   ETH,
   @JsonValue('MATIC')
-  MATIC
+  MATIC,
+  @JsonValue('TCOI')
+  TCOI,
+  @JsonValue('D2COI')
+  D2COI
+}
+
+enum PaymentProvider {
+  @JsonValue('stripe')
+  stripe,
+  @JsonValue('safe')
+  safe
+}
+
+enum PaymentAccountType {
+  @JsonValue('ethereum')
+  ethereum,
+  @JsonValue('digital')
+  digital
+}
+
+enum PaymentState {
+  @JsonValue('created')
+  created,
+  @JsonValue('failed')
+  failed,
+  @JsonValue('succeeded')
+  succeeded,
+  @JsonValue('initialized')
+  initialized
 }

@@ -6,4 +6,6 @@ class NotificationType {
   static const String userDiscoveryMatch = "user_discovery_match";
   static const String userContactSignUp = "user_contact_signup";
   static const String eventAnnounce = "event_announce";
+  static const String paymentSucceeded = 'payment_succeeded';
+  static const String paymentFailed = 'payment_failed';
 }

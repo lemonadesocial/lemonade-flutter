@@ -1,5 +1,7 @@
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/entities/event_ticket.dart';
+import 'package:app/core/domain/payment/payment_enums.dart';
+import 'package:app/core/utils/list/unique_list_extension.dart';
 import 'package:collection/collection.dart';
 
 class EventTicketUtils {
@@ -43,4 +45,26 @@ class EventTicketUtils {
     List<EventTicket> tickets,
   ) =>
       groupBy(tickets, (ticket) => ticket.type ?? '');
+
+  static List<PurchasableTicketType> getTicketTypesByCurrency({
+    required List<PurchasableTicketType> ticketTypes,
+    required Currency currency,
+  }) {
+    return ticketTypes
+        .where(
+          (element) =>
+              (element.prices ?? Map.fromEntries([])).keys.contains(currency),
+        )
+        .toList();
+  }
+
+  static getSupportedCurrencies({
+    required List<PurchasableTicketType> ticketTypes,
+  }) {
+    List<Currency> currencies = [];
+    for (var element in ticketTypes) {
+      currencies.addAll((element.prices ?? Map.fromEntries([])).keys);
+    }
+    return currencies.unique();
+  }
 }
