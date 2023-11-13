@@ -84,8 +84,9 @@ class EventTicketsSummaryPageView extends StatelessWidget {
               // cannot init payment, ask user to slide again
               showDialog(
                 context: context,
-                builder: (context) => const LemonAlertDialog(
-                  child: Text('InitPaymentFailure'),
+                builder: (context) => LemonAlertDialog(
+                  onClose: () => Navigator.of(context).pop(),
+                  child: Text(t.common.pleaseTryAgain),
                 ),
               );
             }
@@ -94,8 +95,11 @@ class EventTicketsSummaryPageView extends StatelessWidget {
               // user may just cancel the payment of payment card failed to proceed, need to get stripe error code
               showDialog(
                 context: context,
-                builder: (context) => const LemonAlertDialog(
-                  child: Text('StripePaymentFailure'),
+                builder: (context) => LemonAlertDialog(
+                  child: Text(
+                    failureReason.exception.error.message ??
+                        t.common.pleaseTryAgain,
+                  ),
                 ),
               );
             }
@@ -105,8 +109,9 @@ class EventTicketsSummaryPageView extends StatelessWidget {
               // Still thinking way to backup this case
               showDialog(
                 context: context,
-                builder: (context) => const LemonAlertDialog(
-                  child: Text('UpdatePaymentFailure'),
+                builder: (context) => LemonAlertDialog(
+                  onClose: () => Navigator.of(context).pop(),
+                  child: Text(t.common.pleaseTryAgain),
                 ),
               );
             }

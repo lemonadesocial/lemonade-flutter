@@ -26,6 +26,7 @@ class BuyTicketsBloc extends Bloc<BuyTicketsEvent, BuyTicketsState> {
   }
 
   Future<void> _onBuy(StartBuyTickets event, Emitter emit) async {
+    emit(BuyTicketsState.loading());
     final result = await eventTicketRepository.buyTickets(input: event.input);
     result.fold(
       (l) => emit(
@@ -75,7 +76,7 @@ class BuyTicketsBloc extends Bloc<BuyTicketsEvent, BuyTicketsState> {
       if (e is StripeException) {
         return emit(
           BuyTicketsState.failure(
-            failureReason: StripePaymentFailure(),
+            failureReason: StripePaymentFailure(exception: e),
           ),
         );
       }
@@ -147,6 +148,11 @@ class BuyTicketsFailure {}
 
 class InitPaymentFailure extends BuyTicketsFailure {}
 
-class StripePaymentFailure extends BuyTicketsFailure {}
+class StripePaymentFailure extends BuyTicketsFailure {
+  StripeException exception;
+  StripePaymentFailure({
+    required this.exception,
+  });
+}
 
 class UpdatePaymentFailure extends BuyTicketsFailure {}

@@ -221,16 +221,22 @@ class SelectTicketView extends StatelessWidget {
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
                             children: [
-                              SelectCurrencyButton(
-                                supportedCurrencies: supportedCurrencies,
-                                selectedCurrency: selectedCurrency,
-                                onSelectCurrency: (currency) {
-                                  selectTicketBloc.add(
-                                    SelectEventTicketTypesEvent.selectCurrency(
-                                      currency: currency,
-                                    ),
-                                  );
-                                },
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: Spacing.medium,
+                                ),
+                                child: SelectCurrencyButton(
+                                  supportedCurrencies: supportedCurrencies,
+                                  selectedCurrency: selectedCurrency,
+                                  onSelectCurrency: (currency) {
+                                    selectTicketBloc.add(
+                                      SelectEventTicketTypesEvent
+                                          .selectCurrency(
+                                        currency: currency,
+                                      ),
+                                    );
+                                  },
+                                ),
                               ),
                               Expanded(
                                 child: ListView.separated(

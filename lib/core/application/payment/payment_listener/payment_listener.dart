@@ -26,7 +26,7 @@ class PaymentListener extends StatelessWidget {
         state.when(
           idle: () => null,
           hasNewNotification: (notification) {
-            if (notification.type != NotificationType.paymentSuccess &&
+            if (notification.type != NotificationType.paymentSucceeded &&
                 notification.type != NotificationType.paymentFailed) {
               return;
             }
@@ -42,7 +42,7 @@ class PaymentListener extends StatelessWidget {
 
             if (payment == null) return;
 
-            if (notification.type == NotificationType.paymentSuccess) {
+            if (notification.type == NotificationType.paymentSucceeded) {
               onReceivedPaymentSuccess?.call(eventId, payment);
               return;
             }

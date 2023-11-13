@@ -31,17 +31,17 @@ enum Currency {
 }
 
 enum PaymentProvider {
-  @JsonValue('Stripe')
-  Stripe,
-  @JsonValue('Safe')
-  Safe
+  @JsonValue('stripe')
+  stripe,
+  @JsonValue('safe')
+  safe
 }
 
 enum PaymentAccountType {
-  @JsonValue('Ethereum')
-  Ethereum,
-  @JsonValue('Digital')
-  Digital
+  @JsonValue('ethereum')
+  ethereum,
+  @JsonValue('digital')
+  digital
 }
 
 enum PaymentState {

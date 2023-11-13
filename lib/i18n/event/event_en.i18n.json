@@ -33,7 +33,8 @@
     "eventBuyTickets": {
         "selectTickets": "Select tickets",
         "orderSummary": "Order summary",
-        "enterPromoCode": "Enter promo code"
+        "enterPromoCode": "Enter promo code",
+        "selectCurrency": "Please select currency first"
     },
     "eventOrder": {
         "itemTotal": "Item total",

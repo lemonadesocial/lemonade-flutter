@@ -1,4 +1,6 @@
 import 'package:app/core/domain/payment/payment_enums.dart';
+import 'package:app/i18n/i18n.g.dart';
+import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 
 class SelectCurrencyButton extends StatelessWidget {
@@ -14,10 +16,16 @@ class SelectCurrencyButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = Translations.of(context);
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Text('Please select currency first'),
+        Text(
+          t.event.eventBuyTickets.selectCurrency,
+          style: Typo.medium.copyWith(color: colorScheme.onSecondary),
+        ),
         DropdownButton<Currency>(
           value: selectedCurrency,
           items: supportedCurrencies

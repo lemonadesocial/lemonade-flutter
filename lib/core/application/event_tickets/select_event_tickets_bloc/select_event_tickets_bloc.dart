@@ -52,7 +52,7 @@ class SelectEventTicketTypesBloc
     final newSelectedTicketTypes = [
       event.ticketType,
       ...state.selectedTicketTypes,
-    ].unique((item) => item.id);
+    ].unique((item) => item.id).where((element) => element.count > 0).toList();
 
     final totalSelectedCount =
         _calculateTotalSelectedCount(newSelectedTicketTypes);
