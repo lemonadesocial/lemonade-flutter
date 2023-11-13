@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:graphql_flutter/graphql_flutter.dart' as gql_flutter;
 import 'package:app/injection/register_module.dart';
+import 'package:app/core/utils/gql/ai_gql_client.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,6 +21,7 @@ void main() async {
     await getIt<FirebaseService>().initialize();
   }
   await getIt<MatrixService>().init();
+  await getIt<AIClient>().init();
 
   runApp(const LemonadeApp());
 
