@@ -152,7 +152,7 @@ class _MyEventTicketsListViewState extends State<MyEventTicketsListView> {
                     isActive: selectedReservationType == ReservationType.past,
                     label: t.event.past,
                   ),
-                ]
+                ],
               ],
             ),
           ),

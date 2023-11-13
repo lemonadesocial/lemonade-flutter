@@ -106,7 +106,7 @@ class OnboardingPhotoPicker extends StatelessWidget {
                             blurRadius: 4,
                             offset: const Offset(0, 2),
                             spreadRadius: 0,
-                          )
+                          ),
                         ],
                       ),
                       child: Assets.icons.icRefresh.svg(),

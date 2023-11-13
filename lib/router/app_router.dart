@@ -11,6 +11,11 @@ class AppRouter extends $AppRouter {
           fullscreenDialog: true,
         ),
         AutoRoute(
+          path: '/shorebird-update',
+          page: ShorebirdUpdateRoute.page,
+          fullscreenDialog: true,
+        ),
+        AutoRoute(
           path: '/',
           page: RootRoute.page,
           children: [

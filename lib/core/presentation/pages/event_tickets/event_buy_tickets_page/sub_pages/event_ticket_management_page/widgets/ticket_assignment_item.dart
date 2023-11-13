@@ -72,8 +72,8 @@ class TicketAssignmentItem extends StatelessWidget {
             children: [
               Text(
                 "${ticketType?.title}   •   ${NumberUtils.formatCurrency(
-                  amount: ticketType?.cost?.toDouble() ?? 0,
-                  currency: currency ?? Currency.USD,
+                  amount: ticketType?.defaultPrice?.fiatCost?.toDouble() ?? 0,
+                  currency: ticketType?.defaultCurrency,
                   freeText: t.event.free,
                 )}",
                 style: Typo.medium.copyWith(
@@ -156,10 +156,10 @@ class TicketAssignmentItem extends StatelessWidget {
                         style: Typo.xSmall.copyWith(
                           color: colorScheme.onSecondary,
                         ),
-                      )
+                      ),
                     ],
                   ),
-                )
+                ),
             ],
           ),
           const Spacer(),

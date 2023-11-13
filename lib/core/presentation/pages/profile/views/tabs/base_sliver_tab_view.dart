@@ -58,7 +58,7 @@ class BaseSliverTabView extends StatelessWidget {
                       context,
                     ),
                   ),
-                  ...children
+                  ...children,
                 ],
               ),
             ),

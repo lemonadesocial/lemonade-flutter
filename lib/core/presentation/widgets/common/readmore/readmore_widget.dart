@@ -64,7 +64,7 @@ class ReadMoreWidget extends StatelessWidget {
                           t.common.showMore,
                           style: moreLessTextStyle,
                         ),
-                      )
+                      ),
                     ],
                   ),
                   expanded: Column(

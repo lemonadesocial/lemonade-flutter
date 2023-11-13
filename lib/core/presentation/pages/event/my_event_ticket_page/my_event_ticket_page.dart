@@ -80,10 +80,10 @@ class MyEventTicketPage extends StatelessWidget {
                       event: event,
                       eventPayment: eventPayment!,
                     ),
-                  ]
+                  ],
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),

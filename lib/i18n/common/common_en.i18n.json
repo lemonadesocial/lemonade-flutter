@@ -116,5 +116,13 @@
     "locationRequest": {
         "title": "Set your location services",
         "description": "We require access to your location to display geo-locked collectibles & events around you. \nWe only access your location while you're using the app and do not collect background location data"
-    }
+    },
+    "internetConnectionStatus": {
+        "connected": "You're back online",
+        "disconnected": "No internet connection"
+    },
+    "shorebird_update_title": "Update Required",
+    "shorebird_update_description" :"To ensure the best experience and maintain security, a mandatory app update is now required please click \"Update Now\" to proceed.",
+    "update_now": "Update Now",
+    "restart": "Restart"
 }

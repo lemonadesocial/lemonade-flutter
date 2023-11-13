@@ -114,11 +114,11 @@ class _OnboardingTermConditionsPageState
                               description: t.onboarding
                                   .termConditionsBeProactive.description,
                             ),
-                            SizedBox(height: Spacing.medium * 5)
+                            SizedBox(height: Spacing.medium * 5),
                           ],
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -166,7 +166,7 @@ class _OnboardingTermConditionsPageState
                     ),
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),
@@ -211,7 +211,7 @@ class TermConditionItem extends StatelessWidget {
             style: Typo.small.copyWith(
               color: colorScheme.onSecondary,
             ),
-          )
+          ),
         ],
       ),
     );

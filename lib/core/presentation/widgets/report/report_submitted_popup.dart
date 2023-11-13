@@ -51,7 +51,7 @@ class ReportSubmittedPopup extends StatelessWidget {
               },
               label: t.common.actions.dismiss,
               mode: GradientButtonMode.defaultMode,
-            )
+            ),
           ],
         ),
       ),

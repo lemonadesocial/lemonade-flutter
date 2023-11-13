@@ -43,7 +43,7 @@ class DiscoverCommunities extends StatelessWidget {
           create: (context) =>
               CommunityBloc(getIt<CommunityRepository>())..getUsersSpotlight(),
           child: const _DiscoverCommunitiesList(),
-        )
+        ),
       ],
     );
   }

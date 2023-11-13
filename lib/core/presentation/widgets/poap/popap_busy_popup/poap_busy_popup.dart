@@ -65,7 +65,7 @@ class PoapBusyPopup extends StatelessWidget {
                   onTap: () => onClose.call(),
                   label: t.common.actions.dismiss,
                   mode: GradientButtonMode.lavenderMode,
-                )
+                ),
               ],
             ),
           ],

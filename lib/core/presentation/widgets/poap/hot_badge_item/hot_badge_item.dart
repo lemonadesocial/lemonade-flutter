@@ -70,7 +70,7 @@ class HotBadgeItem extends StatelessWidget {
               Align(
                 alignment: const Alignment(0, 0.3),
                 child: HotBadgeQuantityBar(badge: badge),
-              )
+              ),
             ],
           );
         },

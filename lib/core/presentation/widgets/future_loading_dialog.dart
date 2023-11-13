@@ -121,7 +121,7 @@ class LoadingDialogState<T> extends State<LoadingDialog> {
             CupertinoDialogAction(
               onPressed: Navigator.of(context).pop,
               child: Text(widget.backLabel ?? LoadingDialog.defaultBackLabel),
-            )
+            ),
         ],
       );
     }

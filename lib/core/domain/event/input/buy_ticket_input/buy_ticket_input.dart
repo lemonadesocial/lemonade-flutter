@@ -1,4 +1,4 @@
-import 'package:app/core/domain/event/input/calculate_tickets_pricing_input/calculate_tickets_pricing_input.dart';
+import 'package:app/core/domain/payment/entities/purchasable_item/purchasable_item.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'buy_ticket_input.freezed.dart';

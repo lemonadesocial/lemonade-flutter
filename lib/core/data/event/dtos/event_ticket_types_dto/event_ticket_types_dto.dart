@@ -1,7 +1,9 @@
 import 'package:app/core/data/event/dtos/event_dtos.dart';
+import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'event_ticket_types_dto.freezed.dart';
+
 part 'event_ticket_types_dto.g.dart';
 
 @freezed
@@ -34,7 +36,7 @@ class PurchasableTicketTypeDto with _$PurchasableTicketTypeDto {
     @JsonKey(name: '_id') String? id,
     bool? active,
     @JsonKey(name: 'address_required') bool? addressRequired,
-    int? cost,
+    @JsonKey(name: 'prices') Map<Currency, EventTicketPriceDto>? prices,
     @JsonKey(name: 'default') bool? isDefault,
     String? description,
     @JsonKey(name: 'description_line') String? descriptionLine,
@@ -48,4 +50,14 @@ class PurchasableTicketTypeDto with _$PurchasableTicketTypeDto {
 
   factory PurchasableTicketTypeDto.fromJson(Map<String, dynamic> json) =>
       _$PurchasableTicketTypeDtoFromJson(json);
+}
+
+@freezed
+class EventTicketPriceDto with _$EventTicketPriceDto {
+  const factory EventTicketPriceDto({
+    String? cost,
+  }) = _EventTicketPriceDto;
+
+  factory EventTicketPriceDto.fromJson(Map<String, dynamic> json) =>
+      _$EventTicketPriceDtoFromJson(json);
 }

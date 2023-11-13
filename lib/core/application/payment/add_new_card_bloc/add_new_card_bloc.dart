@@ -1,4 +1,4 @@
-import 'package:app/core/domain/payment/entities/payment_card_entity/payment_card_entity.dart';
+import 'package:app/core/domain/payment/entities/payment_card/payment_card.dart';
 import 'package:app/core/domain/payment/payment_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';

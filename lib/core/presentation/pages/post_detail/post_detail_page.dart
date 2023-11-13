@@ -156,7 +156,7 @@ class PostDetailView extends StatelessWidget {
                   ),
                 SliverToBoxAdapter(
                   child: SizedBox(height: Spacing.xLarge * 3),
-                )
+                ),
               ],
             ),
           ),
@@ -173,7 +173,7 @@ class PostDetailView extends StatelessWidget {
                         ),
                       ),
             ),
-          )
+          ),
         ],
       ),
     );

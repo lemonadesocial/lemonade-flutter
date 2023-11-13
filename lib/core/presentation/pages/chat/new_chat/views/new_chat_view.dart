@@ -95,7 +95,7 @@ class NewChatView extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(top: Spacing.medium),
             child: Loading.defaultLoading(context),
-          )
+          ),
         ] else if (newChatState.userSearchResult != null) ...[
           Expanded(
             child: _buildUserList(newChatState, context),

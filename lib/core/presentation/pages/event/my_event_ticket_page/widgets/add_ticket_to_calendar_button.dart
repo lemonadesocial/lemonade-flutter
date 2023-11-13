@@ -47,7 +47,7 @@ class AddTicketToCalendarButton extends StatelessWidget {
                 color: colorScheme.onPrimary,
                 fontWeight: FontWeight.w700,
               ),
-            )
+            ),
           ],
         ),
       ),

@@ -264,7 +264,7 @@ class _ProfileUserNameAndTitle extends StatelessWidget {
           style: Typo.medium.copyWith(color: colorScheme.onSecondary),
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
-        )
+        ),
       ],
     );
   }

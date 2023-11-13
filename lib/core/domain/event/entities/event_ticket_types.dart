@@ -1,5 +1,6 @@
 import 'package:app/core/data/event/dtos/event_ticket_types_dto/event_ticket_types_dto.dart';
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'event_ticket_types.freezed.dart';
@@ -54,7 +55,6 @@ class PurchasableTicketType with _$PurchasableTicketType {
     String? id,
     bool? active,
     bool? addressRequired,
-    int? cost,
     bool? isDefault,
     String? description,
     String? descriptionLine,
@@ -64,7 +64,9 @@ class PurchasableTicketType with _$PurchasableTicketType {
     List<EventOffer>? offers,
     List<String>? photos,
     String? title,
-    @Default(1) int count,
+    Map<Currency, EventTicketPrice>? prices,
+    Currency? defaultCurrency,
+    EventTicketPrice? defaultPrice,
   }) = _PurchasableTicketType;
 
   factory PurchasableTicketType.fromDto(PurchasableTicketTypeDto dto) =>
@@ -72,7 +74,6 @@ class PurchasableTicketType with _$PurchasableTicketType {
         id: dto.id,
         active: dto.active,
         addressRequired: dto.addressRequired,
-        cost: dto.cost,
         isDefault: dto.isDefault,
         description: dto.description,
         descriptionLine: dto.descriptionLine,
@@ -86,5 +87,34 @@ class PurchasableTicketType with _$PurchasableTicketType {
             : [],
         photos: dto.photos,
         title: dto.title,
+        defaultCurrency: dto.prices?.keys.first,
+        defaultPrice: dto.prices?.values.first != null
+            ? EventTicketPrice.fromDto(dto.prices!.values.first)
+            : null,
+        prices: dto.prices != null
+            ? Map.fromEntries(
+                dto.prices!.entries.map(
+                  (e) => MapEntry(e.key, EventTicketPrice.fromDto(e.value)),
+                ),
+              )
+            : null,
+      );
+}
+
+class EventTicketPrice {
+  final String? cost;
+  final double? fiatCost;
+  final String? blockchainCost;
+
+  EventTicketPrice({
+    this.cost,
+    this.fiatCost,
+    this.blockchainCost,
+  });
+
+  factory EventTicketPrice.fromDto(EventTicketPriceDto dto) => EventTicketPrice(
+        cost: dto.cost,
+        fiatCost: dto.cost != null ? double.tryParse(dto.cost!) : null,
+        blockchainCost: dto.cost,
       );
 }

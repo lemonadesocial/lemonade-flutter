@@ -206,7 +206,7 @@ class TicketCardBottom extends StatelessWidget {
                 style: Typo.medium.copyWith(
                   color: colorScheme.onSecondary,
                 ),
-              )
+              ),
             ],
           ),
         ),

@@ -69,7 +69,7 @@ class GuestEventLocation extends StatelessWidget {
                         size: 90.w,
                         color: LemonColor.rippleMarkerColor,
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -121,7 +121,7 @@ class GuestEventLocation extends StatelessWidget {
                   ],
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),

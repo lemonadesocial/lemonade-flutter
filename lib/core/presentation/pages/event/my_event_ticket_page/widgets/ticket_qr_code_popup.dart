@@ -40,7 +40,7 @@ class TicketQRCodePopup extends StatelessWidget {
                 backgroundColor: colorScheme.onPrimary,
               ),
             ),
-          )
+          ),
         ],
       ),
     );

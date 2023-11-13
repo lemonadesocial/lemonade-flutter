@@ -1,5 +1,5 @@
 import 'package:app/core/application/payment/payment_bloc/payment_bloc.dart';
-import 'package:app/core/domain/payment/entities/payment_card_entity/payment_card_entity.dart';
+import 'package:app/core/domain/payment/entities/payment_card/payment_card.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_payment_method_page/widgets/add_card_bottomsheet.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';

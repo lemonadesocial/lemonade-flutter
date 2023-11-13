@@ -247,7 +247,7 @@ class EventTicketManagementView extends StatelessWidget {
                                 ),
                               ),
                             ),
-                          )
+                          ),
                         ],
                       ),
                     );

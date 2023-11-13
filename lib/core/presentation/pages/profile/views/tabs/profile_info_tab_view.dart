@@ -91,7 +91,7 @@ class ProfileInfoTabView extends StatelessWidget {
                   context.read<AuthBloc>().add(const AuthEvent.logout()),
               child: const Text("Logout"),
             ),
-          )
+          ),
       ],
     );
   }
@@ -103,7 +103,7 @@ class ProfileInfoTabView extends StatelessWidget {
         user.handleTwitter,
         user.handleInstagram,
         user.handleFacebook,
-        user.handleLinkedin
+        user.handleLinkedin,
       ].asMap().entries.map((entry) {
         if (entry.value == null || entry.value?.isEmpty == true) {
           return const SizedBox.shrink();

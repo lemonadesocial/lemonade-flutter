@@ -187,7 +187,7 @@ class GuestEventPoapOfferItemState extends State<GuestEventPoapOfferItemView>
                                 ),
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
-                              )
+                              ),
                             ],
                           ),
                         ),

@@ -1,6 +1,6 @@
 import 'package:app/core/data/event/gql/event_tickets_query.dart';
 import 'package:app/core/data/payment/dtos/payment_card_dto/payment_card_dto.dart';
-import 'package:app/core/domain/payment/entities/payment_card_entity/payment_card_entity.dart';
+import 'package:app/core/domain/payment/entities/payment_card/payment_card.dart';
 import 'package:app/core/domain/payment/payment_repository.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/core/utils/gql/gql.dart';

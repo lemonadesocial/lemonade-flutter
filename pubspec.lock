@@ -298,7 +298,7 @@ packages:
     source: hosted
     version: "3.0.0"
   connectivity_plus:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: connectivity_plus
       sha256: b502a681ba415272ecc41400bd04fe543ed1a62632137dc84d25a91e7746f55f
@@ -314,7 +314,7 @@ packages:
     source: hosted
     version: "1.2.4"
   convert:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: convert
       sha256: "0f08b14755d163f6e2134cb58222dd25ea2a2ee8a195e53983d57c075324d592"
@@ -1847,6 +1847,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.1.0"
+  restart_app:
+    dependency: "direct main"
+    description:
+      name: restart_app
+      sha256: b37daeb1c02fcab30e19d9e30b6fdd215bd53577efd927042eb77cf6f09daadb
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.1"
   rxdart:
     dependency: "direct main"
     description:

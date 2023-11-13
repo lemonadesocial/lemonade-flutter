@@ -10,9 +10,10 @@ final getEventTicketTypesQuery = gql('''
       }
       ticket_types {
         _id
-        title
-        cost
         active
+        event
+        title
+        prices
         default
         address_required
         description
@@ -37,12 +38,13 @@ final getEventTicketTypesQuery = gql('''
 ''');
 
 final calculateTicketsPricingInfoQuery = gql('''
+  
   query CalculateTicketsPricing(\$input: CalculateTicketsPricingInput!) {
     calculateTicketsPricing(input: \$input) {
       currency
-      discount
-      subtotal
       total
+      subtotal
+      discount
     }
   }
 ''');

@@ -91,12 +91,12 @@ class PoapTransferSuccessPopup extends StatelessWidget {
                             label: '${t.common.done}!',
                             onTap: () => onClose.call(),
                           ),
-                        )
+                        ),
                       ],
                     ),
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),

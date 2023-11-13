@@ -73,7 +73,7 @@ class EventDashboardItem extends StatelessWidget {
                               fontFamily: FontFamily.nohemiVariable,
                             ),
                           ),
-                          child
+                          child,
                         ],
                       ),
                     ],
