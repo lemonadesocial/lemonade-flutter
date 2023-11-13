@@ -12,6 +12,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:uuid/uuid.dart';
+
+var uuid = Uuid();
 
 class AIChatMessage {
   final String text;
@@ -31,6 +34,7 @@ class AIPage extends StatefulWidget {
 class AIPageState extends State<AIPage> {
   final client = getIt<AIClient>().client;
   final ScrollController _scrollController = ScrollController();
+  final String session = uuid.v4();
   bool _loading = false;
   List<AIChatMessage> messages = [
     AIChatMessage(
@@ -65,7 +69,8 @@ class AIPageState extends State<AIPage> {
       final createPostReq = GRunReq(
         (b) => b
           ..vars.config = config
-          ..vars.message = text,
+          ..vars.message = text
+          ..vars.session = session,
       );
       client.request(createPostReq).listen((event) {
         setState(() {

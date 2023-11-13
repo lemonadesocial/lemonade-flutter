@@ -57,8 +57,8 @@ class _HomePageState extends State<HomePage> {
             child: InkWell(
               onTap: () {
                 context.read<AuthBloc>().state.maybeWhen(
-                      authenticated: (session) =>
-                          AutoRouter.of(context).navigate(const AIRoute()),
+                      authenticated: (session) => AutoRouter.of(context)
+                          .navigate(const ChatListRoute()),
                       orElse: () =>
                           AutoRouter.of(context).navigate(const LoginRoute()),
                     );

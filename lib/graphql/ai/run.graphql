@@ -1,5 +1,5 @@
-mutation Run($message: String!, $config: ObjectId!) {
-    run(message: $message, config: $config) {
+mutation Run($message: String!, $config: ObjectId!, $session: String) {
+    run(message: $message, config: $config, session: $session) {
         message
     }
 }
