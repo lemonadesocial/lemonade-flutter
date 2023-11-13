@@ -14,7 +14,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:uuid/uuid.dart';
 
-var uuid = Uuid();
+const uuid = Uuid();
 
 class AIChatMessage {
   final String text;
