@@ -47,7 +47,8 @@ class PaymentCardItem extends StatelessWidget {
           ),
           SizedBox(width: Spacing.xSmall),
           Text(
-            t.event.eventPayment.cardEnding(lastCardNumber: cardInfo.last4),
+            t.event.eventPayment
+                .cardEnding(lastCardNumber: cardInfo.last4 ?? ''),
             style: Typo.medium.copyWith(
               fontWeight: FontWeight.w600,
               color: colorScheme.onPrimary.withOpacity(0.87),

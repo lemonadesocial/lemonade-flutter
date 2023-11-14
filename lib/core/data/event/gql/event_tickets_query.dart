@@ -72,39 +72,3 @@ final getTicketsQuery = gql('''
     }
   }
 ''');
-
-final getListCardQuery = gql('''
-  query GetStripeCards(\$skip: Int!, \$limit: Int!, \$provider: PaymentProvider){
-    getStripeCards(skip: \$skip, limit: \$limit, provider: \$provider) {
-      _id
-      active
-      stamp
-      provider
-      provider_id
-      user
-      brand
-      name
-      last4
-    }
-  }
-''');
-
-final createNewCardMutation = gql('''
-  mutation CreateStripeCard(\$payment_account: MongoID!, \$payment_method: String!) {
-    createStripeCard(
-      payment_account: \$payment_account
-      payment_method: \$payment_method
-    ) {
-      _id
-      active
-      stamp
-      payment_account
-      provider_id
-      user
-      brand
-      name
-      last4
-    }
-  }
-
-''');
