@@ -35,7 +35,10 @@ class AIMetadataButtonCard extends StatelessWidget {
           Container(
             height: 128.h,
             margin: EdgeInsets.only(
-                left: 70.w, right: Spacing.smMedium, bottom: Spacing.smMedium),
+              left: 70.w,
+              right: Spacing.smMedium,
+              bottom: Spacing.smMedium,
+            ),
             padding: EdgeInsets.all(Spacing.smMedium),
             clipBehavior: Clip.antiAlias,
             decoration: ShapeDecoration(
