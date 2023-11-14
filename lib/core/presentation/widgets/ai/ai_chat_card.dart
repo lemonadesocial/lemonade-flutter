@@ -109,10 +109,12 @@ class AIChatCard extends StatelessWidget {
     final action = firstButton['action'];
     List<Color> colors = [];
     Widget? icon;
+    bool featureAvailable = false;
     switch (action) {
       case 'create_post':
         icon = Assets.icons.icCreatePost.svg();
         colors = CreatePopupGradient.post.colors;
+        featureAvailable = true;
         break;
       case 'create_room':
         icon = Assets.icons.icCreateRoom.svg();
@@ -138,7 +140,7 @@ class AIChatCard extends StatelessWidget {
       title: title ?? '',
       description: description ?? '',
       suffixIcon: icon,
-      featureAvailable: true,
+      featureAvailable: featureAvailable,
       colors: colors,
       onTap: () {
         if (action == 'create_post') {
