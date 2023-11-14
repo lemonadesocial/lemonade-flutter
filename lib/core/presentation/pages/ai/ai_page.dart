@@ -18,9 +18,10 @@ const uuid = Uuid();
 
 class AIChatMessage {
   final String text;
+  final Map<String, dynamic>? metadata;
   final bool isUser;
 
-  AIChatMessage(this.text, this.isUser);
+  AIChatMessage(this.text, this.metadata, this.isUser);
 }
 
 @RoutePage()
@@ -39,6 +40,7 @@ class AIPageState extends State<AIPage> {
   List<AIChatMessage> messages = [
     AIChatMessage(
       "I’m Lulu, your creative and helpful collaborator. I have limitations and won’t always get it right, but your feedback will help me improve. What would you like to create today?",
+      null,
       false,
     ),
   ];
@@ -60,7 +62,7 @@ class AIPageState extends State<AIPage> {
         _loading = true;
         messages.insert(
           messages.length,
-          AIChatMessage(text, true),
+          AIChatMessage(text, null, true),
         );
       });
 
@@ -72,13 +74,18 @@ class AIPageState extends State<AIPage> {
           ..vars.message = text
           ..vars.session = session,
       );
+
       client.request(createPostReq).listen((event) {
         print(event.data!.run.metadata.toString());
         setState(() {
           _loading = false;
           messages.insert(
             messages.length,
-            AIChatMessage(event.data!.run.message, false),
+            AIChatMessage(
+              event.data!.run.message,
+              event.data!.run.metadata,
+              false,
+            ),
           );
         });
         _scrollToEnd();

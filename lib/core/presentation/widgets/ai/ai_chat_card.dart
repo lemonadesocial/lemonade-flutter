@@ -1,14 +1,19 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/pages/ai/ai_page.dart';
+import 'package:app/core/presentation/widgets/ai/ai_metadata_button_card.dart';
+import 'package:app/core/presentation/widgets/home/create_pop_up_tile.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/utils/avatar_utils.dart';
 import 'package:app/gen/assets.gen.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 
 class AIChatCard extends StatelessWidget {
   const AIChatCard({
@@ -30,16 +35,21 @@ class AIChatCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20.r),
               ),
               color: LemonColor.darkCharcoalGray,
-              child: ListTile(
-                contentPadding: EdgeInsets.symmetric(
-                  vertical: 18.h,
-                  horizontal: 15.w,
-                ),
-                leading: _buildAvatar(
-                  isUser,
-                  authState.authSession,
-                ),
-                title: Text(message.text),
+              child: Column(
+                children: [
+                  ListTile(
+                    contentPadding: EdgeInsets.symmetric(
+                      vertical: 18.h,
+                      horizontal: 15.w,
+                    ),
+                    leading: _buildAvatar(
+                      isUser,
+                      authState.authSession,
+                    ),
+                    title: Text(message.text),
+                  ),
+                  _buildButtons(context)
+                ],
               ),
             );
           }
@@ -87,6 +97,55 @@ class AIChatCard extends StatelessWidget {
           fit: BoxFit.contain,
         ),
       ),
+    );
+  }
+
+  Widget _buildButtons(BuildContext context) {
+    if (message.metadata == null || message.metadata!.isEmpty) {
+      return const SizedBox();
+    }
+    // TODO: Extract display first item, facing problem about not able display Grid view here
+    final firstButton = message.metadata?['buttons']?[0];
+    final action = firstButton['action'];
+    List<Color> colors = [];
+    Widget? icon;
+    switch (action) {
+      case 'create_post':
+        icon = Assets.icons.icCreatePost.svg();
+        colors = CreatePopupGradient.post.colors;
+        break;
+      case 'create_room':
+        icon = Assets.icons.icCreateRoom.svg();
+        colors = CreatePopupGradient.post.colors;
+        break;
+      case 'create_event':
+        icon = Assets.icons.icHouseParty.svg();
+        colors = CreatePopupGradient.event.colors;
+        break;
+      case 'create_poap':
+        icon = Assets.icons.icCreatePoap.svg();
+        colors = CreatePopupGradient.poap.colors;
+        break;
+      case 'create_collectible':
+        icon = Assets.icons.icCrystal.svg();
+        colors = CreatePopupGradient.collectible.colors;
+        break;
+      default:
+    }
+    final title = firstButton['title'];
+    final description = firstButton['description'];
+    return AIMetadataButtonCard(
+      title: title ?? '',
+      description: description ?? '',
+      suffixIcon: icon,
+      featureAvailable: true,
+      colors: colors,
+      onTap: () {
+        if (action == 'create_post') {
+          Vibrate.feedback(FeedbackType.light);
+          AutoRouter.of(context).navigate(const CreatePostRoute());
+        }
+      },
     );
   }
 }
