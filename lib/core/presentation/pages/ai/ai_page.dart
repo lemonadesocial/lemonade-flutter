@@ -73,6 +73,7 @@ class AIPageState extends State<AIPage> {
           ..vars.session = session,
       );
       client.request(createPostReq).listen((event) {
+        print(event.data!.run.metadata.toString());
         setState(() {
           _loading = false;
           messages.insert(

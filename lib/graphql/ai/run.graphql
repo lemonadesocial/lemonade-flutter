@@ -1,5 +1,6 @@
 mutation Run($message: String!, $config: ObjectId!, $session: String) {
     run(message: $message, config: $config, session: $session) {
         message
+        metadata
     }
 }
