@@ -58,7 +58,7 @@
         "cvc": "CVC",
         "addCard": "Add card",
         "howYouPay": "How would you like to pay?",
-        "selectPayment": "Select payment method",
+        "selectCard": "Select card",
         "invalidDate": "Invalid date"
     },
     "eventPickMyTickets": {

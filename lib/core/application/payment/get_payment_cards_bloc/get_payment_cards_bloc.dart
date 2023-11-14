@@ -12,6 +12,7 @@ class GetPaymentCardsBloc
   final paymentRepository = getIt<PaymentRepository>();
   GetPaymentCardsBloc() : super(GetPaymentCardsState.idle()) {
     on<GetPaymentCardsEventFetch>(_onFetch);
+    on<GetPaymentCardsEventManuallyAddMoreCard>(_onAddMoreCard);
   }
 
   Future<void> _onFetch(GetPaymentCardsEventFetch event, Emitter emit) async {
@@ -25,6 +26,21 @@ class GetPaymentCardsBloc
       ),
     );
   }
+
+  void _onAddMoreCard(
+    GetPaymentCardsEventManuallyAddMoreCard event,
+    Emitter emit,
+  ) {
+    final currentCards = state.maybeWhen(
+      orElse: () => [],
+      success: (cards) => cards,
+    );
+    emit(
+      GetPaymentCardsState.success(
+        paymentCards: [event.paymentCard, ...currentCards],
+      ),
+    );
+  }
 }
 
 @freezed
@@ -32,6 +48,9 @@ class GetPaymentCardsEvent with _$GetPaymentCardsEvent {
   factory GetPaymentCardsEvent.fetch({
     required GetStripeCardsInput input,
   }) = GetPaymentCardsEventFetch;
+  factory GetPaymentCardsEvent.manuallyAddMoreCard({
+    required PaymentCard paymentCard,
+  }) = GetPaymentCardsEventManuallyAddMoreCard;
 }
 
 @freezed

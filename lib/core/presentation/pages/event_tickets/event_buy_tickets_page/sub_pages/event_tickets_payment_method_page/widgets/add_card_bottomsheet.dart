@@ -9,7 +9,6 @@ import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -60,7 +59,7 @@ class AddCardBottomSheetView extends StatelessWidget {
       listener: (context, state) {
         if (state.status == AddNewCardBlocStatus.success) {
           // Return previous screen with new card data
-          context.router.pop(state.paymentCard);
+          Navigator.of(context).pop(state.paymentCard);
         }
       },
       builder: (context, state) {

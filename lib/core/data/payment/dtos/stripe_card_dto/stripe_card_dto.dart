@@ -1,3 +1,4 @@
+import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'stripe_card_dto.freezed.dart';
@@ -10,7 +11,7 @@ class StripeCardDto with _$StripeCardDto {
   const factory StripeCardDto({
     @JsonKey(name: '_id') String? id,
     bool? active,
-    String? brand,
+    PaymentCardBrand? brand,
     String? last4,
     String? name,
     @JsonKey(name: 'payment_account') String? paymentAccount,

@@ -2,9 +2,12 @@ import 'package:app/core/application/event/event_provider_bloc/event_provider_bl
 import 'package:app/core/application/event_tickets/buy_tickets_bloc/buy_tickets_bloc.dart';
 import 'package:app/core/application/event_tickets/calculate_event_tickets_pricing_bloc/calculate_event_tickets_pricing_bloc.dart';
 import 'package:app/core/application/event_tickets/select_event_tickets_bloc/select_event_tickets_bloc.dart';
+import 'package:app/core/application/payment/get_payment_cards_bloc/get_payment_cards_bloc.dart';
 import 'package:app/core/application/payment/payment_listener/payment_listener.dart';
+import 'package:app/core/application/payment/select_payment_card_cubit/select_payment_card_cubit.dart';
 import 'package:app/core/domain/event/input/buy_tickets_input/buy_tickets_input.dart';
 import 'package:app/core/domain/event/input/calculate_tickets_pricing_input/calculate_tickets_pricing_input.dart';
+import 'package:app/core/domain/payment/input/get_stripe_cards_input/get_stripe_cards_input.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/add_promo_code_input.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/event_order_summary.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/event_order_summary_footer.dart';
@@ -75,54 +78,94 @@ class EventTicketsSummaryPageView extends StatelessWidget {
     final t = Translations.of(context);
     final event = context.read<EventProviderBloc>().event;
 
-    return BlocListener<BuyTicketsBloc, BuyTicketsState>(
-      listener: (context, state) {
-        state.maybeWhen(
-          orElse: () => null,
-          failure: (failureReason) {
-            if (failureReason is InitPaymentFailure) {
-              // cannot init payment, ask user to slide again
-              showDialog(
-                context: context,
-                builder: (context) => LemonAlertDialog(
-                  onClose: () => Navigator.of(context).pop(),
-                  child: Text(t.common.pleaseTryAgain),
-                ),
-              );
-            }
-
-            if (failureReason is StripePaymentFailure) {
-              // user may just cancel the payment of payment card failed to proceed, need to get stripe error code
-              showDialog(
-                context: context,
-                builder: (context) => LemonAlertDialog(
-                  child: Text(
-                    failureReason.exception.error.message ??
-                        t.common.pleaseTryAgain,
-                  ),
-                ),
-              );
-            }
-
-            if (failureReason is UpdatePaymentFailure) {
-              // payment cannot be updated in BE side
-              // Still thinking way to backup this case
-              showDialog(
-                context: context,
-                builder: (context) => LemonAlertDialog(
-                  onClose: () => Navigator.of(context).pop(),
-                  child: Text(t.common.pleaseTryAgain),
-                ),
-              );
-            }
-            // reset slide button
-            _slideActionKey.currentState?.reset();
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<GetPaymentCardsBloc, GetPaymentCardsState>(
+          listener: (context, state) {
+            state.maybeWhen(
+              orElse: () => null,
+              success: (cards) {
+                if (cards.isEmpty) return;
+                context
+                    .read<SelectPaymentCardCubit>()
+                    .selectPaymentCard(paymentCard: cards.first);
+              },
+            );
           },
-          done: (payment) {
-            // When done, still need to wait for payment success or failed notification below
+        ),
+        BlocListener<CalculateEventTicketPricingBloc,
+            CalculateEventTicketPricingState>(
+          listener: (context, state) {
+            state.maybeWhen(
+              success: (pricingInfo) {
+                if (pricingInfo.paymentAccounts?.isEmpty == true) return;
+                context.read<GetPaymentCardsBloc>().add(
+                      GetPaymentCardsEvent.fetch(
+                        input: GetStripeCardsInput(
+                          limit: 25,
+                          skip: 0,
+                          paymentAccount:
+                              pricingInfo.paymentAccounts?.first.id ?? '',
+                        ),
+                      ),
+                    );
+              },
+              orElse: () => null,
+            );
           },
-        );
-      },
+        ),
+        BlocListener<BuyTicketsBloc, BuyTicketsState>(
+          listener: (context, state) {
+            state.maybeWhen(
+              orElse: () => null,
+              failure: (failureReason) {
+                if (failureReason is InitPaymentFailure) {
+                  // cannot init payment, ask user to slide again
+                  showDialog(
+                    context: context,
+                    builder: (context) => LemonAlertDialog(
+                      onClose: () => Navigator.of(context).pop(),
+                      child: Text(t.common.pleaseTryAgain),
+                    ),
+                  );
+                }
+
+                if (failureReason is StripePaymentFailure) {
+                  // user may just cancel the payment of payment card failed to proceed, need to get stripe error code
+                  showDialog(
+                    context: context,
+                    builder: (context) => LemonAlertDialog(
+                      child: Text(
+                        failureReason.exception.error.message ??
+                            t.common.pleaseTryAgain,
+                      ),
+                    ),
+                  );
+                }
+
+                if (failureReason is UpdatePaymentFailure) {
+                  // payment cannot be updated in BE side
+                  // Still thinking way to backup this case
+                  showDialog(
+                    context: context,
+                    builder: (context) => LemonAlertDialog(
+                      onClose: () => Navigator.of(context).pop(),
+                      child: Text(t.common.pleaseTryAgain),
+                    ),
+                  );
+                }
+                // reset slide button
+                _slideActionKey.currentState?.reset();
+              },
+              done: (payment) {
+                // TODO: will trigger timeout 30s and if payment noti not coming yet => manually
+                // call getPayment to check
+                // When done, still need to wait for payment success or failed notification below
+              },
+            );
+          },
+        ),
+      ],
       child: PaymentListener(
         onReceivedPaymentSuccess: (eventId, payment) {
           final currentPayment = context.read<BuyTicketsBloc>().currentPayment;
@@ -210,15 +253,15 @@ class EventTicketsSummaryPageView extends StatelessWidget {
                     ),
                     Align(
                       alignment: Alignment.bottomCenter,
-                      child: BlocBuilder<BuyTicketsBloc, BuyTicketsState>(
+                      child: BlocBuilder<CalculateEventTicketPricingBloc,
+                          CalculateEventTicketPricingState>(
                         builder: (context, state) {
-                          return BlocBuilder<CalculateEventTicketPricingBloc,
-                              CalculateEventTicketPricingState>(
-                            builder: (context, state) {
-                              final pricingInfo = state.maybeWhen(
-                                orElse: () => null,
-                                success: (pricingInfo) => pricingInfo,
-                              );
+                          final pricingInfo = state.maybeWhen(
+                            orElse: () => null,
+                            success: (pricingInfo) => pricingInfo,
+                          );
+                          return EventOrderSummaryFooter(
+                            onSlideToPay: () {
                               final selectedTickets = context
                                   .read<SelectEventTicketTypesBloc>()
                                   .state
@@ -227,33 +270,58 @@ class EventTicketsSummaryPageView extends StatelessWidget {
                                   .read<SelectEventTicketTypesBloc>()
                                   .state
                                   .selectedCurrency;
-                              return EventOrderSummaryFooter(
-                                onSlideToPay: () {
-                                  if (pricingInfo?.paymentAccounts == null ||
-                                      pricingInfo?.paymentAccounts?.isEmpty ==
-                                          true) {
-                                    return _slideActionKey.currentState
-                                        ?.reset();
-                                  }
-                                  context.read<BuyTicketsBloc>().add(
-                                        BuyTicketsEvent.buy(
-                                          input: BuyTicketsInput(
-                                            eventId: event.id ?? '',
-                                            accountId: pricingInfo
-                                                    ?.paymentAccounts
-                                                    ?.first
-                                                    .id ??
-                                                '',
-                                            currency: selectedCurrency!,
-                                            items: selectedTickets,
-                                            total: pricingInfo?.total ?? '0',
-                                          ),
+                              if (pricingInfo?.paymentAccounts == null ||
+                                  pricingInfo?.paymentAccounts?.isEmpty ==
+                                      true) {
+                                return const SizedBox.shrink();
+                              }
+                              final selectedCard = context
+                                  .read<SelectPaymentCardCubit>()
+                                  .state
+                                  .when(
+                                    empty: () => null,
+                                    cardSelected: (selectedCard) =>
+                                        selectedCard,
+                                  );
+                              context.read<BuyTicketsBloc>().add(
+                                    BuyTicketsEvent.buy(
+                                      input: BuyTicketsInput(
+                                        eventId: event.id ?? '',
+                                        accountId: pricingInfo
+                                                ?.paymentAccounts?.first.id ??
+                                            '',
+                                        currency: selectedCurrency!,
+                                        items: selectedTickets,
+                                        total: pricingInfo?.total ?? '0',
+                                        transferParams:
+                                            BuyTicketsTransferParamsInput(
+                                          paymentMethod:
+                                              selectedCard?.providerId ?? '',
                                         ),
-                                      );
-                                },
-                                pricingInfo: pricingInfo,
-                                slideActionKey: _slideActionKey,
-                              );
+                                      ),
+                                    ),
+                                  );
+                            },
+                            pricingInfo: pricingInfo,
+                            slideActionKey: _slideActionKey,
+                            onCardAdded: (newCard) {
+                              context.read<GetPaymentCardsBloc>().add(
+                                    GetPaymentCardsEvent.manuallyAddMoreCard(
+                                      paymentCard: newCard,
+                                    ),
+                                  );
+                              context
+                                  .read<SelectPaymentCardCubit>()
+                                  .selectPaymentCard(
+                                    paymentCard: newCard,
+                                  );
+                            },
+                            onSelectCard: (selectedCard) {
+                              context
+                                  .read<SelectPaymentCardCubit>()
+                                  .selectPaymentCard(
+                                    paymentCard: selectedCard,
+                                  );
                             },
                           );
                         },

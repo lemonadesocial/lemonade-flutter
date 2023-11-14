@@ -58,16 +58,21 @@ class BuyTicketsBloc extends Bloc<BuyTicketsEvent, BuyTicketsState> {
     try {
       final stripePublicKey = payment.transferMetadata?['public_key'];
       final stripeClientSecret = payment.transferMetadata?['client_secret'];
+      final paymentMethodId = payment.transferParams?['payment_method'] ?? '';
 
       Stripe.publishableKey = stripePublicKey;
 
-      await Stripe.instance.initPaymentSheet(
-        paymentSheetParameters: SetupPaymentSheetParameters(
-          paymentIntentClientSecret: stripeClientSecret,
-          style: ThemeMode.dark,
-        ),
-      );
-      await Stripe.instance.presentPaymentSheet();
+      // if payment method not defined then have to use stripe payment sheet
+      if (paymentMethodId == null || (paymentMethodId as String).isEmpty) {
+        await Stripe.instance.initPaymentSheet(
+          paymentSheetParameters: SetupPaymentSheetParameters(
+            paymentIntentClientSecret: stripeClientSecret,
+            style: ThemeMode.dark,
+          ),
+        );
+
+        await Stripe.instance.presentPaymentSheet();
+      }
 
       add(
         BuyTicketsEvent.processUpdatePayment(payment: payment),

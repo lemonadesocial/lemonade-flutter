@@ -91,7 +91,11 @@ class AddNewCardBloc extends Cubit<AddNewCardState> {
       );
 
       result.fold(
-        (l) => emit(state.copyWith(status: AddNewCardBlocStatus.error)),
+        (l) => emit(
+          state.copyWith(
+            status: AddNewCardBlocStatus.error,
+          ),
+        ),
         (newCardInfo) {
           emit(
             state.copyWith(

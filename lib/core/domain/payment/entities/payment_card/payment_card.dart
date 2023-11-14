@@ -1,4 +1,5 @@
 import 'package:app/core/data/payment/dtos/stripe_card_dto/stripe_card_dto.dart';
+import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'payment_card.freezed.dart';
@@ -9,7 +10,7 @@ class PaymentCard with _$PaymentCard {
   const factory PaymentCard({
     String? id,
     String? last4,
-    String? brand,
+    PaymentCardBrand? brand,
     bool? active,
     String? name,
     String? paymentAccount,
