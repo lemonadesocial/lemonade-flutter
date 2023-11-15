@@ -48,7 +48,7 @@ class AIChatCard extends StatelessWidget {
                     ),
                     title: Text(message.text),
                   ),
-                  _buildButtons(context)
+                  _buildButtons(context),
                 ],
               ),
             );

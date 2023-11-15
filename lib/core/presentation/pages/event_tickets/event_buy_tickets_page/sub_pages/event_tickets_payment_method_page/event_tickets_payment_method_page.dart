@@ -72,7 +72,6 @@ class EventTicketsPaymentMethodPage extends StatelessWidget {
                   loading: () => Loading.defaultLoading(context),
                   failure: () => EmptyList(emptyText: t.common.somethingWrong),
                   success: (paymentCards) {
-                    if (paymentCards.isEmpty) return const SizedBox.shrink();
                     final selectedCard =
                         context.watch<SelectPaymentCardCubit>().state.maybeWhen(
                               orElse: () => null,
