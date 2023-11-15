@@ -90,7 +90,7 @@ dependencies:
   flutter_switch: ^0.3.2
 
   # Webview
-  flutter_inappwebview: ^5.7.2+3
+  flutter_inappwebview: ^5.8.0
   
   # Firebase
   firebase_core: ^2.16.0
