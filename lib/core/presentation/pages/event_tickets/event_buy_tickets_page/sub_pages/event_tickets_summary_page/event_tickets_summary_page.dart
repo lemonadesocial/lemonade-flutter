@@ -131,7 +131,6 @@ class EventTicketsSummaryPageView extends StatelessWidget {
                 }
 
                 if (failureReason is StripePaymentFailure) {
-                  // user may just cancel the payment of payment card failed to proceed, need to get stripe error code
                   showDialog(
                     context: context,
                     builder: (context) => LemonAlertDialog(
@@ -144,8 +143,8 @@ class EventTicketsSummaryPageView extends StatelessWidget {
                 }
 
                 if (failureReason is UpdatePaymentFailure) {
-                  // payment cannot be updated in BE side
-                  // Still thinking way to backup this case
+                  //TODO: payment cannot be updated in BE side
+                  // still thinking way to backup this case
                   showDialog(
                     context: context,
                     builder: (context) => LemonAlertDialog(
