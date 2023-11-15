@@ -12,13 +12,19 @@ targets:
           type_overrides:
             DateTimeISO:
               name: DateTime
+            JSON:
+              name: Map<String, dynamic>
       ferry_generator|serializer_builder:
         enabled: true
         options:
           schema: app|lib/schemas/ai/schema.graphql
           type_overrides:
-              DateTimeISO:
-                name: DateTime
+            DateTimeISO:
+              name: DateTime
+            JSON:
+              name: Map<String, dynamic>
           custom_serializers:
             - import: "package:app/serializers/datetime_iso_serializer.dart"
               name: DateTimeISOSerializer
+            - import: "package:app/serializers/json_serializer.dart"
+              name: JSONSerializer
