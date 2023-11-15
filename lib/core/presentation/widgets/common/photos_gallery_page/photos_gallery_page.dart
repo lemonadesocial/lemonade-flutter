@@ -148,6 +148,10 @@ class _PhotosGalleryPageState extends State<PhotosGalleryPage> {
                               width: 42.w,
                               height: 42.w,
                               fit: BoxFit.cover,
+                              placeholder: (_, __) =>
+                                  ImagePlaceholder.defaultPlaceholder(),
+                              errorWidget: (_, __, ___) =>
+                                  ImagePlaceholder.defaultPlaceholder(),
                             ),
                           ),
                         ),

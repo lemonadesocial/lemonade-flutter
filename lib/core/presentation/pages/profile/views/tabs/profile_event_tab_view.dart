@@ -262,7 +262,9 @@ class _EventItem extends StatelessWidget {
                           imageConfig: ImageConfig.eventPhoto,
                         ),
                         fit: BoxFit.cover,
-                        errorWidget: (ctx, _, __) =>
+                        placeholder: (_, __) =>
+                            ImagePlaceholder.defaultPlaceholder(),
+                        errorWidget: (_, __, ___) =>
                             ImagePlaceholder.defaultPlaceholder(),
                       ),
                     )
