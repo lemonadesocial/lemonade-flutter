@@ -54,3 +54,5 @@ enum PaymentState {
   @JsonValue('initialized')
   initialized
 }
+
+enum PaymentCardBrand { visa, mastercard }
