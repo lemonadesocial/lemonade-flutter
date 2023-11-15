@@ -107,6 +107,10 @@ class GuestEventPoapOfferItemState extends State<GuestEventPoapOfferItemView>
                       child: CachedNetworkImage(
                         fit: BoxFit.cover,
                         imageUrl: snapshot.data?.url ?? '',
+                        placeholder: (_, __) =>
+                            ImagePlaceholder.defaultPlaceholder(),
+                        errorWidget: (_, __, ___) =>
+                            ImagePlaceholder.defaultPlaceholder(),
                       ),
                     ),
                   ),
