@@ -1,5 +1,3 @@
-// ignore_for_file: unused_field
-
 import 'package:app/core/config.dart';
 import 'package:app/core/constants/web3/chains.dart';
 import 'package:app/core/domain/web3/entities/ethereum_transaction.dart';
@@ -176,30 +174,28 @@ class WalletConnectService {
     required String message,
     required String wallet,
     required SupportedWalletApp walletApp,
+    String? chainId,
   }) async {
-    try {
-      final activeSession = await getActiveSession();
+    final activeSession = await getActiveSession();
 
-      launchUrlString(
-        _getDeepLinkUrl(walletApp),
-        mode: LaunchMode.externalApplication,
-      );
+    launchUrlString(
+      _getDeepLinkUrl(walletApp),
+      mode: LaunchMode.externalApplication,
+    );
 
-      final data = await _app!.request(
-        topic: activeSession!.topic,
-        chainId: _currentWalletChainId ??
-            WCUtils.getSessionsChains(activeSession.namespaces).first,
-        request: SessionRequestParams(
-          method: 'personal_sign',
-          params: [message, wallet],
-        ),
-      );
-      if (data is String) return data;
-      return null;
-    } catch (e) {
-      SnackBarUtils.showSnackbar(e.toString());
-      return null;
-    }
+    final data = await _app!.request(
+      topic: activeSession!.topic,
+      chainId: chainId ??
+          _currentWalletChainId ??
+          WCUtils.getSessionsChains(activeSession.namespaces).first,
+      request: SessionRequestParams(
+        method: 'personal_sign',
+        params: [message, wallet],
+      ),
+    );
+    if (data is String) return data;
+
+    return null;
   }
 
   Future<String> requestTransaction({
@@ -219,7 +215,9 @@ class WalletConnectService {
       chainId: chainId,
       request: SessionRequestParams(
         method: 'eth_sendTransaction',
-        params: [transaction.toJson()],
+        params: [
+          transaction.toJson(),
+        ],
       ),
     );
     return transactionId;

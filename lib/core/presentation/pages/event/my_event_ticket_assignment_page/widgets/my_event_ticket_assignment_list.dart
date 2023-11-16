@@ -37,7 +37,7 @@ class MyEventTicketAssignmentList extends StatelessWidget {
         children: [
           SliverAppBar(
             leading: const SizedBox.shrink(),
-            collapsedHeight: 56.w,
+            collapsedHeight: kToolbarHeight,
             pinned: true,
             flexibleSpace: Column(
               mainAxisSize: MainAxisSize.min,

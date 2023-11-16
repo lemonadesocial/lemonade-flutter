@@ -36,21 +36,43 @@ class AccountInfo with _$AccountInfo {
 
   factory AccountInfo({
     List<Currency>? currencies,
-    dynamic currencyMap,
+    Map<Currency, CurrencyInfo>? currencyMap,
     String? accountId,
     // Blockchain
     String? address,
-    String? network,
+    List<SupportedPaymentNetwork>? networks,
     // Stripe
     String? publishableKey,
   }) = _AccountInfo;
 
   factory AccountInfo.fromDto(AccountInfoDto dto) => AccountInfo(
         currencies: dto.currencies,
-        currencyMap: dto.currencyMap,
+        currencyMap: Map.fromEntries(
+          (dto.currencyMap?.entries ?? []).map(
+            (e) => MapEntry(
+              e.key,
+              CurrencyInfo.fromDto(e.value),
+            ),
+          ),
+        ),
         accountId: dto.accountId,
         address: dto.address,
-        network: dto.network,
+        networks: dto.networks,
         publishableKey: dto.publishableKey,
+      );
+}
+
+@freezed
+class CurrencyInfo with _$CurrencyInfo {
+  CurrencyInfo._();
+
+  factory CurrencyInfo({
+    int? decimals,
+    Map<SupportedPaymentNetwork, String>? contracts,
+  }) = _CurrencyInfo;
+
+  factory CurrencyInfo.fromDto(CurrencyInfoDto dto) => CurrencyInfo(
+        decimals: dto.decimals,
+        contracts: dto.contracts,
       );
 }

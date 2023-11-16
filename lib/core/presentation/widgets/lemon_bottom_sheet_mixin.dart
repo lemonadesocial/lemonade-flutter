@@ -9,7 +9,7 @@ mixin LemonBottomSheet<M extends StatelessWidget> on Widget {
         context: context,
         isScrollControlled: true,
         backgroundColor: Theme.of(context).colorScheme.primary,
-        isDismissible: false,
+        isDismissible: true,
         useRootNavigator: true,
         builder: (context) => Container(
           decoration: BoxDecoration(

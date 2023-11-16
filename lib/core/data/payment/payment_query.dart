@@ -11,7 +11,7 @@ const paymentAccountFragment = '''
         currencies
         currency_map
         address
-        network
+        networks
       }
 
       ...on StripeAccount {

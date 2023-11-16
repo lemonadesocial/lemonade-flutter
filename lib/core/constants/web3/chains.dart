@@ -4,6 +4,7 @@ import 'package:app/core/domain/web3/entities/chain_metadata.dart';
 
 // TESTNET
 final GOERLI = ChainMetadata(
+  id: "5",
   chainId: "eip155:5",
   name: "goerli",
   displayName: "Goerli",
@@ -19,6 +20,7 @@ final GOERLI = ChainMetadata(
 );
 
 final MUMBAI = ChainMetadata(
+  id: "80001",
   chainId: "eip155:80001",
   name: "mumbai",
   displayName: "Mumbai",
@@ -36,6 +38,7 @@ final MUMBAI = ChainMetadata(
 
 // MAINNET
 final ETHEREUM = ChainMetadata(
+  id: "1",
   chainId: "eip155:1",
   name: "ethereum",
   displayName: "Ethereum",
@@ -49,6 +52,21 @@ final ETHEREUM = ChainMetadata(
   blockExplorerForTransaction: (hash) => 'https://etherscan.io/tx/$hash',
 );
 
+final POLYGON = ChainMetadata(
+  id: "137",
+  chainId: "eip155:137",
+  name: "polygon",
+  displayName: "Polygon",
+  icon: "",
+  rpcUrl: "https://polygon-rpc.com/",
+  nativeCurrency: NativeCurrency(
+    name: "Matic Token",
+    symbol: "MATIC",
+    decimals: 18,
+  ),
+  blockExplorerForTransaction: (hash) => 'https://polygonscan.com/tx/$hash',
+);
+
 class Chains {
   static List<ChainMetadata> get testnet => [
         GOERLI,
@@ -57,6 +75,7 @@ class Chains {
 
   static List<ChainMetadata> get mainnet => [
         ETHEREUM,
+        POLYGON,
       ];
 
   static List<ChainMetadata> get allChains => [
