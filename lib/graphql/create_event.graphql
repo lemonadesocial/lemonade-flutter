@@ -1,0 +1,8 @@
+# import './event_card_fragment.graphql'
+
+mutation CreateEvent($input: EventInput!) {
+    createEvent(input: $input) {
+        ...EventCard
+    }
+}
+

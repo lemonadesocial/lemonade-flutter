@@ -128,6 +128,9 @@ final chatRoutes = AutoRoute(
 
 final eventRoutes = [
   AutoRoute(
+    page: CreateEventRoute.page,
+  ),
+  AutoRoute(
     path: '/events',
     page: EventsListingRoute.page,
   ),

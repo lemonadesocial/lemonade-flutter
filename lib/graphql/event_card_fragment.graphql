@@ -1,0 +1,5 @@
+fragment EventCard on Event {
+    _id
+    title
+    description
+}
