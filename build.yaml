@@ -4,7 +4,7 @@ targets:
       ferry_generator|graphql_builder:
         enabled: true
         options:
-          schema: app|lib/schemas/ai/schema.graphql
+          schema: app|lib/graphql/schema.graphql
           when_extensions:
             when: true
             maybeWhen: true
@@ -17,7 +17,7 @@ targets:
       ferry_generator|serializer_builder:
         enabled: true
         options:
-          schema: app|lib/schemas/ai/schema.graphql
+          schema: app|lib/graphql/schema.graphql
           type_overrides:
             DateTimeISO:
               name: DateTime
