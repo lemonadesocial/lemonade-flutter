@@ -64,8 +64,8 @@
     "eventCryptoPayment": {
         "connectWallet": "Connect wallet",
         "waitForConfirmation": "Waiting for confirmation...",
-        "selectNetwork": "selectNetwork",
-        "signPayment": "signYourPayment",
+        "selectNetwork": "Select network",
+        "signPayment": "Sign your payment",
         "pay": "Pay"
     },
     "eventPickMyTickets": {
