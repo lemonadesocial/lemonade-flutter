@@ -34,8 +34,10 @@ class EventTicketsSummary extends StatelessWidget {
       children: selectedTickets.map((selectedTicket) {
         final selectedTicketType =
             ticketTypes.firstWhere((item) => item.id == selectedTicket.id);
-        final currencyInfo = pricingInfo
-            .paymentAccounts?.first.accountInfo?.currencyMap?[selectedCurrency];
+        final currencyInfo = PaymentUtils.getCurrencyInfo(
+          pricingInfo,
+          currency: selectedCurrency,
+        );
 
         return TicketSummaryItem(
           ticketType: selectedTicketType,
