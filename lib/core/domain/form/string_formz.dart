@@ -4,10 +4,10 @@ import 'package:formz/formz.dart';
 enum StringValidationError {
   empty;
 
-  String getMessage() {
+  String getMessage(fieldName) {
     switch (this) {
       case empty:
-        return 'Can\'t be empty';
+        return '$fieldName is a required field';
     }
   }
 }

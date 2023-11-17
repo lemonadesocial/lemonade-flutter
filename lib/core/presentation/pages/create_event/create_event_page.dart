@@ -54,7 +54,8 @@ class _CreateEventPageState extends State<CreateEventPage> {
                                 .read<CreateEventBloc>()
                                 .add(TitleChanged(title: value)),
                             errorText: state.title.displayError != null
-                                ? '''Title can't be empty'''
+                                ? state.title.displayError!
+                                    .getMessage(t.event.title)
                                 : null,
                           ),
                           SizedBox(
@@ -67,7 +68,8 @@ class _CreateEventPageState extends State<CreateEventPage> {
                                 .read<CreateEventBloc>()
                                 .add(DescriptionChanged(description: value)),
                             errorText: state.description.displayError != null
-                                ? '''Description can't be empty'''
+                                ? state.title.displayError!
+                                    .getMessage(t.event.description)
                                 : null,
                           ),
                         ],
@@ -86,8 +88,6 @@ class _CreateEventPageState extends State<CreateEventPage> {
 
   _buildSubmitButton(BuildContext context) {
     final t = Translations.of(context);
-    final isValid =
-        context.select((CreateEventBloc bloc) => bloc.state.isValid);
     return Padding(
       padding: EdgeInsets.only(bottom: Spacing.smMedium),
       child: LinearGradientButton(
@@ -97,10 +97,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
         textStyle: Typo.medium.copyWith(),
         mode: GradientButtonMode.lavenderMode,
         onTap: () {
-          if (isValid) {
-            context.read<CreateEventBloc>().add(const FormSubmitted());
-          }
-          return;
+          context.read<CreateEventBloc>().add(const FormSubmitted());
         },
       ),
     );
