@@ -1,4 +1,5 @@
 import 'package:app/core/application/event/create_event_bloc/create_event_bloc.dart';
+import 'package:app/core/presentation/pages/create_event/widgets/create_event_config_grid.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
@@ -25,7 +26,6 @@ class _CreateEventPageState extends State<CreateEventPage> {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
 
-    // final createEventBloc = CreateEventBloc(event: );
     return BlocProvider(
       create: (_) => CreateEventBloc(),
       child: GestureDetector(
@@ -37,47 +37,66 @@ class _CreateEventPageState extends State<CreateEventPage> {
           ),
           body: BlocBuilder<CreateEventBloc, CreateEventState>(
             builder: (context, state) {
-              return Padding(
-                padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: Spacing.medium),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          LemonTextField(
-                            initialText: state.title.value,
-                            label: "Title*",
-                            onChange: (value) => context
-                                .read<CreateEventBloc>()
-                                .add(TitleChanged(title: value)),
-                            errorText: state.title.displayError != null
-                                ? state.title.displayError!
-                                    .getMessage(t.event.title)
-                                : null,
+              return CustomScrollView(
+                slivers: [
+                  SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: Column(
+                      children: <Widget>[
+                        Expanded(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: Spacing.smMedium,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(height: Spacing.medium),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    LemonTextField(
+                                      initialText: state.title.value,
+                                      label: "Title*",
+                                      onChange: (value) => context
+                                          .read<CreateEventBloc>()
+                                          .add(TitleChanged(title: value)),
+                                      errorText:
+                                          state.title.displayError != null
+                                              ? state.title.displayError!
+                                                  .getMessage(t.event.title)
+                                              : null,
+                                    ),
+                                    SizedBox(
+                                      height: Spacing.smMedium,
+                                    ),
+                                    LemonTextField(
+                                      initialText: state.description.value,
+                                      label: "Description*",
+                                      onChange: (value) => context
+                                          .read<CreateEventBloc>()
+                                          .add(DescriptionChanged(
+                                              description: value)),
+                                      errorText: state
+                                                  .description.displayError !=
+                                              null
+                                          ? state.title.displayError!
+                                              .getMessage(t.event.description)
+                                          : null,
+                                    ),
+                                    SizedBox(height: Spacing.smMedium),
+                                    CreateEventConfigGrid(),
+                                  ],
+                                )
+                              ],
+                            ),
                           ),
-                          SizedBox(
-                            height: Spacing.smMedium,
-                          ),
-                          LemonTextField(
-                            initialText: state.description.value,
-                            label: "Description*",
-                            onChange: (value) => context
-                                .read<CreateEventBloc>()
-                                .add(DescriptionChanged(description: value)),
-                            errorText: state.description.displayError != null
-                                ? state.title.displayError!
-                                    .getMessage(t.event.description)
-                                : null,
-                          ),
-                        ],
-                      ),
+                        ),
+                        _buildSubmitButton(context),
+                      ],
                     ),
-                    _buildSubmitButton(context)
-                  ],
-                ),
+                  ),
+                ],
               );
             },
           ),
@@ -89,7 +108,8 @@ class _CreateEventPageState extends State<CreateEventPage> {
   _buildSubmitButton(BuildContext context) {
     final t = Translations.of(context);
     return Padding(
-      padding: EdgeInsets.only(bottom: Spacing.smMedium),
+      padding: EdgeInsets.symmetric(
+          horizontal: Spacing.smMedium, vertical: Spacing.smMedium),
       child: LinearGradientButton(
         label: t.common.next,
         height: 48.h,
