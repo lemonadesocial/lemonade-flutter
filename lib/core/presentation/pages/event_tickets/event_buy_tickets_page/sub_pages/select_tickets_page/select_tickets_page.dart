@@ -287,7 +287,10 @@ class SelectTicketView extends StatelessWidget {
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Container(
-                  padding: EdgeInsets.only(top: Spacing.medium),
+                  padding: EdgeInsets.only(
+                    top: Spacing.medium,
+                    bottom: Spacing.smMedium,
+                  ),
                   color: colorScheme.background,
                   child: const SelectTicketSubmitButton(),
                 ),

@@ -1,3 +1,4 @@
+import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'update_payment_input.freezed.dart';
@@ -5,12 +6,26 @@ part 'update_payment_input.g.dart';
 
 @freezed
 class UpdatePaymentInput with _$UpdatePaymentInput {
-  @JsonSerializable(includeIfNull: false)
+  @JsonSerializable(includeIfNull: false, explicitToJson: true)
   factory UpdatePaymentInput({
-    @JsonKey(name: '_id') required String id,
-    @JsonKey(name: 'transfer_params') Map<String, dynamic>? transferParams,
+    @JsonKey(name: '_id') String? id,
+    @JsonKey(name: 'transfer_params')
+    UpdatePaymentTransferParams? transferParams,
   }) = _UpdatePaymentInput;
 
   factory UpdatePaymentInput.fromJson(Map<String, dynamic> json) =>
       _$UpdatePaymentInputFromJson(json);
+}
+
+@freezed
+class UpdatePaymentTransferParams with _$UpdatePaymentTransferParams {
+  @JsonSerializable(includeIfNull: false)
+  factory UpdatePaymentTransferParams({
+    @JsonKey(name: 'tx_hash') String? txHash,
+    @JsonKey(name: 'signature') String? signature,
+    SupportedPaymentNetwork? network,
+  }) = _UpdatePaymentTransferParams;
+
+  factory UpdatePaymentTransferParams.fromJson(Map<String, dynamic> json) =>
+      _$UpdatePaymentTransferParamsFromJson(json);
 }

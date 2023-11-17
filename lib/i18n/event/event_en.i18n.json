@@ -61,6 +61,13 @@
         "selectCard": "Select card",
         "invalidDate": "Invalid date"
     },
+    "eventCryptoPayment": {
+        "connectWallet": "Connect wallet",
+        "waitForConfirmation": "Waiting for confirmation...",
+        "selectNetwork": "Select network",
+        "signPayment": "Sign your payment",
+        "pay": "Pay"
+    },
     "eventPickMyTickets": {
         "pickYourTicket": "Pick your ticket",
         "pickYourTicketDescription": "Select the ticket type you want to assign to this account. This is permanent and cannot be changed later!"

@@ -3,6 +3,8 @@ import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/ticket_wave_custom_paint.dart';
 import 'package:app/core/presentation/widgets/common/dotted_line/dotted_line.dart';
 import 'package:app/core/utils/number_utils.dart';
+import 'package:app/core/utils/payment_utils.dart';
+import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -12,15 +14,21 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class EventOrderSummary extends StatelessWidget {
   const EventOrderSummary({
     super.key,
-    this.pricingInfo,
+    required this.pricingInfo,
+    required this.selectedCurrency,
   });
 
-  final EventTicketsPricingInfo? pricingInfo;
+  final EventTicketsPricingInfo pricingInfo;
+  final Currency selectedCurrency;
 
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+    final isCryptoCurrency = PaymentUtils.isCryptoCurrency(selectedCurrency);
+    final currencyInfo =
+        PaymentUtils.getCurrencyInfo(pricingInfo, currency: selectedCurrency);
+
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
       child: Column(
@@ -47,10 +55,16 @@ class EventOrderSummary extends StatelessWidget {
             ),
             child: SummaryRow(
               label: t.event.eventOrder.itemTotal,
-              value: NumberUtils.formatCurrency(
-                amount: pricingInfo?.fiatSubTotal ?? 0,
-                currency: Currency.USD,
-              ),
+              value: isCryptoCurrency
+                  ? Web3Utils.formatCryptoCurrency(
+                      pricingInfo.cryptoSubTotal ?? BigInt.zero,
+                      currency: selectedCurrency,
+                      decimals: currencyInfo?.decimals ?? 0,
+                    )
+                  : NumberUtils.formatCurrency(
+                      amount: pricingInfo.fiatSubTotal ?? 0,
+                      currency: selectedCurrency,
+                    ),
             ),
           ),
           SizedBox(
@@ -70,10 +84,16 @@ class EventOrderSummary extends StatelessWidget {
             ),
             child: SummaryRow(
               label: t.event.eventOrder.grandTotal,
-              value: NumberUtils.formatCurrency(
-                amount: pricingInfo?.fiatTotal ?? 0,
-                currency: Currency.USD,
-              ),
+              value: isCryptoCurrency
+                  ? Web3Utils.formatCryptoCurrency(
+                      pricingInfo.cryptoTotal ?? BigInt.zero,
+                      currency: selectedCurrency,
+                      decimals: currencyInfo?.decimals ?? 0,
+                    )
+                  : NumberUtils.formatCurrency(
+                      amount: pricingInfo.fiatTotal ?? 0,
+                      currency: selectedCurrency,
+                    ),
             ),
           ),
           Transform.flip(

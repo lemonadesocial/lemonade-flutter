@@ -103,18 +103,18 @@ class PurchasableTicketType with _$PurchasableTicketType {
 
 class EventTicketPrice {
   final String? cost;
-  final BigInt? blockchainCost;
+  final BigInt? cryptoCost;
   final double? fiatCost;
 
   EventTicketPrice({
     this.cost,
-    this.blockchainCost,
+    this.cryptoCost,
     this.fiatCost,
   });
 
   factory EventTicketPrice.fromDto(EventTicketPriceDto dto) => EventTicketPrice(
         cost: dto.cost,
         fiatCost: dto.cost != null ? double.tryParse(dto.cost!) : null,
-        blockchainCost: dto.cost != null ? BigInt.tryParse(dto.cost!) : null,
+        cryptoCost: dto.cost != null ? BigInt.tryParse(dto.cost!) : null,
       );
 }

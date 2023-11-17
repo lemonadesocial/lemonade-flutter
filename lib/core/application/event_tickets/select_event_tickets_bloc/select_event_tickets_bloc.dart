@@ -58,7 +58,7 @@ class SelectEventTicketTypesBloc
         _calculateTotalSelectedCount(newSelectedTicketTypes);
 
     Either<double, BigInt> totalAmount =
-        PaymentUtils.isBlockchainCurrency(selectedCurrency!)
+        PaymentUtils.isCryptoCurrency(selectedCurrency!)
             ? Right(_calculateBlockchainTotalAmount(newSelectedTicketTypes))
             : Left(_calculateFiatTotalAmount(newSelectedTicketTypes));
 
@@ -113,7 +113,7 @@ class SelectEventTicketTypesBloc
       final ticketTypePrice = (eventTicketTypesResponse?.ticketTypes ?? [])
               .firstWhere((element) => element.id == currentItem.id)
               .prices?[selectedCurrency]
-              ?.blockchainCost ??
+              ?.cryptoCost ??
           BigInt.zero;
 
       final amountPerTicketType =
