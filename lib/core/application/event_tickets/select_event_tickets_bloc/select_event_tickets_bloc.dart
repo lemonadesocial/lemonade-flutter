@@ -9,17 +9,28 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'select_event_tickets_bloc.freezed.dart';
 
+enum SelectTicketsPaymentMethod {
+  card,
+  wallet,
+}
+
 class SelectEventTicketsBloc
     extends Bloc<SelectEventTicketsEvent, SelectEventTicketsState> {
   EventTicketTypesResponse? eventTicketTypesResponse;
   Currency? selectedCurrency;
+  // only for SelectTicketsPaymentMethod.wallet
+  SupportedPaymentNetwork? selectedNetwork;
 
   SelectEventTicketsBloc()
       : super(
           SelectEventTicketsState(
-            selectedTicketTypes: [],
+            selectedTickets: [],
             isSelectionValid: false,
             isPaymentRequired: false,
+            paymentMethod: SelectTicketsPaymentMethod.card,
+            selectedCurrency: null,
+            selectedNetwork: null,
+            totalAmount: null,
           ),
         ) {
     on<SelectEventTicketsEventOnListTicketTypesLoaded>((event, emit) {
@@ -28,6 +39,38 @@ class SelectEventTicketsBloc
     on<SelectEventTicketsEventOnSelectTicket>(_onSelectTicketType);
     // TODO:
     on<SelectEventTicketsEventOnSelectCurrency>(_onSelectCurrency);
+    on<SelectEventTicketsEventOnSelectPaymentMethod>(_onSelectPaymentMethod);
+    on<SelectEventTicketsEventOnClear>(_onClear);
+  }
+
+  void _onClear(SelectEventTicketsEventOnClear event, Emitter emit) {
+    emit(
+      state.copyWith(
+        selectedTickets: [],
+        isSelectionValid: false,
+        isPaymentRequired: false,
+        selectedCurrency: null,
+        selectedNetwork: null,
+        totalAmount: null,
+      ),
+    );
+  }
+
+  void _onSelectPaymentMethod(
+    SelectEventTicketsEventOnSelectPaymentMethod event,
+    Emitter emit,
+  ) {
+    emit(
+      state.copyWith(
+        paymentMethod: event.paymentMethod,
+        selectedTickets: [],
+        isSelectionValid: false,
+        isPaymentRequired: false,
+        selectedCurrency: null,
+        selectedNetwork: null,
+        totalAmount: null,
+      ),
+    );
   }
 
   void _onSelectCurrency(
@@ -39,7 +82,7 @@ class SelectEventTicketsBloc
     emit(
       state.copyWith(
         selectedCurrency: selectedCurrency,
-        selectedTicketTypes: [],
+        selectedTickets: [],
         isSelectionValid: false,
       ),
     );
@@ -49,36 +92,48 @@ class SelectEventTicketsBloc
     SelectEventTicketsEventOnSelectTicket event,
     Emitter emit,
   ) async {
-    final newSelectedTicketTypes = [
-      event.ticketType,
-      ...state.selectedTicketTypes,
+    selectedCurrency = event.currency;
+    selectedNetwork = event.network;
+
+    final newSelectedTickets = [
+      event.ticket,
+      ...state.selectedTickets,
     ].unique((item) => item.id).where((element) => element.count > 0).toList();
 
-    final totalSelectedCount =
-        _calculateTotalSelectedCount(newSelectedTicketTypes);
+    if (newSelectedTickets.isEmpty) {
+      // when tickets empty meaning all tickets with same currency and network has been deselected
+      // so just reset
+      add(SelectEventTicketsEvent.clear());
+      return;
+    }
+
+    final totalSelectedCount = _calculateTotalSelectedCount(newSelectedTickets);
 
     Either<double, BigInt> totalAmount =
         PaymentUtils.isCryptoCurrency(selectedCurrency!)
-            ? Right(_calculateBlockchainTotalAmount(newSelectedTicketTypes))
-            : Left(_calculateFiatTotalAmount(newSelectedTicketTypes));
+            ? Right(_calculateBlockchainTotalAmount(newSelectedTickets))
+            : Left(_calculateFiatTotalAmount(newSelectedTickets));
 
     emit(
       state.copyWith(
-        selectedTicketTypes: newSelectedTicketTypes,
+        selectedTickets: newSelectedTickets,
         isSelectionValid: _validateTotalSelectedCount(totalSelectedCount),
         isPaymentRequired: totalAmount.fold((totalFiat) {
           return totalFiat > 0;
         }, (totalBlockchain) {
           return totalBlockchain > BigInt.zero;
         }),
+        selectedCurrency: selectedCurrency,
+        selectedNetwork: selectedNetwork,
+        totalAmount: totalAmount,
       ),
     );
   }
 
   double _calculateTotalSelectedCount(
-    List<PurchasableItem> selectedTicketTypes,
+    List<PurchasableItem> selectedTickets,
   ) {
-    return selectedTicketTypes.fold(
+    return selectedTickets.fold(
       0.0,
       (total, currentItem) => total + currentItem.count,
     );
@@ -92,9 +147,9 @@ class SelectEventTicketsBloc
   }
 
   double _calculateFiatTotalAmount(
-    List<PurchasableItem> selectedTicketTypes,
+    List<PurchasableItem> selectedTickets,
   ) {
-    return selectedTicketTypes.fold(0.0, (total, currentItem) {
+    return selectedTickets.fold(0.0, (total, currentItem) {
       final ticketTypePrice = (eventTicketTypesResponse?.ticketTypes ?? [])
               .firstWhere((element) => element.id == currentItem.id)
               .defaultPrice
@@ -107,9 +162,9 @@ class SelectEventTicketsBloc
   }
 
   BigInt _calculateBlockchainTotalAmount(
-    List<PurchasableItem> selectedTicketTypes,
+    List<PurchasableItem> selectedTickets,
   ) {
-    return selectedTicketTypes.fold(BigInt.from(0), (total, currentItem) {
+    return selectedTickets.fold(BigInt.from(0), (total, currentItem) {
       final ticketTypePrice = (eventTicketTypesResponse?.ticketTypes ?? [])
               .firstWhere((element) => element.id == currentItem.id)
               .prices?[selectedCurrency]
@@ -131,19 +186,28 @@ class SelectEventTicketsEvent with _$SelectEventTicketsEvent {
   }) = SelectEventTicketsEventOnListTicketTypesLoaded;
 
   factory SelectEventTicketsEvent.select({
-    required PurchasableItem ticketType,
+    required PurchasableItem ticket,
+    required Currency currency,
+    SupportedPaymentNetwork? network,
   }) = SelectEventTicketsEventOnSelectTicket;
   factory SelectEventTicketsEvent.selectCurrency({
     required Currency currency,
   }) = SelectEventTicketsEventOnSelectCurrency;
+  factory SelectEventTicketsEvent.selectPaymentMethod({
+    required SelectTicketsPaymentMethod paymentMethod,
+  }) = SelectEventTicketsEventOnSelectPaymentMethod;
+  factory SelectEventTicketsEvent.clear() = SelectEventTicketsEventOnClear;
 }
 
 @freezed
 class SelectEventTicketsState with _$SelectEventTicketsState {
   factory SelectEventTicketsState({
-    required List<PurchasableItem> selectedTicketTypes,
-    Currency? selectedCurrency,
+    required List<PurchasableItem> selectedTickets,
     required bool isSelectionValid,
     required bool isPaymentRequired,
+    required SelectTicketsPaymentMethod paymentMethod,
+    Currency? selectedCurrency,
+    Either<double, BigInt>? totalAmount,
+    SupportedPaymentNetwork? selectedNetwork,
   }) = _SelectEventTicketsState;
 }

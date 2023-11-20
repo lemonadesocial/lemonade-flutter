@@ -2,6 +2,7 @@ import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/entities/event_ticket.dart';
 import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/utils/list/unique_list_extension.dart';
+import 'package:app/core/utils/payment_utils.dart';
 import 'package:collection/collection.dart';
 
 class EventTicketUtils {
@@ -54,6 +55,30 @@ class EventTicketUtils {
         .where(
           (element) =>
               (element.prices ?? Map.fromEntries([])).keys.contains(currency),
+        )
+        .toList();
+  }
+
+  static List<PurchasableTicketType> getTicketTypesSupportStripe({
+    required List<PurchasableTicketType> ticketTypes,
+  }) {
+    return ticketTypes
+        .where(
+          (element) => (element.prices ?? Map.fromEntries([])).keys.any(
+                (currency) => !PaymentUtils.isCryptoCurrency(currency),
+              ),
+        )
+        .toList();
+  }
+
+  static List<PurchasableTicketType> getTicketTypesSupportCrypto({
+    required List<PurchasableTicketType> ticketTypes,
+  }) {
+    return ticketTypes
+        .where(
+          (element) => (element.prices ?? Map.fromEntries([])).keys.any(
+                (currency) => PaymentUtils.isCryptoCurrency(currency),
+              ),
         )
         .toList();
   }

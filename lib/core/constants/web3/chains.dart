@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:app/core/domain/web3/entities/chain_metadata.dart';
+import 'package:app/gen/assets.gen.dart';
 
 // TESTNET
 final GOERLI = ChainMetadata(
@@ -8,7 +9,10 @@ final GOERLI = ChainMetadata(
   chainId: "eip155:5",
   name: "goerli",
   displayName: "Goerli",
-  icon: "",
+  icon: Assets.icons.icEthereum.image(
+    width: 18,
+    height: 18,
+  ),
   rpcUrl: "https://goerli.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161",
   isTestnet: true,
   nativeCurrency: NativeCurrency(
@@ -24,7 +28,10 @@ final MUMBAI = ChainMetadata(
   chainId: "eip155:80001",
   name: "mumbai",
   displayName: "Mumbai",
-  icon: "",
+  icon: Assets.icons.icPolygon.image(
+    width: 18,
+    height: 18,
+  ),
   rpcUrl: "https://rpc-mumbai.maticvigil.com/",
   isTestnet: true,
   nativeCurrency: NativeCurrency(
@@ -42,7 +49,10 @@ final ETHEREUM = ChainMetadata(
   chainId: "eip155:1",
   name: "ethereum",
   displayName: "Ethereum",
-  icon: "",
+  icon: Assets.icons.icEthereum.image(
+    width: 18,
+    height: 18,
+  ),
   rpcUrl: "https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161",
   nativeCurrency: NativeCurrency(
     name: "Ethereum",
@@ -57,7 +67,10 @@ final POLYGON = ChainMetadata(
   chainId: "eip155:137",
   name: "polygon",
   displayName: "Polygon",
-  icon: "",
+  icon: Assets.icons.icPolygon.image(
+    width: 18,
+    height: 18,
+  ),
   rpcUrl: "https://polygon-rpc.com/",
   nativeCurrency: NativeCurrency(
     name: "Matic Token",

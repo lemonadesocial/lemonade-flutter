@@ -105,16 +105,20 @@ class EventTicketPrice {
   final String? cost;
   final BigInt? cryptoCost;
   final double? fiatCost;
+  final SupportedPaymentNetwork? chainId;
 
   EventTicketPrice({
     this.cost,
     this.cryptoCost,
     this.fiatCost,
+    this.chainId,
   });
 
   factory EventTicketPrice.fromDto(EventTicketPriceDto dto) => EventTicketPrice(
         cost: dto.cost,
         fiatCost: dto.cost != null ? double.tryParse(dto.cost!) : null,
         cryptoCost: dto.cost != null ? BigInt.tryParse(dto.cost!) : null,
+        // TODO: mock data
+        chainId: SupportedPaymentNetwork.ethereumGoerli,
       );
 }

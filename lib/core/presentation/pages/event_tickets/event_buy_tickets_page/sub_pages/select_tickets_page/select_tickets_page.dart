@@ -68,6 +68,13 @@ class SelectTicketView extends StatelessWidget {
           orElse: (() => ''),
           authenticated: (session) => session.userId,
         );
+    final selectTicketBloc = context.watch<SelectEventTicketsBloc>();
+    final selectedPaymentMethod = selectTicketBloc.state.paymentMethod;
+    final selectedTickets = selectTicketBloc.state.selectedTickets;
+    final selectedCurrency = selectTicketBloc.state.selectedCurrency;
+    final selectedNetwork = selectTicketBloc.state.selectedNetwork;
+    final totalAmount = selectTicketBloc.state.totalAmount;
+
     return MultiBlocListener(
       listeners: [
         BlocListener<GetEventTicketTypesBloc, GetEventTicketTypesState>(
@@ -200,7 +207,15 @@ class SelectTicketView extends StatelessWidget {
                   SizedBox(height: Spacing.smMedium),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-                    child: const PaymentMethodsSwitcher(),
+                    child: PaymentMethodsSwitcher(
+                      selectedPaymentMethod: selectedPaymentMethod,
+                      onSelect: (paymentMethod) =>
+                          context.read<SelectEventTicketsBloc>().add(
+                                SelectEventTicketsEvent.selectPaymentMethod(
+                                  paymentMethod: paymentMethod,
+                                ),
+                              ),
+                    ),
                   ),
                   SizedBox(height: Spacing.smMedium),
                   BlocBuilder<GetEventTicketTypesBloc,
@@ -210,46 +225,27 @@ class SelectTicketView extends StatelessWidget {
                       failure: () =>
                           EmptyList(emptyText: t.common.somethingWrong),
                       success: (response, supportedCurrencies) {
-                        final selectTicketBloc =
-                            context.watch<SelectEventTicketsBloc>();
-                        final selectedCurrency =
-                            selectTicketBloc.state.selectedCurrency;
-                        final selectedTickets =
-                            selectTicketBloc.state.selectedTicketTypes;
-                        final ticketTypes = selectedCurrency != null
-                            ? EventTicketUtils.getTicketTypesByCurrency(
+                        final ticketTypes = selectedPaymentMethod ==
+                                SelectTicketsPaymentMethod.card
+                            ? EventTicketUtils.getTicketTypesSupportStripe(
                                 ticketTypes: response.ticketTypes ?? [],
-                                currency: selectedCurrency,
                               )
-                            : response.ticketTypes ?? [];
+                            : EventTicketUtils.getTicketTypesSupportCrypto(
+                                ticketTypes: response.ticketTypes ?? [],
+                              );
 
                         return Flexible(
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
                             children: [
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: Spacing.medium,
-                                ),
-                                child: SelectCurrencyButton(
-                                  supportedCurrencies: supportedCurrencies,
-                                  selectedCurrency: selectedCurrency,
-                                  onSelectCurrency: (currency) {
-                                    selectTicketBloc.add(
-                                      SelectEventTicketsEvent.selectCurrency(
-                                        currency: currency,
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ),
                               Expanded(
                                 child: ListView.separated(
                                   itemBuilder: (context, index) =>
                                       SelectTicketItem(
+                                    selectedCurrency: selectedCurrency,
+                                    selectedNetwork: selectedNetwork,
                                     event: event,
                                     ticketType: ticketTypes[index],
-                                    disabled: selectedCurrency == null,
                                     count: selectedTickets
                                             .firstWhereOrNull(
                                               (element) =>
@@ -258,15 +254,17 @@ class SelectTicketView extends StatelessWidget {
                                             )
                                             ?.count ??
                                         0,
-                                    onCountChange: (count) {
+                                    onCountChange: (count, currency, network) {
                                       context
                                           .read<SelectEventTicketsBloc>()
                                           .add(
                                             SelectEventTicketsEvent.select(
-                                              ticketType: PurchasableItem(
+                                              ticket: PurchasableItem(
                                                 count: count,
                                                 id: ticketTypes[index].id ?? '',
                                               ),
+                                              currency: currency,
+                                              network: network,
                                             ),
                                           );
                                     },
@@ -297,7 +295,11 @@ class SelectTicketView extends StatelessWidget {
                     bottom: Spacing.smMedium,
                   ),
                   color: colorScheme.background,
-                  child: const SelectTicketSubmitButton(),
+                  child: SelectTicketSubmitButton(
+                    paymentMethod: selectedPaymentMethod,
+                    selectedCurrency: selectedCurrency,
+                    totalAmount: totalAmount,
+                  ),
                 ),
               ),
             ],

@@ -44,7 +44,7 @@ class EventTicketsSummaryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final eventId = context.read<EventProviderBloc>().event.id;
     final selectTicketBlocState = context.read<SelectEventTicketsBloc>().state;
-    final selectedTickets = selectTicketBlocState.selectedTicketTypes;
+    final selectedTickets = selectTicketBlocState.selectedTickets;
     final selectedCurrency = selectTicketBlocState.selectedCurrency;
 
     return MultiBlocProvider(
@@ -86,7 +86,7 @@ class EventTicketsSummaryPageView extends StatelessWidget {
     final t = Translations.of(context);
     final event = context.read<EventProviderBloc>().event;
     final selectedTickets =
-        context.read<SelectEventTicketsBloc>().state.selectedTicketTypes;
+        context.read<SelectEventTicketsBloc>().state.selectedTickets;
     final selectedCurrency =
         context.read<SelectEventTicketsBloc>().state.selectedCurrency;
     final ticketTypes =

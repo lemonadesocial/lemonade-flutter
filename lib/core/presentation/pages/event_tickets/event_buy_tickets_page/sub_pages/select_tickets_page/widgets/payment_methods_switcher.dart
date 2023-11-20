@@ -1,3 +1,4 @@
+import 'package:app/core/application/event_tickets/select_event_tickets_bloc/select_event_tickets_bloc.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
@@ -8,8 +9,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class PaymentMethodsSwitcher extends StatelessWidget {
+  final Function(SelectTicketsPaymentMethod paymentMethod) onSelect;
+  final SelectTicketsPaymentMethod selectedPaymentMethod;
+
   const PaymentMethodsSwitcher({
     super.key,
+    required this.onSelect,
+    required this.selectedPaymentMethod,
   });
 
   @override
@@ -21,19 +27,24 @@ class PaymentMethodsSwitcher extends StatelessWidget {
       children: [
         Expanded(
           child: _MethodItem(
-            selected: false,
+            selected: selectedPaymentMethod == SelectTicketsPaymentMethod.card,
             label: t.event.eventBuyTickets.paymentMethods.card,
             icon: Assets.icons.icCash.svg(),
-            onPressed: () {},
+            onPressed: () {
+              onSelect(SelectTicketsPaymentMethod.card);
+            },
           ),
         ),
         SizedBox(width: Spacing.xSmall),
         Expanded(
           child: _MethodItem(
-            selected: false,
+            selected:
+                selectedPaymentMethod == SelectTicketsPaymentMethod.wallet,
             label: t.event.eventBuyTickets.paymentMethods.wallet,
             icon: Assets.icons.icWallet.svg(),
-            onPressed: () {},
+            onPressed: () {
+              onSelect(SelectTicketsPaymentMethod.wallet);
+            },
           ),
         ),
       ],
@@ -62,30 +73,33 @@ class _MethodItem extends StatelessWidget {
         selected ? LemonColor.paleViolet18 : LemonColor.atomicBlack;
     final textColor =
         selected ? LemonColor.paleViolet : colorScheme.onSurfaceVariant;
-    return Container(
-      height: 45.w,
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.circular(
-          LemonRadius.small,
+    return InkWell(
+      onTap: onPressed,
+      child: Container(
+        height: 45.w,
+        decoration: BoxDecoration(
+          color: backgroundColor,
+          borderRadius: BorderRadius.circular(
+            LemonRadius.small,
+          ),
         ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          ColorFiltered(
-            colorFilter: ColorFilter.mode(textColor, BlendMode.srcIn),
-            child: icon,
-          ),
-          SizedBox(width: Spacing.xSmall),
-          Text(
-            label,
-            style: Typo.medium.copyWith(
-              color: textColor,
-              fontWeight: FontWeight.w600,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ColorFiltered(
+              colorFilter: ColorFilter.mode(textColor, BlendMode.srcIn),
+              child: icon,
             ),
-          ),
-        ],
+            SizedBox(width: Spacing.xSmall),
+            Text(
+              label,
+              style: Typo.medium.copyWith(
+                color: textColor,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

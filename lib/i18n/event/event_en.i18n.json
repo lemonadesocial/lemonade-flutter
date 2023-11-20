@@ -38,7 +38,9 @@
         "paymentMethods": {
             "card": "Card",
             "wallet": "Wallet"
-        }
+        },
+        "payViaCard": "Pay via Card",
+        "payViaWallet": "Pay via Wallet"
     },
     "eventOrder": {
         "itemTotal": "Item total",
