@@ -96,5 +96,6 @@
     "createEvent": "Create event",
     "title": "Title",
     "description": "Description",
-    "descriptionPlaceholder": "What is this experience about ?"
+    "descriptionPlaceholder": "What is this experience about ?",
+    "createEventSuccessfully": "Create event successfully"
 }

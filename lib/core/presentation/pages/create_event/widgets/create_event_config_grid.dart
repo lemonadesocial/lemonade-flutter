@@ -27,7 +27,7 @@ class CreateEventConfigGrid extends StatelessWidget {
     },
     {'title': 'Virtual', 'description': '', 'icon': Icons.videocam_rounded},
     {
-      'title': 'Office',
+      'title': 'Offline',
       'description': 'Add location',
       'icon': Icons.factory_outlined
     },

@@ -1,4 +1,7 @@
+import 'package:app/core/domain/event/event_repository.dart';
+import 'package:app/core/domain/event/input/event_input/event_input.dart';
 import 'package:app/core/domain/form/string_formz.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -11,6 +14,7 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
     on<DescriptionChanged>(_onDescriptionChanged);
     on<FormSubmitted>(_onFormSubmitted);
   }
+  final _eventRepository = getIt<EventRepository>();
 
   Future<void> _onTitleChanged(
     TitleChanged event,
@@ -58,8 +62,26 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
     );
     if (state.isValid) {
       emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
-      await Future<void>.delayed(const Duration(seconds: 1));
-      emit(state.copyWith(status: FormzSubmissionStatus.success));
+      final result = await _eventRepository.createEvent(
+        input: EventInput(
+          title: title.value,
+          description: title.value,
+          private: false,
+          verify: false,
+          start: "2023-11-22T03:00:00.881Z",
+          end: "2023-11-26T11:00:00.881Z",
+          timezone: "Asia/Bangkok",
+          guestLimit: 100,
+          guestLimitPer: 2,
+          virtual: true,
+        ),
+      );
+      result.fold(
+        (failure) =>
+            emit(state.copyWith(status: FormzSubmissionStatus.failure)),
+        (createEvent) =>
+            emit(state.copyWith(status: FormzSubmissionStatus.success)),
+      );
     }
   }
 }
