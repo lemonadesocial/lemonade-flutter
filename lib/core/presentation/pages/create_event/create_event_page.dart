@@ -73,10 +73,12 @@ class _CreateEventPageState extends State<CreateEventPage> {
                                     LemonTextField(
                                       initialText: state.description.value,
                                       label: "Description*",
-                                      onChange: (value) => context
-                                          .read<CreateEventBloc>()
-                                          .add(DescriptionChanged(
-                                              description: value)),
+                                      onChange: (value) =>
+                                          context.read<CreateEventBloc>().add(
+                                                DescriptionChanged(
+                                                  description: value,
+                                                ),
+                                              ),
                                       errorText: state
                                                   .description.displayError !=
                                               null
@@ -109,7 +111,9 @@ class _CreateEventPageState extends State<CreateEventPage> {
     final t = Translations.of(context);
     return Padding(
       padding: EdgeInsets.symmetric(
-          horizontal: Spacing.smMedium, vertical: Spacing.smMedium),
+        horizontal: Spacing.smMedium,
+        vertical: Spacing.smMedium,
+      ),
       child: LinearGradientButton(
         label: t.common.next,
         height: 48.h,
