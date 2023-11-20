@@ -8,6 +8,7 @@ import 'package:app/core/application/event_tickets/select_event_tickets_bloc/sel
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/input/assign_tickets_input/assign_tickets_input.dart';
 import 'package:app/core/domain/payment/entities/purchasable_item/purchasable_item.dart';
+import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/select_tickets_page/widgets/payment_methods_switcher.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/select_tickets_page/widgets/select_currency_button.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/select_tickets_page/widgets/select_ticket_item.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/select_tickets_page/widgets/select_ticket_submit_button.dart';
@@ -73,13 +74,13 @@ class SelectTicketView extends StatelessWidget {
           listener: (context, state) {
             state.maybeWhen(
               orElse: () => null,
-              success: (response, supportedCurrencies) =>
-                  context.read<SelectEventTicketTypesBloc>().add(
-                        SelectEventTicketTypesEvent
-                            .onEventTicketTypesResponseLoaded(
-                          eventTicketTypesResponse: response,
-                        ),
-                      ),
+              success: (response, supportedCurrencies) => context
+                  .read<SelectEventTicketsBloc>()
+                  .add(
+                    SelectEventTicketsEvent.onEventTicketTypesResponseLoaded(
+                      eventTicketTypesResponse: response,
+                    ),
+                  ),
             );
           },
         ),
@@ -197,6 +198,11 @@ class SelectTicketView extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: Spacing.smMedium),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+                    child: const PaymentMethodsSwitcher(),
+                  ),
+                  SizedBox(height: Spacing.smMedium),
                   BlocBuilder<GetEventTicketTypesBloc,
                       GetEventTicketTypesState>(
                     builder: (context, state) => state.when(
@@ -205,7 +211,7 @@ class SelectTicketView extends StatelessWidget {
                           EmptyList(emptyText: t.common.somethingWrong),
                       success: (response, supportedCurrencies) {
                         final selectTicketBloc =
-                            context.watch<SelectEventTicketTypesBloc>();
+                            context.watch<SelectEventTicketsBloc>();
                         final selectedCurrency =
                             selectTicketBloc.state.selectedCurrency;
                         final selectedTickets =
@@ -230,8 +236,7 @@ class SelectTicketView extends StatelessWidget {
                                   selectedCurrency: selectedCurrency,
                                   onSelectCurrency: (currency) {
                                     selectTicketBloc.add(
-                                      SelectEventTicketTypesEvent
-                                          .selectCurrency(
+                                      SelectEventTicketsEvent.selectCurrency(
                                         currency: currency,
                                       ),
                                     );
@@ -255,9 +260,9 @@ class SelectTicketView extends StatelessWidget {
                                         0,
                                     onCountChange: (count) {
                                       context
-                                          .read<SelectEventTicketTypesBloc>()
+                                          .read<SelectEventTicketsBloc>()
                                           .add(
-                                            SelectEventTicketTypesEvent.select(
+                                            SelectEventTicketsEvent.select(
                                               ticketType: PurchasableItem(
                                                 count: count,
                                                 id: ticketTypes[index].id ?? '',

@@ -9,29 +9,29 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'select_event_tickets_bloc.freezed.dart';
 
-class SelectEventTicketTypesBloc
-    extends Bloc<SelectEventTicketTypesEvent, SelectEventTicketTypesState> {
+class SelectEventTicketsBloc
+    extends Bloc<SelectEventTicketsEvent, SelectEventTicketsState> {
   EventTicketTypesResponse? eventTicketTypesResponse;
   Currency? selectedCurrency;
 
-  SelectEventTicketTypesBloc()
+  SelectEventTicketsBloc()
       : super(
-          SelectEventTicketTypesState(
+          SelectEventTicketsState(
             selectedTicketTypes: [],
             isSelectionValid: false,
             isPaymentRequired: false,
           ),
         ) {
-    on<SelectEventTicketTypesEventOnListTicketTypesLoaded>((event, emit) {
+    on<SelectEventTicketsEventOnListTicketTypesLoaded>((event, emit) {
       eventTicketTypesResponse = event.eventTicketTypesResponse;
     });
-    on<SelectEventTicketTypesEventOnSelectTicketType>(_onSelectTicketType);
+    on<SelectEventTicketsEventOnSelectTicket>(_onSelectTicketType);
     // TODO:
-    on<SelectEventTicketTypesEventOnSelectCurrency>(_onSelectCurrency);
+    on<SelectEventTicketsEventOnSelectCurrency>(_onSelectCurrency);
   }
 
   void _onSelectCurrency(
-    SelectEventTicketTypesEventOnSelectCurrency event,
+    SelectEventTicketsEventOnSelectCurrency event,
     Emitter emit,
   ) {
     selectedCurrency = event.currency;
@@ -46,7 +46,7 @@ class SelectEventTicketTypesBloc
   }
 
   Future<void> _onSelectTicketType(
-    SelectEventTicketTypesEventOnSelectTicketType event,
+    SelectEventTicketsEventOnSelectTicket event,
     Emitter emit,
   ) async {
     final newSelectedTicketTypes = [
@@ -125,25 +125,25 @@ class SelectEventTicketTypesBloc
 }
 
 @freezed
-class SelectEventTicketTypesEvent with _$SelectEventTicketTypesEvent {
-  factory SelectEventTicketTypesEvent.onEventTicketTypesResponseLoaded({
+class SelectEventTicketsEvent with _$SelectEventTicketsEvent {
+  factory SelectEventTicketsEvent.onEventTicketTypesResponseLoaded({
     required EventTicketTypesResponse eventTicketTypesResponse,
-  }) = SelectEventTicketTypesEventOnListTicketTypesLoaded;
+  }) = SelectEventTicketsEventOnListTicketTypesLoaded;
 
-  factory SelectEventTicketTypesEvent.select({
+  factory SelectEventTicketsEvent.select({
     required PurchasableItem ticketType,
-  }) = SelectEventTicketTypesEventOnSelectTicketType;
-  factory SelectEventTicketTypesEvent.selectCurrency({
+  }) = SelectEventTicketsEventOnSelectTicket;
+  factory SelectEventTicketsEvent.selectCurrency({
     required Currency currency,
-  }) = SelectEventTicketTypesEventOnSelectCurrency;
+  }) = SelectEventTicketsEventOnSelectCurrency;
 }
 
 @freezed
-class SelectEventTicketTypesState with _$SelectEventTicketTypesState {
-  factory SelectEventTicketTypesState({
+class SelectEventTicketsState with _$SelectEventTicketsState {
+  factory SelectEventTicketsState({
     required List<PurchasableItem> selectedTicketTypes,
     Currency? selectedCurrency,
     required bool isSelectionValid,
     required bool isPaymentRequired,
-  }) = _SelectEventTicketTypesState;
+  }) = _SelectEventTicketsState;
 }

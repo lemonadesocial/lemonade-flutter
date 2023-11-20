@@ -26,7 +26,7 @@ class SelectTicketSubmitButton extends StatelessWidget {
         acceptEventState is AcceptEventStateLoading ||
         assignTicketsState is AssignTicketsStateLoading;
 
-    return BlocBuilder<SelectEventTicketTypesBloc, SelectEventTicketTypesState>(
+    return BlocBuilder<SelectEventTicketsBloc, SelectEventTicketsState>(
       builder: (context, state) => Padding(
         padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
         child: Opacity(

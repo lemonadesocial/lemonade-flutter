@@ -43,8 +43,7 @@ class EventTicketsSummaryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final eventId = context.read<EventProviderBloc>().event.id;
-    final selectTicketBlocState =
-        context.read<SelectEventTicketTypesBloc>().state;
+    final selectTicketBlocState = context.read<SelectEventTicketsBloc>().state;
     final selectedTickets = selectTicketBlocState.selectedTicketTypes;
     final selectedCurrency = selectTicketBlocState.selectedCurrency;
 
@@ -87,9 +86,9 @@ class EventTicketsSummaryPageView extends StatelessWidget {
     final t = Translations.of(context);
     final event = context.read<EventProviderBloc>().event;
     final selectedTickets =
-        context.read<SelectEventTicketTypesBloc>().state.selectedTicketTypes;
+        context.read<SelectEventTicketsBloc>().state.selectedTicketTypes;
     final selectedCurrency =
-        context.read<SelectEventTicketTypesBloc>().state.selectedCurrency;
+        context.read<SelectEventTicketsBloc>().state.selectedCurrency;
     final ticketTypes =
         context.watch<GetEventTicketTypesBloc>().state.maybeWhen(
               orElse: () => [] as List<PurchasableTicketType>,
