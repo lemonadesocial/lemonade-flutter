@@ -46,6 +46,7 @@ class EventTicketsSummaryPage extends StatelessWidget {
     final selectTicketBlocState = context.read<SelectEventTicketsBloc>().state;
     final selectedTickets = selectTicketBlocState.selectedTickets;
     final selectedCurrency = selectTicketBlocState.selectedCurrency;
+    final selectedNetwork = selectTicketBlocState.selectedNetwork;
 
     return MultiBlocProvider(
       providers: [
@@ -57,6 +58,7 @@ class EventTicketsSummaryPage extends StatelessWidget {
                   eventId: eventId ?? '',
                   items: selectedTickets,
                   currency: selectedCurrency!,
+                  network: selectedNetwork,
                 ),
               ),
             ),
@@ -65,7 +67,9 @@ class EventTicketsSummaryPage extends StatelessWidget {
           create: (context) => BuyTicketsBloc(),
         ),
         BlocProvider(
-          create: (context) => BuyTicketsWithCryptoBloc(),
+          create: (context) => BuyTicketsWithCryptoBloc(
+            selectedNetwork: selectedNetwork,
+          ),
         ),
       ],
       child: EventTicketsSummaryPageView(),
@@ -85,10 +89,10 @@ class EventTicketsSummaryPageView extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
     final event = context.read<EventProviderBloc>().event;
-    final selectedTickets =
-        context.read<SelectEventTicketsBloc>().state.selectedTickets;
-    final selectedCurrency =
-        context.read<SelectEventTicketsBloc>().state.selectedCurrency;
+    final selectTicketsBlocState = context.read<SelectEventTicketsBloc>().state;
+    final selectedTickets = selectTicketsBlocState.selectedTickets;
+    final selectedCurrency = selectTicketsBlocState.selectedCurrency;
+    final selectedNetwork = selectTicketsBlocState.selectedNetwork;
     final ticketTypes =
         context.watch<GetEventTicketTypesBloc>().state.maybeWhen(
               orElse: () => [] as List<PurchasableTicketType>,
@@ -216,6 +220,7 @@ class EventTicketsSummaryPageView extends StatelessWidget {
                                   ticketTypes: ticketTypes,
                                   selectedTickets: selectedTickets,
                                   selectedCurrency: selectedCurrency,
+                                  selectedNetwork: selectedNetwork,
                                   pricingInfo: pricingInfo,
                                 ),
                               );
@@ -254,9 +259,10 @@ class EventTicketsSummaryPageView extends StatelessWidget {
                             success: (pricingInfo) {
                               if (isCryptoCurrency) {
                                 return PayByCryptoButton(
-                                  pricingInfo: pricingInfo,
-                                  selectedCurrency: selectedCurrency,
                                   selectedTickets: selectedTickets,
+                                  selectedCurrency: selectedCurrency,
+                                  selectedNetwork: selectedNetwork,
+                                  pricingInfo: pricingInfo,
                                 );
                               }
 

@@ -43,18 +43,9 @@ class BuyTicketsWithCryptoListener {
               );
             }
 
-            if (data.selectedNetwork == null) {
-              context.read<BuyTicketsWithCryptoBloc>().add(
-                    BuyTicketsWithCryptoEvent.resume(
-                      state: BuyTicketsWithCryptoState.idle(data: state.data),
-                    ),
-                  );
-            }
             context.read<BuyTicketsWithCryptoBloc>().add(
                   BuyTicketsWithCryptoEvent.resume(
-                    state: BuyTicketsWithCryptoState.networkSelected(
-                      data: state.data,
-                    ),
+                    state: BuyTicketsWithCryptoState.idle(data: state.data),
                   ),
                 );
           },

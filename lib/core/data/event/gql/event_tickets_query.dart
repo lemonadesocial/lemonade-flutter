@@ -14,7 +14,11 @@ final getEventTicketTypesQuery = gql('''
         active
         event
         title
-        prices
+        prices {
+          cost
+          currency
+          network
+        }
         default
         address_required
         description
@@ -69,6 +73,16 @@ final getTicketsQuery = gql('''
       assigned_email
       assigned_to
       invited_by
+    }
+  }
+''');
+
+final getEventCurrenciesQuery = gql('''
+  query GetEventCurrencies(\$id: MongoID!) {
+    getEventCurrencies(_id: \$id) {
+      currency
+      decimals
+      network
     }
   }
 ''');

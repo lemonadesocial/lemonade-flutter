@@ -9,7 +9,6 @@ import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/input/assign_tickets_input/assign_tickets_input.dart';
 import 'package:app/core/domain/payment/entities/purchasable_item/purchasable_item.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/select_tickets_page/widgets/payment_methods_switcher.dart';
-import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/select_tickets_page/widgets/select_currency_button.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/select_tickets_page/widgets/select_ticket_item.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/select_tickets_page/widgets/select_ticket_submit_button.dart';
 import 'package:app/core/presentation/widgets/back_button_widget.dart';
@@ -115,8 +114,9 @@ class SelectTicketView extends StatelessWidget {
                       RSVPEventSuccessPopupRoute(
                         event: event,
                         buttonBuilder: (newContext) => LinearGradientButton(
-                          onTap: () => AutoRouter.of(newContext)
-                              .replace(const EventPickMyTicketRoute()),
+                          onTap: () => AutoRouter.of(newContext).replace(
+                            const EventPickMyTicketRoute(),
+                          ),
                           height: Sizing.large,
                           textStyle: Typo.medium.copyWith(
                             fontWeight: FontWeight.w600,
@@ -140,9 +140,9 @@ class SelectTicketView extends StatelessWidget {
               orElse: () => null,
               success: (success) {
                 if (success) {
-                  context
-                      .read<AcceptEventBloc>()
-                      .add(AcceptEventBlocEvent.accept());
+                  context.read<AcceptEventBloc>().add(
+                        AcceptEventBlocEvent.accept(),
+                      );
                 }
               },
             );
@@ -298,6 +298,7 @@ class SelectTicketView extends StatelessWidget {
                   child: SelectTicketSubmitButton(
                     paymentMethod: selectedPaymentMethod,
                     selectedCurrency: selectedCurrency,
+                    selectedNetwork: selectedNetwork,
                     totalAmount: totalAmount,
                   ),
                 ),

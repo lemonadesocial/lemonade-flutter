@@ -1,8 +1,11 @@
+import 'package:app/core/application/event_tickets/get_event_ticket_types_bloc/get_event_ticket_types_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/entities/event_currency.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/select_tickets_page/widgets/ticket_counter.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
+import 'package:app/core/utils/event_tickets_utils.dart';
 import 'package:app/core/utils/number_utils.dart';
 import 'package:app/core/utils/payment_utils.dart';
 import 'package:app/core/utils/web3_utils.dart';
@@ -13,6 +16,7 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SelectTicketItem extends StatelessWidget {
@@ -49,15 +53,16 @@ class SelectTicketItem extends StatelessWidget {
     required Currency currency,
     SupportedPaymentNetwork? network,
   }) {
-    if (newCount == 0) {
-      // TODO: call clear all selected ticket and clear selected currency, selected network in
-      // select ticket bloc
-    }
     onCountChange(newCount, currency, network);
   }
 
   @override
   Widget build(BuildContext context) {
+    List<EventCurrency> eventCurrencies =
+        context.watch<GetEventTicketTypesBloc>().state.maybeWhen(
+              orElse: () => [],
+              success: (_, currencies) => currencies,
+            );
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
     final costText = NumberUtils.formatCurrency(
@@ -116,38 +121,45 @@ class SelectTicketItem extends StatelessWidget {
                   ),
                 ],
                 SizedBox(height: Spacing.xSmall),
-                ...(ticketType.prices?.entries ?? []).map((e) {
-                  // TODO: when backend update => e.value.currency;
-                  final isCryptoCurrency = PaymentUtils.isCryptoCurrency(e.key);
+                ...(ticketType.prices ?? []).map((ticketPrice) {
+                  final isCryptoCurrency =
+                      PaymentUtils.isCryptoCurrency(ticketPrice.currency!);
                   bool enabled = true;
                   if (selectedCurrency == null) {
                     enabled = true;
                   } else {
-                    enabled = e.key == selectedCurrency &&
+                    enabled = ticketPrice.currency == selectedCurrency &&
                         (isCryptoCurrency
-                            ? e.value.chainId == selectedNetwork
+                            ? ticketPrice.network == selectedNetwork
                             : true);
                   }
+                  final decimals = EventTicketUtils.getEventCurrency(
+                        currencies: eventCurrencies,
+                        currency: ticketPrice.currency,
+                        network: ticketPrice.network,
+                      )?.decimals?.toInt() ??
+                      2;
 
                   return Container(
                     margin: EdgeInsets.only(bottom: Spacing.extraSmall),
                     child: _PriceItem(
+                      decimals: decimals,
                       count: enabled ? count : 0,
-                      currency: e.key,
-                      price: e.value,
+                      currency: ticketPrice.currency!,
+                      price: ticketPrice,
                       disabled: !enabled,
                       onIncrease: (newCount) {
                         add(
                           newCount: newCount,
-                          currency: e.key,
-                          network: e.value.chainId,
+                          currency: ticketPrice.currency!,
+                          network: ticketPrice.network,
                         );
                       },
                       onDecrease: (newCount) {
                         minus(
                           newCount: newCount,
-                          currency: e.key,
-                          network: e.value.chainId,
+                          currency: ticketPrice.currency!,
+                          network: ticketPrice.network,
                         );
                       },
                     ),
@@ -165,16 +177,17 @@ class SelectTicketItem extends StatelessWidget {
 class _PriceItem extends StatelessWidget {
   final Currency currency;
   final EventTicketPrice price;
+  final int decimals;
   final bool disabled;
   final Function(int newCount) onDecrease;
   final Function(int newCount) onIncrease;
   final int count;
 
   const _PriceItem({
-    super.key,
-    required this.count,
     required this.currency,
+    required this.count,
     required this.price,
+    required this.decimals,
     required this.disabled,
     required this.onIncrease,
     required this.onDecrease,
@@ -192,7 +205,7 @@ class _PriceItem extends StatelessWidget {
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (isCryptoCurrency && price.chainId != null) ...[
+            if (isCryptoCurrency && price.network != null) ...[
               Container(
                 decoration: ShapeDecoration(
                   color: LemonColor.chineseBlack,
@@ -205,7 +218,7 @@ class _PriceItem extends StatelessWidget {
                 width: Sizing.medium,
                 height: Sizing.medium,
                 child: Center(
-                  child: Web3Utils.getNetworkMetadataById(price.chainId!.value)
+                  child: Web3Utils.getNetworkMetadataById(price.network!.value)
                       .icon,
                 ),
               ),
@@ -220,8 +233,7 @@ class _PriceItem extends StatelessWidget {
                       ? Web3Utils.formatCryptoCurrency(
                           price.cryptoCost ?? BigInt.zero,
                           currency: currency,
-                          // TODO: gen currency info
-                          decimals: 8,
+                          decimals: decimals,
                         )
                       : NumberUtils.formatCurrency(
                           amount: price.fiatCost ?? 0,
@@ -233,10 +245,10 @@ class _PriceItem extends StatelessWidget {
                   ),
                 ),
                 // Mock data
-                if (isCryptoCurrency && price.chainId != null) ...[
+                if (isCryptoCurrency && price.network != null) ...[
                   SizedBox(height: 2.w),
                   Text(
-                    Web3Utils.getNetworkMetadataById(price.chainId!.value)
+                    Web3Utils.getNetworkMetadataById(price.network!.value)
                         .displayName,
                     style: Typo.small.copyWith(
                       color: colorScheme.onSecondary,

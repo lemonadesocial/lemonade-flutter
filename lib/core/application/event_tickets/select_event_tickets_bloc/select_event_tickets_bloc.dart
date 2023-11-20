@@ -1,11 +1,13 @@
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/payment/entities/purchasable_item/purchasable_item.dart';
 import 'package:app/core/domain/payment/payment_enums.dart';
+import 'package:app/core/utils/event_tickets_utils.dart';
 import 'package:app/core/utils/list/unique_list_extension.dart';
 import 'package:app/core/utils/payment_utils.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:collection/collection.dart';
 
 part 'select_event_tickets_bloc.freezed.dart';
 
@@ -150,11 +152,15 @@ class SelectEventTicketsBloc
     List<PurchasableItem> selectedTickets,
   ) {
     return selectedTickets.fold(0.0, (total, currentItem) {
-      final ticketTypePrice = (eventTicketTypesResponse?.ticketTypes ?? [])
-              .firstWhere((element) => element.id == currentItem.id)
-              .defaultPrice
-              ?.fiatCost ??
-          0;
+      final ticketType = (eventTicketTypesResponse?.ticketTypes ?? [])
+          .firstWhereOrNull((element) => element.id == currentItem.id);
+      final ticketTypePrice =
+          EventTicketUtils.getTicketPriceByCurrencyAndNetwork(
+                ticketType: ticketType,
+                currency: selectedCurrency,
+              )?.fiatCost ??
+              0;
+
       final amountPerTicketType = ticketTypePrice * currentItem.count;
 
       return total + amountPerTicketType;
@@ -165,11 +171,15 @@ class SelectEventTicketsBloc
     List<PurchasableItem> selectedTickets,
   ) {
     return selectedTickets.fold(BigInt.from(0), (total, currentItem) {
-      final ticketTypePrice = (eventTicketTypesResponse?.ticketTypes ?? [])
-              .firstWhere((element) => element.id == currentItem.id)
-              .prices?[selectedCurrency]
-              ?.cryptoCost ??
-          BigInt.zero;
+      final ticketType = (eventTicketTypesResponse?.ticketTypes ?? [])
+          .firstWhereOrNull((element) => element.id == currentItem.id);
+      final ticketTypePrice =
+          EventTicketUtils.getTicketPriceByCurrencyAndNetwork(
+                ticketType: ticketType,
+                currency: selectedCurrency,
+                network: selectedNetwork,
+              )?.cryptoCost ??
+              BigInt.zero;
 
       final amountPerTicketType =
           ticketTypePrice * BigInt.from(currentItem.count);

@@ -60,7 +60,6 @@ class _GuestEventDetailView extends StatelessWidget {
                 orElse: () => '',
                 authenticated: (session) => session.userId,
               );
-          return const PreGuestEventDetailView();
 
           final isAttending =
               EventUtils.isAttending(event: event, userId: userId);

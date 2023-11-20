@@ -59,7 +59,6 @@ class _MethodItem extends StatelessWidget {
   final Function() onPressed;
 
   const _MethodItem({
-    super.key,
     required this.selected,
     required this.label,
     required this.icon,

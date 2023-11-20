@@ -64,7 +64,7 @@ class PurchasableTicketType with _$PurchasableTicketType {
     List<EventOffer>? offers,
     List<String>? photos,
     String? title,
-    Map<Currency, EventTicketPrice>? prices,
+    List<EventTicketPrice>? prices,
     Currency? defaultCurrency,
     EventTicketPrice? defaultPrice,
   }) = _PurchasableTicketType;
@@ -87,17 +87,9 @@ class PurchasableTicketType with _$PurchasableTicketType {
             : [],
         photos: dto.photos,
         title: dto.title,
-        defaultCurrency: dto.prices?.keys.first,
-        defaultPrice: dto.prices?.values.first != null
-            ? EventTicketPrice.fromDto(dto.prices!.values.first)
-            : null,
-        prices: dto.prices != null
-            ? Map.fromEntries(
-                dto.prices!.entries.map(
-                  (e) => MapEntry(e.key, EventTicketPrice.fromDto(e.value)),
-                ),
-              )
-            : null,
+        prices: List.from(dto.prices ?? [])
+            .map((item) => EventTicketPrice.fromDto(item))
+            .toList(),
       );
 }
 
@@ -105,20 +97,22 @@ class EventTicketPrice {
   final String? cost;
   final BigInt? cryptoCost;
   final double? fiatCost;
-  final SupportedPaymentNetwork? chainId;
+  final SupportedPaymentNetwork? network;
+  final Currency? currency;
 
   EventTicketPrice({
     this.cost,
     this.cryptoCost,
     this.fiatCost,
-    this.chainId,
+    this.network,
+    this.currency,
   });
 
   factory EventTicketPrice.fromDto(EventTicketPriceDto dto) => EventTicketPrice(
         cost: dto.cost,
         fiatCost: dto.cost != null ? double.tryParse(dto.cost!) : null,
         cryptoCost: dto.cost != null ? BigInt.tryParse(dto.cost!) : null,
-        // TODO: mock data
-        chainId: SupportedPaymentNetwork.ethereumGoerli,
+        network: dto.network,
+        currency: dto.currency,
       );
 }
