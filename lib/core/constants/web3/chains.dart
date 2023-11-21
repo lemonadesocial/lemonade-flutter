@@ -8,7 +8,7 @@ final GOERLI = ChainMetadata(
   id: "5",
   chainId: "eip155:5",
   name: "goerli",
-  displayName: "Goerli",
+  displayName: "Ethereum Goerli",
   icon: Assets.icons.icEthereum.image(
     width: 18,
     height: 18,

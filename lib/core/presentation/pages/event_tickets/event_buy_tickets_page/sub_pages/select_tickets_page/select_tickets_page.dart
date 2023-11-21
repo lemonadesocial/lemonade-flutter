@@ -8,19 +8,24 @@ import 'package:app/core/application/event_tickets/select_event_tickets_bloc/sel
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/input/assign_tickets_input/assign_tickets_input.dart';
 import 'package:app/core/domain/payment/entities/purchasable_item/purchasable_item.dart';
+import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/select_tickets_page/widgets/payment_methods_switcher.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/select_tickets_page/widgets/select_ticket_item.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/select_tickets_page/widgets/select_ticket_submit_button.dart';
 import 'package:app/core/presentation/widgets/back_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
+import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/event_tickets_utils.dart';
+import 'package:app/core/utils/string_utils.dart';
+import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
+import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -51,13 +56,20 @@ class SelectTicketsPage extends StatelessWidget {
   }
 }
 
-class SelectTicketView extends StatelessWidget {
+class SelectTicketView extends StatefulWidget {
   const SelectTicketView({
     super.key,
     required this.event,
   });
 
   final Event event;
+
+  @override
+  State<SelectTicketView> createState() => _SelectTicketViewState();
+}
+
+class _SelectTicketViewState extends State<SelectTicketView> {
+  SupportedPaymentNetwork? networkFilter;
 
   @override
   Widget build(BuildContext context) {
@@ -112,7 +124,7 @@ class SelectTicketView extends StatelessWidget {
                   AutoRouter.of(context).replaceAll(
                     [
                       RSVPEventSuccessPopupRoute(
-                        event: event,
+                        event: widget.event,
                         buttonBuilder: (newContext) => LinearGradientButton(
                           onTap: () => AutoRouter.of(newContext).replace(
                             const EventPickMyTicketRoute(),
@@ -157,11 +169,13 @@ class SelectTicketView extends StatelessWidget {
                 await AutoRouter.of(context).root.pop();
                 AutoRouter.of(context).root.replace(
                       RSVPEventSuccessPopupRoute(
-                        event: event,
+                        event: widget.event,
                         eventRsvp: eventRsvp,
                         onPressed: (outerContext) {
                           AutoRouter.of(outerContext).replace(
-                            GuestEventDetailRoute(eventId: event.id ?? ''),
+                            GuestEventDetailRoute(
+                              eventId: widget.event.id ?? '',
+                            ),
                           );
                         },
                       ),
@@ -196,7 +210,7 @@ class SelectTicketView extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          "${event.title}  •  ${DateFormatUtils.dateOnly(event.start)}",
+                          "${widget.event.title}  •  ${DateFormatUtils.dateOnly(widget.event.start)}",
                           style: Typo.mediumPlus.copyWith(
                             color: colorScheme.onSecondary,
                           ),
@@ -233,18 +247,90 @@ class SelectTicketView extends StatelessWidget {
                             : EventTicketUtils.getTicketTypesSupportCrypto(
                                 ticketTypes: response.ticketTypes ?? [],
                               );
+                        final supportedPaymentNetworks =
+                            EventTicketUtils.getEventSupportedPaymentNetworks(
+                          currencies: supportedCurrencies,
+                        );
 
                         return Flexible(
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
                             children: [
+                              if (selectedPaymentMethod ==
+                                  SelectTicketsPaymentMethod.wallet)
+                                SizedBox(
+                                  height: Sizing.medium,
+                                  child: ListView.separated(
+                                    padding:
+                                        EdgeInsets.only(left: Spacing.smMedium),
+                                    scrollDirection: Axis.horizontal,
+                                    itemBuilder: (context, index) {
+                                      if (index == 0) {
+                                        return LemonOutlineButton(
+                                          onTap: () {
+                                            setState(() {
+                                              networkFilter = null;
+                                            });
+                                          },
+                                          backgroundColor:
+                                              LemonColor.atomicBlack,
+                                          borderColor: LemonColor.atomicBlack,
+                                          label: StringUtils.capitalize(
+                                            t.event.all,
+                                          ),
+                                        );
+                                      }
+                                      final chainMetadata =
+                                          Web3Utils.getNetworkMetadataById(
+                                        supportedPaymentNetworks[index - 1]
+                                            .value,
+                                      );
+                                      final selected =
+                                          supportedPaymentNetworks[index - 1] ==
+                                              networkFilter;
+                                      return Row(
+                                        children: [
+                                          LemonOutlineButton(
+                                            onTap: () {
+                                              setState(() {
+                                                networkFilter =
+                                                    supportedPaymentNetworks[
+                                                        index - 1];
+                                              });
+                                            },
+                                            leading: chainMetadata.icon,
+                                            label: chainMetadata.displayName,
+                                            backgroundColor: selected
+                                                ? LemonColor.paleViolet18
+                                                : null,
+                                            textColor: selected
+                                                ? LemonColor.paleViolet
+                                                : null,
+                                            borderColor: selected
+                                                ? Colors.transparent
+                                                : null,
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                    separatorBuilder: (context, index) {
+                                      return SizedBox(
+                                        width: Spacing.extraSmall,
+                                      );
+                                    },
+                                    itemCount:
+                                        supportedPaymentNetworks.length + 1,
+                                  ),
+                                ),
                               Expanded(
                                 child: ListView.separated(
+                                  padding: EdgeInsets.only(bottom: 200.w),
                                   itemBuilder: (context, index) =>
                                       SelectTicketItem(
+                                    networkFilter: networkFilter,
                                     selectedCurrency: selectedCurrency,
                                     selectedNetwork: selectedNetwork,
-                                    event: event,
+                                    event: widget.event,
                                     ticketType: ticketTypes[index],
                                     count: selectedTickets
                                             .firstWhereOrNull(
@@ -284,7 +370,6 @@ class SelectTicketView extends StatelessWidget {
                       },
                     ),
                   ),
-                  // const Spacer(),
                 ],
               ),
               Align(
