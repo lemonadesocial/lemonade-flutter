@@ -28,7 +28,8 @@ class CreateEventView extends StatelessWidget {
         if (state.status.isSuccess) {
           context.router.popUntilRoot();
           SnackBarUtils.showSuccessSnackbar(
-              t.event.eventCreation.createEventSuccessfully);
+            t.event.eventCreation.createEventSuccessfully,
+          );
         }
       },
       child: GestureDetector(
@@ -64,12 +65,13 @@ class CreateEventView extends StatelessWidget {
                                       onChange: (value) => context
                                           .read<CreateEventBloc>()
                                           .add(TitleChanged(title: value)),
-                                      errorText: state.title.displayError !=
-                                              null
-                                          ? state.title.displayError!
-                                              .getMessage(
-                                                  t.event.eventCreation.title)
-                                          : null,
+                                      errorText:
+                                          state.title.displayError != null
+                                              ? state.title.displayError!
+                                                  .getMessage(
+                                                  t.event.eventCreation.title,
+                                                )
+                                              : null,
                                     ),
                                     SizedBox(
                                       height: Spacing.smMedium,
@@ -86,10 +88,10 @@ class CreateEventView extends StatelessWidget {
                                       errorText:
                                           state.description.displayError != null
                                               ? state.title.displayError!
-                                                  .getMessage(t
-                                                      .event
-                                                      .eventCreation
-                                                      .description)
+                                                  .getMessage(
+                                                  t.event.eventCreation
+                                                      .description,
+                                                )
                                               : null,
                                     ),
                                     SizedBox(height: Spacing.smMedium),
