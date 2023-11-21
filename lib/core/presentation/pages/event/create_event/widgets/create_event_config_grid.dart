@@ -1,12 +1,9 @@
 import 'package:app/core/presentation/pages/event/create_event/widgets/event_config_card.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/event_guest_settings.dart';
-import 'package:app/core/presentation/pages/setting/widgets/setting_tile_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_switch/flutter_switch.dart';
 
 enum EventPrivacy { public, private }
 
@@ -53,7 +50,6 @@ class CreateEventConfigGrid extends StatelessWidget {
   CreateEventConfigGrid({super.key});
 
   onTap(String type, BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,

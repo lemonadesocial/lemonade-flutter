@@ -66,40 +66,42 @@ class EventGuestSetttings extends StatelessWidget {
                   borderRadius: BorderRadius.circular(LemonRadius.normal),
                 ),
                 clipBehavior: Clip.hardEdge,
-                child: Column(children: [
-                  SettingTileWidget(
-                    color: Colors.transparent,
-                    title: "Guest unlock limit",
-                    subTitle:
-                        "number of friends and matches a guest can unlock this experience for",
-                    onTap: () => {},
-                    trailing: SizedBox(
-                      width: 60.w,
-                      child: LemonTextField(
-                        initialText: "2",
-                        contentPadding: EdgeInsets.all(Spacing.small),
-                        onChange: (value) => {},
+                child: Column(
+                  children: [
+                    SettingTileWidget(
+                      color: Colors.transparent,
+                      title: "Guest unlock limit",
+                      subTitle:
+                          "number of friends and matches a guest can unlock this experience for",
+                      onTap: () => {},
+                      trailing: SizedBox(
+                        width: 60.w,
+                        child: LemonTextField(
+                          initialText: "2",
+                          contentPadding: EdgeInsets.all(Spacing.small),
+                          onChange: (value) => {},
+                        ),
                       ),
                     ),
-                  ),
-                  Container(height: 1, color: LemonColor.white09),
-                  SettingTileWidget(
-                    color: Colors.transparent,
-                    title: "No unlock limit",
-                    onTap: () => {},
-                    trailing: FlutterSwitch(
-                      inactiveColor: colorScheme.onPrimary.withOpacity(0.12),
-                      inactiveToggleColor:
-                          colorScheme.onPrimary.withOpacity(0.18),
-                      activeColor: LemonColor.switchActive,
-                      activeToggleColor: colorScheme.onPrimary,
-                      height: 24.h,
-                      width: 42.w,
-                      value: true,
-                      onToggle: (value) => {},
+                    Container(height: 1, color: LemonColor.white09),
+                    SettingTileWidget(
+                      color: Colors.transparent,
+                      title: "No unlock limit",
+                      onTap: () => {},
+                      trailing: FlutterSwitch(
+                        inactiveColor: colorScheme.onPrimary.withOpacity(0.12),
+                        inactiveToggleColor:
+                            colorScheme.onPrimary.withOpacity(0.18),
+                        activeColor: LemonColor.switchActive,
+                        activeToggleColor: colorScheme.onPrimary,
+                        height: 24.h,
+                        width: 42.w,
+                        value: true,
+                        onToggle: (value) => {},
+                      ),
                     ),
-                  ),
-                ]),
+                  ],
+                ),
               ),
               SizedBox(height: Spacing.small),
               Container(
