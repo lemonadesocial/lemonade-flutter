@@ -12,6 +12,8 @@ class LemonOutlineButton extends StatelessWidget {
   final BorderRadius? radius;
   final TextStyle? textStyle;
   final Color? backgroundColor;
+  final Color? borderColor;
+  final Color? textColor;
 
   const LemonOutlineButton({
     super.key,
@@ -23,6 +25,8 @@ class LemonOutlineButton extends StatelessWidget {
     this.radius,
     this.textStyle,
     this.backgroundColor,
+    this.borderColor,
+    this.textColor,
   });
 
   @override
@@ -40,7 +44,9 @@ class LemonOutlineButton extends StatelessWidget {
         decoration: ShapeDecoration(
           color: backgroundColor,
           shape: RoundedRectangleBorder(
-            side: BorderSide(color: colorScheme.outline),
+            side: BorderSide(
+              color: borderColor ?? colorScheme.outline,
+            ),
             borderRadius: radius ?? BorderRadius.circular(LemonRadius.xSmall),
           ),
         ),
@@ -58,7 +64,7 @@ class LemonOutlineButton extends StatelessWidget {
                   label!,
                   style: textStyle ??
                       Typo.small.copyWith(
-                        color: colorScheme.onSecondary,
+                        color: textColor ?? colorScheme.onSecondary,
                         fontWeight: FontWeight.w600,
                       ),
                 ),

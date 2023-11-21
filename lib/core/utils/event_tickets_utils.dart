@@ -2,6 +2,7 @@ import 'package:app/core/domain/event/entities/event_currency.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/entities/event_ticket.dart';
 import 'package:app/core/domain/payment/payment_enums.dart';
+import 'package:app/core/utils/list/unique_list_extension.dart';
 import 'package:app/core/utils/payment_utils.dart';
 import 'package:collection/collection.dart';
 
@@ -96,5 +97,17 @@ class EventTicketUtils {
     return currencies.firstWhereOrNull(
       (element) => element.currency == currency && element.network == network,
     );
+  }
+
+  static List<SupportedPaymentNetwork> getEventSupportedPaymentNetworks({
+    required List<EventCurrency> currencies,
+  }) {
+    List<SupportedPaymentNetwork> networks = [];
+    for (var eventCurrency in currencies) {
+      if (eventCurrency.network != null) {
+        networks.add(eventCurrency.network!);
+      }
+    }
+    return networks.unique();
   }
 }
