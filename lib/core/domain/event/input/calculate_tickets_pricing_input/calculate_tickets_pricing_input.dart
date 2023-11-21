@@ -7,9 +7,11 @@ part 'calculate_tickets_pricing_input.g.dart';
 
 @freezed
 class CalculateTicketsPricingInput with _$CalculateTicketsPricingInput {
+  @JsonSerializable(includeIfNull: false)
   factory CalculateTicketsPricingInput({
     @JsonKey(name: 'event') required String eventId,
     required Currency currency,
+    SupportedPaymentNetwork? network,
     String? discount,
     @Default([]) List<PurchasableItem> items,
   }) = _CalculateTicketsPricingInput;

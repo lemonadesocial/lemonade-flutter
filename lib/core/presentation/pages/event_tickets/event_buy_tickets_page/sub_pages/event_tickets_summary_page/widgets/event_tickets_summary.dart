@@ -4,6 +4,7 @@ import 'package:app/core/domain/payment/entities/payment_account/payment_account
 import 'package:app/core/domain/payment/entities/purchasable_item/purchasable_item.dart';
 import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/utils/event_tickets_utils.dart';
 import 'package:app/core/utils/number_utils.dart';
 import 'package:app/core/utils/payment_utils.dart';
 import 'package:app/core/utils/web3_utils.dart';
@@ -18,13 +19,16 @@ class EventTicketsSummary extends StatelessWidget {
   final List<PurchasableTicketType> ticketTypes;
   final List<PurchasableItem> selectedTickets;
   final Currency selectedCurrency;
+  final SupportedPaymentNetwork? selectedNetwork;
   final EventTicketsPricingInfo pricingInfo;
+
   const EventTicketsSummary({
     super.key,
     required this.ticketTypes,
     required this.selectedTickets,
     required this.selectedCurrency,
     required this.pricingInfo,
+    this.selectedNetwork,
   });
 
   @override
@@ -43,6 +47,7 @@ class EventTicketsSummary extends StatelessWidget {
           ticketType: selectedTicketType,
           count: selectedTicket.count,
           currency: selectedCurrency,
+          network: selectedNetwork,
           currencyInfo: currencyInfo,
         );
       }).toList(),
@@ -56,12 +61,14 @@ class TicketSummaryItem extends StatelessWidget {
     required this.count,
     required this.ticketType,
     required this.currency,
+    required this.network,
     this.currencyInfo,
   });
 
   final PurchasableTicketType ticketType;
   final int count;
   final Currency currency;
+  final SupportedPaymentNetwork? network;
   final CurrencyInfo? currencyInfo;
 
   @override
@@ -103,7 +110,11 @@ class TicketSummaryItem extends StatelessWidget {
           if (!isCrypto)
             Text(
               NumberUtils.formatCurrency(
-                amount: (ticketType.defaultPrice?.fiatCost?.toDouble() ?? 0) *
+                amount: (EventTicketUtils.getTicketPriceByCurrencyAndNetwork(
+                          ticketType: ticketType,
+                          currency: currency,
+                        )?.fiatCost ??
+                        0) *
                     count,
                 currency: currency,
               ),
@@ -111,7 +122,13 @@ class TicketSummaryItem extends StatelessWidget {
           if (isCrypto)
             Text(
               Web3Utils.formatCryptoCurrency(
-                ticketType.prices![currency]!.cryptoCost! * BigInt.from(count),
+                (EventTicketUtils.getTicketPriceByCurrencyAndNetwork(
+                          ticketType: ticketType,
+                          currency: currency,
+                          network: network,
+                        )?.cryptoCost ??
+                        BigInt.zero) *
+                    BigInt.from(count),
                 currency: currency,
                 decimals: currencyInfo?.decimals ?? 0,
               ),

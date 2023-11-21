@@ -33,7 +33,7 @@ class EventBuyTicketsPage extends StatelessWidget implements AutoRouteWrapper {
             ),
         ),
         BlocProvider(
-          create: (context) => SelectEventTicketTypesBloc(),
+          create: (context) => SelectEventTicketsBloc(),
         ),
         BlocProvider(
           create: (context) => RedeemTicketsBloc(event: event),

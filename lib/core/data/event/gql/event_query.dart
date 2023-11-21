@@ -52,7 +52,11 @@ const eventTicketTypesFragment = '''
     event_ticket_types {
       _id
       title
-      prices
+      prices {
+        cost
+        currency
+        network
+      }
       description
     }
   }
@@ -113,14 +117,12 @@ const eventFragment = '''
 final getEventDetailQuery = gql('''
   $eventFragment
   $eventOfferFragment
-  $eventTicketTypesFragment
   $eventPaymentAccountFragment
 
   query(\$id: MongoID!) {
     getEvent(_id: \$id) {
       ...eventFields
       ...eventOfferFragment
-      ...eventTicketTypesFragment
       ...eventPaymentAccountFragment
     }
   }

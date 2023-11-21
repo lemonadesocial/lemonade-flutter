@@ -25,35 +25,25 @@ class BuyTicketsWithCryptoBloc
     extends Bloc<BuyTicketsWithCryptoEvent, BuyTicketsWithCryptoState> {
   final eventTicketRepository = getIt<EventTicketRepository>();
   final paymentRepository = getIt<PaymentRepository>();
+  final SupportedPaymentNetwork? selectedNetwork;
+
   Payment? _currentPayment;
   String? _signature;
   String? _txHash;
-  SupportedPaymentNetwork? _selectedNetwork;
   int _updatePaymentAttemptCount = 0;
   final walletConnectService = getIt<WalletConnectService>();
 
-  BuyTicketsWithCryptoBloc()
-      : super(
+  BuyTicketsWithCryptoBloc({
+    required this.selectedNetwork,
+  }) : super(
           BuyTicketsWithCryptoState.idle(
             data: BuyTicketsWithCryptoStateData(),
           ),
         ) {
-    on<_SelectNetwork>(_onSelectNetwork);
     on<_InitAndSignPayment>(_onInitAndSignPayment);
     on<_MakeTransaction>(_onMakeTransaction);
     on<_ProcessUpdatePayment>(_onProcessUpdatePayment);
     on<_Resume>(_onResumeState);
-  }
-
-  Future<void> _onSelectNetwork(_SelectNetwork event, Emitter emit) async {
-    _selectedNetwork = event.network;
-    emit(
-      BuyTicketsWithCryptoState.networkSelected(
-        data: state.data.copyWith(
-          selectedNetwork: _selectedNetwork,
-        ),
-      ),
-    );
   }
 
   Future<void> _onInitAndSignPayment(
@@ -64,7 +54,7 @@ class BuyTicketsWithCryptoBloc
     final result = await eventTicketRepository.buyTickets(
       input: event.input.copyWith(
         transferParams: BuyTicketsTransferParamsInput(
-          network: _selectedNetwork,
+          network: selectedNetwork,
         ),
       ),
     );
@@ -91,7 +81,7 @@ class BuyTicketsWithCryptoBloc
     try {
       final signature = await walletConnectService.personalSign(
         chainId:
-            Web3Utils.getNetworkMetadataById(_selectedNetwork!.value).chainId,
+            Web3Utils.getNetworkMetadataById(selectedNetwork!.value).chainId,
         message: Web3Utils.toHex(payment.id ?? ''),
         wallet: event.userWalletAddress,
         walletApp: SupportedWalletApp.metamask,
@@ -134,7 +124,7 @@ class BuyTicketsWithCryptoBloc
     emit(BuyTicketsWithCryptoState.loading(data: state.data));
     try {
       final contractAddress =
-          event.currencyInfo.contracts?[_selectedNetwork] ?? '';
+          event.currencyInfo.contracts?[selectedNetwork] ?? '';
       final contract = Web3ContractService.getERC20Contract(contractAddress);
       final contractCallTxn = Transaction.callContract(
         contract: contract,
@@ -152,7 +142,7 @@ class BuyTicketsWithCryptoBloc
       );
       _txHash = await walletConnectService.requestTransaction(
         chainId:
-            Web3Utils.getNetworkMetadataById(_selectedNetwork!.value).chainId,
+            Web3Utils.getNetworkMetadataById(selectedNetwork!.value).chainId,
         transaction: ethereumTxn,
         walletApp: SupportedWalletApp.metamask,
       );
@@ -200,7 +190,7 @@ class BuyTicketsWithCryptoBloc
         transferParams: UpdatePaymentTransferParams(
           signature: _signature,
           txHash: _txHash,
-          network: _selectedNetwork!,
+          network: selectedNetwork!,
         ),
       ),
     );
@@ -258,9 +248,6 @@ class BuyTicketsWithCryptoState with _$BuyTicketsWithCryptoState {
   factory BuyTicketsWithCryptoState.idle({
     required BuyTicketsWithCryptoStateData data,
   }) = BuyTicketsWithCryptoStateIdle;
-  factory BuyTicketsWithCryptoState.networkSelected({
-    required BuyTicketsWithCryptoStateData data,
-  }) = BuyTicketsWithCryptoStateNetworkSelected;
   factory BuyTicketsWithCryptoState.signed({
     required BuyTicketsWithCryptoStateData data,
   }) = BuyTicketsWithCryptoStateSigned;
@@ -282,7 +269,6 @@ class BuyTicketsWithCryptoStateData with _$BuyTicketsWithCryptoStateData {
     Payment? payment,
     String? signature,
     String? txHash,
-    SupportedPaymentNetwork? selectedNetwork,
   }) = _BuyTicketsWithCryptoStateData;
 }
 

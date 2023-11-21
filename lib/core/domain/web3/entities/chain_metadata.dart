@@ -1,9 +1,11 @@
+import 'package:flutter/material.dart';
+
 class ChainMetadata {
   final String id;
   final String chainId;
   final String displayName;
   final String name;
-  final String icon;
+  final Widget icon;
   final bool isTestnet;
   final String rpcUrl;
   final NativeCurrency nativeCurrency;

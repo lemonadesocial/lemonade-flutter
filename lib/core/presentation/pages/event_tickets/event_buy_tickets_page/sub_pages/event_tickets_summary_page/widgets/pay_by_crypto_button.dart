@@ -6,14 +6,14 @@ import 'package:app/core/domain/event/entities/event_tickets_pricing_info.dart';
 import 'package:app/core/domain/event/input/buy_tickets_input/buy_tickets_input.dart';
 import 'package:app/core/domain/payment/entities/purchasable_item/purchasable_item.dart';
 import 'package:app/core/domain/payment/payment_enums.dart';
-import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_payment_method_page/widgets/select_payment_network_bottom_sheet.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/wallet_connect/wallet_connect_popup/wallet_connect_popup.dart';
 import 'package:app/core/utils/payment_utils.dart';
-import 'package:app/core/utils/web3_utils.dart';
+import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -22,6 +22,7 @@ import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
 class PayByCryptoButton extends StatelessWidget {
   final EventTicketsPricingInfo pricingInfo;
   final Currency selectedCurrency;
+  final SupportedPaymentNetwork? selectedNetwork;
   final List<PurchasableItem> selectedTickets;
 
   const PayByCryptoButton({
@@ -29,6 +30,7 @@ class PayByCryptoButton extends StatelessWidget {
     required this.pricingInfo,
     required this.selectedCurrency,
     required this.selectedTickets,
+    this.selectedNetwork,
   });
 
   @override
@@ -41,6 +43,7 @@ class PayByCryptoButton extends StatelessWidget {
       child: PayByCryptoButtonView(
         pricingInfo: pricingInfo,
         selectedCurrency: selectedCurrency,
+        selectedNetwork: selectedNetwork,
         selectedTickets: selectedTickets,
       ),
     );
@@ -50,6 +53,7 @@ class PayByCryptoButton extends StatelessWidget {
 class PayByCryptoButtonView extends StatefulWidget {
   final EventTicketsPricingInfo pricingInfo;
   final Currency selectedCurrency;
+  final SupportedPaymentNetwork? selectedNetwork;
   final List<PurchasableItem> selectedTickets;
 
   const PayByCryptoButtonView({
@@ -57,6 +61,7 @@ class PayByCryptoButtonView extends StatefulWidget {
     required this.pricingInfo,
     required this.selectedCurrency,
     required this.selectedTickets,
+    this.selectedNetwork,
   });
 
   @override
@@ -80,24 +85,6 @@ class _PayByCryptoButtonViewState extends State<PayByCryptoButtonView> {
     );
   }
 
-  clickSelectNetwork() {
-    final networks =
-        widget.pricingInfo.paymentAccounts?.first.accountInfo?.networks ?? [];
-    SelectPaymentNetworkBottomSheet(
-      networks: networks,
-      onSelectNetwork: (network) {
-        context.read<BuyTicketsWithCryptoBloc>().add(
-              BuyTicketsWithCryptoEvent.selectNetwork(
-                network: network,
-              ),
-            );
-      },
-    ).showAsBottomSheet(
-      context,
-      heightFactor: 0.5,
-    );
-  }
-
   clickInitPaymentAndSigned({
     required Event event,
     required String userWalletAddress,
@@ -111,6 +98,7 @@ class _PayByCryptoButtonViewState extends State<PayByCryptoButtonView> {
               currency: widget.selectedCurrency,
               items: widget.selectedTickets,
               total: widget.pricingInfo.total ?? '0',
+              network: widget.selectedNetwork,
             ),
           ),
         );
@@ -177,7 +165,6 @@ class _PayByCryptoButtonViewState extends State<PayByCryptoButtonView> {
             return BlocBuilder<BuyTicketsWithCryptoBloc,
                 BuyTicketsWithCryptoState>(
               builder: (context, state) {
-                final selectedNetwork = state.data.selectedNetwork;
                 String buttonTitle = '';
                 Function()? onPress;
 
@@ -190,11 +177,6 @@ class _PayByCryptoButtonViewState extends State<PayByCryptoButtonView> {
                 }
 
                 if (state is BuyTicketsWithCryptoStateIdle) {
-                  buttonTitle = t.event.eventCryptoPayment.selectNetwork;
-                  onPress = () => clickSelectNetwork();
-                }
-
-                if (state is BuyTicketsWithCryptoStateNetworkSelected) {
                   buttonTitle =
                       buttonTitle = t.event.eventCryptoPayment.signPayment;
                   onPress = () => clickInitPaymentAndSigned(
@@ -214,19 +196,17 @@ class _PayByCryptoButtonViewState extends State<PayByCryptoButtonView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    if (selectedNetwork != null)
-                      Text(
-                        "Network: ${Web3Utils.getNetworkMetadataById(selectedNetwork.value).displayName}",
-                      ),
-                    SizedBox(
-                      height: Spacing.smMedium,
-                    ),
                     LinearGradientButton(
                       onTap: () {
                         onPress?.call();
                       },
                       height: Sizing.large,
                       radius: BorderRadius.circular(LemonRadius.small * 2),
+                      textStyle: Typo.medium.copyWith(
+                        fontFamily: FontFamily.nohemiVariable,
+                        fontWeight: FontWeight.w600,
+                        color: colorScheme.onPrimary.withOpacity(0.87),
+                      ),
                       mode: GradientButtonMode.lavenderMode,
                       label: buttonTitle,
                       // loadingWhen: state is BuyTicketsWithCryptoStateLoading,

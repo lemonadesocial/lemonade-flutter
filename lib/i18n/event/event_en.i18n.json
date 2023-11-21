@@ -34,7 +34,13 @@
         "selectTickets": "Select tickets",
         "orderSummary": "Order summary",
         "enterPromoCode": "Enter promo code",
-        "selectCurrency": "Please select currency first"
+        "selectCurrency": "Please select currency first",
+        "paymentMethods": {
+            "card": "Card",
+            "wallet": "Wallet"
+        },
+        "payViaCard": "Pay via Card",
+        "payViaWallet": "Pay via Wallet"
     },
     "eventOrder": {
         "itemTotal": "Item total",
