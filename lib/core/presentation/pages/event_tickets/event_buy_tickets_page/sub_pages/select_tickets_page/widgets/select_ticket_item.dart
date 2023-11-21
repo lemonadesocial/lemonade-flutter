@@ -244,7 +244,6 @@ class _PriceItem extends StatelessWidget {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                // Mock data
                 if (isCryptoCurrency && price.network != null) ...[
                   SizedBox(height: 2.w),
                   Text(

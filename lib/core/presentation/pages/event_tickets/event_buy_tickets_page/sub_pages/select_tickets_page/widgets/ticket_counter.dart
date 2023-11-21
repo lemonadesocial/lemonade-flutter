@@ -28,7 +28,6 @@ class TicketCounter extends StatelessWidget {
         color: count > 0
             ? colorScheme.onPrimary.withOpacity(0.005)
             : colorScheme.onPrimary.withOpacity(0.09),
-        // color:  colorScheme.onPrimary.withOpacity(0.005),
       ),
       borderRadius: BorderRadius.circular(LemonRadius.xSmall),
     );
