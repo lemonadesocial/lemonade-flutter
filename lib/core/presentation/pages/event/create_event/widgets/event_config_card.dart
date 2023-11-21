@@ -8,24 +8,21 @@ class EventConfigCard extends StatelessWidget {
   final String title;
   final String description;
   final Widget icon;
+  final Function() onTap;
 
   const EventConfigCard({
     super.key,
     required this.title,
     required this.description,
     required this.icon,
+    required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return GestureDetector(
-      onTap: () {
-        // Handle tap action for the card
-        if (kDebugMode) {
-          print('Card tapped! $title');
-        }
-      },
+      onTap: onTap,
       child: Container(
         height: 70.h,
         decoration: BoxDecoration(

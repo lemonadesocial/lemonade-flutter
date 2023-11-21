@@ -1,5 +1,5 @@
 import 'package:app/core/application/event/create_event_bloc/create_event_bloc.dart';
-import 'package:app/core/presentation/pages/create_event/widgets/create_event_view.dart';
+import 'package:app/core/presentation/pages/event/create_event/widgets/create_event_view.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 

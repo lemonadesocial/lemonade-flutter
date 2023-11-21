@@ -1,5 +1,5 @@
 import 'package:app/core/application/event/create_event_bloc/create_event_bloc.dart';
-import 'package:app/core/presentation/pages/create_event/widgets/create_event_config_grid.dart';
+import 'package:app/core/presentation/pages/event/create_event/widgets/create_event_config_grid.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
