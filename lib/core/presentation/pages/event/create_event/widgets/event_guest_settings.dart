@@ -105,48 +105,48 @@ class EventGuestSetttings extends StatelessWidget {
               ),
               SizedBox(height: Spacing.small),
               Container(
-                  decoration: BoxDecoration(
-                    color: colorScheme.onPrimary.withOpacity(0.06),
-                    borderRadius: BorderRadius.circular(LemonRadius.normal),
-                  ),
-                  clipBehavior: Clip.hardEdge,
-                  child: Column(
-                    children: [
-                      SettingTileWidget(
-                        color: Colors.transparent,
-                        title: "Total guest limit",
-                        subTitle:
-                            "total number of people who can attend this experience",
-                        onTap: () => {},
-                        trailing: SizedBox(
-                          width: 60.w,
-                          child: LemonTextField(
-                            initialText: "100",
-                            contentPadding: EdgeInsets.all(Spacing.small),
-                            onChange: (value) => {},
-                          ),
+                decoration: BoxDecoration(
+                  color: colorScheme.onPrimary.withOpacity(0.06),
+                  borderRadius: BorderRadius.circular(LemonRadius.normal),
+                ),
+                clipBehavior: Clip.hardEdge,
+                child: Column(
+                  children: [
+                    SettingTileWidget(
+                      color: Colors.transparent,
+                      title: "Total guest limit",
+                      subTitle:
+                          "total number of people who can attend this experience",
+                      onTap: () => {},
+                      trailing: SizedBox(
+                        width: 60.w,
+                        child: LemonTextField(
+                          initialText: "100",
+                          contentPadding: EdgeInsets.all(Spacing.small),
+                          onChange: (value) => {},
                         ),
                       ),
-                      Container(height: 1, color: LemonColor.white09),
-                      SettingTileWidget(
-                        color: Colors.transparent,
-                        title: "No guest limit",
-                        onTap: () => {},
-                        trailing: FlutterSwitch(
-                          inactiveColor:
-                              colorScheme.onPrimary.withOpacity(0.12),
-                          inactiveToggleColor:
-                              colorScheme.onPrimary.withOpacity(0.18),
-                          activeColor: LemonColor.switchActive,
-                          activeToggleColor: colorScheme.onPrimary,
-                          height: 24.h,
-                          width: 42.w,
-                          value: true,
-                          onToggle: (value) => {},
-                        ),
+                    ),
+                    Container(height: 1, color: LemonColor.white09),
+                    SettingTileWidget(
+                      color: Colors.transparent,
+                      title: "No guest limit",
+                      onTap: () => {},
+                      trailing: FlutterSwitch(
+                        inactiveColor: colorScheme.onPrimary.withOpacity(0.12),
+                        inactiveToggleColor:
+                            colorScheme.onPrimary.withOpacity(0.18),
+                        activeColor: LemonColor.switchActive,
+                        activeToggleColor: colorScheme.onPrimary,
+                        height: 24.h,
+                        width: 42.w,
+                        value: true,
+                        onToggle: (value) => {},
                       ),
-                    ],
-                  )),
+                    ),
+                  ],
+                ),
+              ),
               SizedBox(height: Spacing.small),
             ],
           ),

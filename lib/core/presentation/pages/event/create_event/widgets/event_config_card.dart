@@ -1,6 +1,5 @@
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/theme/typo.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
