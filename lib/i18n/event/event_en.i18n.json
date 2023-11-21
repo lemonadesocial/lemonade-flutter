@@ -99,6 +99,7 @@
         "description": "Description",
         "descriptionPlaceholder": "What is this experience about ?",
         "createEventSuccessfully": "Create event successfully",
-        "guestSettings": "Guest Settings"
+        "guestSettings": "Guest Settings",
+        "guestSettingDescription": "$guestLimit guests, $guestLimitPer guests unlocks"
     }
 }

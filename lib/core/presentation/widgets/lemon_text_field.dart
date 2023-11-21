@@ -25,6 +25,7 @@ class LemonTextField extends StatelessWidget {
     this.textInputType,
     this.focusNode,
     this.errorText,
+    this.readOnly,
   }) : super(key: key);
 
   final ValueChanged<String> onChange;
@@ -44,6 +45,7 @@ class LemonTextField extends StatelessWidget {
   final TextInputType? textInputType;
   final FocusNode? focusNode;
   final String? errorText;
+  final bool? readOnly;
 
   @override
   Widget build(BuildContext context) {
@@ -96,6 +98,7 @@ class LemonTextField extends StatelessWidget {
             prefixIcon: leadingIcon,
           ),
           inputFormatters: inputFormatters,
+          readOnly: readOnly ?? false,
         ),
         if (statusWidget != null) ...[
           SizedBox(height: Spacing.xSmall),

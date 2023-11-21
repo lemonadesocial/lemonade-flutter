@@ -1,4 +1,4 @@
-import 'package:app/core/utils/string_validators.dart';
+import 'package:app/core/utils/validators/string_validators.dart';
 import 'package:formz/formz.dart';
 
 enum StringValidationError {

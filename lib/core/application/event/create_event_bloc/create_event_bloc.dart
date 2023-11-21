@@ -2,6 +2,7 @@ import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/core/domain/event/input/event_input/event_input.dart';
 import 'package:app/core/domain/form/string_formz.dart';
 import 'package:app/injection/register_module.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -12,9 +13,16 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
   CreateEventBloc() : super(const CreateEventState()) {
     on<TitleChanged>(_onTitleChanged);
     on<DescriptionChanged>(_onDescriptionChanged);
+    on<VerifyChanged>(_onVerifyChanged);
+    on<GuestLimitChanged>(_onGuestLimitChanged);
+    on<GuestLimitPerChanged>(_onGuestLimitPerChanged);
+    on<PrivateChanged>(_onPrivateChanged);
+    on<VirtualChanged>(_onVirtualChanged);
     on<FormSubmitted>(_onFormSubmitted);
   }
   final _eventRepository = getIt<EventRepository>();
+  final guestLimitPerController = TextEditingController(text: "2");
+  final guestLimitController = TextEditingController(text: "100");
 
   Future<void> _onTitleChanged(
     TitleChanged event,
@@ -43,6 +51,72 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
           state.title,
           description,
         ]),
+      ),
+    );
+  }
+
+  Future<void> _onVerifyChanged(
+    VerifyChanged event,
+    Emitter<CreateEventState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        verify: event.verify,
+      ),
+    );
+  }
+
+  Future<void> _onGuestLimitChanged(
+    GuestLimitChanged event,
+    Emitter<CreateEventState> emit,
+  ) async {
+    if (event.guestLimit == null) {
+      guestLimitController.text = "";
+    } else {
+      guestLimitController.text = event.guestLimit.toString();
+    }
+
+    emit(
+      state.copyWith(
+        guestLimit: event.guestLimit,
+      ),
+    );
+  }
+
+  Future<void> _onGuestLimitPerChanged(
+    GuestLimitPerChanged event,
+    Emitter<CreateEventState> emit,
+  ) async {
+    if (event.guestLimitPer == null) {
+      guestLimitPerController.text = "";
+    } else {
+      guestLimitPerController.text = event.guestLimitPer.toString();
+    }
+    emit(
+      state.copyWith(
+        guestLimitPer: event.guestLimitPer,
+      ),
+    );
+  }
+
+  Future<void> _onPrivateChanged(
+    PrivateChanged event,
+    Emitter<CreateEventState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        private: event.private,
+      ),
+    );
+  }
+
+  Future<void> _onVirtualChanged(
+    VirtualChanged event,
+    Emitter<CreateEventState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        virtual: event.virtual,
       ),
     );
   }
@@ -95,6 +169,22 @@ class CreateEventEvent with _$CreateEventEvent {
     required String description,
   }) = DescriptionChanged;
 
+  const factory CreateEventEvent.guestLimitChanged(
+      {required String? guestLimit}) = GuestLimitChanged;
+
+  const factory CreateEventEvent.guestLimitPerChanged({
+    required String? guestLimitPer,
+  }) = GuestLimitPerChanged;
+
+  const factory CreateEventEvent.privateChanged({required bool private}) =
+      PrivateChanged;
+
+  const factory CreateEventEvent.verifyChanged({required bool verify}) =
+      VerifyChanged;
+
+  const factory CreateEventEvent.virtualChanged({required bool virtual}) =
+      VirtualChanged;
+
   const factory CreateEventEvent.formSubmitted() = FormSubmitted;
 }
 
@@ -103,6 +193,11 @@ class CreateEventState with _$CreateEventState {
   const factory CreateEventState({
     @Default(StringFormz.pure()) StringFormz title,
     @Default(StringFormz.pure()) StringFormz description,
+    @Default("100") String? guestLimit,
+    @Default("2") String? guestLimitPer,
+    @Default(false) bool private,
+    @Default(true) bool verify,
+    @Default(true) bool virtual,
     @Default(false) bool isValid,
     @Default(FormzSubmissionStatus.initial) FormzSubmissionStatus status,
   }) = _CreateEventState;
