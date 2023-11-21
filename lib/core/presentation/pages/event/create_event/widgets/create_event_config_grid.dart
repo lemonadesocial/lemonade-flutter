@@ -1,6 +1,5 @@
 import 'package:app/core/presentation/pages/event/create_event/widgets/event_config_card.dart';
-import 'package:app/core/presentation/pages/event/create_event/widgets/event_guest_settings.dart';
-import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
+import 'package:app/core/presentation/pages/event/event_guest_settings_page/event_guest_settings_page.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -50,56 +49,8 @@ class CreateEventConfigGrid extends StatelessWidget {
   CreateEventConfigGrid({super.key});
 
   onTap(String type, BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Theme.of(context).colorScheme.primary,
-      builder: (BuildContext context) {
-        return Container(
-          decoration: BoxDecoration(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
-            color: Theme.of(context).colorScheme.onPrimaryContainer,
-          ),
-          clipBehavior: Clip.hardEdge,
-          child: FractionallySizedBox(
-            heightFactor: 0.8,
-            child: Column(
-              children: [
-                const SizedBox(height: 10),
-                Container(
-                  width: 35,
-                  height: 5,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.tertiaryContainer,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 10.h, bottom: 15.h),
-                  child: Expanded(
-                    child: Column(
-                      children: [
-                        LemonAppBar(
-                          title: "Guest Settings",
-                          backgroundColor:
-                              Theme.of(context).colorScheme.onPrimaryContainer,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: Spacing.xSmall,
-                          ),
-                          child: const EventGuestSetttings(),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
+    const EventGuestSettingsPage()
+        .showAsBottomSheet(context, heightFactor: 0.8);
   }
 
   @override

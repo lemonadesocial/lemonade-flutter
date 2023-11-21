@@ -1,5 +1,7 @@
 import 'package:app/core/presentation/pages/setting/widgets/setting_tile_widget.dart';
+import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
+import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
@@ -8,12 +10,29 @@ import 'package:flutter_switch/flutter_switch.dart';
 
 enum EventPrivacy { public, private }
 
-class EventGuestSetttings extends StatelessWidget {
-  const EventGuestSetttings({super.key});
+class EventGuestSettingsView extends StatelessWidget {
+  const EventGuestSettingsView({super.key});
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final t = Translations.of(context);
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        appBar: LemonAppBar(
+          backgroundColor: colorScheme.onPrimaryContainer,
+          title: t.event.eventCreation.guestSettings,
+        ),
+        backgroundColor: colorScheme.onPrimaryContainer,
+        body: _buildContent(colorScheme),
+      ),
+    );
+  }
+
+  _buildContent(ColorScheme colorScheme) {
     return Column(
       children: [
         Container(

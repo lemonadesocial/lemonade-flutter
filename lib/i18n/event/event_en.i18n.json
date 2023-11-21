@@ -93,9 +93,12 @@
         "reservations": "You don't have any reservations."
     },
     "paymentNotSupported": "Paid tickets are not supported yet. Please kindly use our website",
-    "createEvent": "Create event",
-    "title": "Title",
-    "description": "Description",
-    "descriptionPlaceholder": "What is this experience about ?",
-    "createEventSuccessfully": "Create event successfully"
+    "eventCreation": {
+        "createEvent": "Create event",
+        "title": "Title",
+        "description": "Description",
+        "descriptionPlaceholder": "What is this experience about ?",
+        "createEventSuccessfully": "Create event successfully",
+        "guestSettings": "Guest Settings"
+    }
 }

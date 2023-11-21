@@ -27,7 +27,8 @@ class CreateEventView extends StatelessWidget {
       listener: (context, state) {
         if (state.status.isSuccess) {
           context.router.popUntilRoot();
-          SnackBarUtils.showSuccessSnackbar(t.event.createEventSuccessfully);
+          SnackBarUtils.showSuccessSnackbar(
+              t.event.eventCreation.createEventSuccessfully);
         }
       },
       child: GestureDetector(
@@ -35,7 +36,7 @@ class CreateEventView extends StatelessWidget {
         child: Scaffold(
           backgroundColor: colorScheme.primary,
           appBar: LemonAppBar(
-            title: t.event.createEvent,
+            title: t.event.eventCreation.createEvent,
           ),
           body: BlocBuilder<CreateEventBloc, CreateEventState>(
             builder: (context, state) {
@@ -63,11 +64,12 @@ class CreateEventView extends StatelessWidget {
                                       onChange: (value) => context
                                           .read<CreateEventBloc>()
                                           .add(TitleChanged(title: value)),
-                                      errorText:
-                                          state.title.displayError != null
-                                              ? state.title.displayError!
-                                                  .getMessage(t.event.title)
-                                              : null,
+                                      errorText: state.title.displayError !=
+                                              null
+                                          ? state.title.displayError!
+                                              .getMessage(
+                                                  t.event.eventCreation.title)
+                                          : null,
                                     ),
                                     SizedBox(
                                       height: Spacing.smMedium,
@@ -81,12 +83,14 @@ class CreateEventView extends StatelessWidget {
                                                   description: value,
                                                 ),
                                               ),
-                                      errorText: state
-                                                  .description.displayError !=
-                                              null
-                                          ? state.title.displayError!
-                                              .getMessage(t.event.description)
-                                          : null,
+                                      errorText:
+                                          state.description.displayError != null
+                                              ? state.title.displayError!
+                                                  .getMessage(t
+                                                      .event
+                                                      .eventCreation
+                                                      .description)
+                                              : null,
                                     ),
                                     SizedBox(height: Spacing.smMedium),
                                     CreateEventConfigGrid(),
