@@ -301,10 +301,11 @@ class _SelectTicketViewState extends State<SelectTicketView> {
                                             leading: chainMetadata.icon,
                                             label: chainMetadata.displayName,
                                             backgroundColor: selected
-                                                ? LemonColor.paleViolet18
+                                                ? LemonColor.atomicBlack
                                                 : null,
                                             textColor: selected
-                                                ? LemonColor.paleViolet
+                                                ? colorScheme.onPrimary
+                                                    .withOpacity(0.72)
                                                 : null,
                                             borderColor: selected
                                                 ? Colors.transparent
@@ -330,6 +331,8 @@ class _SelectTicketViewState extends State<SelectTicketView> {
                                     networkFilter: networkFilter,
                                     selectedCurrency: selectedCurrency,
                                     selectedNetwork: selectedNetwork,
+                                    selectedPaymentMethod:
+                                        selectedPaymentMethod,
                                     event: widget.event,
                                     ticketType: ticketTypes[index],
                                     count: selectedTickets

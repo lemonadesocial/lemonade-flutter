@@ -10,6 +10,8 @@ part 'calculate_event_tickets_pricing_bloc.freezed.dart';
 class CalculateEventTicketPricingBloc extends Bloc<
     CalculateEventTicketPricingEvent, CalculateEventTicketPricingState> {
   final eventTicketRepository = getIt<EventTicketRepository>();
+  EventTicketsPricingInfo? _currentPricingInfo;
+  String? promoCode;
 
   CalculateEventTicketPricingBloc()
       : super(CalculateEventTicketPricingState.idle()) {
@@ -24,12 +26,23 @@ class CalculateEventTicketPricingBloc extends Bloc<
     final result = await eventTicketRepository.calculateTicketsPricing(
       input: event.input,
     );
-    result.fold(
-      (l) {},
-      (pricingInfo) => emit(
-        CalculateEventTicketPricingState.success(pricingInfo: pricingInfo),
-      ),
-    );
+
+    result.fold((l) {
+      emit(
+        CalculateEventTicketPricingState.failure(
+          pricingInfo: _currentPricingInfo,
+        ),
+      );
+    }, (pricingInfo) {
+      _currentPricingInfo = pricingInfo.copyWith(
+        promoCode: event.input.discount,
+      );
+      emit(
+        CalculateEventTicketPricingState.success(
+          pricingInfo: _currentPricingInfo!,
+        ),
+      );
+    });
   }
 }
 
@@ -49,6 +62,7 @@ class CalculateEventTicketPricingState with _$CalculateEventTicketPricingState {
   factory CalculateEventTicketPricingState.success({
     required EventTicketsPricingInfo pricingInfo,
   }) = CalculateTicketsPricingStateSuccess;
-  factory CalculateEventTicketPricingState.failure() =
-      CalculateTicketsPricingStateFailure;
+  factory CalculateEventTicketPricingState.failure({
+    EventTicketsPricingInfo? pricingInfo,
+  }) = CalculateTicketsPricingStateFailure;
 }

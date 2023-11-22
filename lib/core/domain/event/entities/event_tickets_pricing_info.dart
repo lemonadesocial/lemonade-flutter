@@ -1,30 +1,26 @@
 import 'package:app/core/data/event/dtos/event_tickets_pricing_info_dto/event_tickets_pricing_info_dto.dart';
 import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class EventTicketsPricingInfo {
-  final String? discount;
-  final String? subTotal;
-  final String? total;
-  final double? fiatDiscount;
-  final double? fiatSubTotal;
-  final double? fiatTotal;
-  final BigInt? blockchainDiscount;
-  final BigInt? cryptoSubTotal;
-  final BigInt? cryptoTotal;
-  final List<PaymentAccount>? paymentAccounts;
+part 'event_tickets_pricing_info.freezed.dart';
 
-  const EventTicketsPricingInfo({
-    this.discount,
-    this.subTotal,
-    this.total,
-    this.fiatDiscount,
-    this.fiatSubTotal,
-    this.fiatTotal,
-    this.blockchainDiscount,
-    this.cryptoSubTotal,
-    this.cryptoTotal,
-    this.paymentAccounts,
-  });
+@freezed
+class EventTicketsPricingInfo with _$EventTicketsPricingInfo {
+  EventTicketsPricingInfo._();
+
+  factory EventTicketsPricingInfo({
+    String? discount,
+    String? subTotal,
+    String? total,
+    double? fiatDiscount,
+    double? fiatSubTotal,
+    double? fiatTotal,
+    BigInt? cryptoDiscount,
+    BigInt? cryptoSubTotal,
+    BigInt? cryptoTotal,
+    List<PaymentAccount>? paymentAccounts,
+    String? promoCode,
+  }) = _EventTicketsPricingInfo;
 
   factory EventTicketsPricingInfo.fromDto(EventTicketsPricingInfoDto dto) =>
       EventTicketsPricingInfo(
@@ -36,7 +32,7 @@ class EventTicketsPricingInfo {
         fiatSubTotal:
             dto.subtotal != null ? double.tryParse(dto.subtotal!) : null,
         fiatTotal: dto.total != null ? double.tryParse(dto.total!) : null,
-        blockchainDiscount:
+        cryptoDiscount:
             dto.discount != null ? BigInt.parse(dto.discount!) : null,
         cryptoSubTotal:
             dto.subtotal != null ? BigInt.parse(dto.subtotal!) : null,

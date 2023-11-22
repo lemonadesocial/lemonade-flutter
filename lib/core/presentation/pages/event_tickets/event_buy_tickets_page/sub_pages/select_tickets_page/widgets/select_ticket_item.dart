@@ -1,4 +1,5 @@
 import 'package:app/core/application/event_tickets/get_event_ticket_types_bloc/get_event_ticket_types_bloc.dart';
+import 'package:app/core/application/event_tickets/select_event_tickets_bloc/select_event_tickets_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_currency.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
@@ -8,7 +9,9 @@ import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/utils/event_tickets_utils.dart';
 import 'package:app/core/utils/number_utils.dart';
 import 'package:app/core/utils/payment_utils.dart';
+import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/core/utils/web3_utils.dart';
+import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
@@ -26,6 +29,7 @@ class SelectTicketItem extends StatelessWidget {
     required this.event,
     required this.onCountChange,
     required this.count,
+    required this.selectedPaymentMethod,
     this.selectedCurrency,
     this.selectedNetwork,
     this.networkFilter,
@@ -35,6 +39,7 @@ class SelectTicketItem extends StatelessWidget {
   final PurchasableTicketType ticketType;
   final int count;
   final Currency? selectedCurrency;
+  final SelectTicketsPaymentMethod selectedPaymentMethod;
   final SupportedPaymentNetwork? selectedNetwork;
   final SupportedPaymentNetwork? networkFilter;
   final Function(int count, Currency currency, SupportedPaymentNetwork? network)
@@ -124,6 +129,20 @@ class SelectTicketItem extends StatelessWidget {
                 ],
                 SizedBox(height: Spacing.xSmall),
                 ...(ticketType.prices ?? []).map((ticketPrice) {
+                  final isCryptoCurrency =
+                      PaymentUtils.isCryptoCurrency(ticketPrice.currency!);
+                  if (isCryptoCurrency &&
+                      selectedPaymentMethod ==
+                          SelectTicketsPaymentMethod.card) {
+                    return const SizedBox.shrink();
+                  }
+
+                  if (!isCryptoCurrency &&
+                      selectedPaymentMethod ==
+                          SelectTicketsPaymentMethod.wallet) {
+                    return const SizedBox.shrink();
+                  }
+
                   // Only apply for crypto flow, hide price item with network different
                   // with current selected network filter
                   if (ticketPrice.network != null &&
@@ -132,8 +151,6 @@ class SelectTicketItem extends StatelessWidget {
                     return const SizedBox.shrink();
                   }
 
-                  final isCryptoCurrency =
-                      PaymentUtils.isCryptoCurrency(ticketPrice.currency!);
                   bool enabled = true;
                   if (selectedCurrency == null) {
                     enabled = true;
@@ -279,8 +296,72 @@ class _PriceItem extends StatelessWidget {
           onDecrease: onDecrease,
           onIncrease: onIncrease,
           disabled: disabled,
+          onPressDisabled: () {
+            SnackBarUtils.showCustomSnackbar(
+              MultipleTicketsErrorSnackbar.create(context),
+            );
+          },
         ),
       ],
+    );
+  }
+}
+
+class MultipleTicketsErrorSnackbar {
+  static SnackBar create(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return SnackBar(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(
+          LemonRadius.normal,
+        ),
+      ),
+      behavior: SnackBarBehavior.floating,
+      margin: EdgeInsets.only(bottom: size.height - size.height * 0.2),
+      backgroundColor: LemonColor.chineseBlack,
+      showCloseIcon: true,
+      closeIconColor: colorScheme.onSecondary,
+      content: Row(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(LemonRadius.normal),
+              color: LemonColor.errorRedBg.withOpacity(0.2),
+            ),
+            width: Sizing.medium,
+            height: Sizing.medium,
+            child: Center(
+              child: Assets.icons.icError.svg(),
+            ),
+          ),
+          SizedBox(width: Spacing.small),
+          Flexible(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  t.event.error,
+                  style: Typo.small.copyWith(
+                    color: colorScheme.onPrimary.withOpacity(0.87),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                SizedBox(
+                  height: 2.w,
+                ),
+                Text(
+                  t.event.eventBuyTickets.multipleTicketsError,
+                  style: Typo.small.copyWith(
+                    color: colorScheme.onSecondary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

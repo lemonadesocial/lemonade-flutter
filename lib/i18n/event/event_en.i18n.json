@@ -40,7 +40,13 @@
             "wallet": "Wallet"
         },
         "payViaCard": "Pay via Card",
-        "payViaWallet": "Pay via Wallet"
+        "payViaWallet": "Pay via Wallet",
+        "multipleTicketsError": "Multiple tickets require the same chain and currency",
+        "discardSelectionWarning": {
+            "title": "Discard selection?",
+            "description": "Switching payment methods will discard your previous selection. Continue anyway?",
+            "buttonLabel": "Discard & continue"
+        }
     },
     "eventOrder": {
         "itemTotal": "Item total",
@@ -49,7 +55,8 @@
         "grandTotal": "Grand total",
         "subTotal": "Subtotal",
         "total": "Total",
-        "accessCode": "Access code"
+        "accessCode": "Access code",
+        "promo": "Promo"
     },
     "eventPayment": {
         "payUsing": "Pay using",
@@ -105,5 +112,6 @@
         "tickets": "You don't have any tickets.",
         "reservations": "You don't have any reservations."
     },
-    "paymentNotSupported": "Paid tickets are not supported yet. Please kindly use our website"
+    "paymentNotSupported": "Paid tickets are not supported yet. Please kindly use our website",
+    "error": "Error"
 }
