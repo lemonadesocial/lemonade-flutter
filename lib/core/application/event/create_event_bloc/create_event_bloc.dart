@@ -2,7 +2,6 @@ import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/core/domain/event/input/event_input/event_input.dart';
 import 'package:app/core/domain/form/string_formz.dart';
 import 'package:app/injection/register_module.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -156,8 +155,9 @@ class CreateEventEvent with _$CreateEventEvent {
     required String description,
   }) = DescriptionChanged;
 
-  const factory CreateEventEvent.guestLimitChanged(
-      {required String? guestLimit}) = GuestLimitChanged;
+  const factory CreateEventEvent.guestLimitChanged({
+    required String? guestLimit,
+  }) = GuestLimitChanged;
 
   const factory CreateEventEvent.guestLimitPerChanged({
     required String? guestLimitPer,

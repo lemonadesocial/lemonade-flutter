@@ -41,8 +41,6 @@ class BaseCreateEventPage extends StatelessWidget {
           ),
           body: BlocBuilder<CreateEventBloc, CreateEventState>(
             builder: (context, state) {
-              print("............state");
-              print(state);
               return CustomScrollView(
                 slivers: [
                   SliverFillRemaining(

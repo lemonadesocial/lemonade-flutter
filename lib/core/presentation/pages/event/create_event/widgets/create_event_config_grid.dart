@@ -138,7 +138,10 @@ class CreateEventConfigGrid extends StatelessWidget {
                                 child: EventConfigCard(
                                   title: getTitle(context, entry.value, state),
                                   description: getDescription(
-                                      context, entry.value, state),
+                                    context,
+                                    entry.value,
+                                    state,
+                                  ),
                                   icon: Icon(
                                     entry.value['icon'],
                                     color: colorScheme.onPrimary,
