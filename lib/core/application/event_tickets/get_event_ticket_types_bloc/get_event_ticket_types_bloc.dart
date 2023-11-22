@@ -1,9 +1,9 @@
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/entities/event_currency.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
+import 'package:app/core/domain/event/input/get_event_currencies_input/get_event_currencies_input.dart';
 import 'package:app/core/domain/event/input/get_event_ticket_types_input/get_event_ticket_types_input.dart';
 import 'package:app/core/domain/event/repository/event_ticket_repository.dart';
-import 'package:app/core/domain/payment/payment_enums.dart';
-import 'package:app/core/utils/event_tickets_utils.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -28,14 +28,19 @@ class GetEventTicketTypesBloc
     final result = await _eventTicketRepository.getEventTicketTypes(
       input: GetEventTicketTypesInput(event: event.id ?? ''),
     );
+
+    final currenciesResult = await _eventTicketRepository.getEventCurrencies(
+      input: GetEventCurrenciesInput(id: event.id ?? ''),
+    );
+
+    final currencies = currenciesResult.getOrElse(() => []);
+
     result.fold(
       (l) => emit(GetEventTicketTypesState.failure()),
       (data) => emit(
         GetEventTicketTypesState.success(
           eventTicketTypesResponse: data,
-          supportedCurrencies: EventTicketUtils.getSupportedCurrencies(
-            ticketTypes: data.ticketTypes ?? [],
-          ),
+          supportedCurrencies: currencies,
         ),
       ),
     );
@@ -52,7 +57,7 @@ class GetEventTicketTypesState with _$GetEventTicketTypesState {
   factory GetEventTicketTypesState.loading() = GetEventTicketTypesStateLoading;
   factory GetEventTicketTypesState.success({
     required EventTicketTypesResponse eventTicketTypesResponse,
-    required List<Currency> supportedCurrencies,
+    required List<EventCurrency> supportedCurrencies,
   }) = GetEventTicketTypesStateSuccess;
   factory GetEventTicketTypesState.failure() = GetEventTicketTypesStateFailure;
 }

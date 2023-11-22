@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:app/core/constants/web3/chains.dart';
 
 enum Currency {
   @JsonValue('AUD')
@@ -56,3 +57,23 @@ enum PaymentState {
 }
 
 enum PaymentCardBrand { visa, mastercard }
+
+enum SupportedPaymentNetwork {
+  @JsonValue("5")
+  ethereumGoerli(value: "5"),
+
+  @JsonValue("80001")
+  polygonMumbai(value: "80001"),
+
+  @JsonValue("1")
+  ethereum(value: "1"),
+
+  @JsonValue("137")
+  polygon(value: "137");
+
+  final String value;
+
+  const SupportedPaymentNetwork({
+    required this.value,
+  });
+}

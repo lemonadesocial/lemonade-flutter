@@ -9,8 +9,8 @@ class EventTicketsPricingInfo {
   final double? fiatSubTotal;
   final double? fiatTotal;
   final BigInt? blockchainDiscount;
-  final BigInt? blockchainSubTotal;
-  final BigInt? blockchainTotal;
+  final BigInt? cryptoSubTotal;
+  final BigInt? cryptoTotal;
   final List<PaymentAccount>? paymentAccounts;
 
   const EventTicketsPricingInfo({
@@ -21,8 +21,8 @@ class EventTicketsPricingInfo {
     this.fiatSubTotal,
     this.fiatTotal,
     this.blockchainDiscount,
-    this.blockchainSubTotal,
-    this.blockchainTotal,
+    this.cryptoSubTotal,
+    this.cryptoTotal,
     this.paymentAccounts,
   });
 
@@ -38,9 +38,9 @@ class EventTicketsPricingInfo {
         fiatTotal: dto.total != null ? double.tryParse(dto.total!) : null,
         blockchainDiscount:
             dto.discount != null ? BigInt.parse(dto.discount!) : null,
-        blockchainSubTotal:
+        cryptoSubTotal:
             dto.subtotal != null ? BigInt.parse(dto.subtotal!) : null,
-        blockchainTotal: dto.total != null ? BigInt.parse(dto.total!) : null,
+        cryptoTotal: dto.total != null ? BigInt.parse(dto.total!) : null,
         paymentAccounts: List.from(dto.paymentAccounts ?? [])
             .map((item) => PaymentAccount.fromDto(item))
             .toList(),

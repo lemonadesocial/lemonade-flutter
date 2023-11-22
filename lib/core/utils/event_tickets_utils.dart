@@ -1,7 +1,9 @@
+import 'package:app/core/domain/event/entities/event_currency.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/entities/event_ticket.dart';
 import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/utils/list/unique_list_extension.dart';
+import 'package:app/core/utils/payment_utils.dart';
 import 'package:collection/collection.dart';
 
 class EventTicketUtils {
@@ -46,25 +48,66 @@ class EventTicketUtils {
   ) =>
       groupBy(tickets, (ticket) => ticket.type ?? '');
 
-  static List<PurchasableTicketType> getTicketTypesByCurrency({
+  static List<PurchasableTicketType> getTicketTypesSupportStripe({
     required List<PurchasableTicketType> ticketTypes,
-    required Currency currency,
   }) {
     return ticketTypes
         .where(
-          (element) =>
-              (element.prices ?? Map.fromEntries([])).keys.contains(currency),
+          (element) => (element.prices ?? []).any(
+            (price) => price.currency != null
+                ? !PaymentUtils.isCryptoCurrency(price.currency!)
+                : false,
+          ),
         )
         .toList();
   }
 
-  static getSupportedCurrencies({
+  static List<PurchasableTicketType> getTicketTypesSupportCrypto({
     required List<PurchasableTicketType> ticketTypes,
   }) {
-    List<Currency> currencies = [];
-    for (var element in ticketTypes) {
-      currencies.addAll((element.prices ?? Map.fromEntries([])).keys);
+    return ticketTypes
+        .where(
+          (element) => (element.prices ?? []).any(
+            (price) => price.currency != null
+                ? PaymentUtils.isCryptoCurrency(price.currency!)
+                : false,
+          ),
+        )
+        .toList();
+  }
+
+  static EventTicketPrice? getTicketPriceByCurrencyAndNetwork({
+    PurchasableTicketType? ticketType,
+    Currency? currency,
+    SupportedPaymentNetwork? network,
+  }) {
+    if (ticketType == null || currency == null) return null;
+
+    return (ticketType.prices ?? []).firstWhereOrNull(
+      (element) => element.currency == currency && element.network == network,
+    );
+  }
+
+  static EventCurrency? getEventCurrency({
+    required List<EventCurrency> currencies,
+    Currency? currency,
+    SupportedPaymentNetwork? network,
+  }) {
+    if (currency == null) return null;
+    return currencies.firstWhereOrNull(
+      (element) => element.currency == currency && element.network == network,
+    );
+  }
+
+  static List<SupportedPaymentNetwork> getEventSupportedPaymentNetworks({
+    required List<EventCurrency> currencies,
+  }) {
+    List<SupportedPaymentNetwork> networks = [];
+    for (var eventCurrency in currencies) {
+      if (eventCurrency.network != null) {
+        networks.add(eventCurrency.network!);
+      }
     }
-    return currencies.unique();
+    return networks.unique();
   }
 }

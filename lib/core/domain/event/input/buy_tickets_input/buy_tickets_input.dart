@@ -7,11 +7,12 @@ part 'buy_tickets_input.freezed.dart';
 
 @freezed
 class BuyTicketsInput with _$BuyTicketsInput {
-  @JsonSerializable(includeIfNull: false)
+  @JsonSerializable(includeIfNull: false, explicitToJson: true)
   factory BuyTicketsInput({
     @JsonKey(name: 'event') required String eventId,
     @JsonKey(name: 'account_id') required String accountId,
     required Currency currency,
+    SupportedPaymentNetwork? network,
     required String total,
     required List<PurchasableItem>? items,
     @JsonKey(name: 'billing_info') BillingInfoInput? billingInfo,
@@ -49,10 +50,11 @@ class BillingInfoInput with _$BillingInfoInput {
 
 @freezed
 class BuyTicketsTransferParamsInput with _$BuyTicketsTransferParamsInput {
-  @JsonSerializable(includeIfNull: false)
+  @JsonSerializable(includeIfNull: false, explicitToJson: true)
   factory BuyTicketsTransferParamsInput({
     @JsonKey(name: 'save_card') bool? saveCard,
     @JsonKey(name: 'payment_method') String? paymentMethod,
+    SupportedPaymentNetwork? network,
   }) = _BuyTicketsTransferParamsInput;
 
   factory BuyTicketsTransferParamsInput.fromJson(Map<String, dynamic> json) =>

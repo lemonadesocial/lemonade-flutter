@@ -34,7 +34,13 @@
         "selectTickets": "Select tickets",
         "orderSummary": "Order summary",
         "enterPromoCode": "Enter promo code",
-        "selectCurrency": "Please select currency first"
+        "selectCurrency": "Please select currency first",
+        "paymentMethods": {
+            "card": "Card",
+            "wallet": "Wallet"
+        },
+        "payViaCard": "Pay via Card",
+        "payViaWallet": "Pay via Wallet"
     },
     "eventOrder": {
         "itemTotal": "Item total",
@@ -60,6 +66,13 @@
         "howYouPay": "How would you like to pay?",
         "selectCard": "Select card",
         "invalidDate": "Invalid date"
+    },
+    "eventCryptoPayment": {
+        "connectWallet": "Connect wallet",
+        "waitForConfirmation": "Waiting for confirmation...",
+        "selectNetwork": "Select network",
+        "signPayment": "Sign your payment",
+        "pay": "Pay"
     },
     "eventPickMyTickets": {
         "pickYourTicket": "Pick your ticket",
