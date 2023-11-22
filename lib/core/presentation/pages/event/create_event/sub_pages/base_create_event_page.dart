@@ -87,7 +87,7 @@ class BaseCreateEventPage extends StatelessWidget {
                                               ),
                                       errorText:
                                           state.description.displayError != null
-                                              ? state.title.displayError!
+                                              ? state.description.displayError!
                                                   .getMessage(
                                                   t.event.eventCreation
                                                       .description,
@@ -128,9 +128,7 @@ class BaseCreateEventPage extends StatelessWidget {
         radius: BorderRadius.circular(24),
         textStyle: Typo.medium.copyWith(),
         mode: GradientButtonMode.lavenderMode,
-        onTap: () {
-          context.read<CreateEventBloc>().add(const FormSubmitted());
-        },
+        onTap: () => context.read<CreateEventBloc>().add(const FormSubmitted()),
       ),
     );
   }

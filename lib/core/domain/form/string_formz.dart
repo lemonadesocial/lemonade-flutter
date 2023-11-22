@@ -8,6 +8,8 @@ enum StringValidationError {
     switch (this) {
       case empty:
         return '$fieldName is a required field';
+      default:
+        return '$fieldName is a required field';
     }
   }
 }
