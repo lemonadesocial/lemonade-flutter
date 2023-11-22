@@ -2,6 +2,7 @@ import 'package:app/core/application/event/create_event_bloc/create_event_bloc.d
 import 'package:app/core/presentation/pages/setting/widgets/setting_tile_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
+import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
@@ -57,7 +58,7 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
       builder: (context, state) {
         return Column(
           children: [
-            _buildSegmentedButton(colorScheme),
+            _buildSegmentedButton(colorScheme, state),
             Padding(
               padding: EdgeInsets.symmetric(
                 horizontal: Spacing.xSmall,
@@ -157,24 +158,55 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
     );
   }
 
-  Widget _buildSegmentedButton(ColorScheme colorScheme) {
+  Widget _buildSegmentedButton(
+    ColorScheme colorScheme,
+    CreateEventState state,
+  ) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
       width: double.maxFinite,
       child: SegmentedButton(
-        segments: [
+        style: ButtonStyle(
+          backgroundColor:
+              MaterialStateColor.resolveWith((Set<MaterialState> states) {
+            return states.contains(MaterialState.selected)
+                ? LemonColor.lavender18
+                : LemonColor.chineseBlack;
+          }),
+          foregroundColor:
+              MaterialStateColor.resolveWith((Set<MaterialState> states) {
+            return states.contains(MaterialState.selected)
+                ? LemonColor.lavender
+                : LemonColor.black33;
+          }),
+          textStyle: MaterialStateProperty.resolveWith(
+            (Set<MaterialState> states) {
+              return const TextStyle(
+                fontFamily: FontFamily.nohemiVariable,
+                fontWeight: FontWeight.w700,
+              );
+            },
+          ),
+        ),
+        showSelectedIcon: false,
+        segments: const [
           ButtonSegment(
-            value: EventPrivacy.public.name,
-            label: const Text("Public"),
-            icon: const Icon(Icons.visibility_off_outlined),
+            value: false,
+            label: Text("Public"),
+            icon: Icon(Icons.visibility_off_outlined),
           ),
           ButtonSegment(
-            value: EventPrivacy.private.name,
-            label: const Text("Private"),
-            icon: const Icon(Icons.visibility_outlined),
+            value: true,
+            label: Text("Private"),
+            icon: Icon(Icons.visibility_outlined),
           ),
         ],
-        selected: {EventPrivacy.public.name},
+        selected: {state.private},
+        onSelectionChanged: (Set<bool> newSelection) {
+          context.read<CreateEventBloc>().add(
+                PrivateChanged(private: newSelection.first),
+              );
+        },
       ),
     );
   }

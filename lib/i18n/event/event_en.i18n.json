@@ -114,5 +114,9 @@
         "createEventSuccessfully": "Create event successfully",
         "guestSettings": "Guest Settings",
         "guestSettingDescription": "$guestLimit guests, $guestLimitPer guests unlocks"
-    }
+    },
+    "private": "Private",
+    "privateDescription": "Only invitees can discover",
+    "public": "Public",
+    "publicDescription": "Anyone can discover"
 }

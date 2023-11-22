@@ -173,6 +173,8 @@ class CreateEventConfigGrid extends StatelessWidget {
     EventConfigGrid eventConfigType = eventConfig['type'];
     String title = eventConfig['title'];
     switch (eventConfigType) {
+      case EventConfigGrid.visibility:
+        return state.private == true ? t.event.private : t.event.public;
       default:
         return title;
     }
@@ -187,6 +189,10 @@ class CreateEventConfigGrid extends StatelessWidget {
     EventConfigGrid eventConfigType = eventConfig['type'];
     String description = eventConfig['description'];
     switch (eventConfigType) {
+      case EventConfigGrid.visibility:
+        return state.private == true
+            ? t.event.privateDescription
+            : t.event.publicDescription;
       case EventConfigGrid.guestSettings:
         return t.event.eventCreation.guestSettingDescription(
           guestLimit: state.guestLimit ?? 'unlimited',
