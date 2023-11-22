@@ -96,6 +96,7 @@ class AppRouter extends $AppRouter {
         AutoRoute(page: AIRoute.page),
         chatRoutes,
         eventBuyTicketsRoutes,
+        createEventRoutes,
         ...postRoutes,
         ...eventRoutes,
         ...commonRoutes,
@@ -127,9 +128,6 @@ final chatRoutes = AutoRoute(
 );
 
 final eventRoutes = [
-  AutoRoute(
-    page: CreateEventRoute.page,
-  ),
   AutoRoute(
     path: '/events',
     page: EventsListingRoute.page,
@@ -188,6 +186,19 @@ final eventBuyTicketsRoutes = AutoRoute(
     AutoRoute(
       page: RSVPEventSuccessPopupRoute.page,
       meta: const {'popBlocked': true},
+    ),
+  ],
+);
+
+final createEventRoutes = AutoRoute(
+  page: CreateEventRoute.page,
+  children: [
+    AutoRoute(
+      initial: true,
+      page: BaseCreateEventRoute.page,
+    ),
+    AutoRoute(
+      page: EventGuestSettingsRoute.page,
     ),
   ],
 );

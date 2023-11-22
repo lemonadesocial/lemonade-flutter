@@ -21,8 +21,6 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
     on<FormSubmitted>(_onFormSubmitted);
   }
   final _eventRepository = getIt<EventRepository>();
-  final guestLimitPerController = TextEditingController(text: "2");
-  final guestLimitController = TextEditingController(text: "100");
 
   Future<void> _onTitleChanged(
     TitleChanged event,
@@ -70,12 +68,6 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
     GuestLimitChanged event,
     Emitter<CreateEventState> emit,
   ) async {
-    if (event.guestLimit == null) {
-      guestLimitController.text = "";
-    } else {
-      guestLimitController.text = event.guestLimit.toString();
-    }
-
     emit(
       state.copyWith(
         guestLimit: event.guestLimit,
@@ -87,11 +79,6 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
     GuestLimitPerChanged event,
     Emitter<CreateEventState> emit,
   ) async {
-    if (event.guestLimitPer == null) {
-      guestLimitPerController.text = "";
-    } else {
-      guestLimitPerController.text = event.guestLimitPer.toString();
-    }
     emit(
       state.copyWith(
         guestLimitPer: event.guestLimitPer,

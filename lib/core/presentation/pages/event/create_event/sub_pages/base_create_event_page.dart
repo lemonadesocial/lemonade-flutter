@@ -15,8 +15,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:formz/formz.dart';
 
 @RoutePage()
-class CreateEventView extends StatelessWidget {
-  const CreateEventView({super.key});
+class BaseCreateEventPage extends StatelessWidget {
+  const BaseCreateEventPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +41,8 @@ class CreateEventView extends StatelessWidget {
           ),
           body: BlocBuilder<CreateEventBloc, CreateEventState>(
             builder: (context, state) {
+              print("............state");
+              print(state);
               return CustomScrollView(
                 slivers: [
                   SliverFillRemaining(
