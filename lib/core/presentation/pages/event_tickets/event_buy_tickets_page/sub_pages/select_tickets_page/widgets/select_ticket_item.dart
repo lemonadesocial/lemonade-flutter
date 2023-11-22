@@ -129,6 +129,14 @@ class SelectTicketItem extends StatelessWidget {
                 ],
                 SizedBox(height: Spacing.xSmall),
                 ...(ticketType.prices ?? []).map((ticketPrice) {
+                  // Only apply for crypto flow, hide price item with network different
+                  // with current selected network filter
+                  if (ticketPrice.network != null &&
+                      networkFilter != null &&
+                      ticketPrice.network != networkFilter) {
+                    return const SizedBox.shrink();
+                  }
+
                   final isCryptoCurrency =
                       PaymentUtils.isCryptoCurrency(ticketPrice.currency!);
                   if (isCryptoCurrency &&
