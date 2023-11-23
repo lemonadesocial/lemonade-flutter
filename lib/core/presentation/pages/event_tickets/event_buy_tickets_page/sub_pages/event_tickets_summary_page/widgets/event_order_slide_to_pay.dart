@@ -3,6 +3,8 @@ import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/presentation/widgets/common/slide_to_act/slide_to_act.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/number_utils.dart';
+import 'package:app/core/utils/payment_utils.dart';
+import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -17,22 +19,31 @@ class EventOrderSlideToPay extends StatelessWidget {
     super.key,
     required this.onSlideToPay,
     required this.slideActionKey,
+    required this.selectedCurrency,
     this.pricingInfo,
   });
 
   final Function() onSlideToPay;
   final EventTicketsPricingInfo? pricingInfo;
+  final Currency selectedCurrency;
   final GlobalKey<SlideActionState> slideActionKey;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
-    final amountText = NumberUtils.formatCurrency(
-      amount: pricingInfo?.fiatTotal ?? 0,
-      // TODO: need to use selected currency
-      currency: Currency.USD,
-    );
+    final currencyInfo =
+        PaymentUtils.getCurrencyInfo(pricingInfo, currency: selectedCurrency);
+    final amountText = PaymentUtils.isCryptoCurrency(selectedCurrency)
+        ? Web3Utils.formatCryptoCurrency(
+            pricingInfo?.cryptoTotal ?? BigInt.zero,
+            currency: selectedCurrency,
+            decimals: currencyInfo?.decimals ?? 2,
+          )
+        : NumberUtils.formatCurrency(
+            amount: pricingInfo?.fiatTotal ?? 0,
+            currency: selectedCurrency,
+          );
 
     return SizedBox(
       height: 60.w,

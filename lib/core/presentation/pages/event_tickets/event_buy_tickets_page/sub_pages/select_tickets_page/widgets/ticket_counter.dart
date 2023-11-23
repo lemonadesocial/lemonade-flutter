@@ -8,6 +8,7 @@ class TicketCounter extends StatelessWidget {
   final Function(int newCount) onDecrease;
   final Function(int newCount) onIncrease;
   final bool disabled;
+  final Function()? onPressDisabled;
 
   const TicketCounter({
     super.key,
@@ -15,6 +16,7 @@ class TicketCounter extends StatelessWidget {
     required this.onDecrease,
     required this.onIncrease,
     required this.disabled,
+    this.onPressDisabled,
   });
 
   @override
@@ -44,7 +46,10 @@ class TicketCounter extends StatelessWidget {
           children: [
             InkWell(
               onTap: () {
-                if (disabled) return;
+                if (disabled) {
+                  onPressDisabled?.call();
+                  return;
+                }
                 if (count == 0) return;
                 onDecrease(count - 1);
               },
@@ -79,7 +84,10 @@ class TicketCounter extends StatelessWidget {
             SizedBox(width: Spacing.superExtraSmall),
             InkWell(
               onTap: () {
-                if (disabled) return;
+                if (disabled) {
+                  onPressDisabled?.call();
+                  return;
+                }
                 onIncrease(count + 1);
               },
               child: Container(

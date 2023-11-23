@@ -40,7 +40,13 @@
             "wallet": "Wallet"
         },
         "payViaCard": "Pay via Card",
-        "payViaWallet": "Pay via Wallet"
+        "payViaWallet": "Pay via Wallet",
+        "multipleTicketsError": "Multiple tickets require the same chain and currency",
+        "discardSelectionWarning": {
+            "title": "Discard selection?",
+            "description": "Switching payment methods will discard your previous selection. Continue anyway?",
+            "buttonLabel": "Discard & continue"
+        }
     },
     "eventOrder": {
         "itemTotal": "Item total",
@@ -49,7 +55,8 @@
         "grandTotal": "Grand total",
         "subTotal": "Subtotal",
         "total": "Total",
-        "accessCode": "Access code"
+        "accessCode": "Access code",
+        "promo": "Promo"
     },
     "eventPayment": {
         "payUsing": "Pay using",
@@ -128,5 +135,6 @@
         "totalGuestLimit": "Total guest limit",
         "totalGuestLimitDescription": "Total number of people who can attend this experience",
         "noGuestLimit": "No guest limit"
-    }
+    },
+    "error": "Error"
 }

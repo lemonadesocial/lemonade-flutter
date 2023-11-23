@@ -6,6 +6,7 @@ import 'package:app/core/utils/number_utils.dart';
 import 'package:app/core/utils/payment_utils.dart';
 import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
@@ -53,18 +54,41 @@ class EventOrderSummary extends StatelessWidget {
               right: Spacing.medium,
               bottom: Spacing.xSmall,
             ),
-            child: SummaryRow(
-              label: t.event.eventOrder.itemTotal,
-              value: isCryptoCurrency
-                  ? Web3Utils.formatCryptoCurrency(
-                      pricingInfo.cryptoSubTotal ?? BigInt.zero,
-                      currency: selectedCurrency,
-                      decimals: currencyInfo?.decimals ?? 0,
-                    )
-                  : NumberUtils.formatCurrency(
-                      amount: pricingInfo.fiatSubTotal ?? 0,
-                      currency: selectedCurrency,
-                    ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SummaryRow(
+                  label: t.event.eventOrder.itemTotal,
+                  value: isCryptoCurrency
+                      ? Web3Utils.formatCryptoCurrency(
+                          pricingInfo.cryptoSubTotal ?? BigInt.zero,
+                          currency: selectedCurrency,
+                          decimals: currencyInfo?.decimals ?? 0,
+                        )
+                      : NumberUtils.formatCurrency(
+                          amount: pricingInfo.fiatSubTotal ?? 0,
+                          currency: selectedCurrency,
+                        ),
+                ),
+                if (pricingInfo.discount != null &&
+                    pricingInfo.promoCode?.isNotEmpty == true) ...[
+                  SizedBox(height: Spacing.xSmall),
+                  SummaryRow(
+                    label:
+                        '${t.event.eventOrder.promo} [${pricingInfo.promoCode}]',
+                    value:
+                        '-${isCryptoCurrency ? Web3Utils.formatCryptoCurrency(
+                            pricingInfo.cryptoDiscount ?? BigInt.zero,
+                            currency: selectedCurrency,
+                            decimals: currencyInfo?.decimals ?? 0,
+                          ) : NumberUtils.formatCurrency(
+                            amount: pricingInfo.fiatDiscount ?? 0,
+                            currency: selectedCurrency,
+                          )}',
+                    textColor: LemonColor.promoApplied,
+                  ),
+                ],
+              ],
             ),
           ),
           SizedBox(
@@ -116,16 +140,18 @@ class SummaryRow extends StatelessWidget {
     super.key,
     required this.label,
     required this.value,
+    this.textColor,
   });
 
   final String label;
   final String value;
+  final Color? textColor;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final textStyle = Typo.mediumPlus.copyWith(
-      color: colorScheme.onSecondary,
+      color: textColor ?? colorScheme.onSecondary,
     );
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,

@@ -213,9 +213,20 @@ class EventTicketsSummaryPageView extends StatelessWidget {
                               return state.when(
                                 idle: () => const SizedBox.shrink(),
                                 loading: () => Loading.defaultLoading(context),
-                                failure: () => EmptyList(
-                                  emptyText: t.common.somethingWrong,
-                                ),
+                                failure: (pricingInfo) {
+                                  if (pricingInfo != null) {
+                                    return EventTicketsSummary(
+                                      ticketTypes: ticketTypes,
+                                      selectedTickets: selectedTickets,
+                                      selectedCurrency: selectedCurrency,
+                                      selectedNetwork: selectedNetwork,
+                                      pricingInfo: pricingInfo,
+                                    );
+                                  }
+                                  return EmptyList(
+                                    emptyText: t.common.somethingWrong,
+                                  );
+                                },
                                 success: (pricingInfo) => EventTicketsSummary(
                                   ticketTypes: ticketTypes,
                                   selectedTickets: selectedTickets,
@@ -227,7 +238,32 @@ class EventTicketsSummaryPageView extends StatelessWidget {
                             },
                           ),
                           SizedBox(height: Spacing.smMedium),
-                          const AddPromoCodeInput(),
+                          BlocBuilder<CalculateEventTicketPricingBloc,
+                              CalculateEventTicketPricingState>(
+                            builder: (context, state) => AddPromoCodeInput(
+                              pricingInfo: state.maybeWhen(
+                                orElse: () => null,
+                                failure: ((pricingInfo) => pricingInfo),
+                                success: (pricingInfo) => pricingInfo,
+                              ),
+                              onPressApply: (promoCode) {
+                                context
+                                    .read<CalculateEventTicketPricingBloc>()
+                                    .add(
+                                      CalculateEventTicketPricingEvent
+                                          .calculate(
+                                        input: CalculateTicketsPricingInput(
+                                          discount: promoCode,
+                                          eventId: event.id ?? '',
+                                          items: selectedTickets,
+                                          currency: selectedCurrency,
+                                          network: selectedNetwork,
+                                        ),
+                                      ),
+                                    );
+                              },
+                            ),
+                          ),
                           SizedBox(height: Spacing.smMedium),
                           BlocBuilder<CalculateEventTicketPricingBloc,
                               CalculateEventTicketPricingState>(
@@ -235,9 +271,17 @@ class EventTicketsSummaryPageView extends StatelessWidget {
                               return state.when(
                                 idle: () => const SizedBox.shrink(),
                                 loading: () => Loading.defaultLoading(context),
-                                failure: () => EmptyList(
-                                  emptyText: t.common.somethingWrong,
-                                ),
+                                failure: (pricingInfo) {
+                                  if (pricingInfo != null) {
+                                    return EventOrderSummary(
+                                      selectedCurrency: selectedCurrency,
+                                      pricingInfo: pricingInfo,
+                                    );
+                                  }
+                                  return EmptyList(
+                                    emptyText: t.common.somethingWrong,
+                                  );
+                                },
                                 success: (pricingInfo) => EventOrderSummary(
                                   selectedCurrency: selectedCurrency,
                                   pricingInfo: pricingInfo,
@@ -254,78 +298,80 @@ class EventTicketsSummaryPageView extends StatelessWidget {
                       child: BlocBuilder<CalculateEventTicketPricingBloc,
                           CalculateEventTicketPricingState>(
                         builder: (context, state) {
-                          return state.maybeWhen(
-                            orElse: () => const SizedBox.shrink(),
-                            success: (pricingInfo) {
-                              if (isCryptoCurrency) {
-                                return PayByCryptoButton(
-                                  selectedTickets: selectedTickets,
-                                  selectedCurrency: selectedCurrency,
-                                  selectedNetwork: selectedNetwork,
-                                  pricingInfo: pricingInfo,
-                                );
-                              }
+                          final pricingInfo = state.maybeWhen(
+                            orElse: () => null,
+                            failure: ((pricingInfo) => pricingInfo),
+                            success: (pricingInfo) => pricingInfo,
+                          );
 
-                              return EventOrderSummaryFooter(
-                                onSlideToPay: () {
-                                  if (pricingInfo.paymentAccounts == null ||
-                                      pricingInfo.paymentAccounts?.isEmpty ==
-                                          true) {
-                                    return const SizedBox.shrink();
-                                  }
-                                  final selectedCard = context
-                                      .read<SelectPaymentCardCubit>()
-                                      .state
-                                      .when(
-                                        empty: () => null,
-                                        cardSelected: (selectedCard) =>
-                                            selectedCard,
-                                      );
-                                  context.read<BuyTicketsBloc>().add(
-                                        BuyTicketsEvent.buy(
-                                          input: BuyTicketsInput(
-                                            eventId: event.id ?? '',
-                                            accountId: pricingInfo
-                                                    .paymentAccounts
-                                                    ?.first
-                                                    .id ??
-                                                '',
-                                            currency: selectedCurrency,
-                                            items: selectedTickets,
-                                            total: pricingInfo.total ?? '0',
-                                            transferParams:
-                                                BuyTicketsTransferParamsInput(
-                                              paymentMethod:
-                                                  selectedCard?.providerId ??
-                                                      '',
-                                            ),
-                                          ),
+                          if (pricingInfo == null) {
+                            return const SizedBox.shrink();
+                          }
+                          if (isCryptoCurrency) {
+                            return PayByCryptoButton(
+                              selectedTickets: selectedTickets,
+                              selectedCurrency: selectedCurrency,
+                              selectedNetwork: selectedNetwork,
+                              pricingInfo: pricingInfo,
+                            );
+                          }
+
+                          return EventOrderSummaryFooter(
+                            selectedCurrency: selectedCurrency,
+                            onSlideToPay: () {
+                              if (pricingInfo.paymentAccounts == null ||
+                                  pricingInfo.paymentAccounts?.isEmpty ==
+                                      true) {
+                                return const SizedBox.shrink();
+                              }
+                              final selectedCard = context
+                                  .read<SelectPaymentCardCubit>()
+                                  .state
+                                  .when(
+                                    empty: () => null,
+                                    cardSelected: (selectedCard) =>
+                                        selectedCard,
+                                  );
+                              context.read<BuyTicketsBloc>().add(
+                                    BuyTicketsEvent.buy(
+                                      input: BuyTicketsInput(
+                                        discount: pricingInfo.promoCode,
+                                        eventId: event.id ?? '',
+                                        accountId: pricingInfo
+                                                .paymentAccounts?.first.id ??
+                                            '',
+                                        currency: selectedCurrency,
+                                        items: selectedTickets,
+                                        total: pricingInfo.total ?? '0',
+                                        transferParams:
+                                            BuyTicketsTransferParamsInput(
+                                          paymentMethod:
+                                              selectedCard?.providerId ?? '',
                                         ),
-                                      );
-                                },
-                                pricingInfo: pricingInfo,
-                                slideActionKey: _slideActionKey,
-                                onCardAdded: (newCard) {
-                                  context.read<GetPaymentCardsBloc>().add(
-                                        GetPaymentCardsEvent
-                                            .manuallyAddMoreCard(
-                                          paymentCard: newCard,
-                                        ),
-                                      );
-                                  context
-                                      .read<SelectPaymentCardCubit>()
-                                      .selectPaymentCard(
-                                        paymentCard: newCard,
-                                      );
-                                },
-                                onSelectCard: (selectedCard) {
-                                  context
-                                      .read<SelectPaymentCardCubit>()
-                                      .selectPaymentCard(
-                                        paymentCard: selectedCard,
-                                      );
-                                },
-                              );
+                                      ),
+                                    ),
+                                  );
+                            },
+                            pricingInfo: pricingInfo,
+                            slideActionKey: _slideActionKey,
+                            onCardAdded: (newCard) {
+                              context.read<GetPaymentCardsBloc>().add(
+                                    GetPaymentCardsEvent.manuallyAddMoreCard(
+                                      paymentCard: newCard,
+                                    ),
+                                  );
+                              context
+                                  .read<SelectPaymentCardCubit>()
+                                  .selectPaymentCard(
+                                    paymentCard: newCard,
+                                  );
+                            },
+                            onSelectCard: (selectedCard) {
+                              context
+                                  .read<SelectPaymentCardCubit>()
+                                  .selectPaymentCard(
+                                    paymentCard: selectedCard,
+                                  );
                             },
                           );
                         },
