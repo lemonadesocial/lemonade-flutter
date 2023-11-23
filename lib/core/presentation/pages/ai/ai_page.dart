@@ -140,23 +140,25 @@ class AIPageState extends State<AIPage> {
     return Scaffold(
       appBar: const LemonAppBar(),
       backgroundColor: colorScheme.primary,
-      body: Container(
-        decoration: BoxDecoration(
-          color: LemonColor.atomicBlack,
-          borderRadius: BorderRadius.circular(20.r),
-        ),
-        child: Column(
-          children: <Widget>[
-            _buildChatList(),
-            Container(
-              decoration: BoxDecoration(color: Theme.of(context).cardColor),
-              child: AIChatComposer(
-                textController: _textController,
-                onSend: send,
-                loading: _loading,
+      body: SafeArea(
+        child: Container(
+          decoration: BoxDecoration(
+            color: LemonColor.atomicBlack,
+            borderRadius: BorderRadius.circular(20.r),
+          ),
+          child: Column(
+            children: <Widget>[
+              _buildChatList(),
+              Container(
+                decoration: BoxDecoration(color: Theme.of(context).cardColor),
+                child: AIChatComposer(
+                  textController: _textController,
+                  onSend: send,
+                  loading: _loading,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
