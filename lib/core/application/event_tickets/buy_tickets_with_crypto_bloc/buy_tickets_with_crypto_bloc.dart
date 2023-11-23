@@ -257,7 +257,9 @@ class BuyTicketsWithCryptoBloc
   }
 
   void _onReceivedPaymentFailedFromNotification(
-      _ReceivedPaymentFailedFromNotification event, Emitter emit) {
+    _ReceivedPaymentFailedFromNotification event,
+    Emitter emit,
+  ) {
     emit(
       BuyTicketsWithCryptoState.failure(
         data: state.data,

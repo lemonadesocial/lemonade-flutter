@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:app/core/application/event/event_provider_bloc/event_provider_bloc.dart';
 import 'package:app/core/application/event_tickets/buy_tickets_bloc/buy_tickets_bloc.dart';
 import 'package:app/core/application/event_tickets/buy_tickets_with_crypto_bloc/buy_tickets_with_crypto_bloc.dart';
