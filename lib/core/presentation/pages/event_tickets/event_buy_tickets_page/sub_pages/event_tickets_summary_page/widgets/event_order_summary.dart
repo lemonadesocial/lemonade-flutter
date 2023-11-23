@@ -69,6 +69,7 @@ class EventOrderSummary extends StatelessWidget {
                           amount: pricingInfo.fiatSubTotal ?? 0,
                           currency: selectedCurrency,
                         ),
+                  textColor: colorScheme.onPrimary.withOpacity(0.87),
                 ),
                 if (pricingInfo.discount != null &&
                     pricingInfo.promoCode?.isNotEmpty == true) ...[
@@ -118,6 +119,10 @@ class EventOrderSummary extends StatelessWidget {
                       amount: pricingInfo.fiatTotal ?? 0,
                       currency: selectedCurrency,
                     ),
+              textStyle: Typo.mediumPlus.copyWith(
+                color: colorScheme.onPrimary,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
           Transform.flip(
@@ -141,25 +146,28 @@ class SummaryRow extends StatelessWidget {
     required this.label,
     required this.value,
     this.textColor,
+    this.textStyle,
   });
 
   final String label;
   final String value;
   final Color? textColor;
+  final TextStyle? textStyle;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final textStyle = Typo.mediumPlus.copyWith(
-      color: textColor ?? colorScheme.onSecondary,
-    );
+    final customTextStyle = textStyle ??
+        Typo.mediumPlus.copyWith(
+          color: textColor ?? colorScheme.onSecondary,
+        );
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           label,
-          style: textStyle,
+          style: customTextStyle,
         ),
         Expanded(
           child: Padding(
@@ -171,7 +179,7 @@ class SummaryRow extends StatelessWidget {
         ),
         Text(
           value,
-          style: textStyle,
+          style: customTextStyle,
         ),
       ],
     );

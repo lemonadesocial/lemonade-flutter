@@ -1,5 +1,7 @@
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
+import 'package:app/theme/color.dart';
+import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 
@@ -34,6 +36,29 @@ class ImagePlaceholder {
         child: ThemeSvgIcon(
           builder: (filter) => Assets.icons.icLemonOutline
               .svg(colorFilter: filter, width: 50, height: 50),
+        ),
+      ),
+    );
+  }
+
+  static Widget ticketThumbnail({
+    Color? iconColor,
+    Color? backgroundColor,
+  }) {
+    return Container(
+      height: Sizing.medium,
+      width: Sizing.medium,
+      decoration: BoxDecoration(
+        color: backgroundColor ?? LemonColor.atomicBlack,
+      ),
+      child: Center(
+        child: ThemeSvgIcon(
+          color: iconColor,
+          builder: (filter) => Assets.icons.icTicket.svg(
+            height: Sizing.xSmall,
+            width: Sizing.xSmall,
+            colorFilter: filter,
+          ),
         ),
       ),
     );

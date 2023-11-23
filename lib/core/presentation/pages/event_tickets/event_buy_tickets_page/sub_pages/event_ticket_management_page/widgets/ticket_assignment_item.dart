@@ -7,7 +7,6 @@ import 'package:app/core/presentation/widgets/common/button/lemon_outline_button
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/event_tickets_utils.dart';
-import 'package:app/core/utils/number_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
@@ -41,6 +40,10 @@ class TicketAssignmentItem extends StatelessWidget {
     final isTicketUnassigned =
         EventTicketUtils.isTicketNotAssigned(eventTicket);
     final isTicketPending = EventTicketUtils.isTicketPending(eventTicket);
+    final ticketThumbnail = ImagePlaceholder.ticketThumbnail(
+      iconColor: colorScheme.onSecondary,
+      backgroundColor: colorScheme.background,
+    );
 
     return Container(
       padding: EdgeInsets.all(Spacing.smMedium),
@@ -61,9 +64,8 @@ class TicketAssignmentItem extends StatelessWidget {
               height: Sizing.medium,
               // TODO: photo expanded
               imageUrl: "",
-              errorWidget: (_, __, ___) =>
-                  ImagePlaceholder.defaultPlaceholder(),
-              placeholder: (_, __) => ImagePlaceholder.defaultPlaceholder(),
+              errorWidget: (_, __, ___) => ticketThumbnail,
+              placeholder: (_, __) => ticketThumbnail,
             ),
           ),
           SizedBox(width: Spacing.xSmall),
@@ -71,11 +73,7 @@ class TicketAssignmentItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "${ticketType?.title}   •   ${NumberUtils.formatCurrency(
-                  amount: ticketType?.defaultPrice?.fiatCost?.toDouble() ?? 0,
-                  currency: ticketType?.defaultCurrency,
-                  freeText: t.event.free,
-                )}",
+                ticketType?.title ?? '',
                 style: Typo.medium.copyWith(
                   fontWeight: FontWeight.w600,
                   color: colorScheme.onPrimary.withOpacity(0.87),

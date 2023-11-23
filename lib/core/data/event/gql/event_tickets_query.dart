@@ -78,8 +78,8 @@ final getTicketsQuery = gql('''
 ''');
 
 final getEventCurrenciesQuery = gql('''
-  query GetEventCurrencies(\$id: MongoID!) {
-    getEventCurrencies(_id: \$id) {
+  query GetEventCurrencies(\$id: MongoID!, \$used: Boolean) {
+    getEventCurrencies(_id: \$id, used: \$used) {
       currency
       decimals
       network
