@@ -1,4 +1,5 @@
 import 'package:app/core/application/event_tickets/select_event_tickets_bloc/select_event_tickets_bloc.dart';
+import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/select_tickets_page/widgets/discard_selected_tickets_warning.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
@@ -31,7 +32,15 @@ class PaymentMethodsSwitcher extends StatelessWidget {
             label: t.event.eventBuyTickets.paymentMethods.card,
             icon: Assets.icons.icCash.svg(),
             onPressed: () {
-              onSelect(SelectTicketsPaymentMethod.card);
+              if (selectedPaymentMethod == SelectTicketsPaymentMethod.card) {
+                return;
+              }
+              showDialog(
+                context: context,
+                builder: (context) => DiscardSelectedTicketsWarning(
+                  onConfirm: () => onSelect(SelectTicketsPaymentMethod.card),
+                ),
+              );
             },
           ),
         ),
@@ -43,7 +52,15 @@ class PaymentMethodsSwitcher extends StatelessWidget {
             label: t.event.eventBuyTickets.paymentMethods.wallet,
             icon: Assets.icons.icWallet.svg(),
             onPressed: () {
-              onSelect(SelectTicketsPaymentMethod.wallet);
+              if (selectedPaymentMethod == SelectTicketsPaymentMethod.wallet) {
+                return;
+              }
+              showDialog(
+                context: context,
+                builder: (context) => DiscardSelectedTicketsWarning(
+                  onConfirm: () => onSelect(SelectTicketsPaymentMethod.wallet),
+                ),
+              );
             },
           ),
         ),

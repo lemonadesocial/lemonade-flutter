@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:app/core/domain/event/input/buy_tickets_input/buy_tickets_input.dart';
 import 'package:app/core/domain/event/repository/event_ticket_repository.dart';
 import 'package:app/core/domain/payment/entities/payment.dart';
@@ -79,13 +80,19 @@ class BuyTicketsWithCryptoBloc
       );
     }
     try {
-      final signature = await walletConnectService.personalSign(
-        chainId:
-            Web3Utils.getNetworkMetadataById(selectedNetwork!.value).chainId,
-        message: Web3Utils.toHex(payment.id ?? ''),
-        wallet: event.userWalletAddress,
-        walletApp: SupportedWalletApp.metamask,
-      );
+      final signature = await walletConnectService
+          .personalSign(
+            chainId: Web3Utils.getNetworkMetadataById(selectedNetwork!.value)
+                .chainId,
+            message: Web3Utils.toHex(payment.id ?? ''),
+            wallet: event.userWalletAddress,
+            walletApp: SupportedWalletApp.metamask,
+          )
+          .timeout(
+            const Duration(
+              seconds: 30,
+            ),
+          );
 
       _signature = signature;
 
@@ -107,6 +114,16 @@ class BuyTicketsWithCryptoBloc
         );
       }
     } catch (e) {
+      if (e is TimeoutException) {
+        return emit(
+          BuyTicketsWithCryptoState.failure(
+            data: state.data,
+            failureReason: WalletConnectFailure(
+              message: 'Timeout',
+            ),
+          ),
+        );
+      }
       emit(
         BuyTicketsWithCryptoState.failure(
           data: state.data,
@@ -140,12 +157,18 @@ class BuyTicketsWithCryptoBloc
         value: '0x0',
         data: hex.encode(List<int>.from(contractCallTxn.data!)),
       );
-      _txHash = await walletConnectService.requestTransaction(
-        chainId:
-            Web3Utils.getNetworkMetadataById(selectedNetwork!.value).chainId,
-        transaction: ethereumTxn,
-        walletApp: SupportedWalletApp.metamask,
-      );
+      _txHash = await walletConnectService
+          .requestTransaction(
+            chainId: Web3Utils.getNetworkMetadataById(selectedNetwork!.value)
+                .chainId,
+            transaction: ethereumTxn,
+            walletApp: SupportedWalletApp.metamask,
+          )
+          .timeout(
+            const Duration(
+              seconds: 30,
+            ),
+          );
 
       if (_txHash != null) {
         add(BuyTicketsWithCryptoEvent.processUpdatePayment());
@@ -158,6 +181,16 @@ class BuyTicketsWithCryptoBloc
         );
       }
     } catch (e) {
+      if (e is TimeoutException) {
+        return emit(
+          BuyTicketsWithCryptoState.failure(
+            data: state.data,
+            failureReason: WalletConnectFailure(
+              message: 'Timeout',
+            ),
+          ),
+        );
+      }
       emit(
         BuyTicketsWithCryptoState.failure(
           data: state.data,
