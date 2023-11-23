@@ -88,6 +88,8 @@ dependencies:
   qr_flutter: ^4.1.0
   upgrader: ^8.1.0
   flutter_switch: ^0.3.2
+  flutter_keyboard_visibility: ^5.4.1
+  animated_text_kit: ^4.2.2
 
   # Webview
   flutter_inappwebview: ^5.8.0
@@ -129,7 +131,6 @@ dependencies:
   ferry_hive_store: ^0.5.1
   ferry_flutter: ^0.8.1
   uuid: ^3.0.7
-  flutter_keyboard_visibility: ^5.4.1
 
 dependency_overrides:
   matrix_api_lite:
