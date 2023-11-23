@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:app/core/utils/gql/ai_gql_client.dart';
 import 'package:app/core/config.dart';
 import 'package:app/core/presentation/widgets/ai/ai_chat_card.dart';
@@ -10,9 +12,11 @@ import 'package:app/theme/color.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:uuid/uuid.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 const uuid = Uuid();
 
@@ -37,6 +41,7 @@ class AIPageState extends State<AIPage> {
   final ScrollController _scrollController = ScrollController();
   final String session = uuid.v4();
   bool _loading = false;
+
   List<AIChatMessage> messages = [
     AIChatMessage(
       "I’m Lulu, your creative and helpful collaborator. I have limitations and won’t always get it right, but your feedback will help me improve. What would you like to create today?",
@@ -47,9 +52,29 @@ class AIPageState extends State<AIPage> {
 
   final TextEditingController _textController = TextEditingController();
 
+  late StreamSubscription<bool> keyboardSubscription;
+
   @override
   void initState() {
     super.initState();
+
+    var keyboardVisibilityController = KeyboardVisibilityController();
+    keyboardSubscription =
+        keyboardVisibilityController.onChange.listen((bool visible) {
+      if (visible == true) {
+        Future.delayed(const Duration(milliseconds: 300), () {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            _scrollToEnd();
+          });
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    keyboardSubscription.cancel();
+    super.dispose();
   }
 
   void send(String text) {
@@ -87,7 +112,11 @@ class AIPageState extends State<AIPage> {
             ),
           );
         });
-        _scrollToEnd();
+
+        // Wait insert latest messages then scroll
+        SchedulerBinding.instance.addPostFrameCallback((_) {
+          _scrollToEnd();
+        });
       });
     } catch (e) {
       if (kDebugMode) {
@@ -98,7 +127,8 @@ class AIPageState extends State<AIPage> {
 
   void _scrollToEnd() {
     _scrollController.animateTo(
-      _scrollController.position.maxScrollExtent,
+      _scrollController.position.maxScrollExtent +
+          MediaQuery.of(context).viewInsets.bottom,
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeOut,
     );
@@ -117,19 +147,7 @@ class AIPageState extends State<AIPage> {
         ),
         child: Column(
           children: <Widget>[
-            Expanded(
-              child: ListView.builder(
-                controller: _scrollController,
-                padding: EdgeInsets.symmetric(
-                  vertical: 10.h,
-                  horizontal: 10.w,
-                ),
-                itemCount: messages.length,
-                itemBuilder: (context, index) {
-                  return AIChatCard(message: messages[index]);
-                },
-              ),
-            ),
+            _buildChatList(),
             Container(
               decoration: BoxDecoration(color: Theme.of(context).cardColor),
               child: AIChatComposer(
@@ -140,6 +158,22 @@ class AIPageState extends State<AIPage> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildChatList() {
+    return Expanded(
+      child: ListView.builder(
+        controller: _scrollController,
+        padding: EdgeInsets.symmetric(
+          vertical: 10.h,
+          horizontal: 10.w,
+        ),
+        itemCount: messages.length,
+        itemBuilder: (context, index) {
+          return AIChatCard(message: messages[index]);
+        },
       ),
     );
   }

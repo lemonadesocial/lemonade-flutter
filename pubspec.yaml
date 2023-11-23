@@ -129,6 +129,7 @@ dependencies:
   ferry_hive_store: ^0.5.1
   ferry_flutter: ^0.8.1
   uuid: ^3.0.7
+  flutter_keyboard_visibility: ^5.4.1
 
 dependency_overrides:
   matrix_api_lite:
