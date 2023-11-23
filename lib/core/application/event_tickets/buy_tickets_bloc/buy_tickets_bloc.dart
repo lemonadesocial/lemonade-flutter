@@ -23,6 +23,9 @@ class BuyTicketsBloc extends Bloc<BuyTicketsEvent, BuyTicketsState> {
     on<StartBuyTickets>(_onBuy);
     on<ProcessPaymentIntent>(_onProcessPaymentIntent);
     on<ProcessUpdatePayment>(_onProcessUpdatePayment);
+    on<ReceivedPaymentFailedFromNotification>(
+      _onReceivedPaymentFailedFromNotification,
+    );
   }
 
   Future<void> _onBuy(StartBuyTickets event, Emitter emit) async {
@@ -122,6 +125,17 @@ class BuyTicketsBloc extends Bloc<BuyTicketsEvent, BuyTicketsState> {
       },
     );
   }
+
+  void _onReceivedPaymentFailedFromNotification(
+    ReceivedPaymentFailedFromNotification event,
+    Emitter emit,
+  ) {
+    emit(
+      BuyTicketsState.failure(
+        failureReason: NotificationPaymentFailure(),
+      ),
+    );
+  }
 }
 
 @freezed
@@ -135,6 +149,9 @@ class BuyTicketsEvent with _$BuyTicketsEvent {
   factory BuyTicketsEvent.processUpdatePayment({
     required Payment payment,
   }) = ProcessUpdatePayment;
+  factory BuyTicketsEvent.receivedPaymentFailedFromNotification({
+    Payment? payment,
+  }) = ReceivedPaymentFailedFromNotification;
 }
 
 @freezed
@@ -161,3 +178,5 @@ class StripePaymentFailure extends BuyTicketsFailure {
 }
 
 class UpdatePaymentFailure extends BuyTicketsFailure {}
+
+class NotificationPaymentFailure extends BuyTicketsFailure {}

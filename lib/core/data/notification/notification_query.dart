@@ -32,8 +32,10 @@ final getNotificationsQuery = gql('''
   $notificationFragment
   query(
     \$skip: Int = 0
-    \$limit: Int = 50
-    \$type: NotificationTypeFilterInput = {nin: [payment_authorized, payment_failed, payment_succeeded, payments_wired_summary, admin_payment_verification, payments_captured_summary]}
+    \$limit: Int = 100
+    \$type: NotificationTypeFilterInput = {
+        nin: [payment_authorized, payments_wired_summary, admin_payment_verification, payments_captured_summary]
+      }
   ) {
     getNotifications(
       skip: \$skip, 

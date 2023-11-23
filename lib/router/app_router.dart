@@ -160,6 +160,9 @@ final eventBuyTicketsRoutes = AutoRoute(
   children: [
     AutoRoute(
       initial: true,
+      page: EventBuyTicketsInitialRoute.page,
+    ),
+    AutoRoute(
       page: SelectTicketsRoute.page,
     ),
     AutoRoute(

@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class BuyTicketsListener {
   static create({
     Function()? onFailure,
+    Function()? onDone,
   }) {
     return BlocListener<BuyTicketsBloc, BuyTicketsState>(
       listener: (context, state) {
@@ -14,8 +15,9 @@ class BuyTicketsListener {
         state.maybeWhen(
           orElse: () => null,
           failure: (failureReason) {
-            if (failureReason is InitPaymentFailure) {
-              // cannot init payment, ask user to slide again
+            if (failureReason is InitPaymentFailure ||
+                failureReason is UpdatePaymentFailure ||
+                failureReason is NotificationPaymentFailure) {
               showDialog(
                 context: context,
                 builder: (context) => LemonAlertDialog(
@@ -37,17 +39,6 @@ class BuyTicketsListener {
               );
             }
 
-            if (failureReason is UpdatePaymentFailure) {
-              //TODO: payment cannot be updated in BE side
-              // still thinking way to backup this case
-              showDialog(
-                context: context,
-                builder: (context) => LemonAlertDialog(
-                  onClose: () => Navigator.of(context).pop(),
-                  child: Text(t.common.pleaseTryAgain),
-                ),
-              );
-            }
             // reset slide button
             onFailure?.call();
           },
@@ -55,6 +46,7 @@ class BuyTicketsListener {
             // TODO: will trigger timeout 30s and if payment noti not coming yet => manually
             // call getPayment to check
             // When done, still need to wait for payment success or failed notification below
+            onDone?.call();
           },
         );
       },
