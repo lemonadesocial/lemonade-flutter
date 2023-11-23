@@ -1,5 +1,5 @@
 import 'package:app/core/domain/event/event_repository.dart';
-import 'package:app/core/domain/event/input/event_input/event_input.dart';
+import 'package:app/core/domain/event/input/create_event_input/create_event_input.dart';
 import 'package:app/core/domain/form/string_formz.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -123,13 +123,13 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
     if (state.isValid) {
       emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
       final result = await _eventRepository.createEvent(
-        input: EventInput(
+        input: CreateEventInput(
           title: title.value,
           description: title.value,
           private: false,
           verify: false,
-          start: "2023-11-22T03:00:00.881Z",
-          end: "2023-11-26T11:00:00.881Z",
+          start: DateTime.parse("2023-12-22T03:00:00.881Z"),
+          end: DateTime.parse("2023-12-25T03:00:00.881Z"),
           timezone: "Asia/Bangkok",
           guestLimit: 100,
           guestLimitPer: 2,

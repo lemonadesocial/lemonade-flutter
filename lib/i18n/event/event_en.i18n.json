@@ -118,5 +118,15 @@
     "private": "Private",
     "privateDescription": "Only invitees can discover",
     "public": "Public",
-    "publicDescription": "Anyone can discover"
+    "publicDescription": "Anyone can discover",
+    "guestSettings": {
+        "autoApprove": "Auto Approve",
+        "autoApproveDescription": "All requests to join instantly approved",
+        "noUnlockLimit": "No unlock limit",
+        "guestUnlockLimit": "Guest unlock limit",
+        "guestUnlockLimitDescription": "Number of friends and matches a guest can unlock this experience for",
+        "totalGuestLimit": "Total guest limit",
+        "totalGuestLimitDescription": "Total number of people who can attend this experience",
+        "noGuestLimit": "No guest limit"
+    }
 }

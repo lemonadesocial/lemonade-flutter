@@ -1,4 +1,5 @@
 import 'package:app/core/application/event/create_event_bloc/create_event_bloc.dart';
+import 'package:app/core/constants/app_constants.dart';
 import 'package:app/core/presentation/pages/setting/widgets/setting_tile_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
@@ -67,8 +68,8 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
               child: Column(
                 children: [
                   _buildSettingTile(
-                    title: "Auto Approve",
-                    subTitle: "All requests to join instantly approved",
+                    title: t.event.guestSettings.autoApprove,
+                    subTitle: t.event.guestSettings.autoApproveDescription,
                     value: state.verify,
                     onChanged: (value) {
                       Vibrate.feedback(FeedbackType.light);
@@ -82,9 +83,9 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
                   ),
                   _buildContainer(
                     _buildSettingTile(
-                      title: "Guest unlock limit",
+                      title: t.event.guestSettings.guestUnlockLimit,
                       subTitle:
-                          "Number of friends and matches a guest can unlock this experience for",
+                          t.event.guestSettings.guestUnlockLimitDescription,
                       value: state.guestLimitPer == null,
                       onChanged: (value) =>
                           _onGuestLimitPerToggle(value, state),
@@ -107,7 +108,7 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
                   ),
                   _buildContainer(
                     _buildSettingTile(
-                      title: "No unlock limit",
+                      title: t.event.guestSettings.noUnlockLimit,
                       value: state.guestLimitPer == null,
                       onChanged: (value) =>
                           _onNoGuestLimitPerToggle(value, state),
@@ -119,9 +120,9 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
                   ),
                   _buildContainer(
                     _buildSettingTile(
-                      title: "Total guest limit",
+                      title: t.event.guestSettings.totalGuestLimit,
                       subTitle:
-                          "Total number of people who can attend this experience",
+                          t.event.guestSettings.totalGuestLimitDescription,
                       value: state.guestLimit == null,
                       onChanged: (value) => _onGuestLimitToggle(value, state),
                       trailing: SizedBox(
@@ -143,7 +144,7 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
                   ),
                   _buildContainer(
                     _buildSettingTile(
-                      title: "No guest limit",
+                      title: t.event.guestSettings.noGuestLimit,
                       value: state.guestLimit == null,
                       onChanged: (value) => _onNoGuestLimitToggle(value, state),
                       subTitle: '',
@@ -249,38 +250,48 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
     );
   }
 
-  void _onGuestLimitPerToggle(bool value, CreateEventState state) {
-    guestLimitPerController.text = value ? '' : '2';
+  void _onGuestLimitPerToggle(bool isGuestLimitPer, CreateEventState state) {
+    guestLimitPerController.text =
+        isGuestLimitPer ? '' : AppConstants.defaultEventGuestLimitPer;
     context.read<CreateEventBloc>().add(
           GuestLimitPerChanged(
-            guestLimitPer: value ? null : "2",
+            guestLimitPer:
+                isGuestLimitPer ? null : AppConstants.defaultEventGuestLimitPer,
           ),
         );
   }
 
-  void _onNoGuestLimitPerToggle(bool value, CreateEventState state) {
-    guestLimitPerController.text = value ? '' : '2';
+  void _onNoGuestLimitPerToggle(
+      bool isNoGuestLimitPer, CreateEventState state) {
+    guestLimitPerController.text =
+        isNoGuestLimitPer ? '' : AppConstants.defaultEventGuestLimitPer;
     context.read<CreateEventBloc>().add(
           GuestLimitPerChanged(
-            guestLimitPer: value ? null : "2",
+            guestLimitPer: isNoGuestLimitPer
+                ? null
+                : AppConstants.defaultEventGuestLimitPer,
           ),
         );
   }
 
-  void _onGuestLimitToggle(bool value, CreateEventState state) {
-    guestLimitController.text = value ? '' : '100';
+  void _onGuestLimitToggle(bool isGuestLimit, CreateEventState state) {
+    guestLimitController.text =
+        isGuestLimit ? '' : AppConstants.defaultEventGuestLimit;
     context.read<CreateEventBloc>().add(
           GuestLimitChanged(
-            guestLimit: value ? null : "100",
+            guestLimit:
+                isGuestLimit ? null : AppConstants.defaultEventGuestLimit,
           ),
         );
   }
 
-  void _onNoGuestLimitToggle(bool value, CreateEventState state) {
-    guestLimitController.text = value ? '' : '100';
+  void _onNoGuestLimitToggle(bool isNoGuestLimit, CreateEventState state) {
+    guestLimitController.text =
+        isNoGuestLimit ? '' : AppConstants.defaultEventGuestLimit;
     context.read<CreateEventBloc>().add(
           GuestLimitChanged(
-            guestLimit: value ? null : "100",
+            guestLimit:
+                isNoGuestLimit ? null : AppConstants.defaultEventGuestLimit,
           ),
         );
   }

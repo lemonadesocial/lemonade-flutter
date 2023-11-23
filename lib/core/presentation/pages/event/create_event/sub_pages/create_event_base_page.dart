@@ -61,7 +61,7 @@ class BaseCreateEventPage extends StatelessWidget {
                                   children: [
                                     LemonTextField(
                                       initialText: state.title.value,
-                                      label: "Title*",
+                                      label: t.event.eventCreation.title,
                                       onChange: (value) => context
                                           .read<CreateEventBloc>()
                                           .add(TitleChanged(title: value)),
@@ -78,7 +78,7 @@ class BaseCreateEventPage extends StatelessWidget {
                                     ),
                                     LemonTextField(
                                       initialText: state.description.value,
-                                      label: "Description*",
+                                      label: t.event.eventCreation.description,
                                       onChange: (value) =>
                                           context.read<CreateEventBloc>().add(
                                                 DescriptionChanged(

@@ -3,7 +3,7 @@ import 'package:app/core/domain/event/entities/event_rsvp.dart';
 import 'package:app/core/domain/event/input/accept_event_input/accept_event_input.dart';
 import 'package:app/core/domain/event/input/get_event_detail_input.dart';
 import 'package:app/core/domain/event/input/get_events_listing_input.dart';
-import 'package:app/core/domain/event/input/event_input/event_input.dart';
+import 'package:app/core/domain/event/input/create_event_input/create_event_input.dart';
 import 'package:app/core/failure.dart';
 import 'package:dartz/dartz.dart';
 
@@ -35,7 +35,8 @@ abstract class EventRepository {
   Future<Either<Failure, EventRsvp>> acceptEvent({
     required AcceptEventInput input,
   });
+
   Future<Either<Failure, Event>> createEvent({
-    required EventInput input,
+    required CreateEventInput input,
   });
 }

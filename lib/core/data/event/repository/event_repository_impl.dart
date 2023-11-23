@@ -7,7 +7,7 @@ import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_rsvp.dart';
 import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/core/domain/event/input/accept_event_input/accept_event_input.dart';
-import 'package:app/core/domain/event/input/event_input/event_input.dart';
+import 'package:app/core/domain/event/input/create_event_input/create_event_input.dart';
 import 'package:app/core/domain/event/input/get_event_detail_input.dart';
 import 'package:app/core/domain/event/input/get_events_listing_input.dart';
 import 'package:app/core/failure.dart';
@@ -155,7 +155,7 @@ class EventRepositoryImpl implements EventRepository {
 
   @override
   Future<Either<Failure, Event>> createEvent({
-    required EventInput input,
+    required CreateEventInput input,
   }) async {
     final result = await client.mutate(
       MutationOptions(
