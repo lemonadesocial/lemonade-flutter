@@ -71,11 +71,8 @@ class SelectTicketItem extends StatelessWidget {
               success: (_, currencies) => currencies,
             );
     final colorScheme = Theme.of(context).colorScheme;
-    final t = Translations.of(context);
-    final costText = NumberUtils.formatCurrency(
-      amount: (ticketType.defaultPrice?.fiatCost?.toDouble() ?? 0),
-      currency: ticketType.defaultCurrency,
-      freeText: t.event.free,
+    final ticketThumbnail = ImagePlaceholder.ticketThumbnail(
+      iconColor: colorScheme.onSecondary,
     );
     return Padding(
       padding: EdgeInsets.all(Spacing.smMedium),
@@ -94,9 +91,8 @@ class SelectTicketItem extends StatelessWidget {
               child: CachedNetworkImage(
                 // TODO: api does not support yet
                 imageUrl: "",
-                placeholder: (_, __) => ImagePlaceholder.defaultPlaceholder(),
-                errorWidget: (_, __, ___) =>
-                    ImagePlaceholder.defaultPlaceholder(),
+                placeholder: (_, __) => ticketThumbnail,
+                errorWidget: (_, __, ___) => ticketThumbnail,
               ),
             ),
           ),
@@ -108,7 +104,7 @@ class SelectTicketItem extends StatelessWidget {
               mainAxisSize: MainAxisSize.max,
               children: [
                 Text(
-                  "${ticketType.title}  •  $costText",
+                  ticketType.title ?? '',
                   style: Typo.medium.copyWith(
                     color: colorScheme.onPrimary.withOpacity(0.87),
                     fontWeight: FontWeight.w600,
