@@ -85,36 +85,45 @@ class GuestEventPoapOfferItemState extends State<GuestEventPoapOfferItemView>
         borderRadius: BorderRadius.circular(15.r),
         child: Stack(
           children: [
-            Positioned(
-              top: Spacing.smMedium,
-              left: Spacing.smMedium,
-              child: SizedBox(
-                child: FutureBuilder(
-                  future: MediaUtils.getNftMedia(
-                    widget.token?.metadata?.image,
-                    widget.token?.metadata?.animation_url,
-                  ),
-                  builder: (context, snapshot) => Container(
-                    width: Sizing.medium * 2,
-                    height: Sizing.medium * 2,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(
-                        LemonRadius.small,
-                      ),
+            Positioned.fill(
+              child: ImageFiltered(
+                imageFilter: ImageFilter.blur(
+                  sigmaX: 30,
+                  sigmaY: 30,
+                ),
+                child: SizedBox(
+                  child: FutureBuilder(
+                    future: MediaUtils.getNftMedia(
+                      widget.token?.metadata?.image,
+                      widget.token?.metadata?.animation_url,
                     ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(LemonRadius.xSmall),
-                      child: CachedNetworkImage(
-                        fit: BoxFit.cover,
-                        imageUrl: snapshot.data?.url ?? '',
-                        placeholder: (_, __) =>
-                            ImagePlaceholder.defaultPlaceholder(),
-                        errorWidget: (_, __, ___) =>
-                            ImagePlaceholder.defaultPlaceholder(),
+                    builder: (context, snapshot) => Container(
+                      width: Sizing.medium * 2,
+                      height: Sizing.medium * 2,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(
+                          LemonRadius.small,
+                        ),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(LemonRadius.xSmall),
+                        child: CachedNetworkImage(
+                          fit: BoxFit.cover,
+                          imageUrl: snapshot.data?.url ?? '',
+                          placeholder: (_, __) =>
+                              ImagePlaceholder.defaultPlaceholder(),
+                          errorWidget: (_, __, ___) =>
+                              ImagePlaceholder.defaultPlaceholder(),
+                        ),
                       ),
                     ),
                   ),
                 ),
+              ),
+            ),
+            Positioned.fill(
+              child: Container(
+                color: colorScheme.primary.withOpacity(0.8),
               ),
             ),
             Container(
@@ -132,35 +141,29 @@ class GuestEventPoapOfferItemState extends State<GuestEventPoapOfferItemView>
                   Row(
                     mainAxisSize: MainAxisSize.max,
                     children: [
-                      BackdropFilter(
-                        filter: ImageFilter.blur(
-                          sigmaX: 50,
-                          sigmaY: 50,
+                      FutureBuilder(
+                        future: MediaUtils.getNftMedia(
+                          widget.token?.metadata?.image,
+                          widget.token?.metadata?.animation_url,
                         ),
-                        child: FutureBuilder(
-                          future: MediaUtils.getNftMedia(
-                            widget.token?.metadata?.image,
-                            widget.token?.metadata?.animation_url,
-                          ),
-                          builder: (context, snapshot) => Container(
-                            width: Sizing.medium * 2,
-                            height: Sizing.medium * 2,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(
-                                LemonRadius.small,
-                              ),
+                        builder: (context, snapshot) => Container(
+                          width: Sizing.medium * 2,
+                          height: Sizing.medium * 2,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(
+                              LemonRadius.small,
                             ),
-                            child: ClipRRect(
-                              borderRadius:
-                                  BorderRadius.circular(LemonRadius.xSmall),
-                              child: CachedNetworkImage(
-                                fit: BoxFit.cover,
-                                errorWidget: (_, __, ___) =>
-                                    ImagePlaceholder.defaultPlaceholder(),
-                                placeholder: (_, __) =>
-                                    ImagePlaceholder.defaultPlaceholder(),
-                                imageUrl: snapshot.data?.url ?? '',
-                              ),
+                          ),
+                          child: ClipRRect(
+                            borderRadius:
+                                BorderRadius.circular(LemonRadius.xSmall),
+                            child: CachedNetworkImage(
+                              fit: BoxFit.cover,
+                              errorWidget: (_, __, ___) =>
+                                  ImagePlaceholder.defaultPlaceholder(),
+                              placeholder: (_, __) =>
+                                  ImagePlaceholder.defaultPlaceholder(),
+                              imageUrl: snapshot.data?.url ?? '',
                             ),
                           ),
                         ),
