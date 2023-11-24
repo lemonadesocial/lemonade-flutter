@@ -78,3 +78,5 @@ enum OfferProvider {
   poap,
   token,
 }
+
+enum EventPrivacy { public, private }

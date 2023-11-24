@@ -114,5 +114,28 @@
         "reservations": "You don't have any reservations."
     },
     "paymentNotSupported": "Paid tickets are not supported yet. Please kindly use our website",
+    "eventCreation": {
+        "createEvent": "Create event",
+        "title": "Title",
+        "description": "Description",
+        "descriptionPlaceholder": "What is this experience about ?",
+        "createEventSuccessfully": "Create event successfully",
+        "guestSettings": "Guest Settings",
+        "guestSettingDescription": "$guestLimit guests, $guestLimitPer guests unlocks"
+    },
+    "private": "Private",
+    "privateDescription": "Only invitees can discover",
+    "public": "Public",
+    "publicDescription": "Anyone can discover",
+    "guestSettings": {
+        "autoApprove": "Auto Approve",
+        "autoApproveDescription": "All requests to join instantly approved",
+        "noUnlockLimit": "No unlock limit",
+        "guestUnlockLimit": "Guest unlock limit",
+        "guestUnlockLimitDescription": "Number of friends and matches a guest can unlock this experience for",
+        "totalGuestLimit": "Total guest limit",
+        "totalGuestLimitDescription": "Total number of people who can attend this experience",
+        "noGuestLimit": "No guest limit"
+    },
     "error": "Error"
 }

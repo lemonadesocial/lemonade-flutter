@@ -68,6 +68,10 @@ class CreatePopUpPage extends StatelessWidget with LemonBottomSheet {
               colors: CreatePopupGradient.event.colors,
               label: t.home.event,
               content: t.home.eventDesc,
+              onTap: () {
+                context.router.pop();
+                context.router.push(const CreateEventRoute());
+              },
               suffixIcon: ThemeSvgIcon(
                 color: LemonColor.paleViolet,
                 builder: (colorFilter) => Assets.icons.icHouseParty.svg(
@@ -76,6 +80,7 @@ class CreatePopUpPage extends StatelessWidget with LemonBottomSheet {
                   colorFilter: colorFilter,
                 ),
               ),
+              featureAvailable: true,
             ),
             // TODO: Temporary comment, maybe re-open in future
             // SizedBox(height: Spacing.xSmall),

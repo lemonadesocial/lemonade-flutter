@@ -11,6 +11,7 @@ class PaymentUtils {
       Currency.USDT,
       Currency.TCOI,
       Currency.D2COI,
+      Currency.BLUE,
     ].contains(currency);
   }
 

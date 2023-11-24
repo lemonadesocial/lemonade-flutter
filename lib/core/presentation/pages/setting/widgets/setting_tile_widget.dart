@@ -8,21 +8,23 @@ class SettingTileWidget extends StatelessWidget {
   const SettingTileWidget({
     Key? key,
     required this.title,
-    required this.leading,
+    this.leading,
     required this.onTap,
     this.subTitle,
     this.trailing,
     this.featureAvailable = true,
     this.titleColor,
+    this.color,
   }) : super(key: key);
 
   final String title;
   final String? subTitle;
-  final Widget leading;
+  final Widget? leading;
   final Widget? trailing;
   final VoidCallback onTap;
   final bool featureAvailable;
   final Color? titleColor;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +34,7 @@ class SettingTileWidget extends StatelessWidget {
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: colorScheme.onPrimary.withOpacity(0.06),
+          color: color ?? colorScheme.onPrimary.withOpacity(0.06),
           borderRadius: BorderRadius.circular(LemonRadius.normal),
         ),
         clipBehavior: Clip.hardEdge,
@@ -42,17 +44,21 @@ class SettingTileWidget extends StatelessWidget {
               padding: EdgeInsets.all(Spacing.small),
               child: Row(
                 children: [
-                  Container(
-                    width: 42.w,
-                    height: 42.w,
-                    padding: EdgeInsets.all(Spacing.xSmall),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: colorScheme.secondaryContainer,
-                    ),
-                    child: leading,
-                  ),
-                  SizedBox(width: Spacing.small),
+                  leading != null
+                      ? Container(
+                          width: 42.w,
+                          height: 42.w,
+                          padding: EdgeInsets.all(Spacing.xSmall),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: colorScheme.secondaryContainer,
+                          ),
+                          child: leading,
+                        )
+                      : const SizedBox(),
+                  leading != null
+                      ? SizedBox(width: Spacing.small)
+                      : const SizedBox(),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
