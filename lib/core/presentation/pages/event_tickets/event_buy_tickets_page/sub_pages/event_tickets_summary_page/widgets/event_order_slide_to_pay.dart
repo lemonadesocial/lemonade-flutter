@@ -1,5 +1,4 @@
 import 'package:app/core/domain/event/entities/event_tickets_pricing_info.dart';
-import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/presentation/widgets/common/slide_to_act/slide_to_act.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/number_utils.dart';
@@ -26,8 +25,8 @@ class EventOrderSlideToPay extends StatelessWidget {
 
   final Function() onSlideToPay;
   final EventTicketsPricingInfo? pricingInfo;
-  final Currency selectedCurrency;
-  final SupportedPaymentNetwork? selectedNetwork;
+  final String selectedCurrency;
+  final String? selectedNetwork;
   final GlobalKey<SlideActionState> slideActionKey;
 
   @override

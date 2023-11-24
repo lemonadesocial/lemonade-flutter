@@ -1,5 +1,4 @@
 import 'package:app/core/domain/event/entities/event_tickets_pricing_info.dart';
-import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/ticket_wave_custom_paint.dart';
 import 'package:app/core/presentation/widgets/common/dotted_line/dotted_line.dart';
 import 'package:app/core/utils/number_utils.dart';
@@ -10,7 +9,6 @@ import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EventOrderSummary extends StatelessWidget {
@@ -22,8 +20,8 @@ class EventOrderSummary extends StatelessWidget {
   });
 
   final EventTicketsPricingInfo pricingInfo;
-  final SupportedPaymentNetwork? selectedNetwork;
-  final Currency selectedCurrency;
+  final String? selectedNetwork;
+  final String selectedCurrency;
 
   @override
   Widget build(BuildContext context) {

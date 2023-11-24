@@ -16,7 +16,7 @@ class PaymentDto with _$PaymentDto {
     PaymentState? state,
     dynamic stamps,
     @JsonKey(name: 'failure_reason') String? failureReason,
-    Currency? currency,
+    String? currency,
     @JsonKey(name: 'billing_info') BillingInfoDto? billingInfo,
     String? amount,
     @JsonKey(name: 'account_expanded') PaymentAccountDto? accountExpanded,

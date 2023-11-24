@@ -18,7 +18,7 @@ class Payment with _$Payment {
     PaymentState? state,
     dynamic stamps,
     String? failureReason,
-    Currency? currency,
+    String? currency,
     BillingInfo? billingInfo,
     String? amount,
     PaymentAccount? accountExpanded,

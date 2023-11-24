@@ -1,4 +1,3 @@
-import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/presentation/widgets/lemon_bottom_sheet_mixin.dart';
 import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -10,8 +9,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SelectPaymentNetworkBottomSheet extends StatelessWidget
     with LemonBottomSheet {
-  final List<SupportedPaymentNetwork> networks;
-  final Function(SupportedPaymentNetwork network) onSelectNetwork;
+  final List<String> networks;
+  final Function(String network) onSelectNetwork;
 
   const SelectPaymentNetworkBottomSheet({
     super.key,
@@ -50,7 +49,7 @@ class SelectPaymentNetworkBottomSheet extends StatelessWidget
 class NetworkItem extends StatelessWidget {
   final Function()? onPressed;
   final bool selected;
-  final SupportedPaymentNetwork network;
+  final String network;
 
   const NetworkItem({
     super.key,
@@ -62,7 +61,7 @@ class NetworkItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final chainMetadata = Web3Utils.getNetworkMetadataById(network.value);
+    final chainMetadata = Web3Utils.getNetworkMetadataById(network);
 
     return InkWell(
       onTap: onPressed,

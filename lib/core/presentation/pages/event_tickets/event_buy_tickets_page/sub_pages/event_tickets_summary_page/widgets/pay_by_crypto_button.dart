@@ -5,7 +5,6 @@ import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_tickets_pricing_info.dart';
 import 'package:app/core/domain/event/input/buy_tickets_input/buy_tickets_input.dart';
 import 'package:app/core/domain/payment/entities/purchasable_item/purchasable_item.dart';
-import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/event_order_slide_to_pay.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/slide_to_act/slide_to_act.dart';
@@ -28,8 +27,8 @@ import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
 
 class PayByCryptoButton extends StatelessWidget {
   final EventTicketsPricingInfo pricingInfo;
-  final Currency selectedCurrency;
-  final SupportedPaymentNetwork? selectedNetwork;
+  final String selectedCurrency;
+  final String? selectedNetwork;
   final List<PurchasableItem> selectedTickets;
 
   const PayByCryptoButton({
@@ -59,8 +58,8 @@ class PayByCryptoButton extends StatelessWidget {
 
 class PayByCryptoButtonView extends StatefulWidget {
   final EventTicketsPricingInfo pricingInfo;
-  final Currency selectedCurrency;
-  final SupportedPaymentNetwork? selectedNetwork;
+  final String selectedCurrency;
+  final String? selectedNetwork;
   final List<PurchasableItem> selectedTickets;
 
   const PayByCryptoButtonView({

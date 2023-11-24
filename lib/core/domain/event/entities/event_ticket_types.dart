@@ -1,6 +1,5 @@
 import 'package:app/core/data/event/dtos/event_ticket_types_dto/event_ticket_types_dto.dart';
 import 'package:app/core/domain/event/entities/event.dart';
-import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'event_ticket_types.freezed.dart';
@@ -65,7 +64,7 @@ class PurchasableTicketType with _$PurchasableTicketType {
     List<String>? photos,
     String? title,
     List<EventTicketPrice>? prices,
-    Currency? defaultCurrency,
+    String? defaultCurrency,
     EventTicketPrice? defaultPrice,
   }) = _PurchasableTicketType;
 
@@ -97,8 +96,8 @@ class EventTicketPrice {
   final String? cost;
   final BigInt? cryptoCost;
   final double? fiatCost;
-  final SupportedPaymentNetwork? network;
-  final Currency? currency;
+  final String? network;
+  final String? currency;
 
   EventTicketPrice({
     this.cost,

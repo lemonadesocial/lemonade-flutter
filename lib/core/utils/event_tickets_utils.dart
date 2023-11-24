@@ -1,7 +1,6 @@
 import 'package:app/core/domain/event/entities/event_currency.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/entities/event_ticket.dart';
-import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/utils/list/unique_list_extension.dart';
 import 'package:collection/collection.dart';
 
@@ -73,8 +72,8 @@ class EventTicketUtils {
 
   static EventTicketPrice? getTicketPriceByCurrencyAndNetwork({
     PurchasableTicketType? ticketType,
-    Currency? currency,
-    SupportedPaymentNetwork? network,
+    String? currency,
+    String? network,
   }) {
     if (ticketType == null || currency == null) return null;
 
@@ -85,8 +84,8 @@ class EventTicketUtils {
 
   static EventCurrency? getEventCurrency({
     required List<EventCurrency> currencies,
-    Currency? currency,
-    SupportedPaymentNetwork? network,
+    String? currency,
+    String? network,
   }) {
     if (currency == null) return null;
     return currencies.firstWhereOrNull(
@@ -94,10 +93,10 @@ class EventTicketUtils {
     );
   }
 
-  static List<SupportedPaymentNetwork> getEventSupportedPaymentNetworks({
+  static List<String> getEventSupportedPaymentNetworks({
     required List<EventCurrency> currencies,
   }) {
-    List<SupportedPaymentNetwork> networks = [];
+    List<String> networks = [];
     for (var eventCurrency in currencies) {
       if (eventCurrency.network != null) {
         networks.add(eventCurrency.network!);
