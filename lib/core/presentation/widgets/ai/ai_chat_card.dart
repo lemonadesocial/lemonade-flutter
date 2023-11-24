@@ -1,6 +1,6 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
+import 'package:app/core/domain/ai/ai_entities.dart';
 import 'package:app/core/domain/user/entities/user.dart';
-import 'package:app/core/presentation/pages/ai/ai_page.dart';
 import 'package:app/core/presentation/widgets/ai/ai_metadata_button_card.dart';
 import 'package:app/core/presentation/widgets/home/create_pop_up_tile.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
@@ -14,22 +14,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
 
 class AIChatCard extends StatelessWidget {
   const AIChatCard({
     super.key,
     required this.message,
+    required this.onFinishedTypingAnimation,
   });
 
   final AIChatMessage message;
+  final Function()? onFinishedTypingAnimation;
 
   @override
   Widget build(BuildContext context) {
-    bool isUser = message.isUser;
+    bool? isUser = message.isUser;
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, authState) {
         if (authState is AuthStateAuthenticated) {
-          if (!isUser) {
+          if (!isUser!) {
             return Card(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.r),
@@ -46,7 +49,16 @@ class AIChatCard extends StatelessWidget {
                       isUser,
                       authState.authSession,
                     ),
-                    title: Text(message.text),
+                    title: message.finishedAnimation == true
+                        ? Text(message.text ?? '')
+                        : AnimatedTextKit(
+                            animatedTexts: [
+                              TypewriterAnimatedText(message.text ?? ''),
+                            ],
+                            repeatForever: false,
+                            totalRepeatCount: 1,
+                            onFinished: onFinishedTypingAnimation,
+                          ),
                   ),
                   _buildButtons(context),
                 ],
@@ -64,7 +76,7 @@ class AIChatCard extends StatelessWidget {
                   isUser,
                   authState.authSession,
                 ),
-                title: Text(message.text),
+                title: Text(message.text ?? ''),
               ),
               SizedBox(
                 height: 10.h,

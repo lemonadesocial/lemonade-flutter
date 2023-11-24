@@ -88,6 +88,8 @@ dependencies:
   qr_flutter: ^4.1.0
   upgrader: ^8.1.0
   flutter_switch: ^0.3.2
+  flutter_keyboard_visibility: ^5.4.1
+  animated_text_kit: ^4.2.2
 
   # Webview
   flutter_inappwebview: ^5.8.0
