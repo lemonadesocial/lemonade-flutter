@@ -1,6 +1,5 @@
 import 'package:app/core/data/event/dtos/event_rsvp_dto/event_rsvp_dto.dart';
 import 'package:app/core/domain/event/event_enums.dart';
-import 'package:app/core/domain/payment/payment_enums.dart';
 
 class EventRsvp {
   EventRsvp({
@@ -44,7 +43,7 @@ class EventRsvpMessages {
 
 class EventRsvpPayment {
   final double? amount;
-  final Currency? currency;
+  final String? currency;
   final String? provider;
 
   EventRsvpPayment({

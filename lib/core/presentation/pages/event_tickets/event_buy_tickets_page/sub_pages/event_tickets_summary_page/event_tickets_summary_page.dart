@@ -25,7 +25,6 @@ import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart
 import 'package:app/core/presentation/widgets/common/slide_to_act/slide_to_act.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/utils/date_format_utils.dart';
-import 'package:app/core/utils/payment_utils.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -93,14 +92,14 @@ class EventTicketsSummaryPageView extends StatelessWidget {
     final event = context.read<EventProviderBloc>().event;
     final selectTicketsBlocState = context.read<SelectEventTicketsBloc>().state;
     final selectedTickets = selectTicketsBlocState.selectedTickets;
-    final selectedCurrency = selectTicketsBlocState.selectedCurrency;
+    final selectedCurrency = selectTicketsBlocState.selectedCurrency!;
     final selectedNetwork = selectTicketsBlocState.selectedNetwork;
     final ticketTypes =
         context.watch<GetEventTicketTypesBloc>().state.maybeWhen(
               orElse: () => [] as List<PurchasableTicketType>,
               success: (response, _) => response.ticketTypes ?? [],
             );
-    final isCryptoCurrency = PaymentUtils.isCryptoCurrency(selectedCurrency!);
+    final isCryptoCurrency = selectedNetwork != null;
 
     return MultiBlocListener(
       listeners: [
@@ -312,6 +311,7 @@ class EventTicketsSummaryPageView extends StatelessWidget {
                                     if (pricingInfo != null) {
                                       return EventOrderSummary(
                                         selectedCurrency: selectedCurrency,
+                                        selectedNetwork: selectedNetwork,
                                         pricingInfo: pricingInfo,
                                       );
                                     }
@@ -321,6 +321,7 @@ class EventTicketsSummaryPageView extends StatelessWidget {
                                   },
                                   success: (pricingInfo) => EventOrderSummary(
                                     selectedCurrency: selectedCurrency,
+                                    selectedNetwork: selectedNetwork,
                                     pricingInfo: pricingInfo,
                                   ),
                                 );

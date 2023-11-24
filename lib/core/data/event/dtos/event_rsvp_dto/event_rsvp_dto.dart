@@ -1,5 +1,4 @@
 import 'package:app/core/domain/event/event_enums.dart';
-import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'event_rsvp_dto.freezed.dart';
@@ -36,7 +35,7 @@ class EventRsvpMessagesDto with _$EventRsvpMessagesDto {
 class EventRsvpPaymentDto with _$EventRsvpPaymentDto {
   factory EventRsvpPaymentDto({
     double? amount,
-    Currency? currency,
+    String? currency,
     String? provider,
   }) = _EventRsvpPaymentDto;
 

@@ -8,7 +8,6 @@ import 'package:app/core/application/event_tickets/select_event_tickets_bloc/sel
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/input/assign_tickets_input/assign_tickets_input.dart';
 import 'package:app/core/domain/payment/entities/purchasable_item/purchasable_item.dart';
-import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/select_tickets_page/widgets/payment_methods_switcher.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/select_tickets_page/widgets/select_ticket_item.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/select_tickets_page/widgets/select_ticket_submit_button.dart';
@@ -69,7 +68,7 @@ class SelectTicketView extends StatefulWidget {
 }
 
 class _SelectTicketViewState extends State<SelectTicketView> {
-  SupportedPaymentNetwork? networkFilter;
+  String? networkFilter;
 
   @override
   Widget build(BuildContext context) {
@@ -282,8 +281,7 @@ class _SelectTicketViewState extends State<SelectTicketView> {
                                       }
                                       final chainMetadata =
                                           Web3Utils.getNetworkMetadataById(
-                                        supportedPaymentNetworks[index - 1]
-                                            .value,
+                                        supportedPaymentNetworks[index - 1],
                                       );
                                       final selected =
                                           supportedPaymentNetworks[index - 1] ==
@@ -298,8 +296,8 @@ class _SelectTicketViewState extends State<SelectTicketView> {
                                                         index - 1];
                                               });
                                             },
-                                            leading: chainMetadata.icon,
-                                            label: chainMetadata.displayName,
+                                            leading: chainMetadata?.icon,
+                                            label: chainMetadata?.displayName,
                                             backgroundColor: selected
                                                 ? LemonColor.atomicBlack
                                                 : null,

@@ -1,5 +1,4 @@
 import 'package:app/core/domain/event/entities/event_tickets_pricing_info.dart';
-import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/ticket_wave_custom_paint.dart';
 import 'package:app/core/presentation/widgets/common/dotted_line/dotted_line.dart';
 import 'package:app/core/utils/number_utils.dart';
@@ -17,16 +16,18 @@ class EventOrderSummary extends StatelessWidget {
     super.key,
     required this.pricingInfo,
     required this.selectedCurrency,
+    required this.selectedNetwork,
   });
 
   final EventTicketsPricingInfo pricingInfo;
-  final Currency selectedCurrency;
+  final String? selectedNetwork;
+  final String selectedCurrency;
 
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-    final isCryptoCurrency = PaymentUtils.isCryptoCurrency(selectedCurrency);
+    final isCryptoCurrency = selectedNetwork != null;
     final currencyInfo =
         PaymentUtils.getCurrencyInfo(pricingInfo, currency: selectedCurrency);
 

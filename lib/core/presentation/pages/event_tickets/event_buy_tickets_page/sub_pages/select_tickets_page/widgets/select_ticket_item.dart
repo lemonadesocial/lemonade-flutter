@@ -3,12 +3,10 @@ import 'package:app/core/application/event_tickets/select_event_tickets_bloc/sel
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_currency.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
-import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/select_tickets_page/widgets/ticket_counter.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/utils/event_tickets_utils.dart';
 import 'package:app/core/utils/number_utils.dart';
-import 'package:app/core/utils/payment_utils.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -38,17 +36,16 @@ class SelectTicketItem extends StatelessWidget {
   final Event event;
   final PurchasableTicketType ticketType;
   final int count;
-  final Currency? selectedCurrency;
+  final String? selectedCurrency;
   final SelectTicketsPaymentMethod selectedPaymentMethod;
-  final SupportedPaymentNetwork? selectedNetwork;
-  final SupportedPaymentNetwork? networkFilter;
-  final Function(int count, Currency currency, SupportedPaymentNetwork? network)
-      onCountChange;
+  final String? selectedNetwork;
+  final String? networkFilter;
+  final Function(int count, String currency, String? network) onCountChange;
 
   void add({
     required int newCount,
-    required Currency currency,
-    SupportedPaymentNetwork? network,
+    required String currency,
+    String? network,
   }) {
     if (newCount < (ticketType.limit ?? 0)) {
       onCountChange(newCount, currency, network);
@@ -57,8 +54,8 @@ class SelectTicketItem extends StatelessWidget {
 
   void minus({
     required int newCount,
-    required Currency currency,
-    SupportedPaymentNetwork? network,
+    required String currency,
+    String? network,
   }) {
     onCountChange(newCount, currency, network);
   }
@@ -133,8 +130,8 @@ class SelectTicketItem extends StatelessWidget {
                     return const SizedBox.shrink();
                   }
 
-                  final isCryptoCurrency =
-                      PaymentUtils.isCryptoCurrency(ticketPrice.currency!);
+                  final isCryptoCurrency = ticketPrice.network != null;
+
                   if (isCryptoCurrency &&
                       selectedPaymentMethod ==
                           SelectTicketsPaymentMethod.card) {
@@ -177,6 +174,7 @@ class SelectTicketItem extends StatelessWidget {
                       decimals: decimals,
                       count: enabled ? count : 0,
                       currency: ticketPrice.currency!,
+                      network: ticketPrice.network,
                       price: ticketPrice,
                       disabled: !enabled,
                       onIncrease: (newCount) {
@@ -206,7 +204,8 @@ class SelectTicketItem extends StatelessWidget {
 }
 
 class _PriceItem extends StatelessWidget {
-  final Currency currency;
+  final String currency;
+  final String? network;
   final EventTicketPrice price;
   final int decimals;
   final bool disabled;
@@ -222,12 +221,13 @@ class _PriceItem extends StatelessWidget {
     required this.disabled,
     required this.onIncrease,
     required this.onDecrease,
+    this.network,
   });
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final isCryptoCurrency = PaymentUtils.isCryptoCurrency(currency);
+    final isCryptoCurrency = network != null;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -251,8 +251,7 @@ class _PriceItem extends StatelessWidget {
                   height: Sizing.medium,
                   child: Center(
                     child:
-                        Web3Utils.getNetworkMetadataById(price.network!.value)
-                            .icon,
+                        Web3Utils.getNetworkMetadataById(price.network!)?.icon,
                   ),
                 ),
                 SizedBox(width: Spacing.xSmall),
@@ -281,8 +280,9 @@ class _PriceItem extends StatelessWidget {
                     if (isCryptoCurrency && price.network != null) ...[
                       SizedBox(height: 2.w),
                       Text(
-                        Web3Utils.getNetworkMetadataById(price.network!.value)
-                            .displayName,
+                        Web3Utils.getNetworkMetadataById(price.network!)
+                                ?.displayName ??
+                            '',
                         style: Typo.small.copyWith(
                           color: colorScheme.onSecondary,
                         ),

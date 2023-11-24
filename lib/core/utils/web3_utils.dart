@@ -1,9 +1,8 @@
 import 'dart:convert';
 import 'dart:math';
-
 import 'package:app/core/constants/web3/chains.dart';
-import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/domain/web3/entities/chain_metadata.dart';
+import 'package:collection/collection.dart';
 
 class Web3Utils {
   static String formatIdentifier(String address, {int length = 4}) {
@@ -20,13 +19,13 @@ class Web3Utils {
 
   static formatCryptoCurrency(
     BigInt value, {
-    required Currency currency,
+    required String currency,
     required int decimals,
   }) {
-    return '${(value / BigInt.from(pow(10, decimals)))} ${currency.name}';
+    return '${(value / BigInt.from(pow(10, decimals)))} $currency';
   }
 
-  static ChainMetadata getNetworkMetadataById(String id) {
-    return Chains.allChains.firstWhere((chain) => chain.id == id);
+  static ChainMetadata? getNetworkMetadataById(String id) {
+    return Chains.allChains.firstWhereOrNull((chain) => chain.id == id);
   }
 }

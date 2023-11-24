@@ -1,7 +1,6 @@
 import 'package:app/core/data/user/dtos/user_dtos.dart';
 import 'package:app/core/data/user/user_enums.dart';
 import 'package:app/core/domain/common/entities/common.dart';
-import 'package:app/core/domain/payment/payment_enums.dart';
 
 class AuthUser {
   AuthUser({
@@ -176,7 +175,7 @@ class User {
   final int? friends;
   final int? following;
   final int? followers;
-  final Currency? currency;
+  final String? currency;
 
   final String? jobTitle;
   final String? companyName;

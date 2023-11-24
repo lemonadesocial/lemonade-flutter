@@ -3,7 +3,6 @@ import 'package:app/core/data/event/dtos/event_ticket_types_dto/event_ticket_typ
 import 'package:app/core/data/payment/dtos/payment_account_dto/payment_account_dto.dart';
 import 'package:app/core/data/user/dtos/user_dtos.dart';
 import 'package:app/core/domain/event/event_enums.dart';
-import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'event_dtos.freezed.dart';
@@ -28,7 +27,7 @@ class EventDto with _$EventDto {
     DateTime? start,
     DateTime? end,
     double? cost,
-    Currency? currency,
+    String? currency,
     List<String>? accepted,
     List<String>? invited,
     List<String>? pending,

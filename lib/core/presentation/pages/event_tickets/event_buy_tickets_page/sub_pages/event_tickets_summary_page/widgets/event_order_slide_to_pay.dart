@@ -1,5 +1,4 @@
 import 'package:app/core/domain/event/entities/event_tickets_pricing_info.dart';
-import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/presentation/widgets/common/slide_to_act/slide_to_act.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/number_utils.dart';
@@ -20,12 +19,14 @@ class EventOrderSlideToPay extends StatelessWidget {
     required this.onSlideToPay,
     required this.slideActionKey,
     required this.selectedCurrency,
+    required this.selectedNetwork,
     this.pricingInfo,
   });
 
   final Function() onSlideToPay;
   final EventTicketsPricingInfo? pricingInfo;
-  final Currency selectedCurrency;
+  final String selectedCurrency;
+  final String? selectedNetwork;
   final GlobalKey<SlideActionState> slideActionKey;
 
   @override
@@ -34,7 +35,7 @@ class EventOrderSlideToPay extends StatelessWidget {
     final t = Translations.of(context);
     final currencyInfo =
         PaymentUtils.getCurrencyInfo(pricingInfo, currency: selectedCurrency);
-    final amountText = PaymentUtils.isCryptoCurrency(selectedCurrency)
+    final amountText = selectedNetwork != null
         ? Web3Utils.formatCryptoCurrency(
             pricingInfo?.cryptoTotal ?? BigInt.zero,
             currency: selectedCurrency,

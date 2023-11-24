@@ -23,12 +23,12 @@ class PaymentAccountDto with _$PaymentAccountDto {
 @freezed
 class AccountInfoDto with _$AccountInfoDto {
   factory AccountInfoDto({
-    List<Currency>? currencies,
-    @JsonKey(name: 'currency_map') Map<Currency, CurrencyInfoDto>? currencyMap,
+    List<String>? currencies,
+    @JsonKey(name: 'currency_map') Map<String, CurrencyInfoDto>? currencyMap,
     @JsonKey(name: 'account_id') String? accountId,
     // Blockchain
     String? address,
-    List<SupportedPaymentNetwork>? networks,
+    List<String>? networks,
     // Stripe
     @JsonKey(name: 'publishable_key') String? publishableKey,
   }) = _AccountInfoDto;
@@ -42,7 +42,7 @@ class CurrencyInfoDto with _$CurrencyInfoDto {
   factory CurrencyInfoDto({
     // crypto
     int? decimals,
-    Map<SupportedPaymentNetwork, String>? contracts,
+    Map<String, String>? contracts,
   }) = _CurrencyInfoDto;
 
   factory CurrencyInfoDto.fromJson(Map<String, dynamic> json) =>

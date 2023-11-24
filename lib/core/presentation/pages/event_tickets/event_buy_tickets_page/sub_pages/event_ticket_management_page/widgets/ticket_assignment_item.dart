@@ -1,7 +1,6 @@
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/entities/event_ticket.dart';
 import 'package:app/core/domain/onboarding/onboarding_inputs.dart';
-import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
@@ -29,7 +28,7 @@ class TicketAssignmentItem extends StatelessWidget {
 
   final EventTicket eventTicket;
   final PurchasableTicketType? ticketType;
-  final Currency? currency;
+  final String? currency;
   final Function()? onPressedAssign;
 
   @override

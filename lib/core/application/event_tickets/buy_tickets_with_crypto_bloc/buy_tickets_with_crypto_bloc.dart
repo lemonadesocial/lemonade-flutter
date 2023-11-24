@@ -4,7 +4,6 @@ import 'package:app/core/domain/event/repository/event_ticket_repository.dart';
 import 'package:app/core/domain/payment/entities/payment.dart';
 import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
 import 'package:app/core/domain/payment/input/update_payment_input/update_payment_input.dart';
-import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/domain/payment/payment_repository.dart';
 import 'package:app/core/domain/web3/entities/ethereum_transaction.dart';
 import 'package:app/core/service/wallet/wallet_connect_service.dart';
@@ -26,7 +25,7 @@ class BuyTicketsWithCryptoBloc
     extends Bloc<BuyTicketsWithCryptoEvent, BuyTicketsWithCryptoState> {
   final eventTicketRepository = getIt<EventTicketRepository>();
   final paymentRepository = getIt<PaymentRepository>();
-  final SupportedPaymentNetwork? selectedNetwork;
+  final String? selectedNetwork;
 
   Payment? _currentPayment;
   String? _signature;
@@ -85,8 +84,8 @@ class BuyTicketsWithCryptoBloc
     try {
       final signature = await walletConnectService
           .personalSign(
-            chainId: Web3Utils.getNetworkMetadataById(selectedNetwork!.value)
-                .chainId,
+            chainId:
+                Web3Utils.getNetworkMetadataById(selectedNetwork!)?.chainId,
             message: Web3Utils.toHex(payment.id ?? ''),
             wallet: event.userWalletAddress,
             walletApp: SupportedWalletApp.metamask,
@@ -162,8 +161,9 @@ class BuyTicketsWithCryptoBloc
       );
       _txHash = await walletConnectService
           .requestTransaction(
-            chainId: Web3Utils.getNetworkMetadataById(selectedNetwork!.value)
-                .chainId,
+            chainId:
+                Web3Utils.getNetworkMetadataById(selectedNetwork!)?.chainId ??
+                    '',
             transaction: ethereumTxn,
             walletApp: SupportedWalletApp.metamask,
           )
@@ -282,7 +282,7 @@ class BuyTicketsWithCryptoEvent with _$BuyTicketsWithCryptoEvent {
     required CurrencyInfo currencyInfo,
   }) = _MakeTransaction;
   factory BuyTicketsWithCryptoEvent.selectNetwork({
-    required SupportedPaymentNetwork network,
+    required String network,
   }) = _SelectNetwork;
   factory BuyTicketsWithCryptoEvent.processUpdatePayment() =
       _ProcessUpdatePayment;

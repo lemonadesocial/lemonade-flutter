@@ -1,6 +1,5 @@
 import 'package:app/core/data/common/dtos/common_dtos.dart';
 import 'package:app/core/data/user/user_enums.dart';
-import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'user_dtos.freezed.dart';
@@ -55,7 +54,7 @@ class UserDto with _$UserDto {
     int? followers,
     @JsonKey(name: 'job_title') String? jobTitle,
     String? tagline,
-    Currency? currency,
+    String? currency,
     @JsonKey(name: 'new_gender') String? newGender,
     String? ethnicity,
     @JsonKey(name: 'company_name') String? companyName,
