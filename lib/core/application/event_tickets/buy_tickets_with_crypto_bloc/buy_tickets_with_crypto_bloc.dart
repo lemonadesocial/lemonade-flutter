@@ -84,7 +84,8 @@ class BuyTicketsWithCryptoBloc
     try {
       final signature = await walletConnectService
           .personalSign(
-            chainId: Web3Utils.getNetworkMetadataById(selectedNetwork!).chainId,
+            chainId:
+                Web3Utils.getNetworkMetadataById(selectedNetwork!)?.chainId,
             message: Web3Utils.toHex(payment.id ?? ''),
             wallet: event.userWalletAddress,
             walletApp: SupportedWalletApp.metamask,
@@ -160,7 +161,9 @@ class BuyTicketsWithCryptoBloc
       );
       _txHash = await walletConnectService
           .requestTransaction(
-            chainId: Web3Utils.getNetworkMetadataById(selectedNetwork!).chainId,
+            chainId:
+                Web3Utils.getNetworkMetadataById(selectedNetwork!)?.chainId ??
+                    '',
             transaction: ethereumTxn,
             walletApp: SupportedWalletApp.metamask,
           )

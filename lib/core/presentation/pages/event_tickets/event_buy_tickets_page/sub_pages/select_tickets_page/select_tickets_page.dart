@@ -296,8 +296,8 @@ class _SelectTicketViewState extends State<SelectTicketView> {
                                                         index - 1];
                                               });
                                             },
-                                            leading: chainMetadata.icon,
-                                            label: chainMetadata.displayName,
+                                            leading: chainMetadata?.icon,
+                                            label: chainMetadata?.displayName,
                                             backgroundColor: selected
                                                 ? LemonColor.atomicBlack
                                                 : null,

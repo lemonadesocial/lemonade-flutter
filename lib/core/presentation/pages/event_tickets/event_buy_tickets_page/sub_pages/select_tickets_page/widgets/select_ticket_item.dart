@@ -255,7 +255,7 @@ class _PriceItem extends StatelessWidget {
                   height: Sizing.medium,
                   child: Center(
                     child:
-                        Web3Utils.getNetworkMetadataById(price.network!).icon,
+                        Web3Utils.getNetworkMetadataById(price.network!)?.icon,
                   ),
                 ),
                 SizedBox(width: Spacing.xSmall),
@@ -285,7 +285,8 @@ class _PriceItem extends StatelessWidget {
                       SizedBox(height: 2.w),
                       Text(
                         Web3Utils.getNetworkMetadataById(price.network!)
-                            .displayName,
+                                ?.displayName ??
+                            '',
                         style: Typo.small.copyWith(
                           color: colorScheme.onSecondary,
                         ),

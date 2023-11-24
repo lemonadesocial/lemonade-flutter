@@ -74,7 +74,7 @@ class NetworkItem extends StatelessWidget {
         child: Row(
           children: [
             Text(
-              chainMetadata.displayName,
+              chainMetadata?.displayName ?? '',
               style: Typo.medium.copyWith(
                 fontWeight: FontWeight.w600,
                 color: colorScheme.onPrimary.withOpacity(0.87),
