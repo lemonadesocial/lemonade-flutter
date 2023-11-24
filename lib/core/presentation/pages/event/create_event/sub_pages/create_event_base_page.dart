@@ -97,7 +97,7 @@ class BaseCreateEventPage extends StatelessWidget {
                                     SizedBox(height: Spacing.smMedium),
                                     CreateEventConfigGrid(),
                                   ],
-                                )
+                                ),
                               ],
                             ),
                           ),

@@ -200,5 +200,7 @@ enum Currency {
   @JsonValue('TCOI')
   TCOI,
   @JsonValue('D2COI')
-  D2COI
+  D2COI,
+  @JsonValue('BLUE')
+  BLUE,
 }
