@@ -20,12 +20,14 @@ class EventOrderSlideToPay extends StatelessWidget {
     required this.onSlideToPay,
     required this.slideActionKey,
     required this.selectedCurrency,
+    required this.selectedNetwork,
     this.pricingInfo,
   });
 
   final Function() onSlideToPay;
   final EventTicketsPricingInfo? pricingInfo;
   final Currency selectedCurrency;
+  final SupportedPaymentNetwork? selectedNetwork;
   final GlobalKey<SlideActionState> slideActionKey;
 
   @override
@@ -34,7 +36,7 @@ class EventOrderSlideToPay extends StatelessWidget {
     final t = Translations.of(context);
     final currencyInfo =
         PaymentUtils.getCurrencyInfo(pricingInfo, currency: selectedCurrency);
-    final amountText = PaymentUtils.isCryptoCurrency(selectedCurrency)
+    final amountText = selectedNetwork != null
         ? Web3Utils.formatCryptoCurrency(
             pricingInfo?.cryptoTotal ?? BigInt.zero,
             currency: selectedCurrency,

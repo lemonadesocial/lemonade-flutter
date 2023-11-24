@@ -20,6 +20,7 @@ class EventOrderSummaryFooter extends StatelessWidget {
     required this.onSlideToPay,
     required this.slideActionKey,
     required this.selectedCurrency,
+    this.selectedNetwork,
     this.onSelectCard,
     this.onCardAdded,
   });
@@ -30,6 +31,7 @@ class EventOrderSummaryFooter extends StatelessWidget {
   final Function(PaymentCard paymentCard)? onSelectCard;
   final Function(PaymentCard paymentCard)? onCardAdded;
   final Currency selectedCurrency;
+  final SupportedPaymentNetwork? selectedNetwork;
 
   String get paymentAccountId {
     return pricingInfo?.paymentAccounts?.isNotEmpty == true
@@ -101,6 +103,7 @@ class EventOrderSummaryFooter extends StatelessWidget {
                       pricingInfo: pricingInfo,
                       slideActionKey: slideActionKey,
                       selectedCurrency: selectedCurrency,
+                      selectedNetwork: selectedNetwork,
                     ),
                   ],
                 );

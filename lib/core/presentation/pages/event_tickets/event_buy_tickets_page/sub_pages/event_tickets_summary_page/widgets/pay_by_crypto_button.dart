@@ -285,6 +285,7 @@ class _PayByCryptoButtonViewState extends State<PayByCryptoButtonView> {
                         onSlideToPay: () => onPress?.call(),
                         slideActionKey: _slideToActionKey,
                         selectedCurrency: widget.selectedCurrency,
+                        selectedNetwork: widget.selectedNetwork,
                         pricingInfo: widget.pricingInfo,
                       ),
                     if (state is! BuyTicketsWithCryptoStateSigned &&

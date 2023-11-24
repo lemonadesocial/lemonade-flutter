@@ -8,7 +8,6 @@ import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/utils/event_tickets_utils.dart';
 import 'package:app/core/utils/number_utils.dart';
-import 'package:app/core/utils/payment_utils.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -137,8 +136,8 @@ class SelectTicketItem extends StatelessWidget {
                     return const SizedBox.shrink();
                   }
 
-                  final isCryptoCurrency =
-                      PaymentUtils.isCryptoCurrency(ticketPrice.currency!);
+                  final isCryptoCurrency = ticketPrice.network != null;
+
                   if (isCryptoCurrency &&
                       selectedPaymentMethod ==
                           SelectTicketsPaymentMethod.card) {
@@ -181,6 +180,7 @@ class SelectTicketItem extends StatelessWidget {
                       decimals: decimals,
                       count: enabled ? count : 0,
                       currency: ticketPrice.currency!,
+                      network: ticketPrice.network,
                       price: ticketPrice,
                       disabled: !enabled,
                       onIncrease: (newCount) {
@@ -211,6 +211,7 @@ class SelectTicketItem extends StatelessWidget {
 
 class _PriceItem extends StatelessWidget {
   final Currency currency;
+  final SupportedPaymentNetwork? network;
   final EventTicketPrice price;
   final int decimals;
   final bool disabled;
@@ -226,12 +227,13 @@ class _PriceItem extends StatelessWidget {
     required this.disabled,
     required this.onIncrease,
     required this.onDecrease,
+    this.network,
   });
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final isCryptoCurrency = PaymentUtils.isCryptoCurrency(currency);
+    final isCryptoCurrency = network != null;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,

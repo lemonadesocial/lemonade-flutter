@@ -10,6 +10,7 @@ import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EventOrderSummary extends StatelessWidget {
@@ -17,16 +18,18 @@ class EventOrderSummary extends StatelessWidget {
     super.key,
     required this.pricingInfo,
     required this.selectedCurrency,
+    required this.selectedNetwork,
   });
 
   final EventTicketsPricingInfo pricingInfo;
+  final SupportedPaymentNetwork? selectedNetwork;
   final Currency selectedCurrency;
 
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-    final isCryptoCurrency = PaymentUtils.isCryptoCurrency(selectedCurrency);
+    final isCryptoCurrency = selectedNetwork != null;
     final currencyInfo =
         PaymentUtils.getCurrencyInfo(pricingInfo, currency: selectedCurrency);
 

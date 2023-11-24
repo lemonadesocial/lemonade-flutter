@@ -3,7 +3,6 @@ import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/entities/event_ticket.dart';
 import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/utils/list/unique_list_extension.dart';
-import 'package:app/core/utils/payment_utils.dart';
 import 'package:collection/collection.dart';
 
 class EventTicketUtils {
@@ -54,9 +53,7 @@ class EventTicketUtils {
     return ticketTypes
         .where(
           (element) => (element.prices ?? []).any(
-            (price) => price.currency != null
-                ? !PaymentUtils.isCryptoCurrency(price.currency!)
-                : false,
+            (price) => price.currency != null ? price.network == null : false,
           ),
         )
         .toList();
@@ -68,9 +65,7 @@ class EventTicketUtils {
     return ticketTypes
         .where(
           (element) => (element.prices ?? []).any(
-            (price) => price.currency != null
-                ? PaymentUtils.isCryptoCurrency(price.currency!)
-                : false,
+            (price) => price.currency != null ? price.network != null : false,
           ),
         )
         .toList();

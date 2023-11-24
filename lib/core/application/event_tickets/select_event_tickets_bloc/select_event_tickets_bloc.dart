@@ -96,6 +96,7 @@ class SelectEventTicketsBloc
   ) async {
     selectedCurrency = event.currency;
     selectedNetwork = event.network;
+    bool isCryptoCurrency = selectedNetwork != null;
 
     final newSelectedTickets = [
       event.ticket,
@@ -111,10 +112,9 @@ class SelectEventTicketsBloc
 
     final totalSelectedCount = _calculateTotalSelectedCount(newSelectedTickets);
 
-    Either<double, BigInt> totalAmount =
-        PaymentUtils.isCryptoCurrency(selectedCurrency!)
-            ? Right(_calculateBlockchainTotalAmount(newSelectedTickets))
-            : Left(_calculateFiatTotalAmount(newSelectedTickets));
+    Either<double, BigInt> totalAmount = isCryptoCurrency
+        ? Right(_calculateBlockchainTotalAmount(newSelectedTickets))
+        : Left(_calculateFiatTotalAmount(newSelectedTickets));
 
     emit(
       state.copyWith(
