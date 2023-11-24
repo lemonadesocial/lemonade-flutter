@@ -70,6 +70,7 @@ class AIPageState extends State<AIPage> {
   @override
   void dispose() {
     keyboardSubscription.cancel();
+    _timer?.cancel();
     super.dispose();
   }
 
