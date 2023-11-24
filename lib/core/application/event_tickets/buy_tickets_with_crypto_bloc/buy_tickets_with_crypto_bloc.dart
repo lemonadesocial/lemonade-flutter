@@ -45,6 +45,9 @@ class BuyTicketsWithCryptoBloc
     on<_MakeTransaction>(_onMakeTransaction);
     on<_ProcessUpdatePayment>(_onProcessUpdatePayment);
     on<_Resume>(_onResumeState);
+    on<_ReceivedPaymentFailedFromNotification>(
+      _onReceivedPaymentFailedFromNotification,
+    );
   }
 
   Future<void> _onInitAndSignPayment(
@@ -252,6 +255,18 @@ class BuyTicketsWithCryptoBloc
   void _onResumeState(_Resume event, Emitter emit) {
     emit(event.state);
   }
+
+  void _onReceivedPaymentFailedFromNotification(
+    _ReceivedPaymentFailedFromNotification event,
+    Emitter emit,
+  ) {
+    emit(
+      BuyTicketsWithCryptoState.failure(
+        data: state.data,
+        failureReason: NotificationCryptoPaymentFailure(),
+      ),
+    );
+  }
 }
 
 @freezed
@@ -274,6 +289,9 @@ class BuyTicketsWithCryptoEvent with _$BuyTicketsWithCryptoEvent {
   factory BuyTicketsWithCryptoEvent.resume({
     required BuyTicketsWithCryptoState state,
   }) = _Resume;
+  factory BuyTicketsWithCryptoEvent.receivedPaymentFailedFromNotification({
+    Payment? payment,
+  }) = _ReceivedPaymentFailedFromNotification;
 }
 
 @freezed
@@ -317,3 +335,5 @@ class WalletConnectFailure extends BuyWithCryptoFailure {
 }
 
 class UpdateCryptoPaymentFailure extends BuyWithCryptoFailure {}
+
+class NotificationCryptoPaymentFailure extends BuyWithCryptoFailure {}

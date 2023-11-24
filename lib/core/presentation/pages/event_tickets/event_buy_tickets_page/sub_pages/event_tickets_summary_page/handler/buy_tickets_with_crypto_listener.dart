@@ -5,13 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BuyTicketsWithCryptoListener {
-  static BlocListener create() {
+  static BlocListener create({
+    Function()? onDone,
+  }) {
     return BlocListener<BuyTicketsWithCryptoBloc, BuyTicketsWithCryptoState>(
       listener: (context, state) {
         state.maybeWhen(
           orElse: () => null,
           failure: (data, failureReason) {
-            if (failureReason is InitCryptoPaymentFailure) {
+            if (failureReason is InitCryptoPaymentFailure ||
+                failureReason is UpdateCryptoPaymentFailure ||
+                failureReason is NotificationCryptoPaymentFailure) {
               showDialog(
                 context: context,
                 builder: (context) => LemonAlertDialog(
@@ -31,18 +35,6 @@ class BuyTicketsWithCryptoListener {
               );
             }
 
-            if (failureReason is UpdateCryptoPaymentFailure) {
-              //TODO: payment cannot be updated in BE side
-              // still thinking way to backup this case
-              showDialog(
-                context: context,
-                builder: (context) => LemonAlertDialog(
-                  onClose: () => Navigator.of(context).pop(),
-                  child: Text(t.common.pleaseTryAgain),
-                ),
-              );
-            }
-
             context.read<BuyTicketsWithCryptoBloc>().add(
                   BuyTicketsWithCryptoEvent.resume(
                     state: BuyTicketsWithCryptoState.idle(data: state.data),
@@ -53,6 +45,7 @@ class BuyTicketsWithCryptoListener {
             // TODO: will trigger timeout 30s and if payment noti not coming yet => manually
             // call getPayment to check
             // When done, still need to wait for payment success or failed notification below
+            onDone?.call();
           },
         );
       },

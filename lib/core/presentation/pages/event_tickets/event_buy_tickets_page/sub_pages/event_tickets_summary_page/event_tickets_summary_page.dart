@@ -13,6 +13,7 @@ import 'package:app/core/domain/event/input/calculate_tickets_pricing_input/calc
 import 'package:app/core/domain/payment/input/get_stripe_cards_input/get_stripe_cards_input.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/handler/buy_tickets_listener.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/handler/buy_tickets_with_crypto_listener.dart';
+import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/handler/wait_for_payment_notification_handler.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/add_promo_code_input.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/event_order_summary.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/event_order_summary_footer.dart';
@@ -83,6 +84,7 @@ class EventTicketsSummaryPageView extends StatelessWidget {
   });
 
   final _slideActionKey = GlobalKey<SlideActionState>();
+  final _waitForNotificationTimer = WaitForPaymentNotificationHandler();
 
   @override
   Widget build(BuildContext context) {
@@ -139,15 +141,45 @@ class EventTicketsSummaryPageView extends StatelessWidget {
         ),
         BuyTicketsListener.create(
           onFailure: () => _slideActionKey.currentState?.reset(),
+          onDone: () {
+            _waitForNotificationTimer.start(context);
+          },
         ),
-        BuyTicketsWithCryptoListener.create(),
+        BuyTicketsWithCryptoListener.create(
+          onDone: () {
+            _waitForNotificationTimer.start(context);
+          },
+        ),
       ],
       child: PaymentListener(
+        onReceivedPaymentFailed: (eventId, payment) {
+          final currentPayment = isCryptoCurrency
+              ? context.read<BuyTicketsWithCryptoBloc>().state.data.payment
+              : context.read<BuyTicketsBloc>().currentPayment;
+          if (currentPayment?.id == payment.id && eventId == event.id) {
+            _waitForNotificationTimer.cancel();
+            if (isCryptoCurrency) {
+              context.read<BuyTicketsWithCryptoBloc>().add(
+                    BuyTicketsWithCryptoEvent
+                        .receivedPaymentFailedFromNotification(
+                      payment: payment,
+                    ),
+                  );
+            } else {
+              context.read<BuyTicketsBloc>().add(
+                    BuyTicketsEvent.receivedPaymentFailedFromNotification(
+                      payment: payment,
+                    ),
+                  );
+            }
+          }
+        },
         onReceivedPaymentSuccess: (eventId, payment) {
           final currentPayment = isCryptoCurrency
               ? context.read<BuyTicketsWithCryptoBloc>().state.data.payment
               : context.read<BuyTicketsBloc>().currentPayment;
           if (currentPayment?.id == payment.id && eventId == event.id) {
+            _waitForNotificationTimer.cancel();
             AutoRouter.of(context).replaceAll(
               [
                 RSVPEventSuccessPopupRoute(
@@ -170,247 +202,253 @@ class EventTicketsSummaryPageView extends StatelessWidget {
             );
           }
         },
-        child: Stack(
-          children: [
-            Scaffold(
-              backgroundColor: colorScheme.background,
-              appBar: const LemonAppBar(),
-              body: SafeArea(
-                child: Stack(
-                  children: [
-                    SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: Spacing.smMedium,
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  t.event.eventBuyTickets.orderSummary,
-                                  style: Typo.extraLarge.copyWith(
-                                    color: colorScheme.onPrimary,
-                                    fontFamily: FontFamily.nohemiVariable,
-                                    fontWeight: FontWeight.w800,
-                                  ),
-                                ),
-                                Text(
-                                  "${event.title}  •  ${DateFormatUtils.dateOnly(event.start)}",
-                                  style: Typo.mediumPlus.copyWith(
-                                    color: colorScheme.onSecondary,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: Spacing.large),
-                          BlocBuilder<CalculateEventTicketPricingBloc,
-                              CalculateEventTicketPricingState>(
-                            builder: (context, state) {
-                              return state.when(
-                                idle: () => const SizedBox.shrink(),
-                                loading: () => Loading.defaultLoading(context),
-                                failure: (pricingInfo) {
-                                  if (pricingInfo != null) {
-                                    return EventTicketsSummary(
-                                      ticketTypes: ticketTypes,
-                                      selectedTickets: selectedTickets,
-                                      selectedCurrency: selectedCurrency,
-                                      selectedNetwork: selectedNetwork,
-                                      pricingInfo: pricingInfo,
-                                    );
-                                  }
-                                  return EmptyList(
-                                    emptyText: t.common.somethingWrong,
-                                  );
-                                },
-                                success: (pricingInfo) => EventTicketsSummary(
-                                  ticketTypes: ticketTypes,
-                                  selectedTickets: selectedTickets,
-                                  selectedCurrency: selectedCurrency,
-                                  selectedNetwork: selectedNetwork,
-                                  pricingInfo: pricingInfo,
-                                ),
-                              );
-                            },
-                          ),
-                          SizedBox(height: Spacing.smMedium),
-                          BlocBuilder<CalculateEventTicketPricingBloc,
-                              CalculateEventTicketPricingState>(
-                            builder: (context, state) => AddPromoCodeInput(
-                              pricingInfo: state.maybeWhen(
-                                orElse: () => null,
-                                failure: ((pricingInfo) => pricingInfo),
-                                success: (pricingInfo) => pricingInfo,
+        child: WillPopScope(
+          // prevent accidentally swipe back
+          onWillPop: () async => true,
+          child: Stack(
+            children: [
+              Scaffold(
+                backgroundColor: colorScheme.background,
+                appBar: const LemonAppBar(),
+                body: SafeArea(
+                  child: Stack(
+                    children: [
+                      SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: Spacing.smMedium,
                               ),
-                              onPressApply: (promoCode) {
-                                context
-                                    .read<CalculateEventTicketPricingBloc>()
-                                    .add(
-                                      CalculateEventTicketPricingEvent
-                                          .calculate(
-                                        input: CalculateTicketsPricingInput(
-                                          discount: promoCode,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    t.event.eventBuyTickets.orderSummary,
+                                    style: Typo.extraLarge.copyWith(
+                                      color: colorScheme.onPrimary,
+                                      fontFamily: FontFamily.nohemiVariable,
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                  ),
+                                  Text(
+                                    "${event.title}  •  ${DateFormatUtils.dateOnly(event.start)}",
+                                    style: Typo.mediumPlus.copyWith(
+                                      color: colorScheme.onSecondary,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: Spacing.large),
+                            BlocBuilder<CalculateEventTicketPricingBloc,
+                                CalculateEventTicketPricingState>(
+                              builder: (context, state) {
+                                return state.when(
+                                  idle: () => const SizedBox.shrink(),
+                                  loading: () =>
+                                      Loading.defaultLoading(context),
+                                  failure: (pricingInfo) {
+                                    if (pricingInfo != null) {
+                                      return EventTicketsSummary(
+                                        ticketTypes: ticketTypes,
+                                        selectedTickets: selectedTickets,
+                                        selectedCurrency: selectedCurrency,
+                                        selectedNetwork: selectedNetwork,
+                                        pricingInfo: pricingInfo,
+                                      );
+                                    }
+                                    return EmptyList(
+                                      emptyText: t.common.somethingWrong,
+                                    );
+                                  },
+                                  success: (pricingInfo) => EventTicketsSummary(
+                                    ticketTypes: ticketTypes,
+                                    selectedTickets: selectedTickets,
+                                    selectedCurrency: selectedCurrency,
+                                    selectedNetwork: selectedNetwork,
+                                    pricingInfo: pricingInfo,
+                                  ),
+                                );
+                              },
+                            ),
+                            SizedBox(height: Spacing.smMedium),
+                            BlocBuilder<CalculateEventTicketPricingBloc,
+                                CalculateEventTicketPricingState>(
+                              builder: (context, state) => AddPromoCodeInput(
+                                pricingInfo: state.maybeWhen(
+                                  orElse: () => null,
+                                  failure: ((pricingInfo) => pricingInfo),
+                                  success: (pricingInfo) => pricingInfo,
+                                ),
+                                onPressApply: (promoCode) {
+                                  context
+                                      .read<CalculateEventTicketPricingBloc>()
+                                      .add(
+                                        CalculateEventTicketPricingEvent
+                                            .calculate(
+                                          input: CalculateTicketsPricingInput(
+                                            discount: promoCode,
+                                            eventId: event.id ?? '',
+                                            items: selectedTickets,
+                                            currency: selectedCurrency,
+                                            network: selectedNetwork,
+                                          ),
+                                        ),
+                                      );
+                                },
+                              ),
+                            ),
+                            SizedBox(height: Spacing.smMedium),
+                            BlocBuilder<CalculateEventTicketPricingBloc,
+                                CalculateEventTicketPricingState>(
+                              builder: (context, state) {
+                                return state.when(
+                                  idle: () => const SizedBox.shrink(),
+                                  loading: () =>
+                                      Loading.defaultLoading(context),
+                                  failure: (pricingInfo) {
+                                    if (pricingInfo != null) {
+                                      return EventOrderSummary(
+                                        selectedCurrency: selectedCurrency,
+                                        pricingInfo: pricingInfo,
+                                      );
+                                    }
+                                    return EmptyList(
+                                      emptyText: t.common.somethingWrong,
+                                    );
+                                  },
+                                  success: (pricingInfo) => EventOrderSummary(
+                                    selectedCurrency: selectedCurrency,
+                                    pricingInfo: pricingInfo,
+                                  ),
+                                );
+                              },
+                            ),
+                            SizedBox(height: 150.w + Spacing.medium),
+                          ],
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: BlocBuilder<CalculateEventTicketPricingBloc,
+                            CalculateEventTicketPricingState>(
+                          builder: (context, state) {
+                            final pricingInfo = state.maybeWhen(
+                              orElse: () => null,
+                              failure: ((pricingInfo) => pricingInfo),
+                              success: (pricingInfo) => pricingInfo,
+                            );
+
+                            if (pricingInfo == null) {
+                              return const SizedBox.shrink();
+                            }
+                            if (isCryptoCurrency) {
+                              return PayByCryptoButton(
+                                selectedTickets: selectedTickets,
+                                selectedCurrency: selectedCurrency,
+                                selectedNetwork: selectedNetwork,
+                                pricingInfo: pricingInfo,
+                              );
+                            }
+
+                            return EventOrderSummaryFooter(
+                              selectedCurrency: selectedCurrency,
+                              onSlideToPay: () {
+                                if (pricingInfo.paymentAccounts == null ||
+                                    pricingInfo.paymentAccounts?.isEmpty ==
+                                        true) {
+                                  return const SizedBox.shrink();
+                                }
+                                final selectedCard = context
+                                    .read<SelectPaymentCardCubit>()
+                                    .state
+                                    .when(
+                                      empty: () => null,
+                                      cardSelected: (selectedCard) =>
+                                          selectedCard,
+                                    );
+                                context.read<BuyTicketsBloc>().add(
+                                      BuyTicketsEvent.buy(
+                                        input: BuyTicketsInput(
+                                          discount: pricingInfo.promoCode,
                                           eventId: event.id ?? '',
-                                          items: selectedTickets,
+                                          accountId: pricingInfo
+                                                  .paymentAccounts?.first.id ??
+                                              '',
                                           currency: selectedCurrency,
-                                          network: selectedNetwork,
+                                          items: selectedTickets,
+                                          total: pricingInfo.total ?? '0',
+                                          transferParams:
+                                              BuyTicketsTransferParamsInput(
+                                            paymentMethod:
+                                                selectedCard?.providerId ?? '',
+                                          ),
                                         ),
                                       ),
                                     );
                               },
-                            ),
-                          ),
-                          SizedBox(height: Spacing.smMedium),
-                          BlocBuilder<CalculateEventTicketPricingBloc,
-                              CalculateEventTicketPricingState>(
-                            builder: (context, state) {
-                              return state.when(
-                                idle: () => const SizedBox.shrink(),
-                                loading: () => Loading.defaultLoading(context),
-                                failure: (pricingInfo) {
-                                  if (pricingInfo != null) {
-                                    return EventOrderSummary(
-                                      selectedCurrency: selectedCurrency,
-                                      pricingInfo: pricingInfo,
-                                    );
-                                  }
-                                  return EmptyList(
-                                    emptyText: t.common.somethingWrong,
-                                  );
-                                },
-                                success: (pricingInfo) => EventOrderSummary(
-                                  selectedCurrency: selectedCurrency,
-                                  pricingInfo: pricingInfo,
-                                ),
-                              );
-                            },
-                          ),
-                          SizedBox(height: 150.w + Spacing.medium),
-                        ],
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: BlocBuilder<CalculateEventTicketPricingBloc,
-                          CalculateEventTicketPricingState>(
-                        builder: (context, state) {
-                          final pricingInfo = state.maybeWhen(
-                            orElse: () => null,
-                            failure: ((pricingInfo) => pricingInfo),
-                            success: (pricingInfo) => pricingInfo,
-                          );
-
-                          if (pricingInfo == null) {
-                            return const SizedBox.shrink();
-                          }
-                          if (isCryptoCurrency) {
-                            return PayByCryptoButton(
-                              selectedTickets: selectedTickets,
-                              selectedCurrency: selectedCurrency,
-                              selectedNetwork: selectedNetwork,
                               pricingInfo: pricingInfo,
-                            );
-                          }
-
-                          return EventOrderSummaryFooter(
-                            selectedCurrency: selectedCurrency,
-                            onSlideToPay: () {
-                              if (pricingInfo.paymentAccounts == null ||
-                                  pricingInfo.paymentAccounts?.isEmpty ==
-                                      true) {
-                                return const SizedBox.shrink();
-                              }
-                              final selectedCard = context
-                                  .read<SelectPaymentCardCubit>()
-                                  .state
-                                  .when(
-                                    empty: () => null,
-                                    cardSelected: (selectedCard) =>
-                                        selectedCard,
-                                  );
-                              context.read<BuyTicketsBloc>().add(
-                                    BuyTicketsEvent.buy(
-                                      input: BuyTicketsInput(
-                                        discount: pricingInfo.promoCode,
-                                        eventId: event.id ?? '',
-                                        accountId: pricingInfo
-                                                .paymentAccounts?.first.id ??
-                                            '',
-                                        currency: selectedCurrency,
-                                        items: selectedTickets,
-                                        total: pricingInfo.total ?? '0',
-                                        transferParams:
-                                            BuyTicketsTransferParamsInput(
-                                          paymentMethod:
-                                              selectedCard?.providerId ?? '',
-                                        ),
+                              slideActionKey: _slideActionKey,
+                              onCardAdded: (newCard) {
+                                context.read<GetPaymentCardsBloc>().add(
+                                      GetPaymentCardsEvent.manuallyAddMoreCard(
+                                        paymentCard: newCard,
                                       ),
-                                    ),
-                                  );
-                            },
-                            pricingInfo: pricingInfo,
-                            slideActionKey: _slideActionKey,
-                            onCardAdded: (newCard) {
-                              context.read<GetPaymentCardsBloc>().add(
-                                    GetPaymentCardsEvent.manuallyAddMoreCard(
+                                    );
+                                context
+                                    .read<SelectPaymentCardCubit>()
+                                    .selectPaymentCard(
                                       paymentCard: newCard,
-                                    ),
-                                  );
-                              context
-                                  .read<SelectPaymentCardCubit>()
-                                  .selectPaymentCard(
-                                    paymentCard: newCard,
-                                  );
-                            },
-                            onSelectCard: (selectedCard) {
-                              context
-                                  .read<SelectPaymentCardCubit>()
-                                  .selectPaymentCard(
-                                    paymentCard: selectedCard,
-                                  );
-                            },
-                          );
-                        },
+                                    );
+                              },
+                              onSelectCard: (selectedCard) {
+                                context
+                                    .read<SelectPaymentCardCubit>()
+                                    .selectPaymentCard(
+                                      paymentCard: selectedCard,
+                                    );
+                              },
+                            );
+                          },
+                        ),
                       ),
+                    ],
+                  ),
+                ),
+              ),
+              BlocBuilder<BuyTicketsBloc, BuyTicketsState>(
+                builder: (context, state) => state.maybeWhen(
+                  idle: () => const SizedBox.shrink(),
+                  failure: (failureReason) => const SizedBox.shrink(),
+                  orElse: () => Positioned.fill(
+                    child: Container(
+                      color: colorScheme.background.withOpacity(0.5),
+                      child: Loading.defaultLoading(context),
                     ),
-                  ],
-                ),
-              ),
-            ),
-            BlocBuilder<BuyTicketsBloc, BuyTicketsState>(
-              builder: (context, state) => state.maybeWhen(
-                idle: () => const SizedBox.shrink(),
-                failure: (failureReason) => const SizedBox.shrink(),
-                orElse: () => Positioned.fill(
-                  child: Container(
-                    color: colorScheme.background.withOpacity(0.5),
-                    child: Loading.defaultLoading(context),
                   ),
                 ),
               ),
-            ),
-            BlocBuilder<BuyTicketsWithCryptoBloc, BuyTicketsWithCryptoState>(
-              builder: (context, state) => state.maybeWhen(
-                orElse: () => const SizedBox.shrink(),
-                loading: (_) => Positioned.fill(
-                  child: Container(
-                    color: colorScheme.background.withOpacity(0.5),
-                    child: Loading.defaultLoading(context),
+              BlocBuilder<BuyTicketsWithCryptoBloc, BuyTicketsWithCryptoState>(
+                builder: (context, state) => state.maybeWhen(
+                  orElse: () => const SizedBox.shrink(),
+                  loading: (_) => Positioned.fill(
+                    child: Container(
+                      color: colorScheme.background.withOpacity(0.5),
+                      child: Loading.defaultLoading(context),
+                    ),
                   ),
-                ),
-                done: (_) => Positioned.fill(
-                  child: Container(
-                    color: colorScheme.background.withOpacity(0.5),
-                    child: Loading.defaultLoading(context),
+                  done: (_) => Positioned.fill(
+                    child: Container(
+                      color: colorScheme.background.withOpacity(0.5),
+                      child: Loading.defaultLoading(context),
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -122,73 +122,86 @@ class EventPickMyTicketView extends StatelessWidget {
           },
         ),
       ],
-      child: Scaffold(
-        backgroundColor: colorScheme.background,
-        appBar: const LemonAppBar(
-          leading: SizedBox.shrink(),
-        ),
-        body: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      t.event.eventPickMyTickets.pickYourTicket,
-                      style: Typo.extraLarge.copyWith(
-                        color: colorScheme.onPrimary,
-                        fontFamily: FontFamily.nohemiVariable,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                    Text(
-                      t.event.eventPickMyTickets.pickYourTicketDescription,
-                      style: Typo.mediumPlus.copyWith(
-                        color: colorScheme.onSecondary,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: Spacing.smMedium),
-              BlocBuilder<GetEventTicketTypesBloc, GetEventTicketTypesState>(
-                builder: (context, state) {
-                  return state.when(
-                    loading: () => Loading.defaultLoading(context),
-                    failure: () => EmptyList(
-                      emptyText: t.common.somethingWrong,
-                    ),
-                    success: (eventTicketTypesResponse, supportedCurrencies) {
-                      return BlocBuilder<GetMyTicketsBloc, GetMyTicketsState>(
-                        builder: (context, state) => state.when(
-                          loading: () => Loading.defaultLoading(context),
-                          failure: () => EmptyList(
-                            emptyText: t.common.somethingWrong,
+      child: Stack(
+        children: [
+          Scaffold(
+            backgroundColor: colorScheme.background,
+            appBar: const LemonAppBar(
+              leading: SizedBox.shrink(),
+            ),
+            body: SafeArea(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          t.event.eventPickMyTickets.pickYourTicket,
+                          style: Typo.extraLarge.copyWith(
+                            color: colorScheme.onPrimary,
+                            fontFamily: FontFamily.nohemiVariable,
+                            fontWeight: FontWeight.w800,
                           ),
-                          success: (myTickets) {
-                            return PickMyTicketsList(
-                              event: event,
-                              ticketGroupsMap:
-                                  EventTicketUtils.groupTicketsByTicketType(
-                                EventTicketUtils.getNotAssignedTicketOnly(
-                                  myTickets,
-                                ),
-                              ),
-                              ticketTypes:
-                                  eventTicketTypesResponse.ticketTypes ?? [],
-                            );
-                          },
                         ),
+                        Text(
+                          t.event.eventPickMyTickets.pickYourTicketDescription,
+                          style: Typo.mediumPlus.copyWith(
+                            color: colorScheme.onSecondary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: Spacing.smMedium),
+                  BlocBuilder<GetEventTicketTypesBloc,
+                      GetEventTicketTypesState>(
+                    builder: (context, state) {
+                      return state.when(
+                        loading: () =>
+                            Expanded(child: Loading.defaultLoading(context)),
+                        failure: () => EmptyList(
+                          emptyText: t.common.somethingWrong,
+                        ),
+                        success:
+                            (eventTicketTypesResponse, supportedCurrencies) {
+                          return BlocBuilder<GetMyTicketsBloc,
+                              GetMyTicketsState>(
+                            builder: (context, state) => state.when(
+                              loading: () => Loading.defaultLoading(context),
+                              failure: () => EmptyList(
+                                emptyText: t.common.somethingWrong,
+                              ),
+                              success: (myTickets) {
+                                return PickMyTicketsList(
+                                  event: event,
+                                  ticketGroupsMap:
+                                      EventTicketUtils.groupTicketsByTicketType(
+                                    EventTicketUtils.getNotAssignedTicketOnly(
+                                      myTickets,
+                                    ),
+                                  ),
+                                  ticketTypes:
+                                      eventTicketTypesResponse.ticketTypes ??
+                                          [],
+                                );
+                              },
+                            ),
+                          );
+                        },
                       );
                     },
-                  );
-                },
+                  ),
+                ],
               ),
-              const Spacer(),
-              BlocBuilder<SelectSelfAssignTicketBloc,
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: SafeArea(
+              child: BlocBuilder<SelectSelfAssignTicketBloc,
                   SelectSelfAssignTicketState>(
                 builder: (context, state) {
                   final isButtonLoading =
@@ -236,9 +249,9 @@ class EventPickMyTicketView extends StatelessWidget {
                   );
                 },
               ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
