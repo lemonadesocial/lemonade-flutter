@@ -98,7 +98,9 @@ class _SelectTicketViewState extends State<SelectTicketView> {
                         eventTicketTypesResponse: response,
                       ),
                     );
-                if ((response.ticketTypes ?? []).isEmpty) {
+                final allTicketTypes = response.ticketTypes ?? [];
+
+                if (allTicketTypes.isEmpty) {
                   return;
                 }
 
@@ -123,6 +125,23 @@ class _SelectTicketViewState extends State<SelectTicketView> {
                   context.read<SelectEventTicketsBloc>().add(
                         SelectEventTicketsEvent.selectPaymentMethod(
                           paymentMethod: SelectTicketsPaymentMethod.card,
+                        ),
+                      );
+                }
+
+                // auto increase if only 1 ticket tier and only 1 price option in that tier
+                if (allTicketTypes.length == 1 &&
+                    allTicketTypes.first.prices?.isNotEmpty == true &&
+                    allTicketTypes.first.prices?.length == 1) {
+                  final price = allTicketTypes.first.prices!.first;
+                  context.read<SelectEventTicketsBloc>().add(
+                        SelectEventTicketsEvent.select(
+                          ticket: PurchasableItem(
+                            count: 1,
+                            id: allTicketTypes.first.id!,
+                          ),
+                          currency: price.currency ?? '',
+                          network: price.network,
                         ),
                       );
                 }
