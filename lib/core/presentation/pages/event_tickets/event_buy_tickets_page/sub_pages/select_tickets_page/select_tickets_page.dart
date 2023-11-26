@@ -91,13 +91,41 @@ class _SelectTicketViewState extends State<SelectTicketView> {
           listener: (context, state) {
             state.maybeWhen(
               orElse: () => null,
-              success: (response, supportedCurrencies) => context
-                  .read<SelectEventTicketsBloc>()
-                  .add(
-                    SelectEventTicketsEvent.onEventTicketTypesResponseLoaded(
-                      eventTicketTypesResponse: response,
-                    ),
-                  ),
+              success: (response, supportedCurrencies) {
+                context.read<SelectEventTicketsBloc>().add(
+                      SelectEventTicketsEvent.onEventTicketTypesResponseLoaded(
+                        eventTicketTypesResponse: response,
+                      ),
+                    );
+                if ((response.ticketTypes ?? []).isEmpty) {
+                  return;
+                }
+
+                final stripeTicketTypes =
+                    EventTicketUtils.getTicketTypesSupportStripe(
+                  ticketTypes: response.ticketTypes ?? [],
+                );
+                final erc20TicketTypes =
+                    EventTicketUtils.getTicketTypesSupportCrypto(
+                  ticketTypes: response.ticketTypes ?? [],
+                );
+
+                if (stripeTicketTypes.isEmpty) {
+                  context.read<SelectEventTicketsBloc>().add(
+                        SelectEventTicketsEvent.selectPaymentMethod(
+                          paymentMethod: SelectTicketsPaymentMethod.wallet,
+                        ),
+                      );
+                }
+
+                if (erc20TicketTypes.isEmpty) {
+                  context.read<SelectEventTicketsBloc>().add(
+                        SelectEventTicketsEvent.selectPaymentMethod(
+                          paymentMethod: SelectTicketsPaymentMethod.card,
+                        ),
+                      );
+                }
+              },
             );
           },
         ),
@@ -218,19 +246,50 @@ class _SelectTicketViewState extends State<SelectTicketView> {
                     ),
                   ),
                   SizedBox(height: Spacing.smMedium),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-                    child: PaymentMethodsSwitcher(
-                      selectedPaymentMethod: selectedPaymentMethod,
-                      onSelect: (paymentMethod) =>
-                          context.read<SelectEventTicketsBloc>().add(
-                                SelectEventTicketsEvent.selectPaymentMethod(
-                                  paymentMethod: paymentMethod,
-                                ),
-                              ),
-                    ),
+                  BlocBuilder<GetEventTicketTypesBloc,
+                      GetEventTicketTypesState>(
+                    builder: (context, state) {
+                      return state.when(
+                        loading: () => const SizedBox.shrink(),
+                        failure: () => const SizedBox.shrink(),
+                        success: (response, supportedCurrencies) {
+                          final stripeTicketTypes =
+                              EventTicketUtils.getTicketTypesSupportStripe(
+                            ticketTypes: response.ticketTypes ?? [],
+                          );
+                          final erc20TicketTypes =
+                              EventTicketUtils.getTicketTypesSupportCrypto(
+                            ticketTypes: response.ticketTypes ?? [],
+                          );
+
+                          // if there's only one supported payment methods (wallet or card)
+                          // then no need to render payment methods switcher
+                          if (stripeTicketTypes.isEmpty ||
+                              erc20TicketTypes.isEmpty) {
+                            return const SizedBox.shrink();
+                          }
+
+                          return Padding(
+                            padding: EdgeInsets.only(
+                              bottom: Spacing.smMedium,
+                              left: Spacing.smMedium,
+                              right: Spacing.smMedium,
+                            ),
+                            child: PaymentMethodsSwitcher(
+                              selectedPaymentMethod: selectedPaymentMethod,
+                              onSelect: (paymentMethod) => context
+                                  .read<SelectEventTicketsBloc>()
+                                  .add(
+                                    SelectEventTicketsEvent.selectPaymentMethod(
+                                      paymentMethod: paymentMethod,
+                                    ),
+                                  ),
+                            ),
+                          );
+                        },
+                      );
+                    },
                   ),
-                  SizedBox(height: Spacing.smMedium),
                   BlocBuilder<GetEventTicketTypesBloc,
                       GetEventTicketTypesState>(
                     builder: (context, state) => state.when(
