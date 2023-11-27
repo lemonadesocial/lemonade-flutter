@@ -1,14 +1,20 @@
 import 'dart:async';
 
+import 'package:app/core/constants/app_constants.dart';
 import 'package:app/core/domain/ai/ai_entities.dart';
+import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/core/utils/gql/ai_gql_client.dart';
 import 'package:app/core/config.dart';
 import 'package:app/core/presentation/widgets/ai/ai_chat_card.dart';
 import 'package:app/core/presentation/widgets/ai/ai_chat_composer.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
+import 'package:app/core/utils/modal_utils.dart';
+import 'package:app/gen/assets.gen.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/schemas/ai/__generated__/schema.schema.gql.dart';
 import 'package:app/theme/color.dart';
+import 'package:app/theme/spacing.dart';
+import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -35,6 +41,7 @@ class AIPageState extends State<AIPage> {
   final ScrollController _scrollController = ScrollController();
   final String session = uuid.v4();
   bool _loading = false;
+  late String inputString = '';
 
   List<AIChatMessage> messages = [
     AIChatMessage(
@@ -93,14 +100,15 @@ class AIPageState extends State<AIPage> {
     startTimer();
   }
 
-  void send(String text) {
+  void onSend(String? text) {
     try {
       Vibrate.feedback(FeedbackType.light);
       FocusScope.of(context).unfocus();
-      if (_textController.text.trim().isEmpty) return;
+      if (inputString.trim().isEmpty || text!.trim().isEmpty) return;
       _textController.clear();
       setState(() {
         _loading = true;
+        inputString = '';
         messages.insert(
           messages.length,
           AIChatMessage(text, null, true, true),
@@ -155,7 +163,47 @@ class AIPageState extends State<AIPage> {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      appBar: const LemonAppBar(),
+      appBar: LemonAppBar(
+        titleBuilder: (context) => Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 200),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const LemonCircleAvatar(
+                  isLemonIcon: true,
+                ),
+                SizedBox(width: Spacing.xSmall),
+                Flexible(
+                  child: Text(
+                    AppConstants.defaultAIChatbotName,
+                    style: Typo.extraMedium,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        actions: [
+          Padding(
+            padding:
+                EdgeInsets.only(left: Spacing.medium, right: Spacing.xSmall),
+            child: InkWell(
+              onTap: () {
+                Vibrate.feedback(FeedbackType.light);
+                showComingSoonDialog(context);
+              },
+              child: Icon(
+                Icons.more_horiz,
+                size: 21,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+            ),
+          ),
+        ],
+      ),
       backgroundColor: colorScheme.primary,
       body: SafeArea(
         child: Container(
@@ -170,8 +218,14 @@ class AIPageState extends State<AIPage> {
                 decoration: BoxDecoration(color: Theme.of(context).cardColor),
                 child: AIChatComposer(
                   textController: _textController,
-                  onSend: send,
+                  inputString: inputString,
+                  onSend: onSend,
                   loading: _loading,
+                  onChanged: (String text) {
+                    setState(() {
+                      inputString = text;
+                    });
+                  },
                 ),
               ),
             ],

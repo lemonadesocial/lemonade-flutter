@@ -4,4 +4,6 @@ class AppConstants {
 
   /// Guest limit 100
   static String defaultEventGuestLimit = '100';
+
+  static String defaultAIChatbotName = 'Lulu';
 }

@@ -2,6 +2,7 @@ import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/domain/ai/ai_entities.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/widgets/ai/ai_metadata_button_card.dart';
+import 'package:app/core/presentation/widgets/common/list_tile/custom_list_tile.dart';
 import 'package:app/core/presentation/widgets/home/create_pop_up_tile.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
@@ -9,6 +10,7 @@ import 'package:app/core/utils/avatar_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
+import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -40,26 +42,40 @@ class AIChatCard extends StatelessWidget {
               color: LemonColor.darkCharcoalGray,
               child: Column(
                 children: [
-                  ListTile(
-                    contentPadding: EdgeInsets.symmetric(
-                      vertical: 18.h,
-                      horizontal: 15.w,
-                    ),
+                  CustomListTile(
                     leading: _buildAvatar(
                       isUser,
                       authState.authSession,
                     ),
                     title: message.finishedAnimation == true
-                        ? Text(message.text ?? '')
+                        ? Text(
+                            message.text ?? '',
+                            style: Typo.medium.copyWith(
+                              fontWeight: FontWeight.w400,
+                            ),
+                          )
                         : AnimatedTextKit(
                             animatedTexts: [
-                              TypewriterAnimatedText(message.text ?? ''),
+                              TypewriterAnimatedText(
+                                message.text ?? '',
+                                textStyle: Typo.medium.copyWith(
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
                             ],
                             repeatForever: false,
                             totalRepeatCount: 1,
                             onFinished: onFinishedTypingAnimation,
                           ),
                   ),
+                  // ListTile(
+                  //   visualDensity:
+                  //       const VisualDensity(horizontal: 0, vertical: -4),
+                  //   contentPadding: EdgeInsets.symmetric(
+                  //     vertical: 18.h,
+                  //     horizontal: 15.w,
+                  //   ),,
+                  // ),
                   _buildButtons(context),
                 ],
               ),
@@ -100,14 +116,12 @@ class AIChatCard extends StatelessWidget {
         ),
       );
     }
-    return Container(
+    return SizedBox(
       width: 42.w,
       height: 42.h,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: Assets.images.icChatAiBot.provider(),
-          fit: BoxFit.contain,
-        ),
+      child: const LemonCircleAvatar(
+        isLemonIcon: true,
+        lemonIconScale: 1.4,
       ),
     );
   }

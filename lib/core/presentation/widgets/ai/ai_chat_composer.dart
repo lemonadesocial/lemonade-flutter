@@ -1,3 +1,4 @@
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
@@ -9,13 +10,16 @@ class AIChatComposer extends StatelessWidget {
   const AIChatComposer({
     super.key,
     this.loading,
+    required this.inputString,
     required this.onSend,
+    required this.onChanged,
     required this.textController,
   });
-
+  final String inputString;
   final bool? loading;
   final TextEditingController textController;
-  final Function(String text) onSend;
+  final Function(String? text) onSend;
+  final Function(String text) onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -36,23 +40,14 @@ class AIChatComposer extends StatelessWidget {
             EdgeInsets.only(left: 15.w, right: 15.w, top: 15.h, bottom: 12.h),
         child: Row(
           children: [
-            Container(
-              width: 42.w,
-              height: 42.h,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: Assets.images.icChatAiBot.provider(),
-                  fit: BoxFit.contain,
-                ),
-              ),
-            ),
             SizedBox(
               width: 6.w,
             ),
             Expanded(
               child: TextField(
                 controller: textController,
-                onSubmitted: onSend,
+                onSubmitted: (value) => onSend(value),
+                onChanged: onChanged,
                 decoration: InputDecoration(
                   contentPadding: EdgeInsets.symmetric(
                     vertical: Spacing.extraSmall,
@@ -85,6 +80,22 @@ class AIChatComposer extends StatelessWidget {
   }
 
   Widget _buildSendbutton(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    Widget icon = inputString == ''
+        ? ThemeSvgIcon(
+            color: colorScheme.onSecondary,
+            builder: (filter) => Assets.icons.icMic.svg(
+              colorFilter: filter,
+            ),
+          )
+        : IconButton(
+            icon: Icon(
+              Icons.send_rounded,
+              color: LemonColor.babyPurple,
+              size: 35.w,
+            ),
+            onPressed: () => onSend(inputString),
+          );
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 4.0),
       child: loading == true
@@ -100,14 +111,7 @@ class AIChatComposer extends StatelessWidget {
                 ),
               ),
             )
-          : IconButton(
-              icon: Icon(
-                Icons.send_rounded,
-                color: LemonColor.babyPurple,
-                size: 24.w,
-              ),
-              onPressed: () => onSend(textController.text),
-            ),
+          : Transform.scale(scale: 0.35, child: icon),
     );
   }
 }
