@@ -6,28 +6,28 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LemonTextField extends StatelessWidget {
-  const LemonTextField(
-      {Key? key,
-      this.onChange,
-      this.initialText,
-      this.hintText,
-      this.minLines = 1,
-      this.maxLines,
-      this.borderColor,
-      this.statusWidget,
-      this.label,
-      this.suffixIcon,
-      this.leadingIcon,
-      this.autofocus = false,
-      this.inputFormatters,
-      this.controller,
-      this.contentPadding,
-      this.textInputType,
-      this.focusNode,
-      this.errorText,
-      this.readOnly,
-      this.onTap})
-      : super(key: key);
+  const LemonTextField({
+    Key? key,
+    this.onChange,
+    this.initialText,
+    this.hintText,
+    this.minLines = 1,
+    this.maxLines,
+    this.borderColor,
+    this.statusWidget,
+    this.label,
+    this.suffixIcon,
+    this.leadingIcon,
+    this.autofocus = false,
+    this.inputFormatters,
+    this.controller,
+    this.contentPadding,
+    this.textInputType,
+    this.focusNode,
+    this.errorText,
+    this.readOnly,
+    this.onTap,
+  }) : super(key: key);
 
   final ValueChanged<String>? onChange;
   final String? initialText;

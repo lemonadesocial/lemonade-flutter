@@ -1,4 +1,5 @@
 import 'package:app/core/domain/form/datetime_formz.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -19,8 +20,10 @@ class EventDateTimeSettingsBloc
     EventDateTimeSettingsEventInit event,
     Emitter emit,
   ) async {
-    print("......");
-    print('init');
+    if (kDebugMode) {
+      print("......");
+      print('init');
+    }
   }
 
   Future<void> _onStartDateChanged(
@@ -48,17 +51,21 @@ class EventDateTimeSettingsBloc
 class EventDateTimeSettingsEvent with _$EventDateTimeSettingsEvent {
   factory EventDateTimeSettingsEvent.init() = EventDateTimeSettingsEventInit;
 
-  const factory EventDateTimeSettingsEvent.startDateChanged(
-      {required bool virtual}) = StartDateChanged;
+  const factory EventDateTimeSettingsEvent.startDateChanged({
+    required bool virtual,
+  }) = StartDateChanged;
 
-  const factory EventDateTimeSettingsEvent.startTimeChanged(
-      {required bool virtual}) = StartTimeChanged;
+  const factory EventDateTimeSettingsEvent.startTimeChanged({
+    required bool virtual,
+  }) = StartTimeChanged;
 
-  const factory EventDateTimeSettingsEvent.endDateChanged(
-      {required bool virtual}) = EndDateChanged;
+  const factory EventDateTimeSettingsEvent.endDateChanged({
+    required bool virtual,
+  }) = EndDateChanged;
 
-  const factory EventDateTimeSettingsEvent.endTimeChanged(
-      {required bool virtual}) = EndTimeChanged;
+  const factory EventDateTimeSettingsEvent.endTimeChanged({
+    required bool virtual,
+  }) = EndTimeChanged;
 
   const factory EventDateTimeSettingsEvent.formSubmitted() = FormSubmitted;
 }

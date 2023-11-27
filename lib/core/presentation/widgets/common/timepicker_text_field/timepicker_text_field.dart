@@ -6,8 +6,11 @@ class TimePickerTextField extends StatefulWidget {
   final TextEditingController controller;
   final String label;
 
-  const TimePickerTextField(
-      {super.key, required this.controller, required this.label});
+  const TimePickerTextField({
+    super.key,
+    required this.controller,
+    required this.label,
+  });
 
   @override
   TimePickerTextFieldState createState() => TimePickerTextFieldState();
