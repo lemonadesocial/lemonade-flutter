@@ -1,17 +1,18 @@
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomListTile extends StatelessWidget {
   final Widget leading;
   final Widget title;
   final VoidCallback? onTap;
+  final Widget? additionalInfoSection;
 
   const CustomListTile({
     Key? key,
     required this.leading,
     required this.title,
     this.onTap,
+    this.additionalInfoSection,
   }) : super(key: key);
 
   @override
@@ -23,19 +24,16 @@ class CustomListTile extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Leading Column with CrossAxisAlignment.start
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                leading,
-              ],
-            ),
-            SizedBox(width: 16.w),
+            leading,
+            SizedBox(width: Spacing.small),
             Expanded(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   title,
+                  additionalInfoSection != null
+                      ? SizedBox(height: Spacing.small)
+                      : const SizedBox(),
+                  additionalInfoSection ?? const SizedBox()
                 ],
               ),
             ),

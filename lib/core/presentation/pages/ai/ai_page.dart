@@ -45,11 +45,11 @@ class AIPageState extends State<AIPage> {
 
   List<AIChatMessage> messages = [
     AIChatMessage(
-      "I’m Lulu, your creative and helpful collaborator. I have limitations and won’t always get it right, but your feedback will help me improve. What would you like to create today?",
-      null,
-      false,
-      false,
-    ),
+        "I’m Lulu, your creative and helpful collaborator. I have limitations and won’t always get it right, but your feedback will help me improve. What would you like to create today?",
+        null,
+        false,
+        false,
+        true),
   ];
 
   final TextEditingController _textController = TextEditingController();
@@ -111,7 +111,7 @@ class AIPageState extends State<AIPage> {
         inputString = '';
         messages.insert(
           messages.length,
-          AIChatMessage(text, null, true, true),
+          AIChatMessage(text, null, true, true, false),
         );
       });
 
@@ -132,6 +132,7 @@ class AIPageState extends State<AIPage> {
             AIChatMessage(
               event.data!.run.message,
               event.data!.run.metadata,
+              false,
               false,
               false,
             ),

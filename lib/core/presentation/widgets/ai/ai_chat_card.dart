@@ -1,6 +1,7 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/domain/ai/ai_entities.dart';
 import 'package:app/core/domain/user/entities/user.dart';
+import 'package:app/core/presentation/widgets/ai/ai_chat_default_grid.dart';
 import 'package:app/core/presentation/widgets/ai/ai_metadata_button_card.dart';
 import 'package:app/core/presentation/widgets/common/list_tile/custom_list_tile.dart';
 import 'package:app/core/presentation/widgets/home/create_pop_up_tile.dart';
@@ -31,6 +32,7 @@ class AIChatCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool? isUser = message.isUser;
+    bool? showDefaultGrid = message.showDefaultGrid;
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, authState) {
         if (authState is AuthStateAuthenticated) {
@@ -47,6 +49,9 @@ class AIChatCard extends StatelessWidget {
                       isUser,
                       authState.authSession,
                     ),
+                    additionalInfoSection: showDefaultGrid == true
+                        ? const AIChatDefaultGrid()
+                        : null,
                     title: message.finishedAnimation == true
                         ? Text(
                             message.text ?? '',
@@ -68,14 +73,6 @@ class AIChatCard extends StatelessWidget {
                             onFinished: onFinishedTypingAnimation,
                           ),
                   ),
-                  // ListTile(
-                  //   visualDensity:
-                  //       const VisualDensity(horizontal: 0, vertical: -4),
-                  //   contentPadding: EdgeInsets.symmetric(
-                  //     vertical: 18.h,
-                  //     horizontal: 15.w,
-                  //   ),,
-                  // ),
                   _buildButtons(context),
                 ],
               ),
