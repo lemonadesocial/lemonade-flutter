@@ -91,6 +91,16 @@ class EventOrderSummaryFooter extends StatelessWidget {
                             publishableKey: stripePublishableKey,
                             onCardAdded: onCardAdded,
                             onSelectCard: onSelectCard,
+                            buyButton: EventOrderSlideToPay(
+                              onSlideToPay: () async {
+                                await AutoRouter.of(context).pop();
+                                onSlideToPay();
+                              },
+                              pricingInfo: pricingInfo,
+                              slideActionKey: GlobalKey<SlideActionState>(),
+                              selectedCurrency: selectedCurrency,
+                              selectedNetwork: selectedNetwork,
+                            ),
                           ),
                         );
                       },

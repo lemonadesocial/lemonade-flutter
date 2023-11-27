@@ -8,6 +8,7 @@ import 'package:app/core/application/event_tickets/select_event_tickets_bloc/sel
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/input/assign_tickets_input/assign_tickets_input.dart';
 import 'package:app/core/domain/payment/entities/purchasable_item/purchasable_item.dart';
+import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/select_tickets_page/widgets/other_ticket_types_list.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/select_tickets_page/widgets/payment_methods_switcher.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/select_tickets_page/widgets/select_ticket_item.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/select_tickets_page/widgets/select_ticket_submit_button.dart';
@@ -91,13 +92,60 @@ class _SelectTicketViewState extends State<SelectTicketView> {
           listener: (context, state) {
             state.maybeWhen(
               orElse: () => null,
-              success: (response, supportedCurrencies) => context
-                  .read<SelectEventTicketsBloc>()
-                  .add(
-                    SelectEventTicketsEvent.onEventTicketTypesResponseLoaded(
-                      eventTicketTypesResponse: response,
-                    ),
-                  ),
+              success: (response, supportedCurrencies) {
+                context.read<SelectEventTicketsBloc>().add(
+                      SelectEventTicketsEvent.onEventTicketTypesResponseLoaded(
+                        eventTicketTypesResponse: response,
+                      ),
+                    );
+                final allTicketTypes = response.ticketTypes ?? [];
+
+                if (allTicketTypes.isEmpty) {
+                  return;
+                }
+
+                final stripeTicketTypes =
+                    EventTicketUtils.getTicketTypesSupportStripe(
+                  ticketTypes: response.ticketTypes ?? [],
+                );
+                final erc20TicketTypes =
+                    EventTicketUtils.getTicketTypesSupportCrypto(
+                  ticketTypes: response.ticketTypes ?? [],
+                );
+
+                if (stripeTicketTypes.isEmpty) {
+                  context.read<SelectEventTicketsBloc>().add(
+                        SelectEventTicketsEvent.selectPaymentMethod(
+                          paymentMethod: SelectTicketsPaymentMethod.wallet,
+                        ),
+                      );
+                }
+
+                if (erc20TicketTypes.isEmpty) {
+                  context.read<SelectEventTicketsBloc>().add(
+                        SelectEventTicketsEvent.selectPaymentMethod(
+                          paymentMethod: SelectTicketsPaymentMethod.card,
+                        ),
+                      );
+                }
+
+                // auto increase if only 1 ticket tier and only 1 price option in that tier
+                if (allTicketTypes.length == 1 &&
+                    allTicketTypes.first.prices?.isNotEmpty == true &&
+                    allTicketTypes.first.prices?.length == 1) {
+                  final price = allTicketTypes.first.prices!.first;
+                  context.read<SelectEventTicketsBloc>().add(
+                        SelectEventTicketsEvent.select(
+                          ticket: PurchasableItem(
+                            count: 1,
+                            id: allTicketTypes.first.id!,
+                          ),
+                          currency: price.currency ?? '',
+                          network: price.network,
+                        ),
+                      );
+                }
+              },
             );
           },
         ),
@@ -218,19 +266,50 @@ class _SelectTicketViewState extends State<SelectTicketView> {
                     ),
                   ),
                   SizedBox(height: Spacing.smMedium),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-                    child: PaymentMethodsSwitcher(
-                      selectedPaymentMethod: selectedPaymentMethod,
-                      onSelect: (paymentMethod) =>
-                          context.read<SelectEventTicketsBloc>().add(
-                                SelectEventTicketsEvent.selectPaymentMethod(
-                                  paymentMethod: paymentMethod,
-                                ),
-                              ),
-                    ),
+                  BlocBuilder<GetEventTicketTypesBloc,
+                      GetEventTicketTypesState>(
+                    builder: (context, state) {
+                      return state.when(
+                        loading: () => const SizedBox.shrink(),
+                        failure: () => const SizedBox.shrink(),
+                        success: (response, supportedCurrencies) {
+                          final stripeTicketTypes =
+                              EventTicketUtils.getTicketTypesSupportStripe(
+                            ticketTypes: response.ticketTypes ?? [],
+                          );
+                          final erc20TicketTypes =
+                              EventTicketUtils.getTicketTypesSupportCrypto(
+                            ticketTypes: response.ticketTypes ?? [],
+                          );
+
+                          // if there's only one supported payment methods (wallet or card)
+                          // then no need to render payment methods switcher
+                          if (stripeTicketTypes.isEmpty ||
+                              erc20TicketTypes.isEmpty) {
+                            return const SizedBox.shrink();
+                          }
+
+                          return Padding(
+                            padding: EdgeInsets.only(
+                              bottom: Spacing.smMedium,
+                              left: Spacing.smMedium,
+                              right: Spacing.smMedium,
+                            ),
+                            child: PaymentMethodsSwitcher(
+                              selectedPaymentMethod: selectedPaymentMethod,
+                              onSelect: (paymentMethod) => context
+                                  .read<SelectEventTicketsBloc>()
+                                  .add(
+                                    SelectEventTicketsEvent.selectPaymentMethod(
+                                      paymentMethod: paymentMethod,
+                                    ),
+                                  ),
+                            ),
+                          );
+                        },
+                      );
+                    },
                   ),
-                  SizedBox(height: Spacing.smMedium),
                   BlocBuilder<GetEventTicketTypesBloc,
                       GetEventTicketTypesState>(
                     builder: (context, state) => state.when(
@@ -238,7 +317,7 @@ class _SelectTicketViewState extends State<SelectTicketView> {
                       failure: () =>
                           EmptyList(emptyText: t.common.somethingWrong),
                       success: (response, supportedCurrencies) {
-                        final ticketTypes = selectedPaymentMethod ==
+                        final filteredTicketTypes = selectedPaymentMethod ==
                                 SelectTicketsPaymentMethod.card
                             ? EventTicketUtils.getTicketTypesSupportStripe(
                                 ticketTypes: response.ticketTypes ?? [],
@@ -324,45 +403,102 @@ class _SelectTicketViewState extends State<SelectTicketView> {
                               Expanded(
                                 child: ListView.separated(
                                   padding: EdgeInsets.only(bottom: 200.w),
-                                  itemBuilder: (context, index) =>
-                                      SelectTicketItem(
-                                    networkFilter: networkFilter,
-                                    selectedCurrency: selectedCurrency,
-                                    selectedNetwork: selectedNetwork,
-                                    selectedPaymentMethod:
-                                        selectedPaymentMethod,
-                                    event: widget.event,
-                                    ticketType: ticketTypes[index],
-                                    count: selectedTickets
-                                            .firstWhereOrNull(
-                                              (element) =>
-                                                  element.id ==
-                                                  ticketTypes[index].id,
-                                            )
-                                            ?.count ??
-                                        0,
-                                    onCountChange: (count, currency, network) {
-                                      context
-                                          .read<SelectEventTicketsBloc>()
-                                          .add(
-                                            SelectEventTicketsEvent.select(
-                                              ticket: PurchasableItem(
-                                                count: count,
-                                                id: ticketTypes[index].id ?? '',
+                                  itemBuilder: (context, index) {
+                                    if (index == filteredTicketTypes.length) {
+                                      return Padding(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: Spacing.smMedium,
+                                        ),
+                                        child:
+                                            OtherPaymentMethodTicketTypesList(
+                                          ticketTypes:
+                                              response.ticketTypes ?? [],
+                                          networkFilter: networkFilter,
+                                          selectedCurrency: selectedCurrency,
+                                          selectedNetwork: selectedNetwork,
+                                          selectedPaymentMethod:
+                                              selectedPaymentMethod,
+                                        ),
+                                      );
+                                    }
+
+                                    if (index ==
+                                        filteredTicketTypes.length + 1) {
+                                      return Padding(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: Spacing.smMedium,
+                                        ),
+                                        child: OtherChainTicketTypesList(
+                                          ticketTypes:
+                                              response.ticketTypes ?? [],
+                                          networkFilter: networkFilter,
+                                          selectedCurrency: selectedCurrency,
+                                          selectedNetwork: selectedNetwork,
+                                          selectedPaymentMethod:
+                                              selectedPaymentMethod,
+                                        ),
+                                      );
+                                    }
+
+                                    return SelectTicketItem(
+                                      networkFilter: networkFilter,
+                                      selectedCurrency: selectedCurrency,
+                                      selectedNetwork: selectedNetwork,
+                                      selectedPaymentMethod:
+                                          selectedPaymentMethod,
+                                      event: widget.event,
+                                      ticketType: filteredTicketTypes[index],
+                                      count: selectedTickets
+                                              .firstWhereOrNull(
+                                                (element) =>
+                                                    element.id ==
+                                                    filteredTicketTypes[index]
+                                                        .id,
+                                              )
+                                              ?.count ??
+                                          0,
+                                      onCountChange:
+                                          (count, currency, network) {
+                                        context
+                                            .read<SelectEventTicketsBloc>()
+                                            .add(
+                                              SelectEventTicketsEvent.select(
+                                                ticket: PurchasableItem(
+                                                  count: count,
+                                                  id: filteredTicketTypes[index]
+                                                          .id ??
+                                                      '',
+                                                ),
+                                                currency: currency,
+                                                network: network,
                                               ),
-                                              currency: currency,
-                                              network: network,
-                                            ),
-                                          );
-                                    },
-                                  ),
-                                  separatorBuilder: (context, index) => Divider(
-                                    height: 1.w,
-                                    thickness: 1.w,
-                                    color:
-                                        colorScheme.onPrimary.withOpacity(0.05),
-                                  ),
-                                  itemCount: ticketTypes.length,
+                                            );
+                                      },
+                                    );
+                                  },
+                                  separatorBuilder: (context, index) {
+                                    if (index == filteredTicketTypes.length ||
+                                        index ==
+                                            filteredTicketTypes.length + 1) {
+                                      return SizedBox(height: Spacing.xSmall);
+                                    }
+
+                                    return Padding(
+                                      padding: EdgeInsets.only(
+                                        bottom: index ==
+                                                filteredTicketTypes.length - 1
+                                            ? Spacing.xSmall
+                                            : 0,
+                                      ),
+                                      child: Divider(
+                                        height: 1.w,
+                                        thickness: 1.w,
+                                        color: colorScheme.onPrimary
+                                            .withOpacity(0.05),
+                                      ),
+                                    );
+                                  },
+                                  itemCount: filteredTicketTypes.length + 2,
                                 ),
                               ),
                             ],
