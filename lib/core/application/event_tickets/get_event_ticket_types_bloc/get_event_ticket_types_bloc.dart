@@ -1,5 +1,7 @@
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/entities/event_currency.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
+import 'package:app/core/domain/event/input/get_event_currencies_input/get_event_currencies_input.dart';
 import 'package:app/core/domain/event/input/get_event_ticket_types_input/get_event_ticket_types_input.dart';
 import 'package:app/core/domain/event/repository/event_ticket_repository.dart';
 import 'package:app/injection/register_module.dart';
@@ -19,9 +21,6 @@ class GetEventTicketTypesBloc
     on<GetEventTicketTypesEventFetch>(_onFetch);
   }
 
-  // TODO: will filter out ticket types by currency
-  // void _onFilterTicketTypesByCurrency(Currency curreny);
-
   Future<void> _onFetch(
     GetEventTicketTypesEventFetch blocEvent,
     Emitter emit,
@@ -29,11 +28,19 @@ class GetEventTicketTypesBloc
     final result = await _eventTicketRepository.getEventTicketTypes(
       input: GetEventTicketTypesInput(event: event.id ?? ''),
     );
+
+    final currenciesResult = await _eventTicketRepository.getEventCurrencies(
+      input: GetEventCurrenciesInput(id: event.id ?? ''),
+    );
+
+    final currencies = currenciesResult.getOrElse(() => []);
+
     result.fold(
       (l) => emit(GetEventTicketTypesState.failure()),
       (data) => emit(
         GetEventTicketTypesState.success(
           eventTicketTypesResponse: data,
+          supportedCurrencies: currencies,
         ),
       ),
     );
@@ -50,6 +57,7 @@ class GetEventTicketTypesState with _$GetEventTicketTypesState {
   factory GetEventTicketTypesState.loading() = GetEventTicketTypesStateLoading;
   factory GetEventTicketTypesState.success({
     required EventTicketTypesResponse eventTicketTypesResponse,
+    required List<EventCurrency> supportedCurrencies,
   }) = GetEventTicketTypesStateSuccess;
   factory GetEventTicketTypesState.failure() = GetEventTicketTypesStateFailure;
 }

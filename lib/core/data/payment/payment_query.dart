@@ -1,65 +1,56 @@
-const ethereumAccountFragment = '''
-  fragment ethereumAccountFragment on EthereumAccount {
-    currencies
-    currency_map
-    address
-    network
-  }
-''';
-
-const safeAccountFragment = '''
-  fragment safeAccountFragment on SafeAccount {
-    currencies
-    currency_map
-    address
-    network
-    owners
-    threshold
-    funded
-  }
-''';
-
-const digitalAccount = '''
-  fragment digitalAccountFragment on DigitalAccount {
-    currencies
-    currency_map
-    account_id
-  }
-''';
-
-const stripAccountFragment = '''
-  fragment stripeAccountFragment on StripeAccount {
-    currencies
-    currency_map
-    account_id
-    publishable_key
-  }
-''';
-
-const accountInfoFragment = '''
-  $ethereumAccountFragment
-  $safeAccountFragment
-  $digitalAccount
-  $stripAccountFragment
-  
-  fragment accountInfo on AccountInfo{
-    ...ethereumAccountFragment
-    ...safeAccountFragment
-    ...digitalAccount
-    ...stripAccountFragment
-  }
-''';
-
 const paymentAccountFragment = '''
-  $accountInfoFragment
+  fragment paymentAccountFragment on NewPaymentAccount {
+      _id
+      active
+      created_at
+      user
+      type
+      provider
+      account_info {
+        ...on EthereumAccount {
+        currencies
+        currency_map
+        address
+        networks
+      }
 
-  fragment paymentAccountFragment on NewPaymentAccount{
+      ...on StripeAccount {
+        currencies
+        currency_map
+        account_id
+        publishable_key
+      }
+
+      ...on DigitalAccount {
+        currencies
+        currency_map
+        account_id
+      }
+    }
+  }
+''';
+
+const paymentFragment = '''
+  $paymentAccountFragment
+
+  fragment paymentFragment on NewPayment {
     _id
-    active
-    created_at
+    stamps
+    amount
+    currency
+    state
     user
-    type
-    provider
-    ...accountInfo
+    billing_info {
+      _id
+      email
+      firstname
+      lastname
+    }
+    transfer_metadata
+    transfer_params
+    failure_reason
+    account_expanded {
+      ...paymentAccountFragment
+    }
   }
 ''';

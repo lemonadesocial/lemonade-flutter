@@ -28,7 +28,7 @@ class GuestEventDetailAppBar extends StatelessWidget {
       stretch: true,
       floating: true,
       leading: const SizedBox.shrink(),
-      collapsedHeight: 60.h,
+      collapsedHeight: kToolbarHeight,
       expandedHeight: isIpad ? 280.h : 188.h,
       centerTitle: true,
       title: AnimatedOpacity(

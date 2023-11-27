@@ -43,7 +43,8 @@
         "block": "Block",
         "unBlock": "Unblock",
         "success": "Success",
-        "setLocation": "Set location services"
+        "setLocation": "Set location services",
+        "view": "View"
     },
     "followed": "Followed",
     "anonymous": "anonymous",
@@ -124,5 +125,7 @@
     "shorebird_update_title": "Update Required",
     "shorebird_update_description" :"To ensure the best experience and maintain security, a mandatory app update is now required please click \"Update Now\" to proceed.",
     "update_now": "Update Now",
-    "restart": "Restart"
+    "restart": "Restart",
+    "pleaseTryAgain": "There's something wrong, please try again",
+    "chatAI": "Chat AI"
 }

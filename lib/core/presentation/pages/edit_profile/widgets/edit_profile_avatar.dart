@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:app/core/application/profile/edit_profile_bloc/edit_profile_bloc.dart';
+import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/theme/color.dart';
@@ -39,7 +40,13 @@ class EditProfileAvatar extends StatelessWidget {
                             File(imageFile!.path),
                             fit: BoxFit.fill,
                           )
-                        : CachedNetworkImage(imageUrl: imageUrl!),
+                        : CachedNetworkImage(
+                            imageUrl: imageUrl!,
+                            placeholder: (_, __) =>
+                                ImagePlaceholder.defaultPlaceholder(),
+                            errorWidget: (_, __, ___) =>
+                                ImagePlaceholder.defaultPlaceholder(),
+                          ),
                   ),
                 ),
                 Positioned(

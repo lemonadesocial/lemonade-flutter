@@ -1,19 +1,17 @@
 import 'package:app/core/domain/payment/entities/payment_card/payment_card.dart';
+import 'package:app/core/domain/payment/input/create_stripe_card_input/create_stripe_card_input.dart';
 import 'package:app/core/domain/payment/payment_repository.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'add_new_card_state.dart';
-
 part 'add_new_card_bloc.freezed.dart';
 
 class AddNewCardBloc extends Cubit<AddNewCardState> {
-  AddNewCardBloc(
-    this._paymentRepository,
-  ) : super(AddNewCardState.initial());
+  final _paymentRepository = getIt<PaymentRepository>();
 
-  final PaymentRepository _paymentRepository;
+  AddNewCardBloc() : super(AddNewCardState.initial());
 
   void onCardHolderNameChange(String? value) {
     emit(
@@ -55,9 +53,9 @@ class AddNewCardBloc extends Cubit<AddNewCardState> {
     );
   }
 
-  Future<void> addNewCard(
-    String publishableKey, {
-    required String userId,
+  Future<void> addNewCard({
+    required String publishableKey,
+    required String paymentAccountId,
   }) async {
     try {
       emit(state.copyWith(status: AddNewCardBlocStatus.loading));
@@ -76,21 +74,28 @@ class AddNewCardBloc extends Cubit<AddNewCardState> {
         expirationYear: expirationYear,
         cvc: state.cvv,
       );
-      CardTokenParams cardParams = CardTokenParams(
-        type: TokenType.Card,
-        name: state.cardHolderName,
-      );
+
       await Stripe.instance.dangerouslyUpdateCardDetails(cardDetail);
-      final token = await Stripe.instance.createToken(
-        CreateTokenParams.card(params: cardParams),
+
+      final paymentMethod = await Stripe.instance.createPaymentMethod(
+        params: const PaymentMethodParams.card(
+          paymentMethodData: PaymentMethodData(),
+        ),
       );
 
-      final result = await _paymentRepository.createNewCard(
-        userId: userId,
-        tokenId: token.id,
+      final result = await _paymentRepository.createStripeCard(
+        input: CreateStripeCardInput(
+          paymentAccount: paymentAccountId,
+          paymentMethod: paymentMethod.id,
+        ),
       );
+
       result.fold(
-        (l) => emit(state.copyWith(status: AddNewCardBlocStatus.error)),
+        (l) => emit(
+          state.copyWith(
+            status: AddNewCardBlocStatus.error,
+          ),
+        ),
         (newCardInfo) {
           emit(
             state.copyWith(
@@ -109,4 +114,34 @@ class AddNewCardBloc extends Cubit<AddNewCardState> {
       );
     }
   }
+}
+
+@freezed
+class AddNewCardState with _$AddNewCardState {
+  AddNewCardState._();
+
+  factory AddNewCardState({
+    @Default(AddNewCardBlocStatus.initial) AddNewCardBlocStatus status,
+    PaymentCard? paymentCard,
+    String? cardHolderName,
+    String? cardNumber,
+    String? validThrough,
+    String? cvv,
+    String? error,
+  }) = _AddNewCardState;
+
+  factory AddNewCardState.initial() => AddNewCardState();
+
+  bool get fieldValidated =>
+      cardHolderName != null &&
+      cardNumber?.length == 19 &&
+      validThrough?.length == 5 &&
+      cvv?.length == 3;
+}
+
+enum AddNewCardBlocStatus {
+  initial,
+  loading,
+  success,
+  error,
 }

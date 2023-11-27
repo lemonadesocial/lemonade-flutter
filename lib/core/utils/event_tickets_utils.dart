@@ -1,5 +1,7 @@
+import 'package:app/core/domain/event/entities/event_currency.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/entities/event_ticket.dart';
+import 'package:app/core/utils/list/unique_list_extension.dart';
 import 'package:collection/collection.dart';
 
 class EventTicketUtils {
@@ -43,4 +45,63 @@ class EventTicketUtils {
     List<EventTicket> tickets,
   ) =>
       groupBy(tickets, (ticket) => ticket.type ?? '');
+
+  static List<PurchasableTicketType> getTicketTypesSupportStripe({
+    required List<PurchasableTicketType> ticketTypes,
+  }) {
+    return ticketTypes
+        .where(
+          (element) => (element.prices ?? []).any(
+            (price) => price.currency != null ? price.network == null : false,
+          ),
+        )
+        .toList();
+  }
+
+  static List<PurchasableTicketType> getTicketTypesSupportCrypto({
+    required List<PurchasableTicketType> ticketTypes,
+  }) {
+    return ticketTypes
+        .where(
+          (element) => (element.prices ?? []).any(
+            (price) => price.currency != null ? price.network != null : false,
+          ),
+        )
+        .toList();
+  }
+
+  static EventTicketPrice? getTicketPriceByCurrencyAndNetwork({
+    PurchasableTicketType? ticketType,
+    String? currency,
+    String? network,
+  }) {
+    if (ticketType == null || currency == null) return null;
+
+    return (ticketType.prices ?? []).firstWhereOrNull(
+      (element) => element.currency == currency && element.network == network,
+    );
+  }
+
+  static EventCurrency? getEventCurrency({
+    required List<EventCurrency> currencies,
+    String? currency,
+    String? network,
+  }) {
+    if (currency == null) return null;
+    return currencies.firstWhereOrNull(
+      (element) => element.currency == currency && element.network == network,
+    );
+  }
+
+  static List<String> getEventSupportedPaymentNetworks({
+    required List<EventCurrency> currencies,
+  }) {
+    List<String> networks = [];
+    for (var eventCurrency in currencies) {
+      if (eventCurrency.network != null) {
+        networks.add(eventCurrency.network!);
+      }
+    }
+    return networks.unique();
+  }
 }

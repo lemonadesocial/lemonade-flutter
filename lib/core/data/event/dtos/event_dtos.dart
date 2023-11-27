@@ -1,8 +1,8 @@
 import 'package:app/core/data/common/dtos/common_dtos.dart';
-import 'package:app/core/data/event/dtos/event_payment_ticket_type_dto/event_payment_ticket_type_dto.dart';
+import 'package:app/core/data/event/dtos/event_ticket_types_dto/event_ticket_types_dto.dart';
+import 'package:app/core/data/payment/dtos/payment_account_dto/payment_account_dto.dart';
 import 'package:app/core/data/user/dtos/user_dtos.dart';
 import 'package:app/core/domain/event/event_enums.dart';
-import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'event_dtos.freezed.dart';
@@ -27,17 +27,19 @@ class EventDto with _$EventDto {
     DateTime? start,
     DateTime? end,
     double? cost,
-    Currency? currency,
+    String? currency,
     List<String>? accepted,
     List<String>? invited,
     List<String>? pending,
     double? latitude,
     double? longitude,
     @JsonKey(name: 'matrix_event_room_id') String? matrixEventRoomId,
-    @JsonKey(name: 'payment_ticket_types')
-    List<EventPaymentTicketTypeDto>? paymentTicketTypes,
+    @JsonKey(name: 'event_ticket_types')
+    List<PurchasableTicketTypeDto>? eventTicketTypes,
     List<EventOfferDto>? offers,
     AddressDto? address,
+    @JsonKey(name: 'payment_accounts_expanded')
+    List<PaymentAccountDto>? paymentAccountsExpanded,
   }) = _EventDto;
 
   factory EventDto.fromJson(Map<String, dynamic> json) =>

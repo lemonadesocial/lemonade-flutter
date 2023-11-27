@@ -1,4 +1,5 @@
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:app/core/data/payment/payment_query.dart';
 
 const eventHostExpandedFragment = '''
   fragment eventHostExpandedFragment on User {
@@ -46,6 +47,32 @@ const eventOfferFragment = '''
   }
 ''';
 
+const eventTicketTypesFragment = '''
+  fragment eventTicketTypesFragment on Event {
+    event_ticket_types {
+      _id
+      title
+      prices {
+        cost
+        currency
+        network
+      }
+      description
+    }
+  }
+''';
+
+const eventPaymentAccountFragment = '''
+  $paymentAccountFragment
+
+  fragment eventPaymentAccountFragment on Event {
+    payment_accounts_new,
+    payment_accounts_expanded {
+      ...paymentAccountFragment
+    }
+  }
+''';
+
 const eventFragment = '''
   $eventHostExpandedFragment
   $eventPeopleFragment
@@ -82,12 +109,6 @@ const eventFragment = '''
     title
     region
   }
-  event_ticket_types {
-      _id
-      title
-      prices
-      description
-    }
   latitude
   longitude
 }
@@ -96,11 +117,13 @@ const eventFragment = '''
 final getEventDetailQuery = gql('''
   $eventFragment
   $eventOfferFragment
+  $eventPaymentAccountFragment
 
   query(\$id: MongoID!) {
     getEvent(_id: \$id) {
       ...eventFields
       ...eventOfferFragment
+      ...eventPaymentAccountFragment
     }
   }
 ''');

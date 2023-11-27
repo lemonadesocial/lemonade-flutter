@@ -1,7 +1,6 @@
 import 'package:app/core/presentation/widgets/lemon_back_button_widget.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LemonAnimatedAppBar extends SliverPersistentHeaderDelegate {
   const LemonAnimatedAppBar({
@@ -23,13 +22,13 @@ class LemonAnimatedAppBar extends SliverPersistentHeaderDelegate {
   final EdgeInsets? padding;
   final bool? hideLeading;
 
-  Size get preferredSize => Size.fromHeight(60.w);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 
   @override
-  double get maxExtent => 60.w;
+  double get maxExtent => kToolbarHeight;
 
   @override
-  double get minExtent => 60.w;
+  double get minExtent => kToolbarHeight;
 
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>

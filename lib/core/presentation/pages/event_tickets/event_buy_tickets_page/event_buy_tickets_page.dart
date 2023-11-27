@@ -2,12 +2,9 @@ import 'package:app/core/application/event/event_provider_bloc/event_provider_bl
 import 'package:app/core/application/event_tickets/get_event_ticket_types_bloc/get_event_ticket_types_bloc.dart';
 import 'package:app/core/application/event_tickets/redeem_tickets_bloc/redeem_tickets_bloc.dart';
 import 'package:app/core/application/event_tickets/select_event_tickets_bloc/select_event_tickets_bloc.dart';
-import 'package:app/core/application/payment/payment_bloc/payment_bloc.dart';
+import 'package:app/core/application/payment/get_payment_cards_bloc/get_payment_cards_bloc.dart';
+import 'package:app/core/application/payment/select_payment_card_cubit/select_payment_card_cubit.dart';
 import 'package:app/core/domain/event/entities/event.dart' as event_entity;
-import 'package:app/core/domain/event/repository/event_ticket_repository.dart';
-import 'package:app/core/domain/payment/payment_enums.dart';
-import 'package:app/core/domain/payment/payment_repository.dart';
-import 'package:app/injection/register_module.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -36,22 +33,16 @@ class EventBuyTicketsPage extends StatelessWidget implements AutoRouteWrapper {
             ),
         ),
         BlocProvider(
-          create: (context) => SelectEventTicketTypesBloc()
-            //TODO: Will remove this and UI will update to let user select currency
-            ..add(
-              SelectEventTicketTypesEvent.selectCurrency(
-                currency: Currency.USD,
-              ),
-            ),
-        ),
-        BlocProvider(
-          create: (context) => PaymentBloc(
-            getIt<PaymentRepository>(),
-            getIt<EventTicketRepository>(),
-          )..initializeStripePayment(),
+          create: (context) => SelectEventTicketsBloc(),
         ),
         BlocProvider(
           create: (context) => RedeemTicketsBloc(event: event),
+        ),
+        BlocProvider(
+          create: (context) => GetPaymentCardsBloc(),
+        ),
+        BlocProvider(
+          create: (context) => SelectPaymentCardCubit(),
         ),
       ],
       child: this,

@@ -13,6 +13,7 @@ class Notification {
   String? refRoom;
   String? refStoreOrder;
   String? refUser;
+  Map<String, dynamic>? data;
 
   Notification({
     this.id,
@@ -26,6 +27,7 @@ class Notification {
     this.refRoom,
     this.refStoreOrder,
     this.refUser,
+    this.data,
   });
 
   static Notification fromDto(NotificationDto dto) {
@@ -42,6 +44,7 @@ class Notification {
       refRoom: dto.refRoom,
       refStoreOrder: dto.refStoreOrder,
       refUser: dto.refUser,
+      data: dto.data,
     );
   }
 }

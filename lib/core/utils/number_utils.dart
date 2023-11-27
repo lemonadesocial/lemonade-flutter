@@ -1,10 +1,9 @@
-import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:intl/intl.dart';
 
 class NumberUtils {
   static String formatCurrency({
     double amount = 0,
-    Currency? currency,
+    String? currency,
     int attemptedDecimals = 2,
     bool showFree = true,
     String? freeText,
@@ -18,8 +17,7 @@ class NumberUtils {
       return freeText ?? 'free';
     } else {
       var formattedAmount = NumberFormat.currency(
-        symbol:
-            NumberFormat.simpleCurrency(name: currency?.name).currencySymbol,
+        symbol: NumberFormat.simpleCurrency(name: currency).currencySymbol,
         decimalDigits: decimals,
       ).format(amount);
 

@@ -15,6 +15,10 @@ class SnackBarUtils {
     _colorScheme = colorScheme;
   }
 
+  static void showCustomSnackbar(SnackBar snackbar) {
+    rootScaffoldMessengerKey.currentState?.showSnackBar(snackbar);
+  }
+
   static void showSnackbar(String message, {Color? backgroundColor}) {
     rootScaffoldMessengerKey.currentState?.showSnackBar(
       SnackBar(

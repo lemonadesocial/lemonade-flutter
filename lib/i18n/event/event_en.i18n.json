@@ -33,7 +33,23 @@
     "eventBuyTickets": {
         "selectTickets": "Select tickets",
         "orderSummary": "Order summary",
-        "enterPromoCode": "Enter promo code"
+        "enterPromoCode": "Enter promo code",
+        "selectCurrency": "Please select currency first",
+        "paymentMethods": {
+            "card": "Card",
+            "wallet": "Wallet"
+        },
+        "payViaCard": "Pay via Card",
+        "payViaWallet": "Pay via Wallet",
+        "multipleTicketsError": "Multiple tickets require the same chain and currency",
+        "discardSelectionWarning": {
+            "title": "Discard selection?",
+            "description": "Switching payment methods will discard your previous selection. Continue anyway?",
+            "buttonLabel": "Discard & continue"
+        },
+        "redeem": "Redeem",
+        "onOtherChain": "on other chain",
+        "viaOtherPaymentMethod": "via other payment method"
     },
     "eventOrder": {
         "itemTotal": "Item total",
@@ -42,7 +58,8 @@
         "grandTotal": "Grand total",
         "subTotal": "Subtotal",
         "total": "Total",
-        "accessCode": "Access code"
+        "accessCode": "Access code",
+        "promo": "Promo"
     },
     "eventPayment": {
         "payUsing": "Pay using",
@@ -57,8 +74,16 @@
         "cvc": "CVC",
         "addCard": "Add card",
         "howYouPay": "How would you like to pay?",
-        "selectPayment": "Select payment method",
-        "invalidDate": "Invalid date"
+        "selectCard": "Select card",
+        "invalidDate": "Invalid date",
+        "paymentNotificationTimeoutMessage": "The payment confirmation might take some time.\nWould you like to leave and check out other events in the meantime?"
+    },
+    "eventCryptoPayment": {
+        "connectWallet": "Connect wallet",
+        "waitForConfirmation": "Waiting for confirmation...",
+        "selectNetwork": "Select network",
+        "signPayment": "Sign your payment",
+        "pay": "Pay"
     },
     "eventPickMyTickets": {
         "pickYourTicket": "Pick your ticket",
@@ -91,5 +116,29 @@
         "tickets": "You don't have any tickets.",
         "reservations": "You don't have any reservations."
     },
-    "paymentNotSupported": "Paid tickets are not supported yet. Please kindly use our website"
+    "paymentNotSupported": "Paid tickets are not supported yet. Please kindly use our website",
+    "eventCreation": {
+        "createEvent": "Create event",
+        "title": "Title",
+        "description": "Description",
+        "descriptionPlaceholder": "What is this experience about ?",
+        "createEventSuccessfully": "Create event successfully",
+        "guestSettings": "Guest Settings",
+        "guestSettingDescription": "$guestLimit guests, $guestLimitPer guests unlocks"
+    },
+    "private": "Private",
+    "privateDescription": "Only invitees can discover",
+    "public": "Public",
+    "publicDescription": "Anyone can discover",
+    "guestSettings": {
+        "autoApprove": "Auto Approve",
+        "autoApproveDescription": "All requests to join instantly approved",
+        "noUnlockLimit": "No unlock limit",
+        "guestUnlockLimit": "Guest unlock limit",
+        "guestUnlockLimitDescription": "Number of friends and matches a guest can unlock this experience for",
+        "totalGuestLimit": "Total guest limit",
+        "totalGuestLimitDescription": "Total number of people who can attend this experience",
+        "noGuestLimit": "No guest limit"
+    },
+    "error": "Error"
 }

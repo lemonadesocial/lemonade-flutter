@@ -1,3 +1,4 @@
+import 'package:app/core/data/payment/payment_query.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 final getEventTicketTypesQuery = gql('''
@@ -13,7 +14,11 @@ final getEventTicketTypesQuery = gql('''
         active
         event
         title
-        prices
+        prices {
+          cost
+          currency
+          network
+        }
         default
         address_required
         description
@@ -38,13 +43,16 @@ final getEventTicketTypesQuery = gql('''
 ''');
 
 final calculateTicketsPricingInfoQuery = gql('''
-  
+  $paymentAccountFragment
+
   query CalculateTicketsPricing(\$input: CalculateTicketsPricingInput!) {
     calculateTicketsPricing(input: \$input) {
-      currency
       total
       subtotal
       discount
+      payment_accounts {
+        ...paymentAccountFragment
+      }
     }
   }
 ''');
@@ -69,38 +77,12 @@ final getTicketsQuery = gql('''
   }
 ''');
 
-final getListCardQuery = gql('''
-  query GetStripeCards(\$skip: Int!, \$limit: Int!, \$provider: PaymentProvider){
-    getStripeCards(skip: \$skip, limit: \$limit, provider: \$provider) {
-      _id
-      active
-      stamp
-      provider
-      provider_id
-      user
-      brand
-      name
-      last4
+final getEventCurrenciesQuery = gql('''
+  query GetEventCurrencies(\$id: MongoID!, \$used: Boolean) {
+    getEventCurrencies(_id: \$id, used: \$used) {
+      currency
+      decimals
+      network
     }
   }
-''');
-
-final createNewCardMutation = gql('''
-  mutation CreateStripeCard(\$payment_account: MongoID!, \$payment_method: String!) {
-    createStripeCard(
-      payment_account: \$payment_account
-      payment_method: \$payment_method
-    ) {
-      _id
-      active
-      stamp
-      payment_account
-      provider_id
-      user
-      brand
-      name
-      last4
-    }
-  }
-
 ''');

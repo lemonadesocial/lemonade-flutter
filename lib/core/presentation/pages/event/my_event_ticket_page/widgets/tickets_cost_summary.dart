@@ -1,6 +1,6 @@
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_payment.dart';
-import 'package:app/core/domain/event/entities/event_payment_ticket_type.dart';
+import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/presentation/widgets/common/dotted_line/dotted_line.dart';
 import 'package:app/core/utils/number_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -20,15 +20,16 @@ class TicketCostSummary extends StatelessWidget {
     required this.event,
   });
 
-  EventPaymentTicketType? get selectedTicketType {
-    return List.from(event.paymentTicketTypes ?? []).firstWhere(
+  PurchasableTicketType? get selectedTicketType {
+    return List.from(event.eventTicketTypes ?? []).firstWhere(
       (item) => item.id == eventPayment.ticketType,
       orElse: () => null,
     );
   }
 
   double get subTotalValue {
-    return (eventPayment.ticketCount ?? 0) * (selectedTicketType?.cost ?? 0);
+    return (eventPayment.ticketCount ?? 0) *
+        (selectedTicketType?.defaultPrice?.fiatCost ?? 0);
   }
 
   double get totalValue {

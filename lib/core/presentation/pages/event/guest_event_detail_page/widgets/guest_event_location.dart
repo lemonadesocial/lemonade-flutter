@@ -1,6 +1,7 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/guest_event_detail_page/widgets/ripple_marker.dart';
+import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/utils/map_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
@@ -56,6 +57,9 @@ class GuestEventLocation extends StatelessWidget {
                     Positioned.fill(
                       child: CachedNetworkImage(
                         fit: BoxFit.cover,
+                        placeholder: (_, __) => ImagePlaceholder.eventCard(),
+                        errorWidget: (_, __, ___) =>
+                            ImagePlaceholder.eventCard(),
                         imageUrl: MapUtils.createGoogleMapsURL(
                           lat: event.latitude ?? 0,
                           lng: event.longitude ?? 0,

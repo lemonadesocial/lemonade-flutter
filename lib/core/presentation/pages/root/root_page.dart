@@ -1,4 +1,5 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
+import 'package:app/core/application/payment/payment_listener/payment_listener.dart';
 import 'package:app/core/config.dart';
 import 'package:app/core/presentation/widgets/bottom_bar/bottom_bar_widget.dart';
 import 'package:app/core/presentation/widgets/common/drawer/lemon_drawer.dart';
@@ -48,71 +49,77 @@ class _RootPageViewState extends State<RootPage> {
     final isIpad = DeviceUtils.isIpad();
     final heightFactor = isIpad ? 0.35 : 0.60;
     final primaryColor = Theme.of(context).colorScheme.primary;
-    return BlocConsumer<AuthBloc, AuthState>(
-      listener: (context, state) {
-        state.maybeWhen(
-          onBoardingRequired: (user) {
-            OnboardingUtils.startOnboarding(context, user: user);
-          },
-          orElse: () {},
-        );
-      },
-      builder: (context, authState) {
-        context.read<NewsfeedListingBloc>().add(NewsfeedListingEvent.fetch());
-        return UpgradeAlert(
-          upgrader: Upgrader(
-            showIgnore: false,
-            durationUntilAlertAgain: const Duration(seconds: 30),
-            dialogStyle: UpgradeDialogStyle.cupertino,
-            cupertinoButtonTextStyle:
-                TextStyle(color: Colors.white, fontSize: Typo.small.fontSize!),
-            appcastConfig: appCastConfiguration,
-            debugLogging: kDebugMode,
-          ),
-          child: Stack(
-            children: [
-              const Align(
-                child: PoapClaimTransferControllerWidget(),
+
+    return PaymentListener(
+      child: BlocConsumer<AuthBloc, AuthState>(
+        listener: (context, state) {
+          state.maybeWhen(
+            onBoardingRequired: (user) {
+              OnboardingUtils.startOnboarding(context, user: user);
+            },
+            orElse: () {},
+          );
+        },
+        builder: (context, authState) {
+          context.read<NewsfeedListingBloc>().add(NewsfeedListingEvent.fetch());
+          return UpgradeAlert(
+            upgrader: Upgrader(
+              showIgnore: false,
+              durationUntilAlertAgain: const Duration(seconds: 30),
+              dialogStyle: UpgradeDialogStyle.cupertino,
+              cupertinoButtonTextStyle: TextStyle(
+                color: Colors.white,
+                fontSize: Typo.small.fontSize!,
               ),
-              AutoTabsScaffold(
-                extendBody: true,
-                scaffoldKey: DrawerUtils.drawerGlobalKey,
-                backgroundColor: primaryColor,
-                routes: [
-                  const HomeRoute(),
-                  const DiscoverRoute(),
-                  authState.maybeWhen(
-                    authenticated: (session) => const NotificationRoute(),
-                    orElse: EmptyRoute.new,
-                  ),
-                  authState.maybeWhen(
-                    authenticated: (session) => const MyProfileRoute(),
-                    orElse: EmptyRoute.new,
-                  ),
-                ],
-                drawer: const LemonDrawer(),
-                floatingActionButton: FloatingCreateButton(
-                  onTap: () {
+              appcastConfig: appCastConfiguration,
+              debugLogging: kDebugMode,
+            ),
+            child: Stack(
+              children: [
+                const Align(
+                  child: PoapClaimTransferControllerWidget(),
+                ),
+                AutoTabsScaffold(
+                  extendBody: true,
+                  scaffoldKey: DrawerUtils.drawerGlobalKey,
+                  backgroundColor: primaryColor,
+                  routes: [
+                    const HomeRoute(),
+                    const DiscoverRoute(),
                     authState.maybeWhen(
-                      authenticated: (session) =>
-                          const CreatePopUpPage().showAsBottomSheet(
-                        context,
-                        heightFactor: heightFactor,
-                      ),
-                      orElse: () => context.router.navigate(const LoginRoute()),
-                    );
+                      authenticated: (session) => const NotificationRoute(),
+                      orElse: EmptyRoute.new,
+                    ),
+                    authState.maybeWhen(
+                      authenticated: (session) => const MyProfileRoute(),
+                      orElse: EmptyRoute.new,
+                    ),
+                  ],
+                  drawer: const LemonDrawer(),
+                  floatingActionButton: FloatingCreateButton(
+                    onTap: () {
+                      authState.maybeWhen(
+                        authenticated: (session) =>
+                            const CreatePopUpPage().showAsBottomSheet(
+                          context,
+                          heightFactor: heightFactor,
+                        ),
+                        orElse: () =>
+                            context.router.navigate(const LoginRoute()),
+                      );
+                    },
+                  ),
+                  floatingActionButtonLocation:
+                      FloatingActionButtonLocation.centerDocked,
+                  bottomNavigationBuilder: (_, tabsRouter) {
+                    return const BottomBar();
                   },
                 ),
-                floatingActionButtonLocation:
-                    FloatingActionButtonLocation.centerDocked,
-                bottomNavigationBuilder: (_, tabsRouter) {
-                  return const BottomBar();
-                },
-              ),
-            ],
-          ),
-        );
-      },
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 }

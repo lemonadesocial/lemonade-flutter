@@ -99,9 +99,18 @@ class FirebaseService {
       );
       FirebaseCrashlytics.instance
           .setCrashlyticsCollectionEnabled(kDebugMode == false);
-      FlutterError.onError = (errorDetails) {
-        // If you wish to record a "non-fatal" exception, please use `FirebaseCrashlytics.instance.recordFlutterError` instead
-        FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+      FlutterError.onError = (flutterErrorDetails) async {
+        // Prevent flush crash analytics error
+        // https://github.com/Baseflow/flutter_cached_network_image/issues/336
+        if (flutterErrorDetails.library == "image resource service" &&
+            flutterErrorDetails.exception
+                .toString()
+                .startsWith("HttpException: Invalid statusCode: 413, uri")) {
+          return;
+        }
+        await FirebaseCrashlytics.instance
+            .recordFlutterFatalError(flutterErrorDetails);
+        return;
       };
       PlatformDispatcher.instance.onError = (error, stack) {
         // If you wish to record a "non-fatal" exception, please remove the "fatal" parameter
