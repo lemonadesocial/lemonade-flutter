@@ -53,7 +53,9 @@ class _EventDatetimeSettingsPageState extends State<EventDatetimeSettingsPage> {
       builder: (context, state) {
         return Padding(
           padding: EdgeInsets.symmetric(
-              horizontal: Spacing.xSmall, vertical: Spacing.small),
+            horizontal: Spacing.xSmall,
+            vertical: Spacing.small,
+          ),
           child: Column(
             children: [
               DatePickerTextField(

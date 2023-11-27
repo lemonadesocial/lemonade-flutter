@@ -47,9 +47,7 @@ class DatePickerTextFieldState extends State<DatePickerTextField> {
           setState(() {
             widget.controller.text = formattedDate;
           });
-        } else {
-          print("Date is not selected");
-        }
+        } else {}
       },
     );
   }
