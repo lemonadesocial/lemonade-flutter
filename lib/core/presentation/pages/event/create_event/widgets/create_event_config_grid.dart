@@ -1,6 +1,7 @@
 import 'package:app/core/application/event/create_event_bloc/create_event_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/event_config_card.dart';
+import 'package:app/core/presentation/pages/event/event_datetime_settings_page/event_datetime_settings_page.dart';
 import 'package:app/core/presentation/pages/event/event_guest_settings_page/event_guest_settings_page.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
@@ -66,6 +67,21 @@ class CreateEventConfigGrid extends StatelessWidget {
     Map<String, dynamic> eventConfig,
     CreateEventState state,
   ) {
+    Widget page;
+
+    final eventConfigType = eventConfig['type'];
+    switch (eventConfigType) {
+      case EventConfigGrid.visibility:
+        page = const EventGuestSettingsPage();
+        break;
+      case EventConfigGrid.dateAndTime:
+        page = const EventDatetimeSettingsPage();
+        break;
+      default:
+        page = const SizedBox();
+        break;
+    }
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -89,8 +105,8 @@ class CreateEventConfigGrid extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              const Expanded(
-                child: EventGuestSettingsPage(),
+              Expanded(
+                child: page,
               ),
             ],
           ),

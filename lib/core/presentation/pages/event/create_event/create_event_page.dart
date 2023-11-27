@@ -1,4 +1,5 @@
 import 'package:app/core/application/event/create_event_bloc/create_event_bloc.dart';
+import 'package:app/core/application/event/event_datetime_settings_bloc/event_datetime_settings_bloc.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
@@ -14,6 +15,12 @@ class CreateEventPage extends StatelessWidget implements AutoRouteWrapper {
       providers: [
         BlocProvider(
           create: (context) => CreateEventBloc(),
+        ),
+        BlocProvider(
+          create: (context) => EventDateTimeSettingsBloc()
+            ..add(
+              EventDateTimeSettingsEvent.init(),
+            ),
         ),
       ],
       child: this,

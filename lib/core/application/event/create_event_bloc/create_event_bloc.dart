@@ -1,5 +1,6 @@
 import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/core/domain/event/input/create_event_input/create_event_input.dart';
+import 'package:app/core/domain/form/datetime_formz.dart';
 import 'package:app/core/domain/form/string_formz.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,6 +11,7 @@ part 'create_event_bloc.freezed.dart';
 
 class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
   CreateEventBloc() : super(const CreateEventState()) {
+    // on<CreateEventEventInit>(_onInit);
     on<TitleChanged>(_onTitleChanged);
     on<DescriptionChanged>(_onDescriptionChanged);
     on<VerifyChanged>(_onVerifyChanged);
@@ -20,6 +22,14 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
     on<FormSubmitted>(_onFormSubmitted);
   }
   final _eventRepository = getIt<EventRepository>();
+
+  // Future<void> _onInit(
+  //   CreateEventEventInit event,
+  //   Emitter emit,
+  // ) async {
+  //   print("......");
+  //   print('init');
+  // }
 
   Future<void> _onTitleChanged(
     TitleChanged event,
@@ -148,6 +158,8 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
 
 @freezed
 class CreateEventEvent with _$CreateEventEvent {
+  // factory CreateEventEvent.init() = CreateEventEventInit;
+
   const factory CreateEventEvent.titleChanged({required String title}) =
       TitleChanged;
 
@@ -172,6 +184,18 @@ class CreateEventEvent with _$CreateEventEvent {
   const factory CreateEventEvent.virtualChanged({required bool virtual}) =
       VirtualChanged;
 
+  // const factory CreateEventEvent.startDateChanged({required bool virtual}) =
+  //     StartDateChanged;
+
+  // const factory CreateEventEvent.startTimeChanged({required bool virtual}) =
+  //     StartTimeChanged;
+
+  // const factory CreateEventEvent.endDateChanged({required bool virtual}) =
+  //     EndDateChanged;
+
+  // const factory CreateEventEvent.endTimeChanged({required bool virtual}) =
+  //     EndTimeChanged;
+
   const factory CreateEventEvent.formSubmitted() = FormSubmitted;
 }
 
@@ -186,6 +210,8 @@ class CreateEventState with _$CreateEventState {
     @Default(true) bool verify,
     @Default(true) bool virtual,
     @Default(false) bool isValid,
+    // @Default(DateTimeFormz.pure()) DateTimeFormz start,
+    // @Default(DateTimeFormz.pure()) DateTimeFormz end,
     @Default(FormzSubmissionStatus.initial) FormzSubmissionStatus status,
   }) = _CreateEventState;
 }

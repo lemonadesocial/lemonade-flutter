@@ -15,8 +15,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:formz/formz.dart';
 
 @RoutePage()
-class BaseCreateEventPage extends StatelessWidget {
-  const BaseCreateEventPage({super.key});
+class CreateEventBasePage extends StatelessWidget {
+  const CreateEventBasePage({super.key});
 
   @override
   Widget build(BuildContext context) {

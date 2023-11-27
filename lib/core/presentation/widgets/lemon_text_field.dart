@@ -6,29 +6,30 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LemonTextField extends StatelessWidget {
-  const LemonTextField({
-    Key? key,
-    required this.onChange,
-    this.initialText,
-    this.hintText,
-    this.minLines = 1,
-    this.maxLines,
-    this.borderColor,
-    this.statusWidget,
-    this.label,
-    this.suffixIcon,
-    this.leadingIcon,
-    this.autofocus = false,
-    this.inputFormatters,
-    this.controller,
-    this.contentPadding,
-    this.textInputType,
-    this.focusNode,
-    this.errorText,
-    this.readOnly,
-  }) : super(key: key);
+  const LemonTextField(
+      {Key? key,
+      this.onChange,
+      this.initialText,
+      this.hintText,
+      this.minLines = 1,
+      this.maxLines,
+      this.borderColor,
+      this.statusWidget,
+      this.label,
+      this.suffixIcon,
+      this.leadingIcon,
+      this.autofocus = false,
+      this.inputFormatters,
+      this.controller,
+      this.contentPadding,
+      this.textInputType,
+      this.focusNode,
+      this.errorText,
+      this.readOnly,
+      this.onTap})
+      : super(key: key);
 
-  final ValueChanged<String> onChange;
+  final ValueChanged<String>? onChange;
   final String? initialText;
   final String? hintText;
   final int minLines;
@@ -46,6 +47,7 @@ class LemonTextField extends StatelessWidget {
   final FocusNode? focusNode;
   final String? errorText;
   final bool? readOnly;
+  final Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -73,6 +75,7 @@ class LemonTextField extends StatelessWidget {
           SizedBox(height: Spacing.superExtraSmall),
         ],
         TextFormField(
+          onTap: onTap,
           controller: controller,
           autofocus: autofocus,
           onChanged: onChange,
