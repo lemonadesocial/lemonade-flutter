@@ -35,6 +35,7 @@
         "safelyStored": "Safely Stored",
         "safelyStoredDescription": "If you forget it or lose it, your funds are going\nto be lost as well.",
         "showRecoveryPhrase": "Show Recovery Phrase",
+        "recoveryPhrase": "Recovery Phrase",
         "recoveryPhraseDescription": "This set of 12 words will allow you to recover your vault in case of loss or damage.",
         "recoveryPhraseCheck": "Recovery Phrase Check",
         "recoveryCheckQuestion": "What is the $order word?",

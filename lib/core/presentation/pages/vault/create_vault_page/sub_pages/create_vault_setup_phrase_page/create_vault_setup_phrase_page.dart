@@ -1,5 +1,7 @@
+import 'package:app/core/presentation/pages/vault/create_vault_page/sub_pages/create_vault_setup_phrase_page/view/show_recovery_phrase_bottom_sheet.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
+import 'package:app/core/utils/bottomsheet_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -52,6 +54,13 @@ class CreateVaultSetupPhrasePage extends StatelessWidget {
                   vertical: Spacing.smMedium,
                 ),
                 child: LinearGradientButton(
+                  onTap: () {
+                    BottomSheetUtils.showSnapBottomSheet(
+                      context,
+                      builder: (context) =>
+                          const ShowRecoveryPhraseBottomSheet(),
+                    );
+                  },
                   label: t.common.next,
                   radius: BorderRadius.circular(LemonRadius.small * 2),
                   height: Sizing.large,
