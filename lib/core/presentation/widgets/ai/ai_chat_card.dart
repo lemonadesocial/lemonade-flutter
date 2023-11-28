@@ -51,7 +51,7 @@ class AIChatCard extends StatelessWidget {
                     ),
                     additionalInfoSection: showDefaultGrid == true
                         ? const AIChatDefaultGrid()
-                        : null,
+                        : _buildButtons(context),
                     title: message.finishedAnimation == true
                         ? Text(
                             message.text ?? '',
@@ -73,7 +73,7 @@ class AIChatCard extends StatelessWidget {
                             onFinished: onFinishedTypingAnimation,
                           ),
                   ),
-                  _buildButtons(context),
+                  // _buildButtons(context),
                 ],
               ),
             );
@@ -159,18 +159,27 @@ class AIChatCard extends StatelessWidget {
     }
     final title = firstButton['title'];
     final description = firstButton['description'];
-    return AIMetadataButtonCard(
-      title: title ?? '',
-      description: description ?? '',
-      suffixIcon: icon,
-      featureAvailable: featureAvailable,
-      colors: colors,
+    return AIMetaDataCard(
+      item: aiChatDefaultGridData[0],
       onTap: () {
-        if (action == 'create_post') {
+        if (aiChatDefaultGridData[0] == 'create_post') {
           Vibrate.feedback(FeedbackType.light);
           AutoRouter.of(context).navigate(const CreatePostRoute());
         }
       },
     );
+    // return AIMetadataButtonCard(
+    //   title: title ?? '',
+    //   description: description ?? '',
+    //   suffixIcon: icon,
+    //   featureAvailable: featureAvailable,
+    //   colors: colors,
+    //   onTap: () {
+    //     if (action == 'create_post') {
+    //       Vibrate.feedback(FeedbackType.light);
+    //       AutoRouter.of(context).navigate(const CreatePostRoute());
+    //     }
+    // },
+    // );
   }
 }

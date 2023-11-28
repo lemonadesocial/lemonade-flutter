@@ -109,8 +109,8 @@ class AIChatDefaultGrid extends StatelessWidget {
       ),
       itemCount: aiChatDefaultGridData.length,
       itemBuilder: (BuildContext context, int gridIndex) {
-        return GridItem(
-          gridIndex: gridIndex,
+        return AIGridItem(
+          item: aiChatDefaultGridData[gridIndex],
           onTap: () => {onTap(context, aiChatDefaultGridData[gridIndex])},
         );
       },
@@ -118,16 +118,15 @@ class AIChatDefaultGrid extends StatelessWidget {
   }
 }
 
-class GridItem extends StatelessWidget {
-  const GridItem({Key? key, required this.gridIndex, this.onTap})
+class AIGridItem extends StatelessWidget {
+  const AIGridItem({Key? key, this.onTap, required this.item})
       : super(key: key);
-  final int gridIndex;
   final Function()? onTap;
+  final Map<String, dynamic> item;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final item = aiChatDefaultGridData[gridIndex];
     final label = item['label'];
     final content = item['content'];
     final icon = item['icon'];
