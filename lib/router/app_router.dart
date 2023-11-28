@@ -100,6 +100,7 @@ class AppRouter extends $AppRouter {
         ...postRoutes,
         ...eventRoutes,
         ...commonRoutes,
+        ...vaultRoutes,
       ];
 }
 
@@ -218,5 +219,11 @@ final commonRoutes = [
     path: '/browser',
     page: WebviewRoute.page,
     fullscreenDialog: true,
+  ),
+];
+
+final vaultRoutes = [
+  AutoRoute(
+    page: VaultsListingRoute.page,
   ),
 ];

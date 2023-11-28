@@ -46,22 +46,21 @@ class LemonDrawer extends StatelessWidget {
           children: [
             SizedBox(height: Spacing.superExtraSmall),
             ...[
-              if (FeatureFlagService.isWalletFeatureEnabled)
-                DrawerItem(
-                  icon: Assets.icons.icBank,
-                  label: t.common.vault,
-                  featureAvailable: false,
-                  onPressed: () {
-                    Vibrate.feedback(FeedbackType.light);
-                    context.read<AuthBloc>().state.maybeWhen(
-                          authenticated: (authSession) =>
-                              context.router.push(const CommunityRoute()),
-                          orElse: () => context.router.navigate(
-                            const WalletRoute(),
-                          ),
-                        );
-                  },
-                ),
+              DrawerItem(
+                icon: Assets.icons.icBank,
+                label: t.vault.vault(n: 2),
+                onPressed: () {
+                  Vibrate.feedback(FeedbackType.light);
+                  context.read<AuthBloc>().state.maybeWhen(
+                        authenticated: (authSession) => context.router.push(
+                          const VaultsListingRoute(),
+                        ),
+                        orElse: () => context.router.navigate(
+                          const WalletRoute(),
+                        ),
+                      );
+                },
+              ),
               DrawerItem(
                 icon: Assets.icons.icChat,
                 label: t.common.chatAI,

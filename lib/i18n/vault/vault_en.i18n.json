@@ -1,0 +1,50 @@
+{
+    "vault(ordinal)": {
+        "one": "vault",
+        "other": "vaults"
+    },
+    "vaultType": {
+        "individual": "Individual",
+        "community": "Community"
+    },
+    "newVault": "New Vault",
+    "vaultInfo": {
+        "chain": "Chain",
+        "assets": "Assets",
+        "members": "Members",
+        "balance": "balance"
+    },
+    "createVaultBottomSheet": {
+        "title": "New vault",
+        "subTitle": "Create individual or community vaults",
+        "individualDescription": "Create a personal Vault for your own assets and transactions. You retain full control and ownership.",
+        "communityDescription": "Establish a shared Vault for collaborative management. Multiple members can jointly control & transact within this safe.",
+        "alreadyHaveVault": "Already have vault?",
+        "restore": "Restore"
+    },
+    "poweredBySafe": "powered by",
+    "createVault": {
+        "setupYourNewVault": "Setup your new vault",
+        "selectChain": "select the chain on which to create your vault",
+        "beforeContinue": "Before you continue",
+        "safeEnvironment": "Safe Environment",
+        "safeEnvironmentDescription": "Make sure you are alone & no camera is recording you or the screen.",
+        "sensitiveInformation": "Sensitive Information",
+        "sensitiveInformationDescription": "Whomever can access your recovery phrase, can steal your funds.",
+        "safelyStored": "Safely Stored",
+        "safelyStoredDescription": "If you forget it or lose it, your funds are going to be lost as well.",
+        "showRecoveryPhrase": "Show Recovery Phrase",
+        "recoveryPhraseDescription": "This set of 12 words will allow you to recover your vault in case of loss or damage.",
+        "recoveryPhraseCheck": "Recovery Phrase Check",
+        "recoveryCheckQuestion": "What is the $order word?",
+        "securityRemind": "Make sure to be in a private & safe space",
+        "createVaultSuccess": "Your new $vaultType vault ‘$name’ has been created",
+        "enterVault": "Enter vault"
+    },
+    "createPIN": {
+        "setPIN": "Set a PIN",
+        "confirmPIN": "Confirm PIN",
+        "setPINDescription": "You’ll need your PIN to log in to your wallet. This PIN secures the wallet on this device."
+    },
+    "emptyVault": "You don't have any vaults yet. Create one now to manage your assets in a collective & secure way!"
+}
