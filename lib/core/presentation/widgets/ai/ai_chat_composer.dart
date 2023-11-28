@@ -145,10 +145,10 @@ class AIChatComposer extends StatelessWidget {
       child: loading == true
           ? Transform.scale(
               scale: 0.5,
-              child: const SizedBox(
-                height: 50,
-                width: 50,
-                child: Center(
+              child: SizedBox(
+                height: 50.h,
+                width: 50.w,
+                child: const Center(
                   child: CircularProgressIndicator(
                     color: Colors.white,
                   ),

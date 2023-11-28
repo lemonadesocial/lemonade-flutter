@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:app/core/constants/app_constants.dart';
+import 'package:app/core/constants/ai/ai_constants.dart';
 import 'package:app/core/domain/ai/ai_entities.dart';
 import 'package:app/core/presentation/pages/ai/widgets/ai_chat_command_view.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
@@ -10,6 +10,7 @@ import 'package:app/core/presentation/widgets/ai/ai_chat_card.dart';
 import 'package:app/core/presentation/widgets/ai/ai_chat_composer.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/utils/modal_utils.dart';
+import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/schemas/ai/__generated__/schema.schema.gql.dart';
 import 'package:app/theme/color.dart';
@@ -45,7 +46,7 @@ class AIPageState extends State<AIPage> {
 
   List<AIChatMessage> messages = [
     AIChatMessage(
-      "I’m Lulu, your creative and helpful collaborator. I have limitations and won’t always get it right, but your feedback will help me improve. What would you like to create today?",
+      t.ai.initialAIMessage(botName: AIConstants.defaultAIChatbotName),
       null,
       false,
       false,
@@ -59,7 +60,7 @@ class AIPageState extends State<AIPage> {
   final keyboardVisibilityController = KeyboardVisibilityController();
   Timer? _timer;
   bool _needScrollToEnd = false;
-  bool _selectedCommand = false;
+  bool _commandSelected = false;
 
   @override
   void initState() {
@@ -165,6 +166,7 @@ class AIPageState extends State<AIPage> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final t = Translations.of(context);
     return Scaffold(
       appBar: LemonAppBar(
         titleBuilder: (context) => Center(
@@ -179,7 +181,7 @@ class AIPageState extends State<AIPage> {
                 SizedBox(width: Spacing.xSmall),
                 Flexible(
                   child: Text(
-                    AppConstants.defaultAIChatbotName,
+                    AIConstants.defaultAIChatbotName,
                     style: Typo.extraMedium,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -220,8 +222,8 @@ class AIPageState extends State<AIPage> {
                 padding: const EdgeInsets.only(bottom: aiChatComposerHeight),
                 child: _buildChatList(),
               ),
-              _selectedCommand ? const FullScreenOverlay() : const SizedBox(),
-              _selectedCommand ? const AIChatCommandView() : const SizedBox(),
+              _commandSelected ? const FullScreenOverlay() : const SizedBox(),
+              _commandSelected ? const AIChatCommandView() : const SizedBox(),
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Container(
@@ -231,14 +233,14 @@ class AIPageState extends State<AIPage> {
                     inputString: inputString,
                     onSend: onSend,
                     loading: _loading,
-                    selectedCommand: _selectedCommand,
+                    selectedCommand: _commandSelected,
                     onChanged: (String text) {
                       setState(() {
                         inputString = text;
                       });
                     },
                     onToggleCommand: () => setState(() {
-                      _selectedCommand = !_selectedCommand;
+                      _commandSelected = !_commandSelected;
                     }),
                   ),
                 ),

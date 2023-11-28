@@ -3,5 +3,6 @@
     "personalAssistant": "Personal Assistant",
     "createCommand": "/create",
     "discoverCommand": "/discover",
-    "enterYourPromptHere": "Enter your prompt here"
+    "enterYourPromptHere": "Enter your prompt here",
+    "initialAIMessage": "I’m $botName, your creative and helpful collaborator. I have limitations and won’t always get it right, but your feedback will help me improve. What would you like to create today?"
 }

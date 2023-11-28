@@ -1,3 +1,4 @@
+import 'package:app/core/presentation/pages/ai/view_model.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
@@ -10,16 +11,16 @@ class AIMetaDataCard extends StatelessWidget {
   const AIMetaDataCard({Key? key, this.onTap, required this.item})
       : super(key: key);
   final Function()? onTap;
-  final Map<String, dynamic> item;
+  final AIDefaultChatGridModel item;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final label = item['label'];
-    final content = item['content'];
-    final icon = item['icon'];
-    final featureAvailable = item['featureAvailable'];
-    final colors = item['colors'];
+    final label = item.label;
+    final content = item.content;
+    final icon = item.icon;
+    final featureAvailable = item.featureAvailable;
+    final colors = item.colors;
     return InkWell(
       onTap: onTap,
       child: GridTile(
