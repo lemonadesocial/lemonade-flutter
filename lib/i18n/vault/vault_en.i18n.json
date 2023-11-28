@@ -22,7 +22,7 @@
         "alreadyHaveVault": "Already have vault?",
         "restore": "Restore"
     },
-    "poweredBySafe": "powered by",
+    "poweredBy": "powered by",
     "createVault": {
         "setupYourNewVault": "Setup your new vault",
         "selectChain": "select the chain on which to create your vault",
