@@ -163,7 +163,7 @@ class AIGridItem extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  icon ?? const SizedBox(),
+                  icon,
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [

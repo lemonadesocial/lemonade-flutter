@@ -166,7 +166,6 @@ class AIPageState extends State<AIPage> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final t = Translations.of(context);
     return Scaffold(
       appBar: LemonAppBar(
         titleBuilder: (context) => Center(

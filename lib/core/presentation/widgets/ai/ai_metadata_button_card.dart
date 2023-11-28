@@ -51,7 +51,7 @@ class AIMetaDataCard extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      icon ?? const SizedBox(),
+                      icon,
                       SizedBox(width: Spacing.xSmall),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.start,
