@@ -89,7 +89,7 @@ class AIMetaDataCard extends StatelessWidget {
                 top: 0,
                 right: 0,
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 6.h),
+                  padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 2.h),
                   decoration: BoxDecoration(
                     color: colorScheme.onPrimary.withOpacity(0.12),
                     borderRadius: BorderRadius.only(

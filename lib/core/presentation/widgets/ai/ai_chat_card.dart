@@ -73,7 +73,6 @@ class AIChatCard extends StatelessWidget {
                             onFinished: onFinishedTypingAnimation,
                           ),
                   ),
-                  // _buildButtons(context),
                 ],
               ),
             );
@@ -127,59 +126,20 @@ class AIChatCard extends StatelessWidget {
     if (message.metadata == null || message.metadata!.isEmpty) {
       return const SizedBox();
     }
-    // TODO: Extract display first item, facing problem about not able display Grid view here
     final firstButton = message.metadata?['buttons']?[0];
     final action = firstButton['action'];
-    List<Color> colors = [];
-    Widget? icon;
-    bool featureAvailable = false;
-    switch (action) {
-      case 'create_post':
-        icon = Assets.icons.icCreatePost.svg();
-        colors = CreatePopupGradient.post.colors;
-        featureAvailable = true;
-        break;
-      case 'create_room':
-        icon = Assets.icons.icCreateRoom.svg();
-        colors = CreatePopupGradient.post.colors;
-        break;
-      case 'create_event':
-        icon = Assets.icons.icHouseParty.svg();
-        colors = CreatePopupGradient.event.colors;
-        break;
-      case 'create_poap':
-        icon = Assets.icons.icCreatePoap.svg();
-        colors = CreatePopupGradient.poap.colors;
-        break;
-      case 'create_collectible':
-        icon = Assets.icons.icCrystal.svg();
-        colors = CreatePopupGradient.collectible.colors;
-        break;
-      default:
-    }
-    final title = firstButton['title'];
-    final description = firstButton['description'];
+    Map<String, dynamic>? targetObject = aiChatDefaultGridData.firstWhere(
+      (element) => element['action'] == action,
+      orElse: () => {},
+    );
     return AIMetaDataCard(
-      item: aiChatDefaultGridData[0],
+      item: targetObject,
       onTap: () {
-        if (aiChatDefaultGridData[0] == 'create_post') {
+        if (targetObject['action'] == 'create_post') {
           Vibrate.feedback(FeedbackType.light);
           AutoRouter.of(context).navigate(const CreatePostRoute());
         }
       },
     );
-    // return AIMetadataButtonCard(
-    //   title: title ?? '',
-    //   description: description ?? '',
-    //   suffixIcon: icon,
-    //   featureAvailable: featureAvailable,
-    //   colors: colors,
-    //   onTap: () {
-    //     if (action == 'create_post') {
-    //       Vibrate.feedback(FeedbackType.light);
-    //       AutoRouter.of(context).navigate(const CreatePostRoute());
-    //     }
-    // },
-    // );
   }
 }
