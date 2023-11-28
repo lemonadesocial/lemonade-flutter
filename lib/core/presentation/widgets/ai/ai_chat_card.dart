@@ -1,7 +1,8 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/domain/ai/ai_entities.dart';
+import 'package:app/core/domain/ai/ai_enums.dart';
 import 'package:app/core/domain/user/entities/user.dart';
-import 'package:app/core/presentation/pages/ai/view_model.dart';
+import 'package:app/core/presentation/pages/ai/ai_view_model.dart';
 import 'package:app/core/presentation/widgets/ai/ai_chat_default_grid.dart';
 import 'package:app/core/presentation/widgets/ai/ai_metadata_button_card.dart';
 import 'package:app/core/presentation/widgets/common/list_tile/custom_list_tile.dart';
@@ -133,7 +134,7 @@ class AIChatCard extends StatelessWidget {
     return AIMetaDataCard(
       item: targetObject,
       onTap: () {
-        if (targetObject.action == 'create_post') {
+        if (targetObject.action == AIMetadataAction.createPost) {
           Vibrate.feedback(FeedbackType.light);
           AutoRouter.of(context).navigate(const CreatePostRoute());
         }

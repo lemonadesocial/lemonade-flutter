@@ -1,4 +1,4 @@
-import 'package:app/core/presentation/pages/ai/view_model.dart';
+import 'package:app/core/presentation/pages/ai/ai_view_model.dart';
 import 'package:app/core/presentation/widgets/ai/ai_chat_composer.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
@@ -43,20 +43,21 @@ class AIChatCommandView extends StatelessWidget {
           showComingSoonDialog(context);
         },
       ),
-      AICommandViewModel(
-        label: t.home.poap,
-        onTap: () {
-          Vibrate.feedback(FeedbackType.light);
-          showComingSoonDialog(context);
-        },
-      ),
-      AICommandViewModel(
-        label: t.home.collectible,
-        onTap: () {
-          Vibrate.feedback(FeedbackType.light);
-          showComingSoonDialog(context);
-        },
-      ),
+      // TODO: Temporary comment for AppStore/PlayStore review
+      // AICommandViewModel(
+      //   label: t.home.poap,
+      //   onTap: () {
+      //     Vibrate.feedback(FeedbackType.light);
+      //     showComingSoonDialog(context);
+      //   },
+      // ),
+      // AICommandViewModel(
+      //   label: t.home.collectible,
+      //   onTap: () {
+      //     Vibrate.feedback(FeedbackType.light);
+      //     showComingSoonDialog(context);
+      //   },
+      // ),
     ];
     final List<AICommandViewModel> aiDiscoverList = [
       AICommandViewModel(
@@ -80,13 +81,14 @@ class AIChatCommandView extends StatelessWidget {
           showComingSoonDialog(context);
         },
       ),
-      AICommandViewModel(
-        label: t.ai.discover.collectibles,
-        onTap: () {
-          Vibrate.feedback(FeedbackType.light);
-          showComingSoonDialog(context);
-        },
-      ),
+      // TODO: Temporary comment for AppStore/PlayStore review
+      // AICommandViewModel(
+      //   label: t.ai.discover.collectibles,
+      //   onTap: () {
+      //     Vibrate.feedback(FeedbackType.light);
+      //     showComingSoonDialog(context);
+      //   },
+      // ),
       AICommandViewModel(
         label: t.ai.discover.communities,
         onTap: () {

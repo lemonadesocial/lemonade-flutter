@@ -1,4 +1,4 @@
-import 'package:app/core/presentation/pages/ai/view_model.dart';
+import 'package:app/core/presentation/pages/ai/ai_view_model.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/typo.dart';

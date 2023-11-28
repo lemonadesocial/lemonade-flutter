@@ -1,4 +1,5 @@
-import 'package:app/core/presentation/pages/ai/view_model.dart';
+import 'package:app/core/domain/ai/ai_enums.dart';
+import 'package:app/core/presentation/pages/ai/ai_view_model.dart';
 import 'package:app/core/presentation/widgets/home/create_pop_up_tile.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -14,7 +15,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 final List<AIChatGridViewModel> aiChatDefaultGridData = [
   AIChatGridViewModel(
-    action: 'create_post',
+    action: AIMetadataAction.createPost,
     label: t.home.post,
     content: t.home.postDesc,
     icon: ThemeSvgIcon(
@@ -27,7 +28,7 @@ final List<AIChatGridViewModel> aiChatDefaultGridData = [
     colors: CreatePopupGradient.post.colors,
   ),
   AIChatGridViewModel(
-    action: 'create_room',
+    action: AIMetadataAction.createRoom,
     label: t.home.room,
     content: t.home.roomDesc,
     icon: ThemeSvgIcon(
@@ -40,7 +41,7 @@ final List<AIChatGridViewModel> aiChatDefaultGridData = [
     colors: CreatePopupGradient.room.colors,
   ),
   AIChatGridViewModel(
-    action: 'create_event',
+    action: AIMetadataAction.createEvent,
     label: t.home.event,
     content: t.home.eventDesc,
     icon: ThemeSvgIcon(
@@ -54,43 +55,44 @@ final List<AIChatGridViewModel> aiChatDefaultGridData = [
     featureAvailable: false,
     colors: CreatePopupGradient.event.colors,
   ),
-  AIChatGridViewModel(
-    action: 'create_poap',
-    label: t.home.poap,
-    content: t.home.poapDesc,
-    icon: ThemeSvgIcon(
-      builder: (colorFilter) => Assets.icons.icCreatePoap.svg(
-        width: 24.w,
-        height: 24.w,
-      ),
-    ),
-    featureAvailable: false,
-    colors: CreatePopupGradient.poap.colors,
-  ),
-  AIChatGridViewModel(
-    action: 'create_collectible',
-    label: t.home.collectible,
-    content: t.home.collectibleDesc,
-    icon: ThemeSvgIcon(
-      color: LemonColor.collectibleColor,
-      builder: (colorFilter) => Assets.icons.icCrystal.svg(
-        width: 24.w,
-        height: 24.w,
-        colorFilter: colorFilter,
-      ),
-    ),
-    featureAvailable: false,
-    colors: CreatePopupGradient.collectible.colors,
-  ),
+  // TODO: Temporary comment for AppStore/PlayStore review
+  // AIChatGridViewModel(
+  //   action: AIMetadataAction.createPoap,
+  //   label: t.home.poap,
+  //   content: t.home.poapDesc,
+  //   icon: ThemeSvgIcon(
+  //     builder: (colorFilter) => Assets.icons.icCreatePoap.svg(
+  //       width: 24.w,
+  //       height: 24.w,
+  //     ),
+  //   ),
+  //   featureAvailable: false,
+  //   colors: CreatePopupGradient.poap.colors,
+  // ),
+  // AIChatGridViewModel(
+  //   action: AIMetadataAction.createCollectible,
+  //   label: t.home.collectible,
+  //   content: t.home.collectibleDesc,
+  //   icon: ThemeSvgIcon(
+  //     color: LemonColor.collectibleColor,
+  //     builder: (colorFilter) => Assets.icons.icCrystal.svg(
+  //       width: 24.w,
+  //       height: 24.w,
+  //       colorFilter: colorFilter,
+  //     ),
+  //   ),
+  //   featureAvailable: false,
+  //   colors: CreatePopupGradient.collectible.colors,
+  // ),
 ];
 
 class AIChatDefaultGrid extends StatelessWidget {
   const AIChatDefaultGrid({super.key});
 
-  onTap(BuildContext context, item) {
-    final action = item['action'];
+  onTap(BuildContext context, AIChatGridViewModel item) {
+    final action = item.action;
     switch (action) {
-      case 'create_post':
+      case AIMetadataAction.createPost:
         AutoRouter.of(context).navigate(const CreatePostRoute());
       default:
         break;

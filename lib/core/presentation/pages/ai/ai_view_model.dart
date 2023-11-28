@@ -1,7 +1,8 @@
+import 'package:app/core/domain/ai/ai_enums.dart';
 import 'package:flutter/material.dart';
 
 class AIChatGridViewModel {
-  final String action;
+  final AIMetadataAction action;
   final String label;
   final String content;
   final Widget icon;
