@@ -25,7 +25,8 @@
     "poweredBy": "powered by",
     "createVault": {
         "setupYourNewVault": "Setup your new vault",
-        "selectChain": "select the chain on which to create your vault",
+        "selectChain": "Select the chain on which to create your vault",
+        "enterVaultName": "Enter your vault name",
         "beforeContinue": "Before you continue",
         "safeEnvironment": "Safe Environment",
         "safeEnvironmentDescription": "Make sure you are alone & no camera is recording you or the screen.",

@@ -3,10 +3,12 @@ import 'package:app/core/presentation/widgets/common/bottomsheet/lemon_snap_bott
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 class AddVaultBottomSheet extends StatelessWidget {
@@ -55,6 +57,8 @@ class AddVaultBottomSheet extends StatelessWidget {
                     ),
                     SizedBox(height: Spacing.medium),
                     _CreateVaultOptionItem(
+                      onPressed: () =>
+                          AutoRouter.of(context).push(const CreateVaultRoute()),
                       title: t.vault.vaultType.individual,
                       description:
                           t.vault.createVaultBottomSheet.individualDescription,
@@ -72,6 +76,8 @@ class AddVaultBottomSheet extends StatelessWidget {
                     ),
                     SizedBox(height: Spacing.xSmall),
                     _CreateVaultOptionItem(
+                      onPressed: () =>
+                          AutoRouter.of(context).push(const CreateVaultRoute()),
                       title: t.vault.vaultType.community,
                       description:
                           t.vault.createVaultBottomSheet.communityDescription,
@@ -125,6 +131,7 @@ class _CreateVaultOptionItem extends StatelessWidget {
   final Widget icon;
   final String title;
   final String description;
+  final Function() onPressed;
 
   const _CreateVaultOptionItem({
     required this.title,
@@ -132,6 +139,7 @@ class _CreateVaultOptionItem extends StatelessWidget {
     required this.gradientColors,
     required this.iconBackground,
     required this.icon,
+    required this.onPressed,
   });
 
   @override
@@ -139,65 +147,68 @@ class _CreateVaultOptionItem extends StatelessWidget {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
 
-    return Container(
-      padding: EdgeInsets.all(Spacing.medium),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(LemonRadius.normal),
-        gradient: LinearGradient(
-          stops: const [0.25, 0.5, 0.75, 1],
-          colors: gradientColors,
+    return InkWell(
+      onTap: onPressed,
+      child: Container(
+        padding: EdgeInsets.all(Spacing.medium),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(LemonRadius.normal),
+          gradient: LinearGradient(
+            stops: const [0.25, 0.5, 0.75, 1],
+            colors: gradientColors,
+          ),
         ),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: Sizing.large,
-            height: Sizing.large,
-            decoration: BoxDecoration(
-              color: iconBackground,
-              borderRadius: BorderRadius.circular(Sizing.large),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: Sizing.large,
+              height: Sizing.large,
+              decoration: BoxDecoration(
+                color: iconBackground,
+                borderRadius: BorderRadius.circular(Sizing.large),
+              ),
+              child: Center(
+                child: icon,
+              ),
             ),
-            child: Center(
-              child: icon,
-            ),
-          ),
-          SizedBox(width: Spacing.smMedium),
-          Flexible(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  t.vault.vaultType.individual,
-                  style: Typo.mediumPlus.copyWith(
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                SizedBox(height: Spacing.superExtraSmall),
-                Text(
-                  t.vault.createVaultBottomSheet.individualDescription,
-                  style: Typo.small.copyWith(
-                    color: colorScheme.onSecondary,
-                  ),
-                ),
-                SizedBox(height: Spacing.xSmall),
-                Row(
-                  children: [
-                    Text(
-                      t.vault.poweredBy,
-                      style: Typo.xSmall.copyWith(
-                        color: colorScheme.onSecondary,
-                      ),
+            SizedBox(width: Spacing.smMedium),
+            Flexible(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    t.vault.vaultType.individual,
+                    style: Typo.mediumPlus.copyWith(
+                      fontWeight: FontWeight.w600,
                     ),
-                    SizedBox(width: Spacing.superExtraSmall),
-                    Assets.icons.icSafe.svg(),
-                  ],
-                ),
-              ],
+                  ),
+                  SizedBox(height: Spacing.superExtraSmall),
+                  Text(
+                    t.vault.createVaultBottomSheet.individualDescription,
+                    style: Typo.small.copyWith(
+                      color: colorScheme.onSecondary,
+                    ),
+                  ),
+                  SizedBox(height: Spacing.xSmall),
+                  Row(
+                    children: [
+                      Text(
+                        t.vault.poweredBy,
+                        style: Typo.xSmall.copyWith(
+                          color: colorScheme.onSecondary,
+                        ),
+                      ),
+                      SizedBox(width: Spacing.superExtraSmall),
+                      Assets.icons.icSafe.svg(),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

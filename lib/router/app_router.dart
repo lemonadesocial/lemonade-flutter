@@ -226,4 +226,13 @@ final vaultRoutes = [
   AutoRoute(
     page: VaultsListingRoute.page,
   ),
+  AutoRoute(
+    page: CreateVaultRoute.page,
+    children: [
+      AutoRoute(
+        initial: true,
+        page: CreateVaultBasicInfoRoute.page,
+      ),
+    ],
+  ),
 ];
