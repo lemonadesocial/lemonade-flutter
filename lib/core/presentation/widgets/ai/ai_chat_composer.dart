@@ -1,10 +1,14 @@
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/utils/modal_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
+
+const aiChatComposerHeight = 80.0;
 
 class AIChatComposer extends StatelessWidget {
   const AIChatComposer({
@@ -14,12 +18,16 @@ class AIChatComposer extends StatelessWidget {
     required this.onSend,
     required this.onChanged,
     required this.textController,
+    this.selectedCommand,
+    required this.onToggleCommand,
   });
   final String inputString;
   final bool? loading;
   final TextEditingController textController;
   final Function(String? text) onSend;
   final Function(String text) onChanged;
+  final bool? selectedCommand;
+  final Function() onToggleCommand;
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +35,7 @@ class AIChatComposer extends StatelessWidget {
     return IconTheme(
       data: IconThemeData(color: Theme.of(context).cardColor),
       child: Container(
+        height: aiChatComposerHeight,
         decoration: BoxDecoration(
           color: LemonColor.atomicBlack,
           border: Border(
@@ -40,6 +49,34 @@ class AIChatComposer extends StatelessWidget {
             EdgeInsets.only(left: 15.w, right: 15.w, top: 15.h, bottom: 12.h),
         child: Row(
           children: [
+            InkWell(
+              child: Container(
+                height: 48.h,
+                padding: EdgeInsets.symmetric(horizontal: Spacing.extraSmall),
+                decoration: BoxDecoration(
+                  color: selectedCommand == true
+                      ? LemonColor.paleViolet18
+                      : LemonColor.white09,
+                  borderRadius: BorderRadius.circular(24.r),
+                ),
+                child: SizedBox(
+                  width: 15.w,
+                  height: 15.h,
+                  child: ThemeSvgIcon(
+                    color: selectedCommand == true
+                        ? LemonColor.paleViolet
+                        : colorScheme.onSecondary,
+                    builder: (filter) => Assets.icons.icCommand.svg(
+                      colorFilter: filter,
+                    ),
+                  ),
+                ),
+              ),
+              onTap: () {
+                Vibrate.feedback(FeedbackType.light);
+                onToggleCommand();
+              },
+            ),
             SizedBox(
               width: 6.w,
             ),
@@ -82,10 +119,17 @@ class AIChatComposer extends StatelessWidget {
   Widget _buildSendbutton(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     Widget icon = inputString == ''
-        ? ThemeSvgIcon(
-            color: colorScheme.onSecondary,
-            builder: (filter) => Assets.icons.icMic.svg(
-              colorFilter: filter,
+        ? GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () {
+              Vibrate.feedback(FeedbackType.light);
+              showComingSoonDialog(context);
+            },
+            child: ThemeSvgIcon(
+              color: colorScheme.onSecondary,
+              builder: (filter) => Assets.icons.icMic.svg(
+                colorFilter: filter,
+              ),
             ),
           )
         : IconButton(
@@ -102,8 +146,8 @@ class AIChatComposer extends StatelessWidget {
           ? Transform.scale(
               scale: 0.5,
               child: const SizedBox(
-                height: 24,
-                width: 24,
+                height: 50,
+                width: 50,
                 child: Center(
                   child: CircularProgressIndicator(
                     color: Colors.white,

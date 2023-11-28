@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:app/core/constants/app_constants.dart';
 import 'package:app/core/domain/ai/ai_entities.dart';
+import 'package:app/core/presentation/pages/ai/widgets/ai_chat_command_view.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/core/utils/gql/ai_gql_client.dart';
 import 'package:app/core/config.dart';
@@ -9,7 +10,6 @@ import 'package:app/core/presentation/widgets/ai/ai_chat_card.dart';
 import 'package:app/core/presentation/widgets/ai/ai_chat_composer.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/utils/modal_utils.dart';
-import 'package:app/gen/assets.gen.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/schemas/ai/__generated__/schema.schema.gql.dart';
 import 'package:app/theme/color.dart';
@@ -23,8 +23,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-
 import 'package:app/graphql/__generated__/run.req.gql.dart';
+import 'package:app/core/presentation/pages/ai/widgets/fullscreen_overlay.dart';
 
 const uuid = Uuid();
 
@@ -58,6 +58,7 @@ class AIPageState extends State<AIPage> {
   final keyboardVisibilityController = KeyboardVisibilityController();
   Timer? _timer;
   bool _needScrollToEnd = false;
+  bool _selectedCommand = false;
 
   @override
   void initState() {
@@ -212,23 +213,35 @@ class AIPageState extends State<AIPage> {
             color: LemonColor.atomicBlack,
             borderRadius: BorderRadius.circular(20.r),
           ),
-          child: Column(
-            children: <Widget>[
-              _buildChatList(),
-              Container(
-                decoration: BoxDecoration(color: Theme.of(context).cardColor),
-                child: AIChatComposer(
-                  textController: _textController,
-                  inputString: inputString,
-                  onSend: onSend,
-                  loading: _loading,
-                  onChanged: (String text) {
-                    setState(() {
-                      inputString = text;
-                    });
-                  },
-                ),
+          child: Stack(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: aiChatComposerHeight),
+                child: _buildChatList(),
               ),
+              _selectedCommand ? const FullScreenOverlay() : const SizedBox(),
+              _selectedCommand ? const AIChatCommandView() : const SizedBox(),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  decoration: BoxDecoration(color: Theme.of(context).cardColor),
+                  child: AIChatComposer(
+                    textController: _textController,
+                    inputString: inputString,
+                    onSend: onSend,
+                    loading: _loading,
+                    selectedCommand: _selectedCommand,
+                    onChanged: (String text) {
+                      setState(() {
+                        inputString = text;
+                      });
+                    },
+                    onToggleCommand: () => setState(() {
+                      _selectedCommand = !_selectedCommand;
+                    }),
+                  ),
+                ),
+              )
             ],
           ),
         ),
