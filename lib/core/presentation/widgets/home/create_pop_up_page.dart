@@ -2,6 +2,7 @@ import 'package:app/core/presentation/widgets/back_button_widget.dart';
 import 'package:app/core/presentation/widgets/home/create_pop_up_tile.dart';
 import 'package:app/core/presentation/widgets/lemon_bottom_sheet_mixin.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/utils/modal_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -69,8 +70,7 @@ class CreatePopUpPage extends StatelessWidget with LemonBottomSheet {
               label: t.home.event,
               content: t.home.eventDesc,
               onTap: () {
-                context.router.pop();
-                context.router.push(const CreateEventRoute());
+                showComingSoonDialog(context);
               },
               suffixIcon: ThemeSvgIcon(
                 color: LemonColor.paleViolet,
@@ -80,7 +80,7 @@ class CreatePopUpPage extends StatelessWidget with LemonBottomSheet {
                   colorFilter: colorFilter,
                 ),
               ),
-              featureAvailable: true,
+              featureAvailable: false,
             ),
             // TODO: Temporary comment, maybe re-open in future
             // SizedBox(height: Spacing.xSmall),
