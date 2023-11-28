@@ -5,6 +5,11 @@ class AIChatMessage {
   late bool? finishedAnimation;
   final bool? showDefaultGrid;
 
-  AIChatMessage(this.text, this.metadata, this.isUser, this.finishedAnimation,
-      this.showDefaultGrid);
+  AIChatMessage(
+    this.text,
+    this.metadata,
+    this.isUser,
+    this.finishedAnimation,
+    this.showDefaultGrid,
+  );
 }

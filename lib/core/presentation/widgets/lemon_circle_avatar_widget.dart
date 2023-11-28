@@ -13,13 +13,14 @@ class LemonCircleAvatar extends StatelessWidget {
   final String? label;
   final bool? isLemonIcon;
   final double? lemonIconScale;
-  const LemonCircleAvatar(
-      {super.key,
-      this.url,
-      this.size,
-      this.label,
-      this.isLemonIcon,
-      this.lemonIconScale});
+  const LemonCircleAvatar({
+    super.key,
+    this.url,
+    this.size,
+    this.label,
+    this.isLemonIcon,
+    this.lemonIconScale,
+  });
 
   double get avatarSize => size ?? Sizing.regular;
 

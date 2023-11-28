@@ -45,11 +45,12 @@ class AIPageState extends State<AIPage> {
 
   List<AIChatMessage> messages = [
     AIChatMessage(
-        "I’m Lulu, your creative and helpful collaborator. I have limitations and won’t always get it right, but your feedback will help me improve. What would you like to create today?",
-        null,
-        false,
-        false,
-        true),
+      "I’m Lulu, your creative and helpful collaborator. I have limitations and won’t always get it right, but your feedback will help me improve. What would you like to create today?",
+      null,
+      false,
+      false,
+      true,
+    ),
   ];
 
   final TextEditingController _textController = TextEditingController();
