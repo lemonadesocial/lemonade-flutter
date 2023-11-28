@@ -12,8 +12,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-final List<AIDefaultChatGridModel> aiChatDefaultGridData = [
-  AIDefaultChatGridModel(
+final List<AIChatGridViewModel> aiChatDefaultGridData = [
+  AIChatGridViewModel(
     action: 'create_post',
     label: t.home.post,
     content: t.home.postDesc,
@@ -26,7 +26,7 @@ final List<AIDefaultChatGridModel> aiChatDefaultGridData = [
     featureAvailable: true,
     colors: CreatePopupGradient.post.colors,
   ),
-  AIDefaultChatGridModel(
+  AIChatGridViewModel(
     action: 'create_room',
     label: t.home.room,
     content: t.home.roomDesc,
@@ -39,7 +39,7 @@ final List<AIDefaultChatGridModel> aiChatDefaultGridData = [
     featureAvailable: false,
     colors: CreatePopupGradient.room.colors,
   ),
-  AIDefaultChatGridModel(
+  AIChatGridViewModel(
     action: 'create_event',
     label: t.home.event,
     content: t.home.eventDesc,
@@ -54,7 +54,7 @@ final List<AIDefaultChatGridModel> aiChatDefaultGridData = [
     featureAvailable: false,
     colors: CreatePopupGradient.event.colors,
   ),
-  AIDefaultChatGridModel(
+  AIChatGridViewModel(
     action: 'create_poap',
     label: t.home.poap,
     content: t.home.poapDesc,
@@ -67,7 +67,7 @@ final List<AIDefaultChatGridModel> aiChatDefaultGridData = [
     featureAvailable: false,
     colors: CreatePopupGradient.poap.colors,
   ),
-  AIDefaultChatGridModel(
+  AIChatGridViewModel(
     action: 'create_collectible',
     label: t.home.collectible,
     content: t.home.collectibleDesc,
@@ -123,7 +123,7 @@ class AIGridItem extends StatelessWidget {
   const AIGridItem({Key? key, this.onTap, required this.item})
       : super(key: key);
   final Function()? onTap;
-  final AIDefaultChatGridModel item;
+  final AIChatGridViewModel item;
 
   @override
   Widget build(BuildContext context) {

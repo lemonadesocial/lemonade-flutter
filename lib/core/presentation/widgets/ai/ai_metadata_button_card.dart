@@ -11,7 +11,7 @@ class AIMetaDataCard extends StatelessWidget {
   const AIMetaDataCard({Key? key, this.onTap, required this.item})
       : super(key: key);
   final Function()? onTap;
-  final AIDefaultChatGridModel item;
+  final AIChatGridViewModel item;
 
   @override
   Widget build(BuildContext context) {

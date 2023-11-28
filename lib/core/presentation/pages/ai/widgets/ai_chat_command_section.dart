@@ -1,3 +1,4 @@
+import 'package:app/core/presentation/pages/ai/view_model.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/typo.dart';
@@ -6,7 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AiChatCommandSection extends StatelessWidget {
   final String sectionLabel;
-  final List<Map<String, dynamic>> commandList;
+  final List<AICommandViewModel> commandList;
 
   const AiChatCommandSection({
     super.key,
@@ -35,8 +36,8 @@ class AiChatCommandSection extends StatelessWidget {
           spacing: 6,
           children: commandList.map((command) {
             return ActionChip(
-              label: Text(command['label']!),
-              onPressed: () => _handleChipPress(command['onPressed']),
+              label: Text(command.label),
+              onPressed: () => _handleChipPress(command.onTap),
               backgroundColor: LemonColor.atomicBlack,
               labelStyle: Typo.small.copyWith(color: colorScheme.onSecondary),
               shape: RoundedRectangleBorder(

@@ -127,7 +127,7 @@ class AIChatCard extends StatelessWidget {
     }
     final firstButton = message.metadata?['buttons']?[0];
     final action = firstButton['action'];
-    AIDefaultChatGridModel targetObject = aiChatDefaultGridData.firstWhere(
+    AIChatGridViewModel targetObject = aiChatDefaultGridData.firstWhere(
       (element) => element.action == action,
     );
     return AIMetaDataCard(

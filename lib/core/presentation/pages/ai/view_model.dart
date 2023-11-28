@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class AIDefaultChatGridModel {
+class AIChatGridViewModel {
   final String action;
   final String label;
   final String content;
@@ -8,12 +8,22 @@ class AIDefaultChatGridModel {
   final bool featureAvailable;
   final List<Color> colors;
 
-  AIDefaultChatGridModel({
+  AIChatGridViewModel({
     required this.action,
     required this.label,
     required this.content,
     required this.icon,
     required this.featureAvailable,
     required this.colors,
+  });
+}
+
+class AICommandViewModel {
+  final String label;
+  final Function() onTap;
+
+  AICommandViewModel({
+    required this.label,
+    required this.onTap,
   });
 }

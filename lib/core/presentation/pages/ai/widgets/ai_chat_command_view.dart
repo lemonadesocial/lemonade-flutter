@@ -1,3 +1,4 @@
+import 'package:app/core/presentation/pages/ai/view_model.dart';
 import 'package:app/core/presentation/widgets/ai/ai_chat_composer.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
@@ -20,6 +21,80 @@ class AIChatCommandView extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
+    final List<AICommandViewModel> aiCommandList = [
+      AICommandViewModel(
+        label: t.home.post,
+        onTap: () {
+          Vibrate.feedback(FeedbackType.light);
+          AutoRouter.of(context).navigate(const CreatePostRoute());
+        },
+      ),
+      AICommandViewModel(
+        label: t.home.room,
+        onTap: () {
+          Vibrate.feedback(FeedbackType.light);
+          showComingSoonDialog(context);
+        },
+      ),
+      AICommandViewModel(
+        label: t.home.event,
+        onTap: () {
+          Vibrate.feedback(FeedbackType.light);
+          showComingSoonDialog(context);
+        },
+      ),
+      AICommandViewModel(
+        label: t.home.poap,
+        onTap: () {
+          Vibrate.feedback(FeedbackType.light);
+          showComingSoonDialog(context);
+        },
+      ),
+      AICommandViewModel(
+        label: t.home.collectible,
+        onTap: () {
+          Vibrate.feedback(FeedbackType.light);
+          showComingSoonDialog(context);
+        },
+      ),
+    ];
+    final List<AICommandViewModel> aiDiscoverList = [
+      AICommandViewModel(
+        label: t.ai.discover.events,
+        onTap: () {
+          Vibrate.feedback(FeedbackType.light);
+          showComingSoonDialog(context);
+        },
+      ),
+      AICommandViewModel(
+        label: t.ai.discover.badges,
+        onTap: () {
+          Vibrate.feedback(FeedbackType.light);
+          showComingSoonDialog(context);
+        },
+      ),
+      AICommandViewModel(
+        label: t.ai.discover.collaborators,
+        onTap: () {
+          Vibrate.feedback(FeedbackType.light);
+          showComingSoonDialog(context);
+        },
+      ),
+      AICommandViewModel(
+        label: t.ai.discover.collectibles,
+        onTap: () {
+          Vibrate.feedback(FeedbackType.light);
+          showComingSoonDialog(context);
+        },
+      ),
+      AICommandViewModel(
+        label: t.ai.discover.communities,
+        onTap: () {
+          Vibrate.feedback(FeedbackType.light);
+          showComingSoonDialog(context);
+        },
+      )
+    ];
     return Positioned(
       bottom: aiChatComposerHeight,
       left: 0.0,
@@ -52,42 +127,7 @@ class AIChatCommandView extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
               child: AiChatCommandSection(
                 sectionLabel: t.ai.createCommand,
-                commandList: [
-                  {
-                    'label': 'post',
-                    'onPressed': () {
-                      Vibrate.feedback(FeedbackType.light);
-                      AutoRouter.of(context).navigate(const CreatePostRoute());
-                    },
-                  },
-                  {
-                    'label': 'room',
-                    'onPressed': () {
-                      Vibrate.feedback(FeedbackType.light);
-                      showComingSoonDialog(context);
-                    }
-                  },
-                  {
-                    'label': 'event',
-                    'onPressed': () {
-                      showComingSoonDialog(context);
-                    }
-                  },
-                  {
-                    'label': 'poap',
-                    'onPressed': () {
-                      Vibrate.feedback(FeedbackType.light);
-                      showComingSoonDialog(context);
-                    }
-                  },
-                  {
-                    'label': 'collectible',
-                    'onPressed': () {
-                      Vibrate.feedback(FeedbackType.light);
-                      showComingSoonDialog(context);
-                    }
-                  },
-                ],
+                commandList: aiCommandList,
               ),
             ),
             Container(height: 1, color: colorScheme.outline),
@@ -95,43 +135,7 @@ class AIChatCommandView extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
               child: AiChatCommandSection(
                 sectionLabel: t.ai.discoverCommand,
-                commandList: [
-                  {
-                    'label': 'events',
-                    'onPressed': () {
-                      Vibrate.feedback(FeedbackType.light);
-                      showComingSoonDialog(context);
-                    }
-                  },
-                  {
-                    'label': 'badges',
-                    'onPressed': () {
-                      Vibrate.feedback(FeedbackType.light);
-                      AutoRouter.of(context).navigate(PoapListingRoute());
-                    }
-                  },
-                  {
-                    'label': 'collaborators',
-                    'onPressed': () {
-                      Vibrate.feedback(FeedbackType.light);
-                      showComingSoonDialog(context);
-                    }
-                  },
-                  {
-                    'label': 'collectibles',
-                    'onPressed': () {
-                      Vibrate.feedback(FeedbackType.light);
-                      showComingSoonDialog(context);
-                    }
-                  },
-                  {
-                    'label': 'communities',
-                    'onPressed': () {
-                      Vibrate.feedback(FeedbackType.light);
-                      showComingSoonDialog(context);
-                    }
-                  },
-                ],
+                commandList: aiDiscoverList,
               ),
             )
           ],
