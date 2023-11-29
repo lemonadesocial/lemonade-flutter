@@ -144,12 +144,13 @@ class AIChatCard extends StatelessWidget {
     );
   }
 
-  Widget additionalInfoSection(BuildContext context) {
+  Widget? additionalInfoSection(BuildContext context) {
     bool? showDefaultGrid = message.showDefaultGrid;
     if (message.finishedAnimation == true) {
-      return showDefaultGrid == true
-          ? const AIChatDefaultGrid()
-          : _buildButtons(context);
+      if (showDefaultGrid == true) {
+        return const AIChatDefaultGrid();
+      }
+      return _buildButtons(context);
     } else {
       return const SizedBox();
     }

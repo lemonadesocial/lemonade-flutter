@@ -1,21 +1,18 @@
 import 'dart:async';
 
-import 'package:app/core/constants/ai/ai_constants.dart';
 import 'package:app/core/domain/ai/ai_entities.dart';
 import 'package:app/core/presentation/pages/ai/widgets/ai_chat_command_view.dart';
-import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
+import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/utils/gql/ai_gql_client.dart';
 import 'package:app/core/config.dart';
 import 'package:app/core/presentation/widgets/ai/ai_chat_card.dart';
 import 'package:app/core/presentation/widgets/ai/ai_chat_composer.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
-import 'package:app/core/utils/modal_utils.dart';
-import 'package:app/i18n/i18n.g.dart';
+import 'package:app/graphql/__generated__/config.req.gql.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/schemas/ai/__generated__/schema.schema.gql.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -41,18 +38,11 @@ class AIPageState extends State<AIPage> {
   final client = getIt<AIClient>().client;
   final ScrollController _scrollController = ScrollController();
   final String session = uuid.v4();
-  bool _loading = false;
   late String inputString = '';
+  bool _loading = false;
+  bool _initialLoading = true;
 
-  List<AIChatMessage> messages = [
-    AIChatMessage(
-      t.ai.initialAIMessage(botName: AIConstants.defaultAIChatbotName),
-      null,
-      false,
-      false,
-      true,
-    ),
-  ];
+  List<AIChatMessage> messages = [];
 
   final TextEditingController _textController = TextEditingController();
 
@@ -65,6 +55,24 @@ class AIPageState extends State<AIPage> {
   @override
   void initState() {
     super.initState();
+    final config = GObjectIdBuilder();
+    config.value = AppConfig.chatLemonAIConfig;
+    final getConfigReq = GconfigReq((b) => b..vars.id = config);
+    client.request(getConfigReq).listen((event) {
+      setState(() {
+        _initialLoading = false;
+        messages.insert(
+          messages.length,
+          AIChatMessage(
+            event.data?.config.welcomeMessage,
+            null,
+            false,
+            false,
+            true,
+          ),
+        );
+      });
+    });
     startTimer();
     keyboardSubscription =
         keyboardVisibilityController.onChange.listen((bool visible) {
@@ -116,9 +124,8 @@ class AIPageState extends State<AIPage> {
           AIChatMessage(text, null, true, true, false),
         );
       });
-
       final config = GObjectIdBuilder();
-      config.value = AppConfig.aiConfig;
+      config.value = AppConfig.chatLemonAIConfig;
       final createPostReq = GRunReq(
         (b) => b
           ..vars.config = config
@@ -170,20 +177,6 @@ class AIPageState extends State<AIPage> {
       appBar: LemonAppBar(
         leading: Padding(
           padding: EdgeInsets.symmetric(horizontal: Spacing.small),
-          child: Row(
-            children: [
-              const LemonCircleAvatar(
-                isLemonIcon: true,
-              ),
-              SizedBox(width: Spacing.xSmall),
-              Text(
-                AIConstants.defaultAIChatbotName,
-                style: Typo.extraMedium,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ],
-          ),
         ),
         actions: [
           Padding(
@@ -192,7 +185,7 @@ class AIPageState extends State<AIPage> {
             child: InkWell(
               onTap: () {
                 Vibrate.feedback(FeedbackType.light);
-                showComingSoonDialog(context);
+                AutoRouter.of(context).pop();
               },
               child: Icon(
                 Icons.close_rounded,
@@ -279,6 +272,9 @@ class AIPageState extends State<AIPage> {
   }
 
   Widget _buildChatList() {
+    if (_initialLoading) {
+      return Loading.defaultLoading(context);
+    }
     return ListView.builder(
       controller: _scrollController,
       padding: EdgeInsets.symmetric(

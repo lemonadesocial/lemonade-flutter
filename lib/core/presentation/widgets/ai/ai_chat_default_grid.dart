@@ -107,7 +107,7 @@ class AIChatDefaultGrid extends StatelessWidget {
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         crossAxisSpacing: 10,
-        mainAxisSpacing: 10,
+        mainAxisSpacing: 2,
         childAspectRatio: 1,
       ),
       itemCount: aiChatDefaultGridData.length,

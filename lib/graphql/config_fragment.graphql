@@ -1,0 +1,13 @@
+fragment ConfigFields on Config {
+    _id
+    createdAt
+    updatedAt
+    avatar
+    description
+    isPublic
+    name
+    systemMessage
+    welcomeMessage
+    welcomeMetadata
+    __typename
+}

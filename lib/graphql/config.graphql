@@ -1,0 +1,8 @@
+# import './config_fragment.graphql'
+
+query config($id: ObjectId!) {
+    config(_id: $id) {
+        ...ConfigFields
+        __typename
+    }
+}
