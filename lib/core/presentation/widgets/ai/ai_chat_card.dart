@@ -31,7 +31,6 @@ class AIChatCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool? isUser = message.isUser;
-    bool? showDefaultGrid = message.showDefaultGrid;
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, authState) {
         if (authState is AuthStateAuthenticated) {
@@ -48,9 +47,7 @@ class AIChatCard extends StatelessWidget {
                       isUser,
                       authState.authSession,
                     ),
-                    additionalInfoSection: showDefaultGrid == true
-                        ? const AIChatDefaultGrid()
-                        : _buildButtons(context),
+                    additionalInfoSection: additionalInfoSection(context),
                     title: message.finishedAnimation == true
                         ? Text(
                             message.text ?? '',
@@ -145,5 +142,16 @@ class AIChatCard extends StatelessWidget {
         }
       },
     );
+  }
+
+  Widget additionalInfoSection(BuildContext context) {
+    bool? showDefaultGrid = message.showDefaultGrid;
+    if (message.finishedAnimation == true) {
+      return showDefaultGrid == true
+          ? const AIChatDefaultGrid()
+          : _buildButtons(context);
+    } else {
+      return const SizedBox();
+    }
   }
 }

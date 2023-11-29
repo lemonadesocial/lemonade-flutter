@@ -6,6 +6,7 @@ import 'package:app/core/utils/modal_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
+import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
@@ -104,7 +105,6 @@ class AIChatCommandView extends StatelessWidget {
       child: Container(
         height: 400.h,
         decoration: BoxDecoration(
-          color: colorScheme.surfaceVariant,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(20.r),
             topRight: Radius.circular(20.r),
@@ -112,12 +112,7 @@ class AIChatCommandView extends StatelessWidget {
           gradient: LinearGradient(
             begin: Alignment.bottomCenter,
             end: Alignment.topCenter,
-            colors: [
-              Colors.black.withOpacity(
-                1.0,
-              ),
-              const Color.fromRGBO(23, 23, 23, 1.0),
-            ],
+            colors: [LemonColor.black, LemonColor.chineseBlack],
           ),
         ),
         child: Column(

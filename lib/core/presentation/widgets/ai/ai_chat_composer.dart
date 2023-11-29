@@ -20,6 +20,7 @@ class AIChatComposer extends StatelessWidget {
     required this.textController,
     this.selectedCommand,
     required this.onToggleCommand,
+    this.onFocusChange,
   });
   final String inputString;
   final bool? loading;
@@ -28,6 +29,7 @@ class AIChatComposer extends StatelessWidget {
   final Function(String text) onChanged;
   final bool? selectedCommand;
   final Function() onToggleCommand;
+  final Function(bool focus)? onFocusChange;
 
   @override
   Widget build(BuildContext context) {
@@ -81,33 +83,38 @@ class AIChatComposer extends StatelessWidget {
               width: 6.w,
             ),
             Expanded(
-              child: TextField(
-                cursorColor: colorScheme.outline,
-                controller: textController,
-                onSubmitted: (value) => onSend(value),
-                onChanged: onChanged,
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.symmetric(
-                    vertical: Spacing.extraSmall,
-                    horizontal: Spacing.smMedium,
-                  ),
-                  hintText: 'Enter your prompt here',
-                  hintStyle: Typo.medium.copyWith(
-                    color: colorScheme.onPrimary.withOpacity(0.18),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(24.r),
-                    borderSide: BorderSide(
-                      color: colorScheme.outline,
+              child: FocusScope(
+                child: Focus(
+                  onFocusChange: (focus) => onFocusChange!(focus),
+                  child: TextField(
+                    cursorColor: colorScheme.outline,
+                    controller: textController,
+                    onSubmitted: (value) => onSend(value),
+                    onChanged: onChanged,
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.symmetric(
+                        vertical: Spacing.extraSmall,
+                        horizontal: Spacing.smMedium,
+                      ),
+                      hintText: 'Enter your prompt here',
+                      hintStyle: Typo.medium.copyWith(
+                        color: colorScheme.onPrimary.withOpacity(0.18),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(24.r),
+                        borderSide: BorderSide(
+                          color: colorScheme.outline,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(21),
+                        borderSide: BorderSide(
+                          color: colorScheme.outline,
+                        ),
+                      ),
+                      suffixIcon: _buildSendbutton(context),
                     ),
                   ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(21),
-                    borderSide: BorderSide(
-                      color: colorScheme.outline,
-                    ),
-                  ),
-                  suffixIcon: _buildSendbutton(context),
                 ),
               ),
             ),
