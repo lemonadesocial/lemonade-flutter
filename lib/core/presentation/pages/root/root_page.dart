@@ -6,7 +6,6 @@ import 'package:app/core/presentation/widgets/common/drawer/lemon_drawer.dart';
 import 'package:app/core/presentation/widgets/home/floating_create_button.dart';
 import 'package:app/core/presentation/widgets/poap/poap_claim_transfer_controller_widget/poap_claim_transfer_controller_widget.dart';
 import 'package:app/core/service/shorebird_codepush_service.dart';
-import 'package:app/core/utils/device_utils.dart';
 import 'package:app/core/utils/drawer_utils.dart';
 import 'package:app/core/utils/onboarding_utils.dart';
 import 'package:app/injection/register_module.dart';
