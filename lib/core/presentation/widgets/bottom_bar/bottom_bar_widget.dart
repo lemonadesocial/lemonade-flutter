@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/presentation/widgets/bottom_bar/app_tabs.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
@@ -16,7 +18,7 @@ import 'package:app/core/application/newsfeed/newsfeed_listing_bloc/newsfeed_lis
 class BottomBar extends StatefulWidget {
   const BottomBar({super.key});
 
-  static double get bottomBarHeight => 70.h;
+  static double get bottomBarHeight => Platform.isIOS ? 48.w : 64.w;
 
   @override
   BottomBarState createState() => BottomBarState();

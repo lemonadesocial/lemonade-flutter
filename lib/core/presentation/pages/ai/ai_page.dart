@@ -243,7 +243,7 @@ class AIPageState extends State<AIPage> {
                     }),
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),

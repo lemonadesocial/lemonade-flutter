@@ -35,7 +35,7 @@ class CustomListTile extends StatelessWidget {
                   additionalInfoSection != null
                       ? SizedBox(height: Spacing.small)
                       : const SizedBox(),
-                  additionalInfoSection ?? const SizedBox()
+                  additionalInfoSection ?? const SizedBox(),
                 ],
               ),
             ),
