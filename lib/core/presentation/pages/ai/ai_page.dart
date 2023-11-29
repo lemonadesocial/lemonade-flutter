@@ -242,25 +242,26 @@ class AIPageState extends State<AIPage> {
                 child: Container(
                   decoration: BoxDecoration(color: Theme.of(context).cardColor),
                   child: AIChatComposer(
-                      textController: _textController,
-                      inputString: inputString,
-                      onSend: onSend,
-                      loading: _loading,
-                      selectedCommand: _commandSelected,
-                      onChanged: (String text) {
-                        setState(() {
-                          inputString = text;
-                        });
-                      },
-                      onToggleCommand: () => setState(() {
-                            FocusScope.of(context).requestFocus(FocusNode());
-                            _commandSelected = !_commandSelected;
-                          }),
-                      onFocusChange: (focus) {
-                        setState(() {
-                          _commandSelected = false;
-                        });
-                      }),
+                    textController: _textController,
+                    inputString: inputString,
+                    onSend: onSend,
+                    loading: _loading,
+                    selectedCommand: _commandSelected,
+                    onChanged: (String text) {
+                      setState(() {
+                        inputString = text;
+                      });
+                    },
+                    onToggleCommand: () => setState(() {
+                      FocusScope.of(context).requestFocus(FocusNode());
+                      _commandSelected = !_commandSelected;
+                    }),
+                    onFocusChange: (focus) {
+                      setState(() {
+                        _commandSelected = false;
+                      });
+                    },
+                  ),
                 ),
               )
             ],
