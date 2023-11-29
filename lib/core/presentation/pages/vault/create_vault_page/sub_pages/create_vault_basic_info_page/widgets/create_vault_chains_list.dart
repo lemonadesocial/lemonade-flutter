@@ -43,7 +43,7 @@ class CreateVaultChainsList extends StatelessWidget {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  chainMetadata?.icon ?? SizedBox.shrink(),
+                  chainMetadata?.icon ?? const SizedBox.shrink(),
                   SizedBox(width: Spacing.extraSmall),
                   Text(chainMetadata?.displayName ?? ''),
                 ],
