@@ -100,10 +100,7 @@ class _RootPageViewState extends State<RootPage> {
                     onTap: () {
                       authState.maybeWhen(
                         authenticated: (session) =>
-                            const CreatePopUpPage().showAsBottomSheet(
-                          context,
-                          heightFactor: heightFactor,
-                        ),
+                            context.router.push(const AIRoute()),
                         orElse: () =>
                             context.router.navigate(const LoginRoute()),
                       );

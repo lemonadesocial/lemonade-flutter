@@ -71,7 +71,7 @@ class AIChatCommandView extends StatelessWidget {
         label: t.ai.discover.badges,
         onTap: () {
           Vibrate.feedback(FeedbackType.light);
-          showComingSoonDialog(context);
+          AutoRouter.of(context).navigate(PoapListingRoute());
         },
       ),
       AICommandViewModel(
