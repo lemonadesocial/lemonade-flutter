@@ -168,26 +168,21 @@ class AIPageState extends State<AIPage> {
     final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: LemonAppBar(
-        titleBuilder: (context) => Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 200),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const LemonCircleAvatar(
-                  isLemonIcon: true,
-                ),
-                SizedBox(width: Spacing.xSmall),
-                Flexible(
-                  child: Text(
-                    AIConstants.defaultAIChatbotName,
-                    style: Typo.extraMedium,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ],
-            ),
+        leading: Padding(
+          padding: EdgeInsets.symmetric(horizontal: Spacing.small),
+          child: Row(
+            children: [
+              const LemonCircleAvatar(
+                isLemonIcon: true,
+              ),
+              SizedBox(width: Spacing.xSmall),
+              Text(
+                AIConstants.defaultAIChatbotName,
+                style: Typo.extraMedium,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
           ),
         ),
         actions: [
@@ -200,8 +195,8 @@ class AIPageState extends State<AIPage> {
                 showComingSoonDialog(context);
               },
               child: Icon(
-                Icons.more_horiz,
-                size: 21,
+                Icons.close_rounded,
+                size: 24,
                 color: Theme.of(context).colorScheme.onSurface,
               ),
             ),
