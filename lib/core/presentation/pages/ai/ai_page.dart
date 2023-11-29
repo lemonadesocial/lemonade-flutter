@@ -110,7 +110,6 @@ class AIPageState extends State<AIPage> {
       if (inputString.trim().isEmpty || text!.trim().isEmpty) return;
       _textController.clear();
       setState(() {
-        _loading = true;
         inputString = '';
         messages.insert(
           messages.length,
@@ -126,7 +125,9 @@ class AIPageState extends State<AIPage> {
           ..vars.message = text
           ..vars.session = session,
       );
-
+      setState(() {
+        _loading = true;
+      });
       client.request(createPostReq).listen((event) {
         setState(() {
           _loading = false;
@@ -141,7 +142,6 @@ class AIPageState extends State<AIPage> {
             ),
           );
         });
-
         // Wait insert latest messages then scroll
         SchedulerBinding.instance.addPostFrameCallback((_) {
           triggerAutoScrollToEnd();
@@ -259,21 +259,19 @@ class AIPageState extends State<AIPage> {
   }
 
   Widget _buildChatList() {
-    return Expanded(
-      child: ListView.builder(
-        controller: _scrollController,
-        padding: EdgeInsets.symmetric(
-          vertical: 10.h,
-          horizontal: 10.w,
-        ),
-        itemCount: messages.length,
-        itemBuilder: (context, index) {
-          return AIChatCard(
-            message: messages[index],
-            onFinishedTypingAnimation: onFinishedTypingAnimation,
-          );
-        },
+    return ListView.builder(
+      controller: _scrollController,
+      padding: EdgeInsets.symmetric(
+        vertical: 10.h,
+        horizontal: 10.w,
       ),
+      itemCount: messages.length,
+      itemBuilder: (context, index) {
+        return AIChatCard(
+          message: messages[index],
+          onFinishedTypingAnimation: onFinishedTypingAnimation,
+        );
+      },
     );
   }
 }
