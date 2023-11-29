@@ -44,8 +44,6 @@ class _RootPageViewState extends State<RootPage> {
       url: AppConfig.appCastUrl,
       supportedOS: ['android', 'ios'],
     );
-
-    final isIpad = DeviceUtils.isIpad();
     final primaryColor = Theme.of(context).colorScheme.primary;
 
     return PaymentListener(
