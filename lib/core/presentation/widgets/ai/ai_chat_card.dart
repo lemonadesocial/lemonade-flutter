@@ -2,7 +2,6 @@ import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/domain/ai/ai_entities.dart';
 import 'package:app/core/domain/ai/ai_enums.dart';
 import 'package:app/core/domain/user/entities/user.dart';
-import 'package:app/core/presentation/pages/ai/ai_view_model.dart';
 import 'package:app/core/presentation/widgets/ai/ai_chat_default_grid.dart';
 import 'package:app/core/presentation/widgets/ai/ai_metadata_button_card.dart';
 import 'package:app/core/presentation/widgets/common/list_tile/custom_list_tile.dart';
@@ -90,9 +89,6 @@ class AIChatCard extends StatelessWidget {
                 ),
                 title: Text(message.text ?? ''),
               ),
-              SizedBox(
-                height: 10.h,
-              ),
             ],
           );
         } else {
@@ -122,15 +118,24 @@ class AIChatCard extends StatelessWidget {
     );
   }
 
-  Widget _buildButtons(BuildContext context) {
+  _buildButtons(BuildContext context) {
     if (message.metadata == null || message.metadata!.isEmpty) {
-      return const SizedBox();
+      return null;
     }
     final firstButton = message.metadata?['buttons']?[0];
-    final action = firstButton['action'];
-    AIChatGridViewModel targetObject = aiChatDefaultGridData.firstWhere(
-      (element) => element.action == action,
+    final firstButtonAction = firstButton['action'];
+
+    final targetObject = aiChatDefaultGridData.firstWhere(
+      (element) {
+        return element?.action.value == firstButtonAction;
+      },
+      orElse: () => null,
     );
+
+    if (targetObject == null) {
+      return null;
+    }
+
     return AIMetaDataCard(
       item: targetObject,
       onTap: () {

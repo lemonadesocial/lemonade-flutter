@@ -82,6 +82,7 @@ class AIChatComposer extends StatelessWidget {
             ),
             Expanded(
               child: TextField(
+                cursorColor: colorScheme.outline,
                 controller: textController,
                 onSubmitted: (value) => onSend(value),
                 onChanged: onChanged,

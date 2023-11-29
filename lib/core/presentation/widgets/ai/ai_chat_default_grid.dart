@@ -13,7 +13,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-final List<AIChatGridViewModel> aiChatDefaultGridData = [
+final List<AIChatGridViewModel?> aiChatDefaultGridData = [
   AIChatGridViewModel(
     action: AIMetadataAction.createPost,
     label: t.home.post,
@@ -114,7 +114,7 @@ class AIChatDefaultGrid extends StatelessWidget {
       itemBuilder: (BuildContext context, int gridIndex) {
         return AIGridItem(
           item: aiChatDefaultGridData[gridIndex],
-          onTap: () => {onTap(context, aiChatDefaultGridData[gridIndex])},
+          onTap: () => {onTap(context, aiChatDefaultGridData[gridIndex]!)},
         );
       },
     );
@@ -125,16 +125,16 @@ class AIGridItem extends StatelessWidget {
   const AIGridItem({Key? key, this.onTap, required this.item})
       : super(key: key);
   final Function()? onTap;
-  final AIChatGridViewModel item;
+  final AIChatGridViewModel? item;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final label = item.label;
-    final content = item.content;
-    final icon = item.icon;
-    final featureAvailable = item.featureAvailable;
-    final colors = item.colors;
+    final label = item?.label;
+    final content = item?.content;
+    final icon = item?.icon;
+    final featureAvailable = item?.featureAvailable;
+    final colors = item?.colors;
     return InkWell(
       onTap: onTap,
       child: GridTile(
@@ -151,7 +151,7 @@ class AIGridItem extends StatelessWidget {
                 gradient: RadialGradient(
                   radius: 1.1,
                   center: Alignment.bottomRight,
-                  colors: colors,
+                  colors: colors ?? [],
                 ),
                 shadows: [
                   BoxShadow(
@@ -165,7 +165,7 @@ class AIGridItem extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  icon,
+                  icon ?? const SizedBox(),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -174,7 +174,7 @@ class AIGridItem extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              label,
+                              label ?? '',
                               style: Typo.medium.copyWith(
                                 fontWeight: FontWeight.w600,
                                 fontFamily: FontFamily.nohemiVariable,
@@ -182,7 +182,7 @@ class AIGridItem extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              content,
+                              content ?? '',
                               style: Typo.xSmall.copyWith(
                                 fontWeight: FontWeight.w400,
                                 color: colorScheme.onPrimary.withOpacity(0.54),
@@ -197,7 +197,7 @@ class AIGridItem extends StatelessWidget {
                 ],
               ),
             ),
-            if (!featureAvailable)
+            if (!featureAvailable!)
               Positioned(
                 top: 0,
                 right: 0,

@@ -28,6 +28,8 @@ class CustomListTile extends StatelessWidget {
             SizedBox(width: Spacing.small),
             Expanded(
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   title,
                   additionalInfoSection != null
