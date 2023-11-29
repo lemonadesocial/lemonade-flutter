@@ -9,7 +9,6 @@ import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/utils/avatar_utils.dart';
 import 'package:app/router/app_router.gr.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -30,16 +29,18 @@ class AIChatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool? isUser = message.isUser;
+    final colorScheme = Theme.of(context).colorScheme;
+
+    bool? isUser = message.isUser ?? false;
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, authState) {
         if (authState is AuthStateAuthenticated) {
-          if (!isUser!) {
+          if (!isUser) {
             return Card(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.r),
               ),
-              color: LemonColor.darkCharcoalGray,
+              color: colorScheme.secondaryContainer,
               child: Column(
                 children: [
                   CustomListTile(
@@ -73,7 +74,9 @@ class AIChatCard extends StatelessWidget {
               ),
             );
           }
+
           return Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               ListTile(
                 contentPadding: EdgeInsets.symmetric(
@@ -107,7 +110,7 @@ class AIChatCard extends StatelessWidget {
     }
     return SizedBox(
       width: 42.w,
-      height: 42.h,
+      height: 42.w,
       child: const LemonCircleAvatar(
         isLemonIcon: true,
         lemonIconScale: 1.4,
@@ -115,9 +118,9 @@ class AIChatCard extends StatelessWidget {
     );
   }
 
-  _buildButtons(BuildContext context) {
+  Widget _buildButtons(BuildContext context) {
     if (message.metadata == null || message.metadata!.isEmpty) {
-      return null;
+      return const SizedBox.shrink();
     }
     final firstButton = message.metadata?['buttons']?[0];
     final firstButtonAction = firstButton['action'];
@@ -130,7 +133,7 @@ class AIChatCard extends StatelessWidget {
     );
 
     if (targetObject == null) {
-      return null;
+      return const SizedBox.shrink();
     }
 
     return AIMetaDataCard(
@@ -144,15 +147,13 @@ class AIChatCard extends StatelessWidget {
     );
   }
 
-  Widget? additionalInfoSection(BuildContext context) {
+  Widget additionalInfoSection(BuildContext context) {
     bool? showDefaultGrid = message.showDefaultGrid;
     if (message.finishedAnimation == true) {
-      if (showDefaultGrid == true) {
-        return const AIChatDefaultGrid();
-      }
-      return _buildButtons(context);
-    } else {
-      return const SizedBox();
+      return showDefaultGrid == true
+          ? const AIChatDefaultGrid()
+          : _buildButtons(context);
     }
+    return const SizedBox();
   }
 }

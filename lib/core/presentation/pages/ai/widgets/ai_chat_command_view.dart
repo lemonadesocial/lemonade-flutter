@@ -96,7 +96,7 @@ class AIChatCommandView extends StatelessWidget {
           Vibrate.feedback(FeedbackType.light);
           showComingSoonDialog(context);
         },
-      )
+      ),
     ];
     return Positioned(
       bottom: aiChatComposerHeight,
@@ -134,7 +134,7 @@ class AIChatCommandView extends StatelessWidget {
                 sectionLabel: t.ai.discoverCommand,
                 commandList: aiDiscoverList,
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -201,9 +201,9 @@ class Header extends StatelessWidget {
                         color: colorScheme.onPrimary,
                         fontWeight: FontWeight.w600,
                       ),
-                    )
+                    ),
                   ],
-                )
+                ),
               ],
             ),
           ),
