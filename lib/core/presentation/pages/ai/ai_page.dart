@@ -8,12 +8,9 @@ import 'package:app/core/utils/gql/ai_gql_client.dart';
 import 'package:app/core/config.dart';
 import 'package:app/core/presentation/widgets/ai/ai_chat_card.dart';
 import 'package:app/core/presentation/widgets/ai/ai_chat_composer.dart';
-import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
-import 'package:app/core/utils/modal_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/schemas/ai/__generated__/schema.schema.gql.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
@@ -134,8 +131,8 @@ class AIPageState extends State<AIPage> {
           messages.insert(
             messages.length,
             AIChatMessage(
-              event.data!.run.message,
-              event.data!.run.metadata,
+              event.data?.run.message,
+              event.data?.run.metadata,
               false,
               false,
               false,
@@ -167,32 +164,36 @@ class AIPageState extends State<AIPage> {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      appBar: LemonAppBar(
-        leading: Padding(
-          padding: EdgeInsets.symmetric(horizontal: Spacing.small),
-          child: Row(
-            children: [
-              const LemonCircleAvatar(
-                isLemonIcon: true,
-              ),
-              SizedBox(width: Spacing.xSmall),
-              Text(
-                AIConstants.defaultAIChatbotName,
-                style: Typo.extraMedium,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ],
+      appBar: AppBar(
+        shape: Border(
+          bottom: BorderSide(
+            color: colorScheme.outline,
           ),
+        ),
+        automaticallyImplyLeading: false,
+        titleSpacing: 0,
+        title: Row(
+          children: [
+            SizedBox(width: Spacing.smMedium),
+            const LemonCircleAvatar(
+              isLemonIcon: true,
+            ),
+            SizedBox(width: Spacing.xSmall),
+            Text(
+              AIConstants.defaultAIChatbotName,
+              style: Typo.extraMedium,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
         ),
         actions: [
           Padding(
-            padding:
-                EdgeInsets.only(left: Spacing.medium, right: Spacing.xSmall),
+            padding: EdgeInsets.only(right: Spacing.smMedium),
             child: InkWell(
               onTap: () {
                 Vibrate.feedback(FeedbackType.light);
-                showComingSoonDialog(context);
+                AutoRouter.of(context).pop();
               },
               child: Icon(
                 Icons.close_rounded,
@@ -207,7 +208,7 @@ class AIPageState extends State<AIPage> {
       body: SafeArea(
         child: Container(
           decoration: BoxDecoration(
-            color: LemonColor.atomicBlack,
+            color: colorScheme.background,
             borderRadius: BorderRadius.circular(20.r),
           ),
           child: Stack(
@@ -232,38 +233,35 @@ class AIPageState extends State<AIPage> {
                     ),
                     _commandSelected
                         ? const FullScreenOverlay()
-                        : const SizedBox()
+                        : const SizedBox(),
                   ],
                 ),
               ),
               _commandSelected ? const AIChatCommandView() : const SizedBox(),
               Align(
                 alignment: Alignment.bottomCenter,
-                child: Container(
-                  decoration: BoxDecoration(color: Theme.of(context).cardColor),
-                  child: AIChatComposer(
-                    textController: _textController,
-                    inputString: inputString,
-                    onSend: onSend,
-                    loading: _loading,
-                    selectedCommand: _commandSelected,
-                    onChanged: (String text) {
-                      setState(() {
-                        inputString = text;
-                      });
-                    },
-                    onToggleCommand: () => setState(() {
-                      FocusScope.of(context).requestFocus(FocusNode());
-                      _commandSelected = !_commandSelected;
-                    }),
-                    onFocusChange: (focus) {
-                      setState(() {
-                        _commandSelected = false;
-                      });
-                    },
-                  ),
+                child: AIChatComposer(
+                  textController: _textController,
+                  inputString: inputString,
+                  onSend: onSend,
+                  loading: _loading,
+                  selectedCommand: _commandSelected,
+                  onChanged: (String text) {
+                    setState(() {
+                      inputString = text;
+                    });
+                  },
+                  onToggleCommand: () => setState(() {
+                    FocusScope.of(context).requestFocus(FocusNode());
+                    _commandSelected = !_commandSelected;
+                  }),
+                  onFocusChange: (focus) {
+                    setState(() {
+                      _commandSelected = false;
+                    });
+                  },
                 ),
-              )
+              ),
             ],
           ),
         ),

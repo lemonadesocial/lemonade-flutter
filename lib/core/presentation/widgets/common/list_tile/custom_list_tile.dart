@@ -17,7 +17,7 @@ class CustomListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
       onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -28,14 +28,15 @@ class CustomListTile extends StatelessWidget {
             SizedBox(width: Spacing.small),
             Expanded(
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   title,
-                  additionalInfoSection != null
-                      ? SizedBox(height: Spacing.small)
-                      : const SizedBox(),
-                  additionalInfoSection ?? const SizedBox()
+                  if (additionalInfoSection != null) ...[
+                    SizedBox(height: Spacing.small),
+                    additionalInfoSection ?? const SizedBox(),
+                  ],
                 ],
               ),
             ),
