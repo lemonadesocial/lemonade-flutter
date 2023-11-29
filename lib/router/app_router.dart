@@ -230,12 +230,14 @@ final vaultRoutes = [
     page: CreateVaultRoute.page,
     children: [
       AutoRoute(
-        // initial: true,
+        initial: true,
         page: CreateVaultBasicInfoRoute.page,
       ),
       AutoRoute(
-        initial: true,
         page: CreateVaultSetupPhraseRoute.page,
+      ),
+      AutoRoute(
+        page: CreateVaultCheckPhraseRoute.page,
       ),
     ],
   ),

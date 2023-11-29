@@ -5,6 +5,7 @@ import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -64,6 +65,10 @@ class CreateVaultBasicInfoPage extends StatelessWidget {
                   vertical: Spacing.smMedium,
                 ),
                 child: LinearGradientButton(
+                  onTap: () {
+                    AutoRouter.of(context)
+                        .push(const CreateVaultSetupPhraseRoute());
+                  },
                   label: t.common.next,
                   radius: BorderRadius.circular(LemonRadius.small * 2),
                   height: Sizing.large,

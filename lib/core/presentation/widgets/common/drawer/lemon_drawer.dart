@@ -56,7 +56,7 @@ class LemonDrawer extends StatelessWidget {
                           const VaultsListingRoute(),
                         ),
                         orElse: () => context.router.navigate(
-                          const WalletRoute(),
+                          const LoginRoute(),
                         ),
                       );
                 },
