@@ -65,14 +65,17 @@ class DiscoverPage extends StatelessWidget {
           SliverPadding(
             padding: EdgeInsets.symmetric(vertical: Spacing.xSmall),
           ),
+          const DiscoverUpcomingEvents(),
+          SliverPadding(
+            padding: EdgeInsets.symmetric(vertical: Spacing.xSmall),
+          ),
           const DiscoverCommunities(),
           SliverPadding(
             padding: EdgeInsets.symmetric(vertical: Spacing.xSmall),
           ),
           const DiscoverBadgesNearYou(),
-          const DiscoverUpcomingEvents(),
           SliverToBoxAdapter(
-            child: SizedBox(height: 2 * BottomBar.bottomBarHeight),
+            child: SizedBox(height: 3 * BottomBar.bottomBarHeight),
           ),
         ],
       ),
