@@ -239,6 +239,9 @@ final vaultRoutes = [
       AutoRoute(
         page: CreateVaultCheckPhraseRoute.page,
       ),
+      AutoRoute(
+        page: CreateVaultSetupPinRoute.page,
+      ),
     ],
   ),
 ];

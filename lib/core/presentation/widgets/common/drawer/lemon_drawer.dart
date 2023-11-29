@@ -2,7 +2,6 @@ import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
-import 'package:app/core/service/feature_flag_service.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
