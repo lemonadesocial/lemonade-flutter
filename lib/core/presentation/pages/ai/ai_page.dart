@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:app/core/constants/ai/ai_constants.dart';
 import 'package:app/core/domain/ai/ai_entities.dart';
@@ -164,8 +165,10 @@ class AIPageState extends State<AIPage> {
 
   void _scrollToEnd() {
     _scrollController.animateTo(
-      _scrollController.position.maxScrollExtent +
-          MediaQuery.of(context).viewInsets.bottom,
+      Platform.isAndroid
+          ? _scrollController.position.maxScrollExtent +
+              MediaQuery.of(context).viewInsets.bottom
+          : _scrollController.position.maxScrollExtent,
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeOut,
     );
