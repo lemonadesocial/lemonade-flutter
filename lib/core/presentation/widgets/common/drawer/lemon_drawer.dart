@@ -2,6 +2,7 @@ import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/service/feature_flag_service.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -45,21 +46,22 @@ class LemonDrawer extends StatelessWidget {
           children: [
             SizedBox(height: Spacing.superExtraSmall),
             ...[
-              DrawerItem(
-                icon: Assets.icons.icBank,
-                label: t.vault.vault(n: 2),
-                onPressed: () {
-                  Vibrate.feedback(FeedbackType.light);
-                  context.read<AuthBloc>().state.maybeWhen(
-                        authenticated: (authSession) => context.router.push(
-                          const VaultsListingRoute(),
-                        ),
-                        orElse: () => context.router.navigate(
-                          const LoginRoute(),
-                        ),
-                      );
-                },
-              ),
+              if (FeatureFlagService.isWalletFeatureEnabled)
+                DrawerItem(
+                  icon: Assets.icons.icBank,
+                  label: t.vault.vault(n: 2),
+                  onPressed: () {
+                    Vibrate.feedback(FeedbackType.light);
+                    context.read<AuthBloc>().state.maybeWhen(
+                          authenticated: (authSession) => context.router.push(
+                            const VaultsListingRoute(),
+                          ),
+                          orElse: () => context.router.navigate(
+                            const LoginRoute(),
+                          ),
+                        );
+                  },
+                ),
               DrawerItem(
                 icon: Assets.icons.icChat,
                 label: t.common.chatAI,
