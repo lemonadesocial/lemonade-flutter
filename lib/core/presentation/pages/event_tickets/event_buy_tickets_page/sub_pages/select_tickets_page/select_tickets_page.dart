@@ -18,10 +18,10 @@ import 'package:app/core/presentation/widgets/common/button/lemon_outline_button
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
+import 'package:app/core/presentation/widgets/web3/chain/chain_query_widget.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/event_tickets_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
-import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -30,6 +30,7 @@ import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -358,35 +359,65 @@ class _SelectTicketViewState extends State<SelectTicketView> {
                                           ),
                                         );
                                       }
-                                      final chainMetadata =
-                                          Web3Utils.getNetworkMetadataById(
-                                        supportedPaymentNetworks[index - 1],
-                                      );
+
                                       final selected =
                                           supportedPaymentNetworks[index - 1] ==
                                               networkFilter;
                                       return Row(
                                         children: [
-                                          LemonOutlineButton(
-                                            onTap: () {
-                                              setState(() {
-                                                networkFilter =
-                                                    supportedPaymentNetworks[
-                                                        index - 1];
-                                              });
-                                            },
-                                            leading: chainMetadata?.icon,
-                                            label: chainMetadata?.displayName,
-                                            backgroundColor: selected
-                                                ? LemonColor.atomicBlack
-                                                : null,
-                                            textColor: selected
-                                                ? colorScheme.onPrimary
-                                                    .withOpacity(0.72)
-                                                : null,
-                                            borderColor: selected
-                                                ? Colors.transparent
-                                                : null,
+                                          ChainQuery(
+                                            chainId: supportedPaymentNetworks[
+                                                index - 1],
+                                            builder: (
+                                              chain, {
+                                              required bool isLoading,
+                                            }) =>
+                                                LemonOutlineButton(
+                                              onTap: () {
+                                                setState(() {
+                                                  networkFilter =
+                                                      supportedPaymentNetworks[
+                                                          index - 1];
+                                                });
+                                              },
+                                              leading: chain?.logoUrl != null
+                                                  ? ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                        Sizing.xSmall,
+                                                      ),
+                                                      child: CachedNetworkImage(
+                                                        imageUrl:
+                                                            chain?.logoUrl ??
+                                                                '',
+                                                        placeholder: (_, __) =>
+                                                            const SizedBox
+                                                                .shrink(),
+                                                        errorWidget: (
+                                                          _,
+                                                          __,
+                                                          ___,
+                                                        ) =>
+                                                            const SizedBox
+                                                                .shrink(),
+                                                        width: Sizing.xSmall,
+                                                        height: Sizing.xSmall,
+                                                        fit: BoxFit.cover,
+                                                      ),
+                                                    )
+                                                  : null,
+                                              label: chain?.name,
+                                              backgroundColor: selected
+                                                  ? LemonColor.atomicBlack
+                                                  : null,
+                                              textColor: selected
+                                                  ? colorScheme.onPrimary
+                                                      .withOpacity(0.72)
+                                                  : null,
+                                              borderColor: selected
+                                                  ? Colors.transparent
+                                                  : null,
+                                            ),
                                           ),
                                         ],
                                       );
