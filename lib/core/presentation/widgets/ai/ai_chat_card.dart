@@ -49,26 +49,7 @@ class AIChatCard extends StatelessWidget {
                       authState.authSession,
                     ),
                     additionalInfoSection: additionalInfoSection(context),
-                    title: message.finishedAnimation == true
-                        ? Text(
-                            message.text ?? '',
-                            style: Typo.medium.copyWith(
-                              fontWeight: FontWeight.w400,
-                            ),
-                          )
-                        : AnimatedTextKit(
-                            animatedTexts: [
-                              TypewriterAnimatedText(
-                                message.text ?? '',
-                                textStyle: Typo.medium.copyWith(
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                            ],
-                            repeatForever: false,
-                            totalRepeatCount: 1,
-                            onFinished: onFinishedTypingAnimation,
-                          ),
+                    title: _buildTextDisplay(),
                   ),
                 ],
               ),
@@ -114,6 +95,30 @@ class AIChatCard extends StatelessWidget {
       child: const LemonCircleAvatar(
         isLemonIcon: true,
         lemonIconScale: 1.4,
+      ),
+    );
+  }
+
+  Widget _buildTextDisplay() {
+    if (message.finishedAnimation == false) {
+      return AnimatedTextKit(
+        animatedTexts: [
+          TypewriterAnimatedText(
+            message.text ?? '',
+            textStyle: Typo.medium.copyWith(
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+        ],
+        repeatForever: false,
+        totalRepeatCount: 1,
+        onFinished: onFinishedTypingAnimation,
+      );
+    }
+    return Text(
+      message.text ?? '',
+      style: Typo.medium.copyWith(
+        fontWeight: FontWeight.w400,
       ),
     );
   }
