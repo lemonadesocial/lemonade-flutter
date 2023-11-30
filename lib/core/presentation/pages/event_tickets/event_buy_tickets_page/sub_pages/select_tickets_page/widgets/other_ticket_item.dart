@@ -4,10 +4,10 @@ import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_currency.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
+import 'package:app/core/presentation/widgets/web3/chain/chain_query_widget.dart';
 import 'package:app/core/utils/event_tickets_utils.dart';
 import 'package:app/core/utils/number_utils.dart';
 import 'package:app/core/utils/web3_utils.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -157,72 +157,86 @@ class _PriceItem extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final isCryptoCurrency = network != null;
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        Flexible(
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (isCryptoCurrency && price.network != null) ...[
-                Container(
-                  decoration: ShapeDecoration(
-                    color: LemonColor.chineseBlack,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                        Sizing.medium,
-                      ),
-                    ),
-                  ),
-                  width: Sizing.medium,
-                  height: Sizing.medium,
-                  child: Center(
-                    child:
-                        Web3Utils.getNetworkMetadataById(price.network!)?.icon,
-                  ),
-                ),
-                SizedBox(width: Spacing.xSmall),
-              ],
-              Flexible(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      isCryptoCurrency
-                          ? Web3Utils.formatCryptoCurrency(
-                              price.cryptoCost ?? BigInt.zero,
-                              currency: currency,
-                              decimals: decimals,
-                            )
-                          : NumberUtils.formatCurrency(
-                              amount: price.fiatCost ?? 0,
-                              currency: currency,
-                            ),
-                      style: Typo.medium.copyWith(
-                        color: colorScheme.onPrimary.withOpacity(0.87),
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    if (isCryptoCurrency && price.network != null) ...[
-                      SizedBox(height: 2.w),
-                      Text(
-                        Web3Utils.getNetworkMetadataById(price.network!)
-                                ?.displayName ??
-                            '',
-                        style: Typo.small.copyWith(
-                          color: colorScheme.onSecondary,
+    return ChainQuery(
+      chainId: price.network ?? '',
+      builder: (
+        chain, {
+        required isLoading,
+      }) =>
+          Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Flexible(
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (isCryptoCurrency && price.network != null) ...[
+                  Container(
+                    decoration: ShapeDecoration(
+                      color: colorScheme.surface,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                          Sizing.medium,
                         ),
                       ),
+                    ),
+                    width: Sizing.medium,
+                    height: Sizing.medium,
+                    child: Center(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(Sizing.xSmall),
+                        child: CachedNetworkImage(
+                          imageUrl: chain?.logoUrl ?? '',
+                          placeholder: (_, __) => const SizedBox.shrink(),
+                          errorWidget: (_, __, ___) => const SizedBox.shrink(),
+                          width: Sizing.xSmall,
+                          height: Sizing.xSmall,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: Spacing.xSmall),
+                ],
+                Flexible(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        isCryptoCurrency
+                            ? Web3Utils.formatCryptoCurrency(
+                                price.cryptoCost ?? BigInt.zero,
+                                currency: currency,
+                                decimals: decimals,
+                              )
+                            : NumberUtils.formatCurrency(
+                                amount: price.fiatCost ?? 0,
+                                currency: currency,
+                              ),
+                        style: Typo.medium.copyWith(
+                          color: colorScheme.onPrimary.withOpacity(0.87),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      if (isCryptoCurrency && price.network != null) ...[
+                        SizedBox(height: 2.w),
+                        Text(
+                          chain?.name ?? '',
+                          style: Typo.small.copyWith(
+                            color: colorScheme.onSecondary,
+                          ),
+                        ),
+                      ],
                     ],
-                  ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

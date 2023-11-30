@@ -3,6 +3,8 @@
 import 'package:app/core/domain/web3/entities/chain_metadata.dart';
 import 'package:app/gen/assets.gen.dart';
 
+const zeroAddress = "0x0000000000000000000000000000000000000000";
+
 // TESTNET
 final GOERLI = ChainMetadata(
   id: "5",
