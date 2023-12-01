@@ -110,7 +110,8 @@ class GuestEventDetailClock extends StatelessWidget {
                               child: CachedNetworkImage(
                                 fit: BoxFit.cover,
                                 imageUrl: EventUtils.getEventThumbnailUrl(
-                                    event: event),
+                                  event: event,
+                                ),
                                 errorWidget: (context, url, error) =>
                                     ImagePlaceholder.defaultPlaceholder(),
                                 placeholder: (context, url) =>
