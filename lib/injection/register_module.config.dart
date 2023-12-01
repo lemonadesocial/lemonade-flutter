@@ -33,6 +33,7 @@ import 'package:app/core/data/report/repository/report_repository_impl.dart'
 import 'package:app/core/data/token/token_repository_impl.dart' as _i39;
 import 'package:app/core/data/user/user_repository_impl.dart' as _i41;
 import 'package:app/core/data/wallet/wallet_repository_impl.dart' as _i44;
+import 'package:app/core/data/web3/web3_repository_impl.dart' as _i46;
 import 'package:app/core/domain/ai/ai_repository.dart' as _i5;
 import 'package:app/core/domain/badge/badge_repository.dart' as _i9;
 import 'package:app/core/domain/community/community_repository.dart' as _i12;
@@ -51,6 +52,7 @@ import 'package:app/core/domain/report/report_repository.dart' as _i34;
 import 'package:app/core/domain/token/token_repository.dart' as _i38;
 import 'package:app/core/domain/user/user_repository.dart' as _i40;
 import 'package:app/core/domain/wallet/wallet_repository.dart' as _i43;
+import 'package:app/core/domain/web3/web3_repository.dart' as _i45;
 import 'package:app/core/oauth/oauth.dart' as _i7;
 import 'package:app/core/service/badge/badge_service.dart' as _i11;
 import 'package:app/core/service/firebase/firebase_service.dart' as _i20;
@@ -113,6 +115,7 @@ extension GetItInjectableX on _i1.GetIt {
         () => _i42.WalletConnectService());
     gh.lazySingleton<_i4.WalletGQL>(() => _i4.WalletGQL());
     gh.lazySingleton<_i43.WalletRepository>(() => _i44.WalletRepositoryImpl());
+    gh.lazySingleton<_i45.Web3Repository>(() => _i46.Web3RepositoryIml());
     return this;
   }
 }

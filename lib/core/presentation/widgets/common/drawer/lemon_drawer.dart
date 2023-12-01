@@ -49,15 +49,15 @@ class LemonDrawer extends StatelessWidget {
               if (FeatureFlagService.isWalletFeatureEnabled)
                 DrawerItem(
                   icon: Assets.icons.icBank,
-                  label: t.common.vault,
-                  featureAvailable: false,
+                  label: t.vault.vault(n: 2),
                   onPressed: () {
                     Vibrate.feedback(FeedbackType.light);
                     context.read<AuthBloc>().state.maybeWhen(
-                          authenticated: (authSession) =>
-                              context.router.push(const CommunityRoute()),
+                          authenticated: (authSession) => context.router.push(
+                            const VaultsListingRoute(),
+                          ),
                           orElse: () => context.router.navigate(
-                            const WalletRoute(),
+                            const LoginRoute(),
                           ),
                         );
                   },

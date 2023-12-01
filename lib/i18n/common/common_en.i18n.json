@@ -44,7 +44,8 @@
         "unBlock": "Unblock",
         "success": "Success",
         "setLocation": "Set location services",
-        "view": "View"
+        "view": "View",
+        "copy": "Copy"
     },
     "followed": "Followed",
     "anonymous": "anonymous",
