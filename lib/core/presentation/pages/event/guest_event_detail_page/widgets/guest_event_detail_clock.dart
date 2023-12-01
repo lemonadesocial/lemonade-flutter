@@ -14,7 +14,6 @@ import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:duration/duration.dart';
-import 'package:duration/locale.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -117,12 +116,12 @@ class GuestEventDetailClock extends StatelessWidget {
                             ? t.event.eventStartIn(
                                 time: printDuration(
                                   durationToEvent!,
-                                  tersity: DurationTersity.minute,
+                                  tersity: (durationToEvent?.inDays ?? 0) < 1
+                                      ? (durationToEvent?.inHours ?? 0) >= 1
+                                          ? DurationTersity.hour
+                                          : DurationTersity.minute
+                                      : DurationTersity.day,
                                   upperTersity: DurationTersity.day,
-                                  abbreviated: true,
-                                  spacer: '',
-                                  delimiter: ' ',
-                                  locale: CustomDurationLocale(),
                                 ),
                               )
                             : t.event.eventEnded,
@@ -170,16 +169,5 @@ class GuestEventDetailClock extends StatelessWidget {
         ],
       ),
     );
-  }
-}
-
-class CustomDurationLocale extends EnglishDurationLocale {
-  @override
-  String minute(int amount, [bool abbreviated = true]) {
-    if (abbreviated) {
-      return 'm';
-    } else {
-      return 'minute${amount.abs() != 1 ? 's' : ''}';
-    }
   }
 }

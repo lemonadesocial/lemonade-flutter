@@ -28,6 +28,8 @@ class PostGuestEventDetailView extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+    final bottomPadding = MediaQuery.of(context).padding.bottom;
+
     return Scaffold(
       backgroundColor: colorScheme.primary,
       body: BlocBuilder<GetEventDetailBloc, GetEventDetailState>(
@@ -40,6 +42,7 @@ class PostGuestEventDetailView extends StatelessWidget {
           loading: () => Loading.defaultLoading(context),
           fetched: (event) {
             return SafeArea(
+              bottom: false,
               child: CustomScrollView(
                 physics: const BouncingScrollPhysics(),
                 slivers: [
@@ -92,13 +95,9 @@ class PostGuestEventDetailView extends StatelessWidget {
                         top: Spacing.smMedium * 2,
                       ),
                     ),
-                    SliverPadding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-                      sliver: SliverToBoxAdapter(
-                        child: GuestEventPoapOffers(
-                          event: event,
-                        ),
+                    SliverToBoxAdapter(
+                      child: GuestEventPoapOffers(
+                        event: event,
                       ),
                     ),
                   ],
@@ -140,6 +139,9 @@ class PostGuestEventDetailView extends StatelessWidget {
                   ),
                   SliverToBoxAdapter(
                     child: GuestEventDetailHosts(event: event),
+                  ),
+                  SliverToBoxAdapter(
+                    child: SizedBox(height: bottomPadding),
                   ),
                 ],
               ),

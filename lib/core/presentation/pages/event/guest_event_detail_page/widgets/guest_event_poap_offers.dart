@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class GuestEventPoapOffers extends StatelessWidget {
-  const GuestEventPoapOffers({
+  GuestEventPoapOffers({
     super.key,
     required this.event,
   });
@@ -78,13 +78,27 @@ class GuestEventPoapOffers extends StatelessWidget {
                 );
               }
 
+              if (eventPoapOffers.length == 1) {
+                return Container(
+                  padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+                  child: GuestEventPoapOfferItem(
+                    offer: eventPoapOffers.first,
+                    token: tokens.firstOrNull,
+                  ),
+                );
+              }
+
               return ListView.separated(
+                padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
                 scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) => GuestEventPoapOfferItem(
-                  offer: eventPoapOffers[index],
-                  token: tokens.isNotEmpty && index <= tokens.length - 1
-                      ? tokens[index]
-                      : null,
+                itemBuilder: (context, index) => SizedBox(
+                  width: 315.w,
+                  child: GuestEventPoapOfferItem(
+                    offer: eventPoapOffers[index],
+                    token: tokens.isNotEmpty && index <= tokens.length - 1
+                        ? tokens[index]
+                        : null,
+                  ),
                 ),
                 separatorBuilder: (context, index) => SizedBox(
                   width: Spacing.extraSmall,

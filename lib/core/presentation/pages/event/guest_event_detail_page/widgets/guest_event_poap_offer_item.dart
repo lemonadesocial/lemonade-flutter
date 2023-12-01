@@ -79,53 +79,44 @@ class GuestEventPoapOfferItemState extends State<GuestEventPoapOfferItemView>
     final colorScheme = Theme.of(context).colorScheme;
 
     return SizedBox(
-      width: 315.w,
       height: 229.w,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(15.r),
         child: Stack(
           children: [
-            Positioned.fill(
-              child: ImageFiltered(
-                imageFilter: ImageFilter.blur(
-                  sigmaX: 30,
-                  sigmaY: 30,
-                ),
-                child: SizedBox(
-                  child: FutureBuilder(
-                    future: MediaUtils.getNftMedia(
-                      widget.token?.metadata?.image,
-                      widget.token?.metadata?.animation_url,
-                    ),
-                    builder: (context, snapshot) => Container(
-                      width: Sizing.medium * 2,
-                      height: Sizing.medium * 2,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(
-                          LemonRadius.small,
-                        ),
+            Positioned(
+              top: Spacing.superExtraSmall,
+              left: Spacing.superExtraSmall,
+              child: SizedBox(
+                width: Sizing.xLarge * 2,
+                height: Sizing.xLarge * 2,
+                child: FutureBuilder(
+                  future: MediaUtils.getNftMedia(
+                    widget.token?.metadata?.image,
+                    widget.token?.metadata?.animation_url,
+                  ),
+                  builder: (context, snapshot) => Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(
+                        LemonRadius.small,
                       ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(LemonRadius.xSmall),
-                        child: CachedNetworkImage(
-                          fit: BoxFit.cover,
-                          imageUrl: snapshot.data?.url ?? '',
-                          placeholder: (_, __) =>
-                              ImagePlaceholder.defaultPlaceholder(),
-                          errorWidget: (_, __, ___) =>
-                              ImagePlaceholder.defaultPlaceholder(),
-                        ),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(LemonRadius.xSmall),
+                      child: CachedNetworkImage(
+                        fit: BoxFit.cover,
+                        imageUrl: snapshot.data?.url ?? '',
+                        placeholder: (_, __) =>
+                            ImagePlaceholder.defaultPlaceholder(),
+                        errorWidget: (_, __, ___) =>
+                            ImagePlaceholder.defaultPlaceholder(),
                       ),
                     ),
                   ),
                 ),
               ),
             ),
-            Positioned.fill(
-              child: Container(
-                color: colorScheme.primary.withOpacity(0.8),
-              ),
-            ),
+            const Blur(),
             Container(
               decoration: BoxDecoration(
                 color: colorScheme.onPrimary.withOpacity(0.05),
@@ -286,6 +277,33 @@ class GuestEventPoapOfferItemState extends State<GuestEventPoapOfferItemView>
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class Blur extends StatelessWidget {
+  const Blur({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: Sizing.xLarge * 3.5,
+      height: Sizing.xLarge * 3.5,
+      child: ClipRRect(
+        child: BackdropFilter(
+          filter: ImageFilter.blur(
+            sigmaX: 50,
+            sigmaY: 50,
+          ),
+          child: Container(
+            width: Sizing.xLarge * 3.5,
+            height: Sizing.xLarge * 3.5,
+            color: Colors.black.withOpacity(0.5),
+          ),
         ),
       ),
     );
