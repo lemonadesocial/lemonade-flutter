@@ -4,7 +4,6 @@ import 'package:app/core/application/poap/claim_poap_bloc/claim_poap_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/poap/input/poap_input.dart';
 import 'package:app/core/domain/token/entities/token_entities.dart';
-import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
@@ -19,6 +18,7 @@ import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -116,7 +116,7 @@ class GuestEventPoapOfferItemState extends State<GuestEventPoapOfferItemView>
                 ),
               ),
             ),
-            const Blur(),
+            const _Blur(),
             Container(
               decoration: BoxDecoration(
                 color: colorScheme.onPrimary.withOpacity(0.05),
@@ -222,19 +222,40 @@ class GuestEventPoapOfferItemState extends State<GuestEventPoapOfferItemView>
                       }
 
                       if (hasClaimed) {
-                        return SizedBox(
+                        return Container(
                           height: 42.w,
-                          child: LemonOutlineButton(
-                            leading: ThemeSvgIcon(
-                              color: colorScheme.onSurfaceVariant,
-                              builder: (filter) =>
-                                  Assets.icons.icDone.svg(colorFilter: filter),
-                            ),
-                            label: StringUtils.capitalize(t.nft.claimed),
-                            textStyle: Typo.medium.copyWith(
-                              fontWeight: FontWeight.w600,
-                              fontFamily: FontFamily.nohemiVariable,
-                              color: colorScheme.onSurfaceVariant,
+                          decoration: BoxDecoration(
+                            borderRadius:
+                                BorderRadius.circular(LemonRadius.xSmall),
+                            color: colorScheme.onPrimary.withOpacity(0.06),
+                          ),
+                          child: DottedBorder(
+                            strokeWidth: 1.w,
+                            color: colorScheme.outline,
+                            dashPattern: [5.w],
+                            borderType: BorderType.RRect,
+                            radius: Radius.circular(LemonRadius.xSmall),
+                            child: Center(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  ThemeSvgIcon(
+                                    color: colorScheme.onSurfaceVariant,
+                                    builder: (filter) => Assets.icons.icDone
+                                        .svg(colorFilter: filter),
+                                  ),
+                                  SizedBox(width: Spacing.xSmall),
+                                  Text(
+                                    StringUtils.capitalize(t.nft.claimed),
+                                    style: Typo.medium.copyWith(
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: FontFamily.nohemiVariable,
+                                      color: colorScheme.onSurfaceVariant,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         );
@@ -283,10 +304,8 @@ class GuestEventPoapOfferItemState extends State<GuestEventPoapOfferItemView>
   }
 }
 
-class Blur extends StatelessWidget {
-  const Blur({
-    super.key,
-  });
+class _Blur extends StatelessWidget {
+  const _Blur();
 
   @override
   Widget build(BuildContext context) {

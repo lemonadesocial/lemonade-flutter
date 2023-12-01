@@ -118,12 +118,14 @@ final getEventDetailQuery = gql('''
   $eventFragment
   $eventOfferFragment
   $eventPaymentAccountFragment
+  $eventTicketTypesFragment
 
   query(\$id: MongoID!) {
     getEvent(_id: \$id) {
       ...eventFields
       ...eventOfferFragment
       ...eventPaymentAccountFragment
+      ...eventTicketTypesFragment
     }
   }
 ''');
