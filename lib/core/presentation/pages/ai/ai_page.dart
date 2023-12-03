@@ -11,6 +11,7 @@ import 'package:app/core/config.dart';
 import 'package:app/core/presentation/widgets/ai/ai_chat_card.dart';
 import 'package:app/core/presentation/widgets/ai/ai_chat_composer.dart';
 import 'package:app/graphql/__generated__/config.req.gql.dart';
+import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/schemas/ai/__generated__/schema.schema.gql.dart';
 import 'package:app/theme/spacing.dart';
@@ -53,20 +54,25 @@ class AIPageState extends State<AIPage> {
   Timer? _timer;
   bool _needScrollToEnd = false;
   bool _commandSelected = false;
+  StreamSubscription? _subscription;
 
   @override
   void initState() {
     super.initState();
     final config = GObjectIdBuilder();
-    config.value = AppConfig.chatLemonAIConfig;
+    config.value = AppConfig.aiConfig;
     final getConfigReq = GconfigReq((b) => b..vars.id = config);
-    client.request(getConfigReq).listen((event) {
+    _subscription = client.request(getConfigReq).listen((event) {
+      final t = Translations.of(context);
       setState(() {
         _initialLoading = false;
         messages.insert(
           messages.length,
           AIChatMessage(
-            event.data?.config.welcomeMessage,
+            event.data?.config.welcomeMessage ??
+                t.ai.initialAIMessage(
+                  botName: AIConstants.defaultAIChatbotName,
+                ),
             null,
             false,
             false,
@@ -91,6 +97,7 @@ class AIPageState extends State<AIPage> {
   @override
   void dispose() {
     keyboardSubscription.cancel();
+    _subscription?.cancel();
     _timer?.cancel();
     super.dispose();
   }
@@ -113,7 +120,7 @@ class AIPageState extends State<AIPage> {
     startTimer();
   }
 
-  void onSend(String? text) {
+  void onSend(String? text) async {
     try {
       Vibrate.feedback(FeedbackType.light);
       FocusScope.of(context).unfocus();
@@ -127,7 +134,7 @@ class AIPageState extends State<AIPage> {
         );
       });
       final config = GObjectIdBuilder();
-      config.value = AppConfig.chatLemonAIConfig;
+      config.value = AppConfig.aiConfig;
       final createPostReq = GRunReq(
         (b) => b
           ..vars.config = config
@@ -137,7 +144,10 @@ class AIPageState extends State<AIPage> {
       setState(() {
         _loading = true;
       });
-      client.request(createPostReq).listen((event) {
+      if (_subscription != null) {
+        await _subscription?.cancel();
+      }
+      _subscription = client.request(createPostReq).listen((event) {
         setState(() {
           _loading = false;
           messages.insert(
