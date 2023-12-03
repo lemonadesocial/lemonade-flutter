@@ -1,4 +1,5 @@
 import 'package:app/core/data/event/dtos/event_ticket_types_dto/event_ticket_types_dto.dart';
+import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -66,6 +67,7 @@ class PurchasableTicketType with _$PurchasableTicketType {
     List<EventTicketPrice>? prices,
     String? defaultCurrency,
     EventTicketPrice? defaultPrice,
+    List<DbFile>? photosExpanded,
   }) = _PurchasableTicketType;
 
   factory PurchasableTicketType.fromDto(PurchasableTicketTypeDto dto) =>
@@ -88,6 +90,9 @@ class PurchasableTicketType with _$PurchasableTicketType {
         title: dto.title,
         prices: List.from(dto.prices ?? [])
             .map((item) => EventTicketPrice.fromDto(item))
+            .toList(),
+        photosExpanded: List.from(dto.photosExpanded ?? [])
+            .map((item) => DbFile.fromDto(item))
             .toList(),
       );
 }

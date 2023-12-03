@@ -1,3 +1,4 @@
+import 'package:app/core/data/common/dtos/common_dtos.dart';
 import 'package:app/core/data/event/dtos/event_dtos.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -45,6 +46,7 @@ class PurchasableTicketTypeDto with _$PurchasableTicketTypeDto {
     List<EventOfferDto>? offers,
     List<String>? photos,
     String? title,
+    @JsonKey(name: 'photos_expanded') List<DbFileDto>? photosExpanded,
   }) = _PurchasableTicketTypeDto;
 
   factory PurchasableTicketTypeDto.fromJson(Map<String, dynamic> json) =>

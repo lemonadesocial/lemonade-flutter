@@ -58,6 +58,10 @@ const eventTicketTypesFragment = '''
         network
       }
       description
+      photos_expanded(limit: 1) {
+        key
+        bucket
+      }
     }
   }
 ''';
