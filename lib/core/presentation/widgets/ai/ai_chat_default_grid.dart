@@ -107,7 +107,7 @@ class AIChatDefaultGrid extends StatelessWidget {
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         crossAxisSpacing: 10,
-        mainAxisSpacing: 10,
+        mainAxisSpacing: 2,
         childAspectRatio: 1,
       ),
       itemCount: aiChatDefaultGridData.length,
@@ -148,16 +148,16 @@ class AIGridItem extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15.r),
                 ),
-                gradient: RadialGradient(
-                  radius: 1.1,
-                  center: Alignment.bottomRight,
+                gradient: LinearGradient(
+                  begin: Alignment.bottomRight,
+                  end: Alignment.topLeft,
                   colors: colors ?? [],
                 ),
                 shadows: [
                   BoxShadow(
                     color: LemonColor.white06,
-                    offset: const Offset(-1, -1),
-                    spreadRadius: 1,
+                    offset: const Offset(-0.6, -0.6),
+                    spreadRadius: 0.6,
                   ),
                 ],
               ),

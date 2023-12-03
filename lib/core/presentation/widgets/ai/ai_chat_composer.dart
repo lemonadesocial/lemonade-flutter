@@ -2,6 +2,7 @@ import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/modal_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/theme/color.dart';
+import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,7 @@ class AIChatComposer extends StatelessWidget {
     required this.textController,
     this.selectedCommand,
     required this.onToggleCommand,
+    this.onFocusChange,
   });
   final String inputString;
   final bool? loading;
@@ -28,6 +30,7 @@ class AIChatComposer extends StatelessWidget {
   final Function(String text) onChanged;
   final bool? selectedCommand;
   final Function() onToggleCommand;
+  final Function(bool focus)? onFocusChange;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +40,7 @@ class AIChatComposer extends StatelessWidget {
       child: Container(
         height: aiChatComposerHeight,
         decoration: BoxDecoration(
-          color: LemonColor.atomicBlack,
+          color: colorScheme.background,
           border: Border(
             top: BorderSide(
               width: 1.h,
@@ -51,7 +54,8 @@ class AIChatComposer extends StatelessWidget {
           children: [
             InkWell(
               child: Container(
-                height: 48.h,
+                height: Sizing.small * 2,
+                width: Sizing.medium,
                 padding: EdgeInsets.symmetric(horizontal: Spacing.extraSmall),
                 decoration: BoxDecoration(
                   color: selectedCommand == true
@@ -59,15 +63,15 @@ class AIChatComposer extends StatelessWidget {
                       : LemonColor.white09,
                   borderRadius: BorderRadius.circular(24.r),
                 ),
-                child: SizedBox(
-                  width: 15.w,
-                  height: 15.h,
+                child: Center(
                   child: ThemeSvgIcon(
                     color: selectedCommand == true
                         ? LemonColor.paleViolet
                         : colorScheme.onSecondary,
                     builder: (filter) => Assets.icons.icCommand.svg(
                       colorFilter: filter,
+                      width: Sizing.xSmall,
+                      height: Sizing.xSmall,
                     ),
                   ),
                 ),
@@ -81,33 +85,38 @@ class AIChatComposer extends StatelessWidget {
               width: 6.w,
             ),
             Expanded(
-              child: TextField(
-                cursorColor: colorScheme.outline,
-                controller: textController,
-                onSubmitted: (value) => onSend(value),
-                onChanged: onChanged,
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.symmetric(
-                    vertical: Spacing.extraSmall,
-                    horizontal: Spacing.smMedium,
-                  ),
-                  hintText: 'Enter your prompt here',
-                  hintStyle: Typo.medium.copyWith(
-                    color: colorScheme.onPrimary.withOpacity(0.18),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(24.r),
-                    borderSide: BorderSide(
-                      color: colorScheme.outline,
+              child: FocusScope(
+                child: Focus(
+                  onFocusChange: (focus) => onFocusChange!(focus),
+                  child: TextField(
+                    cursorColor: colorScheme.outline,
+                    controller: textController,
+                    onSubmitted: (value) => onSend(value),
+                    onChanged: onChanged,
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.symmetric(
+                        vertical: Spacing.extraSmall,
+                        horizontal: Spacing.smMedium,
+                      ),
+                      hintText: 'Enter your prompt here',
+                      hintStyle: Typo.medium.copyWith(
+                        color: colorScheme.onSurfaceVariant,
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(24.r),
+                        borderSide: BorderSide(
+                          color: colorScheme.outline,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(21),
+                        borderSide: BorderSide(
+                          color: colorScheme.outline,
+                        ),
+                      ),
+                      suffixIcon: _buildSendbutton(context),
                     ),
                   ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(21),
-                    borderSide: BorderSide(
-                      color: colorScheme.outline,
-                    ),
-                  ),
-                  suffixIcon: _buildSendbutton(context),
                 ),
               ),
             ),
@@ -141,6 +150,7 @@ class AIChatComposer extends StatelessWidget {
             ),
             onPressed: () => onSend(inputString),
           );
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 4.0),
       child: loading == true
@@ -156,7 +166,10 @@ class AIChatComposer extends StatelessWidget {
                 ),
               ),
             )
-          : Transform.scale(scale: 0.35, child: icon),
+          : Transform.scale(
+              scale: 0.35,
+              child: icon,
+            ),
     );
   }
 }
