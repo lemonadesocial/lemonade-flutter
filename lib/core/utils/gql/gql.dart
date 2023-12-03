@@ -143,3 +143,12 @@ class GeoLocationBasedGQL extends BaseGQL {
           customLinks: [link],
         );
 }
+
+@lazySingleton
+class AIGQL extends BaseGQL {
+  AIGQL()
+      : super(
+          httpUrl: AppConfig.aiUrl,
+          wssUrl: AppConfig.wssAIUrl,
+        );
+}

@@ -1,19 +1,19 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:app/core/constants/ai/ai_constants.dart';
 import 'package:app/core/domain/ai/ai_entities.dart';
 import 'package:app/core/presentation/pages/ai/widgets/ai_chat_command_view.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
+import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/utils/gql/ai_gql_client.dart';
 import 'package:app/core/config.dart';
 import 'package:app/core/presentation/widgets/ai/ai_chat_card.dart';
 import 'package:app/core/presentation/widgets/ai/ai_chat_composer.dart';
-import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
-import 'package:app/core/utils/modal_utils.dart';
+import 'package:app/graphql/__generated__/config.req.gql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/schemas/ai/__generated__/schema.schema.gql.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
@@ -41,18 +41,11 @@ class AIPageState extends State<AIPage> {
   final client = getIt<AIClient>().client;
   final ScrollController _scrollController = ScrollController();
   final String session = uuid.v4();
-  bool _loading = false;
   late String inputString = '';
+  bool _loading = false;
+  bool _initialLoading = true;
 
-  List<AIChatMessage> messages = [
-    AIChatMessage(
-      t.ai.initialAIMessage(botName: AIConstants.defaultAIChatbotName),
-      null,
-      false,
-      false,
-      true,
-    ),
-  ];
+  List<AIChatMessage> messages = [];
 
   final TextEditingController _textController = TextEditingController();
 
@@ -61,10 +54,33 @@ class AIPageState extends State<AIPage> {
   Timer? _timer;
   bool _needScrollToEnd = false;
   bool _commandSelected = false;
+  StreamSubscription? _subscription;
 
   @override
   void initState() {
     super.initState();
+    final config = GObjectIdBuilder();
+    config.value = AppConfig.aiConfig;
+    final getConfigReq = GconfigReq((b) => b..vars.id = config);
+    _subscription = client.request(getConfigReq).listen((event) {
+      final t = Translations.of(context);
+      setState(() {
+        _initialLoading = false;
+        messages.insert(
+          messages.length,
+          AIChatMessage(
+            event.data?.config.welcomeMessage ??
+                t.ai.initialAIMessage(
+                  botName: AIConstants.defaultAIChatbotName,
+                ),
+            null,
+            false,
+            false,
+            true,
+          ),
+        );
+      });
+    });
     startTimer();
     keyboardSubscription =
         keyboardVisibilityController.onChange.listen((bool visible) {
@@ -81,6 +97,7 @@ class AIPageState extends State<AIPage> {
   @override
   void dispose() {
     keyboardSubscription.cancel();
+    _subscription?.cancel();
     _timer?.cancel();
     super.dispose();
   }
@@ -103,7 +120,7 @@ class AIPageState extends State<AIPage> {
     startTimer();
   }
 
-  void onSend(String? text) {
+  void onSend(String? text) async {
     try {
       Vibrate.feedback(FeedbackType.light);
       FocusScope.of(context).unfocus();
@@ -116,7 +133,6 @@ class AIPageState extends State<AIPage> {
           AIChatMessage(text, null, true, true, false),
         );
       });
-
       final config = GObjectIdBuilder();
       config.value = AppConfig.aiConfig;
       final createPostReq = GRunReq(
@@ -128,14 +144,17 @@ class AIPageState extends State<AIPage> {
       setState(() {
         _loading = true;
       });
-      client.request(createPostReq).listen((event) {
+      if (_subscription != null) {
+        await _subscription?.cancel();
+      }
+      _subscription = client.request(createPostReq).listen((event) {
         setState(() {
           _loading = false;
           messages.insert(
             messages.length,
             AIChatMessage(
-              event.data!.run.message,
-              event.data!.run.metadata,
+              event.data?.run.message,
+              event.data?.run.metadata,
               false,
               false,
               false,
@@ -156,8 +175,10 @@ class AIPageState extends State<AIPage> {
 
   void _scrollToEnd() {
     _scrollController.animateTo(
-      _scrollController.position.maxScrollExtent +
-          MediaQuery.of(context).viewInsets.bottom,
+      Platform.isAndroid
+          ? _scrollController.position.maxScrollExtent +
+              MediaQuery.of(context).viewInsets.bottom
+          : _scrollController.position.maxScrollExtent,
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeOut,
     );
@@ -167,41 +188,40 @@ class AIPageState extends State<AIPage> {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      appBar: LemonAppBar(
-        titleBuilder: (context) => Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 200),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const LemonCircleAvatar(
-                  isLemonIcon: true,
-                ),
-                SizedBox(width: Spacing.xSmall),
-                Flexible(
-                  child: Text(
-                    AIConstants.defaultAIChatbotName,
-                    style: Typo.extraMedium,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ],
-            ),
+      appBar: AppBar(
+        shape: Border(
+          bottom: BorderSide(
+            color: colorScheme.outline,
           ),
+        ),
+        automaticallyImplyLeading: false,
+        titleSpacing: 0,
+        title: Row(
+          children: [
+            SizedBox(width: Spacing.smMedium),
+            const LemonCircleAvatar(
+              isLemonIcon: true,
+            ),
+            SizedBox(width: Spacing.xSmall),
+            Text(
+              AIConstants.defaultAIChatbotName,
+              style: Typo.extraMedium,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
         ),
         actions: [
           Padding(
-            padding:
-                EdgeInsets.only(left: Spacing.medium, right: Spacing.xSmall),
+            padding: EdgeInsets.only(right: Spacing.smMedium),
             child: InkWell(
               onTap: () {
                 Vibrate.feedback(FeedbackType.light);
-                showComingSoonDialog(context);
+                AutoRouter.of(context).pop();
               },
               child: Icon(
-                Icons.more_horiz,
-                size: 21,
+                Icons.close_rounded,
+                size: 24,
                 color: Theme.of(context).colorScheme.onSurface,
               ),
             ),
@@ -212,36 +232,58 @@ class AIPageState extends State<AIPage> {
       body: SafeArea(
         child: Container(
           decoration: BoxDecoration(
-            color: LemonColor.atomicBlack,
+            color: colorScheme.background,
             borderRadius: BorderRadius.circular(20.r),
           ),
           child: Stack(
             children: [
-              Padding(
-                padding: const EdgeInsets.only(bottom: aiChatComposerHeight),
-                child: _buildChatList(),
+              GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () {
+                  if (_commandSelected) {
+                    setState(() {
+                      _commandSelected = false;
+                    });
+                  } else {
+                    FocusScope.of(context).requestFocus(FocusNode());
+                  }
+                },
+                child: Stack(
+                  children: [
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(bottom: aiChatComposerHeight),
+                      child: _buildChatList(),
+                    ),
+                    _commandSelected
+                        ? const FullScreenOverlay()
+                        : const SizedBox(),
+                  ],
+                ),
               ),
-              _commandSelected ? const FullScreenOverlay() : const SizedBox(),
               _commandSelected ? const AIChatCommandView() : const SizedBox(),
               Align(
                 alignment: Alignment.bottomCenter,
-                child: Container(
-                  decoration: BoxDecoration(color: Theme.of(context).cardColor),
-                  child: AIChatComposer(
-                    textController: _textController,
-                    inputString: inputString,
-                    onSend: onSend,
-                    loading: _loading,
-                    selectedCommand: _commandSelected,
-                    onChanged: (String text) {
-                      setState(() {
-                        inputString = text;
-                      });
-                    },
-                    onToggleCommand: () => setState(() {
-                      _commandSelected = !_commandSelected;
-                    }),
-                  ),
+                child: AIChatComposer(
+                  textController: _textController,
+                  inputString: inputString,
+                  onSend: onSend,
+                  loading: _loading,
+                  selectedCommand: _commandSelected,
+                  onChanged: (String text) {
+                    setState(() {
+                      inputString = text;
+                    });
+                  },
+                  onToggleCommand: () => setState(() {
+                    FocusScope.of(context).requestFocus(FocusNode());
+                    _commandSelected = !_commandSelected;
+                  }),
+                  onFocusChange: (focus) {
+                    setState(() {
+                      _commandSelected = false;
+                    });
+                  },
                 ),
               ),
             ],
@@ -252,13 +294,16 @@ class AIPageState extends State<AIPage> {
   }
 
   onFinishedTypingAnimation() {
-    stopAutoScrollToEnd();
     setState(() {
       messages.last.finishedAnimation = true;
     });
+    stopAutoScrollToEnd();
   }
 
-  Widget _buildChatList() {
+  Widget? _buildChatList() {
+    if (_initialLoading) {
+      return Loading.defaultLoading(context);
+    }
     return ListView.builder(
       controller: _scrollController,
       padding: EdgeInsets.symmetric(
