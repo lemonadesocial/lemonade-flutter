@@ -1,14 +1,15 @@
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/guest_event_detail_page/widgets/guest_event_detail_about_bottom_sheet.dart';
-import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/bottomsheet_utils.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
+import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -39,54 +40,74 @@ class GuestEventDetailAboutCard extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
+        color: colorScheme.onPrimary.withOpacity(0.06),
         borderRadius: BorderRadius.circular(15.r),
       ),
       child: Stack(
         children: [
-          Positioned.fill(
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(15.r),
-              child: CachedNetworkImage(
-                fit: BoxFit.cover,
-                imageUrl: photoUrl,
-                errorWidget: (_, __, ___) => ImagePlaceholder.eventCard(),
-                placeholder: (_, __) => ImagePlaceholder.eventCard(),
-              ),
-            ),
-          ),
-          Positioned.fill(
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15.r),
-                color: colorScheme.primary.withOpacity(0.9),
-              ),
-            ),
-          ),
           Padding(
-            padding: EdgeInsets.only(
-              top: Spacing.large,
-              right: Spacing.medium,
-              bottom: Spacing.medium,
-              left: Spacing.medium,
+            padding: EdgeInsets.symmetric(
+              horizontal: Spacing.medium,
+              vertical: Spacing.medium,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  t.event.aboutTheEvent,
-                  style: Typo.extraMedium.copyWith(
-                    fontFamily: FontFamily.nohemiVariable,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-                SizedBox(height: 3.w),
-                Text(
-                  '${event.title ?? ''}  •  ${DateFormatUtils.dateOnly(event.start)}',
-                  style: Typo.medium.copyWith(
-                    color: colorScheme.onSecondary,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  maxLines: 2,
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Flexible(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            t.event.aboutTheEvent,
+                            style: Typo.extraMedium.copyWith(
+                              fontFamily: FontFamily.nohemiVariable,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                          SizedBox(height: 3.w),
+                          Text(
+                            '${event.title ?? ''}  •  ${DateFormatUtils.dateOnly(event.start)}',
+                            style: Typo.medium.copyWith(
+                              color: colorScheme.onSecondary,
+                              fontWeight: FontWeight.w600,
+                            ),
+                            maxLines: 2,
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(width: Spacing.extraSmall),
+                    InkWell(
+                      onTap: () {
+                        BottomSheetUtils.showSnapBottomSheet(
+                          context,
+                          builder: (context) =>
+                              GuestEventDetailAboutBottomSheet(event: event),
+                        );
+                      },
+                      child: Container(
+                        width: Sizing.medium,
+                        height: Sizing.medium,
+                        decoration: BoxDecoration(
+                          color: colorScheme.secondary,
+                          borderRadius:
+                              BorderRadius.circular(LemonRadius.normal),
+                        ),
+                        child: Center(
+                          child: ThemeSvgIcon(
+                            color: colorScheme.onSurfaceVariant,
+                            builder: (filter) => Assets.icons.icArrowDown.svg(
+                              colorFilter: filter,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 SizedBox(
                   height: Spacing.smMedium,
@@ -98,36 +119,6 @@ class GuestEventDetailAboutCard extends StatelessWidget {
                   ),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                ),
-                SizedBox(
-                  height: Spacing.medium,
-                ),
-                InkWell(
-                  onTap: () {
-                    BottomSheetUtils.showSnapBottomSheet(
-                      context,
-                      builder: (context) =>
-                          GuestEventDetailAboutBottomSheet(event: event),
-                    );
-                  },
-                  child: Container(
-                    height: 42.w,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(LemonRadius.button),
-                      color: colorScheme.secondary,
-                    ),
-                    child: Center(
-                      child: Text(
-                        t.common.viewMore,
-                        style: Typo.small.copyWith(
-                          color: colorScheme.onSurfaceVariant,
-                          fontFamily: FontFamily.switzerVariable,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ),
                 ),
               ],
             ),

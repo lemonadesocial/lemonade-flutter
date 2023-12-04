@@ -58,6 +58,10 @@ const eventTicketTypesFragment = '''
         network
       }
       description
+      photos_expanded(limit: 1) {
+        key
+        bucket
+      }
     }
   }
 ''';
@@ -118,12 +122,14 @@ final getEventDetailQuery = gql('''
   $eventFragment
   $eventOfferFragment
   $eventPaymentAccountFragment
+  $eventTicketTypesFragment
 
   query(\$id: MongoID!) {
     getEvent(_id: \$id) {
       ...eventFields
       ...eventOfferFragment
       ...eventPaymentAccountFragment
+      ...eventTicketTypesFragment
     }
   }
 ''');
