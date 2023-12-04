@@ -3,7 +3,6 @@ import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/event_enums.dart';
 import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
-import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 
 class Event {
@@ -97,7 +96,7 @@ class Event {
   DateTime? start;
   DateTime? end;
   double? cost;
-  Currency? currency;
+  String? currency;
   List<String>? accepted;
   List<String>? invited;
   List<String>? pending;

@@ -1,12 +1,13 @@
 import 'dart:async';
+import 'package:app/core/constants/web3/chains.dart';
 import 'package:app/core/domain/event/input/buy_tickets_input/buy_tickets_input.dart';
 import 'package:app/core/domain/event/repository/event_ticket_repository.dart';
 import 'package:app/core/domain/payment/entities/payment.dart';
 import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
 import 'package:app/core/domain/payment/input/update_payment_input/update_payment_input.dart';
-import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/domain/payment/payment_repository.dart';
 import 'package:app/core/domain/web3/entities/ethereum_transaction.dart';
+import 'package:app/core/domain/web3/web3_repository.dart';
 import 'package:app/core/service/wallet/wallet_connect_service.dart';
 import 'package:app/core/service/web3/web3_contract_service.dart';
 import 'package:app/core/utils/web3_utils.dart';
@@ -26,7 +27,8 @@ class BuyTicketsWithCryptoBloc
     extends Bloc<BuyTicketsWithCryptoEvent, BuyTicketsWithCryptoState> {
   final eventTicketRepository = getIt<EventTicketRepository>();
   final paymentRepository = getIt<PaymentRepository>();
-  final SupportedPaymentNetwork? selectedNetwork;
+  final String? selectedNetwork;
+  final _web3Repository = getIt<Web3Repository>();
 
   Payment? _currentPayment;
   String? _signature;
@@ -83,10 +85,12 @@ class BuyTicketsWithCryptoBloc
       );
     }
     try {
+      final getChainResult =
+          await _web3Repository.getChainById(chainId: selectedNetwork!);
+      final chain = getChainResult.getOrElse(() => null);
       final signature = await walletConnectService
           .personalSign(
-            chainId: Web3Utils.getNetworkMetadataById(selectedNetwork!.value)
-                .chainId,
+            chainId: chain?.fullChainId,
             message: Web3Utils.toHex(payment.id ?? ''),
             wallet: event.userWalletAddress,
             walletApp: SupportedWalletApp.metamask,
@@ -143,27 +147,50 @@ class BuyTicketsWithCryptoBloc
   Future<void> _onMakeTransaction(_MakeTransaction event, Emitter emit) async {
     emit(BuyTicketsWithCryptoState.loading(data: state.data));
     try {
+      final getChainResult =
+          await _web3Repository.getChainById(chainId: selectedNetwork!);
+      final chain = getChainResult.getOrElse(() => null);
       final contractAddress =
           event.currencyInfo.contracts?[selectedNetwork] ?? '';
-      final contract = Web3ContractService.getERC20Contract(contractAddress);
-      final contractCallTxn = Transaction.callContract(
-        contract: contract,
-        function: contract.function('transfer'),
-        parameters: [
-          EthereumAddress.fromHex(event.to),
-          event.amount,
-        ],
-      );
-      final ethereumTxn = EthereumTransaction(
-        from: event.from,
-        to: contractAddress,
-        value: '0x0',
-        data: hex.encode(List<int>.from(contractCallTxn.data!)),
-      );
+
+      if (contractAddress.isEmpty) {
+        return emit(
+          BuyTicketsWithCryptoState.failure(
+            data: state.data,
+            failureReason: InitCryptoPaymentFailure(),
+          ),
+        );
+      }
+      late EthereumTransaction ethereumTxn;
+      // is erc20 token
+      if (contractAddress != zeroAddress) {
+        final contract = Web3ContractService.getERC20Contract(contractAddress);
+        final contractCallTxn = Transaction.callContract(
+          contract: contract,
+          function: contract.function('transfer'),
+          parameters: [
+            EthereumAddress.fromHex(event.to),
+            event.amount,
+          ],
+        );
+        ethereumTxn = EthereumTransaction(
+          from: event.from,
+          to: contractAddress,
+          value: '0x0',
+          data: hex.encode(List<int>.from(contractCallTxn.data!)),
+        );
+      } else {
+        // is native token
+        ethereumTxn = EthereumTransaction(
+          from: event.from,
+          to: event.to,
+          value: event.amount.toRadixString(16),
+        );
+      }
+
       _txHash = await walletConnectService
           .requestTransaction(
-            chainId: Web3Utils.getNetworkMetadataById(selectedNetwork!.value)
-                .chainId,
+            chainId: chain?.fullChainId ?? '',
             transaction: ethereumTxn,
             walletApp: SupportedWalletApp.metamask,
           )
@@ -282,7 +309,7 @@ class BuyTicketsWithCryptoEvent with _$BuyTicketsWithCryptoEvent {
     required CurrencyInfo currencyInfo,
   }) = _MakeTransaction;
   factory BuyTicketsWithCryptoEvent.selectNetwork({
-    required SupportedPaymentNetwork network,
+    required String network,
   }) = _SelectNetwork;
   factory BuyTicketsWithCryptoEvent.processUpdatePayment() =
       _ProcessUpdatePayment;

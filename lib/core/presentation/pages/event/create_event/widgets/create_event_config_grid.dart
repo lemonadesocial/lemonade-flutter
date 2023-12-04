@@ -25,37 +25,37 @@ class CreateEventConfigGrid extends StatelessWidget {
       'type': EventConfigGrid.visibility,
       'title': 'Public',
       'description': 'Anyone can discover',
-      'icon': Icons.remove_red_eye_outlined
+      'icon': Icons.remove_red_eye_outlined,
     },
     {
       'type': EventConfigGrid.guestSettings,
       'title': 'Guess limit',
       'description': '100 guests, 2 guests unlocks',
-      'icon': Icons.groups_rounded
+      'icon': Icons.groups_rounded,
     },
     {
       'type': EventConfigGrid.dateAndTime,
       'title': 'Mon, November 20 - 10:00',
       'description': 'Start',
-      'icon': Icons.calendar_month_outlined
+      'icon': Icons.calendar_month_outlined,
     },
     {
       'type': EventConfigGrid.dateAndTime,
       'title': 'Mon, November 23 - 10:00',
       'description': 'End',
-      'icon': Icons.calendar_month_outlined
+      'icon': Icons.calendar_month_outlined,
     },
     {
       'type': EventConfigGrid.virtual,
       'title': 'Virtual',
       'description': '',
-      'icon': Icons.videocam_rounded
+      'icon': Icons.videocam_rounded,
     },
     {
       'type': EventConfigGrid.location,
       'title': 'Offline',
       'description': 'Add location',
-      'icon': Icons.factory_outlined
+      'icon': Icons.factory_outlined,
     },
   ];
 

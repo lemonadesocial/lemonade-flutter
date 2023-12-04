@@ -3,11 +3,9 @@ import 'package:app/core/application/payment/payment_listener/payment_listener.d
 import 'package:app/core/config.dart';
 import 'package:app/core/presentation/widgets/bottom_bar/bottom_bar_widget.dart';
 import 'package:app/core/presentation/widgets/common/drawer/lemon_drawer.dart';
-import 'package:app/core/presentation/widgets/home/create_pop_up_page.dart';
 import 'package:app/core/presentation/widgets/home/floating_create_button.dart';
 import 'package:app/core/presentation/widgets/poap/poap_claim_transfer_controller_widget/poap_claim_transfer_controller_widget.dart';
 import 'package:app/core/service/shorebird_codepush_service.dart';
-import 'package:app/core/utils/device_utils.dart';
 import 'package:app/core/utils/drawer_utils.dart';
 import 'package:app/core/utils/onboarding_utils.dart';
 import 'package:app/injection/register_module.dart';
@@ -45,9 +43,6 @@ class _RootPageViewState extends State<RootPage> {
       url: AppConfig.appCastUrl,
       supportedOS: ['android', 'ios'],
     );
-
-    final isIpad = DeviceUtils.isIpad();
-    final heightFactor = isIpad ? 0.35 : 0.60;
     final primaryColor = Theme.of(context).colorScheme.primary;
 
     return PaymentListener(
@@ -100,10 +95,7 @@ class _RootPageViewState extends State<RootPage> {
                     onTap: () {
                       authState.maybeWhen(
                         authenticated: (session) =>
-                            const CreatePopUpPage().showAsBottomSheet(
-                          context,
-                          heightFactor: heightFactor,
-                        ),
+                            context.router.push(const AIRoute()),
                         orElse: () =>
                             context.router.navigate(const LoginRoute()),
                       );

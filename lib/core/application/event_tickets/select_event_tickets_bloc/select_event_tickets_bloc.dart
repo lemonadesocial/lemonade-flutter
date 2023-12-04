@@ -1,9 +1,7 @@
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/payment/entities/purchasable_item/purchasable_item.dart';
-import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/utils/event_tickets_utils.dart';
 import 'package:app/core/utils/list/unique_list_extension.dart';
-import 'package:app/core/utils/payment_utils.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -19,9 +17,9 @@ enum SelectTicketsPaymentMethod {
 class SelectEventTicketsBloc
     extends Bloc<SelectEventTicketsEvent, SelectEventTicketsState> {
   EventTicketTypesResponse? eventTicketTypesResponse;
-  Currency? selectedCurrency;
+  String? selectedCurrency;
   // only for SelectTicketsPaymentMethod.wallet
-  SupportedPaymentNetwork? selectedNetwork;
+  String? selectedNetwork;
 
   SelectEventTicketsBloc()
       : super(
@@ -96,6 +94,7 @@ class SelectEventTicketsBloc
   ) async {
     selectedCurrency = event.currency;
     selectedNetwork = event.network;
+    bool isCryptoCurrency = selectedNetwork != null;
 
     final newSelectedTickets = [
       event.ticket,
@@ -111,10 +110,9 @@ class SelectEventTicketsBloc
 
     final totalSelectedCount = _calculateTotalSelectedCount(newSelectedTickets);
 
-    Either<double, BigInt> totalAmount =
-        PaymentUtils.isCryptoCurrency(selectedCurrency!)
-            ? Right(_calculateBlockchainTotalAmount(newSelectedTickets))
-            : Left(_calculateFiatTotalAmount(newSelectedTickets));
+    Either<double, BigInt> totalAmount = isCryptoCurrency
+        ? Right(_calculateBlockchainTotalAmount(newSelectedTickets))
+        : Left(_calculateFiatTotalAmount(newSelectedTickets));
 
     emit(
       state.copyWith(
@@ -197,11 +195,11 @@ class SelectEventTicketsEvent with _$SelectEventTicketsEvent {
 
   factory SelectEventTicketsEvent.select({
     required PurchasableItem ticket,
-    required Currency currency,
-    SupportedPaymentNetwork? network,
+    required String currency,
+    String? network,
   }) = SelectEventTicketsEventOnSelectTicket;
   factory SelectEventTicketsEvent.selectCurrency({
-    required Currency currency,
+    required String currency,
   }) = SelectEventTicketsEventOnSelectCurrency;
   factory SelectEventTicketsEvent.selectPaymentMethod({
     required SelectTicketsPaymentMethod paymentMethod,
@@ -216,8 +214,8 @@ class SelectEventTicketsState with _$SelectEventTicketsState {
     required bool isSelectionValid,
     required bool isPaymentRequired,
     required SelectTicketsPaymentMethod paymentMethod,
-    Currency? selectedCurrency,
+    String? selectedCurrency,
     Either<double, BigInt>? totalAmount,
-    SupportedPaymentNetwork? selectedNetwork,
+    String? selectedNetwork,
   }) = _SelectEventTicketsState;
 }

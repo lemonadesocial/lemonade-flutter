@@ -56,4 +56,7 @@ class AppConfig {
 
   // Chat AI
   static get aiConfig => dotenv.env['AI_CONFIG'];
+
+  // Chat LemonAI config
+  static get chatLemonAIConfig => dotenv.env['CHAT_LEMON_AI_CONFIG'];
 }

@@ -43,7 +43,10 @@
         "block": "Block",
         "unBlock": "Unblock",
         "success": "Success",
-        "setLocation": "Set location services"
+        "setLocation": "Set location services",
+        "view": "View",
+        "copy": "Copy",
+        "share": "Share"
     },
     "followed": "Followed",
     "anonymous": "anonymous",

@@ -4,7 +4,6 @@ import 'package:app/core/application/event_tickets/get_event_ticket_types_bloc/g
 import 'package:app/core/application/event_tickets/redeem_tickets_bloc/redeem_tickets_bloc.dart';
 import 'package:app/core/application/event_tickets/select_event_tickets_bloc/select_event_tickets_bloc.dart';
 import 'package:app/core/domain/event/entities/event_currency.dart';
-import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/utils/event_tickets_utils.dart';
 import 'package:app/core/utils/number_utils.dart';
@@ -22,8 +21,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SelectTicketSubmitButton extends StatelessWidget {
   final SelectTicketsPaymentMethod paymentMethod;
-  final Currency? selectedCurrency;
-  final SupportedPaymentNetwork? selectedNetwork;
+  final String? selectedCurrency;
+  final String? selectedNetwork;
   final Either<double, BigInt>? totalAmount;
 
   const SelectTicketSubmitButton({
@@ -102,11 +101,13 @@ class SelectTicketSubmitButton extends StatelessWidget {
             radius: BorderRadius.circular(LemonRadius.small * 2),
             label: isLoading
                 ? t.common.processing
-                : paymentMethod == SelectTicketsPaymentMethod.card
-                    ? '${t.event.eventBuyTickets.payViaCard}  $amountText'
-                        .trim()
-                    : '${t.event.eventBuyTickets.payViaWallet}  $amountText'
-                        .trim(),
+                : !state.isPaymentRequired
+                    ? t.event.eventBuyTickets.redeem
+                    : paymentMethod == SelectTicketsPaymentMethod.card
+                        ? '${t.event.eventBuyTickets.payViaCard}  $amountText'
+                            .trim()
+                        : '${t.event.eventBuyTickets.payViaWallet}  $amountText'
+                            .trim(),
             mode: GradientButtonMode.lavenderMode,
           ),
         ),

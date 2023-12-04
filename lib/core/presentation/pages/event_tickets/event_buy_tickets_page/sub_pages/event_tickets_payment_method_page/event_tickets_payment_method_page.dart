@@ -21,6 +21,7 @@ class EventTicketsPaymentMethodPage extends StatelessWidget {
   final String publishableKey;
   final Function(PaymentCard paymentCard)? onSelectCard;
   final Function(PaymentCard paymentCard)? onCardAdded;
+  final Widget? buyButton;
 
   const EventTicketsPaymentMethodPage({
     super.key,
@@ -28,6 +29,7 @@ class EventTicketsPaymentMethodPage extends StatelessWidget {
     required this.publishableKey,
     this.onSelectCard,
     this.onCardAdded,
+    this.buyButton,
   });
 
   @override
@@ -113,6 +115,8 @@ class EventTicketsPaymentMethodPage extends StatelessWidget {
                               ),
                             ),
                           ),
+                          if (selectedCard != null)
+                            buyButton ?? const SizedBox.shrink(),
                         ],
                       ),
                     );

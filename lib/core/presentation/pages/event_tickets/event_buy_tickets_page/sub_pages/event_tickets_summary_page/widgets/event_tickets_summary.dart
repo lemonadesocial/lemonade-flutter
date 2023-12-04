@@ -2,7 +2,6 @@ import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/entities/event_tickets_pricing_info.dart';
 import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
 import 'package:app/core/domain/payment/entities/purchasable_item/purchasable_item.dart';
-import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/event_tickets_utils.dart';
 import 'package:app/core/utils/number_utils.dart';
@@ -18,8 +17,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class EventTicketsSummary extends StatelessWidget {
   final List<PurchasableTicketType> ticketTypes;
   final List<PurchasableItem> selectedTickets;
-  final Currency selectedCurrency;
-  final SupportedPaymentNetwork? selectedNetwork;
+  final String selectedCurrency;
+  final String? selectedNetwork;
   final EventTicketsPricingInfo pricingInfo;
 
   const EventTicketsSummary({
@@ -67,14 +66,14 @@ class TicketSummaryItem extends StatelessWidget {
 
   final PurchasableTicketType ticketType;
   final int count;
-  final Currency currency;
-  final SupportedPaymentNetwork? network;
+  final String currency;
+  final String? network;
   final CurrencyInfo? currencyInfo;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final isCrypto = PaymentUtils.isCryptoCurrency(currency);
+    final isCrypto = network != null;
 
     return Container(
       margin: EdgeInsets.only(bottom: Spacing.xSmall),

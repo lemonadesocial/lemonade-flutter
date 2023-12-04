@@ -1,5 +1,4 @@
 import 'package:app/core/domain/event/entities/event_tickets_pricing_info.dart';
-import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/ticket_wave_custom_paint.dart';
 import 'package:app/core/presentation/widgets/common/dotted_line/dotted_line.dart';
 import 'package:app/core/utils/number_utils.dart';
@@ -17,16 +16,18 @@ class EventOrderSummary extends StatelessWidget {
     super.key,
     required this.pricingInfo,
     required this.selectedCurrency,
+    required this.selectedNetwork,
   });
 
   final EventTicketsPricingInfo pricingInfo;
-  final Currency selectedCurrency;
+  final String? selectedNetwork;
+  final String selectedCurrency;
 
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-    final isCryptoCurrency = PaymentUtils.isCryptoCurrency(selectedCurrency);
+    final isCryptoCurrency = selectedNetwork != null;
     final currencyInfo =
         PaymentUtils.getCurrencyInfo(pricingInfo, currency: selectedCurrency);
 
@@ -69,6 +70,7 @@ class EventOrderSummary extends StatelessWidget {
                           amount: pricingInfo.fiatSubTotal ?? 0,
                           currency: selectedCurrency,
                         ),
+                  textColor: colorScheme.onPrimary.withOpacity(0.87),
                 ),
                 if (pricingInfo.discount != null &&
                     pricingInfo.promoCode?.isNotEmpty == true) ...[
@@ -118,6 +120,10 @@ class EventOrderSummary extends StatelessWidget {
                       amount: pricingInfo.fiatTotal ?? 0,
                       currency: selectedCurrency,
                     ),
+              textStyle: Typo.mediumPlus.copyWith(
+                color: colorScheme.onPrimary,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
           Transform.flip(
@@ -141,25 +147,28 @@ class SummaryRow extends StatelessWidget {
     required this.label,
     required this.value,
     this.textColor,
+    this.textStyle,
   });
 
   final String label;
   final String value;
   final Color? textColor;
+  final TextStyle? textStyle;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final textStyle = Typo.mediumPlus.copyWith(
-      color: textColor ?? colorScheme.onSecondary,
-    );
+    final customTextStyle = textStyle ??
+        Typo.mediumPlus.copyWith(
+          color: textColor ?? colorScheme.onSecondary,
+        );
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           label,
-          style: textStyle,
+          style: customTextStyle,
         ),
         Expanded(
           child: Padding(
@@ -171,7 +180,7 @@ class SummaryRow extends StatelessWidget {
         ),
         Text(
           value,
-          style: textStyle,
+          style: customTextStyle,
         ),
       ],
     );

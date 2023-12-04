@@ -46,7 +46,10 @@
             "title": "Discard selection?",
             "description": "Switching payment methods will discard your previous selection. Continue anyway?",
             "buttonLabel": "Discard & continue"
-        }
+        },
+        "redeem": "Redeem",
+        "onOtherChain": "on other chain",
+        "viaOtherPaymentMethod": "via other payment method"
     },
     "eventOrder": {
         "itemTotal": "Item total",

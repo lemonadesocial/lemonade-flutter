@@ -65,14 +65,12 @@ class LinearGradientButton extends StatelessWidget {
       onTap: loadingWhen ? null : onTap,
       child: ClipRRect(
         borderRadius: radius ?? BorderRadius.circular(LemonRadius.xSmall),
-        child: onTap == null && !loadingWhen
-            ? _childButton
-            : InnerShadow(
-                color: Colors.white.withOpacity(0.36),
-                offset: shadowOffset ?? const Offset(0, 4),
-                blur: 4,
-                child: _childButton,
-              ),
+        child: InnerShadow(
+          color: Colors.white.withOpacity(0.06),
+          offset: shadowOffset ?? const Offset(0, 4),
+          blur: 4,
+          child: _childButton,
+        ),
       ),
     );
   }

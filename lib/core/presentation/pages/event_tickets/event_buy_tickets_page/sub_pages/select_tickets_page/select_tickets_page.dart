@@ -8,7 +8,7 @@ import 'package:app/core/application/event_tickets/select_event_tickets_bloc/sel
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/input/assign_tickets_input/assign_tickets_input.dart';
 import 'package:app/core/domain/payment/entities/purchasable_item/purchasable_item.dart';
-import 'package:app/core/domain/payment/payment_enums.dart';
+import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/select_tickets_page/widgets/other_ticket_types_list.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/select_tickets_page/widgets/payment_methods_switcher.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/select_tickets_page/widgets/select_ticket_item.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/select_tickets_page/widgets/select_ticket_submit_button.dart';
@@ -18,10 +18,10 @@ import 'package:app/core/presentation/widgets/common/button/lemon_outline_button
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
+import 'package:app/core/presentation/widgets/web3/chain/chain_query_widget.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/event_tickets_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
-import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -30,6 +30,7 @@ import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -69,7 +70,7 @@ class SelectTicketView extends StatefulWidget {
 }
 
 class _SelectTicketViewState extends State<SelectTicketView> {
-  SupportedPaymentNetwork? networkFilter;
+  String? networkFilter;
 
   @override
   Widget build(BuildContext context) {
@@ -92,13 +93,60 @@ class _SelectTicketViewState extends State<SelectTicketView> {
           listener: (context, state) {
             state.maybeWhen(
               orElse: () => null,
-              success: (response, supportedCurrencies) => context
-                  .read<SelectEventTicketsBloc>()
-                  .add(
-                    SelectEventTicketsEvent.onEventTicketTypesResponseLoaded(
-                      eventTicketTypesResponse: response,
-                    ),
-                  ),
+              success: (response, supportedCurrencies) {
+                context.read<SelectEventTicketsBloc>().add(
+                      SelectEventTicketsEvent.onEventTicketTypesResponseLoaded(
+                        eventTicketTypesResponse: response,
+                      ),
+                    );
+                final allTicketTypes = response.ticketTypes ?? [];
+
+                if (allTicketTypes.isEmpty) {
+                  return;
+                }
+
+                final stripeTicketTypes =
+                    EventTicketUtils.getTicketTypesSupportStripe(
+                  ticketTypes: response.ticketTypes ?? [],
+                );
+                final erc20TicketTypes =
+                    EventTicketUtils.getTicketTypesSupportCrypto(
+                  ticketTypes: response.ticketTypes ?? [],
+                );
+
+                if (stripeTicketTypes.isEmpty) {
+                  context.read<SelectEventTicketsBloc>().add(
+                        SelectEventTicketsEvent.selectPaymentMethod(
+                          paymentMethod: SelectTicketsPaymentMethod.wallet,
+                        ),
+                      );
+                }
+
+                if (erc20TicketTypes.isEmpty) {
+                  context.read<SelectEventTicketsBloc>().add(
+                        SelectEventTicketsEvent.selectPaymentMethod(
+                          paymentMethod: SelectTicketsPaymentMethod.card,
+                        ),
+                      );
+                }
+
+                // auto increase if only 1 ticket tier and only 1 price option in that tier
+                if (allTicketTypes.length == 1 &&
+                    allTicketTypes.first.prices?.isNotEmpty == true &&
+                    allTicketTypes.first.prices?.length == 1) {
+                  final price = allTicketTypes.first.prices!.first;
+                  context.read<SelectEventTicketsBloc>().add(
+                        SelectEventTicketsEvent.select(
+                          ticket: PurchasableItem(
+                            count: 1,
+                            id: allTicketTypes.first.id!,
+                          ),
+                          currency: price.currency ?? '',
+                          network: price.network,
+                        ),
+                      );
+                }
+              },
             );
           },
         ),
@@ -219,19 +267,50 @@ class _SelectTicketViewState extends State<SelectTicketView> {
                     ),
                   ),
                   SizedBox(height: Spacing.smMedium),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-                    child: PaymentMethodsSwitcher(
-                      selectedPaymentMethod: selectedPaymentMethod,
-                      onSelect: (paymentMethod) =>
-                          context.read<SelectEventTicketsBloc>().add(
-                                SelectEventTicketsEvent.selectPaymentMethod(
-                                  paymentMethod: paymentMethod,
-                                ),
-                              ),
-                    ),
+                  BlocBuilder<GetEventTicketTypesBloc,
+                      GetEventTicketTypesState>(
+                    builder: (context, state) {
+                      return state.when(
+                        loading: () => const SizedBox.shrink(),
+                        failure: () => const SizedBox.shrink(),
+                        success: (response, supportedCurrencies) {
+                          final stripeTicketTypes =
+                              EventTicketUtils.getTicketTypesSupportStripe(
+                            ticketTypes: response.ticketTypes ?? [],
+                          );
+                          final erc20TicketTypes =
+                              EventTicketUtils.getTicketTypesSupportCrypto(
+                            ticketTypes: response.ticketTypes ?? [],
+                          );
+
+                          // if there's only one supported payment methods (wallet or card)
+                          // then no need to render payment methods switcher
+                          if (stripeTicketTypes.isEmpty ||
+                              erc20TicketTypes.isEmpty) {
+                            return const SizedBox.shrink();
+                          }
+
+                          return Padding(
+                            padding: EdgeInsets.only(
+                              bottom: Spacing.smMedium,
+                              left: Spacing.smMedium,
+                              right: Spacing.smMedium,
+                            ),
+                            child: PaymentMethodsSwitcher(
+                              selectedPaymentMethod: selectedPaymentMethod,
+                              onSelect: (paymentMethod) => context
+                                  .read<SelectEventTicketsBloc>()
+                                  .add(
+                                    SelectEventTicketsEvent.selectPaymentMethod(
+                                      paymentMethod: paymentMethod,
+                                    ),
+                                  ),
+                            ),
+                          );
+                        },
+                      );
+                    },
                   ),
-                  SizedBox(height: Spacing.smMedium),
                   BlocBuilder<GetEventTicketTypesBloc,
                       GetEventTicketTypesState>(
                     builder: (context, state) => state.when(
@@ -239,7 +318,7 @@ class _SelectTicketViewState extends State<SelectTicketView> {
                       failure: () =>
                           EmptyList(emptyText: t.common.somethingWrong),
                       success: (response, supportedCurrencies) {
-                        final ticketTypes = selectedPaymentMethod ==
+                        final filteredTicketTypes = selectedPaymentMethod ==
                                 SelectTicketsPaymentMethod.card
                             ? EventTicketUtils.getTicketTypesSupportStripe(
                                 ticketTypes: response.ticketTypes ?? [],
@@ -280,36 +359,65 @@ class _SelectTicketViewState extends State<SelectTicketView> {
                                           ),
                                         );
                                       }
-                                      final chainMetadata =
-                                          Web3Utils.getNetworkMetadataById(
-                                        supportedPaymentNetworks[index - 1]
-                                            .value,
-                                      );
+
                                       final selected =
                                           supportedPaymentNetworks[index - 1] ==
                                               networkFilter;
                                       return Row(
                                         children: [
-                                          LemonOutlineButton(
-                                            onTap: () {
-                                              setState(() {
-                                                networkFilter =
-                                                    supportedPaymentNetworks[
-                                                        index - 1];
-                                              });
-                                            },
-                                            leading: chainMetadata.icon,
-                                            label: chainMetadata.displayName,
-                                            backgroundColor: selected
-                                                ? LemonColor.atomicBlack
-                                                : null,
-                                            textColor: selected
-                                                ? colorScheme.onPrimary
-                                                    .withOpacity(0.72)
-                                                : null,
-                                            borderColor: selected
-                                                ? Colors.transparent
-                                                : null,
+                                          ChainQuery(
+                                            chainId: supportedPaymentNetworks[
+                                                index - 1],
+                                            builder: (
+                                              chain, {
+                                              required bool isLoading,
+                                            }) =>
+                                                LemonOutlineButton(
+                                              onTap: () {
+                                                setState(() {
+                                                  networkFilter =
+                                                      supportedPaymentNetworks[
+                                                          index - 1];
+                                                });
+                                              },
+                                              leading: chain?.logoUrl != null
+                                                  ? ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                        Sizing.xSmall,
+                                                      ),
+                                                      child: CachedNetworkImage(
+                                                        imageUrl:
+                                                            chain?.logoUrl ??
+                                                                '',
+                                                        placeholder: (_, __) =>
+                                                            const SizedBox
+                                                                .shrink(),
+                                                        errorWidget: (
+                                                          _,
+                                                          __,
+                                                          ___,
+                                                        ) =>
+                                                            const SizedBox
+                                                                .shrink(),
+                                                        width: Sizing.xSmall,
+                                                        height: Sizing.xSmall,
+                                                        fit: BoxFit.cover,
+                                                      ),
+                                                    )
+                                                  : null,
+                                              label: chain?.name,
+                                              backgroundColor: selected
+                                                  ? LemonColor.atomicBlack
+                                                  : null,
+                                              textColor: selected
+                                                  ? colorScheme.onPrimary
+                                                      .withOpacity(0.72)
+                                                  : null,
+                                              borderColor: selected
+                                                  ? Colors.transparent
+                                                  : null,
+                                            ),
                                           ),
                                         ],
                                       );
@@ -326,45 +434,102 @@ class _SelectTicketViewState extends State<SelectTicketView> {
                               Expanded(
                                 child: ListView.separated(
                                   padding: EdgeInsets.only(bottom: 200.w),
-                                  itemBuilder: (context, index) =>
-                                      SelectTicketItem(
-                                    networkFilter: networkFilter,
-                                    selectedCurrency: selectedCurrency,
-                                    selectedNetwork: selectedNetwork,
-                                    selectedPaymentMethod:
-                                        selectedPaymentMethod,
-                                    event: widget.event,
-                                    ticketType: ticketTypes[index],
-                                    count: selectedTickets
-                                            .firstWhereOrNull(
-                                              (element) =>
-                                                  element.id ==
-                                                  ticketTypes[index].id,
-                                            )
-                                            ?.count ??
-                                        0,
-                                    onCountChange: (count, currency, network) {
-                                      context
-                                          .read<SelectEventTicketsBloc>()
-                                          .add(
-                                            SelectEventTicketsEvent.select(
-                                              ticket: PurchasableItem(
-                                                count: count,
-                                                id: ticketTypes[index].id ?? '',
+                                  itemBuilder: (context, index) {
+                                    if (index == filteredTicketTypes.length) {
+                                      return Padding(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: Spacing.smMedium,
+                                        ),
+                                        child:
+                                            OtherPaymentMethodTicketTypesList(
+                                          ticketTypes:
+                                              response.ticketTypes ?? [],
+                                          networkFilter: networkFilter,
+                                          selectedCurrency: selectedCurrency,
+                                          selectedNetwork: selectedNetwork,
+                                          selectedPaymentMethod:
+                                              selectedPaymentMethod,
+                                        ),
+                                      );
+                                    }
+
+                                    if (index ==
+                                        filteredTicketTypes.length + 1) {
+                                      return Padding(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: Spacing.smMedium,
+                                        ),
+                                        child: OtherChainTicketTypesList(
+                                          ticketTypes:
+                                              response.ticketTypes ?? [],
+                                          networkFilter: networkFilter,
+                                          selectedCurrency: selectedCurrency,
+                                          selectedNetwork: selectedNetwork,
+                                          selectedPaymentMethod:
+                                              selectedPaymentMethod,
+                                        ),
+                                      );
+                                    }
+
+                                    return SelectTicketItem(
+                                      networkFilter: networkFilter,
+                                      selectedCurrency: selectedCurrency,
+                                      selectedNetwork: selectedNetwork,
+                                      selectedPaymentMethod:
+                                          selectedPaymentMethod,
+                                      event: widget.event,
+                                      ticketType: filteredTicketTypes[index],
+                                      count: selectedTickets
+                                              .firstWhereOrNull(
+                                                (element) =>
+                                                    element.id ==
+                                                    filteredTicketTypes[index]
+                                                        .id,
+                                              )
+                                              ?.count ??
+                                          0,
+                                      onCountChange:
+                                          (count, currency, network) {
+                                        context
+                                            .read<SelectEventTicketsBloc>()
+                                            .add(
+                                              SelectEventTicketsEvent.select(
+                                                ticket: PurchasableItem(
+                                                  count: count,
+                                                  id: filteredTicketTypes[index]
+                                                          .id ??
+                                                      '',
+                                                ),
+                                                currency: currency,
+                                                network: network,
                                               ),
-                                              currency: currency,
-                                              network: network,
-                                            ),
-                                          );
-                                    },
-                                  ),
-                                  separatorBuilder: (context, index) => Divider(
-                                    height: 1.w,
-                                    thickness: 1.w,
-                                    color:
-                                        colorScheme.onPrimary.withOpacity(0.05),
-                                  ),
-                                  itemCount: ticketTypes.length,
+                                            );
+                                      },
+                                    );
+                                  },
+                                  separatorBuilder: (context, index) {
+                                    if (index == filteredTicketTypes.length ||
+                                        index ==
+                                            filteredTicketTypes.length + 1) {
+                                      return SizedBox(height: Spacing.xSmall);
+                                    }
+
+                                    return Padding(
+                                      padding: EdgeInsets.only(
+                                        bottom: index ==
+                                                filteredTicketTypes.length - 1
+                                            ? Spacing.xSmall
+                                            : 0,
+                                      ),
+                                      child: Divider(
+                                        height: 1.w,
+                                        thickness: 1.w,
+                                        color: colorScheme.onPrimary
+                                            .withOpacity(0.05),
+                                      ),
+                                    );
+                                  },
+                                  itemCount: filteredTicketTypes.length + 2,
                                 ),
                               ),
                             ],

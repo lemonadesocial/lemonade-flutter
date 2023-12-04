@@ -7,10 +7,12 @@ class LemonButton extends StatelessWidget {
   final String label;
   final Widget? icon;
   final Function()? onTap;
+  final double? width;
 
   const LemonButton({
     super.key,
     required this.label,
+    this.width,
     this.icon,
     this.onTap,
   });
@@ -22,7 +24,7 @@ class LemonButton extends StatelessWidget {
       behavior: HitTestBehavior.translucent,
       onTap: onTap,
       child: Container(
-        width: 107.w,
+        width: width ?? 107.w,
         padding: EdgeInsets.symmetric(vertical: Spacing.xSmall),
         clipBehavior: Clip.antiAlias,
         decoration: ShapeDecoration(

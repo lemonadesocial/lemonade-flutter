@@ -1,8 +1,6 @@
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
-import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
-import 'package:app/core/utils/number_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/sizing.dart';
@@ -25,7 +23,7 @@ class PickTicketItem extends StatelessWidget {
   final bool selected;
   final PurchasableTicketType? ticketType;
   final double total;
-  final Currency? currency;
+  final String? currency;
   final Function()? onPressed;
 
   @override
@@ -33,6 +31,10 @@ class PickTicketItem extends StatelessWidget {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
     final displayedTotal = (selected ? total - 1 : total).toInt();
+    final ticketThumbnail = ImagePlaceholder.ticketThumbnail(
+      iconColor: colorScheme.onSecondary,
+      backgroundColor: colorScheme.background,
+    );
 
     return InkWell(
       onTap: () => onPressed?.call(),
@@ -55,9 +57,8 @@ class PickTicketItem extends StatelessWidget {
                 height: Sizing.medium,
                 // TODO: ticketType.photosExpanded.first
                 imageUrl: "",
-                errorWidget: (_, __, ___) =>
-                    ImagePlaceholder.defaultPlaceholder(),
-                placeholder: (_, __) => ImagePlaceholder.defaultPlaceholder(),
+                errorWidget: (_, __, ___) => ticketThumbnail,
+                placeholder: (_, __) => ticketThumbnail,
               ),
             ),
             SizedBox(width: Spacing.xSmall),
@@ -65,11 +66,7 @@ class PickTicketItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "${ticketType?.title}   •   ${NumberUtils.formatCurrency(
-                    amount: ticketType?.defaultPrice?.fiatCost?.toDouble() ?? 0,
-                    currency: ticketType?.defaultCurrency,
-                    freeText: t.event.free,
-                  )}",
+                  ticketType?.title ?? '',
                   style: Typo.medium.copyWith(
                     fontWeight: FontWeight.w600,
                     color: colorScheme.onPrimary.withOpacity(0.87),

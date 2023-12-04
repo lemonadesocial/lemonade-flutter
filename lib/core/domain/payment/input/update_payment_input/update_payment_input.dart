@@ -1,4 +1,3 @@
-import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'update_payment_input.freezed.dart';
@@ -23,7 +22,7 @@ class UpdatePaymentTransferParams with _$UpdatePaymentTransferParams {
   factory UpdatePaymentTransferParams({
     @JsonKey(name: 'tx_hash') String? txHash,
     @JsonKey(name: 'signature') String? signature,
-    SupportedPaymentNetwork? network,
+    String? network,
   }) = _UpdatePaymentTransferParams;
 
   factory UpdatePaymentTransferParams.fromJson(Map<String, dynamic> json) =>

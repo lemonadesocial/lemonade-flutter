@@ -35,12 +35,12 @@ class AccountInfo with _$AccountInfo {
   AccountInfo._();
 
   factory AccountInfo({
-    List<Currency>? currencies,
-    Map<Currency, CurrencyInfo>? currencyMap,
+    List<String>? currencies,
+    Map<String, CurrencyInfo>? currencyMap,
     String? accountId,
     // Blockchain
     String? address,
-    List<SupportedPaymentNetwork>? networks,
+    List<String>? networks,
     // Stripe
     String? publishableKey,
   }) = _AccountInfo;
@@ -68,7 +68,7 @@ class CurrencyInfo with _$CurrencyInfo {
 
   factory CurrencyInfo({
     int? decimals,
-    Map<SupportedPaymentNetwork, String>? contracts,
+    Map<String, String>? contracts,
   }) = _CurrencyInfo;
 
   factory CurrencyInfo.fromDto(CurrencyInfoDto dto) => CurrencyInfo(

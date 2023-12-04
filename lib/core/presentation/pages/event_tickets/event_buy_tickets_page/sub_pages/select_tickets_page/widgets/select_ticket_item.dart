@@ -3,12 +3,11 @@ import 'package:app/core/application/event_tickets/select_event_tickets_bloc/sel
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_currency.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
-import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/select_tickets_page/widgets/ticket_counter.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
+import 'package:app/core/presentation/widgets/web3/chain/chain_query_widget.dart';
 import 'package:app/core/utils/event_tickets_utils.dart';
 import 'package:app/core/utils/number_utils.dart';
-import 'package:app/core/utils/payment_utils.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -38,17 +37,16 @@ class SelectTicketItem extends StatelessWidget {
   final Event event;
   final PurchasableTicketType ticketType;
   final int count;
-  final Currency? selectedCurrency;
+  final String? selectedCurrency;
   final SelectTicketsPaymentMethod selectedPaymentMethod;
-  final SupportedPaymentNetwork? selectedNetwork;
-  final SupportedPaymentNetwork? networkFilter;
-  final Function(int count, Currency currency, SupportedPaymentNetwork? network)
-      onCountChange;
+  final String? selectedNetwork;
+  final String? networkFilter;
+  final Function(int count, String currency, String? network) onCountChange;
 
   void add({
     required int newCount,
-    required Currency currency,
-    SupportedPaymentNetwork? network,
+    required String currency,
+    String? network,
   }) {
     if (newCount < (ticketType.limit ?? 0)) {
       onCountChange(newCount, currency, network);
@@ -57,8 +55,8 @@ class SelectTicketItem extends StatelessWidget {
 
   void minus({
     required int newCount,
-    required Currency currency,
-    SupportedPaymentNetwork? network,
+    required String currency,
+    String? network,
   }) {
     onCountChange(newCount, currency, network);
   }
@@ -71,11 +69,8 @@ class SelectTicketItem extends StatelessWidget {
               success: (_, currencies) => currencies,
             );
     final colorScheme = Theme.of(context).colorScheme;
-    final t = Translations.of(context);
-    final costText = NumberUtils.formatCurrency(
-      amount: (ticketType.defaultPrice?.fiatCost?.toDouble() ?? 0),
-      currency: ticketType.defaultCurrency,
-      freeText: t.event.free,
+    final ticketThumbnail = ImagePlaceholder.ticketThumbnail(
+      iconColor: colorScheme.onSecondary,
     );
     return Padding(
       padding: EdgeInsets.all(Spacing.smMedium),
@@ -94,9 +89,8 @@ class SelectTicketItem extends StatelessWidget {
               child: CachedNetworkImage(
                 // TODO: api does not support yet
                 imageUrl: "",
-                placeholder: (_, __) => ImagePlaceholder.defaultPlaceholder(),
-                errorWidget: (_, __, ___) =>
-                    ImagePlaceholder.defaultPlaceholder(),
+                placeholder: (_, __) => ticketThumbnail,
+                errorWidget: (_, __, ___) => ticketThumbnail,
               ),
             ),
           ),
@@ -108,7 +102,7 @@ class SelectTicketItem extends StatelessWidget {
               mainAxisSize: MainAxisSize.max,
               children: [
                 Text(
-                  "${ticketType.title}  •  $costText",
+                  ticketType.title ?? '',
                   style: Typo.medium.copyWith(
                     color: colorScheme.onPrimary.withOpacity(0.87),
                     fontWeight: FontWeight.w600,
@@ -137,8 +131,8 @@ class SelectTicketItem extends StatelessWidget {
                     return const SizedBox.shrink();
                   }
 
-                  final isCryptoCurrency =
-                      PaymentUtils.isCryptoCurrency(ticketPrice.currency!);
+                  final isCryptoCurrency = ticketPrice.network != null;
+
                   if (isCryptoCurrency &&
                       selectedPaymentMethod ==
                           SelectTicketsPaymentMethod.card) {
@@ -181,6 +175,7 @@ class SelectTicketItem extends StatelessWidget {
                       decimals: decimals,
                       count: enabled ? count : 0,
                       currency: ticketPrice.currency!,
+                      network: ticketPrice.network,
                       price: ticketPrice,
                       disabled: !enabled,
                       onIncrease: (newCount) {
@@ -210,7 +205,8 @@ class SelectTicketItem extends StatelessWidget {
 }
 
 class _PriceItem extends StatelessWidget {
-  final Currency currency;
+  final String currency;
+  final String? network;
   final EventTicketPrice price;
   final int decimals;
   final bool disabled;
@@ -226,91 +222,102 @@ class _PriceItem extends StatelessWidget {
     required this.disabled,
     required this.onIncrease,
     required this.onDecrease,
+    this.network,
   });
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final isCryptoCurrency = PaymentUtils.isCryptoCurrency(currency);
+    final isCryptoCurrency = network != null;
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        Flexible(
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (isCryptoCurrency && price.network != null) ...[
-                Container(
-                  decoration: ShapeDecoration(
-                    color: LemonColor.chineseBlack,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                        Sizing.medium,
-                      ),
-                    ),
-                  ),
-                  width: Sizing.medium,
-                  height: Sizing.medium,
-                  child: Center(
-                    child:
-                        Web3Utils.getNetworkMetadataById(price.network!.value)
-                            .icon,
-                  ),
-                ),
-                SizedBox(width: Spacing.xSmall),
-              ],
-              Flexible(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      isCryptoCurrency
-                          ? Web3Utils.formatCryptoCurrency(
-                              price.cryptoCost ?? BigInt.zero,
-                              currency: currency,
-                              decimals: decimals,
-                            )
-                          : NumberUtils.formatCurrency(
-                              amount: price.fiatCost ?? 0,
-                              currency: currency,
-                            ),
-                      style: Typo.medium.copyWith(
-                        color: colorScheme.onPrimary.withOpacity(0.87),
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    if (isCryptoCurrency && price.network != null) ...[
-                      SizedBox(height: 2.w),
-                      Text(
-                        Web3Utils.getNetworkMetadataById(price.network!.value)
-                            .displayName,
-                        style: Typo.small.copyWith(
-                          color: colorScheme.onSecondary,
+    return ChainQuery(
+      chainId: price.network ?? '',
+      builder: (chain, {required isLoading}) => Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Flexible(
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (isCryptoCurrency && price.network != null) ...[
+                  Container(
+                    decoration: ShapeDecoration(
+                      color: LemonColor.chineseBlack,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                          Sizing.medium,
                         ),
                       ),
+                    ),
+                    width: Sizing.medium,
+                    height: Sizing.medium,
+                    child: Center(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(Sizing.xSmall),
+                        child: CachedNetworkImage(
+                          imageUrl: chain?.logoUrl ?? '',
+                          placeholder: (_, __) => const SizedBox.shrink(),
+                          errorWidget: (_, __, ___) => const SizedBox.shrink(),
+                          width: Sizing.xSmall,
+                          height: Sizing.xSmall,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: Spacing.xSmall),
+                ],
+                Flexible(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        isCryptoCurrency
+                            ? Web3Utils.formatCryptoCurrency(
+                                price.cryptoCost ?? BigInt.zero,
+                                currency: currency,
+                                decimals: decimals,
+                              )
+                            : NumberUtils.formatCurrency(
+                                amount: price.fiatCost ?? 0,
+                                currency: currency,
+                              ),
+                        style: Typo.medium.copyWith(
+                          color: colorScheme.onPrimary.withOpacity(0.87),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      if (isCryptoCurrency && price.network != null) ...[
+                        SizedBox(height: 2.w),
+                        Text(
+                          chain?.name ?? '',
+                          style: Typo.small.copyWith(
+                            color: colorScheme.onSecondary,
+                          ),
+                        ),
+                      ],
                     ],
-                  ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-        SizedBox(width: Spacing.xSmall),
-        TicketCounter(
-          count: count,
-          onDecrease: onDecrease,
-          onIncrease: onIncrease,
-          disabled: disabled,
-          onPressDisabled: () {
-            SnackBarUtils.showCustomSnackbar(
-              MultipleTicketsErrorSnackbar.create(context),
-            );
-          },
-        ),
-      ],
+          SizedBox(width: Spacing.xSmall),
+          TicketCounter(
+            count: count,
+            onDecrease: onDecrease,
+            onIncrease: onIncrease,
+            disabled: disabled,
+            onPressDisabled: () {
+              SnackBarUtils.showCustomSnackbar(
+                MultipleTicketsErrorSnackbar.create(context),
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 }

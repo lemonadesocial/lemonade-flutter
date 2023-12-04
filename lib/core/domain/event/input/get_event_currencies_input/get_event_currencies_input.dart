@@ -7,6 +7,7 @@ part 'get_event_currencies_input.g.dart';
 class GetEventCurrenciesInput with _$GetEventCurrenciesInput {
   factory GetEventCurrenciesInput({
     required String id,
+    @Default(true) bool? used,
   }) = _GetEventCurrenciesInput;
 
   factory GetEventCurrenciesInput.fromJson(Map<String, dynamic> json) =>

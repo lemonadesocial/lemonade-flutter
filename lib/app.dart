@@ -8,6 +8,7 @@ import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/service/connectivity/connectivity_service.dart';
 import 'package:app/core/service/firebase/firebase_service.dart';
 import 'package:app/core/service/matrix/matrix_service.dart';
+import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
@@ -18,6 +19,7 @@ import 'package:app/theme/theme.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_badger/flutter_app_badger.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -28,6 +30,7 @@ import 'package:app/core/presentation/widgets/custom_error_widget.dart';
 import 'package:app/core/application/newsfeed/newsfeed_listing_bloc/newsfeed_listing_bloc.dart';
 import 'package:app/core/data/post/newsfeed_repository_impl.dart';
 import 'package:app/core/service/newsfeed/newsfeed_service.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 
 class LemonadeApp extends StatefulWidget {
   const LemonadeApp({super.key});
@@ -42,6 +45,7 @@ class _LemonadeAppViewState extends State<LemonadeApp> {
   @override
   void initState() {
     super.initState();
+    FlutterAppBadger.removeBadge();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       getIt<MatrixService>().backgroundPush.setupContextAndRouter(
             router: _appRouter,
@@ -90,6 +94,11 @@ class _LemonadeAppViewState extends State<LemonadeApp> {
         child: child,
       );
 
+  Widget _gqlProviderBuilder(Widget child) => GraphQLProvider(
+        client: ValueNotifier(getIt<AppGQL>().client),
+        child: child,
+      );
+
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(
@@ -100,8 +109,10 @@ class _LemonadeAppViewState extends State<LemonadeApp> {
           : const Size(1024, 1366), //Ipad Pro 12.9 inches
     );
     return _translationProviderBuilder(
-      _portalBuilder(
-        _globalBlocProviderBuilder(_App(_appRouter)),
+      _gqlProviderBuilder(
+        _portalBuilder(
+          _globalBlocProviderBuilder(_App(_appRouter)),
+        ),
       ),
     );
   }

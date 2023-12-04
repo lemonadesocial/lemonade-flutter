@@ -1,7 +1,6 @@
 import 'package:app/core/application/payment/select_payment_card_cubit/select_payment_card_cubit.dart';
 import 'package:app/core/domain/event/entities/event_tickets_pricing_info.dart';
 import 'package:app/core/domain/payment/entities/payment_card/payment_card.dart';
-import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/event_card_tile.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/event_order_slide_to_pay.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/select_card_button.dart';
@@ -20,6 +19,7 @@ class EventOrderSummaryFooter extends StatelessWidget {
     required this.onSlideToPay,
     required this.slideActionKey,
     required this.selectedCurrency,
+    this.selectedNetwork,
     this.onSelectCard,
     this.onCardAdded,
   });
@@ -29,7 +29,8 @@ class EventOrderSummaryFooter extends StatelessWidget {
   final GlobalKey<SlideActionState> slideActionKey;
   final Function(PaymentCard paymentCard)? onSelectCard;
   final Function(PaymentCard paymentCard)? onCardAdded;
-  final Currency selectedCurrency;
+  final String selectedCurrency;
+  final String? selectedNetwork;
 
   String get paymentAccountId {
     return pricingInfo?.paymentAccounts?.isNotEmpty == true
@@ -90,6 +91,16 @@ class EventOrderSummaryFooter extends StatelessWidget {
                             publishableKey: stripePublishableKey,
                             onCardAdded: onCardAdded,
                             onSelectCard: onSelectCard,
+                            buyButton: EventOrderSlideToPay(
+                              onSlideToPay: () async {
+                                await AutoRouter.of(context).pop();
+                                onSlideToPay();
+                              },
+                              pricingInfo: pricingInfo,
+                              slideActionKey: GlobalKey<SlideActionState>(),
+                              selectedCurrency: selectedCurrency,
+                              selectedNetwork: selectedNetwork,
+                            ),
                           ),
                         );
                       },
@@ -101,6 +112,7 @@ class EventOrderSummaryFooter extends StatelessWidget {
                       pricingInfo: pricingInfo,
                       slideActionKey: slideActionKey,
                       selectedCurrency: selectedCurrency,
+                      selectedNetwork: selectedNetwork,
                     ),
                   ],
                 );
