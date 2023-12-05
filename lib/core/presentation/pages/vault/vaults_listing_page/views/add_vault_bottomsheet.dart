@@ -10,6 +10,7 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:app/core/utils/modal_utils.dart';
 
 class AddVaultBottomSheet extends StatelessWidget {
   const AddVaultBottomSheet({
@@ -33,7 +34,6 @@ class AddVaultBottomSheet extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               LemonAppBar(
-                title: "",
                 backgroundColor: LemonColor.atomicBlack,
               ),
               Padding(
@@ -57,8 +57,10 @@ class AddVaultBottomSheet extends StatelessWidget {
                     ),
                     SizedBox(height: Spacing.medium),
                     _CreateVaultOptionItem(
-                      onPressed: () =>
-                          AutoRouter.of(context).push(const CreateVaultRoute()),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        AutoRouter.of(context).push(const CreateVaultRoute());
+                      },
                       title: t.vault.vaultType.individual,
                       description:
                           t.vault.createVaultBottomSheet.individualDescription,
@@ -76,8 +78,7 @@ class AddVaultBottomSheet extends StatelessWidget {
                     ),
                     SizedBox(height: Spacing.xSmall),
                     _CreateVaultOptionItem(
-                      onPressed: () =>
-                          AutoRouter.of(context).push(const CreateVaultRoute()),
+                      onPressed: () => showComingSoonDialog(context),
                       title: t.vault.vaultType.community,
                       description:
                           t.vault.createVaultBottomSheet.communityDescription,
@@ -94,26 +95,28 @@ class AddVaultBottomSheet extends StatelessWidget {
                       ],
                     ),
                     SizedBox(height: Spacing.medium),
-                    InkWell(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            t.vault.createVaultBottomSheet.alreadyHaveVault,
-                            style: Typo.medium.copyWith(
-                              color: colorScheme.onSecondary,
-                            ),
-                          ),
-                          SizedBox(width: Spacing.superExtraSmall),
-                          Text(
-                            t.vault.createVaultBottomSheet.restore,
-                            style: Typo.medium.copyWith(
-                              color: LemonColor.paleViolet,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                    // TODO: temporary hide
+                    // InkWell(
+                    //   onTap: () => showComingSoonDialog(context),
+                    //   child: Row(
+                    //     mainAxisAlignment: MainAxisAlignment.center,
+                    //     children: [
+                    //       Text(
+                    //         t.vault.createVaultBottomSheet.alreadyHaveVault,
+                    //         style: Typo.medium.copyWith(
+                    //           color: colorScheme.onSecondary,
+                    //         ),
+                    //       ),
+                    //       SizedBox(width: Spacing.superExtraSmall),
+                    //       Text(
+                    //         t.vault.createVaultBottomSheet.restore,
+                    //         style: Typo.medium.copyWith(
+                    //           color: LemonColor.paleViolet,
+                    //         ),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
@@ -156,6 +159,7 @@ class _CreateVaultOptionItem extends StatelessWidget {
           gradient: LinearGradient(
             stops: const [0.25, 0.5, 0.75, 1],
             colors: gradientColors,
+            end: Alignment.bottomRight,
           ),
         ),
         child: Row(
@@ -179,14 +183,14 @@ class _CreateVaultOptionItem extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    t.vault.vaultType.individual,
+                    title,
                     style: Typo.mediumPlus.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
                   ),
                   SizedBox(height: Spacing.superExtraSmall),
                   Text(
-                    t.vault.createVaultBottomSheet.individualDescription,
+                    description,
                     style: Typo.small.copyWith(
                       color: colorScheme.onSecondary,
                     ),

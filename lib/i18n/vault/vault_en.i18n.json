@@ -51,5 +51,6 @@
     "emptyVault": "You don't have any vaults yet. Create one\nnow to manage your assets in a collective &\nsecure way!",
     "actions": {
         "createVault": "Create Vault"
-    }
+    },
+    "connectedWith": "Connected with"
 }
