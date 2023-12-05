@@ -9,10 +9,8 @@ enum PaymentProvider {
 }
 
 enum PaymentAccountType {
-  @JsonValue('ethereum')
   ethereum,
-  @JsonValue('digital')
-  digital
+  digital,
 }
 
 enum PaymentState {
