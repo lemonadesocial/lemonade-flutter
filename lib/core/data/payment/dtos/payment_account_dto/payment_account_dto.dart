@@ -11,6 +11,7 @@ class PaymentAccountDto with _$PaymentAccountDto {
     bool? active,
     @JsonKey(name: 'created_at') DateTime? createdAt,
     String? user,
+    String? title,
     PaymentAccountType? type,
     PaymentProvider? provider,
     @JsonKey(name: 'account_info') AccountInfoDto? accountInfo,
@@ -29,6 +30,10 @@ class AccountInfoDto with _$AccountInfoDto {
     // Blockchain
     String? address,
     List<String>? networks,
+    // Safe
+    List<String>? owners,
+    int? threshold,
+    bool? funded,
     // Stripe
     @JsonKey(name: 'publishable_key') String? publishableKey,
   }) = _AccountInfoDto;

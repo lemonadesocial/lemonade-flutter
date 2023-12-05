@@ -23,6 +23,7 @@ class EmptyList extends StatelessWidget {
             Text(
               emptyText!,
               style: Typo.small.copyWith(color: colorScheme.onSurfaceVariant),
+              textAlign: TextAlign.center,
             ),
           ],
         ],

@@ -1,3 +1,5 @@
+import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
+import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
@@ -8,7 +10,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class VaultItem extends StatelessWidget {
-  const VaultItem({super.key});
+  final PaymentAccount vault;
+  const VaultItem({
+    super.key,
+    required this.vault,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +40,7 @@ class VaultItem extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    "LT Investment",
+                    vault.title ?? '',
                     style: Typo.medium.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
@@ -50,7 +56,9 @@ class VaultItem extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        "0x9837...289H",
+                        Web3Utils.formatIdentifier(
+                          vault.accountInfo?.address ?? '',
+                        ),
                         style: Typo.small.copyWith(
                           color: colorScheme.onSecondary,
                         ),
@@ -81,34 +89,35 @@ class VaultItem extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: Spacing.smMedium),
-          // more vault info
-          IntrinsicHeight(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                _VaultInfoItem(
-                  title: t.vault.vaultInfo.chain,
-                  child: const SizedBox.shrink(),
-                ),
-                SizedBox(width: Spacing.extraSmall),
-                _VaultInfoItem(
-                  title: t.vault.vaultInfo.assets,
-                  child: const SizedBox.shrink(),
-                ),
-                SizedBox(width: Spacing.extraSmall),
-                _VaultInfoItem(
-                  title: t.vault.vaultInfo.members,
-                  child: Text(
-                    '11',
-                    style: Typo.mediumPlus.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          // TODO: temporary hide
+          // SizedBox(height: Spacing.smMedium),
+          // // more vault info
+          // IntrinsicHeight(
+          //   child: Row(
+          //     crossAxisAlignment: CrossAxisAlignment.stretch,
+          //     children: [
+          //       _VaultInfoItem(
+          //         title: t.vault.vaultInfo.chain,
+          //         child: const SizedBox.shrink(),
+          //       ),
+          //       SizedBox(width: Spacing.extraSmall),
+          //       _VaultInfoItem(
+          //         title: t.vault.vaultInfo.assets,
+          //         child: const SizedBox.shrink(),
+          //       ),
+          //       SizedBox(width: Spacing.extraSmall),
+          //       _VaultInfoItem(
+          //         title: t.vault.vaultInfo.members,
+          //         child: Text(
+          //           '11',
+          //           style: Typo.mediumPlus.copyWith(
+          //             fontWeight: FontWeight.w600,
+          //           ),
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          // ),
         ],
       ),
     );

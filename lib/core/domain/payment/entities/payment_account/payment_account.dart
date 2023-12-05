@@ -13,6 +13,7 @@ class PaymentAccount with _$PaymentAccount {
     bool? active,
     DateTime? createdAt,
     String? user,
+    String? title,
     PaymentAccountType? type,
     PaymentProvider? provider,
     AccountInfo? accountInfo,
@@ -22,6 +23,7 @@ class PaymentAccount with _$PaymentAccount {
         id: dto.id,
         active: dto.active,
         createdAt: dto.createdAt,
+        title: dto.title,
         type: dto.type,
         provider: dto.provider,
         accountInfo: dto.accountInfo != null
@@ -41,6 +43,10 @@ class AccountInfo with _$AccountInfo {
     // Blockchain
     String? address,
     List<String>? networks,
+    // Safe extends Blockchain
+    List<String>? owners,
+    int? threshold,
+    bool? funded,
     // Stripe
     String? publishableKey,
   }) = _AccountInfo;
@@ -58,6 +64,9 @@ class AccountInfo with _$AccountInfo {
         accountId: dto.accountId,
         address: dto.address,
         networks: dto.networks,
+        owners: dto.owners,
+        threshold: dto.threshold,
+        funded: dto.funded,
         publishableKey: dto.publishableKey,
       );
 }

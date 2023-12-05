@@ -102,9 +102,7 @@ class PaymentRepositoryImpl extends PaymentRepository {
     final result = await _client.query(
       QueryOptions(
         document: getPaymentAccountsQuery,
-        variables: {
-          'input': input.toJson(),
-        },
+        variables: input.toJson(),
         parserFn: (data) => List.from(data['listNewPaymentAccounts'] ?? [])
             .map(
               (item) => PaymentAccount.fromDto(
