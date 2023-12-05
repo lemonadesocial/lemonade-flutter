@@ -1,3 +1,5 @@
+import 'package:graphql_flutter/graphql_flutter.dart';
+
 const paymentAccountFragment = '''
   fragment paymentAccountFragment on NewPaymentAccount {
       _id
@@ -54,3 +56,57 @@ const paymentFragment = '''
     }
   }
 ''';
+
+final getPaymentAccountsQuery = gql('''
+  query ListNewPaymentAccounts(
+    \$skip: Int!
+    \$limit: Int!
+    \$id: [MongoID!]
+    \$type: PaymentAccountType
+    \$provider: NewPaymentProvider
+  ) {
+    listNewPaymentAccounts(
+      skip: \$skip
+      limit: \$limit
+      _id: \$id
+      type: \$type
+      provider: \$provider
+    ) {
+      _id
+      active
+      created_at
+      user
+      type
+      title
+      provider
+      account_info {
+        ... on EthereumAccount {
+          currencies
+          currency_map
+          address
+          networks
+        }
+        ... on SafeAccount {
+          currencies
+          currency_map
+          address
+          network
+          owners
+          threshold
+          funded
+        }
+        ... on DigitalAccount {
+          currencies
+          currency_map
+          account_id
+        }
+        ... on StripeAccount {
+          currencies
+          currency_map
+          account_id
+          publishable_key
+        }
+      }
+    }
+  }
+''');
