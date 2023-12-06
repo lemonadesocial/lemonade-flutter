@@ -1,8 +1,11 @@
 import 'package:app/core/application/event/create_event_bloc/create_event_bloc.dart';
+import 'package:app/core/application/event/event_datetime_settings_bloc/event_datetime_settings_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/entities/event_configuration.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/event_config_card.dart';
 import 'package:app/core/presentation/pages/event/event_datetime_settings_page/event_datetime_settings_page.dart';
 import 'package:app/core/presentation/pages/event/event_guest_settings_page/event_guest_settings_page.dart';
+import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
@@ -11,52 +14,44 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 enum EventPrivacy { public, private }
 
-enum EventConfigGrid {
-  visibility,
-  guestSettings,
-  dateAndTime,
-  virtual,
-  location
-}
-
 class CreateEventConfigGrid extends StatelessWidget {
-  final List<Map<String, dynamic>> eventConfigs = [
-    {
-      'type': EventConfigGrid.visibility,
-      'title': 'Public',
-      'description': 'Anyone can discover',
-      'icon': Icons.remove_red_eye_outlined,
-    },
-    {
-      'type': EventConfigGrid.guestSettings,
-      'title': 'Guess limit',
-      'description': '100 guests, 2 guests unlocks',
-      'icon': Icons.groups_rounded,
-    },
-    {
-      'type': EventConfigGrid.dateAndTime,
-      'title': 'Mon, November 20 - 10:00',
-      'description': 'Start',
-      'icon': Icons.calendar_month_outlined,
-    },
-    {
-      'type': EventConfigGrid.dateAndTime,
-      'title': 'Mon, November 23 - 10:00',
-      'description': 'End',
-      'icon': Icons.calendar_month_outlined,
-    },
-    {
-      'type': EventConfigGrid.virtual,
-      'title': 'Virtual',
-      'description': '',
-      'icon': Icons.videocam_rounded,
-    },
-    {
-      'type': EventConfigGrid.location,
-      'title': 'Offline',
-      'description': 'Add location',
-      'icon': Icons.factory_outlined,
-    },
+  final List<EventConfiguration> eventConfigs = [
+    EventConfiguration(
+      type: EventConfigurationType.visibility,
+      title: 'Public',
+      description: 'Anyone can discover',
+      icon: const Icon(Icons.remove_red_eye_outlined),
+    ),
+    EventConfiguration(
+      type: EventConfigurationType.guestSettings,
+      title: 'Guest limit',
+      description: '100 guests, 2 guests unlocks',
+      icon: const Icon(Icons.groups_rounded),
+    ),
+    EventConfiguration(
+      type: EventConfigurationType.startDateTime,
+      title: 'Mon, November 20 - 10:00',
+      description: 'Start',
+      icon: const Icon(Icons.calendar_month_outlined),
+    ),
+    EventConfiguration(
+      type: EventConfigurationType.endDateTime,
+      title: 'Mon, November 20 - 10:00',
+      description: 'End',
+      icon: const Icon(Icons.calendar_month_outlined),
+    ),
+    EventConfiguration(
+      type: EventConfigurationType.virtual,
+      title: 'Virtual',
+      description: '',
+      icon: const Icon(Icons.videocam_rounded),
+    ),
+    EventConfiguration(
+      type: EventConfigurationType.location,
+      title: 'Offline',
+      description: 'Add location',
+      icon: const Icon(Icons.factory_outlined),
+    ),
   ];
 
   final Event? event;
@@ -64,17 +59,16 @@ class CreateEventConfigGrid extends StatelessWidget {
 
   onTap(
     BuildContext context,
-    Map<String, dynamic> eventConfig,
-    CreateEventState state,
+    EventConfiguration eventConfig,
   ) {
     Widget page;
-
-    final eventConfigType = eventConfig['type'];
+    final eventConfigType = eventConfig.type;
     switch (eventConfigType) {
-      case EventConfigGrid.visibility:
+      case EventConfigurationType.visibility ||
+            EventConfigurationType.guestSettings:
         page = const EventGuestSettingsPage();
         break;
-      case EventConfigGrid.dateAndTime:
+      case EventConfigurationType.startDateTime:
         page = const EventDatetimeSettingsPage();
         break;
       default:
@@ -118,104 +112,112 @@ class CreateEventConfigGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    return BlocBuilder<CreateEventBloc, CreateEventState>(
-      builder: (context, state) {
-        return Column(
-          children: List.generate(
-            (eventConfigs.length / 2).ceil(),
-            (rowIndex) {
-              final startIndex = rowIndex * 2;
-              final endIndex = (startIndex + 2 <= eventConfigs.length)
-                  ? startIndex + 2
-                  : eventConfigs.length;
-              return Column(
-                children: [
-                  Container(
-                    margin: EdgeInsets.symmetric(
-                      vertical: Spacing.extraSmall,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: eventConfigs
-                          .sublist(startIndex, endIndex)
-                          .asMap()
-                          .entries
-                          .map(
-                            (entry) => Expanded(
-                              child: Container(
-                                margin: EdgeInsets.only(
-                                  left: entry.key == 1
-                                      ? Spacing.superExtraSmall
-                                      : 0,
-                                  right: entry.key == 0
-                                      ? Spacing.superExtraSmall
-                                      : 0,
-                                ), // Adjust horizontal spacing
-                                child: EventConfigCard(
-                                  title: getTitle(context, entry.value, state),
-                                  description: getDescription(
-                                    context,
-                                    entry.value,
-                                    state,
-                                  ),
-                                  icon: Icon(
-                                    entry.value['icon'],
-                                    color: colorScheme.onPrimary,
-                                    size: 16.w,
-                                  ),
-                                  onTap: () =>
-                                      onTap(context, entry.value, state),
-                                ),
-                              ),
-                            ),
-                          )
-                          .toList(),
-                    ),
-                  ),
-                ],
-              );
-            },
-          ),
-        );
-      },
+    return Column(
+      children: List.generate(
+        (eventConfigs.length / 2).ceil(),
+        (rowIndex) {
+          final startIndex = rowIndex * 2;
+          final endIndex = (startIndex + 2 <= eventConfigs.length)
+              ? startIndex + 2
+              : eventConfigs.length;
+          return Column(
+            children: [
+              Container(
+                margin: EdgeInsets.symmetric(
+                  vertical: Spacing.extraSmall,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: eventConfigs
+                      .sublist(startIndex, endIndex)
+                      .asMap()
+                      .entries
+                      .map(
+                        (entry) => Expanded(
+                          child: Container(
+                            margin: EdgeInsets.only(
+                              left:
+                                  entry.key == 1 ? Spacing.superExtraSmall : 0,
+                              right:
+                                  entry.key == 0 ? Spacing.superExtraSmall : 0,
+                            ), // Adjust horizontal spacing
+                            child: _buildCard(entry.value),
+                          ),
+                        ),
+                      )
+                      .toList(),
+                ),
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 
-  String getTitle(
-    BuildContext context,
-    Map<String, dynamic> eventConfig,
-    CreateEventState state,
-  ) {
-    EventConfigGrid eventConfigType = eventConfig['type'];
-    String title = eventConfig['title'];
+  _buildCard(EventConfiguration eventConfig) {
+    EventConfigurationType? eventConfigType = eventConfig.type;
     switch (eventConfigType) {
-      case EventConfigGrid.visibility:
-        return state.private == true ? t.event.private : t.event.public;
-      default:
-        return title;
-    }
-  }
-
-  String getDescription(
-    BuildContext context,
-    Map<String, dynamic> eventConfig,
-    CreateEventState state,
-  ) {
-    final t = Translations.of(context);
-    EventConfigGrid eventConfigType = eventConfig['type'];
-    String description = eventConfig['description'];
-    switch (eventConfigType) {
-      case EventConfigGrid.visibility:
-        return state.private == true
-            ? t.event.privateDescription
-            : t.event.publicDescription;
-      case EventConfigGrid.guestSettings:
-        return t.event.eventCreation.guestSettingDescription(
-          guestLimit: state.guestLimit ?? 'unlimited',
-          guestLimitPer: state.guestLimitPer ?? 'no',
+      case EventConfigurationType.visibility:
+        return BlocBuilder<CreateEventBloc, CreateEventState>(
+          builder: (context, state) {
+            return EventConfigCard(
+              title: state.private == true ? t.event.private : t.event.public,
+              description: state.private == true
+                  ? t.event.privateDescription
+                  : t.event.publicDescription,
+              icon: eventConfig.icon,
+              onTap: () => onTap(context, eventConfig),
+            );
+          },
+        );
+      case EventConfigurationType.guestSettings:
+        return BlocBuilder<CreateEventBloc, CreateEventState>(
+          builder: (context, state) {
+            return EventConfigCard(
+              title: eventConfig.title,
+              description: t.event.eventCreation.guestSettingDescription(
+                guestLimit: state.guestLimit ?? 'unlimited',
+                guestLimitPer: state.guestLimitPer ?? 'no',
+              ),
+              icon: eventConfig.icon,
+              onTap: () => onTap(context, eventConfig),
+            );
+          },
+        );
+      case EventConfigurationType.startDateTime:
+        return BlocBuilder<EventDateTimeSettingsBloc,
+            EventDateTimeSettingsState>(
+          builder: (context, state) {
+            return EventConfigCard(
+              title: DateFormatUtils.custom(state.start.value,
+                  pattern: 'EEE, MMMM dd - HH:mm'),
+              description: eventConfig.description,
+              icon: eventConfig.icon,
+              onTap: () => onTap(context, eventConfig),
+            );
+          },
+        );
+      case EventConfigurationType.endDateTime:
+        return BlocBuilder<EventDateTimeSettingsBloc,
+            EventDateTimeSettingsState>(
+          builder: (context, state) {
+            return EventConfigCard(
+              title: DateFormatUtils.custom(state.end.value,
+                  pattern: 'EEE, MMMM dd - HH:mm'),
+              description: eventConfig.description,
+              icon: eventConfig.icon,
+              onTap: () => onTap(context, eventConfig),
+            );
+          },
         );
       default:
-        return description;
+        return EventConfigCard(
+          title: '',
+          description: '',
+          icon: eventConfig.icon,
+          onTap: () => null,
+        );
     }
   }
 }

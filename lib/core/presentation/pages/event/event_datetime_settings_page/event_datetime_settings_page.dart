@@ -1,4 +1,4 @@
-import 'package:app/core/application/event/create_event_bloc/create_event_bloc.dart';
+import 'package:app/core/application/event/event_datetime_settings_bloc/event_datetime_settings_bloc.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/datepicker_text_field/datepicker_text_field.dart';
 import 'package:app/core/presentation/widgets/common/timepicker_text_field/timepicker_text_field.dart';
@@ -49,7 +49,7 @@ class _EventDatetimeSettingsPageState extends State<EventDatetimeSettingsPage> {
   }
 
   Widget _buildContent(ColorScheme colorScheme) {
-    return BlocBuilder<CreateEventBloc, CreateEventState>(
+    return BlocBuilder<EventDateTimeSettingsBloc, EventDateTimeSettingsState>(
       builder: (context, state) {
         return Padding(
           padding: EdgeInsets.symmetric(
@@ -61,6 +61,7 @@ class _EventDatetimeSettingsPageState extends State<EventDatetimeSettingsPage> {
               DatePickerTextField(
                 controller: startDateInputController,
                 label: t.event.datetimeSettings.startDate,
+                initialValue: state.start.value,
               ),
               SizedBox(
                 height: Spacing.medium,
@@ -68,6 +69,7 @@ class _EventDatetimeSettingsPageState extends State<EventDatetimeSettingsPage> {
               TimePickerTextField(
                 controller: startTimeInputController,
                 label: t.event.datetimeSettings.startTime,
+                initialValue: state.start.value,
               ),
               SizedBox(
                 height: Spacing.medium,
@@ -75,6 +77,7 @@ class _EventDatetimeSettingsPageState extends State<EventDatetimeSettingsPage> {
               DatePickerTextField(
                 controller: endDateInputController,
                 label: t.event.datetimeSettings.endDate,
+                initialValue: state.end.value,
               ),
               SizedBox(
                 height: Spacing.medium,
@@ -82,6 +85,7 @@ class _EventDatetimeSettingsPageState extends State<EventDatetimeSettingsPage> {
               TimePickerTextField(
                 controller: endTimeInputController,
                 label: t.event.datetimeSettings.endTime,
+                initialValue: state.end.value,
               ),
             ],
           ),

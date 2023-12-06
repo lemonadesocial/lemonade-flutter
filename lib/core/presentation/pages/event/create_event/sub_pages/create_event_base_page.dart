@@ -39,76 +39,81 @@ class CreateEventBasePage extends StatelessWidget {
           appBar: LemonAppBar(
             title: t.event.eventCreation.createEvent,
           ),
-          body: BlocBuilder<CreateEventBloc, CreateEventState>(
-            builder: (context, state) {
-              return CustomScrollView(
-                slivers: [
-                  SliverFillRemaining(
-                    hasScrollBody: false,
-                    child: Column(
-                      children: <Widget>[
-                        Expanded(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: Spacing.smMedium,
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(height: Spacing.medium),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    LemonTextField(
-                                      initialText: state.title.value,
-                                      label: t.event.eventCreation.title,
-                                      onChange: (value) => context
-                                          .read<CreateEventBloc>()
-                                          .add(TitleChanged(title: value)),
-                                      errorText:
-                                          state.title.displayError != null
-                                              ? state.title.displayError!
-                                                  .getMessage(
-                                                  t.event.eventCreation.title,
-                                                )
-                                              : null,
-                                    ),
-                                    SizedBox(
-                                      height: Spacing.smMedium,
-                                    ),
-                                    LemonTextField(
-                                      initialText: state.description.value,
-                                      label: t.event.eventCreation.description,
-                                      onChange: (value) =>
-                                          context.read<CreateEventBloc>().add(
-                                                DescriptionChanged(
-                                                  description: value,
+          body: SafeArea(
+            child: BlocBuilder<CreateEventBloc, CreateEventState>(
+              builder: (context, state) {
+                return CustomScrollView(
+                  slivers: [
+                    SliverFillRemaining(
+                      hasScrollBody: false,
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: Spacing.smMedium,
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(height: Spacing.medium),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      LemonTextField(
+                                        initialText: state.title.value,
+                                        label: t.event.eventCreation.title,
+                                        onChange: (value) => context
+                                            .read<CreateEventBloc>()
+                                            .add(TitleChanged(title: value)),
+                                        errorText:
+                                            state.title.displayError != null
+                                                ? state.title.displayError!
+                                                    .getMessage(
+                                                    t.event.eventCreation.title,
+                                                  )
+                                                : null,
+                                      ),
+                                      SizedBox(
+                                        height: Spacing.smMedium,
+                                      ),
+                                      LemonTextField(
+                                        initialText: state.description.value,
+                                        label:
+                                            t.event.eventCreation.description,
+                                        onChange: (value) =>
+                                            context.read<CreateEventBloc>().add(
+                                                  DescriptionChanged(
+                                                    description: value,
+                                                  ),
                                                 ),
-                                              ),
-                                      errorText:
-                                          state.description.displayError != null
-                                              ? state.description.displayError!
-                                                  .getMessage(
-                                                  t.event.eventCreation
-                                                      .description,
-                                                )
-                                              : null,
-                                    ),
-                                    SizedBox(height: Spacing.smMedium),
-                                    CreateEventConfigGrid(),
-                                  ],
-                                ),
-                              ],
+                                        errorText: state
+                                                    .description.displayError !=
+                                                null
+                                            ? state.description.displayError!
+                                                .getMessage(
+                                                t.event.eventCreation
+                                                    .description,
+                                              )
+                                            : null,
+                                      ),
+                                      SizedBox(height: Spacing.smMedium),
+                                      CreateEventConfigGrid(),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                        _buildSubmitButton(context),
-                      ],
+                          _buildSubmitButton(context),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              );
-            },
+                  ],
+                );
+              },
+            ),
           ),
         ),
       ),
@@ -120,7 +125,7 @@ class CreateEventBasePage extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(
         horizontal: Spacing.smMedium,
-        vertical: Spacing.smMedium,
+        vertical: Spacing.xSmall,
       ),
       child: LinearGradientButton(
         label: t.common.next,

@@ -5,18 +5,30 @@ import 'package:intl/intl.dart';
 class DatePickerTextField extends StatefulWidget {
   final TextEditingController controller;
   final String label;
+  final DateTime? initialValue;
 
   const DatePickerTextField({
-    super.key,
+    Key? key,
     required this.controller,
     required this.label,
-  });
+    this.initialValue,
+  }) : super(key: key);
 
   @override
   DatePickerTextFieldState createState() => DatePickerTextFieldState();
 }
 
 class DatePickerTextFieldState extends State<DatePickerTextField> {
+  @override
+  void initState() {
+    super.initState();
+    if (widget.initialValue != null) {
+      String formattedDate =
+          DateFormat('E, MMMM d').format(widget.initialValue!);
+      widget.controller.text = formattedDate;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -27,9 +39,9 @@ class DatePickerTextFieldState extends State<DatePickerTextField> {
       onTap: () async {
         DateTime? pickedDate = await showDatePicker(
           context: context,
-          initialDate: DateTime.now(),
+          initialDate: widget.initialValue ?? DateTime.now(),
           firstDate: DateTime(2000),
-          lastDate: DateTime(2101),
+          lastDate: DateTime(3000),
           builder: (BuildContext context, Widget? child) {
             return Theme(
               data: ThemeData.dark().copyWith(

@@ -20,10 +20,12 @@ class EventDateTimeSettingsBloc
     EventDateTimeSettingsEventInit event,
     Emitter emit,
   ) async {
-    if (kDebugMode) {
-      print("......");
-      print('init');
-    }
+    print("......onInit");
+    final start = DateTimeFormz.dirty(event.startDateTime);
+    final end = DateTimeFormz.dirty(event.endDateTime);
+    emit(
+      state.copyWith(start: start, end: end),
+    );
   }
 
   Future<void> _onStartDateChanged(
@@ -49,22 +51,25 @@ class EventDateTimeSettingsBloc
 
 @freezed
 class EventDateTimeSettingsEvent with _$EventDateTimeSettingsEvent {
-  factory EventDateTimeSettingsEvent.init() = EventDateTimeSettingsEventInit;
+  factory EventDateTimeSettingsEvent.init({
+    required DateTime startDateTime,
+    required DateTime endDateTime,
+  }) = EventDateTimeSettingsEventInit;
 
   const factory EventDateTimeSettingsEvent.startDateChanged({
-    required bool virtual,
+    required DateTime datetime,
   }) = StartDateChanged;
 
   const factory EventDateTimeSettingsEvent.startTimeChanged({
-    required bool virtual,
+    required DateTime datetime,
   }) = StartTimeChanged;
 
   const factory EventDateTimeSettingsEvent.endDateChanged({
-    required bool virtual,
+    required DateTime datetime,
   }) = EndDateChanged;
 
   const factory EventDateTimeSettingsEvent.endTimeChanged({
-    required bool virtual,
+    required DateTime datetime,
   }) = EndTimeChanged;
 
   const factory EventDateTimeSettingsEvent.formSubmitted() = FormSubmitted;
@@ -76,5 +81,6 @@ class EventDateTimeSettingsState with _$EventDateTimeSettingsState {
     @Default(DateTimeFormz.pure()) DateTimeFormz start,
     @Default(DateTimeFormz.pure()) DateTimeFormz end,
     @Default(FormzSubmissionStatus.initial) FormzSubmissionStatus status,
+    @Default(false) bool isValid,
   }) = _EventDateTimeSettingsState;
 }

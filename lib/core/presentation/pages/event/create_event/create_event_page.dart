@@ -11,6 +11,21 @@ class CreateEventPage extends StatelessWidget implements AutoRouteWrapper {
 
   @override
   Widget wrappedRoute(BuildContext context) {
+    DateTime currentDateTime = DateTime.now();
+    DateTime startDateTime = DateTime(
+      currentDateTime.year,
+      currentDateTime.month,
+      currentDateTime.day + 3,
+      10,
+    );
+
+    DateTime endDateTime = DateTime(
+      currentDateTime.year,
+      currentDateTime.month,
+      currentDateTime.day + 6,
+      18,
+    );
+
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -19,7 +34,10 @@ class CreateEventPage extends StatelessWidget implements AutoRouteWrapper {
         BlocProvider(
           create: (context) => EventDateTimeSettingsBloc()
             ..add(
-              EventDateTimeSettingsEvent.init(),
+              EventDateTimeSettingsEvent.init(
+                startDateTime: startDateTime,
+                endDateTime: endDateTime,
+              ),
             ),
         ),
       ],

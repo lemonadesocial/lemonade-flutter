@@ -22,14 +22,6 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
   }
   final _eventRepository = getIt<EventRepository>();
 
-  // Future<void> _onInit(
-  //   CreateEventEventInit event,
-  //   Emitter emit,
-  // ) async {
-  //   print("......");
-  //   print('init');
-  // }
-
   Future<void> _onTitleChanged(
     TitleChanged event,
     Emitter<CreateEventState> emit,

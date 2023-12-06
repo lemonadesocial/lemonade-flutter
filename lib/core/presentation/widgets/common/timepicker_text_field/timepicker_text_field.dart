@@ -5,11 +5,13 @@ import 'package:intl/intl.dart';
 class TimePickerTextField extends StatefulWidget {
   final TextEditingController controller;
   final String label;
+  final DateTime? initialValue;
 
   const TimePickerTextField({
     super.key,
     required this.controller,
     required this.label,
+    this.initialValue,
   });
 
   @override
@@ -17,6 +19,15 @@ class TimePickerTextField extends StatefulWidget {
 }
 
 class TimePickerTextFieldState extends State<TimePickerTextField> {
+  @override
+  void initState() {
+    super.initState();
+    if (widget.initialValue != null) {
+      String formattedDate = DateFormat('HH:mm').format(widget.initialValue!);
+      widget.controller.text = formattedDate;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -26,7 +37,8 @@ class TimePickerTextFieldState extends State<TimePickerTextField> {
       readOnly: true,
       onTap: () async {
         TimeOfDay? pickedTime = await showTimePicker(
-          initialTime: TimeOfDay.now(),
+          initialTime:
+              TimeOfDay.fromDateTime(widget.initialValue ?? DateTime.now()),
           context: context,
           builder: (BuildContext context, Widget? child) {
             return Theme(
