@@ -63,7 +63,7 @@ class AIChatCommandView extends StatelessWidget {
         label: t.ai.discover.events,
         onTap: () {
           Vibrate.feedback(FeedbackType.light);
-          showComingSoonDialog(context);
+          AutoRouter.of(context).navigate(const EventsListingRoute());
         },
       ),
       AICommandViewModel(
