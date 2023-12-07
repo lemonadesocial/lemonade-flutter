@@ -1,5 +1,4 @@
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
-import 'package:app/core/utils/modal_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
@@ -127,29 +126,14 @@ class AIChatComposer extends StatelessWidget {
   }
 
   Widget _buildSendbutton(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    Widget icon = inputString == ''
-        ? GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTap: () {
-              Vibrate.feedback(FeedbackType.light);
-              showComingSoonDialog(context);
-            },
-            child: ThemeSvgIcon(
-              color: colorScheme.onSecondary,
-              builder: (filter) => Assets.icons.icMic.svg(
-                colorFilter: filter,
-              ),
-            ),
-          )
-        : IconButton(
-            icon: Icon(
-              Icons.send_rounded,
-              color: LemonColor.babyPurple,
-              size: 35.w,
-            ),
-            onPressed: () => onSend(inputString),
-          );
+    Widget icon = IconButton(
+      icon: Icon(
+        Icons.send_rounded,
+        color: LemonColor.babyPurple,
+        size: 35.w,
+      ),
+      onPressed: () => onSend(inputString),
+    );
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 4.0),
