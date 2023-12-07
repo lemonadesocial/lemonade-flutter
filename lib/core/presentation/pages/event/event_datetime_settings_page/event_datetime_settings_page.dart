@@ -51,84 +51,89 @@ class _EventDatetimeSettingsPageState extends State<EventDatetimeSettingsPage> {
 
   Widget _buildContent(ColorScheme colorScheme) {
     return BlocListener<EventDateTimeSettingsBloc, EventDateTimeSettingsState>(
-        listener: (context, state) async {
-      if (state.start.value == null) {
-        startDateInputController.text = '';
-      }
-      if (state.end.value == null) {
-        endDateInputController.text = '';
-      }
-      BlocProvider.of<CreateEventBloc>(context).add(
+      listener: (context, state) async {
+        if (state.start.value == null) {
+          startDateInputController.text = '';
+        }
+        if (state.end.value == null) {
+          endDateInputController.text = '';
+        }
+        BlocProvider.of<CreateEventBloc>(context).add(
           CreateEventEvent.startDateTimeChanged(
-              datetime: state.start.value ?? DateTime.now()));
-      BlocProvider.of<CreateEventBloc>(context).add(
-          CreateEventEvent.endDateTimeChanged(
-              datetime: state.end.value ?? DateTime.now()));
-    }, child:
-            BlocBuilder<EventDateTimeSettingsBloc, EventDateTimeSettingsState>(
-      builder: (context, state) {
-        return Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: Spacing.xSmall,
-            vertical: Spacing.small,
+            datetime: state.start.value ?? DateTime.now(),
           ),
-          child: Column(
-            children: [
-              DatePickerTextField(
-                controller: startDateInputController,
-                label: t.event.datetimeSettings.startDate,
-                initialValue: state.start.value,
-                onChanged: (value) => context
-                    .read<EventDateTimeSettingsBloc>()
-                    .add(StartDateChanged(datetime: value)),
-                errorText: state.start.error != null
-                    ? state.start.error!.getMessage(
-                        t.event.datetimeSettings.startDate,
-                      )
-                    : null,
-              ),
-              SizedBox(
-                height: Spacing.medium,
-              ),
-              TimePickerTextField(
-                controller: startTimeInputController,
-                label: t.event.datetimeSettings.startTime,
-                initialValue: state.start.value,
-                onChanged: (value) => context
-                    .read<EventDateTimeSettingsBloc>()
-                    .add(StartTimeChanged(datetime: value)),
-              ),
-              SizedBox(
-                height: Spacing.medium,
-              ),
-              DatePickerTextField(
-                controller: endDateInputController,
-                label: t.event.datetimeSettings.endDate,
-                initialValue: state.end.value,
-                onChanged: (value) => context
-                    .read<EventDateTimeSettingsBloc>()
-                    .add(EndDateChanged(datetime: value)),
-                errorText: state.end.error != null
-                    ? state.end.error!.getMessage(
-                        t.event.datetimeSettings.endDate,
-                      )
-                    : null,
-              ),
-              SizedBox(
-                height: Spacing.medium,
-              ),
-              TimePickerTextField(
-                controller: endTimeInputController,
-                label: t.event.datetimeSettings.endTime,
-                initialValue: state.end.value,
-                onChanged: (value) => context
-                    .read<EventDateTimeSettingsBloc>()
-                    .add(EndTimeChanged(datetime: value)),
-              ),
-            ],
+        );
+        BlocProvider.of<CreateEventBloc>(context).add(
+          CreateEventEvent.endDateTimeChanged(
+            datetime: state.end.value ?? DateTime.now(),
           ),
         );
       },
-    ));
+      child: BlocBuilder<EventDateTimeSettingsBloc, EventDateTimeSettingsState>(
+        builder: (context, state) {
+          return Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: Spacing.xSmall,
+              vertical: Spacing.small,
+            ),
+            child: Column(
+              children: [
+                DatePickerTextField(
+                  controller: startDateInputController,
+                  label: t.event.datetimeSettings.startDate,
+                  initialValue: state.start.value,
+                  onChanged: (value) => context
+                      .read<EventDateTimeSettingsBloc>()
+                      .add(StartDateChanged(datetime: value)),
+                  errorText: state.start.error != null
+                      ? state.start.error!.getMessage(
+                          t.event.datetimeSettings.startDate,
+                        )
+                      : null,
+                ),
+                SizedBox(
+                  height: Spacing.medium,
+                ),
+                TimePickerTextField(
+                  controller: startTimeInputController,
+                  label: t.event.datetimeSettings.startTime,
+                  initialValue: state.start.value,
+                  onChanged: (value) => context
+                      .read<EventDateTimeSettingsBloc>()
+                      .add(StartTimeChanged(datetime: value)),
+                ),
+                SizedBox(
+                  height: Spacing.medium,
+                ),
+                DatePickerTextField(
+                  controller: endDateInputController,
+                  label: t.event.datetimeSettings.endDate,
+                  initialValue: state.end.value,
+                  onChanged: (value) => context
+                      .read<EventDateTimeSettingsBloc>()
+                      .add(EndDateChanged(datetime: value)),
+                  errorText: state.end.error != null
+                      ? state.end.error!.getMessage(
+                          t.event.datetimeSettings.endDate,
+                        )
+                      : null,
+                ),
+                SizedBox(
+                  height: Spacing.medium,
+                ),
+                TimePickerTextField(
+                  controller: endTimeInputController,
+                  label: t.event.datetimeSettings.endTime,
+                  initialValue: state.end.value,
+                  onChanged: (value) => context
+                      .read<EventDateTimeSettingsBloc>()
+                      .add(EndTimeChanged(datetime: value)),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
   }
 }
