@@ -308,23 +308,6 @@ packages:
   color:
     dependency: transitive
     description:
-
-    
-          
-            
-    
-
-          
-          Expand Down
-          
-            
-    
-
-          
-          Expand Up
-    
-    @@ -1490,10 +1490,10 @@ packages:
-  
       name: color
       sha256: ddcdf1b3badd7008233f5acffaf20ca9f5dc2cd0172b75f68f24526a5f5725cb
       url: "https://pub.dev"
@@ -1514,23 +1497,6 @@ packages:
   io:
     dependency: transitive
     description:
-
-    
-          
-            
-    
-
-          
-          Expand Down
-          
-            
-    
-
-          
-          Expand Up
-    
-    @@ -1618,18 +1618,18 @@ packages:
-  
       name: io
       sha256: "2ec25704aba361659e10e3e5f5d672068d332fc8ac516421d483a11e5cbd061e"
       url: "https://pub.dev"
@@ -1667,23 +1633,6 @@ packages:
   matrix:
     dependency: "direct main"
     description:
-
-    
-          
-            
-    
-
-          
-          Expand Down
-          
-            
-    
-
-          
-          Expand Up
-    
-    @@ -2176,10 +2176,10 @@ packages:
-  
       name: matrix
       sha256: "14aaaa0d0193a0ce1ffb5ce2d89d6b54dbd7fa30e627d1b7ad3edf694dfe7469"
       url: "https://pub.dev"
@@ -2234,23 +2183,6 @@ packages:
   sqflite:
     dependency: transitive
     description:
-
-    
-          
-            
-    
-
-          
-          Expand Down
-          
-            
-    
-
-          
-          Expand Up
-    
-    @@ -2272,10 +2272,10 @@ packages:
-  
       name: sqflite
       sha256: b4d6710e1200e96845747e37338ea8a819a12b51689a3bcf31eff0003b37a0b9
       url: "https://pub.dev"
@@ -2347,23 +2279,6 @@ packages:
   time:
     dependency: transitive
     description:
-
-    
-          
-            
-    
-
-          
-          Expand Down
-          
-            
-    
-
-          
-          Expand Up
-    
-    @@ -2484,14 +2484,6 @@ packages:
-  
       name: time
       sha256: "83427e11d9072e038364a5e4da559e85869b227cf699a541be0da74f14140124"
       url: "https://pub.dev"
@@ -2580,23 +2495,6 @@ packages:
   web3dart:
     dependency: "direct main"
     description:
-
-    
-          
-            
-    
-
-          
-          Expand Down
-          
-            
-    
-
-          
-          Expand Up
-    
-    @@ -2573,5 +2565,5 @@ packages:
-  
       name: web3dart
       sha256: "0b96223a6b284e3146e65dc842ded139eca68a85c4ab79c5ba1a73284927d3cd"
       url: "https://pub.dev"
