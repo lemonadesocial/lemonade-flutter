@@ -34,6 +34,7 @@ dependencies:
 
   # local storage
   hive: ^2.2.3
+  flutter_secure_storage: ^8.1.0
 
   # other
   path_provider: ^2.0.15

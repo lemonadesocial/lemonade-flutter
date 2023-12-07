@@ -242,6 +242,9 @@ final vaultRoutes = [
       AutoRoute(
         page: CreateVaultSetupPinRoute.page,
       ),
+      AutoRoute(
+        page: CreateVaultSuccessRoute.page,
+      ),
     ],
   ),
 ];

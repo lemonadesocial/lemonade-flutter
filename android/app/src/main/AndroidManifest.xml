@@ -1,58 +1,72 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools" package="social.lemonade.app" android:installLocation="auto">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools" package="social.lemonade.app"
+  android:installLocation="auto">
   <!-- Permission -->
-  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-  <uses-permission android:name="android.permission.VIBRATE"/>
+  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+  <uses-permission android:name="android.permission.VIBRATE" />
   <queries>
-    <package android:name="metamask"/>
+    <package android:name="metamask" />
   </queries>
-  <application android:label="@string/app_name" android:name="${applicationName}" android:icon="@mipmap/ic_launcher">
-    <activity android:name=".MainActivity" android:exported="true" android:launchMode="singleTop" android:theme="@style/LaunchTheme" android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode" android:hardwareAccelerated="true" android:windowSoftInputMode="adjustResize" android:screenOrientation="portrait">
+  <application
+    android:allowBackup="false"
+    android:fullBackupContent="false"
+    android:label="@string/app_name"
+    android:name="${applicationName}"
+    android:icon="@mipmap/ic_launcher">
+    <activity android:name=".MainActivity" android:exported="true" android:launchMode="singleTop"
+      android:theme="@style/LaunchTheme"
+      android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+      android:hardwareAccelerated="true" android:windowSoftInputMode="adjustResize"
+      android:screenOrientation="portrait">
       <!-- Specifies an Android theme to apply to this Activity as soon as
             the Android process has started. This theme is visible to the user
             while the Flutter UI initializes. After that, this theme continues
             to determine the Window background behind the Flutter UI. -->
-      <meta-data android:name="io.flutter.embedding.android.NormalTheme" android:resource="@style/NormalTheme"/>
-      <meta-data android:name="firebase_crashlytics_collection_enabled" android:value="${crashlyticsCollectionEnabled}"/>
+      <meta-data android:name="io.flutter.embedding.android.NormalTheme"
+        android:resource="@style/NormalTheme" />
+      <meta-data android:name="firebase_crashlytics_collection_enabled"
+        android:value="${crashlyticsCollectionEnabled}" />
       <intent-filter>
-        <action android:name="android.intent.action.MAIN"/>
-        <category android:name="android.intent.category.LAUNCHER"/>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
       <intent-filter>
-        <action android:name="FLUTTER_NOTIFICATION_CLICK"/>
-        <category android:name="android.intent.category.DEFAULT"/>
+        <action android:name="FLUTTER_NOTIFICATION_CLICK" />
+        <category android:name="android.intent.category.DEFAULT" />
       </intent-filter>
     </activity>
     <!-- Flutter web auth -->
     <activity android:name="com.linusu.flutter_web_auth_2.CallbackActivity" android:exported="true">
       <intent-filter android:label="flutter_web_auth_2">
-        <action android:name="android.intent.action.VIEW"/>
-        <category android:name="android.intent.category.DEFAULT"/>
-        <category android:name="android.intent.category.BROWSABLE"/>
-        <data android:scheme="@string/uri_scheme" android:host="oauth2" android:path="/callback"/>
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <data android:scheme="@string/uri_scheme" android:host="oauth2" android:path="/callback" />
       </intent-filter>
     </activity>
     <activity android:name="net.openid.appauth.RedirectUriReceiverActivity" android:exported="true">
       <intent-filter>
-        <action android:name="android.intent.action.VIEW"/>
-        <category android:name="android.intent.category.DEFAULT"/>
-        <category android:name="android.intent.category.BROWSABLE"/>
-        <data android:scheme="@string/uri_scheme" android:host="oauth2" android:path="/logout"/>
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <data android:scheme="@string/uri_scheme" android:host="oauth2" android:path="/logout" />
       </intent-filter>
     </activity>
     <activity
-        android:name="com.yalantis.ucrop.UCropActivity"
-        android:screenOrientation="portrait"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
-    <meta-data android:name="com.google.firebase.messaging.default_notification_channel_id" android:value="high_importance_channel"/>
+      android:name="com.yalantis.ucrop.UCropActivity"
+      android:screenOrientation="portrait"
+      android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+    <meta-data android:name="com.google.firebase.messaging.default_notification_channel_id"
+      android:value="high_importance_channel" />
     <service android:name=".FcmPushService" android:exported="false">
       <intent-filter>
-        <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+        <action android:name="com.google.firebase.MESSAGING_EVENT" />
       </intent-filter>
     </service>
     <!-- Don't delete the meta-data below.
           This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
-    <meta-data android:name="flutterEmbedding" android:value="2"/>
+    <meta-data android:name="flutterEmbedding" android:value="2" />
   </application>
-  <uses-permission android:name="android.permission.INTERNET"/>
+  <uses-permission android:name="android.permission.INTERNET" />
 </manifest>

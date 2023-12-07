@@ -179,6 +179,11 @@ class CreateVaultBasicInfoPage extends StatelessWidget {
               state.maybeWhen(
                 orElse: () => null,
                 success: (paymentAccount) {
+                  // TODO: when create wallet success
+                  // Check if already set passcode ?
+                  // if yes => Go to success page
+                  // if no => Go to setup passcode page
+                  // for now temporary
                   AutoRouter.of(context).root.popUntilRoot();
                   AutoRouter.of(context).push(const VaultsListingRoute());
                 },
