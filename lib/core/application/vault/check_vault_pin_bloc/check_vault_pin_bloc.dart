@@ -9,7 +9,9 @@ class CheckVaultPinBloc extends Bloc<CheckVaultPinEvent, CheckVaultPinState> {
   }
 
   Future<void> _onInitialize(
-      CheckVaultPinEventInitialize event, Emitter emit) async {
+    CheckVaultPinEventInitialize event,
+    Emitter emit,
+  ) async {
     emit(CheckVaultPinState.checking());
     await Future.delayed(const Duration(milliseconds: 500));
     emit(CheckVaultPinState.noPin());

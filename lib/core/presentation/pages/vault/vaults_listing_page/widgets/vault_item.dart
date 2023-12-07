@@ -124,41 +124,42 @@ class VaultItem extends StatelessWidget {
   }
 }
 
-class _VaultInfoItem extends StatelessWidget {
-  final String title;
-  final Widget child;
+// TODO: temporary hide
+// class _VaultInfoItem extends StatelessWidget {
+//   final String title;
+//   final Widget child;
 
-  const _VaultInfoItem({
-    required this.title,
-    required this.child,
-  });
+//   const _VaultInfoItem({
+//     required this.title,
+//     required this.child,
+//   });
 
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return Expanded(
-      child: Container(
-        padding: EdgeInsets.all(Spacing.xSmall),
-        decoration: BoxDecoration(
-          color: colorScheme.secondaryContainer,
-          borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            child,
-            SizedBox(height: Spacing.superExtraSmall),
-            Text(
-              title,
-              style: Typo.xSmall.copyWith(
-                color: colorScheme.onSecondary,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     final colorScheme = Theme.of(context).colorScheme;
+//     return Expanded(
+//       child: Container(
+//         padding: EdgeInsets.all(Spacing.xSmall),
+//         decoration: BoxDecoration(
+//           color: colorScheme.secondaryContainer,
+//           borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
+//         ),
+//         child: Column(
+//           mainAxisSize: MainAxisSize.min,
+//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           children: [
+//             child,
+//             SizedBox(height: Spacing.superExtraSmall),
+//             Text(
+//               title,
+//               style: Typo.xSmall.copyWith(
+//                 color: colorScheme.onSecondary,
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }

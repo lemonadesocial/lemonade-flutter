@@ -53,7 +53,7 @@ class VaultsListView extends StatelessWidget {
                   ),
                 ),
               ),
-            )
+            ),
           ],
         ),
       );
