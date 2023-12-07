@@ -6,12 +6,16 @@ class DatePickerTextField extends StatefulWidget {
   final TextEditingController controller;
   final String label;
   final DateTime? initialValue;
+  final ValueChanged<DateTime>? onChanged;
+  final String? errorText;
 
   const DatePickerTextField({
     Key? key,
     required this.controller,
     required this.label,
     this.initialValue,
+    this.onChanged,
+    this.errorText,
   }) : super(key: key);
 
   @override
@@ -36,6 +40,7 @@ class DatePickerTextFieldState extends State<DatePickerTextField> {
       label: widget.label,
       controller: widget.controller,
       readOnly: true,
+      errorText: widget.errorText,
       onTap: () async {
         DateTime? pickedDate = await showDatePicker(
           context: context,
@@ -58,6 +63,9 @@ class DatePickerTextFieldState extends State<DatePickerTextField> {
           String formattedDate = DateFormat('E, MMMM d').format(pickedDate);
           setState(() {
             widget.controller.text = formattedDate;
+            if (widget.onChanged != null) {
+              widget.onChanged!(pickedDate);
+            }
           });
         } else {}
       },

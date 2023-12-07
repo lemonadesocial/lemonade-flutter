@@ -7,6 +7,6 @@ class MustBeFutureValidator extends DateTimeValidator {
 
   @override
   bool isValid(DateTime value) {
-    return value.isBefore(DateTime.now());
+    return value.isAfter(DateTime.now());
   }
 }

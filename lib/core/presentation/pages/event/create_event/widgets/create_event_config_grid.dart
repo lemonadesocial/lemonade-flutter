@@ -6,11 +6,13 @@ import 'package:app/core/presentation/pages/event/create_event/widgets/event_con
 import 'package:app/core/presentation/pages/event/event_datetime_settings_page/event_datetime_settings_page.dart';
 import 'package:app/core/presentation/pages/event/event_guest_settings_page/event_guest_settings_page.dart';
 import 'package:app/core/utils/date_format_utils.dart';
+import 'package:app/core/utils/modal_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 
 enum EventPrivacy { public, private }
 
@@ -61,6 +63,7 @@ class CreateEventConfigGrid extends StatelessWidget {
     BuildContext context,
     EventConfiguration eventConfig,
   ) {
+    Vibrate.feedback(FeedbackType.light);
     Widget page;
     final eventConfigType = eventConfig.type;
     switch (eventConfigType) {
@@ -69,6 +72,9 @@ class CreateEventConfigGrid extends StatelessWidget {
         page = const EventGuestSettingsPage();
         break;
       case EventConfigurationType.startDateTime:
+        page = const EventDatetimeSettingsPage();
+        break;
+      case EventConfigurationType.endDateTime:
         page = const EventDatetimeSettingsPage();
         break;
       default:
@@ -111,7 +117,6 @@ class CreateEventConfigGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     return Column(
       children: List.generate(
         (eventConfigs.length / 2).ceil(),
@@ -141,7 +146,7 @@ class CreateEventConfigGrid extends StatelessWidget {
                               right:
                                   entry.key == 0 ? Spacing.superExtraSmall : 0,
                             ), // Adjust horizontal spacing
-                            child: _buildCard(entry.value),
+                            child: _buildCard(entry.value, context),
                           ),
                         ),
                       )
@@ -155,7 +160,7 @@ class CreateEventConfigGrid extends StatelessWidget {
     );
   }
 
-  _buildCard(EventConfiguration eventConfig) {
+  _buildCard(EventConfiguration eventConfig, BuildContext context) {
     EventConfigurationType? eventConfigType = eventConfig.type;
     switch (eventConfigType) {
       case EventConfigurationType.visibility:
@@ -190,8 +195,10 @@ class CreateEventConfigGrid extends StatelessWidget {
             EventDateTimeSettingsState>(
           builder: (context, state) {
             return EventConfigCard(
-              title: DateFormatUtils.custom(state.start.value,
-                  pattern: 'EEE, MMMM dd - HH:mm'),
+              title: DateFormatUtils.custom(
+                state.start.value,
+                pattern: 'EEE, MMMM dd - HH:mm',
+              ),
               description: eventConfig.description,
               icon: eventConfig.icon,
               onTap: () => onTap(context, eventConfig),
@@ -203,14 +210,31 @@ class CreateEventConfigGrid extends StatelessWidget {
             EventDateTimeSettingsState>(
           builder: (context, state) {
             return EventConfigCard(
-              title: DateFormatUtils.custom(state.end.value,
-                  pattern: 'EEE, MMMM dd - HH:mm'),
+              title: DateFormatUtils.custom(
+                state.end.value,
+                pattern: 'EEE, MMMM dd - HH:mm',
+              ),
               description: eventConfig.description,
               icon: eventConfig.icon,
               onTap: () => onTap(context, eventConfig),
             );
           },
         );
+      case EventConfigurationType.virtual:
+        return EventConfigCard(
+          title: eventConfig.title,
+          description: eventConfig.description,
+          icon: eventConfig.icon,
+          onTap: () => showComingSoonDialog(context),
+        );
+      case EventConfigurationType.location:
+        return EventConfigCard(
+          title: eventConfig.title,
+          description: eventConfig.description,
+          icon: eventConfig.icon,
+          onTap: () => showComingSoonDialog(context),
+        );
+
       default:
         return EventConfigCard(
           title: '',

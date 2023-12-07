@@ -3,9 +3,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:injectable/injectable.dart';
 
 part 'event_datetime_settings_bloc.freezed.dart';
 
+@lazySingleton
 class EventDateTimeSettingsBloc
     extends Bloc<EventDateTimeSettingsEvent, EventDateTimeSettingsState> {
   EventDateTimeSettingsBloc() : super(const EventDateTimeSettingsState()) {
@@ -20,7 +22,6 @@ class EventDateTimeSettingsBloc
     EventDateTimeSettingsEventInit event,
     Emitter emit,
   ) async {
-    print("......onInit");
     final start = DateTimeFormz.dirty(event.startDateTime);
     final end = DateTimeFormz.dirty(event.endDateTime);
     emit(
@@ -31,22 +32,87 @@ class EventDateTimeSettingsBloc
   Future<void> _onStartDateChanged(
     StartDateChanged event,
     Emitter<EventDateTimeSettingsState> emit,
-  ) async {}
+  ) async {
+    final startDate = DateTimeFormz.dirty(event.datetime);
+    if (state.end.value != null && startDate.value!.isAfter(state.end.value!)) {
+      emit(
+        state.copyWith(
+          start: startDate.isValid
+              ? startDate
+              : DateTimeFormz.dirty(DateTime.now()),
+          end: const DateTimeFormz.pure(),
+          isValid: Formz.validate([
+            startDate,
+            state.end,
+          ]),
+        ),
+      );
+    } else {
+      emit(
+        state.copyWith(
+          start: startDate.isValid
+              ? startDate
+              : DateTimeFormz.dirty(DateTime.now()),
+          isValid: Formz.validate([startDate, state.end]),
+        ),
+      );
+    }
+  }
 
   Future<void> _onStartTimeChanged(
     StartTimeChanged event,
     Emitter<EventDateTimeSettingsState> emit,
-  ) async {}
+  ) async {
+    final startTime = DateTimeFormz.dirty(event.datetime);
+    emit(
+      state.copyWith(
+        start: startTime,
+      ),
+    );
+  }
 
   Future<void> _onEndDateChanged(
     EndDateChanged event,
     Emitter<EventDateTimeSettingsState> emit,
-  ) async {}
+  ) async {
+    final endDate = DateTimeFormz.dirty(event.datetime);
+    if (state.start.value != null &&
+        endDate.value != null &&
+        endDate.value!.isBefore(state.start.value!)) {
+      emit(
+        state.copyWith(
+          start: const DateTimeFormz.pure(),
+          end: endDate.isValid ? endDate : DateTimeFormz.dirty(DateTime.now()),
+          isValid: Formz.validate([
+            state.start,
+            endDate,
+          ]),
+        ),
+      );
+    } else {
+      emit(
+        state.copyWith(
+          end: endDate.isValid ? endDate : DateTimeFormz.dirty(DateTime.now()),
+          isValid: Formz.validate([
+            state.start,
+            endDate,
+          ]),
+        ),
+      );
+    }
+  }
 
   Future<void> _onEndTimeChanged(
     EndTimeChanged event,
     Emitter<EventDateTimeSettingsState> emit,
-  ) async {}
+  ) async {
+    final endTime = DateTimeFormz.dirty(event.datetime);
+    emit(
+      state.copyWith(
+        end: endTime,
+      ),
+    );
+  }
 }
 
 @freezed

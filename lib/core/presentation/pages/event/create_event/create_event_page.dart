@@ -1,5 +1,6 @@
 import 'package:app/core/application/event/create_event_bloc/create_event_bloc.dart';
 import 'package:app/core/application/event/event_datetime_settings_bloc/event_datetime_settings_bloc.dart';
+import 'package:app/core/constants/event/event_constants.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
@@ -11,21 +12,6 @@ class CreateEventPage extends StatelessWidget implements AutoRouteWrapper {
 
   @override
   Widget wrappedRoute(BuildContext context) {
-    DateTime currentDateTime = DateTime.now();
-    DateTime startDateTime = DateTime(
-      currentDateTime.year,
-      currentDateTime.month,
-      currentDateTime.day + 3,
-      10,
-    );
-
-    DateTime endDateTime = DateTime(
-      currentDateTime.year,
-      currentDateTime.month,
-      currentDateTime.day + 6,
-      18,
-    );
-
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -35,8 +21,8 @@ class CreateEventPage extends StatelessWidget implements AutoRouteWrapper {
           create: (context) => EventDateTimeSettingsBloc()
             ..add(
               EventDateTimeSettingsEvent.init(
-                startDateTime: startDateTime,
-                endDateTime: endDateTime,
+                startDateTime: EventDateTimeConstants.defaultStartDateTime,
+                endDateTime: EventDateTimeConstants.defaultEndDateTime,
               ),
             ),
         ),

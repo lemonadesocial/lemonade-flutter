@@ -6,12 +6,14 @@ class TimePickerTextField extends StatefulWidget {
   final TextEditingController controller;
   final String label;
   final DateTime? initialValue;
+  final ValueChanged<DateTime>? onChanged;
 
   const TimePickerTextField({
     super.key,
     required this.controller,
     required this.label,
     this.initialValue,
+    this.onChanged,
   });
 
   @override
@@ -52,12 +54,18 @@ class TimePickerTextFieldState extends State<TimePickerTextField> {
           },
         );
         if (pickedTime != null) {
+          int year = widget.initialValue?.year ?? DateTime.now().year;
+          int month = widget.initialValue?.month ?? DateTime.now().month;
+          int day = widget.initialValue?.day ?? DateTime.now().day;
           int hour = pickedTime.hour;
           int minute = pickedTime.minute;
-          DateTime parsedTime = DateTime(2023, 1, 1, hour, minute);
+          DateTime parsedTime = DateTime(year, month, day, hour, minute);
           String formattedTime = DateFormat('HH:mm').format(parsedTime);
           setState(() {
             widget.controller.text = formattedTime;
+            if (widget.onChanged != null) {
+              widget.onChanged!(parsedTime);
+            }
           });
         }
       },

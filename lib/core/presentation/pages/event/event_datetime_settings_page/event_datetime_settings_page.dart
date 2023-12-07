@@ -1,3 +1,4 @@
+import 'package:app/core/application/event/create_event_bloc/create_event_bloc.dart';
 import 'package:app/core/application/event/event_datetime_settings_bloc/event_datetime_settings_bloc.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/datepicker_text_field/datepicker_text_field.dart';
@@ -49,7 +50,22 @@ class _EventDatetimeSettingsPageState extends State<EventDatetimeSettingsPage> {
   }
 
   Widget _buildContent(ColorScheme colorScheme) {
-    return BlocBuilder<EventDateTimeSettingsBloc, EventDateTimeSettingsState>(
+    return BlocListener<EventDateTimeSettingsBloc, EventDateTimeSettingsState>(
+        listener: (context, state) async {
+      if (state.start.value == null) {
+        startDateInputController.text = '';
+      }
+      if (state.end.value == null) {
+        endDateInputController.text = '';
+      }
+      BlocProvider.of<CreateEventBloc>(context).add(
+          CreateEventEvent.startDateTimeChanged(
+              datetime: state.start.value ?? DateTime.now()));
+      BlocProvider.of<CreateEventBloc>(context).add(
+          CreateEventEvent.endDateTimeChanged(
+              datetime: state.end.value ?? DateTime.now()));
+    }, child:
+            BlocBuilder<EventDateTimeSettingsBloc, EventDateTimeSettingsState>(
       builder: (context, state) {
         return Padding(
           padding: EdgeInsets.symmetric(
@@ -62,6 +78,14 @@ class _EventDatetimeSettingsPageState extends State<EventDatetimeSettingsPage> {
                 controller: startDateInputController,
                 label: t.event.datetimeSettings.startDate,
                 initialValue: state.start.value,
+                onChanged: (value) => context
+                    .read<EventDateTimeSettingsBloc>()
+                    .add(StartDateChanged(datetime: value)),
+                errorText: state.start.error != null
+                    ? state.start.error!.getMessage(
+                        t.event.datetimeSettings.startDate,
+                      )
+                    : null,
               ),
               SizedBox(
                 height: Spacing.medium,
@@ -70,6 +94,9 @@ class _EventDatetimeSettingsPageState extends State<EventDatetimeSettingsPage> {
                 controller: startTimeInputController,
                 label: t.event.datetimeSettings.startTime,
                 initialValue: state.start.value,
+                onChanged: (value) => context
+                    .read<EventDateTimeSettingsBloc>()
+                    .add(StartTimeChanged(datetime: value)),
               ),
               SizedBox(
                 height: Spacing.medium,
@@ -78,6 +105,14 @@ class _EventDatetimeSettingsPageState extends State<EventDatetimeSettingsPage> {
                 controller: endDateInputController,
                 label: t.event.datetimeSettings.endDate,
                 initialValue: state.end.value,
+                onChanged: (value) => context
+                    .read<EventDateTimeSettingsBloc>()
+                    .add(EndDateChanged(datetime: value)),
+                errorText: state.end.error != null
+                    ? state.end.error!.getMessage(
+                        t.event.datetimeSettings.endDate,
+                      )
+                    : null,
               ),
               SizedBox(
                 height: Spacing.medium,
@@ -86,11 +121,14 @@ class _EventDatetimeSettingsPageState extends State<EventDatetimeSettingsPage> {
                 controller: endTimeInputController,
                 label: t.event.datetimeSettings.endTime,
                 initialValue: state.end.value,
+                onChanged: (value) => context
+                    .read<EventDateTimeSettingsBloc>()
+                    .add(EndTimeChanged(datetime: value)),
               ),
             ],
           ),
         );
       },
-    );
+    ));
   }
 }
