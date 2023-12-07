@@ -128,5 +128,6 @@
     "update_now": "Update Now",
     "restart": "Restart",
     "pleaseTryAgain": "There's something wrong, please try again",
-    "chatAI": "Chat AI"
+    "chatAI": "Chat AI",
+    "incorrectPin": "Incorrect PIN code"
 }

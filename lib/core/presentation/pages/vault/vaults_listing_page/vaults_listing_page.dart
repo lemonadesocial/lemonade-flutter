@@ -1,8 +1,11 @@
 import 'package:app/core/application/payment/get_payment_accounts_bloc/get_payment_accounts_bloc.dart';
+import 'package:app/core/application/vault/check_vault_pin_bloc/check_vault_pin_bloc.dart';
 import 'package:app/core/domain/payment/input/get_payment_accounts_input/get_payment_accounts_input.dart';
 import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/domain/vault/vault_enums.dart';
 import 'package:app/core/presentation/pages/vault/vaults_listing_page/views/vaults_list_view.dart';
+import 'package:app/core/presentation/widgets/app_lock/app_lock.dart';
+import 'package:app/core/presentation/widgets/app_lock/lemon_app_lock_page.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
@@ -20,16 +23,26 @@ class VaultsListingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => GetPaymentAccountsBloc()
-        ..add(
-          GetPaymentAccountsEvent.fetch(
-            input: GetPaymentAccountsInput(
-              type: PaymentAccountType.ethereum,
-              provider: PaymentProvider.safe,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => GetPaymentAccountsBloc()
+            ..add(
+              GetPaymentAccountsEvent.fetch(
+                input: GetPaymentAccountsInput(
+                  type: PaymentAccountType.ethereum,
+                  provider: PaymentProvider.safe,
+                ),
+              ),
             ),
-          ),
         ),
+        BlocProvider(
+          create: (context) => CheckVaultPinBloc()
+            ..add(
+              CheckVaultPinEvent.initialize(),
+            ),
+        ),
+      ],
       child: const VaultsListingPageView(),
     );
   }
@@ -44,73 +57,104 @@ class VaultsListingPageView extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
-    return Scaffold(
-      backgroundColor: colorScheme.background,
-      appBar: LemonAppBar(
-        title: StringUtils.capitalize(
-          t.vault.vault(n: 2),
-        ),
-      ),
-      body: DefaultTabController(
-        initialIndex: 0,
-        length: 2,
-        child: Column(
-          children: [
-            TabBar(
-              labelStyle: Typo.medium.copyWith(
-                color: colorScheme.onPrimary,
-                fontWeight: FontWeight.w500,
-              ),
-              unselectedLabelStyle: Typo.medium.copyWith(
-                color: colorScheme.onSurfaceVariant,
-                fontWeight: FontWeight.w500,
-              ),
-              indicatorColor: LemonColor.paleViolet,
-              tabs: <Widget>[
-                Tab(text: t.vault.vaultType.individual),
-                Tab(text: t.vault.vaultType.community),
-              ],
+
+    return BlocBuilder<CheckVaultPinBloc, CheckVaultPinState>(
+      builder: (context, vaultPinState) {
+        if (vaultPinState is CheckVaultPinStateChecking) {
+          return Scaffold(
+            backgroundColor: colorScheme.background,
+            body: Center(
+              child: Loading.defaultLoading(context),
             ),
-            Expanded(
-              child:
-                  BlocBuilder<GetPaymentAccountsBloc, GetPaymentAccountsState>(
-                builder: (context, state) => state.when(
-                  initial: () => Loading.defaultLoading(context),
-                  loading: () => Loading.defaultLoading(context),
-                  failure: () => EmptyList(
-                    emptyText: t.common.somethingWrong,
+          );
+        }
+        return AppLock(
+          theme: Theme.of(context),
+          enabled: vaultPinState.maybeWhen(
+            orElse: () => false,
+            noPin: () => false,
+            pinRequired: (_) => true,
+          ),
+          lockScreen: LemonAppLockPage(
+            title: t.vault.createPIN.confirmPIN,
+            description: t.vault.createPIN.setPINDescription,
+            correctPin: vaultPinState.maybeWhen(
+              orElse: () => '',
+              pinRequired: (correctPin) => correctPin,
+            ),
+          ),
+          builder: (arg) => Scaffold(
+            backgroundColor: colorScheme.background,
+            appBar: LemonAppBar(
+              title: StringUtils.capitalize(
+                t.vault.vault(n: 2),
+              ),
+            ),
+            body: DefaultTabController(
+              initialIndex: 0,
+              length: 2,
+              child: Column(
+                children: [
+                  TabBar(
+                    labelStyle: Typo.medium.copyWith(
+                      color: colorScheme.onPrimary,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    unselectedLabelStyle: Typo.medium.copyWith(
+                      color: colorScheme.onSurfaceVariant,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    indicatorColor: LemonColor.paleViolet,
+                    tabs: <Widget>[
+                      Tab(text: t.vault.vaultType.individual),
+                      Tab(text: t.vault.vaultType.community),
+                    ],
                   ),
-                  success: (paymentAccounts) {
-                    final individualVaults = paymentAccounts
-                        .where(
-                          (account) => account.accountInfo?.owners?.length == 1,
-                        )
-                        .toList();
-                    final communityVaults = paymentAccounts
-                        .where(
-                          (account) =>
-                              (account.accountInfo?.owners ?? []).length > 1,
-                        )
-                        .toList();
-                    return TabBarView(
-                      children: [
-                        VaultsListView(
-                          vaultType: VaultType.individual,
-                          vaults: individualVaults,
+                  Expanded(
+                    child: BlocBuilder<GetPaymentAccountsBloc,
+                        GetPaymentAccountsState>(
+                      builder: (context, state) => state.when(
+                        initial: () => Loading.defaultLoading(context),
+                        loading: () => Loading.defaultLoading(context),
+                        failure: () => EmptyList(
+                          emptyText: t.common.somethingWrong,
                         ),
-                        VaultsListView(
-                          vaultType: VaultType.community,
-                          vaults: communityVaults,
-                        ),
-                      ],
-                    );
-                  },
-                ),
+                        success: (paymentAccounts) {
+                          final individualVaults = paymentAccounts
+                              .where(
+                                (account) =>
+                                    account.accountInfo?.owners?.length == 1,
+                              )
+                              .toList();
+                          final communityVaults = paymentAccounts
+                              .where(
+                                (account) =>
+                                    (account.accountInfo?.owners ?? []).length >
+                                    1,
+                              )
+                              .toList();
+                          return TabBarView(
+                            children: [
+                              VaultsListView(
+                                vaultType: VaultType.individual,
+                                vaults: individualVaults,
+                              ),
+                              VaultsListView(
+                                vaultType: VaultType.community,
+                                vaults: communityVaults,
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }
