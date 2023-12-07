@@ -765,7 +765,7 @@ workflows:
       - build/app/outputs/bundle/**/*.aab    
     publishing:
       <<: *ios_app_store_publish
-      <<: *android_publish
+      <<: *production_android_publish
       scripts:
         - *upload_production_dsym_to_firebase
 
