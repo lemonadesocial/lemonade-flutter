@@ -52,7 +52,7 @@ final List<AIChatGridViewModel?> aiChatDefaultGridData = [
         colorFilter: colorFilter,
       ),
     ),
-    featureAvailable: false,
+    featureAvailable: true,
     colors: CreatePopupGradient.event.colors,
   ),
   // TODO: Temporary comment for AppStore/PlayStore review
@@ -94,6 +94,8 @@ class AIChatDefaultGrid extends StatelessWidget {
     switch (action) {
       case AIMetadataAction.createPost:
         AutoRouter.of(context).navigate(const CreatePostRoute());
+      case AIMetadataAction.createEvent:
+        AutoRouter.of(context).navigate(const CreateEventRoute());
       default:
         break;
     }

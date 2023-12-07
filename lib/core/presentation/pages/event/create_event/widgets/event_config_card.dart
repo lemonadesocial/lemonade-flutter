@@ -5,14 +5,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EventConfigCard extends StatelessWidget {
   final String title;
-  final String description;
+  final String? description;
   final Widget icon;
   final Function() onTap;
 
   const EventConfigCard({
     super.key,
     required this.title,
-    required this.description,
+    this.description,
     required this.icon,
     required this.onTap,
   });
@@ -52,13 +52,15 @@ class EventConfigCard extends StatelessWidget {
                       color: colorScheme.onSurface,
                     ),
                   ),
-                  Text(
-                    description,
-                    style: Typo.extraSmall.copyWith(
-                      fontFamily: FontFamily.switzerVariable,
-                      color: colorScheme.onSurface,
-                    ),
-                  ),
+                  description != null
+                      ? Text(
+                          description!,
+                          style: Typo.extraSmall.copyWith(
+                            fontFamily: FontFamily.switzerVariable,
+                            color: colorScheme.onSurface,
+                          ),
+                        )
+                      : const SizedBox(),
                 ],
               ),
             ),
