@@ -35,7 +35,7 @@ class LinearGradientButton extends StatelessWidget {
   final GradientButtonMode mode;
   final String label;
   final Widget? leading;
-  final Function()? onTap;
+  final void Function()? onTap;
   final double? height;
   final EdgeInsets? padding;
   final BorderRadius? radius;

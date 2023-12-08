@@ -11,7 +11,10 @@
     "vaultInfo": {
         "chain": "Chain",
         "assets": "Assets",
-        "members": "Members",
+        "members(ordinal)": {
+            "one": "Member",
+            "other": "Members"
+        },
         "balance": "balance"
     },
     "createVaultBottomSheet": {
@@ -48,5 +51,10 @@
         "confirmPIN": "Confirm PIN",
         "setPINDescription": "You’ll need your PIN to log in to your wallet. This PIN secures the wallet on this device."
     },
-    "emptyVault": "You don't have any vaults yet. Create one now to manage your assets in a collective & secure way!"
+    "emptyVault": "You don't have any vaults yet. Create one\nnow to manage your assets in a collective &\nsecure way!",
+    "actions": {
+        "createVault": "Create Vault"
+    },
+    "connectedWith": "Connected with",
+    "deploying": "Deploying..."
 }

@@ -1,4 +1,5 @@
 import 'package:app/core/domain/payment/payment_enums.dart';
+import 'package:app/core/domain/vault/vault_enums.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'payment_account_dto.freezed.dart';
@@ -11,6 +12,7 @@ class PaymentAccountDto with _$PaymentAccountDto {
     bool? active,
     @JsonKey(name: 'created_at') DateTime? createdAt,
     String? user,
+    String? title,
     PaymentAccountType? type,
     PaymentProvider? provider,
     @JsonKey(name: 'account_info') AccountInfoDto? accountInfo,
@@ -29,6 +31,12 @@ class AccountInfoDto with _$AccountInfoDto {
     // Blockchain
     String? address,
     List<String>? networks,
+    // Safe
+    String? network,
+    List<String>? owners,
+    int? threshold,
+    bool? funded,
+    GelatoTaskStatus? status,
     // Stripe
     @JsonKey(name: 'publishable_key') String? publishableKey,
   }) = _AccountInfoDto;

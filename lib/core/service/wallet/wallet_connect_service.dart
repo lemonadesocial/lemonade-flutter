@@ -1,8 +1,10 @@
 import 'package:app/core/config.dart';
 import 'package:app/core/constants/web3/chains.dart';
 import 'package:app/core/domain/web3/entities/ethereum_transaction.dart';
+import 'package:app/core/domain/web3/web3_repository.dart';
 import 'package:app/core/utils/wc_utils.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:injectable/injectable.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
@@ -50,6 +52,7 @@ class WalletConnectService {
     'personal_sign',
     'eth_signTypedData',
     'eth_sendTransaction',
+    'eth_sendRawTransaction',
   ];
   static const defaultEvents = SupportedSessionEvent.values;
 
@@ -78,9 +81,11 @@ class WalletConnectService {
         WCUtils.getSessionsChains(activeSession?.namespaces),
       );
 
+      final chains =
+          (await getIt<Web3Repository>().getChainsList()).getOrElse(() => []);
       // Register event handler of all supported chains
       _registerEventHandler(
-        Chains.allChains.map((chain) => chain.chainId).toList(),
+        chains.map((chain) => chain.fullChainId ?? '').toList(),
       );
 
       _app!.onSessionEvent.subscribe(_onSessionEvent);
@@ -112,19 +117,22 @@ class WalletConnectService {
 
   Future<bool> connectWallet({
     required SupportedWalletApp walletApp,
-    List<Chains>? chains,
+    String? chainId,
   }) async {
     try {
       if (_app == null) {
         await init();
       }
+
+      final chains =
+          (await getIt<Web3Repository>().getChainsList()).getOrElse(() => []);
       final supportedChainIds =
-          (AppConfig.isProduction ? Chains.mainnet : Chains.testnet)
-              .map((item) => item.chainId)
-              .toList();
+          chains.map((chain) => chain.fullChainId ?? '').toList();
       final supportedEvents = defaultEvents.map((item) => item.name).toList();
       final requiredNamespace = RequiredNamespace(
-        chains: [AppConfig.isProduction ? ETHEREUM.chainId : GOERLI.chainId],
+        chains: chainId != null
+            ? [chainId]
+            : [AppConfig.isProduction ? ETHEREUM.chainId : GOERLI.chainId],
         methods: defaultMethods,
         events: supportedEvents,
       );

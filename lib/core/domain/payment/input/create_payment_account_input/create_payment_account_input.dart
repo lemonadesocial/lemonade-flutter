@@ -1,0 +1,36 @@
+import 'package:app/core/domain/payment/payment_enums.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'create_payment_account_input.freezed.dart';
+part 'create_payment_account_input.g.dart';
+
+@freezed
+class CreatePaymentAccountInput with _$CreatePaymentAccountInput {
+  @JsonSerializable(explicitToJson: true, includeIfNull: false)
+  factory CreatePaymentAccountInput({
+    required PaymentAccountType type,
+    String? title,
+    PaymentProvider? provider,
+    @JsonKey(name: 'account_info') AccountInfoInput? accountInfo,
+  }) = _CreatePaymentAccountInput;
+
+  factory CreatePaymentAccountInput.fromJson(Map<String, dynamic> json) =>
+      _$CreatePaymentAccountInputFromJson(json);
+}
+
+@freezed
+class AccountInfoInput with _$AccountInfoInput {
+  @JsonSerializable(explicitToJson: true, includeIfNull: false)
+  factory AccountInfoInput({
+    @Default([]) List<String>? currencies,
+    // Blockchain Account
+    String? address,
+    // Safe Account extends Blockchain Account
+    String? network,
+    List<String>? owners,
+    int? threshold,
+  }) = _AccountInfoInput;
+
+  factory AccountInfoInput.fromJson(Map<String, dynamic> json) =>
+      _$AccountInfoInputFromJson(json);
+}
