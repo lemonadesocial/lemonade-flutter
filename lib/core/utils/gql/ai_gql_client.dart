@@ -29,12 +29,12 @@ class AIClient {
   }
 
   void _disposeClient() {
+    _client.cache.clear();
+    _client.cache.clearOptimisticPatches();
     _authLink.dispose();
     _webSocketLink.dispose();
     _client.link.dispose();
     _client.cache.dispose();
-    _client.cache.clear();
-    _client.cache.clearOptimisticPatches();
   }
 
   void _initializeWebSocketLink() {

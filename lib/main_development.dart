@@ -16,12 +16,12 @@ void main() async {
 
   registerModule();
 
+  await getIt<AIClient>().init();
   await getIt<AppOauth>().init();
   if (!kDebugMode) {
     await getIt<FirebaseService>().initialize();
   }
   await getIt<MatrixService>().init();
-  await getIt<AIClient>().init();
 
   runApp(const LemonadeApp());
 
