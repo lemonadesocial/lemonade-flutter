@@ -79,7 +79,7 @@ dependencies:
   flutter_blurhash: 0.8.2
   emoji_picker_flutter: ^1.6.1
   mime: ^1.0.4
-  flutter_screenutil: ^5.8.4
+  flutter_screenutil: ^5.9.0
   pull_to_refresh_flutter3: ^2.0.1
   lottie: ^2.6.0
   expandable: ^5.0.1

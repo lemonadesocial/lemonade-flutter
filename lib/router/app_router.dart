@@ -155,9 +155,6 @@ final eventRoutes = [
   AutoRoute(
     page: MyEventTicketAssignmentRoute.page,
   ),
-  AutoRoute(
-    page: EventGuestSettingsRoute.page,
-  ),
 ];
 
 final eventBuyTicketsRoutes = AutoRoute(
@@ -199,10 +196,13 @@ final createEventRoutes = AutoRoute(
   children: [
     AutoRoute(
       initial: true,
-      page: BaseCreateEventRoute.page,
+      page: CreateEventBaseRoute.page,
     ),
     AutoRoute(
       page: EventGuestSettingsRoute.page,
+    ),
+    AutoRoute(
+      page: EventDatetimeSettingsRoute.page,
     ),
   ],
 );

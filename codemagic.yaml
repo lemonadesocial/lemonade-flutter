@@ -3,7 +3,7 @@ definitions:
     instance_type: mac_mini_m1
     max_build_duration: 75
   env_versions: &env_versions
-    flutter: stable
+    flutter: 3.13.9
     xcode: 14.3.1
     cocoapods: 1.13.0
   integrations:
@@ -573,11 +573,16 @@ definitions:
       auth: integration
       submit_to_testflight: true
       submit_to_app_store: false
-  android_publish: &android_publish
+  staging_android_publish: &staging_android_publish
     google_play:
       credentials: $GCLOUD_SERVICE_ACCOUNT_CREDENTIALS
       track: $GOOGLE_PLAY_TRACK
       submit_as_draft: true
+  production_android_publish: &production_android_publish
+    google_play:
+      credentials: $GCLOUD_SERVICE_ACCOUNT_CREDENTIALS
+      track: $GOOGLE_PLAY_TRACK
+      submit_as_draft: false
 workflows:
   # Build iOS Staging 
   ios-staging:
@@ -642,7 +647,7 @@ workflows:
       - *aab
       - *android_log
     publishing:
-      <<: *android_publish
+      <<: *staging_android_publish
       <<: *email_staging
       scripts:
         - *notify_android_staging_to_slack
@@ -680,7 +685,7 @@ workflows:
       - *android_log
     publishing:
       <<: *ios_app_store_publish
-      <<: *android_publish
+      <<: *production_android_publish
       <<: *email_production
       scripts:
         - *upload_production_dsym_to_firebase
@@ -718,7 +723,7 @@ workflows:
       - build/app/outputs/bundle/**/*.aab    
     publishing:
       <<: *ios_app_store_publish
-      <<: *android_publish
+      <<: *staging_android_publish
       scripts:
         - *upload_staging_dsym_to_firebase
 
@@ -760,7 +765,7 @@ workflows:
       - build/app/outputs/bundle/**/*.aab    
     publishing:
       <<: *ios_app_store_publish
-      <<: *android_publish
+      <<: *production_android_publish
       scripts:
         - *upload_production_dsym_to_firebase
 

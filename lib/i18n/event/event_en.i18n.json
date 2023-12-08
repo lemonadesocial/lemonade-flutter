@@ -130,6 +130,7 @@
     "privateDescription": "Only invitees can discover",
     "public": "Public",
     "publicDescription": "Anyone can discover",
+    "error": "Error",
     "guestSettings": {
         "autoApprove": "Auto Approve",
         "autoApproveDescription": "All requests to join instantly approved",
@@ -140,5 +141,12 @@
         "totalGuestLimitDescription": "Total number of people who can attend this experience",
         "noGuestLimit": "No guest limit"
     },
-    "error": "Error"
+    "dateAndTime": "Date & Time",
+    "datetimeSettings": {
+        "startDate": "Start date",
+        "startTime": "Start time",
+        "endDate": "End date",
+        "endTime": "End time"       
+    },
+    "timezone": "Timezone"
 }

@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/user/entities/user.dart';
@@ -112,6 +110,7 @@ class _EventHostItem extends StatelessWidget {
       child: Container(
         width: 130.w,
         decoration: ShapeDecoration(
+          color: colorScheme.onPrimary.withOpacity(0.06),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15.r),
           ),
@@ -120,25 +119,6 @@ class _EventHostItem extends StatelessWidget {
           borderRadius: BorderRadius.circular(15.r),
           child: Stack(
             children: [
-              Positioned.fill(
-                child: ImageFiltered(
-                  imageFilter: ImageFilter.blur(
-                    sigmaX: 100,
-                    sigmaY: 50,
-                  ),
-                  child: CachedNetworkImage(
-                    fit: BoxFit.cover,
-                    placeholder: (_, __) =>
-                        ImagePlaceholder.defaultPlaceholder(),
-                    errorWidget: (_, __, ___) =>
-                        ImagePlaceholder.defaultPlaceholder(),
-                    imageUrl: ImageUtils.generateUrl(
-                      file: host?.newPhotosExpanded?.first,
-                      imageConfig: ImageConfig.eventPhoto,
-                    ),
-                  ),
-                ),
-              ),
               Padding(
                 padding: EdgeInsets.symmetric(
                   vertical: Spacing.small,

@@ -1,5 +1,6 @@
 import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/core/domain/event/input/create_event_input/create_event_input.dart';
+import 'package:app/core/domain/form/datetime_formz.dart';
 import 'package:app/core/domain/form/string_formz.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,6 +11,7 @@ part 'create_event_bloc.freezed.dart';
 
 class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
   CreateEventBloc() : super(const CreateEventState()) {
+    // on<CreateEventEventInit>(_onInit);
     on<TitleChanged>(_onTitleChanged);
     on<DescriptionChanged>(_onDescriptionChanged);
     on<VerifyChanged>(_onVerifyChanged);
@@ -18,6 +20,8 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
     on<PrivateChanged>(_onPrivateChanged);
     on<VirtualChanged>(_onVirtualChanged);
     on<FormSubmitted>(_onFormSubmitted);
+    on<StartDateTimeChanged>(_onStartDateTimeChanged);
+    on<EndDateTimeChanged>(_onEndDateTimeChanged);
   }
   final _eventRepository = getIt<EventRepository>();
 
@@ -107,6 +111,30 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
     );
   }
 
+  Future<void> _onStartDateTimeChanged(
+    StartDateTimeChanged event,
+    Emitter<CreateEventState> emit,
+  ) async {
+    final startDateTime = DateTimeFormz.dirty(event.datetime);
+    emit(
+      state.copyWith(
+        start: startDateTime,
+      ),
+    );
+  }
+
+  Future<void> _onEndDateTimeChanged(
+    EndDateTimeChanged event,
+    Emitter<CreateEventState> emit,
+  ) async {
+    final endDateTime = DateTimeFormz.dirty(event.datetime);
+    emit(
+      state.copyWith(
+        end: endDateTime,
+      ),
+    );
+  }
+
   Future<void> _onFormSubmitted(
     FormSubmitted event,
     Emitter<CreateEventState> emit,
@@ -128,8 +156,8 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
           description: title.value,
           private: false,
           verify: false,
-          start: DateTime.parse("2023-12-22T03:00:00.881Z"),
-          end: DateTime.parse("2023-12-25T03:00:00.881Z"),
+          start: DateTime.parse(state.start.value!.toUtc().toIso8601String()),
+          end: DateTime.parse(state.end.value!.toUtc().toIso8601String()),
           timezone: "Asia/Bangkok",
           guestLimit: 100,
           guestLimitPer: 2,
@@ -148,6 +176,8 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
 
 @freezed
 class CreateEventEvent with _$CreateEventEvent {
+  // factory CreateEventEvent.init() = CreateEventEventInit;
+
   const factory CreateEventEvent.titleChanged({required String title}) =
       TitleChanged;
 
@@ -172,6 +202,14 @@ class CreateEventEvent with _$CreateEventEvent {
   const factory CreateEventEvent.virtualChanged({required bool virtual}) =
       VirtualChanged;
 
+  const factory CreateEventEvent.startDateTimeChanged({
+    required DateTime datetime,
+  }) = StartDateTimeChanged;
+
+  const factory CreateEventEvent.endDateTimeChanged({
+    required DateTime datetime,
+  }) = EndDateTimeChanged;
+
   const factory CreateEventEvent.formSubmitted() = FormSubmitted;
 }
 
@@ -186,6 +224,8 @@ class CreateEventState with _$CreateEventState {
     @Default(true) bool verify,
     @Default(true) bool virtual,
     @Default(false) bool isValid,
+    @Default(DateTimeFormz.pure()) DateTimeFormz start,
+    @Default(DateTimeFormz.pure()) DateTimeFormz end,
     @Default(FormzSubmissionStatus.initial) FormzSubmissionStatus status,
   }) = _CreateEventState;
 }

@@ -52,7 +52,7 @@ final List<AIChatGridViewModel?> aiChatDefaultGridData = [
         colorFilter: colorFilter,
       ),
     ),
-    featureAvailable: false,
+    featureAvailable: true,
     colors: CreatePopupGradient.event.colors,
   ),
   // TODO: Temporary comment for AppStore/PlayStore review
@@ -94,6 +94,8 @@ class AIChatDefaultGrid extends StatelessWidget {
     switch (action) {
       case AIMetadataAction.createPost:
         AutoRouter.of(context).navigate(const CreatePostRoute());
+      case AIMetadataAction.createEvent:
+        AutoRouter.of(context).navigate(const CreateEventRoute());
       default:
         break;
     }
@@ -106,9 +108,9 @@ class AIChatDefaultGrid extends StatelessWidget {
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 2,
-        childAspectRatio: 1,
+        crossAxisSpacing: 9,
+        mainAxisSpacing: 9,
+        childAspectRatio: 1.5,
       ),
       itemCount: aiChatDefaultGridData.length,
       itemBuilder: (BuildContext context, int gridIndex) {
@@ -131,7 +133,6 @@ class AIGridItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final label = item?.label;
-    final content = item?.content;
     final icon = item?.icon;
     final featureAvailable = item?.featureAvailable;
     final colors = item?.colors;
@@ -141,7 +142,7 @@ class AIGridItem extends StatelessWidget {
         child: Stack(
           children: [
             Container(
-              height: 120.h,
+              height: 90.h,
               padding: EdgeInsets.all(Spacing.smMedium),
               clipBehavior: Clip.antiAlias,
               decoration: ShapeDecoration(
@@ -179,14 +180,6 @@ class AIGridItem extends StatelessWidget {
                                 fontWeight: FontWeight.w600,
                                 fontFamily: FontFamily.nohemiVariable,
                                 color: colorScheme.onPrimary,
-                              ),
-                            ),
-                            Text(
-                              content ?? '',
-                              style: Typo.xSmall.copyWith(
-                                fontWeight: FontWeight.w400,
-                                color: colorScheme.onPrimary.withOpacity(0.54),
-                                fontFamily: FontFamily.switzerVariable,
                               ),
                             ),
                           ],

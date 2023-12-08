@@ -63,23 +63,25 @@ class AIPageState extends State<AIPage> {
     config.value = AppConfig.aiConfig;
     final getConfigReq = GconfigReq((b) => b..vars.id = config);
     _subscription = client.request(getConfigReq).listen((event) {
-      final t = Translations.of(context);
-      setState(() {
-        _initialLoading = false;
-        messages.insert(
-          messages.length,
-          AIChatMessage(
-            event.data?.config.welcomeMessage ??
-                t.ai.initialAIMessage(
-                  botName: AIConstants.defaultAIChatbotName,
-                ),
-            null,
-            false,
-            false,
-            true,
-          ),
-        );
-      });
+      if (!event.hasErrors) {
+        final t = Translations.of(context);
+        setState(() {
+          _initialLoading = false;
+          messages.insert(
+            messages.length,
+            AIChatMessage(
+              event.data?.config.welcomeMessage ??
+                  t.ai.initialAIMessage(
+                    botName: AIConstants.defaultAIChatbotName,
+                  ),
+              null,
+              false,
+              false,
+              true,
+            ),
+          );
+        });
+      }
     });
     startTimer();
     keyboardSubscription =

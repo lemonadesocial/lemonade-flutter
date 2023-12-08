@@ -1,22 +1,31 @@
 import 'dart:ui';
 
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/entities/event_ticket.dart';
+import 'package:app/core/domain/event/input/get_tickets_input/get_tickets_input.dart';
+import 'package:app/core/domain/event/repository/event_ticket_repository.dart';
+import 'package:app/core/failure.dart';
+import 'package:app/core/presentation/widgets/common/dotted_line/dotted_line.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
-import 'package:app/core/utils/event_utils.dart';
+import 'package:app/core/utils/auth_utils.dart';
+import 'package:app/core/utils/event_tickets_utils.dart';
+import 'package:app/core/utils/image_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dartz/dartz.dart';
 import 'package:duration/duration.dart';
-import 'package:duration/locale.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:collection/collection.dart';
 
 class GuestEventDetailClock extends StatelessWidget {
   const GuestEventDetailClock({
@@ -39,147 +48,248 @@ class GuestEventDetailClock extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15.r),
+    final userId = AuthUtils.getUserId(context);
+
+    return FutureBuilder<Either<Failure, List<EventTicket>>>(
+      future: getIt<EventTicketRepository>().getTickets(
+        input: GetTicketsInput(
+          event: event.id,
+          user: userId,
+        ),
       ),
-      child: Stack(
-        children: [
-          Positioned.fill(
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(15.r),
-              child: ImageFiltered(
-                imageFilter: ImageFilter.blur(
-                  sigmaX: 100,
-                  sigmaY: 50,
+      builder: (context, snapshot) {
+        final eventTickets = snapshot.data?.getOrElse(() => []) ?? [];
+        final myTicket = eventTickets.isNotEmpty
+            ? eventTickets.firstWhereOrNull(
+                (ticket) => EventTicketUtils.isTicketAssignedToMe(
+                  ticket,
+                  userId: userId,
                 ),
-                child: CachedNetworkImage(
-                  fit: BoxFit.cover,
-                  imageUrl: EventUtils.getEventThumbnailUrl(event: event),
-                  errorWidget: (context, url, error) =>
-                      ImagePlaceholder.defaultPlaceholder(),
-                  placeholder: (context, url) =>
-                      ImagePlaceholder.defaultPlaceholder(),
-                ),
-              ),
-            ),
+              )
+            : null;
+        final ticketType = event.eventTicketTypes?.firstWhereOrNull(
+          (type) => type.id == myTicket?.type,
+        );
+
+        return Container(
+          height: 78.w,
+          decoration: BoxDecoration(
+            color: colorScheme.onPrimary.withOpacity(0.06),
+            borderRadius: BorderRadius.circular(15.r),
           ),
-          Positioned.fill(
-            child: Container(
-              color: Colors.black.withOpacity(0.7),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(
-              vertical: Spacing.smMedium,
-              horizontal: Spacing.smMedium,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Container(
-                  width: 42.w,
-                  height: 42.w,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: colorScheme.outline),
-                    borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
+          child: Stack(
+            children: [
+              Positioned(
+                left: Spacing.superExtraSmall,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(15.r),
+                  child: SizedBox(
+                    width: 72.w,
+                    height: 72.w,
                     child: CachedNetworkImage(
                       fit: BoxFit.cover,
-                      imageUrl: EventUtils.getEventThumbnailUrl(event: event),
+                      imageUrl: ticketType?.photosExpanded?.isNotEmpty == true
+                          ? ImageUtils.generateUrl(
+                              file: ticketType?.photosExpanded?.first,
+                            )
+                          : '',
                       errorWidget: (context, url, error) =>
-                          ImagePlaceholder.defaultPlaceholder(),
+                          ImagePlaceholder.ticketThumbnail(),
                       placeholder: (context, url) =>
-                          ImagePlaceholder.defaultPlaceholder(),
+                          ImagePlaceholder.ticketThumbnail(),
                     ),
                   ),
                 ),
-                SizedBox(width: Spacing.small),
-                Expanded(
-                  flex: 1,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        event.title ?? '',
-                        style: Typo.small.copyWith(
-                          color: colorScheme.onSecondary,
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      SizedBox(height: 3.w),
-                      Text(
-                        durationToEvent != null
-                            ? t.event.eventStartIn(
-                                time: printDuration(
-                                  durationToEvent!,
-                                  tersity: DurationTersity.minute,
-                                  upperTersity: DurationTersity.day,
-                                  abbreviated: true,
-                                  spacer: '',
-                                  delimiter: ' ',
-                                  locale: CustomDurationLocale(),
+              ),
+              Positioned.fill(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(15.r),
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(
+                      sigmaX: 40,
+                      sigmaY: 40,
+                    ),
+                    child: Container(
+                      // color: Colors.red,
+                      color: colorScheme.onPrimary.withOpacity(0.06),
+                    ),
+                  ),
+                ),
+              ),
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Stack(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            vertical: Spacing.smMedium,
+                            horizontal: Spacing.smMedium,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Container(
+                                width: 42.w,
+                                height: 42.w,
+                                decoration: BoxDecoration(
+                                  border:
+                                      Border.all(color: colorScheme.outline),
+                                  borderRadius: BorderRadius.circular(
+                                    LemonRadius.extraSmall,
+                                  ),
                                 ),
-                              )
-                            : t.event.eventEnded,
-                        style: Typo.mediumPlus.copyWith(
-                          color: colorScheme.onPrimary,
-                          fontWeight: FontWeight.w800,
-                          fontFamily: FontFamily.nohemiVariable,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(
+                                    LemonRadius.extraSmall,
+                                  ),
+                                  child: CachedNetworkImage(
+                                    fit: BoxFit.cover,
+                                    imageUrl: ticketType
+                                                ?.photosExpanded?.isNotEmpty ==
+                                            true
+                                        ? ImageUtils.generateUrl(
+                                            file: ticketType
+                                                ?.photosExpanded?.first,
+                                          )
+                                        : '',
+                                    errorWidget: (context, url, error) =>
+                                        ImagePlaceholder.ticketThumbnail(),
+                                    placeholder: (context, url) =>
+                                        ImagePlaceholder.ticketThumbnail(),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: Spacing.small),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    durationToEvent != null
+                                        ? t.event.eventStartIn(
+                                            time: printDuration(
+                                              durationToEvent!,
+                                              tersity: (durationToEvent
+                                                              ?.inDays ??
+                                                          0) <
+                                                      1
+                                                  ? (durationToEvent?.inHours ??
+                                                              0) >=
+                                                          1
+                                                      ? DurationTersity.hour
+                                                      : DurationTersity.minute
+                                                  : DurationTersity.day,
+                                              upperTersity: DurationTersity.day,
+                                            ),
+                                          )
+                                        : t.event.eventEnded,
+                                    style: Typo.mediumPlus.copyWith(
+                                      color: colorScheme.onPrimary,
+                                      fontWeight: FontWeight.w800,
+                                      fontFamily: FontFamily.nohemiVariable,
+                                    ),
+                                  ),
+                                  SizedBox(height: 2.w),
+                                  Text(
+                                    ticketType?.title ?? '',
+                                    style: Typo.small.copyWith(
+                                      color: colorScheme.onSecondary,
+                                    ),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  SizedBox(height: 3.w),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
+                        Positioned(
+                          right: 0,
+                          child: SizedBox(
+                            height: 80.w,
+                            child: DottedLine(
+                              lineThickness: 2.w,
+                              direction: Axis.vertical,
+                              dashColor: colorScheme.background,
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          top: -9.w,
+                          right: -9.w,
+                          child: const _Circle(),
+                        ),
+                        Positioned(
+                          bottom: -9.w,
+                          right: -9.w,
+                          child: const _Circle(),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Stack(
+                    children: [
+                      SizedBox(
+                        // color: Colors.red,
+                        width: Sizing.xLarge,
+                        child: InkWell(
+                          onTap: () {
+                            AutoRouter.of(context).navigate(
+                              MyEventTicketRoute(
+                                event: event,
+                              ),
+                            );
+                          },
+                          child: Center(
+                            child: ThemeSvgIcon(
+                              color: colorScheme.onSecondary,
+                              builder: (filter) => Assets.icons.icQr.svg(
+                                colorFilter: filter,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: -9.w,
+                        left: -9.w,
+                        child: const _Circle(),
+                      ),
+                      Positioned(
+                        bottom: -9.w,
+                        left: -9.w,
+                        child: const _Circle(),
                       ),
                     ],
                   ),
-                ),
-                SizedBox(width: Spacing.small),
-                InkWell(
-                  onTap: () {
-                    AutoRouter.of(context).navigate(
-                      MyEventTicketRoute(
-                        event: event,
-                      ),
-                    );
-                  },
-                  child: Container(
-                    width: Sizing.medium,
-                    height: Sizing.medium,
-                    decoration: BoxDecoration(
-                      color: colorScheme.onPrimary.withOpacity(0.06),
-                      borderRadius: BorderRadius.circular(LemonRadius.xSmall),
-                    ),
-                    child: Center(
-                      child: Stack(
-                        children: [
-                          ThemeSvgIcon(
-                            color: colorScheme.onSecondary,
-                            builder: (filter) => Assets.icons.icTicketBold
-                                .svg(colorFilter: filter),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+                ],
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
 
-class CustomDurationLocale extends EnglishDurationLocale {
+class _Circle extends StatelessWidget {
+  const _Circle();
+
   @override
-  String minute(int amount, [bool abbreviated = true]) {
-    if (abbreviated) {
-      return 'm';
-    } else {
-      return 'minute${amount.abs() != 1 ? 's' : ''}';
-    }
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Container(
+      width: 18.w,
+      height: 18.w,
+      decoration: BoxDecoration(
+        color: colorScheme.background,
+        borderRadius: BorderRadius.circular(LemonRadius.normal),
+      ),
+    );
   }
 }
