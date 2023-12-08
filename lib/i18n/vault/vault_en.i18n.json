@@ -11,7 +11,10 @@
     "vaultInfo": {
         "chain": "Chain",
         "assets": "Assets",
-        "members": "Members",
+        "members(ordinal)": {
+            "one": "Member",
+            "other": "Members"
+        },
         "balance": "balance"
     },
     "createVaultBottomSheet": {

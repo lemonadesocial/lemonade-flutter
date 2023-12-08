@@ -102,26 +102,25 @@ class VaultItem extends StatelessWidget {
                   ],
                 ),
                 // vault balance
-                // TODO: temporary hide
-                // Column(
-                //   crossAxisAlignment: CrossAxisAlignment.end,
-                //   mainAxisSize: MainAxisSize.min,
-                //   children: [
-                //     Text(
-                //       '\$32K',
-                //       style: Typo.medium.copyWith(
-                //         fontWeight: FontWeight.w600,
-                //       ),
-                //     ),
-                //     SizedBox(height: 2.w),
-                //     Text(
-                //       t.vault.vaultInfo.balance,
-                //       style: Typo.small.copyWith(
-                //         color: colorScheme.onSecondary,
-                //       ),
-                //     ),
-                //   ],
-                // ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      '\$0.0',
+                      style: Typo.medium.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    SizedBox(height: 2.w),
+                    Text(
+                      t.vault.vaultInfo.balance,
+                      style: Typo.small.copyWith(
+                        color: colorScheme.onSecondary,
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
             SizedBox(height: Spacing.smMedium),
@@ -149,7 +148,6 @@ class VaultItem extends StatelessWidget {
                                 height: Sizing.xSmall,
                               ),
                             ),
-                            // Text(chain?.name ?? '', style: Typo.xSmall),
                           ],
                         ),
                       ),
@@ -180,7 +178,9 @@ class VaultItem extends StatelessWidget {
                   ),
                   SizedBox(width: Spacing.extraSmall),
                   _VaultInfoItem(
-                    title: t.vault.vaultInfo.members,
+                    title: t.vault.vaultInfo.members(
+                      n: (vault.accountInfo?.owners ?? []).length,
+                    ),
                     child: Text(
                       (vault.accountInfo?.owners ?? []).length.toString(),
                       style: Typo.mediumPlus.copyWith(
