@@ -144,6 +144,10 @@ class CreateVaultBasicInfoPage extends StatelessWidget {
                           WalletConnectActiveSessionWidget(
                             title: t.vault.connectedWith,
                             activeSession: walletConnectState.activeSession!,
+                            onPressDisconnect: () =>
+                                context.read<WalletBloc>().add(
+                                      const WalletEvent.disconnect(),
+                                    ),
                           ),
                           SizedBox(height: Spacing.smMedium),
                           Opacity(

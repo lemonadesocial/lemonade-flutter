@@ -52,5 +52,6 @@
     "actions": {
         "createVault": "Create Vault"
     },
-    "connectedWith": "Connected with"
+    "connectedWith": "Connected with",
+    "deploying": "Deploying..."
 }

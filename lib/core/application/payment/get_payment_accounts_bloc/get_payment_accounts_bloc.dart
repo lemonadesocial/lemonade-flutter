@@ -4,6 +4,7 @@ import 'package:app/core/domain/payment/payment_repository.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:rxdart/rxdart.dart';
 
 part 'get_payment_accounts_bloc.freezed.dart';
 
@@ -11,7 +12,14 @@ class GetPaymentAccountsBloc
     extends Bloc<GetPaymentAccountsEvent, GetPaymentAccountsState> {
   final _paymentRepository = getIt<PaymentRepository>();
   GetPaymentAccountsBloc() : super(GetPaymentAccountsState.initial()) {
-    on<GetPaymentAccountsEventFetch>(_onFetch);
+    on<GetPaymentAccountsEventFetch>(
+      _onFetch,
+      transformer: (events, mapper) {
+        return events
+            .debounceTime(const Duration(milliseconds: 500))
+            .asyncExpand(mapper);
+      },
+    );
   }
 
   void _onFetch(GetPaymentAccountsEventFetch event, Emitter emit) async {

@@ -1,3 +1,4 @@
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/theme/color.dart';
@@ -10,11 +11,13 @@ import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
 class WalletConnectActiveSessionWidget extends StatelessWidget {
   final String? title;
   final SessionData activeSession;
+  final Function()? onPressDisconnect;
 
   const WalletConnectActiveSessionWidget({
     super.key,
     this.title,
     required this.activeSession,
+    this.onPressDisconnect,
   });
 
   @override
@@ -26,6 +29,7 @@ class WalletConnectActiveSessionWidget extends StatelessWidget {
     String displayAddress = Web3Utils.formatIdentifier(userWalletAddress);
 
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Container(
           decoration: BoxDecoration(
@@ -58,6 +62,25 @@ class WalletConnectActiveSessionWidget extends StatelessWidget {
           ],
         ),
         const Spacer(),
+        InkWell(
+          onTap: () => onPressDisconnect?.call(),
+          child: Container(
+            width: Sizing.medium,
+            height: Sizing.medium,
+            decoration: BoxDecoration(
+              color: colorScheme.onPrimary.withOpacity(0.09),
+              borderRadius: BorderRadius.circular(LemonRadius.normal),
+            ),
+            child: Center(
+              child: ThemeSvgIcon(
+                color: colorScheme.onSurfaceVariant,
+                builder: (filter) => Assets.icons.icClose.svg(
+                  colorFilter: filter,
+                ),
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }

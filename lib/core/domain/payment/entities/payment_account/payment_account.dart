@@ -1,5 +1,6 @@
 import 'package:app/core/data/payment/dtos/payment_account_dto/payment_account_dto.dart';
 import 'package:app/core/domain/payment/payment_enums.dart';
+import 'package:app/core/domain/vault/vault_enums.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'payment_account.freezed.dart';
@@ -48,6 +49,7 @@ class AccountInfo with _$AccountInfo {
     List<String>? owners,
     int? threshold,
     bool? funded,
+    GelatoTaskStatus? status,
     // Stripe
     String? publishableKey,
   }) = _AccountInfo;
@@ -63,12 +65,16 @@ class AccountInfo with _$AccountInfo {
           ),
         ),
         accountId: dto.accountId,
+        // blockchain account
         address: dto.address,
         networks: dto.networks,
+        // Safe extends Blockchain
         network: dto.network,
         owners: dto.owners,
         threshold: dto.threshold,
         funded: dto.funded,
+        status: dto.status,
+        // Stripe
         publishableKey: dto.publishableKey,
       );
 }

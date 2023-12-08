@@ -1,4 +1,7 @@
+import 'package:app/core/application/payment/get_payment_accounts_bloc/get_payment_accounts_bloc.dart';
 import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
+import 'package:app/core/domain/payment/input/get_payment_accounts_input/get_payment_accounts_input.dart';
+import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/domain/vault/vault_enums.dart';
 import 'package:app/core/presentation/pages/vault/vaults_listing_page/views/add_vault_bottomsheet.dart';
 import 'package:app/core/presentation/pages/vault/vaults_listing_page/widgets/add_vault_button.dart';
@@ -9,6 +12,7 @@ import 'package:app/core/utils/bottomsheet_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class VaultsListView extends StatelessWidget {
@@ -59,23 +63,35 @@ class VaultsListView extends StatelessWidget {
       );
     }
 
-    return ListView.separated(
-      padding: EdgeInsets.all(Spacing.smMedium),
-      itemBuilder: (context, index) {
-        if (index == 0) {
-          return AddVaultButton(
-            onPressAdd: () => BottomSheetUtils.showSnapBottomSheet(
-              context,
-              builder: (context) => const AddVaultBottomSheet(),
-            ),
-          );
-        }
-        return VaultItem(
-          vault: vaults[index - 1],
-        );
+    return RefreshIndicator(
+      onRefresh: () async {
+        context.read<GetPaymentAccountsBloc>().add(
+              GetPaymentAccountsEvent.fetch(
+                input: GetPaymentAccountsInput(
+                  type: PaymentAccountType.ethereum,
+                  provider: PaymentProvider.safe,
+                ),
+              ),
+            );
       },
-      separatorBuilder: (context, index) => SizedBox(height: Spacing.xSmall),
-      itemCount: vaults.length + 1,
+      child: ListView.separated(
+        padding: EdgeInsets.all(Spacing.smMedium),
+        itemBuilder: (context, index) {
+          if (index == 0) {
+            return AddVaultButton(
+              onPressAdd: () => BottomSheetUtils.showSnapBottomSheet(
+                context,
+                builder: (context) => const AddVaultBottomSheet(),
+              ),
+            );
+          }
+          return VaultItem(
+            vault: vaults[index - 1],
+          );
+        },
+        separatorBuilder: (context, index) => SizedBox(height: Spacing.xSmall),
+        itemCount: vaults.length + 1,
+      ),
     );
   }
 }

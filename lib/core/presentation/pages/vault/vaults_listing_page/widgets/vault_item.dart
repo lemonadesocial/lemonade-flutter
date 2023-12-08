@@ -1,4 +1,5 @@
 import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
+import 'package:app/core/domain/vault/vault_enums.dart';
 import 'package:app/core/presentation/widgets/web3/chain/chain_query_widget.dart';
 import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -76,15 +77,26 @@ class VaultItem extends StatelessWidget {
                             height: Sizing.small / 2,
                           ),
                         ),
-                        Text(
-                          Web3Utils.formatIdentifier(
-                            vault.accountInfo?.address ?? '',
-                            length: 6,
+                        if (vault.accountInfo?.status ==
+                            GelatoTaskStatus.pending)
+                          Text(
+                            t.vault.deploying,
+                            style: Typo.small.copyWith(
+                              color: colorScheme.onSecondary,
+                            ),
                           ),
-                          style: Typo.small.copyWith(
-                            color: colorScheme.onSecondary,
+                        if (vault.accountInfo?.status ==
+                                GelatoTaskStatus.succeeded ||
+                            vault.accountInfo?.address?.isNotEmpty == true)
+                          Text(
+                            Web3Utils.formatIdentifier(
+                              vault.accountInfo?.address ?? '',
+                              length: 6,
+                            ),
+                            style: Typo.small.copyWith(
+                              color: colorScheme.onSecondary,
+                            ),
                           ),
-                        ),
                       ],
                     ),
                   ],

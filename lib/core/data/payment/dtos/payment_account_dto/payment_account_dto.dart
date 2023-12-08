@@ -1,4 +1,5 @@
 import 'package:app/core/domain/payment/payment_enums.dart';
+import 'package:app/core/domain/vault/vault_enums.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'payment_account_dto.freezed.dart';
@@ -35,6 +36,7 @@ class AccountInfoDto with _$AccountInfoDto {
     List<String>? owners,
     int? threshold,
     bool? funded,
+    GelatoTaskStatus? status,
     // Stripe
     @JsonKey(name: 'publishable_key') String? publishableKey,
   }) = _AccountInfoDto;
