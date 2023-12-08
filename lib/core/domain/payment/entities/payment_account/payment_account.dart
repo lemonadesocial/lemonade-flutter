@@ -44,6 +44,7 @@ class AccountInfo with _$AccountInfo {
     String? address,
     List<String>? networks,
     // Safe extends Blockchain
+    String? network,
     List<String>? owners,
     int? threshold,
     bool? funded,
@@ -64,6 +65,7 @@ class AccountInfo with _$AccountInfo {
         accountId: dto.accountId,
         address: dto.address,
         networks: dto.networks,
+        network: dto.network,
         owners: dto.owners,
         threshold: dto.threshold,
         funded: dto.funded,

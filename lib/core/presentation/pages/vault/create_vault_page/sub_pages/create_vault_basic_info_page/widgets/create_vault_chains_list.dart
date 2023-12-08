@@ -1,3 +1,4 @@
+import 'package:app/core/domain/web3/entities/chain.dart';
 import 'package:app/core/domain/web3/web3_repository.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
@@ -10,8 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CreateVaultChainsList extends StatelessWidget {
-  final String? selectedChain;
-  final Function(String selectedChain)? onSelectChain;
+  final Chain? selectedChain;
+  final Function(Chain selectedChain)? onSelectChain;
 
   const CreateVaultChainsList({
     super.key,
@@ -42,9 +43,9 @@ class CreateVaultChainsList extends StatelessWidget {
               runSpacing: Spacing.extraSmall,
               spacing: Spacing.extraSmall,
               children: chains.map((chain) {
-                final selected = chain.chainId == selectedChain;
+                final selected = chain.chainId == selectedChain?.chainId;
                 return InkWell(
-                  onTap: () => onSelectChain?.call(chain.chainId ?? ''),
+                  onTap: () => onSelectChain?.call(chain),
                   child: Container(
                     height: 42.w,
                     padding: EdgeInsets.symmetric(horizontal: Spacing.small),

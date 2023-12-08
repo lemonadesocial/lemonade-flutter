@@ -31,6 +31,7 @@ class AccountInfoDto with _$AccountInfoDto {
     String? address,
     List<String>? networks,
     // Safe
+    String? network,
     List<String>? owners,
     int? threshold,
     bool? funded,

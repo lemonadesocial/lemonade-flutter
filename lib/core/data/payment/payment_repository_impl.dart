@@ -103,6 +103,7 @@ class PaymentRepositoryImpl extends PaymentRepository {
       QueryOptions(
         document: getPaymentAccountsQuery,
         variables: input.toJson(),
+        fetchPolicy: FetchPolicy.networkOnly,
         parserFn: (data) => List.from(data['listNewPaymentAccounts'] ?? [])
             .map(
               (item) => PaymentAccount.fromDto(
@@ -123,6 +124,7 @@ class PaymentRepositoryImpl extends PaymentRepository {
     final result = await _client.mutate(
       MutationOptions(
         document: createPaymentAccountMutation,
+        fetchPolicy: FetchPolicy.networkOnly,
         variables: {
           'input': input.toJson(),
         },

@@ -100,7 +100,7 @@ class AppRouter extends $AppRouter {
         ...postRoutes,
         ...eventRoutes,
         ...commonRoutes,
-        ...vaultRoutes,
+        vaultRoutes,
       ];
 }
 
@@ -222,29 +222,34 @@ final commonRoutes = [
   ),
 ];
 
-final vaultRoutes = [
-  AutoRoute(
-    page: VaultsListingRoute.page,
-  ),
-  AutoRoute(
-    page: CreateVaultRoute.page,
-    children: [
-      AutoRoute(
-        initial: true,
-        page: CreateVaultBasicInfoRoute.page,
-      ),
-      AutoRoute(
-        page: CreateVaultSetupPhraseRoute.page,
-      ),
-      AutoRoute(
-        page: CreateVaultCheckPhraseRoute.page,
-      ),
-      AutoRoute(
-        page: CreateVaultSetupPinRoute.page,
-      ),
-      AutoRoute(
-        page: CreateVaultSuccessRoute.page,
-      ),
-    ],
-  ),
-];
+final vaultRoutes = AutoRoute(
+  path: '/vault',
+  page: VaultRootRoute.page,
+  children: [
+    AutoRoute(
+      initial: true,
+      page: VaultsListingRoute.page,
+    ),
+    AutoRoute(
+      page: CreateVaultRoute.page,
+      children: [
+        AutoRoute(
+          initial: true,
+          page: CreateVaultBasicInfoRoute.page,
+        ),
+        AutoRoute(
+          page: CreateVaultSetupPhraseRoute.page,
+        ),
+        AutoRoute(
+          page: CreateVaultCheckPhraseRoute.page,
+        ),
+        AutoRoute(
+          page: CreateVaultSetupPinRoute.page,
+        ),
+        AutoRoute(
+          page: CreateVaultSuccessRoute.page,
+        ),
+      ],
+    ),
+  ],
+);

@@ -129,5 +129,6 @@
     "restart": "Restart",
     "pleaseTryAgain": "There's something wrong, please try again",
     "chatAI": "Chat AI",
-    "incorrectPin": "Incorrect PIN code"
+    "incorrectPin": "Incorrect PIN code",
+    "copiedToClipboard": "Copied to clipboard"
 }

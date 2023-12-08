@@ -19,7 +19,9 @@ class CreatePaymentAccountBloc
     final result =
         await _paymentRepository.createPaymentAccount(input: event.input);
     result.fold(
-      (l) => emit(CreatePaymentAccountState.failure()),
+      (l) => emit(
+        CreatePaymentAccountState.failure(),
+      ),
       (paymentAccount) => emit(
         CreatePaymentAccountState.success(
           paymentAccount: paymentAccount,

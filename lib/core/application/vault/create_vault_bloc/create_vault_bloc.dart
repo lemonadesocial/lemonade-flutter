@@ -1,3 +1,4 @@
+import 'package:app/core/domain/web3/entities/chain.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -91,7 +92,7 @@ class CreateVaultEvent with _$CreateVaultEvent {
     required String vaultName,
   }) = CreateVaultEventOnVaultNameChanged;
   factory CreateVaultEvent.onChainSelected({
-    required String selectedChain,
+    required Chain selectedChain,
   }) = CreateVaultEventOnVaultChainSelected;
   factory CreateVaultEvent.onOwnersChanged({
     required List<String> owners,
@@ -113,7 +114,7 @@ class CreateVaultState with _$CreateVaultState {
 class CreateVaultData with _$CreateVaultData {
   factory CreateVaultData({
     String? vaultName,
-    String? selectedChain,
+    Chain? selectedChain,
     List<String>? owners,
     int? threshold,
   }) = _CreateVaultData;

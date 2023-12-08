@@ -1,4 +1,3 @@
-import 'package:app/core/constants/web3/chains.dart';
 import 'package:app/core/domain/wallet/wallet_repository.dart';
 import 'package:app/core/service/wallet/wallet_connect_service.dart';
 import 'package:app/injection/register_module.dart';
@@ -38,8 +37,10 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
   }
 
   _onConnectWallet(WalletEventConnectWallet event, Emitter emit) async {
-    var success =
-        await walletConnectService.connectWallet(walletApp: event.walletApp);
+    var success = await walletConnectService.connectWallet(
+      walletApp: event.walletApp,
+      chainId: event.chainId,
+    );
     if (success) {
       add(const WalletEvent.getActiveSessions());
     }
@@ -56,7 +57,7 @@ class WalletEvent with _$WalletEvent {
   const factory WalletEvent.initWalletConnect() = WalletEventInitWalletConnect;
   const factory WalletEvent.connectWallet({
     required SupportedWalletApp walletApp,
-    List<Chains>? chains,
+    String? chainId,
   }) = WalletEventConnectWallet;
   const factory WalletEvent.getActiveSessions() = WalletEventGetActiveSessions;
   const factory WalletEvent.disconnect() = WalletEventDisconnectWallet;

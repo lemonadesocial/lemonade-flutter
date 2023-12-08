@@ -1,7 +1,5 @@
 import 'package:app/core/application/payment/get_payment_accounts_bloc/get_payment_accounts_bloc.dart';
 import 'package:app/core/application/vault/check_vault_pin_bloc/check_vault_pin_bloc.dart';
-import 'package:app/core/domain/payment/input/get_payment_accounts_input/get_payment_accounts_input.dart';
-import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/domain/vault/vault_enums.dart';
 import 'package:app/core/presentation/pages/vault/vaults_listing_page/views/vaults_list_view.dart';
 import 'package:app/core/presentation/widgets/app_lock/app_lock.dart';
@@ -9,6 +7,7 @@ import 'package:app/core/presentation/widgets/app_lock/lemon_app_lock_page.dart'
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
+import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
@@ -23,21 +22,11 @@ class VaultsListingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userId = AuthUtils.getUserId(context);
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => GetPaymentAccountsBloc()
-            ..add(
-              GetPaymentAccountsEvent.fetch(
-                input: GetPaymentAccountsInput(
-                  type: PaymentAccountType.ethereum,
-                  provider: PaymentProvider.safe,
-                ),
-              ),
-            ),
-        ),
-        BlocProvider(
-          create: (context) => CheckVaultPinBloc()
+          create: (context) => CheckVaultPinBloc(userId: userId)
             ..add(
               CheckVaultPinEvent.initialize(),
             ),
@@ -57,7 +46,6 @@ class VaultsListingPageView extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
-
     return BlocBuilder<CheckVaultPinBloc, CheckVaultPinState>(
       builder: (context, vaultPinState) {
         if (vaultPinState is CheckVaultPinStateChecking) {
