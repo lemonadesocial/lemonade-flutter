@@ -29,7 +29,8 @@ final createPaymentAccountMutation = gql('''
           address
           owners
           threshold
-          funded
+          gelato_task_status
+          gelato_task_id
         }
         ... on EthereumAccount {
           networks

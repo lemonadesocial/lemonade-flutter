@@ -48,8 +48,8 @@ class AccountInfo with _$AccountInfo {
     String? network,
     List<String>? owners,
     int? threshold,
-    bool? funded,
-    GelatoTaskStatus? status,
+    String? gelatoTaskId,
+    GelatoTaskStatus? gelatoTaskStatus,
     // Stripe
     String? publishableKey,
   }) = _AccountInfo;
@@ -72,8 +72,8 @@ class AccountInfo with _$AccountInfo {
         network: dto.network,
         owners: dto.owners,
         threshold: dto.threshold,
-        funded: dto.funded,
-        status: dto.status,
+        gelatoTaskId: dto.gelatoTaskId,
+        gelatoTaskStatus: dto.gelatoTaskStatus,
         // Stripe
         publishableKey: dto.publishableKey,
       );

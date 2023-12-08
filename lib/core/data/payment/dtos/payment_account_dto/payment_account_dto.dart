@@ -35,8 +35,8 @@ class AccountInfoDto with _$AccountInfoDto {
     String? network,
     List<String>? owners,
     int? threshold,
-    bool? funded,
-    GelatoTaskStatus? status,
+    @JsonKey(name: 'gelato_task_id') String? gelatoTaskId,
+    @JsonKey(name: 'gelato_task_status') GelatoTaskStatus? gelatoTaskStatus,
     // Stripe
     @JsonKey(name: 'publishable_key') String? publishableKey,
   }) = _AccountInfoDto;

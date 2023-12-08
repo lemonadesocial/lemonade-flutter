@@ -77,7 +77,7 @@ class VaultItem extends StatelessWidget {
                             height: Sizing.small / 2,
                           ),
                         ),
-                        if (vault.accountInfo?.status ==
+                        if (vault.accountInfo?.gelatoTaskStatus ==
                             GelatoTaskStatus.pending)
                           Text(
                             t.vault.deploying,
@@ -85,7 +85,7 @@ class VaultItem extends StatelessWidget {
                               color: colorScheme.onSecondary,
                             ),
                           ),
-                        if (vault.accountInfo?.status ==
+                        if (vault.accountInfo?.gelatoTaskStatus ==
                                 GelatoTaskStatus.succeeded ||
                             vault.accountInfo?.address?.isNotEmpty == true)
                           Text(

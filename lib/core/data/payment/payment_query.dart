@@ -28,6 +28,17 @@ const paymentAccountFragment = '''
         currency_map
         account_id
       }
+
+      ... on SafeAccount {
+          currencies
+          currency_map
+          address
+          network
+          owners
+          threshold
+          gelato_task_status
+          gelato_task_id
+        }
     }
   }
 ''';
@@ -93,7 +104,8 @@ final getPaymentAccountsQuery = gql('''
           network
           owners
           threshold
-          funded
+          gelato_task_status
+          gelato_task_id
         }
         ... on DigitalAccount {
           currencies
