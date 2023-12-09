@@ -700,46 +700,50 @@ workflows:
       scripts:
         - *notify_android_staging_to_slack
   
+  # 
+  # Temp close due to will trigger tag for build production process
+  # 
   # Build iOS & Android Production
-  ios-android-production:
-    name: Build iOS & Android Production
-    <<: *instance_mac_mini
-    integrations:
-      <<: *app_store_connect_integrations
-    environment:
-      <<: *env_versions
-      <<: *load_environment_values
-      <<: *ios_signing_production
-      <<: *android_signing_production
-    scripts:
-      - *load_env_files
-      - *use_profiles
-      - *get_flutter_packages
-      - *run_build_runner
-      - *generate_i18_file
-      - *install_firebase_crashlytics
-      - *install_pods
-      - *build_ipa_production
-      - *setup_local_properties
-      - *build_apk_production
-      - *build_aab_production
-    artifacts:
-      - *ipa
-      - *xcode_log
-      - *dsym
-      - *app
-      - *apk
-      - *aab
-      - *android_log
-    publishing:
-      <<: *ios_app_store_publish
-      <<: *production_android_publish
-      <<: *email_production
-      scripts:
-        - *upload_production_dsym_to_firebase
-        - *github_create_prerelease
-        - *notify_ios_production_to_slack
-        - *notify_android_production_to_slack
+  # ios-android-production:
+  #   name: Build iOS & Android Production
+  #   <<: *instance_mac_mini
+  #   integrations:
+  #     <<: *app_store_connect_integrations
+  #   environment:
+  #     <<: *env_versions
+  #     <<: *load_environment_values
+  #     <<: *ios_signing_production
+  #     <<: *android_signing_production
+  #   scripts:
+  #     - *load_env_files
+  #     - *use_profiles
+  #     - *get_flutter_packages
+  #     - *run_build_runner
+  #     - *generate_i18_file
+  #     - *install_firebase_crashlytics
+  #     - *install_pods
+  #     - *build_ipa_production
+  #     - *setup_local_properties
+  #     - *build_apk_production
+  #     - *build_aab_production
+  #   artifacts:
+  #     - *ipa
+  #     - *xcode_log
+  #     - *dsym
+  #     - *app
+  #     - *apk
+  #     - *aab
+  #     - *android_log
+  #   publishing:
+  #     <<: *ios_app_store_publish
+  #     <<: *production_android_publish
+  #     <<: *email_production
+  #     scripts:
+  #       - *upload_production_dsym_to_firebase
+  #       - *github_create_prerelease
+  #       - *notify_ios_production_to_slack
+  #       - *notify_android_production_to_slack
+  
   # 
   # Shorebird 
   # 
@@ -779,6 +783,7 @@ workflows:
       - build/ios/ipa/*.ipa
       - build/app/outputs/apk/**/*.apk    
       - build/app/outputs/bundle/**/*.aab    
+      - *dsym
     publishing:
       <<: *ios_app_store_publish
       <<: *staging_android_publish
@@ -820,7 +825,8 @@ workflows:
     artifacts:
       - build/ios/ipa/*.ipa
       - build/app/outputs/apk/**/*.apk    
-      - build/app/outputs/bundle/**/*.aab    
+      - build/app/outputs/bundle/**/*.aab   
+      - *dsym
     publishing:
       <<: *ios_app_store_publish
       <<: *production_android_publish
