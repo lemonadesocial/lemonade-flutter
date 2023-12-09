@@ -58,8 +58,7 @@ app.*.map.json
 *.gr.dart
 *.gen.dart
 *.config.dart
-
-shorebird.yaml
+*.graphql.dart
 
 **/*.ast.gql.dart
 **/*.req.gql.dart
@@ -68,3 +67,6 @@ shorebird.yaml
 **/*.gql.g.dart
 **/*.schema.gql.dart
 **/*serializers.gql.dart
+
+# Ignore shorebird config file
+shorebird.yaml
