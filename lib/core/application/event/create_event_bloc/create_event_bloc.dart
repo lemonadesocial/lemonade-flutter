@@ -1,7 +1,7 @@
 import 'package:app/core/domain/event/event_repository.dart';
-import 'package:app/core/domain/event/input/create_event_input/create_event_input.dart';
 import 'package:app/core/domain/form/datetime_formz.dart';
 import 'package:app/core/domain/form/string_formz.dart';
+import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
@@ -151,7 +151,7 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
     if (state.isValid) {
       emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
       final result = await _eventRepository.createEvent(
-        input: CreateEventInput(
+        input: Input$EventInput(
           title: title.value,
           description: title.value,
           private: false,
@@ -159,8 +159,8 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
           start: DateTime.parse(state.start.value!.toUtc().toIso8601String()),
           end: DateTime.parse(state.end.value!.toUtc().toIso8601String()),
           timezone: "Asia/Bangkok",
-          guestLimit: 100,
-          guestLimitPer: 2,
+          guest_limit: 100,
+          guest_limit_per: 2,
           virtual: true,
         ),
       );

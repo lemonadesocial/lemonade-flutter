@@ -5,6 +5,7 @@ targets:
         options:
           scopes:
             - lib/graphql/ai/**
+            - lib/graphql/backend/**
           scalars:
             DateTimeISO:
               type: DateTime
