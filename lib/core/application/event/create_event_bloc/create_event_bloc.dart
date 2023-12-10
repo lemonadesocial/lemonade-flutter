@@ -20,8 +20,6 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
     on<PrivateChanged>(_onPrivateChanged);
     on<VirtualChanged>(_onVirtualChanged);
     on<FormSubmitted>(_onFormSubmitted);
-    on<StartDateTimeChanged>(_onStartDateTimeChanged);
-    on<EndDateTimeChanged>(_onEndDateTimeChanged);
   }
   final _eventRepository = getIt<EventRepository>();
 
@@ -111,30 +109,6 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
     );
   }
 
-  Future<void> _onStartDateTimeChanged(
-    StartDateTimeChanged event,
-    Emitter<CreateEventState> emit,
-  ) async {
-    final startDateTime = DateTimeFormz.dirty(event.datetime);
-    emit(
-      state.copyWith(
-        start: startDateTime,
-      ),
-    );
-  }
-
-  Future<void> _onEndDateTimeChanged(
-    EndDateTimeChanged event,
-    Emitter<CreateEventState> emit,
-  ) async {
-    final endDateTime = DateTimeFormz.dirty(event.datetime);
-    emit(
-      state.copyWith(
-        end: endDateTime,
-      ),
-    );
-  }
-
   Future<void> _onFormSubmitted(
     FormSubmitted event,
     Emitter<CreateEventState> emit,
@@ -202,15 +176,10 @@ class CreateEventEvent with _$CreateEventEvent {
   const factory CreateEventEvent.virtualChanged({required bool virtual}) =
       VirtualChanged;
 
-  const factory CreateEventEvent.startDateTimeChanged({
-    required DateTime datetime,
-  }) = StartDateTimeChanged;
-
-  const factory CreateEventEvent.endDateTimeChanged({
-    required DateTime datetime,
-  }) = EndDateTimeChanged;
-
-  const factory CreateEventEvent.formSubmitted() = FormSubmitted;
+  const factory CreateEventEvent.formSubmitted({
+    required DateTime start,
+    required DateTime end,
+  }) = FormSubmitted;
 }
 
 @freezed
@@ -224,8 +193,6 @@ class CreateEventState with _$CreateEventState {
     @Default(true) bool verify,
     @Default(true) bool virtual,
     @Default(false) bool isValid,
-    @Default(DateTimeFormz.pure()) DateTimeFormz start,
-    @Default(DateTimeFormz.pure()) DateTimeFormz end,
     @Default(FormzSubmissionStatus.initial) FormzSubmissionStatus status,
   }) = _CreateEventState;
 }

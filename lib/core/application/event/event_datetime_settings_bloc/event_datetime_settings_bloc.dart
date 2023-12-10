@@ -137,8 +137,6 @@ class EventDateTimeSettingsEvent with _$EventDateTimeSettingsEvent {
   const factory EventDateTimeSettingsEvent.endTimeChanged({
     required DateTime datetime,
   }) = EndTimeChanged;
-
-  const factory EventDateTimeSettingsEvent.formSubmitted() = FormSubmitted;
 }
 
 @freezed
