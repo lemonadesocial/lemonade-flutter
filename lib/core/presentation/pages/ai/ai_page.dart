@@ -6,14 +6,14 @@ import 'package:app/core/domain/ai/ai_entities.dart';
 import 'package:app/core/presentation/pages/ai/widgets/ai_chat_command_view.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
-import 'package:app/core/utils/gql/ai_gql_client.dart';
 import 'package:app/core/config.dart';
 import 'package:app/core/presentation/widgets/ai/ai_chat_card.dart';
 import 'package:app/core/presentation/widgets/ai/ai_chat_composer.dart';
-import 'package:app/graphql/__generated__/config.req.gql.dart';
+import 'package:app/core/utils/gql/gql.dart';
+import 'package:app/graphql/ai/mutation/run.graphql.dart';
+import 'package:app/graphql/ai/query/config.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
-import 'package:app/schemas/ai/__generated__/schema.schema.gql.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
@@ -24,7 +24,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-import 'package:app/graphql/__generated__/run.req.gql.dart';
 import 'package:app/core/presentation/pages/ai/widgets/fullscreen_overlay.dart';
 
 const uuid = Uuid();
@@ -38,7 +37,6 @@ class AIPage extends StatefulWidget {
 }
 
 class AIPageState extends State<AIPage> {
-  final client = getIt<AIClient>().client;
   final ScrollController _scrollController = ScrollController();
   final String session = uuid.v4();
   late String inputString = '';
@@ -56,21 +54,26 @@ class AIPageState extends State<AIPage> {
   bool _commandSelected = false;
   StreamSubscription? _subscription;
 
+  final client = getIt<AIGQL>().client;
+
   @override
   void initState() {
     super.initState();
-    final config = GObjectIdBuilder();
-    config.value = AppConfig.aiConfig;
-    final getConfigReq = GconfigReq((b) => b..vars.id = config);
-    _subscription = client.request(getConfigReq).listen((event) {
-      if (!event.hasErrors) {
+    client
+        .query$config(
+      Options$Query$config(
+        variables: Variables$Query$config(id: AppConfig.aiConfig),
+      ),
+    )
+        .then((value) {
+      if (value.parsedData != null) {
         final t = Translations.of(context);
         setState(() {
           _initialLoading = false;
           messages.insert(
             messages.length,
             AIChatMessage(
-              event.data?.config.welcomeMessage ??
+              value.parsedData?.config.welcomeMessage ??
                   t.ai.initialAIMessage(
                     botName: AIConstants.defaultAIChatbotName,
                   ),
@@ -135,37 +138,36 @@ class AIPageState extends State<AIPage> {
           AIChatMessage(text, null, true, true, false),
         );
       });
-      final config = GObjectIdBuilder();
-      config.value = AppConfig.aiConfig;
-      final createPostReq = GRunReq(
-        (b) => b
-          ..vars.config = config
-          ..vars.message = text
-          ..vars.session = session,
-      );
       setState(() {
         _loading = true;
       });
-      if (_subscription != null) {
-        await _subscription?.cancel();
-      }
-      _subscription = client.request(createPostReq).listen((event) {
+      client
+          .mutate$Run(
+        Options$Mutation$Run(
+          variables: Variables$Mutation$Run(
+            message: text,
+            config: AppConfig.aiConfig,
+            session: session,
+          ),
+        ),
+      )
+          .then((value) {
         setState(() {
           _loading = false;
           messages.insert(
             messages.length,
             AIChatMessage(
-              event.data?.run.message,
-              event.data?.run.metadata,
+              value.parsedData?.run.message,
+              value.parsedData?.run.metadata,
               false,
               false,
               false,
             ),
           );
-        });
-        // Wait insert latest messages then scroll
-        SchedulerBinding.instance.addPostFrameCallback((_) {
-          triggerAutoScrollToEnd();
+          // Wait insert latest messages then scroll
+          SchedulerBinding.instance.addPostFrameCallback((_) {
+            triggerAutoScrollToEnd();
+          });
         });
       });
     } catch (e) {

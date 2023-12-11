@@ -36,20 +36,6 @@ dependencies:
   hive: ^2.2.3
   flutter_secure_storage: ^8.1.0
 
-  # other
-  path_provider: ^2.0.15
-  dartz: ^0.10.1
-  url_launcher: ^6.1.12
-  share_plus: ^7.0.2
-  shake: ^2.2.0
-  flutter_native_splash: ^2.3.2
-  package_info_plus: ^4.1.0
-  flutter_vibrate: ^1.3.0
-  connectivity_plus: any
-  restart_app: ^1.2.1
-  formz: ^0.6.1
-  flutter_app_badger: ^1.5.0
-
   # navigation
   auto_route: ^7.4.0
 
@@ -127,12 +113,19 @@ dependencies:
   # payment
   flutter_stripe: ^9.4.0
   
-  # Ferry
-  ferry: ^0.14.2+1
-  gql_http_link: ^0.4.5
-  hive_flutter: ^1.1.0
-  ferry_hive_store: ^0.5.1
-  ferry_flutter: ^0.8.1
+  # other
+  path_provider: ^2.0.15
+  dartz: ^0.10.1
+  url_launcher: ^6.1.12
+  share_plus: ^7.0.2
+  shake: ^2.2.0
+  flutter_native_splash: ^2.3.2
+  package_info_plus: ^4.1.0
+  flutter_vibrate: ^1.3.0
+  connectivity_plus: any
+  restart_app: ^1.2.1
+  formz: ^0.6.1
+  flutter_app_badger: ^1.5.0
   uuid: ^3.0.7
 
 dependency_overrides:
@@ -154,13 +147,13 @@ dev_dependencies:
   flutter_lints: ^2.0.0
 
   # code generators
-  build_runner: ^2.4.5
+  build_runner: ^2.4.7
   json_serializable: ^6.6.2
   freezed: ^2.3.5
   auto_route_generator: ^7.1.1
   injectable_generator: ^2.1.6
   flutter_gen_runner: ^5.3.1
-  ferry_generator: ^0.8.1
+  graphql_codegen: ^0.12.2
 
 # generate asset 
 flutter_gen:
