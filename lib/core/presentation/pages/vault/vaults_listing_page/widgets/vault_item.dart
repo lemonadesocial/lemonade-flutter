@@ -77,16 +77,14 @@ class VaultItem extends StatelessWidget {
                             height: Sizing.small / 2,
                           ),
                         ),
-                        if (vault.accountInfo?.gelatoTaskStatus ==
-                            GelatoTaskStatus.pending)
+                        if (vault.accountInfo?.pending == true)
                           Text(
                             t.vault.deploying,
                             style: Typo.small.copyWith(
                               color: colorScheme.onSecondary,
                             ),
                           ),
-                        if (vault.accountInfo?.gelatoTaskStatus ==
-                                GelatoTaskStatus.succeeded ||
+                        if (vault.accountInfo?.pending != true &&
                             vault.accountInfo?.address?.isNotEmpty == true)
                           Text(
                             Web3Utils.formatIdentifier(
