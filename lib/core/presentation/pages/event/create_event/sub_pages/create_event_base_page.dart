@@ -125,8 +125,10 @@ class CreateEventBasePage extends StatelessWidget {
 
   _buildSubmitButton(BuildContext context) {
     final t = Translations.of(context);
-    final start = context.read<EventDateTimeSettingsBloc>().state.start.value ?? EventDateTimeConstants.defaultStartDateTime; 
-    final end = context.read<EventDateTimeSettingsBloc>().state.end.value ?? EventDateTimeConstants.defaultEndDateTime;
+    final start = context.read<EventDateTimeSettingsBloc>().state.start.value ??
+        EventDateTimeConstants.defaultStartDateTime;
+    final end = context.read<EventDateTimeSettingsBloc>().state.end.value ??
+        EventDateTimeConstants.defaultEndDateTime;
     return BlocBuilder<CreateEventBloc, CreateEventState>(
       builder: (context, state) {
         return Padding(

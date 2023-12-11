@@ -148,5 +148,10 @@
         "endDate": "End date",
         "endTime": "End time"       
     },
+    "locationSetting": {
+        "myPlaces": "My places",
+        "description": "Select or add a location to your event",
+        "addNew": "ADD NEW"
+    },
     "timezone": "Timezone"
 }

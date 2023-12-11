@@ -204,6 +204,9 @@ final createEventRoutes = AutoRoute(
     AutoRoute(
       page: EventDatetimeSettingsRoute.page,
     ),
+    AutoRoute(
+      page: EventLocationSettingRoute.page,
+    ),
   ],
 );
 

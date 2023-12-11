@@ -1,5 +1,4 @@
 import 'package:app/core/domain/event/event_repository.dart';
-import 'package:app/core/domain/form/datetime_formz.dart';
 import 'package:app/core/domain/form/string_formz.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/injection/register_module.dart';
@@ -130,8 +129,8 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
           description: title.value,
           private: false,
           verify: false,
-          start: DateTime.parse(state.start.value!.toUtc().toIso8601String()),
-          end: DateTime.parse(state.end.value!.toUtc().toIso8601String()),
+          start: DateTime.parse(event.start.toUtc().toIso8601String()),
+          end: DateTime.parse(event.end.toUtc().toIso8601String()),
           timezone: "Asia/Bangkok",
           guest_limit: 100,
           guest_limit_per: 2,
