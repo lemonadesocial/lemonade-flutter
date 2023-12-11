@@ -1,5 +1,4 @@
 import 'package:app/core/domain/payment/payment_enums.dart';
-import 'package:app/core/domain/vault/vault_enums.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'payment_account_dto.freezed.dart';

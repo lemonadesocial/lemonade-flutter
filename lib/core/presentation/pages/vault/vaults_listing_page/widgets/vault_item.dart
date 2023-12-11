@@ -1,5 +1,4 @@
 import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
-import 'package:app/core/domain/vault/vault_enums.dart';
 import 'package:app/core/presentation/widgets/web3/chain/chain_query_widget.dart';
 import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/gen/assets.gen.dart';
