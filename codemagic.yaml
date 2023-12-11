@@ -918,8 +918,8 @@ workflows:
       - *patch_shorebird_ios_production
     artifacts:
       - build/ios/ipa/*.ipa
-      scripts:
-        - *notify_shorebird_patch_ios_production_to_slack
+    scripts:
+      - *notify_shorebird_patch_ios_production_to_slack
 
   shorebird-patch-android-production:
     name: Shorebird Patch Android Production
@@ -955,5 +955,5 @@ workflows:
     artifacts:
       - build/app/outputs/apk/**/*.apk    
       - build/app/outputs/bundle/**/*.aab 
-      scripts:
-        - *notify_shorebird_patch_android_production_to_slack
+    scripts:
+      - *notify_shorebird_patch_android_production_to_slack
