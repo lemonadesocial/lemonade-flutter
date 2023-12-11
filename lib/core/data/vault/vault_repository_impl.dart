@@ -16,8 +16,9 @@ class VaultRepositoryImpl implements VaultRepository {
   final _client = getIt<AppGQL>().client;
 
   @override
-  Future<Either<Failure, RawTransaction>> getInitSafeTransaction(
-      {required GetInitSafeTransactionInput input}) async {
+  Future<Either<Failure, RawTransaction>> getInitSafeTransaction({
+    required GetInitSafeTransactionInput input,
+  }) async {
     final result = await _client.query(
       QueryOptions(
         document: getInitSafeTransactionQuery,
