@@ -7,6 +7,7 @@ const paymentAccountFragment = '''
       created_at
       user
       type
+      title
       provider
       account_info {
         ...on EthereumAccount {
@@ -28,6 +29,16 @@ const paymentAccountFragment = '''
         currency_map
         account_id
       }
+
+      ... on SafeAccount {
+          currencies
+          currency_map
+          address
+          network
+          owners
+          threshold
+          pending
+        }
     }
   }
 ''';
@@ -58,6 +69,8 @@ const paymentFragment = '''
 ''';
 
 final getPaymentAccountsQuery = gql('''
+  $paymentAccountFragment
+
   query ListNewPaymentAccounts(
     \$skip: Int!
     \$limit: Int!
@@ -72,41 +85,7 @@ final getPaymentAccountsQuery = gql('''
       type: \$type
       provider: \$provider
     ) {
-      _id
-      active
-      created_at
-      user
-      type
-      title
-      provider
-      account_info {
-        ... on EthereumAccount {
-          currencies
-          currency_map
-          address
-          networks
-        }
-        ... on SafeAccount {
-          currencies
-          currency_map
-          address
-          network
-          owners
-          threshold
-          funded
-        }
-        ... on DigitalAccount {
-          currencies
-          currency_map
-          account_id
-        }
-        ... on StripeAccount {
-          currencies
-          currency_map
-          account_id
-          publishable_key
-        }
-      }
+      ...paymentAccountFragment
     }
   }
 ''');
