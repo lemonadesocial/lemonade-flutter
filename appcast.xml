@@ -3,20 +3,20 @@
     <channel>
         <title>Lemonade Social - Appcast</title>
         <item>
-            <title>Version 1.0.1</title>
+            <title>Version 1.0.2</title>
             <description>Bug fixes and performance improvements.</description>
-            <pubDate>Wed, 8 Nov 2023 12:00:00 +0000</pubDate>
-            <enclosure url="https://apps.apple.com/us/app/lemonade-social/id6450694884" sparkle:version="1.0.1" sparkle:os="ios" />
+            <pubDate>Fri, 8 Dec 2023 22:00:00 +0000</pubDate>
+            <enclosure url="https://apps.apple.com/us/app/lemonade-social/id6450694884" sparkle:version="1.0.2" sparkle:os="ios" />
             <!-- Force update version -->
-            <sparkle:tags> <sparkle:criticalUpdate /> </sparkle:tags>
+            <!-- <sparkle:tags> <sparkle:criticalUpdate /> </sparkle:tags> -->
         </item>
         <item>
-            <title>Version 1.0.1</title>
+            <title>Version 1.0.2</title>
             <description>Bug fixes and performance improvements.</description>
-            <pubDate>Wed, 8 Nov 2023 12:00:00 +0000</pubDate>
-            <enclosure url="https://play.google.com/store/apps/details?id=social.lemonade.app" sparkle:version="1.0.1" sparkle:os="android" />
+            <pubDate>Fri, 8 Dec 2023 22:00:00 +0000</pubDate>
+            <enclosure url="https://play.google.com/store/apps/details?id=social.lemonade.app" sparkle:version="1.0.2" sparkle:os="android" />
             <!-- Force update version -->
-            <sparkle:tags> <sparkle:criticalUpdate /> </sparkle:tags>
+            <!-- <sparkle:tags> <sparkle:criticalUpdate /> </sparkle:tags> -->
         </item>
     </channel>
 </rss>

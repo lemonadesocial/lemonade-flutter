@@ -98,8 +98,9 @@ class _EventLocationSettingPageState extends State<EventLocationSettingPage> {
                           Text(
                             t.event.locationSetting.addNew,
                             style: Typo.extraMedium.copyWith(
-                                fontFamily: FontFamily.nohemiVariable,
-                                fontWeight: FontWeight.w600),
+                              fontFamily: FontFamily.nohemiVariable,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                           const Icon(Icons.add_circle_outline_rounded),
                         ],
@@ -137,14 +138,13 @@ class _EventLocationSettingPageState extends State<EventLocationSettingPage> {
 
   _buildSaveButton() {
     return LinearGradientButton(
-        label: t.common.save,
-        height: 48.h,
-        radius: BorderRadius.circular(24),
-        textStyle: Typo.medium.copyWith(),
-        mode: GradientButtonMode.lavenderMode,
-        onTap: () {},
-      );
-    
+      label: t.common.save,
+      height: 48.h,
+      radius: BorderRadius.circular(24),
+      textStyle: Typo.medium.copyWith(),
+      mode: GradientButtonMode.lavenderMode,
+      onTap: () {},
+    );
   }
 }
 
