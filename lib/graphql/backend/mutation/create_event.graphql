@@ -1,0 +1,5 @@
+mutation CreateEvent($input: EventInput!) {
+    createEvent(input: $input) {
+        _id
+    }
+}

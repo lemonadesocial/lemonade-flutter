@@ -1,4 +1,3 @@
-import 'package:app/core/application/event/create_event_bloc/create_event_bloc.dart';
 import 'package:app/core/application/event/event_datetime_settings_bloc/event_datetime_settings_bloc.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/datepicker_text_field/datepicker_text_field.dart';
@@ -58,16 +57,6 @@ class _EventDatetimeSettingsPageState extends State<EventDatetimeSettingsPage> {
         if (state.end.value == null) {
           endDateInputController.text = '';
         }
-        BlocProvider.of<CreateEventBloc>(context).add(
-          CreateEventEvent.startDateTimeChanged(
-            datetime: state.start.value ?? DateTime.now(),
-          ),
-        );
-        BlocProvider.of<CreateEventBloc>(context).add(
-          CreateEventEvent.endDateTimeChanged(
-            datetime: state.end.value ?? DateTime.now(),
-          ),
-        );
       },
       child: BlocBuilder<EventDateTimeSettingsBloc, EventDateTimeSettingsState>(
         builder: (context, state) {

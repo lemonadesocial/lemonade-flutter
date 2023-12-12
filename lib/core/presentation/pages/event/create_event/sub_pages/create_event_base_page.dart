@@ -1,4 +1,6 @@
 import 'package:app/core/application/event/create_event_bloc/create_event_bloc.dart';
+import 'package:app/core/application/event/event_datetime_settings_bloc/event_datetime_settings_bloc.dart';
+import 'package:app/core/constants/event/event_constants.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/create_event_config_grid.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
@@ -123,6 +125,10 @@ class CreateEventBasePage extends StatelessWidget {
 
   _buildSubmitButton(BuildContext context) {
     final t = Translations.of(context);
+    final start = context.read<EventDateTimeSettingsBloc>().state.start.value ??
+        EventDateTimeConstants.defaultStartDateTime;
+    final end = context.read<EventDateTimeSettingsBloc>().state.end.value ??
+        EventDateTimeConstants.defaultEndDateTime;
     return BlocBuilder<CreateEventBloc, CreateEventState>(
       builder: (context, state) {
         return Padding(
@@ -138,7 +144,12 @@ class CreateEventBasePage extends StatelessWidget {
             mode: GradientButtonMode.lavenderMode,
             onTap: () {
               Vibrate.feedback(FeedbackType.light);
-              context.read<CreateEventBloc>().add(const FormSubmitted());
+              context.read<CreateEventBloc>().add(
+                    FormSubmitted(
+                      start: start,
+                      end: end,
+                    ),
+                  );
             },
             loadingWhen: state.status.isInProgress,
           ),

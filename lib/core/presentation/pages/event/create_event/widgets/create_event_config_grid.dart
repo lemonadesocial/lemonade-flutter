@@ -5,6 +5,7 @@ import 'package:app/core/domain/event/entities/event_configuration.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/event_config_card.dart';
 import 'package:app/core/presentation/pages/event/event_datetime_settings_page/event_datetime_settings_page.dart';
 import 'package:app/core/presentation/pages/event/event_guest_settings_page/event_guest_settings_page.dart';
+import 'package:app/core/presentation/pages/event/event_location_setting_page/event_location_setting_page.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/modal_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -63,7 +64,7 @@ class CreateEventConfigGrid extends StatelessWidget {
     EventConfiguration eventConfig,
   ) {
     Vibrate.feedback(FeedbackType.light);
-    Widget page;
+    Widget? page;
     final eventConfigType = eventConfig.type;
     switch (eventConfigType) {
       case EventConfigurationType.visibility ||
@@ -76,11 +77,16 @@ class CreateEventConfigGrid extends StatelessWidget {
       case EventConfigurationType.endDateTime:
         page = const EventDatetimeSettingsPage();
         break;
+      case EventConfigurationType.location:
+        page = const EventLocationSettingPage();
+        break;
       default:
-        page = const SizedBox();
+        page = null;
         break;
     }
-
+    if (page == null) {
+      return showComingSoonDialog(context);
+    }
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -105,7 +111,7 @@ class CreateEventConfigGrid extends StatelessWidget {
                 ),
               ),
               Expanded(
-                child: page,
+                child: page ?? const SizedBox(),
               ),
             ],
           ),
@@ -224,14 +230,14 @@ class CreateEventConfigGrid extends StatelessWidget {
           title: eventConfig.title,
           description: eventConfig.description,
           icon: eventConfig.icon,
-          onTap: () => showComingSoonDialog(context),
+          onTap: () => onTap(context, eventConfig),
         );
       case EventConfigurationType.location:
         return EventConfigCard(
           title: eventConfig.title,
           description: eventConfig.description,
           icon: eventConfig.icon,
-          onTap: () => showComingSoonDialog(context),
+          onTap: () => onTap(context, eventConfig),
         );
 
       default:
