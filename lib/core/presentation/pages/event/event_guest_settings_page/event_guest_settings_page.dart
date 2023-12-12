@@ -1,5 +1,4 @@
 import 'package:app/core/application/event/create_event_bloc/create_event_bloc.dart';
-import 'package:app/core/constants/app_constants.dart';
 import 'package:app/core/constants/event/event_constants.dart';
 import 'package:app/core/presentation/pages/setting/widgets/setting_tile_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
@@ -256,8 +255,9 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
         isGuestLimitPer ? '' : EventConstants.defaultEventGuestLimitPer;
     context.read<CreateEventBloc>().add(
           GuestLimitPerChanged(
-            guestLimitPer:
-                isGuestLimitPer ? null : EventConstants.defaultEventGuestLimitPer,
+            guestLimitPer: isGuestLimitPer
+                ? null
+                : EventConstants.defaultEventGuestLimitPer,
           ),
         );
   }

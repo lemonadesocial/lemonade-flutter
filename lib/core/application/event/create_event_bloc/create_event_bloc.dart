@@ -134,9 +134,11 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
           end: DateTime.parse(event.end.toUtc().toIso8601String()),
           timezone: "Asia/Bangkok",
           guest_limit: double.parse(
-              state.guestLimit ?? EventConstants.defaultEventGuestLimit),
+            state.guestLimit ?? EventConstants.defaultEventGuestLimit,
+          ),
           guest_limit_per: double.parse(
-              state.guestLimitPer ?? EventConstants.defaultEventGuestLimitPer),
+            state.guestLimitPer ?? EventConstants.defaultEventGuestLimitPer,
+          ),
           virtual: true,
         ),
       );

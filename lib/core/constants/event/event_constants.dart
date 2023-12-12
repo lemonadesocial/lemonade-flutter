@@ -6,7 +6,6 @@ class EventConstants {
   static String defaultEventGuestLimit = '100';
 }
 
-
 class EventDateTimeConstants {
   static final DateTime currentDateTime = DateTime.now();
 
