@@ -1,3 +1,4 @@
+import 'package:app/core/constants/event/event_constants.dart';
 import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/core/domain/form/string_formz.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
@@ -132,8 +133,10 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
           start: DateTime.parse(event.start.toUtc().toIso8601String()),
           end: DateTime.parse(event.end.toUtc().toIso8601String()),
           timezone: "Asia/Bangkok",
-          guest_limit: 100,
-          guest_limit_per: 2,
+          guest_limit: double.parse(
+              state.guestLimit ?? EventConstants.defaultEventGuestLimit),
+          guest_limit_per: double.parse(
+              state.guestLimitPer ?? EventConstants.defaultEventGuestLimitPer),
           virtual: true,
         ),
       );

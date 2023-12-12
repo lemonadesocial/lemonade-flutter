@@ -40,15 +40,14 @@ class _EventLocationSettingPageState extends State<EventLocationSettingPage> {
         title: t.event.eventLocation,
       ),
       backgroundColor: colorScheme.onPrimaryContainer,
-      body: _buildContent(colorScheme),
+      body: _buildContent(),
       resizeToAvoidBottomInset: true,
     );
   }
 
-  Widget _buildContent(ColorScheme colorScheme) {
+  Widget _buildContent() {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-
     List<Address> addresses = context.watch<AuthBloc>().state.maybeWhen(
           authenticated: (authSession) => authSession.addresses ?? [],
           orElse: () => [],
@@ -163,7 +162,6 @@ class AddressList extends StatelessWidget {
         onTap: () {
           Vibrate.feedback(FeedbackType.light);
         },
-        // child:  Container(height: 100, color: Colors.red,),
         child: LocationItem(
           location: addresses[index],
         ),
