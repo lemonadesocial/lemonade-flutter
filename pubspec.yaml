@@ -127,7 +127,9 @@ dependencies:
   formz: ^0.6.1
   flutter_app_badger: ^1.5.0
   uuid: ^3.0.7
-
+  flutter_google_places_hoc081098: ^1.2.0
+  google_maps_webservice: ^0.0.20-nullsafety.5
+  
 dependency_overrides:
   matrix_api_lite:
     git:

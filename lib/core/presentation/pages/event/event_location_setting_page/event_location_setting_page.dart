@@ -1,6 +1,7 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/event/event_datetime_settings_bloc/event_datetime_settings_bloc.dart';
 import 'package:app/core/domain/common/entities/common.dart';
+import 'package:app/core/presentation/pages/event/event_location_setting_page/sub_pages/event_location_setting_detail_page.dart';
 import 'package:app/core/presentation/pages/event/event_location_setting_page/widgets/location_item.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
@@ -95,7 +96,7 @@ class _EventLocationSettingPageState extends State<EventLocationSettingPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            t.event.locationSetting.addNew,
+                            t.event.locationSetting.addNew.toUpperCase(),
                             style: Typo.extraMedium.copyWith(
                               fontFamily: FontFamily.nohemiVariable,
                               fontWeight: FontWeight.w600,
@@ -133,6 +134,39 @@ class _EventLocationSettingPageState extends State<EventLocationSettingPage> {
 
   _onTapAddNew() {
     Vibrate.feedback(FeedbackType.light);
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Theme.of(context).colorScheme.primary,
+      builder: (context) => Container(
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
+          color: Theme.of(context).colorScheme.onPrimaryContainer,
+        ),
+        clipBehavior: Clip.hardEdge,
+        child: FractionallySizedBox(
+          heightFactor: 0.95,
+          child: Column(
+            children: [
+              const SizedBox(height: 10),
+              Container(
+                width: 35,
+                height: 5,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.tertiaryContainer,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              const Expanded(
+                child:
+                    EventLocationSettingDetailPage(),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   _buildSaveButton() {
