@@ -1,8 +1,10 @@
+import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/event/event_location_setting_bloc/event_location_setting_bloc.dart';
 import 'package:app/core/config.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
+import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -11,6 +13,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_google_places_hoc081098/flutter_google_places_hoc081098.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:formz/formz.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:google_api_headers/google_api_headers.dart';
 
@@ -53,6 +57,13 @@ class _EventLocationSettingDetailPageState
         child:
             BlocListener<EventLocationSettingBloc, EventLocationSettingState>(
           listener: (context, state) async {
+            if (state.status.isSuccess) {
+              context.read<AuthBloc>().add(const AuthEvent.refreshData());
+              SnackBarUtils.showSuccessSnackbar(
+                t.event.locationSetting.addNewLocationSuccessfully,
+              );
+              AutoRouter.of(context).popTop();
+            }
             if (state.placeDetailsText != '') {
               placeDetailsController.text = state.placeDetailsText;
             }
@@ -204,11 +215,12 @@ class _EventLocationSettingDetailPageState
   }
 
   Future<void> displayPrediction(
-      Prediction? p, ScaffoldMessengerState messengerState) async {
+    Prediction? p,
+    ScaffoldMessengerState messengerState,
+  ) async {
     if (p == null) {
       return;
     }
-
     // get detail (lat/lng)
     final places = GoogleMapsPlaces(
       apiKey: AppConfig.googleMapKey,
@@ -216,40 +228,32 @@ class _EventLocationSettingDetailPageState
     );
 
     final detail = await places.getDetailsByPlaceId(p.placeId!);
-    final geometry = detail.result.geometry!;
-    final latitude = geometry.location.lat;
-    final longitude = geometry.location.lng;
-
-    FocusScope.of(context).unfocus();
-
     context
         .read<EventLocationSettingBloc>()
         .add(PlaceDetailsChanged(placeDetails: detail.result));
-
-    // placeDetailsController.text = detail.result.formattedAddress!;
-    // titleController.text = detail.result.name;
-    // street1Controller.text =
-    //     (result.streetNumber != null && result.streetName != null)
-    //         ? '${result.streetNumber} ${result.streetName}'
-    //         : '';
-    // street2Controller.text = '';
-    // cityController.text = result.city ?? '';
-    // regionController.text = result.stateCode ?? '';
-    // postalController.text = result.stateCode ?? '';
-    // countryController.text = result.country ?? '';
   }
 
   _buildSaveButton() {
-    return Padding(
-      padding: EdgeInsets.only(bottom: 15.h),
-      child: LinearGradientButton(
-        label: t.common.add,
-        height: 48.h,
-        radius: BorderRadius.circular(24),
-        textStyle: Typo.medium.copyWith(),
-        mode: GradientButtonMode.lavenderMode,
-        onTap: () {},
-      ),
+    return BlocBuilder<EventLocationSettingBloc, EventLocationSettingState>(
+      builder: (context, state) {
+        return Padding(
+          padding: EdgeInsets.only(bottom: 15.h),
+          child: LinearGradientButton(
+            label: t.common.add,
+            height: 48.h,
+            radius: BorderRadius.circular(24),
+            textStyle: Typo.medium.copyWith(),
+            mode: GradientButtonMode.lavenderMode,
+            onTap: () {
+              Vibrate.feedback(FeedbackType.light);
+              context
+                  .read<EventLocationSettingBloc>()
+                  .add(const SubmitAddLocation());
+            },
+            loadingWhen: state.status.isInProgress,
+          ),
+        );
+      },
     );
   }
 }

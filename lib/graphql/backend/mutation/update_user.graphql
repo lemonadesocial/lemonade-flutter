@@ -1,0 +1,10 @@
+# import '../fragment/user_fragment.graphql'
+
+mutation UpdateUser($input: UserInput!) {
+    updateUser(input: $input) {
+        ...BaseUserFragment
+        ...UserProfileFragment
+        ...UserPrivateFragment
+        ...UserTermFragment
+    }
+}

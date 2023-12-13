@@ -159,8 +159,7 @@ class _EventLocationSettingPageState extends State<EventLocationSettingPage> {
                 ),
               ),
               const Expanded(
-                child:
-                    EventLocationSettingDetailPage(),
+                child: EventLocationSettingDetailPage(),
               ),
             ],
           ),
