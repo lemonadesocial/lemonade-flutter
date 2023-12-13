@@ -35,6 +35,8 @@ dependencies:
   # local storage
   hive: ^2.2.3
   flutter_secure_storage: ^8.1.0
+  sqflite: ^2.3.0
+  path: ^1.8.3
 
   # other
   path_provider: ^2.0.15
@@ -112,6 +114,8 @@ dependencies:
   walletconnect_flutter_v2: ^2.1.10
   web3dart: ^2.6.1
   convert: ^3.1.1
+  bip39: ^1.0.6
+  bip32: ^2.0.0
 
   # matrix
   matrix: ^0.22.1

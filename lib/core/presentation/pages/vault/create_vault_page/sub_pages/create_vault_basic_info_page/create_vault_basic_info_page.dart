@@ -13,7 +13,7 @@ import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/web3/connect_wallet_button.dart';
 import 'package:app/core/presentation/widgets/web3/wallet_connect_active_session.dart';
-import 'package:app/core/service/vault/vault_secure_storage.dart';
+import 'package:app/core/service/vault/vault_pin_storage/vault_pin_storage.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -208,7 +208,7 @@ class CreateVaultBasicInfoPage extends StatelessWidget {
                   // Check if already set passcode ?
                   // if yes => Go to success page
                   final userId = auth_utils.AuthUtils.getUserId(context);
-                  if (await VaultSecureStorage.hasPinCode(userId)) {
+                  if (await VaultPinStorage.hasPinCode(userId)) {
                     return AutoRouter.of(context).replaceAll(
                       [
                         CreateVaultSuccessRoute(

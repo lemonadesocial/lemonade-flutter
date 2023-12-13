@@ -1,4 +1,4 @@
-import 'package:app/core/service/vault/vault_secure_storage.dart';
+import 'package:app/core/service/vault/vault_pin_storage/vault_pin_storage.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -17,7 +17,7 @@ class CheckVaultPinBloc extends Bloc<CheckVaultPinEvent, CheckVaultPinState> {
     Emitter emit,
   ) async {
     emit(CheckVaultPinState.checking());
-    final pinCode = await VaultSecureStorage.getPinCode(userId);
+    final pinCode = await VaultPinStorage.getPinCode(userId);
     if (pinCode?.isNotEmpty == true) {
       return emit(CheckVaultPinState.pinRequired(correctPin: pinCode!));
     }
