@@ -79,7 +79,7 @@ class EventLocationSettingBloc
           state.city,
           state.region,
           state.postal,
-          state.country
+          state.country,
         ]),
       ),
     );
@@ -99,7 +99,7 @@ class EventLocationSettingBloc
           state.city,
           state.region,
           state.postal,
-          state.country
+          state.country,
         ]),
       ),
     );
@@ -130,7 +130,7 @@ class EventLocationSettingBloc
           state.street1,
           state.region,
           state.postal,
-          state.country
+          state.country,
         ]),
       ),
     );
@@ -150,7 +150,7 @@ class EventLocationSettingBloc
           state.street1,
           state.city,
           state.postal,
-          state.country
+          state.country,
         ]),
       ),
     );
@@ -170,7 +170,7 @@ class EventLocationSettingBloc
           state.street1,
           state.region,
           state.city,
-          state.country
+          state.country,
         ]),
       ),
     );
