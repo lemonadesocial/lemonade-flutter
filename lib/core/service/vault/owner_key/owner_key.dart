@@ -14,12 +14,46 @@ enum OwnerKeyType {
   @JsonValue(1)
   deviceGenerated,
   @JsonValue(2)
-  walletConnect
+  walletConnect;
+
+  static List<OwnerKeyType> get privateKeyTypes => [
+        OwnerKeyType.deviceGenerated,
+        OwnerKeyType.deviceGenerated,
+      ];
 }
 
 @freezed
 class OwnerKey with _$OwnerKey {
   OwnerKey._();
+
+  Future<void> save({
+    String? id,
+    required String name,
+    required OwnerKeyType type,
+    required address,
+    PrivateKey? privateKey,
+    required int backup,
+  }) async {
+    assert(backup == 0 || backup == 1);
+    var ownerKey = OwnerKey(
+      id: id ?? '',
+      name: name,
+      type: type,
+      address: address,
+      backup: backup,
+    );
+    if (OwnerKeyType.privateKeyTypes.contains(type)) {
+      assert(privateKey != null);
+      ownerKey = ownerKey.copyWith(
+        id: privateKey!.id,
+      );
+      await PrivateKey.save(
+        id: privateKey.id,
+        privateKey: privateKey,
+      );
+    }
+    await getIt<OwnerKeysDatabase>().insert(ownerKey);
+  }
 
   factory OwnerKey({
     required String id,
@@ -34,29 +68,4 @@ class OwnerKey with _$OwnerKey {
 
   factory OwnerKey.fromJson(Map<String, dynamic> json) =>
       _$OwnerKeyFromJson(json);
-}
-
-extension OwnerKeyPersistence on OwnerKey {
-  Future<void> saveOwnerKeyWithPrivateKey({
-    required String name,
-    required OwnerKeyType type,
-    required PrivateKey privateKey,
-    required int backup,
-  }) async {
-    assert(type != OwnerKeyType.walletConnect);
-    assert(backup == 0 || backup == 1);
-    final ownerKey = OwnerKey(
-      id: privateKey.id,
-      name: name,
-      type: type,
-      address: address,
-      backup: backup,
-    );
-
-    await getIt<OwnerKeysDatabase>().insert(ownerKey);
-    await PrivateKey.save(
-      id: privateKey.id,
-      privateKey: privateKey,
-    );
-  }
 }
