@@ -51,4 +51,11 @@ class OwnerKeysDatabase {
     final db = await databaseInstance;
     await db?.insert(tableOwnerKeys, ownerKey.toJson());
   }
+
+  Future<List<OwnerKey>> getAll() async {
+    final db = await databaseInstance;
+    final result = await db?.query(tableOwnerKeys);
+    final ownerKeys = (result ?? []).map((e) => OwnerKey.fromJson(e)).toList();
+    return ownerKeys;
+  }
 }

@@ -55,6 +55,10 @@ class OwnerKey with _$OwnerKey {
     await getIt<OwnerKeysDatabase>().insert(ownerKey);
   }
 
+  static Future<List<OwnerKey>> getAll() async {
+    return await getIt<OwnerKeysDatabase>().getAll();
+  }
+
   factory OwnerKey({
     required String id,
     required String name,

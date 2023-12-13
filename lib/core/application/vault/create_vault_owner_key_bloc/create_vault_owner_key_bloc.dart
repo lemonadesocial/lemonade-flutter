@@ -16,11 +16,9 @@ class CreateVaultOwnerKeyBloc
   }
 
   Future<void> _onGenerate(
-      CreateVaultOwnerKeyEventGenerate event, Emitter emit) async {
-    if (state is _CreateVaultOwnerKeyStateGenerated) {
-      return;
-    }
-
+    CreateVaultOwnerKeyEventGenerate event,
+    Emitter emit,
+  ) async {
     try {
       final seedPhrase = bip39.generateMnemonic();
       final privateKey = PrivateKey.fromMnemonic(seedPhrase, 0);
