@@ -15,7 +15,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 @RoutePage()
 class CreateVaultCheckPhrasePage extends StatelessWidget {
-  const CreateVaultCheckPhrasePage({super.key});
+  final String? seedPhrase;
+  CreateVaultCheckPhrasePage({
+    super.key,
+    this.seedPhrase,
+  }) {
+    assert(seedPhrase != null);
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -26,11 +26,11 @@ enum OwnerKeyType {
 class OwnerKey with _$OwnerKey {
   OwnerKey._();
 
-  Future<void> save({
+  static Future<void> save({
     String? id,
     required String name,
     required OwnerKeyType type,
-    required address,
+    required EthereumAddress address,
     PrivateKey? privateKey,
     required int backup,
   }) async {
@@ -61,7 +61,7 @@ class OwnerKey with _$OwnerKey {
     required OwnerKeyType type,
     @EthereumAddressJsonConverter() required EthereumAddress address,
     // 0 || 1 (local db only accept int for boolean)
-    @Default(0) required int backup,
+    required int backup,
     // TODO: wallet
     // TODO: wallet connect active session
   }) = _OwnerKey;

@@ -1,3 +1,5 @@
+import 'package:app/core/application/vault/create_vault_bloc/create_vault_bloc.dart';
+import 'package:app/core/application/vault/create_vault_owner_key_bloc/create_vault_owner_key_bloc.dart';
 import 'package:app/core/presentation/pages/vault/create_vault_page/sub_pages/create_vault_setup_phrase_page/view/show_recovery_phrase_bottom_sheet.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
@@ -5,15 +7,35 @@ import 'package:app/core/utils/bottomsheet_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 @RoutePage()
 class CreateVaultSetupPhrasePage extends StatelessWidget {
   const CreateVaultSetupPhrasePage({super.key});
+
+  onAfterViewPhrase(BuildContext context) {
+    final ownerKeyBloc = context.read<CreateVaultOwnerKeyBloc>();
+    ownerKeyBloc.state.maybeWhen(
+      orElse: () => null,
+      generated: ((seedPhrase, address) {
+        ownerKeyBloc
+            .add(CreateVaultOwnerKeyEvent.import(seedPhrase: seedPhrase));
+        context
+            .read<CreateVaultBloc>()
+            .add(CreateVaultEvent.onOwnersChanged(owners: [address.hexEip55]));
+        context
+            .read<CreateVaultBloc>()
+            .add(CreateVaultEvent.onThresholdChanged(threshold: 1));
+        AutoRouter.of(context).push(CreateVaultCheckPhraseRoute());
+      }),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,30 +70,68 @@ class CreateVaultSetupPhrasePage extends StatelessWidget {
               subTitle: t.vault.createVault.safelyStoredDescription,
             ),
             const Spacer(),
-            SafeArea(
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                  vertical: Spacing.smMedium,
-                ),
-                child: LinearGradientButton(
-                  onTap: () {
+            BlocConsumer<CreateVaultOwnerKeyBloc, CreateVaultOwnerKeyState>(
+              listener: (context, state) {
+                state.maybeWhen(
+                  orElse: () => null,
+                  generated: (seedPhrase, address) {
+                    context.read<CreateVaultBloc>().add(
+                          CreateVaultEvent.onOwnersChanged(
+                            owners: [address.hexEip55],
+                          ),
+                        );
+                    context.read<CreateVaultBloc>().add(
+                          CreateVaultEvent.onThresholdChanged(threshold: 1),
+                        );
                     BottomSheetUtils.showSnapBottomSheet(
                       context,
-                      builder: (context) =>
-                          const ShowRecoveryPhraseBottomSheet(),
+                      builder: (context) => ShowRecoveryPhraseBottomSheet(
+                        seedPhrase: seedPhrase,
+                        onNext: () => onAfterViewPhrase(context),
+                      ),
                     );
                   },
-                  label: t.common.next,
-                  radius: BorderRadius.circular(LemonRadius.small * 2),
-                  height: Sizing.large,
-                  mode: GradientButtonMode.lavenderMode,
-                  textStyle: Typo.medium.copyWith(
-                    color: colorScheme.onPrimary.withOpacity(0.87),
-                    fontFamily: FontFamily.nohemiVariable,
-                    fontWeight: FontWeight.w600,
+                );
+              },
+              builder: (context, state) {
+                return SafeArea(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: Spacing.smMedium,
+                    ),
+                    child: LinearGradientButton(
+                      onTap: () {
+                        state.maybeWhen(
+                          orElse: () {
+                            context.read<CreateVaultOwnerKeyBloc>().add(
+                                  CreateVaultOwnerKeyEvent.generate(),
+                                );
+                          },
+                          generated: (seedPhrase, address) {
+                            BottomSheetUtils.showSnapBottomSheet(
+                              context,
+                              builder: (context) =>
+                                  ShowRecoveryPhraseBottomSheet(
+                                seedPhrase: seedPhrase,
+                                onNext: () => onAfterViewPhrase(context),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                      label: t.common.next,
+                      radius: BorderRadius.circular(LemonRadius.small * 2),
+                      height: Sizing.large,
+                      mode: GradientButtonMode.lavenderMode,
+                      textStyle: Typo.medium.copyWith(
+                        color: colorScheme.onPrimary.withOpacity(0.87),
+                        fontFamily: FontFamily.nohemiVariable,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   ),
-                ),
-              ),
+                );
+              },
             ),
           ],
         ),
