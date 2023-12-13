@@ -8,8 +8,8 @@ part 'common_dtos.g.dart';
 class AddressDto with _$AddressDto {
   @JsonSerializable(explicitToJson: true)
   const factory AddressDto({
-    String? street1,
-    String? street2,
+    @JsonKey(name: 'street_1') String? street1,
+    @JsonKey(name: 'street_2') String? street2,
     String? city,
     String? region,
     String? postal,

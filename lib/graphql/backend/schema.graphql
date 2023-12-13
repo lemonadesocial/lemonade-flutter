@@ -1,0 +1,2926 @@
+directive @expanded(from: String!, to: String!, resolve: Boolean) on FIELD_DEFINITION
+
+directive @secure(paths: [String!]!) on FIELD_DEFINITION
+
+type Query {
+  getBadgeLists(skip: Int! = 0, limit: Int! = 25, user: MongoID, title: String): [BadgeList!]!
+  getBadges(
+    skip: Int! = 0
+    limit: Int! = 25
+    _id: [MongoID!]
+    list: [MongoID!]
+    city: String
+    country: String
+
+    """Distance in meters"""
+    distance: Float
+  ): [Badge!]!
+  getBadgeCities(skip: Int! = 0, limit: Int! = 25): [BadgeCity!]!
+  getBroadcasts(provider: BroadcastProvider!): [Broadcast!]!
+  getComments(input: GetCommentsArgs!, skip: Int! = 0, limit: Int! = 25): [Comment!]!
+  getConfigs(keys: [String!]!): JSON!
+  exportEventAccepted(_id: MongoID!): [EventAcceptedExport!]!
+  getEventbriteEvents(input: GetEventbriteEventsInput, skip: Int! = 0, limit: Int! = 25): [EventbriteEvent!]!
+  getEventCheckins(input: GetEventCheckinsInput!): [EventCheckin!]!
+  getEventCohostRequests(input: GetEventCohostRequestsInput!): [EventCohostRequest!]!
+  getEventCurrencies(_id: MongoID!, used: Boolean): [EventCurrency!]!
+  getMyEvents(state: GetEventsState, skip: Int! = 0, limit: Int! = 25): [Event!]!
+  getHostingEvents(order: Int, state: FilterEventInput, user: MongoID, skip: Int! = 0, limit: Int! = 25): [Event!]!
+  getEvent(_id: MongoID!): Event
+  getEvents(skip: Int! = 0, limit: Int! = 25, _id: [MongoID!], search: String, accepted: MongoID, highlight: Boolean): [Event!]!
+  getHomeEvents(skip: Int! = 0, limit: Int! = 25, search: String, tense: EventTense, longitude: Float, latitude: Float, search_range: Float): [Event!]!
+  getProfileEvents(skip: Int! = 0, limit: Int! = 25, user: MongoID): [Event!]!
+  getPastEvents(skip: Int! = 0, limit: Int! = 25, user: MongoID, sort: JSON): [Event!]!
+  getUpcomingEvents(skip: Int! = 0, limit: Int! = 25, user: MongoID, host: Boolean, sort: JSON): [Event!]!
+  getEventPaymentDonationSummary(event: MongoID!): EventPaymentDonationSummary
+  getEventPaymentSummary(event: MongoID!): EventPaymentSummary!
+  getEventTicketTypes(input: GetEventTicketTypesInput!): GetEventTicketTypesResponse!
+  getEventQuestions(input: GetEventQuestionsInput!): [EventQuestion!]!
+  getEventRewardUses(input: GetEventRewardUsesInput!): [EventRewardUse!]!
+  getEventSessionReservations(input: GetEventSessionReservationsInput): [EventSessionReservation!]!
+  getEventSessionReservationSummary(input: GetEventSessionReservationSummaryInput!): [EventSessionReservationSummary!]!
+  getFiles(skip: Int! = 0, limit: Int! = 25, id_lt: MongoID, user: MongoID, links: FileLinkInput): [File!]!
+  getFrequentQuestions(input: GetFrequentQuestionsInput!): [FrequentQuestion!]!
+  getKratosFlow(email: String!): String!
+  listFiatCurrencies: [FiatCurrency!]!
+  listChains: [Chain!]!
+  listNewPaymentAccounts(skip: Int! = 0, limit: Int! = 25, _id: [MongoID!], type: PaymentAccountType, provider: NewPaymentProvider): [NewPaymentAccount!]!
+  getNewPayment(_id: MongoID!): NewPayment
+  listNewPayments(skip: Int! = 0, limit: Int! = 25, event: MongoID!, users: [MongoID!]): [NewPayment!]!
+  getPosts(input: GetPostsInput, skip: Int! = 0, limit: Int! = 25): [Post!]!
+  getNewsfeed(offset: Float): Newsfeed
+  getNotifications(skip: Int! = 0, limit: Int! = 25, type: NotificationTypeFilterInput): [Notification!]!
+  getOffers(type: OfferType!): [Offer!]!
+  getPayments(skip: Int! = 0, limit: Int! = 25, state: PaymentStateInput, type: PaymentTypeInput, event: MongoID, user: MongoID, direct_recipient: MongoID, ticket_assignees: MongoID): [Payment!]!
+  getRooms(input: GetRoomsInput!): [Room!]!
+  getRoom(_id: MongoID!): Room
+  getRoomCredentials(input: GetRoomCredentialsInput!): RoomCredentials!
+  getSites(skip: Int! = 0, limit: Int! = 25, _id: [MongoID!], active: Boolean): [Site!]!
+  getStoreBucketItems(skip: Int! = 0, limit: Int! = 25): [StoreBucketItem!]!
+  getStoreCategory(_id: MongoID!): StoreCategory
+  getStoreCategories(skip: Int! = 0, limit: Int! = 25, store: MongoID, parents: MongoID): [StoreCategory!]!
+  getStoreOrder(_id: MongoID!): StoreOrder
+  getStoreOrders(skip: Int! = 0, limit: Int! = 25, store: MongoID, place_reservation: MongoID, state: StoreOrderStateFilterInput): [StoreOrder!]!
+  getStoreProduct(_id: MongoID!): StoreProduct!
+  getStoreProducts(skip: Int! = 0, limit: Int! = 25, store: MongoID, categories: MongoID): [StoreProduct!]!
+  getStore(promotion: MongoID, _id: MongoID): Store
+  getStores(skip: Int! = 0, limit: Int! = 25, user: MongoID, longitude: Float, latitude: Float, country: String, region: String, city: String, postal: String, tags: String): [Store!]!
+  getStoreDeliveryOptions(store: MongoID!, address: AddressInput!): [DeliveryOption!]!
+  getStoreSalesTax(store: MongoID!, address: AddressInput!): SalesTax!
+  getStripeCards(skip: Int! = 0, limit: Int! = 25, payment_account: MongoID): [StripeCard!]!
+  calculateTicketsPricing(input: CalculateTicketsPricingInput!): PricingInfo!
+  getTickets(skip: Int! = 0, limit: Int! = 25, _id: [MongoID!], event: MongoID, user: MongoID): [Ticket!]!
+  getUserContacts(skip: Int! = 0, limit: Int! = 25, input: GetUserContactsInput): GetUserContactsResponse!
+  getUserDiscovery(longitude: Float!, latitude: Float!, search_range: Float, event: MongoID): UserDiscovery!
+  getUserDiscoverySwipes(skip: Int! = 0, limit: Int! = 25, state: UserDiscoverySwipeState, other_wallets: Boolean): [UserDiscoverySwipe!]!
+  getUserFollows(skip: Int! = 0, limit: Int! = 25, input: GetUserFollowsInput!): [UserFollow!]!
+  getUserFriendships(skip: Int! = 0, limit: Int! = 25, input: GetUserFriendshipsInput): GetUserFriendshipsResponse!
+  getUserIcebreakerQuestions: [UserIcebreakerQuestion!]!
+  getUserPaymentVerification: UserPaymentVerificationInfo!
+  getRecommendedUsers(skip: Int! = 0, limit: Int! = 25): [User!]!
+  getMe: User!
+  getUser(_id: MongoID, username: String, matrix_localpart: String): User
+  getUsers(skip: Int! = 0, limit: Int! = 25, _id: [MongoID!], tag_recommended: Boolean, wallets: [String!], search: String): [User!]!
+  getUsersSpotlight: [User!]!
+  getUserWalletRequest(wallet: String!): UserWalletRequest!
+}
+
+type BadgeList {
+  _id: MongoID!
+  title: String!
+  image_url: String
+  user: MongoID!
+  user_expanded: User
+}
+
+scalar MongoID
+
+type User {
+  _id: MongoID
+  active: Boolean!
+  created_at: DateTimeISO!
+  updated_at: DateTimeISO!
+  name: String!
+  verified: Boolean
+  phone: String
+  phone_verified: Boolean
+  email: String
+  email_marketing: Boolean
+  email_verified: Boolean
+  country: String
+  display_name: String
+  first_name: String
+  last_name: String
+  type: UserType
+  search_range: Float
+  lemon_amount: Float!
+  lemon_cap: Float!
+  discovery: UserDiscoverySettings
+  addresses: [Address!]
+  age: Float
+  blocked: [MongoID!]
+  calendly_url: String
+  currency: String
+  company_address: Address
+  company_name: String
+  cover: MongoID
+  date_of_birth: DateTimeISO
+  description: String
+  education_title: String
+  ethnicity: String
+  events: [MongoID!]
+  frequent_questions: [FrequentQuestion!]
+  handle_facebook: String
+  handle_instagram: String
+  handle_linkedin: String
+  handle_twitter: String
+  image_avatar: String
+  industry: String
+  interests: [String!]
+  job_title: String
+  languages: [String!]
+  layout_sections: [LayoutSection!]
+  location_line: String
+  music: [String!]
+  offers: [UserOffer!]
+  preferred_network: String
+  pronoun: String
+  new_gender: String
+  new_photos: [MongoID!]
+  tag_recommended: Boolean
+  tag_site: Boolean
+  tag_support: Boolean
+  tag_timeline: Boolean
+  tag_verified: Boolean
+  tagline: String
+  timezone: String
+  username: String
+  settings: JSON
+  wallets: [String!]
+  wallet_custodial: String
+  attended: Float
+  followers: Float
+  following: Float
+  friends: Float
+  hosted: Float
+  posts: Float
+  discord_user_info: JSON
+  lemon_refresh_at: DateTimeISO
+  fcm_tokens: [String!]
+  matrix_localpart: String
+  matrix_support_room_id: String
+  payment_direct: [UserPaymentDirectItem!]
+  payment_verification: UserPaymentVerification
+  url: String
+  url_go: String
+  daos: [UserDao!]
+  data: JSON
+  eventbrite_user_info: JSON
+  google_user_info: JSON
+  stripe_user_info: JSON
+  terms_accepted_adult: Boolean
+  terms_accepted_conditions: Boolean
+  notification_filters: [JSON!]
+  razorpay_customer: String
+  shopify_user_info: JSON
+  twitch_user_info: JSON
+  twitter_user_info: JSON
+  twitter2_user_info: JSON
+  zoom_user_info: JSON
+  icebreakers: [UserIcebreaker!]
+  cover_expanded: File
+  events_expanded(skip: Int! = 0, limit: Int! = 25): [Event]
+  new_photos_expanded(skip: Int! = 0, limit: Int! = 25): [File]
+  blocked_expanded: [User]
+}
+
+"""
+A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.This scalar is serialized to a string in ISO 8601 format and parsed from a string in ISO 8601 format.
+"""
+scalar DateTimeISO
+
+enum UserType {
+  Admin
+}
+
+type UserDiscoverySettings {
+  enabled: Boolean!
+  min_age: Float!
+  max_age: Float!
+}
+
+type Address {
+  _id: MongoID
+  recipient_name: String
+  street_1: String
+  street_2: String
+  city: String
+  region: String
+  postal: String
+  country: String
+  title: String
+  phone: String
+  longitude: Float
+  latitude: Float
+}
+
+type FrequentQuestion {
+  _id: MongoID
+  type: [FrequentQuestionType!]!
+  question: String!
+  answer: String!
+  position: Float
+  tag: String
+}
+
+enum FrequentQuestionType {
+  event
+  poap
+  user
+}
+
+type LayoutSection {
+  id: String
+  hidden: Boolean
+}
+
+type UserOffer {
+  _id: MongoID
+  provider: OfferProvider!
+  provider_network: String!
+  provider_id: String!
+  position: Float
+  auto: Boolean
+}
+
+enum OfferProvider {
+  claimable
+  festival_heads
+  metaverse
+  order
+  poap
+  token
+}
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
+
+type UserPaymentDirectItem {
+  provider: PaymentProvider!
+  currency: String
+}
+
+enum PaymentProvider {
+  local
+  razorpay
+  stripe_au
+  stripe_ca
+  stripe_eu
+  stripe_us
+}
+
+type UserPaymentVerification {
+  stamp: DateTimeISO!
+  state: UserPaymentVerificationState!
+  reason: String
+  verified_by: MongoID
+}
+
+enum UserPaymentVerificationState {
+  pending
+  declined
+  completed
+}
+
+type UserDao {
+  network: String!
+  address: String!
+}
+
+type UserIcebreaker {
+  _id: MongoID
+  question: MongoID!
+  value: String!
+  question_expanded: UserIcebreakerQuestion
+}
+
+type UserIcebreakerQuestion {
+  _id: MongoID!
+  title: String!
+  description: String
+}
+
+type File {
+  _id: MongoID
+  stamp: DateTimeISO!
+  state: FileState!
+  owner: MongoID!
+  type: String!
+  size: Float!
+  url: String!
+  bucket: String!
+  key: String!
+  links: [FileLink!]
+  likes: Float!
+  likers: [MongoID!]
+  description: String
+  owner_expanded: User
+  liked: Boolean
+  link_events_expanded(skip: Int! = 0, limit: Int! = 25): [Event]
+  link_stores_expanded(skip: Int! = 0, limit: Int! = 25): [Store]
+  link_store_products_expanded(skip: Int! = 0, limit: Int! = 25): [StoreProduct]
+  link_users_expanded(skip: Int! = 0, limit: Int! = 25): [User]
+}
+
+enum FileState {
+  done
+  error
+  started
+}
+
+type FileLink {
+  model: String!
+  id: MongoID!
+  path: String!
+  type: FileLinkType!
+}
+
+enum FileLinkType {
+  file_inline
+  object_id
+}
+
+type Event {
+  _id: MongoID
+  shortid: String!
+  active: Boolean!
+  stamp: DateTimeISO!
+  state: EventState!
+  title: String!
+  slug: String!
+  start: DateTimeISO!
+  end: DateTimeISO!
+  host: MongoID!
+  cohosts: [MongoID!]
+  invited: [MongoID!]
+  inviters: [MongoID!]
+  pending: [MongoID!]
+  accepted: [MongoID!]
+  declined: [MongoID!]
+  payment_fee: Float!
+  accepted_store_promotion: MongoID
+  accepted_user_fields_required: [String!]
+  access_pass: AccessPass
+  address: Address
+  approved: Boolean
+  broadcast_rooms: [BroadcastRoom!]
+  button_icon: String
+  button_text: String
+  button_url: String
+  comments: String
+  cost: Float
+  currency: String
+  cover: String
+  cta_button_text: String
+  description: String
+  events: [MongoID!]
+  frequent_questions: [FrequentQuestion!]
+  guest_limit: Float
+  guest_limit_per: Float
+  hide_chat_action: Boolean
+  hide_creators: Boolean
+  hide_invite_action: Boolean
+  hide_question_box: Boolean
+  hide_rooms_action: Boolean
+  hide_session_guests: Boolean
+  hide_speakers: Boolean
+  hide_stories_action: Boolean
+  highlight: Boolean
+  latitude: Float
+  layout_sections: [LayoutSection!]
+  location: Point
+  longitude: Float
+  new_photos: [FileInline!]
+  new_new_photos: [MongoID!]
+  offers: [EventOffer!]
+  payment_accounts_new: [MongoID!]
+  payment_accounts: JSON
+  payment_donation: Boolean
+  payment_donation_amount_includes_tickets: Boolean
+  payment_donation_amount_increment: Float
+  payment_donation_message: String
+  payment_donation_target: Float
+  payment_enabled: Boolean
+  payment_optional: Boolean
+  payment_provider: PaymentProvider
+  payment_split_frozen: Boolean
+  payment_ticket_external_message: String
+  payment_ticket_external_url: String
+  payment_ticket_purchase_title: String
+  photos: [String!]
+  private: Boolean
+  published: Boolean
+  rewards: [EventReward!]
+  reward_uses: JSON
+  session_guests: JSON
+  speaker_users: [MongoID!]
+  stores: [MongoID!]
+  stories: [MongoID!]
+  stories_eponym: Boolean
+  tags: [String!]
+  terms_email_permission_text: Boolean
+  terms_text: String
+  timezone: String
+  unlisted: Boolean
+  verify: Boolean
+  videos: [Video!]
+  virtual: Boolean
+  welcome_text: String
+  welcome_video: Video
+  payment_ticket_count: Float
+  payment_ticket_unassigned_count: Float
+  eventbrite_enabled: Boolean
+  eventbrite_event_id: String
+  eventbrite_tickets_imported: Boolean
+  invited_count: Float
+  inviter_user_map: JSON
+  matrix_event_room_id: String
+  url: String
+  url_go: String
+  broadcasts: [Broadcast!]
+  event_ticket_types: [EventTicketType!]
+  sessions: [EventSession!]
+  has_terms_accepted: Boolean
+  data: JSON
+  host_expanded: User
+  cohosts_expanded(skip: Int! = 0, limit: Int! = 25): [User]
+  invited_expanded(skip: Int! = 0, limit: Int! = 25): [User]
+  pending_expanded(skip: Int! = 0, limit: Int! = 25): [User]
+  accepted_expanded(skip: Int! = 0, limit: Int! = 25): [User]
+  declined_expanded(skip: Int! = 0, limit: Int! = 25): [User]
+  stores_expanded(skip: Int! = 0, limit: Int! = 25): [Store]
+  new_new_photos_expanded(skip: Int! = 0, limit: Int! = 25): [File]
+  events_expanded(skip: Int! = 0, limit: Int! = 25): [Event]
+  speaker_users_expanded(skip: Int! = 0, limit: Int! = 25): [User]
+  payment_accounts_expanded(skip: Int! = 0, limit: Int! = 25): [NewPaymentAccount!]
+  payment_split: [EventPaymentSplitItem!]
+  payment_ticket_discounts: [EventPaymentTicketDiscount!]
+  tickets: [Ticket!]
+}
+
+enum EventState {
+  created
+  started
+  ended
+  cancelled
+}
+
+type AccessPass {
+  contract: String!
+  network: String!
+  frame: String!
+  base: String!
+  name: String!
+  logo_url: String!
+  info_url: String!
+  card_image_url: String!
+  card_logo_url: String!
+  gallery_logo_url: String!
+  card_description: String!
+  dialog_background_url: String!
+  dialog_title: String!
+  dialog_description: String!
+  metadata_name: String!
+  metadata_description: String!
+  metadata_creators: [String!]!
+  unlocked_description: String
+  twitter_url: String
+  instagram_url: String
+  discord_url: String
+  checkin: Boolean
+}
+
+type BroadcastRoom {
+  _id: MongoID
+  title: String
+  description: String
+  photos: [MongoID!]
+  event_payment_ticket_types: [MongoID!]
+  position: Float
+  iframe_src: String
+  photos_expanded(skip: Int! = 0, limit: Int! = 25): [File]
+}
+
+type Point {
+  type: String!
+  coordinates: [Float!]!
+}
+
+type FileInline {
+  id: MongoID!
+  url: String!
+  key: String!
+  fa_file: MongoID
+  fa_index: Float
+}
+
+type EventOffer {
+  _id: MongoID
+  provider: OfferProvider!
+  provider_network: String!
+  provider_id: String!
+  position: Float
+  auto: Boolean
+  broadcast_rooms: [MongoID!]
+}
+
+type EventReward {
+  _id: MongoID
+  active: Boolean!
+  title: String!
+  limit: Float
+  limit_per: Float!
+  icon_color: String
+  icon_url: String
+  payment_ticket_types: [MongoID!]
+}
+
+type Video {
+  provider: String!
+  provider_id: String!
+  title: String
+  thumbnail: String
+}
+
+type Broadcast {
+  _id: MongoID
+  active: Boolean!
+  user: MongoID!
+  provider: BroadcastProvider!
+  provider_id: String!
+  title: String!
+  life_cycle_status: BroadcastLifeCycleStatus!
+  recording_status: BroadcastRecordingStatus!
+  description: String
+  position: Float
+  rooms: [MongoID!]
+  thumbnail: String
+  scheduled_start_time: DateTimeISO
+  start_time: DateTimeISO
+  scheduled_end_time: DateTimeISO
+  end_time: DateTimeISO
+  meta_data: BroadcastMetaData
+  processed_by_job: Boolean
+  deactivation_code: String
+  deactivation_message: String
+  eligible: Boolean!
+  user_expanded: User
+}
+
+enum BroadcastProvider {
+  embed
+  local
+  twitch
+  video
+  youtube
+  zoom
+}
+
+enum BroadcastLifeCycleStatus {
+  complete
+  created
+  live
+  liveStarting
+  ready
+  revoked
+  testStarting
+  testing
+}
+
+enum BroadcastRecordingStatus {
+  notRecording
+  recorded
+  recording
+}
+
+type BroadcastMetaData {
+  user: String
+  title: String
+  video: String
+  password: String
+  boundStreamId: String
+  boundStreamStamp: DateTimeISO
+  enableAutoStop: Boolean
+  static_thumbnail: String
+}
+
+type EventTicketType {
+  _id: MongoID!
+  active: Boolean
+  event: MongoID!
+  title: String!
+  prices: [EventTicketPrice!]!
+  default: Boolean
+  address_required: Boolean
+  description: String
+  description_line: String
+  external_ids: [String!]
+  offers: [EventOffer!]
+  photos: [MongoID!]
+  ticket_count: Float
+  ticket_limit: Float
+  ticket_limit_per: Float
+  photos_expanded(skip: Int! = 0, limit: Int! = 25): [File]
+}
+
+type EventTicketPrice {
+  default: Boolean
+  currency: String!
+  network: String
+  cost: String!
+}
+
+type EventSession {
+  _id: MongoID
+  title: String!
+  start: DateTimeISO!
+  end: DateTimeISO!
+  broadcast: MongoID
+  description: String
+  photos: [MongoID!]
+  speaker_users: [MongoID!]
+  photos_expanded(skip: Int! = 0, limit: Int! = 25): [File]
+  speaker_users_expanded(skip: Int! = 0, limit: Int! = 25): [User]
+}
+
+type Store {
+  _id: MongoID!
+  active: Boolean!
+  stamp: DateTimeISO!
+  user: MongoID!
+  managers: [MongoID!]!
+  title: String!
+  payment_provider: PaymentProvider!
+  payment_account: MongoID!
+  payment_fee_store: Float!
+  payment_fee_user: Float!
+  currency: String!
+  fulfillment_addresses: [Address!]!
+  address: Address
+  api_secret: String
+  easyship_enabled: Boolean
+  easyship_company_id: String
+  easyship_token: String
+  easyship_secret_key: String
+  approved: Boolean
+  pickup_addresses: [Address!]
+  delivery_options: [DeliveryOption!]
+  sales_taxes: [SalesTax!]
+  photos: [FileInline!]
+  new_photos: [MongoID!]!
+  order_count: Float
+  tags: [String!]
+  age_restriction_min: Float
+  age_restriction_reason: String
+  managers_expanded(skip: Int! = 0, limit: Int! = 25): [User]
+  user_expanded: User
+  new_photos_expanded(skip: Int! = 0, limit: Int! = 25): [File]
+  promotions: [StorePromotion]
+}
+
+type DeliveryOption {
+  _id: MongoID!
+  type: DeliveryOptionType!
+  title: String!
+  cost: Float!
+  fulfillment_address: MongoID
+  pickup_addresses: [MongoID!]
+  waive_type: DeliveryOptionWaiveType
+  waive_value_threshold: Float
+  group: String
+  description: String
+  longitude: Float
+  latitude: Float
+  search_range: Float
+  polygon: JSON
+  countries: [String!]
+  regions: [String!]
+  cities: [String!]
+  postals: [String!]
+  postal_ranges: [DeliveryOptionPostalRange!]
+}
+
+enum DeliveryOptionType {
+  worldwide
+  country
+  region
+  city
+  postal
+  geo_zone
+}
+
+enum DeliveryOptionWaiveType {
+  store
+  product
+  any
+}
+
+type DeliveryOptionPostalRange {
+  _id: MongoID!
+  pattern: String!
+  min: Float!
+  max: Float!
+}
+
+type SalesTax {
+  _id: MongoID!
+  type: SalesTaxType!
+  name: String
+  flat_map: JSON
+  ratio_map: JSON
+  countries: [String!]
+  regions: [String!]
+}
+
+enum SalesTaxType {
+  worldwide
+  country
+  region
+}
+
+type StorePromotion {
+  _id: MongoID!
+  active: Boolean!
+  type: StorePromotionType!
+  title: String!
+  ratio: Float!
+  use_count: Float
+  use_count_map: JSON
+  use_limit: Float
+  use_limit_per: Float
+  waive_delivery_option_cost: Boolean
+  event: MongoID
+  products: [MongoID!]
+  products_expanded(skip: Int! = 0, limit: Int! = 25): [StoreProduct]
+}
+
+enum StorePromotionType {
+  event
+}
+
+type StoreProduct {
+  _id: MongoID!
+  active: Boolean!
+  stamp: DateTimeISO!
+  store: MongoID!
+  order: Float!
+  title: String!
+  description: String!
+  categories: [MongoID!]
+  delivery_options: [DeliveryOption!]
+  easyship_category: EasyshipCategory
+  sales_tax_tag: String
+  groups: JSON
+  highlight: Boolean
+  primary_group: String
+  variants: [StoreProductVariant!]!
+  store_expanded: Store
+}
+
+enum EasyshipCategory {
+  mobiles
+  tablets
+  computers_laptops
+  cameras
+  accessory_no_battery
+  accessory_battery
+  health_beauty
+  fashion
+  watches
+  home_appliances
+  home_decor
+  toys
+  sport
+  luggage
+  audio_video
+  documents
+  jewelry
+  dry_food_supplements
+  books_collectionables
+  pet_accessory
+  gaming
+}
+
+type StoreProductVariant {
+  _id: MongoID!
+  title: String!
+  cost: Float!
+  groups: JSON!
+  weight: Float!
+  length: Float!
+  width: Float!
+  height: Float!
+  photos: [FileInline!]
+  new_photos: [MongoID!]
+  inventory: Float
+  new_photos_expanded(skip: Int! = 0, limit: Int! = 25): [File]
+}
+
+type NewPaymentAccount {
+  _id: MongoID!
+  active: Boolean!
+  created_at: DateTimeISO!
+  user: MongoID!
+  type: PaymentAccountType!
+  title: String
+  provider: NewPaymentProvider
+  account_info: AccountInfo!
+}
+
+enum PaymentAccountType {
+  ethereum
+  digital
+}
+
+enum NewPaymentProvider {
+  stripe
+  safe
+}
+
+union AccountInfo = EthereumAccount | SafeAccount | DigitalAccount | StripeAccount
+
+type EthereumAccount {
+  currencies: [String!]!
+  currency_map: JSON
+  address: String!
+  networks: [String!]!
+}
+
+type SafeAccount {
+  currencies: [String!]!
+  currency_map: JSON
+  address: String!
+  network: String!
+  owners: [String!]!
+  threshold: Float!
+  funded: Boolean
+}
+
+type DigitalAccount {
+  currencies: [String!]!
+  currency_map: JSON
+  account_id: String!
+}
+
+type StripeAccount {
+  currencies: [String!]!
+  currency_map: JSON
+  account_id: String!
+  publishable_key: String!
+}
+
+type EventPaymentSplitItem {
+  ratio: Float!
+  user: MongoID!
+  state: EventPaymentSplitItemState!
+  user_expanded: User
+}
+
+enum EventPaymentSplitItemState {
+  expired
+  pending
+  accepted
+}
+
+type EventPaymentTicketDiscount {
+  active: Boolean!
+  stamp: DateTimeISO!
+  code: String!
+  ratio: Float!
+  use_count: Float
+  use_count_map: JSON
+  users: [MongoID!]
+  ticket_count: Float
+  ticket_count_map: JSON
+  payments: [MongoID!]
+  use_limit: Float
+  use_limit_per: Float
+  ticket_limit: Float
+  ticket_limit_per: Float
+  ticket_types: [MongoID!]
+  payments_expanded(skip: Int! = 0, limit: Int! = 25): [Payment]
+  users_expanded(skip: Int! = 0, limit: Int! = 25): [User]
+}
+
+type Payment {
+  _id: MongoID!
+  created_at: DateTimeISO!
+  created_context: JSON
+  active: Boolean!
+  stamp: DateTimeISO!
+  user: MongoID!
+  user_email: String
+  stamp_authorized: DateTimeISO
+  stamp_canceled: DateTimeISO
+  stamp_captured: DateTimeISO
+  stamp_failed: DateTimeISO
+  stamp_refunded: DateTimeISO
+  provider_id: String
+  currency: String
+  amount: Float
+  fee: Float
+  refund_amount: Float
+  transfer_amount: Float
+  error_code: String
+  error_description: String
+  meta_data: PaymentMetaData
+  direct_message: String
+  direct_recipient: MongoID
+  event: MongoID
+  store_order: MongoID
+  stripe_card: MongoID
+  ticket_assignees: [MongoID!]
+  ticket_assigned_emails: [String!]
+  ticket_assigned_phones: [String!]
+  ticket_count: Float
+  ticket_discount: String
+  ticket_discount_amount: Float
+  ticket_type: MongoID
+  ticket_count_remaining: Float
+  stripe_card_expanded: StripeCard
+  ticket_assignees_expanded(skip: Int! = 0, limit: Int! = 25): [User]
+  user_expanded: User
+  event_expanded: Event
+}
+
+type PaymentMetaData {
+  card: JSON
+  charge: String
+}
+
+type StripeCard {
+  _id: MongoID!
+  active: Boolean!
+  stamp: DateTimeISO!
+  payment_account: MongoID!
+  provider_id: String!
+  user: MongoID!
+  brand: String!
+  name: String!
+  last4: String!
+}
+
+type Ticket {
+  _id: MongoID!
+  event: MongoID!
+  type: MongoID!
+  accepted: Boolean
+  assigned_email: String
+  assigned_to: MongoID
+  invited_by: MongoID
+}
+
+type Badge {
+  _id: MongoID!
+  list: MongoID!
+  network: String!
+  contract: String!
+  city: String
+  country: String
+
+  """Distance in meters"""
+  distance: Float
+  claimable: Boolean
+  list_expanded: BadgeList
+}
+
+type BadgeCity {
+  city: String!
+  country: String!
+}
+
+type Comment {
+  _id: MongoID!
+  created_at: DateTimeISO!
+  text: String!
+  post: MongoID!
+  user: MongoID!
+  comment: MongoID
+  user_expanded: User
+}
+
+input GetCommentsArgs {
+  post: MongoID!
+  comment: MongoID
+}
+
+type EventAcceptedExport {
+  _id: MongoID!
+  name: String
+  first_name: String
+  last_name: String
+  username: String
+  email: String
+  phone: String
+  amount: String
+  currency: String
+  ticket_type: String
+  ticket_count: Float
+  ticket_discount: String
+  ticket_discount_amount: String
+  checkin_date: DateTimeISO
+}
+
+type EventbriteEvent {
+  id: String!
+  title: String!
+  status: String!
+  logo_url: String
+  description: String
+  start: DateTimeISO!
+  end: DateTimeISO!
+  stamp: DateTimeISO!
+}
+
+input GetEventbriteEventsInput {
+  status: EventbriteEventStatus
+  order: EventbriteEventOrder
+}
+
+enum EventbriteEventStatus {
+  DRAFT
+  LIVE
+  CANCELED
+  STARTED
+  ENDED
+}
+
+enum EventbriteEventOrder {
+  CREATED_ASC
+  CREATED_DESC
+}
+
+type EventCheckin {
+  _id: MongoID!
+  active: Boolean!
+  event: MongoID!
+  user: MongoID!
+}
+
+input GetEventCheckinsInput {
+  event: MongoID!
+  users: [MongoID!]
+}
+
+type EventCohostRequest {
+  _id: MongoID!
+  stamp: DateTimeISO!
+  from: MongoID!
+  event: MongoID!
+  to: MongoID!
+  state: EventCohostRequestState!
+  from_expanded: User
+  to_expanded: User
+}
+
+enum EventCohostRequestState {
+  DECLINED
+  ACCEPTED
+  PENDING
+}
+
+input GetEventCohostRequestsInput {
+  event: MongoID!
+  state: EventCohostRequestState
+}
+
+type EventCurrency {
+  currency: String!
+  decimals: Float!
+  network: String
+}
+
+enum GetEventsState {
+  ACCEPTED
+  DECLINED
+  INVITED
+  PENDING
+}
+
+input FilterEventInput {
+  eq: EventState
+  in: [EventState!]
+  nin: [EventState!]
+}
+
+enum EventTense {
+  Current
+  Future
+  Past
+}
+
+type EventPaymentDonationSummary {
+  currency: String
+  message: String
+  target: Float
+  amount: Float!
+  user_count: Float!
+}
+
+type EventPaymentSummary {
+  currency: String
+  amount: Float!
+  refund_amount: Float!
+  lemonade_fee: Float!
+  service_fee: Float!
+  transfer_amount: Float!
+  pending_transfer_amount: Float!
+  completed_transfer_amount: Float!
+  payout_amount: Float!
+  split: [EventPaymentSummarySplitItem!]!
+}
+
+type EventPaymentSummarySplitItem {
+  user: MongoID!
+  ratio: Float
+  transfer_amount: Float!
+  pending_transfer_amount: Float!
+  completed_transfer_amount: Float!
+  payout_amount: Float!
+  user_expanded: User
+}
+
+type GetEventTicketTypesResponse {
+  limit: Float!
+  ticket_types: [PurchasableTicketType!]!
+  discount: TicketDiscount
+}
+
+type PurchasableTicketType {
+  _id: MongoID!
+  active: Boolean
+  event: MongoID!
+  title: String!
+  prices: [EventTicketPrice!]!
+  default: Boolean
+  address_required: Boolean
+  description: String
+  description_line: String
+  external_ids: [String!]
+  offers: [EventOffer!]
+  photos: [MongoID!]
+  discountable: Boolean!
+  limit: Float!
+}
+
+type TicketDiscount {
+  discount: String!
+  limit: Float!
+  ratio: Float!
+}
+
+input GetEventTicketTypesInput {
+  event: MongoID!
+  discount: String
+}
+
+type EventQuestion {
+  _id: MongoID!
+  stamp: DateTimeISO!
+  event: MongoID!
+  user: MongoID!
+  question: String!
+  likes: Int!
+  session: MongoID
+  user_expanded: User
+  liked: Boolean
+}
+
+input GetEventQuestionsInput {
+  event: MongoID!
+  id_lt: MongoID
+  limit: Int! = 20
+  sort: GetEventQuestionInputSort! = _id
+}
+
+enum GetEventQuestionInputSort {
+  _id
+  likes
+}
+
+type EventRewardUse {
+  _id: MongoID!
+  active: Boolean!
+  event: MongoID!
+  reward_id: MongoID!
+  reward_number: Float!
+  user: MongoID!
+  user_expanded: User
+}
+
+input GetEventRewardUsesInput {
+  event: MongoID!
+  user: MongoID!
+}
+
+type EventSessionReservation {
+  user: MongoID!
+  event: MongoID!
+  session: MongoID!
+  payment_ticket_type: MongoID
+  user_expanded: User
+}
+
+input GetEventSessionReservationsInput {
+  event: MongoID
+}
+
+type EventSessionReservationSummary {
+  session: MongoID!
+  payment_ticket_type: MongoID
+  count: Float!
+}
+
+input GetEventSessionReservationSummaryInput {
+  event: MongoID!
+  session: MongoID
+}
+
+input FileLinkInput {
+  model: String!
+  id: MongoID!
+  path: String
+  type: FileLinkType
+}
+
+input GetFrequentQuestionsInput {
+  type: [FrequentQuestionType!]!
+}
+
+type FiatCurrency {
+  code: String!
+  decimals: Float!
+}
+
+type Chain {
+  active: Boolean
+  chain_id: String!
+  name: String!
+  rpc_url: String!
+  logo_url: String
+  tokens: [Token!]
+}
+
+type Token {
+  active: Boolean
+  name: String!
+  symbol: String!
+  decimals: Float!
+  contract: String!
+  logo_url: String
+}
+
+type NewPayment {
+  _id: MongoID!
+  stamps: JSON!
+  amount: String!
+  currency: String!
+  state: NewPaymentState!
+  user: MongoID!
+  account: MongoID!
+  billing_info: BillingInfo
+  transfer_metadata: JSON
+  transfer_params: JSON
+  failure_reason: String
+  account_expanded: NewPaymentAccount
+}
+
+enum NewPaymentState {
+  created
+  initialized
+  failed
+  succeeded
+}
+
+type BillingInfo {
+  _id: MongoID
+  recipient_name: String
+  street_1: String
+  street_2: String
+  city: String
+  region: String
+  postal: String
+  country: String
+  title: String
+  phone: String
+  longitude: Float
+  latitude: Float
+  email: String
+  firstname: String
+  lastname: String
+}
+
+type Post {
+  _id: MongoID!
+  created_at: DateTimeISO!
+  user: MongoID!
+  visibility: PostVisibility!
+  comments: Float
+  published: Boolean
+  text: String
+  reactions: Float
+  ref_type: PostRefType
+  ref_id: String
+  has_reaction: Boolean
+  ref_event: Event
+  ref_file: File
+  user_expanded: User
+}
+
+enum PostVisibility {
+  PUBLIC
+  FRIENDS
+  FOLLOWERS
+  MENTIONS
+}
+
+enum PostRefType {
+  EVENT
+  FILE
+}
+
+input GetPostsInput {
+  _id: MongoID
+  user: MongoID
+  published: Boolean
+  created_at: GetPostsCreatedAtInput
+}
+
+input GetPostsCreatedAtInput {
+  gte: DateTimeISO
+  lte: DateTimeISO
+}
+
+type Newsfeed {
+  offset: Float!
+  posts: [Post!]!
+}
+
+type Notification {
+  _id: MongoID!
+  created_at: DateTimeISO!
+  type: NotificationType!
+  from: MongoID
+  title: String
+  message: String
+  image_url: String
+  data: JSON
+  ref_event: MongoID
+  ref_user: MongoID
+  ref_store_order: MongoID
+  ref_room: MongoID
+  is_seen: Boolean
+  from_expanded: User
+  ref_user_expanded: User
+  ref_event_expanded: Event
+  ref_store_order_expanded: StoreOrder
+  ref_room_expanded: Room
+}
+
+enum NotificationType {
+  admin_payment_verification
+  chat_message
+  event_announce
+  event_approve
+  event_broadcast_created
+  event_broadcast_deactivated
+  event_broadcast_deleted
+  event_broadcast_ended
+  event_broadcast_rescheduled
+  event_broadcast_started
+  event_cancellation
+  event_chat_announce
+  event_cohost_request
+  event_cohost_request_announce
+  event_donation
+  event_invite
+  event_invite_verify_accept_request
+  event_invite_verify_request
+  event_payment_split_remove
+  event_payment_split_request
+  event_payment_split_request_accept
+  event_payment_split_request_decline
+  event_unlock_verify_accept_request
+  event_unlock_verify_request
+  event_update
+  payment_assign
+  payment_authorized
+  payment_succeeded
+  payment_failed
+  payment_refunded
+  payments_captured_summary
+  payments_wired_summary
+  place_reservation_delete
+  place_reservation_request
+  place_reservation_request_accept
+  place_reservation_request_decline
+  reservation_accept
+  reservation_decline
+  room_invite
+  room_started
+  store_order_accepted
+  store_order_awaiting_pickup
+  store_order_cancelled
+  store_order_declined
+  store_order_delivered
+  store_order_delivery_confirmed
+  store_order_in_transit
+  store_order_pending
+  store_order_preparing
+  user_contact_signup
+  user_discovery_match
+  user_friendship_request
+  user_friendship_request_accept
+}
+
+type StoreOrder {
+  _id: MongoID
+  active: Boolean!
+  stamp: DateTimeISO!
+  stamp_created: DateTimeISO!
+  state: StoreOrderState!
+  user: MongoID!
+  store: MongoID!
+  order_nr: Float!
+  address: Address!
+  value: Float!
+  amount: Float!
+  currency: String!
+  delivery_option: DeliveryOption!
+  delivery_cost: Float!
+  fulfillment_address: Address
+  pickup_address: Address
+  payment_provider: PaymentProvider
+  delivery_option_cost_waived: Boolean
+  sales_tax: SalesTax
+  easyship_rates: [JSON!]
+  easyship_courier_id: String
+  easyship_shipment_id: String
+  easyship_selected_courier: JSON
+  label_state: String
+  label_error: String
+  label_url: String
+  promotion: MongoID
+  payment: MongoID
+  tracking_url: String
+  store_expanded: Store
+  user_expanded: User
+  payment_expanded: Payment
+  history: [StoreOrderHistoryItem!]
+  items: [StoreOrderItem!]!
+}
+
+enum StoreOrderState {
+  created
+  pending
+  declined
+  accepted
+  preparing
+  awaiting_pickup
+  in_transit
+  delivered
+  delivery_confirmed
+  cancelled
+}
+
+type StoreOrderHistoryItem {
+  stamp: DateTimeISO!
+  state: String!
+  user: MongoID
+  user_expanded: User
+}
+
+type StoreOrderItem {
+  _id: MongoID!
+  state: StoreOrderItemState!
+  product_variant: MongoID!
+  product_groups: JSON!
+  count: Float!
+  value: Float!
+  amount: Float!
+  delivery_option: DeliveryOption
+  delivery_cost: Float
+  delivery_option_cost_waived: Boolean
+  promotion: Float
+  promotion_amount: Float
+  inventory: Float
+  fee: Float
+  tax: Float
+  tracking_url: String
+  product: StoreProduct!
+}
+
+enum StoreOrderItemState {
+  pending
+  accepted
+  declined
+}
+
+type Room {
+  _id: MongoID!
+  shortid: String!
+  active: Boolean!
+  stamp: DateTimeISO!
+  title: String!
+  state: RoomState!
+  start: DateTimeISO!
+  host: MongoID!
+  cohosts: [MongoID!]
+  staged_users: [MongoID!]
+  staged_uids: [Float!]
+  stage_invitees: [MongoID!]
+  stage_requesters: [MongoID!]
+  attending_users: [MongoID!]
+  access_users: [MongoID!]
+  access_requesters: [MongoID!]
+  url: String!
+  url_go: String!
+  staged_size: Float
+  audience_size: Float
+  private: Boolean
+  verify: Boolean
+  description: String
+  event: MongoID
+  payment_direct: Boolean
+  photos: [MongoID!]
+  stage_open: Boolean
+  theme_background_photo: MongoID
+  theme_color: String
+  theme_layout: Float
+  video: Video
+  highlight_stores: [MongoID!]
+  highlight_events: [MongoID!]
+  highlight_rooms: [MongoID!]
+  highlight_users: [MongoID!]
+  used: Boolean
+  broadcasters_count: Float
+  audience_total: Float
+  creator_last_seen_at: DateTimeISO
+  offers: [RoomOffer!]
+  has_access: Boolean
+  host_expanded: User
+  cohosts_expanded(skip: Int! = 0, limit: Int! = 25): [User]
+  staged_users_expanded(skip: Int! = 0, limit: Int! = 25): [User!]
+  stage_invitees_expanded(skip: Int! = 0, limit: Int! = 25): [User!]
+  stage_requesters_expanded(skip: Int! = 0, limit: Int! = 25): [User!]
+  attending_users_expanded(skip: Int! = 0, limit: Int! = 25): [User!]
+  access_users_expanded(skip: Int! = 0, limit: Int! = 25): [User!]
+  access_requesters_expanded(skip: Int! = 0, limit: Int! = 25): [User!]
+  event_expanded: Event
+  photos_expanded(skip: Int! = 0, limit: Int! = 25): [File!]
+  theme_background_photo_expanded: File
+  highlight_stores_expanded(skip: Int! = 0, limit: Int! = 25): [Store!]
+  highlight_events_expanded(skip: Int! = 0, limit: Int! = 25): [Event!]
+  highlight_rooms_expanded(skip: Int! = 0, limit: Int! = 25): [Room!]
+  highlight_users_expanded(skip: Int! = 0, limit: Int! = 25): [User!]
+}
+
+enum RoomState {
+  scheduled
+  started
+  ended
+}
+
+type RoomOffer {
+  _id: MongoID
+  provider: OfferProvider!
+  provider_network: String!
+  provider_id: String!
+  position: Float
+}
+
+input NotificationTypeFilterInput {
+  eq: NotificationType
+  in: [NotificationType!]
+  nin: [NotificationType!]
+}
+
+type Offer {
+  _id: MongoID
+  provider: OfferProvider!
+  provider_network: String!
+  provider_id: String!
+  position: Float
+  color: String
+}
+
+enum OfferType {
+  HOME
+  POAP
+}
+
+input PaymentStateInput {
+  eq: PaymentState
+  in: [PaymentState!]
+  nin: [PaymentState!]
+}
+
+enum PaymentState {
+  canceled
+  failed
+  charging
+  charged
+  authorized
+  captured
+  refunded
+  wiring
+  wired
+}
+
+input PaymentTypeInput {
+  eq: PaymentType
+  in: [PaymentType!]
+  nin: [PaymentType!]
+}
+
+enum PaymentType {
+  direct
+  donation
+  store_order
+  ticket
+}
+
+input GetRoomsInput {
+  skip: Int! = 0
+  limit: Int! = 25
+  state: GetRoomsInputState
+  creator: MongoID
+  event: MongoID
+}
+
+input GetRoomsInputState {
+  eq: RoomState
+  in: [RoomState!]
+  nin: [RoomState!]
+}
+
+type RoomCredentials {
+  uid: Float!
+  token: String!
+}
+
+input GetRoomCredentialsInput {
+  _id: MongoID!
+  role: GetRoomCredentialsInputRole!
+  password: String
+}
+
+enum GetRoomCredentialsInputRole {
+  SUBSCRIBER
+  PUBLISHER
+}
+
+type Site {
+  _id: MongoID!
+  active: Boolean!
+  client: String!
+  hostnames: [String!]
+  title: String!
+  description: String!
+  access_pass: AccessPass
+  header_metas: [SiteHeaderMeta!]
+  header_links: [SiteHeaderLink!]
+  footer_scripts: [SiteFooterScript!]
+  ai_config: MongoID
+  event: MongoID
+  onboarding_steps: [SiteOnboardingStep!]
+  owners: [MongoID!]
+  partners: [MongoID!]
+  user: MongoID
+  share_url: JSON
+  favicon_url: String
+  logo_url: String
+  logo_mobile_url: String
+  privacy_url: String
+  theme_data: JSON
+  theme_type: String
+  text: JSON
+  visibility: JSON
+  user_expanded: User
+}
+
+type SiteHeaderMeta {
+  key: String
+  name: String
+  property: String
+  content: String
+}
+
+type SiteHeaderLink {
+  rel: SiteHeaderLinkRel
+  href: String
+}
+
+enum SiteHeaderLinkRel {
+  Stylesheet
+  Icon
+}
+
+type SiteFooterScript {
+  strategy: SiteFooterScriptStrategy
+  src: String
+  id: String
+  children: String
+}
+
+enum SiteFooterScriptStrategy {
+  AfterInteractive
+  LazyOnload
+  BeforeInteractive
+}
+
+type SiteOnboardingStep {
+  name: SiteOnboardingStepName!
+  data: JSON
+}
+
+enum SiteOnboardingStepName {
+  AdultCheck
+  ConditionsCheck
+  Username
+  Wallet
+  WalletInput
+  Photo
+  About
+  Interests
+  Feeds
+  Custom
+  Done
+  DisplayName
+  Job
+  Biography
+  SocialHandles
+}
+
+type StoreBucketItem {
+  _id: MongoID!
+  active: Boolean!
+  stamp: DateTimeISO!
+  user: MongoID!
+  store: MongoID!
+  product: MongoID!
+  product_variant: MongoID!
+  product_groups: JSON!
+  count: Float!
+  product_expanded: StoreProduct
+  store_expanded: Store
+}
+
+type StoreCategory {
+  _id: MongoID!
+  active: Boolean!
+  stamp: DateTimeISO!
+  store: MongoID!
+  title: String!
+  description: String
+  parents: [MongoID!]
+}
+
+input StoreOrderStateFilterInput {
+  eq: StoreOrderState
+  in: [StoreOrderState!]
+  nin: [StoreOrderState!]
+}
+
+input AddressInput {
+  _id: MongoID
+  recipient_name: String
+  street_1: String
+  street_2: String
+  city: String
+  region: String
+  postal: String
+  country: String
+  title: String
+  phone: String
+  longitude: Float
+  latitude: Float
+}
+
+type PricingInfo {
+  discount: String!
+  subtotal: String!
+  total: String!
+  payment_accounts: [NewPaymentAccount!]
+}
+
+input CalculateTicketsPricingInput {
+  currency: String!
+  network: String
+  event: MongoID!
+  items: [PurchasableItem!]!
+  discount: String
+}
+
+input PurchasableItem {
+  id: MongoID!
+  count: Int!
+}
+
+type GetUserContactsResponse {
+  items: [UserContact!]!
+  total: Int!
+  counts: JSON
+}
+
+type UserContact {
+  _id: MongoID!
+  created_at: DateTimeISO!
+  user: MongoID!
+  first_name: String
+  last_name: String
+  email: String
+  phone: String
+  contact: MongoID
+  converted_at: DateTimeISO
+  invited_at: DateTimeISO
+  invited_count: Float
+  tags: [String!]
+  contact_expanded: User
+}
+
+input GetUserContactsInput {
+  tags: [String!]
+  invited_at_gt: DateTimeISO
+  search: String
+}
+
+type UserDiscovery {
+  _id: MongoID!
+  stamp: DateTimeISO!
+  user: MongoID!
+  min_age: Float!
+  max_age: Float!
+  search_range: Float!
+  selected: [MongoID!]!
+  event: MongoID
+  selected_expanded: [User]
+}
+
+type UserDiscoverySwipe {
+  _id: MongoID!
+  stamp: DateTimeISO!
+  user1: MongoID!
+  user2: MongoID!
+  state: UserDiscoverySwipeState!
+  source: UserDiscoverySwipeSource!
+  decision1: UserDiscoverySwipeDecision
+  decision2: UserDiscoverySwipeDecision
+  other: MongoID
+  other_expanded: User
+}
+
+enum UserDiscoverySwipeState {
+  undecided
+  declined
+  matched
+  pending
+}
+
+enum UserDiscoverySwipeSource {
+  discovery
+  live
+}
+
+enum UserDiscoverySwipeDecision {
+  accept
+  decline
+}
+
+type UserFollow {
+  _id: MongoID!
+  created_at: DateTimeISO!
+  follower: MongoID!
+  followee: MongoID!
+  follower_expanded: User
+  followee_expanded: User
+}
+
+input GetUserFollowsInput {
+  follower: MongoID
+  followee: MongoID
+  follower_search: String
+  followee_search: String
+}
+
+type GetUserFriendshipsResponse {
+  items: [UserFriendship!]!
+  total: Int!
+}
+
+type UserFriendship {
+  _id: MongoID!
+  created_at: DateTimeISO!
+  user1: MongoID!
+  user2: MongoID!
+  state: UserFriendshipState!
+  types: JSON
+  other: MongoID
+  other_expanded: User
+  type: UserFriendshipType
+}
+
+enum UserFriendshipState {
+  accepted
+  pending
+}
+
+enum UserFriendshipType {
+  crew
+  tribe
+}
+
+input GetUserFriendshipsInput {
+  user1: MongoID
+  user2: MongoID
+  state: UserFriendshipState
+  user: MongoID
+  other: MongoID
+  other_wallets: Boolean
+  other_search: String
+  type: UserFriendshipType
+}
+
+type UserPaymentVerificationInfo {
+  conditions: [UserPaymentVerificationCondition!]!
+  eligible: Boolean!
+  verified: Boolean!
+}
+
+type UserPaymentVerificationCondition {
+  title: String!
+  prop: String!
+  satisfied: Boolean!
+}
+
+type UserWalletRequest {
+  message: String!
+  token: String!
+}
+
+type Mutation {
+  createBadgeList(input: CreateBadgeListInput!): BadgeList!
+  updateBadgeList(input: UpdateBadgeListInput!, _id: MongoID!): BadgeList!
+  deleteBadgeList(_id: MongoID!): Boolean!
+  createBadge(input: CreateBadgeInput!): Badge!
+  updateBadge(input: UpdateBadgeInput!, _id: MongoID!): Badge!
+  deleteBadge(_id: MongoID!): Boolean!
+  createComment(input: CommentInput!): Comment!
+  deleteComment(_id: MongoID!): Boolean!
+  generateCubejsToken(events: [MongoID!], site: MongoID, user: MongoID): String!
+  createEventFromEventbrite(input: CreateEventFromEventbriteInput!, id: String!): Event!
+  createEventbriteWebhookForEvent(eventbrite_event: String!, _id: MongoID!): Boolean!
+  createEventBroadcast(input: CreateEventBroadcastInput!, event: MongoID!): Boolean!
+  updateEventBroadcast(input: UpdateEventBroadcastInput!, event: MongoID!, _id: MongoID!): Boolean!
+  deleteEventBroadcast(event: MongoID!, _id: MongoID!): Boolean!
+  updateEventCheckin(input: UpdateEventCheckinInput!): Boolean!
+  manageEventCohostRequests(input: ManageEventCohostRequestsInput!): Boolean!
+  decideEventCohostRequest(input: DecideEventCohostRequestInput!): Boolean!
+  createEvent(input: EventInput!): Event!
+  updateEvent(input: EventInput!, _id: MongoID!): Event!
+  cancelEvent(_id: MongoID!): Event!
+  acceptEventTerms(input: AcceptEventTermsInput!): Boolean!
+  inviteEvent(input: InviteEventInput!): Event!
+  createEventTicketType(input: EventTicketTypeInput!): EventTicketType!
+  updateEventTicketType(input: EventTicketTypeInput!, _id: MongoID!): EventTicketType!
+  deleteEventTicketType(event: MongoID!, _id: MongoID!): Boolean!
+  createEventQuestion(input: CreateEventQuestionsInput!): EventQuestion!
+  deleteEventQuestion(_id: MongoID!): Boolean!
+  toggleEventQuestionLike(_id: MongoID!): Boolean!
+  updateEventRewardUse(input: UpdateEventRewardUseInput!): Boolean!
+  acceptEvent(_id: MongoID!): EventRsvp!
+  declineEvent(_id: MongoID!): EventRsvp!
+  createEventSessionReservation(input: EventSessionReservationInput!): Boolean!
+  deleteEventSessionReservation(input: EventSessionReservationInput!): Boolean!
+  createEventStory(input: EventStoryInput!): Boolean!
+  deleteEventStory(input: EventStoryInput!): Boolean!
+  createEventTicketDiscounts(event: MongoID!, inputs: [EventPaymentTicketDiscountInput!]!): Event!
+  deleteEventTicketDiscounts(event: MongoID!, discounts: [String!]!): Event!
+  mailEventTicket(event: MongoID!, payment: MongoID, emails: [String!]!): Boolean!
+  createFile(input: FileInput, url: String!): File!
+  updateFile(input: FileInput!, _id: MongoID!): File!
+  toggleFileLike(_id: MongoID!): File!
+  flagUser(_id: MongoID!, reason: String!): Boolean!
+  flagEvent(_id: MongoID!, reason: String!): Boolean!
+  flagPost(_id: MongoID!, reason: String!): Boolean!
+  generateMatrixToken: String!
+  createNewPaymentAccount(input: CreateNewPaymentAccountInput!): NewPaymentAccount!
+  updateNewPaymentAccount(input: UpdateNewPaymentAccountInput!): NewPaymentAccount!
+  updatePayment(input: UpdatePaymentInput!): NewPayment!
+  createPost(input: PostInput!): Post!
+  deletePost(_id: MongoID!): Boolean!
+  updatePost(input: UpdatePostInput!, _id: MongoID!): Post!
+  toggleReaction(input: ReactionInput!): Boolean!
+  deleteNotifications(_id: [MongoID!], type: NotificationTypeFilterInput): Boolean!
+  readNotifications(_id: [MongoID!], type: NotificationTypeFilterInput): Boolean!
+  revokeOauth2(name: String!): String!
+  createRegistration(input: Registration!): Boolean!
+  sendRoomInvite(input: SendRoomInviteInput!): Boolean!
+  createRoom(input: RoomInput!): Room!
+  updateRoom(input: RoomInput!, _id: MongoID!): Room!
+  decideRoomAccessRequest(input: DecideRoomAccessRequestInput!): Boolean!
+  modifyRoomStage(input: ModifyRoomStageInput!): ModifyRoomStagePayload!
+  requestRoomStage(input: RequestRoomStageInput!): Boolean!
+  decideRoomStageRequest(input: DecideRoomStageRequestInput!): Boolean!
+  createSite(input: CreateSiteInput!): Site!
+  updateSite(input: UpdateSiteInput!, _id: MongoID!): Site
+  deleteSite(_id: MongoID!): Boolean!
+  createStoreBucketItem(input: StoreBucketItemInput!): StoreBucketItem!
+  updateStoreBucketItem(input: UpdateStoreBucketItemInput!, _id: MongoID!): StoreBucketItem
+  deleteStoreBucketItem(_id: MongoID!): Boolean!
+  createStoreCategory(store: MongoID!, input: StoreCategoryInput!): StoreCategory!
+  updateStoreCategory(_id: MongoID!, store: MongoID!, input: StoreCategoryInput!): StoreCategory!
+  deleteStoreCategory(_id: MongoID!, store: MongoID!): Boolean!
+  createStoreOrder(store: MongoID!, bucket_items: [StoreBucketItemInput!], address: MongoID!, delivery_option: MongoID, delivery_option_pickup_address: MongoID, promotion: MongoID, place_reservation: MongoID, easyship_courier_id: String, dry_run: Boolean): StoreOrder!
+  updateStoreOrder(input: StoreOrderInput!, _id: MongoID!): StoreOrder!
+  createStoreProduct(store: MongoID!, input: StoreProductInput!): StoreProduct!
+  updateStoreProduct(store: MongoID!, _id: MongoID!, input: StoreProductInput!): StoreProduct!
+  deleteStoreProduct(store: MongoID!, _id: MongoID!): Boolean!
+  createStoreProductVariant(store: MongoID!, product: MongoID!, input: StoreProductVariantInput!): StoreProductVariant!
+  updateStoreProductVariant(store: MongoID!, product: MongoID!, input: StoreProductVariantInput!, _id: MongoID!): StoreProductVariant!
+  deleteStoreProductVariant(store: MongoID!, product: MongoID!, _id: MongoID!): Boolean!
+  createStorePromotion(store: MongoID!, input: StorePromotionInput!): StorePromotion!
+  deleteStorePromotion(_id: MongoID!, store: MongoID!): Boolean!
+  createStore(input: StoreInput!): Store!
+  updateStore(_id: MongoID!, input: StoreInput!): Store!
+  deleteStore(_id: MongoID!): Boolean!
+  createStripeCard(payment_account: MongoID!, payment_method: String!): StripeCard!
+  deleteStripeCard(_id: MongoID!): StripeCard!
+  assignTickets(input: AssignTicketsInput!): Boolean!
+  redeemTickets(input: RedeemTicketsInput!): [Ticket!]!
+  buyTickets(input: BuyTicketsInput!): NewPayment!
+  revokeTwitter: String!
+  inviteUserContacts(_id: MongoID): Boolean!
+  createUserFollow(followee: MongoID!): Boolean!
+  deleteUserFollow(followee: MongoID!): Boolean!
+  createUserFriendship(input: CreateUserFriendshipInput!): UserFriendship!
+  deleteUserFriendship(input: DeleteUserFriendshipInput!): Boolean!
+  deleteUser: Boolean!
+  updateUser(input: UserInput!): User!
+  addUserFcmToken(token: String!): Boolean!
+  removeUserFcmToken(token: String!): Boolean!
+  reportUser(input: ReportUserInput!): Boolean!
+  toggleBlockUser(input: ToggleBlockUserInput!): Boolean!
+  setUserWallet(token: String!, signature: String!): Boolean!
+}
+
+input CreateBadgeListInput {
+  title: String!
+  image_url: String
+}
+
+input UpdateBadgeListInput {
+  title: String
+  image_url: String
+}
+
+input CreateBadgeInput {
+  network: String!
+  contract: String!
+  list: MongoID!
+}
+
+input UpdateBadgeInput {
+  network: String
+  contract: String
+}
+
+input CommentInput {
+  text: String!
+  post: MongoID!
+  comment: MongoID
+}
+
+input CreateEventFromEventbriteInput {
+  title: String
+  description: String
+  start: DateTimeISO
+  end: DateTimeISO
+}
+
+input CreateEventBroadcastInput {
+  provider: BroadcastProvider!
+  provider_id: String!
+  title: String!
+  description: String
+  position: Float
+  rooms: [MongoID!]
+  thumbnail: String
+  scheduled_start_time: DateTimeISO
+  scheduled_end_time: DateTimeISO
+}
+
+input UpdateEventBroadcastInput {
+  description: String
+  position: Float
+  rooms: [MongoID!]
+  thumbnail: String
+}
+
+input UpdateEventCheckinInput {
+  active: Boolean!
+  event: MongoID!
+  user: MongoID!
+}
+
+input ManageEventCohostRequestsInput {
+  event: MongoID!
+  decision: Boolean!
+  users: [MongoID!]!
+}
+
+input DecideEventCohostRequestInput {
+  event: MongoID!
+  decision: Boolean!
+}
+
+input EventInput {
+  title: String
+  start: DateTimeISO
+  end: DateTimeISO
+  accepted_store_promotion: MongoID
+  accepted_user_fields_required: [String!]
+  access_pass: AccessPassInput
+  address: AddressInput
+  broadcast_rooms: [BroadcastRoomInput!]
+  comments: String
+  cost: Float
+  currency: String
+  cover: String
+  cta_button_text: String
+  description: String
+  events: [MongoID!]
+  frequent_questions: [FrequentQuestionInput!]
+  guest_limit: Float
+  guest_limit_per: Float
+  latitude: Float
+  layout_sections: [LayoutSectionInput!]
+  longitude: Float
+  new_photos: [FileInlineInput!]
+  new_new_photos: [MongoID!]
+  offers: [EventOfferInput!]
+  payment_accounts_new: [MongoID!]
+  payment_donation: Boolean
+  payment_donation_amount_includes_tickets: Boolean
+  payment_donation_message: String
+  payment_donation_target: Float
+  payment_optional: Boolean
+  payment_ticket_purchase_title: String
+  photos: [String!]
+  private: Boolean
+  published: Boolean
+  rewards: [EventRewardInput!]
+  sessions: [EventSessionInput!]
+  speaker_emails: [String!]
+  speaker_users: [MongoID!]
+  stores: [MongoID!]
+  stories: [MongoID!]
+  tags: [String!]
+  terms_email_permission_text: Boolean
+  terms_text: String
+  timezone: String
+  verify: Boolean
+  virtual: Boolean
+  welcome_text: String
+  welcome_video: VideoInput
+}
+
+input AccessPassInput {
+  contract: String!
+  network: String!
+  frame: String!
+  base: String!
+  name: String!
+  logo_url: String!
+  info_url: String!
+  card_image_url: String!
+  card_logo_url: String!
+  gallery_logo_url: String!
+  card_description: String!
+  dialog_background_url: String!
+  dialog_title: String!
+  dialog_description: String!
+  metadata_name: String!
+  metadata_description: String!
+  metadata_creators: [String!]!
+  unlocked_description: String
+  twitter_url: String
+  instagram_url: String
+  discord_url: String
+  checkin: Boolean
+}
+
+input BroadcastRoomInput {
+  _id: MongoID
+  title: String
+  description: String
+  photos: [MongoID!]
+  event_payment_ticket_types: [MongoID!]
+  position: Float
+  iframe_src: String
+}
+
+input FrequentQuestionInput {
+  _id: MongoID
+  type: [FrequentQuestionType!]!
+  question: String!
+  answer: String!
+  position: Float
+  tag: String
+}
+
+input LayoutSectionInput {
+  id: String
+  hidden: Boolean
+}
+
+input FileInlineInput {
+  id: MongoID!
+  url: String!
+  key: String!
+  fa_file: MongoID
+  fa_index: Float
+}
+
+input EventOfferInput {
+  _id: MongoID
+  provider: OfferProvider!
+  provider_network: String!
+  provider_id: String!
+  position: Float
+  auto: Boolean
+  broadcast_rooms: [MongoID!]
+}
+
+input EventRewardInput {
+  _id: MongoID
+  active: Boolean!
+  title: String!
+  limit: Float
+  limit_per: Float!
+  icon_color: String
+  icon_url: String
+  payment_ticket_types: [MongoID!]
+}
+
+input EventSessionInput {
+  _id: MongoID
+  title: String!
+  start: DateTimeISO!
+  end: DateTimeISO!
+  broadcast: MongoID
+  description: String
+  photos: [MongoID!]
+  speaker_users: [MongoID!]
+}
+
+input VideoInput {
+  provider: String!
+  provider_id: String!
+  title: String
+  thumbnail: String
+}
+
+input AcceptEventTermsInput {
+  _id: MongoID!
+  email_permission: Boolean
+}
+
+input InviteEventInput {
+  _id: MongoID!
+  users: [MongoID!]
+  phones: [String!]
+  emails: [String!]
+}
+
+input EventTicketTypeInput {
+  active: Boolean
+  event: MongoID
+  title: String
+  prices: [EventTicketPriceInput!]
+  default: Boolean
+  address_required: Boolean
+  description: String
+  description_line: String
+  external_ids: [String!]
+  photos: [MongoID!]
+  ticket_limit: Float
+  ticket_limit_per: Float
+  offers: [EventTicketTypeOffersInput!]
+}
+
+input EventTicketPriceInput {
+  default: Boolean
+  currency: String!
+  network: String
+  cost: String!
+}
+
+input EventTicketTypeOffersInput {
+  _id: MongoID
+  provider: OfferProvider
+  provider_network: String
+  provider_id: String
+  position: Float
+  auto: Boolean
+  broadcast_rooms: [MongoID!]
+}
+
+input CreateEventQuestionsInput {
+  event: MongoID!
+  question: String!
+  session: MongoID
+}
+
+input UpdateEventRewardUseInput {
+  event: MongoID!
+  reward_id: MongoID!
+  reward_number: Float!
+  user: MongoID!
+  active: Boolean!
+}
+
+type EventRsvp {
+  state: EventRsvpState!
+  messages: EventRsvpMessages
+  payment: EventRsvpPayment
+}
+
+enum EventRsvpState {
+  pending
+  payment
+  accepted
+  declined
+}
+
+type EventRsvpMessages {
+  primary: String!
+  secondary: String
+}
+
+type EventRsvpPayment {
+  amount: Float!
+  currency: String!
+  provider: String!
+}
+
+input EventSessionReservationInput {
+  event: MongoID!
+  session: MongoID!
+}
+
+input EventStoryInput {
+  event: MongoID!
+  file: MongoID!
+}
+
+input EventPaymentTicketDiscountInput {
+  code: String!
+  ratio: Float!
+  use_limit: Float
+  use_limit_per: Float
+  ticket_limit: Float
+  ticket_limit_per: Float
+  ticket_types: [MongoID!]
+}
+
+input FileInput {
+  description: String
+}
+
+input CreateNewPaymentAccountInput {
+  type: PaymentAccountType!
+  title: String
+  provider: NewPaymentProvider
+  account_info: JSON
+}
+
+input UpdateNewPaymentAccountInput {
+  _id: MongoID!
+  title: String
+  account_info: JSON!
+}
+
+input UpdatePaymentInput {
+  _id: MongoID!
+  transfer_params: JSON
+}
+
+input PostInput {
+  visibility: PostVisibility!
+  text: String
+  ref_type: PostRefType
+  ref_id: String
+}
+
+input UpdatePostInput {
+  visibility: PostVisibility
+  published: Boolean
+}
+
+input ReactionInput {
+  active: Boolean!
+  post: MongoID!
+}
+
+input Registration {
+  client: String!
+  first_name: String!
+  last_name: String!
+  email: String!
+  organization: String
+  country: String
+  postal_code: String
+  consent_communications: Boolean
+}
+
+input SendRoomInviteInput {
+  _id: MongoID!
+  users: [MongoID!]!
+}
+
+input RoomInput {
+  active: Boolean
+  title: String
+  state: RoomState
+  start: DateTimeISO
+  cohosts: [MongoID!]
+  access_users: [MongoID!]
+  private: Boolean
+  verify: Boolean
+  description: String
+  event: MongoID
+  payment_direct: Boolean
+  photos: [MongoID!]
+  stage_open: Boolean
+  theme_background_photo: MongoID
+  theme_color: String
+  theme_layout: Float
+  video: VideoInput
+  highlight_stores: [MongoID!]
+  highlight_events: [MongoID!]
+  highlight_rooms: [MongoID!]
+  highlight_users: [MongoID!]
+  offers: [RoomOfferInput!]
+}
+
+input RoomOfferInput {
+  _id: MongoID
+  provider: OfferProvider
+  provider_network: String
+  provider_id: String
+  position: Float
+}
+
+input DecideRoomAccessRequestInput {
+  _id: MongoID!
+  user: MongoID!
+  decision: Boolean!
+}
+
+type ModifyRoomStagePayload {
+  credentials: RoomCredentials
+}
+
+input ModifyRoomStageInput {
+  _id: MongoID!
+  user: MongoID!
+  staged: Boolean!
+}
+
+input RequestRoomStageInput {
+  _id: MongoID!
+  user: MongoID!
+}
+
+input DecideRoomStageRequestInput {
+  _id: MongoID!
+  user: MongoID!
+  decision: Boolean!
+}
+
+input CreateSiteInput {
+  client: String!
+  hostnames: [String!]
+  title: String!
+  description: String!
+  access_pass: AccessPassInput
+  header_metas: [SiteHeaderMetaInput!]
+  header_links: [SiteHeaderLinkInput!]
+  footer_scripts: [SiteFooterScriptInput!]
+  ai_config: MongoID
+  event: MongoID
+  onboarding_steps: [SiteOnboardingStepInput!]
+  owners: [MongoID!]
+  partners: [MongoID!]
+  share_url: JSON
+  favicon_url: String
+  logo_url: String
+  logo_mobile_url: String
+  privacy_url: String
+  theme_data: JSON
+  theme_type: String
+  text: JSON
+  visibility: JSON
+}
+
+input SiteHeaderMetaInput {
+  key: String
+  name: String
+  property: String
+  content: String
+}
+
+input SiteHeaderLinkInput {
+  rel: SiteHeaderLinkRel
+  href: String
+}
+
+input SiteFooterScriptInput {
+  strategy: SiteFooterScriptStrategy
+  src: String
+  id: String
+  children: String
+}
+
+input SiteOnboardingStepInput {
+  name: SiteOnboardingStepName!
+  data: JSON
+}
+
+input UpdateSiteInput {
+  client: String
+  hostnames: [String!]
+  title: String
+  description: String
+  access_pass: AccessPassInput
+  header_metas: [SiteHeaderMetaInput!]
+  header_links: [SiteHeaderLinkInput!]
+  footer_scripts: [SiteFooterScriptInput!]
+  ai_config: MongoID
+  event: MongoID
+  onboarding_steps: [SiteOnboardingStepInput!]
+  owners: [MongoID!]
+  partners: [MongoID!]
+  share_url: JSON
+  favicon_url: String
+  logo_url: String
+  logo_mobile_url: String
+  privacy_url: String
+  theme_data: JSON
+  theme_type: String
+  text: JSON
+  visibility: JSON
+  active: Boolean
+}
+
+input StoreBucketItemInput {
+  product: MongoID!
+  product_variant: MongoID!
+  product_groups: JSON!
+  count: Float!
+}
+
+input UpdateStoreBucketItemInput {
+  count: Float!
+}
+
+input StoreCategoryInput {
+  title: String
+  description: String
+  parents: [MongoID!]
+}
+
+input StoreOrderInput {
+  state: StoreOrderState!
+  items: [StoreOrderItemInput!]!
+}
+
+input StoreOrderItemInput {
+  _id: MongoID!
+  state: StoreOrderItemState!
+  amount: Float!
+  delivery_option: DeliveryOptionInput
+  delivery_cost: Float
+  delivery_option_cost_waived: Boolean
+  inventory: Float
+  tax: Float
+  tracking_url: String
+}
+
+input DeliveryOptionInput {
+  _id: MongoID!
+  type: DeliveryOptionType!
+  title: String!
+  cost: Float!
+  fulfillment_address: MongoID
+  pickup_addresses: [MongoID!]
+  waive_type: DeliveryOptionWaiveType
+  waive_value_threshold: Float
+  group: String
+  description: String
+  longitude: Float
+  latitude: Float
+  search_range: Float
+  polygon: JSON
+  countries: [String!]
+  regions: [String!]
+  cities: [String!]
+  postals: [String!]
+  postal_ranges: [DeliveryOptionPostalRangeInput!]
+}
+
+input DeliveryOptionPostalRangeInput {
+  _id: MongoID!
+  pattern: String!
+  min: Float!
+  max: Float!
+}
+
+input StoreProductInput {
+  _id: MongoID
+  order: Float
+  title: String
+  description: String
+  categories: [MongoID!]
+  delivery_options: [DeliveryOptionInput!]
+  easyship_category: EasyshipCategory
+  sales_tax_tag: String
+  highlight: Boolean
+  primary_group: String
+}
+
+input StoreProductVariantInput {
+  _id: MongoID
+  title: String
+  cost: Float
+  groups: JSON
+  weight: Float
+  length: Float
+  width: Float
+  height: Float
+  photos: [FileInlineInput!]
+  new_photos: [MongoID!]
+  inventory: Float
+}
+
+input StorePromotionInput {
+  type: StorePromotionType
+  title: String
+  ratio: Float
+  use_limit: Float
+  use_limit_per: Float
+  event: MongoID
+  products: [MongoID!]
+}
+
+input StoreInput {
+  _id: MongoID
+  managers: [MongoID!]
+  title: String
+  payment_provider: PaymentProvider
+  payment_account: MongoID
+  currency: String
+  api_secret: String
+  easyship_enabled: Boolean
+  easyship_company_id: String
+  easyship_token: String
+  easyship_secret_key: String
+  delivery_options: [DeliveryOptionInput!]
+  sales_taxes: [SalesTaxInput!]
+  photos: [FileInlineInput!]
+  new_photos: [MongoID!]
+  tags: [String!]
+  age_restriction_min: Float
+  age_restriction_reason: String
+}
+
+input SalesTaxInput {
+  _id: MongoID!
+  type: SalesTaxType!
+  name: String
+  flat_map: JSON
+  ratio_map: JSON
+  countries: [String!]
+  regions: [String!]
+}
+
+input AssignTicketsInput {
+  event: MongoID!
+  assignees: [TicketAssignee!]!
+}
+
+input TicketAssignee {
+  user: MongoID
+  email: String
+  ticket: MongoID!
+}
+
+input RedeemTicketsInput {
+  event: MongoID!
+  items: [RedeemItem!]!
+}
+
+input RedeemItem {
+  ticket_type: MongoID!
+  count: Int!
+}
+
+input BuyTicketsInput {
+  currency: String!
+  network: String
+  event: MongoID!
+  items: [PurchasableItem!]!
+  discount: String
+  total: String!
+  account_id: MongoID!
+  billing_info: BillingInfoInput
+  transfer_params: JSON
+}
+
+input BillingInfoInput {
+  _id: MongoID
+  recipient_name: String
+  street_1: String
+  street_2: String
+  city: String
+  region: String
+  postal: String
+  country: String
+  title: String
+  phone: String
+  longitude: Float
+  latitude: Float
+  email: String
+  firstname: String
+  lastname: String
+}
+
+input CreateUserFriendshipInput {
+  user: MongoID!
+  type: UserFriendshipType
+}
+
+input DeleteUserFriendshipInput {
+  user: MongoID!
+}
+
+input UserInput {
+  name: String
+  phone: String
+  email_marketing: Boolean
+  display_name: String
+  search_range: Float
+  discovery: UserDiscoverySettingsInput
+  addresses: [AddressInput!]
+  calendly_url: String
+  currency: String
+  company_address: AddressInput
+  company_name: String
+  cover: MongoID
+  date_of_birth: DateTimeISO
+  description: String
+  education_title: String
+  ethnicity: String
+  events: [MongoID!]
+  frequent_questions: [FrequentQuestionInput!]
+  handle_facebook: String
+  handle_instagram: String
+  handle_linkedin: String
+  handle_twitter: String
+  icebreakers: [UserIcebreakerInput!]
+  industry: String
+  interests: [String!]
+  job_title: String
+  languages: [String!]
+  layout_sections: [LayoutSectionInput!]
+  music: [String!]
+  offers: [UserOfferInput!]
+  preferred_network: String
+  pronoun: String
+  new_gender: String
+  new_photos: [MongoID!]
+  tagline: String
+  timezone: String
+  username: String
+  settings: JSON
+  daos: [UserDaoInput!]
+  data: JSON
+  terms_accepted_adult: Boolean
+  terms_accepted_conditions: Boolean
+  notification_filters: [JSON!]
+}
+
+input UserDiscoverySettingsInput {
+  enabled: Boolean!
+  min_age: Float!
+  max_age: Float!
+}
+
+input UserIcebreakerInput {
+  _id: MongoID
+  question: MongoID!
+  value: String!
+}
+
+input UserOfferInput {
+  _id: MongoID
+  provider: OfferProvider!
+  provider_network: String!
+  provider_id: String!
+  position: Float
+  auto: Boolean
+}
+
+input UserDaoInput {
+  network: String!
+  address: String!
+}
+
+input ReportUserInput {
+  user: MongoID!
+  reason: String
+  block: Boolean
+}
+
+input ToggleBlockUserInput {
+  user: MongoID!
+  block: Boolean!
+}
+
+type Subscription {
+  postCreated: Post!
+  notificationCreated: Notification!
+  roomStarted(event: MongoID): Room!
+  roomUpdated(_id: MongoID!): Room!
+  roomAccess(_id: MongoID!): Boolean!
+  roomAction(_id: MongoID!): RoomActionPayload!
+}
+
+union RoomActionPayload = RoomActionPayload_Notify | RoomActionPayload_Renew | RoomActionPayload_AccessRequested | RoomActionPayload_AccessRequestDecided | RoomActionPayload_StageInvited | RoomActionPayload_StageModified | RoomActionPayload_StageRequestDecided | RoomActionPayload_StageRequested | RoomActionPayload_AttendingUsersModified
+
+type RoomActionPayload_Notify {
+  message: String!
+}
+
+type RoomActionPayload_Renew {
+  credentials: RoomCredentials!
+}
+
+type RoomActionPayload_AccessRequested {
+  user: MongoID!
+  user_expanded: RoomUser!
+  message: String!
+}
+
+type RoomUser {
+  _id: MongoID!
+  name: String
+  image_avatar: String
+  username: String
+}
+
+type RoomActionPayload_AccessRequestDecided {
+  user: MongoID!
+}
+
+type RoomActionPayload_StageInvited {
+  user: MongoID!
+  user_expanded: RoomUser!
+  message: String!
+  requested: Boolean
+}
+
+type RoomActionPayload_StageModified {
+  uid: Float!
+  user: MongoID!
+  staged: Boolean!
+}
+
+type RoomActionPayload_StageRequestDecided {
+  user: MongoID!
+}
+
+type RoomActionPayload_StageRequested {
+  user: MongoID!
+  user_expanded: RoomUser!
+  message: String!
+}
+
+type RoomActionPayload_AttendingUsersModified {
+  user: MongoID!
+  user_expanded: RoomUser!
+  attending: Boolean!
+}

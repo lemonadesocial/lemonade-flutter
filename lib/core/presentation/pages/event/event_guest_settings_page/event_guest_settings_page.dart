@@ -1,5 +1,5 @@
 import 'package:app/core/application/event/create_event_bloc/create_event_bloc.dart';
-import 'package:app/core/constants/app_constants.dart';
+import 'package:app/core/constants/event/event_constants.dart';
 import 'package:app/core/presentation/pages/setting/widgets/setting_tile_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
@@ -252,11 +252,12 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
 
   void _onGuestLimitPerToggle(bool isGuestLimitPer, CreateEventState state) {
     guestLimitPerController.text =
-        isGuestLimitPer ? '' : AppConstants.defaultEventGuestLimitPer;
+        isGuestLimitPer ? '' : EventConstants.defaultEventGuestLimitPer;
     context.read<CreateEventBloc>().add(
           GuestLimitPerChanged(
-            guestLimitPer:
-                isGuestLimitPer ? null : AppConstants.defaultEventGuestLimitPer,
+            guestLimitPer: isGuestLimitPer
+                ? null
+                : EventConstants.defaultEventGuestLimitPer,
           ),
         );
   }
@@ -266,34 +267,34 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
     CreateEventState state,
   ) {
     guestLimitPerController.text =
-        isNoGuestLimitPer ? '' : AppConstants.defaultEventGuestLimitPer;
+        isNoGuestLimitPer ? '' : EventConstants.defaultEventGuestLimitPer;
     context.read<CreateEventBloc>().add(
           GuestLimitPerChanged(
             guestLimitPer: isNoGuestLimitPer
                 ? null
-                : AppConstants.defaultEventGuestLimitPer,
+                : EventConstants.defaultEventGuestLimitPer,
           ),
         );
   }
 
   void _onGuestLimitToggle(bool isGuestLimit, CreateEventState state) {
     guestLimitController.text =
-        isGuestLimit ? '' : AppConstants.defaultEventGuestLimit;
+        isGuestLimit ? '' : EventConstants.defaultEventGuestLimit;
     context.read<CreateEventBloc>().add(
           GuestLimitChanged(
             guestLimit:
-                isGuestLimit ? null : AppConstants.defaultEventGuestLimit,
+                isGuestLimit ? null : EventConstants.defaultEventGuestLimit,
           ),
         );
   }
 
   void _onNoGuestLimitToggle(bool isNoGuestLimit, CreateEventState state) {
     guestLimitController.text =
-        isNoGuestLimit ? '' : AppConstants.defaultEventGuestLimit;
+        isNoGuestLimit ? '' : EventConstants.defaultEventGuestLimit;
     context.read<CreateEventBloc>().add(
           GuestLimitChanged(
             guestLimit:
-                isNoGuestLimit ? null : AppConstants.defaultEventGuestLimit,
+                isNoGuestLimit ? null : EventConstants.defaultEventGuestLimit,
           ),
         );
   }

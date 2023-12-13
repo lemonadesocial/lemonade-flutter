@@ -382,7 +382,7 @@ definitions:
                     "fields": [
                       {
                         "type": "mrkdwn",
-                        "text": "*Branch*\n'"$CM_BRANCH"'"
+                        "text": "*Tag*\n'"$CM_TAG"'"
                       },
                       {
                         "type": "mrkdwn",
@@ -450,7 +450,7 @@ definitions:
                     "fields": [
                       {
                         "type": "mrkdwn",
-                        "text": "*Branch*\n'"$CM_BRANCH"'"
+                        "text": "*Branch*\n'"$CM_TAG"'"
                       },
                       {
                         "type": "mrkdwn",
@@ -544,12 +544,79 @@ definitions:
             ]
           }'
         fi
+    - &notify_shorebird_patch_ios_production_to_slack
+      name: Notify shorebird patch iOS Production app to slack
+      script: | 
+        curl -0 -v -X POST $SLACK_WEBHOOK_URL \
+        -H 'Content-type: application/json' \
+        --data-raw '
+        {
+          "attachments": [
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "🚀 Shorebird patch iOS Production app successfully"
+                  }
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Tag*\n'"$CM_TAG"'"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Commit*\n'"$CM_COMMIT"'"
+                    }
+                  ]
+                },
+              ]
+            }
+          ]
+        }'
+    - &notify_shorebird_patch_android_production_to_slack
+      name: Notify shorebird patch Android Production app to slack
+      script: | 
+        curl -0 -v -X POST $SLACK_WEBHOOK_URL \
+        -H 'Content-type: application/json' \
+        --data-raw '
+        {
+          "attachments": [
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "🚀 Shorebird patch Android Production app successfully"
+                  }
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Tag*\n'"$CM_TAG"'"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Commit*\n'"$CM_COMMIT"'"
+                    }
+                  ]
+                },
+              ]
+            }
+          ]
+        }'
   email_staging: &email_staging
     email:
       recipients:
         - sieu@coderpush.com
         - thinh@coderpush.com
-        - ron@coderpush.com
       notify:
         success: true
         failure: true
@@ -558,13 +625,6 @@ definitions:
       recipients:
         - sieu@coderpush.com
         - thinh@coderpush.com
-        - ron@coderpush.com
-        # - kc@lemonade.social
-        # - chris@lemonade.social
-        # - jakob@lemonade.social
-        # - pranoti@lemonade.social
-        # - rishi@lemonade.social
-        # - david@lemonade.social
       notify:
         success: true
         failure: true
@@ -594,12 +654,6 @@ workflows:
       <<: *env_versions
       <<: *load_environment_values
       <<: *ios_signing_staging
-    # triggering:
-    #   events:
-    #     - push
-    #   branch_patterns: 
-    #     - pattern: master
-    #   cancel_previous_builds: true
     scripts:
       - *load_env_files
       - *use_profiles
@@ -628,12 +682,6 @@ workflows:
       <<: *env_versions
       <<: *load_environment_values
       <<: *android_signing_staging
-    # triggering:
-    #   events:
-    #     - push
-    #   branch_patterns: 
-    #     - pattern: master
-    #   cancel_previous_builds: true
     scripts:
       - *load_env_files
       - *setup_local_properties
@@ -652,46 +700,50 @@ workflows:
       scripts:
         - *notify_android_staging_to_slack
   
+  # 
+  # Temp close due to will trigger tag for build production process
+  # 
   # Build iOS & Android Production
-  ios-android-production:
-    name: Build iOS & Android Production
-    <<: *instance_mac_mini
-    integrations:
-      <<: *app_store_connect_integrations
-    environment:
-      <<: *env_versions
-      <<: *load_environment_values
-      <<: *ios_signing_production
-      <<: *android_signing_production
-    scripts:
-      - *load_env_files
-      - *use_profiles
-      - *get_flutter_packages
-      - *run_build_runner
-      - *generate_i18_file
-      - *install_firebase_crashlytics
-      - *install_pods
-      - *build_ipa_production
-      - *setup_local_properties
-      - *build_apk_production
-      - *build_aab_production
-    artifacts:
-      - *ipa
-      - *xcode_log
-      - *dsym
-      - *app
-      - *apk
-      - *aab
-      - *android_log
-    publishing:
-      <<: *ios_app_store_publish
-      <<: *production_android_publish
-      <<: *email_production
-      scripts:
-        - *upload_production_dsym_to_firebase
-        - *github_create_prerelease
-        - *notify_ios_production_to_slack
-        - *notify_android_production_to_slack
+  # ios-android-production:
+  #   name: Build iOS & Android Production
+  #   <<: *instance_mac_mini
+  #   integrations:
+  #     <<: *app_store_connect_integrations
+  #   environment:
+  #     <<: *env_versions
+  #     <<: *load_environment_values
+  #     <<: *ios_signing_production
+  #     <<: *android_signing_production
+  #   scripts:
+  #     - *load_env_files
+  #     - *use_profiles
+  #     - *get_flutter_packages
+  #     - *run_build_runner
+  #     - *generate_i18_file
+  #     - *install_firebase_crashlytics
+  #     - *install_pods
+  #     - *build_ipa_production
+  #     - *setup_local_properties
+  #     - *build_apk_production
+  #     - *build_aab_production
+  #   artifacts:
+  #     - *ipa
+  #     - *xcode_log
+  #     - *dsym
+  #     - *app
+  #     - *apk
+  #     - *aab
+  #     - *android_log
+  #   publishing:
+  #     <<: *ios_app_store_publish
+  #     <<: *production_android_publish
+  #     <<: *email_production
+  #     scripts:
+  #       - *upload_production_dsym_to_firebase
+  #       - *github_create_prerelease
+  #       - *notify_ios_production_to_slack
+  #       - *notify_android_production_to_slack
+  
   # 
   # Shorebird 
   # 
@@ -705,6 +757,16 @@ workflows:
       <<: *load_environment_values
       <<: *ios_signing_staging
       <<: *android_signing_staging
+    triggering:
+      events:
+        - tag
+      tag_patterns:
+        - pattern: '*-rc*' # v1.0.0-rc.1
+          include: true
+        - pattern: excluded-tag
+          include: false
+        - pattern: included-tag
+          include: true
     scripts:
       - *load_env_files
       - *use_profiles
@@ -721,6 +783,7 @@ workflows:
       - build/ios/ipa/*.ipa
       - build/app/outputs/apk/**/*.apk    
       - build/app/outputs/bundle/**/*.aab    
+      - *dsym
     publishing:
       <<: *ios_app_store_publish
       <<: *staging_android_publish
@@ -762,12 +825,16 @@ workflows:
     artifacts:
       - build/ios/ipa/*.ipa
       - build/app/outputs/apk/**/*.apk    
-      - build/app/outputs/bundle/**/*.aab    
+      - build/app/outputs/bundle/**/*.aab   
+      - *dsym
     publishing:
       <<: *ios_app_store_publish
       <<: *production_android_publish
       scripts:
         - *upload_production_dsym_to_firebase
+        - *github_create_prerelease
+        - *notify_ios_production_to_slack
+        - *notify_android_production_to_slack
 
   shorebird-patch-ios-staging:
     name: Shorebird Patch iOS Staging
@@ -851,6 +918,8 @@ workflows:
       - *patch_shorebird_ios_production
     artifacts:
       - build/ios/ipa/*.ipa
+    scripts:
+      - *notify_shorebird_patch_ios_production_to_slack
 
   shorebird-patch-android-production:
     name: Shorebird Patch Android Production
@@ -886,3 +955,5 @@ workflows:
     artifacts:
       - build/app/outputs/apk/**/*.apk    
       - build/app/outputs/bundle/**/*.aab 
+    scripts:
+      - *notify_shorebird_patch_android_production_to_slack
