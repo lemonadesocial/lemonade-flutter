@@ -32,8 +32,13 @@ class PrivateKey with _$PrivateKey {
     );
   }
 
-  static Future<String?> get(String id) async {
-    return secureStorage.read(key: id);
+  static Future<PrivateKey?> get(String id) async {
+    final jsonString = await secureStorage.read(key: id);
+    if (jsonString == null) {
+      throw Exception('Failed to retrieve private key from secure storage');
+    }
+    final jsonResult = jsonDecode(jsonString);
+    return PrivateKey.fromJson(jsonResult);
   }
 
   static Future<void> remove(String id) async {
