@@ -54,94 +54,84 @@ class _EventLocationSettingPageState extends State<EventLocationSettingPage> {
           authenticated: (authSession) => authSession.addresses ?? [],
           orElse: () => [],
         );
-    return BlocListener<EventLocationSettingBloc, EventLocationSettingState>(
-      listener: (context, state) async {
-        if (state.deleteStatus.isSuccess) {
-          context
-              .read<EventLocationSettingBloc>()
-              .add(const EventLocationSettingEvent.clear());
-        }
-      },
-      child: BlocBuilder<EventLocationSettingBloc, EventLocationSettingState>(
-        builder: (context, state) {
-          return Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: Spacing.small,
-              vertical: Spacing.small,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  t.event.locationSetting.description,
-                  style: Typo.medium.copyWith(color: colorScheme.onSecondary),
-                ),
-                SizedBox(
-                  height: 15.h,
-                ),
-                InkWell(
-                  onTap: () => _onTapAddNew(),
-                  child: Container(
-                    height: 80.h,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(20.r)),
-                      gradient: LinearGradient(
-                        begin: Alignment.bottomCenter,
-                        end: Alignment.topCenter,
-                        colors: [
-                          LemonColor.darkCharcoalGray,
-                          LemonColor.darkCharcoalGray,
-                        ],
-                      ),
+    return BlocBuilder<EventLocationSettingBloc, EventLocationSettingState>(
+      builder: (context, state) {
+        return Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: Spacing.small,
+            vertical: Spacing.small,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                t.event.locationSetting.description,
+                style: Typo.medium.copyWith(color: colorScheme.onSecondary),
+              ),
+              SizedBox(
+                height: 15.h,
+              ),
+              InkWell(
+                onTap: () => _onTapAddNew(),
+                child: Container(
+                  height: 80.h,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(20.r)),
+                    gradient: LinearGradient(
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
+                      colors: [
+                        LemonColor.darkCharcoalGray,
+                        LemonColor.darkCharcoalGray,
+                      ],
                     ),
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 25.w,
-                        vertical: 10.h,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            t.event.locationSetting.addNew.toUpperCase(),
-                            style: Typo.extraMedium.copyWith(
-                              fontFamily: FontFamily.nohemiVariable,
-                              fontWeight: FontWeight.w600,
-                            ),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 25.w,
+                      vertical: 10.h,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          t.event.locationSetting.addNew.toUpperCase(),
+                          style: Typo.extraMedium.copyWith(
+                            fontFamily: FontFamily.nohemiVariable,
+                            fontWeight: FontWeight.w600,
                           ),
-                          const Icon(Icons.add_circle_outline_rounded),
-                        ],
-                      ),
+                        ),
+                        const Icon(Icons.add_circle_outline_rounded),
+                      ],
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 25.h,
+              ),
+              SizedBox(
+                height: 25.h,
+              ),
+              Text(
+                t.event.locationSetting.myPlaces,
+                style: Typo.extraMedium,
+              ),
+              SizedBox(
+                height: 12.h,
+              ),
+              Expanded(
+                child: AddressList(
+                  addresses: addresses,
                 ),
-                Text(
-                  t.event.locationSetting.myPlaces,
-                  style: Typo.extraMedium,
-                ),
-                SizedBox(
-                  height: 12.h,
-                ),
-                Expanded(
-                  child: AddressList(
-                    addresses: addresses,
-                  ),
-                ),
-                _buildSaveButton(),
-              ],
-            ),
-          );
-        },
-      ),
+              ),
+              _buildSaveButton(),
+            ],
+          ),
+        );
+      },
     );
   }
 
   _onTapAddNew() {
     Vibrate.feedback(FeedbackType.light);
-
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -207,11 +197,13 @@ class AddressList extends StatelessWidget {
         },
         child: LocationItem(
           location: addresses[index],
-          onPressEdit: () {},
+          onPressEdit: () {
+            _onTapEdit(addresses[index], context);
+          },
           onPressDelete: () {
             context
                 .read<EventLocationSettingBloc>()
-                .add(DeleteLocation(index: index));
+                .add(DeleteLocation(id: addresses[index].id));
           },
         ),
       ),
@@ -219,6 +211,43 @@ class AddressList extends StatelessWidget {
         height: 10.h,
       ),
       itemCount: addresses.length,
+    );
+  }
+
+  _onTapEdit(Address address, BuildContext context) {
+    Vibrate.feedback(FeedbackType.light);
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Theme.of(context).colorScheme.primary,
+      builder: (context) => Container(
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
+          color: Theme.of(context).colorScheme.onPrimaryContainer,
+        ),
+        clipBehavior: Clip.hardEdge,
+        child: FractionallySizedBox(
+          heightFactor: 0.95,
+          child: Column(
+            children: [
+              const SizedBox(height: 10),
+              Container(
+                width: 35,
+                height: 5,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.tertiaryContainer,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              Expanded(
+                child: EventLocationSettingDetailPage(
+                  address: address,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

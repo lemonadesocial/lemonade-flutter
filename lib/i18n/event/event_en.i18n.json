@@ -152,6 +152,7 @@
         "myPlaces": "My places",
         "description": "Select or add a location to your event",
         "addNew": "Add new",
+        "edit": "Edit",
         "enterAnAddress": "Enter an address",
         "nameThisPlace": "Name this place",
         "street1": "Address",

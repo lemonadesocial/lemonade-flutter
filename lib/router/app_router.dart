@@ -207,6 +207,9 @@ final createEventRoutes = AutoRoute(
     AutoRoute(
       page: EventLocationSettingRoute.page,
     ),
+    AutoRoute(
+      page: EventLocationSettingDetailRoute.page,
+    ),
   ],
 );
 

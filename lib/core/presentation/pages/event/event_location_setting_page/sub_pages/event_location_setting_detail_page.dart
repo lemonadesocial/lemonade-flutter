@@ -1,6 +1,7 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/event/event_location_setting_bloc/event_location_setting_bloc.dart';
 import 'package:app/core/config.dart';
+import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
@@ -20,7 +21,10 @@ import 'package:google_api_headers/google_api_headers.dart';
 
 @RoutePage()
 class EventLocationSettingDetailPage extends StatefulWidget {
-  const EventLocationSettingDetailPage({Key? key}) : super(key: key);
+  const EventLocationSettingDetailPage({Key? key, this.address})
+      : super(key: key);
+
+  final Address? address;
 
   @override
   State<EventLocationSettingDetailPage> createState() =>
@@ -41,6 +45,20 @@ class _EventLocationSettingDetailPageState
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      context
+          .read<EventLocationSettingBloc>()
+          .add(EventLocationSettingEvent.init(address: widget.address));
+      if (widget.address != null) {
+        titleController.text = widget.address?.title ?? '';
+        street1Controller.text = widget.address?.street1 ?? '';
+        street2Controller.text = widget.address?.street2 ?? '';
+        cityController.text = widget.address?.city ?? '';
+        regionController.text = widget.address?.region ?? '';
+        postalController.text = widget.address?.postal ?? '';
+        countryController.text = widget.address?.country ?? '';
+      }
+    });
   }
 
   @override
@@ -63,7 +81,9 @@ class _EventLocationSettingDetailPageState
     return Scaffold(
       appBar: LemonAppBar(
         backgroundColor: colorScheme.onPrimaryContainer,
-        title: t.event.locationSetting.addNew,
+        title: widget.address != null
+            ? t.event.locationSetting.edit
+            : t.event.locationSetting.addNew,
       ),
       backgroundColor: colorScheme.onPrimaryContainer,
       body: SafeArea(
@@ -72,9 +92,6 @@ class _EventLocationSettingDetailPageState
           listener: (context, state) async {
             if (state.status.isSuccess) {
               context.read<AuthBloc>().add(const AuthEvent.refreshData());
-              context
-                  .read<EventLocationSettingBloc>()
-                  .add(const EventLocationSettingEvent.clear());
               SnackBarUtils.showSuccessSnackbar(
                 t.event.locationSetting.addNewLocationSuccessfully,
               );
@@ -255,11 +272,14 @@ class _EventLocationSettingDetailPageState
         return Padding(
           padding: EdgeInsets.only(bottom: 15.h),
           child: LinearGradientButton(
-            label: t.common.add,
+            label:
+                widget.address != null ? t.common.actions.edit : t.common.add,
             height: 48.h,
             radius: BorderRadius.circular(24),
             textStyle: Typo.medium.copyWith(),
-            mode: GradientButtonMode.lavenderMode,
+            mode: state.placeDetailsText == ''
+                ? GradientButtonMode.lavenderDisableMode
+                : GradientButtonMode.lavenderMode,
             onTap: () {
               Vibrate.feedback(FeedbackType.light);
               context

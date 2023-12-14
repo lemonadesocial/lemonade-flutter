@@ -1,4 +1,5 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
+import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/form/string_formz.dart';
 import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/utils/google_address_parser.dart';
@@ -29,7 +30,6 @@ class EventLocationSettingBloc
     on<LocationChanged>(_onLocationChanged);
     on<SubmitAddLocation>(_onSubmitAddLocation);
     on<DeleteLocation>(_onDeleteLocation);
-    on<EventLocationSettingEventClear>(_onClear);
   }
 
   final _userRepository = getIt<UserRepository>();
@@ -37,7 +37,47 @@ class EventLocationSettingBloc
   Future<void> _onInit(
     EventLocationSettingEventInit event,
     Emitter emit,
-  ) async {}
+  ) async {
+    // Edit mode
+    if (event.address != null) {
+      final address = event.address;
+      emit(
+        state.copyWith(
+          placeDetailsText: '',
+          id: address?.id ?? '',
+          title: StringFormz.dirty(address?.title ?? ''),
+          street1: StringFormz.pure(address?.street1 ?? ''),
+          street2: address?.street2 ?? '',
+          city: StringFormz.pure(address?.city ?? ''),
+          region: StringFormz.pure(address?.region ?? ''),
+          postal: StringFormz.pure(address?.postal ?? ''),
+          country: StringFormz.pure(address?.country ?? ''),
+          latitude: address?.latitude ?? 0,
+          longitude: address?.longitude ?? 0,
+          status: FormzSubmissionStatus.initial,
+          deleteStatus: FormzSubmissionStatus.initial,
+        ),
+      );
+    } else {
+      emit(
+        state.copyWith(
+          placeDetailsText: '',
+          id: '',
+          title: const StringFormz.pure(),
+          street1: const StringFormz.pure(),
+          street2: '',
+          city: const StringFormz.pure(),
+          region: const StringFormz.pure(),
+          postal: const StringFormz.pure(),
+          country: const StringFormz.pure(),
+          latitude: 0,
+          longitude: 0,
+          status: FormzSubmissionStatus.initial,
+          deleteStatus: FormzSubmissionStatus.initial,
+        ),
+      );
+    }
+  }
 
   Future<void> _onPlaceDetailsChanged(
     PlaceDetailsChanged event,
@@ -242,8 +282,22 @@ class EventLocationSettingBloc
       List<Input$AddressInput> newUserAddresses = [];
       for (var i = 0; i < userAddresses.length; i++) {
         final userAddress = userAddresses[i];
-        newUserAddresses.add(
-          Input$AddressInput(
+        Input$AddressInput addressInput;
+
+        if (state.id != '' && userAddress.id == state.id) {
+          addressInput = Input$AddressInput(
+            title: state.title.value,
+            street_1: state.street1.value,
+            street_2: state.street2,
+            city: state.city.value,
+            country: state.country.value,
+            postal: state.postal.value,
+            region: state.region.value,
+            latitude: state.latitude,
+            longitude: state.longitude,
+          );
+        } else {
+          addressInput = Input$AddressInput(
             title: userAddress.title,
             street_1: userAddress.street1,
             street_2: userAddress.street2,
@@ -253,23 +307,27 @@ class EventLocationSettingBloc
             region: userAddress.region,
             latitude: userAddress.latitude,
             longitude: userAddress.longitude,
+          );
+        }
+
+        newUserAddresses.add(addressInput);
+      }
+
+      if (state.id == '') {
+        newUserAddresses.add(
+          Input$AddressInput(
+            title: state.title.value,
+            street_1: state.street1.value,
+            street_2: state.street2,
+            city: state.city.value,
+            country: state.country.value,
+            postal: state.postal.value,
+            region: state.region.value,
+            latitude: state.latitude,
+            longitude: state.longitude,
           ),
         );
       }
-      newUserAddresses.add(
-        Input$AddressInput(
-          title: state.title.value,
-          street_1: state.street1.value,
-          street_2: state.street2,
-          city: state.city.value,
-          country: state.country.value,
-          postal: state.postal.value,
-          region: state.region.value,
-          latitude: state.latitude,
-          longitude: state.longitude,
-        ),
-      );
-
       final result = await _userRepository.updateUserAddresses(
         input: Input$UserInput(
           addresses: newUserAddresses,
@@ -294,7 +352,7 @@ class EventLocationSettingBloc
         );
     if (userAddresses == null) return;
     emit(state.copyWith(deleteStatus: FormzSubmissionStatus.inProgress));
-    userAddresses.removeAt(event.index);
+    userAddresses.removeWhere((address) => address.id == event.id);
     List<Input$AddressInput> newUserAddresses = [];
     for (var i = 0; i < userAddresses.length; i++) {
       final userAddress = userAddresses[i];
@@ -324,23 +382,12 @@ class EventLocationSettingBloc
           emit(state.copyWith(deleteStatus: FormzSubmissionStatus.success)),
     );
   }
-
-  Future<void> _onClear(
-    EventLocationSettingEventClear event,
-    Emitter<EventLocationSettingState> emit,
-  ) async {
-    emit(
-      state.copyWith(
-        status: FormzSubmissionStatus.initial,
-        deleteStatus: FormzSubmissionStatus.initial,
-      ),
-    );
-  }
 }
 
 @freezed
 class EventLocationSettingEvent with _$EventLocationSettingEvent {
-  factory EventLocationSettingEvent.init() = EventLocationSettingEventInit;
+  factory EventLocationSettingEvent.init({Address? address}) =
+      EventLocationSettingEventInit;
 
   const factory EventLocationSettingEvent.PlaceDetailsChanged({
     required PlaceDetails placeDetails,
@@ -383,17 +430,15 @@ class EventLocationSettingEvent with _$EventLocationSettingEvent {
       SubmitAddLocation;
 
   const factory EventLocationSettingEvent.deleteLocation({
-    required int index,
+    required String? id,
   }) = DeleteLocation;
-
-  const factory EventLocationSettingEvent.clear() =
-      EventLocationSettingEventClear;
 }
 
 @freezed
 class EventLocationSettingState with _$EventLocationSettingState {
   const factory EventLocationSettingState({
     @Default("") String placeDetailsText,
+    @Default("") String id,
     @Default(StringFormz.pure()) StringFormz title,
     @Default(StringFormz.pure()) StringFormz street1,
     @Default('') String street2,
