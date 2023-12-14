@@ -1,5 +1,5 @@
-import 'package:app/core/application/payment/create_payment_account_bloc/create_payment_account_bloc.dart';
 import 'package:app/core/application/vault/create_vault_bloc/create_vault_bloc.dart';
+import 'package:app/core/application/vault/create_vault_owner_key_bloc/create_vault_owner_key_bloc.dart';
 import 'package:app/core/application/wallet/wallet_bloc/wallet_bloc.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -14,10 +14,10 @@ class CreateVaultPage extends StatelessWidget with AutoRouteWrapper {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => CreatePaymentAccountBloc(),
+          create: (context) => CreateVaultBloc(),
         ),
         BlocProvider(
-          create: (context) => CreateVaultBloc(),
+          create: (context) => CreateVaultOwnerKeyBloc(),
         ),
         BlocProvider(
           create: (context) => WalletBloc()

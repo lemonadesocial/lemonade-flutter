@@ -26,16 +26,16 @@ import 'package:app/core/data/event/repository/event_ticket_repository_impl.dart
     as _i19;
 import 'package:app/core/data/notification/repository/notification_repository_impl.dart'
     as _i27;
-import 'package:app/core/data/payment/payment_repository_impl.dart' as _i29;
-import 'package:app/core/data/poap/poap_repository_impl.dart' as _i31;
+import 'package:app/core/data/payment/payment_repository_impl.dart' as _i30;
+import 'package:app/core/data/poap/poap_repository_impl.dart' as _i32;
 import 'package:app/core/data/post/newsfeed_repository_impl.dart' as _i25;
-import 'package:app/core/data/post/post_repository_impl.dart' as _i33;
+import 'package:app/core/data/post/post_repository_impl.dart' as _i34;
 import 'package:app/core/data/report/repository/report_repository_impl.dart'
-    as _i35;
-import 'package:app/core/data/token/token_repository_impl.dart' as _i39;
-import 'package:app/core/data/user/user_repository_impl.dart' as _i41;
-import 'package:app/core/data/wallet/wallet_repository_impl.dart' as _i44;
-import 'package:app/core/data/web3/web3_repository_impl.dart' as _i46;
+    as _i36;
+import 'package:app/core/data/token/token_repository_impl.dart' as _i40;
+import 'package:app/core/data/user/user_repository_impl.dart' as _i42;
+import 'package:app/core/data/wallet/wallet_repository_impl.dart' as _i45;
+import 'package:app/core/data/web3/web3_repository_impl.dart' as _i47;
 import 'package:app/core/domain/ai/ai_repository.dart' as _i4;
 import 'package:app/core/domain/badge/badge_repository.dart' as _i8;
 import 'package:app/core/domain/community/community_repository.dart' as _i11;
@@ -47,21 +47,23 @@ import 'package:app/core/domain/event/repository/event_ticket_repository.dart'
 import 'package:app/core/domain/newsfeed/newsfeed_repository.dart' as _i24;
 import 'package:app/core/domain/notification/notification_repository.dart'
     as _i26;
-import 'package:app/core/domain/payment/payment_repository.dart' as _i28;
-import 'package:app/core/domain/poap/poap_repository.dart' as _i30;
-import 'package:app/core/domain/post/post_repository.dart' as _i32;
-import 'package:app/core/domain/report/report_repository.dart' as _i34;
-import 'package:app/core/domain/token/token_repository.dart' as _i38;
-import 'package:app/core/domain/user/user_repository.dart' as _i40;
-import 'package:app/core/domain/wallet/wallet_repository.dart' as _i43;
-import 'package:app/core/domain/web3/web3_repository.dart' as _i45;
+import 'package:app/core/domain/payment/payment_repository.dart' as _i29;
+import 'package:app/core/domain/poap/poap_repository.dart' as _i31;
+import 'package:app/core/domain/post/post_repository.dart' as _i33;
+import 'package:app/core/domain/report/report_repository.dart' as _i35;
+import 'package:app/core/domain/token/token_repository.dart' as _i39;
+import 'package:app/core/domain/user/user_repository.dart' as _i41;
+import 'package:app/core/domain/wallet/wallet_repository.dart' as _i44;
+import 'package:app/core/domain/web3/web3_repository.dart' as _i46;
 import 'package:app/core/oauth/oauth.dart' as _i6;
 import 'package:app/core/service/badge/badge_service.dart' as _i10;
 import 'package:app/core/service/firebase/firebase_service.dart' as _i20;
 import 'package:app/core/service/matrix/matrix_service.dart' as _i22;
-import 'package:app/core/service/shake/shake_service.dart' as _i36;
-import 'package:app/core/service/shorebird_codepush_service.dart' as _i37;
-import 'package:app/core/service/wallet/wallet_connect_service.dart' as _i42;
+import 'package:app/core/service/shake/shake_service.dart' as _i37;
+import 'package:app/core/service/shorebird_codepush_service.dart' as _i38;
+import 'package:app/core/service/vault/owner_key/database/owner_keys_database.dart'
+    as _i28;
+import 'package:app/core/service/wallet/wallet_connect_service.dart' as _i43;
 import 'package:app/core/utils/gql/gql.dart' as _i3;
 import 'package:app/core/utils/location_utils.dart' as _i21;
 import 'package:get_it/get_it.dart' as _i1;
@@ -103,21 +105,22 @@ extension GetItInjectableX on _i1.GetIt {
         () => _i25.NewsfeedRepositoryImpl());
     gh.lazySingleton<_i26.NotificationRepository>(
         () => _i27.NotificationRepositoryImpl());
-    gh.lazySingleton<_i28.PaymentRepository>(
-        () => _i29.PaymentRepositoryImpl());
-    gh.lazySingleton<_i30.PoapRepository>(() => _i31.PoapRepositoryImpl());
-    gh.lazySingleton<_i32.PostRepository>(() => _i33.PostRepositoryImpl());
-    gh.lazySingleton<_i34.ReportRepository>(() => _i35.ReportRepositoryImpl());
-    gh.lazySingleton<_i36.ShakeService>(() => _i36.ShakeService());
-    gh.lazySingleton<_i37.ShorebirdCodePushService>(
-        () => _i37.ShorebirdCodePushService());
-    gh.lazySingleton<_i38.TokenRepository>(() => _i39.TokenRepositoryImpl());
-    gh.lazySingleton<_i40.UserRepository>(() => _i41.UserRepositoryImpl());
-    gh.lazySingleton<_i42.WalletConnectService>(
-        () => _i42.WalletConnectService());
+    gh.lazySingleton<_i28.OwnerKeysDatabase>(() => _i28.OwnerKeysDatabase());
+    gh.lazySingleton<_i29.PaymentRepository>(
+        () => _i30.PaymentRepositoryImpl());
+    gh.lazySingleton<_i31.PoapRepository>(() => _i32.PoapRepositoryImpl());
+    gh.lazySingleton<_i33.PostRepository>(() => _i34.PostRepositoryImpl());
+    gh.lazySingleton<_i35.ReportRepository>(() => _i36.ReportRepositoryImpl());
+    gh.lazySingleton<_i37.ShakeService>(() => _i37.ShakeService());
+    gh.lazySingleton<_i38.ShorebirdCodePushService>(
+        () => _i38.ShorebirdCodePushService());
+    gh.lazySingleton<_i39.TokenRepository>(() => _i40.TokenRepositoryImpl());
+    gh.lazySingleton<_i41.UserRepository>(() => _i42.UserRepositoryImpl());
+    gh.lazySingleton<_i43.WalletConnectService>(
+        () => _i43.WalletConnectService());
     gh.lazySingleton<_i3.WalletGQL>(() => _i3.WalletGQL());
-    gh.lazySingleton<_i43.WalletRepository>(() => _i44.WalletRepositoryImpl());
-    gh.lazySingleton<_i45.Web3Repository>(() => _i46.Web3RepositoryIml());
+    gh.lazySingleton<_i44.WalletRepository>(() => _i45.WalletRepositoryImpl());
+    gh.lazySingleton<_i46.Web3Repository>(() => _i47.Web3RepositoryIml());
     return this;
   }
 }

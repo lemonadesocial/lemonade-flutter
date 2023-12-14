@@ -247,6 +247,9 @@ final vaultRoutes = AutoRoute(
           page: CreateVaultCheckPhraseRoute.page,
         ),
         AutoRoute(
+          page: CreateVaultSubmitTransactionRoute.page,
+        ),
+        AutoRoute(
           page: CreateVaultSetupPinRoute.page,
         ),
         AutoRoute(
