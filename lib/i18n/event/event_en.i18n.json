@@ -160,7 +160,8 @@
         "region": "State/province/region (eg. NJ)",
         "postalCode": "Postal code",
         "country": "Country",
-        "addNewLocationSuccessfully": "add new location successfully"
+        "addNewLocationSuccessfully": "Add new location successfully",
+        "removeNewLocationSuccessfully": "Remove location successfully"
     },
     "timezone": "Timezone"
 }

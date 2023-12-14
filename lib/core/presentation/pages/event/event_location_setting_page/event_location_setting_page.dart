@@ -1,5 +1,5 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
-import 'package:app/core/application/event/event_datetime_settings_bloc/event_datetime_settings_bloc.dart';
+import 'package:app/core/application/event/event_location_setting_bloc/event_location_setting_bloc.dart';
 import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/presentation/pages/event/event_location_setting_page/sub_pages/event_location_setting_detail_page.dart';
 import 'package:app/core/presentation/pages/event/event_location_setting_page/widgets/location_item.dart';
@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:formz/formz.dart';
 
 @RoutePage()
 class EventLocationSettingPage extends StatefulWidget {
@@ -53,9 +54,15 @@ class _EventLocationSettingPageState extends State<EventLocationSettingPage> {
           authenticated: (authSession) => authSession.addresses ?? [],
           orElse: () => [],
         );
-    return BlocListener<EventDateTimeSettingsBloc, EventDateTimeSettingsState>(
-      listener: (context, state) async {},
-      child: BlocBuilder<EventDateTimeSettingsBloc, EventDateTimeSettingsState>(
+    return BlocListener<EventLocationSettingBloc, EventLocationSettingState>(
+      listener: (context, state) async {
+        if (state.deleteStatus.isSuccess) {
+          context
+              .read<EventLocationSettingBloc>()
+              .add(const EventLocationSettingEvent.clear());
+        }
+      },
+      child: BlocBuilder<EventLocationSettingBloc, EventLocationSettingState>(
         builder: (context, state) {
           return Padding(
             padding: EdgeInsets.symmetric(
@@ -175,7 +182,9 @@ class _EventLocationSettingPageState extends State<EventLocationSettingPage> {
       radius: BorderRadius.circular(24),
       textStyle: Typo.medium.copyWith(),
       mode: GradientButtonMode.lavenderMode,
-      onTap: () {},
+      onTap: () {
+        AutoRouter.of(context).pop();
+      },
     );
   }
 }
@@ -190,6 +199,7 @@ class AddressList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
+      padding: EdgeInsets.only(bottom: Spacing.medium),
       shrinkWrap: true,
       itemBuilder: (context, index) => InkWell(
         onTap: () {
@@ -197,6 +207,12 @@ class AddressList extends StatelessWidget {
         },
         child: LocationItem(
           location: addresses[index],
+          onPressEdit: () {},
+          onPressDelete: () {
+            context
+                .read<EventLocationSettingBloc>()
+                .add(DeleteLocation(index: index));
+          },
         ),
       ),
       separatorBuilder: (context, index) => SizedBox(

@@ -44,6 +44,19 @@ class _EventLocationSettingDetailPageState
   }
 
   @override
+  void dispose() {
+    placeDetailsController.clear();
+    titleController.clear();
+    street1Controller.clear();
+    street2Controller.clear();
+    cityController.clear();
+    regionController.clear();
+    postalController.clear();
+    countryController.clear();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
@@ -59,6 +72,9 @@ class _EventLocationSettingDetailPageState
           listener: (context, state) async {
             if (state.status.isSuccess) {
               context.read<AuthBloc>().add(const AuthEvent.refreshData());
+              context
+                  .read<EventLocationSettingBloc>()
+                  .add(const EventLocationSettingEvent.clear());
               SnackBarUtils.showSuccessSnackbar(
                 t.event.locationSetting.addNewLocationSuccessfully,
               );
@@ -221,12 +237,12 @@ class _EventLocationSettingDetailPageState
     if (p == null) {
       return;
     }
-    // get detail (lat/lng)
+    FocusScope.of(context).requestFocus(FocusNode());
+    // Get place detail (lat/lng)
     final places = GoogleMapsPlaces(
       apiKey: AppConfig.googleMapKey,
       apiHeaders: await const GoogleApiHeaders().getHeaders(),
     );
-
     final detail = await places.getDetailsByPlaceId(p.placeId!);
     context
         .read<EventLocationSettingBloc>()

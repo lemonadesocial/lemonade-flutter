@@ -8,9 +8,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LocationItem extends StatelessWidget {
   final Address location;
+  final Function onPressEdit;
+  final Function onPressDelete;
   const LocationItem({
     super.key,
     required this.location,
+    required this.onPressEdit,
+    required this.onPressDelete,
   });
 
   @override
@@ -60,7 +64,7 @@ class LocationItem extends StatelessWidget {
                 children: [
                   IconButton(
                     onPressed: () async {
-                      // TODO: Handle on edit action
+                      onPressEdit();
                     },
                     icon: ThemeSvgIcon(
                       color: colorScheme.onPrimary,
@@ -75,7 +79,7 @@ class LocationItem extends StatelessWidget {
                   ),
                   IconButton(
                     onPressed: () async {
-                      // TODO: Handle on delete action
+                      onPressDelete();
                     },
                     icon: ThemeSvgIcon(
                       color: colorScheme.onPrimary,

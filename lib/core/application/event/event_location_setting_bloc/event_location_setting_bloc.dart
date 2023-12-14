@@ -28,6 +28,8 @@ class EventLocationSettingBloc
     on<CountryChanged>(_onCountryChanged);
     on<LocationChanged>(_onLocationChanged);
     on<SubmitAddLocation>(_onSubmitAddLocation);
+    on<DeleteLocation>(_onDeleteLocation);
+    on<EventLocationSettingEventClear>(_onClear);
   }
 
   final _userRepository = getIt<UserRepository>();
@@ -281,6 +283,59 @@ class EventLocationSettingBloc
       );
     }
   }
+
+  Future<void> _onDeleteLocation(
+    DeleteLocation event,
+    Emitter<EventLocationSettingState> emit,
+  ) async {
+    final userAddresses = getIt<AuthBloc>().state.maybeWhen(
+          authenticated: (authSession) => authSession.addresses,
+          orElse: () => null,
+        );
+    if (userAddresses == null) return;
+    emit(state.copyWith(deleteStatus: FormzSubmissionStatus.inProgress));
+    userAddresses.removeAt(event.index);
+    List<Input$AddressInput> newUserAddresses = [];
+    for (var i = 0; i < userAddresses.length; i++) {
+      final userAddress = userAddresses[i];
+      newUserAddresses.add(
+        Input$AddressInput(
+          title: userAddress.title,
+          street_1: userAddress.street1,
+          street_2: userAddress.street2,
+          city: userAddress.city,
+          country: userAddress.country,
+          postal: userAddress.postal,
+          region: userAddress.region,
+          latitude: userAddress.latitude,
+          longitude: userAddress.longitude,
+        ),
+      );
+    }
+    final result = await _userRepository.updateUserAddresses(
+      input: Input$UserInput(
+        addresses: newUserAddresses,
+      ),
+    );
+    result.fold(
+      (failure) =>
+          emit(state.copyWith(deleteStatus: FormzSubmissionStatus.failure)),
+      (createEvent) =>
+          emit(state.copyWith(deleteStatus: FormzSubmissionStatus.success)),
+    );
+  }
+
+  Future<void> _onClear(
+    EventLocationSettingEventClear event,
+    Emitter<EventLocationSettingState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        status: FormzSubmissionStatus.initial,
+        deleteStatus: FormzSubmissionStatus.initial,
+      ),
+    );
+  }
 }
 
 @freezed
@@ -326,6 +381,13 @@ class EventLocationSettingEvent with _$EventLocationSettingEvent {
 
   const factory EventLocationSettingEvent.submitAddLocation() =
       SubmitAddLocation;
+
+  const factory EventLocationSettingEvent.deleteLocation({
+    required int index,
+  }) = DeleteLocation;
+
+  const factory EventLocationSettingEvent.clear() =
+      EventLocationSettingEventClear;
 }
 
 @freezed
@@ -342,6 +404,7 @@ class EventLocationSettingState with _$EventLocationSettingState {
     @Default(0) double latitude,
     @Default(0) double longitude,
     @Default(FormzSubmissionStatus.initial) FormzSubmissionStatus status,
+    @Default(FormzSubmissionStatus.initial) FormzSubmissionStatus deleteStatus,
     @Default(false) bool isValid,
   }) = _EventLocationSettingState;
 }
