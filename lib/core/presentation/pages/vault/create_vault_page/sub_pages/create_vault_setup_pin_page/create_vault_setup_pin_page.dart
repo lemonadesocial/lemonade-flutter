@@ -7,7 +7,7 @@ import 'package:app/core/presentation/widgets/app_lock/widgets/pin_row.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/custom_number_keyboard/custom_number_keyboard.dart';
-import 'package:app/core/service/vault/vault_secure_storage.dart';
+import 'package:app/core/service/vault/vault_pin_storage/vault_pin_storage.dart';
 import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -134,7 +134,7 @@ class _CreateVaultSetupPinPageState extends State<CreateVaultSetupPinPage> {
                     if (widget.defaultPinCode != null) {
                       if (pinCode == widget.defaultPinCode) {
                         final userId = AuthUtils.getUserId(context);
-                        await VaultSecureStorage.setPinCode(
+                        await VaultPinStorage.setPinCode(
                           userId: userId,
                           pinCode: pinCode,
                         );

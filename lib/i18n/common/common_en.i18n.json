@@ -46,7 +46,8 @@
         "setLocation": "Set location services",
         "view": "View",
         "copy": "Copy",
-        "share": "Share"
+        "share": "Share",
+        "restart": "Restart"
     },
     "followed": "Followed",
     "anonymous": "anonymous",
