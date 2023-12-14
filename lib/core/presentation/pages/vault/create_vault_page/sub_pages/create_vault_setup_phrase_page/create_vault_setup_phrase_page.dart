@@ -32,7 +32,11 @@ class CreateVaultSetupPhrasePage extends StatelessWidget {
         context
             .read<CreateVaultBloc>()
             .add(CreateVaultEvent.onThresholdChanged(threshold: 1));
-        AutoRouter.of(context).push(CreateVaultCheckPhraseRoute());
+        AutoRouter.of(context).push(
+          CreateVaultCheckPhraseRoute(
+            seedPhrase: seedPhrase,
+          ),
+        );
       }),
     );
   }

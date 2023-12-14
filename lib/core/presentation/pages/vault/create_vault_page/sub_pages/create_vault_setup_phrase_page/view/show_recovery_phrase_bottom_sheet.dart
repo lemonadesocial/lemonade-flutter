@@ -11,6 +11,7 @@ import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ShowRecoveryPhraseBottomSheet extends StatelessWidget {
@@ -47,9 +48,13 @@ class ShowRecoveryPhraseBottomSheet extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           LemonButton(
-                            onTap: () {
+                            onTap: () async {
+                              await Clipboard.setData(
+                                ClipboardData(text: seedPhrase),
+                              );
                               SnackBarUtils.showSuccessSnackbar(
-                                  t.common.copiedToClipboard);
+                                t.common.copiedToClipboard,
+                              );
                             },
                             width: 80.w,
                             icon: Assets.icons.icCopy.svg(),
@@ -92,7 +97,8 @@ class ShowRecoveryPhraseBottomSheet extends StatelessWidget {
                               return Container(
                                 height: 42.w,
                                 padding: EdgeInsets.symmetric(
-                                    horizontal: Spacing.small),
+                                  horizontal: Spacing.small,
+                                ),
                                 decoration: BoxDecoration(
                                   color: LemonColor.paleViolet18,
                                   borderRadius:

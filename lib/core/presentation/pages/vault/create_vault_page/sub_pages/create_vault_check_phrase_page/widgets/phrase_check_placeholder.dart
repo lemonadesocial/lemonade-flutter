@@ -1,3 +1,4 @@
+import 'package:app/core/application/vault/create_vault_verify_seed_phrase_bloc/create_vault_verify_seed_phrase_bloc.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
@@ -6,11 +7,20 @@ import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 
 class PhraseCheckPlaceholder extends StatelessWidget {
-  const PhraseCheckPlaceholder({super.key});
+  final CreateVaultVerifySeedPhraseState state;
+  final List<String> phrases;
+  const PhraseCheckPlaceholder({
+    super.key,
+    required this.state,
+    required this.phrases,
+  });
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final correctWordIndex =
+        state.data.questions[state.data.currentQuestion].wordIndex;
+    final correctWordOrder = correctWordIndex + 1;
     return Padding(
       padding: EdgeInsets.symmetric(vertical: Spacing.medium),
       child: Row(
@@ -18,7 +28,7 @@ class PhraseCheckPlaceholder extends StatelessWidget {
         children: [
           RichText(
             text: TextSpan(
-              text: '6',
+              text: (correctWordOrder - 1).toString(),
               style: Typo.mediumPlus.copyWith(
                 color: LemonColor.paleViolet,
               ),
@@ -27,7 +37,7 @@ class PhraseCheckPlaceholder extends StatelessWidget {
                   child: SizedBox(width: Spacing.extraSmall),
                 ),
                 TextSpan(
-                  text: 'Hay',
+                  text: phrases[correctWordIndex - 1],
                   style: Typo.mediumPlus.copyWith(
                     fontWeight: FontWeight.w600,
                     color: colorScheme.onPrimary,
@@ -51,7 +61,7 @@ class PhraseCheckPlaceholder extends StatelessWidget {
           SizedBox(width: Spacing.medium),
           RichText(
             text: TextSpan(
-              text: '8',
+              text: (correctWordOrder + 1).toString(),
               style: Typo.mediumPlus.copyWith(
                 color: LemonColor.paleViolet,
               ),
@@ -60,7 +70,7 @@ class PhraseCheckPlaceholder extends StatelessWidget {
                   child: SizedBox(width: Spacing.extraSmall),
                 ),
                 TextSpan(
-                  text: 'Beta',
+                  text: phrases[correctWordIndex + 1],
                   style: Typo.mediumPlus.copyWith(
                     fontWeight: FontWeight.w600,
                     color: colorScheme.onPrimary,

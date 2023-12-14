@@ -6,8 +6,8 @@ class PkDataJsonConverter extends JsonConverter<EthPrivateKey, String> {
   const PkDataJsonConverter();
 
   @override
-  EthPrivateKey fromJson(String data) {
-    return EthPrivateKey(base64Decode(data));
+  EthPrivateKey fromJson(String json) {
+    return EthPrivateKey(base64Decode(json));
   }
 
   @override

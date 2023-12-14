@@ -29,16 +29,6 @@ class CreateVaultOwnerKeyBloc
           address: address,
         ),
       );
-
-      await OwnerKey.save(
-        // we dont have ui to setup onwer key name yet so default will be address
-        name: address.hexEip55,
-        // right now only support type device generated
-        type: OwnerKeyType.deviceGenerated,
-        privateKey: privateKey,
-        address: address,
-        backup: 1,
-      );
     } catch (error) {
       emit(CreateVaultOwnerKeyState.failure());
     }

@@ -1,4 +1,3 @@
-import 'package:app/core/application/payment/create_payment_account_bloc/create_payment_account_bloc.dart';
 import 'package:app/core/application/vault/create_vault_bloc/create_vault_bloc.dart';
 import 'package:app/core/application/vault/create_vault_owner_key_bloc/create_vault_owner_key_bloc.dart';
 import 'package:app/core/application/wallet/wallet_bloc/wallet_bloc.dart';
@@ -14,9 +13,6 @@ class CreateVaultPage extends StatelessWidget with AutoRouteWrapper {
   Widget wrappedRoute(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (context) => CreatePaymentAccountBloc(),
-        ),
         BlocProvider(
           create: (context) => CreateVaultBloc(),
         ),

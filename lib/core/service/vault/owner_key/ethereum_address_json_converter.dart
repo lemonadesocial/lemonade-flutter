@@ -7,8 +7,8 @@ class EthereumAddressJsonConverter
   const EthereumAddressJsonConverter();
 
   @override
-  EthereumAddress fromJson(String data) {
-    return EthereumAddress(base64Decode(data));
+  EthereumAddress fromJson(String json) {
+    return EthereumAddress(base64Decode(json));
   }
 
   @override

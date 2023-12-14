@@ -1,3 +1,5 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers
+
 import 'package:app/core/service/vault/owner_key/owner_key.dart';
 import 'package:injectable/injectable.dart';
 import 'package:path_provider/path_provider.dart';

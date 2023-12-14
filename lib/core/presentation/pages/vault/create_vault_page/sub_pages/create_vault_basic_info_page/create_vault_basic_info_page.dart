@@ -100,7 +100,7 @@ class CreateVaultBasicInfoPage extends StatelessWidget {
                               AutoRouter.of(context)
                                   .push(const CreateVaultSetupPhraseRoute());
                             },
-                            label: t.vault.actions.createVault,
+                            label: t.common.next,
                             radius:
                                 BorderRadius.circular(LemonRadius.small * 2),
                             height: Sizing.large,
