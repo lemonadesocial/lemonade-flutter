@@ -3,6 +3,7 @@ import 'package:app/core/domain/user/entities/user.dart';
 
 class Address {
   Address({
+    this.id,
     this.street1,
     this.street2,
     this.city,
@@ -14,6 +15,7 @@ class Address {
     this.longitude,
     this.recipientName,
   });
+  final String? id;
   final String? street1;
   final String? street2;
   final String? city;
@@ -27,6 +29,7 @@ class Address {
 
   static Address fromDto(AddressDto dto) {
     return Address(
+      id: dto.id,
       street1: dto.street1,
       street2: dto.street2,
       city: dto.city,

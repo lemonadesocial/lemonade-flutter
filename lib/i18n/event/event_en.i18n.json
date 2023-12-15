@@ -151,7 +151,18 @@
     "locationSetting": {
         "myPlaces": "My places",
         "description": "Select or add a location to your event",
-        "addNew": "ADD NEW"
+        "addNew": "Add new",
+        "edit": "Edit",
+        "enterAnAddress": "Enter an address",
+        "nameThisPlace": "Name this place",
+        "street1": "Address",
+        "street2": "Apartment/Building number",
+        "city": "City",
+        "region": "State/province/region (eg. NJ)",
+        "postalCode": "Postal code",
+        "country": "Country",
+        "addNewLocationSuccessfully": "Add new location successfully",
+        "removeNewLocationSuccessfully": "Remove location successfully"
     },
     "timezone": "Timezone"
 }

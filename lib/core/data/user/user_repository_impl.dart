@@ -9,6 +9,8 @@ import 'package:app/core/domain/user/input/user_follows_input.dart';
 import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/core/utils/gql/gql.dart';
+import 'package:app/graphql/backend/schema.graphql.dart';
+import 'package:app/graphql/backend/user/mutation/update_user.graphql.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:dartz/dartz.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -214,5 +216,21 @@ class UserRepositoryImpl implements UserRepository {
     );
     if (result.hasException) return Left(Failure());
     return Right(result.parsedData ?? false);
+  }
+
+  @override
+  Future<Either<Failure, Mutation$UpdateUser>> updateUserAddresses({
+    required Input$UserInput input,
+  }) async {
+    final result = await _gqlClient.mutate$UpdateUser(
+      Options$Mutation$UpdateUser(
+        variables: Variables$Mutation$UpdateUser(input: input),
+      ),
+    );
+
+    if (result.hasException) {
+      return Left(Failure.withGqlException(result.exception));
+    }
+    return Right(result.parsedData!);
   }
 }
