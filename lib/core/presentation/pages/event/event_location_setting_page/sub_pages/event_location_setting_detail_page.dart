@@ -63,14 +63,6 @@ class _EventLocationSettingDetailPageState
 
   @override
   void dispose() {
-    placeDetailsController.clear();
-    titleController.clear();
-    street1Controller.clear();
-    street2Controller.clear();
-    cityController.clear();
-    regionController.clear();
-    postalController.clear();
-    countryController.clear();
     super.dispose();
   }
 

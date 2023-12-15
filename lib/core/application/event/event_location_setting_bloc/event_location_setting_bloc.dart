@@ -283,7 +283,6 @@ class EventLocationSettingBloc
       for (var i = 0; i < userAddresses.length; i++) {
         final userAddress = userAddresses[i];
         Input$AddressInput addressInput;
-
         if (state.id != '' && userAddress.id == state.id) {
           addressInput = Input$AddressInput(
             title: state.title.value,

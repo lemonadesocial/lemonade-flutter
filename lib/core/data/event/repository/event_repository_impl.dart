@@ -10,7 +10,7 @@ import 'package:app/core/domain/event/input/get_event_detail_input.dart';
 import 'package:app/core/domain/event/input/get_events_listing_input.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/core/utils/gql/gql.dart';
-import 'package:app/graphql/backend/mutation/create_event.graphql.dart';
+import 'package:app/graphql/backend/event/mutation/create_event.graphql.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:dartz/dartz.dart';

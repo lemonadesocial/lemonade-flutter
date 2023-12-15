@@ -1,12 +1,12 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/event/event_location_setting_bloc/event_location_setting_bloc.dart';
 import 'package:app/core/domain/common/entities/common.dart';
-import 'package:app/core/presentation/pages/event/event_location_setting_page/sub_pages/event_location_setting_detail_page.dart';
 import 'package:app/core/presentation/pages/event/event_location_setting_page/widgets/location_item.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -131,37 +131,7 @@ class _EventLocationSettingPageState extends State<EventLocationSettingPage> {
 
   _onTapAddNew() {
     Vibrate.feedback(FeedbackType.light);
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Theme.of(context).colorScheme.primary,
-      builder: (context) => Container(
-        decoration: BoxDecoration(
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
-          color: Theme.of(context).colorScheme.onPrimaryContainer,
-        ),
-        clipBehavior: Clip.hardEdge,
-        child: FractionallySizedBox(
-          heightFactor: 0.95,
-          child: Column(
-            children: [
-              const SizedBox(height: 10),
-              Container(
-                width: 35,
-                height: 5,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.tertiaryContainer,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              const Expanded(
-                child: EventLocationSettingDetailPage(),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+    AutoRouter.of(context).navigate(EventLocationSettingDetailRoute());
   }
 
   _buildSaveButton() {
@@ -215,38 +185,7 @@ class AddressList extends StatelessWidget {
 
   _onTapEdit(Address address, BuildContext context) {
     Vibrate.feedback(FeedbackType.light);
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Theme.of(context).colorScheme.primary,
-      builder: (context) => Container(
-        decoration: BoxDecoration(
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
-          color: Theme.of(context).colorScheme.onPrimaryContainer,
-        ),
-        clipBehavior: Clip.hardEdge,
-        child: FractionallySizedBox(
-          heightFactor: 0.95,
-          child: Column(
-            children: [
-              const SizedBox(height: 10),
-              Container(
-                width: 35,
-                height: 5,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.tertiaryContainer,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              Expanded(
-                child: EventLocationSettingDetailPage(
-                  address: address,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+    AutoRouter.of(context)
+        .navigate(EventLocationSettingDetailRoute(address: address));
   }
 }
