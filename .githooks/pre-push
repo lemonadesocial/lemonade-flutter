@@ -20,7 +20,7 @@ printError() {
 printMessage "Running local Lemonade pre-push hook."
 
 # Check if there are any dart analyze issues
-analyze_output=$(dart analyze 2>&1)
+analyze_output=$(fvm dart analyze 2>&1)
 if [[ "$analyze_output" != *"No issues found!"* ]]; then
     printError "Error in dart analysis. Aborting commit."
 	echo -e "Failed files:\n$analyze_output"
