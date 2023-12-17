@@ -87,7 +87,6 @@ class AppRouter extends $AppRouter {
           page: EditProfileRoute.page,
         ),
         AutoRoute(page: CreatePopUpRoute.page),
-        AutoRoute(page: LeftPanelRoute.page),
         AutoRoute(page: SettingRoute.page),
         AutoRoute(page: NotificationSettingRoute.page),
         AutoRoute(page: CommunityRoute.page),

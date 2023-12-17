@@ -90,7 +90,7 @@ class SettingPageView extends StatelessWidget {
                 const SettingProfileTile(),
                 SizedBox(height: 24.h),
                 SettingTileWidget(
-                  title: t.common.vault,
+                  title: t.common.vaults,
                   subTitle: t.setting.vaultDesc,
                   leading: ThemeSvgIcon(
                     color: colorScheme.onPrimary.withOpacity(0.54),

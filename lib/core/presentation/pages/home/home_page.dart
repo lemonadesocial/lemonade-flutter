@@ -45,7 +45,7 @@ class _HomePageState extends State<HomePage> {
       appBar: LemonAppBar(
         title: t.home.newsfeed,
         leading: InkWell(
-          onTap: () => AutoRouter.of(context).navigate(const LeftPanelRoute()),
+          onTap: () => DrawerUtils.openDrawer(),
           child: Icon(
             Icons.menu_outlined,
             color: colorScheme.onPrimary,
