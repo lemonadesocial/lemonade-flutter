@@ -70,10 +70,13 @@ class CreateEventBasePage extends StatelessWidget {
                                         onChange: (value) => context
                                             .read<CreateEventBloc>()
                                             .add(TitleChanged(title: value)),
-                                        errorText: state.title.displayError!
-                                            .getMessage(
-                                          t.event.eventCreation.title,
-                                        ),
+                                        errorText:
+                                            state.title.displayError != null
+                                                ? state.title.displayError!
+                                                    .getMessage(
+                                                    t.event.eventCreation.title,
+                                                  )
+                                                : null,
                                       ),
                                       SizedBox(
                                         height: Spacing.smMedium,
@@ -89,10 +92,14 @@ class CreateEventBasePage extends StatelessWidget {
                                                   ),
                                                 ),
                                         errorText: state
-                                            .description.displayError!
-                                            .getMessage(
-                                          t.event.eventCreation.description,
-                                        ),
+                                                    .description.displayError !=
+                                                null
+                                            ? state.description.displayError!
+                                                .getMessage(
+                                                t.event.eventCreation
+                                                    .description,
+                                              )
+                                            : null,
                                       ),
                                       SizedBox(height: Spacing.smMedium),
                                       CreateEventConfigGrid(),
