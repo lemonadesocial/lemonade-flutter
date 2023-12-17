@@ -125,11 +125,9 @@ class _EventLocationSettingDetailPageState
                                   .add(TitleChanged(title: value)),
                               hintText: t.event.locationSetting.nameThisPlace,
                               controller: titleController,
-                              errorText: state.title.displayError != null
-                                  ? state.title.displayError!.getMessage(
-                                      t.event.locationSetting.nameThisPlace,
-                                    )
-                                  : null,
+                              errorText: state.title.displayError!.getMessage(
+                                t.event.locationSetting.nameThisPlace,
+                              ),
                             ),
                             SizedBox(height: Spacing.smMedium),
                             LemonTextField(
@@ -138,11 +136,9 @@ class _EventLocationSettingDetailPageState
                                   .add(Street1Changed(street1: value)),
                               hintText: t.event.locationSetting.street1,
                               controller: street1Controller,
-                              errorText: state.street1.displayError != null
-                                  ? state.street1.displayError!.getMessage(
-                                      t.event.locationSetting.street1,
-                                    )
-                                  : null,
+                              errorText: state.street1.displayError!.getMessage(
+                                t.event.locationSetting.street1,
+                              ),
                             ),
                             SizedBox(height: Spacing.smMedium),
                             LemonTextField(
@@ -156,11 +152,9 @@ class _EventLocationSettingDetailPageState
                             LemonTextField(
                               hintText: t.event.locationSetting.city,
                               controller: cityController,
-                              errorText: state.city.displayError != null
-                                  ? state.city.displayError!.getMessage(
-                                      t.event.locationSetting.city,
-                                    )
-                                  : null,
+                              errorText: state.city.displayError!.getMessage(
+                                t.event.locationSetting.city,
+                              ),
                               onChange: (value) => context
                                   .read<EventLocationSettingBloc>()
                                   .add(CityChanged(city: value)),
@@ -169,11 +163,9 @@ class _EventLocationSettingDetailPageState
                             LemonTextField(
                               hintText: t.event.locationSetting.region,
                               controller: regionController,
-                              errorText: state.region.displayError != null
-                                  ? state.region.displayError!.getMessage(
-                                      t.event.locationSetting.region,
-                                    )
-                                  : null,
+                              errorText: state.region.displayError!.getMessage(
+                                t.event.locationSetting.region,
+                              ),
                               onChange: (value) => context
                                   .read<EventLocationSettingBloc>()
                                   .add(RegionChanged(region: value)),
