@@ -182,11 +182,9 @@ class _EventLocationSettingDetailPageState
                             LemonTextField(
                               hintText: t.event.locationSetting.postalCode,
                               controller: postalController,
-                              errorText: state.postal.displayError != null
-                                  ? state.postal.displayError!.getMessage(
-                                      t.event.locationSetting.postalCode,
-                                    )
-                                  : null,
+                              errorText: state.postal.displayError!.getMessage(
+                                t.event.locationSetting.postalCode,
+                              ),
                               onChange: (value) => context
                                   .read<EventLocationSettingBloc>()
                                   .add(PostalChanged(postal: value)),
@@ -195,11 +193,9 @@ class _EventLocationSettingDetailPageState
                             LemonTextField(
                               hintText: t.event.locationSetting.country,
                               controller: countryController,
-                              errorText: state.country.displayError != null
-                                  ? state.country.displayError!.getMessage(
-                                      t.event.locationSetting.country,
-                                    )
-                                  : null,
+                              errorText: state.country.displayError!.getMessage(
+                                t.event.locationSetting.country,
+                              ),
                               onChange: (value) => context
                                   .read<EventLocationSettingBloc>()
                                   .add(CountryChanged(country: value)),

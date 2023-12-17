@@ -89,9 +89,7 @@ class User {
       firstName: dto.firstName,
       lastName: dto.lastName,
       imageAvatar: dto.imageAvatar,
-      newPhotosExpanded: dto.newPhotosExpanded != null
-          ? dto.newPhotosExpanded!.map(DbFile.fromDto).toList()
-          : null,
+      newPhotosExpanded: dto.newPhotosExpanded!.map(DbFile.fromDto).toList(),
       dateOfBirth: dto.dateOfBirth,
       phoneVerified: dto.phoneVerified,
       googleUserInfo: dto.googleUserInfo != null
@@ -118,9 +116,7 @@ class User {
       cover: dto.cover,
       type: dto.type,
       industry: dto.industry,
-      addresses: dto.addresses != null
-          ? dto.addresses!.map(Address.fromDto).toList()
-          : null,
+      addresses: dto.addresses!.map(Address.fromDto).toList(),
       hosted: dto.hosted,
       attended: dto.attended,
       friends: dto.friends,

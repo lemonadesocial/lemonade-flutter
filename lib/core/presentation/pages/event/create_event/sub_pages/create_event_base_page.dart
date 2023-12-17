@@ -70,13 +70,10 @@ class CreateEventBasePage extends StatelessWidget {
                                         onChange: (value) => context
                                             .read<CreateEventBloc>()
                                             .add(TitleChanged(title: value)),
-                                        errorText:
-                                            state.title.displayError != null
-                                                ? state.title.displayError!
-                                                    .getMessage(
-                                                    t.event.eventCreation.title,
-                                                  )
-                                                : null,
+                                        errorText: state.title.displayError!
+                                            .getMessage(
+                                          t.event.eventCreation.title,
+                                        ),
                                       ),
                                       SizedBox(
                                         height: Spacing.smMedium,
