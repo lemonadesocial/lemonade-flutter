@@ -89,14 +89,10 @@ class CreateEventBasePage extends StatelessWidget {
                                                   ),
                                                 ),
                                         errorText: state
-                                                    .description.displayError !=
-                                                null
-                                            ? state.description.displayError!
-                                                .getMessage(
-                                                t.event.eventCreation
-                                                    .description,
-                                              )
-                                            : null,
+                                            .description.displayError!
+                                            .getMessage(
+                                          t.event.eventCreation.description,
+                                        ),
                                       ),
                                       SizedBox(height: Spacing.smMedium),
                                       CreateEventConfigGrid(),

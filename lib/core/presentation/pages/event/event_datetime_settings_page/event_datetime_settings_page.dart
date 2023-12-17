@@ -99,11 +99,9 @@ class _EventDatetimeSettingsPageState extends State<EventDatetimeSettingsPage> {
                   onChanged: (value) => context
                       .read<EventDateTimeSettingsBloc>()
                       .add(EndDateChanged(datetime: value)),
-                  errorText: state.end.error != null
-                      ? state.end.error!.getMessage(
-                          t.event.datetimeSettings.endDate,
-                        )
-                      : null,
+                  errorText: state.end.error!.getMessage(
+                    t.event.datetimeSettings.endDate,
+                  ),
                 ),
                 SizedBox(
                   height: Spacing.medium,
