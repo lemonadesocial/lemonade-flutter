@@ -37,7 +37,7 @@ abstract class EventRepository {
     required AcceptEventInput input,
   });
 
-  Future<Either<Failure, Mutation$CreateEvent >> createEvent({
+  Future<Either<Failure, Mutation$CreateEvent>> createEvent({
     required Input$EventInput input,
   });
 }
