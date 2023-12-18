@@ -1,2 +1,2 @@
 #!/usr/bin/env sh
-dart run slang
+fvm dart run slang
