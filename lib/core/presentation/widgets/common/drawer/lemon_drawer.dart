@@ -1,7 +1,6 @@
 import 'package:app/core/presentation/pages/left_panel/left_panel_page.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DrawerItem {
   DrawerItem({

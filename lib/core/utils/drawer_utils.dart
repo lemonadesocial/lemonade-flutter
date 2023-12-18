@@ -1,8 +1,8 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DrawerUtils {
   static final GlobalKey<ScaffoldState> _drawerGlobalKey =
@@ -11,11 +11,16 @@ class DrawerUtils {
   static GlobalKey<ScaffoldState> get drawerGlobalKey => _drawerGlobalKey;
 
   static void openDrawer(BuildContext context) {
-    context.read<AuthBloc>().state.maybeWhen(
-          authenticated: (session) =>
-              drawerGlobalKey.currentState?.openDrawer(),
-          orElse: () => AutoRouter.of(context).navigate(const LoginRoute()),
+    final authSession = getIt<AuthBloc>().state.maybeWhen(
+          authenticated: (authSession) => authSession,
+          orElse: () => null,
         );
+    if (authSession != null) {
+      drawerGlobalKey.currentState?.openDrawer();
+    } else {
+      AutoRouter.of(context).navigate(const LoginRoute());
+      return;
+    }
   }
 
   static void openEndDrawer() {

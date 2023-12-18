@@ -98,7 +98,6 @@ class _MyEventTicketsListViewState extends State<MyEventTicketsListView> {
     return Scaffold(
       backgroundColor: colorScheme.background,
       appBar: LemonAppBar(
-        // leading: const BurgerMenu(),
         title: StringUtils.capitalize(t.event.tickets(n: 2)),
       ),
       body: Column(
