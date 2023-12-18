@@ -33,7 +33,7 @@ Recommend to use fvm [Flutter version management](https://fvm.app/) and use Flut
 How to install 
 
 ```
-fvm install 3.1.9
+fvm install 3.13.9
 ```
 
 How to run Staging & Production
