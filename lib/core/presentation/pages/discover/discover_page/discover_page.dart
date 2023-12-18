@@ -28,7 +28,7 @@ class DiscoverPage extends StatelessWidget {
       appBar: LemonAppBar(
         title: t.discover.discover,
         leading: InkWell(
-          onTap: () => DrawerUtils.openDrawer(),
+          onTap: () => DrawerUtils.openDrawer(context),
           child: Icon(
             Icons.menu_outlined,
             color: colorScheme.onPrimary,

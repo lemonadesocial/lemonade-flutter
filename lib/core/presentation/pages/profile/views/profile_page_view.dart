@@ -93,7 +93,7 @@ class _ProfilePageViewState extends State<ProfilePageView>
                             '@${widget.userProfile.username ?? t.common.anonymous}',
                         leading: isMe
                             ? InkWell(
-                                onTap: () => DrawerUtils.openDrawer(),
+                                onTap: () => DrawerUtils.openDrawer(context),
                                 child: Icon(
                                   Icons.menu_outlined,
                                   color: colorScheme.onPrimary,
