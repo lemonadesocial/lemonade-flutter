@@ -28,10 +28,19 @@ Follow [Conventional Commit](https://www.conventionalcommits.org/en/v1.0.0/)
 
 ### Build and run the app with Flutter
 
-1. Open a terminal or command prompt and navigate to the project directory.
-2. If you haven't enabled Flutter on your machine, visit the [Flutter installation guide](https://flutter.dev/docs/get-started/install) and follow the instructions for your operating system.
-3. Ensure you have the appropriate Flutter devices set up by running `flutter devices`. If no devices are found or configured, follow the [device setup instructions](https://flutter.dev/docs/get-started/install).
-4. Run the app by executing `flutter run`.
+Recommend to use fvm [Flutter version management](https://fvm.app/) and use Flutter version 3.13.9 and Dart 3.1.5
+
+How to install 
+
+```
+fvm install 3.13.9
+```
+
+How to run Staging & Production
+```
+fvm flutter run --flavor staging  --target lib/main_staging.dart
+fvm flutter run --flavor production  --target lib/main_production.dart
+```
 
 With the `.env` file configured and the app built and run via Flutter, you can now successfully use the Lemonade Flutter app.
 

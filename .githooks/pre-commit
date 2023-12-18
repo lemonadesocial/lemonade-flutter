@@ -18,7 +18,7 @@ printError() {
 }
 printMessage "Running local Lemonade pre-commit hook."
 
-dart format --set-exit-if-changed .
+fvm dart format --set-exit-if-changed .
 
 if [ $? -ne 0 ]
 then

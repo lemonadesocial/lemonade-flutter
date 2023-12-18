@@ -70,3 +70,5 @@ app.*.map.json
 
 # Ignore shorebird config file
 shorebird.yaml
+
+.fvm/flutter_sdk
