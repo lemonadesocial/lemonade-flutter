@@ -17,8 +17,8 @@ import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:slang/builder/utils/string_extensions.dart';
 
-class LeftPanelProfileInfo extends StatelessWidget {
-  const LeftPanelProfileInfo({
+class LemonDrawerProfileInfo extends StatelessWidget {
+  const LemonDrawerProfileInfo({
     Key? key,
   }) : super(key: key);
 
@@ -73,7 +73,7 @@ class LeftPanelProfileInfo extends StatelessWidget {
                 builder: (filter) => Assets.icons.icEdit.svg(
                   colorFilter: filter,
                   width: 15.w,
-                  height: 15.h,
+                  height: 15.w,
                 ),
               ),
               label: Text(
@@ -98,7 +98,7 @@ class LeftPanelProfileInfo extends StatelessWidget {
                 builder: (filter) => Assets.icons.icQr.svg(
                   colorFilter: filter,
                   width: 15.w,
-                  height: 15.h,
+                  height: 15.w,
                 ),
               ),
               label: Text(
@@ -123,7 +123,7 @@ class LeftPanelProfileInfo extends StatelessWidget {
                 builder: (filter) => Assets.icons.icShare.svg(
                   colorFilter: filter,
                   width: 15.w,
-                  height: 15.h,
+                  height: 15.w,
                 ),
               ),
               label: Text(

@@ -5,8 +5,8 @@ import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class LeftPanelTileWidget extends StatelessWidget {
-  const LeftPanelTileWidget({
+class LemonDrawerTileWidget extends StatelessWidget {
+  const LemonDrawerTileWidget({
     Key? key,
     required this.title,
     this.leading,
