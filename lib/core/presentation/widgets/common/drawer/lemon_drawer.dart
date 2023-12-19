@@ -78,7 +78,7 @@ class LemonDrawer extends StatelessWidget {
                       Vibrate.feedback(FeedbackType.light);
                       showComingSoonDialog(context);
 
-                      // TODO: Temp hide for release v1.0.3
+                      // TODO: Temporary hide Vaults for v1.0.3
                       // context.read<AuthBloc>().state.maybeWhen(
                       //       authenticated: (authSession) => context.router.push(
                       //         const VaultsListingRoute(),
