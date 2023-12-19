@@ -98,7 +98,7 @@ dependencies:
   rxdart: ^0.27.7
 
   # wallet
-  walletconnect_flutter_v2: ^2.1.10
+  walletconnect_flutter_v2: ^2.1.11
   web3dart: ^2.6.1
   convert: ^3.1.1
   bip39: ^1.0.6

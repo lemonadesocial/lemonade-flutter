@@ -6,6 +6,8 @@ import 'package:app/core/domain/web3/entities/chain_metadata.dart';
 import 'package:app/core/domain/web3/entities/ethereum_transaction.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_button_widget.dart';
+import 'package:app/core/presentation/widgets/web3/connect_wallet_button.dart';
+import 'package:app/core/presentation/widgets/web3/wallet_connect_active_session.dart';
 import 'package:app/core/service/wallet/wallet_connect_service.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/core/utils/web3_utils.dart';
@@ -36,7 +38,16 @@ class _SendTokenViewState extends State<SendTokenPoc> {
   Widget build(BuildContext context) {
     return BlocBuilder<WalletBloc, WalletState>(
       builder: (context, state) {
-        if (state.activeSession == null) return const SizedBox.shrink();
+        if (state.activeSession == null) {
+          return ConnectWalletButton(
+            onSelect: (walletApp) {
+              context.read<WalletBloc>().add(
+                    WalletEvent.connectWallet(walletApp: walletApp),
+                  );
+            },
+          );
+        }
+
         final userWalletAddress = NamespaceUtils.getAccount(
           state.activeSession!.namespaces.entries.first.value.accounts.first,
         );
@@ -48,6 +59,28 @@ class _SendTokenViewState extends State<SendTokenPoc> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
+              WalletConnectActiveSessionWidget(
+                activeSession: state.activeSession!,
+                onPressDisconnect: () => context
+                    .read<WalletBloc>()
+                    .add(const WalletEvent.disconnect()),
+              ),
+              SizedBox(height: Spacing.xSmall),
+              LinearGradientButton(
+                label: "switch network",
+                onTap: () async {
+                  await getIt<WalletConnectService>()
+                      .switchNetwork(
+                    // newChainId: 'eip155:5',
+                    newChainId: 'eip155:11155111',
+                    walletApp: SupportedWalletApp.metamask,
+                  )
+                      .catchError((error) {
+                    return null;
+                  });
+                },
+              ),
+              SizedBox(height: Spacing.xSmall),
               LinearGradientButton(
                 label: "Sign the payment",
                 onTap: () async {

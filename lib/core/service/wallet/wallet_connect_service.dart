@@ -54,6 +54,10 @@ class WalletConnectService {
     'eth_sendTransaction',
     'eth_sendRawTransaction',
   ];
+
+  static const optionalMethods = [
+    'eth_chainId',
+  ];
   static const defaultEvents = SupportedSessionEvent.values;
 
   Web3App? _app;
@@ -73,6 +77,7 @@ class WalletConnectService {
       _app = await Web3App.createInstance(
         projectId: AppConfig.walletConnectProjectId,
         metadata: lemonadeDAppMetadata,
+        logLevel: AppConfig.isProduction ? LogLevel.nothing : LogLevel.debug,
       );
       // Register event handler for all chain in active session if available;
       final activeSession = await getActiveSession();
@@ -139,7 +144,7 @@ class WalletConnectService {
 
       final optionalNamespaces = RequiredNamespace(
         chains: supportedChainIds,
-        methods: defaultMethods,
+        methods: [...defaultMethods, ...optionalMethods],
         events: supportedEvents,
       );
       final ConnectResponse connectResponse = await _app!.connect(
@@ -241,6 +246,34 @@ class WalletConnectService {
     }
   }
 
+  Future<String?> switchNetwork({
+    required String newChainId,
+    required SupportedWalletApp walletApp,
+  }) async {
+    final activeSession = await getActiveSession();
+
+    if (activeSession == null) return null;
+
+    launchUrlString(
+      _getDeepLinkUrl(walletApp),
+      mode: LaunchMode.externalApplication,
+    );
+
+    final walletChainId = await _app!.request(
+      topic: activeSession.topic,
+      chainId: newChainId,
+      request: const SessionRequestParams(
+        method: 'eth_chainId',
+        params: [],
+      ),
+    );
+    final formatted =
+        '$defaultNamespace:${int.parse((walletChainId as String).replaceFirst("0x", ""), radix: 16)}';
+    _currentWalletChainId = formatted;
+
+    return formatted;
+  }
+
   String _getDeepLinkUrl(SupportedWalletApp walletApp) =>
       '${walletApp.scheme}://wc?uri=$_url';
 
@@ -250,6 +283,8 @@ class WalletConnectService {
       if (sessionEvent?.data is List) {
         _currentWalletAccount =
             NamespaceUtils.getAccount(sessionEvent?.data[0]);
+        _currentWalletChainId =
+            NamespaceUtils.getChainFromAccount(sessionEvent?.data[0]);
       }
     }
     if (eventName == 'chainChanged') {
