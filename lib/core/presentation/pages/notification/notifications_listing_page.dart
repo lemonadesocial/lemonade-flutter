@@ -87,7 +87,7 @@ class _NotificationsListingViewState extends State<_NotificationsListingView> {
       appBar: LemonAppBar(
         title: t.notification.notifications,
         leading: InkWell(
-          onTap: () => DrawerUtils.openDrawer(),
+          onTap: () => DrawerUtils.openDrawer(context),
           child: Icon(
             Icons.menu_outlined,
             color: themeColor.onPrimary,

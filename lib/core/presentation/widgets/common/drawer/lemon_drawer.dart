@@ -1,34 +1,20 @@
-import 'package:app/core/application/auth/auth_bloc.dart';
-import 'package:app/core/domain/user/entities/user.dart';
-import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
-import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
-import 'package:app/core/service/feature_flag_service.dart';
-import 'package:app/core/utils/string_utils.dart';
-import 'package:app/gen/assets.gen.dart';
-import 'package:app/i18n/i18n.g.dart';
+import 'package:app/core/presentation/widgets/back_button_widget.dart';
+import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
+import 'package:app/core/presentation/widgets/common/drawer/widgets/lemon_drawer_profile_info.dart';
+import 'package:app/core/presentation/widgets/common/drawer/widgets/lemon_drawer_tile_widget.dart';
+import 'package:app/core/utils/modal_utils.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:app/core/application/auth/auth_bloc.dart';
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/gen/assets.gen.dart';
+import 'package:app/i18n/i18n.g.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:app/core/utils/modal_utils.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
-
-class DrawerItem {
-  DrawerItem({
-    required this.icon,
-    required this.label,
-    this.onPressed,
-    this.featureAvailable = true,
-  });
-
-  final SvgGenImage icon;
-  final String label;
-  final Function()? onPressed;
-  final bool featureAvailable;
-}
+import 'package:slang/builder/utils/string_extensions.dart';
 
 class LemonDrawer extends StatelessWidget {
   const LemonDrawer({super.key});
@@ -36,227 +22,153 @@ class LemonDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final t = Translations.of(context);
     return SafeArea(
       child: Drawer(
-        width: 270.w,
+        width: MediaQuery.of(context).size.width,
         backgroundColor: colorScheme.primary,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: Spacing.superExtraSmall),
-            ...[
-              if (FeatureFlagService.isWalletFeatureEnabled)
-                DrawerItem(
-                  icon: Assets.icons.icBank,
-                  label: t.vault.vault(n: 2),
-                  onPressed: () {
+        child: Scaffold(
+          backgroundColor: colorScheme.primary,
+          appBar: LemonAppBar(
+            title: '',
+            leading: const LemonBackButton(),
+            actions: [
+              Padding(
+                padding: EdgeInsets.only(right: Spacing.smMedium),
+                child: InkWell(
+                  onTap: () {
                     Vibrate.feedback(FeedbackType.light);
-                    context.read<AuthBloc>().state.maybeWhen(
-                          authenticated: (authSession) => context.router.push(
-                            const VaultsListingRoute(),
-                          ),
-                          orElse: () => context.router.navigate(
-                            const LoginRoute(),
-                          ),
-                        );
+                    AutoRouter.of(context).navigate(const SettingRoute());
                   },
-                ),
-              DrawerItem(
-                icon: Assets.icons.icPeopleAlt,
-                label: t.common.community,
-                onPressed: () {
-                  context.router.pop();
-                  context.read<AuthBloc>().state.maybeWhen(
-                        authenticated: (authSession) =>
-                            context.router.push(const CommunityRoute()),
-                        orElse: () => context.router.navigate(
-                          const LoginRoute(),
-                        ),
-                      );
-                },
-              ),
-              DrawerItem(
-                icon: Assets.icons.icTicket,
-                label: t.common.ticket(n: 2),
-                onPressed: () {
-                  context.read<AuthBloc>().state.maybeWhen(
-                        authenticated: (authSession) => context.router.push(
-                          MyEventTicketsListRoute(),
-                        ),
-                        orElse: () => context.router.navigate(
-                          const LoginRoute(),
-                        ),
-                      );
-                },
-              ),
-              DrawerItem(
-                icon: Assets.icons.icInsights,
-                label: t.common.dashboard,
-                featureAvailable: false,
-                onPressed: () {
-                  Vibrate.feedback(FeedbackType.light);
-                  showComingSoonDialog(context);
-                },
-              ),
-              DrawerItem(
-                icon: Assets.icons.icQr,
-                label: t.common.qrCode,
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  context.read<AuthBloc>().state.maybeWhen(
-                        authenticated: (authSession) => context.router.push(
-                          const QrCodeRoute(),
-                        ),
-                        orElse: () => context.router.navigate(
-                          const LoginRoute(),
-                        ),
-                      );
-                },
-              ),
-            ].map(
-              (item) =>
-                  _buildDrawerItem(context, item: item, onTap: item.onPressed),
-            ),
-            SizedBox(height: Spacing.xSmall),
-            Divider(color: colorScheme.outline, height: 2),
-            SizedBox(height: Spacing.xSmall),
-            _buildDrawerItem(
-              context,
-              item: DrawerItem(
-                icon: Assets.icons.icEdit,
-                label: t.profile.editProfile,
-              ),
-              onTap: () {
-                context.router.pop();
-                context.read<AuthBloc>().state.maybeWhen(
-                      authenticated: (authSession) => context.router.push(
-                        EditProfileRoute(userProfile: authSession),
-                      ),
-                      orElse: () => context.router.navigate(
-                        const LoginRoute(),
-                      ),
-                    );
-              },
-            ),
-            SizedBox(height: Spacing.xSmall),
-            _buildDrawerItem(
-              context,
-              onTap: () {
-                context.router.pop();
-                context.read<AuthBloc>().state.maybeWhen(
-                      authenticated: (authSession) => context.router.push(
-                        const SettingRoute(),
-                      ),
-                      orElse: () => context.router.navigate(
-                        const LoginRoute(),
-                      ),
-                    );
-              },
-              item: DrawerItem(
-                icon: Assets.icons.icSettings,
-                label: t.common.setting,
-              ),
-            ),
-            const Spacer(),
-            _buildUser(context),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildDrawerItem(
-    BuildContext context, {
-    required DrawerItem item,
-    VoidCallback? onTap,
-  }) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.symmetric(
-          vertical: Spacing.small,
-          horizontal: Spacing.smMedium,
-        ),
-        child: Row(
-          children: [
-            ThemeSvgIcon(
-              color: colorScheme.onPrimary,
-              builder: (filter) => item.icon.svg(
-                colorFilter: filter,
-                height: 18.w,
-                width: 18.w,
-              ),
-            ),
-            SizedBox(width: Spacing.small),
-            Text(
-              StringUtils.capitalize(item.label),
-              style: Typo.medium.copyWith(color: colorScheme.onSurface),
-            ),
-            if (!item.featureAvailable) ...[
-              SizedBox(width: Spacing.small),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 5.w),
-                decoration: BoxDecoration(
-                  color: colorScheme.onPrimary.withOpacity(0.09),
-                  borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
-                ),
-                child: Text(
-                  t.common.comingSoon,
-                  style: Typo.extraSmall.copyWith(
-                    color: colorScheme.onPrimary.withOpacity(0.36),
+                  child: ThemeSvgIcon(
+                    color: colorScheme.onSurface,
+                    builder: (filter) => Assets.icons.icSettings.svg(
+                      width: 24.h,
+                      height: 24.h,
+                    ),
                   ),
                 ),
               ),
             ],
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildUser(
-    context,
-  ) {
-    return BlocBuilder<AuthBloc, AuthState>(
-      builder: (context, state) {
-        return state.when(
-          authenticated: (authSession) => authedUser(context, authSession),
-          onBoardingRequired: (authSession) => authedUser(context, authSession),
-          processing: SizedBox.shrink,
-          unknown: SizedBox.shrink,
-          unauthenticated: (_) => const SizedBox.shrink(),
-        );
-      },
-    );
-  }
-
-  Widget authedUser(BuildContext context, User authSession) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        vertical: Spacing.small,
-        horizontal: Spacing.smMedium,
-      ),
-      child: Row(
-        children: [
-          LemonCircleAvatar(
-            url: authSession.imageAvatar ?? '',
-            size: 42,
           ),
-          SizedBox(width: Spacing.xSmall),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(authSession.displayName ?? ''),
-              Text(
-                '@${authSession.username ?? ''}',
-                style: Typo.small.copyWith(color: colorScheme.onSecondary),
+          body: SingleChildScrollView(
+            child: SafeArea(
+              minimum: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const LemonDrawerProfileInfo(),
+                  SizedBox(
+                    height: 30.h,
+                  ),
+                  LemonDrawerTileWidget(
+                    title: t.common.vaults,
+                    leading: ThemeSvgIcon(
+                      color: colorScheme.onPrimary,
+                      builder: (filter) {
+                        return Assets.icons.icBank
+                            .svg(colorFilter: filter, width: 18, height: 18);
+                      },
+                    ),
+                    featureAvailable: true,
+                    trailing: Assets.icons.icArrowBack.svg(
+                      width: 18.w,
+                      height: 18.w,
+                    ),
+                    onTap: () {
+                      Vibrate.feedback(FeedbackType.light);
+                      context.read<AuthBloc>().state.maybeWhen(
+                            authenticated: (authSession) => context.router.push(
+                              const VaultsListingRoute(),
+                            ),
+                            orElse: () => context.router.navigate(
+                              const LoginRoute(),
+                            ),
+                          );
+                    },
+                  ),
+                  SizedBox(
+                    height: Spacing.xSmall,
+                  ),
+                  LemonDrawerTileWidget(
+                    title: t.common.community.capitalize(),
+                    leading: ThemeSvgIcon(
+                      color: colorScheme.onPrimary,
+                      builder: (filter) {
+                        return Assets.icons.icPeopleAlt.svg(
+                          colorFilter: filter,
+                          width: 18.w,
+                          height: 18.w,
+                        );
+                      },
+                    ),
+                    featureAvailable: true,
+                    trailing: Assets.icons.icArrowBack.svg(
+                      width: 18.w,
+                      height: 18.w,
+                    ),
+                    onTap: () {
+                      Vibrate.feedback(FeedbackType.light);
+                      context.read<AuthBloc>().state.maybeWhen(
+                            authenticated: (authSession) =>
+                                context.router.push(const CommunityRoute()),
+                            orElse: () => context.router.navigate(
+                              const LoginRoute(),
+                            ),
+                          );
+                    },
+                  ),
+                  SizedBox(
+                    height: Spacing.xSmall,
+                  ),
+                  LemonDrawerTileWidget(
+                    title: t.common.ticket(n: 2).capitalize(),
+                    leading: ThemeSvgIcon(
+                      color: colorScheme.onPrimary,
+                      builder: (filter) {
+                        return Assets.icons.icTicket.svg(
+                          colorFilter: filter,
+                          width: 18.h,
+                          height: 18.w,
+                        );
+                      },
+                    ),
+                    trailing: Assets.icons.icArrowBack.svg(
+                      width: 18.w,
+                      height: 18.w,
+                    ),
+                    featureAvailable: true,
+                    onTap: () {
+                      Vibrate.feedback(FeedbackType.light);
+                      context.read<AuthBloc>().state.maybeWhen(
+                            authenticated: (authSession) => context.router.push(
+                              MyEventTicketsListRoute(),
+                            ),
+                            orElse: () => context.router.navigate(
+                              const LoginRoute(),
+                            ),
+                          );
+                    },
+                  ),
+                  SizedBox(
+                    height: Spacing.xSmall,
+                  ),
+                  LemonDrawerTileWidget(
+                    title: t.common.dashboard.capitalize(),
+                    leading: ThemeSvgIcon(
+                      color: colorScheme.onPrimary,
+                      builder: (filter) {
+                        return Assets.icons.icInsights
+                            .svg(colorFilter: filter, width: 18, height: 18);
+                      },
+                    ),
+                    featureAvailable: false,
+                    onTap: () => showComingSoonDialog(context),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ],
+        ),
       ),
     );
   }

@@ -34,7 +34,6 @@ jobs:
       
       - name: Generate i18n files
         run: |
-          #!/bin/sh
           dart run slang  
 
       - uses: invertase/github-action-dart-analyzer@v1

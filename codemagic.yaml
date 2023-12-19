@@ -97,8 +97,7 @@ definitions:
     - &generate_i18_file
       name: Generate i18n files
       script: |
-        #!/bin/sh
-        sh gen_i18n.sh
+        dart run slang
     - &install_firebase_crashlytics
       name: Install firebase crashlytics
       script: |
