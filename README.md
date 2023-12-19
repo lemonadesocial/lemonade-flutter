@@ -30,10 +30,11 @@ Follow [Conventional Commit](https://www.conventionalcommits.org/en/v1.0.0/)
 
 Recommend to use fvm [Flutter version management](https://fvm.app/) and use Flutter version 3.13.9 and Dart 3.1.5
 
-How to install 
+How to install & use
 
 ```
 fvm install 3.13.9
+fvm use 3.13.9
 ```
 
 How to run Staging & Production
