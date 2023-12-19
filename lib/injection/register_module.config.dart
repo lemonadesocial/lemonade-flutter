@@ -36,8 +36,9 @@ import 'package:app/core/data/report/repository/report_repository_impl.dart'
     as _i37;
 import 'package:app/core/data/token/token_repository_impl.dart' as _i41;
 import 'package:app/core/data/user/user_repository_impl.dart' as _i43;
-import 'package:app/core/data/wallet/wallet_repository_impl.dart' as _i46;
-import 'package:app/core/data/web3/web3_repository_impl.dart' as _i48;
+import 'package:app/core/data/vault/vault_repository_impl.dart' as _i45;
+import 'package:app/core/data/wallet/wallet_repository_impl.dart' as _i48;
+import 'package:app/core/data/web3/web3_repository_impl.dart' as _i50;
 import 'package:app/core/domain/ai/ai_repository.dart' as _i4;
 import 'package:app/core/domain/badge/badge_repository.dart' as _i8;
 import 'package:app/core/domain/community/community_repository.dart' as _i11;
@@ -55,8 +56,9 @@ import 'package:app/core/domain/post/post_repository.dart' as _i34;
 import 'package:app/core/domain/report/report_repository.dart' as _i36;
 import 'package:app/core/domain/token/token_repository.dart' as _i40;
 import 'package:app/core/domain/user/user_repository.dart' as _i42;
-import 'package:app/core/domain/wallet/wallet_repository.dart' as _i45;
-import 'package:app/core/domain/web3/web3_repository.dart' as _i47;
+import 'package:app/core/domain/vault/vault_repository.dart' as _i44;
+import 'package:app/core/domain/wallet/wallet_repository.dart' as _i47;
+import 'package:app/core/domain/web3/web3_repository.dart' as _i49;
 import 'package:app/core/oauth/oauth.dart' as _i6;
 import 'package:app/core/service/badge/badge_service.dart' as _i10;
 import 'package:app/core/service/firebase/firebase_service.dart' as _i21;
@@ -65,7 +67,7 @@ import 'package:app/core/service/shake/shake_service.dart' as _i38;
 import 'package:app/core/service/shorebird_codepush_service.dart' as _i39;
 import 'package:app/core/service/vault/owner_key/database/owner_keys_database.dart'
     as _i29;
-import 'package:app/core/service/wallet/wallet_connect_service.dart' as _i44;
+import 'package:app/core/service/wallet/wallet_connect_service.dart' as _i46;
 import 'package:app/core/utils/gql/gql.dart' as _i3;
 import 'package:app/core/utils/location_utils.dart' as _i22;
 import 'package:get_it/get_it.dart' as _i1;
@@ -120,11 +122,12 @@ extension GetItInjectableX on _i1.GetIt {
         () => _i39.ShorebirdCodePushService());
     gh.lazySingleton<_i40.TokenRepository>(() => _i41.TokenRepositoryImpl());
     gh.lazySingleton<_i42.UserRepository>(() => _i43.UserRepositoryImpl());
-    gh.lazySingleton<_i44.WalletConnectService>(
-        () => _i44.WalletConnectService());
+    gh.lazySingleton<_i44.VaultRepository>(() => _i45.VaultRepositoryImpl());
+    gh.lazySingleton<_i46.WalletConnectService>(
+        () => _i46.WalletConnectService());
     gh.lazySingleton<_i3.WalletGQL>(() => _i3.WalletGQL());
-    gh.lazySingleton<_i45.WalletRepository>(() => _i46.WalletRepositoryImpl());
-    gh.lazySingleton<_i47.Web3Repository>(() => _i48.Web3RepositoryIml());
+    gh.lazySingleton<_i47.WalletRepository>(() => _i48.WalletRepositoryImpl());
+    gh.lazySingleton<_i49.Web3Repository>(() => _i50.Web3RepositoryIml());
     return this;
   }
 }
