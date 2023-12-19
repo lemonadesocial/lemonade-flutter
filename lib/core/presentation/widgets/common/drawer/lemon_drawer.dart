@@ -69,21 +69,24 @@ class LemonDrawer extends StatelessWidget {
                             .svg(colorFilter: filter, width: 18, height: 18);
                       },
                     ),
-                    featureAvailable: true,
+                    featureAvailable: false,
                     trailing: Assets.icons.icArrowBack.svg(
                       width: 18.w,
                       height: 18.w,
                     ),
                     onTap: () {
                       Vibrate.feedback(FeedbackType.light);
-                      context.read<AuthBloc>().state.maybeWhen(
-                            authenticated: (authSession) => context.router.push(
-                              const VaultsListingRoute(),
-                            ),
-                            orElse: () => context.router.navigate(
-                              const LoginRoute(),
-                            ),
-                          );
+                      showComingSoonDialog(context);
+
+                      // TODO: Temporary hide Vaults for v1.0.3
+                      // context.read<AuthBloc>().state.maybeWhen(
+                      //       authenticated: (authSession) => context.router.push(
+                      //         const VaultsListingRoute(),
+                      //       ),
+                      //       orElse: () => context.router.navigate(
+                      //         const LoginRoute(),
+                      //       ),
+                      //     );
                     },
                   ),
                   SizedBox(
@@ -162,7 +165,10 @@ class LemonDrawer extends StatelessWidget {
                       },
                     ),
                     featureAvailable: false,
-                    onTap: () => showComingSoonDialog(context),
+                    onTap: () {
+                      Vibrate.feedback(FeedbackType.light);
+                      showComingSoonDialog(context);
+                    },
                   ),
                 ],
               ),
