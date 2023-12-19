@@ -5,6 +5,7 @@ import 'package:app/core/application/vault/deploy_vault_safe_wallet_bloc/deploy_
 import 'package:app/core/domain/payment/input/create_payment_account_input/create_payment_account_input.dart';
 import 'package:app/core/domain/payment/input/get_payment_accounts_input/get_payment_accounts_input.dart';
 import 'package:app/core/domain/payment/payment_enums.dart';
+import 'package:app/core/domain/vault/entities/free_safe_init_info/free_safe_init_info.dart';
 import 'package:app/core/domain/vault/input/get_safe_free_limit_input/get_safe_free_limit_input.dart';
 import 'package:app/core/domain/vault/vault_enums.dart';
 import 'package:app/core/domain/vault/vault_repository.dart';
@@ -33,7 +34,7 @@ class CreateVaultSubmitTransactionPage extends StatelessWidget {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
 
-    return FutureBuilder<Either<Failure, int>>(
+    return FutureBuilder<Either<Failure, FreeSafeInitInfo>>(
       future: getIt<VaultRepository>().getSafeFreeLimit(
         input: GetSafeFreeLimitInput(
           network: createVaultData.selectedChain?.chainId ?? '',
@@ -57,7 +58,11 @@ class CreateVaultSubmitTransactionPage extends StatelessWidget {
           );
         }
 
-        final isFreeDeployment = (snapshot.data?.getOrElse(() => 0) ?? 0) > 0;
+        final isFreeDeployment = snapshot.data?.fold(
+              (l) => false,
+              (freeInfo) => (freeInfo.remaining ?? 0) > 0,
+            ) ??
+            false;
 
         if (!isFreeDeployment) {
           return MultiBlocProvider(

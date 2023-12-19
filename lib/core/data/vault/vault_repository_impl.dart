@@ -1,4 +1,6 @@
+import 'package:app/core/data/vault/dtos/free_safe_init_info_dto/free_safe_init_info_dto.dart';
 import 'package:app/core/data/vault/query/vault_query.dart';
+import 'package:app/core/domain/vault/entities/free_safe_init_info/free_safe_init_info.dart';
 import 'package:app/core/domain/vault/input/get_init_safe_transaction_input/get_init_safe_transaction_input.dart';
 import 'package:app/core/domain/vault/input/get_safe_free_limit_input/get_safe_free_limit_input.dart';
 import 'package:app/core/domain/vault/vault_repository.dart';
@@ -9,7 +11,6 @@ import 'package:app/injection/register_module.dart';
 import 'package:dartz/dartz.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:injectable/injectable.dart';
-import 'package:matrix/matrix.dart';
 
 @LazySingleton(as: VaultRepository)
 class VaultRepositoryImpl implements VaultRepository {
@@ -38,7 +39,7 @@ class VaultRepositoryImpl implements VaultRepository {
   }
 
   @override
-  Future<Either<Failure, int>> getSafeFreeLimit({
+  Future<Either<Failure, FreeSafeInitInfo>> getSafeFreeLimit({
     required GetSafeFreeLimitInput input,
   }) async {
     final result = await _client.query(
@@ -46,21 +47,18 @@ class VaultRepositoryImpl implements VaultRepository {
         document: getSafeFreeLimitQuery,
         fetchPolicy: FetchPolicy.networkOnly,
         variables: input.toJson(),
-        parserFn: (data) =>
-            (data.tryGet('getSafeFreeLimit') as Map<String, dynamic>)
-                .tryGet('limit') as int? ??
-            0,
+        parserFn: (data) => data['getSafeFreeLimit'] != null
+            ? FreeSafeInitInfo.fromDto(
+                FreeSafeInitInfoDto.fromJson(data['getSafeFreeLimit']),
+              )
+            : null,
       ),
     );
 
-    if (result.hasException) {
+    if (result.hasException || result.parsedData == null) {
       return Left(Failure());
     }
-    final responseData =
-        (result.data?.tryGet('getSafeFreeLimit') as Map<String, dynamic>);
-    final max = (responseData.tryGet('max') as int?) ?? 0;
-    final current = (responseData.tryGet('current') as int?) ?? 0;
-    final remaining = max - current;
-    return Right(remaining);
+
+    return Right(result.parsedData!);
   }
 }
