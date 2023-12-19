@@ -28,13 +28,13 @@ Follow [Conventional Commit](https://www.conventionalcommits.org/en/v1.0.0/)
 
 ### Build and run the app with Flutter
 
-Recommend to use fvm [Flutter version management](https://fvm.app/) and use Flutter version 3.13.8 and Dart 3.1.4
+Recommend to use fvm [Flutter version management](https://fvm.app/) and use Flutter version 3.13.9 and Dart 3.1.5
 
 How to install & use
 
 ```
-fvm install 3.13.8
-fvm use 3.13.8
+fvm install 3.13.9
+fvm use 3.13.9
 ```
 
 How to run Staging & Production
