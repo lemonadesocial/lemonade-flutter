@@ -3,7 +3,7 @@ definitions:
     instance_type: mac_mini_m1
     max_build_duration: 75
   env_versions: &env_versions
-    flutter: 3.13.9
+    flutter: fvm
     xcode: 14.3.1
     cocoapods: 1.13.0
   integrations:
@@ -199,6 +199,10 @@ definitions:
 
         # Add Shorebird to PATH
         echo PATH="$HOME/.shorebird/bin:$PATH" >> $CM_ENV
+    - &change_shorebird_version
+      name: 🐦 Change Shorebird version
+      script: |
+        shorebird flutter versions use 3.13.9
     - &release_shorebird_ipa_staging
       name: Release shorebird ipa staging
       script: |
@@ -773,6 +777,7 @@ workflows:
       - *run_build_runner
       - *generate_i18_file
       - *setup_shorebird
+      - *change_shorebird_version
       - *install_firebase_crashlytics
       - *install_pods
       - *release_shorebird_ipa_staging
@@ -816,6 +821,7 @@ workflows:
       - *run_build_runner
       - *generate_i18_file
       - *setup_shorebird
+      - *change_shorebird_version
       - *install_firebase_crashlytics
       - *install_pods
       - *release_shorebird_ipa_production
@@ -853,6 +859,7 @@ workflows:
       - *run_build_runner
       - *generate_i18_file
       - *setup_shorebird
+      - *change_shorebird_version
       - *install_firebase_crashlytics
       - *install_pods
       - *patch_shorebird_ios_staging
@@ -877,6 +884,7 @@ workflows:
       - *run_build_runner
       - *generate_i18_file
       - *setup_shorebird
+      - *change_shorebird_version
       - *setup_local_properties
       - *patch_shorebird_android_staging
     artifacts:
@@ -912,6 +920,7 @@ workflows:
       - *run_build_runner
       - *generate_i18_file
       - *setup_shorebird
+      - *change_shorebird_version
       - *install_firebase_crashlytics
       - *install_pods
       - *patch_shorebird_ios_production
@@ -949,6 +958,7 @@ workflows:
       - *run_build_runner
       - *generate_i18_file
       - *setup_shorebird
+      - *change_shorebird_version
       - *setup_local_properties
       - *patch_shorebird_android_production
     artifacts:
