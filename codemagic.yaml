@@ -199,6 +199,9 @@ definitions:
 
         # Add Shorebird to PATH
         echo PATH="$HOME/.shorebird/bin:$PATH" >> $CM_ENV
+
+        shorebird flutter versions use 3.13.8
+        shorebird dart versions use 3.13.4
     - &release_shorebird_ipa_staging
       name: Release shorebird ipa staging
       script: |
