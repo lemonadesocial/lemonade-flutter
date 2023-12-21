@@ -87,7 +87,6 @@ class CreateEventConfigGrid extends StatelessWidget {
       case EventConfigurationType.location:
         page = const EventLocationSettingPage();
         break;
-        return;
       default:
         page = null;
         break;

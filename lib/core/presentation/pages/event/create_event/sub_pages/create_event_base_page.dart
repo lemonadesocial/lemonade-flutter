@@ -68,10 +68,12 @@ class CreateEventBasePage extends StatelessWidget {
                                       LemonTextField(
                                         initialText: state.title.value,
                                         label: t.event.eventCreation.title,
-                                        onChange: (value) => context
-                                            .read<CreateEventBloc>()
-                                            .add(EventTitleChanged(
-                                                title: value)),
+                                        onChange: (value) =>
+                                            context.read<CreateEventBloc>().add(
+                                                  EventTitleChanged(
+                                                    title: value,
+                                                  ),
+                                                ),
                                         errorText:
                                             state.title.displayError != null
                                                 ? state.title.displayError!
