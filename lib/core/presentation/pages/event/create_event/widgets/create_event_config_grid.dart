@@ -1,5 +1,6 @@
 import 'package:app/core/application/event/create_event_bloc/create_event_bloc.dart';
 import 'package:app/core/application/event/event_datetime_settings_bloc/event_datetime_settings_bloc.dart';
+import 'package:app/core/application/event/event_location_setting_bloc/event_location_setting_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_configuration.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/event_config_card.dart';
@@ -23,36 +24,42 @@ class CreateEventConfigGrid extends StatelessWidget {
       title: 'Public',
       description: 'Anyone can discover',
       icon: const Icon(Icons.remove_red_eye_outlined),
+      selected: false,
     ),
     EventConfiguration(
       type: EventConfigurationType.guestSettings,
       title: 'Guest limit',
       description: '100 guests, 2 guests unlocks',
       icon: const Icon(Icons.groups_rounded),
+      selected: false,
     ),
     EventConfiguration(
       type: EventConfigurationType.startDateTime,
       title: 'Mon, November 20 - 10:00',
       description: 'Start',
       icon: const Icon(Icons.calendar_month_outlined),
+      selected: false,
     ),
     EventConfiguration(
       type: EventConfigurationType.endDateTime,
       title: 'Mon, November 20 - 10:00',
       description: 'End',
       icon: const Icon(Icons.calendar_month_outlined),
+      selected: false,
     ),
     EventConfiguration(
       type: EventConfigurationType.virtual,
       title: 'Virtual',
       description: '',
       icon: const Icon(Icons.videocam_rounded),
+      selected: false,
     ),
     EventConfiguration(
       type: EventConfigurationType.location,
       title: 'Offline',
       description: 'Add location',
       icon: const Icon(Icons.factory_outlined),
+      selected: false,
     ),
   ];
 
@@ -80,6 +87,7 @@ class CreateEventConfigGrid extends StatelessWidget {
       case EventConfigurationType.location:
         page = const EventLocationSettingPage();
         break;
+        return;
       default:
         page = null;
         break;
@@ -226,18 +234,34 @@ class CreateEventConfigGrid extends StatelessWidget {
           },
         );
       case EventConfigurationType.virtual:
-        return EventConfigCard(
-          title: eventConfig.title,
-          description: eventConfig.description,
-          icon: eventConfig.icon,
-          onTap: () => onTap(context, eventConfig),
+        return BlocBuilder<CreateEventBloc, CreateEventState>(
+          builder: (context, state) {
+            return EventConfigCard(
+              title: eventConfig.title,
+              description: eventConfig.description,
+              icon: eventConfig.icon,
+              onTap: () {
+                Vibrate.feedback(FeedbackType.light);
+                context.read<CreateEventBloc>().add(
+                      VirtualChanged(virtual: !state.virtual),
+                    );
+              },
+              selected: state.virtual,
+            );
+          },
         );
       case EventConfigurationType.location:
-        return EventConfigCard(
-          title: eventConfig.title,
-          description: eventConfig.description,
-          icon: eventConfig.icon,
-          onTap: () => onTap(context, eventConfig),
+        return BlocBuilder<EventLocationSettingBloc, EventLocationSettingState>(
+          builder: (context, state) {
+            return EventConfigCard(
+              title: eventConfig.title,
+              description: state.selectedAddress?.title ??
+                  t.event.locationSetting.addLocation,
+              icon: eventConfig.icon,
+              onTap: () => onTap(context, eventConfig),
+              selected: state.selectedAddress != null,
+            );
+          },
         );
 
       default:

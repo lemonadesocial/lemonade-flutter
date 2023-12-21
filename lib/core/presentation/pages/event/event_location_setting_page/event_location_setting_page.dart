@@ -157,29 +157,42 @@ class AddressList extends StatelessWidget {
   final List<Address> addresses;
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-      padding: EdgeInsets.only(bottom: Spacing.medium),
-      shrinkWrap: true,
-      itemBuilder: (context, index) => InkWell(
-        onTap: () {
-          Vibrate.feedback(FeedbackType.light);
-        },
-        child: LocationItem(
-          location: addresses[index],
-          onPressEdit: () {
-            _onTapEdit(addresses[index], context);
-          },
-          onPressDelete: () {
-            context
-                .read<EventLocationSettingBloc>()
-                .add(DeleteLocation(id: addresses[index].id));
-          },
-        ),
-      ),
-      separatorBuilder: (context, index) => SizedBox(
-        height: 10.h,
-      ),
-      itemCount: addresses.length,
+    return BlocBuilder<EventLocationSettingBloc, EventLocationSettingState>(
+      builder: (context, state) {
+        return ListView.separated(
+          padding: EdgeInsets.only(bottom: Spacing.medium),
+          shrinkWrap: true,
+          itemBuilder: (context, index) => InkWell(
+            onTap: () {
+              Vibrate.feedback(FeedbackType.light);
+            },
+            child: LocationItem(
+              location: addresses[index],
+              onPressEdit: () {
+                Vibrate.feedback(FeedbackType.light);
+                _onTapEdit(addresses[index], context);
+              },
+              onPressDelete: () {
+                Vibrate.feedback(FeedbackType.light);
+                context
+                    .read<EventLocationSettingBloc>()
+                    .add(DeleteLocation(id: addresses[index].id));
+              },
+              onPressItem: () {
+                Vibrate.feedback(FeedbackType.light);
+                context
+                    .read<EventLocationSettingBloc>()
+                    .add(SelectAddress(address: addresses[index]));
+              },
+              selected: state.selectedAddress?.id == addresses[index].id,
+            ),
+          ),
+          separatorBuilder: (context, index) => SizedBox(
+            height: 10.h,
+          ),
+          itemCount: addresses.length,
+        );
+      },
     );
   }
 

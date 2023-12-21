@@ -30,6 +30,7 @@ class EventLocationSettingBloc
     on<LocationChanged>(_onLocationChanged);
     on<SubmitAddLocation>(_onSubmitAddLocation);
     on<DeleteLocation>(_onDeleteLocation);
+    on<SelectAddress>(_onSelectAddress);
   }
 
   final _userRepository = getIt<UserRepository>();
@@ -381,6 +382,26 @@ class EventLocationSettingBloc
           emit(state.copyWith(deleteStatus: FormzSubmissionStatus.success)),
     );
   }
+
+  Future<void> _onSelectAddress(
+    SelectAddress event,
+    Emitter<EventLocationSettingState> emit,
+  ) async {
+    // Uncheck when tap again
+    if (event.address.id == state.selectedAddress?.id) {
+      emit(
+        state.copyWith(
+          selectedAddress: null,
+        ),
+      );
+    } else {
+      emit(
+        state.copyWith(
+          selectedAddress: event.address,
+        ),
+      );
+    }
+  }
 }
 
 @freezed
@@ -431,6 +452,10 @@ class EventLocationSettingEvent with _$EventLocationSettingEvent {
   const factory EventLocationSettingEvent.deleteLocation({
     required String? id,
   }) = DeleteLocation;
+
+  const factory EventLocationSettingEvent.selectAddress({
+    required Address address,
+  }) = SelectAddress;
 }
 
 @freezed
@@ -450,5 +475,6 @@ class EventLocationSettingState with _$EventLocationSettingState {
     @Default(FormzSubmissionStatus.initial) FormzSubmissionStatus status,
     @Default(FormzSubmissionStatus.initial) FormzSubmissionStatus deleteStatus,
     @Default(false) bool isValid,
+    Address? selectedAddress,
   }) = _EventLocationSettingState;
 }

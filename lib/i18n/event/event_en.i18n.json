@@ -149,6 +149,7 @@
         "endTime": "End time"       
     },
     "locationSetting": {
+        "addLocation": "Add location",
         "myPlaces": "My places",
         "description": "Select or add a location to your event",
         "addNew": "Add new",

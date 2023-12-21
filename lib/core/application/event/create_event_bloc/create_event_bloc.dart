@@ -1,7 +1,9 @@
 import 'package:app/core/constants/event/event_constants.dart';
+import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/core/domain/form/string_formz.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
+import 'package:app/graphql/backend/user/fragment/user_fragment.graphql.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
@@ -11,9 +13,8 @@ part 'create_event_bloc.freezed.dart';
 
 class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
   CreateEventBloc() : super(const CreateEventState()) {
-    // on<CreateEventEventInit>(_onInit);
-    on<TitleChanged>(_onTitleChanged);
-    on<DescriptionChanged>(_onDescriptionChanged);
+    on<EventTitleChanged>(_onTitleChanged);
+    on<EventDescriptionChanged>(_onDescriptionChanged);
     on<VerifyChanged>(_onVerifyChanged);
     on<GuestLimitChanged>(_onGuestLimitChanged);
     on<GuestLimitPerChanged>(_onGuestLimitPerChanged);
@@ -24,7 +25,7 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
   final _eventRepository = getIt<EventRepository>();
 
   Future<void> _onTitleChanged(
-    TitleChanged event,
+    EventTitleChanged event,
     Emitter<CreateEventState> emit,
   ) async {
     final title = StringFormz.dirty(event.title);
@@ -37,7 +38,7 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
   }
 
   Future<void> _onDescriptionChanged(
-    DescriptionChanged event,
+    EventDescriptionChanged event,
     Emitter<CreateEventState> emit,
   ) async {
     final description = StringFormz.dirty(event.description);
@@ -124,24 +125,37 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
     );
     if (state.isValid) {
       emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
-      final result = await _eventRepository.createEvent(
-        input: Input$EventInput(
-          title: title.value,
-          description: title.value,
-          private: false,
-          verify: false,
-          start: DateTime.parse(event.start.toUtc().toIso8601String()),
-          end: DateTime.parse(event.end.toUtc().toIso8601String()),
-          timezone: "Asia/Bangkok",
-          guest_limit: double.parse(
-            state.guestLimit ?? EventConstants.defaultEventGuestLimit,
-          ),
-          guest_limit_per: double.parse(
-            state.guestLimitPer ?? EventConstants.defaultEventGuestLimitPer,
-          ),
-          virtual: true,
+      var input = Input$EventInput(
+        title: title.value,
+        description: title.value,
+        private: false,
+        verify: false,
+        start: DateTime.parse(event.start.toUtc().toIso8601String()),
+        end: DateTime.parse(event.end.toUtc().toIso8601String()),
+        timezone: "Asia/Bangkok",
+        guest_limit: double.parse(
+          state.guestLimit ?? EventConstants.defaultEventGuestLimit,
         ),
+        guest_limit_per: double.parse(
+          state.guestLimitPer ?? EventConstants.defaultEventGuestLimitPer,
+        ),
+        virtual: state.virtual,
+        address: event.address != null
+            ? Input$AddressInput(
+                title: event.address!.title,
+                street_1: event.address!.street1,
+                street_2: event.address!.street2,
+                region: event.address!.region,
+                city: event.address!.city,
+                country: event.address!.country,
+                postal: event.address!.postal,
+                recipient_name: event.address!.recipientName,
+                latitude: event.address!.latitude,
+                longitude: event.address!.longitude,
+              )
+            : null,
       );
+      final result = await _eventRepository.createEvent(input: input);
       result.fold(
         (failure) =>
             emit(state.copyWith(status: FormzSubmissionStatus.failure)),
@@ -154,14 +168,12 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
 
 @freezed
 class CreateEventEvent with _$CreateEventEvent {
-  // factory CreateEventEvent.init() = CreateEventEventInit;
+  const factory CreateEventEvent.eventTitleChanged({required String title}) =
+      EventTitleChanged;
 
-  const factory CreateEventEvent.titleChanged({required String title}) =
-      TitleChanged;
-
-  const factory CreateEventEvent.descriptionChanged({
+  const factory CreateEventEvent.eventDescriptionChanged({
     required String description,
-  }) = DescriptionChanged;
+  }) = EventDescriptionChanged;
 
   const factory CreateEventEvent.guestLimitChanged({
     required String? guestLimit,
@@ -183,6 +195,7 @@ class CreateEventEvent with _$CreateEventEvent {
   const factory CreateEventEvent.formSubmitted({
     required DateTime start,
     required DateTime end,
+    Address? address,
   }) = FormSubmitted;
 }
 
