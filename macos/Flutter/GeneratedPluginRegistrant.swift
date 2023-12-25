@@ -17,6 +17,7 @@ import firebase_messaging
 import flutter_app_badger
 import flutter_appauth
 import flutter_local_notifications
+import flutter_native_timezone
 import flutter_secure_storage_macos
 import flutter_web_auth_2
 import geolocator_apple
@@ -43,6 +44,7 @@ func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
   FlutterAppBadgerPlugin.register(with: registry.registrar(forPlugin: "FlutterAppBadgerPlugin"))
   FlutterAppauthPlugin.register(with: registry.registrar(forPlugin: "FlutterAppauthPlugin"))
   FlutterLocalNotificationsPlugin.register(with: registry.registrar(forPlugin: "FlutterLocalNotificationsPlugin"))
+  FlutterNativeTimezonePlugin.register(with: registry.registrar(forPlugin: "FlutterNativeTimezonePlugin"))
   FlutterSecureStoragePlugin.register(with: registry.registrar(forPlugin: "FlutterSecureStoragePlugin"))
   FlutterWebAuth2Plugin.register(with: registry.registrar(forPlugin: "FlutterWebAuth2Plugin"))
   GeolocatorPlugin.register(with: registry.registrar(forPlugin: "GeolocatorPlugin"))

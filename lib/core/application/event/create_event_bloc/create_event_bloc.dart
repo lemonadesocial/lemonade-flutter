@@ -5,6 +5,7 @@ import 'package:app/core/domain/form/string_formz.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:formz/formz.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -123,6 +124,7 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
       ),
     );
     if (state.isValid) {
+      final timezone = await FlutterNativeTimezone.getLocalTimezone();
       emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
       var input = Input$EventInput(
         title: title.value,
@@ -131,7 +133,7 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
         verify: false,
         start: DateTime.parse(event.start.toUtc().toIso8601String()),
         end: DateTime.parse(event.end.toUtc().toIso8601String()),
-        timezone: "Asia/Bangkok",
+        timezone: timezone,
         guest_limit: double.parse(
           state.guestLimit ?? EventConstants.defaultEventGuestLimit,
         ),
