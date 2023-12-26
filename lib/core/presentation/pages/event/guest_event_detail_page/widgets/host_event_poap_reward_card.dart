@@ -4,6 +4,7 @@ import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
@@ -29,8 +30,8 @@ class HostEventPoapRewardCard extends StatelessWidget {
       decoration: ShapeDecoration(
         shape: RoundedRectangleBorder(
           side: BorderSide(
-            width: 2,
-            color: Colors.white.withOpacity(0.11999999731779099),
+            width: 2.w,
+            color: colorScheme.outline,
           ),
           borderRadius: BorderRadius.circular(15),
         ),
@@ -50,90 +51,91 @@ class HostEventPoapRewardCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
-                      width: 72,
-                      height: 72,
+                      width: 72.w,
+                      height: 72.h,
                       clipBehavior: Clip.antiAlias,
                       decoration: ShapeDecoration(
                         color: Colors.white.withOpacity(0.05999999865889549),
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(9)),
+                          borderRadius: BorderRadius.circular(9),
+                        ),
                       ),
                     ),
-                    const SizedBox(width: 18),
+                    SizedBox(width: 18.w),
                     Expanded(
-                      child: Container(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              width: 60,
-                              height: 18,
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 36, vertical: 18),
-                              clipBehavior: Clip.antiAlias,
-                              decoration: ShapeDecoration(
-                                color: Colors.white
-                                    .withOpacity(0.05999999865889549),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(3)),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            width: 60.w,
+                            height: 18.h,
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 36.h,
+                              vertical: 18.h,
+                            ),
+                            clipBehavior: Clip.antiAlias,
+                            decoration: ShapeDecoration(
+                              color: LemonColor.white06,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(3.r),
                               ),
                             ),
-                            const SizedBox(height: 9),
-                            Container(
-                              width: double.infinity,
-                              height: 27,
-                              clipBehavior: Clip.antiAlias,
-                              decoration: const BoxDecoration(),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    width: double.infinity,
-                                    height: 12,
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 36, vertical: 18),
-                                    clipBehavior: Clip.antiAlias,
-                                    decoration: ShapeDecoration(
-                                      color: Colors.white
-                                          .withOpacity(0.05999999865889549),
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(3)),
+                          ),
+                          SizedBox(height: 9.h),
+                          Container(
+                            width: double.infinity,
+                            height: 27.h,
+                            clipBehavior: Clip.antiAlias,
+                            decoration: const BoxDecoration(),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  width: double.infinity,
+                                  height: 12.h,
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 36.w, vertical: 18.h),
+                                  clipBehavior: Clip.antiAlias,
+                                  decoration: ShapeDecoration(
+                                    color: LemonColor.white06,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(3.r),
                                     ),
                                   ),
-                                  const SizedBox(height: 3),
-                                  Container(
-                                    width: 159.75,
-                                    height: 12,
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 36, vertical: 18),
-                                    clipBehavior: Clip.antiAlias,
-                                    decoration: ShapeDecoration(
-                                      color: Colors.white
-                                          .withOpacity(0.05999999865889549),
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(3)),
+                                ),
+                                SizedBox(height: 3.h),
+                                Container(
+                                  width: 160.w,
+                                  height: 12.h,
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 36.w,
+                                    vertical: 18.h,
+                                  ),
+                                  clipBehavior: Clip.antiAlias,
+                                  decoration: ShapeDecoration(
+                                    color: LemonColor.white06,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(3.r),
                                     ),
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
               SizedBox(
                 width: double.infinity,
-                height: 85,
+                height: 85.h,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -148,18 +150,6 @@ class HostEventPoapRewardCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
-                            width: 303,
-                            height: 4,
-                            decoration: ShapeDecoration(
-                              color:
-                                  Colors.white.withOpacity(0.05999999865889549),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(100),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 6),
-                          Container(
                             width: double.infinity,
                             clipBehavior: Clip.antiAlias,
                             decoration: const BoxDecoration(),
@@ -169,30 +159,34 @@ class HostEventPoapRewardCard extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Container(
-                                  width: 60,
-                                  height: 18,
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 36, vertical: 18),
+                                  width: 60.w,
+                                  height: 18.h,
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 36.w,
+                                    vertical: 18.h,
+                                  ),
                                   clipBehavior: Clip.antiAlias,
                                   decoration: ShapeDecoration(
-                                    color: Colors.white
-                                        .withOpacity(0.05999999865889549),
+                                    color: LemonColor.white06,
                                     shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(3)),
+                                      borderRadius: BorderRadius.circular(3.r),
+                                    ),
                                   ),
                                 ),
-                                const SizedBox(width: 12),
+                                SizedBox(width: 12.w),
                                 Container(
-                                  width: 60,
-                                  height: 18,
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 36, vertical: 18),
+                                  width: 60.w,
+                                  height: 18.h,
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 36.w,
+                                    vertical: 18.h,
+                                  ),
                                   clipBehavior: Clip.antiAlias,
                                   decoration: ShapeDecoration(
-                                    color: Colors.white
-                                        .withOpacity(0.05999999865889549),
+                                    color: LemonColor.white06,
                                     shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(3)),
+                                      borderRadius: BorderRadius.circular(3.r),
+                                    ),
                                   ),
                                 ),
                               ],
@@ -201,17 +195,20 @@ class HostEventPoapRewardCard extends StatelessWidget {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 15),
+                    SizedBox(height: 15.h),
                     Container(
                       width: double.infinity,
-                      height: 42,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 36, vertical: 18),
+                      height: 42.h,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 36.w,
+                        vertical: 18.h,
+                      ),
                       clipBehavior: Clip.antiAlias,
                       decoration: ShapeDecoration(
-                        color: Colors.white.withOpacity(0.05999999865889549),
+                        color: LemonColor.white06,
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(9)),
+                          borderRadius: BorderRadius.circular(9.r),
+                        ),
                       ),
                     ),
                   ],
