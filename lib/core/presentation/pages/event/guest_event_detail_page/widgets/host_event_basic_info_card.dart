@@ -21,7 +21,6 @@ import 'package:dartz/dartz.dart';
 import 'package:duration/duration.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:collection/collection.dart';
 
 class HostEventBasicInfoCard extends StatelessWidget {
   const HostEventBasicInfoCard({
@@ -54,19 +53,6 @@ class HostEventBasicInfoCard extends StatelessWidget {
         ),
       ),
       builder: (context, snapshot) {
-        final eventTickets = snapshot.data?.getOrElse(() => []) ?? [];
-        final myTicket = eventTickets.isNotEmpty
-            ? eventTickets.firstWhereOrNull(
-                (ticket) => EventTicketUtils.isTicketAssignedToMe(
-                  ticket,
-                  userId: userId,
-                ),
-              )
-            : null;
-        final ticketType = event.eventTicketTypes?.firstWhereOrNull(
-          (type) => type.id == myTicket?.type,
-        );
-
         return Container(
           height: 78.w,
           decoration: BoxDecoration(

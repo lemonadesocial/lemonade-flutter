@@ -98,7 +98,9 @@ class HostEventPoapRewardCard extends StatelessWidget {
                                   width: double.infinity,
                                   height: 12.h,
                                   padding: EdgeInsets.symmetric(
-                                      horizontal: 36.w, vertical: 18.h),
+                                    horizontal: 36.w,
+                                    vertical: 18.h,
+                                  ),
                                   clipBehavior: Clip.antiAlias,
                                   decoration: ShapeDecoration(
                                     color: LemonColor.white06,

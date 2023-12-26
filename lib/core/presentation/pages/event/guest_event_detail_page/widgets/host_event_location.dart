@@ -91,9 +91,10 @@ class HostEventLocation extends StatelessWidget {
                   Text(
                     event.address?.street1 ?? '',
                     style: Typo.small.copyWith(
-                        fontFamily: FontFamily.switzerVariable,
-                        fontWeight: FontWeight.w600,
-                        color: colorScheme.onSurfaceVariant),
+                      fontFamily: FontFamily.switzerVariable,
+                      fontWeight: FontWeight.w600,
+                      color: colorScheme.onSurfaceVariant,
+                    ),
                   ),
                 ],
               ),
