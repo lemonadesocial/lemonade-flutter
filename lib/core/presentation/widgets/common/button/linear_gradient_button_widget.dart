@@ -37,6 +37,7 @@ class LinearGradientButton extends StatelessWidget {
   final Widget? leading;
   final void Function()? onTap;
   final double? height;
+  final double? width;
   final EdgeInsets? padding;
   final BorderRadius? radius;
   final TextStyle? textStyle;
@@ -51,6 +52,7 @@ class LinearGradientButton extends StatelessWidget {
     this.mode = GradientButtonMode.defaultMode,
     this.onTap,
     this.height,
+    this.width,
     this.padding,
     this.radius,
     this.textStyle,
@@ -77,6 +79,7 @@ class LinearGradientButton extends StatelessWidget {
 
   Widget get _childButton => Container(
         height: height ?? Sizing.medium,
+        width: width,
         padding: padding ??
             EdgeInsets.symmetric(
               horizontal: Spacing.xSmall,
