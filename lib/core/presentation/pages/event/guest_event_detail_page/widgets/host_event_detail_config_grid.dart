@@ -146,7 +146,7 @@ class HostEventDetailConfigGrid extends StatelessWidget {
             onTap: listData[index]!.onTap,
           );
         },
-        childCount: 6, // Total number of items
+        childCount: 6,
       ),
     );
   }

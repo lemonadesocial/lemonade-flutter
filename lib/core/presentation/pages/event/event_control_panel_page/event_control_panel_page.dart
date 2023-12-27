@@ -1,14 +1,18 @@
+import 'package:app/core/application/event/create_event_bloc/create_event_bloc.dart';
+import 'package:app/core/application/event/event_datetime_settings_bloc/event_datetime_settings_bloc.dart';
+import 'package:app/core/application/event/event_location_setting_bloc/event_location_setting_bloc.dart';
+import 'package:app/core/constants/event/event_constants.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/create_event_config_grid.dart';
-import 'package:app/core/presentation/pages/event/guest_event_detail_page/widgets/host_event_detail_config_grid.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 @RoutePage()
-class EventControlPanelPage extends StatefulWidget {
+class EventControlPanelPage extends StatelessWidget {
   final Event event;
 
   const EventControlPanelPage({
@@ -17,32 +21,58 @@ class EventControlPanelPage extends StatefulWidget {
   });
 
   @override
-  State<EventControlPanelPage> createState() => _EventControlPanelPageState();
+  Widget build(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => CreateEventBloc(),
+        ),
+        BlocProvider(
+          create: (context) => EventDateTimeSettingsBloc()
+            ..add(
+              EventDateTimeSettingsEvent.init(
+                startDateTime: EventDateTimeConstants.defaultStartDateTime,
+                endDateTime: EventDateTimeConstants.defaultEndDateTime,
+              ),
+            ),
+        ),
+        BlocProvider(
+          create: (context) => EventLocationSettingBloc(),
+        ),
+      ],
+      child: EventControlPanelView(event: event),
+    );
+  }
 }
 
-class _EventControlPanelPageState extends State<EventControlPanelPage> {
+class EventControlPanelView extends StatelessWidget {
+  const EventControlPanelView({
+    super.key,
+    required this.event,
+  });
+
+  final Event event;
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final t = Translations.of(context);
     return Scaffold(
-      appBar: LemonAppBar(
-        backgroundColor: colorScheme.primary,
-        title: t.event.dateAndTime,
-      ),
       backgroundColor: colorScheme.primary,
+      appBar: LemonAppBar(
+        title: t.event.editEvent,
+      ),
       body: SafeArea(
-        bottom: false,
         child: CustomScrollView(
           physics: const BouncingScrollPhysics(),
           slivers: [
             SliverPadding(
-              padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-              sliver: HostEventDetailConfigGrid(
-                event: widget.event,
+              padding: EdgeInsets.symmetric(
+                horizontal: Spacing.smMedium,
+              ),
+              sliver: CreateEventConfigGrid(
+                event: event,
               ),
             ),
-            CreateEventConfigGrid(),
           ],
         ),
       ),

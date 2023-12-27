@@ -16,47 +16,8 @@ import 'package:flutter_vibrate/flutter_vibrate.dart';
 enum EventPrivacy { public, private }
 
 class CreateEventConfigGrid extends StatelessWidget {
-  final List<EventConfiguration> eventConfigs = [
-    EventConfiguration(
-      type: EventConfigurationType.visibility,
-      title: 'Public',
-      description: 'Anyone can discover',
-      icon: const Icon(Icons.remove_red_eye_outlined),
-    ),
-    EventConfiguration(
-      type: EventConfigurationType.guestSettings,
-      title: 'Guest limit',
-      description: '100 guests, 2 guests unlocks',
-      icon: const Icon(Icons.groups_rounded),
-    ),
-    EventConfiguration(
-      type: EventConfigurationType.startDateTime,
-      title: 'Mon, November 20 - 10:00',
-      description: 'Start',
-      icon: const Icon(Icons.calendar_month_outlined),
-    ),
-    EventConfiguration(
-      type: EventConfigurationType.endDateTime,
-      title: 'Mon, November 20 - 10:00',
-      description: 'End',
-      icon: const Icon(Icons.calendar_month_outlined),
-    ),
-    EventConfiguration(
-      type: EventConfigurationType.virtual,
-      title: 'Virtual',
-      description: '',
-      icon: const Icon(Icons.videocam_rounded),
-    ),
-    EventConfiguration(
-      type: EventConfigurationType.location,
-      title: 'Offline',
-      description: 'Add location',
-      icon: const Icon(Icons.factory_outlined),
-    ),
-  ];
-
   final Event? event;
-  CreateEventConfigGrid({super.key, this.event});
+  const CreateEventConfigGrid({super.key, this.event});
 
   onTap(
     BuildContext context,
@@ -121,14 +82,45 @@ class CreateEventConfigGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Edit event case
+    if (event != null) {
+      final eventConfigs =
+          EventConfiguration.createEventConfigurations(event: event);
+      return SliverGrid(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 10,
+          childAspectRatio: 2.2,
+        ),
+        delegate: SliverChildBuilderDelegate(
+          childCount: 6,
+          (BuildContext context, int index) {
+            final eventConfig = eventConfigs[index];
+            EventConfigurationType? eventConfigType = eventConfig.type;
+            switch (eventConfigType) {
+              default:
+                return EventConfigCard(
+                  title: eventConfig.title,
+                  description: eventConfig.description,
+                  icon: eventConfig.icon,
+                  onTap: () => null,
+                );
+            }
+          },
+        ),
+      );
+    }
+    final eventConfigs = EventConfiguration.defaultEventConfigurations();
     return SliverGrid(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,
-        childAspectRatio: 2.2,
+        childAspectRatio: 2.5,
       ),
       delegate: SliverChildBuilderDelegate(
+        childCount: 6,
         (BuildContext context, int index) {
           final eventConfig = eventConfigs[index];
           EventConfigurationType? eventConfigType = eventConfig.type;
@@ -216,7 +208,6 @@ class CreateEventConfigGrid extends StatelessWidget {
               );
           }
         },
-        childCount: 6, // Total number of items
       ),
     );
   }

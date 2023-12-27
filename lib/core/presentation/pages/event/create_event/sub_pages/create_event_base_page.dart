@@ -52,7 +52,8 @@ class CreateEventBasePage extends StatelessWidget {
                       slivers: [
                         SliverPadding(
                           padding: EdgeInsets.symmetric(
-                              horizontal: Spacing.smMedium),
+                            horizontal: Spacing.smMedium,
+                          ),
                           sliver: SliverToBoxAdapter(
                             child: LemonTextField(
                               initialText: state.title.value,
@@ -73,7 +74,8 @@ class CreateEventBasePage extends StatelessWidget {
                         ),
                         SliverPadding(
                           padding: EdgeInsets.symmetric(
-                              horizontal: Spacing.smMedium),
+                            horizontal: Spacing.smMedium,
+                          ),
                           sliver: SliverToBoxAdapter(
                             child: LemonTextField(
                               initialText: state.description.value,
@@ -97,8 +99,9 @@ class CreateEventBasePage extends StatelessWidget {
                         ),
                         SliverPadding(
                           padding: EdgeInsets.symmetric(
-                              horizontal: Spacing.smMedium),
-                          sliver: CreateEventConfigGrid(),
+                            horizontal: Spacing.smMedium,
+                          ),
+                          sliver: const CreateEventConfigGrid(),
                         ),
                       ],
                     ),

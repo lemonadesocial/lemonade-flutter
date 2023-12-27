@@ -24,6 +24,7 @@ class EventConfigCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         height: 70.h,
+        padding: EdgeInsets.symmetric(horizontal: 10.w),
         decoration: BoxDecoration(
           border: Border.all(color: colorScheme.outlineVariant),
           borderRadius: BorderRadius.circular(10.r),
@@ -33,7 +34,7 @@ class EventConfigCard extends StatelessWidget {
             Container(
               width: 40.w,
               height: 40.h,
-              margin: EdgeInsets.all(10.w),
+              margin: EdgeInsets.only(right: 10.w),
               decoration: BoxDecoration(
                 color: colorScheme.surface,
                 borderRadius: BorderRadius.circular(10.r),
