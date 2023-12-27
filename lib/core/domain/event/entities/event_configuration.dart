@@ -17,10 +17,12 @@ class EventConfiguration {
     required this.title,
     this.description,
     required this.icon,
+    this.selected,
   });
 
   final EventConfigurationType type;
   final String title;
   final String? description;
   final Widget icon;
+  final bool? selected;
 }

@@ -1,5 +1,6 @@
 import 'package:app/core/application/event/create_event_bloc/create_event_bloc.dart';
 import 'package:app/core/application/event/event_datetime_settings_bloc/event_datetime_settings_bloc.dart';
+import 'package:app/core/application/event/event_location_setting_bloc/event_location_setting_bloc.dart';
 import 'package:app/core/constants/event/event_constants.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/create_event_config_grid.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
@@ -67,9 +68,12 @@ class CreateEventBasePage extends StatelessWidget {
                                       LemonTextField(
                                         initialText: state.title.value,
                                         label: t.event.eventCreation.title,
-                                        onChange: (value) => context
-                                            .read<CreateEventBloc>()
-                                            .add(TitleChanged(title: value)),
+                                        onChange: (value) =>
+                                            context.read<CreateEventBloc>().add(
+                                                  EventTitleChanged(
+                                                    title: value,
+                                                  ),
+                                                ),
                                         errorText:
                                             state.title.displayError != null
                                                 ? state.title.displayError!
@@ -87,7 +91,7 @@ class CreateEventBasePage extends StatelessWidget {
                                             t.event.eventCreation.description,
                                         onChange: (value) =>
                                             context.read<CreateEventBloc>().add(
-                                                  DescriptionChanged(
+                                                  EventDescriptionChanged(
                                                     description: value,
                                                   ),
                                                 ),
@@ -129,6 +133,8 @@ class CreateEventBasePage extends StatelessWidget {
         EventDateTimeConstants.defaultStartDateTime;
     final end = context.read<EventDateTimeSettingsBloc>().state.end.value ??
         EventDateTimeConstants.defaultEndDateTime;
+    final selectedAddress =
+        context.read<EventLocationSettingBloc>().state.selectedAddress;
     return BlocBuilder<CreateEventBloc, CreateEventState>(
       builder: (context, state) {
         return Padding(
@@ -148,6 +154,7 @@ class CreateEventBasePage extends StatelessWidget {
                     FormSubmitted(
                       start: start,
                       end: end,
+                      address: selectedAddress,
                     ),
                   );
             },
