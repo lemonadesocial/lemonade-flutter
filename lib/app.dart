@@ -26,11 +26,11 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_portal/flutter_portal.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:app/core/presentation/widgets/custom_error_widget.dart';
-
 import 'package:app/core/application/newsfeed/newsfeed_listing_bloc/newsfeed_listing_bloc.dart';
 import 'package:app/core/data/post/newsfeed_repository_impl.dart';
 import 'package:app/core/service/newsfeed/newsfeed_service.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 class LemonadeApp extends StatefulWidget {
   const LemonadeApp({super.key});
@@ -56,6 +56,7 @@ class _LemonadeAppViewState extends State<LemonadeApp> {
         context: context,
       );
       setupInteractedMessage();
+      FlutterNativeSplash.remove();
     });
     EasyLoading.instance
       ..indicatorType = EasyLoadingIndicatorType.ring
@@ -101,19 +102,21 @@ class _LemonadeAppViewState extends State<LemonadeApp> {
 
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(
-      context,
-      minTextAdapt: true,
+    return ScreenUtilInit(
       designSize: getDeviceType() == DeviceType.phone
-          ? const Size(375, 812) //Iphone X screen size, match Figma
-          : const Size(1024, 1366), //Ipad Pro 12.9 inches
-    );
-    return _translationProviderBuilder(
-      _gqlProviderBuilder(
-        _portalBuilder(
-          _globalBlocProviderBuilder(_App(_appRouter)),
-        ),
-      ),
+          ? const Size(375, 812) // Iphone X screen size, match Figma
+          : const Size(1024, 1366), // Ipad Pro 12.9 inches
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (_, child) {
+        return _translationProviderBuilder(
+          _gqlProviderBuilder(
+            _portalBuilder(
+              _globalBlocProviderBuilder(_App(_appRouter)),
+            ),
+          ),
+        );
+      },
     );
   }
 

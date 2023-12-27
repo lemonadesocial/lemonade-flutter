@@ -7,10 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:graphql_flutter/graphql_flutter.dart' as gql_flutter;
 import 'package:app/injection/register_module.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: '.env.staging');
   await gql_flutter.initHiveForFlutter();
 
@@ -22,6 +22,7 @@ void main() async {
   }
   await getIt<MatrixService>().init();
 
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   runApp(const LemonadeApp());
 
   debugPrint('App is ready!!! ✅');
