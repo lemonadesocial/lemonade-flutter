@@ -1,9 +1,12 @@
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/guest_event_detail_page/view_model/event_config_grid_view_model.dart';
+import 'package:app/core/utils/modal_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/typo.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -37,6 +40,9 @@ class HostEventDetailConfigGrid extends StatelessWidget {
             ),
           ),
         ),
+        onTap: () {
+          showComingSoonDialog(context);
+        },
       ),
       EventConfigGridViewModel(
         title: t.event.configuration.tickets,
@@ -51,6 +57,9 @@ class HostEventDetailConfigGrid extends StatelessWidget {
             ),
           ),
         ),
+        onTap: () {
+          showComingSoonDialog(context);
+        },
       ),
       EventConfigGridViewModel(
         title: t.event.configuration.checkIn,
@@ -67,6 +76,9 @@ class HostEventDetailConfigGrid extends StatelessWidget {
             ),
           ),
         ),
+        onTap: () {
+          showComingSoonDialog(context);
+        },
       ),
       EventConfigGridViewModel(
         title: t.event.configuration.coHosts,
@@ -81,6 +93,9 @@ class HostEventDetailConfigGrid extends StatelessWidget {
             ),
           ),
         ),
+        onTap: () {
+          showComingSoonDialog(context);
+        },
       ),
       EventConfigGridViewModel(
         title: t.event.configuration.controlPanel,
@@ -95,6 +110,9 @@ class HostEventDetailConfigGrid extends StatelessWidget {
             ),
           ),
         ),
+        onTap: () {
+          AutoRouter.of(context).navigate(EventControlPanelRoute(event: event));
+        },
       ),
       EventConfigGridViewModel(
         title: t.event.configuration.dashboard,
@@ -109,6 +127,9 @@ class HostEventDetailConfigGrid extends StatelessWidget {
             ),
           ),
         ),
+        onTap: () {
+          showComingSoonDialog(context);
+        },
       ),
     ];
     return SliverGrid(
@@ -122,6 +143,7 @@ class HostEventDetailConfigGrid extends StatelessWidget {
         (BuildContext context, int index) {
           return GridItemWidget(
             item: listData[index],
+            onTap: listData[index]!.onTap,
           );
         },
         childCount: 6, // Total number of items
@@ -132,113 +154,118 @@ class HostEventDetailConfigGrid extends StatelessWidget {
 
 class GridItemWidget extends StatelessWidget {
   final EventConfigGridViewModel? item;
+  final Function() onTap;
 
   const GridItemWidget({
     super.key,
     required this.item,
+    required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    return Container(
-      padding: const EdgeInsets.only(top: 1, left: 1, right: 1, bottom: 6),
-      decoration: ShapeDecoration(
-        color: colorScheme.secondaryContainer,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-      ),
+    return InkWell(
+      onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(15),
-        clipBehavior: Clip.antiAlias,
+        padding: const EdgeInsets.only(top: 1, left: 1, right: 1, bottom: 6),
         decoration: ShapeDecoration(
-          gradient: LinearGradient(
-            begin: const Alignment(0.00, -1.00),
-            end: const Alignment(0, 1),
-            colors: [colorScheme.secondaryContainer, Colors.black],
-          ),
+          color: colorScheme.secondaryContainer,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
+            borderRadius: BorderRadius.circular(16),
           ),
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            item?.icon ?? const SizedBox(),
-            SizedBox(
-              width: double.infinity,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    width: double.infinity,
-                    child: Text(
-                      item?.title ?? '',
-                      style: Typo.small.copyWith(
-                        fontFamily: FontFamily.nohemiVariable,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w700,
+        child: Container(
+          padding: const EdgeInsets.all(15),
+          clipBehavior: Clip.antiAlias,
+          decoration: ShapeDecoration(
+            gradient: LinearGradient(
+              begin: const Alignment(0.00, -1.00),
+              end: const Alignment(0, 1),
+              colors: [colorScheme.secondaryContainer, Colors.black],
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              item?.icon ?? const SizedBox(),
+              SizedBox(
+                width: double.infinity,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width: double.infinity,
+                      child: Text(
+                        item?.title ?? '',
+                        style: Typo.small.copyWith(
+                          fontFamily: FontFamily.nohemiVariable,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
-                  ),
-                  // const SizedBox(height: 6),
-                  item!.showProgressBar == true
-                      ? Padding(
-                          padding: EdgeInsets.symmetric(vertical: 6.h),
-                          child: Container(
-                            width: 79,
-                            height: 2,
-                            decoration: ShapeDecoration(
-                              color: colorScheme.outline,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(100),
+                    // const SizedBox(height: 6),
+                    item!.showProgressBar == true
+                        ? Padding(
+                            padding: EdgeInsets.symmetric(vertical: 6.h),
+                            child: Container(
+                              width: 79,
+                              height: 2,
+                              decoration: ShapeDecoration(
+                                color: colorScheme.outline,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(100),
+                                ),
                               ),
-                            ),
-                            child: Stack(
-                              children: [
-                                Positioned(
-                                  left: -0,
-                                  top: 0,
-                                  child: Container(
-                                    width: 57,
-                                    height: 2,
-                                    decoration: ShapeDecoration(
-                                      gradient: LinearGradient(
-                                        begin: const Alignment(1.00, 0.00),
-                                        end: const Alignment(-1, 0),
-                                        colors: item?.progressBarColors ?? [],
-                                      ),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(100),
+                              child: Stack(
+                                children: [
+                                  Positioned(
+                                    left: -0,
+                                    top: 0,
+                                    child: Container(
+                                      width: 57,
+                                      height: 2,
+                                      decoration: ShapeDecoration(
+                                        gradient: LinearGradient(
+                                          begin: const Alignment(1.00, 0.00),
+                                          end: const Alignment(-1, 0),
+                                          colors: item?.progressBarColors ?? [],
+                                        ),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(100),
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                        )
-                      : const SizedBox(),
-                  SizedBox(height: 2.h),
-                  SizedBox(
-                    child: Text(
-                      item?.subTitle ?? '',
-                      style: Typo.xSmall.copyWith(
-                        fontSize: 9,
-                        color: colorScheme.onSecondary,
-                        height: 0,
+                          )
+                        : const SizedBox(),
+                    SizedBox(height: 2.h),
+                    SizedBox(
+                      child: Text(
+                        item?.subTitle ?? '',
+                        style: Typo.xSmall.copyWith(
+                          fontSize: 9,
+                          color: colorScheme.onSecondary,
+                          height: 0,
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

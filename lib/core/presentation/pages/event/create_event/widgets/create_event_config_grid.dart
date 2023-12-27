@@ -9,7 +9,6 @@ import 'package:app/core/presentation/pages/event/event_location_setting_page/ev
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/modal_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
@@ -122,131 +121,103 @@ class CreateEventConfigGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: List.generate(
-        (eventConfigs.length / 2).ceil(),
-        (rowIndex) {
-          final startIndex = rowIndex * 2;
-          final endIndex = (startIndex + 2 <= eventConfigs.length)
-              ? startIndex + 2
-              : eventConfigs.length;
-          return Column(
-            children: [
-              Container(
-                margin: EdgeInsets.symmetric(
-                  vertical: Spacing.extraSmall,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: eventConfigs
-                      .sublist(startIndex, endIndex)
-                      .asMap()
-                      .entries
-                      .map(
-                        (entry) => Expanded(
-                          child: Container(
-                            margin: EdgeInsets.only(
-                              left:
-                                  entry.key == 1 ? Spacing.superExtraSmall : 0,
-                              right:
-                                  entry.key == 0 ? Spacing.superExtraSmall : 0,
-                            ), // Adjust horizontal spacing
-                            child: _buildCard(entry.value, context),
-                          ),
-                        ),
-                      )
-                      .toList(),
-                ),
-              ),
-            ],
-          );
+    return SliverGrid(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
+        childAspectRatio: 2.2,
+      ),
+      delegate: SliverChildBuilderDelegate(
+        (BuildContext context, int index) {
+          final eventConfig = eventConfigs[index];
+          EventConfigurationType? eventConfigType = eventConfig.type;
+          switch (eventConfigType) {
+            case EventConfigurationType.visibility:
+              return BlocBuilder<CreateEventBloc, CreateEventState>(
+                builder: (context, state) {
+                  return EventConfigCard(
+                    title: state.private == true
+                        ? t.event.private
+                        : t.event.public,
+                    description: state.private == true
+                        ? t.event.privateDescription
+                        : t.event.publicDescription,
+                    icon: eventConfig.icon,
+                    onTap: () => onTap(context, eventConfig),
+                  );
+                },
+              );
+            case EventConfigurationType.guestSettings:
+              return BlocBuilder<CreateEventBloc, CreateEventState>(
+                builder: (context, state) {
+                  return EventConfigCard(
+                    title: eventConfig.title,
+                    description: t.event.eventCreation.guestSettingDescription(
+                      guestLimit: state.guestLimit ?? 'unlimited',
+                      guestLimitPer: state.guestLimitPer ?? 'no',
+                    ),
+                    icon: eventConfig.icon,
+                    onTap: () => onTap(context, eventConfig),
+                  );
+                },
+              );
+            case EventConfigurationType.startDateTime:
+              return BlocBuilder<EventDateTimeSettingsBloc,
+                  EventDateTimeSettingsState>(
+                builder: (context, state) {
+                  return EventConfigCard(
+                    title: DateFormatUtils.custom(
+                      state.start.value,
+                      pattern: 'EEE, MMMM dd - HH:mm',
+                    ),
+                    description: eventConfig.description,
+                    icon: eventConfig.icon,
+                    onTap: () => onTap(context, eventConfig),
+                  );
+                },
+              );
+            case EventConfigurationType.endDateTime:
+              return BlocBuilder<EventDateTimeSettingsBloc,
+                  EventDateTimeSettingsState>(
+                builder: (context, state) {
+                  return EventConfigCard(
+                    title: DateFormatUtils.custom(
+                      state.end.value,
+                      pattern: 'EEE, MMMM dd - HH:mm',
+                    ),
+                    description: eventConfig.description,
+                    icon: eventConfig.icon,
+                    onTap: () => onTap(context, eventConfig),
+                  );
+                },
+              );
+            case EventConfigurationType.virtual:
+              return EventConfigCard(
+                title: eventConfig.title,
+                description: eventConfig.description,
+                icon: eventConfig.icon,
+                onTap: () => onTap(context, eventConfig),
+              );
+            case EventConfigurationType.location:
+              return EventConfigCard(
+                title: eventConfig.title,
+                description: eventConfig.description,
+                icon: eventConfig.icon,
+                onTap: () => onTap(context, eventConfig),
+              );
+
+            default:
+              return EventConfigCard(
+                title: '',
+                description: '',
+                icon: eventConfig.icon,
+                onTap: () => null,
+              );
+          }
         },
+        childCount: 6, // Total number of items
       ),
     );
-  }
-
-  _buildCard(EventConfiguration eventConfig, BuildContext context) {
-    EventConfigurationType? eventConfigType = eventConfig.type;
-    switch (eventConfigType) {
-      case EventConfigurationType.visibility:
-        return BlocBuilder<CreateEventBloc, CreateEventState>(
-          builder: (context, state) {
-            return EventConfigCard(
-              title: state.private == true ? t.event.private : t.event.public,
-              description: state.private == true
-                  ? t.event.privateDescription
-                  : t.event.publicDescription,
-              icon: eventConfig.icon,
-              onTap: () => onTap(context, eventConfig),
-            );
-          },
-        );
-      case EventConfigurationType.guestSettings:
-        return BlocBuilder<CreateEventBloc, CreateEventState>(
-          builder: (context, state) {
-            return EventConfigCard(
-              title: eventConfig.title,
-              description: t.event.eventCreation.guestSettingDescription(
-                guestLimit: state.guestLimit ?? 'unlimited',
-                guestLimitPer: state.guestLimitPer ?? 'no',
-              ),
-              icon: eventConfig.icon,
-              onTap: () => onTap(context, eventConfig),
-            );
-          },
-        );
-      case EventConfigurationType.startDateTime:
-        return BlocBuilder<EventDateTimeSettingsBloc,
-            EventDateTimeSettingsState>(
-          builder: (context, state) {
-            return EventConfigCard(
-              title: DateFormatUtils.custom(
-                state.start.value,
-                pattern: 'EEE, MMMM dd - HH:mm',
-              ),
-              description: eventConfig.description,
-              icon: eventConfig.icon,
-              onTap: () => onTap(context, eventConfig),
-            );
-          },
-        );
-      case EventConfigurationType.endDateTime:
-        return BlocBuilder<EventDateTimeSettingsBloc,
-            EventDateTimeSettingsState>(
-          builder: (context, state) {
-            return EventConfigCard(
-              title: DateFormatUtils.custom(
-                state.end.value,
-                pattern: 'EEE, MMMM dd - HH:mm',
-              ),
-              description: eventConfig.description,
-              icon: eventConfig.icon,
-              onTap: () => onTap(context, eventConfig),
-            );
-          },
-        );
-      case EventConfigurationType.virtual:
-        return EventConfigCard(
-          title: eventConfig.title,
-          description: eventConfig.description,
-          icon: eventConfig.icon,
-          onTap: () => onTap(context, eventConfig),
-        );
-      case EventConfigurationType.location:
-        return EventConfigCard(
-          title: eventConfig.title,
-          description: eventConfig.description,
-          icon: eventConfig.icon,
-          onTap: () => onTap(context, eventConfig),
-        );
-
-      default:
-        return EventConfigCard(
-          title: '',
-          description: '',
-          icon: eventConfig.icon,
-          onTap: () => null,
-        );
-    }
   }
 }

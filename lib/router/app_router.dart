@@ -155,6 +155,9 @@ final eventRoutes = [
   AutoRoute(
     page: MyEventTicketAssignmentRoute.page,
   ),
+  AutoRoute(
+    page: EventControlPanelRoute.page,
+  ),
 ];
 
 final eventBuyTicketsRoutes = AutoRoute(

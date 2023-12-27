@@ -6,6 +6,7 @@ class EventConfigGridViewModel {
   final Widget icon;
   final bool? showProgressBar;
   final List<Color>? progressBarColors;
+  final Function() onTap;
 
   EventConfigGridViewModel({
     required this.title,
@@ -13,5 +14,6 @@ class EventConfigGridViewModel {
     required this.icon,
     this.showProgressBar,
     this.progressBarColors,
+    required this.onTap,
   });
 }
