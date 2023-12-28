@@ -6,6 +6,9 @@ part 'stripe_onramp_session_dto.freezed.dart';
 @freezed
 class StripeOnrampSessionDto with _$StripeOnrampSessionDto {
   factory StripeOnrampSessionDto({
+    String? id,
+    bool? livemode,
+    String? status,
     @JsonKey(name: 'client_secret') String? clientSecret,
     @JsonKey(name: 'publishable_key') String? publishableKey,
   }) = _StripeOnrampSessionDto;

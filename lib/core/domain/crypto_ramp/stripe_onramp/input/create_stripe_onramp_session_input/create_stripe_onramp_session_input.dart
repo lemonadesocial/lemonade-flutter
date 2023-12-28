@@ -6,7 +6,7 @@ part 'create_stripe_onramp_session_input.freezed.dart';
 @freezed
 class CreateStripeOnrampSessionInput with _$CreateStripeOnrampSessionInput {
   factory CreateStripeOnrampSessionInput({
-    @JsonKey(name: "destination_amount") String? destinationAmount,
+    @JsonKey(name: "destination_amount") double? destinationAmount,
     @JsonKey(name: "destination_currency") String? destinationCurrency,
     @JsonKey(name: "destination_network") String? destinationNetwork,
     @JsonKey(name: "source_currency") String? sourceCurrency,

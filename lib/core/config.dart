@@ -59,4 +59,7 @@ class AppConfig {
 
   // Chat LemonAI config
   static get chatLemonAIConfig => dotenv.env['CHAT_LEMON_AI_CONFIG'];
+
+  //Crypto cramp
+  static get stripeOnrampHost => dotenv.env['STRIPE_ONRAMP_HOST'];
 }

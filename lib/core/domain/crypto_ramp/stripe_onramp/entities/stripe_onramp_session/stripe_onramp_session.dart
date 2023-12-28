@@ -8,12 +8,18 @@ class StripeOnrampSession with _$StripeOnrampSession {
   StripeOnrampSession._();
 
   factory StripeOnrampSession({
+    String? id,
+    bool? livemode,
+    String? status,
     String? clientSecret,
     String? publishableKey,
   }) = _StripeOnrampSession;
 
   factory StripeOnrampSession.fromDto(StripeOnrampSessionDto dto) =>
       StripeOnrampSession(
+        id: dto.id,
+        livemode: dto.livemode,
+        status: dto.status,
         clientSecret: dto.clientSecret,
         publishableKey: dto.publishableKey,
       );
