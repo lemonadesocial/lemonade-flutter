@@ -165,5 +165,18 @@
         "addNewLocationSuccessfully": "Add new location successfully",
         "removeNewLocationSuccessfully": "Remove location successfully"
     },
-    "timezone": "Timezone"
+    "timezone": "Timezone",
+    "configuration": {
+        "invite": "Invite",
+        "tickets": "Tickets",
+        "checkIn": "Check-in",
+        "coHosts": "Co-hosts",
+        "controlPanel": "Control panel",
+        "controlPanelDescription": "Exclusive perks & rewards",
+        "dashboard": "Dashboard",
+        "dashboardDescription": "Find what’s exciting around"
+    },
+    "rewards": "Rewards",
+    "rewardsDescription": "Enhance you guests’ experience with unique rewards and make this event stand out!",
+    "addPoap": "Add POAP"
 }
