@@ -34,6 +34,7 @@ class Event {
     this.paymentAccountsExpanded,
     this.guestLimit,
     this.guestLimitPer,
+    this.virtual,
   });
 
   factory Event.fromDto(EventDto dto) {
@@ -84,6 +85,7 @@ class Event {
           .toList(),
       guestLimit: dto.guestLimit,
       guestLimitPer: dto.guestLimitPer,
+      virtual: dto.virtual,
     );
   }
   String? id;
@@ -113,6 +115,7 @@ class Event {
   List<PaymentAccount>? paymentAccountsExpanded;
   int? guestLimit;
   int? guestLimitPer;
+  bool? virtual;
 }
 
 class EventOffer {

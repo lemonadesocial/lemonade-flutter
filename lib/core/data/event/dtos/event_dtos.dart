@@ -42,6 +42,7 @@ class EventDto with _$EventDto {
     List<PaymentAccountDto>? paymentAccountsExpanded,
     @JsonKey(name: 'guest_limit') int? guestLimit,
     @JsonKey(name: 'guest_limit_per') int? guestLimitPer,
+    bool? virtual,
   }) = _EventDto;
 
   factory EventDto.fromJson(Map<String, dynamic> json) =>

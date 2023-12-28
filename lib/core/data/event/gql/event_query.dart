@@ -117,6 +117,7 @@ const eventFragment = '''
   longitude
   guest_limit
   guest_limit_per
+  virtual
 }
 ''';
 

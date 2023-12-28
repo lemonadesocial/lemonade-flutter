@@ -104,7 +104,8 @@ class CreateEventConfigGrid extends StatelessWidget {
                   title: eventConfig.title,
                   description: eventConfig.description,
                   icon: eventConfig.icon,
-                  onTap: () => null,
+                  selected: eventConfig.selected,
+                  onTap: () => onTap(context, eventConfig),
                 );
             }
           },

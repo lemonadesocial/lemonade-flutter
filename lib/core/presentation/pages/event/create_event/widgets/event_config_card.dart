@@ -1,4 +1,5 @@
 import 'package:app/gen/fonts.gen.dart';
+import 'package:app/theme/color.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,6 +9,7 @@ class EventConfigCard extends StatelessWidget {
   final String? description;
   final Widget icon;
   final Function() onTap;
+  final bool? selected;
 
   const EventConfigCard({
     super.key,
@@ -15,6 +17,7 @@ class EventConfigCard extends StatelessWidget {
     this.description,
     required this.icon,
     required this.onTap,
+    this.selected,
   });
 
   @override
@@ -26,7 +29,10 @@ class EventConfigCard extends StatelessWidget {
         height: 70.h,
         padding: EdgeInsets.symmetric(horizontal: 10.w),
         decoration: BoxDecoration(
-          border: Border.all(color: colorScheme.outlineVariant),
+          color: selected == true ? LemonColor.white12 : Colors.transparent,
+          border: selected == true
+              ? null
+              : Border.all(color: colorScheme.outlineVariant),
           borderRadius: BorderRadius.circular(10.r),
         ),
         child: Row(
@@ -36,7 +42,8 @@ class EventConfigCard extends StatelessWidget {
               height: 40.h,
               margin: EdgeInsets.only(right: 10.w),
               decoration: BoxDecoration(
-                color: colorScheme.surface,
+                color:
+                    selected == true ? LemonColor.white12 : colorScheme.surface,
                 borderRadius: BorderRadius.circular(10.r),
               ),
               child: icon,
@@ -53,7 +60,7 @@ class EventConfigCard extends StatelessWidget {
                       color: colorScheme.onSurface,
                     ),
                   ),
-                  description != null
+                  description != ""
                       ? Text(
                           description!,
                           style: Typo.extraSmall.copyWith(

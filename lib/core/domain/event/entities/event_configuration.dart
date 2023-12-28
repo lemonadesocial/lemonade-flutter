@@ -20,12 +20,14 @@ class EventConfiguration {
     required this.title,
     this.description,
     required this.icon,
+    this.selected,
   });
 
   final EventConfigurationType type;
   String title;
   String? description;
   final Widget icon;
+  bool? selected;
 
   static List<EventConfiguration> defaultEventConfigurations() {
     final List<EventConfiguration> eventConfigs = [
@@ -91,6 +93,9 @@ class EventConfiguration {
           event?.end,
           pattern: 'EEE, MMMM dd - HH:mm',
         );
+      }
+      if (element.type == EventConfigurationType.virtual) {
+        element.selected = event?.virtual;
       }
     }
     return result;

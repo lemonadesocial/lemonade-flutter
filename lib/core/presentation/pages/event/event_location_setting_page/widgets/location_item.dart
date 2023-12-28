@@ -10,17 +10,25 @@ class LocationItem extends StatelessWidget {
   final Address location;
   final Function onPressEdit;
   final Function onPressDelete;
+  final Function onPressItem;
+  final bool? selected;
+
   const LocationItem({
     super.key,
     required this.location,
     required this.onPressEdit,
     required this.onPressDelete,
+    required this.onPressItem,
+    this.selected,
   });
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return InkWell(
+      onTap: () async {
+        onPressItem();
+      },
       child: Column(
         children: [
           Row(
@@ -29,11 +37,17 @@ class LocationItem extends StatelessWidget {
               Expanded(
                 child: Row(
                   children: [
-                    Icon(
-                      Icons.circle_outlined,
-                      size: Spacing.medium,
-                      color: colorScheme.onSurface,
-                    ),
+                    selected == true
+                        ? Icon(
+                            Icons.check_circle_outline_outlined,
+                            size: Spacing.medium,
+                            color: colorScheme.onSurface,
+                          )
+                        : Icon(
+                            Icons.circle_outlined,
+                            size: Spacing.medium,
+                            color: colorScheme.onSurface,
+                          ),
                     SizedBox(
                       width: Spacing.small,
                     ),
