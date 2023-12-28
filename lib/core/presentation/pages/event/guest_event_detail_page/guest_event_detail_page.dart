@@ -1,7 +1,6 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/presentation/pages/event/guest_event_detail_page/views/post_guest_event_detail_view.dart';
-import 'package:app/core/presentation/pages/event/guest_event_detail_page/views/post_host_event_detail_view.dart';
 import 'package:app/core/presentation/pages/event/guest_event_detail_page/views/pre_guest_event_detail_view.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';

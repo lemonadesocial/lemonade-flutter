@@ -36,6 +36,9 @@ class LemonRadius {
   /// Represents spacing of 12.0 pixels.
   static double small = 12.r;
 
+  /// Represents spacing of 16.0 pixels.
+  static double medium = 16.r;
+
   /// Represents spacing of 18.0 pixels.
   static double normal = 18.r;
 

@@ -1,9 +1,9 @@
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
-import 'package:app/core/presentation/pages/event/guest_event_detail_page/widgets/host_event_basic_info_card.dart';
-import 'package:app/core/presentation/pages/event/guest_event_detail_page/widgets/host_event_detail_config_grid.dart';
-import 'package:app/core/presentation/pages/event/guest_event_detail_page/widgets/host_event_location.dart';
-import 'package:app/core/presentation/pages/event/guest_event_detail_page/widgets/host_event_poap_reward_card.dart';
 import 'package:app/core/presentation/pages/event/guest_event_detail_page/widgets/post_guest_event_animated_app_bar.dart';
+import 'package:app/core/presentation/pages/event/host_event_detail_page/widgets/host_event_basic_info_card.dart';
+import 'package:app/core/presentation/pages/event/host_event_detail_page/widgets/host_event_detail_config_grid.dart';
+import 'package:app/core/presentation/pages/event/host_event_detail_page/widgets/host_event_location.dart';
+import 'package:app/core/presentation/pages/event/host_event_detail_page/widgets/host_event_poap_reward_card.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -12,8 +12,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class PostHostEventDetailView extends StatelessWidget {
-  const PostHostEventDetailView({super.key});
+class HostEventDetailView extends StatelessWidget {
+  const HostEventDetailView({super.key});
 
   @override
   Widget build(BuildContext context) {

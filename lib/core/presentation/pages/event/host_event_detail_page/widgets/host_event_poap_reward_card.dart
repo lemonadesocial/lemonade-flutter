@@ -25,7 +25,7 @@ class HostEventPoapRewardCard extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: 229.h,
-      padding: const EdgeInsets.all(24),
+      padding: EdgeInsets.symmetric(horizontal: Spacing.medium, vertical: 24.h),
       clipBehavior: Clip.antiAlias,
       decoration: ShapeDecoration(
         shape: RoundedRectangleBorder(
@@ -33,7 +33,7 @@ class HostEventPoapRewardCard extends StatelessWidget {
             width: 2.w,
             color: colorScheme.outline,
           ),
-          borderRadius: BorderRadius.circular(15),
+          borderRadius: BorderRadius.circular(LemonRadius.medium),
         ),
       ),
       child: Stack(
@@ -55,9 +55,10 @@ class HostEventPoapRewardCard extends StatelessWidget {
                       height: 72.h,
                       clipBehavior: Clip.antiAlias,
                       decoration: ShapeDecoration(
-                        color: Colors.white.withOpacity(0.05999999865889549),
+                        color: LemonColor.white06,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(9),
+                          borderRadius:
+                              BorderRadius.circular(LemonRadius.xSmall),
                         ),
                       ),
                     ),
@@ -72,7 +73,7 @@ class HostEventPoapRewardCard extends StatelessWidget {
                             width: 60.w,
                             height: 18.h,
                             padding: EdgeInsets.symmetric(
-                              horizontal: 36.h,
+                              horizontal: 36.w,
                               vertical: 18.h,
                             ),
                             clipBehavior: Clip.antiAlias,
@@ -175,7 +176,7 @@ class HostEventPoapRewardCard extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                SizedBox(width: 12.w),
+                                SizedBox(width: Spacing.xSmall),
                                 Container(
                                   width: 60.w,
                                   height: 18.h,
@@ -234,7 +235,7 @@ class HostEventPoapRewardCard extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  height: 9.h,
+                  height: Spacing.extraSmall,
                 ),
                 Text(
                   t.event.rewardsDescription,
@@ -242,7 +243,7 @@ class HostEventPoapRewardCard extends StatelessWidget {
                   style: Typo.small.copyWith(color: colorScheme.onSecondary),
                 ),
                 SizedBox(
-                  height: 18.h,
+                  height: Spacing.smMedium,
                 ),
                 LinearGradientButton(
                   width: 108.w,
@@ -254,8 +255,8 @@ class HostEventPoapRewardCard extends StatelessWidget {
                   mode: GradientButtonMode.lavenderMode,
                   radius: BorderRadius.circular(LemonRadius.normal),
                   padding: EdgeInsets.symmetric(
-                    horizontal: 12.w,
-                    vertical: 9.w,
+                    horizontal: Spacing.xSmall,
+                    vertical: 9.h,
                   ),
                 ),
               ],

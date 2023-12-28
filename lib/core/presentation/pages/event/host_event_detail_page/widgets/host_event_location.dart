@@ -34,8 +34,8 @@ class HostEventLocation extends StatelessWidget {
             width: 144.w,
             child: ClipRRect(
               borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(15.sp),
-                bottomLeft: Radius.circular(15.sp),
+                topLeft: Radius.circular(LemonRadius.medium),
+                bottomLeft: Radius.circular(LemonRadius.medium),
               ),
               child: Stack(
                 children: [
