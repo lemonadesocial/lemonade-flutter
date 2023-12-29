@@ -1,3 +1,4 @@
+import 'package:app/core/application/event/edit_event_detail_bloc/edit_event_detail_bloc.dart';
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +24,9 @@ class EventDetailPage extends StatelessWidget implements AutoRouteWrapper {
                 eventId: eventId,
               ),
             ),
+        ),
+        BlocProvider(
+          create: (context) => EditEventDetailBloc(),
         ),
       ],
       child: this,

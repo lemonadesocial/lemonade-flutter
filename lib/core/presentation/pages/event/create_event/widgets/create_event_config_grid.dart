@@ -1,4 +1,5 @@
 import 'package:app/core/application/event/create_event_bloc/create_event_bloc.dart';
+import 'package:app/core/application/event/edit_event_detail_bloc/edit_event_detail_bloc.dart';
 import 'package:app/core/application/event/event_datetime_settings_bloc/event_datetime_settings_bloc.dart';
 import 'package:app/core/application/event/event_location_setting_bloc/event_location_setting_bloc.dart';
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
@@ -100,6 +101,33 @@ class CreateEventConfigGrid extends StatelessWidget {
             final eventConfig = eventConfigs[index];
             EventConfigurationType? eventConfigType = eventConfig.type;
             switch (eventConfigType) {
+              case EventConfigurationType.virtual:
+                return BlocBuilder<EditEventDetailBloc, EditEventDetailState>(
+                  builder: (context, state) {
+                    final loading = state.maybeWhen(
+                      loading: () => true,
+                      success: (_) => false,
+                      failure: () => false,
+                      orElse: () => false,
+                    );
+                    return EventConfigCard(
+                      title: eventConfig.title,
+                      description: eventConfig.description,
+                      icon: eventConfig.icon,
+                      selected: eventConfig.selected,
+                      onTap: () {
+                        Vibrate.feedback(FeedbackType.light);
+                        context.read<EditEventDetailBloc>().add(
+                              EditEventDetailEvent.update(
+                                eventId: event?.id ?? '',
+                                virtual: !(event?.virtual ?? false),
+                              ),
+                            );
+                      },
+                      loading: loading,
+                    );
+                  },
+                );
               default:
                 return EventConfigCard(
                   title: eventConfig.title,
@@ -107,17 +135,7 @@ class CreateEventConfigGrid extends StatelessWidget {
                   icon: eventConfig.icon,
                   selected: eventConfig.selected,
                   onTap: () {
-                    Vibrate.feedback(FeedbackType.light);
-                    if (eventConfig.type == EventConfigurationType.virtual) {
-                      context.read<GetEventDetailBloc>().add(
-                            GetEventDetailEvent.update(
-                              eventId: event?.id ?? '',
-                              virtual: !(event?.virtual ?? false),
-                            ),
-                          );
-                    } else {
-                      onTap(context, eventConfig);
-                    }
+                    onTap(context, eventConfig);
                   },
                 );
             }

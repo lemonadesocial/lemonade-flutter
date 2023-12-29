@@ -1,8 +1,10 @@
+# import '../fragment/event_fragment.graphql'
+
 mutation UpdateEvent($input: EventInput!, $id: MongoID!) {
   updateEvent(input: $input, _id: $id) {
-    _id
-    virtual
-    guest_limit
-    guest_limit_per
+    ...EventFields
+    ...EventOfferFragment
+    ...EventPaymentAccountFragment
+    ...EventTicketTypesFragment
   }
 }

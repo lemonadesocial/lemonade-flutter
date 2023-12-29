@@ -1,0 +1,42 @@
+# import '../../schema.graphql'
+
+fragment PaymentAccountFragment on NewPaymentAccount {
+    _id
+    active
+    created_at
+    user
+    type
+    title
+    provider
+    account_info {
+        ...on EthereumAccount {
+            currencies
+            currency_map
+            address
+            networks
+        }
+
+        ...on StripeAccount {
+            currencies
+            currency_map
+            account_id
+            publishable_key
+        }
+
+        ...on DigitalAccount {
+            currencies
+            currency_map
+            account_id
+        }
+
+        # ... on SafeAccount {
+        #     currencies
+        #     currency_map
+        #     address
+        #     network
+        #     owners
+        #     threshold
+        #     pending
+        # }
+    }
+}

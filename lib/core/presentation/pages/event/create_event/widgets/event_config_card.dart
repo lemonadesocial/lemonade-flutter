@@ -1,3 +1,4 @@
+import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/typo.dart';
@@ -10,6 +11,7 @@ class EventConfigCard extends StatelessWidget {
   final Widget icon;
   final Function() onTap;
   final bool? selected;
+  final bool? loading;
 
   const EventConfigCard({
     super.key,
@@ -18,6 +20,7 @@ class EventConfigCard extends StatelessWidget {
     required this.icon,
     required this.onTap,
     this.selected,
+    this.loading,
   });
 
   @override
@@ -46,7 +49,7 @@ class EventConfigCard extends StatelessWidget {
                     selected == true ? LemonColor.white12 : colorScheme.surface,
                 borderRadius: BorderRadius.circular(10.r),
               ),
-              child: icon,
+              child: loading == true ? Loading.defaultLoading(context) : icon,
             ),
             Expanded(
               child: Column(
