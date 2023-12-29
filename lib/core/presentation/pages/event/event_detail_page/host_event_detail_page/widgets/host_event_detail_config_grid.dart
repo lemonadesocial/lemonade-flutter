@@ -1,5 +1,5 @@
 import 'package:app/core/domain/event/entities/event.dart';
-import 'package:app/core/presentation/pages/event/guest_event_detail_page/view_model/event_config_grid_view_model.dart';
+import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/view_model/event_config_grid_view_model.dart';
 import 'package:app/core/utils/modal_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
@@ -111,7 +111,7 @@ class HostEventDetailConfigGrid extends StatelessWidget {
           ),
         ),
         onTap: () {
-          AutoRouter.of(context).navigate(EventControlPanelRoute(event: event));
+          AutoRouter.of(context).navigate(const EventControlPanelRoute());
         },
       ),
       EventConfigGridViewModel(
@@ -211,7 +211,6 @@ class GridItemWidget extends StatelessWidget {
                         ),
                       ),
                     ),
-                    // const SizedBox(height: 6),
                     item!.showProgressBar == true
                         ? Padding(
                             padding: EdgeInsets.symmetric(vertical: 6.h),

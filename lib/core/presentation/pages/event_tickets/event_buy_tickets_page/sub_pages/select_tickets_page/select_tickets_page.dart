@@ -221,7 +221,7 @@ class _SelectTicketViewState extends State<SelectTicketView> {
                         eventRsvp: eventRsvp,
                         onPressed: (outerContext) {
                           AutoRouter.of(outerContext).replace(
-                            GuestEventDetailRoute(
+                            EventDetailRoute(
                               eventId: widget.event.id ?? '',
                             ),
                           );

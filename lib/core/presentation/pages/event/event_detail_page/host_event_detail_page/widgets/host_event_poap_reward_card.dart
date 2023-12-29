@@ -24,7 +24,7 @@ class HostEventPoapRewardCard extends StatelessWidget {
     final t = Translations.of(context);
     return Container(
       width: double.infinity,
-      height: 229.h,
+      height: 230.h,
       padding: EdgeInsets.symmetric(horizontal: Spacing.medium, vertical: 24.h),
       clipBehavior: Clip.antiAlias,
       decoration: ShapeDecoration(

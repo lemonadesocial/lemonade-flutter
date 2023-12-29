@@ -3,7 +3,7 @@ import 'package:app/core/application/report/report_bloc/report_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/report/input/report_input.dart';
 import 'package:app/core/presentation/dpos/common/dropdown_item_dpo.dart';
-import 'package:app/core/presentation/pages/event/guest_event_detail_page/widgets/guest_event_detail_appbar.dart';
+import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_appbar.dart';
 import 'package:app/core/presentation/widgets/floating_frosted_glass_dropdown_widget.dart';
 import 'package:app/core/presentation/widgets/report/report_bottom_sheet.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';

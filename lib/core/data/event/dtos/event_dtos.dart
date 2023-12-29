@@ -40,8 +40,8 @@ class EventDto with _$EventDto {
     AddressDto? address,
     @JsonKey(name: 'payment_accounts_expanded')
     List<PaymentAccountDto>? paymentAccountsExpanded,
-    @JsonKey(name: 'guest_limit') int? guestLimit,
-    @JsonKey(name: 'guest_limit_per') int? guestLimitPer,
+    @JsonKey(name: 'guest_limit') double? guestLimit,
+    @JsonKey(name: 'guest_limit_per') double? guestLimitPer,
     bool? virtual,
   }) = _EventDto;
 

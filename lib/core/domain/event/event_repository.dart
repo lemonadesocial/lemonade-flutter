@@ -40,4 +40,9 @@ abstract class EventRepository {
   Future<Either<Failure, Mutation$CreateEvent>> createEvent({
     required Input$EventInput input,
   });
+
+  Future<Either<Failure, Event>> updateEvent({
+    required Input$EventInput input,
+    required String id,
+  });
 }

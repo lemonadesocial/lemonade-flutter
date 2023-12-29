@@ -11,6 +11,7 @@ import 'package:app/core/domain/event/input/get_events_listing_input.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/graphql/backend/event/mutation/create_event.graphql.dart';
+import 'package:app/graphql/backend/event/mutation/update_event.graphql.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:dartz/dartz.dart';
@@ -166,5 +167,27 @@ class EventRepositoryImpl implements EventRepository {
       return Left(Failure.withGqlException(result.exception));
     }
     return Right(result.parsedData!);
+  }
+
+  @override
+  Future<Either<Failure, Event>> updateEvent({
+    required Input$EventInput input,
+    required String id,
+  }) async {
+    final result = await client.mutate$UpdateEvent(
+      Options$Mutation$UpdateEvent(
+        variables: Variables$Mutation$UpdateEvent(input: input, id: id),
+      ),
+    );
+    if (result.hasException) {
+      return Left(Failure.withGqlException(result.exception));
+    }
+    return Right(
+      Event.fromDto(
+        EventDto.fromJson(
+          result.parsedData!.updateEvent.toJson(),
+        ),
+      ),
+    );
   }
 }

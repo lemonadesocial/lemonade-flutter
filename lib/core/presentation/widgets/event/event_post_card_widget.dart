@@ -45,7 +45,7 @@ class EventPostCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         AutoRouter.of(context).navigate(
-          GuestEventDetailRoute(
+          EventDetailRoute(
             eventId: event.id ?? '',
           ),
         );

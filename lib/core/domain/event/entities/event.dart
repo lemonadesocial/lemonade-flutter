@@ -113,8 +113,8 @@ class Event {
   List<PurchasableTicketType>? eventTicketTypes;
   Address? address;
   List<PaymentAccount>? paymentAccountsExpanded;
-  int? guestLimit;
-  int? guestLimitPer;
+  double? guestLimit;
+  double? guestLimitPer;
   bool? virtual;
 }
 

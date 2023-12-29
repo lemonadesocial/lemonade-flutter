@@ -11,8 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 @RoutePage()
-class EventDetailPage extends StatefulWidget {
-  const EventDetailPage({
+class EventDetailPageWebView extends StatefulWidget {
+  const EventDetailPageWebView({
     super.key,
     @PathParam('id') required this.eventId,
     @PathParam('name') required this.eventName,
@@ -21,10 +21,10 @@ class EventDetailPage extends StatefulWidget {
   final String eventName;
 
   @override
-  State<EventDetailPage> createState() => _EventDetailPageState();
+  State<EventDetailPageWebView> createState() => _EventDetailPageWebViewState();
 }
 
-class _EventDetailPageState extends State<EventDetailPage>
+class _EventDetailPageWebViewState extends State<EventDetailPageWebView>
     with WidgetsBindingObserver {
   bool isReady = false;
   bool isLoaded = false;
