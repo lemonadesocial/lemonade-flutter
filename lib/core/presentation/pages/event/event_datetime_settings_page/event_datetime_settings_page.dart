@@ -1,4 +1,6 @@
 import 'package:app/core/application/event/event_datetime_settings_bloc/event_datetime_settings_bloc.dart';
+import 'package:app/core/constants/event/event_constants.dart';
+import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/datepicker_text_field/datepicker_text_field.dart';
 import 'package:app/core/presentation/widgets/common/timepicker_text_field/timepicker_text_field.dart';
@@ -9,15 +11,44 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 @RoutePage()
-class EventDatetimeSettingsPage extends StatefulWidget {
-  const EventDatetimeSettingsPage({Key? key}) : super(key: key);
+class EventDatetimeSettingsPage extends StatelessWidget {
+  final Event? event;
+  const EventDatetimeSettingsPage({super.key, this.event});
 
   @override
-  State<EventDatetimeSettingsPage> createState() =>
+  Widget build(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => EventDateTimeSettingsBloc()
+            ..add(
+              EventDateTimeSettingsEvent.init(
+                startDateTime: event != null
+                    ? event?.start ??
+                        EventDateTimeConstants.defaultStartDateTime
+                    : EventDateTimeConstants.defaultStartDateTime,
+                endDateTime: event != null
+                    ? event?.end ?? EventDateTimeConstants.defaultStartDateTime
+                    : EventDateTimeConstants.defaultEndDateTime,
+              ),
+            ),
+        ),
+      ],
+      child: const EventDatetimeSettingsPageView(),
+    );
+  }
+}
+
+class EventDatetimeSettingsPageView extends StatefulWidget {
+  const EventDatetimeSettingsPageView({Key? key}) : super(key: key);
+
+  @override
+  State<EventDatetimeSettingsPageView> createState() =>
       _EventDatetimeSettingsPageState();
 }
 
-class _EventDatetimeSettingsPageState extends State<EventDatetimeSettingsPage> {
+class _EventDatetimeSettingsPageState
+    extends State<EventDatetimeSettingsPageView> {
   final TextEditingController startDateInputController =
       TextEditingController();
   final TextEditingController endDateInputController = TextEditingController();

@@ -182,6 +182,7 @@ class EventRepositoryImpl implements EventRepository {
     if (result.hasException) {
       return Left(Failure.withGqlException(result.exception));
     }
+
     return Right(
       Event.fromDto(
         EventDto.fromJson(

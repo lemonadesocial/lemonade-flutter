@@ -2,7 +2,6 @@ import 'package:app/core/application/event/create_event_bloc/create_event_bloc.d
 import 'package:app/core/application/event/edit_event_detail_bloc/edit_event_detail_bloc.dart';
 import 'package:app/core/application/event/event_datetime_settings_bloc/event_datetime_settings_bloc.dart';
 import 'package:app/core/application/event/event_location_setting_bloc/event_location_setting_bloc.dart';
-import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_configuration.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/event_config_card.dart';
@@ -35,7 +34,9 @@ class CreateEventConfigGrid extends StatelessWidget {
         page = const EventGuestSettingsPage();
         break;
       case EventConfigurationType.startDateTime:
-        page = const EventDatetimeSettingsPage();
+        page = EventDatetimeSettingsPage(
+          event: event,
+        );
         break;
       case EventConfigurationType.endDateTime:
         page = const EventDatetimeSettingsPage();

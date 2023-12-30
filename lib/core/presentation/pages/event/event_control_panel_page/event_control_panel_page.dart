@@ -4,7 +4,6 @@ import 'package:app/core/presentation/pages/event/create_event/widgets/create_ev
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
-import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
@@ -14,17 +13,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 @RoutePage()
 class EventControlPanelPage extends StatelessWidget {
   const EventControlPanelPage({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return const EventControlPanelView();
-  }
-}
-
-class EventControlPanelView extends StatelessWidget {
-  const EventControlPanelView({
     super.key,
   });
 

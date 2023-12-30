@@ -19,7 +19,6 @@ class HostEventDetailView extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-
     return Scaffold(
       backgroundColor: colorScheme.primary,
       body: BlocBuilder<GetEventDetailBloc, GetEventDetailState>(
