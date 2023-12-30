@@ -125,6 +125,8 @@ PODS:
     - OpenSSL-Universal
   - flutter_secure_storage (6.0.0):
     - Flutter
+  - flutter_timezone (0.0.1):
+    - Flutter
   - flutter_vibrate (0.0.1):
     - Flutter
   - flutter_web_auth_2 (1.1.1):
@@ -269,6 +271,7 @@ DEPENDENCIES:
   - flutter_olm (from `.symlinks/plugins/flutter_olm/ios`)
   - flutter_openssl_crypto (from `.symlinks/plugins/flutter_openssl_crypto/ios`)
   - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
+  - flutter_timezone (from `.symlinks/plugins/flutter_timezone/ios`)
   - flutter_vibrate (from `.symlinks/plugins/flutter_vibrate/ios`)
   - flutter_web_auth_2 (from `.symlinks/plugins/flutter_web_auth_2/ios`)
   - geolocator_apple (from `.symlinks/plugins/geolocator_apple/ios`)
@@ -353,6 +356,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_openssl_crypto/ios"
   flutter_secure_storage:
     :path: ".symlinks/plugins/flutter_secure_storage/ios"
+  flutter_timezone:
+    :path: ".symlinks/plugins/flutter_timezone/ios"
   flutter_vibrate:
     :path: ".symlinks/plugins/flutter_vibrate/ios"
   flutter_web_auth_2:
@@ -411,6 +416,7 @@ SPEC CHECKSUMS:
   flutter_olm: e8526f4359dc12ee54378dcf7947607b131d810c
   flutter_openssl_crypto: 636ad25f56fbe0f45b9e13b8589540b341a486a1
   flutter_secure_storage: 23fc622d89d073675f2eaa109381aefbcf5a49be
+  flutter_timezone: ffb07bdad3c6276af8dada0f11978d8a1f8a20bb
   flutter_vibrate: 9f4c2ab57008965f78969472367c329dd77eb801
   flutter_web_auth_2: a1bc00762c408a8f80b72a538cd7ff5b601c3e71
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a

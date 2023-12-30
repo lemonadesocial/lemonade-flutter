@@ -31,7 +31,9 @@ class GetEventDetailBloc
   }
 
   Future<void> _onReplace(
-      GetEventDetailEventReplace event, Emitter emit) async {
+    GetEventDetailEventReplace event,
+    Emitter emit,
+  ) async {
     emit(GetEventDetailState.fetched(eventDetail: event.event));
   }
 }

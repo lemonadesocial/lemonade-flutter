@@ -9,7 +9,7 @@ part 'edit_event_detail_bloc.freezed.dart';
 
 class EditEventDetailBloc
     extends Bloc<EditEventDetailEvent, EditEventDetailState> {
-  EditEventDetailBloc() : super(const EditEventDetailStateInitial()) {
+  EditEventDetailBloc() : super(EditEventDetailState()) {
     on<EditEventDetailEventUpdateEvent>(_onUpdate);
   }
 
@@ -19,17 +19,27 @@ class EditEventDetailBloc
     EditEventDetailEventUpdateEvent event,
     Emitter emit,
   ) async {
-    emit(const EditEventDetailState.loading());
+    emit(state.copyWith(status: EditEventDetailBlocStatus.loading));
     final result = await eventRepository.updateEvent(
       input: Input$EventInput(
         virtual: event.virtual,
+        start: event.start != null
+            ? DateTime.parse(event.start!.toUtc().toIso8601String())
+            : null,
+        end: event.end != null
+            ? DateTime.parse(event.end!.toUtc().toIso8601String())
+            : null,
       ),
       id: event.eventId,
     );
     result.fold(
-      (failure) => emit(const EditEventDetailState.failure()),
+      (failure) =>
+          emit(state.copyWith(status: EditEventDetailBlocStatus.failure)),
       (eventDetail) => emit(
-        EditEventDetailState.success(eventDetail: eventDetail),
+        state.copyWith(
+          status: EditEventDetailBlocStatus.success,
+          event: eventDetail,
+        ),
       ),
     );
   }
@@ -40,15 +50,25 @@ class EditEventDetailEvent with _$EditEventDetailEvent {
   const factory EditEventDetailEvent.update({
     required String eventId,
     bool? virtual,
+    DateTime? start,
+    DateTime? end,
   }) = EditEventDetailEventUpdateEvent;
 }
 
 @freezed
 class EditEventDetailState with _$EditEventDetailState {
-  const factory EditEventDetailState.initial() = EditEventDetailStateInitial;
-  const factory EditEventDetailState.loading() = EditEventDetailStateLoading;
-  const factory EditEventDetailState.success({
-    required Event eventDetail,
-  }) = EditEventDetailStateSuccess;
-  const factory EditEventDetailState.failure() = EditEventDetailStateFailure;
+  factory EditEventDetailState({
+    @Default(EditEventDetailBlocStatus.initial)
+    EditEventDetailBlocStatus status,
+    Event? event,
+  }) = _EditEventDetailState;
+
+  factory EditEventDetailState.initial() => EditEventDetailState();
+}
+
+enum EditEventDetailBlocStatus {
+  initial,
+  loading,
+  success,
+  failure,
 }

@@ -161,18 +161,24 @@ final eventDetailRoutes = AutoRoute(
     ),
     AutoRoute(
       page: EventControlPanelRoute.page,
-    ),
-    AutoRoute(
-      page: EventGuestSettingsRoute.page,
-    ),
-    AutoRoute(
-      page: EventDatetimeSettingsRoute.page,
-    ),
-    AutoRoute(
-      page: EventLocationSettingRoute.page,
-    ),
-    AutoRoute(
-      page: EventLocationSettingDetailRoute.page,
+      children: [
+        AutoRoute(
+          initial: true,
+          page: EventControlPanelBaseRoute.page,
+        ),
+        AutoRoute(
+          page: EventGuestSettingsRoute.page,
+        ),
+        AutoRoute(
+          page: EventDatetimeSettingsRoute.page,
+        ),
+        AutoRoute(
+          page: EventLocationSettingRoute.page,
+        ),
+        AutoRoute(
+          page: EventLocationSettingDetailRoute.page,
+        ),
+      ],
     ),
   ],
 );
