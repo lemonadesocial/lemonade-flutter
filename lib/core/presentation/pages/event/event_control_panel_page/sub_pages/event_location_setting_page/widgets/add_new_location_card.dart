@@ -1,4 +1,4 @@
-import 'package:app/core/presentation/pages/event/event_location_setting_page/sub_pages/event_location_setting_detail_page.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_location_setting_page/sub_pages/event_location_setting_detail_page.dart';
 import 'package:flutter/material.dart';
 
 class AddNewLocationCard extends StatelessWidget {

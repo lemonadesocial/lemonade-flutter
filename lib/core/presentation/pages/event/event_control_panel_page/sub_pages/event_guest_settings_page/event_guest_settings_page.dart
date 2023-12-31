@@ -333,7 +333,9 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
   }
 
   void _onGuestLimitPerToggle(
-      bool isGuestLimitPer, EventGuestSettingState state) {
+    bool isGuestLimitPer,
+    EventGuestSettingState state,
+  ) {
     guestLimitPerController.text =
         isGuestLimitPer ? '' : EventConstants.defaultEventGuestLimitPer;
     context.read<EventGuestSettingsBloc>().add(

@@ -31,7 +31,6 @@ import 'package:app/core/application/newsfeed/newsfeed_listing_bloc/newsfeed_lis
 import 'package:app/core/data/post/newsfeed_repository_impl.dart';
 import 'package:app/core/service/newsfeed/newsfeed_service.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 class LemonadeApp extends StatefulWidget {
   const LemonadeApp({super.key});
