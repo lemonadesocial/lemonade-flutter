@@ -94,6 +94,9 @@ class EventConfiguration {
           pattern: 'EEE, MMMM dd - HH:mm',
         );
       }
+      if (element.type == EventConfigurationType.location) {
+        element.description = event?.address?.title;
+      }
       if (element.type == EventConfigurationType.virtual) {
         element.selected = event?.virtual;
       }

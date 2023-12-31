@@ -1,3 +1,4 @@
+import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
@@ -29,6 +30,20 @@ class EditEventDetailBloc
         end: event.end != null
             ? DateTime.parse(event.end!.toUtc().toIso8601String())
             : null,
+        address: event.address != null
+            ? Input$AddressInput(
+                title: event.address!.title,
+                street_1: event.address!.street1,
+                street_2: event.address!.street2,
+                region: event.address!.region,
+                city: event.address!.city,
+                country: event.address!.country,
+                postal: event.address!.postal,
+                recipient_name: event.address!.recipientName,
+                latitude: event.address!.latitude,
+                longitude: event.address!.longitude,
+              )
+            : null,
       ),
       id: event.eventId,
     );
@@ -52,6 +67,7 @@ class EditEventDetailEvent with _$EditEventDetailEvent {
     bool? virtual,
     DateTime? start,
     DateTime? end,
+    Address? address,
   }) = EditEventDetailEventUpdateEvent;
 }
 

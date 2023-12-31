@@ -1,6 +1,8 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
+import 'package:app/core/application/event/edit_event_detail_bloc/edit_event_detail_bloc.dart';
 import 'package:app/core/application/event/event_location_setting_bloc/event_location_setting_bloc.dart';
 import 'package:app/core/domain/common/entities/common.dart';
+import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_location_setting_page/widgets/location_item.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
@@ -18,7 +20,11 @@ import 'package:flutter_vibrate/flutter_vibrate.dart';
 
 @RoutePage()
 class EventLocationSettingPage extends StatefulWidget {
-  const EventLocationSettingPage({Key? key}) : super(key: key);
+  const EventLocationSettingPage({
+    super.key,
+    this.event,
+  });
+  final Event? event;
 
   @override
   State<EventLocationSettingPage> createState() =>
@@ -26,11 +32,6 @@ class EventLocationSettingPage extends StatefulWidget {
 }
 
 class _EventLocationSettingPageState extends State<EventLocationSettingPage> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -41,8 +42,8 @@ class _EventLocationSettingPageState extends State<EventLocationSettingPage> {
         title: t.event.eventLocation,
       ),
       backgroundColor: colorScheme.onPrimaryContainer,
-      body: _buildContent(),
       resizeToAvoidBottomInset: true,
+      body: _buildContent(),
     );
   }
 
@@ -53,79 +54,84 @@ class _EventLocationSettingPageState extends State<EventLocationSettingPage> {
           authenticated: (authSession) => authSession.addresses ?? [],
           orElse: () => [],
         );
-    return BlocBuilder<EventLocationSettingBloc, EventLocationSettingState>(
-      builder: (context, state) {
-        return Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: Spacing.small,
-            vertical: Spacing.small,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                t.event.locationSetting.description,
-                style: Typo.medium.copyWith(color: colorScheme.onSecondary),
-              ),
-              SizedBox(
-                height: 15.h,
-              ),
-              InkWell(
-                onTap: () => _onTapAddNew(),
-                child: Container(
-                  height: 80.h,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(20.r)),
-                    gradient: LinearGradient(
-                      begin: Alignment.bottomCenter,
-                      end: Alignment.topCenter,
-                      colors: [
-                        LemonColor.darkCharcoalGray,
-                        LemonColor.darkCharcoalGray,
-                      ],
-                    ),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 25.w,
-                      vertical: 10.h,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          t.event.locationSetting.addNew.toUpperCase(),
-                          style: Typo.extraMedium.copyWith(
-                            fontFamily: FontFamily.nohemiVariable,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        const Icon(Icons.add_circle_outline_rounded),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 25.h,
-              ),
-              Text(
-                t.event.locationSetting.myPlaces,
-                style: Typo.extraMedium,
-              ),
-              SizedBox(
-                height: 12.h,
-              ),
-              Expanded(
-                child: AddressList(
-                  addresses: addresses,
-                ),
-              ),
-              _buildSaveButton(),
-            ],
-          ),
-        );
+    return BlocListener<EditEventDetailBloc, EditEventDetailState>(
+      listener: (context, state) {
+        if (state.status == EditEventDetailBlocStatus.success) {
+          AutoRouter.of(context).pop();
+        }
       },
+      child: BlocBuilder<EventLocationSettingBloc, EventLocationSettingState>(
+        builder: (context, state) {
+          return Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: Spacing.small,
+              vertical: Spacing.small,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  t.event.locationSetting.description,
+                  style: Typo.medium.copyWith(color: colorScheme.onSecondary),
+                ),
+                SizedBox(
+                  height: 15.h,
+                ),
+                InkWell(
+                  onTap: () => _onTapAddNew(),
+                  child: Container(
+                    height: 80.h,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(20.r)),
+                      gradient: LinearGradient(
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                        colors: [
+                          LemonColor.darkCharcoalGray,
+                          LemonColor.darkCharcoalGray,
+                        ],
+                      ),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 25.w,
+                        vertical: 10.h,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            t.event.locationSetting.addNew.toUpperCase(),
+                            style: Typo.extraMedium.copyWith(
+                              fontFamily: FontFamily.nohemiVariable,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const Icon(Icons.add_circle_outline_rounded),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 25.h,
+                ),
+                Text(
+                  t.event.locationSetting.myPlaces,
+                  style: Typo.extraMedium,
+                ),
+                SizedBox(
+                  height: 12.h,
+                ),
+                Expanded(
+                  child: AddressList(addresses: addresses, event: widget.event),
+                ),
+                _buildSaveButton(),
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 
@@ -135,23 +141,42 @@ class _EventLocationSettingPageState extends State<EventLocationSettingPage> {
   }
 
   _buildSaveButton() {
-    return LinearGradientButton(
-      label: t.common.save,
-      height: 48.h,
-      radius: BorderRadius.circular(24),
-      textStyle: Typo.medium.copyWith(),
-      mode: GradientButtonMode.lavenderMode,
-      onTap: () {
-        AutoRouter.of(context).pop();
+    return BlocBuilder<EditEventDetailBloc, EditEventDetailState>(
+      builder: (context, state) {
+        return LinearGradientButton(
+          label: t.common.save,
+          height: 48.h,
+          radius: BorderRadius.circular(24),
+          textStyle: Typo.medium.copyWith(),
+          mode: GradientButtonMode.lavenderMode,
+          onTap: () {
+            if (widget.event != null) {
+              context.read<EditEventDetailBloc>().add(
+                    EditEventDetailEvent.update(
+                      eventId: widget.event?.id ?? '',
+                      address: context
+                          .read<EventLocationSettingBloc>()
+                          .state
+                          .selectedAddress,
+                    ),
+                  );
+            } else {
+              AutoRouter.of(context).pop();
+            }
+          },
+          loadingWhen: state.status == EditEventDetailBlocStatus.loading,
+        );
       },
     );
   }
 }
 
 class AddressList extends StatelessWidget {
+  final Event? event;
   const AddressList({
     super.key,
     required this.addresses,
+    this.event,
   });
 
   final List<Address> addresses;
@@ -184,7 +209,9 @@ class AddressList extends StatelessWidget {
                     .read<EventLocationSettingBloc>()
                     .add(SelectAddress(address: addresses[index]));
               },
-              selected: state.selectedAddress?.id == addresses[index].id,
+              selected: state.selectedAddress != null
+                  ? state.selectedAddress?.id == addresses[index].id
+                  : event?.address?.title == addresses[index].title,
             ),
           ),
           separatorBuilder: (context, index) => SizedBox(
