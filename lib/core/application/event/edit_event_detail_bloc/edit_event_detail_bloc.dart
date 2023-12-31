@@ -1,4 +1,3 @@
-import 'package:app/core/constants/event/event_constants.dart';
 import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/event_repository.dart';
