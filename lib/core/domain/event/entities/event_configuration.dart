@@ -11,7 +11,9 @@ enum EventConfigurationType {
   startDateTime,
   endDateTime,
   virtual,
-  location
+  location,
+  coHosts,
+  speakers
 }
 
 class EventConfiguration {
@@ -66,6 +68,24 @@ class EventConfiguration {
         title: 'Offline',
         description: 'Add location',
         icon: const Icon(Icons.factory_outlined),
+      ),
+    ];
+    return eventConfigs;
+  }
+
+  static List<EventConfiguration> collaborationsEventConfiguations() {
+    final List<EventConfiguration> eventConfigs = [
+      EventConfiguration(
+        type: EventConfigurationType.visibility,
+        title: t.event.configuration.coHosts,
+        description: t.common.add,
+        icon: const Icon(Icons.person_add),
+      ),
+      EventConfiguration(
+        type: EventConfigurationType.location,
+        title: t.event.configuration.speakers,
+        description: t.common.add,
+        icon: const Icon(Icons.speaker),
       ),
     ];
     return eventConfigs;
