@@ -183,5 +183,6 @@
     "editEvent": "Edit event",
     "editEventSuccessfully": "Edit event successfully",
     "collaborations": "Collaborations",
-    "eventDetails": "Event Details"
+    "eventDetails": "Event Details",
+    "cohostInfo": "$cohostsCount co-hosts"
 }

@@ -1,7 +1,9 @@
+import 'package:app/core/application/event/event_detail_cohosts_bloc/event_detail_cohosts_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 enum EventPrivacy { public, private }
 
@@ -73,12 +75,21 @@ class EventConfiguration {
     return eventConfigs;
   }
 
-  static List<EventConfiguration> collaborationsEventConfiguations() {
+  static List<EventConfiguration> collaborationsEventConfiguations(
+      BuildContext context) {
+    final eventCohostRequests =
+        context.read<EventDetailCohostsBloc>().state.maybeWhen(
+              fetched: (eventCohostRequests) => eventCohostRequests,
+              orElse: () => [],
+            );
     final List<EventConfiguration> eventConfigs = [
       EventConfiguration(
         type: EventConfigurationType.visibility,
         title: t.event.configuration.coHosts,
-        description: t.common.add,
+        description: eventCohostRequests.isNotEmpty
+            ? t.event
+                .cohostInfo(cohostsCount: eventCohostRequests.length.toString())
+            : t.common.add,
         icon: const Icon(Icons.person_add),
       ),
       EventConfiguration(

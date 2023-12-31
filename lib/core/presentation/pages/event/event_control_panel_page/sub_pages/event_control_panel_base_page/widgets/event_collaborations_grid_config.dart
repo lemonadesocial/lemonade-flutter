@@ -1,8 +1,10 @@
+import 'package:app/core/application/event/event_detail_cohosts_bloc/event_detail_cohosts_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_configuration.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/event_config_card.dart';
 import 'package:app/core/utils/modal_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 
 enum EventPrivacy { public, private }
@@ -56,7 +58,8 @@ class EventCollaborationsGridConfig extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final eventConfigs = EventConfiguration.collaborationsEventConfiguations();
+    final eventConfigs =
+        EventConfiguration.collaborationsEventConfiguations(context);
     return SliverGrid(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,

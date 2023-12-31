@@ -1,0 +1,7 @@
+# import '../fragment/event_fragment.graphql'
+
+query GetEventCohostRequests($input: GetEventCohostRequestsInput!) {
+    getEventCohostRequests(input: $input) {
+        ...EventCohostRequestFragment
+    }
+}
