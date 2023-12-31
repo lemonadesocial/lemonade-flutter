@@ -118,6 +118,7 @@ const eventFragment = '''
   guest_limit
   guest_limit_per
   virtual
+  private
 }
 ''';
 

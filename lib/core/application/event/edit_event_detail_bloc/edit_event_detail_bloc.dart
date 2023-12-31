@@ -1,3 +1,4 @@
+import 'package:app/core/constants/event/event_constants.dart';
 import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/event_repository.dart';
@@ -30,6 +31,13 @@ class EditEventDetailBloc
         end: event.end != null
             ? DateTime.parse(event.end!.toUtc().toIso8601String())
             : null,
+        guest_limit: event.guestLimit != null
+            ? double.parse(event.guestLimit ?? '')
+            : null,
+        guest_limit_per: event.guestLimitPer != null
+            ? double.parse(event.guestLimitPer ?? '')
+            : null,
+        private: event.private ?? false,
         address: event.address != null
             ? Input$AddressInput(
                 title: event.address!.title,
@@ -68,6 +76,9 @@ class EditEventDetailEvent with _$EditEventDetailEvent {
     DateTime? start,
     DateTime? end,
     Address? address,
+    String? guestLimit,
+    String? guestLimitPer,
+    bool? private,
   }) = EditEventDetailEventUpdateEvent;
 }
 

@@ -76,10 +76,17 @@ class EventConfiguration {
   }) {
     List<EventConfiguration> result = List.from(defaultEventConfigurations());
     for (var element in result) {
+      if (element.type == EventConfigurationType.visibility) {
+        element.title =
+            event?.private == true ? t.event.private : t.event.public;
+        element.description = event?.private == true
+            ? t.event.privateDescription
+            : t.event.publicDescription;
+      }
       if (element.type == EventConfigurationType.guestSettings) {
         element.description = t.event.eventCreation.guestSettingDescription(
-          guestLimit: event?.guestLimit ?? 'unlimited',
-          guestLimitPer: event?.guestLimitPer ?? 'no',
+          guestLimit: event?.guestLimit?.toStringAsFixed(0) ?? 'unlimited',
+          guestLimitPer: event?.guestLimitPer?.toStringAsFixed(0) ?? 'no',
         );
       }
       if (element.type == EventConfigurationType.startDateTime) {

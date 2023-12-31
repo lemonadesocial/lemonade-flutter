@@ -1,6 +1,7 @@
 import 'package:app/core/application/event/create_event_bloc/create_event_bloc.dart';
 import 'package:app/core/application/event/edit_event_detail_bloc/edit_event_detail_bloc.dart';
 import 'package:app/core/application/event/event_datetime_settings_bloc/event_datetime_settings_bloc.dart';
+import 'package:app/core/application/event/event_guest_settings_bloc/event_guest_settings_bloc.dart';
 import 'package:app/core/application/event/event_location_setting_bloc/event_location_setting_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_configuration.dart';
@@ -31,7 +32,9 @@ class CreateEventConfigGrid extends StatelessWidget {
     switch (eventConfigType) {
       case EventConfigurationType.visibility ||
             EventConfigurationType.guestSettings:
-        page = const EventGuestSettingsPage();
+        page = EventGuestSettingsPage(
+          event: event,
+        );
         break;
       case EventConfigurationType.startDateTime:
         page = EventDatetimeSettingsPage(
@@ -158,7 +161,8 @@ class CreateEventConfigGrid extends StatelessWidget {
           EventConfigurationType? eventConfigType = eventConfig.type;
           switch (eventConfigType) {
             case EventConfigurationType.visibility:
-              return BlocBuilder<CreateEventBloc, CreateEventState>(
+              return BlocBuilder<EventGuestSettingsBloc,
+                  EventGuestSettingState>(
                 builder: (context, state) {
                   return EventConfigCard(
                     title: state.private == true
@@ -173,7 +177,8 @@ class CreateEventConfigGrid extends StatelessWidget {
                 },
               );
             case EventConfigurationType.guestSettings:
-              return BlocBuilder<CreateEventBloc, CreateEventState>(
+              return BlocBuilder<EventGuestSettingsBloc,
+                  EventGuestSettingState>(
                 builder: (context, state) {
                   return EventConfigCard(
                     title: eventConfig.title,

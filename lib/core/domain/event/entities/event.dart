@@ -35,6 +35,7 @@ class Event {
     this.guestLimit,
     this.guestLimitPer,
     this.virtual,
+    this.private,
   });
 
   factory Event.fromDto(EventDto dto) {
@@ -86,6 +87,7 @@ class Event {
       guestLimit: dto.guestLimit,
       guestLimitPer: dto.guestLimitPer,
       virtual: dto.virtual,
+      private: dto.private,
     );
   }
   String? id;
@@ -116,6 +118,7 @@ class Event {
   double? guestLimit;
   double? guestLimitPer;
   bool? virtual;
+  bool? private;
 }
 
 class EventOffer {

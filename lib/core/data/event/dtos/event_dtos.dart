@@ -43,6 +43,7 @@ class EventDto with _$EventDto {
     @JsonKey(name: 'guest_limit') double? guestLimit,
     @JsonKey(name: 'guest_limit_per') double? guestLimitPer,
     bool? virtual,
+    bool? private,
   }) = _EventDto;
 
   factory EventDto.fromJson(Map<String, dynamic> json) =>

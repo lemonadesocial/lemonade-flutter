@@ -1,12 +1,16 @@
-import 'package:app/core/application/event/create_event_bloc/create_event_bloc.dart';
+import 'package:app/core/application/event/edit_event_detail_bloc/edit_event_detail_bloc.dart';
+import 'package:app/core/application/event/event_guest_settings_bloc/event_guest_settings_bloc.dart';
 import 'package:app/core/constants/event/event_constants.dart';
+import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/setting/widgets/setting_tile_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
+import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,7 +22,11 @@ enum EventPrivacy { public, private }
 
 @RoutePage()
 class EventGuestSettingsPage extends StatefulWidget {
-  const EventGuestSettingsPage({Key? key}) : super(key: key);
+  const EventGuestSettingsPage({
+    super.key,
+    this.event,
+  });
+  final Event? event;
 
   @override
   State<EventGuestSettingsPage> createState() => _EventGuestSettingsPageState();
@@ -31,9 +39,21 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
   @override
   void initState() {
     super.initState();
-    final createEventBloc = context.read<CreateEventBloc>().state;
-    guestLimitPerController.text = createEventBloc.guestLimitPer ?? "";
-    guestLimitController.text = createEventBloc.guestLimit ?? "";
+    if (widget.event != null) {
+      guestLimitController.text =
+          widget.event!.guestLimit?.toStringAsFixed(0) ?? '';
+      guestLimitPerController.text =
+          widget.event!.guestLimitPer?.toStringAsFixed(0) ?? '';
+      context.read<EventGuestSettingsBloc>().add(
+            PrivateChanged(private: widget.event?.private ?? false),
+          );
+    } else {
+      final eventGuestSettingBloc =
+          context.read<EventGuestSettingsBloc>().state;
+      guestLimitController.text = eventGuestSettingBloc.guestLimit.toString();
+      guestLimitPerController.text =
+          eventGuestSettingBloc.guestLimitPer.toString();
+    }
   }
 
   @override
@@ -48,111 +68,171 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
           title: t.event.eventCreation.guestSettings,
         ),
         backgroundColor: colorScheme.onPrimaryContainer,
-        body: SingleChildScrollView(child: _buildContent(colorScheme)),
+        body: BlocListener<EditEventDetailBloc, EditEventDetailState>(
+          listener: (context, state) {
+            if (state.status == EditEventDetailBlocStatus.success) {
+              AutoRouter.of(context).pop();
+            }
+          },
+          child: _buildContent(colorScheme),
+        ),
         resizeToAvoidBottomInset: true,
       ),
     );
   }
 
   Widget _buildContent(ColorScheme colorScheme) {
-    return BlocBuilder<CreateEventBloc, CreateEventState>(
+    return BlocBuilder<EventGuestSettingsBloc, EventGuestSettingState>(
       builder: (context, state) {
-        return Column(
+        return Stack(
           children: [
-            _buildSegmentedButton(colorScheme, state),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: Spacing.xSmall,
-                vertical: Spacing.xSmall,
-              ),
-              child: Column(
-                children: [
-                  _buildSettingTile(
-                    title: t.event.guestSettings.autoApprove,
-                    subTitle: t.event.guestSettings.autoApproveDescription,
-                    value: state.verify,
-                    onChanged: (value) {
-                      Vibrate.feedback(FeedbackType.light);
-                      context
-                          .read<CreateEventBloc>()
-                          .add(VerifyChanged(verify: value));
-                    },
-                  ),
-                  SizedBox(
-                    height: Spacing.xSmall,
-                  ),
-                  _buildContainer(
+            SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: Spacing.xSmall,
+                  vertical: Spacing.xSmall,
+                ),
+                child: Column(
+                  children: [
+                    _buildSegmentedButton(colorScheme, state),
+                    SizedBox(
+                      height: Spacing.medium,
+                    ),
                     _buildSettingTile(
-                      title: t.event.guestSettings.guestUnlockLimit,
-                      subTitle:
-                          t.event.guestSettings.guestUnlockLimitDescription,
-                      value: state.guestLimitPer == null,
-                      onChanged: (value) =>
-                          _onGuestLimitPerToggle(value, state),
-                      trailing: SizedBox(
-                        width: 60.w,
-                        child: LemonTextField(
-                          textInputType: TextInputType.number,
-                          controller: guestLimitPerController,
-                          contentPadding: EdgeInsets.all(Spacing.small),
-                          onChange: (value) => context
-                              .read<CreateEventBloc>()
-                              .add(GuestLimitPerChanged(guestLimitPer: value)),
-                          readOnly: state.guestLimitPer == null,
+                      title: t.event.guestSettings.autoApprove,
+                      subTitle: t.event.guestSettings.autoApproveDescription,
+                      value: state.verify,
+                      onChanged: (value) {
+                        Vibrate.feedback(FeedbackType.light);
+                        context
+                            .read<EventGuestSettingsBloc>()
+                            .add(VerifyChanged(verify: value));
+                      },
+                    ),
+                    SizedBox(
+                      height: Spacing.xSmall,
+                    ),
+                    _buildContainer(
+                      _buildSettingTile(
+                        title: t.event.guestSettings.guestUnlockLimit,
+                        subTitle:
+                            t.event.guestSettings.guestUnlockLimitDescription,
+                        value: state.guestLimitPer == null,
+                        onChanged: (value) =>
+                            _onGuestLimitPerToggle(value, state),
+                        trailing: SizedBox(
+                          width: 60.w,
+                          child: LemonTextField(
+                            textInputType: TextInputType.number,
+                            controller: guestLimitPerController,
+                            contentPadding: EdgeInsets.all(Spacing.small),
+                            onChange: (value) => context
+                                .read<EventGuestSettingsBloc>()
+                                .add(
+                                  GuestLimitPerChanged(guestLimitPer: value),
+                                ),
+                            readOnly: state.guestLimitPer == null,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: Spacing.xSmall,
-                  ),
-                  _buildContainer(
-                    _buildSettingTile(
-                      title: t.event.guestSettings.noUnlockLimit,
-                      value: state.guestLimitPer == null,
-                      onChanged: (value) =>
-                          _onNoGuestLimitPerToggle(value, state),
-                      subTitle: '',
+                    SizedBox(
+                      height: Spacing.xSmall,
                     ),
-                  ),
-                  SizedBox(
-                    height: Spacing.xSmall,
-                  ),
-                  _buildContainer(
-                    _buildSettingTile(
-                      title: t.event.guestSettings.totalGuestLimit,
-                      subTitle:
-                          t.event.guestSettings.totalGuestLimitDescription,
-                      value: state.guestLimit == null,
-                      onChanged: (value) => _onGuestLimitToggle(value, state),
-                      trailing: SizedBox(
-                        width: 60.w,
-                        child: LemonTextField(
-                          textInputType: TextInputType.number,
-                          controller: guestLimitController,
-                          contentPadding: EdgeInsets.all(Spacing.small),
-                          onChange: (value) => context
-                              .read<CreateEventBloc>()
-                              .add(GuestLimitChanged(guestLimit: value)),
-                          readOnly: state.guestLimit == null,
+                    _buildContainer(
+                      _buildSettingTile(
+                        title: t.event.guestSettings.noUnlockLimit,
+                        value: state.guestLimitPer == null,
+                        onChanged: (value) =>
+                            _onNoGuestLimitPerToggle(value, state),
+                        subTitle: '',
+                      ),
+                    ),
+                    SizedBox(
+                      height: Spacing.xSmall,
+                    ),
+                    _buildContainer(
+                      _buildSettingTile(
+                        title: t.event.guestSettings.totalGuestLimit,
+                        subTitle:
+                            t.event.guestSettings.totalGuestLimitDescription,
+                        value: state.guestLimit == null,
+                        onChanged: (value) => _onGuestLimitToggle(value, state),
+                        trailing: SizedBox(
+                          width: 60.w,
+                          child: LemonTextField(
+                            textInputType: TextInputType.number,
+                            controller: guestLimitController,
+                            contentPadding: EdgeInsets.all(Spacing.small),
+                            onChange: (value) => context
+                                .read<EventGuestSettingsBloc>()
+                                .add(GuestLimitChanged(guestLimit: (value))),
+                            readOnly: state.guestLimit == null,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: Spacing.xSmall,
-                  ),
-                  _buildContainer(
-                    _buildSettingTile(
-                      title: t.event.guestSettings.noGuestLimit,
-                      value: state.guestLimit == null,
-                      onChanged: (value) => _onNoGuestLimitToggle(value, state),
-                      subTitle: '',
+                    SizedBox(
+                      height: Spacing.xSmall,
                     ),
-                  ),
-                ],
+                    _buildContainer(
+                      _buildSettingTile(
+                        title: t.event.guestSettings.noGuestLimit,
+                        value: state.guestLimit == null,
+                        onChanged: (value) =>
+                            _onNoGuestLimitToggle(value, state),
+                        subTitle: '',
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
+            widget.event != null
+                ? BlocBuilder<EditEventDetailBloc, EditEventDetailState>(
+                    builder: (context, state) {
+                      return Align(
+                        alignment: Alignment.bottomCenter,
+                        child: SafeArea(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: Spacing.smMedium,
+                              vertical: Spacing.smMedium,
+                            ),
+                            child: LinearGradientButton(
+                              label: t.common.save,
+                              height: 48.h,
+                              radius: BorderRadius.circular(24),
+                              textStyle: Typo.medium.copyWith(),
+                              mode: GradientButtonMode.lavenderMode,
+                              onTap: () {
+                                context.read<EditEventDetailBloc>().add(
+                                      EditEventDetailEvent.update(
+                                        eventId: widget.event?.id ?? '',
+                                        guestLimit: context
+                                            .read<EventGuestSettingsBloc>()
+                                            .state
+                                            .guestLimit,
+                                        guestLimitPer: context
+                                            .read<EventGuestSettingsBloc>()
+                                            .state
+                                            .guestLimitPer,
+                                        private: context
+                                            .read<EventGuestSettingsBloc>()
+                                            .state
+                                            .private,
+                                      ),
+                                    );
+                              },
+                              loadingWhen: state.status ==
+                                  EditEventDetailBlocStatus.loading,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  )
+                : const SizedBox(),
           ],
         );
       },
@@ -161,7 +241,7 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
 
   Widget _buildSegmentedButton(
     ColorScheme colorScheme,
-    CreateEventState state,
+    EventGuestSettingState state,
   ) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
@@ -202,9 +282,11 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
             icon: Icon(Icons.visibility_outlined),
           ),
         ],
-        selected: {state.private},
+        selected: {
+          state.private,
+        },
         onSelectionChanged: (Set<bool> newSelection) {
-          context.read<CreateEventBloc>().add(
+          context.read<EventGuestSettingsBloc>().add(
                 PrivateChanged(private: newSelection.first),
               );
         },
@@ -250,10 +332,11 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
     );
   }
 
-  void _onGuestLimitPerToggle(bool isGuestLimitPer, CreateEventState state) {
+  void _onGuestLimitPerToggle(
+      bool isGuestLimitPer, EventGuestSettingState state) {
     guestLimitPerController.text =
         isGuestLimitPer ? '' : EventConstants.defaultEventGuestLimitPer;
-    context.read<CreateEventBloc>().add(
+    context.read<EventGuestSettingsBloc>().add(
           GuestLimitPerChanged(
             guestLimitPer: isGuestLimitPer
                 ? null
@@ -264,11 +347,11 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
 
   void _onNoGuestLimitPerToggle(
     bool isNoGuestLimitPer,
-    CreateEventState state,
+    EventGuestSettingState state,
   ) {
     guestLimitPerController.text =
         isNoGuestLimitPer ? '' : EventConstants.defaultEventGuestLimitPer;
-    context.read<CreateEventBloc>().add(
+    context.read<EventGuestSettingsBloc>().add(
           GuestLimitPerChanged(
             guestLimitPer: isNoGuestLimitPer
                 ? null
@@ -277,10 +360,10 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
         );
   }
 
-  void _onGuestLimitToggle(bool isGuestLimit, CreateEventState state) {
+  void _onGuestLimitToggle(bool isGuestLimit, EventGuestSettingState state) {
     guestLimitController.text =
         isGuestLimit ? '' : EventConstants.defaultEventGuestLimit;
-    context.read<CreateEventBloc>().add(
+    context.read<EventGuestSettingsBloc>().add(
           GuestLimitChanged(
             guestLimit:
                 isGuestLimit ? null : EventConstants.defaultEventGuestLimit,
@@ -288,10 +371,11 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
         );
   }
 
-  void _onNoGuestLimitToggle(bool isNoGuestLimit, CreateEventState state) {
+  void _onNoGuestLimitToggle(
+      bool isNoGuestLimit, EventGuestSettingState state) {
     guestLimitController.text =
         isNoGuestLimit ? '' : EventConstants.defaultEventGuestLimit;
-    context.read<CreateEventBloc>().add(
+    context.read<EventGuestSettingsBloc>().add(
           GuestLimitChanged(
             guestLimit:
                 isNoGuestLimit ? null : EventConstants.defaultEventGuestLimit,

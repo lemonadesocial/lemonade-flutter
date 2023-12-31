@@ -89,6 +89,7 @@ fragment EventFields on Event {
         provider_id
     }
     address {
+        _id
         street_1
         city
         title
@@ -99,4 +100,5 @@ fragment EventFields on Event {
     guest_limit
     guest_limit_per
     virtual
+    private
 }

@@ -39,7 +39,8 @@ class EventControlPanelBasePage extends StatelessWidget {
                 if (state.status == EditEventDetailBlocStatus.success) {
                   context.read<GetEventDetailBloc>().add(
                         GetEventDetailEvent.replace(
-                            event: state.event ?? Event()),
+                          event: state.event ?? Event(),
+                        ),
                       );
                 }
               },
