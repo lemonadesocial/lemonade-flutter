@@ -9,6 +9,7 @@ import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 
 class HostEventDetailConfigGrid extends StatelessWidget {
   const HostEventDetailConfigGrid({
@@ -41,6 +42,7 @@ class HostEventDetailConfigGrid extends StatelessWidget {
           ),
         ),
         onTap: () {
+          Vibrate.feedback(FeedbackType.light);
           showComingSoonDialog(context);
         },
       ),
@@ -58,6 +60,7 @@ class HostEventDetailConfigGrid extends StatelessWidget {
           ),
         ),
         onTap: () {
+          Vibrate.feedback(FeedbackType.light);
           showComingSoonDialog(context);
         },
       ),
@@ -77,6 +80,7 @@ class HostEventDetailConfigGrid extends StatelessWidget {
           ),
         ),
         onTap: () {
+          Vibrate.feedback(FeedbackType.light);
           showComingSoonDialog(context);
         },
       ),
@@ -94,6 +98,7 @@ class HostEventDetailConfigGrid extends StatelessWidget {
           ),
         ),
         onTap: () {
+          Vibrate.feedback(FeedbackType.light);
           showComingSoonDialog(context);
         },
       ),
@@ -111,6 +116,7 @@ class HostEventDetailConfigGrid extends StatelessWidget {
           ),
         ),
         onTap: () {
+          Vibrate.feedback(FeedbackType.light);
           AutoRouter.of(context).navigate(const EventControlPanelRoute());
         },
       ),
@@ -128,6 +134,7 @@ class HostEventDetailConfigGrid extends StatelessWidget {
           ),
         ),
         onTap: () {
+          Vibrate.feedback(FeedbackType.light);
           showComingSoonDialog(context);
         },
       ),

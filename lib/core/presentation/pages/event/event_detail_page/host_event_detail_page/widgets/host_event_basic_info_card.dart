@@ -13,13 +13,16 @@ import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dartz/dartz.dart';
 import 'package:duration/duration.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 
 class HostEventBasicInfoCard extends StatelessWidget {
   const HostEventBasicInfoCard({
@@ -176,7 +179,11 @@ class HostEventBasicInfoCard extends StatelessWidget {
                         ),
                       ),
                       child: InkWell(
-                        onTap: () {},
+                        onTap: () {
+                          Vibrate.feedback(FeedbackType.light);
+                          AutoRouter.of(context)
+                              .navigate(const EventControlPanelRoute());
+                        },
                         child: Center(
                           child: ThemeSvgIcon(
                             color: colorScheme.onSecondary,

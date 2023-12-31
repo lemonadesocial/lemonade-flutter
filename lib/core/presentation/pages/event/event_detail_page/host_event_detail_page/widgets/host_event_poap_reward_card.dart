@@ -1,6 +1,7 @@
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/utils/modal_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -9,6 +10,7 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 
 class HostEventPoapRewardCard extends StatelessWidget {
   const HostEventPoapRewardCard({
@@ -245,18 +247,24 @@ class HostEventPoapRewardCard extends StatelessWidget {
                 SizedBox(
                   height: Spacing.smMedium,
                 ),
-                LinearGradientButton(
-                  width: 108.w,
-                  label: t.event.addPoap,
-                  trailing: ThemeSvgIcon(
-                    builder: (filter) =>
-                        Assets.icons.icSendMessage.svg(colorFilter: filter),
-                  ),
-                  mode: GradientButtonMode.lavenderMode,
-                  radius: BorderRadius.circular(LemonRadius.normal),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: Spacing.xSmall,
-                    vertical: 9.h,
+                InkWell(
+                  onTap: () {
+                    Vibrate.feedback(FeedbackType.light);
+                    showComingSoonDialog(context);
+                  },
+                  child: LinearGradientButton(
+                    width: 108.w,
+                    label: t.event.addPoap,
+                    trailing: ThemeSvgIcon(
+                      builder: (filter) =>
+                          Assets.icons.icSendMessage.svg(colorFilter: filter),
+                    ),
+                    mode: GradientButtonMode.lavenderMode,
+                    radius: BorderRadius.circular(LemonRadius.normal),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: Spacing.xSmall,
+                      vertical: 9.h,
+                    ),
                   ),
                 ),
               ],
