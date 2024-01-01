@@ -195,8 +195,9 @@ class EventRepositoryImpl implements EventRepository {
   }
 
   @override
-  Future<Either<Failure, List<EventCohostRequest>>> getEventCohostRequest(
-      {required Input$GetEventCohostRequestsInput input}) async {
+  Future<Either<Failure, List<EventCohostRequest>>> getEventCohostRequest({
+    required Input$GetEventCohostRequestsInput input,
+  }) async {
     final result = await client.query$GetEventCohostRequests(
       Options$Query$GetEventCohostRequests(
         variables: Variables$Query$GetEventCohostRequests(input: input),

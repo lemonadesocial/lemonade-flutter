@@ -76,7 +76,8 @@ class EventConfiguration {
   }
 
   static List<EventConfiguration> collaborationsEventConfiguations(
-      BuildContext context) {
+    BuildContext context,
+  ) {
     final eventCohostRequests =
         context.read<EventDetailCohostsBloc>().state.maybeWhen(
               fetched: (eventCohostRequests) => eventCohostRequests,

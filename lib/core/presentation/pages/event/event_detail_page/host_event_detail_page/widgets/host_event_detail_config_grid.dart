@@ -1,7 +1,6 @@
 import 'package:app/core/application/event/event_detail_cohosts_bloc/event_detail_cohosts_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/view_model/event_config_grid_view_model.dart';
-import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/utils/modal_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
@@ -24,7 +23,6 @@ class HostEventDetailConfigGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
     final List<EventConfigGridViewModel?> listData = [
       EventConfigGridViewModel(

@@ -16,17 +16,18 @@ class EventDetailCohostsBloc
   final EventRepository eventRepository = getIt<EventRepository>();
 
   Future<void> _onFetch(
-      EventDetailCohostsEventFetch event, Emitter emit) async {
-    print('..._onFetch');
+    EventDetailCohostsEventFetch event,
+    Emitter emit,
+  ) async {
     final result = await eventRepository.getEventCohostRequest(
       input: Input$GetEventCohostRequestsInput(event: event.eventId),
     );
-    print('...result');
     result.fold(
       (failure) => emit(const EventDetailCohostsState.failure()),
       (eventCohostRequests) => emit(
         EventDetailCohostsState.fetched(
-            eventCohostRequests: eventCohostRequests),
+          eventCohostRequests: eventCohostRequests,
+        ),
       ),
     );
   }
