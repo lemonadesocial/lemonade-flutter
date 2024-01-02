@@ -3,6 +3,7 @@ import 'package:app/core/data/event/dtos/event_rsvp_dto/event_rsvp_dto.dart';
 import 'package:app/core/data/event/gql/event_mutation.dart';
 import 'package:app/core/data/event/gql/event_query.dart';
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/entities/event_cohost_request.dart';
 import 'package:app/core/domain/event/entities/event_rsvp.dart';
 import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/core/domain/event/input/accept_event_input/accept_event_input.dart';
@@ -11,6 +12,8 @@ import 'package:app/core/domain/event/input/get_events_listing_input.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/graphql/backend/event/mutation/create_event.graphql.dart';
+import 'package:app/graphql/backend/event/mutation/update_event.graphql.dart';
+import 'package:app/graphql/backend/event/query/get_event_cohost_requests.graphql.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:dartz/dartz.dart';
@@ -166,5 +169,49 @@ class EventRepositoryImpl implements EventRepository {
       return Left(Failure.withGqlException(result.exception));
     }
     return Right(result.parsedData!);
+  }
+
+  @override
+  Future<Either<Failure, Event>> updateEvent({
+    required Input$EventInput input,
+    required String id,
+  }) async {
+    final result = await client.mutate$UpdateEvent(
+      Options$Mutation$UpdateEvent(
+        variables: Variables$Mutation$UpdateEvent(input: input, id: id),
+      ),
+    );
+    if (result.hasException) {
+      return Left(Failure.withGqlException(result.exception));
+    }
+
+    return Right(
+      Event.fromDto(
+        EventDto.fromJson(
+          result.parsedData!.updateEvent.toJson(),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<EventCohostRequest>>> getEventCohostRequest({
+    required Input$GetEventCohostRequestsInput input,
+  }) async {
+    final result = await client.query$GetEventCohostRequests(
+      Options$Query$GetEventCohostRequests(
+        variables: Variables$Query$GetEventCohostRequests(input: input),
+      ),
+    );
+    if (result.hasException) {
+      return Left(Failure.withGqlException(result.exception));
+    }
+    return Right(
+      List.from(
+        result.parsedData!.getEventCohostRequests
+            .map((item) => EventCohostRequest.fromJson(item.toJson()))
+            .toList(),
+      ),
+    );
   }
 }

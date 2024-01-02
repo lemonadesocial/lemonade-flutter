@@ -46,76 +46,71 @@ class CreateEventBasePage extends StatelessWidget {
           body: SafeArea(
             child: BlocBuilder<CreateEventBloc, CreateEventState>(
               builder: (context, state) {
-                return CustomScrollView(
-                  slivers: [
-                    SliverFillRemaining(
-                      hasScrollBody: false,
-                      child: Column(
-                        children: [
-                          Expanded(
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: Spacing.smMedium,
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(height: Spacing.medium),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      LemonTextField(
-                                        initialText: state.title.value,
-                                        label: t.event.eventCreation.title,
-                                        onChange: (value) =>
-                                            context.read<CreateEventBloc>().add(
-                                                  EventTitleChanged(
-                                                    title: value,
-                                                  ),
-                                                ),
-                                        errorText:
-                                            state.title.displayError != null
-                                                ? state.title.displayError!
-                                                    .getMessage(
-                                                    t.event.eventCreation.title,
-                                                  )
-                                                : null,
-                                      ),
-                                      SizedBox(
-                                        height: Spacing.smMedium,
-                                      ),
-                                      LemonTextField(
-                                        initialText: state.description.value,
-                                        label:
-                                            t.event.eventCreation.description,
-                                        onChange: (value) =>
-                                            context.read<CreateEventBloc>().add(
-                                                  EventDescriptionChanged(
-                                                    description: value,
-                                                  ),
-                                                ),
-                                        errorText: state
-                                                    .description.displayError !=
-                                                null
-                                            ? state.description.displayError!
-                                                .getMessage(
-                                                t.event.eventCreation
-                                                    .description,
-                                              )
-                                            : null,
-                                      ),
-                                      SizedBox(height: Spacing.smMedium),
-                                      CreateEventConfigGrid(),
-                                    ],
-                                  ),
-                                ],
-                              ),
+                return Stack(
+                  children: [
+                    CustomScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      slivers: [
+                        SliverPadding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: Spacing.smMedium,
+                          ),
+                          sliver: SliverToBoxAdapter(
+                            child: LemonTextField(
+                              initialText: state.title.value,
+                              label: t.event.eventCreation.title,
+                              onChange: (value) => context
+                                  .read<CreateEventBloc>()
+                                  .add(EventTitleChanged(title: value)),
+                              errorText: state.title.displayError != null
+                                  ? state.title.displayError!.getMessage(
+                                      t.event.eventCreation.title,
+                                    )
+                                  : null,
                             ),
                           ),
-                          _buildSubmitButton(context),
-                        ],
-                      ),
+                        ),
+                        SliverPadding(
+                          padding: EdgeInsets.only(top: 10.h),
+                        ),
+                        SliverPadding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: Spacing.smMedium,
+                          ),
+                          sliver: SliverToBoxAdapter(
+                            child: LemonTextField(
+                              initialText: state.description.value,
+                              label: t.event.eventCreation.description,
+                              onChange: (value) =>
+                                  context.read<CreateEventBloc>().add(
+                                        EventDescriptionChanged(
+                                          description: value,
+                                        ),
+                                      ),
+                              errorText: state.description.displayError != null
+                                  ? state.description.displayError!.getMessage(
+                                      t.event.eventCreation.description,
+                                    )
+                                  : null,
+                            ),
+                          ),
+                        ),
+                        SliverPadding(
+                          padding: EdgeInsets.only(top: 40.h),
+                        ),
+                        SliverPadding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: Spacing.smMedium,
+                          ),
+                          sliver: const CreateEventConfigGrid(),
+                        ),
+                      ],
+                    ),
+                    Positioned(
+                      left: 0,
+                      right: 0,
+                      bottom: 15,
+                      child: _buildSubmitButton(context),
                     ),
                   ],
                 );

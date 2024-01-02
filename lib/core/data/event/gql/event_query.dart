@@ -115,6 +115,10 @@ const eventFragment = '''
   }
   latitude
   longitude
+  guest_limit
+  guest_limit_per
+  virtual
+  private
 }
 ''';
 

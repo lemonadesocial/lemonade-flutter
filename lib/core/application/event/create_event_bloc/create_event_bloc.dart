@@ -15,10 +15,6 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
   CreateEventBloc() : super(const CreateEventState()) {
     on<EventTitleChanged>(_onTitleChanged);
     on<EventDescriptionChanged>(_onDescriptionChanged);
-    on<VerifyChanged>(_onVerifyChanged);
-    on<GuestLimitChanged>(_onGuestLimitChanged);
-    on<GuestLimitPerChanged>(_onGuestLimitPerChanged);
-    on<PrivateChanged>(_onPrivateChanged);
     on<VirtualChanged>(_onVirtualChanged);
     on<FormSubmitted>(_onFormSubmitted);
   }
@@ -51,50 +47,6 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
           state.title,
           description,
         ]),
-      ),
-    );
-  }
-
-  Future<void> _onVerifyChanged(
-    VerifyChanged event,
-    Emitter<CreateEventState> emit,
-  ) async {
-    emit(
-      state.copyWith(
-        verify: event.verify,
-      ),
-    );
-  }
-
-  Future<void> _onGuestLimitChanged(
-    GuestLimitChanged event,
-    Emitter<CreateEventState> emit,
-  ) async {
-    emit(
-      state.copyWith(
-        guestLimit: event.guestLimit,
-      ),
-    );
-  }
-
-  Future<void> _onGuestLimitPerChanged(
-    GuestLimitPerChanged event,
-    Emitter<CreateEventState> emit,
-  ) async {
-    emit(
-      state.copyWith(
-        guestLimitPer: event.guestLimitPer,
-      ),
-    );
-  }
-
-  Future<void> _onPrivateChanged(
-    PrivateChanged event,
-    Emitter<CreateEventState> emit,
-  ) async {
-    emit(
-      state.copyWith(
-        private: event.private,
       ),
     );
   }
@@ -135,10 +87,10 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
         end: DateTime.parse(event.end.toUtc().toIso8601String()),
         timezone: timezone,
         guest_limit: double.parse(
-          state.guestLimit ?? EventConstants.defaultEventGuestLimit,
+          event.guestLimit ?? EventConstants.defaultEventGuestLimit,
         ),
         guest_limit_per: double.parse(
-          state.guestLimitPer ?? EventConstants.defaultEventGuestLimitPer,
+          event.guestLimitPer ?? EventConstants.defaultEventGuestLimitPer,
         ),
         virtual: state.virtual,
         address: event.address != null
@@ -176,20 +128,6 @@ class CreateEventEvent with _$CreateEventEvent {
     required String description,
   }) = EventDescriptionChanged;
 
-  const factory CreateEventEvent.guestLimitChanged({
-    required String? guestLimit,
-  }) = GuestLimitChanged;
-
-  const factory CreateEventEvent.guestLimitPerChanged({
-    required String? guestLimitPer,
-  }) = GuestLimitPerChanged;
-
-  const factory CreateEventEvent.privateChanged({required bool private}) =
-      PrivateChanged;
-
-  const factory CreateEventEvent.verifyChanged({required bool verify}) =
-      VerifyChanged;
-
   const factory CreateEventEvent.virtualChanged({required bool virtual}) =
       VirtualChanged;
 
@@ -197,6 +135,8 @@ class CreateEventEvent with _$CreateEventEvent {
     required DateTime start,
     required DateTime end,
     Address? address,
+    String? guestLimit,
+    String? guestLimitPer,
   }) = FormSubmitted;
 }
 
@@ -205,10 +145,6 @@ class CreateEventState with _$CreateEventState {
   const factory CreateEventState({
     @Default(StringFormz.pure()) StringFormz title,
     @Default(StringFormz.pure()) StringFormz description,
-    @Default("100") String? guestLimit,
-    @Default("2") String? guestLimitPer,
-    @Default(false) bool private,
-    @Default(true) bool verify,
     @Default(true) bool virtual,
     @Default(false) bool isValid,
     @Default(FormzSubmissionStatus.initial) FormzSubmissionStatus status,

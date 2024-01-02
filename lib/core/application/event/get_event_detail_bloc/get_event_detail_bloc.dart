@@ -11,6 +11,7 @@ class GetEventDetailBloc
     extends Bloc<GetEventDetailEvent, GetEventDetailState> {
   GetEventDetailBloc() : super(const GetEventDetailStateLoading()) {
     on<GetEventDetailEventFetch>(_onFetch);
+    on<GetEventDetailEventReplace>(_onReplace);
   }
 
   final EventRepository eventRepository = getIt<EventRepository>();
@@ -28,6 +29,13 @@ class GetEventDetailBloc
       ),
     );
   }
+
+  Future<void> _onReplace(
+    GetEventDetailEventReplace event,
+    Emitter emit,
+  ) async {
+    emit(GetEventDetailState.fetched(eventDetail: event.event));
+  }
 }
 
 @freezed
@@ -35,6 +43,10 @@ class GetEventDetailEvent with _$GetEventDetailEvent {
   const factory GetEventDetailEvent.fetch({
     required String eventId,
   }) = GetEventDetailEventFetch;
+
+  const factory GetEventDetailEvent.replace({
+    required Event event,
+  }) = GetEventDetailEventReplace;
 }
 
 @freezed

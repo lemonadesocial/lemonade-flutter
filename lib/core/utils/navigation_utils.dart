@@ -58,7 +58,7 @@ class NavigationUtils {
 
     if (notification?.refEvent != null) {
       return AutoRouter.of(context).navigate(
-        GuestEventDetailRoute(
+        EventDetailRoute(
           eventId: notification?.refEvent ?? '',
         ),
       );
@@ -98,14 +98,14 @@ extension PaymentNotificationExtension on NavigationUtils {
           userId: AuthUtils.getUserId(context),
         )) {
           AutoRouter.of(context).navigate(
-            GuestEventDetailRoute(
+            EventDetailRoute(
               eventId: notification?.refEvent ?? '',
             ),
           );
         } else {
           AutoRouter.of(context).pushAll(
             [
-              GuestEventDetailRoute(
+              EventDetailRoute(
                 eventId: notification?.refEvent ?? '',
               ),
               EventBuyTicketsRoute(

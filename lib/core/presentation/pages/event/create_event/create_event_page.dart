@@ -1,5 +1,6 @@
 import 'package:app/core/application/event/create_event_bloc/create_event_bloc.dart';
 import 'package:app/core/application/event/event_datetime_settings_bloc/event_datetime_settings_bloc.dart';
+import 'package:app/core/application/event/event_guest_settings_bloc/event_guest_settings_bloc.dart';
 import 'package:app/core/application/event/event_location_setting_bloc/event_location_setting_bloc.dart';
 import 'package:app/core/constants/event/event_constants.dart';
 import 'package:auto_route/auto_route.dart';
@@ -17,6 +18,9 @@ class CreateEventPage extends StatelessWidget implements AutoRouteWrapper {
       providers: [
         BlocProvider(
           create: (context) => CreateEventBloc(),
+        ),
+        BlocProvider(
+          create: (context) => EventGuestSettingsBloc(),
         ),
         BlocProvider(
           create: (context) => EventDateTimeSettingsBloc()

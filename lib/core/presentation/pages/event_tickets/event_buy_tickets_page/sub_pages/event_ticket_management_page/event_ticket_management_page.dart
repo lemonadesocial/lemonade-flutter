@@ -226,7 +226,7 @@ class EventTicketManagementView extends StatelessWidget {
                                             );
                                         await AutoRouter.of(context).root.pop();
                                         AutoRouter.of(context).root.navigate(
-                                              GuestEventDetailRoute(
+                                              EventDetailRoute(
                                                 eventId: event.id ?? '',
                                               ),
                                             );

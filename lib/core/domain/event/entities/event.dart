@@ -32,6 +32,10 @@ class Event {
     this.eventTicketTypes,
     this.address,
     this.paymentAccountsExpanded,
+    this.guestLimit,
+    this.guestLimitPer,
+    this.virtual,
+    this.private,
   });
 
   factory Event.fromDto(EventDto dto) {
@@ -80,6 +84,10 @@ class Event {
       paymentAccountsExpanded: List.from(dto.paymentAccountsExpanded ?? [])
           .map((item) => PaymentAccount.fromDto(item))
           .toList(),
+      guestLimit: dto.guestLimit,
+      guestLimitPer: dto.guestLimitPer,
+      virtual: dto.virtual,
+      private: dto.private,
     );
   }
   String? id;
@@ -107,6 +115,10 @@ class Event {
   List<PurchasableTicketType>? eventTicketTypes;
   Address? address;
   List<PaymentAccount>? paymentAccountsExpanded;
+  double? guestLimit;
+  double? guestLimitPer;
+  bool? virtual;
+  bool? private;
 }
 
 class EventOffer {

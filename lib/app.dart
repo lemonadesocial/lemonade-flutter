@@ -23,6 +23,7 @@ import 'package:flutter_app_badger/flutter_app_badger.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_portal/flutter_portal.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:app/core/presentation/widgets/custom_error_widget.dart';
@@ -30,7 +31,6 @@ import 'package:app/core/application/newsfeed/newsfeed_listing_bloc/newsfeed_lis
 import 'package:app/core/data/post/newsfeed_repository_impl.dart';
 import 'package:app/core/service/newsfeed/newsfeed_service.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 class LemonadeApp extends StatefulWidget {
   const LemonadeApp({super.key});

@@ -97,6 +97,7 @@ class AppRouter extends $AppRouter {
         chatRoutes,
         eventBuyTicketsRoutes,
         createEventRoutes,
+        eventDetailRoutes,
         ...postRoutes,
         ...eventRoutes,
         ...commonRoutes,
@@ -134,13 +135,6 @@ final eventRoutes = [
     page: EventsListingRoute.page,
   ),
   AutoRoute(
-    path: '/events/:id',
-    page: GuestEventDetailRoute.page,
-  ),
-  AutoRoute(
-    page: EventDetailRoute.page,
-  ),
-  AutoRoute(
     page: EventSelectingRoute.page,
   ),
   AutoRoute(
@@ -157,6 +151,38 @@ final eventRoutes = [
   ),
 ];
 
+final eventDetailRoutes = AutoRoute(
+  page: EventDetailRoute.page,
+  path: '/events/:id',
+  children: [
+    AutoRoute(
+      initial: true,
+      page: EventDetailBaseRoute.page,
+    ),
+    AutoRoute(
+      page: EventControlPanelRoute.page,
+      children: [
+        AutoRoute(
+          initial: true,
+          page: EventControlPanelBaseRoute.page,
+        ),
+        AutoRoute(
+          page: EventGuestSettingsRoute.page,
+        ),
+        AutoRoute(
+          page: EventDatetimeSettingsRoute.page,
+        ),
+        AutoRoute(
+          page: EventLocationSettingRoute.page,
+        ),
+        AutoRoute(
+          page: EventLocationSettingDetailRoute.page,
+        ),
+      ],
+    ),
+  ],
+);
+
 final eventBuyTicketsRoutes = AutoRoute(
   page: EventBuyTicketsRoute.page,
   children: [
@@ -172,9 +198,6 @@ final eventBuyTicketsRoutes = AutoRoute(
     ),
     AutoRoute(
       page: EventTicketsPaymentMethodRoute.page,
-    ),
-    AutoRoute(
-      page: EventDetailRoute.page,
     ),
     AutoRoute(
       page: EventPickMyTicketRoute.page,

@@ -39,7 +39,7 @@ class PoapPolicyEventNodeWidget extends StatelessWidget {
         return InkWell(
           onTap: () {
             AutoRouter.of(context).navigate(
-              GuestEventDetailRoute(eventId: event?.id ?? ''),
+              EventDetailRoute(eventId: event?.id ?? ''),
             );
           },
           child: Row(
