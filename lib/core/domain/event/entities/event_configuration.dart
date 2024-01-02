@@ -88,8 +88,8 @@ class EventConfiguration {
         type: EventConfigurationType.coHosts,
         title: t.event.configuration.coHosts,
         description: eventCohostRequests.isNotEmpty
-            ? t.event
-                .cohosts.cohostInfo(cohostsCount: eventCohostRequests.length.toString())
+            ? t.event.cohosts
+                .cohostInfo(cohostsCount: eventCohostRequests.length.toString())
             : t.common.add,
         icon: const Icon(Icons.person_add),
       ),
