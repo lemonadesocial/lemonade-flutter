@@ -161,7 +161,7 @@ class HostEventDetailConfigGrid extends StatelessWidget {
                   item: EventConfigGridViewModel(
                     title: listData[index]!.title,
                     subTitle: eventCohostRequests.isNotEmpty
-                        ? t.event.cohostInfo(
+                        ? t.event.cohosts.cohostInfo(
                             cohostsCount: eventCohostRequests.length,
                           )
                         : '',

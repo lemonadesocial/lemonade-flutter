@@ -85,16 +85,16 @@ class EventConfiguration {
             );
     final List<EventConfiguration> eventConfigs = [
       EventConfiguration(
-        type: EventConfigurationType.visibility,
+        type: EventConfigurationType.coHosts,
         title: t.event.configuration.coHosts,
         description: eventCohostRequests.isNotEmpty
             ? t.event
-                .cohostInfo(cohostsCount: eventCohostRequests.length.toString())
+                .cohosts.cohostInfo(cohostsCount: eventCohostRequests.length.toString())
             : t.common.add,
         icon: const Icon(Icons.person_add),
       ),
       EventConfiguration(
-        type: EventConfigurationType.location,
+        type: EventConfigurationType.speakers,
         title: t.event.configuration.speakers,
         description: t.common.add,
         icon: const Icon(Icons.speaker),

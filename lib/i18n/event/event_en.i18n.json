@@ -184,5 +184,8 @@
     "editEventSuccessfully": "Edit event successfully",
     "collaborations": "Collaborations",
     "eventDetails": "Event Details",
-    "cohostInfo": "$cohostsCount co-hosts"
+    "cohosts": {
+        "cohostInfo": "$cohostsCount co-hosts",
+        "addCohosts": "Add co-hosts"
+    }
 }

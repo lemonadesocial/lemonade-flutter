@@ -134,5 +134,6 @@
     "incorrectPin": "Incorrect PIN code",
     "copiedToClipboard": "Copied to clipboard",
     "save": "Save",
-    "add": "Add"
+    "add": "Add",
+    "pending": "Pending"
 }

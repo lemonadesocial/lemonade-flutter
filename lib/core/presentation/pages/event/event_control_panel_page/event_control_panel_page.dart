@@ -46,11 +46,6 @@ class EventControlPanelPage extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        return true;
-      },
-      child: const AutoRouter(),
-    );
+    return const AutoRouter();
   }
 }
