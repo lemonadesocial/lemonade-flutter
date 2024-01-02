@@ -123,7 +123,7 @@ class _OwnerKeyBalanceWidgetState extends State<OwnerKeyBalanceWidget> {
                     walletAddress: widget.ownerAddress,
                     destinationAmount: gasFee < minTopupAmount
                         ? minTopupAmount
-                        : gasFee.ceilToDouble(),
+                        : gasFee + minTopupAmount,
                   ),
                 ),
               );
