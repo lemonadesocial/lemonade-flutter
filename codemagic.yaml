@@ -93,7 +93,7 @@ definitions:
     - &run_build_runner
       name: Run build runner
       script: |
-        flutter packages pub run build_runner build --delete-conflicting-outputs
+        dart run build_runner build --delete-conflicting-outputs
     - &generate_i18_file
       name: Generate i18n files
       script: |
