@@ -42,9 +42,17 @@ class DeployVaultWithOwnerKeyBloc
           EthereumAddress.fromHex(event.ownerAddress),
         ),
       );
+
       if (privateKey == null) {
-        return;
+        return emit(
+          DeployVaultWithOwnerKeyState.failure(
+            failureReason: DeployVaultWithOwnerKeyFailureReason(
+              errorMessage: 'You\'re not authorized to make this transaction',
+            ),
+          ),
+        );
       }
+
       final rpcClient = Web3Client(network.rpcUrl!, http.Client());
       final txHash = await rpcClient.sendTransaction(
         privateKey.credential,
