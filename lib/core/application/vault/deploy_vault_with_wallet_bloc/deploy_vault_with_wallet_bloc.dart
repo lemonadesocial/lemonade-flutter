@@ -10,17 +10,17 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:http/http.dart' as http;
 
-part 'deploy_vault_safe_wallet_bloc.freezed.dart';
+part 'deploy_vault_with_wallet_bloc.freezed.dart';
 
-class DeployVaultSafeWalletBloc
-    extends Bloc<DeployVaultSafeWalletEvent, DeployVaultSafeWalletState> {
+class DeployVaultWithWalletBloc
+    extends Bloc<DeployVaultWithWalletEvent, DeployVaultWithWalletState> {
   final vaultRepository = getIt<VaultRepository>();
-  DeployVaultSafeWalletBloc() : super(DeployVaultSafeWalletState.idle()) {
-    on<DeployVaultSafeWalletEventStartDeploy>(_onStartDeploy);
+  DeployVaultWithWalletBloc() : super(DeployVaultWithWalletState.idle()) {
+    on<DeployVaultWithWalletEventStartDeploy>(_onStartDeploy);
   }
 
   Future<void> _onStartDeploy(
-    DeployVaultSafeWalletEventStartDeploy event,
+    DeployVaultWithWalletEventStartDeploy event,
     Emitter emit,
   ) async {
     try {
@@ -29,7 +29,7 @@ class DeployVaultSafeWalletBloc
 
       if (result.isLeft()) {
         return emit(
-          DeployVaultSafeWalletState.failure(
+          DeployVaultWithWalletState.failure(
             failureReason: GetTransactionPayloadFailure(),
           ),
         );
@@ -49,13 +49,13 @@ class DeployVaultSafeWalletBloc
       final receipt = await rpcClient.getTransactionReceipt(txHash);
       if (receipt == null || receipt.logs.isEmpty) {
         return emit(
-          DeployVaultSafeWalletState.failure(
+          DeployVaultWithWalletState.failure(
             failureReason: GetTransactionReceiptFailure(),
           ),
         );
       }
       emit(
-        DeployVaultSafeWalletState.success(
+        DeployVaultWithWalletState.success(
           safeWalletAddress: receipt.logs.first.address?.hex ?? '',
           owners: event.input.owners,
           threshold: event.input.threshold,
@@ -64,7 +64,7 @@ class DeployVaultSafeWalletBloc
       );
     } catch (error) {
       emit(
-        DeployVaultSafeWalletState.failure(
+        DeployVaultWithWalletState.failure(
           failureReason: DeploySafeWalletFailure(),
         ),
       );
@@ -73,25 +73,25 @@ class DeployVaultSafeWalletBloc
 }
 
 @freezed
-class DeployVaultSafeWalletEvent with _$DeployVaultSafeWalletEvent {
-  factory DeployVaultSafeWalletEvent.startDeploy({
+class DeployVaultWithWalletEvent with _$DeployVaultWithWalletEvent {
+  factory DeployVaultWithWalletEvent.startDeploy({
     required String userWalletAddress,
     required Chain network,
     required GetInitSafeTransactionInput input,
-  }) = DeployVaultSafeWalletEventStartDeploy;
+  }) = DeployVaultWithWalletEventStartDeploy;
 }
 
 @freezed
-class DeployVaultSafeWalletState with _$DeployVaultSafeWalletState {
-  factory DeployVaultSafeWalletState.idle() = DeployVaultSafeWalletIdle;
-  factory DeployVaultSafeWalletState.loading() = DeployVaultSafeWalletLoading;
-  factory DeployVaultSafeWalletState.success({
+class DeployVaultWithWalletState with _$DeployVaultWithWalletState {
+  factory DeployVaultWithWalletState.idle() = DeployVaultSafeWalletIdle;
+  factory DeployVaultWithWalletState.loading() = DeployVaultSafeWalletLoading;
+  factory DeployVaultWithWalletState.success({
     required String safeWalletAddress,
     required List<String> owners,
     required int threshold,
     required Chain network,
   }) = DeployVaultSafeWalletSuccess;
-  factory DeployVaultSafeWalletState.failure({
+  factory DeployVaultWithWalletState.failure({
     required DeploySafeWalletFailure failureReason,
   }) = DeployVaultSafeWalletFailure;
 }

@@ -45,7 +45,11 @@
         "securityRemind": "Make sure to be in a private & safe space",
         "createVaultSuccess": "Your new $vaultType vault ‘$name’ has been created",
         "enterVault": "Enter vault",
-        "reachFreeLimit": "You have reached the maximum limit for free vault creation. Please connect your wallet to cover the necessary transaction fees."
+        "reachFreeLimit": "You have reached the maximum limit for free vault creation. Please connect your wallet or top up your owner key's balance to cover the necessary transaction fees.",
+        "topupOwnerKeyBalance": "Top up owner key's balance",
+        "topup": "Top up",
+        "owner": "Owner",
+        "balance": "Balance"
     },
     "createPIN": {
         "setPIN": "Set a PIN",
@@ -57,5 +61,6 @@
         "createVault": "Create Vault"
     },
     "connectedWith": "Connected with",
-    "deploying": "Deploying..."
+    "deploying": "Deploying...",
+    "estimateFee": "Est. network fee"
 }

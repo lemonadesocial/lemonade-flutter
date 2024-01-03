@@ -1,7 +1,8 @@
 import 'package:app/core/application/payment/create_payment_account_bloc/create_payment_account_bloc.dart';
 import 'package:app/core/application/payment/get_payment_accounts_bloc/get_payment_accounts_bloc.dart';
 import 'package:app/core/application/vault/create_vault_bloc/create_vault_bloc.dart';
-import 'package:app/core/application/vault/deploy_vault_safe_wallet_bloc/deploy_vault_safe_wallet_bloc.dart';
+import 'package:app/core/application/vault/deploy_vault_with_wallet_bloc/deploy_vault_with_wallet_bloc.dart';
+import 'package:app/core/application/vault/deploy_vault_with_owner_key_bloc/deploy_vault_with_owner_key_bloc.dart';
 import 'package:app/core/domain/payment/input/create_payment_account_input/create_payment_account_input.dart';
 import 'package:app/core/domain/payment/input/get_payment_accounts_input/get_payment_accounts_input.dart';
 import 'package:app/core/domain/payment/payment_enums.dart';
@@ -10,11 +11,14 @@ import 'package:app/core/domain/vault/input/get_safe_free_limit_input/get_safe_f
 import 'package:app/core/domain/vault/vault_enums.dart';
 import 'package:app/core/domain/vault/vault_repository.dart';
 import 'package:app/core/failure.dart';
-import 'package:app/core/presentation/pages/vault/create_vault_page/sub_pages/create_vault_submit_transaction_page/view/deploy_paid_vault_view.dart';
+import 'package:app/core/presentation/pages/vault/create_vault_page/sub_pages/create_vault_submit_transaction_page/view/deploy_vault_options_view.dart';
+import 'package:app/core/presentation/pages/vault/create_vault_page/sub_pages/create_vault_submit_transaction_page/widgets/deploy_paid_vault_explaination.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/service/vault/vault_pin_storage/vault_pin_storage.dart';
 import 'package:app/core/utils/auth_utils.dart';
+import 'package:app/core/utils/snackbar_utils.dart';
+import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -23,6 +27,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 @RoutePage()
 class CreateVaultSubmitTransactionPage extends StatelessWidget {
@@ -71,10 +76,15 @@ class CreateVaultSubmitTransactionPage extends StatelessWidget {
                 create: (context) => CreatePaymentAccountBloc(),
               ),
               BlocProvider(
-                create: (context) => DeployVaultSafeWalletBloc(),
+                create: (context) => DeployVaultWithWalletBloc(),
+              ),
+              BlocProvider(
+                create: (context) => DeployVaultWithOwnerKeyBloc(),
               ),
             ],
-            child: const CreateVaultSubmitTransactionPageView(),
+            child: CreateVaultSubmitTransactionPageView(
+              isFreeDeployment: isFreeDeployment,
+            ),
           );
         }
 
@@ -104,10 +114,15 @@ class CreateVaultSubmitTransactionPage extends StatelessWidget {
                 ),
             ),
             BlocProvider(
-              create: (context) => DeployVaultSafeWalletBloc(),
+              create: (context) => DeployVaultWithWalletBloc(),
+            ),
+            BlocProvider(
+              create: (context) => DeployVaultWithOwnerKeyBloc(),
             ),
           ],
-          child: const CreateVaultSubmitTransactionPageView(),
+          child: CreateVaultSubmitTransactionPageView(
+            isFreeDeployment: isFreeDeployment,
+          ),
         );
       },
     );
@@ -115,8 +130,10 @@ class CreateVaultSubmitTransactionPage extends StatelessWidget {
 }
 
 class CreateVaultSubmitTransactionPageView extends StatelessWidget {
+  final bool isFreeDeployment;
   const CreateVaultSubmitTransactionPageView({
     super.key,
+    required this.isFreeDeployment,
   });
 
   @override
@@ -127,7 +144,48 @@ class CreateVaultSubmitTransactionPageView extends StatelessWidget {
       backgroundColor: colorScheme.background,
       body: MultiBlocListener(
         listeners: [
-          BlocListener<DeployVaultSafeWalletBloc, DeployVaultSafeWalletState>(
+          BlocListener<DeployVaultWithOwnerKeyBloc,
+              DeployVaultWithOwnerKeyState>(
+            listener: (context, deployVaultState) {
+              deployVaultState.maybeWhen(
+                orElse: () => null,
+                failure: (failureReason) {
+                  SnackBarUtils.showErrorSnackbar(
+                    failureReason?.errorMessage ?? t.common.somethingWrong,
+                  );
+                },
+                success: (safeWalletAddress) {
+                  final createPaymentAccountBloc =
+                      context.read<CreatePaymentAccountBloc>();
+                  final createVaultBloc = context.read<CreateVaultBloc>();
+                  final createVaultData = createVaultBloc.state.data;
+
+                  createPaymentAccountBloc.add(
+                    CreatePaymentAccountEvent.create(
+                      input: CreatePaymentAccountInput(
+                        title: createVaultData.vaultName,
+                        type: PaymentAccountType.ethereum,
+                        provider: PaymentProvider.safe,
+                        accountInfo: AccountInfoInput(
+                          address: safeWalletAddress,
+                          owners: createVaultData.owners,
+                          threshold: createVaultData.threshold,
+                          network: createVaultData.selectedChain!.chainId,
+                          currencies:
+                              (createVaultData.selectedChain?.tokens ?? [])
+                                  .map(
+                                    (token) => token.symbol ?? '',
+                                  )
+                                  .toList(),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              );
+            },
+          ),
+          BlocListener<DeployVaultWithWalletBloc, DeployVaultWithWalletState>(
             listener: (context, deployVaultState) {
               deployVaultState.maybeWhen(
                 orElse: () => null,
@@ -209,17 +267,35 @@ class CreateVaultSubmitTransactionPageView extends StatelessWidget {
         ],
         child: Stack(
           children: [
-            SafeArea(
-              child: Padding(
-                padding: EdgeInsets.all(Spacing.smMedium),
-                child: const DeployPaidVaultView(),
+            if (!isFreeDeployment)
+              SafeArea(
+                child: Padding(
+                  padding: EdgeInsets.all(Spacing.smMedium),
+                  child: Column(
+                    children: [
+                      const Spacer(),
+                      Assets.icons.icWallet3d.image(
+                        height: 200.w,
+                      ),
+                      const Spacer(),
+                      const DeployPaidVaultExplanation(),
+                      SizedBox(
+                        height: Spacing.extraSmall,
+                      ),
+                      const DeployVaultOptionsView(),
+                    ],
+                  ),
+                ),
               ),
-            ),
             context.watch<CreatePaymentAccountBloc>().state.maybeWhen(
                   orElse: () => const SizedBox.shrink(),
                   loading: () => _loading(context),
                 ),
-            context.watch<DeployVaultSafeWalletBloc>().state.maybeWhen(
+            context.watch<DeployVaultWithWalletBloc>().state.maybeWhen(
+                  orElse: () => const SizedBox.shrink(),
+                  loading: () => _loading(context),
+                ),
+            context.watch<DeployVaultWithOwnerKeyBloc>().state.maybeWhen(
                   orElse: () => const SizedBox.shrink(),
                   loading: () => _loading(context),
                 ),
