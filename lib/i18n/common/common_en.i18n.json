@@ -135,5 +135,8 @@
     "copiedToClipboard": "Copied to clipboard",
     "save": "Save",
     "add": "Add",
-    "pending": "Pending"
+    "pending": "Pending",
+    "error": {
+        "privateKeyNotFound": "Credential not found"
+    }
 }

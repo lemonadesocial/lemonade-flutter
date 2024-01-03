@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:app/core/domain/web3/entities/chain.dart';
 import 'package:app/core/domain/web3/entities/raw_transaction.dart';
 import 'package:app/core/service/vault/private_key/private_key.dart';
+import 'package:app/i18n/i18n.g.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -47,7 +48,7 @@ class DeployVaultWithOwnerKeyBloc
         return emit(
           DeployVaultWithOwnerKeyState.failure(
             failureReason: DeployVaultWithOwnerKeyFailureReason(
-              errorMessage: 'You\'re not authorized to make this transaction',
+              errorMessage: t.common.error.privateKeyNotFound,
             ),
           ),
         );
@@ -75,7 +76,7 @@ class DeployVaultWithOwnerKeyBloc
         emit(
           DeployVaultWithOwnerKeyState.failure(
             failureReason: DeployVaultWithOwnerKeyFailureReason.withRpcError(
-              message: 'There\'s something wrong',
+              message: t.common.somethingWrong,
             ),
           ),
         );
