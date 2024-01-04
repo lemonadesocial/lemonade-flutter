@@ -79,7 +79,7 @@ class EventConfiguration {
     BuildContext context,
   ) {
     final eventCohostRequests =
-        context.read<EventDetailCohostsBloc>().state.maybeWhen(
+        context.watch<EventDetailCohostsBloc>().state.maybeWhen(
               fetched: (eventCohostRequests) => eventCohostRequests,
               orElse: () => [],
             );
