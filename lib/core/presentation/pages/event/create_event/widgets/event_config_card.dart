@@ -63,15 +63,14 @@ class EventConfigCard extends StatelessWidget {
                       color: colorScheme.onSurface,
                     ),
                   ),
-                  description != ""
-                      ? Text(
-                          description!,
-                          style: Typo.extraSmall.copyWith(
-                            fontFamily: FontFamily.switzerVariable,
-                            color: colorScheme.onSurface,
-                          ),
-                        )
-                      : const SizedBox(),
+                  if (description?.isNotEmpty == true)
+                    Text(
+                      description!,
+                      style: Typo.extraSmall.copyWith(
+                        fontFamily: FontFamily.switzerVariable,
+                        color: colorScheme.onSurface,
+                      ),
+                    ),
                 ],
               ),
             ),

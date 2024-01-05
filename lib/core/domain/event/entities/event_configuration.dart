@@ -1,6 +1,7 @@
 import 'package:app/core/application/event/event_detail_cohosts_bloc/event_detail_cohosts_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/utils/date_format_utils.dart';
+import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,7 +16,8 @@ enum EventConfigurationType {
   virtual,
   location,
   coHosts,
-  speakers
+  speakers,
+  ticketTiers,
 }
 
 class EventConfiguration {
@@ -83,6 +85,7 @@ class EventConfiguration {
               fetched: (eventCohostRequests) => eventCohostRequests,
               orElse: () => [],
             );
+    final colorScheme = Theme.of(context).colorScheme;
     final List<EventConfiguration> eventConfigs = [
       EventConfiguration(
         type: EventConfigurationType.coHosts,
@@ -98,6 +101,19 @@ class EventConfiguration {
         title: t.event.configuration.speakers,
         description: t.common.add,
         icon: const Icon(Icons.speaker),
+      ),
+      EventConfiguration(
+        type: EventConfigurationType.ticketTiers,
+        title: t.event.ticketTier,
+        description: "",
+        icon: Center(
+          child: Assets.icons.icTicket.svg(
+            colorFilter: ColorFilter.mode(
+              colorScheme.onPrimary,
+              BlendMode.srcIn,
+            ),
+          ),
+        ),
       ),
     ];
     return eventConfigs;
