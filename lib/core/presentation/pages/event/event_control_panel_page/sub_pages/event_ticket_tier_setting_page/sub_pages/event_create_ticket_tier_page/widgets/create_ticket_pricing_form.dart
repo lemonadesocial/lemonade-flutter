@@ -1,5 +1,7 @@
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/add_ticket_tier_pricing_form.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/ticket_tier_pricing_item.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/utils/bottomsheet_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
@@ -78,29 +80,37 @@ class _AddPaymentMethodButton extends StatelessWidget {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
 
-    return DottedBorder(
-      dashPattern: [5.w],
-      color: colorScheme.outline,
-      borderType: BorderType.RRect,
-      padding: EdgeInsets.all(Spacing.small),
-      radius: Radius.circular(LemonRadius.xSmall),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          ThemeSvgIcon(
-            color: colorScheme.onSecondary,
-            builder: (filter) => Assets.icons.icAdd.svg(
-              colorFilter: filter,
-            ),
-          ),
-          SizedBox(width: Spacing.extraSmall),
-          Text(
-            t.event.ticketTierSetting.addPaymentMethod,
-            style: Typo.medium.copyWith(
+    return InkWell(
+      onTap: () {
+        BottomSheetUtils.showSnapBottomSheet(
+          context,
+          builder: (context) => const AddTicketTierPricingForm(),
+        );
+      },
+      child: DottedBorder(
+        dashPattern: [5.w],
+        color: colorScheme.outline,
+        borderType: BorderType.RRect,
+        padding: EdgeInsets.all(Spacing.small),
+        radius: Radius.circular(LemonRadius.xSmall),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ThemeSvgIcon(
               color: colorScheme.onSecondary,
+              builder: (filter) => Assets.icons.icAdd.svg(
+                colorFilter: filter,
+              ),
             ),
-          ),
-        ],
+            SizedBox(width: Spacing.extraSmall),
+            Text(
+              t.event.ticketTierSetting.addPaymentMethod,
+              style: Typo.medium.copyWith(
+                color: colorScheme.onSecondary,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

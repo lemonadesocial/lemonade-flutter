@@ -192,6 +192,7 @@
     "ticketTierSetting": {
         "payoutAccounts": "Payout accounts",
         "creditDebit": "Credit/Debit",
+        "erc20": "ERC20",
         "connectAccount": "Connect account",
         "crypto": "Crypto",
         "newTicket": "New ticket",
