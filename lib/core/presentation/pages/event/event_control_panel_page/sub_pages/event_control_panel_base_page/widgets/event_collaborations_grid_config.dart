@@ -68,6 +68,7 @@ class EventCollaborationsGridConfig extends StatelessWidget {
               loading: loading,
             );
           }
+          return const SizedBox();
         },
       ),
     );
