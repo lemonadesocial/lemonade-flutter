@@ -21,6 +21,8 @@ class EventDto with _$EventDto {
     String? title,
     String? slug,
     @JsonKey(name: 'speaker_users') List<String>? speakerUsers,
+    @JsonKey(name: 'speaker_users_expanded')
+    List<UserDto?>? speakerUsersExpanded,
     String? host,
     List<BroadcastDto>? broadcasts,
     String? description,

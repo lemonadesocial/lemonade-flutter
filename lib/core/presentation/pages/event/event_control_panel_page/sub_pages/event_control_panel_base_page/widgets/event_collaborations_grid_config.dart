@@ -2,7 +2,6 @@ import 'package:app/core/application/event/event_detail_cohosts_bloc/event_detai
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_configuration.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/event_config_card.dart';
-import 'package:app/core/utils/modal_utils.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -21,10 +20,9 @@ class EventCollaborationsGridConfig extends StatelessWidget {
   ) {
     Vibrate.feedback(FeedbackType.light);
     if (eventConfig.type == EventConfigurationType.coHosts) {
-      Vibrate.feedback(FeedbackType.light);
       AutoRouter.of(context).navigate(const EventCohostsRoute());
-    } else {
-      showComingSoonDialog(context);
+    } else if (eventConfig.type == EventConfigurationType.speakers) {
+      AutoRouter.of(context).navigate(const EventSpeakersRoute());
     }
   }
 

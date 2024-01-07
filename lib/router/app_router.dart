@@ -184,6 +184,12 @@ final eventDetailRoutes = AutoRoute(
         AutoRoute(
           page: EventAddCohostsRoute.page,
         ),
+        AutoRoute(
+          page: EventSpeakersRoute.page,
+        ),
+        AutoRoute(
+          page: EventAddSpeakersRoute.page,
+        ),
       ],
     ),
   ],
