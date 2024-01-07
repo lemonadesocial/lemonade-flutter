@@ -1,4 +1,5 @@
 import 'package:app/core/application/event/event_detail_cohosts_bloc/event_detail_cohosts_bloc.dart';
+import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_configuration.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/event_config_card.dart';
@@ -40,19 +41,33 @@ class EventCollaborationsGridConfig extends StatelessWidget {
       delegate: SliverChildBuilderDelegate(
         childCount: eventConfigs.length,
         (BuildContext context, int index) {
-          bool loading =
-              context.watch<EventDetailCohostsBloc>().state.maybeWhen(
-                    loading: () => true,
-                    orElse: () => false,
-                  );
           final eventConfig = eventConfigs[index];
-          return EventConfigCard(
-            title: eventConfig.title,
-            description: eventConfig.description,
-            icon: eventConfig.icon,
-            onTap: () => onTap(context, eventConfig),
-            loading: loading,
-          );
+          if (eventConfig.type == EventConfigurationType.coHosts) {
+            bool loading =
+                context.watch<EventDetailCohostsBloc>().state.maybeWhen(
+                      loading: () => true,
+                      orElse: () => false,
+                    );
+            return EventConfigCard(
+              title: eventConfig.title,
+              description: eventConfig.description,
+              icon: eventConfig.icon,
+              onTap: () => onTap(context, eventConfig),
+              loading: loading,
+            );
+          } else if (eventConfig.type == EventConfigurationType.speakers) {
+            bool loading = context.watch<GetEventDetailBloc>().state.maybeWhen(
+                  loading: () => true,
+                  orElse: () => false,
+                );
+            return EventConfigCard(
+              title: eventConfig.title,
+              description: eventConfig.description,
+              icon: eventConfig.icon,
+              onTap: () => onTap(context, eventConfig),
+              loading: loading,
+            );
+          }
         },
       ),
     );
