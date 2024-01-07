@@ -42,7 +42,8 @@ class EventAddCohostItem extends StatelessWidget {
                     Flexible(
                       child: Padding(
                         padding: EdgeInsets.symmetric(
-                            horizontal: Spacing.extraSmall),
+                          horizontal: Spacing.extraSmall,
+                        ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
