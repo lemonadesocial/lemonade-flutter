@@ -101,12 +101,7 @@ class HostEventDetailConfigGrid extends StatelessWidget {
         ),
         onTap: () {
           Vibrate.feedback(FeedbackType.light);
-          // AutoRouter.of(context).navigate(const EventCohostsRoute());
-          context.read<EventDetailCohostsBloc>().add(
-                EventDetailCohostsEvent.fetch(
-                  eventId: event.id ?? '',
-                ),
-              );
+          AutoRouter.of(context).navigate(const EventCohostsRoute());
         },
       ),
       EventConfigGridViewModel(
