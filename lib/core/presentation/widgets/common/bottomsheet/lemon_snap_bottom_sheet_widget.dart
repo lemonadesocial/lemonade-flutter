@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 class LemonSnapBottomSheet extends StatelessWidget {
   final Widget Function(ScrollController scrollController) builder;
+  final Widget Function(BuildContext context)? footerBuilder;
   final List<double>? snapSizes;
   final double? maxSnapSize;
   final double? minSnapSize;
@@ -16,6 +17,7 @@ class LemonSnapBottomSheet extends StatelessWidget {
   const LemonSnapBottomSheet({
     super.key,
     required this.builder,
+    this.footerBuilder,
     this.snapSizes,
     this.maxSnapSize,
     this.minSnapSize,
@@ -58,6 +60,10 @@ class LemonSnapBottomSheet extends StatelessWidget {
               children: [
                 _buildIndicator(),
                 builder(scrollController),
+                if (footerBuilder != null) ...[
+                  const Spacer(),
+                  footerBuilder!.call(context),
+                ],
               ],
             ),
           );

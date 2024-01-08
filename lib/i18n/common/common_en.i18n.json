@@ -47,7 +47,8 @@
         "view": "View",
         "copy": "Copy",
         "share": "Share",
-        "restart": "Restart"
+        "restart": "Restart",
+        "connectWallet": "Connect wallet"
     },
     "followed": "Followed",
     "anonymous": "anonymous",

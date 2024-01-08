@@ -21,11 +21,14 @@ class EventCollaborationsGridConfig extends StatelessWidget {
   ) {
     Vibrate.feedback(FeedbackType.light);
     if (eventConfig.type == EventConfigurationType.coHosts) {
-      Vibrate.feedback(FeedbackType.light);
       AutoRouter.of(context).navigate(const EventCohostsRoute());
-    } else {
-      showComingSoonDialog(context);
     }
+    if (eventConfig.type == EventConfigurationType.ticketTiers) {
+      AutoRouter.of(context).navigate(
+        const EventTicketTierSettingRoute(),
+      );
+    }
+    return showComingSoonDialog(context);
   }
 
   @override
