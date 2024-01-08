@@ -1,3 +1,5 @@
+import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
+import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_ticket_tiers_listing_page/widgets/payout_accounts_widget.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_ticket_tiers_listing_page/widgets/ticket_tier_item.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
@@ -10,6 +12,7 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 @RoutePage()
@@ -20,6 +23,13 @@ class EventTicketTiersListingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+    final eventTicketTypes = context
+            .watch<GetEventDetailBloc>()
+            .state
+            .maybeWhen(
+                fetched: (event) => event.eventTicketTypes,
+                orElse: () => [] as List<EventTicketType>) ??
+        [];
     return Scaffold(
       backgroundColor: colorScheme.background,
       appBar: LemonAppBar(
@@ -38,8 +48,10 @@ class EventTicketTiersListingPage extends StatelessWidget {
                 SliverList.separated(
                   separatorBuilder: (context, index) =>
                       SizedBox(height: Spacing.xSmall),
-                  itemBuilder: (context, index) => const TicketTierItem(),
-                  itemCount: 1,
+                  itemBuilder: (context, index) => TicketTierItem(
+                    eventTicketType: eventTicketTypes[index],
+                  ),
+                  itemCount: eventTicketTypes.length,
                 ),
                 SliverPadding(
                   padding: EdgeInsets.symmetric(
