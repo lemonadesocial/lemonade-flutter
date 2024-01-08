@@ -187,5 +187,9 @@
     "cohosts": {
         "cohostInfo": "$cohostsCount co-hosts",
         "addCohosts": "Add co-hosts"
+    },
+    "speakers": {
+        "speakersCountInfo": "$speakersCount speakers",
+        "addSpeakers": "Add speakers"
     }
 }

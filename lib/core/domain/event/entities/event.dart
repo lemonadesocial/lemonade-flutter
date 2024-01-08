@@ -36,6 +36,7 @@ class Event {
     this.guestLimitPer,
     this.virtual,
     this.private,
+    this.speakerUsersExpanded,
   });
 
   factory Event.fromDto(EventDto dto) {
@@ -53,6 +54,9 @@ class Event {
       slug: dto.slug,
       speakerUsers: List<String>.from(dto.speakerUsers ?? [])
           .map((item) => item)
+          .toList(),
+      speakerUsersExpanded: List.from(dto.speakerUsersExpanded ?? [])
+          .map((item) => item != null ? User.fromDto(item) : null)
           .toList(),
       cohosts:
           List<String>.from(dto.cohosts ?? []).map((item) => item).toList(),
@@ -97,6 +101,7 @@ class Event {
   String? title;
   String? slug;
   List<String>? speakerUsers;
+  List<User?>? speakerUsersExpanded;
   List<String>? cohosts;
   String? host;
   List<Broadcast>? broadcasts;
