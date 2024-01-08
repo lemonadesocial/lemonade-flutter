@@ -48,14 +48,6 @@ class EventControlPanelPage extends StatelessWidget
           create: (context) => EventGuestSettingsBloc(),
         ),
         BlocProvider(
-          create: (context) => EventDetailCohostsBloc()
-            ..add(
-              EventDetailCohostsEvent.fetch(
-                eventId: event?.id ?? '',
-              ),
-            ),
-        ),
-        BlocProvider(
           create: (context) => GetUsersBloc(),
         ),
         BlocProvider(

@@ -9,6 +9,7 @@ import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_cohosts_page/widgets/event_cohost_item.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
+import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
@@ -66,6 +67,20 @@ class _EventCohostsPageViewState extends State<EventCohostsPageView> {
               fetched: (eventCohostsRequests) => eventCohostsRequests,
               orElse: () => [],
             );
+    final loadingEventCohostsRequests =
+        context.watch<EventDetailCohostsBloc>().state.maybeWhen(
+              loading: () => true,
+              fetched: (eventCohostsRequests) => false,
+              failure: () => false,
+              orElse: () => false,
+            );
+    final loadingManageEventCohostRequests =
+        context.watch<ManageEventCohostRequestsBloc>().state.maybeWhen(
+              loading: () => true,
+              success: () => false,
+              failure: () => false,
+              orElse: () => false,
+            );
     return BlocListener<ManageEventCohostRequestsBloc,
         ManageEventCohostRequestsState>(
       listener: (context, state) {
@@ -96,10 +111,13 @@ class _EventCohostsPageViewState extends State<EventCohostsPageView> {
               height: Spacing.smMedium,
             ),
             Expanded(
-              child: CohostsList(
-                eventCohostsRequests: eventCohostsRequests,
-                event: widget.event,
-              ),
+              child: loadingEventCohostsRequests ||
+                      loadingManageEventCohostRequests
+                  ? Loading.defaultLoading(context)
+                  : CohostsList(
+                      eventCohostsRequests: eventCohostsRequests,
+                      event: widget.event,
+                    ),
             ),
             _buildAddCohostsButton(),
           ],

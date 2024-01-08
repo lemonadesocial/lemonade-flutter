@@ -1,4 +1,5 @@
 import 'package:app/core/application/event/edit_event_detail_bloc/edit_event_detail_bloc.dart';
+import 'package:app/core/application/event/event_detail_cohosts_bloc/event_detail_cohosts_bloc.dart';
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/create_event_config_grid.dart';
@@ -39,6 +40,11 @@ class EventControlPanelBasePage extends StatelessWidget {
             return BlocListener<EditEventDetailBloc, EditEventDetailState>(
               listener: (context, state) {
                 if (state.status == EditEventDetailBlocStatus.success) {
+                  context.read<EventDetailCohostsBloc>().add(
+                        EventDetailCohostsEvent.fetch(
+                          eventId: event.id ?? '',
+                        ),
+                      );
                   context.read<GetEventDetailBloc>().add(
                         GetEventDetailEvent.replace(
                           event: state.event ?? Event(),

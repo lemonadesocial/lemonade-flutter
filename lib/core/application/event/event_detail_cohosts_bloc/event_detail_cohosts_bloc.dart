@@ -19,6 +19,7 @@ class EventDetailCohostsBloc
     EventDetailCohostsEventFetch event,
     Emitter emit,
   ) async {
+    emit(const EventDetailCohostsState.loading());
     final result = await eventRepository.getEventCohostRequest(
       input: Input$GetEventCohostRequestsInput(event: event.eventId),
     );

@@ -7,6 +7,7 @@ import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_p
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
+import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -17,6 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:slang/builder/utils/string_extensions.dart';
 
 @RoutePage()
 class EventAddCohostsPage extends StatelessWidget {
@@ -90,7 +92,7 @@ class _EventAddCohostsViewState extends State<EventAddCohostsView> {
                     fit: BoxFit.scaleDown,
                   ),
                 ),
-                hintText: t.setting.searchCommunity,
+                hintText: t.common.search.capitalize(),
                 contentPadding: EdgeInsets.all(Spacing.small),
                 onChange: (value) => context.read<GetUsersBloc>().add(
                       GetUsersEvent.fetch(
@@ -107,6 +109,7 @@ class _EventAddCohostsViewState extends State<EventAddCohostsView> {
                 child: BlocBuilder<GetUsersBloc, GetUsersState>(
                   builder: (context, state) {
                     return state.maybeWhen(
+                      loading: () => Loading.defaultLoading(context),
                       success: (users) {
                         return ListView.separated(
                           padding: EdgeInsets.only(bottom: Spacing.medium),
