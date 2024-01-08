@@ -162,6 +162,7 @@ class _EventAddSpeakersViewState extends State<EventAddSpeakersView> {
           textStyle: Typo.medium.copyWith(),
           mode: GradientButtonMode.lavenderMode,
           onTap: () {
+            FocusScope.of(context).requestFocus(FocusNode());
             List<User?> speakerUsers =
                 context.read<GetEventDetailBloc>().state.maybeWhen(
                       fetched: (eventDetail) =>
@@ -170,6 +171,7 @@ class _EventAddSpeakersViewState extends State<EventAddSpeakersView> {
                     );
             List<String> speakerUsersIds =
                 speakerUsers.map((user) => user!.userId).toList();
+            // Included old speakers and with new selected speakers
             List<String> newSpeakerUsers =
                 (speakerUsersIds + selectedUserIds).toSet().toList();
             Vibrate.feedback(FeedbackType.light);

@@ -173,6 +173,7 @@ class _EventAddCohostsViewState extends State<EventAddCohostsView> {
           textStyle: Typo.medium.copyWith(),
           mode: GradientButtonMode.lavenderMode,
           onTap: () {
+            FocusScope.of(context).requestFocus(FocusNode());
             Vibrate.feedback(FeedbackType.light);
             context.read<ManageEventCohostRequestsBloc>().add(
                   ManageEventCohostRequestsEvent.saveChanged(
