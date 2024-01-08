@@ -2,6 +2,8 @@ import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_configuration.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/event_config_card.dart';
 import 'package:app/core/utils/modal_utils.dart';
+import 'package:app/router/app_router.gr.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 
@@ -16,6 +18,11 @@ class EventCollaborationsGridConfig extends StatelessWidget {
     EventConfiguration eventConfig,
   ) {
     Vibrate.feedback(FeedbackType.light);
+    if (eventConfig.type == EventConfigurationType.ticketTiers) {
+      return AutoRouter.of(context).navigate(
+        const EventTicketTierSettingRoute(),
+      );
+    }
     return showComingSoonDialog(context);
   }
 

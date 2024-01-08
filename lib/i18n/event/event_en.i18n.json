@@ -187,5 +187,34 @@
     "cohosts": {
         "cohostInfo": "$cohostsCount co-hosts",
         "addCohosts": "Add co-hosts"
+    },
+    "ticketTier": "Ticket tiers",
+    "ticketTierSetting": {
+        "payoutAccounts": "Payout accounts",
+        "creditDebit": "Credit/Debit",
+        "erc20": "ERC20",
+        "connectAccount": "Connect account",
+        "crypto": "Crypto",
+        "newTicket": "New ticket",
+        "createTicket": "Create ticket",
+        "whatIsTicketName": "What is the name of your ticket",
+        "ticketName": "Ticket name",
+        "ticketDescription": "Description (optional)",
+        "pricingAndPaymentMethods": "Pricing & payment methods",
+        "free": "Free",
+        "paid": "Paid",
+        "guests": "Guests",
+        "guestLimit": "Guest limit",
+        "unlimitedOfGuestsAllowed": "Unlimited guests allowed",
+        "limitOfGuestsAllowed": "Limited no. of guests allowed",
+        "activateTicket": "Activate ticket",
+        "visibleToGuests": "Visible to guests",
+        "addTicket": "Add ticket",
+        "paymentMethod": "Payment method",
+        "addPaymentMethod": "Add payment method",
+        "howUserPay": "How do you want the users to pay?",
+        "whatTicketPrice": "What is the price of the ticket?",
+        "whatTicketTokenPrice": "What is the token price of the ticket?",
+        "selectChain": "Select chain"
     }
 }

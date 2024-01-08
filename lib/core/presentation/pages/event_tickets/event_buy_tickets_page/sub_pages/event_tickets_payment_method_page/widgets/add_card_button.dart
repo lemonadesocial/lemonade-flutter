@@ -1,3 +1,4 @@
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
@@ -26,7 +27,12 @@ class AddCardButton extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Assets.icons.icCreditCard.svg(),
+            ThemeSvgIcon(
+              color: colorScheme.onSecondary,
+              builder: (filter) => Assets.icons.icCreditCard.svg(
+                colorFilter: filter,
+              ),
+            ),
             SizedBox(width: Spacing.extraSmall),
             Text(
               t.event.eventPayment.addNewCard,
