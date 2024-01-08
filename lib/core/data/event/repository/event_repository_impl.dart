@@ -12,6 +12,7 @@ import 'package:app/core/domain/event/input/get_events_listing_input.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/graphql/backend/event/mutation/create_event.graphql.dart';
+import 'package:app/graphql/backend/event/mutation/manage_event_cohost_requests.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/update_event.graphql.dart';
 import 'package:app/graphql/backend/event/query/get_event_cohost_requests.graphql.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
@@ -201,6 +202,7 @@ class EventRepositoryImpl implements EventRepository {
     final result = await client.query$GetEventCohostRequests(
       Options$Query$GetEventCohostRequests(
         variables: Variables$Query$GetEventCohostRequests(input: input),
+        fetchPolicy: FetchPolicy.networkOnly,
       ),
     );
     if (result.hasException) {
@@ -213,5 +215,20 @@ class EventRepositoryImpl implements EventRepository {
             .toList(),
       ),
     );
+  }
+
+  @override
+  Future<Either<Failure, bool>> manageEventCohostRequests({
+    required Input$ManageEventCohostRequestsInput input,
+  }) async {
+    final result = await client.mutate$ManageEventCohostRequests(
+      Options$Mutation$ManageEventCohostRequests(
+        variables: Variables$Mutation$ManageEventCohostRequests(input: input),
+      ),
+    );
+    if (result.hasException) {
+      return Left(Failure.withGqlException(result.exception));
+    }
+    return Right(result.parsedData!.manageEventCohostRequests);
   }
 }

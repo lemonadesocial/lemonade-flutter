@@ -51,6 +51,7 @@ class EditEventDetailBloc
                 longitude: event.address!.longitude,
               )
             : null,
+        speaker_users: event.speakerUsers ?? [],
       ),
       id: event.eventId,
     );
@@ -78,6 +79,7 @@ class EditEventDetailEvent with _$EditEventDetailEvent {
     String? guestLimit,
     String? guestLimitPer,
     bool? private,
+    List<String>? speakerUsers,
   }) = EditEventDetailEventUpdateEvent;
 }
 

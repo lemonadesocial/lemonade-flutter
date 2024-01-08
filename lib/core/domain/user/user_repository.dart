@@ -40,4 +40,9 @@ abstract class UserRepository {
   Future<Either<Failure, Mutation$UpdateUser>> updateUserAddresses({
     required Input$UserInput input,
   });
+  Future<Either<Failure, List<User>>> getUsers({
+    int? skip,
+    int? limit,
+    String? search,
+  });
 }
