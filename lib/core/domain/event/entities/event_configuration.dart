@@ -1,4 +1,5 @@
 import 'package:app/core/application/event/event_detail_cohosts_bloc/event_detail_cohosts_bloc.dart';
+import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -86,6 +87,10 @@ class EventConfiguration {
               orElse: () => [],
             );
     final colorScheme = Theme.of(context).colorScheme;
+    final speakerUsers = context.watch<GetEventDetailBloc>().state.maybeWhen(
+          fetched: (eventDetail) => eventDetail.speakerUsers,
+          orElse: () => null,
+        );
     final List<EventConfiguration> eventConfigs = [
       EventConfiguration(
         type: EventConfigurationType.coHosts,
@@ -99,7 +104,11 @@ class EventConfiguration {
       EventConfiguration(
         type: EventConfigurationType.speakers,
         title: t.event.configuration.speakers,
-        description: t.common.add,
+        description: speakerUsers!.isNotEmpty
+            ? t.event.speakers.speakersCountInfo(
+                speakersCount: speakerUsers.length.toString(),
+              )
+            : t.common.add,
         icon: const Icon(Icons.speaker),
       ),
       EventConfiguration(

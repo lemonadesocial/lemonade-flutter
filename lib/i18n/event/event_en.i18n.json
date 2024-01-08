@@ -216,5 +216,9 @@
         "whatTicketPrice": "What is the price of the ticket?",
         "whatTicketTokenPrice": "What is the token price of the ticket?",
         "selectChain": "Select chain"
+    },
+    "speakers": {
+        "speakersCountInfo": "$speakersCount speakers",
+        "addSpeakers": "Add speakers"
     }
 }

@@ -10,14 +10,14 @@ import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class EventCohostItem extends StatelessWidget {
+class EventSpeakerItem extends StatelessWidget {
   final User? user;
-  final Function() onTapRevoke;
+  final Function() onTapRemove;
 
-  const EventCohostItem({
+  const EventSpeakerItem({
     super.key,
     this.user,
-    required this.onTapRevoke,
+    required this.onTapRemove,
   });
 
   @override
@@ -66,9 +66,9 @@ class EventCohostItem extends StatelessWidget {
               children: [
                 LinearGradientButton(
                   onTap: () {
-                    onTapRevoke();
+                    onTapRemove();
                   },
-                  label: t.common.revoke,
+                  label: t.common.remove,
                   radius: BorderRadius.circular(LemonRadius.small * 2),
                   height: Sizing.regular,
                   mode: GradientButtonMode.defaultMode,

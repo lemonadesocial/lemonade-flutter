@@ -139,5 +139,8 @@
     "pending": "Pending",
     "error": {
         "privateKeyNotFound": "Credential not found"
-    }
+    },
+    "remove": "Remove",
+    "revoke": "Revoke",
+    "saveChanges": "Save changes"
 }

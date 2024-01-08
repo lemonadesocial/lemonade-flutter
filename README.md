@@ -69,3 +69,7 @@ Uncomment this one to force update app version
 ```
 ## How to test Stripe payment on staging
 - In order to test payment with Stripe properly, you can use one of the demo card provided by Stripe. The card list can be found [here](https://stripe.com/docs/testing#cards)
+
+## How to fix when sign commit gpg stuck
+rm -rf ~/.gnupg/*.lock
+rm -rf ~/.gnupg/public-keys.d/*.lock

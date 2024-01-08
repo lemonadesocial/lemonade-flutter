@@ -1,13 +1,13 @@
-import 'package:app/core/application/event/event_detail_cohosts_bloc/event_detail_cohosts_bloc.dart';
+import 'package:app/core/application/event/edit_event_detail_bloc/edit_event_detail_bloc.dart';
 import 'package:app/core/application/event/event_provider_bloc/event_provider_bloc.dart';
-import 'package:app/core/application/event/manage_event_cohost_requests_bloc/manage_event_cohost_requests_bloc.dart';
+import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/application/user/get_users_bloc/get_users_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_cohosts_page/widgets/event_add_cohost_item.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
-import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -21,30 +21,30 @@ import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:slang/builder/utils/string_extensions.dart';
 
 @RoutePage()
-class EventAddCohostsPage extends StatelessWidget {
-  const EventAddCohostsPage({
+class EventAddSpeakersPage extends StatelessWidget {
+  const EventAddSpeakersPage({
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
     final event = context.read<EventProviderBloc>().event;
-    return EventAddCohostsView(event: event);
+    return EventAddSpeakersView(event: event);
   }
 }
 
-class EventAddCohostsView extends StatefulWidget {
-  const EventAddCohostsView({
+class EventAddSpeakersView extends StatefulWidget {
+  const EventAddSpeakersView({
     super.key,
     this.event,
   });
   final Event? event;
 
   @override
-  State<EventAddCohostsView> createState() => _EventAddCohostsViewState();
+  State<EventAddSpeakersView> createState() => _EventAddSpeakersViewState();
 }
 
-class _EventAddCohostsViewState extends State<EventAddCohostsView> {
+class _EventAddSpeakersViewState extends State<EventAddSpeakersView> {
   List<String> selectedUserIds = [];
 
   @override
@@ -54,25 +54,21 @@ class _EventAddCohostsViewState extends State<EventAddCohostsView> {
     return Scaffold(
       appBar: LemonAppBar(
         backgroundColor: colorScheme.onPrimaryContainer,
-        title: t.event.cohosts.addCohosts,
+        title: t.event.speakers.addSpeakers,
       ),
       backgroundColor: colorScheme.onPrimaryContainer,
       resizeToAvoidBottomInset: true,
-      body: BlocListener<ManageEventCohostRequestsBloc,
-          ManageEventCohostRequestsState>(
+      body: BlocListener<EditEventDetailBloc, EditEventDetailState>(
         listener: (context, state) {
-          state.maybeWhen(
-            orElse: () => null,
-            success: () {
-              AutoRouter.of(context).back();
-              context.read<GetUsersBloc>().add(GetUsersEvent.reset());
-              context.read<EventDetailCohostsBloc>().add(
-                    EventDetailCohostsEvent.fetch(
-                      eventId: widget.event?.id ?? '',
-                    ),
-                  );
-            },
-          );
+          if (state.status == EditEventDetailBlocStatus.success) {
+            AutoRouter.of(context).back();
+            context.read<GetUsersBloc>().add(GetUsersEvent.reset());
+            context.read<GetEventDetailBloc>().add(
+                  GetEventDetailEvent.fetch(
+                    eventId: widget.event!.id ?? '',
+                  ),
+                );
+          }
         },
         child: Padding(
           padding: EdgeInsets.symmetric(
@@ -109,7 +105,6 @@ class _EventAddCohostsViewState extends State<EventAddCohostsView> {
                 child: BlocBuilder<GetUsersBloc, GetUsersState>(
                   builder: (context, state) {
                     return state.maybeWhen(
-                      loading: () => Loading.defaultLoading(context),
                       success: (users) {
                         return ListView.separated(
                           padding: EdgeInsets.only(bottom: Spacing.medium),
@@ -149,7 +144,7 @@ class _EventAddCohostsViewState extends State<EventAddCohostsView> {
                   },
                 ),
               ),
-              _buildAddCohostsButton(),
+              _buildAddSpeakersButton(),
             ],
           ),
         ),
@@ -157,15 +152,9 @@ class _EventAddCohostsViewState extends State<EventAddCohostsView> {
     );
   }
 
-  _buildAddCohostsButton() {
-    return BlocBuilder<ManageEventCohostRequestsBloc,
-        ManageEventCohostRequestsState>(
+  _buildAddSpeakersButton() {
+    return BlocBuilder<EditEventDetailBloc, EditEventDetailState>(
       builder: (context, state) {
-        final loading = state.maybeWhen(
-          success: () => false,
-          loading: () => true,
-          orElse: () => false,
-        );
         return LinearGradientButton(
           label: t.common.saveChanges,
           height: 48.h,
@@ -173,16 +162,25 @@ class _EventAddCohostsViewState extends State<EventAddCohostsView> {
           textStyle: Typo.medium.copyWith(),
           mode: GradientButtonMode.lavenderMode,
           onTap: () {
+            List<User?> speakerUsers =
+                context.read<GetEventDetailBloc>().state.maybeWhen(
+                      fetched: (eventDetail) =>
+                          eventDetail.speakerUsersExpanded ?? [],
+                      orElse: () => [],
+                    );
+            List<String> speakerUsersIds =
+                speakerUsers.map((user) => user!.userId).toList();
+            List<String> newSpeakerUsers =
+                (speakerUsersIds + selectedUserIds).toSet().toList();
             Vibrate.feedback(FeedbackType.light);
-            context.read<ManageEventCohostRequestsBloc>().add(
-                  ManageEventCohostRequestsEvent.saveChanged(
+            context.read<EditEventDetailBloc>().add(
+                  EditEventDetailEvent.update(
                     eventId: widget.event?.id ?? '',
-                    users: selectedUserIds,
-                    decision: true,
+                    speakerUsers: newSpeakerUsers,
                   ),
                 );
           },
-          loadingWhen: loading,
+          loadingWhen: state.status == EditEventDetailBlocStatus.loading,
         );
       },
     );
