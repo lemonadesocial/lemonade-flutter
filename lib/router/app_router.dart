@@ -182,7 +182,6 @@ final eventDetailRoutes = AutoRoute(
           page: EventCohostsRoute.page,
         ),
         AutoRoute(
-          initial: true,
           page: EventTicketTiersListingRoute.page,
         ),
         AutoRoute(
