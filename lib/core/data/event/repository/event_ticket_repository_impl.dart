@@ -20,6 +20,9 @@ import 'package:app/core/domain/event/repository/event_ticket_repository.dart';
 import 'package:app/core/domain/payment/entities/payment.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/core/utils/gql/gql.dart';
+import 'package:app/graphql/backend/event/fragment/event_ticket_fragment.graphql.dart';
+import 'package:app/graphql/backend/event/mutation/create_event_ticket_type.graphql.dart';
+import 'package:app/graphql/backend/event/mutation/update_event_ticket_type.graphql.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:dartz/dartz.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -179,5 +182,39 @@ class EventTicketRepositoryImpl implements EventTicketRepository {
 
     if (result.hasException) return Left(Failure());
     return Right(result.parsedData!);
+  }
+
+  @override
+  Future<Either<Failure, Fragment$EventTicketType>> createEventTicketType({
+    required Variables$Mutation$CreateEventTicketType input,
+  }) async {
+    final result = await _client.mutate$CreateEventTicketType(
+      Options$Mutation$CreateEventTicketType(
+        variables: input,
+        fetchPolicy: FetchPolicy.networkOnly,
+      ),
+    );
+
+    if (result.hasException || result.parsedData == null) {
+      return Left(Failure());
+    }
+    return Right(result.parsedData!.createEventTicketType);
+  }
+
+  @override
+  Future<Either<Failure, Fragment$EventTicketType>> updateEventTicketType({
+    required Variables$Mutation$UpdateEventTicketType input,
+  }) async {
+    final result = await _client.mutate$UpdateEventTicketType(
+      Options$Mutation$UpdateEventTicketType(
+        variables: input,
+        fetchPolicy: FetchPolicy.networkOnly,
+      ),
+    );
+
+    if (result.hasException || result.parsedData == null) {
+      return Left(Failure());
+    }
+    return Right(result.parsedData!.updateEventTicketType);
   }
 }

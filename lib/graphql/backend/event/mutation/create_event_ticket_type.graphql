@@ -1,0 +1,7 @@
+# import '../fragment/event_ticket_fragment.graphql';
+
+mutation CreateEventTicketType($input: EventTicketTypeInput!) {
+  createEventTicketType(input: $input) {
+    ...EventTicketType
+  }
+}

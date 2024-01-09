@@ -1,0 +1,32 @@
+# import '../../schema.graphql';
+
+fragment EventTicketType on EventTicketType {
+  id: _id
+  active
+  event
+  title
+  prices {
+    cost
+    currency
+    network
+  }
+  default
+  addressRequired: address_required
+  description
+  descriptionLine: description_line
+  externalIds: external_ids
+  offers {
+    id: _id
+    provider
+    providerNetwork: provider_network
+    providerId: provider_id
+    position
+    auto
+    broadcastRooms: broadcast_rooms
+  }
+  photos
+  photosExpanded: photos_expanded {
+    id: _id
+    bucket
+  }
+}

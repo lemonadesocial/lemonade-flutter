@@ -54,6 +54,31 @@ class PurchasableTicketTypeDto with _$PurchasableTicketTypeDto {
 }
 
 @freezed
+class EventTicketTypeDto with _$EventTicketTypeDto {
+  factory EventTicketTypeDto({
+    @JsonKey(name: '_id') String? id,
+    bool? active,
+    @JsonKey(name: 'address_required') bool? addressRequired,
+    List<EventTicketPriceDto>? prices,
+    @JsonKey(name: 'default') bool? isDefault,
+    String? description,
+    @JsonKey(name: 'description_line') String? descriptionLine,
+    bool? discountable,
+    List<String>? externalIds,
+    int? limit,
+    List<EventOfferDto>? offers,
+    List<String>? photos,
+    String? title,
+    @JsonKey(name: 'photos_expanded') List<DbFileDto>? photosExpanded,
+    @JsonKey(name: 'ticket_limit') double? ticketLimit,
+    @JsonKey(name: 'ticket_count') double? ticketCount,
+  }) = _EventTicketTypeDto;
+
+  factory EventTicketTypeDto.fromJson(Map<String, dynamic> json) =>
+      _$EventTicketTypeDtoFromJson(json);
+}
+
+@freezed
 class EventTicketPriceDto with _$EventTicketPriceDto {
   const factory EventTicketPriceDto({
     String? cost,

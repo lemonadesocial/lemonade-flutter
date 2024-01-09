@@ -1,0 +1,7 @@
+# import '../fragment/event_ticket_fragment.graphql';
+
+mutation UpdateEventTicketType($input: EventTicketTypeInput!, $id: MongoID!) {
+  updateEventTicketType(input: $input, _id: $id) {
+    ...EventTicketType
+  }
+}
