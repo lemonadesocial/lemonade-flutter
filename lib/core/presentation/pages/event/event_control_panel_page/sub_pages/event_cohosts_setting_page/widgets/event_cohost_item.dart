@@ -68,7 +68,7 @@ class EventCohostItem extends StatelessWidget {
                   onTap: () {
                     onTapRevoke();
                   },
-                  label: t.common.revoke,
+                  label: t.common.actions.revoke,
                   radius: BorderRadius.circular(LemonRadius.small * 2),
                   height: Sizing.regular,
                   mode: GradientButtonMode.defaultMode,

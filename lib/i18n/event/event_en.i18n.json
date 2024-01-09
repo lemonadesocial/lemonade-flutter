@@ -218,7 +218,10 @@
         "selectChain": "Select chain"
     },
     "speakers": {
-        "speakersCountInfo": "$speakersCount speakers",
+        "speakersCountInfo(ordinal)": {
+            "one": "speaker",
+            "other": "speakers"
+        },
         "addSpeakers": "Add speakers"
     }
 }

@@ -1,5 +1,4 @@
 import 'package:app/core/application/event/edit_event_detail_bloc/edit_event_detail_bloc.dart';
-import 'package:app/core/application/event/event_provider_bloc/event_provider_bloc.dart';
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/user/entities/user.dart';
@@ -25,7 +24,10 @@ class EventSpeakersPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final event = context.read<EventProviderBloc>().event;
+    final event = context.read<GetEventDetailBloc>().state.maybeWhen(
+          fetched: (eventDetail) => eventDetail,
+          orElse: () => null,
+        );
     return EventSpeakersPageView(event: event);
   }
 }

@@ -6,7 +6,7 @@ import 'package:app/core/data/user/dtos/user_dtos.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_cohost_request.dart';
 import 'package:app/core/domain/user/entities/user.dart';
-import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_cohosts_page/widgets/event_cohost_item.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_cohosts_setting_page/widgets/event_cohost_item.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
@@ -21,30 +21,32 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 
 @RoutePage()
-class EventCohostsPage extends StatelessWidget {
-  const EventCohostsPage({
+class EventCohostsSettingPage extends StatelessWidget {
+  const EventCohostsSettingPage({
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
     final event = context.read<EventProviderBloc>().event;
-    return EventCohostsPageView(event: event);
+    return EventCohostsSettingPageView(event: event);
   }
 }
 
-class EventCohostsPageView extends StatefulWidget {
-  const EventCohostsPageView({
+class EventCohostsSettingPageView extends StatefulWidget {
+  const EventCohostsSettingPageView({
     super.key,
     this.event,
   });
   final Event? event;
 
   @override
-  State<EventCohostsPageView> createState() => _EventCohostsPageViewState();
+  State<EventCohostsSettingPageView> createState() =>
+      _EventCohostsSettingPageViewState();
 }
 
-class _EventCohostsPageViewState extends State<EventCohostsPageView> {
+class _EventCohostsSettingPageViewState
+    extends State<EventCohostsSettingPageView> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;

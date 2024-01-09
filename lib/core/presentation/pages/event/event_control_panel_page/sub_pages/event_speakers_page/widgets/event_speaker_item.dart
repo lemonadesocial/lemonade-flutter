@@ -68,7 +68,7 @@ class EventSpeakerItem extends StatelessWidget {
                   onTap: () {
                     onTapRemove();
                   },
-                  label: t.common.remove,
+                  label: t.common.actions.remove,
                   radius: BorderRadius.circular(LemonRadius.small * 2),
                   height: Sizing.regular,
                   mode: GradientButtonMode.defaultMode,

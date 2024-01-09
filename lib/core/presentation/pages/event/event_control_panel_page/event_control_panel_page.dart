@@ -6,7 +6,6 @@ import 'package:app/core/application/event/get_event_detail_bloc/get_event_detai
 import 'package:app/core/application/event/manage_event_cohost_requests_bloc/manage_event_cohost_requests_bloc.dart';
 import 'package:app/core/application/user/get_users_bloc/get_users_bloc.dart';
 import 'package:app/core/constants/event/event_constants.dart';
-import 'package:app/core/domain/event/entities/event.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,9 +25,6 @@ class EventControlPanelPage extends StatelessWidget
         );
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (context) => EventProviderBloc(event: event ?? Event()),
-        ),
         BlocProvider(
           create: (context) => EventDateTimeSettingsBloc()
             ..add(

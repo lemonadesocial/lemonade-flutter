@@ -48,7 +48,12 @@
         "copy": "Copy",
         "share": "Share",
         "restart": "Restart",
-        "connectWallet": "Connect wallet"
+        "connectWallet": "Connect wallet",
+        "save": "Save",
+        "add": "Add",
+        "remove": "Remove",
+        "revoke": "Revoke",
+        "saveChanges": "Save changes"
     },
     "followed": "Followed",
     "anonymous": "anonymous",
@@ -134,13 +139,8 @@
     "chatAI": "Chat AI",
     "incorrectPin": "Incorrect PIN code",
     "copiedToClipboard": "Copied to clipboard",
-    "save": "Save",
-    "add": "Add",
     "pending": "Pending",
     "error": {
         "privateKeyNotFound": "Credential not found"
-    },
-    "remove": "Remove",
-    "revoke": "Revoke",
-    "saveChanges": "Save changes"
+    }
 }

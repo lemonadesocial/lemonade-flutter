@@ -1,10 +1,9 @@
 import 'package:app/core/application/event/edit_event_detail_bloc/edit_event_detail_bloc.dart';
-import 'package:app/core/application/event/event_provider_bloc/event_provider_bloc.dart';
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/application/user/get_users_bloc/get_users_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/user/entities/user.dart';
-import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_cohosts_page/widgets/event_add_cohost_item.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_cohosts_setting_page/widgets/event_add_cohost_item.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
@@ -28,7 +27,10 @@ class EventAddSpeakersPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final event = context.read<EventProviderBloc>().event;
+    final event = context.read<GetEventDetailBloc>().state.maybeWhen(
+          fetched: (eventDetail) => eventDetail,
+          orElse: () => null,
+        );
     return EventAddSpeakersView(event: event);
   }
 }
@@ -156,7 +158,7 @@ class _EventAddSpeakersViewState extends State<EventAddSpeakersView> {
     return BlocBuilder<EditEventDetailBloc, EditEventDetailState>(
       builder: (context, state) {
         return LinearGradientButton(
-          label: t.common.saveChanges,
+          label: t.common.actions.saveChanges,
           height: 48.h,
           radius: BorderRadius.circular(24),
           textStyle: Typo.medium.copyWith(),

@@ -179,7 +179,7 @@ final eventDetailRoutes = AutoRoute(
           page: EventLocationSettingDetailRoute.page,
         ),
         AutoRoute(
-          page: EventCohostsRoute.page,
+          page: EventCohostsSettingRoute.page,
         ),
         AutoRoute(
           page: EventAddCohostsRoute.page,

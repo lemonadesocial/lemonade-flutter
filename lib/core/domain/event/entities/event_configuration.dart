@@ -98,17 +98,17 @@ class EventConfiguration {
         description: eventCohostRequests.isNotEmpty
             ? t.event.cohosts
                 .cohostInfo(cohostsCount: eventCohostRequests.length.toString())
-            : t.common.add,
+            : t.common.actions.add,
         icon: const Icon(Icons.person_add),
       ),
       EventConfiguration(
         type: EventConfigurationType.speakers,
         title: t.event.configuration.speakers,
         description: speakerUsers!.isNotEmpty
-            ? t.event.speakers.speakersCountInfo(
-                speakersCount: speakerUsers.length.toString(),
-              )
-            : t.common.add,
+            ? '${speakerUsers.length} ${t.event.speakers.speakersCountInfo(
+                n: speakerUsers.length,
+              )}'
+            : t.common.actions.add,
         icon: const Icon(Icons.speaker),
       ),
       EventConfiguration(
