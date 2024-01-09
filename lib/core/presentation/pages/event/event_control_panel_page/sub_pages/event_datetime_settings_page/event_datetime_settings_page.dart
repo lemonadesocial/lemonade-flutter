@@ -159,7 +159,7 @@ class _EventDatetimeSettingsPageState
                                       vertical: Spacing.smMedium,
                                     ),
                                     child: LinearGradientButton(
-                                      label: t.common.save,
+                                      label: t.common.actions.save,
                                       height: 48.h,
                                       radius: BorderRadius.circular(24),
                                       textStyle: Typo.medium.copyWith(),

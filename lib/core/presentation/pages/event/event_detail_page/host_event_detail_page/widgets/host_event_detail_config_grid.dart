@@ -1,4 +1,4 @@
-import 'package:app/core/application/event/event_detail_cohosts_bloc/event_detail_cohosts_bloc.dart';
+import 'package:app/core/application/event/get_event_cohost_requests_bloc/get_event_cohost_requests_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/view_model/event_config_grid_view_model.dart';
 import 'package:app/core/utils/modal_utils.dart';
@@ -101,7 +101,7 @@ class HostEventDetailConfigGrid extends StatelessWidget {
         ),
         onTap: () {
           Vibrate.feedback(FeedbackType.light);
-          showComingSoonDialog(context);
+          AutoRouter.of(context).navigate(const EventCohostsSettingRoute());
         },
       ),
       EventConfigGridViewModel(
@@ -141,6 +141,11 @@ class HostEventDetailConfigGrid extends StatelessWidget {
         },
       ),
     ];
+    final eventCohostRequests =
+        context.watch<GetEventCohostRequestsBloc>().state.maybeWhen(
+              orElse: () => [],
+              fetched: (eventCohostRequests) => eventCohostRequests,
+            );
     return SliverGrid(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
@@ -151,26 +156,18 @@ class HostEventDetailConfigGrid extends StatelessWidget {
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
           if (listData[index]?.title == t.event.configuration.coHosts) {
-            return BlocBuilder<EventDetailCohostsBloc, EventDetailCohostsState>(
-              builder: (context, state) {
-                final eventCohostRequests = state.maybeWhen(
-                  fetched: (eventCohostRequests) => eventCohostRequests,
-                  orElse: () => [],
-                );
-                return GridItemWidget(
-                  item: EventConfigGridViewModel(
-                    title: listData[index]!.title,
-                    subTitle: eventCohostRequests.isNotEmpty
-                        ? t.event.cohosts.cohostInfo(
-                            cohostsCount: eventCohostRequests.length,
-                          )
-                        : '',
-                    icon: listData[index]!.icon,
-                    onTap: () {},
-                  ),
-                  onTap: listData[index]!.onTap,
-                );
-              },
+            return GridItemWidget(
+              item: EventConfigGridViewModel(
+                title: listData[index]!.title,
+                subTitle: eventCohostRequests.isNotEmpty
+                    ? '${eventCohostRequests.length} ${t.event.cohosts.cohostsCountInfo(
+                        n: eventCohostRequests.length,
+                      )}'
+                    : '',
+                icon: listData[index]!.icon,
+                onTap: () {},
+              ),
+              onTap: listData[index]!.onTap,
             );
           }
           return GridItemWidget(

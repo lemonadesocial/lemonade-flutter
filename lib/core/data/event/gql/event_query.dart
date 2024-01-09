@@ -21,6 +21,9 @@ const eventPeopleFragment = '''
   fragment eventPeopleFragment on Event {
     cohosts
     speaker_users
+    speaker_users_expanded {
+      ...eventHostExpandedFragment
+    }
     accepted
     invited
     pending

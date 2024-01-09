@@ -1,17 +1,19 @@
-import 'package:app/core/data/user/dtos/user_dtos.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:app/core/data/event/dtos/event_cohost_request_dto/event_cohost_request_dto.dart';
+import 'package:app/core/domain/user/entities/user.dart';
 
-part 'event_cohost_request.freezed.dart';
-part 'event_cohost_request.g.dart';
+class EventCohostRequest {
+  EventCohostRequest({
+    this.id,
+    this.toExpanded,
+  });
 
-@freezed
-class EventCohostRequest with _$EventCohostRequest {
-  @JsonSerializable(explicitToJson: true)
-  factory EventCohostRequest({
-    String? id,
-    UserDto? toExpanded,
-  }) = _EventCohostRequest;
+  String? id;
+  User? toExpanded;
 
-  factory EventCohostRequest.fromJson(Map<String, dynamic> json) =>
-      _$EventCohostRequestFromJson(json);
+  factory EventCohostRequest.fromDto(EventCohostRequestDto dto) =>
+      EventCohostRequest(
+        id: dto.id,
+        toExpanded:
+            dto.toExpanded != null ? User.fromDto(dto.toExpanded!) : null,
+      );
 }

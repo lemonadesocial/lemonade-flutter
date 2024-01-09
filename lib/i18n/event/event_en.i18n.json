@@ -185,7 +185,10 @@
     "collaborations": "Collaborations",
     "eventDetails": "Event Details",
     "cohosts": {
-        "cohostInfo": "$cohostsCount co-hosts",
+        "cohostsCountInfo(ordinal)": {
+            "one": "co-host",
+            "other": "co-hosts"
+        },
         "addCohosts": "Add co-hosts"
     },
     "ticketTier": "Ticket tiers",
@@ -229,5 +232,12 @@
             "one": "1 method",
             "other": "$count methods"
         }
+    },
+    "speakers": {
+        "speakersCountInfo(ordinal)": {
+            "one": "speaker",
+            "other": "speakers"
+        },
+        "addSpeakers": "Add speakers"
     }
 }

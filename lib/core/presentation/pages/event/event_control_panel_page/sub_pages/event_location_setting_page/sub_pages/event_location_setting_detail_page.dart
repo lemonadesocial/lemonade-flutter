@@ -264,8 +264,9 @@ class _EventLocationSettingDetailPageState
         return Padding(
           padding: EdgeInsets.only(bottom: 15.h),
           child: LinearGradientButton(
-            label:
-                widget.address != null ? t.common.actions.edit : t.common.add,
+            label: widget.address != null
+                ? t.common.actions.edit
+                : t.common.actions.add,
             height: 48.h,
             radius: BorderRadius.circular(24),
             textStyle: Typo.medium.copyWith(),

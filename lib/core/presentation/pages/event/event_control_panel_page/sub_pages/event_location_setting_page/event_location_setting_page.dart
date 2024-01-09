@@ -144,7 +144,7 @@ class _EventLocationSettingPageState extends State<EventLocationSettingPage> {
     return BlocBuilder<EditEventDetailBloc, EditEventDetailState>(
       builder: (context, state) {
         return LinearGradientButton(
-          label: t.common.save,
+          label: t.common.actions.save,
           height: 48.h,
           radius: BorderRadius.circular(24),
           textStyle: Typo.medium.copyWith(),

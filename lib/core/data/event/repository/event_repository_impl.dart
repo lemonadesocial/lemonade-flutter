@@ -1,3 +1,4 @@
+import 'package:app/core/data/event/dtos/event_cohost_request_dto/event_cohost_request_dto.dart';
 import 'package:app/core/data/event/dtos/event_dtos.dart';
 import 'package:app/core/data/event/dtos/event_rsvp_dto/event_rsvp_dto.dart';
 import 'package:app/core/data/event/gql/event_mutation.dart';
@@ -12,6 +13,7 @@ import 'package:app/core/domain/event/input/get_events_listing_input.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/graphql/backend/event/mutation/create_event.graphql.dart';
+import 'package:app/graphql/backend/event/mutation/manage_event_cohost_requests.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/update_event.graphql.dart';
 import 'package:app/graphql/backend/event/query/get_event_cohost_requests.graphql.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
@@ -201,6 +203,7 @@ class EventRepositoryImpl implements EventRepository {
     final result = await client.query$GetEventCohostRequests(
       Options$Query$GetEventCohostRequests(
         variables: Variables$Query$GetEventCohostRequests(input: input),
+        fetchPolicy: FetchPolicy.networkOnly,
       ),
     );
     if (result.hasException) {
@@ -209,9 +212,28 @@ class EventRepositoryImpl implements EventRepository {
     return Right(
       List.from(
         result.parsedData!.getEventCohostRequests
-            .map((item) => EventCohostRequest.fromJson(item.toJson()))
+            .map(
+              (item) => EventCohostRequest.fromDto(
+                EventCohostRequestDto.fromJson(item.toJson()),
+              ),
+            )
             .toList(),
       ),
     );
+  }
+
+  @override
+  Future<Either<Failure, bool>> manageEventCohostRequests({
+    required Input$ManageEventCohostRequestsInput input,
+  }) async {
+    final result = await client.mutate$ManageEventCohostRequests(
+      Options$Mutation$ManageEventCohostRequests(
+        variables: Variables$Mutation$ManageEventCohostRequests(input: input),
+      ),
+    );
+    if (result.hasException) {
+      return Left(Failure.withGqlException(result.exception));
+    }
+    return Right(result.parsedData!.manageEventCohostRequests);
   }
 }
