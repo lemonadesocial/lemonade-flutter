@@ -20,7 +20,6 @@ import 'package:app/core/domain/event/repository/event_ticket_repository.dart';
 import 'package:app/core/domain/payment/entities/payment.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/core/utils/gql/gql.dart';
-import 'package:app/graphql/backend/event/fragment/event_ticket_fragment.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/create_event_ticket_type.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/update_event_ticket_type.graphql.dart';
 import 'package:app/injection/register_module.dart';
@@ -185,7 +184,7 @@ class EventTicketRepositoryImpl implements EventTicketRepository {
   }
 
   @override
-  Future<Either<Failure, Fragment$EventTicketType>> createEventTicketType({
+  Future<Either<Failure, EventTicketType>> createEventTicketType({
     required Variables$Mutation$CreateEventTicketType input,
   }) async {
     final result = await _client.mutate$CreateEventTicketType(
@@ -198,11 +197,17 @@ class EventTicketRepositoryImpl implements EventTicketRepository {
     if (result.hasException || result.parsedData == null) {
       return Left(Failure());
     }
-    return Right(result.parsedData!.createEventTicketType);
+    return Right(
+      EventTicketType.fromDto(
+        EventTicketTypeDto.fromJson(
+          result.parsedData!.createEventTicketType.toJson(),
+        ),
+      ),
+    );
   }
 
   @override
-  Future<Either<Failure, Fragment$EventTicketType>> updateEventTicketType({
+  Future<Either<Failure, EventTicketType>> updateEventTicketType({
     required Variables$Mutation$UpdateEventTicketType input,
   }) async {
     final result = await _client.mutate$UpdateEventTicketType(
@@ -215,6 +220,12 @@ class EventTicketRepositoryImpl implements EventTicketRepository {
     if (result.hasException || result.parsedData == null) {
       return Left(Failure());
     }
-    return Right(result.parsedData!.updateEventTicketType);
+    return Right(
+      EventTicketType.fromDto(
+        EventTicketTypeDto.fromJson(
+          result.parsedData!.updateEventTicketType.toJson(),
+        ),
+      ),
+    );
   }
 }

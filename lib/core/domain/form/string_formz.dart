@@ -26,3 +26,14 @@ final class StringFormz extends FormzInput<String, StringValidationError> {
     return null;
   }
 }
+
+final class OptionalStringFormz
+    extends FormzInput<String, StringValidationError> {
+  const OptionalStringFormz.pure([super.value = '']) : super.pure();
+  const OptionalStringFormz.dirty([super.value = '']) : super.dirty();
+
+  @override
+  StringValidationError? validator(String value) {
+    return null;
+  }
+}
