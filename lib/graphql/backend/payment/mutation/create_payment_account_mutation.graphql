@@ -1,0 +1,7 @@
+# import '../fragment/payment_fragment.graphql';
+
+mutation CreateNewPaymentAccount($input: CreateNewPaymentAccountInput!) {
+  createNewPaymentAccount(input: $input) {
+    ...PaymentAccountFragment
+  }
+}
