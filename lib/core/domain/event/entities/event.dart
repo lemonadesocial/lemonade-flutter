@@ -82,7 +82,7 @@ class Event {
           .map((item) => EventOffer.fromDto(item))
           .toList(),
       eventTicketTypes: List.from(dto.eventTicketTypes ?? [])
-          .map((item) => PurchasableTicketType.fromDto(item))
+          .map((item) => EventTicketType.fromDto(item))
           .toList(),
       address: dto.address != null ? Address.fromDto(dto.address!) : null,
       paymentAccountsExpanded: List.from(dto.paymentAccountsExpanded ?? [])
@@ -117,7 +117,7 @@ class Event {
   double? longitude;
   String? matrixEventRoomId;
   List<EventOffer>? offers;
-  List<PurchasableTicketType>? eventTicketTypes;
+  List<EventTicketType>? eventTicketTypes;
   Address? address;
   List<PaymentAccount>? paymentAccountsExpanded;
   double? guestLimit;

@@ -1,0 +1,19 @@
+# import '../fragment/payment_fragment.graphql'
+
+query ListNewPaymentAccounts(
+  $skip: Int!
+  $limit: Int!
+  $type: PaymentAccountType
+  $id: [MongoID!]
+  $provider: NewPaymentProvider
+) {
+  listNewPaymentAccounts(
+    skip: $skip
+    limit: $limit
+    type: $type
+    _id: $id
+    provider: $provider
+  ) {
+    ...PaymentAccountFragment
+  }
+}

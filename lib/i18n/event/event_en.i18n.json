@@ -197,6 +197,7 @@
         "creditDebit": "Credit/Debit",
         "erc20": "ERC20",
         "connectAccount": "Connect account",
+        "selectAccount": "Select account",
         "crypto": "Crypto",
         "newTicket": "New ticket",
         "createTicket": "Create ticket",
@@ -207,7 +208,12 @@
         "free": "Free",
         "paid": "Paid",
         "guests": "Guests",
+        "guestsCount(ordinal)": {
+            "one": "guest",
+            "other": "$n guests"
+        },
         "guestLimit": "Guest limit",
+        "unlimitedGuests": "Unlimited guests",
         "unlimitedOfGuestsAllowed": "Unlimited guests allowed",
         "limitOfGuestsAllowed": "Limited no. of guests allowed",
         "activateTicket": "Activate ticket",
@@ -218,7 +224,14 @@
         "howUserPay": "How do you want the users to pay?",
         "whatTicketPrice": "What is the price of the ticket?",
         "whatTicketTokenPrice": "What is the token price of the ticket?",
-        "selectChain": "Select chain"
+        "selectChain": "Select chain",
+        "defaultTicket": "Default",
+        "active": "Active",
+        "disabled": "Disabled",
+        "method(ordinal)": {
+            "one": "1 method",
+            "other": "$count methods"
+        }
     },
     "speakers": {
         "speakersCountInfo(ordinal)": {

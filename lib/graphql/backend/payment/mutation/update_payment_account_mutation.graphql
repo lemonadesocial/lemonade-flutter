@@ -1,0 +1,7 @@
+# import '../fragment/payment_fragment.graphql';
+
+mutation UpdateNewPaymentAccount($input: UpdateNewPaymentAccountInput!) {
+  updateNewPaymentAccount(input: $input) {
+    ...PaymentAccountFragment
+  }
+}

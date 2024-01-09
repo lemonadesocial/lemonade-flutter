@@ -1,5 +1,9 @@
+import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
+import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
+import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
@@ -7,7 +11,9 @@ import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:collection/collection.dart';
 
 class PayoutAccountsWidget extends StatelessWidget {
   const PayoutAccountsWidget({super.key});
@@ -16,7 +22,18 @@ class PayoutAccountsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-
+    final eventPaymentAccountsExpanded =
+        context.watch<GetEventDetailBloc>().state.maybeWhen(
+              fetched: (event) => event.paymentAccountsExpanded,
+              orElse: () => [] as List<PaymentAccount>,
+            );
+    final hasStripePaymentAccount = eventPaymentAccountsExpanded!.any(
+      (item) => item.provider == PaymentProvider.stripe,
+    );
+    final ethereumPaymentAccount =
+        eventPaymentAccountsExpanded.firstWhereOrNull(
+      (item) => item.type == PaymentAccountType.ethereum,
+    );
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -29,24 +46,66 @@ class PayoutAccountsWidget extends StatelessWidget {
         SizedBox(height: Spacing.xSmall),
         PayoutAccountItem(
           title: t.event.ticketTierSetting.creditDebit,
-          subTitle: t.event.ticketTierSetting.connectAccount,
+          subTitle: hasStripePaymentAccount
+              ? t.event.ticketTierSetting.selectAccount
+              : t.event.ticketTierSetting.connectAccount,
           icon: ThemeSvgIcon(
             color: colorScheme.onSecondary,
             builder: (filter) => Assets.icons.icCash.svg(
               colorFilter: filter,
             ),
           ),
+          buttonBuilder: () {
+            if (hasStripePaymentAccount) {
+              return InkWell(
+                onTap: () {},
+                child: ThemeSvgIcon(
+                  color: colorScheme.onSurfaceVariant,
+                  builder: (filter) => Assets.icons.icForward.svg(
+                    colorFilter: filter,
+                  ),
+                ),
+              );
+            }
+            return LinearGradientButton(
+              height: Sizing.medium,
+              radius: BorderRadius.circular(LemonRadius.small * 2),
+              label: t.common.actions.connect,
+            );
+          },
         ),
         SizedBox(height: Spacing.xSmall),
         PayoutAccountItem(
           title: t.event.ticketTierSetting.crypto,
-          subTitle: t.common.actions.connectWallet,
+          subTitle: ethereumPaymentAccount != null
+              ? Web3Utils.formatIdentifier(
+                  ethereumPaymentAccount.accountInfo?.address ?? '',
+                )
+              : t.common.actions.connectWallet,
           icon: ThemeSvgIcon(
             color: colorScheme.onSecondary,
             builder: (filter) => Assets.icons.icWallet.svg(
               colorFilter: filter,
             ),
           ),
+          buttonBuilder: () {
+            if (ethereumPaymentAccount != null) {
+              return InkWell(
+                onTap: () {},
+                child: ThemeSvgIcon(
+                  color: colorScheme.onSurfaceVariant,
+                  builder: (filter) => Assets.icons.icForward.svg(
+                    colorFilter: filter,
+                  ),
+                ),
+              );
+            }
+            return LinearGradientButton(
+              height: Sizing.medium,
+              radius: BorderRadius.circular(LemonRadius.small * 2),
+              label: t.common.actions.connect,
+            );
+          },
         ),
       ],
     );
@@ -57,12 +116,14 @@ class PayoutAccountItem extends StatelessWidget {
   final String title;
   final String subTitle;
   final Widget icon;
+  final Widget Function()? buttonBuilder;
 
   const PayoutAccountItem({
     super.key,
     required this.title,
     required this.subTitle,
     required this.icon,
+    this.buttonBuilder,
   });
 
   @override
@@ -110,12 +171,7 @@ class PayoutAccountItem extends StatelessWidget {
               ],
             ),
           ),
-          // Edit icon
-          LinearGradientButton(
-            height: Sizing.medium,
-            radius: BorderRadius.circular(LemonRadius.small * 2),
-            label: t.common.actions.connect,
-          ),
+          if (buttonBuilder != null) buttonBuilder!.call(),
         ],
       ),
     );

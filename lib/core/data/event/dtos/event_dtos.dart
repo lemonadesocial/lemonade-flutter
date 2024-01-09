@@ -37,7 +37,7 @@ class EventDto with _$EventDto {
     double? longitude,
     @JsonKey(name: 'matrix_event_room_id') String? matrixEventRoomId,
     @JsonKey(name: 'event_ticket_types')
-    List<PurchasableTicketTypeDto>? eventTicketTypes,
+    List<EventTicketTypeDto>? eventTicketTypes,
     List<EventOfferDto>? offers,
     AddressDto? address,
     @JsonKey(name: 'payment_accounts_expanded')

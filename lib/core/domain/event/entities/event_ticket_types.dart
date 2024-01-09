@@ -97,6 +97,57 @@ class PurchasableTicketType with _$PurchasableTicketType {
       );
 }
 
+@freezed
+class EventTicketType with _$EventTicketType {
+  factory EventTicketType({
+    String? id,
+    bool? active,
+    bool? addressRequired,
+    bool? isDefault,
+    String? description,
+    String? descriptionLine,
+    bool? discountable,
+    List<String>? externalIds,
+    int? limit,
+    List<EventOffer>? offers,
+    List<String>? photos,
+    String? title,
+    List<EventTicketPrice>? prices,
+    String? defaultCurrency,
+    EventTicketPrice? defaultPrice,
+    List<DbFile>? photosExpanded,
+    double? ticketLimit,
+    double? ticketCount,
+  }) = _EventTicketType;
+
+  factory EventTicketType.fromDto(EventTicketTypeDto dto) => EventTicketType(
+        id: dto.id,
+        active: dto.active,
+        addressRequired: dto.addressRequired,
+        isDefault: dto.isDefault,
+        description: dto.description,
+        descriptionLine: dto.descriptionLine,
+        discountable: dto.discountable,
+        externalIds: dto.externalIds,
+        limit: dto.limit,
+        offers: dto.offers != null
+            ? List.from(dto.offers ?? [])
+                .map((item) => EventOffer.fromDto(item))
+                .toList()
+            : [],
+        photos: dto.photos,
+        title: dto.title,
+        prices: List.from(dto.prices ?? [])
+            .map((item) => EventTicketPrice.fromDto(item))
+            .toList(),
+        photosExpanded: List.from(dto.photosExpanded ?? [])
+            .map((item) => DbFile.fromDto(item))
+            .toList(),
+        ticketLimit: dto.ticketLimit,
+        ticketCount: dto.ticketCount,
+      );
+}
+
 class EventTicketPrice {
   final String? cost;
   final BigInt? cryptoCost;

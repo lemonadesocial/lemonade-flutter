@@ -54,15 +54,35 @@ const eventTicketTypesFragment = '''
   fragment eventTicketTypesFragment on Event {
     event_ticket_types {
       _id
+      active
+      event
       title
       prices {
         cost
         currency
         network
       }
+      ticket_limit
+      ticket_count
+      default
+      address_required
       description
+      description_line
+      external_ids
+      offers {
+        _id
+        provider
+        provider_network
+        provider_id
+        position
+        auto
+        broadcast_rooms
+      }
+      photos
       photos_expanded(limit: 1) {
-        key
+        _id
+        url
+        key 
         bucket
       }
     }
