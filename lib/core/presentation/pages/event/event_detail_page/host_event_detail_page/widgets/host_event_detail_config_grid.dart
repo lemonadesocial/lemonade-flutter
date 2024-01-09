@@ -1,4 +1,4 @@
-import 'package:app/core/application/event/event_detail_cohosts_bloc/event_detail_cohosts_bloc.dart';
+import 'package:app/core/application/event/get_event_cohost_requests_bloc/get_event_cohost_requests_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/view_model/event_config_grid_view_model.dart';
 import 'package:app/core/utils/modal_utils.dart';
@@ -142,7 +142,7 @@ class HostEventDetailConfigGrid extends StatelessWidget {
       ),
     ];
     final eventCohostRequests =
-        context.watch<EventDetailCohostsBloc>().state.maybeWhen(
+        context.watch<GetEventCohostRequestsBloc>().state.maybeWhen(
               orElse: () => [],
               fetched: (eventCohostRequests) => eventCohostRequests,
             );

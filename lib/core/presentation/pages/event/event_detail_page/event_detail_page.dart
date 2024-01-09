@@ -1,5 +1,5 @@
 import 'package:app/core/application/event/edit_event_detail_bloc/edit_event_detail_bloc.dart';
-import 'package:app/core/application/event/event_detail_cohosts_bloc/event_detail_cohosts_bloc.dart';
+import 'package:app/core/application/event/get_event_cohost_requests_bloc/get_event_cohost_requests_bloc.dart';
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -27,9 +27,9 @@ class EventDetailPage extends StatelessWidget implements AutoRouteWrapper {
             ),
         ),
         BlocProvider(
-          create: (context) => EventDetailCohostsBloc()
+          create: (context) => GetEventCohostRequestsBloc()
             ..add(
-              EventDetailCohostsEvent.fetch(
+              GetEventCohostRequestsEvent.fetch(
                 eventId: eventId,
               ),
             ),

@@ -1,4 +1,4 @@
-import 'package:app/core/application/event/event_detail_cohosts_bloc/event_detail_cohosts_bloc.dart';
+import 'package:app/core/application/event/get_event_cohost_requests_bloc/get_event_cohost_requests_bloc.dart';
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/utils/date_format_utils.dart';
@@ -82,7 +82,7 @@ class EventConfiguration {
     BuildContext context,
   ) {
     final eventCohostRequests =
-        context.watch<EventDetailCohostsBloc>().state.maybeWhen(
+        context.watch<GetEventCohostRequestsBloc>().state.maybeWhen(
               fetched: (eventCohostRequests) => eventCohostRequests,
               orElse: () => [],
             );

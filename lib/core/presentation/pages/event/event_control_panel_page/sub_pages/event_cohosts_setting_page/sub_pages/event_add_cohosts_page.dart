@@ -1,4 +1,4 @@
-import 'package:app/core/application/event/event_detail_cohosts_bloc/event_detail_cohosts_bloc.dart';
+import 'package:app/core/application/event/get_event_cohost_requests_bloc/get_event_cohost_requests_bloc.dart';
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/application/event/manage_event_cohost_requests_bloc/manage_event_cohost_requests_bloc.dart';
 import 'package:app/core/application/user/get_users_bloc/get_users_bloc.dart';
@@ -69,8 +69,8 @@ class _EventAddCohostsViewState extends State<EventAddCohostsView> {
             success: () {
               AutoRouter.of(context).back();
               context.read<GetUsersBloc>().add(GetUsersEvent.reset());
-              context.read<EventDetailCohostsBloc>().add(
-                    EventDetailCohostsEvent.fetch(
+              context.read<GetEventCohostRequestsBloc>().add(
+                    GetEventCohostRequestsEvent.fetch(
                       eventId: widget.event?.id ?? '',
                     ),
                   );
