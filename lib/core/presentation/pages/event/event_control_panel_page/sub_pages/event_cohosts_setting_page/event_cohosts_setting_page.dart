@@ -1,11 +1,10 @@
 import 'package:app/core/application/event/edit_event_detail_bloc/edit_event_detail_bloc.dart';
 import 'package:app/core/application/event/event_provider_bloc/event_provider_bloc.dart';
 import 'package:app/core/application/event/get_event_cohost_requests_bloc/get_event_cohost_requests_bloc.dart';
+import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/application/event/manage_event_cohost_requests_bloc/manage_event_cohost_requests_bloc.dart';
-import 'package:app/core/data/user/dtos/user_dtos.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_cohost_request.dart';
-import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_cohosts_setting_page/widgets/event_cohost_item.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
@@ -28,7 +27,10 @@ class EventCohostsSettingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final event = context.read<EventProviderBloc>().event;
+    final event = context.read<GetEventDetailBloc>().state.maybeWhen(
+          fetched: (eventDetail) => eventDetail,
+          orElse: () => null,
+        );
     return EventCohostsSettingPageView(event: event);
   }
 }
@@ -128,7 +130,7 @@ class _EventCohostsSettingPageViewState
     );
   }
 
-  _buildAddCohostsButton() {
+  Widget _buildAddCohostsButton() {
     return BlocBuilder<EditEventDetailBloc, EditEventDetailState>(
       builder: (context, state) {
         return LinearGradientButton(
@@ -162,17 +164,13 @@ class CohostsList extends StatelessWidget {
       padding: EdgeInsets.only(bottom: Spacing.medium),
       shrinkWrap: true,
       itemBuilder: (context, index) => EventCohostItem(
-        user: User.fromDto(
-          UserDto.fromJson(
-            eventCohostsRequests[index].toExpanded!.toJson(),
-          ),
-        ),
+        user: eventCohostsRequests[index].toExpanded,
         onTapRevoke: () {
           Vibrate.feedback(FeedbackType.light);
           context.read<ManageEventCohostRequestsBloc>().add(
                 ManageEventCohostRequestsEvent.saveChanged(
                   eventId: event?.id ?? '',
-                  users: [eventCohostsRequests[index].toExpanded?.id ?? ''],
+                  users: [eventCohostsRequests[index].toExpanded?.userId ?? ''],
                   decision: false,
                 ),
               );

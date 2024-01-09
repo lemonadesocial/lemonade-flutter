@@ -1,3 +1,4 @@
+import 'package:app/core/data/event/dtos/event_cohost_request_dto/event_cohost_request_dto.dart';
 import 'package:app/core/data/event/dtos/event_dtos.dart';
 import 'package:app/core/data/event/dtos/event_rsvp_dto/event_rsvp_dto.dart';
 import 'package:app/core/data/event/gql/event_mutation.dart';
@@ -211,7 +212,11 @@ class EventRepositoryImpl implements EventRepository {
     return Right(
       List.from(
         result.parsedData!.getEventCohostRequests
-            .map((item) => EventCohostRequest.fromJson(item.toJson()))
+            .map(
+              (item) => EventCohostRequest.fromDto(
+                EventCohostRequestDto.fromJson(item.toJson()),
+              ),
+            )
             .toList(),
       ),
     );

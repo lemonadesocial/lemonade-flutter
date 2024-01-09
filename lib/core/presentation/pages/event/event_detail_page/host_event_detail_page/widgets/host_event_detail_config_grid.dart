@@ -160,9 +160,9 @@ class HostEventDetailConfigGrid extends StatelessWidget {
               item: EventConfigGridViewModel(
                 title: listData[index]!.title,
                 subTitle: eventCohostRequests.isNotEmpty
-                    ? t.event.cohosts.cohostInfo(
-                        cohostsCount: eventCohostRequests.length,
-                      )
+                    ? '${eventCohostRequests.length} ${t.event.cohosts.cohostsCountInfo(
+                        n: eventCohostRequests.length,
+                      )}'
                     : '',
                 icon: listData[index]!.icon,
                 onTap: () {},

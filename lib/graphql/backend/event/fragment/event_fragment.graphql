@@ -105,11 +105,11 @@ fragment EventFields on Event {
 
 fragment EventCohostRequestFragment on EventCohostRequest {
     _id
-    toExpanded: to_expanded {
+    to_expanded {
         _id
         name
         username
-        newPhotosExpanded:  new_photos_expanded(limit: 1) {
+        new_photos_expanded(limit: 1) {
             _id
             key
             bucket

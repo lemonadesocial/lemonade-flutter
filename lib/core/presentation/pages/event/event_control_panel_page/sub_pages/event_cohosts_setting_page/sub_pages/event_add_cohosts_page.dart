@@ -160,7 +160,7 @@ class _EventAddCohostsViewState extends State<EventAddCohostsView> {
     );
   }
 
-  _buildAddCohostsButton() {
+  Widget _buildAddCohostsButton() {
     return BlocBuilder<ManageEventCohostRequestsBloc,
         ManageEventCohostRequestsState>(
       builder: (context, state) {
