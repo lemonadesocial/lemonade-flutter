@@ -23,13 +23,12 @@ class EventTicketTiersListingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-    final eventTicketTypes = context
-            .watch<GetEventDetailBloc>()
-            .state
-            .maybeWhen(
-                fetched: (event) => event.eventTicketTypes,
-                orElse: () => [] as List<EventTicketType>) ??
-        [];
+    final eventTicketTypes =
+        context.watch<GetEventDetailBloc>().state.maybeWhen(
+                  fetched: (event) => event.eventTicketTypes,
+                  orElse: () => [] as List<EventTicketType>,
+                ) ??
+            [];
     return Scaffold(
       backgroundColor: colorScheme.background,
       appBar: LemonAppBar(
