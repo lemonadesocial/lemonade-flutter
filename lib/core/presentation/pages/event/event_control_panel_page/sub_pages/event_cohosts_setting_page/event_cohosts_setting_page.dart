@@ -53,19 +53,6 @@ class _EventCohostsSettingPageViewState
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
-    return Scaffold(
-      appBar: LemonAppBar(
-        backgroundColor: colorScheme.onPrimaryContainer,
-        title: t.event.configuration.coHosts,
-      ),
-      backgroundColor: colorScheme.onPrimaryContainer,
-      resizeToAvoidBottomInset: true,
-      body: _buildContent(),
-    );
-  }
-
-  Widget _buildContent() {
-    final t = Translations.of(context);
     List<EventCohostRequest> eventCohostsRequests =
         context.watch<GetEventCohostRequestsBloc>().state.maybeWhen(
               fetched: (eventCohostsRequests) => eventCohostsRequests,
@@ -85,46 +72,54 @@ class _EventCohostsSettingPageViewState
               failure: () => false,
               orElse: () => false,
             );
-    return BlocListener<ManageEventCohostRequestsBloc,
-        ManageEventCohostRequestsState>(
-      listener: (context, state) {
-        state.maybeWhen(
-          orElse: () => null,
-          success: () async {
-            context.read<GetEventCohostRequestsBloc>().add(
-                  GetEventCohostRequestsEvent.fetch(
-                    eventId: widget.event?.id ?? '',
-                  ),
-                );
-          },
-        );
-      },
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: Spacing.small,
-          vertical: Spacing.small,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              t.common.pending,
-              style: Typo.mediumPlus,
-            ),
-            SizedBox(
-              height: Spacing.smMedium,
-            ),
-            Expanded(
-              child: loadingEventCohostsRequests ||
-                      loadingManageEventCohostRequests
-                  ? Loading.defaultLoading(context)
-                  : CohostsList(
-                      eventCohostsRequests: eventCohostsRequests,
-                      event: widget.event,
+    return Scaffold(
+      appBar: LemonAppBar(
+        backgroundColor: colorScheme.onPrimaryContainer,
+        title: t.event.configuration.coHosts,
+      ),
+      backgroundColor: colorScheme.onPrimaryContainer,
+      resizeToAvoidBottomInset: true,
+      body: BlocListener<ManageEventCohostRequestsBloc,
+          ManageEventCohostRequestsState>(
+        listener: (context, state) {
+          state.maybeWhen(
+            orElse: () => null,
+            success: () async {
+              context.read<GetEventCohostRequestsBloc>().add(
+                    GetEventCohostRequestsEvent.fetch(
+                      eventId: widget.event?.id ?? '',
                     ),
-            ),
-            _buildAddCohostsButton(),
-          ],
+                  );
+            },
+          );
+        },
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: Spacing.small,
+            vertical: Spacing.small,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                t.common.pending,
+                style: Typo.mediumPlus,
+              ),
+              SizedBox(
+                height: Spacing.smMedium,
+              ),
+              Expanded(
+                child: loadingEventCohostsRequests ||
+                        loadingManageEventCohostRequests
+                    ? Loading.defaultLoading(context)
+                    : CohostsList(
+                        eventCohostsRequests: eventCohostsRequests,
+                        event: widget.event,
+                      ),
+              ),
+              _buildAddCohostsButton(),
+            ],
+          ),
         ),
       ),
     );
