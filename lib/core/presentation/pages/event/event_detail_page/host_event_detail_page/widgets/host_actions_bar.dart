@@ -33,7 +33,7 @@ class HostActionsBar extends StatelessWidget {
           children: [
             const Icon(Icons.qr_code, color: Colors.white),
             SizedBox(width: Spacing.extraSmall),
-            Text(t.event.scan, style: Typo.mediumPlus),
+            Text(t.event.scanQR.scan, style: Typo.mediumPlus),
           ],
         ),
       ),

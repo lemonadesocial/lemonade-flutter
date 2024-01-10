@@ -161,6 +161,9 @@ final eventDetailRoutes = AutoRoute(
       page: EventDetailBaseRoute.page,
     ),
     AutoRoute(
+      page: ScanQRCodeRoute.page,
+    ),
+    AutoRoute(
       page: EventControlPanelRoute.page,
       children: [
         AutoRoute(
@@ -196,9 +199,6 @@ final eventDetailRoutes = AutoRoute(
         ),
         AutoRoute(
           page: EventAddSpeakersRoute.page,
-        ),
-        AutoRoute(
-          page: ScanQRCodeRoute.page,
         ),
       ],
     ),

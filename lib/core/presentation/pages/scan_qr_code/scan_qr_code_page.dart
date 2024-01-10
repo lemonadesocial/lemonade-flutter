@@ -1,3 +1,4 @@
+import 'package:app/core/application/event/get_event_checkins_bloc/get_event_checkins_bloc.dart';
 import 'package:app/core/application/event/update_event_checkin_bloc/update_event_checkin_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/scan_qr_code/widgets/scanner_error_widget.dart';
@@ -60,11 +61,10 @@ class _ScanQRCodePageViewState extends State<ScanQRCodePageView> {
 
   void onBarcodeDetect(BarcodeCapture barcodeCapture) {
     final t = Translations.of(context);
-    final barcode = barcodeCapture.barcodes.last;
     setState(() {
-      overlayText = barcodeCapture.barcodes.last.displayValue ??
-          barcode.rawValue ??
-          t.common.somethingWrong;
+      overlayText = barcodeCapture.barcodes.last.displayValue != null
+          ? t.event.scanQR.scanTicketSuccess
+          : t.common.somethingWrong;
     });
     context.read<UpdateEventCheckinBloc>().add(
           UpdateEventCheckinEvent.checkinUser(
@@ -84,107 +84,113 @@ class _ScanQRCodePageViewState extends State<ScanQRCodePageView> {
     );
 
     return Scaffold(
-        appBar: const LemonAppBar(),
-        body: BlocListener<UpdateEventCheckinBloc, UpdateEventCheckinState>(
-          listener: (context, state) {
-            state.maybeWhen(
-              orElse: () => null,
-              success: () {
-                AutoRouter.of(context).back();
-                SnackBarUtils.showSuccessSnackbar(
-                  t.event.scanTicketSuccess,
-                );
-              },
-            );
-          },
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Expanded(
-                  child: Stack(
-                    fit: StackFit.expand,
-                    children: [
-                      Center(
-                        child: MobileScanner(
-                          fit: BoxFit.cover,
-                          onDetect: onBarcodeDetect,
-                          overlay: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Align(
-                              alignment: Alignment.bottomCenter,
-                              child: Opacity(
-                                opacity: 0.7,
-                                child: Text(
-                                  overlayText,
-                                  style: const TextStyle(
-                                    backgroundColor: Colors.black26,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 24,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  maxLines: 1,
+      appBar: const LemonAppBar(),
+      body: BlocListener<UpdateEventCheckinBloc, UpdateEventCheckinState>(
+        listener: (context, state) {
+          state.maybeWhen(
+            orElse: () => null,
+            success: () {
+              AutoRouter.of(context).popTop();
+              SnackBarUtils.showSuccessSnackbar(
+                t.event.scanQR.scanTicketSuccess,
+              );
+              context.read<GetEventCheckinsBloc>().add(
+                    GetEventCheckinsEvent.fetch(
+                      eventId: widget.event.id ?? '',
+                    ),
+                  );
+            },
+          );
+        },
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Expanded(
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    Center(
+                      child: MobileScanner(
+                        fit: BoxFit.cover,
+                        onDetect: onBarcodeDetect,
+                        overlay: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Align(
+                            alignment: Alignment.topCenter,
+                            child: Opacity(
+                              opacity: 1,
+                              child: Text(
+                                overlayText,
+                                style: const TextStyle(
+                                  backgroundColor: Colors.black26,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 24,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
+                                maxLines: 1,
                               ),
                             ),
                           ),
-                          controller: controller,
-                          scanWindow: scanWindow,
-                          errorBuilder: (context, error, child) {
-                            return ScannerErrorWidget(error: error);
-                          },
+                        ),
+                        controller: controller,
+                        scanWindow: scanWindow,
+                        errorBuilder: (context, error, child) {
+                          return ScannerErrorWidget(error: error);
+                        },
+                      ),
+                    ),
+                    CustomPaint(
+                      painter: ScannerOverlay(scanWindow),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            ValueListenableBuilder<TorchState>(
+                              valueListenable: controller.torchState,
+                              builder: (context, value, child) {
+                                final Color iconColor;
+                                switch (value) {
+                                  case TorchState.off:
+                                    iconColor = Colors.black;
+                                    break;
+                                  case TorchState.on:
+                                    iconColor = Colors.yellow;
+                                    break;
+                                }
+                                return IconButton(
+                                  onPressed: () => controller.toggleTorch(),
+                                  icon: Icon(
+                                    Icons.flashlight_on,
+                                    color: iconColor,
+                                  ),
+                                );
+                              },
+                            ),
+                            IconButton(
+                              onPressed: () => controller.switchCamera(),
+                              icon: const Icon(
+                                Icons.cameraswitch_rounded,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      CustomPaint(
-                        painter: ScannerOverlay(scanWindow),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Align(
-                          alignment: Alignment.bottomCenter,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              ValueListenableBuilder<TorchState>(
-                                valueListenable: controller.torchState,
-                                builder: (context, value, child) {
-                                  final Color iconColor;
-                                  switch (value) {
-                                    case TorchState.off:
-                                      iconColor = Colors.black;
-                                      break;
-                                    case TorchState.on:
-                                      iconColor = Colors.yellow;
-                                      break;
-                                  }
-                                  return IconButton(
-                                    onPressed: () => controller.toggleTorch(),
-                                    icon: Icon(
-                                      Icons.flashlight_on,
-                                      color: iconColor,
-                                    ),
-                                  );
-                                },
-                              ),
-                              IconButton(
-                                onPressed: () => controller.switchCamera(),
-                                icon: const Icon(
-                                  Icons.cameraswitch_rounded,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 }
 
