@@ -35,11 +35,12 @@ abstract class GetHomeEventsInput with _$GetHomeEventsInput {
 
 @freezed
 abstract class GetHostingEventsInput with _$GetHostingEventsInput {
-  const factory GetHostingEventsInput(
-      {@JsonKey(includeIfNull: false) String? id,
-      @JsonKey(includeIfNull: false) FilterEventInput? state,
-      @JsonKey(includeIfNull: false) int? skip,
-      @JsonKey(includeIfNull: false) int? limit}) = _GetHostingEventsInput;
+  const factory GetHostingEventsInput({
+    @JsonKey(includeIfNull: false) String? id,
+    @JsonKey(includeIfNull: false) FilterEventInput? state,
+    @JsonKey(includeIfNull: false) int? skip,
+    @JsonKey(includeIfNull: false) int? limit,
+  }) = _GetHostingEventsInput;
 
   factory GetHostingEventsInput.fromJson(Map<String, dynamic> json) =>
       _$GetHostingEventsInputFromJson(json);
