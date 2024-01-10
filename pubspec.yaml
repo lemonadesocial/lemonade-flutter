@@ -135,6 +135,7 @@ dependencies:
   flutter_google_places_hoc081098: ^1.2.0
   google_maps_webservice: ^0.0.20-nullsafety.5
   flutter_timezone: ^1.0.8
+  mobile_scanner: 3.5.5
   
 dependency_overrides:
   matrix_api_lite:

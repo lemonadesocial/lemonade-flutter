@@ -239,5 +239,6 @@
             "other": "speakers"
         },
         "addSpeakers": "Add speakers"
-    }
+    },
+    "scan": "Scan"
 }
