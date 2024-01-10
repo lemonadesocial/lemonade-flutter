@@ -1,4 +1,5 @@
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
@@ -33,9 +34,9 @@ class ScannerErrorWidget extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Padding(
-              padding: EdgeInsets.only(bottom: 16),
-              child: Icon(Icons.error, color: Colors.white),
+            Padding(
+              padding: EdgeInsets.only(bottom: Spacing.small),
+              child: const Icon(Icons.error, color: Colors.white),
             ),
             Text(
               errorMessage,

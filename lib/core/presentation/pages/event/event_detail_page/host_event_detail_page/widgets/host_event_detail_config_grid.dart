@@ -69,7 +69,7 @@ class HostEventDetailConfigGrid extends StatelessWidget {
       ),
       EventConfigGridViewModel(
         title: t.event.configuration.checkIn,
-        subTitle: '0 checked in',
+        subTitle: '0 ${t.event.scanQR.checkedIn}',
         showProgressBar: true,
         progressBarColors: [const Color(0xFFF9D3BC), const Color(0xFFF29A68)],
         icon: Container(
