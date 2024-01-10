@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 class NumberUtils {
@@ -29,5 +32,17 @@ class NumberUtils {
     num? amount,
   }) {
     return NumberFormat.compact().format(amount ?? 0);
+  }
+
+  static List<FilteringTextInputFormatter> get currencyInputFormatters => [
+        FilteringTextInputFormatter.deny(',', replacementString: '.'),
+        FilteringTextInputFormatter.allow(RegExp(r'^[1-9]\d*\.?\d*|0\.?\d*')),
+      ];
+
+  static double getAmountByDecimals(
+    BigInt amount, {
+    required int decimals,
+  }) {
+    return amount / BigInt.from(pow(10, decimals));
   }
 }

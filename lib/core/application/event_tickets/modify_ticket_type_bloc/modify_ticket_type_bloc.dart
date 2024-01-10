@@ -17,6 +17,7 @@ class ModifyTicketTypeBloc
     on<_ModifyTicketTypeEventOnGuestsLimitChanged>(_onGuestsLimitChanged);
     on<_ModifyTicketTypeEventOnActiveChanged>(_onActiveChanged);
     on<_ModifyTicketTypeEventOnPricesChanged>(_onPricesChanged);
+    on<_ModifyTicketTypeEventOnValidate>(_onValidate);
   }
 
   void _onTitleChanged(
@@ -69,12 +70,20 @@ class ModifyTicketTypeBloc
     emit(_validate(newState));
   }
 
+  void _onValidate(
+    _ModifyTicketTypeEventOnValidate event,
+    Emitter emit,
+  ) {
+    emit(_validate(state));
+  }
+
   ModifyTicketTypeState _validate(ModifyTicketTypeState state) {
     final isValid = Formz.validate([
-          state.title,
-          state.description,
-        ]) &&
-        state.prices.isNotEmpty;
+      state.title,
+      state.description,
+    ]);
+    // &&
+    // state.prices.isNotEmpty;
 
     return state.copyWith(isValid: isValid);
   }
@@ -97,6 +106,7 @@ class ModifyTicketTypeEvent with _$ModifyTicketTypeEvent {
   factory ModifyTicketTypeEvent.onPricesChanged({
     required List<TicketPriceInput> prices,
   }) = _ModifyTicketTypeEventOnPricesChanged;
+  factory ModifyTicketTypeEvent.onValidate() = _ModifyTicketTypeEventOnValidate;
 }
 
 @freezed
@@ -114,7 +124,7 @@ class ModifyTicketTypeState with _$ModifyTicketTypeState {
         title: const StringFormz.pure(),
         description: const OptionalStringFormz.pure(),
         limit: null,
-        active: null,
+        active: true,
         prices: [],
         isValid: false,
       );

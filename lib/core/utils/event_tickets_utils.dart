@@ -89,7 +89,12 @@ class EventTicketUtils {
   }) {
     if (currency == null) return null;
     return currencies.firstWhereOrNull(
-      (element) => element.currency == currency && element.network == network,
+      (element) {
+        if (network != null) {
+          return element.currency == currency && element.network == network;
+        }
+        return element.currency == currency;
+      },
     );
   }
 

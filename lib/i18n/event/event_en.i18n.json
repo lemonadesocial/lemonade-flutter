@@ -146,7 +146,7 @@
         "startDate": "Start date",
         "startTime": "Start time",
         "endDate": "End date",
-        "endTime": "End time"       
+        "endTime": "End time"
     },
     "locationSetting": {
         "addLocation": "Add location",
@@ -231,7 +231,10 @@
         "method(ordinal)": {
             "one": "1 method",
             "other": "$count methods"
-        }
+        },
+        "currency": "Currency",
+        "amount": "Amount",
+        "token": "Token"
     },
     "speakers": {
         "speakersCountInfo(ordinal)": {
