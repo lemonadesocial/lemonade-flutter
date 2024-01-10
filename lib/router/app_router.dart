@@ -1,4 +1,3 @@
-import 'package:app/core/presentation/pages/scan_qr_code/scan_qr_code_page.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:auto_route/auto_route.dart';
 

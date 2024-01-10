@@ -1,5 +1,4 @@
 import 'package:app/core/domain/event/entities/event_checkin.dart';
-import 'package:app/core/domain/event/entities/event_cohost_request.dart';
 import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/injection/register_module.dart';
