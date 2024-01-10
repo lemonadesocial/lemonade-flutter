@@ -210,15 +210,13 @@ final getHostingEventsQuery = gql('''
     \$id: MongoID!, 
     \$state: FilterEventInput, 
     \$limit: Int = 100, 
-    \$skip: Int = 0, 
-    \$order: Int = -1
+    \$skip: Int = 0
   ) {
     events: getHostingEvents(
       user: \$id, 
       state: \$state, 
       limit: \$limit, 
-      skip: \$skip, 
-      order: \$order
+      skip: \$skip
     ) {
       ...eventFields
     }
