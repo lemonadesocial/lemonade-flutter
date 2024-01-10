@@ -240,5 +240,12 @@
         },
         "addSpeakers": "Add speakers"
     },
-    "scan": "Scan"
+    "scan": "Scan",
+    "scanQRErrors": {
+        "controllerNotReady": "Controller not ready",
+        "permissionDenied": "Permission denied",
+        "unsupported": "Scan QR Code is unsupported on this device",
+        "somethingWrong": "Something wrong"
+    },
+    "scanTicketSuccess": "Scan ticket successfully"
 }

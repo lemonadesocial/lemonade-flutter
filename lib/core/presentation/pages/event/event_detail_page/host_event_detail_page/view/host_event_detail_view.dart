@@ -65,10 +65,14 @@ class HostEventDetailView extends StatelessWidget {
                   ),
                   SliverPadding(
                     padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-                    sliver: const SliverToBoxAdapter(child: HostActionsBar()),
+                    sliver: SliverToBoxAdapter(
+                      child: HostActionsBar(
+                        event: event,
+                      ),
+                    ),
                   ),
                   SliverPadding(
-                    padding: EdgeInsets.only(top: 42.h),
+                    padding: EdgeInsets.only(top: Spacing.medium),
                   ),
                   SliverPadding(
                     padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),

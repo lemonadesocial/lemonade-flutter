@@ -54,4 +54,8 @@ abstract class EventRepository {
   Future<Either<Failure, bool>> manageEventCohostRequests({
     required Input$ManageEventCohostRequestsInput input,
   });
+
+  Future<Either<Failure, bool>> updateEventCheckin({
+    required Input$UpdateEventCheckinInput input,
+  });
 }

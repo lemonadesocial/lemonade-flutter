@@ -1,23 +1,55 @@
+import 'package:app/core/application/event/update_event_checkin_bloc/update_event_checkin_bloc.dart';
+import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/scan_qr_code/widgets/scanner_error_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
+import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
-class ScanQRCodePage extends StatefulWidget {
-  const ScanQRCodePage({super.key});
+@RoutePage()
+class ScanQRCodePage extends StatelessWidget {
+  const ScanQRCodePage({
+    super.key,
+    required this.event,
+  });
+  final Event event;
 
   @override
-  ScanQRCodePageState createState() => ScanQRCodePageState();
+  Widget build(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => UpdateEventCheckinBloc(),
+        ),
+      ],
+      child: ScanQRCodePageView(
+        event: event,
+      ),
+    );
+  }
 }
 
-class ScanQRCodePageState extends State<ScanQRCodePage> {
+class ScanQRCodePageView extends StatefulWidget {
+  const ScanQRCodePageView({
+    super.key,
+    required this.event,
+  });
+  final Event event;
+
+  @override
+  State<ScanQRCodePageView> createState() => _ScanQRCodePageViewState();
+}
+
+class _ScanQRCodePageViewState extends State<ScanQRCodePageView> {
   String overlayText = "Please scan QR Code";
 
   final MobileScannerController controller = MobileScannerController(
     formats: const [BarcodeFormat.qrCode],
-    autoStart: false,
+    autoStart: true,
   );
 
   @override
@@ -34,6 +66,13 @@ class ScanQRCodePageState extends State<ScanQRCodePage> {
           barcode.rawValue ??
           t.common.somethingWrong;
     });
+    context.read<UpdateEventCheckinBloc>().add(
+          UpdateEventCheckinEvent.checkinUser(
+            eventId: widget.event.id ?? '',
+            active: true,
+            userId: barcodeCapture.barcodes.last.displayValue.toString(),
+          ),
+        );
   }
 
   @override
@@ -45,95 +84,107 @@ class ScanQRCodePageState extends State<ScanQRCodePage> {
     );
 
     return Scaffold(
-      appBar: const LemonAppBar(),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Expanded(
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  Center(
-                    child: MobileScanner(
-                      fit: BoxFit.cover,
-                      onDetect: onBarcodeDetect,
-                      overlay: Padding(
+        appBar: const LemonAppBar(),
+        body: BlocListener<UpdateEventCheckinBloc, UpdateEventCheckinState>(
+          listener: (context, state) {
+            state.maybeWhen(
+              orElse: () => null,
+              success: () {
+                AutoRouter.of(context).back();
+                SnackBarUtils.showSuccessSnackbar(
+                  t.event.scanTicketSuccess,
+                );
+              },
+            );
+          },
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Expanded(
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      Center(
+                        child: MobileScanner(
+                          fit: BoxFit.cover,
+                          onDetect: onBarcodeDetect,
+                          overlay: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Align(
+                              alignment: Alignment.bottomCenter,
+                              child: Opacity(
+                                opacity: 0.7,
+                                child: Text(
+                                  overlayText,
+                                  style: const TextStyle(
+                                    backgroundColor: Colors.black26,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 24,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  maxLines: 1,
+                                ),
+                              ),
+                            ),
+                          ),
+                          controller: controller,
+                          scanWindow: scanWindow,
+                          errorBuilder: (context, error, child) {
+                            return ScannerErrorWidget(error: error);
+                          },
+                        ),
+                      ),
+                      CustomPaint(
+                        painter: ScannerOverlay(scanWindow),
+                      ),
+                      Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: Align(
                           alignment: Alignment.bottomCenter,
-                          child: Opacity(
-                            opacity: 0.7,
-                            child: Text(
-                              overlayText,
-                              style: const TextStyle(
-                                backgroundColor: Colors.black26,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 24,
-                                overflow: TextOverflow.ellipsis,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              ValueListenableBuilder<TorchState>(
+                                valueListenable: controller.torchState,
+                                builder: (context, value, child) {
+                                  final Color iconColor;
+                                  switch (value) {
+                                    case TorchState.off:
+                                      iconColor = Colors.black;
+                                      break;
+                                    case TorchState.on:
+                                      iconColor = Colors.yellow;
+                                      break;
+                                  }
+                                  return IconButton(
+                                    onPressed: () => controller.toggleTorch(),
+                                    icon: Icon(
+                                      Icons.flashlight_on,
+                                      color: iconColor,
+                                    ),
+                                  );
+                                },
                               ),
-                              maxLines: 1,
-                            ),
+                              IconButton(
+                                onPressed: () => controller.switchCamera(),
+                                icon: const Icon(
+                                  Icons.cameraswitch_rounded,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
-                      // controller: controller,
-                      scanWindow: scanWindow,
-                      errorBuilder: (context, error, child) {
-                        return ScannerErrorWidget(error: error);
-                      },
-                    ),
+                    ],
                   ),
-                  CustomPaint(
-                    painter: ScannerOverlay(scanWindow),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          ValueListenableBuilder<TorchState>(
-                            valueListenable: controller.torchState,
-                            builder: (context, value, child) {
-                              final Color iconColor;
-                              switch (value) {
-                                case TorchState.off:
-                                  iconColor = Colors.black;
-                                  break;
-                                case TorchState.on:
-                                  iconColor = Colors.yellow;
-                                  break;
-                              }
-                              return IconButton(
-                                onPressed: () => controller.toggleTorch(),
-                                icon: Icon(
-                                  Icons.flashlight_on,
-                                  color: iconColor,
-                                ),
-                              );
-                            },
-                          ),
-                          IconButton(
-                            onPressed: () => controller.switchCamera(),
-                            icon: const Icon(
-                              Icons.cameraswitch_rounded,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
-    );
+          ),
+        ));
   }
 }
 
