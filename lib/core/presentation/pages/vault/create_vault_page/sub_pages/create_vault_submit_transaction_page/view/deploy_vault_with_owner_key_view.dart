@@ -33,63 +33,62 @@ class _DeployVaultWithOwnerKeyViewState
     final createVaultData = context.read<CreateVaultBloc>().state.data;
     final selectedChain = createVaultData.selectedChain!;
     final ownerAddress = createVaultData.owners!.first;
+
     final t = Translations.of(context);
-
-    return FutureBuilder<BigInt>(
-      future: Web3Utils.estimateGasFee(
-        selectedChain,
-        sender: EthereumAddress.fromHex(ownerAddress),
-        to: EthereumAddress.fromHex(widget.rawTransaction.to!),
-        data: hexToBytes(widget.rawTransaction.data!),
-      ),
-      builder: (context, gasFreeSnapshot) => Column(
-        children: [
-          OwnerKeyBalanceWidget(
-            network: createVaultData.selectedChain!,
-            ownerAddress: ownerAddress,
-            estimatedGasFee: gasFreeSnapshot.data ?? BigInt.zero,
-            onPressRefresh: () => setState(() {}),
-          ),
-          SizedBox(height: Spacing.xSmall),
-          EstimateGasFeeWidget(
-            network: createVaultData.selectedChain!,
-            estimatedGasFee: gasFreeSnapshot.data ?? BigInt.zero,
-          ),
-          SizedBox(height: Spacing.xSmall),
-          FutureBuilder(
-            future: Web3Utils.getBalance(
-              EthereumAddress.fromHex(ownerAddress),
-              network: selectedChain,
+    return FutureBuilder<List<BigInt>>(
+      future: Future.wait([
+        Web3Utils.estimateGasFee(
+          selectedChain,
+          sender: EthereumAddress.fromHex(ownerAddress),
+          to: EthereumAddress.fromHex(widget.rawTransaction.to!),
+          data: hexToBytes(widget.rawTransaction.data!),
+        ),
+        Web3Utils.getBalance(
+          EthereumAddress.fromHex(ownerAddress),
+          network: selectedChain,
+        ),
+      ]),
+      builder: (context, gasFreeAndBalanceSnapshot) {
+        final gasFee = gasFreeAndBalanceSnapshot.data?.first ?? BigInt.zero;
+        final balance = gasFreeAndBalanceSnapshot.data?[1] ?? BigInt.zero;
+        final isDisabled = gasFreeAndBalanceSnapshot.connectionState ==
+                ConnectionState.waiting ||
+            balance <= gasFee;
+        return Column(
+          children: [
+            OwnerKeyBalanceWidget(
+              network: createVaultData.selectedChain!,
+              ownerAddress: ownerAddress,
+              onPressRefresh: () => setState(() {}),
             ),
-            builder: (context, snapshot) {
-              final balanceAmount = snapshot.data ?? BigInt.zero;
-              final isDisabled =
-                  gasFreeSnapshot.connectionState == ConnectionState.waiting ||
-                      balanceAmount <= (gasFreeSnapshot.data ?? BigInt.zero);
-
-              return Opacity(
-                opacity: isDisabled ? 0.5 : 1,
-                child: LinearGradientButton(
-                  radius: BorderRadius.circular(LemonRadius.button),
-                  height: 42.w,
-                  mode: GradientButtonMode.lavenderMode,
-                  onTap: () async {
-                    if (isDisabled) return;
-                    context.read<DeployVaultWithOwnerKeyBloc>().add(
-                          DeployVaultWithOwnerKeyEvent.startDeploy(
-                            rawTransaction: widget.rawTransaction,
-                            ownerAddress: ownerAddress,
-                            network: selectedChain,
-                          ),
-                        );
-                  },
-                  label: t.common.next,
-                ),
-              );
-            },
-          ),
-        ],
-      ),
+            SizedBox(height: Spacing.xSmall),
+            EstimateGasFeeWidget(
+              network: createVaultData.selectedChain!,
+              estimatedGasFee: gasFee,
+            ),
+            SizedBox(height: Spacing.xSmall),
+            Opacity(
+              opacity: isDisabled ? 0.5 : 1,
+              child: LinearGradientButton(
+                radius: BorderRadius.circular(LemonRadius.button),
+                height: 42.w,
+                mode: GradientButtonMode.lavenderMode,
+                onTap: () async {
+                  if (isDisabled) return;
+                  context.read<DeployVaultWithOwnerKeyBloc>().add(
+                        DeployVaultWithOwnerKeyEvent.startDeploy(
+                          rawTransaction: widget.rawTransaction,
+                          ownerAddress: ownerAddress,
+                          network: selectedChain,
+                        ),
+                      );
+                },
+                label: t.common.next,
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

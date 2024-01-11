@@ -31,12 +31,16 @@ class StripeOnrampWebview extends StatelessWidget {
             '${AppConfig.stripeOnrampHost}?session_key=${stripeOnrampSession.clientSecret}&publishable_key=${stripeOnrampSession.publishableKey}',
           ),
         ),
+        onConsoleMessage: (controller, consoleMessage) {
+          debugPrint(consoleMessage.message);
+        },
         onWebViewCreated: (controller) {
           controller.addJavaScriptHandler(
             handlerName: _handlerName,
-            callback: (sessionData) {
+            callback: (data) {
               try {
-                final sessionJson = jsonDecode(sessionData as String);
+                if (data.isEmpty) return;
+                final sessionJson = jsonDecode(data.first as String);
                 final onrampSession = StripeOnrampSession.fromDto(
                   StripeOnrampSessionDto.fromJson(sessionJson),
                 );
