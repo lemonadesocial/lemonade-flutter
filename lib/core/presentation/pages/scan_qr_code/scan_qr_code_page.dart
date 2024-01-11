@@ -16,20 +16,19 @@ class ScanQRCodePage extends StatelessWidget {
   const ScanQRCodePage({
     super.key,
     required this.event,
+    required this.onDetectResult,
+    this.successMessage,
   });
   final Event event;
+  final Function(String? result) onDetectResult;
+  final String? successMessage;
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) => UpdateEventCheckinBloc(),
-        ),
-      ],
-      child: ScanQRCodePageView(
-        event: event,
-      ),
+    return ScanQRCodePageView(
+      event: event,
+      onDetectResult: onDetectResult,
+      successMessage: successMessage,
     );
   }
 }
@@ -38,8 +37,12 @@ class ScanQRCodePageView extends StatefulWidget {
   const ScanQRCodePageView({
     super.key,
     required this.event,
+    required this.onDetectResult,
+    this.successMessage,
   });
   final Event event;
+  final String? successMessage;
+  final Function(String? result) onDetectResult;
 
   @override
   State<ScanQRCodePageView> createState() => _ScanQRCodePageViewState();
@@ -63,16 +66,10 @@ class _ScanQRCodePageViewState extends State<ScanQRCodePageView> {
     final t = Translations.of(context);
     setState(() {
       overlayText = barcodeCapture.barcodes.last.displayValue != null
-          ? t.event.scanQR.scanTicketSuccess
+          ? widget.successMessage ?? ''
           : t.common.somethingWrong;
     });
-    context.read<UpdateEventCheckinBloc>().add(
-          UpdateEventCheckinEvent.checkinUser(
-            eventId: widget.event.id ?? '',
-            active: true,
-            userId: barcodeCapture.barcodes.last.displayValue.toString(),
-          ),
-        );
+    widget.onDetectResult.call(barcodeCapture.barcodes.last.displayValue);
   }
 
   @override
@@ -90,7 +87,7 @@ class _ScanQRCodePageViewState extends State<ScanQRCodePageView> {
           state.maybeWhen(
             orElse: () => null,
             success: () {
-              AutoRouter.of(context).popTop();
+              AutoRouter.of(context).back();
               SnackBarUtils.showSuccessSnackbar(
                 t.event.scanQR.scanTicketSuccess,
               );

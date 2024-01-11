@@ -1,3 +1,4 @@
+import 'package:app/core/application/event/update_event_checkin_bloc/update_event_checkin_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -5,6 +6,7 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HostActionsBar extends StatelessWidget {
   const HostActionsBar({
@@ -26,7 +28,20 @@ class HostActionsBar extends StatelessWidget {
       ),
       child: InkWell(
         onTap: () {
-          AutoRouter.of(context).navigate(ScanQRCodeRoute(event: event));
+          AutoRouter.of(context).navigate(
+            ScanQRCodeRoute(
+              event: event,
+              onDetectResult: (String? result) {
+                context.read<UpdateEventCheckinBloc>().add(
+                      UpdateEventCheckinEvent.checkinUser(
+                        eventId: event.id ?? '',
+                        active: true,
+                        userId: result.toString(),
+                      ),
+                    );
+              },
+            ),
+          );
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
