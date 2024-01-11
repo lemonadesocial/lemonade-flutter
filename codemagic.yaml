@@ -837,7 +837,7 @@ workflows:
       <<: *production_android_publish
       scripts:
         - *upload_production_dsym_to_firebase
-        - *github_create_prerelease
+        # - *github_create_prerelease
         - *notify_ios_production_to_slack
         - *notify_android_production_to_slack
 
