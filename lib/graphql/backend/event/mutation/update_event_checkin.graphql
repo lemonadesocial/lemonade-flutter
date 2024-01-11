@@ -1,0 +1,3 @@
+mutation UpdateEventCheckin($input: UpdateEventCheckinInput!) {
+    updateEventCheckin(input: $input)
+}
