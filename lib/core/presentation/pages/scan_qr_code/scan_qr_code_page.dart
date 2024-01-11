@@ -46,7 +46,7 @@ class ScanQRCodePageView extends StatefulWidget {
 }
 
 class _ScanQRCodePageViewState extends State<ScanQRCodePageView> {
-  String overlayText = "Please scan QR Code";
+  String overlayText = t.event.scanQR.pleaseScan;
 
   final MobileScannerController controller = MobileScannerController(
     formats: const [BarcodeFormat.qrCode],
@@ -157,7 +157,7 @@ class _ScanQRCodePageViewState extends State<ScanQRCodePageView> {
                                 final Color iconColor;
                                 switch (value) {
                                   case TorchState.off:
-                                    iconColor = Colors.black;
+                                    iconColor = Colors.white;
                                     break;
                                   case TorchState.on:
                                     iconColor = Colors.yellow;

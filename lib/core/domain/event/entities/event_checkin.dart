@@ -1,20 +1,17 @@
-class EventCheckin {
-  EventCheckin({
-    this.id,
-    this.active,
-    this.event,
-    this.user,
-  });
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  String? id;
-  bool? active;
-  String? event;
-  String? user;
+part 'event_checkin.freezed.dart';
+part 'event_checkin.g.dart';
 
-  factory EventCheckin.fromJson(Map<String, dynamic> json) => EventCheckin(
-        id: json['id'],
-        active: json['active'],
-        event: json['event'],
-        user: json['user'],
-      );
+@freezed
+class EventCheckin with _$EventCheckin {
+  factory EventCheckin({
+    String? id,
+    bool? active,
+    String? event,
+    String? user,
+  }) = _EventCheckin;
+
+  factory EventCheckin.fromJson(Map<String, dynamic> json) =>
+      _$EventCheckinFromJson(json);
 }
