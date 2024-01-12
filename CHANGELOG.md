@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.2](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.1.1...v1.1.2) (2024-01-12)
+
+
+### Bug Fixes
+
+* show error when network not supported stripe onramp ([#342](https://github.com/lemonadesocial/lemonade-flutter/issues/342)) ([8bffec8](https://github.com/lemonadesocial/lemonade-flutter/commit/8bffec88aacbb52cbc4eac12569428c2b5005d39))
+
 ## [1.1.1](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.1.0...v1.1.1) (2024-01-12)
 
 
