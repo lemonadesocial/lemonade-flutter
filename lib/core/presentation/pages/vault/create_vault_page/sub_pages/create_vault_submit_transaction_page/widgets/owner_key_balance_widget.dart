@@ -104,7 +104,12 @@ class _OwnerKeyBalanceWidgetState extends State<OwnerKeyBalanceWidget> {
                   (nativeToken?.symbol ?? '').toLowerCase();
               final destinationNetwork =
                   stripeOnrampSupportedNetworkByCurrencyMap
-                      .tryGet(destinationCurrency) as String;
+                      .tryGet(destinationCurrency) as String?;
+              if (destinationNetwork == null) {
+                return SnackBarUtils.showErrorSnackbar(
+                  t.payment.stripeOnramp.networkNotSupported,
+                );
+              }
 
               final value = await showFutureLoadingDialog(
                 context: context,
