@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:bip39/bip39.dart' as bip39;
+import 'package:bip39_mnemonic/bip39_mnemonic.dart' as bip39_mnemonic;
 import 'package:bip32/bip32.dart' as bip32;
 
 part 'private_key.freezed.dart';
@@ -98,8 +99,7 @@ class PrivateKey with _$PrivateKey {
     if (!isValidMnemonic) {
       throw Exception('Invalid mnemonic');
     }
-
-    final seed = await compute(_seedGenerator, mnemonic);
+    final seed = Uint8List.fromList(await compute(_seedGenerator2, mnemonic));
     final rootNode = bip32.BIP32.fromSeed(seed);
     final prefixNode = rootNode.derivePath(defaultPath);
     final keyNode = prefixNode.derive(index);
@@ -119,7 +119,14 @@ class PrivateKey with _$PrivateKey {
   static identifier(EthereumAddress address) =>
       '$keychainPrivateKeyPrefix:${address.hexEip55}';
 
-  static Uint8List _seedGenerator(String mnemonic) {
-    return bip39.mnemonicToSeed(mnemonic);
+  // static Uint8List _seedGenerator(String mnemonic) {
+  //   return bip39.mnemonicToSeed(mnemonic);
+  // }
+
+  static List<int> _seedGenerator2(String mnemonic) {
+    return bip39_mnemonic.Mnemonic.fromSentence(
+      mnemonic,
+      bip39_mnemonic.Language.english,
+    ).seed;
   }
 }
