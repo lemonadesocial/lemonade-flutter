@@ -924,10 +924,9 @@ workflows:
       - *install_firebase_crashlytics
       - *install_pods
       - *patch_shorebird_ios_production
+      - *notify_shorebird_patch_ios_production_to_slack
     artifacts:
       - build/ios/ipa/*.ipa
-    scripts:
-      - *notify_shorebird_patch_ios_production_to_slack
 
   shorebird-patch-android-production:
     name: Shorebird Patch Android Production
@@ -961,8 +960,7 @@ workflows:
       - *change_shorebird_version
       - *setup_local_properties
       - *patch_shorebird_android_production
+      - *notify_shorebird_patch_android_production_to_slack
     artifacts:
       - build/app/outputs/apk/**/*.apk    
-      - build/app/outputs/bundle/**/*.aab 
-    scripts:
-      - *notify_shorebird_patch_android_production_to_slack
+      - build/app/outputs/bundle/**/*.aab  
