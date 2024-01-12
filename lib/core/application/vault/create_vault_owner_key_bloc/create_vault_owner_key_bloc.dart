@@ -19,14 +19,16 @@ class CreateVaultOwnerKeyBloc
     CreateVaultOwnerKeyEventGenerate event,
     Emitter emit,
   ) async {
+    emit(CreateVaultOwnerKeyState.loading());
     try {
       final seedPhrase = bip39.generateMnemonic();
-      final privateKey = PrivateKey.fromMnemonic(seedPhrase, 0);
+      final privateKey = await PrivateKey.fromMnemonicCompute(seedPhrase, 0);
       final address = privateKey.credential.address;
       emit(
         CreateVaultOwnerKeyState.generated(
           seedPhrase: seedPhrase,
           address: address,
+          privateKey: privateKey,
         ),
       );
     } catch (error) {
@@ -39,7 +41,7 @@ class CreateVaultOwnerKeyBloc
     Emitter emit,
   ) async {
     try {
-      final privateKey = PrivateKey.fromMnemonic(event.seedPhrase, 0);
+      final privateKey = event.privateKey;
       final address = privateKey.credential.address;
 
       await OwnerKey.save(
@@ -69,7 +71,7 @@ class CreateVaultOwnerKeyEvent with _$CreateVaultOwnerKeyEvent {
   factory CreateVaultOwnerKeyEvent.generate() =
       CreateVaultOwnerKeyEventGenerate;
   factory CreateVaultOwnerKeyEvent.import({
-    required String seedPhrase,
+    required PrivateKey privateKey,
   }) = CreateVaultOwnerKeyEventImport;
   factory CreateVaultOwnerKeyEvent.reset() = CreateVaultOwnerKeyEventReset;
 }
@@ -77,9 +79,11 @@ class CreateVaultOwnerKeyEvent with _$CreateVaultOwnerKeyEvent {
 @freezed
 class CreateVaultOwnerKeyState with _$CreateVaultOwnerKeyState {
   factory CreateVaultOwnerKeyState.initial() = _CreateVaultOwnerKeyStateInitial;
+  factory CreateVaultOwnerKeyState.loading() = _CreateVaultOwnerKeyStateLoading;
   factory CreateVaultOwnerKeyState.generated({
     required String seedPhrase,
     required EthereumAddress address,
+    required PrivateKey privateKey,
   }) = _CreateVaultOwnerKeyStateGenerated;
   factory CreateVaultOwnerKeyState.failure() = _CreateVaultOwnerKeyStateFailure;
 }
