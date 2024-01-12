@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:app/core/service/vault/private_key/pk_data_json_converter.dart';
 import 'package:app/core/service/storage/secure_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:bip39/bip39.dart' as bip39;
@@ -89,6 +90,36 @@ class PrivateKey with _$PrivateKey {
     );
   }
 
+  static Future<PrivateKey> fromMnemonicCompute(
+    String mnemonic,
+    int index,
+  ) async {
+    final isValidMnemonic = bip39.validateMnemonic(mnemonic);
+    if (!isValidMnemonic) {
+      throw Exception('Invalid mnemonic');
+    }
+
+    final seed = await compute(_seedGenerator, mnemonic);
+    final rootNode = bip32.BIP32.fromSeed(seed);
+    final prefixNode = rootNode.derivePath(defaultPath);
+    final keyNode = prefixNode.derive(index);
+
+    if (keyNode.privateKey == null) {
+      throw Exception('Failed to generate a private key');
+    }
+
+    final credential = EthPrivateKey(keyNode.privateKey!);
+
+    return PrivateKey(
+      id: PrivateKey.identifier(credential.address),
+      credential: credential,
+    );
+  }
+
   static identifier(EthereumAddress address) =>
       '$keychainPrivateKeyPrefix:${address.hexEip55}';
+
+  static Uint8List _seedGenerator(String mnemonic) {
+    return bip39.mnemonicToSeed(mnemonic);
+  }
 }
