@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.1.0...v1.1.1) (2024-01-12)
+
+
+### Bug Fixes
+
+* use compute when generating seed from mnemonic ([#336](https://github.com/lemonadesocial/lemonade-flutter/issues/336)) ([680946a](https://github.com/lemonadesocial/lemonade-flutter/commit/680946a9c7251fa1d88487ead27734a43614e10c))
+
 ## [1.1.0-rc.1](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.0.4-rc.1...v1.1.0-rc.1) (2024-01-11)
 
 
