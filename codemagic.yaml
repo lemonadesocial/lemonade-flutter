@@ -199,14 +199,10 @@ definitions:
 
         # Add Shorebird to PATH
         echo PATH="$HOME/.shorebird/bin:$PATH" >> $CM_ENV
-    - &shorebird_upgrade
-      name: 🐦 Shorebird Upgrade
-      script: |
-        shorebird upgrade
     - &change_shorebird_version
       name: 🐦 Change Shorebird version
       script: |
-        shorebird flutter versions use 3.16.5
+        shorebird flutter versions use 3.16.4
     - &release_shorebird_ipa_staging
       name: Release shorebird ipa staging
       script: |
@@ -839,7 +835,6 @@ workflows:
       - *run_build_runner
       - *generate_i18_file
       - *setup_shorebird
-      - *shorebird_upgrade
       - *change_shorebird_version
       - *install_firebase_crashlytics
       - *install_pods
@@ -884,7 +879,6 @@ workflows:
       - *run_build_runner
       - *generate_i18_file
       - *setup_shorebird
-      - *shorebird_upgrade
       - *change_shorebird_version
       - *install_firebase_crashlytics
       - *install_pods
@@ -923,7 +917,6 @@ workflows:
       - *run_build_runner
       - *generate_i18_file
       - *setup_shorebird
-      - *shorebird_upgrade
       - *change_shorebird_version
       - *install_firebase_crashlytics
       - *install_pods
@@ -949,7 +942,6 @@ workflows:
       - *run_build_runner
       - *generate_i18_file
       - *setup_shorebird
-      - *shorebird_upgrade
       - *change_shorebird_version
       - *setup_local_properties
       - *patch_shorebird_android_staging
@@ -986,7 +978,6 @@ workflows:
       - *run_build_runner
       - *generate_i18_file
       - *setup_shorebird
-      - *shorebird_upgrade
       - *change_shorebird_version
       - *install_firebase_crashlytics
       - *install_pods
@@ -1024,7 +1015,6 @@ workflows:
       - *run_build_runner
       - *generate_i18_file
       - *setup_shorebird
-      - *shorebird_upgrade
       - *change_shorebird_version
       - *setup_local_properties
       - *patch_shorebird_android_production
