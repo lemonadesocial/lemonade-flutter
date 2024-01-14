@@ -93,10 +93,6 @@ const userProfileFragment = '''
     provider_id
     position
   }
-  payment_direct {
-    provider
-    currency
-  }
   pronoun
   tag_verified
   url_go

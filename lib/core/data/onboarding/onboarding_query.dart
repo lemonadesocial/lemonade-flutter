@@ -89,11 +89,6 @@ fragment profileFragment on User {
     position
     __typename
   }
-  payment_direct {
-    provider
-    currency
-    __typename
-  }
   pronoun
   tag_verified
   url_go

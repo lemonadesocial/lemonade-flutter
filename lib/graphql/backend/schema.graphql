@@ -25,20 +25,19 @@ type Query {
   getEventCohostRequests(input: GetEventCohostRequestsInput!): [EventCohostRequest!]!
   getEventCurrencies(_id: MongoID!, used: Boolean): [EventCurrency!]!
   getMyEvents(state: GetEventsState, skip: Int! = 0, limit: Int! = 25): [Event!]!
-  getHostingEvents(order: Int, state: FilterEventInput, user: MongoID, skip: Int! = 0, limit: Int! = 25): [Event!]!
+  getHostingEvents(skip: Int! = 0, limit: Int! = 25, site: MongoID, user: MongoID, state: FilterEventInput, sort: JSON): [Event!]!
   getEvent(_id: MongoID!): Event
-  getEvents(skip: Int! = 0, limit: Int! = 25, _id: [MongoID!], search: String, accepted: MongoID, highlight: Boolean): [Event!]!
+  getEvents(skip: Int! = 0, limit: Int! = 25, _id: [MongoID!], site: MongoID, search: String, accepted: MongoID, highlight: Boolean): [Event!]!
   getHomeEvents(skip: Int! = 0, limit: Int! = 25, search: String, tense: EventTense, longitude: Float, latitude: Float, search_range: Float): [Event!]!
   getProfileEvents(skip: Int! = 0, limit: Int! = 25, user: MongoID): [Event!]!
-  getPastEvents(skip: Int! = 0, limit: Int! = 25, user: MongoID, sort: JSON): [Event!]!
-  getUpcomingEvents(skip: Int! = 0, limit: Int! = 25, user: MongoID, host: Boolean, sort: JSON): [Event!]!
-  getEventPaymentDonationSummary(event: MongoID!): EventPaymentDonationSummary
-  getEventPaymentSummary(event: MongoID!): EventPaymentSummary!
-  getEventTicketTypes(input: GetEventTicketTypesInput!): GetEventTicketTypesResponse!
+  getPastEvents(skip: Int! = 0, limit: Int! = 25, site: MongoID, user: MongoID, sort: JSON): [Event!]!
+  getUpcomingEvents(skip: Int! = 0, limit: Int! = 25, site: MongoID, user: MongoID, host: Boolean, sort: JSON): [Event!]!
+  getEventPaymentSummary(event: MongoID!): [EventPaymentSummary!]!
   getEventQuestions(input: GetEventQuestionsInput!): [EventQuestion!]!
   getEventRewardUses(input: GetEventRewardUsesInput!): [EventRewardUse!]!
   getEventSessionReservations(input: GetEventSessionReservationsInput): [EventSessionReservation!]!
   getEventSessionReservationSummary(input: GetEventSessionReservationSummaryInput!): [EventSessionReservationSummary!]!
+  getEventTicketTypes(input: GetEventTicketTypesInput!): GetEventTicketTypesResponse!
   getFiles(skip: Int! = 0, limit: Int! = 25, id_lt: MongoID, user: MongoID, links: FileLinkInput): [File!]!
   getFrequentQuestions(input: GetFrequentQuestionsInput!): [FrequentQuestion!]!
   getKratosFlow(email: String!): String!
@@ -51,10 +50,11 @@ type Query {
   getNewsfeed(offset: Float): Newsfeed
   getNotifications(skip: Int! = 0, limit: Int! = 25, type: NotificationTypeFilterInput): [Notification!]!
   getOffers(type: OfferType!): [Offer!]!
-  getPayments(skip: Int! = 0, limit: Int! = 25, state: PaymentStateInput, type: PaymentTypeInput, event: MongoID, user: MongoID, direct_recipient: MongoID, ticket_assignees: MongoID): [Payment!]!
   getRooms(input: GetRoomsInput!): [Room!]!
   getRoom(_id: MongoID!): Room
   getRoomCredentials(input: GetRoomCredentialsInput!): RoomCredentials!
+  getSafeFreeLimit(network: String!): FreeSafeInitInfo!
+  getInitSafeTransaction(input: GetInitSafeTransactionInput!): RawTransaction!
   getSites(skip: Int! = 0, limit: Int! = 25, _id: [MongoID!], active: Boolean): [Site!]!
   getStoreBucketItems(skip: Int! = 0, limit: Int! = 25): [StoreBucketItem!]!
   getStoreCategory(_id: MongoID!): StoreCategory
@@ -169,7 +169,6 @@ type User {
   fcm_tokens: [String!]
   matrix_localpart: String
   matrix_support_room_id: String
-  payment_direct: [UserPaymentDirectItem!]
   payment_verification: UserPaymentVerification
   url: String
   url_go: String
@@ -267,20 +266,6 @@ The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://
 """
 scalar JSON
 
-type UserPaymentDirectItem {
-  provider: PaymentProvider!
-  currency: String
-}
-
-enum PaymentProvider {
-  local
-  razorpay
-  stripe_au
-  stripe_ca
-  stripe_eu
-  stripe_us
-}
-
 type UserPaymentVerification {
   stamp: DateTimeISO!
   state: UserPaymentVerificationState!
@@ -370,6 +355,7 @@ type Event {
   accepted: [MongoID!]
   declined: [MongoID!]
   payment_fee: Float!
+  application_form_url: String
   accepted_store_promotion: MongoID
   accepted_user_fields_required: [String!]
   access_pass: AccessPass
@@ -406,7 +392,6 @@ type Event {
   new_new_photos: [MongoID!]
   offers: [EventOffer!]
   payment_accounts_new: [MongoID!]
-  payment_accounts: JSON
   payment_donation: Boolean
   payment_donation_amount_includes_tickets: Boolean
   payment_donation_amount_increment: Float
@@ -414,8 +399,6 @@ type Event {
   payment_donation_target: Float
   payment_enabled: Boolean
   payment_optional: Boolean
-  payment_provider: PaymentProvider
-  payment_split_frozen: Boolean
   payment_ticket_external_message: String
   payment_ticket_external_url: String
   payment_ticket_purchase_title: String
@@ -465,7 +448,6 @@ type Event {
   events_expanded(skip: Int! = 0, limit: Int! = 25): [Event]
   speaker_users_expanded(skip: Int! = 0, limit: Int! = 25): [User]
   payment_accounts_expanded(skip: Int! = 0, limit: Int! = 25): [NewPaymentAccount!]
-  payment_split: [EventPaymentSplitItem!]
   payment_ticket_discounts: [EventPaymentTicketDiscount!]
   tickets: [Ticket!]
 }
@@ -662,8 +644,6 @@ type Store {
   user: MongoID!
   managers: [MongoID!]!
   title: String!
-  payment_provider: PaymentProvider!
-  payment_account: MongoID!
   payment_fee_store: Float!
   payment_fee_user: Float!
   currency: String!
@@ -865,7 +845,8 @@ type SafeAccount {
   network: String!
   owners: [String!]!
   threshold: Float!
-  funded: Boolean
+  gelato_task_id: String
+  pending: Boolean
 }
 
 type DigitalAccount {
@@ -881,19 +862,6 @@ type StripeAccount {
   publishable_key: String!
 }
 
-type EventPaymentSplitItem {
-  ratio: Float!
-  user: MongoID!
-  state: EventPaymentSplitItemState!
-  user_expanded: User
-}
-
-enum EventPaymentSplitItemState {
-  expired
-  pending
-  accepted
-}
-
 type EventPaymentTicketDiscount {
   active: Boolean!
   stamp: DateTimeISO!
@@ -904,72 +872,12 @@ type EventPaymentTicketDiscount {
   users: [MongoID!]
   ticket_count: Float
   ticket_count_map: JSON
-  payments: [MongoID!]
   use_limit: Float
   use_limit_per: Float
   ticket_limit: Float
   ticket_limit_per: Float
   ticket_types: [MongoID!]
-  payments_expanded(skip: Int! = 0, limit: Int! = 25): [Payment]
   users_expanded(skip: Int! = 0, limit: Int! = 25): [User]
-}
-
-type Payment {
-  _id: MongoID!
-  created_at: DateTimeISO!
-  created_context: JSON
-  active: Boolean!
-  stamp: DateTimeISO!
-  user: MongoID!
-  user_email: String
-  stamp_authorized: DateTimeISO
-  stamp_canceled: DateTimeISO
-  stamp_captured: DateTimeISO
-  stamp_failed: DateTimeISO
-  stamp_refunded: DateTimeISO
-  provider_id: String
-  currency: String
-  amount: Float
-  fee: Float
-  refund_amount: Float
-  transfer_amount: Float
-  error_code: String
-  error_description: String
-  meta_data: PaymentMetaData
-  direct_message: String
-  direct_recipient: MongoID
-  event: MongoID
-  store_order: MongoID
-  stripe_card: MongoID
-  ticket_assignees: [MongoID!]
-  ticket_assigned_emails: [String!]
-  ticket_assigned_phones: [String!]
-  ticket_count: Float
-  ticket_discount: String
-  ticket_discount_amount: Float
-  ticket_type: MongoID
-  ticket_count_remaining: Float
-  stripe_card_expanded: StripeCard
-  ticket_assignees_expanded(skip: Int! = 0, limit: Int! = 25): [User]
-  user_expanded: User
-  event_expanded: Event
-}
-
-type PaymentMetaData {
-  card: JSON
-  charge: String
-}
-
-type StripeCard {
-  _id: MongoID!
-  active: Boolean!
-  stamp: DateTimeISO!
-  payment_account: MongoID!
-  provider_id: String!
-  user: MongoID!
-  brand: String!
-  name: String!
-  last4: String!
 }
 
 type Ticket {
@@ -1121,69 +1029,12 @@ enum EventTense {
   Past
 }
 
-type EventPaymentDonationSummary {
-  currency: String
-  message: String
-  target: Float
-  amount: Float!
-  user_count: Float!
-}
-
 type EventPaymentSummary {
-  currency: String
-  amount: Float!
-  refund_amount: Float!
-  lemonade_fee: Float!
-  service_fee: Float!
-  transfer_amount: Float!
-  pending_transfer_amount: Float!
-  completed_transfer_amount: Float!
-  payout_amount: Float!
-  split: [EventPaymentSummarySplitItem!]!
-}
-
-type EventPaymentSummarySplitItem {
-  user: MongoID!
-  ratio: Float
-  transfer_amount: Float!
-  pending_transfer_amount: Float!
-  completed_transfer_amount: Float!
-  payout_amount: Float!
-  user_expanded: User
-}
-
-type GetEventTicketTypesResponse {
-  limit: Float!
-  ticket_types: [PurchasableTicketType!]!
-  discount: TicketDiscount
-}
-
-type PurchasableTicketType {
-  _id: MongoID!
-  active: Boolean
-  event: MongoID!
-  title: String!
-  prices: [EventTicketPrice!]!
-  default: Boolean
-  address_required: Boolean
-  description: String
-  description_line: String
-  external_ids: [String!]
-  offers: [EventOffer!]
-  photos: [MongoID!]
-  discountable: Boolean!
-  limit: Float!
-}
-
-type TicketDiscount {
-  discount: String!
-  limit: Float!
-  ratio: Float!
-}
-
-input GetEventTicketTypesInput {
-  event: MongoID!
-  discount: String
+  currency: String!
+  decimals: Float!
+  amount: String!
+  transfer_amount: String!
+  pending_transfer_amount: String!
 }
 
 type EventQuestion {
@@ -1246,6 +1097,40 @@ type EventSessionReservationSummary {
 input GetEventSessionReservationSummaryInput {
   event: MongoID!
   session: MongoID
+}
+
+type GetEventTicketTypesResponse {
+  limit: Float!
+  ticket_types: [PurchasableTicketType!]!
+  discount: TicketDiscount
+}
+
+type PurchasableTicketType {
+  _id: MongoID!
+  active: Boolean
+  event: MongoID!
+  title: String!
+  prices: [EventTicketPrice!]!
+  default: Boolean
+  address_required: Boolean
+  description: String
+  description_line: String
+  external_ids: [String!]
+  offers: [EventOffer!]
+  photos: [MongoID!]
+  discountable: Boolean!
+  limit: Float!
+}
+
+type TicketDiscount {
+  discount: String!
+  limit: Float!
+  ratio: Float!
+}
+
+input GetEventTicketTypesInput {
+  event: MongoID!
+  discount: String
 }
 
 input FileLinkInput {
@@ -1408,18 +1293,14 @@ enum NotificationType {
   event_invite
   event_invite_verify_accept_request
   event_invite_verify_request
-  event_payment_split_remove
-  event_payment_split_request
-  event_payment_split_request_accept
-  event_payment_split_request_decline
   event_unlock_verify_accept_request
   event_unlock_verify_request
   event_update
   payment_assign
   payment_authorized
-  payment_succeeded
   payment_failed
   payment_refunded
+  payment_succeeded
   payments_captured_summary
   payments_wired_summary
   place_reservation_delete
@@ -1430,6 +1311,8 @@ enum NotificationType {
   reservation_decline
   room_invite
   room_started
+  safe_vault_init_failed
+  safe_vault_init_success
   store_order_accepted
   store_order_awaiting_pickup
   store_order_cancelled
@@ -1462,7 +1345,6 @@ type StoreOrder {
   delivery_cost: Float!
   fulfillment_address: Address
   pickup_address: Address
-  payment_provider: PaymentProvider
   delivery_option_cost_waived: Boolean
   sales_tax: SalesTax
   easyship_rates: [JSON!]
@@ -1473,11 +1355,9 @@ type StoreOrder {
   label_error: String
   label_url: String
   promotion: MongoID
-  payment: MongoID
   tracking_url: String
   store_expanded: Store
   user_expanded: User
-  payment_expanded: Payment
   history: [StoreOrderHistoryItem!]
   items: [StoreOrderItem!]!
 }
@@ -1553,7 +1433,6 @@ type Room {
   verify: Boolean
   description: String
   event: MongoID
-  payment_direct: Boolean
   photos: [MongoID!]
   stage_open: Boolean
   theme_background_photo: MongoID
@@ -1621,37 +1500,6 @@ enum OfferType {
   POAP
 }
 
-input PaymentStateInput {
-  eq: PaymentState
-  in: [PaymentState!]
-  nin: [PaymentState!]
-}
-
-enum PaymentState {
-  canceled
-  failed
-  charging
-  charged
-  authorized
-  captured
-  refunded
-  wiring
-  wired
-}
-
-input PaymentTypeInput {
-  eq: PaymentType
-  in: [PaymentType!]
-  nin: [PaymentType!]
-}
-
-enum PaymentType {
-  direct
-  donation
-  store_order
-  ticket
-}
-
 input GetRoomsInput {
   skip: Int! = 0
   limit: Int! = 25
@@ -1682,12 +1530,30 @@ enum GetRoomCredentialsInputRole {
   PUBLISHER
 }
 
+type FreeSafeInitInfo {
+  current: Int!
+  max: Int!
+}
+
+type RawTransaction {
+  to: String!
+  value: String!
+  data: String!
+}
+
+input GetInitSafeTransactionInput {
+  owners: [String!]!
+  threshold: Int!
+  network: String!
+}
+
 type Site {
   _id: MongoID!
   active: Boolean!
   client: String!
   hostnames: [String!]
   title: String!
+  daos: [SiteDao!]
   description: String!
   access_pass: AccessPass
   header_metas: [SiteHeaderMeta!]
@@ -1703,12 +1569,20 @@ type Site {
   favicon_url: String
   logo_url: String
   logo_mobile_url: String
+  passport: SitePassport
   privacy_url: String
   theme_data: JSON
   theme_type: String
   text: JSON
   visibility: JSON
   user_expanded: User
+}
+
+type SiteDao {
+  network: String!
+  address: String!
+  name: String!
+  icon: String
 }
 
 type SiteHeaderMeta {
@@ -1764,6 +1638,17 @@ enum SiteOnboardingStepName {
   SocialHandles
 }
 
+type SitePassport {
+  name: String!
+  image: String!
+  logo: String!
+  baseV1Address: String!
+  baseV1ChainId: Float!
+  passportV1CallAddress: String!
+  passportV1AxelarAddress: JSON
+  crowdfundAddress: JSON
+}
+
 type StoreBucketItem {
   _id: MongoID!
   active: Boolean!
@@ -1807,6 +1692,18 @@ input AddressInput {
   phone: String
   longitude: Float
   latitude: Float
+}
+
+type StripeCard {
+  _id: MongoID!
+  active: Boolean!
+  stamp: DateTimeISO!
+  payment_account: MongoID!
+  provider_id: String!
+  user: MongoID!
+  brand: String!
+  name: String!
+  last4: String!
 }
 
 type PricingInfo {
@@ -1993,9 +1890,6 @@ type Mutation {
   cancelEvent(_id: MongoID!): Event!
   acceptEventTerms(input: AcceptEventTermsInput!): Boolean!
   inviteEvent(input: InviteEventInput!): Event!
-  createEventTicketType(input: EventTicketTypeInput!): EventTicketType!
-  updateEventTicketType(input: EventTicketTypeInput!, _id: MongoID!): EventTicketType!
-  deleteEventTicketType(event: MongoID!, _id: MongoID!): Boolean!
   createEventQuestion(input: CreateEventQuestionsInput!): EventQuestion!
   deleteEventQuestion(_id: MongoID!): Boolean!
   toggleEventQuestionLike(_id: MongoID!): Boolean!
@@ -2009,6 +1903,9 @@ type Mutation {
   createEventTicketDiscounts(event: MongoID!, inputs: [EventPaymentTicketDiscountInput!]!): Event!
   deleteEventTicketDiscounts(event: MongoID!, discounts: [String!]!): Event!
   mailEventTicket(event: MongoID!, payment: MongoID, emails: [String!]!): Boolean!
+  createEventTicketType(input: EventTicketTypeInput!): EventTicketType!
+  updateEventTicketType(input: EventTicketTypeInput!, _id: MongoID!): EventTicketType!
+  deleteEventTicketType(event: MongoID!, _id: MongoID!): Boolean!
   createFile(input: FileInput, url: String!): File!
   updateFile(input: FileInput!, _id: MongoID!): File!
   toggleFileLike(_id: MongoID!): File!
@@ -2034,6 +1931,7 @@ type Mutation {
   modifyRoomStage(input: ModifyRoomStageInput!): ModifyRoomStagePayload!
   requestRoomStage(input: RequestRoomStageInput!): Boolean!
   decideRoomStageRequest(input: DecideRoomStageRequestInput!): Boolean!
+  createStripeOnrampSession(input: CreateStripeOnrampSessionInput!): StripeOnrampSession!
   createSite(input: CreateSiteInput!): Site!
   updateSite(input: UpdateSiteInput!, _id: MongoID!): Site
   deleteSite(_id: MongoID!): Boolean!
@@ -2150,6 +2048,7 @@ input EventInput {
   title: String
   start: DateTimeISO
   end: DateTimeISO
+  application_form_url: String
   accepted_store_promotion: MongoID
   accepted_user_fields_required: [String!]
   access_pass: AccessPassInput
@@ -2305,39 +2204,6 @@ input InviteEventInput {
   emails: [String!]
 }
 
-input EventTicketTypeInput {
-  active: Boolean
-  event: MongoID
-  title: String
-  prices: [EventTicketPriceInput!]
-  default: Boolean
-  address_required: Boolean
-  description: String
-  description_line: String
-  external_ids: [String!]
-  photos: [MongoID!]
-  ticket_limit: Float
-  ticket_limit_per: Float
-  offers: [EventTicketTypeOffersInput!]
-}
-
-input EventTicketPriceInput {
-  default: Boolean
-  currency: String!
-  network: String
-  cost: String!
-}
-
-input EventTicketTypeOffersInput {
-  _id: MongoID
-  provider: OfferProvider
-  provider_network: String
-  provider_id: String
-  position: Float
-  auto: Boolean
-  broadcast_rooms: [MongoID!]
-}
-
 input CreateEventQuestionsInput {
   event: MongoID!
   question: String!
@@ -2394,6 +2260,39 @@ input EventPaymentTicketDiscountInput {
   ticket_limit: Float
   ticket_limit_per: Float
   ticket_types: [MongoID!]
+}
+
+input EventTicketTypeInput {
+  active: Boolean
+  event: MongoID
+  title: String
+  prices: [EventTicketPriceInput!]
+  default: Boolean
+  address_required: Boolean
+  description: String
+  description_line: String
+  external_ids: [String!]
+  photos: [MongoID!]
+  ticket_limit: Float
+  ticket_limit_per: Float
+  offers: [EventTicketTypeOffersInput!]
+}
+
+input EventTicketPriceInput {
+  default: Boolean
+  currency: String!
+  network: String
+  cost: String!
+}
+
+input EventTicketTypeOffersInput {
+  _id: MongoID
+  provider: OfferProvider
+  provider_network: String
+  provider_id: String
+  position: Float
+  auto: Boolean
+  broadcast_rooms: [MongoID!]
 }
 
 input FileInput {
@@ -2462,7 +2361,6 @@ input RoomInput {
   verify: Boolean
   description: String
   event: MongoID
-  payment_direct: Boolean
   photos: [MongoID!]
   stage_open: Boolean
   theme_background_photo: MongoID
@@ -2509,6 +2407,19 @@ input DecideRoomStageRequestInput {
   _id: MongoID!
   user: MongoID!
   decision: Boolean!
+}
+
+type StripeOnrampSession {
+  publishable_key: String!
+  client_secret: String!
+}
+
+input CreateStripeOnrampSessionInput {
+  wallet_address: String
+  source_currency: String
+  destination_currency: String
+  destination_network: String
+  destination_amount: Float
 }
 
 input CreateSiteInput {
@@ -2690,8 +2601,6 @@ input StoreInput {
   _id: MongoID
   managers: [MongoID!]
   title: String
-  payment_provider: PaymentProvider
-  payment_account: MongoID
   currency: String
   api_secret: String
   easyship_enabled: Boolean
