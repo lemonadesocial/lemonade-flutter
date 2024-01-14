@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.3](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.1.2...v1.1.3) (2024-01-14)
+
+
+### Bug Fixes
+
+* update schemas ([#345](https://github.com/lemonadesocial/lemonade-flutter/issues/345)) ([f737691](https://github.com/lemonadesocial/lemonade-flutter/commit/f7376914accc99857d327cc115c796b8202dce24))
+
 ## [1.1.2](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.1.1...v1.1.2) (2024-01-12)
 
 
