@@ -72,7 +72,7 @@ class _DiscoverCommunitiesList extends StatelessWidget {
                   )
                 : SliverToBoxAdapter(
                     child: SizedBox(
-                      height: 140.h,
+                      height: 150.h,
                       child: ListView.separated(
                         padding:
                             EdgeInsets.symmetric(horizontal: Spacing.xSmall),

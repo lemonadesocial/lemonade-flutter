@@ -69,7 +69,7 @@ class LemonDrawer extends StatelessWidget {
                             .svg(colorFilter: filter, width: 18, height: 18);
                       },
                     ),
-                    featureAvailable: false,
+                    featureAvailable: true,
                     trailing: Assets.icons.icArrowBack.svg(
                       width: 18.w,
                       height: 18.w,
