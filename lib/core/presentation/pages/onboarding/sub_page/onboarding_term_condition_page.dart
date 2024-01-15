@@ -26,7 +26,7 @@ class OnboardingTermConditionsPage extends StatefulWidget {
 class _OnboardingTermConditionsPageState
     extends State<OnboardingTermConditionsPage> {
   final controller = ScrollController();
-  bool termConditionsAccepted = false;
+  bool termConditionsAccepted = true;
 
   @override
   Widget build(BuildContext context) {
