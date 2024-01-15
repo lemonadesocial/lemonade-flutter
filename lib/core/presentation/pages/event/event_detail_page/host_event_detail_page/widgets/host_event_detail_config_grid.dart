@@ -1,3 +1,4 @@
+import 'package:app/core/application/event/get_event_checkins_bloc/get_event_checkins_bloc.dart';
 import 'package:app/core/application/event/get_event_cohost_requests_bloc/get_event_cohost_requests_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/view_model/event_config_grid_view_model.dart';
@@ -68,7 +69,7 @@ class HostEventDetailConfigGrid extends StatelessWidget {
       ),
       EventConfigGridViewModel(
         title: t.event.configuration.checkIn,
-        subTitle: '1.2k checked in',
+        subTitle: '0 ${t.event.scanQR.checkedIn}',
         showProgressBar: true,
         progressBarColors: [const Color(0xFFF9D3BC), const Color(0xFFF29A68)],
         icon: Container(
@@ -146,6 +147,10 @@ class HostEventDetailConfigGrid extends StatelessWidget {
               orElse: () => [],
               fetched: (eventCohostRequests) => eventCohostRequests,
             );
+    final eventCheckins = context.watch<GetEventCheckinsBloc>().state.maybeWhen(
+          orElse: () => [],
+          fetched: (eventCheckins) => eventCheckins,
+        );
     return SliverGrid(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
@@ -155,6 +160,19 @@ class HostEventDetailConfigGrid extends StatelessWidget {
       ),
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
+          if (listData[index]?.title == t.event.configuration.checkIn) {
+            return GridItemWidget(
+              item: EventConfigGridViewModel(
+                title: listData[index]!.title,
+                subTitle: eventCheckins.isNotEmpty
+                    ? '${eventCheckins.length} ${t.event.scanQR.checkedIn}'
+                    : '',
+                icon: listData[index]!.icon,
+                onTap: () {},
+              ),
+              onTap: listData[index]!.onTap,
+            );
+          }
           if (listData[index]?.title == t.event.configuration.coHosts) {
             return GridItemWidget(
               item: EventConfigGridViewModel(

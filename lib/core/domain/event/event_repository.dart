@@ -1,4 +1,5 @@
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/entities/event_checkin.dart';
 import 'package:app/core/domain/event/entities/event_cohost_request.dart';
 import 'package:app/core/domain/event/entities/event_rsvp.dart';
 import 'package:app/core/domain/event/input/accept_event_input/accept_event_input.dart';
@@ -53,5 +54,13 @@ abstract class EventRepository {
 
   Future<Either<Failure, bool>> manageEventCohostRequests({
     required Input$ManageEventCohostRequestsInput input,
+  });
+
+  Future<Either<Failure, bool>> updateEventCheckin({
+    required Input$UpdateEventCheckinInput input,
+  });
+
+  Future<Either<Failure, List<EventCheckin>>> getEventCheckins({
+    required Input$GetEventCheckinsInput input,
   });
 }

@@ -1,0 +1,8 @@
+query GetEventCheckins($input: GetEventCheckinsInput!) {
+    getEventCheckins(input: $input) {
+        _id
+        active
+        event
+        user
+    }
+}

@@ -67,7 +67,7 @@ definitions:
 
         echo $SHOREBIRD_YAML | base64 --decode > $CM_BUILD_DIR/shorebird.yaml
     - &extract_tag_information
-      name: Setup Staging ENV
+      name: Extract tag information
       script: |
         #!/bin/sh
         # Extract build name 1.0.0
@@ -677,6 +677,38 @@ workflows:
       scripts:
         - *upload_staging_dsym_to_firebase
         - *notify_ios_staging_to_slack
+
+  # Build iOS Production 
+  ios-production:
+    name: iOS Production
+    <<: *instance_mac_mini
+    integrations:
+      <<: *app_store_connect_integrations
+    environment:
+      <<: *env_versions
+      <<: *load_environment_values
+      <<: *ios_signing_production
+    scripts:
+      - *load_env_files
+      - *use_profiles
+      - *get_flutter_packages
+      - *run_build_runner
+      - *generate_i18_file
+      - *install_firebase_crashlytics
+      - *install_pods
+      - *build_ipa_production
+    artifacts:
+      - *ipa
+      - *xcode_log
+      - *dsym
+      - *app
+    publishing:
+      <<: *ios_app_store_publish
+      <<: *email_production
+      scripts:
+        - *upload_production_dsym_to_firebase
+        - *notify_ios_production_to_slack
+
   # Build Android Staging
   android-staging:
     name: Android Staging
@@ -703,6 +735,32 @@ workflows:
       scripts:
         - *notify_android_staging_to_slack
   
+  # Build Android Production
+  android-production:
+    name: Android Production
+    <<: *instance_mac_mini
+    environment:
+      <<: *env_versions
+      <<: *load_environment_values
+      <<: *android_signing_production
+    scripts:
+      - *load_env_files
+      - *setup_local_properties
+      - *get_flutter_packages
+      - *run_build_runner
+      - *generate_i18_file
+      - *build_apk_production
+      - *build_aab_production
+    artifacts:
+      - *apk
+      - *aab
+      - *android_log
+    publishing:
+      <<: *production_android_publish
+      <<: *email_production
+      scripts:
+        - *notify_android_production_to_slack
+        
   # 
   # Temp close due to will trigger tag for build production process
   # 
@@ -837,7 +895,7 @@ workflows:
       <<: *production_android_publish
       scripts:
         - *upload_production_dsym_to_firebase
-        - *github_create_prerelease
+        # - *github_create_prerelease
         - *notify_ios_production_to_slack
         - *notify_android_production_to_slack
 
@@ -924,10 +982,9 @@ workflows:
       - *install_firebase_crashlytics
       - *install_pods
       - *patch_shorebird_ios_production
+      - *notify_shorebird_patch_ios_production_to_slack
     artifacts:
       - build/ios/ipa/*.ipa
-    scripts:
-      - *notify_shorebird_patch_ios_production_to_slack
 
   shorebird-patch-android-production:
     name: Shorebird Patch Android Production
@@ -961,8 +1018,7 @@ workflows:
       - *change_shorebird_version
       - *setup_local_properties
       - *patch_shorebird_android_production
+      - *notify_shorebird_patch_android_production_to_slack
     artifacts:
       - build/app/outputs/apk/**/*.apk    
-      - build/app/outputs/bundle/**/*.aab 
-    scripts:
-      - *notify_shorebird_patch_android_production_to_slack
+      - build/app/outputs/bundle/**/*.aab  

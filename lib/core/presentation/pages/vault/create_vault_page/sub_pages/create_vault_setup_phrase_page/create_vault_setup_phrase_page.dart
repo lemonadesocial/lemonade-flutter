@@ -3,6 +3,7 @@ import 'package:app/core/application/vault/create_vault_owner_key_bloc/create_va
 import 'package:app/core/presentation/pages/vault/create_vault_page/sub_pages/create_vault_setup_phrase_page/view/show_recovery_phrase_bottom_sheet.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
+import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/utils/bottomsheet_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
@@ -23,9 +24,9 @@ class CreateVaultSetupPhrasePage extends StatelessWidget {
     final ownerKeyBloc = context.read<CreateVaultOwnerKeyBloc>();
     ownerKeyBloc.state.maybeWhen(
       orElse: () => null,
-      generated: ((seedPhrase, address) {
+      generated: ((seedPhrase, address, privateKey) {
         ownerKeyBloc
-            .add(CreateVaultOwnerKeyEvent.import(seedPhrase: seedPhrase));
+            .add(CreateVaultOwnerKeyEvent.import(privateKey: privateKey));
         context
             .read<CreateVaultBloc>()
             .add(CreateVaultEvent.onOwnersChanged(owners: [address.hexEip55]));
@@ -51,94 +52,109 @@ class CreateVaultSetupPhrasePage extends StatelessWidget {
       appBar: LemonAppBar(
         title: t.vault.createVault.beforeContinue,
       ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _InfoCard(
-              icon: Assets.icons.icHome.svg(),
-              title: t.vault.createVault.safeEnvironment,
-              subTitle: t.vault.createVault.safeEnvironmentDescription,
-            ),
-            SizedBox(height: Spacing.xSmall),
-            _InfoCard(
-              icon: Assets.icons.icWarning.svg(),
-              title: t.vault.createVault.sensitiveInformation,
-              subTitle: t.vault.createVault.sensitiveInformationDescription,
-            ),
-            SizedBox(height: Spacing.xSmall),
-            _InfoCard(
-              icon: Assets.icons.icShield.svg(),
-              title: t.vault.createVault.safelyStored,
-              subTitle: t.vault.createVault.safelyStoredDescription,
-            ),
-            const Spacer(),
-            BlocConsumer<CreateVaultOwnerKeyBloc, CreateVaultOwnerKeyState>(
-              listener: (context, state) {
-                state.maybeWhen(
-                  orElse: () => null,
-                  generated: (seedPhrase, address) {
-                    context.read<CreateVaultBloc>().add(
-                          CreateVaultEvent.onOwnersChanged(
-                            owners: [address.hexEip55],
+      body: Stack(
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _InfoCard(
+                  icon: Assets.icons.icHome.svg(),
+                  title: t.vault.createVault.safeEnvironment,
+                  subTitle: t.vault.createVault.safeEnvironmentDescription,
+                ),
+                SizedBox(height: Spacing.xSmall),
+                _InfoCard(
+                  icon: Assets.icons.icWarning.svg(),
+                  title: t.vault.createVault.sensitiveInformation,
+                  subTitle: t.vault.createVault.sensitiveInformationDescription,
+                ),
+                SizedBox(height: Spacing.xSmall),
+                _InfoCard(
+                  icon: Assets.icons.icShield.svg(),
+                  title: t.vault.createVault.safelyStored,
+                  subTitle: t.vault.createVault.safelyStoredDescription,
+                ),
+                const Spacer(),
+                BlocConsumer<CreateVaultOwnerKeyBloc, CreateVaultOwnerKeyState>(
+                  listener: (context, state) {
+                    state.maybeWhen(
+                      orElse: () => null,
+                      generated: (seedPhrase, address, privateKey) {
+                        context.read<CreateVaultBloc>().add(
+                              CreateVaultEvent.onOwnersChanged(
+                                owners: [address.hexEip55],
+                              ),
+                            );
+                        context.read<CreateVaultBloc>().add(
+                              CreateVaultEvent.onThresholdChanged(threshold: 1),
+                            );
+                        BottomSheetUtils.showSnapBottomSheet(
+                          context,
+                          builder: (context) => ShowRecoveryPhraseBottomSheet(
+                            seedPhrase: seedPhrase,
+                            onNext: () => onAfterViewPhrase(context),
                           ),
                         );
-                    context.read<CreateVaultBloc>().add(
-                          CreateVaultEvent.onThresholdChanged(threshold: 1),
-                        );
-                    BottomSheetUtils.showSnapBottomSheet(
-                      context,
-                      builder: (context) => ShowRecoveryPhraseBottomSheet(
-                        seedPhrase: seedPhrase,
-                        onNext: () => onAfterViewPhrase(context),
+                      },
+                    );
+                  },
+                  builder: (context, state) {
+                    return SafeArea(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: Spacing.smMedium,
+                        ),
+                        child: LinearGradientButton(
+                          onTap: () {
+                            state.maybeWhen(
+                              orElse: () {
+                                context.read<CreateVaultOwnerKeyBloc>().add(
+                                      CreateVaultOwnerKeyEvent.generate(),
+                                    );
+                              },
+                              generated: (seedPhrase, address, privateKey) {
+                                BottomSheetUtils.showSnapBottomSheet(
+                                  context,
+                                  builder: (context) =>
+                                      ShowRecoveryPhraseBottomSheet(
+                                    seedPhrase: seedPhrase,
+                                    onNext: () => onAfterViewPhrase(context),
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                          label: t.common.next,
+                          radius: BorderRadius.circular(LemonRadius.small * 2),
+                          height: Sizing.large,
+                          mode: GradientButtonMode.lavenderMode,
+                          textStyle: Typo.medium.copyWith(
+                            color: colorScheme.onPrimary.withOpacity(0.87),
+                            fontFamily: FontFamily.nohemiVariable,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                       ),
                     );
                   },
-                );
-              },
-              builder: (context, state) {
-                return SafeArea(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                      vertical: Spacing.smMedium,
-                    ),
-                    child: LinearGradientButton(
-                      onTap: () {
-                        state.maybeWhen(
-                          orElse: () {
-                            context.read<CreateVaultOwnerKeyBloc>().add(
-                                  CreateVaultOwnerKeyEvent.generate(),
-                                );
-                          },
-                          generated: (seedPhrase, address) {
-                            BottomSheetUtils.showSnapBottomSheet(
-                              context,
-                              builder: (context) =>
-                                  ShowRecoveryPhraseBottomSheet(
-                                seedPhrase: seedPhrase,
-                                onNext: () => onAfterViewPhrase(context),
-                              ),
-                            );
-                          },
-                        );
-                      },
-                      label: t.common.next,
-                      radius: BorderRadius.circular(LemonRadius.small * 2),
-                      height: Sizing.large,
-                      mode: GradientButtonMode.lavenderMode,
-                      textStyle: Typo.medium.copyWith(
-                        color: colorScheme.onPrimary.withOpacity(0.87),
-                        fontFamily: FontFamily.nohemiVariable,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                );
-              },
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+          BlocBuilder<CreateVaultOwnerKeyBloc, CreateVaultOwnerKeyState>(
+            builder: (context, state) {
+              return state.maybeWhen(
+                loading: () => Container(
+                  color: Colors.black.withOpacity(0.5),
+                  child: Loading.defaultLoading(context),
+                ),
+                orElse: () => const SizedBox.shrink(),
+              );
+            },
+          ),
+        ],
       ),
     );
   }

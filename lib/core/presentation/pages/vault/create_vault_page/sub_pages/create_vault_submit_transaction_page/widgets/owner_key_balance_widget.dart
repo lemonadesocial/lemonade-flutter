@@ -1,4 +1,3 @@
-import 'package:app/core/constants/crypto_ramp/crypto_ramp.dart';
 import 'package:app/core/domain/crypto_ramp/crypto_ramp_repository.dart';
 import 'package:app/core/domain/crypto_ramp/stripe_onramp/entities/stripe_onramp_session/stripe_onramp_session.dart';
 import 'package:app/core/domain/crypto_ramp/stripe_onramp/input/create_stripe_onramp_session_input/create_stripe_onramp_session_input.dart';
@@ -21,14 +20,12 @@ import 'package:web3dart/web3dart.dart';
 
 class OwnerKeyBalanceWidget extends StatefulWidget {
   final Chain network;
-  final BigInt estimatedGasFee;
   final String ownerAddress;
   final Function()? onPressRefresh;
 
   const OwnerKeyBalanceWidget({
     super.key,
     required this.network,
-    required this.estimatedGasFee,
     required this.ownerAddress,
     this.onPressRefresh,
   });
@@ -44,10 +41,6 @@ class _OwnerKeyBalanceWidgetState extends State<OwnerKeyBalanceWidget> {
     final t = Translations.of(context);
     final nativeToken = widget.network.nativeToken;
     final nativeTokenDecimals = (nativeToken?.decimals ?? 18).toInt();
-    final gasFee = Web3Utils.getAmountByDecimals(
-      widget.estimatedGasFee,
-      decimals: nativeTokenDecimals,
-    );
 
     return FutureBuilder<BigInt>(
       future: Web3Utils.getBalance(
@@ -111,7 +104,12 @@ class _OwnerKeyBalanceWidgetState extends State<OwnerKeyBalanceWidget> {
                   (nativeToken?.symbol ?? '').toLowerCase();
               final destinationNetwork =
                   stripeOnrampSupportedNetworkByCurrencyMap
-                      .tryGet(destinationCurrency) as String;
+                      .tryGet(destinationCurrency) as String?;
+              if (destinationNetwork == null) {
+                return SnackBarUtils.showErrorSnackbar(
+                  t.payment.stripeOnramp.networkNotSupported,
+                );
+              }
 
               final value = await showFutureLoadingDialog(
                 context: context,
@@ -121,9 +119,6 @@ class _OwnerKeyBalanceWidgetState extends State<OwnerKeyBalanceWidget> {
                     destinationNetwork: destinationNetwork,
                     destinationCurrency: destinationCurrency,
                     walletAddress: widget.ownerAddress,
-                    destinationAmount: gasFee < minTopupAmount
-                        ? minTopupAmount
-                        : gasFee + minTopupAmount,
                   ),
                 ),
               );
@@ -139,7 +134,7 @@ class _OwnerKeyBalanceWidgetState extends State<OwnerKeyBalanceWidget> {
                         value.result!.getOrElse(() => StripeOnrampSession()),
                     onStripeOnrampSessionUpdated: (stripeOnrampSession) {
                       Navigator.of(context).pop();
-                      setState(() {});
+                      widget.onPressRefresh?.call();
                     },
                   ),
                 ),

@@ -141,9 +141,7 @@ class SelectEventTicketsBloc
 
   bool _validateTotalSelectedCount(totalSelectedCount) {
     // TODO: handle notify if over the limit
-    return totalSelectedCount <= (eventTicketTypesResponse?.limit ?? 1) &&
-        totalSelectedCount > 0 &&
-        selectedCurrency != null;
+    return totalSelectedCount > 0 && selectedCurrency != null;
   }
 
   double _calculateFiatTotalAmount(

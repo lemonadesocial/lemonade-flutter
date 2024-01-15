@@ -4,6 +4,7 @@ import 'package:app/core/data/event/dtos/event_rsvp_dto/event_rsvp_dto.dart';
 import 'package:app/core/data/event/gql/event_mutation.dart';
 import 'package:app/core/data/event/gql/event_query.dart';
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/entities/event_checkin.dart';
 import 'package:app/core/domain/event/entities/event_cohost_request.dart';
 import 'package:app/core/domain/event/entities/event_rsvp.dart';
 import 'package:app/core/domain/event/event_repository.dart';
@@ -14,8 +15,10 @@ import 'package:app/core/failure.dart';
 import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/graphql/backend/event/mutation/create_event.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/manage_event_cohost_requests.graphql.dart';
+import 'package:app/graphql/backend/event/mutation/update_event_checkin.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/update_event.graphql.dart';
 import 'package:app/graphql/backend/event/query/get_event_cohost_requests.graphql.dart';
+import 'package:app/graphql/backend/event/query/get_event_checkins.graphql.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:dartz/dartz.dart';
@@ -235,5 +238,44 @@ class EventRepositoryImpl implements EventRepository {
       return Left(Failure.withGqlException(result.exception));
     }
     return Right(result.parsedData!.manageEventCohostRequests);
+  }
+
+  @override
+  Future<Either<Failure, bool>> updateEventCheckin({
+    required Input$UpdateEventCheckinInput input,
+  }) async {
+    final result = await client.mutate$UpdateEventCheckin(
+      Options$Mutation$UpdateEventCheckin(
+        variables: Variables$Mutation$UpdateEventCheckin(input: input),
+      ),
+    );
+    if (result.hasException) {
+      return Left(Failure.withGqlException(result.exception));
+    }
+    return Right(result.parsedData!.updateEventCheckin);
+  }
+
+  @override
+  Future<Either<Failure, List<EventCheckin>>> getEventCheckins({
+    required Input$GetEventCheckinsInput input,
+  }) async {
+    final result = await client.query$GetEventCheckins(
+      Options$Query$GetEventCheckins(
+        variables: Variables$Query$GetEventCheckins(input: input),
+        fetchPolicy: FetchPolicy.networkOnly,
+      ),
+    );
+    if (result.hasException) {
+      return Left(Failure.withGqlException(result.exception));
+    }
+    return Right(
+      List.from(
+        result.parsedData!.getEventCheckins
+            .map(
+              (item) => EventCheckin.fromJson(item.toJson()),
+            )
+            .toList(),
+      ),
+    );
   }
 }
