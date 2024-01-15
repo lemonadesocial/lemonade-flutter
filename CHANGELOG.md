@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.4](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.1.3...v1.1.4) (2024-01-15)
+
+
+### Bug Fixes
+
+* enable accept term button by default in onboarding flow ([#348](https://github.com/lemonadesocial/lemonade-flutter/issues/348)) ([b7867e8](https://github.com/lemonadesocial/lemonade-flutter/commit/b7867e88b8af33276151392c31295e05f3c005fe))
+
 ## [1.1.3](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.1.2...v1.1.3) (2024-01-14)
 
 
