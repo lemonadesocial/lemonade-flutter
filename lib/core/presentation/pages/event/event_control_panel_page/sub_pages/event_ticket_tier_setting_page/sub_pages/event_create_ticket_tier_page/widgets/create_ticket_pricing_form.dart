@@ -1,7 +1,12 @@
+import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
+import 'package:app/core/application/event_tickets/modify_ticket_type_bloc/modify_ticket_type_bloc.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/add_ticket_tier_pricing_form.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/get_event_currencies_builder.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/ticket_tier_pricing_item.dart';
+import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/bottomsheet_utils.dart';
+import 'package:app/core/utils/event_tickets_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
@@ -10,15 +15,31 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
-class CreateTicketPricingForm extends StatelessWidget {
+enum PricingOption {
+  free,
+  paid,
+}
+
+class CreateTicketPricingForm extends StatefulWidget {
   const CreateTicketPricingForm({super.key});
 
   @override
+  State<CreateTicketPricingForm> createState() =>
+      _CreateTicketPricingFormState();
+}
+
+class _CreateTicketPricingFormState extends State<CreateTicketPricingForm> {
+  @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
+    final eventId = context.watch<GetEventDetailBloc>().state.maybeWhen(
+          orElse: () => '',
+          fetched: (event) => event.id ?? '',
+        );
     return MultiSliver(
       children: [
         SliverToBoxAdapter(
@@ -32,40 +53,37 @@ class CreateTicketPricingForm extends StatelessWidget {
                 ),
               ),
               SizedBox(height: Spacing.xSmall),
-              Row(
-                children: [
-                  Expanded(
-                    child: PricingOptionItem(
-                      label: t.event.ticketTierSetting.free,
-                      selected: false,
-                    ),
-                  ),
-                  SizedBox(width: Spacing.xSmall),
-                  Expanded(
-                    child: PricingOptionItem(
-                      label: t.event.ticketTierSetting.paid,
-                      selected: true,
-                      leadingBuilder: (color) => ThemeSvgIcon(
-                        color: color,
-                        builder: (filter) => Assets.icons.icCash.svg(
-                          colorFilter: filter,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: Spacing.smMedium),
               const _AddPaymentMethodButton(),
             ],
           ),
         ),
         SizedBox(height: Spacing.smMedium),
-        SliverList.separated(
-          itemCount: 3,
-          itemBuilder: (context, index) => const TicketTierPricingItem(),
-          separatorBuilder: (context, index) =>
-              SizedBox(height: Spacing.smMedium),
+        GetEventCurrenciesBuilder(
+          eventId: eventId,
+          builder: (context, loading, currencies) {
+            if (loading) {
+              return Center(
+                child: Loading.defaultLoading(context),
+              );
+            }
+            return BlocBuilder<ModifyTicketTypeBloc, ModifyTicketTypeState>(
+              builder: (context, state) => SliverList.separated(
+                itemCount: state.prices.length,
+                itemBuilder: (context, index) {
+                  final ticketPrice = state.prices[index];
+                  return TicketTierPricingItem(
+                    ticketPrice: ticketPrice,
+                    currencyInfo: EventTicketUtils.getEventCurrency(
+                      currencies: currencies,
+                      currency: ticketPrice.currency,
+                    ),
+                  );
+                },
+                separatorBuilder: (context, index) =>
+                    SizedBox(height: Spacing.smMedium),
+              ),
+            );
+          },
         ),
       ],
     );
@@ -79,12 +97,36 @@ class _AddPaymentMethodButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+    final getEventDetailBloc = context.watch<GetEventDetailBloc>();
+    final modifyTicketTypeBloc = context.watch<ModifyTicketTypeBloc>();
 
     return InkWell(
       onTap: () {
         BottomSheetUtils.showSnapBottomSheet(
           context,
-          builder: (context) => const AddTicketTierPricingForm(),
+          builder: (innerContext) => MultiBlocProvider(
+            providers: [
+              BlocProvider.value(
+                value: getEventDetailBloc,
+              ),
+              BlocProvider.value(
+                value: modifyTicketTypeBloc,
+              ),
+            ],
+            child: AddTicketTierPricingForm(
+              onConfirm: (newTicketPrice) {
+                Navigator.of(innerContext).pop();
+                context.read<ModifyTicketTypeBloc>().add(
+                      ModifyTicketTypeEvent.onPricesChanged(
+                        prices: [
+                          ...modifyTicketTypeBloc.state.prices,
+                          newTicketPrice,
+                        ],
+                      ),
+                    );
+              },
+            ),
+          ),
         );
       },
       child: DottedBorder(

@@ -1,6 +1,8 @@
 import 'package:app/core/domain/event/entities/event_currency.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/entities/event_ticket.dart';
+import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
+import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/utils/list/unique_list_extension.dart';
 import 'package:collection/collection.dart';
 
@@ -89,7 +91,12 @@ class EventTicketUtils {
   }) {
     if (currency == null) return null;
     return currencies.firstWhereOrNull(
-      (element) => element.currency == currency && element.network == network,
+      (element) {
+        if (network != null) {
+          return element.currency == currency && element.network == network;
+        }
+        return element.currency == currency;
+      },
     );
   }
 
@@ -103,5 +110,25 @@ class EventTicketUtils {
       }
     }
     return networks.unique();
+  }
+
+  static PaymentAccount? findStripePaymentAccount(
+    List<PaymentAccount> paymentAccounts,
+  ) {
+    return paymentAccounts.firstWhereOrNull((payAcc) {
+      return payAcc.provider == PaymentProvider.stripe;
+    });
+  }
+
+  static PaymentAccount? findEthereumPaymentAccount(
+    List<PaymentAccount> paymentAccounts, {
+    required String network,
+    required String currency,
+  }) {
+    return paymentAccounts.firstWhereOrNull((payAcc) {
+      return payAcc.type == PaymentAccountType.ethereum &&
+          (payAcc.accountInfo?.networks?.contains(network) ?? false) &&
+          (payAcc.accountInfo?.currencies?.contains(currency) ?? false);
+    });
   }
 }

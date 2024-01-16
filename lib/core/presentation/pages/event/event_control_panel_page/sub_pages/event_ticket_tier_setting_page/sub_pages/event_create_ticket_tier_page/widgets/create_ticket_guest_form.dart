@@ -1,3 +1,4 @@
+import 'package:app/core/application/event_tickets/modify_ticket_type_bloc/modify_ticket_type_bloc.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
@@ -6,6 +7,7 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 
@@ -34,8 +36,15 @@ class CreateTicketGuestForm extends StatelessWidget {
   }
 }
 
-class GuestLimit extends StatelessWidget {
+class GuestLimit extends StatefulWidget {
   const GuestLimit({super.key});
+
+  @override
+  State<GuestLimit> createState() => _GuestLimitState();
+}
+
+class _GuestLimitState extends State<GuestLimit> {
+  bool limitFieldVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -78,20 +87,37 @@ class GuestLimit extends StatelessWidget {
                 activeToggleColor: colorScheme.onPrimary,
                 height: Sizing.small,
                 width: 42.w,
-                value: true,
-                onToggle: (v) {},
+                value: limitFieldVisible,
+                onToggle: (value) {
+                  setState(() {
+                    limitFieldVisible = value;
+                  });
+                  context.read<ModifyTicketTypeBloc>().add(
+                        ModifyTicketTypeEvent.onGuestsLimitChanged(
+                          limit: null,
+                        ),
+                      );
+                },
               ),
             ],
           ),
         ),
         SizedBox(height: Spacing.smMedium),
-        LemonTextField(
-          inputFormatters: [
-            FilteringTextInputFormatter.digitsOnly,
-          ],
-          textInputType: const TextInputType.numberWithOptions(signed: true),
-          hintText: t.event.ticketTierSetting.limitOfGuestsAllowed,
-        ),
+        if (limitFieldVisible)
+          LemonTextField(
+            inputFormatters: [
+              FilteringTextInputFormatter.digitsOnly,
+            ],
+            onChange: (value) {
+              context.read<ModifyTicketTypeBloc>().add(
+                    ModifyTicketTypeEvent.onGuestsLimitChanged(
+                      limit: double.parse(value),
+                    ),
+                  );
+            },
+            textInputType: const TextInputType.numberWithOptions(signed: true),
+            hintText: t.event.ticketTierSetting.limitOfGuestsAllowed,
+          ),
       ],
     );
   }
@@ -132,15 +158,23 @@ class ActivateTicket extends StatelessWidget {
             ],
           ),
           const Spacer(),
-          FlutterSwitch(
-            inactiveColor: colorScheme.outline,
-            inactiveToggleColor: colorScheme.onSurfaceVariant,
-            activeColor: LemonColor.switchActive,
-            activeToggleColor: colorScheme.onPrimary,
-            height: Sizing.small,
-            width: 42.w,
-            value: true,
-            onToggle: (v) {},
+          BlocBuilder<ModifyTicketTypeBloc, ModifyTicketTypeState>(
+            builder: (context, state) => FlutterSwitch(
+              inactiveColor: colorScheme.outline,
+              inactiveToggleColor: colorScheme.onSurfaceVariant,
+              activeColor: LemonColor.switchActive,
+              activeToggleColor: colorScheme.onPrimary,
+              height: Sizing.small,
+              width: 42.w,
+              value: state.active ?? false,
+              onToggle: (value) {
+                context.read<ModifyTicketTypeBloc>().add(
+                      ModifyTicketTypeEvent.onActiveChanged(
+                        active: value,
+                      ),
+                    );
+              },
+            ),
           ),
         ],
       ),

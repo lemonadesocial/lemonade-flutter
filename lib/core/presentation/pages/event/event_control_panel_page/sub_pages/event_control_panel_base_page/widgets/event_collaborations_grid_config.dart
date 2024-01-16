@@ -75,7 +75,12 @@ class EventCollaborationsGridConfig extends StatelessWidget {
               loading: loading,
             );
           }
-          return const SizedBox();
+          return EventConfigCard(
+            title: eventConfig.title,
+            description: eventConfig.description,
+            icon: eventConfig.icon,
+            onTap: () => onTap(context, eventConfig),
+          );
         },
       ),
     );

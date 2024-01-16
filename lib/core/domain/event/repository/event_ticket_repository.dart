@@ -11,10 +11,10 @@ import 'package:app/core/domain/event/input/get_tickets_input/get_tickets_input.
 import 'package:app/core/domain/event/input/redeem_tickets_input/redeem_tickets_input.dart';
 import 'package:app/core/domain/payment/entities/payment.dart';
 import 'package:app/core/failure.dart';
-import 'package:app/graphql/backend/event/fragment/event_ticket_fragment.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/create_event_ticket_type.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/update_event_ticket_type.graphql.dart';
 import 'package:dartz/dartz.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 
 abstract class EventTicketRepository {
   Future<Either<Failure, EventTicketsPricingInfo>> calculateTicketsPricing({
@@ -43,13 +43,14 @@ abstract class EventTicketRepository {
 
   Future<Either<Failure, List<EventCurrency>>> getEventCurrencies({
     required GetEventCurrenciesInput input,
+    FetchPolicy? fetchPolicy,
   });
 
-  Future<Either<Failure, Fragment$EventTicketType>> createEventTicketType({
+  Future<Either<Failure, EventTicketType>> createEventTicketType({
     required Variables$Mutation$CreateEventTicketType input,
   });
 
-  Future<Either<Failure, Fragment$EventTicketType>> updateEventTicketType({
+  Future<Either<Failure, EventTicketType>> updateEventTicketType({
     required Variables$Mutation$UpdateEventTicketType input,
   });
 }

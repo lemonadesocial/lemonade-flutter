@@ -26,10 +26,11 @@ class Web3Utils {
     BigInt value, {
     required String currency,
     required int decimals,
+    int? decimalDigits = 6,
   }) {
     final amount = getAmountByDecimals(value, decimals: decimals);
     final formatter = NumberFormat.decimalPatternDigits(
-      decimalDigits: 6,
+      decimalDigits: decimalDigits,
     );
 
     return '${formatter.format(amount)} $currency';

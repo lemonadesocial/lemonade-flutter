@@ -1,3 +1,4 @@
+import 'package:app/core/application/event_tickets/modify_ticket_type_bloc/modify_ticket_type_bloc.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -7,6 +8,7 @@ import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CreateTicketBasicInfoForm extends StatelessWidget {
   const CreateTicketBasicInfoForm({super.key});
@@ -46,15 +48,34 @@ class CreateTicketBasicInfoForm extends StatelessWidget {
               ),
             ),
             SizedBox(width: Spacing.xSmall),
-            Expanded(
-              child: LemonTextField(
-                hintText: t.event.ticketTierSetting.ticketName,
+            BlocBuilder<ModifyTicketTypeBloc, ModifyTicketTypeState>(
+              buildWhen: (prev, cur) => prev.title.value != cur.title.value,
+              builder: (context, state) => Expanded(
+                child: LemonTextField(
+                  onChange: (value) {
+                    context.read<ModifyTicketTypeBloc>().add(
+                          ModifyTicketTypeEvent.onTitleChanged(
+                            title: value,
+                          ),
+                        );
+                  },
+                  errorText: state.title.displayError
+                      ?.getMessage(t.event.ticketTierSetting.ticketName),
+                  hintText: t.event.ticketTierSetting.ticketName,
+                ),
               ),
             ),
           ],
         ),
         SizedBox(height: Spacing.smMedium),
         LemonTextField(
+          onChange: (value) {
+            context.read<ModifyTicketTypeBloc>().add(
+                  ModifyTicketTypeEvent.onDescriptionChanged(
+                    description: value,
+                  ),
+                );
+          },
           hintText: t.event.ticketTierSetting.ticketDescription,
         ),
       ],

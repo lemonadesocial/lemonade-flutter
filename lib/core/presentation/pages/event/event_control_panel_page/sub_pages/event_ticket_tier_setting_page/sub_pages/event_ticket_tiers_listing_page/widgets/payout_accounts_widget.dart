@@ -3,9 +3,13 @@ import 'package:app/core/domain/payment/entities/payment_account/payment_account
 import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/presentation/widgets/web3/connect_wallet_button.dart';
+import 'package:app/core/service/wallet/wallet_connect_service.dart';
+import 'package:app/core/utils/modal_utils.dart';
 import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
@@ -13,11 +17,16 @@ import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:collection/collection.dart';
+import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
 
-class PayoutAccountsWidget extends StatelessWidget {
+class PayoutAccountsWidget extends StatefulWidget {
   const PayoutAccountsWidget({super.key});
 
+  @override
+  State<PayoutAccountsWidget> createState() => _PayoutAccountsWidgetState();
+}
+
+class _PayoutAccountsWidgetState extends State<PayoutAccountsWidget> {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
@@ -30,10 +39,7 @@ class PayoutAccountsWidget extends StatelessWidget {
     final hasStripePaymentAccount = eventPaymentAccountsExpanded!.any(
       (item) => item.provider == PaymentProvider.stripe,
     );
-    final ethereumPaymentAccount =
-        eventPaymentAccountsExpanded.firstWhereOrNull(
-      (item) => item.type == PaymentAccountType.ethereum,
-    );
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -68,6 +74,13 @@ class PayoutAccountsWidget extends StatelessWidget {
               );
             }
             return LinearGradientButton(
+              onTap: () => showComingSoonDialog(context),
+              // TODO:
+              // onTap: () => Navigator.of(context).push(
+              //   MaterialPageRoute(
+              //     builder: (context) => const StripeOauthPage(),
+              //   ),
+              // ),
               height: Sizing.medium,
               radius: BorderRadius.circular(LemonRadius.small * 2),
               label: t.common.actions.connect,
@@ -75,35 +88,58 @@ class PayoutAccountsWidget extends StatelessWidget {
           },
         ),
         SizedBox(height: Spacing.xSmall),
-        PayoutAccountItem(
-          title: t.event.ticketTierSetting.crypto,
-          subTitle: ethereumPaymentAccount != null
-              ? Web3Utils.formatIdentifier(
-                  ethereumPaymentAccount.accountInfo?.address ?? '',
-                )
-              : t.common.actions.connectWallet,
-          icon: ThemeSvgIcon(
-            color: colorScheme.onSecondary,
-            builder: (filter) => Assets.icons.icWallet.svg(
-              colorFilter: filter,
-            ),
-          ),
-          buttonBuilder: () {
-            if (ethereumPaymentAccount != null) {
-              return InkWell(
-                onTap: () {},
-                child: ThemeSvgIcon(
-                  color: colorScheme.onSurfaceVariant,
-                  builder: (filter) => Assets.icons.icForward.svg(
-                    colorFilter: filter,
-                  ),
+        FutureBuilder<SessionData?>(
+          future: getIt<WalletConnectService>().getActiveSession(),
+          builder: (context, walletConnectSnapshot) {
+            final activeSession = walletConnectSnapshot.data;
+            final sessionAccount =
+                activeSession?.namespaces.entries.first.value.accounts.first;
+            return PayoutAccountItem(
+              title: t.event.ticketTierSetting.crypto,
+              subTitle: activeSession != null
+                  ? Web3Utils.formatIdentifier(
+                      NamespaceUtils.getAccount(sessionAccount ?? ''),
+                    )
+                  : t.common.actions.connectWallet,
+              icon: ThemeSvgIcon(
+                color: colorScheme.onSecondary,
+                builder: (filter) => Assets.icons.icWallet.svg(
+                  colorFilter: filter,
                 ),
-              );
-            }
-            return LinearGradientButton(
-              height: Sizing.medium,
-              radius: BorderRadius.circular(LemonRadius.small * 2),
-              label: t.common.actions.connect,
+              ),
+              buttonBuilder: () {
+                if (activeSession != null) {
+                  return InkWell(
+                    onTap: () {},
+                    child: ThemeSvgIcon(
+                      color: colorScheme.onSurfaceVariant,
+                      builder: (filter) => Assets.icons.icForward.svg(
+                        colorFilter: filter,
+                      ),
+                    ),
+                  );
+                }
+
+                return ConnectWalletButton(
+                  onSelect: (walletApp) {
+                    getIt<WalletConnectService>()
+                        .connectWallet(walletApp: walletApp)
+                        .then(
+                      (success) {
+                        if (success) {
+                          setState(() {});
+                        }
+                      },
+                    );
+                  },
+                  builder: (showOptions) => LinearGradientButton(
+                    onTap: () => showOptions(context),
+                    height: Sizing.medium,
+                    radius: BorderRadius.circular(LemonRadius.small * 2),
+                    label: t.common.actions.connect,
+                  ),
+                );
+              },
             );
           },
         ),

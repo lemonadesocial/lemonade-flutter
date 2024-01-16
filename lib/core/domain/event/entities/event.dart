@@ -31,6 +31,7 @@ class Event {
     this.offers,
     this.eventTicketTypes,
     this.address,
+    this.paymentAccountsNew,
     this.paymentAccountsExpanded,
     this.guestLimit,
     this.guestLimitPer,
@@ -85,6 +86,7 @@ class Event {
           .map((item) => EventTicketType.fromDto(item))
           .toList(),
       address: dto.address != null ? Address.fromDto(dto.address!) : null,
+      paymentAccountsNew: dto.paymentAccountsNew ?? [],
       paymentAccountsExpanded: List.from(dto.paymentAccountsExpanded ?? [])
           .map((item) => PaymentAccount.fromDto(item))
           .toList(),
@@ -119,6 +121,7 @@ class Event {
   List<EventOffer>? offers;
   List<EventTicketType>? eventTicketTypes;
   Address? address;
+  List<String>? paymentAccountsNew;
   List<PaymentAccount>? paymentAccountsExpanded;
   double? guestLimit;
   double? guestLimitPer;
