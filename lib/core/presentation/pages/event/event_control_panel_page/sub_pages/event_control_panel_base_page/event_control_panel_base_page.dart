@@ -4,6 +4,7 @@ import 'package:app/core/application/event/get_event_detail_bloc/get_event_detai
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/create_event_config_grid.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_control_panel_base_page/widgets/event_collaborations_grid_config.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_control_panel_base_page/widgets/event_tickets_grid_config.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
@@ -54,7 +55,7 @@ class EventControlPanelBasePage extends StatelessWidget {
               },
               child: SafeArea(
                 child: CustomScrollView(
-                  physics: const BouncingScrollPhysics(),
+                  // physics: const BouncingScrollPhysics(),
                   slivers: [
                     SliverPadding(
                       padding: EdgeInsets.only(
@@ -75,6 +76,26 @@ class EventControlPanelBasePage extends StatelessWidget {
                         horizontal: Spacing.smMedium,
                       ),
                       sliver: CreateEventConfigGrid(event: event),
+                    ),
+                    SliverPadding(
+                      padding: EdgeInsets.only(
+                        left: Spacing.smMedium,
+                        right: Spacing.smMedium,
+                        top: Spacing.xLarge,
+                        bottom: Spacing.xSmall,
+                      ),
+                      sliver: SliverToBoxAdapter(
+                        child: Text(
+                          t.event.configuration.tickets,
+                          style: Typo.medium.copyWith(),
+                        ),
+                      ),
+                    ),
+                    SliverPadding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: Spacing.smMedium,
+                      ),
+                      sliver: EventTicketsGridConfig(event: event),
                     ),
                     SliverPadding(
                       padding: EdgeInsets.only(

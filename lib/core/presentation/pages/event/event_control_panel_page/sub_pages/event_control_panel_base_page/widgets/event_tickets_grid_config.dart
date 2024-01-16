@@ -12,9 +12,9 @@ import 'package:flutter_vibrate/flutter_vibrate.dart';
 
 enum EventPrivacy { public, private }
 
-class EventCollaborationsGridConfig extends StatelessWidget {
+class EventTicketsGridConfig extends StatelessWidget {
   final Event? event;
-  const EventCollaborationsGridConfig({super.key, this.event});
+  const EventTicketsGridConfig({super.key, this.event});
 
   onTap(
     BuildContext context,
@@ -23,11 +23,8 @@ class EventCollaborationsGridConfig extends StatelessWidget {
     Vibrate.feedback(FeedbackType.light);
     final eventConfigType = eventConfig.type;
     switch (eventConfigType) {
-      case EventConfigurationType.coHosts:
-        AutoRouter.of(context).navigate(const EventCohostsSettingRoute());
-        break;
-      case EventConfigurationType.speakers:
-        AutoRouter.of(context).navigate(const EventSpeakersRoute());
+      case EventConfigurationType.ticketTiers:
+        AutoRouter.of(context).navigate(const EventTicketTierSettingRoute());
         break;
       default:
         showComingSoonDialog(context);
@@ -36,8 +33,7 @@ class EventCollaborationsGridConfig extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final eventConfigs =
-        EventConfiguration.collaborationsEventConfiguations(context);
+    final eventConfigs = EventConfiguration.ticketsEventConfiguations(context);
     return SliverGrid(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
@@ -75,7 +71,13 @@ class EventCollaborationsGridConfig extends StatelessWidget {
               loading: loading,
             );
           }
-          return const SizedBox();
+          return EventConfigCard(
+            title: eventConfig.title,
+            description: eventConfig.description,
+            icon: eventConfig.icon,
+            onTap: () => onTap(context, eventConfig),
+            loading: false,
+          );
         },
       ),
     );
