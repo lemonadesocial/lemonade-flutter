@@ -44,7 +44,8 @@ class _RootPageViewState extends State<RootPage> {
       supportedOS: ['android', 'ios'],
     );
     final primaryColor = Theme.of(context).colorScheme.primary;
-
+    final authState = BlocProvider.of<AuthBloc>(context).state;
+    final isAuthenticated = authState is AuthStateAuthenticated;
     return PaymentListener(
       child: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
@@ -77,6 +78,8 @@ class _RootPageViewState extends State<RootPage> {
                 AutoTabsScaffold(
                   extendBody: true,
                   scaffoldKey: DrawerUtils.drawerGlobalKey,
+                  drawerEnableOpenDragGesture:
+                      isAuthenticated == true ? true : false,
                   backgroundColor: primaryColor,
                   routes: [
                     const HomeRoute(),
