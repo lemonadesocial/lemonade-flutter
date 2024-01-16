@@ -98,7 +98,7 @@ class SettingPageView extends StatelessWidget {
                       return Assets.icons.icBank.svg(colorFilter: filter);
                     },
                   ),
-                  featureAvailable: false,
+                  featureAvailable: true,
                   onTap: () => showComingSoonDialog(context),
                 ),
                 SizedBox(height: Spacing.xSmall),
