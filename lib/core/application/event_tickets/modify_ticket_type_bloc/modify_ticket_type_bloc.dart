@@ -79,11 +79,10 @@ class ModifyTicketTypeBloc
 
   ModifyTicketTypeState _validate(ModifyTicketTypeState state) {
     final isValid = Formz.validate([
-      state.title,
-      state.description,
-    ]);
-    // &&
-    // state.prices.isNotEmpty;
+          state.title,
+          state.description,
+        ]) &&
+        state.prices.isNotEmpty;
 
     return state.copyWith(isValid: isValid);
   }
