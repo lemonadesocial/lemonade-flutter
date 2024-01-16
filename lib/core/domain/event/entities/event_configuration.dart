@@ -19,6 +19,7 @@ enum EventConfigurationType {
   coHosts,
   speakers,
   ticketTiers,
+  promotions
 }
 
 class EventConfiguration {
@@ -86,7 +87,6 @@ class EventConfiguration {
               fetched: (eventCohostRequests) => eventCohostRequests,
               orElse: () => [],
             );
-    final colorScheme = Theme.of(context).colorScheme;
     final speakerUsers = context.watch<GetEventDetailBloc>().state.maybeWhen(
           fetched: (eventDetail) => eventDetail.speakerUsers,
           orElse: () => null,
@@ -109,19 +109,6 @@ class EventConfiguration {
               )}'
             : t.common.actions.add,
         icon: const Icon(Icons.speaker),
-      ),
-      EventConfiguration(
-        type: EventConfigurationType.ticketTiers,
-        title: t.event.ticketTier,
-        description: "",
-        icon: Center(
-          child: Assets.icons.icTicket.svg(
-            colorFilter: ColorFilter.mode(
-              colorScheme.onPrimary,
-              BlendMode.srcIn,
-            ),
-          ),
-        ),
       ),
     ];
     return eventConfigs;
@@ -165,5 +152,33 @@ class EventConfiguration {
       }
     }
     return result;
+  }
+
+  static List<EventConfiguration> ticketsEventConfiguations(
+    BuildContext context,
+  ) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final List<EventConfiguration> eventConfigs = [
+      EventConfiguration(
+        type: EventConfigurationType.ticketTiers,
+        title: t.event.ticketTier,
+        description: "",
+        icon: Center(
+          child: Assets.icons.icTicket.svg(
+            colorFilter: ColorFilter.mode(
+              colorScheme.onPrimary,
+              BlendMode.srcIn,
+            ),
+          ),
+        ),
+      ),
+      EventConfiguration(
+        type: EventConfigurationType.promotions,
+        title: t.event.configuration.promitions,
+        description: "",
+        icon: const Center(child: Icon(Icons.star_border_outlined)),
+      ),
+    ];
+    return eventConfigs;
   }
 }

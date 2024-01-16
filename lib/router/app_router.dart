@@ -188,17 +188,23 @@ final eventDetailRoutes = AutoRoute(
           page: EventAddCohostsRoute.page,
         ),
         AutoRoute(
-          page: EventTicketTiersListingRoute.page,
-        ),
-        AutoRoute(
-          page: EventCreateTicketTierRoute.page,
-        ),
-        AutoRoute(
           page: EventSpeakersRoute.page,
         ),
         AutoRoute(
           page: EventAddSpeakersRoute.page,
         ),
+        AutoRoute(
+          page: EventTicketTierSettingRoute.page,
+          children: [
+            AutoRoute(
+              initial: true,
+              page: EventTicketTiersListingRoute.page,
+            ),
+            AutoRoute(
+              page: EventCreateTicketTierRoute.page,
+            ),
+          ],
+        )
       ],
     ),
   ],
