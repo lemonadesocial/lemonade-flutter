@@ -71,7 +71,7 @@ class EventCreateTicketTierPagerView extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
-    final eventId = context.read<GetEventDetailBloc>().state.maybeWhen(
+    final eventId = context.watch<GetEventDetailBloc>().state.maybeWhen(
           fetched: (event) => event.id ?? '',
           orElse: () => '',
         );

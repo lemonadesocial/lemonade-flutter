@@ -231,56 +231,64 @@ class _AddTicketTierPricingFormViewState
                 color: LemonColor.atomicBlack,
                 padding: EdgeInsets.all(Spacing.smMedium),
                 child: SafeArea(
-                  child: BlocBuilder<ModifyTicketPriceBloc,
-                      ModifyTicketPriceState>(
-                    builder: (context, state) {
-                      final isConnectingPaymentAccount = context
-                          .read<ConnectPaymentAccountBloc>()
-                          .state
-                          .maybeWhen(
-                            orElse: () => false,
-                            checkingPaymentAccount: () => true,
-                          );
-                      final isValid = pricingMethod == TicketPricingMethod.fiat
-                          ? state.isValid
-                          : state.isValid &&
-                              state.network != null &&
-                              walletState.activeSession != null;
-                      return Opacity(
-                        opacity: isValid ? 1 : 0.5,
-                        child: LinearGradientButton(
-                          onTap: () {
-                            final currency = state.currency;
-                            final selectedChain = state.network;
-                            final userWalletAddress = NamespaceUtils.getAccount(
-                              walletState.activeSession?.namespaces.entries
-                                      .first.value.accounts.first ??
-                                  '',
-                            );
-                            if (!isValid || isConnectingPaymentAccount) return;
-                            rootContext.read<ConnectPaymentAccountBloc>().add(
-                                  ConnectPaymentAccountEvent
-                                      .checkEventHasPaymentAccount(
-                                    currency: currency!,
-                                    selectedChain: selectedChain,
-                                    userWalletAddress: pricingMethod ==
-                                            TicketPricingMethod.fiat
-                                        ? null
-                                        : userWalletAddress,
-                                  ),
-                                );
-                          },
-                          height: 42.w,
-                          radius: BorderRadius.circular(LemonRadius.small * 2),
-                          mode: GradientButtonMode.lavenderMode,
-                          label: t.common.confirm,
-                          textStyle: Typo.medium.copyWith(
-                            fontWeight: FontWeight.w600,
+                  child: BlocBuilder<ConnectPaymentAccountBloc,
+                      ConnectPaymentAccountState>(
+                    builder: (context, connectPaymentAccountState) =>
+                        BlocBuilder<ModifyTicketPriceBloc,
+                            ModifyTicketPriceState>(
+                      builder: (context, modifyTicketPriceState) {
+                        final isConnectingPaymentAccount =
+                            connectPaymentAccountState.maybeWhen(
+                          orElse: () => false,
+                          checkingPaymentAccount: () => true,
+                        );
+                        final isValid =
+                            pricingMethod == TicketPricingMethod.fiat
+                                ? modifyTicketPriceState.isValid
+                                : modifyTicketPriceState.isValid &&
+                                    modifyTicketPriceState.network != null &&
+                                    walletState.activeSession != null;
+                        return Opacity(
+                          opacity: isValid ? 1 : 0.5,
+                          child: LinearGradientButton(
+                            onTap: () {
+                              final currency = modifyTicketPriceState.currency;
+                              final selectedChain =
+                                  modifyTicketPriceState.network;
+                              final userWalletAddress =
+                                  NamespaceUtils.getAccount(
+                                walletState.activeSession?.namespaces.entries
+                                        .first.value.accounts.first ??
+                                    '',
+                              );
+                              if (!isValid || isConnectingPaymentAccount) {
+                                return;
+                              }
+                              rootContext.read<ConnectPaymentAccountBloc>().add(
+                                    ConnectPaymentAccountEvent
+                                        .checkEventHasPaymentAccount(
+                                      currency: currency!,
+                                      selectedChain: selectedChain,
+                                      userWalletAddress: pricingMethod ==
+                                              TicketPricingMethod.fiat
+                                          ? null
+                                          : userWalletAddress,
+                                    ),
+                                  );
+                            },
+                            height: 42.w,
+                            radius:
+                                BorderRadius.circular(LemonRadius.small * 2),
+                            mode: GradientButtonMode.lavenderMode,
+                            label: t.common.confirm,
+                            textStyle: Typo.medium.copyWith(
+                              fontWeight: FontWeight.w600,
+                            ),
+                            loadingWhen: isConnectingPaymentAccount,
                           ),
-                          loadingWhen: isConnectingPaymentAccount,
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   ),
                 ),
               );

@@ -164,11 +164,13 @@ class EventTicketRepositoryImpl implements EventTicketRepository {
   @override
   Future<Either<Failure, List<EventCurrency>>> getEventCurrencies({
     required GetEventCurrenciesInput input,
+    FetchPolicy? fetchPolicy,
   }) async {
     final result = await _client.query(
       QueryOptions(
         document: getEventCurrenciesQuery,
         variables: input.toJson(),
+        fetchPolicy: fetchPolicy,
         parserFn: (data) => List.from(data['getEventCurrencies'] ?? [])
             .map(
               (item) => EventCurrency.fromDto(

@@ -1,11 +1,11 @@
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
 import 'package:app/core/domain/payment/payment_enums.dart';
-import 'package:app/core/presentation/pages/stripe/stripe_oauth_page/stripe_oauth_page.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/presentation/widgets/web3/connect_wallet_button.dart';
 import 'package:app/core/service/wallet/wallet_connect_service.dart';
+import 'package:app/core/utils/modal_utils.dart';
 import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -74,10 +74,13 @@ class _PayoutAccountsWidgetState extends State<PayoutAccountsWidget> {
               );
             }
             return LinearGradientButton(
-              onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(
-                    builder: (context) => const StripeOauthPage()),
-              ),
+              onTap: () => showComingSoonDialog(context),
+              // TODO:
+              // onTap: () => Navigator.of(context).push(
+              //   MaterialPageRoute(
+              //     builder: (context) => const StripeOauthPage(),
+              //   ),
+              // ),
               height: Sizing.medium,
               radius: BorderRadius.circular(LemonRadius.small * 2),
               label: t.common.actions.connect,

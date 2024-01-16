@@ -5,11 +5,15 @@ import 'package:app/core/failure.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 
 class GetEventCurrenciesBuilder extends StatelessWidget {
   final String eventId;
-  final Widget Function(BuildContext context, List<EventCurrency> currencies)
-      builder;
+  final Widget Function(
+    BuildContext context,
+    bool loading,
+    List<EventCurrency> currencies,
+  ) builder;
   const GetEventCurrenciesBuilder({
     super.key,
     required this.eventId,
@@ -21,10 +25,12 @@ class GetEventCurrenciesBuilder extends StatelessWidget {
     return FutureBuilder<Either<Failure, List<EventCurrency>>>(
       future: getIt<EventTicketRepository>().getEventCurrencies(
         input: GetEventCurrenciesInput(id: eventId, used: false),
+        fetchPolicy: FetchPolicy.networkOnly,
       ),
       builder: (context, snapshot) {
         final currencies = snapshot.data?.getOrElse(() => []) ?? [];
-        return builder(context, currencies);
+        final isLoading = snapshot.connectionState == ConnectionState.waiting;
+        return builder(context, isLoading, currencies);
       },
     );
   }

@@ -3,6 +3,7 @@ import 'package:app/core/application/event_tickets/modify_ticket_type_bloc/modif
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/add_ticket_tier_pricing_form.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/get_event_currencies_builder.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/ticket_tier_pricing_item.dart';
+import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/bottomsheet_utils.dart';
 import 'package:app/core/utils/event_tickets_utils.dart';
@@ -35,7 +36,7 @@ class _CreateTicketPricingFormState extends State<CreateTicketPricingForm> {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final eventId = context.read<GetEventDetailBloc>().state.maybeWhen(
+    final eventId = context.watch<GetEventDetailBloc>().state.maybeWhen(
           orElse: () => '',
           fetched: (event) => event.id ?? '',
         );
@@ -52,31 +53,6 @@ class _CreateTicketPricingFormState extends State<CreateTicketPricingForm> {
                 ),
               ),
               SizedBox(height: Spacing.xSmall),
-              // TODO: Web version dont need this
-              // Row(
-              //   children: [
-              //     Expanded(
-              //       child: PricingOptionItem(
-              //         label: t.event.ticketTierSetting.free,
-              //         selected: false,
-              //       ),
-              //     ),
-              //     SizedBox(width: Spacing.xSmall),
-              //     Expanded(
-              //       child: PricingOptionItem(
-              //         label: t.event.ticketTierSetting.paid,
-              //         selected: true,
-              //         leadingBuilder: (color) => ThemeSvgIcon(
-              //           color: color,
-              //           builder: (filter) => Assets.icons.icCash.svg(
-              //             colorFilter: filter,
-              //           ),
-              //         ),
-              //       ),
-              //     ),
-              //   ],
-              // ),
-              // SizedBox(height: Spacing.smMedium),
               const _AddPaymentMethodButton(),
             ],
           ),
@@ -84,24 +60,30 @@ class _CreateTicketPricingFormState extends State<CreateTicketPricingForm> {
         SizedBox(height: Spacing.smMedium),
         GetEventCurrenciesBuilder(
           eventId: eventId,
-          builder: (context, currencies) =>
-              BlocBuilder<ModifyTicketTypeBloc, ModifyTicketTypeState>(
-            builder: (context, state) => SliverList.separated(
-              itemCount: state.prices.length,
-              itemBuilder: (context, index) {
-                final ticketPrice = state.prices[index];
-                return TicketTierPricingItem(
-                  ticketPrice: ticketPrice,
-                  currencyInfo: EventTicketUtils.getEventCurrency(
-                    currencies: currencies,
-                    currency: ticketPrice.currency,
-                  ),
-                );
-              },
-              separatorBuilder: (context, index) =>
-                  SizedBox(height: Spacing.smMedium),
-            ),
-          ),
+          builder: (context, loading, currencies) {
+            if (loading) {
+              return Center(
+                child: Loading.defaultLoading(context),
+              );
+            }
+            return BlocBuilder<ModifyTicketTypeBloc, ModifyTicketTypeState>(
+              builder: (context, state) => SliverList.separated(
+                itemCount: state.prices.length,
+                itemBuilder: (context, index) {
+                  final ticketPrice = state.prices[index];
+                  return TicketTierPricingItem(
+                    ticketPrice: ticketPrice,
+                    currencyInfo: EventTicketUtils.getEventCurrency(
+                      currencies: currencies,
+                      currency: ticketPrice.currency,
+                    ),
+                  );
+                },
+                separatorBuilder: (context, index) =>
+                    SizedBox(height: Spacing.smMedium),
+              ),
+            );
+          },
         ),
       ],
     );
