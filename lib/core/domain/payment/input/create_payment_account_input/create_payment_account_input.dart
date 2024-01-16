@@ -22,9 +22,12 @@ class CreatePaymentAccountInput with _$CreatePaymentAccountInput {
 class AccountInfoInput with _$AccountInfoInput {
   @JsonSerializable(explicitToJson: true, includeIfNull: false)
   factory AccountInfoInput({
+    // Common
     @Default([]) List<String>? currencies,
     // Blockchain Account
     String? address,
+    // Ethereum only
+    @JsonKey(name: 'networks') List<String>? ethereumPaymentAccountNetworks,
     // Safe Account extends Blockchain Account
     String? network,
     List<String>? owners,

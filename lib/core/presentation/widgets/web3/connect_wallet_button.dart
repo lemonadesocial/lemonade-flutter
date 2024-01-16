@@ -10,9 +10,12 @@ import 'package:flutter/material.dart';
 
 class ConnectWalletButton extends StatelessWidget {
   final Function(SupportedWalletApp walletApp)? onSelect;
+  final Function(void Function(BuildContext context) showOptions)? builder;
+
   const ConnectWalletButton({
     super.key,
     this.onSelect,
+    this.builder,
   });
 
   void showSelectWalletPopup(BuildContext context) {
@@ -31,6 +34,9 @@ class ConnectWalletButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
+    if (builder != null) {
+      return builder?.call(showSelectWalletPopup);
+    }
     return LinearGradientButton(
       onTap: () => showSelectWalletPopup(context),
       height: Sizing.large,

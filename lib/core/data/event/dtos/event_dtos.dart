@@ -40,6 +40,7 @@ class EventDto with _$EventDto {
     List<EventTicketTypeDto>? eventTicketTypes,
     List<EventOfferDto>? offers,
     AddressDto? address,
+    @JsonKey(name: 'payment_accounts_new') List<String>? paymentAccountsNew,
     @JsonKey(name: 'payment_accounts_expanded')
     List<PaymentAccountDto>? paymentAccountsExpanded,
     @JsonKey(name: 'guest_limit') double? guestLimit,

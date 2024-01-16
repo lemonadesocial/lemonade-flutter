@@ -1,5 +1,8 @@
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/application/event_tickets/modify_ticket_price_bloc/modify_ticket_price_bloc.dart';
+import 'package:app/core/application/payment/connect_payment_account_bloc/connect_payment_account_bloc.dart';
+import 'package:app/core/application/wallet/wallet_bloc/wallet_bloc.dart';
+import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/input/ticket_type_input/ticket_type_input.dart';
 import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
 import 'package:app/core/domain/payment/payment_enums.dart';
@@ -9,6 +12,7 @@ import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.
 import 'package:app/core/presentation/widgets/common/bottomsheet/lemon_snap_bottom_sheet_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
+import 'package:app/core/presentation/widgets/web3/connect_wallet_button.dart';
 import 'package:app/core/utils/bottomsheet_utils.dart';
 import 'package:app/core/utils/number_utils.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -24,6 +28,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:collection/collection.dart';
+import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
 
 enum TicketPricingMethod {
   fiat,
@@ -40,8 +45,27 @@ class AddTicketTierPricingForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => ModifyTicketPriceBloc(),
+    final event = context.watch<GetEventDetailBloc>().state.maybeWhen(
+          orElse: () => null,
+          fetched: (eventDetail) => eventDetail,
+        );
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => ModifyTicketPriceBloc(),
+        ),
+        BlocProvider(
+          create: (context) => ConnectPaymentAccountBloc(
+            event: event ?? Event(),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => WalletBloc()
+            ..add(
+              const WalletEvent.getActiveSessions(),
+            ),
+        ),
+      ],
       child: AddTicketTierPricingFormView(
         onConfirm: onConfirm,
       ),
@@ -68,148 +92,199 @@ class _AddTicketTierPricingFormViewState
 
   @override
   Widget build(BuildContext context) {
+    final rootContext = context;
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
     final event = context.watch<GetEventDetailBloc>().state.maybeWhen(
           fetched: (eventDetail) => eventDetail,
           orElse: () => null,
         );
-    //TODO: Will assume that we already connect stripe and erc20 payment account with the event
-    // In future, if we not connect yet, then will connect and refresh
     final stripePaymentAccount =
         event?.paymentAccountsExpanded?.firstWhereOrNull(
       (item) => item.provider == PaymentProvider.stripe,
     );
 
-    return GestureDetector(
-      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-      child: LemonSnapBottomSheet(
-        defaultSnapSize: 1,
-        backgroundColor: LemonColor.atomicBlack,
-        resizeToAvoidBottomInset: false,
-        builder: (controller) => Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            LemonAppBar(
-              title: "",
-              backgroundColor: LemonColor.atomicBlack,
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    t.event.ticketTierSetting.paymentMethod,
-                    style: Typo.extraLarge.copyWith(
-                      fontWeight: FontWeight.w800,
-                      fontFamily: FontFamily.nohemiVariable,
-                    ),
-                  ),
-                  SizedBox(height: 2.w),
-                  Text(
-                    t.event.ticketTierSetting.howUserPay,
-                    style: Typo.mediumPlus.copyWith(
-                      color: colorScheme.onSecondary,
-                    ),
-                  ),
-                  SizedBox(height: Spacing.large),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _PricingMethodItem(
-                          onTap: () {
-                            setState(() {
-                              pricingMethod = TicketPricingMethod.fiat;
-                            });
-                          },
-                          selected: pricingMethod == TicketPricingMethod.fiat,
-                          label: t.event.ticketTierSetting.creditDebit,
-                          leadingBuilder: (color) =>
-                              Assets.icons.icCreditCard.svg(
-                            height: Sizing.xSmall,
-                            width: Sizing.xSmall,
-                            colorFilter:
-                                ColorFilter.mode(color, BlendMode.srcIn),
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: Spacing.xSmall),
-                      Expanded(
-                        child: _PricingMethodItem(
-                          onTap: () {
-                            setState(() {
-                              pricingMethod = TicketPricingMethod.erc20;
-                            });
-                          },
-                          selected: pricingMethod == TicketPricingMethod.erc20,
-                          label: t.event.ticketTierSetting.erc20,
-                          leadingBuilder: (color) => Assets.icons.icToken.svg(
-                            colorFilter:
-                                ColorFilter.mode(color, BlendMode.srcIn),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: Spacing.large),
-                  if (pricingMethod == TicketPricingMethod.fiat)
-                    FiatPricingMethod(
-                      stripePaymentAccount: stripePaymentAccount,
-                    ),
-                  if (pricingMethod == TicketPricingMethod.erc20)
-                    const ERC20PricingMethod(),
-                ],
+    return BlocListener<ConnectPaymentAccountBloc, ConnectPaymentAccountState>(
+      listener: (context, connectPaymentAccState) {
+        connectPaymentAccState.maybeWhen(
+          orElse: () => null,
+          paymentAccountConnected: (updatedEvent) {
+            if (updatedEvent != null) {
+              context.read<GetEventDetailBloc>().add(
+                    GetEventDetailEvent.replace(event: updatedEvent),
+                  );
+            }
+            final modifyPriceBlocState =
+                context.read<ModifyTicketPriceBloc>().state;
+            final decimals = pricingMethod == TicketPricingMethod.fiat
+                ? (stripePaymentAccount
+                        ?.accountInfo
+                        ?.currencyMap?[modifyPriceBlocState.currency]
+                        ?.decimals ??
+                    0)
+                : modifyPriceBlocState.network?.tokens
+                        ?.firstWhereOrNull(
+                          (element) =>
+                              element.symbol == modifyPriceBlocState.currency,
+                        )
+                        ?.decimals ??
+                    0;
+            final ticketPricingInput =
+                context.read<ModifyTicketPriceBloc>().getResult(
+                      modifyPriceBlocState,
+                      decimals: decimals.toInt(),
+                    );
+            if (ticketPricingInput == null) {
+              return;
+            }
+            widget.onConfirm?.call(ticketPricingInput);
+          },
+        );
+      },
+      child: GestureDetector(
+        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+        child: LemonSnapBottomSheet(
+          defaultSnapSize: 1,
+          backgroundColor: LemonColor.atomicBlack,
+          resizeToAvoidBottomInset: false,
+          builder: (controller) => Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              LemonAppBar(
+                title: "",
+                backgroundColor: LemonColor.atomicBlack,
               ),
-            ),
-          ],
-        ),
-        footerBuilder: (context) => Container(
-          color: LemonColor.atomicBlack,
-          padding: EdgeInsets.all(Spacing.smMedium),
-          child: SafeArea(
-            child: BlocBuilder<ModifyTicketPriceBloc, ModifyTicketPriceState>(
-              builder: (context, state) {
-                final isValid = pricingMethod == TicketPricingMethod.fiat
-                    ? state.isValid
-                    : state.isValid && state.network != null;
-                return Opacity(
-                  opacity: isValid ? 1 : 0.5,
-                  child: LinearGradientButton(
-                    onTap: () {
-                      if (!isValid) return;
-                      final decimals = pricingMethod == TicketPricingMethod.fiat
-                          ? (stripePaymentAccount?.accountInfo
-                                  ?.currencyMap?[state.currency]?.decimals ??
-                              0)
-                          : state.network?.tokens
-                                  ?.firstWhereOrNull(
-                                    (element) =>
-                                        element.symbol == state.currency,
-                                  )
-                                  ?.decimals ??
-                              0;
-                      final ticketPricingInput =
-                          context.read<ModifyTicketPriceBloc>().getResult(
-                                state,
-                                decimals: decimals.toInt(),
-                              );
-                      if (ticketPricingInput == null) {
-                        return;
-                      }
-                      widget.onConfirm?.call(ticketPricingInput);
-                    },
-                    height: 42.w,
-                    radius: BorderRadius.circular(LemonRadius.small * 2),
-                    mode: GradientButtonMode.lavenderMode,
-                    label: t.common.confirm,
-                    textStyle: Typo.medium.copyWith(
-                      fontWeight: FontWeight.w600,
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      t.event.ticketTierSetting.paymentMethod,
+                      style: Typo.extraLarge.copyWith(
+                        fontWeight: FontWeight.w800,
+                        fontFamily: FontFamily.nohemiVariable,
+                      ),
                     ),
+                    SizedBox(height: 2.w),
+                    Text(
+                      t.event.ticketTierSetting.howUserPay,
+                      style: Typo.mediumPlus.copyWith(
+                        color: colorScheme.onSecondary,
+                      ),
+                    ),
+                    SizedBox(height: Spacing.large),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _PricingMethodItem(
+                            onTap: () {
+                              setState(() {
+                                pricingMethod = TicketPricingMethod.fiat;
+                              });
+                            },
+                            selected: pricingMethod == TicketPricingMethod.fiat,
+                            label: t.event.ticketTierSetting.creditDebit,
+                            leadingBuilder: (color) =>
+                                Assets.icons.icCreditCard.svg(
+                              height: Sizing.xSmall,
+                              width: Sizing.xSmall,
+                              colorFilter:
+                                  ColorFilter.mode(color, BlendMode.srcIn),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: Spacing.xSmall),
+                        Expanded(
+                          child: _PricingMethodItem(
+                            onTap: () {
+                              setState(() {
+                                pricingMethod = TicketPricingMethod.erc20;
+                              });
+                            },
+                            selected:
+                                pricingMethod == TicketPricingMethod.erc20,
+                            label: t.event.ticketTierSetting.erc20,
+                            leadingBuilder: (color) => Assets.icons.icToken.svg(
+                              colorFilter:
+                                  ColorFilter.mode(color, BlendMode.srcIn),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: Spacing.large),
+                    if (pricingMethod == TicketPricingMethod.fiat)
+                      FiatPricingMethod(
+                        stripePaymentAccount: stripePaymentAccount,
+                      ),
+                    if (pricingMethod == TicketPricingMethod.erc20)
+                      const ERC20PricingMethod(),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          footerBuilder: () => BlocBuilder<WalletBloc, WalletState>(
+            builder: (context, walletState) {
+              return Container(
+                color: LemonColor.atomicBlack,
+                padding: EdgeInsets.all(Spacing.smMedium),
+                child: SafeArea(
+                  child: BlocBuilder<ModifyTicketPriceBloc,
+                      ModifyTicketPriceState>(
+                    builder: (context, state) {
+                      final isConnectingPaymentAccount = context
+                          .read<ConnectPaymentAccountBloc>()
+                          .state
+                          .maybeWhen(
+                            orElse: () => false,
+                            checkingPaymentAccount: () => true,
+                          );
+                      final isValid = pricingMethod == TicketPricingMethod.fiat
+                          ? state.isValid
+                          : state.isValid &&
+                              state.network != null &&
+                              walletState.activeSession != null;
+                      return Opacity(
+                        opacity: isValid ? 1 : 0.5,
+                        child: LinearGradientButton(
+                          onTap: () {
+                            final currency = state.currency;
+                            final selectedChain = state.network;
+                            final userWalletAddress = NamespaceUtils.getAccount(
+                              walletState.activeSession?.namespaces.entries
+                                      .first.value.accounts.first ??
+                                  '',
+                            );
+                            if (!isValid || isConnectingPaymentAccount) return;
+                            rootContext.read<ConnectPaymentAccountBloc>().add(
+                                  ConnectPaymentAccountEvent
+                                      .checkEventHasPaymentAccount(
+                                    currency: currency!,
+                                    selectedChain: selectedChain,
+                                    userWalletAddress: pricingMethod ==
+                                            TicketPricingMethod.fiat
+                                        ? null
+                                        : userWalletAddress,
+                                  ),
+                                );
+                          },
+                          height: 42.w,
+                          radius: BorderRadius.circular(LemonRadius.small * 2),
+                          mode: GradientButtonMode.lavenderMode,
+                          label: t.common.confirm,
+                          textStyle: Typo.medium.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
+                          loadingWhen: isConnectingPaymentAccount,
+                        ),
+                      );
+                    },
                   ),
-                );
-              },
-            ),
+                ),
+              );
+            },
           ),
         ),
       ),
@@ -306,92 +381,110 @@ class ERC20PricingMethod extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetChainsListBuilder(
-      builder: (context, chains) => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(t.event.ticketTierSetting.whatTicketTokenPrice),
-          SizedBox(height: Spacing.xSmall),
-          BlocBuilder<ModifyTicketPriceBloc, ModifyTicketPriceState>(
-            builder: (context, state) => _Dropdown<Chain?>(
-              value: state.network,
-              placeholder: t.event.ticketTierSetting.selectChain,
-              getDisplayValue: (chain) => chain?.name ?? '',
-              onTap: () => BottomSheetUtils.showSnapBottomSheet(
-                context,
-                builder: (_) => _DropdownList<Chain, Chain>(
-                  data: chains,
-                  getDisplayLabel: (chain) => chain.name ?? '',
-                  getValue: (chain) => chain,
-                  onConfirm: (item) {
-                    if (item == null) return;
-                    context.router.pop();
-                    context.read<ModifyTicketPriceBloc>().add(
-                          ModifyTicketPriceEvent.onNetworkChanged(
-                            network: item,
-                          ),
-                        );
-                  },
+      builder: (context, chains) => BlocBuilder<WalletBloc, WalletState>(
+        builder: (context, walletState) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(t.event.ticketTierSetting.whatTicketTokenPrice),
+              SizedBox(height: Spacing.xSmall),
+              BlocBuilder<ModifyTicketPriceBloc, ModifyTicketPriceState>(
+                builder: (context, state) => _Dropdown<Chain?>(
+                  value: state.network,
+                  placeholder: t.event.ticketTierSetting.selectChain,
+                  getDisplayValue: (chain) => chain?.name ?? '',
+                  onTap: () => BottomSheetUtils.showSnapBottomSheet(
+                    context,
+                    builder: (_) => _DropdownList<Chain, Chain>(
+                      data: chains,
+                      getDisplayLabel: (chain) => chain.name ?? '',
+                      getValue: (chain) => chain,
+                      onConfirm: (item) {
+                        if (item == null) return;
+                        context.router.pop();
+                        context.read<ModifyTicketPriceBloc>().add(
+                              ModifyTicketPriceEvent.onNetworkChanged(
+                                network: item,
+                              ),
+                            );
+                      },
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-          SizedBox(height: Spacing.xSmall),
-          Row(
-            children: [
-              Expanded(
-                child:
-                    BlocBuilder<ModifyTicketPriceBloc, ModifyTicketPriceState>(
-                  builder: (context, state) {
-                    return _Dropdown<String>(
-                      placeholder: t.event.ticketTierSetting.token,
-                      value: state.currency,
-                      getDisplayValue: (tokenSymbol) => tokenSymbol ?? '',
-                      onTap: () => BottomSheetUtils.showSnapBottomSheet(
-                        context,
-                        builder: (_) => _DropdownList<String, String>(
-                          data: state.network?.tokens
-                                  ?.map((item) => item.symbol ?? '')
-                                  .toList() ??
-                              [],
-                          getDisplayLabel: (tokenSymbol) => tokenSymbol,
-                          getValue: (tokenSymbol) => tokenSymbol,
-                          onConfirm: (item) {
-                            if (item == null) return;
-                            context.router.pop();
+              SizedBox(height: Spacing.xSmall),
+              Row(
+                children: [
+                  Expanded(
+                    child: BlocBuilder<ModifyTicketPriceBloc,
+                        ModifyTicketPriceState>(
+                      builder: (context, state) {
+                        return _Dropdown<String>(
+                          placeholder: t.event.ticketTierSetting.token,
+                          value: state.currency,
+                          getDisplayValue: (tokenSymbol) => tokenSymbol ?? '',
+                          onTap: () => BottomSheetUtils.showSnapBottomSheet(
+                            context,
+                            builder: (_) => _DropdownList<String, String>(
+                              data: state.network?.tokens
+                                      ?.map((item) => item.symbol ?? '')
+                                      .toList() ??
+                                  [],
+                              getDisplayLabel: (tokenSymbol) => tokenSymbol,
+                              getValue: (tokenSymbol) => tokenSymbol,
+                              onConfirm: (item) {
+                                if (item == null) return;
+                                context.router.pop();
+                                context.read<ModifyTicketPriceBloc>().add(
+                                      ModifyTicketPriceEvent.onCurrencyChanged(
+                                        currency: item,
+                                      ),
+                                    );
+                              },
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  SizedBox(width: Spacing.xSmall),
+                  Expanded(
+                    child: BlocBuilder<ModifyTicketPriceBloc,
+                        ModifyTicketPriceState>(
+                      builder: (context, state) {
+                        return LemonTextField(
+                          onChange: (value) {
                             context.read<ModifyTicketPriceBloc>().add(
-                                  ModifyTicketPriceEvent.onCurrencyChanged(
-                                    currency: item,
+                                  ModifyTicketPriceEvent.onCostChanged(
+                                    cost: value,
                                   ),
                                 );
                           },
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-              SizedBox(width: Spacing.xSmall),
-              Expanded(
-                child:
-                    BlocBuilder<ModifyTicketPriceBloc, ModifyTicketPriceState>(
-                  builder: (context, state) {
-                    return LemonTextField(
-                      onChange: (value) {
-                        context.read<ModifyTicketPriceBloc>().add(
-                              ModifyTicketPriceEvent.onCostChanged(cost: value),
-                            );
+                          readOnly:
+                              state.currency == null || state.network == null,
+                          textInputType: const TextInputType.numberWithOptions(
+                            decimal: true,
+                          ),
+                          inputFormatters: NumberUtils.currencyInputFormatters,
+                        );
                       },
-                      readOnly: state.currency == null || state.network == null,
-                      textInputType:
-                          const TextInputType.numberWithOptions(decimal: true),
-                      inputFormatters: NumberUtils.currencyInputFormatters,
-                    );
+                    ),
+                  ),
+                ],
+              ),
+              if (walletState.activeSession == null) ...[
+                SizedBox(height: Spacing.xSmall),
+                ConnectWalletButton(
+                  onSelect: (walletApp) {
+                    context.read<WalletBloc>().add(
+                          WalletEvent.connectWallet(walletApp: walletApp),
+                        );
                   },
                 ),
-              ),
+              ],
             ],
-          ),
-        ],
+          );
+        },
       ),
     );
   }
@@ -599,7 +692,7 @@ class _DropdownListState<T, V> extends State<_DropdownList<T, V>> {
           ],
         );
       },
-      footerBuilder: (context) => Container(
+      footerBuilder: () => Container(
         color: LemonColor.atomicBlack,
         padding: EdgeInsets.all(Spacing.smMedium),
         child: SafeArea(
