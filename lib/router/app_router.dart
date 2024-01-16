@@ -204,7 +204,7 @@ final eventDetailRoutes = AutoRoute(
               page: EventCreateTicketTierRoute.page,
             ),
           ],
-        )
+        ),
       ],
     ),
   ],
