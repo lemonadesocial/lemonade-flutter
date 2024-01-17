@@ -121,7 +121,7 @@ class TicketTierFeatureDropdownListState<T, V>
               backgroundColor: LemonColor.atomicBlack,
             ),
             SizedBox(
-              height: 0.69.sh,
+              height: 0.75.sh,
               child: CustomScrollView(
                 slivers: [
                   SliverList.builder(

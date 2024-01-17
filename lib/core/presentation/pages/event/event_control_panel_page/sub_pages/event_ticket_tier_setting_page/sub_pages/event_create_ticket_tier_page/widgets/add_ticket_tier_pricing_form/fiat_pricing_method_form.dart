@@ -86,6 +86,7 @@ class _FiatPricingMethodFormState extends State<FiatPricingMethodForm> {
                       context,
                       builder: (_) =>
                           TicketTierFeatureDropdownList<String, String>(
+                        value: state.currency,
                         data: currencies,
                         getDisplayLabel: (v) => v,
                         getValue: (v) => v,

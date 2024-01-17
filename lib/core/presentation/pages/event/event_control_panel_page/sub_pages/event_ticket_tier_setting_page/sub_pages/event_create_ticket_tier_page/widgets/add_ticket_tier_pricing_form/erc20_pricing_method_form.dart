@@ -71,6 +71,7 @@ class _ERC20PricingMethodFormState extends State<ERC20PricingMethodForm> {
                   onTap: () => BottomSheetUtils.showSnapBottomSheet(
                     context,
                     builder: (_) => TicketTierFeatureDropdownList<Chain, Chain>(
+                      value: state.network,
                       data: chains,
                       getDisplayLabel: (chain) => chain.name ?? '',
                       getValue: (chain) => chain,
@@ -103,6 +104,7 @@ class _ERC20PricingMethodFormState extends State<ERC20PricingMethodForm> {
                             context,
                             builder: (_) =>
                                 TicketTierFeatureDropdownList<String, String>(
+                              value: state.currency,
                               data: state.network?.tokens
                                       ?.map((item) => item.symbol ?? '')
                                       .toList() ??
