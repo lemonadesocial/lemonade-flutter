@@ -1,6 +1,6 @@
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/application/event_tickets/modify_ticket_type_bloc/modify_ticket_type_bloc.dart';
-import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/add_ticket_tier_pricing_form.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/add_ticket_tier_pricing_form/add_ticket_tier_pricing_form.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/get_event_currencies_builder.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/ticket_tier_pricing_item.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
@@ -72,6 +72,7 @@ class _CreateTicketPricingFormState extends State<CreateTicketPricingForm> {
                 itemBuilder: (context, index) {
                   final ticketPrice = state.prices[index];
                   return TicketTierPricingItem(
+                    index: index,
                     ticketPrice: ticketPrice,
                     currencyInfo: EventTicketUtils.getEventCurrency(
                       currencies: currencies,
@@ -118,10 +119,7 @@ class _AddPaymentMethodButton extends StatelessWidget {
                 Navigator.of(innerContext).pop();
                 context.read<ModifyTicketTypeBloc>().add(
                       ModifyTicketTypeEvent.onPricesChanged(
-                        prices: [
-                          ...modifyTicketTypeBloc.state.prices,
-                          newTicketPrice,
-                        ],
+                        ticketPrice: newTicketPrice,
                       ),
                     );
               },
