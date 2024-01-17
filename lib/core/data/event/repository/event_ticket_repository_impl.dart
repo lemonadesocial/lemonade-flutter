@@ -22,6 +22,7 @@ import 'package:app/core/failure.dart';
 import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/graphql/backend/event/mutation/create_event_ticket_type.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/update_event_ticket_type.graphql.dart';
+import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:dartz/dartz.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -187,11 +188,13 @@ class EventTicketRepositoryImpl implements EventTicketRepository {
 
   @override
   Future<Either<Failure, EventTicketType>> createEventTicketType({
-    required Variables$Mutation$CreateEventTicketType input,
+    required Input$EventTicketTypeInput input,
   }) async {
     final result = await _client.mutate$CreateEventTicketType(
       Options$Mutation$CreateEventTicketType(
-        variables: input,
+        variables: Variables$Mutation$CreateEventTicketType(
+          input: input,
+        ),
         fetchPolicy: FetchPolicy.networkOnly,
       ),
     );
@@ -210,11 +213,15 @@ class EventTicketRepositoryImpl implements EventTicketRepository {
 
   @override
   Future<Either<Failure, EventTicketType>> updateEventTicketType({
-    required Variables$Mutation$UpdateEventTicketType input,
+    required String ticketTypeId,
+    required Input$EventTicketTypeInput input,
   }) async {
     final result = await _client.mutate$UpdateEventTicketType(
       Options$Mutation$UpdateEventTicketType(
-        variables: input,
+        variables: Variables$Mutation$UpdateEventTicketType(
+          id: ticketTypeId,
+          input: input,
+        ),
         fetchPolicy: FetchPolicy.networkOnly,
       ),
     );

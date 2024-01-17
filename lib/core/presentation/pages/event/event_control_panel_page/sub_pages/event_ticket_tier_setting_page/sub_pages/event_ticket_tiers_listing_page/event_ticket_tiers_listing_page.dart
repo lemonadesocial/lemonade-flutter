@@ -60,7 +60,9 @@ class EventTicketTiersListingPage extends StatelessWidget {
                 const SliverToBoxAdapter(
                   child: PayoutAccountsWidget(),
                 ),
-                const SliverFillRemaining(),
+                SliverToBoxAdapter(
+                  child: SizedBox(height: Spacing.xLarge * 3),
+                ),
               ],
             ),
           ),
@@ -73,7 +75,7 @@ class EventTicketTiersListingPage extends StatelessWidget {
                 child: LinearGradientButton(
                   onTap: () {
                     AutoRouter.of(context)
-                        .navigate(const EventCreateTicketTierRoute());
+                        .navigate(EventCreateTicketTierRoute());
                   },
                   height: 42.w,
                   leading: Assets.icons.icAdd.svg(),

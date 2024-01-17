@@ -1,3 +1,4 @@
+import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/input/ticket_type_input/ticket_type_input.dart';
 import 'package:app/core/domain/form/string_formz.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,8 +9,10 @@ part 'modify_ticket_type_bloc.freezed.dart';
 
 class ModifyTicketTypeBloc
     extends Bloc<ModifyTicketTypeEvent, ModifyTicketTypeState> {
-  ModifyTicketTypeBloc()
-      : super(
+  final EventTicketType? initialTicketType;
+  ModifyTicketTypeBloc({
+    this.initialTicketType,
+  }) : super(
           ModifyTicketTypeState.initial(),
         ) {
     on<_ModifyTicketTypeEventOnTitleChanged>(_onTitleChanged);
@@ -18,6 +21,10 @@ class ModifyTicketTypeBloc
     on<_ModifyTicketTypeEventOnActiveChanged>(_onActiveChanged);
     on<_ModifyTicketTypeEventOnPricesChanged>(_onPricesChanged);
     on<_ModifyTicketTypeEventOnValidate>(_onValidate);
+    on<_ModifyTicketTypeEventPopulateTicketType>(_onPopulateTicketType);
+    if (initialTicketType != null) {
+      add(ModifyTicketTypeEvent.populateInitialTicketType());
+    }
   }
 
   void _onTitleChanged(
@@ -86,6 +93,37 @@ class ModifyTicketTypeBloc
 
     return state.copyWith(isValid: isValid);
   }
+
+  void _onPopulateTicketType(
+    _ModifyTicketTypeEventPopulateTicketType event,
+    Emitter emit,
+  ) {
+    if (initialTicketType == null) {
+      return;
+    }
+    emit(
+      _validate(
+        ModifyTicketTypeState(
+          title: StringFormz.pure(initialTicketType?.title ?? ''),
+          description:
+              OptionalStringFormz.pure(initialTicketType?.description ?? ''),
+          limit: initialTicketType?.ticketLimit,
+          active: initialTicketType?.active,
+          prices: initialTicketType?.prices
+                  ?.map(
+                    (item) => TicketPriceInput(
+                      currency: item.currency ?? '',
+                      cost: item.cost ?? '0',
+                      network: item.network,
+                    ),
+                  )
+                  .toList() ??
+              [],
+          isValid: false,
+        ),
+      ),
+    );
+  }
 }
 
 @freezed
@@ -106,6 +144,8 @@ class ModifyTicketTypeEvent with _$ModifyTicketTypeEvent {
     required List<TicketPriceInput> prices,
   }) = _ModifyTicketTypeEventOnPricesChanged;
   factory ModifyTicketTypeEvent.onValidate() = _ModifyTicketTypeEventOnValidate;
+  factory ModifyTicketTypeEvent.populateInitialTicketType() =
+      _ModifyTicketTypeEventPopulateTicketType;
 }
 
 @freezed

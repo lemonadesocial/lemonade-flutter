@@ -10,7 +10,6 @@ import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 import 'package:app/gen/fonts.gen.dart';
-import 'package:app/graphql/backend/event/mutation/create_event_ticket_type.graphql.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
@@ -24,46 +23,61 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 @RoutePage()
 class EventCreateTicketTierPage extends StatelessWidget {
-  const EventCreateTicketTierPage({super.key});
+  final EventTicketType? initialTicketType;
+  const EventCreateTicketTierPage({
+    super.key,
+    this.initialTicketType,
+  });
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ModifyTicketTypeBloc(),
-      child: const EventCreateTicketTierPagerView(),
+      create: (context) => ModifyTicketTypeBloc(
+        initialTicketType: initialTicketType,
+      ),
+      child: EventCreateTicketTierPagerView(
+        initialTicketType: initialTicketType,
+      ),
     );
   }
 }
 
 class EventCreateTicketTierPagerView extends StatelessWidget {
+  final EventTicketType? initialTicketType;
   const EventCreateTicketTierPagerView({
     super.key,
+    this.initialTicketType,
   });
 
   Future<Either<Failure, EventTicketType>> submitModifyTicket(
     ModifyTicketTypeState state, {
     required String eventId,
   }) async {
+    final input = Input$EventTicketTypeInput(
+      event: eventId,
+      title: state.title.value,
+      description: state.description.value,
+      prices: state.prices
+          .map(
+            (item) => Input$EventTicketPriceInput(
+              currency: item.currency,
+              cost: item.cost,
+              $default: item.isDefault,
+              network: item.network,
+            ),
+          )
+          .toList(),
+      ticket_limit: state.limit,
+      active: state.active,
+    );
+    if (initialTicketType != null) {
+      return await getIt<EventTicketRepository>().updateEventTicketType(
+        ticketTypeId: initialTicketType?.id ?? '',
+        input: input,
+      );
+    }
     return await getIt<EventTicketRepository>().createEventTicketType(
-      input: Variables$Mutation$CreateEventTicketType(
-        input: Input$EventTicketTypeInput(
-          event: eventId,
-          title: state.title.value,
-          description: state.description.value,
-          prices: state.prices
-              .map(
-                (item) => Input$EventTicketPriceInput(
-                  currency: item.currency,
-                  cost: item.cost,
-                  $default: item.isDefault,
-                  network: item.network,
-                ),
-              )
-              .toList(),
-          ticket_limit: state.limit,
-          active: state.active,
-        ),
-      ),
+      input: input,
     );
   }
 
@@ -155,7 +169,9 @@ class EventCreateTicketTierPagerView extends StatelessWidget {
                       height: 42.w,
                       radius: BorderRadius.circular(LemonRadius.small * 2),
                       mode: GradientButtonMode.lavenderMode,
-                      label: t.event.ticketTierSetting.addTicket,
+                      label: initialTicketType != null
+                          ? t.common.actions.saveChanges
+                          : t.event.ticketTierSetting.addTicket,
                       textStyle: Typo.medium.copyWith(
                         fontWeight: FontWeight.w600,
                       ),

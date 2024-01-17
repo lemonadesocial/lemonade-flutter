@@ -11,12 +11,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CreateTicketBasicInfoForm extends StatelessWidget {
-  const CreateTicketBasicInfoForm({super.key});
+  const CreateTicketBasicInfoForm({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+    final modifyTicketTypeBloc = context.read<ModifyTicketTypeBloc>();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -50,33 +53,41 @@ class CreateTicketBasicInfoForm extends StatelessWidget {
             SizedBox(width: Spacing.xSmall),
             BlocBuilder<ModifyTicketTypeBloc, ModifyTicketTypeState>(
               buildWhen: (prev, cur) => prev.title.value != cur.title.value,
-              builder: (context, state) => Expanded(
-                child: LemonTextField(
-                  onChange: (value) {
-                    context.read<ModifyTicketTypeBloc>().add(
-                          ModifyTicketTypeEvent.onTitleChanged(
-                            title: value,
-                          ),
-                        );
-                  },
-                  errorText: state.title.displayError
-                      ?.getMessage(t.event.ticketTierSetting.ticketName),
-                  hintText: t.event.ticketTierSetting.ticketName,
-                ),
-              ),
+              builder: (context, state) {
+                return Expanded(
+                  child: LemonTextField(
+                    initialText:
+                        modifyTicketTypeBloc.initialTicketType?.title ?? '',
+                    onChange: (value) {
+                      modifyTicketTypeBloc.add(
+                        ModifyTicketTypeEvent.onTitleChanged(
+                          title: value,
+                        ),
+                      );
+                    },
+                    errorText: state.title.displayError
+                        ?.getMessage(t.event.ticketTierSetting.ticketName),
+                    hintText: t.event.ticketTierSetting.ticketName,
+                  ),
+                );
+              },
             ),
           ],
         ),
         SizedBox(height: Spacing.smMedium),
-        LemonTextField(
-          onChange: (value) {
-            context.read<ModifyTicketTypeBloc>().add(
-                  ModifyTicketTypeEvent.onDescriptionChanged(
-                    description: value,
-                  ),
-                );
-          },
-          hintText: t.event.ticketTierSetting.ticketDescription,
+        BlocBuilder<ModifyTicketTypeBloc, ModifyTicketTypeState>(
+          builder: (context, state) => LemonTextField(
+            initialText:
+                modifyTicketTypeBloc.initialTicketType?.description ?? '',
+            onChange: (value) {
+              modifyTicketTypeBloc.add(
+                ModifyTicketTypeEvent.onDescriptionChanged(
+                  description: value,
+                ),
+              );
+            },
+            hintText: t.event.ticketTierSetting.ticketDescription,
+          ),
         ),
       ],
     );
