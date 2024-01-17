@@ -142,6 +142,15 @@ const eventFragment = '''
   guest_limit_per
   virtual
   private
+  rewards {
+    _id
+    active
+    title
+    icon_url
+    icon_color
+    limit
+    limit_per
+  }
 }
 ''';
 

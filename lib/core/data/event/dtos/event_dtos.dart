@@ -1,5 +1,6 @@
 import 'package:app/core/data/common/dtos/common_dtos.dart';
 import 'package:app/core/data/event/dtos/event_ticket_types_dto/event_ticket_types_dto.dart';
+import 'package:app/core/data/event/dtos/reward_dto/reward_dto.dart';
 import 'package:app/core/data/payment/dtos/payment_account_dto/payment_account_dto.dart';
 import 'package:app/core/data/user/dtos/user_dtos.dart';
 import 'package:app/core/domain/event/event_enums.dart';
@@ -47,6 +48,7 @@ class EventDto with _$EventDto {
     @JsonKey(name: 'guest_limit_per') double? guestLimitPer,
     bool? virtual,
     bool? private,
+    List<RewardDto>? rewards,
   }) = _EventDto;
 
   factory EventDto.fromJson(Map<String, dynamic> json) =>

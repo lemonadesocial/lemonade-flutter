@@ -1,44 +1,45 @@
 import 'package:app/core/data/event/dtos/event_dtos.dart';
 import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
+import 'package:app/core/domain/event/entities/reward.dart';
 import 'package:app/core/domain/event/event_enums.dart';
 import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 
 class Event {
-  Event({
-    this.id,
-    this.hostExpanded,
-    this.cohostsExpanded,
-    this.title,
-    this.slug,
-    this.host,
-    this.cohosts,
-    this.speakerUsers,
-    this.broadcasts,
-    this.description,
-    this.start,
-    this.end,
-    this.cost,
-    this.currency,
-    this.newNewPhotosExpanded,
-    this.accepted,
-    this.invited,
-    this.pending,
-    this.latitude,
-    this.longitude,
-    this.matrixEventRoomId,
-    this.offers,
-    this.eventTicketTypes,
-    this.address,
-    this.paymentAccountsNew,
-    this.paymentAccountsExpanded,
-    this.guestLimit,
-    this.guestLimitPer,
-    this.virtual,
-    this.private,
-    this.speakerUsersExpanded,
-  });
+  Event(
+      {this.id,
+      this.hostExpanded,
+      this.cohostsExpanded,
+      this.title,
+      this.slug,
+      this.host,
+      this.cohosts,
+      this.speakerUsers,
+      this.broadcasts,
+      this.description,
+      this.start,
+      this.end,
+      this.cost,
+      this.currency,
+      this.newNewPhotosExpanded,
+      this.accepted,
+      this.invited,
+      this.pending,
+      this.latitude,
+      this.longitude,
+      this.matrixEventRoomId,
+      this.offers,
+      this.eventTicketTypes,
+      this.address,
+      this.paymentAccountsNew,
+      this.paymentAccountsExpanded,
+      this.guestLimit,
+      this.guestLimitPer,
+      this.virtual,
+      this.private,
+      this.speakerUsersExpanded,
+      this.rewards});
 
   factory Event.fromDto(EventDto dto) {
     return Event(
@@ -94,6 +95,9 @@ class Event {
       guestLimitPer: dto.guestLimitPer,
       virtual: dto.virtual,
       private: dto.private,
+      rewards: List.from(dto.rewards ?? [])
+          .map((item) => Reward.fromDto(item))
+          .toList(),
     );
   }
   String? id;
@@ -127,6 +131,7 @@ class Event {
   double? guestLimitPer;
   bool? virtual;
   bool? private;
+  List<Reward>? rewards;
 }
 
 class EventOffer {

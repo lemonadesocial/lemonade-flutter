@@ -176,9 +176,11 @@
         "dashboard": "Dashboard",
         "dashboardDescription": "Find what’s exciting around",
         "speakers": "Speakers",
-        "promitions": "Promotions"
+        "promitions": "Promotions",
+        "rewards": "Rewards"
     },
     "rewards": "Rewards",
+    "noRewards": "No rewards",
     "rewardsDescription": "Enhance you guests’ experience with unique rewards and make this event stand out!",
     "addPoap": "Add POAP",
     "editEvent": "Edit event",

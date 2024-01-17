@@ -142,5 +142,6 @@
     "pending": "Pending",
     "error": {
         "privateKeyNotFound": "Credential not found"
-    }
+    },
+    "addNew": "Add new"
 }
