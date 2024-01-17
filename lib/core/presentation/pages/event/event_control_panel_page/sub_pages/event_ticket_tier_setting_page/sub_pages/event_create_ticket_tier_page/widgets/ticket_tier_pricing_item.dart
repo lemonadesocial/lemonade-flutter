@@ -38,17 +38,23 @@ class TicketTierPricingItem extends StatelessWidget {
       symbol: ticketPrice.currency,
       decimalDigits: decimals,
     );
-    final doubleAmount = NumberUtils.getAmountByDecimals(
-      BigInt.parse(ticketPrice.cost),
-      decimals: decimals,
-    );
+    double? doubleAmount;
+    String? erc20DisplayedAmount;
     final isERC20 = ticketPrice.network?.isNotEmpty == true;
-    final erc20DisplayedAmount = Web3Utils.formatCryptoCurrency(
-      BigInt.parse(ticketPrice.cost),
-      currency: ticketPrice.currency,
-      decimals: decimals,
-      decimalDigits: 3,
-    );
+    if (isERC20) {
+      erc20DisplayedAmount = Web3Utils.formatCryptoCurrency(
+        BigInt.parse(ticketPrice.cost),
+        currency: ticketPrice.currency,
+        decimals: decimals,
+        decimalDigits: decimals,
+      );
+    } else {
+      final parsedAmount = int.parse(ticketPrice.cost).toString();
+      doubleAmount = NumberUtils.getAmountByDecimals(
+        BigInt.parse(parsedAmount),
+        decimals: decimals,
+      );
+    }
 
     return FutureBuilder<Either<Failure, Chain?>>(
       future: ticketPrice.network != null
@@ -100,7 +106,7 @@ class TicketTierPricingItem extends StatelessWidget {
                 children: [
                   Text(
                     isERC20
-                        ? erc20DisplayedAmount
+                        ? erc20DisplayedAmount ?? ''
                         : formatter.format(doubleAmount),
                     style: Typo.small.copyWith(
                       fontWeight: FontWeight.w600,

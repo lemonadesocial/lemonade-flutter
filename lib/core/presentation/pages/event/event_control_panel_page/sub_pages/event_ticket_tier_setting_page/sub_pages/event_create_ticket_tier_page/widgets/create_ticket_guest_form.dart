@@ -47,7 +47,18 @@ class _GuestLimitState extends State<GuestLimit> {
   bool limitFieldVisible = false;
 
   @override
+  initState() {
+    super.initState();
+    final modifyTicketTypeBloc = context.read<ModifyTicketTypeBloc>();
+    setState(() {
+      limitFieldVisible =
+          modifyTicketTypeBloc.initialTicketType?.ticketLimit != null;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final modifyTicketTypeBloc = context.read<ModifyTicketTypeBloc>();
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
     return Column(
@@ -105,6 +116,9 @@ class _GuestLimitState extends State<GuestLimit> {
         SizedBox(height: Spacing.smMedium),
         if (limitFieldVisible)
           LemonTextField(
+            initialText: modifyTicketTypeBloc.initialTicketType?.ticketLimit
+                ?.toInt()
+                .toString(),
             inputFormatters: [
               FilteringTextInputFormatter.digitsOnly,
             ],
