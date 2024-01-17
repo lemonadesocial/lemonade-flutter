@@ -1,5 +1,5 @@
-import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/application/event_tickets/modify_ticket_type_bloc/modify_ticket_type_bloc.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_reward_setting_page/sub_pages/event_create_reward_page/widgets/create_reward_basic_info_form.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/gen/fonts.gen.dart';
@@ -46,13 +46,19 @@ class EventCreateRewardPagerView extends StatelessWidget {
               slivers: [
                 SliverToBoxAdapter(
                   child: Text(
-                    t.event.ticketTierSetting.createTicket,
+                    t.event.rewardSetting.createNewReward,
                     style: Typo.extraLarge.copyWith(
                       fontWeight: FontWeight.w800,
                       fontFamily: FontFamily.nohemiVariable,
                     ),
                   ),
                 ),
+                SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: Spacing.large,
+                  ),
+                ),
+                const SliverToBoxAdapter(child: CreateRewardBasicInfoForm()),
               ],
             ),
           ),

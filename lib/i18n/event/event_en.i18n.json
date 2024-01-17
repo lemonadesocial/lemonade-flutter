@@ -257,5 +257,14 @@
         "scanTicketSuccess": "Scan ticket successfully",
         "checkedIn": "checked in",
         "pleaseScan": "Please scan QR Code"
+    },
+    "rewardSetting": {
+        "createNewReward": "Create new reward",
+        "rewardName":" Reward name",
+        "chooseAnIcon": "Choose an icon",
+        "limit": "Limit",
+        "limitDescription": "Total number of people who can claim this reward",
+        "selectAllTicketTiers": "Select all ticket tiers",
+        "selectTicketTiers": "Select ticket tiers"
     }
 }
