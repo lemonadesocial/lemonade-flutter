@@ -202,6 +202,7 @@
         "crypto": "Crypto",
         "newTicket": "New ticket",
         "createTicket": "Create ticket",
+        "editTicket": "Edit ticket",
         "whatIsTicketName": "What is the name of your ticket",
         "ticketName": "Ticket name",
         "ticketDescription": "Description (optional)",
@@ -235,7 +236,13 @@
         },
         "currency": "Currency",
         "amount": "Amount",
-        "token": "Token"
+        "token": "Token",
+        "actions": {
+            "makeDefault": "make default",
+            "edit": "edit",
+            "inactivate": "inactivate",
+            "delete": "delete"
+        }
     },
     "speakers": {
         "speakersCountInfo(ordinal)": {

@@ -154,6 +154,7 @@ class EventTicketPrice {
   final double? fiatCost;
   final String? network;
   final String? currency;
+  final bool? isDefault;
 
   EventTicketPrice({
     this.cost,
@@ -161,6 +162,7 @@ class EventTicketPrice {
     this.fiatCost,
     this.network,
     this.currency,
+    this.isDefault,
   });
 
   factory EventTicketPrice.fromDto(EventTicketPriceDto dto) => EventTicketPrice(
@@ -169,5 +171,6 @@ class EventTicketPrice {
         cryptoCost: dto.cost != null ? BigInt.tryParse(dto.cost!) : null,
         network: dto.network,
         currency: dto.currency,
+        isDefault: dto.isDefault,
       );
 }
