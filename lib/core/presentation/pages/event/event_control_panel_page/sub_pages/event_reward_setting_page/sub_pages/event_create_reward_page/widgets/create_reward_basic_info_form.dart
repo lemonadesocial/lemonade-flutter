@@ -1,3 +1,6 @@
+import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
+import 'package:app/core/application/event_tickets/modify_reward_bloc/modify_reward_bloc.dart';
+import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_reward_setting_page/sub_pages/event_create_reward_page/widgets/select_reward_icon_form.dart';
 import 'package:app/core/presentation/pages/setting/widgets/setting_tile_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
@@ -9,40 +12,80 @@ import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 
-class CreateRewardBasicInfoForm extends StatelessWidget {
+class CreateRewardBasicInfoForm extends StatefulWidget {
   const CreateRewardBasicInfoForm({super.key});
 
   @override
+  State<CreateRewardBasicInfoForm> createState() =>
+      _CreateRewardBasicInfoFormState();
+}
+
+class _CreateRewardBasicInfoFormState extends State<CreateRewardBasicInfoForm> {
+  bool selectedAllTicketTiers = false;
+
+  @override
+  initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
+    List<EventTicketType> eventTicketTypes =
+        context.watch<GetEventDetailBloc>().state.maybeWhen(
+                  fetched: (event) => event.eventTicketTypes,
+                  orElse: () => [],
+                ) ??
+            [];
+    final modifyRewardBloc = context.read<ModifyRewardBloc>();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        LemonTextField(
-          onChange: (value) {
-            // TODO:
-            // Handle on change
+        BlocBuilder<ModifyRewardBloc, ModifyRewardState>(
+          builder: (context, state) {
+            return LemonTextField(
+              onChange: (value) {
+                modifyRewardBloc.add(
+                  ModifyRewardEvent.onTitleChanged(
+                    title: value,
+                  ),
+                );
+              },
+              errorText: state.title.displayError
+                  ?.getMessage(t.event.rewardSetting.rewardName),
+              hintText: t.event.rewardSetting.rewardName,
+            );
           },
-          hintText: t.event.rewardSetting.rewardName,
         ),
         SizedBox(height: Spacing.small),
         const _ChooseRewardIconButton(),
         SizedBox(height: Spacing.small),
-        SettingTileWidget(
-          title: t.event.rewardSetting.limit,
-          subTitle: t.event.rewardSetting.limitDescription,
-          onTap: () => {},
-          trailing: SizedBox(
-            width: 60.w,
-            child: const LemonTextField(
-              textInputType: TextInputType.number,
+        BlocBuilder<ModifyRewardBloc, ModifyRewardState>(
+            builder: (context, state) {
+          return SettingTileWidget(
+            title: t.event.rewardSetting.limit,
+            subTitle: t.event.rewardSetting.limitDescription,
+            onTap: () => {},
+            trailing: SizedBox(
+              width: 60.w,
+              child: LemonTextField(
+                initialText: "1",
+                textInputType: TextInputType.number,
+                onChange: (value) {
+                  modifyRewardBloc.add(
+                    ModifyRewardEvent.onLimitPerChanged(
+                      limitPer: double.parse(value),
+                    ),
+                  );
+                },
+              ),
             ),
-          ),
-        ),
+          );
+        }),
         SizedBox(height: Spacing.small),
         SettingTileWidget(
           title: t.event.rewardSetting.selectAllTicketTiers,
@@ -56,10 +99,17 @@ class CreateRewardBasicInfoForm extends StatelessWidget {
             activeToggleColor: Theme.of(context).colorScheme.onPrimary,
             height: 24.h,
             width: 42.w,
-            value: false,
+            value: selectedAllTicketTiers,
             onToggle: (value) => {
-              // TODO:
-              // Handle on toggle
+              setState(() {
+                selectedAllTicketTiers = value;
+              }),
+              modifyRewardBloc.add(
+                ModifyRewardEvent.onToggleSelectAll(
+                  value: value,
+                  eventTicketTypes: eventTicketTypes,
+                ),
+              ),
             },
           ),
         ),
