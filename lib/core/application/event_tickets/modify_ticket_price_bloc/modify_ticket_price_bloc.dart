@@ -9,10 +9,17 @@ part 'modify_ticket_price_bloc.freezed.dart';
 
 class ModifyTicketPriceBloc
     extends Bloc<ModifyTicketPriceEvent, ModifyTicketPriceState> {
-  ModifyTicketPriceBloc() : super(ModifyTicketPriceState.initial()) {
+  final TicketPriceInput? initialTicketPrice;
+  final Chain? initialNetwork;
+  ModifyTicketPriceBloc({
+    this.initialTicketPrice,
+    this.initialNetwork,
+  }) : super(ModifyTicketPriceState.initial()) {
     on<_ModifyTicketPriceEventOnCostChanged>(_onCostChanged);
     on<_ModifyTicketPriceEventOnCurrencyChanged>(_onCurrencyChanged);
     on<_ModifyTicketPriceEventOnNetworkChanged>(_onNetworkChanged);
+    on<_ModifyTicketPriceEventPopulateTicketPrice>(_onPopulateTicketPrice);
+    on<_ModifyTicketPriceEventReset>(_onReset);
   }
 
   void _onCostChanged(
@@ -27,7 +34,10 @@ class ModifyTicketPriceBloc
     _ModifyTicketPriceEventOnCurrencyChanged event,
     Emitter emit,
   ) {
-    final newState = state.copyWith(currency: event.currency);
+    final newState = state.copyWith(
+      currency: event.currency,
+      cost: null,
+    );
     emit(_validate(newState));
   }
 
@@ -35,8 +45,39 @@ class ModifyTicketPriceBloc
     _ModifyTicketPriceEventOnNetworkChanged event,
     Emitter emit,
   ) {
-    final newState = state.copyWith(network: event.network);
+    final newState = state.copyWith(
+      network: event.network,
+      currency: null,
+      cost: null,
+    );
     emit(_validate(newState));
+  }
+
+  void _onReset(
+    _ModifyTicketPriceEventReset event,
+    Emitter emit,
+  ) {
+    emit(ModifyTicketPriceState.initial());
+  }
+
+  void _onPopulateTicketPrice(
+    _ModifyTicketPriceEventPopulateTicketPrice event,
+    Emitter emit,
+  ) {
+    if (initialTicketPrice == null) {
+      return;
+    }
+
+    emit(
+      _validate(
+        ModifyTicketPriceState(
+          network: initialNetwork,
+          currency: initialTicketPrice?.currency,
+          cost: initialTicketPrice?.cost,
+          isValid: false,
+        ),
+      ),
+    );
   }
 
   ModifyTicketPriceState _validate(ModifyTicketPriceState state) {
@@ -79,6 +120,9 @@ class ModifyTicketPriceEvent with _$ModifyTicketPriceEvent {
   factory ModifyTicketPriceEvent.onNetworkChanged({
     required Chain network,
   }) = _ModifyTicketPriceEventOnNetworkChanged;
+  factory ModifyTicketPriceEvent.populateTicketPrice() =
+      _ModifyTicketPriceEventPopulateTicketPrice;
+  factory ModifyTicketPriceEvent.reset() = _ModifyTicketPriceEventReset;
 }
 
 @freezed

@@ -22,7 +22,7 @@ class Web3Utils {
     return '0x${utf8.encode(text).map((e) => e.toRadixString(16).padLeft(2, '0')).join()}';
   }
 
-  static formatCryptoCurrency(
+  static String formatCryptoCurrency(
     BigInt value, {
     required String currency,
     required int decimals,
@@ -33,7 +33,7 @@ class Web3Utils {
       decimalDigits: decimalDigits,
     );
 
-    return '${formatter.format(amount)} $currency';
+    return _removeTrailingZeros('${formatter.format(amount)} $currency').trim();
   }
 
   static ChainMetadata? getNetworkMetadataById(String id) {
@@ -70,5 +70,9 @@ class Web3Utils {
     final rpcClient = Web3Client(network.rpcUrl!, http.Client());
     final etherAmount = await rpcClient.getBalance(address);
     return etherAmount.getInWei;
+  }
+
+  static String _removeTrailingZeros(String n) {
+    return n.replaceAll(RegExp(r"([.]*0+)(?!.*\d)"), "");
   }
 }

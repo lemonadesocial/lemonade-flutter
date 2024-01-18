@@ -77,11 +77,11 @@ class _OwnerKeyBalanceWidgetState extends State<OwnerKeyBalanceWidget> {
                           ),
                         ),
                         Text(
-                          '${Web3Utils.formatCryptoCurrency(
+                          Web3Utils.formatCryptoCurrency(
                             snapshot.data ?? BigInt.zero,
                             currency: nativeToken?.symbol ?? '',
                             decimals: nativeTokenDecimals,
-                          )}',
+                          ),
                           style: Typo.xSmall.copyWith(
                             color: colorScheme.onSecondary,
                           ),
