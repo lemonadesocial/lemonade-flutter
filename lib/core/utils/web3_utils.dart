@@ -33,7 +33,7 @@ class Web3Utils {
       decimalDigits: decimalDigits,
     );
 
-    return _removeTrailingZeros('${formatter.format(amount)} $currency');
+    return _removeTrailingZeros('${formatter.format(amount)} $currency').trim();
   }
 
   static ChainMetadata? getNetworkMetadataById(String id) {

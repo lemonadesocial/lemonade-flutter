@@ -71,8 +71,20 @@ class ModifyTicketTypeBloc
     _ModifyTicketTypeEventOnPricesChanged event,
     Emitter emit,
   ) {
+    final currentPrices = state.prices;
+    List<TicketPriceInput> newPrices;
+    if (event.index != null) {
+      newPrices = currentPrices.asMap().entries.map((entry) {
+        if (entry.key == event.index) {
+          return event.ticketPrice;
+        }
+        return entry.value;
+      }).toList();
+    } else {
+      newPrices = [...currentPrices, event.ticketPrice];
+    }
     final newState = state.copyWith(
-      prices: event.prices,
+      prices: newPrices,
     );
     emit(_validate(newState));
   }
@@ -141,7 +153,8 @@ class ModifyTicketTypeEvent with _$ModifyTicketTypeEvent {
     bool? active,
   }) = _ModifyTicketTypeEventOnActiveChanged;
   factory ModifyTicketTypeEvent.onPricesChanged({
-    required List<TicketPriceInput> prices,
+    required TicketPriceInput ticketPrice,
+    int? index,
   }) = _ModifyTicketTypeEventOnPricesChanged;
   factory ModifyTicketTypeEvent.onValidate() = _ModifyTicketTypeEventOnValidate;
   factory ModifyTicketTypeEvent.populateInitialTicketType() =
