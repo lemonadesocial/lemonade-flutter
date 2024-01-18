@@ -9,6 +9,7 @@ fragment EventTicketType on EventTicketType {
     cost
     currency
     network
+    default
   }
   ticket_limit
   ticket_count

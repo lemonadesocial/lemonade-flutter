@@ -53,6 +53,7 @@ final getEventPaymentsQuery = gql('''
                   currency
                   network
                   cost
+                  default
                 }
                 description,
               },
