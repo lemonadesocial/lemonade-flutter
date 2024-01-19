@@ -106,6 +106,7 @@ class _CreateRewardBasicInfoFormState extends State<CreateRewardBasicInfoForm> {
             width: 42.w,
             value: selectedAllTicketTiers,
             onToggle: (value) => {
+              FocusScope.of(context).unfocus(),
               setState(() {
                 selectedAllTicketTiers = value;
               }),
@@ -132,6 +133,7 @@ class _ChooseRewardIconButton extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     return InkWell(
       onTap: () {
+        FocusScope.of(context).unfocus();
         BottomSheetUtils.showSnapBottomSheet(
           context,
           builder: (innerContext) {
