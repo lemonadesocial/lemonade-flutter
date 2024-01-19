@@ -25,26 +25,6 @@ class RewardItem extends StatelessWidget {
     super.key,
     required this.reward,
   });
-
-  String getSubtitle(BuildContext context) {
-    List<EventTicketType> eventTicketTypes =
-        context.watch<GetEventDetailBloc>().state.maybeWhen(
-                  fetched: (event) => event.eventTicketTypes,
-                  orElse: () => [],
-                ) ??
-            [];
-    List<String> paymentTicketTypes = reward.paymentTicketTypes ?? [];
-    List<EventTicketType> selectedTypes = eventTicketTypes
-        .where((type) => paymentTicketTypes.contains(type.id))
-        .toList();
-    String allTitles =
-        selectedTypes.map((type) => type.title).toList().join(', ').toString();
-    if (allTitles.isEmpty) {
-      return '${t.event.rewardSetting.limit}: ${reward.limitPer} - ${t.event.allTicketTiers}';
-    }
-    return '${t.event.rewardSetting.limit}: ${reward.limitPer} - $allTitles';
-  }
-
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
@@ -85,6 +65,9 @@ class RewardItem extends StatelessWidget {
                 style: Typo.medium.copyWith(
                   color: colorScheme.onPrimary.withOpacity(0.87),
                 ),
+              ),
+              SizedBox(
+                height: Spacing.superExtraSmall / 2,
               ),
               Text(
                 getSubtitle(context),
@@ -138,5 +121,24 @@ class RewardItem extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  String getSubtitle(BuildContext context) {
+    List<EventTicketType> eventTicketTypes =
+        context.watch<GetEventDetailBloc>().state.maybeWhen(
+                  fetched: (event) => event.eventTicketTypes,
+                  orElse: () => [],
+                ) ??
+            [];
+    List<String> paymentTicketTypes = reward.paymentTicketTypes ?? [];
+    List<EventTicketType> selectedTypes = eventTicketTypes
+        .where((type) => paymentTicketTypes.contains(type.id))
+        .toList();
+    String allTitles =
+        selectedTypes.map((type) => type.title).toList().join(', ').toString();
+    if (allTitles.isEmpty) {
+      return '${t.event.rewardSetting.limit}: ${reward.limitPer} - ${t.event.allTicketTiers}';
+    }
+    return '${t.event.rewardSetting.limit}: ${reward.limitPer} - $allTitles';
   }
 }

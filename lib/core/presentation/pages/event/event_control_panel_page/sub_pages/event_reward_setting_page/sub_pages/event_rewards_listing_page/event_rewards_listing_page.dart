@@ -57,7 +57,7 @@ class EventRewardsListingPage extends StatelessWidget {
                     },
                     separatorBuilder: (BuildContext context, int index) =>
                         SizedBox(
-                      height: Spacing.smMedium,
+                      height: Spacing.large,
                     ),
                   ),
               ],
