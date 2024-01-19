@@ -17,12 +17,13 @@ class Reward with _$Reward {
   }) = _Reward;
 
   factory Reward.fromDto(RewardDto dto) => Reward(
-      id: dto.id,
-      active: dto.active,
-      title: dto.title,
-      iconUrl: dto.iconUrl,
-      iconColor: dto.iconColor,
-      limit: dto.limit,
-      limitPer: dto.limitPer,
-      paymentTicketTypes: dto.paymentTicketTypes);
+        id: dto.id,
+        active: dto.active,
+        title: dto.title,
+        iconUrl: dto.iconUrl,
+        iconColor: dto.iconColor,
+        limit: dto.limit,
+        limitPer: dto.limitPer,
+        paymentTicketTypes: dto.paymentTicketTypes,
+      );
 }
