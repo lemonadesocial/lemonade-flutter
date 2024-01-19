@@ -5,7 +5,9 @@ import 'package:app/core/domain/event/input/ticket_type_input/ticket_type_input.
 import 'package:app/core/domain/web3/entities/chain.dart';
 import 'package:app/core/domain/web3/web3_repository.dart';
 import 'package:app/core/failure.dart';
+import 'package:app/core/presentation/dpos/common/dropdown_item_dpo.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/add_ticket_tier_pricing_form/add_ticket_tier_pricing_form.dart';
+import 'package:app/core/presentation/widgets/floating_frosted_glass_dropdown_widget.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/bottomsheet_utils.dart';
@@ -23,6 +25,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+
+enum TicketPricingActions {
+  makeDefault,
+  edit,
+  delete,
+}
 
 class TicketTierPricingItem extends StatelessWidget {
   final TicketPriceInput ticketPrice;
@@ -75,34 +83,72 @@ class TicketTierPricingItem extends StatelessWidget {
       builder: (context, snapshot) {
         final chain = snapshot.data?.getOrElse(() => null);
 
-        return InkWell(
-          onTap: () {
-            BottomSheetUtils.showSnapBottomSheet(
-              context,
-              builder: (innerContext) => MultiBlocProvider(
-                providers: [
-                  BlocProvider.value(
-                    value: getEventDetailBloc,
+        return FloatingFrostedGlassDropdown<TicketPricingActions>(
+          containerWidth: Sizing.xLarge * 2,
+          items: [
+            DropdownItemDpo(
+              label: t.event.ticketTierSetting.actions.makeDefault,
+              textStyle: Typo.small,
+              value: TicketPricingActions.makeDefault,
+            ),
+            DropdownItemDpo(
+              label: t.event.ticketTierSetting.actions.edit,
+              textStyle: Typo.small,
+              value: TicketPricingActions.edit,
+            ),
+            DropdownItemDpo(
+              label: t.event.ticketTierSetting.actions.delete,
+              textStyle: Typo.small,
+              value: TicketPricingActions.delete,
+            ),
+          ],
+          onItemPressed: (item) {
+            switch (item?.value) {
+              case TicketPricingActions.makeDefault:
+                modifyTicketTypeBloc.add(
+                  ModifyTicketTypeEvent.onMarkDefault(
+                    index: index,
                   ),
-                  BlocProvider.value(
-                    value: modifyTicketTypeBloc,
-                  ),
-                ],
-                child: AddTicketTierPricingForm(
-                  initialTicketPrice: ticketPrice,
-                  initialChain: chain,
-                  onConfirm: (newTicketPrice) {
-                    Navigator.of(innerContext).pop();
-                    modifyTicketTypeBloc.add(
-                      ModifyTicketTypeEvent.onPricesChanged(
-                        index: index,
-                        ticketPrice: newTicketPrice,
+                );
+                break;
+              case TicketPricingActions.edit:
+                BottomSheetUtils.showSnapBottomSheet(
+                  context,
+                  builder: (innerContext) => MultiBlocProvider(
+                    providers: [
+                      BlocProvider.value(
+                        value: getEventDetailBloc,
                       ),
-                    );
-                  },
-                ),
-              ),
-            );
+                      BlocProvider.value(
+                        value: modifyTicketTypeBloc,
+                      ),
+                    ],
+                    child: AddTicketTierPricingForm(
+                      initialTicketPrice: ticketPrice,
+                      initialChain: chain,
+                      onConfirm: (newTicketPrice) {
+                        Navigator.of(innerContext).pop();
+                        modifyTicketTypeBloc.add(
+                          ModifyTicketTypeEvent.onPricesChanged(
+                            index: index,
+                            ticketPrice: newTicketPrice,
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                );
+                break;
+              case TicketPricingActions.delete:
+                modifyTicketTypeBloc.add(
+                  ModifyTicketTypeEvent.onDeletePrice(
+                    index: index,
+                  ),
+                );
+                break;
+              default:
+                break;
+            }
           },
           child: Row(
             children: [
@@ -151,13 +197,25 @@ class TicketTierPricingItem extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: 2.w),
-                    Text(
-                      chain != null
-                          ? chain.name ?? ''
-                          : t.event.ticketTierSetting.creditDebit,
-                      style: Typo.small.copyWith(
-                        color: colorScheme.onSecondary,
-                      ),
+                    Row(
+                      children: [
+                        Text(
+                          chain != null
+                              ? chain.name ?? ''
+                              : t.event.ticketTierSetting.creditDebit,
+                          style: Typo.small.copyWith(
+                            color: colorScheme.onSecondary,
+                          ),
+                        ),
+                        if (ticketPrice.isDefault == true) ...[
+                          Text(
+                            " - ${t.event.ticketTierSetting.defaultTicket}",
+                            style: Typo.small.copyWith(
+                              color: colorScheme.onSecondary,
+                            ),
+                          ),
+                        ],
+                      ],
                     ),
                   ],
                 ),

@@ -14,6 +14,7 @@ class FrostedGlassDropdown<T> extends StatefulWidget {
   final Widget Function(BuildContext ctx, int index)? itemBuilder;
   final bool Function(DropdownItemDpo<T> a, DropdownItemDpo<T> b)? isEqual;
   final Function(DropdownItemDpo<T>? item)? onItemPressed;
+  final double? containerWidth;
 
   const FrostedGlassDropdown({
     super.key,
@@ -21,6 +22,7 @@ class FrostedGlassDropdown<T> extends StatefulWidget {
     this.itemBuilder,
     this.isEqual,
     this.onItemPressed,
+    this.containerWidth,
   });
 
   @override
@@ -42,7 +44,7 @@ class _FrostedGlassDropdownController<T>
           filter: ImageFilter.blur(sigmaX: 6.0, sigmaY: 6.0),
           child: Container(
             padding: EdgeInsets.symmetric(vertical: Spacing.superExtraSmall),
-            width: 210,
+            width: widget.containerWidth ?? 210,
             color: LemonColor.dropdownBackground,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -90,9 +92,10 @@ class _FrostedGlassDropdownController<T>
             ],
             Text(
               item.label,
-              style: Typo.medium.copyWith(
-                color: item.customColor,
-              ),
+              style: item.textStyle ??
+                  Typo.medium.copyWith(
+                    color: item.customColor,
+                  ),
             ),
             const Spacer(),
             if (isSelected)

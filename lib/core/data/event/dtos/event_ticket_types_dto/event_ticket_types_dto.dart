@@ -84,6 +84,7 @@ class EventTicketPriceDto with _$EventTicketPriceDto {
     String? cost,
     String? currency,
     String? network,
+    @JsonKey(name: 'default') bool? isDefault,
   }) = _EventTicketPriceDto;
 
   factory EventTicketPriceDto.fromJson(Map<String, dynamic> json) =>
