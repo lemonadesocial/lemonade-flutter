@@ -19,6 +19,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:slang/builder/utils/string_extensions.dart';
 
+enum RewardOptions { edit, delete }
+
 class RewardItem extends StatelessWidget {
   final Reward reward;
   const RewardItem({
@@ -93,7 +95,7 @@ class RewardItem extends StatelessWidget {
                     color: colorScheme.onPrimary,
                   ),
                   label: t.common.actions.edit.capitalize(),
-                  value: "edit",
+                  value: RewardOptions.edit,
                 ),
                 DropdownItemDpo(
                   leadingIcon: Assets.icons.icDelete.svg(
@@ -102,7 +104,7 @@ class RewardItem extends StatelessWidget {
                     color: colorScheme.onPrimary,
                   ),
                   label: t.common.delete.capitalize(),
-                  value: "delete",
+                  value: RewardOptions.delete,
                 ),
               ],
               onItemPressed: (item) {

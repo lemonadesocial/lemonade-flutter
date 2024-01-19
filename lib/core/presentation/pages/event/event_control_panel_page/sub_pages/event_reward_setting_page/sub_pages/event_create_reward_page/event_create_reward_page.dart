@@ -124,7 +124,7 @@ class EventCreateRewardPageView extends StatelessWidget {
                           eventTicketTypes: eventTicketTypes,
                           onTapTicketType: (eventTicketType) {
                             modifyRewardBloc.add(
-                              ModifyRewardEvent.onSelectEventTicketType(
+                              ModifyRewardEvent.onToggleEventTicketType(
                                 eventTicketTypeId: eventTicketType.id ?? '',
                               ),
                             );

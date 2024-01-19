@@ -18,8 +18,8 @@ class ModifyRewardBloc extends Bloc<ModifyRewardEvent, ModifyRewardState> {
     on<_ModifyRewardEventOnToggleSelectAll>(
       _onToggleSelectAll,
     );
-    on<_ModifyRewardEventOnSelectTicketTier>(
-      _onSelectEventTicketType,
+    on<_ModifyRewardEventOnToggleTicketTier>(
+      _onToggleEventTicketType,
     );
     on<_ModifyRewardEventOnValidate>(_onValidate);
     on<_ModifyRewardEventOnSubmitted>(_onSubmitted);
@@ -75,10 +75,11 @@ class ModifyRewardBloc extends Bloc<ModifyRewardEvent, ModifyRewardState> {
     }
   }
 
-  void _onSelectEventTicketType(
-    _ModifyRewardEventOnSelectTicketTier event,
+  void _onToggleEventTicketType(
+    _ModifyRewardEventOnToggleTicketTier event,
     Emitter emit,
   ) {
+    // Deselect if exist
     if (state.selectedEventTicketTypeIds.contains(event.eventTicketTypeId)) {
       final newState = state.copyWith(
         selectedEventTicketTypeIds: state.selectedEventTicketTypeIds
@@ -86,7 +87,9 @@ class ModifyRewardBloc extends Bloc<ModifyRewardEvent, ModifyRewardState> {
             .toList(),
       );
       emit(_validate(newState));
-    } else {
+    }
+    // Add new if not exist yet
+    else {
       final newState = state.copyWith(
         selectedEventTicketTypeIds: [
           ...state.selectedEventTicketTypeIds,
@@ -170,9 +173,9 @@ class ModifyRewardEvent with _$ModifyRewardEvent {
     required bool value,
     required List<EventTicketType> eventTicketTypes,
   }) = _ModifyRewardEventOnToggleSelectAll;
-  factory ModifyRewardEvent.onSelectEventTicketType({
+  factory ModifyRewardEvent.onToggleEventTicketType({
     required String? eventTicketTypeId,
-  }) = _ModifyRewardEventOnSelectTicketTier;
+  }) = _ModifyRewardEventOnToggleTicketTier;
   factory ModifyRewardEvent.onValidate() = _ModifyRewardEventOnValidate;
   factory ModifyRewardEvent.onSubmitted({
     required String eventId,
