@@ -13,6 +13,7 @@ class RewardDto with _$RewardDto {
     @JsonKey(name: 'icon_color') String? iconColor,
     @JsonKey(name: 'limit') int? limit,
     @JsonKey(name: 'limit_per') int? limitPer,
+    @JsonKey(name: 'payment_ticket_types') List<String>? paymentTicketTypes,
   }) = _RewardDto;
 
   factory RewardDto.fromJson(Map<String, dynamic> json) =>

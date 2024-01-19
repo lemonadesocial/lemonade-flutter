@@ -151,6 +151,7 @@ const eventFragment = '''
     icon_color
     limit
     limit_per
+    payment_ticket_types
   }
 }
 ''';

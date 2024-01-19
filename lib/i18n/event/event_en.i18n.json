@@ -274,5 +274,6 @@
         "selectAllTicketTiers": "Select all ticket tiers",
         "selectTicketTiers": "Select ticket tiers",
         "createRewardSuccessfully": "Create reward successfully"
-    }
+    },
+    "allTicketTiers": "All ticket tiers"
 }

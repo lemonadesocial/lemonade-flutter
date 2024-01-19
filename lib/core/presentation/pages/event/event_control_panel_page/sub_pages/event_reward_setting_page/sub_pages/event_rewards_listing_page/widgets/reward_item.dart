@@ -1,9 +1,12 @@
+import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/config.dart';
+import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/entities/reward.dart';
 import 'package:app/core/presentation/dpos/common/dropdown_item_dpo.dart';
 import 'package:app/core/presentation/widgets/floating_frosted_glass_dropdown_widget.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/utils/modal_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
@@ -12,6 +15,7 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:slang/builder/utils/string_extensions.dart';
 
@@ -22,9 +26,29 @@ class RewardItem extends StatelessWidget {
     required this.reward,
   });
 
+  String getSubtitle(BuildContext context) {
+    List<EventTicketType> eventTicketTypes =
+        context.watch<GetEventDetailBloc>().state.maybeWhen(
+                  fetched: (event) => event.eventTicketTypes,
+                  orElse: () => [],
+                ) ??
+            [];
+    List<String> paymentTicketTypes = reward.paymentTicketTypes ?? [];
+    List<EventTicketType> selectedTypes = eventTicketTypes
+        .where((type) => paymentTicketTypes.contains(type.id))
+        .toList();
+    String allTitles =
+        selectedTypes.map((type) => type.title).toList().join(', ').toString();
+    if (allTitles.isEmpty) {
+      return '${t.event.rewardSetting.limit}: ${reward.limitPer} - ${t.event.allTicketTiers}';
+    }
+    return '${t.event.rewardSetting.limit}: ${reward.limitPer} - $allTitles';
+  }
+
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
+
     final colorScheme = Theme.of(context).colorScheme;
     final fullIconUrl = '${AppConfig.assetPrefix}${reward.iconUrl}';
     return Row(
@@ -62,6 +86,12 @@ class RewardItem extends StatelessWidget {
                   color: colorScheme.onPrimary.withOpacity(0.87),
                 ),
               ),
+              Text(
+                getSubtitle(context),
+                style: Typo.small.copyWith(
+                  color: colorScheme.onSecondary,
+                ),
+              ),
             ],
           ),
         ),
@@ -92,6 +122,9 @@ class RewardItem extends StatelessWidget {
                   value: "delete",
                 ),
               ],
+              onItemPressed: (item) {
+                showComingSoonDialog(context);
+              },
               child: ThemeSvgIcon(
                 color: colorScheme.onPrimary,
                 builder: (filter) => Assets.icons.icMoreHoriz.svg(
