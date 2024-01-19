@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.2.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.1.4...v1.2.0) (2024-01-19)
+
+
+### Features
+
+* add tickets control settings ([#351](https://github.com/lemonadesocial/lemonade-flutter/issues/351)) ([523a591](https://github.com/lemonadesocial/lemonade-flutter/commit/523a5912668c54656e9e577b944de79367cca23d))
+* create event reward ([#357](https://github.com/lemonadesocial/lemonade-flutter/issues/357)) ([9d85433](https://github.com/lemonadesocial/lemonade-flutter/commit/9d854333ef167ff3bc4ed5b9f5740d3f1ff388ad))
+* create ticket tier (erc20 prices only) ([#353](https://github.com/lemonadesocial/lemonade-flutter/issues/353)) ([1c77903](https://github.com/lemonadesocial/lemonade-flutter/commit/1c779035f229c77e3965e5bb45353908a8723e16))
+* edit ticket tier ([#354](https://github.com/lemonadesocial/lemonade-flutter/issues/354)) ([7b97acd](https://github.com/lemonadesocial/lemonade-flutter/commit/7b97acd9a4c7a18437962457860893a0200da400))
+* edit ticket tier prices ([#355](https://github.com/lemonadesocial/lemonade-flutter/issues/355)) ([7b1871b](https://github.com/lemonadesocial/lemonade-flutter/commit/7b1871b9f1aa39f754c4aeca28736a39c2f04a31))
+* ticket tier modify actions ([#356](https://github.com/lemonadesocial/lemonade-flutter/issues/356)) ([f87f066](https://github.com/lemonadesocial/lemonade-flutter/commit/f87f0667cf7e3743cb343ac93397596ab5a0152b))
+
+
+### Bug Fixes
+
+* disable swipe drawer if unauthenticated ([#350](https://github.com/lemonadesocial/lemonade-flutter/issues/350)) ([ba0afd3](https://github.com/lemonadesocial/lemonade-flutter/commit/ba0afd32e6a7c5b06cbc4706cc15cb2aa2357f40))
+
 ## [1.1.4](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.1.3...v1.1.4) (2024-01-15)
 
 
