@@ -21,6 +21,7 @@ import 'package:app/core/domain/payment/entities/payment.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/graphql/backend/event/mutation/create_event_ticket_type.graphql.dart';
+import 'package:app/graphql/backend/event/mutation/delete_event_ticket_type.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/update_event_ticket_type.graphql.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/injection/register_module.dart';
@@ -235,6 +236,29 @@ class EventTicketRepositoryImpl implements EventTicketRepository {
           result.parsedData!.updateEventTicketType.toJson(),
         ),
       ),
+    );
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteEventTicketType({
+    required String ticketTypeId,
+    required String eventId,
+  }) async {
+    final result = await _client.mutate$DeleteEventTicketType(
+      Options$Mutation$DeleteEventTicketType(
+        variables: Variables$Mutation$DeleteEventTicketType(
+          event: eventId,
+          id: ticketTypeId,
+        ),
+      ),
+    );
+
+    if (result.hasException || result.parsedData == null) {
+      return Left(Failure());
+    }
+
+    return Right(
+      result.parsedData?.deleteEventTicketType ?? false,
     );
   }
 }

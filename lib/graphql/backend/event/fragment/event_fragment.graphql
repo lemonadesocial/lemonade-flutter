@@ -46,6 +46,7 @@ fragment EventTicketTypesFragment on Event {
             cost
             currency
             network
+            default
         }
         description
         photos_expanded(limit: 1) {

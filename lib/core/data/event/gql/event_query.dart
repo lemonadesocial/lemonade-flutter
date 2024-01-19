@@ -61,6 +61,7 @@ const eventTicketTypesFragment = '''
         cost
         currency
         network
+        default
       }
       ticket_limit
       ticket_count

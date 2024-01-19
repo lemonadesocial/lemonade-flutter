@@ -20,6 +20,8 @@ class ModifyTicketTypeBloc
     on<_ModifyTicketTypeEventOnGuestsLimitChanged>(_onGuestsLimitChanged);
     on<_ModifyTicketTypeEventOnActiveChanged>(_onActiveChanged);
     on<_ModifyTicketTypeEventOnPricesChanged>(_onPricesChanged);
+    on<_ModifyTicketTypeEventOnDeletePrice>(_onDeletePrice);
+    on<_ModifyTicketTypeEventOnMarkDefault>(_onMarkDefault);
     on<_ModifyTicketTypeEventOnValidate>(_onValidate);
     on<_ModifyTicketTypeEventPopulateTicketType>(_onPopulateTicketType);
     if (initialTicketType != null) {
@@ -89,6 +91,53 @@ class ModifyTicketTypeBloc
     emit(_validate(newState));
   }
 
+  void _onDeletePrice(
+    _ModifyTicketTypeEventOnDeletePrice event,
+    Emitter emit,
+  ) {
+    final newPrices = state.prices
+        .asMap()
+        .entries
+        .where(
+          (entry) => entry.key != event.index,
+        )
+        .map(
+          (entry) => entry.value,
+        )
+        .toList();
+    emit(
+      _validate(
+        state.copyWith(
+          prices: newPrices,
+        ),
+      ),
+    );
+  }
+
+  void _onMarkDefault(
+    _ModifyTicketTypeEventOnMarkDefault event,
+    Emitter emit,
+  ) {
+    final newPrices = state.prices.asMap().entries.map((entry) {
+      if (entry.key == event.index) {
+        return entry.value.copyWith(
+          isDefault: true,
+        );
+      }
+      return entry.value.copyWith(
+        isDefault: false,
+      );
+    }).toList();
+
+    emit(
+      _validate(
+        state.copyWith(
+          prices: newPrices,
+        ),
+      ),
+    );
+  }
+
   void _onValidate(
     _ModifyTicketTypeEventOnValidate event,
     Emitter emit,
@@ -127,6 +176,7 @@ class ModifyTicketTypeBloc
                       currency: item.currency ?? '',
                       cost: item.cost ?? '0',
                       network: item.network,
+                      isDefault: item.isDefault,
                     ),
                   )
                   .toList() ??
@@ -156,6 +206,12 @@ class ModifyTicketTypeEvent with _$ModifyTicketTypeEvent {
     required TicketPriceInput ticketPrice,
     int? index,
   }) = _ModifyTicketTypeEventOnPricesChanged;
+  factory ModifyTicketTypeEvent.onDeletePrice({
+    required int index,
+  }) = _ModifyTicketTypeEventOnDeletePrice;
+  factory ModifyTicketTypeEvent.onMarkDefault({
+    required int index,
+  }) = _ModifyTicketTypeEventOnMarkDefault;
   factory ModifyTicketTypeEvent.onValidate() = _ModifyTicketTypeEventOnValidate;
   factory ModifyTicketTypeEvent.populateInitialTicketType() =
       _ModifyTicketTypeEventPopulateTicketType;

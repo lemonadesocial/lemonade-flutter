@@ -102,7 +102,9 @@ class EventCreateTicketTierPagerView extends StatelessWidget {
               slivers: [
                 SliverToBoxAdapter(
                   child: Text(
-                    t.event.ticketTierSetting.createTicket,
+                    initialTicketType != null
+                        ? t.event.ticketTierSetting.editTicket
+                        : t.event.ticketTierSetting.createTicket,
                     style: Typo.extraLarge.copyWith(
                       fontWeight: FontWeight.w800,
                       fontFamily: FontFamily.nohemiVariable,

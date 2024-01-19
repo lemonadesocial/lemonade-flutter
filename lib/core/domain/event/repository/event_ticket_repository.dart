@@ -53,4 +53,9 @@ abstract class EventTicketRepository {
     required Input$EventTicketTypeInput input,
     required String ticketTypeId,
   });
+
+  Future<Either<Failure, bool>> deleteEventTicketType({
+    required String ticketTypeId,
+    required String eventId,
+  });
 }
