@@ -1,6 +1,5 @@
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/domain/event/entities/reward.dart';
-import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_reward_setting_page/sub_pages/event_create_reward_page/event_create_reward_page.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_reward_setting_page/sub_pages/event_rewards_listing_page/widgets/reward_item.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
@@ -49,13 +48,17 @@ class EventRewardsListingPage extends StatelessWidget {
                     ),
                   ),
                 if (rewards.isNotEmpty)
-                  SliverList.builder(
+                  SliverList.separated(
                     itemCount: rewards.length,
                     itemBuilder: (context, index) {
                       return RewardItem(
                         reward: rewards[index],
                       );
                     },
+                    separatorBuilder: (BuildContext context, int index) =>
+                        SizedBox(
+                      height: Spacing.smMedium,
+                    ),
                   ),
               ],
             ),

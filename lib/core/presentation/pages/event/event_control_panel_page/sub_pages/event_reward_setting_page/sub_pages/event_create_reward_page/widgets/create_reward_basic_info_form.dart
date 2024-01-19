@@ -1,16 +1,20 @@
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/application/event_tickets/modify_reward_bloc/modify_reward_bloc.dart';
+import 'package:app/core/config.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_reward_setting_page/sub_pages/event_create_reward_page/widgets/select_reward_icon_form.dart';
 import 'package:app/core/presentation/pages/setting/widgets/setting_tile_widget.dart';
+import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/bottomsheet_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
+import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -130,7 +134,15 @@ class _ChooseRewardIconButton extends StatelessWidget {
         BottomSheetUtils.showSnapBottomSheet(
           context,
           builder: (innerContext) {
-            return const SelectRewardIconForm();
+            return SelectRewardIconForm(
+              onConfirm: (String iconUrl) {
+                context.read<ModifyRewardBloc>().add(
+                      ModifyRewardEvent.onIconChanged(
+                        iconUrl: iconUrl,
+                      ),
+                    );
+              },
+            );
           },
         );
       },
@@ -144,11 +156,43 @@ class _ChooseRewardIconButton extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            ThemeSvgIcon(
-              color: colorScheme.onSecondary,
-              builder: (filter) => Assets.icons.icAdd.svg(
-                colorFilter: filter,
-              ),
+            BlocBuilder<ModifyRewardBloc, ModifyRewardState>(
+              builder: (context, state) {
+                if (state.iconUrl != '' && state.iconUrl != null) {
+                  final fullIconUrl =
+                      '${AppConfig.assetPrefix}${state.iconUrl}';
+                  return Container(
+                    width: Sizing.regular,
+                    height: Sizing.regular,
+                    decoration: BoxDecoration(
+                      borderRadius:
+                          BorderRadius.circular(LemonRadius.extraSmall),
+                      border: Border.all(
+                        color: LemonColor.chineseBlack,
+                      ),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(
+                        LemonRadius.small,
+                      ),
+                      child: CachedNetworkImage(
+                        fit: BoxFit.cover,
+                        imageUrl: fullIconUrl,
+                        placeholder: (_, __) =>
+                            ImagePlaceholder.defaultPlaceholder(),
+                        errorWidget: (_, __, ___) =>
+                            ImagePlaceholder.defaultPlaceholder(),
+                      ),
+                    ),
+                  );
+                }
+                return ThemeSvgIcon(
+                  color: colorScheme.onSecondary,
+                  builder: (filter) => Assets.icons.icAdd.svg(
+                    colorFilter: filter,
+                  ),
+                );
+              },
             ),
             SizedBox(width: Spacing.medium),
             Text(

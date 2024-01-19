@@ -1,5 +1,9 @@
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
+import 'package:app/core/domain/event/entities/reward.dart';
+import 'package:app/core/domain/event/repository/event_reward_repository.dart';
 import 'package:app/core/domain/form/string_formz.dart';
+import 'package:app/graphql/backend/schema.graphql.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -18,7 +22,9 @@ class ModifyRewardBloc extends Bloc<ModifyRewardEvent, ModifyRewardState> {
       _onSelectEventTicketType,
     );
     on<_ModifyRewardEventOnValidate>(_onValidate);
+    on<_ModifyRewardEventOnSubmitted>(_onSubmitted);
   }
+  final _eventRepository = getIt<EventRewardRepository>();
 
   void _onTitleChanged(
     _ModifyRewardEventOnTitleChanged event,
@@ -33,7 +39,12 @@ class ModifyRewardBloc extends Bloc<ModifyRewardEvent, ModifyRewardState> {
   void _onIconChanged(
     _ModifyRewardEventOnIconChanged event,
     Emitter emit,
-  ) {}
+  ) {
+    final newState = state.copyWith(
+      iconUrl: event.iconUrl,
+    );
+    emit(_validate(newState));
+  }
 
   void _onLimitPerChanged(
     _ModifyRewardEventOnLimitPerChanged event,
@@ -100,6 +111,48 @@ class ModifyRewardBloc extends Bloc<ModifyRewardEvent, ModifyRewardState> {
         state.selectedEventTicketTypeIds.isNotEmpty;
     return state.copyWith(isValid: isValid);
   }
+
+  void _onSubmitted(
+    _ModifyRewardEventOnSubmitted event,
+    Emitter emit,
+  ) async {
+    emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
+    final title = StringFormz.dirty(state.title.value);
+    _validate(state.copyWith(title: title));
+    if (state.isValid) {
+      final result = await _eventRepository.createEventReward(
+        input: [
+          ...event.existingRewards
+              .map(
+                (reward) => Input$EventRewardInput(
+                  $_id: reward.id,
+                  active: reward.active!,
+                  title: reward.title!,
+                  limit: reward.limit?.toDouble(),
+                  limit_per: reward.limitPer!.toDouble(),
+                  icon_color: reward.iconColor,
+                  icon_url: reward.iconUrl,
+                ),
+              )
+              .toList(),
+          Input$EventRewardInput(
+            active: true,
+            title: title.value,
+            limit_per: state.limitPer ?? 1,
+            payment_ticket_types: state.selectedEventTicketTypeIds,
+            icon_url: state.iconUrl,
+          ),
+        ],
+        eventId: event.eventId,
+      );
+      result.fold(
+        (failure) =>
+            emit(state.copyWith(status: FormzSubmissionStatus.failure)),
+        (createEvent) =>
+            emit(state.copyWith(status: FormzSubmissionStatus.success)),
+      );
+    }
+  }
 }
 
 @freezed
@@ -108,7 +161,7 @@ class ModifyRewardEvent with _$ModifyRewardEvent {
     required String title,
   }) = _ModifyRewardEventOnTitleChanged;
   factory ModifyRewardEvent.onIconChanged({
-    required String cost,
+    required String iconUrl,
   }) = _ModifyRewardEventOnIconChanged;
   factory ModifyRewardEvent.onLimitPerChanged({
     required double? limitPer,
@@ -121,6 +174,10 @@ class ModifyRewardEvent with _$ModifyRewardEvent {
     required String? eventTicketTypeId,
   }) = _ModifyRewardEventOnSelectTicketTier;
   factory ModifyRewardEvent.onValidate() = _ModifyRewardEventOnValidate;
+  factory ModifyRewardEvent.onSubmitted({
+    required String eventId,
+    required List<Reward> existingRewards,
+  }) = _ModifyRewardEventOnSubmitted;
 }
 
 @freezed
@@ -130,7 +187,8 @@ class ModifyRewardState with _$ModifyRewardState {
     String? iconUrl,
     double? limitPer,
     required List<String> selectedEventTicketTypeIds,
-    required bool isValid,
+    @Default(FormzSubmissionStatus.initial) FormzSubmissionStatus status,
+    @Default(false) bool isValid,
   }) = _ModifyRewardState;
 
   factory ModifyRewardState.initial() => ModifyRewardState(
