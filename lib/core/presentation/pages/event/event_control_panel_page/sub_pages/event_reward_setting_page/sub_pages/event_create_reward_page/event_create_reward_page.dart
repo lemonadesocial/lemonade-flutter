@@ -100,7 +100,8 @@ class EventCreateRewardPageView extends StatelessWidget {
                       ),
                     ),
                     const SliverToBoxAdapter(
-                        child: CreateRewardBasicInfoForm()),
+                      child: CreateRewardBasicInfoForm(),
+                    ),
                     SliverToBoxAdapter(
                       child: SizedBox(
                         height: Spacing.medium,

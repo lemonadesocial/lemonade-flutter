@@ -69,27 +69,28 @@ class _CreateRewardBasicInfoFormState extends State<CreateRewardBasicInfoForm> {
         const _ChooseRewardIconButton(),
         SizedBox(height: Spacing.small),
         BlocBuilder<ModifyRewardBloc, ModifyRewardState>(
-            builder: (context, state) {
-          return SettingTileWidget(
-            title: t.event.rewardSetting.limit,
-            subTitle: t.event.rewardSetting.limitDescription,
-            onTap: () => {},
-            trailing: SizedBox(
-              width: 60.w,
-              child: LemonTextField(
-                initialText: "1",
-                textInputType: TextInputType.number,
-                onChange: (value) {
-                  modifyRewardBloc.add(
-                    ModifyRewardEvent.onLimitPerChanged(
-                      limitPer: double.parse(value),
-                    ),
-                  );
-                },
+          builder: (context, state) {
+            return SettingTileWidget(
+              title: t.event.rewardSetting.limit,
+              subTitle: t.event.rewardSetting.limitDescription,
+              onTap: () => {},
+              trailing: SizedBox(
+                width: 60.w,
+                child: LemonTextField(
+                  initialText: "1",
+                  textInputType: TextInputType.number,
+                  onChange: (value) {
+                    modifyRewardBloc.add(
+                      ModifyRewardEvent.onLimitPerChanged(
+                        limitPer: double.parse(value),
+                      ),
+                    );
+                  },
+                ),
               ),
-            ),
-          );
-        }),
+            );
+          },
+        ),
         SizedBox(height: Spacing.small),
         SettingTileWidget(
           title: t.event.rewardSetting.selectAllTicketTiers,

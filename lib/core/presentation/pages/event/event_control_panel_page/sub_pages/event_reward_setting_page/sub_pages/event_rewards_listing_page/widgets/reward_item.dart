@@ -84,9 +84,10 @@ class RewardItem extends StatelessWidget {
                 ),
                 DropdownItemDpo(
                   leadingIcon: Assets.icons.icDelete.svg(
-                      width: Sizing.xSmall,
-                      height: Sizing.xSmall,
-                      color: colorScheme.onPrimary),
+                    width: Sizing.xSmall,
+                    height: Sizing.xSmall,
+                    color: colorScheme.onPrimary,
+                  ),
                   label: t.common.delete.capitalize(),
                   value: "delete",
                 ),
