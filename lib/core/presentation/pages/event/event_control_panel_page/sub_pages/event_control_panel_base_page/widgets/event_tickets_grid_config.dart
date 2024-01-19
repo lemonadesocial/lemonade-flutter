@@ -26,6 +26,9 @@ class EventTicketsGridConfig extends StatelessWidget {
       case EventConfigurationType.ticketTiers:
         AutoRouter.of(context).navigate(const EventTicketTierSettingRoute());
         break;
+      case EventConfigurationType.rewards:
+        AutoRouter.of(context).navigate(const EventRewardSettingRoute());
+        break;
       default:
         showComingSoonDialog(context);
     }

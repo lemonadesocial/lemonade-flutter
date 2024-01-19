@@ -19,7 +19,7 @@ enum EventConfigurationType {
   coHosts,
   speakers,
   ticketTiers,
-  promotions
+  rewards
 }
 
 class EventConfiguration {
@@ -173,8 +173,8 @@ class EventConfiguration {
         ),
       ),
       EventConfiguration(
-        type: EventConfigurationType.promotions,
-        title: t.event.configuration.promitions,
+        type: EventConfigurationType.rewards,
+        title: t.event.configuration.rewards,
         description: "",
         icon: const Center(child: Icon(Icons.star_border_outlined)),
       ),
