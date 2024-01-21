@@ -30,6 +30,34 @@ class EventRewardRepositoryImpl implements EventRewardRepository {
         fetchPolicy: FetchPolicy.networkOnly,
       ),
     );
+    if (result.hasException || result.parsedData == null) {
+      return Left(Failure());
+    }
+    return Right(
+      Event.fromDto(
+        EventDto.fromJson(
+          result.parsedData!.updateEvent.toJson(),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Future<Either<Failure, Event>> deleteEventReward({
+    required String eventId,
+    required List<Input$EventRewardInput> input,
+  }) async {
+    final result = await _client.mutate$UpdateEvent(
+      Options$Mutation$UpdateEvent(
+        variables: Variables$Mutation$UpdateEvent(
+          input: Input$EventInput(
+            rewards: input,
+          ),
+          id: eventId,
+        ),
+        fetchPolicy: FetchPolicy.networkOnly,
+      ),
+    );
 
     if (result.hasException || result.parsedData == null) {
       return Left(Failure());
