@@ -74,7 +74,9 @@ class _CreateRewardBasicInfoFormState extends State<CreateRewardBasicInfoForm> {
           },
         ),
         SizedBox(height: Spacing.small),
-        _ChooseRewardIconButton(widget.initialReward),
+        _ChooseRewardIconButton(
+          initialReward: widget.initialReward,
+        ),
         SizedBox(height: Spacing.small),
         BlocBuilder<ModifyRewardBloc, ModifyRewardState>(
           builder: (context, state) {
@@ -136,7 +138,7 @@ class _CreateRewardBasicInfoFormState extends State<CreateRewardBasicInfoForm> {
 
 class _ChooseRewardIconButton extends StatelessWidget {
   final Reward? initialReward;
-  const _ChooseRewardIconButton(this.initialReward);
+  const _ChooseRewardIconButton({this.initialReward});
 
   @override
   Widget build(BuildContext context) {
