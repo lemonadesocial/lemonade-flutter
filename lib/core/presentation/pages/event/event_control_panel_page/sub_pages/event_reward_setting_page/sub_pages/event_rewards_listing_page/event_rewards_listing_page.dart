@@ -72,8 +72,7 @@ class EventRewardsListingPage extends StatelessWidget {
               child: SafeArea(
                 child: LinearGradientButton(
                   onTap: () {
-                    AutoRouter.of(context)
-                        .navigate(const EventCreateRewardRoute());
+                    AutoRouter.of(context).navigate(EventCreateRewardRoute());
                   },
                   height: 42.w,
                   leading: Assets.icons.icAdd.svg(),
