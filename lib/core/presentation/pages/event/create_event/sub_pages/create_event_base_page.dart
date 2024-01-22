@@ -1,5 +1,6 @@
 import 'package:app/core/application/event/create_event_bloc/create_event_bloc.dart';
 import 'package:app/core/application/event/event_datetime_settings_bloc/event_datetime_settings_bloc.dart';
+import 'package:app/core/application/event/event_guest_settings_bloc/event_guest_settings_bloc.dart';
 import 'package:app/core/application/event/event_location_setting_bloc/event_location_setting_bloc.dart';
 import 'package:app/core/constants/event/event_constants.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/create_event_config_grid.dart';
@@ -124,6 +125,8 @@ class CreateEventBasePage extends StatelessWidget {
 
   _buildSubmitButton(BuildContext context) {
     final t = Translations.of(context);
+    final eventGuestSettingsState =
+        context.read<EventGuestSettingsBloc>().state;
     final start = context.read<EventDateTimeSettingsBloc>().state.start.value ??
         EventDateTimeConstants.defaultStartDateTime;
     final end = context.read<EventDateTimeSettingsBloc>().state.end.value ??
@@ -150,6 +153,10 @@ class CreateEventBasePage extends StatelessWidget {
                       start: start,
                       end: end,
                       address: selectedAddress,
+                      guestLimit: eventGuestSettingsState.guestLimit,
+                      guestLimitPer: eventGuestSettingsState.guestLimitPer,
+                      requireApproval: eventGuestSettingsState.requireApproval,
+                      private: eventGuestSettingsState.private,
                     ),
                   );
             },

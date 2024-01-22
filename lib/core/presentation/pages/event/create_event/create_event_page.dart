@@ -27,6 +27,9 @@ class CreateEventPage extends StatelessWidget implements AutoRouteWrapper {
           create: (context) => EditEventDetailBloc(),
         ),
         BlocProvider(
+          create: (context) => EventGuestSettingsBloc(),
+        ),
+        BlocProvider(
           create: (context) => EventDateTimeSettingsBloc()
             ..add(
               EventDateTimeSettingsEvent.init(

@@ -9,19 +9,19 @@ part 'event_guest_settings_bloc.freezed.dart';
 class EventGuestSettingsBloc
     extends Bloc<EventGuestSettingEvent, EventGuestSettingState> {
   EventGuestSettingsBloc() : super(const EventGuestSettingState()) {
-    on<VerifyChanged>(_onVerifyChanged);
+    on<RequireApprovalChanged>(_onRequiredApprovalChanged);
     on<GuestLimitChanged>(_onGuestLimitChanged);
     on<GuestLimitPerChanged>(_onGuestLimitPerChanged);
     on<PrivateChanged>(_onPrivateChanged);
   }
 
-  Future<void> _onVerifyChanged(
-    VerifyChanged event,
+  Future<void> _onRequiredApprovalChanged(
+    RequireApprovalChanged event,
     Emitter<EventGuestSettingState> emit,
   ) async {
     emit(
       state.copyWith(
-        verify: event.verify,
+        requireApproval: event.requireApproval,
       ),
     );
   }
@@ -62,14 +62,6 @@ class EventGuestSettingsBloc
 
 @freezed
 class EventGuestSettingEvent with _$EventGuestSettingEvent {
-  const factory EventGuestSettingEvent.eventTitleChanged({
-    required String title,
-  }) = EventTitleChanged;
-
-  const factory EventGuestSettingEvent.eventDescriptionChanged({
-    required String description,
-  }) = EventDescriptionChanged;
-
   const factory EventGuestSettingEvent.guestLimitChanged({
     required String? guestLimit,
   }) = GuestLimitChanged;
@@ -81,8 +73,9 @@ class EventGuestSettingEvent with _$EventGuestSettingEvent {
   const factory EventGuestSettingEvent.privateChanged({required bool private}) =
       PrivateChanged;
 
-  const factory EventGuestSettingEvent.verifyChanged({required bool verify}) =
-      VerifyChanged;
+  const factory EventGuestSettingEvent.requireApprovalChanged({
+    required bool requireApproval,
+  }) = RequireApprovalChanged;
 }
 
 @freezed
@@ -91,7 +84,7 @@ class EventGuestSettingState with _$EventGuestSettingState {
     @Default("100") String? guestLimit,
     @Default("2") String? guestLimitPer,
     @Default(false) bool private,
-    @Default(true) bool verify,
+    @Default(true) bool requireApproval,
     @Default(true) bool virtual,
     @Default(false) bool isValid,
   }) = _EventGuestSettingState;
