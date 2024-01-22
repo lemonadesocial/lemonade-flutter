@@ -80,9 +80,9 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
       emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
       var input = Input$EventInput(
         title: title.value,
-        description: title.value,
-        private: false,
-        verify: false,
+        description: description.value,
+        private: event.private,
+        require_approval: event.requireApproval,
         start: DateTime.parse(event.start.toUtc().toIso8601String()),
         end: DateTime.parse(event.end.toUtc().toIso8601String()),
         timezone: timezone,
@@ -134,6 +134,8 @@ class CreateEventEvent with _$CreateEventEvent {
   const factory CreateEventEvent.formSubmitted({
     required DateTime start,
     required DateTime end,
+    bool? private,
+    bool? requireApproval,
     Address? address,
     String? guestLimit,
     String? guestLimitPer,

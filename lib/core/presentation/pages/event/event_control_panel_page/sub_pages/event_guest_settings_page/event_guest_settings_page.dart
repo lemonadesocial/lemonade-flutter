@@ -101,12 +101,11 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
                     _buildSettingTile(
                       title: t.event.guestSettings.autoApprove,
                       subTitle: t.event.guestSettings.autoApproveDescription,
-                      value: state.verify,
+                      value: state.requireApproval,
                       onChanged: (value) {
                         Vibrate.feedback(FeedbackType.light);
-                        context
-                            .read<EventGuestSettingsBloc>()
-                            .add(VerifyChanged(verify: value));
+                        context.read<EventGuestSettingsBloc>().add(
+                            RequireApprovalChanged(requireApproval: value));
                       },
                     ),
                     SizedBox(

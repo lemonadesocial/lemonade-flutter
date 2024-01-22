@@ -70,6 +70,7 @@ type Query {
   getStripeCards(skip: Int! = 0, limit: Int! = 25, payment_account: MongoID): [StripeCard!]!
   calculateTicketsPricing(input: CalculateTicketsPricingInput!): PricingInfo!
   getTickets(skip: Int! = 0, limit: Int! = 25, _id: [MongoID!], event: MongoID, user: MongoID): [Ticket!]!
+  getEventJoinRequests(skip: Int! = 0, limit: Int! = 25, event: MongoID!, state: String): [EventJoinRequestsResponse!]!
   getUserContacts(skip: Int! = 0, limit: Int! = 25, input: GetUserContactsInput): GetUserContactsResponse!
   getUserDiscovery(longitude: Float!, latitude: Float!, search_range: Float, event: MongoID): UserDiscovery!
   getUserDiscoverySwipes(skip: Int! = 0, limit: Int! = 25, state: UserDiscoverySwipeState, other_wallets: Boolean): [UserDiscoverySwipe!]!
@@ -405,6 +406,7 @@ type Event {
   photos: [String!]
   private: Boolean
   published: Boolean
+  require_approval: Boolean
   rewards: [EventReward!]
   reward_uses: JSON
   session_guests: JSON
@@ -417,7 +419,6 @@ type Event {
   terms_text: String
   timezone: String
   unlisted: Boolean
-  verify: Boolean
   videos: [Video!]
   virtual: Boolean
   welcome_text: String
@@ -1187,6 +1188,7 @@ enum NewPaymentState {
   initialized
   failed
   succeeded
+  pending_approval
 }
 
 type BillingInfo {
@@ -1293,6 +1295,8 @@ enum NotificationType {
   event_invite
   event_invite_verify_accept_request
   event_invite_verify_request
+  event_request_approved
+  event_request_declined
   event_unlock_verify_accept_request
   event_unlock_verify_request
   event_update
@@ -1433,6 +1437,7 @@ type Room {
   verify: Boolean
   description: String
   event: MongoID
+  payment_direct: Boolean
   photos: [MongoID!]
   stage_open: Boolean
   theme_background_photo: MongoID
@@ -1726,6 +1731,172 @@ input PurchasableItem {
   count: Int!
 }
 
+type EventJoinRequestsResponse {
+  _id: MongoID!
+  created_at: DateTimeISO!
+  event: EventResponse!
+  ticket_info: [TicketInfo!]!
+  payment: PaymentResponse
+  approved_at: DateTimeISO
+  approved_by: UserResponse
+  declined_at: DateTimeISO
+  declined_by: UserResponse
+  user: UserResponse!
+}
+
+type EventResponse {
+  _id: MongoID!
+  shortid: String!
+  active: Boolean!
+  stamp: DateTimeISO!
+  state: EventState!
+  title: String!
+  slug: String!
+  start: DateTimeISO!
+  end: DateTimeISO!
+  host: MongoID!
+  cohosts: [MongoID!]!
+  invited: [MongoID!]!
+  inviters: [MongoID!]!
+  pending: [MongoID!]!
+  accepted: [MongoID!]!
+  declined: [MongoID!]!
+  payment_fee: Float!
+  application_form_url: String!
+  alert_tickets: JSON!
+  alert_payments: [MongoID!]!
+  accepted_store_promotion: MongoID!
+  accepted_user_fields_required: [String!]!
+  access_pass: AccessPass!
+  address: Address!
+  approved: Boolean!
+  broadcast_rooms: [BroadcastRoomBase!]!
+  button_icon: String!
+  button_text: String!
+  button_url: String!
+  comments: String!
+  cost: Float!
+  currency: String!
+  cover: String!
+  cta_button_text: String!
+  description: String!
+  events: [MongoID!]!
+  frequent_questions: [FrequentQuestion!]!
+  guest_limit: Float!
+  guest_limit_per: Float!
+  guests: Float!
+  hide_chat_action: Boolean!
+  hide_creators: Boolean!
+  hide_invite_action: Boolean!
+  hide_question_box: Boolean!
+  hide_rooms_action: Boolean!
+  hide_session_guests: Boolean!
+  hide_speakers: Boolean!
+  hide_stories_action: Boolean!
+  highlight: Boolean!
+  latitude: Float!
+  layout_sections: [LayoutSection!]!
+  location: Point!
+  longitude: Float!
+  new_photos: [FileInline!]!
+  new_new_photos: [MongoID!]!
+  offers: [EventOffer!]!
+  payment_accounts_new: [MongoID!]!
+  payment_donation: Boolean!
+  payment_donation_amount_includes_tickets: Boolean!
+  payment_donation_amount_increment: Float!
+  payment_donation_message: String!
+  payment_donation_target: Float!
+  payment_enabled: Boolean!
+  payment_optional: Boolean!
+  payment_ticket_external_message: String!
+  payment_ticket_external_url: String!
+  payment_ticket_purchase_title: String!
+  photos: [String!]!
+  private: Boolean!
+  published: Boolean!
+  require_approval: Boolean!
+  rewards: [EventReward!]!
+  reward_uses: JSON!
+  sessions: [EventSessionBase!]!
+  session_guests: JSON!
+  speaker_emails: [String!]!
+  speaker_users: [MongoID!]!
+  stores: [MongoID!]!
+  stories: [MongoID!]!
+  stories_eponym: Boolean!
+  tags: [String!]!
+  terms_email_permission_text: Boolean!
+  terms_text: String!
+  timezone: String!
+  unlisted: Boolean!
+  videos: [Video!]!
+  virtual: Boolean!
+  welcome_text: String!
+  welcome_video: Video!
+  payment_ticket_count: Float!
+  payment_ticket_unassigned_count: Float!
+  eventbrite_enabled: Boolean!
+  eventbrite_event_id: String!
+  eventbrite_tickets_imported: Boolean!
+  eventbrite_token: String!
+  insider_enabled: Boolean!
+  insider_token: String!
+  invited_count: Float!
+  invited_email_map: JSON!
+  invited_phone_map: JSON!
+  invited_user_map: JSON!
+  inviter_email_map: JSON!
+  inviter_phone_map: JSON!
+  inviter_user_map: JSON!
+  matrix_event_room_id: String!
+  terms_accepted: [MongoID!]!
+  terms_accepted_with_email_permission: [MongoID!]!
+  url: String!
+  url_go: String!
+}
+
+type BroadcastRoomBase {
+  _id: MongoID
+  title: String
+  description: String
+  photos: [MongoID!]
+  event_payment_ticket_types: [MongoID!]
+  position: Float
+  iframe_src: String
+}
+
+type EventSessionBase {
+  _id: MongoID
+  title: String!
+  start: DateTimeISO!
+  end: DateTimeISO!
+  broadcast: MongoID
+  description: String
+  photos: [MongoID!]
+  speaker_users: [MongoID!]
+}
+
+type TicketInfo {
+  count: Float!
+  ticket_type: MongoID!
+}
+
+type PaymentResponse {
+  _id: MongoID!
+  amount: String!
+  currency: String!
+  state: NewPaymentState!
+}
+
+type UserResponse {
+  _id: MongoID
+  display_name: String
+  image_avatar: String
+  username: String
+  wallets: [String!]
+}
+
 type GetUserContactsResponse {
   items: [UserContact!]!
   total: Int!
@@ -1957,10 +2128,16 @@ type Mutation {
   createStripeCard(payment_account: MongoID!, payment_method: String!): StripeCard!
   deleteStripeCard(_id: MongoID!): StripeCard!
   assignTickets(input: AssignTicketsInput!): Boolean!
-  redeemTickets(input: RedeemTicketsInput!): [Ticket!]!
-  buyTickets(input: BuyTicketsInput!): NewPayment!
+  redeemTickets(input: RedeemTicketsInput!): RedeemTicketsResponse!
+  buyTickets(input: BuyTicketsInput!): BuyTicketsResponse!
+  approveUserJoinRequests(input: ApproveUserJoinRequestsInput!): Boolean!
+  declineUserJoinRequests(input: DeclineUserJoinRequestsInput!): Boolean!
   revokeTwitter: String!
   inviteUserContacts(_id: MongoID): Boolean!
+  acceptUserDiscovery(swipee: MongoID!, event: MongoID): AcceptUserDiscoveryResponse!
+  declineUserDiscovery(swipee: MongoID!, event: MongoID): Boolean!
+  rewindUserDiscovery(event: MongoID): RewindUserDiscoveryResponse!
+  deleteUserDiscoverySwipe(swipee: MongoID!): Boolean!
   createUserFollow(followee: MongoID!): Boolean!
   deleteUserFollow(followee: MongoID!): Boolean!
   createUserFriendship(input: CreateUserFriendshipInput!): UserFriendship!
@@ -2080,6 +2257,7 @@ input EventInput {
   photos: [String!]
   private: Boolean
   published: Boolean
+  require_approval: Boolean
   rewards: [EventRewardInput!]
   sessions: [EventSessionInput!]
   speaker_emails: [String!]
@@ -2090,7 +2268,6 @@ input EventInput {
   terms_email_permission_text: Boolean
   terms_text: String
   timezone: String
-  verify: Boolean
   virtual: Boolean
   welcome_text: String
   welcome_video: VideoInput
@@ -2361,6 +2538,7 @@ input RoomInput {
   verify: Boolean
   description: String
   event: MongoID
+  payment_direct: Boolean
   photos: [MongoID!]
   stage_open: Boolean
   theme_background_photo: MongoID
@@ -2637,6 +2815,38 @@ input TicketAssignee {
   ticket: MongoID!
 }
 
+type RedeemTicketsResponse {
+  tickets: [Ticket!]
+  event_join_request: EventJoinRequestBase
+}
+
+type EventJoinRequestBase {
+  _id: MongoID!
+  created_at: DateTimeISO!
+  event: MongoID!
+  user: MongoID!
+  ticket_info: [TicketInfo!]!
+  payment: NewPaymentBase
+  approved_at: DateTimeISO
+  approved_by: MongoID
+  declined_at: DateTimeISO
+  declined_by: MongoID
+}
+
+type NewPaymentBase {
+  _id: MongoID!
+  stamps: JSON!
+  amount: String!
+  currency: String!
+  state: NewPaymentState!
+  user: MongoID!
+  account: MongoID!
+  billing_info: BillingInfo
+  transfer_metadata: JSON
+  transfer_params: JSON
+  failure_reason: String
+}
+
 input RedeemTicketsInput {
   event: MongoID!
   items: [RedeemItem!]!
@@ -2645,6 +2855,11 @@ input RedeemTicketsInput {
 input RedeemItem {
   ticket_type: MongoID!
   count: Int!
+}
+
+type BuyTicketsResponse {
+  payment: NewPaymentBase
+  event_join_request: EventJoinRequestBase
 }
 
 input BuyTicketsInput {
@@ -2675,6 +2890,26 @@ input BillingInfoInput {
   email: String
   firstname: String
   lastname: String
+}
+
+input ApproveUserJoinRequestsInput {
+  event: MongoID!
+  requests: [MongoID!]!
+}
+
+input DeclineUserJoinRequestsInput {
+  event: MongoID!
+  requests: [MongoID!]!
+}
+
+type AcceptUserDiscoveryResponse {
+  state: UserDiscoverySwipeState
+  user: User
+}
+
+type RewindUserDiscoveryResponse {
+  decision: UserDiscoverySwipeDecision!
+  user: User
 }
 
 input CreateUserFriendshipInput {
