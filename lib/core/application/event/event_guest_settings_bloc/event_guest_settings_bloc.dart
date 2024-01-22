@@ -73,8 +73,9 @@ class EventGuestSettingEvent with _$EventGuestSettingEvent {
   const factory EventGuestSettingEvent.privateChanged({required bool private}) =
       PrivateChanged;
 
-  const factory EventGuestSettingEvent.requireApprovalChanged(
-      {required bool requireApproval}) = RequireApprovalChanged;
+  const factory EventGuestSettingEvent.requireApprovalChanged({
+    required bool requireApproval,
+  }) = RequireApprovalChanged;
 }
 
 @freezed
