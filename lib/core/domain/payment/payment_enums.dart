@@ -20,6 +20,8 @@ enum PaymentState {
   failed,
   @JsonValue('succeeded')
   succeeded,
+  @JsonValue('pending_approval')
+  pendingApproval,
   @JsonValue('initialized')
   initialized
 }

@@ -69,6 +69,7 @@ fragment EventFields on Event {
     title
     slug
     host
+    require_approval
     host_expanded {
         ...EventHostExpandedFragment
     }
