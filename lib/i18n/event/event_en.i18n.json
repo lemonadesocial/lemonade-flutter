@@ -267,13 +267,15 @@
     },
     "rewardSetting": {
         "createNewReward": "Create new reward",
+        "editReward": "Edit reward",
         "rewardName":" Reward name",
         "chooseAnIcon": "Choose an icon",
         "limit": "Limit",
         "limitDescription": "Total number of people who can claim this reward",
         "selectAllTicketTiers": "Select all ticket tiers",
         "selectTicketTiers": "Select ticket tiers",
-        "createRewardSuccessfully": "Create reward successfully"
+        "createRewardSuccessfully": "Create reward successfully",
+        "updateRewardSuccessfully": "Update reward successfully"
     },
     "allTicketTiers": "All ticket tiers"
 }

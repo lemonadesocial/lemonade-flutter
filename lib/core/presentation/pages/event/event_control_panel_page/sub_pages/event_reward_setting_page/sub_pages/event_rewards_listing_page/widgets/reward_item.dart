@@ -2,17 +2,23 @@ import 'package:app/core/application/event/get_event_detail_bloc/get_event_detai
 import 'package:app/core/config.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/entities/reward.dart';
+import 'package:app/core/domain/event/repository/event_reward_repository.dart';
 import 'package:app/core/presentation/dpos/common/dropdown_item_dpo.dart';
 import 'package:app/core/presentation/widgets/floating_frosted_glass_dropdown_widget.dart';
+import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/modal_utils.dart';
 import 'package:app/gen/assets.gen.dart';
+import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/injection/register_module.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,10 +33,52 @@ class RewardItem extends StatelessWidget {
     super.key,
     required this.reward,
   });
+
+  Future<void> onPressDelete(BuildContext context) async {
+    final rewards = context.read<GetEventDetailBloc>().state.maybeWhen(
+              fetched: (event) => event.rewards,
+              orElse: () => [] as List<Reward>,
+            ) ??
+        [];
+    final eventId = context.read<GetEventDetailBloc>().state.maybeWhen(
+          orElse: () => '',
+          fetched: (eventDetail) => eventDetail.id ?? '',
+        );
+    final newRewards =
+        rewards.where((element) => element.id != reward.id).toList();
+    showFutureLoadingDialog(
+      context: context,
+      future: () async {
+        final result = await getIt<EventRewardRepository>().deleteEventReward(
+          eventId: eventId,
+          input: [
+            ...newRewards
+                .map(
+                  (reward) => Input$EventRewardInput(
+                    $_id: reward.id,
+                    active: reward.active!,
+                    title: reward.title!,
+                    limit: reward.limit?.toDouble(),
+                    limit_per: reward.limitPer!.toDouble(),
+                    icon_color: reward.iconColor,
+                    icon_url: reward.iconUrl,
+                  ),
+                )
+                .toList(),
+          ],
+        );
+        if (result.isRight()) {
+          context.read<GetEventDetailBloc>().add(
+                GetEventDetailEvent.fetch(eventId: eventId),
+              );
+        }
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-
     final colorScheme = Theme.of(context).colorScheme;
     final fullIconUrl = '${AppConfig.assetPrefix}${reward.iconUrl}';
     return Row(
@@ -108,7 +156,18 @@ class RewardItem extends StatelessWidget {
                 ),
               ],
               onItemPressed: (item) {
-                showComingSoonDialog(context);
+                switch (item?.value) {
+                  case RewardOptions.delete:
+                    onPressDelete(context);
+                  case RewardOptions.edit:
+                    context.router.push(
+                      EventCreateRewardRoute(
+                        initialReward: reward,
+                      ),
+                    );
+                  default:
+                    showComingSoonDialog(context);
+                }
               },
               child: ThemeSvgIcon(
                 color: colorScheme.onPrimary,

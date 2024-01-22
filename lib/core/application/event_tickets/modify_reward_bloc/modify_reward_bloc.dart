@@ -1,3 +1,4 @@
+import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/entities/reward.dart';
 import 'package:app/core/domain/event/repository/event_reward_repository.dart';
@@ -11,7 +12,10 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'modify_reward_bloc.freezed.dart';
 
 class ModifyRewardBloc extends Bloc<ModifyRewardEvent, ModifyRewardState> {
-  ModifyRewardBloc() : super(ModifyRewardState.initial()) {
+  final Reward? initialReward;
+  final Event? eventDetail;
+  ModifyRewardBloc(this.initialReward, this.eventDetail)
+      : super(ModifyRewardState.initial()) {
     on<_ModifyRewardEventOnTitleChanged>(_onTitleChanged);
     on<_ModifyRewardEventOnIconChanged>(_onIconChanged);
     on<_ModifyRewardEventOnLimitPerChanged>(_onLimitPerChanged);
@@ -22,7 +26,12 @@ class ModifyRewardBloc extends Bloc<ModifyRewardEvent, ModifyRewardState> {
       _onToggleEventTicketType,
     );
     on<_ModifyRewardEventOnValidate>(_onValidate);
-    on<_ModifyRewardEventOnSubmitted>(_onSubmitted);
+    on<_ModifyRewardEventOnCreateSubmitted>(_onCreateSubmitted);
+    on<_ModifyRewardEventOnEditSubmitted>(_onEditSubmitted);
+    on<_ModifyRewardEventPopulateReward>(_onPopulateReward);
+    if (initialReward != null) {
+      add(ModifyRewardEvent.populateInitialReward());
+    }
   }
   final _eventRepository = getIt<EventRewardRepository>();
 
@@ -115,8 +124,8 @@ class ModifyRewardBloc extends Bloc<ModifyRewardEvent, ModifyRewardState> {
     return state.copyWith(isValid: isValid);
   }
 
-  void _onSubmitted(
-    _ModifyRewardEventOnSubmitted event,
+  void _onCreateSubmitted(
+    _ModifyRewardEventOnCreateSubmitted event,
     Emitter emit,
   ) async {
     emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
@@ -129,7 +138,7 @@ class ModifyRewardBloc extends Bloc<ModifyRewardEvent, ModifyRewardState> {
               .map(
                 (reward) => Input$EventRewardInput(
                   $_id: reward.id,
-                  active: reward.active!,
+                  active: true,
                   title: reward.title!,
                   limit: reward.limit?.toDouble(),
                   limit_per: reward.limitPer!.toDouble(),
@@ -156,6 +165,74 @@ class ModifyRewardBloc extends Bloc<ModifyRewardEvent, ModifyRewardState> {
       );
     }
   }
+
+  void _onEditSubmitted(
+    _ModifyRewardEventOnEditSubmitted event,
+    Emitter emit,
+  ) async {
+    emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
+    final title = StringFormz.dirty(state.title.value);
+    _validate(state.copyWith(title: title));
+    if (state.isValid) {
+      final result = await _eventRepository.updateEventReward(
+        input: [
+          ...event.existingRewards.map(
+            (reward) {
+              if (reward.id == initialReward?.id) {
+                return Input$EventRewardInput(
+                  active: true,
+                  title: title.value,
+                  limit_per: state.limitPer ?? 1,
+                  payment_ticket_types: state.selectedEventTicketTypeIds,
+                  icon_url: state.iconUrl,
+                );
+              }
+              return Input$EventRewardInput(
+                $_id: reward.id,
+                active: true,
+                title: reward.title!,
+                limit: reward.limit?.toDouble(),
+                limit_per: reward.limitPer!.toDouble(),
+                icon_color: reward.iconColor,
+                icon_url: reward.iconUrl,
+              );
+            },
+          ).toList(),
+        ],
+        eventId: event.eventId,
+      );
+      result.fold(
+        (failure) =>
+            emit(state.copyWith(status: FormzSubmissionStatus.failure)),
+        (createEvent) =>
+            emit(state.copyWith(status: FormzSubmissionStatus.success)),
+      );
+    }
+  }
+
+  void _onPopulateReward(
+    _ModifyRewardEventPopulateReward event,
+    Emitter emit,
+  ) {
+    if (initialReward == null) {
+      return;
+    }
+    List<String> eventTicketTypesIds =
+        eventDetail?.eventTicketTypes?.map((obj) => obj.id ?? '').toList() ??
+            [];
+    emit(
+      _validate(
+        ModifyRewardState(
+          title: StringFormz.pure(initialReward?.title ?? ''),
+          iconUrl: initialReward?.iconUrl,
+          limitPer: initialReward?.limitPer?.toDouble(),
+          selectedEventTicketTypeIds:
+              initialReward?.paymentTicketTypes ?? eventTicketTypesIds,
+          isValid: false,
+        ),
+      ),
+    );
+  }
 }
 
 @freezed
@@ -177,10 +254,16 @@ class ModifyRewardEvent with _$ModifyRewardEvent {
     required String? eventTicketTypeId,
   }) = _ModifyRewardEventOnToggleTicketTier;
   factory ModifyRewardEvent.onValidate() = _ModifyRewardEventOnValidate;
-  factory ModifyRewardEvent.onSubmitted({
+  factory ModifyRewardEvent.onCreateSubmitted({
     required String eventId,
     required List<Reward> existingRewards,
-  }) = _ModifyRewardEventOnSubmitted;
+  }) = _ModifyRewardEventOnCreateSubmitted;
+  factory ModifyRewardEvent.onEditSubmitted({
+    required String eventId,
+    required List<Reward> existingRewards,
+  }) = _ModifyRewardEventOnEditSubmitted;
+  factory ModifyRewardEvent.populateInitialReward() =
+      _ModifyRewardEventPopulateReward;
 }
 
 @freezed

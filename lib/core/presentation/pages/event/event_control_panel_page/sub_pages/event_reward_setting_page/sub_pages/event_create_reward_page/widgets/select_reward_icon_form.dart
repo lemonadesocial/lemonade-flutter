@@ -1,5 +1,8 @@
+import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/application/event_tickets/modify_reward_bloc/modify_reward_bloc.dart';
 import 'package:app/core/config.dart';
+import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/entities/reward.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_reward_setting_page/sub_pages/event_create_reward_page/widgets/rewards_view_model.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/bottomsheet/lemon_snap_bottom_sheet_widget.dart';
@@ -17,10 +20,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SelectRewardIconForm extends StatefulWidget {
   final Function(String iconUrl) onConfirm;
+  final Reward? initialReward;
 
   const SelectRewardIconForm({
     Key? key,
     required this.onConfirm,
+    this.initialReward,
   }) : super(key: key);
 
   @override
@@ -38,8 +43,12 @@ class SelectRewardIconFormState extends State<SelectRewardIconForm> {
 
   @override
   Widget build(BuildContext context) {
+    Event? eventDetail = context.watch<GetEventDetailBloc>().state.maybeWhen(
+          fetched: (event) => event,
+          orElse: () => Event(),
+        );
     return BlocProvider(
-      create: (context) => ModifyRewardBloc(),
+      create: (context) => ModifyRewardBloc(widget.initialReward, eventDetail),
       child: GestureDetector(
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
         child: LemonSnapBottomSheet(

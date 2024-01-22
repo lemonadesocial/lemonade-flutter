@@ -8,4 +8,14 @@ abstract class EventRewardRepository {
     required String eventId,
     required List<Input$EventRewardInput> input,
   });
+
+  Future<Either<Failure, Event>> updateEventReward({
+    required String eventId,
+    required List<Input$EventRewardInput> input,
+  });
+
+  Future<Either<Failure, Event>> deleteEventReward({
+    required String eventId,
+    required List<Input$EventRewardInput> input,
+  });
 }

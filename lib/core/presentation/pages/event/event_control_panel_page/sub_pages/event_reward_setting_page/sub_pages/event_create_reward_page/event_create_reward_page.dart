@@ -1,5 +1,6 @@
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/application/event_tickets/modify_reward_bloc/modify_reward_bloc.dart';
+import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/entities/reward.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_reward_setting_page/sub_pages/event_create_reward_page/widgets/create_reward_basic_info_form.dart';
@@ -19,21 +20,25 @@ import 'package:formz/formz.dart';
 
 @RoutePage()
 class EventCreateRewardPage extends StatelessWidget {
-  const EventCreateRewardPage({super.key});
+  final Reward? initialReward;
+  const EventCreateRewardPage({super.key, this.initialReward});
 
   @override
   Widget build(BuildContext context) {
+    Event? eventDetail = context.watch<GetEventDetailBloc>().state.maybeWhen(
+          fetched: (event) => event,
+          orElse: () => Event(),
+        );
     return BlocProvider(
-      create: (context) => ModifyRewardBloc(),
-      child: const EventCreateRewardPageView(),
+      create: (context) => ModifyRewardBloc(initialReward, eventDetail),
+      child: EventCreateRewardPageView(initialReward: initialReward),
     );
   }
 }
 
 class EventCreateRewardPageView extends StatelessWidget {
-  const EventCreateRewardPageView({
-    super.key,
-  });
+  final Reward? initialReward;
+  const EventCreateRewardPageView({super.key, this.initialReward});
 
   @override
   Widget build(BuildContext context) {
@@ -68,9 +73,15 @@ class EventCreateRewardPageView extends StatelessWidget {
           listener: (context, state) {
             if (state.status == FormzSubmissionStatus.success) {
               AutoRouter.of(context).back();
-              SnackBarUtils.showSuccessSnackbar(
-                t.event.rewardSetting.createRewardSuccessfully,
-              );
+              if (initialReward != null) {
+                SnackBarUtils.showSuccessSnackbar(
+                  t.event.rewardSetting.updateRewardSuccessfully,
+                );
+              } else {
+                SnackBarUtils.showSuccessSnackbar(
+                  t.event.rewardSetting.createRewardSuccessfully,
+                );
+              }
               getEventDetailBloc.add(
                 GetEventDetailEvent.fetch(
                   eventId: eventId,
@@ -87,7 +98,9 @@ class EventCreateRewardPageView extends StatelessWidget {
                   slivers: [
                     SliverToBoxAdapter(
                       child: Text(
-                        t.event.rewardSetting.createNewReward,
+                        initialReward != null
+                            ? t.event.rewardSetting.editReward
+                            : t.event.rewardSetting.createNewReward,
                         style: Typo.extraLarge.copyWith(
                           fontWeight: FontWeight.w800,
                           fontFamily: FontFamily.nohemiVariable,
@@ -99,8 +112,10 @@ class EventCreateRewardPageView extends StatelessWidget {
                         height: Spacing.large,
                       ),
                     ),
-                    const SliverToBoxAdapter(
-                      child: CreateRewardBasicInfoForm(),
+                    SliverToBoxAdapter(
+                      child: CreateRewardBasicInfoForm(
+                        initialReward: initialReward,
+                      ),
                     ),
                     SliverToBoxAdapter(
                       child: SizedBox(
@@ -147,12 +162,21 @@ class EventCreateRewardPageView extends StatelessWidget {
                       padding: EdgeInsets.all(Spacing.smMedium),
                       child: LinearGradientButton(
                         onTap: () async {
-                          modifyRewardBloc.add(
-                            ModifyRewardEvent.onSubmitted(
-                              eventId: eventId,
-                              existingRewards: existingRewards,
-                            ),
-                          );
+                          if (initialReward != null) {
+                            modifyRewardBloc.add(
+                              ModifyRewardEvent.onEditSubmitted(
+                                eventId: eventId,
+                                existingRewards: existingRewards,
+                              ),
+                            );
+                          } else {
+                            modifyRewardBloc.add(
+                              ModifyRewardEvent.onCreateSubmitted(
+                                eventId: eventId,
+                                existingRewards: existingRewards,
+                              ),
+                            );
+                          }
                         },
                         height: 42.w,
                         radius: BorderRadius.circular(LemonRadius.small * 2),

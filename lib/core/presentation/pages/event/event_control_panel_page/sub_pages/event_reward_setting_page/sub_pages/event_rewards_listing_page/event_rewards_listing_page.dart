@@ -35,11 +35,9 @@ class EventRewardsListingPage extends StatelessWidget {
       body: Stack(
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: Spacing.xSmall,
-              vertical: Spacing.small,
-            ),
+            padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
             child: CustomScrollView(
+              physics: const BouncingScrollPhysics(),
               slivers: [
                 if (rewards.isEmpty)
                   SliverToBoxAdapter(
@@ -60,6 +58,9 @@ class EventRewardsListingPage extends StatelessWidget {
                       height: Spacing.large,
                     ),
                   ),
+                SliverToBoxAdapter(
+                  child: SizedBox(height: Spacing.xLarge * 3),
+                ),
               ],
             ),
           ),
@@ -71,8 +72,7 @@ class EventRewardsListingPage extends StatelessWidget {
               child: SafeArea(
                 child: LinearGradientButton(
                   onTap: () {
-                    AutoRouter.of(context)
-                        .navigate(const EventCreateRewardRoute());
+                    AutoRouter.of(context).navigate(EventCreateRewardRoute());
                   },
                   height: 42.w,
                   leading: Assets.icons.icAdd.svg(),

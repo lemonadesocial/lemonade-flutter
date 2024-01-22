@@ -2,6 +2,7 @@ import 'package:app/core/application/event/get_event_detail_bloc/get_event_detai
 import 'package:app/core/application/event_tickets/modify_reward_bloc/modify_reward_bloc.dart';
 import 'package:app/core/config.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
+import 'package:app/core/domain/event/entities/reward.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_reward_setting_page/sub_pages/event_create_reward_page/widgets/select_reward_icon_form.dart';
 import 'package:app/core/presentation/pages/setting/widgets/setting_tile_widget.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
@@ -21,7 +22,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 
 class CreateRewardBasicInfoForm extends StatefulWidget {
-  const CreateRewardBasicInfoForm({super.key});
+  final Reward? initialReward;
+  const CreateRewardBasicInfoForm({super.key, this.initialReward});
 
   @override
   State<CreateRewardBasicInfoForm> createState() =>
@@ -34,6 +36,11 @@ class _CreateRewardBasicInfoFormState extends State<CreateRewardBasicInfoForm> {
   @override
   initState() {
     super.initState();
+    final modifyRewardBloc = context.read<ModifyRewardBloc>();
+    setState(() {
+      selectedAllTicketTiers =
+          modifyRewardBloc.initialReward?.paymentTicketTypes == null;
+    });
   }
 
   @override
@@ -52,6 +59,7 @@ class _CreateRewardBasicInfoFormState extends State<CreateRewardBasicInfoForm> {
         BlocBuilder<ModifyRewardBloc, ModifyRewardState>(
           builder: (context, state) {
             return LemonTextField(
+              initialText: modifyRewardBloc.initialReward?.title ?? '',
               onChange: (value) {
                 modifyRewardBloc.add(
                   ModifyRewardEvent.onTitleChanged(
@@ -66,7 +74,9 @@ class _CreateRewardBasicInfoFormState extends State<CreateRewardBasicInfoForm> {
           },
         ),
         SizedBox(height: Spacing.small),
-        const _ChooseRewardIconButton(),
+        _ChooseRewardIconButton(
+          initialReward: widget.initialReward,
+        ),
         SizedBox(height: Spacing.small),
         BlocBuilder<ModifyRewardBloc, ModifyRewardState>(
           builder: (context, state) {
@@ -77,7 +87,9 @@ class _CreateRewardBasicInfoFormState extends State<CreateRewardBasicInfoForm> {
               trailing: SizedBox(
                 width: 60.w,
                 child: LemonTextField(
-                  initialText: "1",
+                  initialText:
+                      modifyRewardBloc.initialReward?.limitPer.toString() ??
+                          '1',
                   textInputType: TextInputType.number,
                   onChange: (value) {
                     modifyRewardBloc.add(
@@ -125,7 +137,8 @@ class _CreateRewardBasicInfoFormState extends State<CreateRewardBasicInfoForm> {
 }
 
 class _ChooseRewardIconButton extends StatelessWidget {
-  const _ChooseRewardIconButton();
+  final Reward? initialReward;
+  const _ChooseRewardIconButton({this.initialReward});
 
   @override
   Widget build(BuildContext context) {
@@ -138,6 +151,7 @@ class _ChooseRewardIconButton extends StatelessWidget {
           context,
           builder: (innerContext) {
             return SelectRewardIconForm(
+              initialReward: initialReward,
               onConfirm: (String iconUrl) {
                 context.read<ModifyRewardBloc>().add(
                       ModifyRewardEvent.onIconChanged(
