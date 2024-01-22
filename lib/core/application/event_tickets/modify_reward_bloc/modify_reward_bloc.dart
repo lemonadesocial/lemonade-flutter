@@ -197,7 +197,7 @@ class ModifyRewardBloc extends Bloc<ModifyRewardEvent, ModifyRewardState> {
                 icon_url: reward.iconUrl,
               );
             },
-          ).toList()
+          ).toList(),
         ],
         eventId: event.eventId,
       );
