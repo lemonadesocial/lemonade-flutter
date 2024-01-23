@@ -136,7 +136,7 @@ class HostEventBasicInfoCard extends StatelessWidget {
                                   Text(
                                     durationToEvent != null
                                         ? t.event.eventStartIn(
-                                            time: printDuration(
+                                            time: prettyDuration(
                                               durationToEvent!,
                                               tersity: (durationToEvent
                                                               ?.inDays ??

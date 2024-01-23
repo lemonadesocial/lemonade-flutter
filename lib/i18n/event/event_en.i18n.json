@@ -263,7 +263,10 @@
         "scan": "Scan",
         "scanTicketSuccess": "Scan ticket successfully",
         "checkedIn": "checked in",
-        "pleaseScan": "Please scan QR Code"
+        "pleaseScan": "Please scan QR Code",
+        "checkin": "Check in",
+        "checkedinSuccessfully": "Checked in successfully",
+        "rewards": "Rewards"
     },
     "rewardSetting": {
         "createNewReward": "Create new reward",
