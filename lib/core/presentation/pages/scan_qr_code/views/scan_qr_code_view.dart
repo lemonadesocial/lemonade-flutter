@@ -1,5 +1,7 @@
 import 'package:app/core/application/event/update_event_checkin_bloc/update_event_checkin_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/presentation/pages/scan_qr_code/scan_qr_code_page.dart';
+import 'package:app/core/presentation/pages/scan_qr_code/widgets/claim_rewards_modal.dart';
 import 'package:app/core/presentation/pages/scan_qr_code/widgets/scanner_actions.dart';
 import 'package:app/core/presentation/pages/scan_qr_code/widgets/scanner_error_widget.dart';
 import 'package:app/core/presentation/pages/scan_qr_code/widgets/scanner_overlay.dart';
@@ -11,20 +13,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
-class ScanQRCodeCheckinView extends StatefulWidget {
-  const ScanQRCodeCheckinView({
+class ScanQRCodeView extends StatefulWidget {
+  const ScanQRCodeView({
     super.key,
     required this.event,
-    this.successMessage,
+    required this.selectedScannerTabIndex,
   });
   final Event event;
-  final String? successMessage;
+  final int selectedScannerTabIndex;
 
   @override
-  State<ScanQRCodeCheckinView> createState() => _ScanQRCodeCheckinViewState();
+  State<ScanQRCodeView> createState() => _ScanQRCodeViewState();
 }
 
-class _ScanQRCodeCheckinViewState extends State<ScanQRCodeCheckinView> {
+class _ScanQRCodeViewState extends State<ScanQRCodeView> {
   final MobileScannerController controller = MobileScannerController(
     formats: const [BarcodeFormat.qrCode],
     autoStart: true,
@@ -37,13 +39,30 @@ class _ScanQRCodeCheckinViewState extends State<ScanQRCodeCheckinView> {
   }
 
   void onBarcodeDetect(BarcodeCapture barcodeCapture) {
-    context.read<UpdateEventCheckinBloc>().add(
-          UpdateEventCheckinEvent.checkinUser(
-            eventId: widget.event.id ?? '',
-            active: true,
-            userId: barcodeCapture.barcodes.last.displayValue.toString(),
-          ),
-        );
+    if (widget.selectedScannerTabIndex == SelectedScannerTab.checkIn.index) {
+      context.read<UpdateEventCheckinBloc>().add(
+            UpdateEventCheckinEvent.checkinUser(
+              eventId: widget.event.id ?? '',
+              active: true,
+              userId: barcodeCapture.barcodes.last.displayValue.toString(),
+            ),
+          );
+    }
+    if (widget.selectedScannerTabIndex == SelectedScannerTab.rewards.index) {
+      controller.stop();
+      showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context) {
+          return ClaimRewardsModal(
+            onClose: () {
+              controller.start();
+              Navigator.of(context).pop();
+            },
+          );
+        },
+      );
+    }
   }
 
   @override
