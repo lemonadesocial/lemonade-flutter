@@ -1,5 +1,6 @@
 import 'package:app/core/application/event/update_event_checkin_bloc/update_event_checkin_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/presentation/pages/scan_qr_code/widgets/scanner_actions.dart';
 import 'package:app/core/presentation/pages/scan_qr_code/widgets/scanner_error_widget.dart';
 import 'package:app/core/presentation/pages/scan_qr_code/widgets/scanner_overlay.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
@@ -24,8 +25,6 @@ class ScanQRCodeCheckinView extends StatefulWidget {
 }
 
 class _ScanQRCodeCheckinViewState extends State<ScanQRCodeCheckinView> {
-  String overlayText = t.event.scanQR.pleaseScan;
-
   final MobileScannerController controller = MobileScannerController(
     formats: const [BarcodeFormat.qrCode],
     autoStart: true,
@@ -38,12 +37,6 @@ class _ScanQRCodeCheckinViewState extends State<ScanQRCodeCheckinView> {
   }
 
   void onBarcodeDetect(BarcodeCapture barcodeCapture) {
-    final t = Translations.of(context);
-    setState(() {
-      overlayText = barcodeCapture.barcodes.last.displayValue != null
-          ? widget.successMessage ?? ''
-          : t.common.somethingWrong;
-    });
     context.read<UpdateEventCheckinBloc>().add(
           UpdateEventCheckinEvent.checkinUser(
             eventId: widget.event.id ?? '',
@@ -84,26 +77,6 @@ class _ScanQRCodeCheckinViewState extends State<ScanQRCodeCheckinView> {
                     child: MobileScanner(
                       fit: BoxFit.cover,
                       onDetect: onBarcodeDetect,
-                      overlay: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Align(
-                          alignment: Alignment.topCenter,
-                          child: Opacity(
-                            opacity: 1,
-                            child: Text(
-                              overlayText,
-                              style: const TextStyle(
-                                backgroundColor: Colors.black26,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 24,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              maxLines: 1,
-                            ),
-                          ),
-                        ),
-                      ),
                       controller: controller,
                       scanWindow: scanWindow,
                       errorBuilder: (context, error, child) {
@@ -114,45 +87,7 @@ class _ScanQRCodeCheckinViewState extends State<ScanQRCodeCheckinView> {
                   CustomPaint(
                     painter: ScannerOverlay(scanWindow),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          ValueListenableBuilder<TorchState>(
-                            valueListenable: controller.torchState,
-                            builder: (context, value, child) {
-                              final Color iconColor;
-                              switch (value) {
-                                case TorchState.off:
-                                  iconColor = Colors.white;
-                                  break;
-                                case TorchState.on:
-                                  iconColor = Colors.yellow;
-                                  break;
-                              }
-                              return IconButton(
-                                onPressed: () => controller.toggleTorch(),
-                                icon: Icon(
-                                  Icons.flashlight_on,
-                                  color: iconColor,
-                                ),
-                              );
-                            },
-                          ),
-                          IconButton(
-                            onPressed: () => controller.switchCamera(),
-                            icon: const Icon(
-                              Icons.cameraswitch_rounded,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                  ScannerActions(controller: controller),
                 ],
               ),
             ),
