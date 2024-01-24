@@ -1,8 +1,7 @@
-import 'package:app/core/application/event/update_event_checkin_bloc/update_event_checkin_bloc.dart';
+import 'package:app/core/application/chat/new_chat_bloc/new_chat_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/scan_qr_code/views/scan_qr_code_view.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
-import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/typo.dart';
@@ -16,20 +15,31 @@ enum SelectedScannerTab {
 }
 
 @RoutePage()
-class ScanQRCodePage extends StatefulWidget {
+class ScanQRCodePage extends StatelessWidget {
   const ScanQRCodePage({
     super.key,
     required this.event,
-    this.successMessage,
   });
   final Event event;
-  final String? successMessage;
 
   @override
-  State<ScanQRCodePage> createState() => _ScanQRCodePageState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => NewChatBloc(),
+      child: _ScanQRCodeView(event: event),
+    );
+  }
 }
 
-class _ScanQRCodePageState extends State<ScanQRCodePage> {
+class _ScanQRCodeView extends StatefulWidget {
+  const _ScanQRCodeView({required this.event});
+  final Event event;
+
+  @override
+  State<_ScanQRCodeView> createState() => _ScanQRCodeViewState();
+}
+
+class _ScanQRCodeViewState extends State<_ScanQRCodeView> {
   var selectedScannerTabIndex = SelectedScannerTab.checkIn.index;
   @override
   Widget build(BuildContext context) {

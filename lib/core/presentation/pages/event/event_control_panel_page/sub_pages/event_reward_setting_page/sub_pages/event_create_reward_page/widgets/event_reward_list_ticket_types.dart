@@ -1,4 +1,4 @@
-import 'package:app/core/application/event_tickets/modify_reward_bloc/modify_reward_bloc.dart';
+import 'package:app/core/application/event/modify_reward_bloc/modify_reward_bloc.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
