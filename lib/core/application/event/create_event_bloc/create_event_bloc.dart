@@ -107,6 +107,7 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
                 longitude: event.address!.longitude,
               )
             : null,
+        published: true,
       );
       final result = await _eventRepository.createEvent(input: input);
       result.fold(

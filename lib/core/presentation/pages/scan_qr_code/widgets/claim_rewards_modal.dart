@@ -29,8 +29,8 @@ class ClaimRewardsModal extends StatelessWidget {
         borderRadius: BorderRadius.circular(18.0),
       ),
       child: Container(
-        width: 339.w,
-        height: 500.h,
+        width: 1.sw,
+        height: 1.sh,
         clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(
           color: LemonColor.atomicBlack,
@@ -54,7 +54,7 @@ class ClaimRewardsModal extends StatelessWidget {
                           ListTile(
                             title: Text('Section $sectionIndex'),
                           ),
-                          HorizontalListWidget(),
+                          const HorizontalListWidget(),
                         ],
                       );
                     },
@@ -120,17 +120,19 @@ class ClaimRewardsModal extends StatelessWidget {
 }
 
 class HorizontalListWidget extends StatelessWidget {
+  const HorizontalListWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 100, // Adjust the height as needed
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: 5, // Replace with your actual number of items
         itemBuilder: (context, index) {
           return Card(
-            margin: EdgeInsets.all(8),
-            child: Container(
+            margin: const EdgeInsets.all(8),
+            child: SizedBox(
               width: 80,
               child: Center(
                 child: Text('Item $index'),
