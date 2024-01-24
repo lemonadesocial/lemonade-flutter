@@ -1,4 +1,5 @@
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/entities/event_reward_use.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:dartz/dartz.dart';
@@ -18,4 +19,7 @@ abstract class EventRewardRepository {
     required String eventId,
     required List<Input$EventRewardInput> input,
   });
+
+  Future<Either<Failure, List<EventRewardUse>>> getEventRewardUses(
+      {required Input$GetEventRewardUsesInput input});
 }

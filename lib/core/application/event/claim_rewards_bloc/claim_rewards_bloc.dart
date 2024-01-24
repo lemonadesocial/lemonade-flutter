@@ -1,21 +1,20 @@
-import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'scan_qr_code_bloc.freezed.dart';
+part 'claim_rewards_bloc.freezed.dart';
 
-class ScanQRCodeBloc extends Bloc<ScanQRCodeEvent, ScanQRCodeState> {
+class ClaimRewardsBloc extends Bloc<ClaimRewardsEvent, ClaimRewardsState> {
   final String? eventId;
-  ScanQRCodeBloc(this.eventId) : super(ScanQRCodeState()) {
-    on<_ScanQRCodeEventGetUserDetail>(_onGetUserDetail);
+  ClaimRewardsBloc(this.eventId) : super(ClaimRewardsState()) {
+    on<_ClaimRewardsEventGetUserDetail>(_onGetUserDetail);
   }
   final _userRepository = getIt<UserRepository>();
 
   void _onGetUserDetail(
-    _ScanQRCodeEventGetUserDetail event,
+    _ClaimRewardsEventGetUserDetail event,
     Emitter emit,
   ) async {
     emit(state.copyWith(status: ScanQRCodeStatus.loading));
@@ -33,18 +32,18 @@ class ScanQRCodeBloc extends Bloc<ScanQRCodeEvent, ScanQRCodeState> {
 }
 
 @freezed
-class ScanQRCodeEvent with _$ScanQRCodeEvent {
-  factory ScanQRCodeEvent.getUserDetail({
+class ClaimRewardsEvent with _$ClaimRewardsEvent {
+  factory ClaimRewardsEvent.getUserDetail({
     required String? userId,
-  }) = _ScanQRCodeEventGetUserDetail;
+  }) = _ClaimRewardsEventGetUserDetail;
 }
 
 @freezed
-class ScanQRCodeState with _$ScanQRCodeState {
-  factory ScanQRCodeState({
+class ClaimRewardsState with _$ClaimRewardsState {
+  factory ClaimRewardsState({
     @Default(ScanQRCodeStatus.initial) ScanQRCodeStatus status,
     User? scannedUserDetail,
-  }) = _ScanQRCodeState;
+  }) = _ClaimRewardsState;
 }
 
 enum ScanQRCodeStatus {

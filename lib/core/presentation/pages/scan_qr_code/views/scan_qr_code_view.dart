@@ -1,4 +1,3 @@
-import 'package:app/core/application/event/scan_qr_code_bloc/scan_qr_code_bloc.dart';
 import 'package:app/core/application/event/update_event_checkin_bloc/update_event_checkin_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/scan_qr_code/scan_qr_code_page.dart';
@@ -50,13 +49,11 @@ class _ScanQRCodeViewState extends State<ScanQRCodeView> {
           );
     }
     if (widget.selectedScannerTabIndex == SelectedScannerTab.rewards.index) {
-      controller.stop();
-      context.read<ScanQRCodeBloc>().add(
-            ScanQRCodeEvent.getUserDetail(
-              userId: barcodeCapture.barcodes.last.displayValue.toString(),
-            ),
-          );
-      AutoRouter.of(context).navigate(const ClaimRewardsRoute());
+      AutoRouter.of(context).navigate(
+        ClaimRewardsRoute(
+          userId: barcodeCapture.barcodes.last.displayValue.toString(),
+        ),
+      );
     }
   }
 

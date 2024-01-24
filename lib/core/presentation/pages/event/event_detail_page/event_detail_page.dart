@@ -2,7 +2,6 @@ import 'package:app/core/application/event/edit_event_detail_bloc/edit_event_det
 import 'package:app/core/application/event/get_event_checkins_bloc/get_event_checkins_bloc.dart';
 import 'package:app/core/application/event/get_event_cohost_requests_bloc/get_event_cohost_requests_bloc.dart';
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
-import 'package:app/core/application/event/scan_qr_code_bloc/scan_qr_code_bloc.dart';
 import 'package:app/core/application/event/update_event_checkin_bloc/update_event_checkin_bloc.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -50,9 +49,6 @@ class EventDetailPage extends StatelessWidget implements AutoRouteWrapper {
         ),
         BlocProvider(
           create: (context) => UpdateEventCheckinBloc(),
-        ),
-        BlocProvider(
-          create: (context) => ScanQRCodeBloc(eventId),
         ),
       ],
       child: this,
