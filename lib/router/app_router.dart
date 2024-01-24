@@ -163,6 +163,9 @@ final eventDetailRoutes = AutoRoute(
       page: ScanQRCodeRoute.page,
     ),
     AutoRoute(
+      page: ClaimRewardsRoute.page,
+    ),
+    AutoRoute(
       page: EventControlPanelRoute.page,
       children: [
         AutoRoute(

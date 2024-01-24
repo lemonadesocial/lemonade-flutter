@@ -1,12 +1,13 @@
+import 'package:app/core/application/event/scan_qr_code_bloc/scan_qr_code_bloc.dart';
 import 'package:app/core/application/event/update_event_checkin_bloc/update_event_checkin_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/scan_qr_code/scan_qr_code_page.dart';
-import 'package:app/core/presentation/pages/scan_qr_code/widgets/claim_rewards_modal.dart';
 import 'package:app/core/presentation/pages/scan_qr_code/widgets/scanner_actions.dart';
 import 'package:app/core/presentation/pages/scan_qr_code/widgets/scanner_error_widget.dart';
 import 'package:app/core/presentation/pages/scan_qr_code/widgets/scanner_overlay.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -50,18 +51,12 @@ class _ScanQRCodeViewState extends State<ScanQRCodeView> {
     }
     if (widget.selectedScannerTabIndex == SelectedScannerTab.rewards.index) {
       controller.stop();
-      showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (BuildContext context) {
-          return ClaimRewardsModal(
-            onClose: () {
-              controller.start();
-              Navigator.of(context).pop();
-            },
+      context.read<ScanQRCodeBloc>().add(
+            ScanQRCodeEvent.getUserDetail(
+              userId: barcodeCapture.barcodes.last.displayValue.toString(),
+            ),
           );
-        },
-      );
+      AutoRouter.of(context).navigate(const ClaimRewardsRoute());
     }
   }
 
