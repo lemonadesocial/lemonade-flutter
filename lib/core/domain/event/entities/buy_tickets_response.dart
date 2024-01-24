@@ -11,7 +11,7 @@ class BuyTicketsResponse with _$BuyTicketsResponse {
 
   factory BuyTicketsResponse({
     EventJoinRequest? eventJoinRequest,
-    PaymentBase? payment,
+    Payment? payment,
   }) = _BuyTicketsResponse;
 
   factory BuyTicketsResponse.fromDto(BuyTicketsResponseDto dto) =>
@@ -19,6 +19,6 @@ class BuyTicketsResponse with _$BuyTicketsResponse {
         eventJoinRequest: dto.eventJoinRequest != null
             ? EventJoinRequest.fromDto(dto.eventJoinRequest!)
             : null,
-        payment: dto.payment != null ? PaymentBase.fromDto(dto.payment!) : null,
+        payment: dto.payment != null ? Payment.fromDto(dto.payment!) : null,
       );
 }

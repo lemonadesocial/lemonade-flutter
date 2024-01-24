@@ -9,7 +9,7 @@ part 'buy_tickets_response_dto.g.dart';
 class BuyTicketsResponseDto with _$BuyTicketsResponseDto {
   factory BuyTicketsResponseDto({
     @JsonKey(name: 'event_join_request') EventJoinRequestDto? eventJoinRequest,
-    PaymentBaseDto? payment,
+    PaymentDto? payment,
   }) = _BuyTicketsResponseDto;
 
   factory BuyTicketsResponseDto.fromJson(Map<String, dynamic> json) =>
