@@ -68,6 +68,26 @@ const paymentFragment = '''
   }
 ''';
 
+const paymentBaseFragment = '''
+  fragment paymentBaseFragment on NewPaymentBase {
+    _id
+    stamps
+    amount
+    currency
+    state
+    user
+    billing_info {
+      _id
+      email
+      firstname
+      lastname
+    }
+    transfer_metadata
+    transfer_params
+    failure_reason
+  }
+''';
+
 final getPaymentAccountsQuery = gql('''
   $paymentAccountFragment
 

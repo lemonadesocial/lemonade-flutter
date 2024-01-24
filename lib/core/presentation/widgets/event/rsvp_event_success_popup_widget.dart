@@ -21,11 +21,15 @@ class RSVPEventSuccessPopupPage extends StatelessWidget {
     this.eventRsvp,
     this.buttonBuilder,
     this.onPressed,
+    this.primaryMessage,
+    this.secondaryMessage,
   });
 
   final Event event;
   final EventRsvp? eventRsvp;
   final Widget? Function(BuildContext context)? buttonBuilder;
+  final String? primaryMessage;
+  final String? secondaryMessage;
   final Function(BuildContext context)? onPressed;
 
   @override
@@ -47,7 +51,9 @@ class RSVPEventSuccessPopupPage extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: Spacing.xLarge),
                   child: Text(
-                    eventRsvp?.messages?.primary ?? t.event.youreIn,
+                    primaryMessage ??
+                        eventRsvp?.messages?.primary ??
+                        t.event.youreIn,
                     style: Typo.extraLarge.copyWith(
                       fontFamily: FontFamily.nohemiVariable,
                       fontWeight: FontWeight.w900,
@@ -59,7 +65,8 @@ class RSVPEventSuccessPopupPage extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: Spacing.xLarge),
                   child: Text(
-                    eventRsvp?.messages?.secondary ??
+                    secondaryMessage ??
+                        eventRsvp?.messages?.secondary ??
                         t.event.rsvpSuccessful(eventName: event.title ?? ''),
                     style: Typo.mediumPlus.copyWith(
                       fontWeight: FontWeight.w400,

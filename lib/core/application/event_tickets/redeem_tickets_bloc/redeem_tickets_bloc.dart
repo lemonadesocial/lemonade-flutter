@@ -1,6 +1,6 @@
 import 'package:app/core/data/event/repository/event_ticket_repository_impl.dart';
 import 'package:app/core/domain/event/entities/event.dart';
-import 'package:app/core/domain/event/entities/event_ticket.dart';
+import 'package:app/core/domain/event/entities/redeem_tickets_response.dart';
 import 'package:app/core/domain/event/input/redeem_tickets_input/redeem_tickets_input.dart';
 import 'package:app/core/domain/payment/entities/purchasable_item/purchasable_item.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -36,7 +36,7 @@ class RedeemTicketsBloc extends Bloc<RedeemTicketsEvent, RedeemTicketsState> {
     result.fold(
       (failure) => emit(RedeemTicketsState.failure(message: failure.message)),
       (data) => emit(
-        RedeemTicketsState.success(eventTickets: data),
+        RedeemTicketsState.success(redeemTicketsResponse: data),
       ),
     );
   }
@@ -54,7 +54,7 @@ class RedeemTicketsState with _$RedeemTicketsState {
   factory RedeemTicketsState.initial() = RedeemTicketsStateInitial;
   factory RedeemTicketsState.loading() = RedeemTicketsStateLoading;
   factory RedeemTicketsState.success({
-    required List<EventTicket> eventTickets,
+    required RedeemTicketsResponse redeemTicketsResponse,
   }) = RedeemTicketsStateSuccess;
   factory RedeemTicketsState.failure({
     String? message,

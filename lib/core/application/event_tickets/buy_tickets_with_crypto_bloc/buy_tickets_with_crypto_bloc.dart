@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:app/core/constants/web3/chains.dart';
+import 'package:app/core/domain/event/entities/buy_tickets_response.dart';
+import 'package:app/core/domain/event/entities/event_join_request.dart';
 import 'package:app/core/domain/event/input/buy_tickets_input/buy_tickets_input.dart';
 import 'package:app/core/domain/event/repository/event_ticket_repository.dart';
 import 'package:app/core/domain/payment/entities/payment.dart';
@@ -30,6 +32,7 @@ class BuyTicketsWithCryptoBloc
   final String? selectedNetwork;
   final _web3Repository = getIt<Web3Repository>();
 
+  EventJoinRequest? _currentEventJoinRequest;
   Payment? _currentPayment;
   String? _signature;
   String? _txHash;
@@ -73,9 +76,11 @@ class BuyTicketsWithCryptoBloc
         ),
       );
     }
-
-    final payment = result.getOrElse(() => null);
+    final payment = result.getOrElse(() => BuyTicketsResponse()).payment;
+    _currentEventJoinRequest =
+        result.getOrElse(() => BuyTicketsResponse()).eventJoinRequest;
     _currentPayment = payment;
+
     if (payment == null) {
       return emit(
         BuyTicketsWithCryptoState.failure(
@@ -269,6 +274,7 @@ class BuyTicketsWithCryptoBloc
           emit(
             BuyTicketsWithCryptoState.done(
               data: state.data.copyWith(
+                eventJoinRequest: _currentEventJoinRequest,
                 payment: payment,
                 txHash: _txHash,
               ),
@@ -344,6 +350,7 @@ class BuyTicketsWithCryptoState with _$BuyTicketsWithCryptoState {
 @freezed
 class BuyTicketsWithCryptoStateData with _$BuyTicketsWithCryptoStateData {
   factory BuyTicketsWithCryptoStateData({
+    EventJoinRequest? eventJoinRequest,
     Payment? payment,
     String? signature,
     String? txHash,
