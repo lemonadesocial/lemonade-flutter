@@ -40,6 +40,7 @@ class Event {
     this.private,
     this.speakerUsersExpanded,
     this.rewards,
+    this.requireApproval,
   });
 
   factory Event.fromDto(EventDto dto) {
@@ -99,6 +100,7 @@ class Event {
       rewards: List.from(dto.rewards ?? [])
           .map((item) => Reward.fromDto(item))
           .toList(),
+      requireApproval: dto.requireApproval,
     );
   }
   String? id;
@@ -133,6 +135,7 @@ class Event {
   bool? virtual;
   bool? private;
   List<Reward>? rewards;
+  bool? requireApproval;
 }
 
 class EventOffer {

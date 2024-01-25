@@ -85,6 +85,25 @@ class EventTicketsSummaryPageView extends StatelessWidget {
   final _slideActionKey = GlobalKey<SlideActionState>();
   final _waitForNotificationTimer = WaitForPaymentNotificationHandler();
 
+  void _handleEventRequireApproval(BuildContext context) async {
+    final event = context.read<EventProviderBloc>().event;
+    AutoRouter.of(context).root.popUntilRouteWithPath('/events');
+    AutoRouter.of(context).root.push(
+          RSVPEventSuccessPopupRoute(
+            event: event,
+            primaryMessage: t.event.eventApproval.waitingApproval,
+            secondaryMessage: t.event.eventApproval.waitingApprovalDescription,
+            onPressed: (outerContext) async {
+              AutoRouter.of(outerContext).replace(
+                EventDetailRoute(
+                  eventId: event.id ?? '',
+                ),
+              );
+            },
+          ),
+        );
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -140,12 +159,21 @@ class EventTicketsSummaryPageView extends StatelessWidget {
         ),
         BuyTicketsListener.create(
           onFailure: () => _slideActionKey.currentState?.reset(),
-          onDone: () {
+          onDone: ({
+            payment,
+            eventJoinRequest,
+          }) {
+            if (eventJoinRequest != null) {
+              return _handleEventRequireApproval(context);
+            }
             _waitForNotificationTimer.start(context);
           },
         ),
         BuyTicketsWithCryptoListener.create(
-          onDone: () {
+          onDone: (data) {
+            if (data.eventJoinRequest != null) {
+              return _handleEventRequireApproval(context);
+            }
             _waitForNotificationTimer.start(context);
           },
         ),
@@ -174,6 +202,19 @@ class EventTicketsSummaryPageView extends StatelessWidget {
           }
         },
         onReceivedPaymentSuccess: (eventId, payment) {
+          final eventJoinRequest = isCryptoCurrency
+              ? context
+                  .read<BuyTicketsWithCryptoBloc>()
+                  .state
+                  .data
+                  .eventJoinRequest
+              : context.read<BuyTicketsBloc>().state.maybeWhen(
+                    orElse: () => null,
+                    done: (payment, eventJoinRequest) => eventJoinRequest,
+                  );
+          if (eventJoinRequest != null) {
+            return;
+          }
           final currentPayment = isCryptoCurrency
               ? context.read<BuyTicketsWithCryptoBloc>().state.data.payment
               : context.read<BuyTicketsBloc>().currentPayment;

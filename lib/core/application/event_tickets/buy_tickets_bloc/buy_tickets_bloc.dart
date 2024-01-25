@@ -1,3 +1,4 @@
+import 'package:app/core/domain/event/entities/event_join_request.dart';
 import 'package:app/core/domain/event/input/buy_tickets_input/buy_tickets_input.dart';
 import 'package:app/core/domain/event/repository/event_ticket_repository.dart';
 import 'package:app/core/domain/payment/entities/payment.dart';
@@ -18,6 +19,7 @@ class BuyTicketsBloc extends Bloc<BuyTicketsEvent, BuyTicketsState> {
   final paymentRepository = getIt<PaymentRepository>();
   int _updatePaymentAttemptCount = 0;
   Payment? currentPayment;
+  EventJoinRequest? _eventJoinRequest;
 
   BuyTicketsBloc() : super(BuyTicketsState.idle()) {
     on<StartBuyTickets>(_onBuy);
@@ -37,16 +39,18 @@ class BuyTicketsBloc extends Bloc<BuyTicketsEvent, BuyTicketsState> {
           failureReason: InitPaymentFailure(),
         ),
       ),
-      (payment) async {
-        if (payment == null) {
+      (response) async {
+        _eventJoinRequest = response.eventJoinRequest;
+        if (response.payment == null) {
           return emit(
             BuyTicketsState.failure(
               failureReason: InitPaymentFailure(),
             ),
           );
         }
+
         add(
-          BuyTicketsEvent.processPaymentIntent(payment: payment),
+          BuyTicketsEvent.processPaymentIntent(payment: response.payment!),
         );
       },
     );
@@ -120,7 +124,12 @@ class BuyTicketsBloc extends Bloc<BuyTicketsEvent, BuyTicketsState> {
       (payment) {
         if (payment != null) {
           _updatePaymentAttemptCount = 0;
-          emit(BuyTicketsState.done(payment: payment));
+          emit(
+            BuyTicketsState.done(
+              payment: payment,
+              eventJoinRequest: _eventJoinRequest,
+            ),
+          );
         }
       },
     );
@@ -159,7 +168,8 @@ class BuyTicketsState with _$BuyTicketsState {
   factory BuyTicketsState.idle() = BuyTicketsStateIdle;
   factory BuyTicketsState.loading() = BuyTicketsStateLoading;
   factory BuyTicketsState.done({
-    required Payment payment,
+    Payment? payment,
+    EventJoinRequest? eventJoinRequest,
   }) = BuyTicketsStateDone;
   factory BuyTicketsState.failure({
     required BuyTicketsFailure failureReason,

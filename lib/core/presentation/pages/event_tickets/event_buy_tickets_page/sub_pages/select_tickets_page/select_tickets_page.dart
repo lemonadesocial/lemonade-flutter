@@ -6,6 +6,7 @@ import 'package:app/core/application/event_tickets/get_event_ticket_types_bloc/g
 import 'package:app/core/application/event_tickets/redeem_tickets_bloc/redeem_tickets_bloc.dart';
 import 'package:app/core/application/event_tickets/select_event_tickets_bloc/select_event_tickets_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/entities/event_rsvp.dart';
 import 'package:app/core/domain/event/input/assign_tickets_input/assign_tickets_input.dart';
 import 'package:app/core/domain/payment/entities/purchasable_item/purchasable_item.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/select_tickets_page/widgets/other_ticket_types_list.dart';
@@ -71,6 +72,68 @@ class SelectTicketView extends StatefulWidget {
 
 class _SelectTicketViewState extends State<SelectTicketView> {
   String? networkFilter;
+
+  void _handleEventRequireApproval() async {
+    // pop whole buy event page stack
+    await AutoRouter.of(context).root.pop();
+    AutoRouter.of(context).root.replace(
+          RSVPEventSuccessPopupRoute(
+            event: widget.event,
+            primaryMessage: t.event.eventApproval.waitingApproval,
+            secondaryMessage: t.event.eventApproval.waitingApprovalDescription,
+            onPressed: (outerContext) {
+              AutoRouter.of(outerContext).replace(
+                EventDetailRoute(
+                  eventId: widget.event.id ?? '',
+                ),
+              );
+            },
+          ),
+        );
+  }
+
+  void _handleRedeemSingleTicketSuccess({
+    EventRsvp? eventRsvp,
+  }) async {
+    // pop whole buy event page stack
+    await AutoRouter.of(context).root.pop();
+    AutoRouter.of(context).root.replace(
+          RSVPEventSuccessPopupRoute(
+            event: widget.event,
+            eventRsvp: eventRsvp,
+            onPressed: (outerContext) {
+              AutoRouter.of(outerContext).replace(
+                EventDetailRoute(
+                  eventId: widget.event.id ?? '',
+                ),
+              );
+            },
+          ),
+        );
+  }
+
+  void _handleRedeemMultipleTicketsSuccess() {
+    AutoRouter.of(context).replaceAll(
+      [
+        RSVPEventSuccessPopupRoute(
+          event: widget.event,
+          buttonBuilder: (newContext) => LinearGradientButton(
+            onTap: () => AutoRouter.of(newContext).replace(
+              const EventPickMyTicketRoute(),
+            ),
+            height: Sizing.large,
+            textStyle: Typo.medium.copyWith(
+              fontWeight: FontWeight.w600,
+              color: Theme.of(context).colorScheme.onPrimary.withOpacity(0.87),
+              fontFamily: FontFamily.nohemiVariable,
+            ),
+            radius: BorderRadius.circular(LemonRadius.small * 2),
+            label: t.common.next,
+          ),
+        ),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -154,14 +217,21 @@ class _SelectTicketViewState extends State<SelectTicketView> {
           listener: (context, state) {
             state.maybeWhen(
               orElse: () => null,
-              success: (eventTickets) async {
-                if (eventTickets.length == 1) {
+              success: (redeemTicketsResponse) async {
+                // if event join request available
+                // navigate to success page with with different content saying that
+                // need to wait for approval
+                if (redeemTicketsResponse.eventJoinRequest != null) {
+                  return _handleEventRequireApproval();
+                }
+                final tickets = redeemTicketsResponse.tickets ?? [];
+                if (tickets.length == 1) {
                   // then trigger assign ticket to the user
                   context.read<AssignTicketsBloc>().add(
                         AssignTicketsEvent.assign(
                           assignees: [
                             TicketAssignee(
-                              ticket: eventTickets.first.id ?? '',
+                              ticket: tickets.first.id ?? '',
                               user: userId,
                             ),
                           ],
@@ -169,26 +239,7 @@ class _SelectTicketViewState extends State<SelectTicketView> {
                       );
                 } else {
                   // go to event rsvp success with button go to pick my ticket page
-                  AutoRouter.of(context).replaceAll(
-                    [
-                      RSVPEventSuccessPopupRoute(
-                        event: widget.event,
-                        buttonBuilder: (newContext) => LinearGradientButton(
-                          onTap: () => AutoRouter.of(newContext).replace(
-                            const EventPickMyTicketRoute(),
-                          ),
-                          height: Sizing.large,
-                          textStyle: Typo.medium.copyWith(
-                            fontWeight: FontWeight.w600,
-                            color: colorScheme.onPrimary.withOpacity(0.87),
-                            fontFamily: FontFamily.nohemiVariable,
-                          ),
-                          radius: BorderRadius.circular(LemonRadius.small * 2),
-                          label: t.common.next,
-                        ),
-                      ),
-                    ],
-                  );
+                  _handleRedeemMultipleTicketsSuccess();
                 }
               },
             );
@@ -213,21 +264,7 @@ class _SelectTicketViewState extends State<SelectTicketView> {
             state.maybeWhen(
               orElse: () => null,
               success: (eventRsvp) async {
-                // pop whole buy event page stack
-                await AutoRouter.of(context).root.pop();
-                AutoRouter.of(context).root.replace(
-                      RSVPEventSuccessPopupRoute(
-                        event: widget.event,
-                        eventRsvp: eventRsvp,
-                        onPressed: (outerContext) {
-                          AutoRouter.of(outerContext).replace(
-                            EventDetailRoute(
-                              eventId: widget.event.id ?? '',
-                            ),
-                          );
-                        },
-                      ),
-                    );
+                _handleRedeemSingleTicketSuccess(eventRsvp: eventRsvp);
               },
             );
           },

@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BuyTicketsWithCryptoListener {
   static BlocListener create({
-    Function()? onDone,
+    Function(BuyTicketsWithCryptoStateData data)? onDone,
   }) {
     return BlocListener<BuyTicketsWithCryptoBloc, BuyTicketsWithCryptoState>(
       listener: (context, state) {
@@ -45,7 +45,7 @@ class BuyTicketsWithCryptoListener {
             // TODO: will trigger timeout 30s and if payment noti not coming yet => manually
             // call getPayment to check
             // When done, still need to wait for payment success or failed notification below
-            onDone?.call();
+            onDone?.call(data);
           },
         );
       },
