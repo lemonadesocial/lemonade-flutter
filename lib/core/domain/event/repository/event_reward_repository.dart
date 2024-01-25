@@ -23,4 +23,8 @@ abstract class EventRewardRepository {
   Future<Either<Failure, List<EventRewardUse>>> getEventRewardUses({
     required Input$GetEventRewardUsesInput input,
   });
+
+  Future<Either<Failure, bool>> updateEventRewardUse({
+    required Input$UpdateEventRewardUseInput input,
+  });
 }

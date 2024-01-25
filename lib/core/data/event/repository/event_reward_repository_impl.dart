@@ -6,6 +6,7 @@ import 'package:app/core/failure.dart';
 import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/graphql/backend/event/mutation/update_event.graphql.dart';
 import 'package:app/graphql/backend/event/query/get_event_reward_uses.graphql.dart';
+import 'package:app/graphql/backend/event/mutation/update_event_reward_use.graphql.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:dartz/dartz.dart';
@@ -122,5 +123,20 @@ class EventRewardRepositoryImpl implements EventRewardRepository {
             .toList(),
       ),
     );
+  }
+
+  @override
+  Future<Either<Failure, bool>> updateEventRewardUse({
+    required Input$UpdateEventRewardUseInput input,
+  }) async {
+    final result = await _client.mutate$UpdateEventRewardUse(
+      Options$Mutation$UpdateEventRewardUse(
+        variables: Variables$Mutation$UpdateEventRewardUse(input: input),
+      ),
+    );
+    if (result.hasException || result.parsedData == null) {
+      return Left(Failure());
+    }
+    return Right(result.parsedData?.updateEventRewardUse ?? false);
   }
 }

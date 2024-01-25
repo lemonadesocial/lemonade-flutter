@@ -1,0 +1,3 @@
+mutation UpdateEventRewardUse($input: UpdateEventRewardUseInput!) {
+     updateEventRewardUse(input: $input)
+}   
