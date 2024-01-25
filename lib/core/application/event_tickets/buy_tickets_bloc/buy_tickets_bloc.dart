@@ -18,7 +18,7 @@ class BuyTicketsBloc extends Bloc<BuyTicketsEvent, BuyTicketsState> {
   final eventTicketRepository = getIt<EventTicketRepository>();
   final paymentRepository = getIt<PaymentRepository>();
   int _updatePaymentAttemptCount = 0;
-  Payment? currentPayment;
+  Payment? _currentPayment;
   EventJoinRequest? _eventJoinRequest;
 
   BuyTicketsBloc() : super(BuyTicketsState.idle()) {
@@ -32,6 +32,16 @@ class BuyTicketsBloc extends Bloc<BuyTicketsEvent, BuyTicketsState> {
 
   Future<void> _onBuy(StartBuyTickets event, Emitter emit) async {
     emit(BuyTicketsState.loading());
+    final paymentMethod = event.input.transferParams?.paymentMethod ?? '';
+    if (_currentPayment != null) {
+      add(
+        BuyTicketsEvent.processPaymentIntent(
+          paymentMethod: event.input.transferParams?.paymentMethod ?? '',
+          payment: _currentPayment!,
+        ),
+      );
+    }
+
     final result = await eventTicketRepository.buyTickets(input: event.input);
     result.fold(
       (l) => emit(
@@ -50,7 +60,10 @@ class BuyTicketsBloc extends Bloc<BuyTicketsEvent, BuyTicketsState> {
         }
 
         add(
-          BuyTicketsEvent.processPaymentIntent(payment: response.payment!),
+          BuyTicketsEvent.processPaymentIntent(
+            paymentMethod: paymentMethod,
+            payment: response.payment!,
+          ),
         );
       },
     );
@@ -61,16 +74,16 @@ class BuyTicketsBloc extends Bloc<BuyTicketsEvent, BuyTicketsState> {
     Emitter emit,
   ) async {
     final payment = event.payment;
-    currentPayment = payment;
+    _currentPayment = payment;
     try {
       final stripePublicKey = payment.transferMetadata?['public_key'];
       final stripeClientSecret = payment.transferMetadata?['client_secret'];
-      final paymentMethodId = payment.transferParams?['payment_method'] ?? '';
+      final paymentMethodId = event.paymentMethod;
 
       Stripe.publishableKey = stripePublicKey;
 
       // if payment method not defined then have to use stripe payment sheet
-      if (paymentMethodId == null || (paymentMethodId as String).isEmpty) {
+      if (paymentMethodId == null || paymentMethodId.isEmpty) {
         await Stripe.instance.initPaymentSheet(
           paymentSheetParameters: SetupPaymentSheetParameters(
             paymentIntentClientSecret: stripeClientSecret,
@@ -82,7 +95,10 @@ class BuyTicketsBloc extends Bloc<BuyTicketsEvent, BuyTicketsState> {
       }
 
       add(
-        BuyTicketsEvent.processUpdatePayment(payment: payment),
+        BuyTicketsEvent.processUpdatePayment(
+          payment: payment,
+          paymentMethod: event.paymentMethod,
+        ),
       );
     } catch (e) {
       if (e is StripeException) {
@@ -113,12 +129,20 @@ class BuyTicketsBloc extends Bloc<BuyTicketsEvent, BuyTicketsState> {
     }
     _updatePaymentAttemptCount++;
     final result = await paymentRepository.updatePayment(
-      input: UpdatePaymentInput(id: event.payment.id ?? ''),
+      input: UpdatePaymentInput(
+        id: event.payment.id ?? '',
+        transferParams: UpdatePaymentTransferParams(
+          paymentMethod: event.paymentMethod,
+        ),
+      ),
     );
     result.fold(
       (l) {
         add(
-          BuyTicketsEvent.processUpdatePayment(payment: event.payment),
+          BuyTicketsEvent.processUpdatePayment(
+            payment: event.payment,
+            paymentMethod: event.paymentMethod,
+          ),
         );
       },
       (payment) {
@@ -154,9 +178,11 @@ class BuyTicketsEvent with _$BuyTicketsEvent {
   }) = StartBuyTickets;
   factory BuyTicketsEvent.processPaymentIntent({
     required Payment payment,
+    String? paymentMethod,
   }) = ProcessPaymentIntent;
   factory BuyTicketsEvent.processUpdatePayment({
     required Payment payment,
+    String? paymentMethod,
   }) = ProcessUpdatePayment;
   factory BuyTicketsEvent.receivedPaymentFailedFromNotification({
     Payment? payment,
