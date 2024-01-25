@@ -81,17 +81,18 @@ class ClaimRewardsPage extends StatelessWidget {
               ),
             ),
             BlocBuilder<ClaimRewardsBloc, ClaimRewardsState>(
-                builder: (context, state) {
-              if (state.initialLoading == true) {
-                return SliverToBoxAdapter(
-                  child: Padding(
-                    padding: EdgeInsets.only(top: Spacing.large),
-                    child: Loading.defaultLoading(context),
-                  ),
-                );
-              }
-              return ClaimRewardsListing(userId: userId);
-            }),
+              builder: (context, state) {
+                if (state.initialLoading == true) {
+                  return SliverToBoxAdapter(
+                    child: Padding(
+                      padding: EdgeInsets.only(top: Spacing.large),
+                      child: Loading.defaultLoading(context),
+                    ),
+                  );
+                }
+                return ClaimRewardsListing(userId: userId);
+              },
+            ),
           ],
         ),
       ),

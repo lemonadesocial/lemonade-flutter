@@ -130,7 +130,10 @@ class HorizontalListWidget extends StatelessWidget {
         if (result.isRight()) {
           context.read<ClaimRewardsBloc>().add(
                 ClaimRewardsEvent.getEventRewardUses(
-                    eventId: eventId, userId: userId, showLoading: false),
+                  eventId: eventId,
+                  userId: userId,
+                  showLoading: false,
+                ),
               );
         }
       },
