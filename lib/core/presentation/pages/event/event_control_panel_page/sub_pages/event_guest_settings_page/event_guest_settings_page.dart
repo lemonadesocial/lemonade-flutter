@@ -105,7 +105,7 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
                       onChanged: (value) {
                         Vibrate.feedback(FeedbackType.light);
                         context.read<EventGuestSettingsBloc>().add(
-                              RequireApprovalChanged(requireApproval: value),
+                              RequireApprovalChanged(requireApproval: !value),
                             );
                       },
                     ),
