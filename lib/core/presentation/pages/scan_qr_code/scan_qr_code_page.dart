@@ -68,6 +68,8 @@ class _ScanQRCodeViewState extends State<_ScanQRCodeView> {
             Expanded(
               child: TabBarView(
                 children: [
+                  // Using same instance scan QR code controller when scan QR code
+                  // Even it's 2 tabbar
                   ScanQRCodeView(
                     event: widget.event,
                     selectedScannerTabIndex: selectedScannerTabIndex,
