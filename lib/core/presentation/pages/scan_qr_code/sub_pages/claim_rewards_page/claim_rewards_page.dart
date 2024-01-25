@@ -2,6 +2,7 @@ import 'package:app/core/application/event/get_event_detail_bloc/get_event_detai
 import 'package:app/core/application/event/claim_rewards_bloc/claim_rewards_bloc.dart';
 import 'package:app/core/presentation/pages/scan_qr_code/sub_pages/claim_rewards_page/widgets/claim_rewards_listing.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
+import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
@@ -34,6 +35,7 @@ class ClaimRewardsPage extends StatelessWidget {
             ..add(ClaimRewardsEvent.getUserDetail(userId: userId))
             ..add(
               ClaimRewardsEvent.getEventRewardUses(
+                showLoading: true,
                 userId: userId,
                 eventId: eventId,
               ),
@@ -59,8 +61,11 @@ class ClaimRewardsPage extends StatelessWidget {
                   BlocBuilder<ClaimRewardsBloc, ClaimRewardsState>(
                     builder: (context, state) {
                       return Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+                        padding: EdgeInsets.only(
+                          left: Spacing.smMedium,
+                          right: Spacing.smMedium,
+                          top: Spacing.xSmall,
+                        ),
                         child: Text(
                           state.scannedUserDetail?.name ?? '',
                           style: Typo.superLarge.copyWith(
@@ -75,7 +80,18 @@ class ClaimRewardsPage extends StatelessWidget {
                 ],
               ),
             ),
-            const ClaimRewardsListing(),
+            BlocBuilder<ClaimRewardsBloc, ClaimRewardsState>(
+                builder: (context, state) {
+              if (state.initialLoading == true) {
+                return SliverToBoxAdapter(
+                  child: Padding(
+                    padding: EdgeInsets.only(top: Spacing.large),
+                    child: Loading.defaultLoading(context),
+                  ),
+                );
+              }
+              return ClaimRewardsListing(userId: userId);
+            }),
           ],
         ),
       ),

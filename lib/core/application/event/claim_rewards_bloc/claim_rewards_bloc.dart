@@ -37,6 +37,10 @@ class ClaimRewardsBloc extends Bloc<ClaimRewardsEvent, ClaimRewardsState> {
     _ClaimRewardsEventGetEventRewardUses event,
     Emitter emit,
   ) async {
+    if (event.showLoading == true) {
+      emit(state.copyWith(initialLoading: true));
+    }
+
     final result = await _eventRewardRepository.getEventRewardUses(
       input: Input$GetEventRewardUsesInput(
         event: event.eventId ?? '',
@@ -44,9 +48,15 @@ class ClaimRewardsBloc extends Bloc<ClaimRewardsEvent, ClaimRewardsState> {
       ),
     );
     result.fold(
-      (failure) => emit(state.copyWith(eventRewardUses: [])),
+      (failure) =>
+          emit(state.copyWith(eventRewardUses: [], initialLoading: false)),
       (eventRewardUses) {
-        emit(state.copyWith(eventRewardUses: eventRewardUses));
+        emit(
+          state.copyWith(
+            eventRewardUses: eventRewardUses,
+            initialLoading: false,
+          ),
+        );
       },
     );
   }
@@ -61,6 +71,7 @@ class ClaimRewardsEvent with _$ClaimRewardsEvent {
   factory ClaimRewardsEvent.getEventRewardUses({
     required String? userId,
     required String? eventId,
+    bool? showLoading,
   }) = _ClaimRewardsEventGetEventRewardUses;
 }
 
@@ -69,5 +80,6 @@ class ClaimRewardsState with _$ClaimRewardsState {
   factory ClaimRewardsState({
     User? scannedUserDetail,
     List<EventRewardUse>? eventRewardUses,
+    bool? initialLoading,
   }) = _ClaimRewardsState;
 }

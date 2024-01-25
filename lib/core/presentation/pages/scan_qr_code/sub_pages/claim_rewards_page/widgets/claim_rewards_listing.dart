@@ -1,10 +1,15 @@
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/application/event/claim_rewards_bloc/claim_rewards_bloc.dart';
 import 'package:app/core/config.dart';
+import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_reward_use.dart';
 import 'package:app/core/domain/event/entities/reward.dart';
+import 'package:app/core/domain/event/repository/event_reward_repository.dart';
+import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
+import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -12,19 +17,21 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 
 class ClaimRewardsListing extends StatelessWidget {
-  const ClaimRewardsListing({super.key});
+  const ClaimRewardsListing({super.key, required this.userId});
+  final String userId;
 
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-    List<Reward> rewards = context.watch<GetEventDetailBloc>().state.maybeWhen(
-              fetched: (event) => event.rewards,
-              orElse: () => [],
-            ) ??
-        [];
+    Event event = context.watch<GetEventDetailBloc>().state.maybeWhen(
+          fetched: (event) => event,
+          orElse: () => Event(),
+        );
+    List<Reward> rewards = event.rewards ?? [];
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, sectionIndex) {
@@ -72,6 +79,8 @@ class ClaimRewardsListing extends StatelessWidget {
                 ),
                 HorizontalListWidget(
                   reward: reward,
+                  eventId: event.id ?? '',
+                  userId: userId,
                 ),
               ],
             ),
@@ -84,8 +93,49 @@ class ClaimRewardsListing extends StatelessWidget {
 }
 
 class HorizontalListWidget extends StatelessWidget {
-  const HorizontalListWidget({super.key, required this.reward});
+  const HorizontalListWidget({
+    super.key,
+    required this.reward,
+    required this.eventId,
+    required this.userId,
+  });
   final Reward reward;
+  final String eventId;
+  final String userId;
+
+  Future<void> onToggleClaim(
+    BuildContext context,
+    Reward reward,
+    int index,
+  ) async {
+    Vibrate.feedback(FeedbackType.light);
+    List<EventRewardUse>? eventRewardUses =
+        context.read<ClaimRewardsBloc>().state.eventRewardUses;
+    bool? exist = eventRewardUses?.any(
+      (item) => item.rewardNumber == index && item.rewardId == reward.id,
+    );
+    showFutureLoadingDialog(
+      context: context,
+      future: () async {
+        final result =
+            await getIt<EventRewardRepository>().updateEventRewardUse(
+          input: Input$UpdateEventRewardUseInput(
+            event: eventId,
+            user: userId,
+            reward_id: reward.id ?? '',
+            reward_number: index.toDouble(),
+            active: exist == false,
+          ),
+        );
+        if (result.isRight()) {
+          context.read<ClaimRewardsBloc>().add(
+                ClaimRewardsEvent.getEventRewardUses(
+                    eventId: eventId, userId: userId, showLoading: false),
+              );
+        }
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +154,7 @@ class HorizontalListWidget extends StatelessWidget {
                     item.rewardNumber == index && item.rewardId == reward.id,
               );
               return InkWell(
-                onTap: () {},
+                onTap: () => onToggleClaim(context, reward, index),
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
                   child: Opacity(
