@@ -20,6 +20,7 @@ abstract class EventRewardRepository {
     required List<Input$EventRewardInput> input,
   });
 
-  Future<Either<Failure, List<EventRewardUse>>> getEventRewardUses(
-      {required Input$GetEventRewardUsesInput input});
+  Future<Either<Failure, List<EventRewardUse>>> getEventRewardUses({
+    required Input$GetEventRewardUsesInput input,
+  });
 }

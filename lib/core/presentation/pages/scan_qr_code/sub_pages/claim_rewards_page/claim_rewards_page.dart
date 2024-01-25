@@ -86,8 +86,12 @@ class ClaimRewardsPage extends StatelessWidget {
                   final reward = rewards[sectionIndex];
                   return Column(
                     children: [
-                      ListTile(
-                        title: Text(reward.title ?? ''),
+                      BlocBuilder<ClaimRewardsBloc, ClaimRewardsState>(
+                        builder: (context, state) {
+                          return ListTile(
+                            title: Text(reward.title ?? ''),
+                          );
+                        },
                       ),
                       HorizontalListWidget(
                         reward: reward,
