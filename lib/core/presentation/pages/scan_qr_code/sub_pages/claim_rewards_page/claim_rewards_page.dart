@@ -1,6 +1,7 @@
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/application/event/claim_rewards_bloc/claim_rewards_bloc.dart';
 import 'package:app/core/config.dart';
+import 'package:app/core/domain/event/entities/event_reward_use.dart';
 import 'package:app/core/domain/event/entities/reward.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
@@ -41,7 +42,13 @@ class ClaimRewardsPage extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) => ClaimRewardsBloc(eventId)
-            ..add(ClaimRewardsEvent.getUserDetail(userId: userId)),
+            ..add(ClaimRewardsEvent.getUserDetail(userId: userId))
+            ..add(
+              ClaimRewardsEvent.getEventRewardUses(
+                userId: userId,
+                eventId: eventId,
+              ),
+            ),
         ),
       ],
       child: Scaffold(
@@ -67,9 +74,8 @@ class ClaimRewardsPage extends StatelessWidget {
                             EdgeInsets.symmetric(horizontal: Spacing.smMedium),
                         child: Text(
                           state.scannedUserDetail?.name ?? '',
-                          style: Typo.large.copyWith(
+                          style: Typo.superLarge.copyWith(
                             color: colorScheme.onPrimary,
-                            fontSize: 24.sp,
                             fontWeight: FontWeight.w800,
                             fontFamily: FontFamily.nohemiVariable,
                           ),
@@ -84,19 +90,55 @@ class ClaimRewardsPage extends StatelessWidget {
               delegate: SliverChildBuilderDelegate(
                 (context, sectionIndex) {
                   final reward = rewards[sectionIndex];
-                  return Column(
-                    children: [
-                      BlocBuilder<ClaimRewardsBloc, ClaimRewardsState>(
-                        builder: (context, state) {
-                          return ListTile(
-                            title: Text(reward.title ?? ''),
-                          );
-                        },
-                      ),
-                      HorizontalListWidget(
-                        reward: reward,
-                      ),
-                    ],
+                  return Padding(
+                    padding: EdgeInsets.only(
+                      top: sectionIndex == 0
+                          ? Spacing.superExtraSmall
+                          : Spacing.large,
+                    ),
+                    child: Column(
+                      children: [
+                        BlocBuilder<ClaimRewardsBloc, ClaimRewardsState>(
+                          builder: (context, state) {
+                            List<EventRewardUse>? eventRewardUses =
+                                state.eventRewardUses;
+                            final totalCount = eventRewardUses
+                                    ?.where(
+                                      (element) =>
+                                          element.rewardId == reward.id,
+                                    )
+                                    .length ??
+                                0;
+                            return Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: Spacing.smMedium,
+                                vertical: Spacing.small,
+                              ),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    reward.title ?? '',
+                                    style: Typo.mediumPlus,
+                                  ),
+                                  SizedBox(
+                                    width: Spacing.smMedium,
+                                  ),
+                                  Text(
+                                    '$totalCount/${reward.limitPer} ${t.event.claimed}',
+                                    style: Typo.medium.copyWith(
+                                      color: colorScheme.onSecondary,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                        HorizontalListWidget(
+                          reward: reward,
+                        ),
+                      ],
+                    ),
                   );
                 },
                 childCount: rewards.length,
@@ -122,35 +164,44 @@ class HorizontalListWidget extends StatelessWidget {
         itemCount: reward.limitPer,
         itemBuilder: (context, index) {
           final fullIconUrl = '${AppConfig.assetPrefix}${reward.iconUrl}';
-          return Padding(
-            padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
-            child: Opacity(
-              opacity: 1,
-              child: Container(
-                width: Sizing.regular,
-                height: Sizing.regular,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(LemonRadius.large),
-                  border: Border.all(
-                    width: 2.w,
-                    color: Colors.yellow,
+          return BlocBuilder<ClaimRewardsBloc, ClaimRewardsState>(
+            builder: (context, state) {
+              List<EventRewardUse>? eventRewardUses = state.eventRewardUses;
+              bool? exist = eventRewardUses?.any(
+                (item) =>
+                    item.rewardNumber == index && item.rewardId == reward.id,
+              );
+              return Padding(
+                padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
+                child: Opacity(
+                  opacity: exist == true ? 0.5 : 1,
+                  child: Container(
+                    width: Sizing.regular,
+                    height: Sizing.regular,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(LemonRadius.large),
+                      border: Border.all(
+                        width: 2.w,
+                        color: Colors.yellow,
+                      ),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(
+                        LemonRadius.large,
+                      ),
+                      child: CachedNetworkImage(
+                        fit: BoxFit.contain,
+                        imageUrl: fullIconUrl,
+                        placeholder: (_, __) =>
+                            ImagePlaceholder.defaultPlaceholder(),
+                        errorWidget: (_, __, ___) =>
+                            ImagePlaceholder.defaultPlaceholder(),
+                      ),
+                    ),
                   ),
                 ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(
-                    LemonRadius.large,
-                  ),
-                  child: CachedNetworkImage(
-                    fit: BoxFit.contain,
-                    imageUrl: fullIconUrl,
-                    placeholder: (_, __) =>
-                        ImagePlaceholder.defaultPlaceholder(),
-                    errorWidget: (_, __, ___) =>
-                        ImagePlaceholder.defaultPlaceholder(),
-                  ),
-                ),
-              ),
-            ),
+              );
+            },
           );
         },
       ),
