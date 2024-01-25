@@ -280,6 +280,7 @@ class UserRepositoryImpl implements UserRepository {
       return Left(Failure.withGqlException(result.exception));
     }
     return Right(
-        User.fromDto(UserDto.fromJson(result.parsedData!.getUser!.toJson())));
+      User.fromDto(UserDto.fromJson(result.parsedData!.getUser!.toJson())),
+    );
   }
 }

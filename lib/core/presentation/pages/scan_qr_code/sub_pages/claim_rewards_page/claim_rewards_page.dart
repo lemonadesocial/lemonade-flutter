@@ -75,7 +75,7 @@ class ClaimRewardsPage extends StatelessWidget {
                 ],
               ),
             ),
-            const ClaimRewardsListing()
+            const ClaimRewardsListing(),
           ],
         ),
       ),

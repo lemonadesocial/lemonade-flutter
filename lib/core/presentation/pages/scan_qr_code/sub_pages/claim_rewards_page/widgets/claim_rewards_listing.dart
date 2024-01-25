@@ -103,31 +103,34 @@ class HorizontalListWidget extends StatelessWidget {
                 (item) =>
                     item.rewardNumber == index && item.rewardId == reward.id,
               );
-              return Padding(
-                padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
-                child: Opacity(
-                  opacity: exist == true ? 0.5 : 1,
-                  child: Container(
-                    width: Sizing.regular,
-                    height: Sizing.regular,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(LemonRadius.large),
-                      border: Border.all(
-                        width: 2.w,
-                        color: Colors.yellow,
+              return InkWell(
+                onTap: () {},
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
+                  child: Opacity(
+                    opacity: exist == true ? 0.5 : 1,
+                    child: Container(
+                      width: Sizing.regular,
+                      height: Sizing.regular,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(LemonRadius.large),
+                        border: Border.all(
+                          width: 2.w,
+                          color: Colors.yellow,
+                        ),
                       ),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(
-                        LemonRadius.large,
-                      ),
-                      child: CachedNetworkImage(
-                        fit: BoxFit.contain,
-                        imageUrl: fullIconUrl,
-                        placeholder: (_, __) =>
-                            ImagePlaceholder.defaultPlaceholder(),
-                        errorWidget: (_, __, ___) =>
-                            ImagePlaceholder.defaultPlaceholder(),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(
+                          LemonRadius.large,
+                        ),
+                        child: CachedNetworkImage(
+                          fit: BoxFit.contain,
+                          imageUrl: fullIconUrl,
+                          placeholder: (_, __) =>
+                              ImagePlaceholder.defaultPlaceholder(),
+                          errorWidget: (_, __, ___) =>
+                              ImagePlaceholder.defaultPlaceholder(),
+                        ),
                       ),
                     ),
                   ),
