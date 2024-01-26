@@ -5,7 +5,9 @@
 
 ### Features
 
+* approve/decline join request, join request listing ([#370](https://github.com/lemonadesocial/lemonade-flutter/issues/370)) ([5b8eff0](https://github.com/lemonadesocial/lemonade-flutter/commit/5b8eff0d00e4e770d79033209bf83537bfb824bf))
 * delete and edit reward ([#359](https://github.com/lemonadesocial/lemonade-flutter/issues/359)) ([8c692f3](https://github.com/lemonadesocial/lemonade-flutter/commit/8c692f30d6015013a2207e02ab75cc178ee8569d))
+* implement show rewards info for guest ([#369](https://github.com/lemonadesocial/lemonade-flutter/issues/369)) ([5f57bc5](https://github.com/lemonadesocial/lemonade-flutter/commit/5f57bc56838506020ad4e36e4e2b7883e2903c09))
 * scan reward ([#365](https://github.com/lemonadesocial/lemonade-flutter/issues/365)) ([ccd1663](https://github.com/lemonadesocial/lemonade-flutter/commit/ccd16638ef167d77d42e1bfd2319b84889f374e1))
 
 

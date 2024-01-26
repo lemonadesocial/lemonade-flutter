@@ -143,5 +143,7 @@
     "error": {
         "privateKeyNotFound": "Credential not found"
     },
-    "addNew": "Add new"
+    "addNew": "Add new",
+    "countLeft": "$count left",
+    "claimed": "claimed"
 }

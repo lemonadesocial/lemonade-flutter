@@ -167,6 +167,9 @@ final eventDetailRoutes = AutoRoute(
       page: ClaimRewardsRoute.page,
     ),
     AutoRoute(
+      page: GuestEventRewardUsesRoute.page,
+    ),
+    AutoRoute(
       page: EventControlPanelRoute.page,
       children: [
         AutoRoute(
@@ -222,6 +225,9 @@ final eventDetailRoutes = AutoRoute(
           ],
         ),
       ],
+    ),
+    AutoRoute(
+      page: EventApprovalSettingRoute.page,
     ),
   ],
 );
