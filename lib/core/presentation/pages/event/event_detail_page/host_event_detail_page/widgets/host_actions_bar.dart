@@ -27,7 +27,7 @@ class HostActionsBar extends StatelessWidget {
       child: InkWell(
         onTap: () {
           AutoRouter.of(context).navigate(
-            ScanQRCodeRoute(
+            ScanQRCheckinRewardsRoute(
               event: event,
             ),
           );

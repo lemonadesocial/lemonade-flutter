@@ -1,5 +1,5 @@
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
-import 'package:app/core/application/event/claim_rewards_bloc/claim_rewards_bloc.dart';
+import 'package:app/core/application/event/get_event_reward_uses_bloc/get_event_reward_uses_bloc.dart';
 import 'package:app/core/config.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_reward_use.dart';
@@ -42,7 +42,7 @@ class ClaimRewardsListing extends StatelessWidget {
             ),
             child: Column(
               children: [
-                BlocBuilder<ClaimRewardsBloc, ClaimRewardsState>(
+                BlocBuilder<GetEventRewardUsesBloc, GetEventRewardUsesState>(
                   builder: (context, state) {
                     List<EventRewardUse>? eventRewardUses =
                         state.eventRewardUses;
@@ -110,7 +110,7 @@ class HorizontalListWidget extends StatelessWidget {
   ) async {
     Vibrate.feedback(FeedbackType.light);
     List<EventRewardUse>? eventRewardUses =
-        context.read<ClaimRewardsBloc>().state.eventRewardUses;
+        context.read<GetEventRewardUsesBloc>().state.eventRewardUses;
     bool? exist = eventRewardUses?.any(
       (item) => item.rewardNumber == index && item.rewardId == reward.id,
     );
@@ -128,8 +128,8 @@ class HorizontalListWidget extends StatelessWidget {
           ),
         );
         if (result.isRight()) {
-          context.read<ClaimRewardsBloc>().add(
-                ClaimRewardsEvent.getEventRewardUses(
+          context.read<GetEventRewardUsesBloc>().add(
+                GetEventRewardUsesEvent.getEventRewardUses(
                   eventId: eventId,
                   userId: userId,
                   showLoading: false,
@@ -149,7 +149,7 @@ class HorizontalListWidget extends StatelessWidget {
         itemCount: reward.limitPer,
         itemBuilder: (context, index) {
           final fullIconUrl = '${AppConfig.assetPrefix}${reward.iconUrl}';
-          return BlocBuilder<ClaimRewardsBloc, ClaimRewardsState>(
+          return BlocBuilder<GetEventRewardUsesBloc, GetEventRewardUsesState>(
             builder: (context, state) {
               List<EventRewardUse>? eventRewardUses = state.eventRewardUses;
               bool? exist = eventRewardUses?.any(

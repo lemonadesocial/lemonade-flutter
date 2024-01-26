@@ -7,34 +7,18 @@ import 'package:app/injection/register_module.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'claim_rewards_bloc.freezed.dart';
+part 'get_event_reward_uses_bloc.freezed.dart';
 
-class ClaimRewardsBloc extends Bloc<ClaimRewardsEvent, ClaimRewardsState> {
+class GetEventRewardUsesBloc
+    extends Bloc<GetEventRewardUsesEvent, GetEventRewardUsesState> {
   final String? eventId;
-  ClaimRewardsBloc(this.eventId) : super(ClaimRewardsState()) {
-    on<_ClaimRewardsEventGetUserDetail>(_onGetUserDetail);
-    on<_ClaimRewardsEventGetEventRewardUses>(_onGetEventRewardUses);
+  GetEventRewardUsesBloc(this.eventId) : super(GetEventRewardUsesState()) {
+    on<_GetEventRewardUsesEventGetEventRewardUses>(_onGetEventRewardUses);
   }
-  final _userRepository = getIt<UserRepository>();
   final _eventRewardRepository = getIt<EventRewardRepository>();
 
-  void _onGetUserDetail(
-    _ClaimRewardsEventGetUserDetail event,
-    Emitter emit,
-  ) async {
-    final result = await _userRepository.getUser(
-      userId: event.userId ?? '',
-    );
-    result.fold(
-      (failure) => emit(state.copyWith(scannedUserDetail: null)),
-      (user) {
-        emit(state.copyWith(scannedUserDetail: user));
-      },
-    );
-  }
-
   void _onGetEventRewardUses(
-    _ClaimRewardsEventGetEventRewardUses event,
+    _GetEventRewardUsesEventGetEventRewardUses event,
     Emitter emit,
   ) async {
     if (event.showLoading == true) {
@@ -63,23 +47,18 @@ class ClaimRewardsBloc extends Bloc<ClaimRewardsEvent, ClaimRewardsState> {
 }
 
 @freezed
-class ClaimRewardsEvent with _$ClaimRewardsEvent {
-  factory ClaimRewardsEvent.getUserDetail({
-    required String? userId,
-  }) = _ClaimRewardsEventGetUserDetail;
-
-  factory ClaimRewardsEvent.getEventRewardUses({
+class GetEventRewardUsesEvent with _$GetEventRewardUsesEvent {
+  factory GetEventRewardUsesEvent.getEventRewardUses({
     required String? userId,
     required String? eventId,
     bool? showLoading,
-  }) = _ClaimRewardsEventGetEventRewardUses;
+  }) = _GetEventRewardUsesEventGetEventRewardUses;
 }
 
 @freezed
-class ClaimRewardsState with _$ClaimRewardsState {
-  factory ClaimRewardsState({
-    User? scannedUserDetail,
+class GetEventRewardUsesState with _$GetEventRewardUsesState {
+  factory GetEventRewardUsesState({
     List<EventRewardUse>? eventRewardUses,
     bool? initialLoading,
-  }) = _ClaimRewardsState;
+  }) = _GetEventRewardUsesState;
 }

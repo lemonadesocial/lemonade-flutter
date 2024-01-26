@@ -160,7 +160,7 @@ final eventDetailRoutes = AutoRoute(
       page: EventDetailBaseRoute.page,
     ),
     AutoRoute(
-      page: ScanQRCodeRoute.page,
+      page: ScanQRCheckinRewardsRoute.page,
     ),
     AutoRoute(
       path: 'claimRewards/:user_id',

@@ -1,5 +1,5 @@
 import 'package:app/core/domain/event/entities/event.dart';
-import 'package:app/core/presentation/pages/scan_qr_code/views/scan_qr_code_view.dart';
+import 'package:app/core/presentation/pages/scan_qr_checkin_rewards/views/scan_qr_checkin_rewards_view.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
@@ -13,8 +13,8 @@ enum SelectedScannerTab {
 }
 
 @RoutePage()
-class ScanQRCodePage extends StatelessWidget {
-  const ScanQRCodePage({
+class ScanQRCheckinRewardsPage extends StatelessWidget {
+  const ScanQRCheckinRewardsPage({
     super.key,
     required this.event,
   });
@@ -22,19 +22,20 @@ class ScanQRCodePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _ScanQRCodeView(event: event);
+    return _ScanQRCheckinRewardsView(event: event);
   }
 }
 
-class _ScanQRCodeView extends StatefulWidget {
-  const _ScanQRCodeView({required this.event});
+class _ScanQRCheckinRewardsView extends StatefulWidget {
+  const _ScanQRCheckinRewardsView({required this.event});
   final Event event;
 
   @override
-  State<_ScanQRCodeView> createState() => _ScanQRCodeViewState();
+  State<_ScanQRCheckinRewardsView> createState() =>
+      _ScanQRCheckinRewardsViewState();
 }
 
-class _ScanQRCodeViewState extends State<_ScanQRCodeView> {
+class _ScanQRCheckinRewardsViewState extends State<_ScanQRCheckinRewardsView> {
   var selectedScannerTabIndex = SelectedScannerTab.checkIn.index;
   @override
   Widget build(BuildContext context) {
@@ -70,7 +71,7 @@ class _ScanQRCodeViewState extends State<_ScanQRCodeView> {
                 children: [
                   // Using same instance scan QR code controller when scan QR code
                   // Even it's 2 tabbar
-                  ScanQRCodeView(
+                  ScanQRCheckinRewardsView(
                     event: widget.event,
                     selectedScannerTabIndex: selectedScannerTabIndex,
                   ),

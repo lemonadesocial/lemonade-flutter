@@ -1,9 +1,9 @@
 import 'package:app/core/application/event/update_event_checkin_bloc/update_event_checkin_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
-import 'package:app/core/presentation/pages/scan_qr_code/scan_qr_code_page.dart';
-import 'package:app/core/presentation/pages/scan_qr_code/widgets/scanner_actions.dart';
-import 'package:app/core/presentation/pages/scan_qr_code/widgets/scanner_error_widget.dart';
-import 'package:app/core/presentation/pages/scan_qr_code/widgets/scanner_overlay.dart';
+import 'package:app/core/presentation/pages/scan_qr_checkin_rewards/scan_qr_checkin_rewards_page.dart';
+import 'package:app/core/presentation/pages/scan_qr_checkin_rewards/widgets/scanner_actions.dart';
+import 'package:app/core/presentation/pages/scan_qr_checkin_rewards/widgets/scanner_error_widget.dart';
+import 'package:app/core/presentation/pages/scan_qr_checkin_rewards/widgets/scanner_overlay.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -13,8 +13,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
-class ScanQRCodeView extends StatefulWidget {
-  const ScanQRCodeView({
+class ScanQRCheckinRewardsView extends StatefulWidget {
+  const ScanQRCheckinRewardsView({
     super.key,
     required this.event,
     required this.selectedScannerTabIndex,
@@ -23,10 +23,11 @@ class ScanQRCodeView extends StatefulWidget {
   final int selectedScannerTabIndex;
 
   @override
-  State<ScanQRCodeView> createState() => _ScanQRCodeViewState();
+  State<ScanQRCheckinRewardsView> createState() =>
+      _ScanQRCheckinRewardsViewState();
 }
 
-class _ScanQRCodeViewState extends State<ScanQRCodeView> {
+class _ScanQRCheckinRewardsViewState extends State<ScanQRCheckinRewardsView> {
   final MobileScannerController controller = MobileScannerController(
     formats: const [BarcodeFormat.qrCode],
     autoStart: true,
