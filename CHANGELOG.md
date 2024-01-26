@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.3.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.2.0...v1.3.0) (2024-01-26)
+
+
+### Features
+
+* approve/decline join request, join request listing ([#370](https://github.com/lemonadesocial/lemonade-flutter/issues/370)) ([5b8eff0](https://github.com/lemonadesocial/lemonade-flutter/commit/5b8eff0d00e4e770d79033209bf83537bfb824bf))
+* delete and edit reward ([#359](https://github.com/lemonadesocial/lemonade-flutter/issues/359)) ([8c692f3](https://github.com/lemonadesocial/lemonade-flutter/commit/8c692f30d6015013a2207e02ab75cc178ee8569d))
+* implement show rewards info for guest ([#369](https://github.com/lemonadesocial/lemonade-flutter/issues/369)) ([5f57bc5](https://github.com/lemonadesocial/lemonade-flutter/commit/5f57bc56838506020ad4e36e4e2b7883e2903c09))
+* scan reward ([#365](https://github.com/lemonadesocial/lemonade-flutter/issues/365)) ([ccd1663](https://github.com/lemonadesocial/lemonade-flutter/commit/ccd16638ef167d77d42e1bfd2319b84889f374e1))
+
+
+### Bug Fixes
+
+* add published true when create event ([#362](https://github.com/lemonadesocial/lemonade-flutter/issues/362)) ([9ade0d6](https://github.com/lemonadesocial/lemonade-flutter/commit/9ade0d66d756fd1476f46ac543609bf2d2e3d011))
+* update buy tickets api call flow ([#366](https://github.com/lemonadesocial/lemonade-flutter/issues/366)) ([ee31dd7](https://github.com/lemonadesocial/lemonade-flutter/commit/ee31dd7067c0a57eea06c6778ca1f88b5ed711d3))
+* update placeholder text for create post screen ([#367](https://github.com/lemonadesocial/lemonade-flutter/issues/367)) ([21f7738](https://github.com/lemonadesocial/lemonade-flutter/commit/21f773850f5ee23e4e6b6473495cb08f4471c952))
+* update redeem/buy tickets flow with new feature approval ([#363](https://github.com/lemonadesocial/lemonade-flutter/issues/363)) ([1f96b62](https://github.com/lemonadesocial/lemonade-flutter/commit/1f96b62b528ecd6030638475f306cc8de25400ac))
+
 ## [1.2.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.1.4...v1.2.0) (2024-01-19)
 
 
