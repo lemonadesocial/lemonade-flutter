@@ -11,6 +11,7 @@ import 'package:app/core/failure.dart';
 import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/graphql/backend/user/mutation/update_user.graphql.dart';
+import 'package:app/graphql/backend/user/query/get_user.graphql.dart';
 import 'package:app/graphql/backend/user/query/get_users.graphql.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:dartz/dartz.dart';
@@ -260,6 +261,26 @@ class UserRepositoryImpl implements UserRepository {
             .map((item) => User.fromDto(UserDto.fromJson(item.toJson())))
             .toList(),
       ),
+    );
+  }
+
+  @override
+  Future<Either<Failure, User>> getUser({
+    required String userId,
+  }) async {
+    final result = await _gqlClient.query$GetUser(
+      Options$Query$GetUser(
+        variables: Variables$Query$GetUser(
+          id: userId,
+        ),
+      ),
+    );
+
+    if (result.hasException) {
+      return Left(Failure.withGqlException(result.exception));
+    }
+    return Right(
+      User.fromDto(UserDto.fromJson(result.parsedData!.getUser!.toJson())),
     );
   }
 }

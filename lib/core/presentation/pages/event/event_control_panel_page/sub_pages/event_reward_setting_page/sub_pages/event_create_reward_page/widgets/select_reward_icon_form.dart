@@ -1,5 +1,5 @@
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
-import 'package:app/core/application/event_tickets/modify_reward_bloc/modify_reward_bloc.dart';
+import 'package:app/core/application/event/modify_reward_bloc/modify_reward_bloc.dart';
 import 'package:app/core/config.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/reward.dart';

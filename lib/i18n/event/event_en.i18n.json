@@ -263,7 +263,10 @@
         "scan": "Scan",
         "scanTicketSuccess": "Scan ticket successfully",
         "checkedIn": "checked in",
-        "pleaseScan": "Please scan QR Code"
+        "pleaseScan": "Please scan QR Code",
+        "checkin": "Check in",
+        "checkedinSuccessfully": "Checked in successfully",
+        "rewards": "Rewards"
     },
     "rewardSetting": {
         "createNewReward": "Create new reward",
@@ -281,5 +284,6 @@
         "waitingApproval": "Awaiting Approval",
         "waitingApprovalDescription": "Your reservation won't be confirmed until the host accepts your request. We will let you know when the host approves."
     },
-    "allTicketTiers": "All ticket tiers"
+    "allTicketTiers": "All ticket tiers",
+    "claimed": "claimed"
 }

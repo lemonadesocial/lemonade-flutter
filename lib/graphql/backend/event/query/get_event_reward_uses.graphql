@@ -1,0 +1,10 @@
+query GetEventRewardUses($input: GetEventRewardUsesInput!) {
+    getEventRewardUses(input: $input) {
+        id: _id
+        active
+        event
+        rewardId: reward_id
+        rewardNumber: reward_number
+        user
+    }
+}
