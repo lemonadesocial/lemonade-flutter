@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.3.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.2.0...v1.3.0) (2024-01-26)
+
+
+### Features
+
+* delete and edit reward ([#359](https://github.com/lemonadesocial/lemonade-flutter/issues/359)) ([8c692f3](https://github.com/lemonadesocial/lemonade-flutter/commit/8c692f30d6015013a2207e02ab75cc178ee8569d))
+* scan reward ([#365](https://github.com/lemonadesocial/lemonade-flutter/issues/365)) ([ccd1663](https://github.com/lemonadesocial/lemonade-flutter/commit/ccd16638ef167d77d42e1bfd2319b84889f374e1))
+
+
+### Bug Fixes
+
+* add published true when create event ([#362](https://github.com/lemonadesocial/lemonade-flutter/issues/362)) ([9ade0d6](https://github.com/lemonadesocial/lemonade-flutter/commit/9ade0d66d756fd1476f46ac543609bf2d2e3d011))
+* update buy tickets api call flow ([#366](https://github.com/lemonadesocial/lemonade-flutter/issues/366)) ([ee31dd7](https://github.com/lemonadesocial/lemonade-flutter/commit/ee31dd7067c0a57eea06c6778ca1f88b5ed711d3))
+* update placeholder text for create post screen ([#367](https://github.com/lemonadesocial/lemonade-flutter/issues/367)) ([21f7738](https://github.com/lemonadesocial/lemonade-flutter/commit/21f773850f5ee23e4e6b6473495cb08f4471c952))
+* update redeem/buy tickets flow with new feature approval ([#363](https://github.com/lemonadesocial/lemonade-flutter/issues/363)) ([1f96b62](https://github.com/lemonadesocial/lemonade-flutter/commit/1f96b62b528ecd6030638475f306cc8de25400ac))
+
 ## [1.2.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.1.4...v1.2.0) (2024-01-19)
 
 
