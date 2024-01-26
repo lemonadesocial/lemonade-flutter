@@ -36,7 +36,11 @@ class HorizontalRewardsList extends StatelessWidget {
                     item.rewardNumber == index && item.rewardId == reward.id,
               );
               return InkWell(
-                onTap: () => onToggleItem!(context, reward, index),
+                onTap: () {
+                  if (onToggleItem != null) {
+                    onToggleItem!(context, reward, index);
+                  }
+                },
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
                   child: Opacity(
