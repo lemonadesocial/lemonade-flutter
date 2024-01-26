@@ -226,6 +226,9 @@ final eventDetailRoutes = AutoRoute(
         ),
       ],
     ),
+    AutoRoute(
+      page: EventApprovalSettingRoute.page,
+    ),
   ],
 );
 
