@@ -4,7 +4,6 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 
 final redeemTicketsMutation = gql('''
   $eventJoinRequestFragment
-  
   mutation RedeemTickets(\$input: RedeemTicketsInput!) {
     redeemTickets(input: \$input) {
       event_join_request {
@@ -31,15 +30,14 @@ final assignTicketsMutation = gql('''
 
 final buyTicketsMutation = gql('''
   $eventJoinRequestFragment
-  $paymentBaseFragment
-
+  $paymentFragment
   mutation BuyTickets(\$input: BuyTicketsInput!) {
     buyTickets(input: \$input) {
       event_join_request {
         ...eventJoinRequestFragment
       }
       payment {
-        ...paymentBaseFragment
+        ...paymentFragment
       }
     }
   }
