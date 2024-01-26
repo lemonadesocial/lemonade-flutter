@@ -1,5 +1,8 @@
 import 'package:app/core/data/event/dtos/event_join_request_dto/event_join_request_dto.dart';
+import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/entities/event_ticket.dart';
 import 'package:app/core/domain/payment/entities/payment.dart';
+import 'package:app/core/domain/user/entities/user.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'event_join_request.freezed.dart';
@@ -16,8 +19,12 @@ class EventJoinRequest with _$EventJoinRequest {
     String? user,
     String? declinedBy,
     String? approvedBy,
-    Payment? payment,
-    String? event,
+    User? userExpanded,
+    User? declinedByExpanded,
+    User? approvedByExpanded,
+    Payment? paymentExpanded,
+    Event? eventExpanded,
+    List<TicketInfo>? ticketInfo,
   }) = _EventJoinRequest;
 
   factory EventJoinRequest.fromDto(EventJoinRequestDto dto) => EventJoinRequest(
@@ -28,7 +35,22 @@ class EventJoinRequest with _$EventJoinRequest {
         user: dto.user,
         declinedBy: dto.declinedBy,
         approvedBy: dto.approvedBy,
-        payment: dto.payment != null ? Payment.fromDto(dto.payment!) : null,
-        event: dto.event,
+        userExpanded:
+            dto.userExpanded != null ? User.fromDto(dto.userExpanded!) : null,
+        declinedByExpanded: dto.declinedByExpanded != null
+            ? User.fromDto(dto.declinedByExpanded!)
+            : null,
+        approvedByExpanded: dto.approvedByExpanded != null
+            ? User.fromDto(dto.approvedByExpanded!)
+            : null,
+        paymentExpanded: dto.paymentExpanded != null
+            ? Payment.fromDto(dto.paymentExpanded!)
+            : null,
+        eventExpanded: dto.eventExpanded != null
+            ? Event.fromDto(dto.eventExpanded!)
+            : null,
+        ticketInfo: (dto.ticketInfo ?? [])
+            .map((item) => TicketInfo.fromDto(item))
+            .toList(),
       );
 }

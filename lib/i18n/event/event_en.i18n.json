@@ -268,7 +268,7 @@
     "rewardSetting": {
         "createNewReward": "Create new reward",
         "editReward": "Edit reward",
-        "rewardName":" Reward name",
+        "rewardName": " Reward name",
         "chooseAnIcon": "Choose an icon",
         "limit": "Limit",
         "limitDescription": "Total number of people who can claim this reward",
@@ -279,7 +279,14 @@
     },
     "eventApproval": {
         "waitingApproval": "Awaiting Approval",
-        "waitingApprovalDescription": "Your reservation won't be confirmed until the host accepts your request. We will let you know when the host approves."
+        "waitingApprovalDescription": "Your reservation won't be confirmed until the host accepts your request. We will let you know when the host approves.",
+        "guests": "Guests",
+        "tabs": {
+            "reservations": "Reservations",
+            "pending": "Pending",
+            "confirmed": "Confirmed",
+            "rejected": "Rejected"
+        }
     },
     "allTicketTiers": "All ticket tiers"
 }

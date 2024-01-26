@@ -1,6 +1,7 @@
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_checkin.dart';
 import 'package:app/core/domain/event/entities/event_cohost_request.dart';
+import 'package:app/core/domain/event/entities/event_join_request.dart';
 import 'package:app/core/domain/event/entities/event_rsvp.dart';
 import 'package:app/core/domain/event/input/accept_event_input/accept_event_input.dart';
 import 'package:app/core/domain/event/input/get_event_detail_input.dart';
@@ -9,6 +10,7 @@ import 'package:app/core/failure.dart';
 import 'package:app/graphql/backend/event/mutation/create_event.graphql.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:dartz/dartz.dart';
+import 'package:app/graphql/backend/event/query/get_event_join_request.graphql.dart';
 
 abstract class EventRepository {
   Future<Either<Failure, List<Event>>> getEvents({
@@ -62,5 +64,17 @@ abstract class EventRepository {
 
   Future<Either<Failure, List<EventCheckin>>> getEventCheckins({
     required Input$GetEventCheckinsInput input,
+  });
+
+  Future<Either<Failure, List<EventJoinRequest>>> getEventJoinRequests({
+    required Variables$Query$GetEventJoinRequests input,
+  });
+
+  Future<Either<Failure, bool>> approveUserJoinRequest({
+    required Input$ApproveUserJoinRequestsInput input,
+  });
+
+  Future<Either<Failure, bool>> declineUserJoinRequest({
+    required Input$DeclineUserJoinRequestsInput input,
   });
 }

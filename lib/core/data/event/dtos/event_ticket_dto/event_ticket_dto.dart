@@ -18,3 +18,14 @@ class EventTicketDto with _$EventTicketDto {
   factory EventTicketDto.fromJson(Map<String, dynamic> json) =>
       _$EventTicketDtoFromJson(json);
 }
+
+@freezed
+class TicketInfoDto with _$TicketInfoDto {
+  factory TicketInfoDto({
+    double? count,
+    @JsonKey(name: 'ticket_type') String? ticketType,
+  }) = _TicketInfoDto;
+
+  factory TicketInfoDto.fromJson(Map<String, dynamic> json) =>
+      _$TicketInfoDtoFromJson(json);
+}

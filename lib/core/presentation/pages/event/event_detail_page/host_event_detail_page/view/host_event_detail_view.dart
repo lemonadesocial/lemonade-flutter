@@ -63,6 +63,25 @@ class HostEventDetailView extends StatelessWidget {
                   SliverPadding(
                     padding: EdgeInsets.only(top: Spacing.medium),
                   ),
+                  // TODO: temporary hidden for release
+                  // if (event.requireApproval == true) ...[
+                  //   SliverPadding(
+                  //     padding:
+                  //         EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+                  //     sliver: SliverToBoxAdapter(
+                  //       child: LinearGradientButton(
+                  //         label: t.event.eventApproval.guests,
+                  //         onTap: () {
+                  //           AutoRouter.of(context)
+                  //               .push(const EventApprovalSettingRoute());
+                  //         },
+                  //       ),
+                  //     ),
+                  //   ),
+                  //   SliverPadding(
+                  //     padding: EdgeInsets.only(top: Spacing.medium),
+                  //   ),
+                  // ],
                   SliverPadding(
                     padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
                     sliver: SliverToBoxAdapter(
