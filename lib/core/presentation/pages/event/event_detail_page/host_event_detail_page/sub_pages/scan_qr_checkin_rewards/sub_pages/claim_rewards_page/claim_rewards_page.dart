@@ -1,7 +1,7 @@
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/application/event/get_event_reward_uses_bloc/get_event_reward_uses_bloc.dart';
 import 'package:app/core/domain/user/user_repository.dart';
-import 'package:app/core/presentation/pages/scan_qr_checkin_rewards/sub_pages/claim_rewards_page/widgets/claim_rewards_listing.dart';
+import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/sub_pages/scan_qr_checkin_rewards/sub_pages/claim_rewards_page/widgets/claim_rewards_listing.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/gen/fonts.gen.dart';

@@ -1,9 +1,9 @@
 import 'package:app/core/application/event/update_event_checkin_bloc/update_event_checkin_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
-import 'package:app/core/presentation/pages/scan_qr_checkin_rewards/scan_qr_checkin_rewards_page.dart';
-import 'package:app/core/presentation/pages/scan_qr_checkin_rewards/widgets/scanner_actions.dart';
-import 'package:app/core/presentation/pages/scan_qr_checkin_rewards/widgets/scanner_error_widget.dart';
-import 'package:app/core/presentation/pages/scan_qr_checkin_rewards/widgets/scanner_overlay.dart';
+import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/sub_pages/scan_qr_checkin_rewards/scan_qr_checkin_rewards_page.dart';
+import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/sub_pages/scan_qr_checkin_rewards/widgets/scanner_actions.dart';
+import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/sub_pages/scan_qr_checkin_rewards/widgets/scanner_error_widget.dart';
+import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/sub_pages/scan_qr_checkin_rewards/widgets/scanner_overlay.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
