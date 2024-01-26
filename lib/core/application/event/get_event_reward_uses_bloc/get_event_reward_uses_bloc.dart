@@ -1,7 +1,5 @@
 import 'package:app/core/domain/event/entities/event_reward_use.dart';
 import 'package:app/core/domain/event/repository/event_reward_repository.dart';
-import 'package:app/core/domain/user/entities/user.dart';
-import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
