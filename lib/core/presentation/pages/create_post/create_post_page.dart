@@ -1,5 +1,7 @@
+import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/newsfeed/newsfeed_listing_bloc/newsfeed_listing_bloc.dart';
 import 'package:app/core/application/post/create_post_bloc/create_post_bloc.dart';
+import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/pages/create_post/widgets/create_post_event_card_widget.dart';
 import 'package:app/core/presentation/pages/event/event_selecting_page.dart';
 import 'package:app/core/presentation/widgets/back_button_widget.dart';
@@ -32,6 +34,10 @@ class CreatePostPage extends StatelessWidget {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
     final createPostBloc = CreatePostBloc(PostService(getIt<PostRepository>()));
+    User? user = context.watch<AuthBloc>().state.maybeWhen(
+          authenticated: (authSession) => authSession,
+          orElse: () => null,
+        );
 
     return BlocProvider<CreatePostBloc>(
       create: (context) => createPostBloc,
@@ -123,7 +129,9 @@ class CreatePostPage extends StatelessWidget {
                               onChanged: createPostBloc.onPostDescriptionChange,
                               cursorColor: colorScheme.onPrimary,
                               decoration: InputDecoration.collapsed(
-                                hintText: t.home.whatOnYourMind,
+                                hintText: user?.displayName != null
+                                    ? '${t.home.whatOnYourMind}, ${user!.displayName} ?'
+                                    : t.home.whatOnYourMind,
                               ),
                               style: Typo.medium.copyWith(
                                 fontSize: 16,
