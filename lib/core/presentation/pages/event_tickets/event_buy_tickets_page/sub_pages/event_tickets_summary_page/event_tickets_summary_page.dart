@@ -182,7 +182,10 @@ class EventTicketsSummaryPageView extends StatelessWidget {
         onReceivedPaymentFailed: (eventId, payment) {
           final currentPayment = isCryptoCurrency
               ? context.read<BuyTicketsWithCryptoBloc>().state.data.payment
-              : context.read<BuyTicketsBloc>().currentPayment;
+              : context.read<BuyTicketsBloc>().state.maybeWhen(
+                    orElse: () => null,
+                    done: (payment, _) => payment,
+                  );
           if (currentPayment?.id == payment.id && eventId == event.id) {
             _waitForNotificationTimer.cancel();
             if (isCryptoCurrency) {
@@ -217,7 +220,10 @@ class EventTicketsSummaryPageView extends StatelessWidget {
           }
           final currentPayment = isCryptoCurrency
               ? context.read<BuyTicketsWithCryptoBloc>().state.data.payment
-              : context.read<BuyTicketsBloc>().currentPayment;
+              : context.read<BuyTicketsBloc>().state.maybeWhen(
+                    orElse: () => null,
+                    done: (payment, _) => payment,
+                  );
           if (currentPayment?.id == payment.id && eventId == event.id) {
             _waitForNotificationTimer.cancel();
             AutoRouter.of(context).replaceAll(

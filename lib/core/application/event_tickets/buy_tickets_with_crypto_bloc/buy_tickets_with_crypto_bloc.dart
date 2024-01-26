@@ -60,15 +60,30 @@ class BuyTicketsWithCryptoBloc
     Emitter emit,
   ) async {
     emit(BuyTicketsWithCryptoState.loading(data: state.data));
-    final result = await eventTicketRepository.buyTickets(
-      input: event.input.copyWith(
-        transferParams: BuyTicketsTransferParamsInput(
-          network: selectedNetwork,
-        ),
-      ),
-    );
 
-    if (result.isLeft()) {
+    if (_currentPayment == null) {
+      final result = await eventTicketRepository.buyTickets(
+        input: event.input.copyWith(
+          transferParams: BuyTicketsTransferParamsInput(
+            network: selectedNetwork,
+          ),
+        ),
+      );
+
+      if (result.isLeft()) {
+        return emit(
+          BuyTicketsWithCryptoState.failure(
+            data: state.data,
+            failureReason: InitCryptoPaymentFailure(),
+          ),
+        );
+      }
+      _currentPayment = result.getOrElse(() => BuyTicketsResponse()).payment;
+      _currentEventJoinRequest =
+          result.getOrElse(() => BuyTicketsResponse()).eventJoinRequest;
+    }
+
+    if (_currentPayment == null) {
       return emit(
         BuyTicketsWithCryptoState.failure(
           data: state.data,
@@ -76,19 +91,7 @@ class BuyTicketsWithCryptoBloc
         ),
       );
     }
-    final payment = result.getOrElse(() => BuyTicketsResponse()).payment;
-    _currentEventJoinRequest =
-        result.getOrElse(() => BuyTicketsResponse()).eventJoinRequest;
-    _currentPayment = payment;
 
-    if (payment == null) {
-      return emit(
-        BuyTicketsWithCryptoState.failure(
-          data: state.data,
-          failureReason: InitCryptoPaymentFailure(),
-        ),
-      );
-    }
     try {
       final getChainResult =
           await _web3Repository.getChainById(chainId: selectedNetwork!);
@@ -96,7 +99,7 @@ class BuyTicketsWithCryptoBloc
       final signature = await walletConnectService
           .personalSign(
             chainId: chain?.fullChainId,
-            message: Web3Utils.toHex(payment.id ?? ''),
+            message: Web3Utils.toHex(_currentPayment?.id ?? ''),
             wallet: event.userWalletAddress,
             walletApp: SupportedWalletApp.metamask,
           )

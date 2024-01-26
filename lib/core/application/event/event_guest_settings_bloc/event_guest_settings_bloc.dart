@@ -84,7 +84,7 @@ class EventGuestSettingState with _$EventGuestSettingState {
     @Default("100") String? guestLimit,
     @Default("2") String? guestLimitPer,
     @Default(false) bool private,
-    @Default(true) bool requireApproval,
+    @Default(false) bool requireApproval,
     @Default(true) bool virtual,
     @Default(false) bool isValid,
   }) = _EventGuestSettingState;

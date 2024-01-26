@@ -10,7 +10,7 @@ class WaitForPaymentNotificationHandler {
   Timer? timer;
 
   start(BuildContext context) {
-    timer = Timer(const Duration(seconds: 60), () {
+    timer = Timer(const Duration(minutes: 3), () {
       final t = Translations.of(context);
       final colorScheme = Theme.of(context).colorScheme;
 

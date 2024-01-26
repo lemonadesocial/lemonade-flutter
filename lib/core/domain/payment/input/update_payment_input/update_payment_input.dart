@@ -22,6 +22,8 @@ class UpdatePaymentTransferParams with _$UpdatePaymentTransferParams {
   factory UpdatePaymentTransferParams({
     @JsonKey(name: 'tx_hash') String? txHash,
     @JsonKey(name: 'signature') String? signature,
+    // for stripe
+    @JsonKey(name: 'payment_method') String? paymentMethod,
     String? network,
   }) = _UpdatePaymentTransferParams;
 
