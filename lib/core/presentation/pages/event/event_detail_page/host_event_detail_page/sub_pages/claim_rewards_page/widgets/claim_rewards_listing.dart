@@ -115,7 +115,9 @@ class ClaimRewardsListing extends StatelessWidget {
                   },
                 ),
                 HorizontalRewardsList(
-                    reward: reward, onToggleItem: onToggleClaim),
+                  reward: reward,
+                  onToggleItem: onToggleClaim,
+                ),
               ],
             ),
           );

@@ -97,33 +97,34 @@ class _GuestEventRewardUsesPageView extends StatelessWidget {
         physics: const BouncingScrollPhysics(),
         slivers: [
           SliverAppBar(
-              leading: const SizedBox.shrink(),
-              collapsedHeight: kToolbarHeight + Spacing.superExtraSmall,
-              pinned: true,
-              flexibleSpace: Padding(
-                padding: EdgeInsets.symmetric(horizontal: Spacing.medium),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      t.event.rewards,
-                      style: Typo.superLarge.copyWith(
-                        color: colorScheme.onPrimary,
-                        fontWeight: FontWeight.w800,
-                        fontFamily: FontFamily.nohemiVariable,
-                      ),
+            leading: const SizedBox.shrink(),
+            collapsedHeight: kToolbarHeight + Spacing.superExtraSmall,
+            pinned: true,
+            flexibleSpace: Padding(
+              padding: EdgeInsets.symmetric(horizontal: Spacing.medium),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    t.event.rewards,
+                    style: Typo.superLarge.copyWith(
+                      color: colorScheme.onPrimary,
+                      fontWeight: FontWeight.w800,
+                      fontFamily: FontFamily.nohemiVariable,
                     ),
-                    Text(
-                      '$totalEventRewardUses/$totalLimitPer ${t.common.claimed}',
-                      style: Typo.medium.copyWith(
-                        color: colorScheme.onSecondary,
-                        fontWeight: FontWeight.w800,
-                        fontFamily: FontFamily.nohemiVariable,
-                      ),
+                  ),
+                  Text(
+                    '$totalEventRewardUses/$totalLimitPer ${t.common.claimed}',
+                    style: Typo.medium.copyWith(
+                      color: colorScheme.onSecondary,
+                      fontWeight: FontWeight.w800,
+                      fontFamily: FontFamily.nohemiVariable,
                     ),
-                  ],
-                ),
-              )),
+                  ),
+                ],
+              ),
+            ),
+          ),
           BlocBuilder<GetEventRewardUsesBloc, GetEventRewardUsesState>(
             builder: (context, state) {
               if (state.initialLoading == true) {
