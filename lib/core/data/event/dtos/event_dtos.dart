@@ -49,7 +49,7 @@ class EventDto with _$EventDto {
     bool? virtual,
     bool? private,
     List<RewardDto>? rewards,
-    @JsonKey(name: 'require_approval') bool? requireApproval,
+    @JsonKey(name: 'approval_required') bool? approvalRequired,
   }) = _EventDto;
 
   factory EventDto.fromJson(Map<String, dynamic> json) =>

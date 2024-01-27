@@ -5,10 +5,13 @@ import 'package:app/core/presentation/pages/event/event_detail_page/host_event_d
 import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/widgets/host_event_detail_config_grid.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/widgets/host_event_location.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/widgets/host_event_poap_reward_card.dart';
+import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -64,24 +67,22 @@ class HostEventDetailView extends StatelessWidget {
                     padding: EdgeInsets.only(top: Spacing.medium),
                   ),
                   // TODO: temporary hidden for release
-                  // if (event.requireApproval == true) ...[
-                  //   SliverPadding(
-                  //     padding:
-                  //         EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-                  //     sliver: SliverToBoxAdapter(
-                  //       child: LinearGradientButton(
-                  //         label: t.event.eventApproval.guests,
-                  //         onTap: () {
-                  //           AutoRouter.of(context)
-                  //               .push(const EventApprovalSettingRoute());
-                  //         },
-                  //       ),
-                  //     ),
-                  //   ),
-                  //   SliverPadding(
-                  //     padding: EdgeInsets.only(top: Spacing.medium),
-                  //   ),
-                  // ],
+                  SliverPadding(
+                    padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+                    sliver: SliverToBoxAdapter(
+                      child: LinearGradientButton(
+                        label: t.event.eventApproval.guests,
+                        onTap: () {
+                          AutoRouter.of(context).push(
+                            const EventApprovalSettingRoute(),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                  SliverPadding(
+                    padding: EdgeInsets.only(top: Spacing.medium),
+                  ),
                   SliverPadding(
                     padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
                     sliver: SliverToBoxAdapter(

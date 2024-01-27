@@ -1,0 +1,7 @@
+# import '../fragment/event_join_request_fragment.graphql'
+
+query GetMyEventJoinRequest($event: MongoID!) {
+  getMyEventJoinRequest(event: $event) {
+    ...EventJoinRequest
+  }
+}

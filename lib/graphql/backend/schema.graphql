@@ -423,7 +423,7 @@ type Event {
   photos: [String!]
   private: Boolean
   published: Boolean
-  require_approval: Boolean
+  approval_required: Boolean
   required_profile_fields: [String!]
   rewards: [EventReward!]
   reward_uses: JSON
@@ -2163,7 +2163,7 @@ input EventInput {
   photos: [String!]
   private: Boolean
   published: Boolean
-  require_approval: Boolean
+  approval_required: Boolean
   rewards: [EventRewardInput!]
   sessions: [EventSessionInput!]
   speaker_emails: [String!]

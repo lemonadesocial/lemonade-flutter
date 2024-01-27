@@ -1,0 +1,7 @@
+# import '../fragment/event_accepted_export_fragment.graphql'
+
+query ExportEventAccepted($id: MongoID!) {
+  exportEventAccepted(_id: $id) {
+    ...EventAcceptedExport
+  }
+}
