@@ -1,0 +1,19 @@
+schema: ./lib/graphql/backend/schema.graphql
+generates:
+  ./lib/core/domain/app_models.dart:
+    plugins:
+      - flutter-freezed
+    config:
+      camelCasedEnums: true
+      copyWith: true
+      equal: true
+      customScalars:
+        {
+          MongoID: "String",
+          DateTimeISO: "DateTime",
+          Date: "DateTime",
+          JSON: "Map<String, dynamic>",
+          jsonb: 'Map<String, dynamic>',
+          timestamp: 'DateTime',
+          UUID: 'String',
+        }

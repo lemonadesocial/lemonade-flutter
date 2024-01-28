@@ -72,3 +72,5 @@ app.*.map.json
 shorebird.yaml
 
 .fvm/flutter_sdk
+
+node_modules/
