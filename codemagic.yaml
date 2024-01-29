@@ -199,6 +199,8 @@ definitions:
 
         # Add Shorebird to PATH
         echo PATH="$HOME/.shorebird/bin:$PATH" >> $CM_ENV
+
+        shorebird doctor
     - &change_shorebird_version
       name: 🐦 Change Shorebird version
       script: |
