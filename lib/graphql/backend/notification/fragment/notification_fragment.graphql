@@ -1,0 +1,25 @@
+fragment NotificationFragment on Notification {
+  id: _id
+  title
+  message
+  type
+  createdAt: created_at
+  from
+  # from_expanded {
+  #   _id
+  #   new_photos_expanded(limit: 1) {
+  #     _id
+  #     key
+  #     bucket
+  #     __typename
+  #   }
+  #   __typename
+  # }
+  isSeen: is_seen
+  refEvent: ref_event
+  refRoom: ref_room
+  refStreoOrder: ref_store_order
+  refUser: ref_user
+  data
+  __typename
+}

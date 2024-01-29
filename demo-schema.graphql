@@ -1,0 +1,41 @@
+enum Episode {
+  NEWHOPE
+  EMPIRE
+  JEDI
+}
+ 
+type Actor {
+  name: String!
+  appearsIn: [Episode]!
+}
+ 
+type Starship {
+  id: ID!
+  name: String!
+  length: Float
+}
+ 
+interface Character {
+  id: ID!
+  name: String!
+  friends: [Character]
+  appearsIn: [Episode]!
+}
+ 
+type Human implements Character {
+  id: ID!
+  name: String!
+  friends: [Actor]
+  appearsIn: [Episode]!
+  totalCredits: Int
+}
+ 
+type Droid implements Character {
+  id: ID!
+  name: String!
+  friends: [Actor]
+  appearsIn: [Episode]!
+  primaryFunction: String
+}
+ 
+union SearchResult = Human | Droid | Starship
