@@ -111,7 +111,7 @@ const eventFragment = '''
   title
   slug
   host
-  require_approval
+  approval_required
   host_expanded {
     ...eventHostExpandedFragment
   }

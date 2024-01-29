@@ -1,18 +1,25 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/event/buy_event_ticket_bloc/buy_event_ticket_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/entities/event_join_request.dart';
+import 'package:app/core/domain/event/event_repository.dart';
+import 'package:app/core/failure.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
+import 'package:app/core/presentation/widgets/common/dialog/lemon_alert_dialog.dart';
+import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/number_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -20,11 +27,9 @@ class GuestEventDetailBuyButton extends StatelessWidget {
   const GuestEventDetailBuyButton({
     super.key,
     required this.event,
-    this.onBuySuccess,
   });
 
   final Event event;
-  final VoidCallback? onBuySuccess;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +37,6 @@ class GuestEventDetailBuyButton extends StatelessWidget {
       create: (context) => BuyEventTicketBloc(event: event),
       child: _GuestEventDetailBuyButtonView(
         event: event,
-        onBuySuccess: onBuySuccess,
       ),
     );
   }
@@ -41,11 +45,21 @@ class GuestEventDetailBuyButton extends StatelessWidget {
 class _GuestEventDetailBuyButtonView extends StatelessWidget {
   const _GuestEventDetailBuyButtonView({
     required this.event,
-    this.onBuySuccess,
   });
 
   final Event event;
-  final VoidCallback? onBuySuccess;
+
+  Future<Either<Failure, EventJoinRequest?>?> _checkJoinRequest(
+    BuildContext context,
+  ) async {
+    final result =
+        await showFutureLoadingDialog<Either<Failure, EventJoinRequest?>>(
+      context: context,
+      future: () => getIt<EventRepository>()
+          .getMyEventJoinRequest(eventId: event.id ?? ''),
+    );
+    return result.result;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +87,32 @@ class _GuestEventDetailBuyButtonView extends StatelessWidget {
           child: LinearGradientButton(
             onTap: () {
               authState.maybeWhen(
-                authenticated: (_) {
+                authenticated: (_) async {
+                  final result = await _checkJoinRequest(context);
+                  final eventJoinRequest = result?.getOrElse(() => null);
+                  final isPendingJoinRequest = eventJoinRequest != null &&
+                      eventJoinRequest.approvedBy == null &&
+                      eventJoinRequest.declinedBy == null;
+                  final isDeclinedJoinRequest = eventJoinRequest != null &&
+                      eventJoinRequest.declinedBy != null;
+                  if (isPendingJoinRequest) {
+                    showDialog(
+                      context: context,
+                      builder: (context) => LemonAlertDialog(
+                        child: Text(t.event.eventApproval.waitingApproval),
+                      ),
+                    );
+                    return;
+                  }
+                  if (isDeclinedJoinRequest) {
+                    showDialog(
+                      context: context,
+                      builder: (context) => LemonAlertDialog(
+                        child: Text(t.event.eventApproval.yourRequestDeclined),
+                      ),
+                    );
+                    return;
+                  }
                   AutoRouter.of(context).navigate(
                     EventBuyTicketsRoute(event: event),
                   );

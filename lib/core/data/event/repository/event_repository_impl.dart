@@ -5,6 +5,7 @@ import 'package:app/core/data/event/dtos/event_rsvp_dto/event_rsvp_dto.dart';
 import 'package:app/core/data/event/gql/event_mutation.dart';
 import 'package:app/core/data/event/gql/event_query.dart';
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/entities/event_accepted_export.dart';
 import 'package:app/core/domain/event/entities/event_checkin.dart';
 import 'package:app/core/domain/event/entities/event_cohost_request.dart';
 import 'package:app/core/domain/event/entities/event_join_request.dart';
@@ -29,6 +30,8 @@ import 'package:injectable/injectable.dart';
 import 'package:app/graphql/backend/event/query/get_event_join_request.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/approve_user_join_requests.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/decline_user_join_requests.graphql.dart';
+import 'package:app/graphql/backend/event/query/export_event_accepted.graphql.dart';
+import 'package:app/graphql/backend/event/query/get_my_event_join_request.graphql.dart';
 
 @LazySingleton(as: EventRepository)
 class EventRepositoryImpl implements EventRepository {
@@ -312,6 +315,34 @@ class EventRepositoryImpl implements EventRepository {
   }
 
   @override
+  Future<Either<Failure, EventJoinRequest?>> getMyEventJoinRequest({
+    required String eventId,
+  }) async {
+    final result = await client.query$GetMyEventJoinRequest(
+      Options$Query$GetMyEventJoinRequest(
+        variables: Variables$Query$GetMyEventJoinRequest(event: eventId),
+        fetchPolicy: FetchPolicy.networkOnly,
+      ),
+    );
+
+    if (result.hasException) {
+      return Left(Failure.withGqlException(result.exception));
+    }
+
+    if (result.parsedData?.getMyEventJoinRequest == null) {
+      return const Right(null);
+    }
+
+    return Right(
+      EventJoinRequest.fromDto(
+        EventJoinRequestDto.fromJson(
+          result.parsedData!.getMyEventJoinRequest!.toJson(),
+        ),
+      ),
+    );
+  }
+
+  @override
   Future<Either<Failure, bool>> approveUserJoinRequest({
     required Input$ApproveUserJoinRequestsInput input,
   }) async {
@@ -343,5 +374,33 @@ class EventRepositoryImpl implements EventRepository {
       return Left(Failure.withGqlException(result.exception));
     }
     return Right(result.parsedData?.declineUserJoinRequests ?? false);
+  }
+
+  @override
+  Future<Either<Failure, List<EventAcceptedExport>>> exportEventAccepted({
+    required String eventId,
+  }) async {
+    final result = await client.query$ExportEventAccepted(
+      Options$Query$ExportEventAccepted(
+        variables: Variables$Query$ExportEventAccepted(
+          id: eventId,
+        ),
+        fetchPolicy: FetchPolicy.networkOnly,
+      ),
+    );
+
+    if (result.hasException) {
+      return Left(Failure.withGqlException(result.exception));
+    }
+
+    return Right(
+      (result.parsedData?.exportEventAccepted ?? [])
+          .map(
+            (item) => EventAcceptedExport.fromJson(
+              item.toJson(),
+            ),
+          )
+          .toList(),
+    );
   }
 }

@@ -155,7 +155,8 @@ class CreateEventBasePage extends StatelessWidget {
                       address: selectedAddress,
                       guestLimit: eventGuestSettingsState.guestLimit,
                       guestLimitPer: eventGuestSettingsState.guestLimitPer,
-                      requireApproval: eventGuestSettingsState.requireApproval,
+                      approvalRequired:
+                          eventGuestSettingsState.approvalRequired,
                       private: eventGuestSettingsState.private,
                     ),
                   );

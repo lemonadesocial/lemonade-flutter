@@ -21,7 +21,7 @@ class EventGuestSettingsBloc
   ) async {
     emit(
       state.copyWith(
-        requireApproval: event.requireApproval,
+        approvalRequired: event.approvalRequired,
       ),
     );
   }
@@ -74,7 +74,7 @@ class EventGuestSettingEvent with _$EventGuestSettingEvent {
       PrivateChanged;
 
   const factory EventGuestSettingEvent.requireApprovalChanged({
-    required bool requireApproval,
+    required bool approvalRequired,
   }) = RequireApprovalChanged;
 }
 
@@ -84,7 +84,7 @@ class EventGuestSettingState with _$EventGuestSettingState {
     @Default("100") String? guestLimit,
     @Default("2") String? guestLimitPer,
     @Default(false) bool private,
-    @Default(false) bool requireApproval,
+    @Default(false) bool approvalRequired,
     @Default(true) bool virtual,
     @Default(false) bool isValid,
   }) = _EventGuestSettingState;

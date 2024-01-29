@@ -1,5 +1,5 @@
-import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/data/event/dtos/event_join_request_dto/event_join_request_dto.dart';
+import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_join_request.dart';
 import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/widgets/event_join_request_actions_bar.dart';
@@ -13,7 +13,6 @@ import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 enum ModifyJoinRequestAction {
@@ -23,9 +22,11 @@ enum ModifyJoinRequestAction {
 
 class EventJoinRequestList extends StatefulWidget {
   final Enum$JoinRequestState state;
+  final Event? event;
   const EventJoinRequestList({
     super.key,
     required this.state,
+    this.event,
   });
 
   @override
@@ -63,11 +64,7 @@ class _EventJoinRequestListState extends State<EventJoinRequestList> {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final eventId = context.read<GetEventDetailBloc>().state.maybeWhen(
-              orElse: () => '',
-              fetched: (event) => event.id,
-            ) ??
-        '';
+    final eventId = widget.event?.id ?? '';
     return SizedBox(
       child: Query$GetEventJoinRequests$Widget(
         options: Options$Query$GetEventJoinRequests(
