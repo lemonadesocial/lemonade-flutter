@@ -36,7 +36,7 @@ class _EventApprovalSettingPageState extends State<EventApprovalSettingPage> {
       ),
       body: SafeArea(
         child: !approvalRequired
-            ? Expanded(
+            ? SizedBox(
                 child: EventAcceptedExportList(
                   event: event,
                 ),
