@@ -199,12 +199,11 @@ definitions:
 
         # Add Shorebird to PATH
         echo PATH="$HOME/.shorebird/bin:$PATH" >> $CM_ENV
-
-        shorebird doctor
     - &change_shorebird_version
       name: 🐦 Change Shorebird version
       script: |
         shorebird flutter versions use 3.13.9
+        shorebird doctor
     - &release_shorebird_ipa_staging
       name: Release shorebird ipa staging
       script: |
