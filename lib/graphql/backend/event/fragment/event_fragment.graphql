@@ -39,6 +39,7 @@ fragment EventOfferFragment on Event {
 }
 
 fragment EventTicketTypesFragment on Event {
+    required_profile_fields
     event_ticket_types {
         _id
         title

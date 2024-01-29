@@ -293,5 +293,6 @@
         "yourRequestDeclined": "Your join request has been declined."
     },
     "allTicketTiers": "All ticket tiers",
-    "claimed": "claimed"
+    "claimed": "claimed",
+    "profileRequiredFields": "Please update these fields: $fields in your profile to RSVP the event."
 }

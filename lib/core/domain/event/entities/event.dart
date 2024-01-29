@@ -5,43 +5,50 @@ import 'package:app/core/domain/event/entities/reward.dart';
 import 'package:app/core/domain/event/event_enums.dart';
 import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
 import 'package:app/core/domain/user/entities/user.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class Event {
-  Event({
-    this.id,
-    this.hostExpanded,
-    this.cohostsExpanded,
-    this.title,
-    this.slug,
-    this.host,
-    this.cohosts,
-    this.speakerUsers,
-    this.broadcasts,
-    this.description,
-    this.start,
-    this.end,
-    this.cost,
-    this.currency,
-    this.newNewPhotosExpanded,
-    this.accepted,
-    this.invited,
-    this.pending,
-    this.latitude,
-    this.longitude,
-    this.matrixEventRoomId,
-    this.offers,
-    this.eventTicketTypes,
-    this.address,
-    this.paymentAccountsNew,
-    this.paymentAccountsExpanded,
-    this.guestLimit,
-    this.guestLimitPer,
-    this.virtual,
-    this.private,
-    this.speakerUsersExpanded,
-    this.rewards,
-    this.approvalRequired,
-  });
+part 'event.freezed.dart';
+
+@freezed
+class Event with _$Event {
+  Event._();
+
+  factory Event({
+    String? id,
+    User? hostExpanded,
+    List<User?>? cohostsExpanded,
+    List<DbFile?>? newNewPhotosExpanded,
+    String? title,
+    String? slug,
+    List<String>? speakerUsers,
+    List<User?>? speakerUsersExpanded,
+    List<String>? cohosts,
+    String? host,
+    List<Broadcast>? broadcasts,
+    String? description,
+    DateTime? start,
+    DateTime? end,
+    double? cost,
+    String? currency,
+    List<String>? accepted,
+    List<String>? invited,
+    List<String>? pending,
+    double? latitude,
+    double? longitude,
+    String? matrixEventRoomId,
+    List<EventOffer>? offers,
+    List<EventTicketType>? eventTicketTypes,
+    Address? address,
+    List<String>? paymentAccountsNew,
+    List<PaymentAccount>? paymentAccountsExpanded,
+    double? guestLimit,
+    double? guestLimitPer,
+    bool? virtual,
+    bool? private,
+    List<Reward>? rewards,
+    bool? approvalRequired,
+    List<String>? requiredProfileFields,
+  }) = _Event;
 
   factory Event.fromDto(EventDto dto) {
     return Event(
@@ -101,41 +108,9 @@ class Event {
           .map((item) => Reward.fromDto(item))
           .toList(),
       approvalRequired: dto.approvalRequired,
+      requiredProfileFields: dto.requiredProfileFields ?? [],
     );
   }
-  String? id;
-  User? hostExpanded;
-  List<User?>? cohostsExpanded;
-  List<DbFile?>? newNewPhotosExpanded;
-  String? title;
-  String? slug;
-  List<String>? speakerUsers;
-  List<User?>? speakerUsersExpanded;
-  List<String>? cohosts;
-  String? host;
-  List<Broadcast>? broadcasts;
-  String? description;
-  DateTime? start;
-  DateTime? end;
-  double? cost;
-  String? currency;
-  List<String>? accepted;
-  List<String>? invited;
-  List<String>? pending;
-  double? latitude;
-  double? longitude;
-  String? matrixEventRoomId;
-  List<EventOffer>? offers;
-  List<EventTicketType>? eventTicketTypes;
-  Address? address;
-  List<String>? paymentAccountsNew;
-  List<PaymentAccount>? paymentAccountsExpanded;
-  double? guestLimit;
-  double? guestLimitPer;
-  bool? virtual;
-  bool? private;
-  List<Reward>? rewards;
-  bool? approvalRequired;
 }
 
 class EventOffer {

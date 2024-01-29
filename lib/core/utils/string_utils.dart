@@ -28,4 +28,24 @@ class StringUtils {
         return "${value}th";
     }
   }
+
+  static String snakeToCamel(String text) {
+    return text
+        .toLowerCase()
+        .split('_')
+        .map((word) {
+          return capitalize(word);
+        })
+        .join()
+        .replaceFirst(capitalize(text[0]), text[0]);
+  }
+
+  static String camelCaseToWords(String text) {
+    return text
+        .replaceAllMapped(
+          RegExp('([a-z])([A-Z])'),
+          (Match m) => "${m[1]} ${m[2]}",
+        )
+        .toLowerCase();
+  }
 }

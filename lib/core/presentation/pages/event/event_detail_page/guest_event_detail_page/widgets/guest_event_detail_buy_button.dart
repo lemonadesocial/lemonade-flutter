@@ -3,6 +3,7 @@ import 'package:app/core/application/event/buy_event_ticket_bloc/buy_event_ticke
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_join_request.dart';
 import 'package:app/core/domain/event/event_repository.dart';
+import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/dialog/lemon_alert_dialog.dart';
@@ -22,6 +23,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:matrix/matrix.dart' as matrix;
 
 class GuestEventDetailBuyButton extends StatelessWidget {
   const GuestEventDetailBuyButton({
@@ -59,6 +61,56 @@ class _GuestEventDetailBuyButtonView extends StatelessWidget {
           .getMyEventJoinRequest(eventId: event.id ?? ''),
     );
     return result.result;
+  }
+
+  Future<bool> _checkProfileRequiredFields(BuildContext context) async {
+    List<String> profileRequiredFields = (event.requiredProfileFields ?? [])
+        .map(StringUtils.snakeToCamel)
+        .toList();
+    if (profileRequiredFields.isEmpty) {
+      return true;
+    }
+    final userResult = await showFutureLoadingDialog(
+      context: context,
+      future: () => getIt<UserRepository>().getMe(),
+    );
+    return userResult.result!.fold((l) => true, (user) {
+      final userJson = user.toJson();
+      final missingFields = profileRequiredFields.where((field) {
+        final fieldValue = userJson.tryGet(field);
+        if (fieldValue is String) {
+          return fieldValue.isEmpty == true;
+        }
+        return fieldValue == null;
+      });
+      if (missingFields.isEmpty) {
+        return true;
+      }
+      final formattedMissingFields =
+          missingFields.map(StringUtils.camelCaseToWords).toList();
+      showDialog(
+        context: context,
+        builder: (context) {
+          return LemonAlertDialog(
+            onClose: () {
+              AutoRouter.of(context).pop();
+              AutoRouter.of(context).push(
+                EditProfileRoute(
+                  userProfile: user,
+                ),
+              );
+            },
+            buttonLabel: t.common.actions.ok,
+            child: Text(
+              t.event.profileRequiredFields(
+                fields: formattedMissingFields.join(', '),
+              ),
+            ),
+          );
+        },
+      );
+      return false;
+    });
   }
 
   @override
@@ -111,6 +163,11 @@ class _GuestEventDetailBuyButtonView extends StatelessWidget {
                         child: Text(t.event.eventApproval.yourRequestDeclined),
                       ),
                     );
+                    return;
+                  }
+                  final isQualified =
+                      await _checkProfileRequiredFields(context);
+                  if (!isQualified) {
                     return;
                   }
                   AutoRouter.of(context).navigate(
