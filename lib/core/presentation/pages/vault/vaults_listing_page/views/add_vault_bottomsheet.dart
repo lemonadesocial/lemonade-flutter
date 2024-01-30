@@ -1,5 +1,6 @@
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/bottomsheet/lemon_snap_bottom_sheet_widget.dart';
+import 'package:app/core/utils/device_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -23,7 +24,7 @@ class AddVaultBottomSheet extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return LemonSnapBottomSheet(
-      defaultSnapSize: 0.71,
+      defaultSnapSize: DeviceUtils.hasNotch() ? 0.71 : 0.75,
       backgroundColor: LemonColor.atomicBlack,
       builder: (scrollController) => SafeArea(
         child: Container(
