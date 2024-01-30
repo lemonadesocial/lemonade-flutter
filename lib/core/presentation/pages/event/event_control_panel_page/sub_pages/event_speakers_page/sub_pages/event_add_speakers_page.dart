@@ -157,34 +157,39 @@ class _EventAddSpeakersViewState extends State<EventAddSpeakersView> {
   _buildAddSpeakersButton() {
     return BlocBuilder<EditEventDetailBloc, EditEventDetailState>(
       builder: (context, state) {
-        return LinearGradientButton(
-          label: t.common.actions.saveChanges,
-          height: 48.h,
-          radius: BorderRadius.circular(24),
-          textStyle: Typo.medium.copyWith(),
-          mode: GradientButtonMode.lavenderMode,
-          onTap: () {
-            FocusScope.of(context).requestFocus(FocusNode());
-            List<User?> speakerUsers =
-                context.read<GetEventDetailBloc>().state.maybeWhen(
-                      fetched: (eventDetail) =>
-                          eventDetail.speakerUsersExpanded ?? [],
-                      orElse: () => [],
+        return Align(
+          alignment: Alignment.bottomCenter,
+          child: SafeArea(
+            child: LinearGradientButton(
+              label: t.common.actions.saveChanges,
+              height: 48.h,
+              radius: BorderRadius.circular(24),
+              textStyle: Typo.medium.copyWith(),
+              mode: GradientButtonMode.lavenderMode,
+              onTap: () {
+                FocusScope.of(context).requestFocus(FocusNode());
+                List<User?> speakerUsers =
+                    context.read<GetEventDetailBloc>().state.maybeWhen(
+                          fetched: (eventDetail) =>
+                              eventDetail.speakerUsersExpanded ?? [],
+                          orElse: () => [],
+                        );
+                List<String> speakerUsersIds =
+                    speakerUsers.map((user) => user!.userId).toList();
+                // Included old speakers and with new selected speakers
+                List<String> newSpeakerUsers =
+                    (speakerUsersIds + selectedUserIds).toSet().toList();
+                Vibrate.feedback(FeedbackType.light);
+                context.read<EditEventDetailBloc>().add(
+                      EditEventDetailEvent.update(
+                        eventId: widget.event?.id ?? '',
+                        speakerUsers: newSpeakerUsers,
+                      ),
                     );
-            List<String> speakerUsersIds =
-                speakerUsers.map((user) => user!.userId).toList();
-            // Included old speakers and with new selected speakers
-            List<String> newSpeakerUsers =
-                (speakerUsersIds + selectedUserIds).toSet().toList();
-            Vibrate.feedback(FeedbackType.light);
-            context.read<EditEventDetailBloc>().add(
-                  EditEventDetailEvent.update(
-                    eventId: widget.event?.id ?? '',
-                    speakerUsers: newSpeakerUsers,
-                  ),
-                );
-          },
-          loadingWhen: state.status == EditEventDetailBlocStatus.loading,
+              },
+              loadingWhen: state.status == EditEventDetailBlocStatus.loading,
+            ),
+          ),
         );
       },
     );
