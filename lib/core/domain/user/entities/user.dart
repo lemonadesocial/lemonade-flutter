@@ -1,6 +1,10 @@
 import 'package:app/core/data/user/dtos/user_dtos.dart';
 import 'package:app/core/data/user/user_enums.dart';
 import 'package:app/core/domain/common/entities/common.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'user.freezed.dart';
+part 'user.g.dart';
 
 class AuthUser {
   AuthUser({
@@ -31,55 +35,59 @@ class AuthUser {
   String? walletCustodial;
 }
 
-class User {
-  const User({
-    required this.userId,
-    this.createdAt,
-    this.displayName,
-    this.firstName,
-    this.lastName,
-    this.imageAvatar,
-    this.newPhotosExpanded,
-    this.dateOfBirth,
-    this.phoneVerified,
-    this.googleUserInfo,
-    this.discordUserInfo,
-    this.shopifyUserInfo,
-    this.twitchUserInfo,
-    this.zoomUserInfo,
-    this.name,
-    this.username,
-    this.phone,
-    this.email,
-    this.description,
-    this.active,
-    this.cover,
-    this.type,
-    this.industry,
-    this.addresses,
-    this.hosted,
-    this.attended,
-    this.friends,
-    this.following,
-    this.followers,
-    this.currency,
-    this.jobTitle,
-    this.tagline,
-    this.handleTwitter,
-    this.handleInstagram,
-    this.handleFacebook,
-    this.handleLinkedin,
-    this.wallets,
-    this.walletCustodial,
-    this.gender,
-    this.ethnicity,
-    this.education,
-    this.companyName,
-    this.notificationFilterList,
-    this.blockedList,
-    this.termsAcceptedAdult,
-    this.termsAcceptedConditions,
-  });
+@freezed
+class User with _$User {
+  User._();
+
+  @JsonSerializable(explicitToJson: true)
+  factory User({
+    required String userId,
+    DateTime? createdAt,
+    String? displayName,
+    String? firstName,
+    String? lastName,
+    String? imageAvatar,
+    List<DbFile>? newPhotosExpanded,
+    DateTime? dateOfBirth,
+    bool? phoneVerified,
+    GoogleUserInfo? googleUserInfo,
+    DiscordUserInfo? discordUserInfo,
+    ShopifyUserInfo? shopifyUserInfo,
+    TwitchUserInfo? twitchUserInfo,
+    ZoomUserInfo? zoomUserInfo,
+    String? name,
+    String? username,
+    String? phone,
+    String? email,
+    String? description,
+    bool? active,
+    String? cover,
+    UserType? type,
+    List<Address>? addresses,
+    int? hosted,
+    int? attended,
+    int? friends,
+    int? following,
+    int? followers,
+    String? currency,
+    String? jobTitle,
+    String? companyName,
+    String? tagline,
+    String? industry,
+    String? education,
+    String? ethnicity,
+    String? gender,
+    String? handleTwitter,
+    String? handleInstagram,
+    String? handleFacebook,
+    String? handleLinkedin,
+    List<String>? wallets,
+    String? walletCustodial,
+    List<String>? notificationFilterList,
+    List<User>? blockedList,
+    bool? termsAcceptedAdult,
+    bool? termsAcceptedConditions,
+  }) = _User;
 
   factory User.fromDto(UserDto dto) {
     return User(
@@ -147,155 +155,115 @@ class User {
     );
   }
 
-  final String userId;
-  final DateTime? createdAt;
-  final String? displayName;
-  final String? firstName;
-  final String? lastName;
-  final String? imageAvatar;
-  final List<DbFile>? newPhotosExpanded;
-  final DateTime? dateOfBirth;
-  final bool? phoneVerified;
-  final GoogleUserInfo? googleUserInfo;
-  final DiscordUserInfo? discordUserInfo;
-  final ShopifyUserInfo? shopifyUserInfo;
-  final TwitchUserInfo? twitchUserInfo;
-  final ZoomUserInfo? zoomUserInfo;
-  final String? name;
-  final String? username;
-  final String? phone;
-  final String? email;
-  final String? description;
-  final bool? active;
-  final String? cover;
-  final UserType? type;
-  final List<Address>? addresses;
-  final int? hosted;
-  final int? attended;
-  final int? friends;
-  final int? following;
-  final int? followers;
-  final String? currency;
-
-  final String? jobTitle;
-  final String? companyName;
-  final String? tagline;
-
-  final String? industry;
-  final String? education;
-  final String? ethnicity;
-  final String? gender;
-
-  final String? handleTwitter;
-  final String? handleInstagram;
-  final String? handleFacebook;
-  final String? handleLinkedin;
-
-  final List<String>? wallets;
-  final String? walletCustodial;
-  final List<String>? notificationFilterList;
-
-  final List<User>? blockedList;
-  final bool? termsAcceptedAdult;
-  final bool? termsAcceptedConditions;
+  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 }
 
-class DiscordUserInfo {
-  DiscordUserInfo({this.username});
+@freezed
+class DiscordUserInfo with _$DiscordUserInfo {
+  DiscordUserInfo._();
 
-  final String? username;
+  factory DiscordUserInfo({
+    String? username,
+  }) = _DiscordUserInfo;
 
-  static DiscordUserInfo fromDto(DiscordUserInfoDto dto) {
-    return DiscordUserInfo(username: dto.username);
-  }
+  factory DiscordUserInfo.fromDto(DiscordUserInfoDto dto) =>
+      DiscordUserInfo(username: dto.username);
+
+  factory DiscordUserInfo.fromJson(Map<String, dynamic> json) =>
+      _$DiscordUserInfoFromJson(json);
 }
 
-class ShopifyUserInfo {
-  ShopifyUserInfo({this.shopName});
+@freezed
+class ShopifyUserInfo with _$ShopifyUserInfo {
+  ShopifyUserInfo._();
 
-  final String? shopName;
+  factory ShopifyUserInfo({
+    String? shopName,
+  }) = _ShopifyUserInfo;
 
-  static ShopifyUserInfo fromDto(ShopifyUserInfoDto dto) {
-    return ShopifyUserInfo(shopName: dto.shopName);
-  }
+  factory ShopifyUserInfo.fromDto(ShopifyUserInfoDto dto) =>
+      ShopifyUserInfo(shopName: dto.shopName);
+
+  factory ShopifyUserInfo.fromJson(Map<String, dynamic> json) =>
+      _$ShopifyUserInfoFromJson(json);
 }
 
-class GoogleUserInfo {
-  GoogleUserInfo({
-    this.id,
-    this.name,
-    this.email,
-    this.familyName,
-    this.gender,
-    this.givenName,
-    this.hd,
-    this.link,
-    this.locale,
-    this.picture,
-    this.verifiedEmail,
-  });
+@freezed
+class GoogleUserInfo with _$GoogleUserInfo {
+  GoogleUserInfo._();
 
-  final String? id;
-  final String? name;
-  final String? email;
-  final String? familyName;
-  final String? gender;
-  final String? givenName;
-  final String? hd;
-  final String? link;
-  final String? locale;
-  final String? picture;
-  final String? verifiedEmail;
+  factory GoogleUserInfo({
+    String? id,
+    String? name,
+    String? email,
+    String? familyName,
+    String? gender,
+    String? givenName,
+    String? hd,
+    String? link,
+    String? locale,
+    String? picture,
+    String? verifiedEmail,
+  }) = _GoogleUserInfo;
 
-  static GoogleUserInfo fromDto(GoogleUserInfoDto dto) {
-    return GoogleUserInfo(
-      id: dto.id,
-      name: dto.name,
-      email: dto.email,
-      familyName: dto.familyName,
-      gender: dto.gender,
-      givenName: dto.givenName,
-      hd: dto.hd,
-      link: dto.link,
-      locale: dto.locale,
-      picture: dto.picture,
-      verifiedEmail: dto.verifiedEmail,
-    );
-  }
+  factory GoogleUserInfo.fromDto(GoogleUserInfoDto dto) => GoogleUserInfo(
+        id: dto.id,
+        name: dto.name,
+        email: dto.email,
+        familyName: dto.familyName,
+        gender: dto.gender,
+        givenName: dto.givenName,
+        hd: dto.hd,
+        link: dto.link,
+        locale: dto.locale,
+        picture: dto.picture,
+        verifiedEmail: dto.verifiedEmail,
+      );
+
+  factory GoogleUserInfo.fromJson(Map<String, dynamic> json) =>
+      _$GoogleUserInfoFromJson(json);
 }
 
-class TwitchUserInfo {
-  TwitchUserInfo({this.id, this.displayName, this.logoUrl, this.name});
+@freezed
+class TwitchUserInfo with _$TwitchUserInfo {
+  TwitchUserInfo._();
 
-  final String? id;
-  final String? displayName;
-  final String? logoUrl;
-  final String? name;
+  factory TwitchUserInfo({
+    String? id,
+    String? displayName,
+    String? logoUrl,
+    String? name,
+  }) = _TwitchUserInfo;
 
-  static TwitchUserInfo fromDto(TwitchUserInfoDto dto) {
-    return TwitchUserInfo(
-      id: dto.id,
-      displayName: dto.displayName,
-      logoUrl: dto.logoUrl,
-      name: dto.name,
-    );
-  }
+  factory TwitchUserInfo.fromDto(TwitchUserInfoDto dto) => TwitchUserInfo(
+        id: dto.id,
+        displayName: dto.displayName,
+        logoUrl: dto.logoUrl,
+        name: dto.name,
+      );
+
+  factory TwitchUserInfo.fromJson(Map<String, dynamic> json) =>
+      _$TwitchUserInfoFromJson(json);
 }
 
-class ZoomUserInfo {
-  ZoomUserInfo({this.id, this.firstName, this.lastName, this.email});
+@freezed
+class ZoomUserInfo with _$ZoomUserInfo {
+  ZoomUserInfo._();
 
-  final String? id;
-  final String? firstName;
-  final String? lastName;
-  final String? email;
+  factory ZoomUserInfo({
+    String? id,
+    String? firstName,
+    String? lastName,
+    String? email,
+  }) = _ZoomUserInfo;
 
-  static ZoomUserInfo fromDto(ZoomUserInfoDto dto) {
-    return ZoomUserInfo(
-      id: dto.id,
-      firstName: dto.firstName,
-      lastName: dto.lastName,
-      email: dto.email,
-    );
-  }
+  factory ZoomUserInfo.fromDto(ZoomUserInfoDto dto) => ZoomUserInfo(
+        id: dto.id,
+        firstName: dto.firstName,
+        lastName: dto.lastName,
+        email: dto.email,
+      );
+
+  factory ZoomUserInfo.fromJson(Map<String, dynamic> json) =>
+      _$ZoomUserInfoFromJson(json);
 }
