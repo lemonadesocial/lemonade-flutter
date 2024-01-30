@@ -77,7 +77,7 @@ class PostDetailCard extends StatelessWidget {
             url: AvatarUtils.getAvatarUrl(user: post.userExpanded),
           ),
         ),
-        const SizedBox(width: 9),
+        SizedBox(width: Spacing.xSmall),
         Flexible(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

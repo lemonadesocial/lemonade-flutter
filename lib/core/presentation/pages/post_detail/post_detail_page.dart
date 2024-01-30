@@ -95,8 +95,7 @@ class PostDetailView extends StatelessWidget {
               slivers: [
                 SliverToBoxAdapter(
                   child: Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: Spacing.extraSmall),
+                    padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
                     child: Column(
                       children: [
                         PostDetailCard(
