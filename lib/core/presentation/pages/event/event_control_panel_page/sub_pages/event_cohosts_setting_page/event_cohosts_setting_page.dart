@@ -127,16 +127,21 @@ class _EventCohostsSettingPageViewState
   Widget _buildAddCohostsButton() {
     return BlocBuilder<EditEventDetailBloc, EditEventDetailState>(
       builder: (context, state) {
-        return LinearGradientButton(
-          label: t.event.cohosts.addCohosts,
-          height: 48.h,
-          radius: BorderRadius.circular(24),
-          textStyle: Typo.medium.copyWith(),
-          mode: GradientButtonMode.lavenderMode,
-          onTap: () {
-            AutoRouter.of(context).navigate(const EventAddCohostsRoute());
-          },
-          loadingWhen: state.status == EditEventDetailBlocStatus.loading,
+        return Align(
+          alignment: Alignment.bottomCenter,
+          child: SafeArea(
+            child: LinearGradientButton(
+              label: t.event.cohosts.addCohosts,
+              height: 48.h,
+              radius: BorderRadius.circular(24),
+              textStyle: Typo.medium.copyWith(),
+              mode: GradientButtonMode.lavenderMode,
+              onTap: () {
+                AutoRouter.of(context).navigate(const EventAddCohostsRoute());
+              },
+              loadingWhen: state.status == EditEventDetailBlocStatus.loading,
+            ),
+          ),
         );
       },
     );

@@ -109,15 +109,20 @@ class _EventSpeakersPageViewState extends State<EventSpeakersPageView> {
   }
 
   _buildAddSpeakersButton() {
-    return LinearGradientButton(
-      label: t.event.speakers.addSpeakers,
-      height: 48.h,
-      radius: BorderRadius.circular(24),
-      textStyle: Typo.medium.copyWith(),
-      mode: GradientButtonMode.lavenderMode,
-      onTap: () {
-        AutoRouter.of(context).navigate(const EventAddSpeakersRoute());
-      },
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: SafeArea(
+        child: LinearGradientButton(
+          label: t.event.speakers.addSpeakers,
+          height: 48.h,
+          radius: BorderRadius.circular(24),
+          textStyle: Typo.medium.copyWith(),
+          mode: GradientButtonMode.lavenderMode,
+          onTap: () {
+            AutoRouter.of(context).navigate(const EventAddSpeakersRoute());
+          },
+        ),
+      ),
     );
   }
 }
