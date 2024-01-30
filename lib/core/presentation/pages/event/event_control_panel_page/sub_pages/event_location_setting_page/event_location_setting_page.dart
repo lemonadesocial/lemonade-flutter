@@ -143,28 +143,33 @@ class _EventLocationSettingPageState extends State<EventLocationSettingPage> {
   _buildSaveButton() {
     return BlocBuilder<EditEventDetailBloc, EditEventDetailState>(
       builder: (context, state) {
-        return LinearGradientButton(
-          label: t.common.actions.save,
-          height: 48.h,
-          radius: BorderRadius.circular(24),
-          textStyle: Typo.medium.copyWith(),
-          mode: GradientButtonMode.lavenderMode,
-          onTap: () {
-            if (widget.event != null) {
-              context.read<EditEventDetailBloc>().add(
-                    EditEventDetailEvent.update(
-                      eventId: widget.event?.id ?? '',
-                      address: context
-                          .read<EventLocationSettingBloc>()
-                          .state
-                          .selectedAddress,
-                    ),
-                  );
-            } else {
-              AutoRouter.of(context).pop();
-            }
-          },
-          loadingWhen: state.status == EditEventDetailBlocStatus.loading,
+        return Align(
+          alignment: Alignment.bottomCenter,
+          child: SafeArea(
+            child: LinearGradientButton(
+              label: t.common.actions.save,
+              height: 48.h,
+              radius: BorderRadius.circular(24),
+              textStyle: Typo.medium.copyWith(),
+              mode: GradientButtonMode.lavenderMode,
+              onTap: () {
+                if (widget.event != null) {
+                  context.read<EditEventDetailBloc>().add(
+                        EditEventDetailEvent.update(
+                          eventId: widget.event?.id ?? '',
+                          address: context
+                              .read<EventLocationSettingBloc>()
+                              .state
+                              .selectedAddress,
+                        ),
+                      );
+                } else {
+                  AutoRouter.of(context).pop();
+                }
+              },
+              loadingWhen: state.status == EditEventDetailBlocStatus.loading,
+            ),
+          ),
         );
       },
     );
