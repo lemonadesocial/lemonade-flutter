@@ -55,10 +55,10 @@ class _EventAddSpeakersViewState extends State<EventAddSpeakersView> {
     final t = Translations.of(context);
     return Scaffold(
       appBar: LemonAppBar(
-        backgroundColor: colorScheme.onPrimaryContainer,
+        backgroundColor: colorScheme.background,
         title: t.event.speakers.addSpeakers,
       ),
-      backgroundColor: colorScheme.onPrimaryContainer,
+      backgroundColor: colorScheme.background,
       resizeToAvoidBottomInset: true,
       body: BlocListener<EditEventDetailBloc, EditEventDetailState>(
         listener: (context, state) {

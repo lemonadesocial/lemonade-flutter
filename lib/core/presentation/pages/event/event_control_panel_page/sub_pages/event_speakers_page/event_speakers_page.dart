@@ -50,10 +50,10 @@ class _EventSpeakersPageViewState extends State<EventSpeakersPageView> {
     final t = Translations.of(context);
     return Scaffold(
       appBar: LemonAppBar(
-        backgroundColor: colorScheme.onPrimaryContainer,
+        backgroundColor: colorScheme.background,
         title: t.event.configuration.speakers,
       ),
-      backgroundColor: colorScheme.onPrimaryContainer,
+      backgroundColor: colorScheme.background,
       resizeToAvoidBottomInset: true,
       body: _buildContent(),
     );

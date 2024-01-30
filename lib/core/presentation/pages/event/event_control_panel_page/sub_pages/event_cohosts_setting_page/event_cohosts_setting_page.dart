@@ -73,10 +73,10 @@ class _EventCohostsSettingPageViewState
             );
     return Scaffold(
       appBar: LemonAppBar(
-        backgroundColor: colorScheme.onPrimaryContainer,
+        backgroundColor: colorScheme.background,
         title: t.event.configuration.coHosts,
       ),
-      backgroundColor: colorScheme.onPrimaryContainer,
+      backgroundColor: colorScheme.background,
       resizeToAvoidBottomInset: true,
       body: BlocListener<ManageEventCohostRequestsBloc,
           ManageEventCohostRequestsState>(

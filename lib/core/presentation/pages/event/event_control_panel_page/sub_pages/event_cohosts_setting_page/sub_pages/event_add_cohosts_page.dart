@@ -56,10 +56,10 @@ class _EventAddCohostsViewState extends State<EventAddCohostsView> {
     final t = Translations.of(context);
     return Scaffold(
       appBar: LemonAppBar(
-        backgroundColor: colorScheme.onPrimaryContainer,
+        backgroundColor: colorScheme.background,
         title: t.event.cohosts.addCohosts,
       ),
-      backgroundColor: colorScheme.onPrimaryContainer,
+      backgroundColor: colorScheme.background,
       resizeToAvoidBottomInset: true,
       body: BlocListener<ManageEventCohostRequestsBloc,
           ManageEventCohostRequestsState>(
