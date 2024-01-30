@@ -173,7 +173,7 @@ class Header extends StatelessWidget {
                   t.ai.chattingWith,
                   style: Typo.small.copyWith(color: colorScheme.onSecondary),
                 ),
-                SizedBox(height: 2.h),
+                SizedBox(height: 1.h),
                 Row(
                   children: [
                     Text(
