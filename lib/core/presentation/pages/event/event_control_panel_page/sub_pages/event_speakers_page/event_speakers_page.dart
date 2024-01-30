@@ -5,6 +5,7 @@ import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_speakers_page/widgets/event_speaker_item.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
+import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -96,10 +97,12 @@ class _EventSpeakersPageViewState extends State<EventSpeakersPageView> {
             Expanded(
               child: loadingEditEventDetail || loadingGetEventDetail
                   ? Loading.defaultLoading(context)
-                  : SpeakersList(
-                      users: speakerUsers,
-                      event: widget.event,
-                    ),
+                  : speakerUsers.isEmpty
+                      ? const EmptyList()
+                      : SpeakersList(
+                          users: speakerUsers,
+                          event: widget.event,
+                        ),
             ),
             _buildAddSpeakersButton(),
           ],

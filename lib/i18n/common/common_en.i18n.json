@@ -146,5 +146,6 @@
     "addNew": "Add new",
     "countLeft": "$count left",
     "claimed": "claimed",
-    "anonymousLemon": "Anonymous Lemon"
+    "anonymousLemon": "Anonymous Lemon",
+    "defaultEmptyList": "No items to display at the moment."
 }

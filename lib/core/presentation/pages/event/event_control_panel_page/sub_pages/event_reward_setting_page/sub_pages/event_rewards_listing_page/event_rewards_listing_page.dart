@@ -40,10 +40,8 @@ class EventRewardsListingPage extends StatelessWidget {
               physics: const BouncingScrollPhysics(),
               slivers: [
                 if (rewards.isEmpty)
-                  SliverToBoxAdapter(
-                    child: Center(
-                      child: EmptyList(emptyText: t.event.noRewards),
-                    ),
+                  const SliverToBoxAdapter(
+                    child: EmptyList(),
                   ),
                 if (rewards.isNotEmpty)
                   SliverList.separated(
