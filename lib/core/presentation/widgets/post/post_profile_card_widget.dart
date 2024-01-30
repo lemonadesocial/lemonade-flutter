@@ -66,7 +66,7 @@ class PostProfileCardView extends StatelessWidget {
 
   final Post post;
 
-  String get postName => post.userExpanded?.name ?? '';
+  String get postName => post.userExpanded?.name ?? t.common.anonymousLemon;
 
   String get postText => post.text ?? '';
 
@@ -122,7 +122,7 @@ class PostProfileCardView extends StatelessWidget {
               url: AvatarUtils.getAvatarUrl(user: post.userExpanded),
             ),
           ),
-          const SizedBox(width: 9),
+          SizedBox(width: Spacing.xSmall),
           Flexible(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
