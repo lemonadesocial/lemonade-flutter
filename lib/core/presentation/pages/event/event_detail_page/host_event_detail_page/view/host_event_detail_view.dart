@@ -114,6 +114,9 @@ class HostEventDetailView extends StatelessWidget {
                       ),
                     ),
                   ],
+                  SliverPadding(
+                    padding: EdgeInsets.symmetric(vertical: Spacing.medium),
+                  ),
                 ],
               ),
             );
