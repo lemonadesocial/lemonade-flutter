@@ -1,5 +1,6 @@
 import 'package:app/core/application/event/get_event_checkins_bloc/get_event_checkins_bloc.dart';
 import 'package:app/core/application/event/get_event_cohost_requests_bloc/get_event_cohost_requests_bloc.dart';
+import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/view_model/event_config_grid_view_model.dart';
 import 'package:app/core/utils/modal_utils.dart';
@@ -25,10 +26,15 @@ class HostEventDetailConfigGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
+    final eventInvitedCount =
+        context.watch<GetEventDetailBloc>().state.maybeWhen(
+              orElse: () => [],
+              fetched: (event) => event.invitedCount ?? 0,
+            );
     final List<EventConfigGridViewModel?> listData = [
       EventConfigGridViewModel(
         title: t.event.configuration.invite,
-        subTitle: '12/48 confirmed',
+        subTitle: t.event.invitedCount(count: eventInvitedCount),
         showProgressBar: true,
         progressBarColors: [
           const Color(0xFFBCF9CE),

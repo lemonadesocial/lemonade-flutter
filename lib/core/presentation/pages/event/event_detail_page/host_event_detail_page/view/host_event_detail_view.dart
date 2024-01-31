@@ -66,7 +66,6 @@ class HostEventDetailView extends StatelessWidget {
                   SliverPadding(
                     padding: EdgeInsets.only(top: Spacing.medium),
                   ),
-                  // TODO: temporary hidden for release
                   SliverPadding(
                     padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
                     sliver: SliverToBoxAdapter(

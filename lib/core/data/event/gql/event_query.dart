@@ -143,6 +143,7 @@ const eventFragment = '''
   guest_limit_per
   virtual
   private
+  invited_count
   rewards {
     _id
     active
