@@ -26,11 +26,12 @@ class HostEventDetailConfigGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final eventInvitedCount =
-        context.watch<GetEventDetailBloc>().state.maybeWhen(
-              orElse: () => [],
-              fetched: (event) => event.invitedCount ?? 0,
-            );
+    Event eventDetail = context.watch<GetEventDetailBloc>().state.maybeWhen(
+          orElse: () => Event(),
+          fetched: (eventDetail) => eventDetail,
+        );
+    final eventInvitedCount = eventDetail.invitedCount ?? 0;
+    final eventTicketTypesCount = eventDetail.eventTicketTypes?.length ?? 0;
     final List<EventConfigGridViewModel?> listData = [
       EventConfigGridViewModel(
         title: t.event.configuration.invite,
@@ -57,7 +58,7 @@ class HostEventDetailConfigGrid extends StatelessWidget {
       ),
       EventConfigGridViewModel(
         title: t.event.configuration.tickets,
-        subTitle: '4 ticket types \n\$12.9K total sales',
+        subTitle: t.event.ticketTypesCount(count: eventTicketTypesCount),
         icon: Container(
           width: 24.w,
           height: 24.w,
@@ -70,7 +71,7 @@ class HostEventDetailConfigGrid extends StatelessWidget {
         ),
         onTap: () {
           Vibrate.feedback(FeedbackType.light);
-          showComingSoonDialog(context);
+          AutoRouter.of(context).navigate(const EventTicketTierSettingRoute());
         },
       ),
       EventConfigGridViewModel(

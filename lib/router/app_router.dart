@@ -170,6 +170,18 @@ final eventDetailRoutes = AutoRoute(
       page: GuestEventRewardUsesRoute.page,
     ),
     AutoRoute(
+      page: EventTicketTierSettingRoute.page,
+      children: [
+        AutoRoute(
+          initial: true,
+          page: EventTicketTiersListingRoute.page,
+        ),
+        AutoRoute(
+          page: EventCreateTicketTierRoute.page,
+        ),
+      ],
+    ),
+    AutoRoute(
       page: EventControlPanelRoute.page,
       children: [
         AutoRoute(

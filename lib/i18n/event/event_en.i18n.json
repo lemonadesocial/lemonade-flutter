@@ -294,5 +294,6 @@
     "allTicketTiers": "All ticket tiers",
     "claimed": "claimed",
     "profileRequiredFields": "Please update these fields: $fields in your profile to RSVP the event.",
-    "invitedCount": "$count invited"
+    "invitedCount": "$count invited",
+    "ticketTypesCount": "$count ticket types"
 }
