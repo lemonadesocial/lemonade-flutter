@@ -128,10 +128,11 @@ class ModifyRewardBloc extends Bloc<ModifyRewardEvent, ModifyRewardState> {
     _ModifyRewardEventOnCreateSubmitted event,
     Emitter emit,
   ) async {
-    emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
     final title = StringFormz.dirty(state.title.value);
-    _validate(state.copyWith(title: title));
+    emit(_validate(state.copyWith(title: title)));
+
     if (state.isValid) {
+      emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
       final result = await _eventRepository.createEventReward(
         input: [
           ...event.existingRewards
@@ -163,6 +164,8 @@ class ModifyRewardBloc extends Bloc<ModifyRewardEvent, ModifyRewardState> {
         (createEvent) =>
             emit(state.copyWith(status: FormzSubmissionStatus.success)),
       );
+    } else {
+      emit(state.copyWith(status: FormzSubmissionStatus.canceled));
     }
   }
 
