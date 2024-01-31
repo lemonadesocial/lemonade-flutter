@@ -59,9 +59,10 @@ class EventConfigCard extends StatelessWidget {
                   Text(
                     title,
                     style: Typo.small.copyWith(
-                        color: colorScheme.onSurface,
-                        fontFamily: FontFamily.circularStd,
-                        fontWeight: FontWeight.w600),
+                      color: colorScheme.onSurface,
+                      fontFamily: FontFamily.circularStd,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                   if (description?.isNotEmpty == true)
                     Text(
