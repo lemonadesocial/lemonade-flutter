@@ -2,10 +2,12 @@ import 'package:app/core/application/event/modify_reward_bloc/modify_reward_bloc
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
 
 class EventRewardListTicketTypes extends StatelessWidget {
   final List<EventTicketType> eventTicketTypes;
@@ -19,6 +21,14 @@ class EventRewardListTicketTypes extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    List<String> selectedEventTicketTypeIds =
+        context.watch<ModifyRewardBloc>().state.selectedEventTicketTypeIds;
+    bool isValid = context.watch<ModifyRewardBloc>().state.isValid;
+    final isInitialStatus =
+        context.watch<ModifyRewardBloc>().state.status.isInitial;
+    bool isErrorValidation = isInitialStatus == false &&
+        selectedEventTicketTypeIds.isEmpty &&
+        isValid == false;
     return SliverList.separated(
       itemCount: eventTicketTypes.length,
       itemBuilder: (context, index) {
@@ -34,9 +44,22 @@ class EventRewardListTicketTypes extends StatelessWidget {
                 BlocBuilder<ModifyRewardBloc, ModifyRewardState>(
                   builder: (context, state) {
                     if (state.selectedEventTicketTypeIds.contains(item.id)) {
-                      return Assets.icons.icChecked.svg();
+                      return Assets.icons.icChecked.svg(
+                        width: Sizing.regular,
+                        height: Sizing.regular,
+                      );
                     }
-                    return Assets.icons.icUncheck.svg();
+                    if (isErrorValidation) {
+                      return Assets.icons.icUncheck.svg(
+                        color: Colors.red,
+                        width: Sizing.regular,
+                        height: Sizing.regular,
+                      );
+                    }
+                    return Assets.icons.icUncheck.svg(
+                      width: Sizing.regular,
+                      height: Sizing.regular,
+                    );
                   },
                 ),
                 SizedBox(

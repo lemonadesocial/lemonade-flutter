@@ -48,6 +48,7 @@ class Event with _$Event {
     List<Reward>? rewards,
     bool? approvalRequired,
     List<String>? requiredProfileFields,
+    int? invitedCount,
   }) = _Event;
 
   factory Event.fromDto(EventDto dto) {
@@ -109,6 +110,7 @@ class Event with _$Event {
           .toList(),
       approvalRequired: dto.approvalRequired,
       requiredProfileFields: dto.requiredProfileFields ?? [],
+      invitedCount: dto.invitedCount ?? 0,
     );
   }
 }

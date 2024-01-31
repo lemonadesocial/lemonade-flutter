@@ -162,6 +162,7 @@ class EventCreateRewardPageView extends StatelessWidget {
                       padding: EdgeInsets.all(Spacing.smMedium),
                       child: LinearGradientButton(
                         onTap: () async {
+                          FocusScope.of(context).unfocus();
                           if (initialReward != null) {
                             modifyRewardBloc.add(
                               ModifyRewardEvent.onEditSubmitted(

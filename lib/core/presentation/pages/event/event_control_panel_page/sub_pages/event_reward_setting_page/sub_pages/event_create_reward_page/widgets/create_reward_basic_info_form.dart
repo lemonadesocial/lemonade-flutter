@@ -34,16 +34,6 @@ class _CreateRewardBasicInfoFormState extends State<CreateRewardBasicInfoForm> {
   bool selectedAllTicketTiers = false;
 
   @override
-  initState() {
-    super.initState();
-    final modifyRewardBloc = context.read<ModifyRewardBloc>();
-    setState(() {
-      selectedAllTicketTiers =
-          modifyRewardBloc.initialReward?.paymentTicketTypes == null;
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     List<EventTicketType> eventTicketTypes =

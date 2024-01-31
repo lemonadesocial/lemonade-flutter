@@ -156,13 +156,17 @@ class EventConfiguration {
 
   static List<EventConfiguration> ticketsEventConfiguations(
     BuildContext context,
+    Event? event,
   ) {
+    final eventTicketTypesCount = event?.eventTicketTypes?.length ?? 0;
+    final eventRewardsCount = event?.rewards?.length ?? 0;
     final colorScheme = Theme.of(context).colorScheme;
     final List<EventConfiguration> eventConfigs = [
       EventConfiguration(
         type: EventConfigurationType.ticketTiers,
         title: t.event.ticketTier,
-        description: "",
+        description:
+            '$eventTicketTypesCount ${t.event.ticketTypesCount(n: eventTicketTypesCount)}',
         icon: Center(
           child: Assets.icons.icTicket.svg(
             colorFilter: ColorFilter.mode(
@@ -175,7 +179,8 @@ class EventConfiguration {
       EventConfiguration(
         type: EventConfigurationType.rewards,
         title: t.event.configuration.rewards,
-        description: "",
+        description:
+            '$eventRewardsCount ${t.event.rewardsCount(n: eventRewardsCount)}',
         icon: const Center(child: Icon(Icons.star_border_outlined)),
       ),
     ];

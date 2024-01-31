@@ -36,7 +36,12 @@ class EventTicketsGridConfig extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final eventConfigs = EventConfiguration.ticketsEventConfiguations(context);
+    Event eventDetail = context.watch<GetEventDetailBloc>().state.maybeWhen(
+          orElse: () => Event(),
+          fetched: (eventDetail) => eventDetail,
+        );
+    final eventConfigs =
+        EventConfiguration.ticketsEventConfiguations(context, eventDetail);
     return SliverGrid(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
