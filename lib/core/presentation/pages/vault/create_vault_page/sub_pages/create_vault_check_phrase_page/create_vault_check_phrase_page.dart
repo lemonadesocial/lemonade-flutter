@@ -5,6 +5,7 @@ import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/utils/device_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
@@ -136,7 +137,9 @@ class CreateVaultCheckPhrasePageView extends StatelessWidget {
                 SizedBox(height: Spacing.xSmall),
                 const Spacer(),
                 Container(
-                  padding: EdgeInsets.only(bottom: Spacing.smMedium),
+                  padding: EdgeInsets.only(
+                    bottom: DeviceUtils.hasNotch() ? Spacing.smMedium : 0,
+                  ),
                   width: double.infinity,
                   child: SafeArea(
                     child: state.maybeWhen(

@@ -123,8 +123,6 @@ const eventFragment = '''
     key
     bucket
   }
-  ...eventPeopleFragment
-  ...eventMatrixFragment
   start
   end
   cost
@@ -155,6 +153,16 @@ const eventFragment = '''
     limit_per
     payment_ticket_types
   }
+  event_ticket_types {
+    _id
+    prices {
+      currency
+      network
+      cost
+    }
+  }
+  ...eventPeopleFragment
+  ...eventMatrixFragment
 }
 ''';
 
