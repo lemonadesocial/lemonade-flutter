@@ -58,7 +58,8 @@ class HostEventDetailConfigGrid extends StatelessWidget {
       ),
       EventConfigGridViewModel(
         title: t.event.configuration.tickets,
-        subTitle: t.event.ticketTypesCount(count: eventTicketTypesCount),
+        subTitle:
+            '$eventTicketTypesCount ${t.event.ticketTypesCount(n: eventTicketTypesCount)}',
         icon: Container(
           width: 24.w,
           height: 24.w,

@@ -295,5 +295,12 @@
     "claimed": "claimed",
     "profileRequiredFields": "Please update these fields: $fields in your profile to RSVP the event.",
     "invitedCount": "$count invited",
-    "ticketTypesCount": "$count ticket types"
+    "ticketTypesCount(ordinal)": {
+        "one": "ticket type",
+        "other": "ticket types"
+    },
+    "rewardsCount(ordinal)": {
+        "one": "reward",
+        "other": "rewards"
+    }
 }
