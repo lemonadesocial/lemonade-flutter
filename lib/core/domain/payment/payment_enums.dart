@@ -11,6 +11,8 @@ enum PaymentProvider {
 enum PaymentAccountType {
   ethereum,
   digital,
+  @JsonValue('ethereum_escrow')
+  ethereumEscrow,
 }
 
 enum PaymentState {

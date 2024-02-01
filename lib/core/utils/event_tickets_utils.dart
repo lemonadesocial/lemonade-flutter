@@ -1,12 +1,15 @@
 import 'package:app/core/domain/event/entities/event_currency.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/entities/event_ticket.dart';
+import 'package:app/core/domain/event/input/get_event_currencies_input/get_event_currencies_input.dart';
+import 'package:app/core/domain/event/repository/event_ticket_repository.dart';
 import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
 import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/utils/list/unique_list_extension.dart';
 import 'package:app/core/utils/number_utils.dart';
 import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:collection/collection.dart';
 import 'package:intl/intl.dart';
 
@@ -170,5 +173,24 @@ class EventTicketUtils {
     return isERC20
         ? erc20DisplayedAmount ?? ''
         : formatter.format(doubleAmount);
+  }
+
+  static Future<String> getDisplayedTicketPriceAsync({
+    required eventId,
+    required EventTicketPrice? ticketPrice,
+  }) async {
+    final currencyListResult =
+        await getIt<EventTicketRepository>().getEventCurrencies(
+      input: GetEventCurrenciesInput(
+        id: eventId,
+      ),
+    );
+    final currencyList = currencyListResult.getOrElse(() => []);
+    final currency = currencyList
+        .firstWhereOrNull((item) => item.currency == ticketPrice?.currency);
+    return getDisplayedTicketPrice(
+      price: ticketPrice,
+      decimals: currency?.decimals?.toInt(),
+    );
   }
 }

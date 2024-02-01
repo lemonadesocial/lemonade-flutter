@@ -1,12 +1,8 @@
 import 'package:app/core/application/event/events_listing_bloc/base_events_listing_bloc.dart';
-import 'package:app/core/application/event/events_listing_bloc/events_listing_bloc.dart';
 import 'package:app/core/application/event/events_listing_bloc/past_events_listing_bloc.dart';
 import 'package:app/core/application/event/events_listing_bloc/upcoming_events_listing_bloc.dart';
-import 'package:app/core/application/event/get_event_payments_bloc/get_event_payments_bloc.dart';
 import 'package:app/core/domain/event/event_repository.dart';
-import 'package:app/core/domain/event/input/get_event_payments_input/get_event_payments_input.dart';
 import 'package:app/core/domain/event/input/get_events_listing_input.dart';
-import 'package:app/core/presentation/pages/event/my_event_tickets_list_page/views/event_payments_list_view.dart';
 import 'package:app/core/presentation/pages/event/my_event_tickets_list_page/views/event_reservations_list_view.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
@@ -46,29 +42,15 @@ class MyEventTicketsListPage extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => GetEventPaymentsBloc()
-            ..add(
-              GetEventPaymentsEvent.fetch(
-                input: GetEventPaymentsInput(),
-              ),
-            ),
-        ),
-        BlocProvider(
-          create: (context) => EventsListingBloc(
-            eventService,
-            defaultInput: GetEventsInput(accepted: userId, limit: 50),
-          )..add(BaseEventsListingEvent.fetch()),
-        ),
-        BlocProvider(
           create: (context) => UpcomingEventsListingBloc(
             eventService,
-            defaultInput: GetUpcomingEventsInput(id: userId, limit: 50),
+            defaultInput: GetUpcomingEventsInput(id: userId, limit: 100),
           )..add(BaseEventsListingEvent.fetch()),
         ),
         BlocProvider(
           create: (context) => PastEventsListingBloc(
             eventService,
-            defaultInput: GetPastEventsInput(id: userId, limit: 50),
+            defaultInput: GetPastEventsInput(id: userId, limit: 100),
           )..add(BaseEventsListingEvent.fetch()),
         ),
       ],
@@ -87,9 +69,7 @@ class MyEventTicketsListView extends StatefulWidget {
 }
 
 class _MyEventTicketsListViewState extends State<MyEventTicketsListView> {
-  TicketPageMode selectedTicketPageMode = TicketPageMode.tickets;
-
-  ReservationType? selectedReservationType;
+  ReservationType selectedReservationType = ReservationType.upcoming;
 
   @override
   Widget build(BuildContext context) {
@@ -101,6 +81,7 @@ class _MyEventTicketsListViewState extends State<MyEventTicketsListView> {
         title: StringUtils.capitalize(t.event.tickets(n: 2)),
       ),
       body: Column(
+        mainAxisSize: MainAxisSize.max,
         children: [
           Padding(
             padding: EdgeInsets.symmetric(
@@ -112,88 +93,26 @@ class _MyEventTicketsListViewState extends State<MyEventTicketsListView> {
                 LemonChip(
                   onTap: () {
                     setState(() {
-                      selectedTicketPageMode = TicketPageMode.tickets;
+                      selectedReservationType = ReservationType.upcoming;
                     });
                   },
-                  isActive: selectedTicketPageMode == TicketPageMode.tickets,
-                  label: t.event.tickets(n: 2),
+                  isActive: selectedReservationType == ReservationType.upcoming,
+                  label: t.event.upcoming,
                 ),
                 SizedBox(width: Spacing.superExtraSmall),
                 LemonChip(
                   onTap: () {
                     setState(() {
-                      selectedTicketPageMode = TicketPageMode.reservations;
+                      selectedReservationType = ReservationType.past;
                     });
                   },
-                  isActive:
-                      selectedTicketPageMode == TicketPageMode.reservations,
-                  label: t.event.reservations(n: 2),
+                  isActive: selectedReservationType == ReservationType.past,
+                  label: t.event.past,
                 ),
-                if (selectedTicketPageMode == TicketPageMode.reservations) ...[
-                  SizedBox(width: Spacing.superExtraSmall),
-                  LemonChip(
-                    onTap: () {
-                      setState(() {
-                        selectedReservationType = ReservationType.upcoming;
-                      });
-                    },
-                    isActive:
-                        selectedReservationType == ReservationType.upcoming,
-                    label: t.event.upcoming,
-                  ),
-                  SizedBox(width: Spacing.superExtraSmall),
-                  LemonChip(
-                    onTap: () {
-                      setState(() {
-                        selectedReservationType = ReservationType.past;
-                      });
-                    },
-                    isActive: selectedReservationType == ReservationType.past,
-                    label: t.event.past,
-                  ),
-                ],
               ],
             ),
           ),
-          if (selectedTicketPageMode == TicketPageMode.tickets)
-            BlocBuilder<GetEventPaymentsBloc, GetEventPaymentsState>(
-              builder: (context, state) => state.when(
-                loading: () => Loading.defaultLoading(context),
-                failure: () => EmptyList(
-                  emptyText: t.common.somethingWrong,
-                ),
-                success: (data) => data.isEmpty
-                    ? Center(
-                        child: EmptyList(
-                          emptyText: t.event.empty.tickets,
-                        ),
-                      )
-                    : EventPaymentListView(
-                        eventPaymentsList: data,
-                      ),
-              ),
-            ),
-          if (selectedTicketPageMode == TicketPageMode.reservations &&
-              selectedReservationType == null)
-            BlocBuilder<EventsListingBloc, BaseEventsListingState>(
-              builder: (context, state) => state.when(
-                loading: () => Loading.defaultLoading(context),
-                failure: () => EmptyList(
-                  emptyText: t.common.somethingWrong,
-                ),
-                fetched: (eventsList, _) => eventsList.isEmpty
-                    ? Center(
-                        child: EmptyList(
-                          emptyText: t.event.empty.reservations,
-                        ),
-                      )
-                    : EventReservationsListView(
-                        eventsList: eventsList,
-                      ),
-              ),
-            ),
-          if (selectedTicketPageMode == TicketPageMode.reservations &&
-              selectedReservationType == ReservationType.upcoming)
+          if (selectedReservationType == ReservationType.upcoming)
             BlocBuilder<UpcomingEventsListingBloc, BaseEventsListingState>(
               builder: (context, state) => state.when(
                 loading: () => Loading.defaultLoading(context),
@@ -205,8 +124,7 @@ class _MyEventTicketsListViewState extends State<MyEventTicketsListView> {
                 ),
               ),
             ),
-          if (selectedTicketPageMode == TicketPageMode.reservations &&
-              selectedReservationType == ReservationType.past)
+          if (selectedReservationType == ReservationType.past)
             BlocBuilder<PastEventsListingBloc, BaseEventsListingState>(
               builder: (context, state) => state.when(
                 loading: () => Loading.defaultLoading(context),
