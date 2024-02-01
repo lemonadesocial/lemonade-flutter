@@ -204,65 +204,70 @@ class _PersonalCardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(LemonRadius.normal),
-        color: colorScheme.onPrimary.withOpacity(0.06),
-      ),
-      child: Column(
-        children: [
-          SizedBox(height: Spacing.smMedium),
-          Row(
-            children: [
-              Assets.icons.icProfile.svg(
-                width: 18.w,
-                height: 18.w,
-              ),
-              SizedBox(width: Spacing.xSmall),
-              Expanded(
-                child: Text(
-                  userProfile.name ?? '',
-                  overflow: TextOverflow.ellipsis,
-                  style: Typo.medium.copyWith(
-                    fontWeight: FontWeight.normal,
-                    color: colorScheme.onPrimary.withOpacity(0.54),
+    return InkWell(
+      onTap: () {
+        AutoRouter.of(context).push(const SettingRoute());
+      },
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(LemonRadius.normal),
+          color: colorScheme.onPrimary.withOpacity(0.06),
+        ),
+        child: Column(
+          children: [
+            SizedBox(height: Spacing.smMedium),
+            Row(
+              children: [
+                Assets.icons.icProfile.svg(
+                  width: 18.w,
+                  height: 18.w,
+                ),
+                SizedBox(width: Spacing.xSmall),
+                Expanded(
+                  child: Text(
+                    userProfile.name ?? '',
+                    overflow: TextOverflow.ellipsis,
+                    style: Typo.medium.copyWith(
+                      fontWeight: FontWeight.normal,
+                      color: colorScheme.onPrimary.withOpacity(0.54),
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(width: Spacing.xSmall),
-              Assets.icons.icExpand.svg(),
-            ],
-          ),
-          SizedBox(height: Spacing.xSmall),
-          Row(
-            children: [
-              Assets.icons.icMail.svg(),
-              SizedBox(width: Spacing.xSmall),
-              Expanded(
-                child: Text(
-                  userProfile.email ?? '',
-                  overflow: TextOverflow.ellipsis,
-                  style: Typo.medium.copyWith(
-                    fontWeight: FontWeight.normal,
-                    color: colorScheme.onPrimary.withOpacity(0.54),
+                SizedBox(width: Spacing.xSmall),
+                Assets.icons.icExpand.svg(),
+              ],
+            ),
+            SizedBox(height: Spacing.xSmall),
+            Row(
+              children: [
+                Assets.icons.icMail.svg(),
+                SizedBox(width: Spacing.xSmall),
+                Expanded(
+                  child: Text(
+                    userProfile.email ?? '',
+                    overflow: TextOverflow.ellipsis,
+                    style: Typo.medium.copyWith(
+                      fontWeight: FontWeight.normal,
+                      color: colorScheme.onPrimary.withOpacity(0.54),
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          SizedBox(height: Spacing.smMedium),
-          const Divider(),
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: Spacing.small),
-            child: Text(
-              t.profile.infoSecureDesc,
-              style: Typo.small.copyWith(
-                color: colorScheme.onPrimary.withOpacity(0.36),
+              ],
+            ),
+            SizedBox(height: Spacing.smMedium),
+            const Divider(),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: Spacing.small),
+              child: Text(
+                t.profile.infoSecureDesc,
+                style: Typo.small.copyWith(
+                  color: colorScheme.onPrimary.withOpacity(0.36),
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
