@@ -194,7 +194,6 @@ class EditProfilePage extends StatelessWidget {
 
 class _PersonalCardWidget extends StatelessWidget {
   const _PersonalCardWidget({
-    super.key,
     required this.userProfile,
   });
 

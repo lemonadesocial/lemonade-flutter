@@ -60,13 +60,7 @@ class _RootPageViewState extends State<RootPage> {
           context.read<NewsfeedListingBloc>().add(NewsfeedListingEvent.fetch());
           return UpgradeAlert(
             upgrader: Upgrader(
-              showIgnore: false,
               durationUntilAlertAgain: const Duration(seconds: 30),
-              dialogStyle: UpgradeDialogStyle.cupertino,
-              cupertinoButtonTextStyle: TextStyle(
-                color: Colors.white,
-                fontSize: Typo.small.fontSize!,
-              ),
               appcastConfig: appCastConfiguration,
               debugLogging: kDebugMode,
             ),

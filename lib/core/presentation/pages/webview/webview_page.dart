@@ -41,7 +41,7 @@ class _WebviewPageState extends State<WebviewPage> {
           crossPlatform:
               InAppBrowserOptions(toolbarTopBackgroundColor: Colors.white),
         ),
-        urlRequest: URLRequest(url: widget.uri),
+        urlRequest: URLRequest(url: WebUri(widget.uri.toString())),
       );
     } catch (e) {
       if (kDebugMode) {
