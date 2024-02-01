@@ -27,7 +27,7 @@ class StripeOnrampWebview extends StatelessWidget {
       backgroundColor: colorScheme.background,
       body: InAppWebView(
         initialUrlRequest: URLRequest(
-          url: WebUri(
+          url: Uri.parse(
             '${AppConfig.stripeOnrampHost}?session_key=${stripeOnrampSession.clientSecret}&publishable_key=${stripeOnrampSession.publishableKey}',
           ),
         ),
