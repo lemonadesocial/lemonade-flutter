@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.4.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.3.0...v1.4.0) (2024-02-01)
+
+
+### Features
+
+* check profile required fields before buying tickets ([#381](https://github.com/lemonadesocial/lemonade-flutter/issues/381)) ([aafbc34](https://github.com/lemonadesocial/lemonade-flutter/commit/aafbc3451f39ae61b96e5349afefecfe621fd973))
+
+
+### Bug Fixes
+
+* CTA button layout ([#383](https://github.com/lemonadesocial/lemonade-flutter/issues/383)) ([3a81421](https://github.com/lemonadesocial/lemonade-flutter/commit/3a8142100cf17c2cdba2a3e5f96c8087108e5eae))
+* replace some mock data into real data of host event detail screen ([#385](https://github.com/lemonadesocial/lemonade-flutter/issues/385)) ([d5ff00b](https://github.com/lemonadesocial/lemonade-flutter/commit/d5ff00b2b5c126962b97f7c34f0555c014704068))
+* show name in post comments ([#379](https://github.com/lemonadesocial/lemonade-flutter/issues/379)) ([ac737b0](https://github.com/lemonadesocial/lemonade-flutter/commit/ac737b09dd7fce2b078a2c0e0f4812a55925bef2))
+* show wrong ticket price on buy ticket button ([#384](https://github.com/lemonadesocial/lemonade-flutter/issues/384)) ([fd6f0c4](https://github.com/lemonadesocial/lemonade-flutter/commit/fd6f0c4e3e77101e736fef0943b7580c21567d6e))
+* support navigate to create event page in ai-chat ([#380](https://github.com/lemonadesocial/lemonade-flutter/issues/380)) ([a06fa80](https://github.com/lemonadesocial/lemonade-flutter/commit/a06fa80b16654d00d7a2decec7cfb05b92be504a))
+
 ## [1.3.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.2.0...v1.3.0) (2024-01-29)
 
 
