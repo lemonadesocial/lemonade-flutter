@@ -4,8 +4,8 @@ publish_to: 'none'
 version: 1.4.0
 
 environment:
-  flutter: "3.13.9"
-  sdk: "3.1.5"
+  flutter: "3.16.9"
+  sdk: "3.2.6"
 
 dependencies:
   flutter:
@@ -44,14 +44,14 @@ dependencies:
 
   # oauth
   oauth2_client: ^3.2.1
-  flutter_appauth: ^5.0.0
+  flutter_appauth: ^6.0.4
 
   #env
   flutter_dotenv: ^5.1.0
 
   # assets
   flutter_svg: ^2.0.7
-  cached_network_image: 3.3.0
+  cached_network_image: ^3.3.1
   image_picker: ^1.0.2
   image_cropper: ^4.0.1
 
@@ -62,39 +62,39 @@ dependencies:
   sliver_tools: ^0.2.12
   flutter_slidable: ^3.0.0
   scroll_to_index: ^3.0.1
-  flutter_typeahead: ^4.6.2
+  flutter_typeahead: ^5.1.0
   flutter_linkify: ^6.0.0
   flutter_html: ^3.0.0-beta.2
   flutter_blurhash: 0.8.2
-  emoji_picker_flutter: ^1.6.1
+  emoji_picker_flutter: ^2.0.0
   mime: ^1.0.4
   flutter_screenutil: ^5.9.0
   pull_to_refresh_flutter3: ^2.0.1
-  lottie: ^2.6.0
+  lottie: ^3.0.0
   expandable: ^5.0.1
   photo_view: ^0.14.0
   visibility_detector: ^0.4.0+2
   dropdown_button2: ^2.3.9
-  adaptive_dialog: ^1.9.0+2
+  adaptive_dialog: ^2.0.0
   dotted_border: ^2.0.0+3
   qr_flutter: ^4.1.0
-  upgrader: ^8.1.0
+  upgrader: ^9.0.0
   flutter_switch: ^0.3.2
-  flutter_keyboard_visibility: ^5.4.1
+  flutter_keyboard_visibility: ^6.0.0
   animated_text_kit: ^4.2.2
 
   # Webview
-  flutter_inappwebview: ^5.8.0
+  flutter_inappwebview: ^6.0.0
   
   # Firebase
   firebase_core: ^2.16.0
   firebase_messaging: ^14.6.8
   firebase_crashlytics: ^3.3.3
-  flutter_local_notifications: ^15.1.0+1
-  firebase_analytics: 10.5.1
+  flutter_local_notifications: ^16.3.2
+  firebase_analytics: ^10.8.1
   
   # location tracking
-  geolocator: 9.0.2
+  geolocator: ^10.1.0
   rxdart: ^0.27.7
 
   # wallet
@@ -105,9 +105,9 @@ dependencies:
   bip32: ^2.0.0
 
   # matrix
-  matrix: ^0.22.1
+  matrix: ^0.25.8
   flutter_olm: ^1.2.0
-  flutter_openssl_crypto: ^0.1.0
+  flutter_openssl_crypto: ^0.3.0
   flutter_chat_bubble: ^2.0.2
   duration: ^3.0.13
 
@@ -116,7 +116,7 @@ dependencies:
   shorebird_code_push: ^1.1.0
 
   # payment
-  flutter_stripe: ^9.4.0
+  flutter_stripe: ^10.0.0
   
   # other
   path_provider: ^2.0.15
@@ -136,7 +136,7 @@ dependencies:
   google_maps_webservice: ^0.0.20-nullsafety.5
   flutter_timezone: ^1.0.8
   currency_text_input_formatter: ^2.1.10
-  mobile_scanner: 3.5.5
+  mobile_scanner: ^4.0.0
   
 dependency_overrides:
   matrix_api_lite:
@@ -154,7 +154,7 @@ dev_dependencies:
     sdk: flutter
 
   # lints
-  flutter_lints: ^2.0.0
+  flutter_lints: ^3.0.1
 
   # code generators
   build_runner: ^2.4.7
@@ -163,7 +163,7 @@ dev_dependencies:
   auto_route_generator: ^7.1.1
   injectable_generator: ^2.1.6
   flutter_gen_runner: ^5.3.1
-  graphql_codegen: ^0.12.2
+  graphql_codegen: ^0.13.11
 
 # generate asset 
 flutter_gen:

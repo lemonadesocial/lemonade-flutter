@@ -202,7 +202,7 @@ definitions:
     - &change_shorebird_version
       name: 🐦 Change Shorebird version
       script: |
-        shorebird flutter versions use 3.13.9
+        shorebird flutter versions use 3.16.9
     - &release_shorebird_ipa_staging
       name: Release shorebird ipa staging
       script: |
