@@ -146,7 +146,7 @@ class SettingPageView extends StatelessWidget {
                     height: 18.w,
                   ),
                   onTap: () => ChromeSafariBrowser().open(
-                    url: Uri.parse('https://lemonade.social/privacy'),
+                    url: WebUri('https://lemonade.social/privacy'),
                   ),
                 ),
                 SizedBox(height: Spacing.xSmall),
@@ -158,7 +158,7 @@ class SettingPageView extends StatelessWidget {
                     height: 18.w,
                   ),
                   onTap: () => ChromeSafariBrowser().open(
-                    url: Uri.parse('https://lemonade.social/terms'),
+                    url: WebUri('https://lemonade.social/terms'),
                   ),
                 ),
                 SizedBox(height: Spacing.xSmall),
