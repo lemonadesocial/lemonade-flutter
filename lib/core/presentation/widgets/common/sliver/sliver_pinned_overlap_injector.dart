@@ -6,8 +6,8 @@ import 'package:flutter/rendering.dart';
 class SliverPinnedOverlapInjector extends SingleChildRenderObjectWidget {
   const SliverPinnedOverlapInjector({
     required this.handle,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final SliverOverlapAbsorberHandle handle;
 

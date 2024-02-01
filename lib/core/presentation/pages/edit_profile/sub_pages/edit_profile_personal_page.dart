@@ -29,8 +29,8 @@ import 'package:intl/intl.dart';
 class EditProfilePersonalDialog extends StatelessWidget with LemonBottomSheet {
   const EditProfilePersonalDialog({
     required this.userProfile,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final User userProfile;
 

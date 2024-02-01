@@ -8,13 +8,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class FrostedGlassDropDownV2 extends StatelessWidget {
   const FrostedGlassDropDownV2({
-    Key? key,
+    super.key,
     required this.listItem,
     required this.onValueChange,
     this.selectedValue,
     this.label,
     this.hintText,
-  }) : super(key: key);
+  });
 
   final String? label;
   final String? hintText;

@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EditProfileSocialDialog extends StatelessWidget with LemonBottomSheet {
-  const EditProfileSocialDialog({Key? key}) : super(key: key);
+  const EditProfileSocialDialog({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -126,9 +126,7 @@ class User with _$User {
       cover: dto.cover,
       type: dto.type,
       industry: dto.industry,
-      addresses: dto.addresses != null
-          ? dto.addresses!.map(Address.fromDto).toList()
-          : null,
+      addresses: dto.addresses?.map(Address.fromDto).toList(),
       hosted: dto.hosted,
       attended: dto.attended,
       friends: dto.friends,

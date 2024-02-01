@@ -17,9 +17,9 @@ import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 
 class OnboardingPhotoPicker extends StatelessWidget {
   const OnboardingPhotoPicker({
-    Key? key,
+    super.key,
     this.imageFile,
-  }) : super(key: key);
+  });
 
   final XFile? imageFile;
 

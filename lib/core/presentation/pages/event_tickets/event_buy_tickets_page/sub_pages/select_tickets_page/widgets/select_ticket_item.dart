@@ -194,7 +194,7 @@ class SelectTicketItem extends StatelessWidget {
                       },
                     ),
                   );
-                }).toList(),
+                }),
               ],
             ),
           ),

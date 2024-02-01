@@ -16,11 +16,11 @@ class MessageReactions extends StatelessWidget {
   final Function({required Event event, required String emoji})? onReact;
 
   const MessageReactions({
-    Key? key,
+    super.key,
     required this.event,
     required this.timeline,
     this.onReact,
-  }) : super(key: key);
+  });
 
   Set<Event> getAllReactionEvents() {
     return event.aggregatedEvents(timeline, RelationshipTypes.reaction);
@@ -74,19 +74,17 @@ class MessageReactions extends StatelessWidget {
       runSpacing: 4,
       crossAxisAlignment: WrapCrossAlignment.center,
       children: [
-        ...reactions
-            .map(
-              (r) => _Reaction(
-                reactionKey: r.key,
-                count: r.count,
-                reacted: r.reacted,
-                onTap: () => _onTapReaction(r),
-                onLongPress: () async => await _AdaptableReactorsDialog(
-                  reactionEntry: r,
-                ).show(context),
-              ),
-            )
-            .toList(),
+        ...reactions.map(
+          (r) => _Reaction(
+            reactionKey: r.key,
+            count: r.count,
+            reacted: r.reacted,
+            onTap: () => _onTapReaction(r),
+            onLongPress: () async => await _AdaptableReactorsDialog(
+              reactionEntry: r,
+            ).show(context),
+          ),
+        ),
         if (reactions.isNotEmpty)
           InkWell(
             onTap: () {

@@ -19,9 +19,9 @@ import 'package:timeago/timeago.dart' as timeago;
 
 class PostCommentTile extends StatelessWidget {
   const PostCommentTile({
-    Key? key,
+    super.key,
     required this.comment,
-  }) : super(key: key);
+  });
   final PostComment comment;
 
   String? get name => comment.userExpanded?.name;

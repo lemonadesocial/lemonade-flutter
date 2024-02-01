@@ -18,9 +18,9 @@ import 'package:app/theme/color.dart';
 @RoutePage()
 class OnboardingUsernamePage extends StatelessWidget {
   const OnboardingUsernamePage({
-    Key? key,
+    super.key,
     this.onboardingFlow = true,
-  }) : super(key: key);
+  });
 
   final bool onboardingFlow;
 

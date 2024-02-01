@@ -5,13 +5,10 @@ import 'package:oauth2_client/oauth2_helper.dart';
 
 class CustomOAuth2Helper extends OAuth2Helper {
   CustomOAuth2Helper(
-    final OAuth2Client client, {
-    required final String clientId,
-    required final List<String> scopes,
+    super.client, {
+    required super.clientId,
+    required List<String> super.scopes,
   }) : super(
-          client,
-          clientId: clientId,
-          scopes: scopes,
           accessTokenHeaders: {
             "Content-Type": "application/x-www-form-urlencoded",
           },

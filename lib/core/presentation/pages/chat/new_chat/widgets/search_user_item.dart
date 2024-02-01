@@ -17,8 +17,8 @@ class SearchUserItem extends StatelessWidget {
     this.avatarUrl,
     required this.isSelected,
     required this.onTap,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   Widget buildAvatar() {
     return MatrixAvatar(

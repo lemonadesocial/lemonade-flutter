@@ -20,7 +20,7 @@ enum ChatOptions { chatDetails, leave }
 class ChatSettingsPopupMenu extends StatefulWidget {
   final Room room;
 
-  const ChatSettingsPopupMenu({Key? key, required this.room}) : super(key: key);
+  const ChatSettingsPopupMenu({super.key, required this.room});
 
   @override
   ChatSettingsPopupMenuState createState() => ChatSettingsPopupMenuState();

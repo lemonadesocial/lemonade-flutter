@@ -27,9 +27,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 @RoutePage()
 class EditProfilePage extends StatelessWidget {
   const EditProfilePage({
-    Key? key,
+    super.key,
     required this.userProfile,
-  }) : super(key: key);
+  });
 
   final User userProfile;
 
@@ -271,9 +271,8 @@ class _PersonalCardWidget extends StatelessWidget {
 class _UserEditor extends StatelessWidget {
   const _UserEditor(
     this.bloc, {
-    Key? key,
     required this.userName,
-  }) : super(key: key);
+  });
 
   final EditProfileBloc bloc;
   final String userName;

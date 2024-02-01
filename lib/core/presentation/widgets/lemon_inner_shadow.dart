@@ -4,12 +4,12 @@ import 'package:flutter/rendering.dart';
 
 class InnerShadow extends SingleChildRenderObjectWidget {
   const InnerShadow({
-    Key? key,
+    super.key,
     this.blur = 4,
     required this.color,
     required this.offset,
-    required Widget child,
-  }) : super(key: key, child: child);
+    required Widget super.child,
+  });
 
   final double blur;
   final Color color;

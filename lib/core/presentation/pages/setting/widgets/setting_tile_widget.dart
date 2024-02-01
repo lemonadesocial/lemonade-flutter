@@ -6,7 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SettingTileWidget extends StatelessWidget {
   const SettingTileWidget({
-    Key? key,
+    super.key,
     required this.title,
     this.leading,
     required this.onTap,
@@ -15,7 +15,7 @@ class SettingTileWidget extends StatelessWidget {
     this.featureAvailable = true,
     this.titleColor,
     this.color,
-  }) : super(key: key);
+  });
 
   final String title;
   final String? subTitle;

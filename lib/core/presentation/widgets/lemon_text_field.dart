@@ -7,7 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LemonTextField extends StatelessWidget {
   const LemonTextField({
-    Key? key,
+    super.key,
     this.onChange,
     this.initialText,
     this.hintText,
@@ -27,7 +27,7 @@ class LemonTextField extends StatelessWidget {
     this.errorText,
     this.readOnly,
     this.onTap,
-  }) : super(key: key);
+  });
 
   final ValueChanged<String>? onChange;
   final String? initialText;

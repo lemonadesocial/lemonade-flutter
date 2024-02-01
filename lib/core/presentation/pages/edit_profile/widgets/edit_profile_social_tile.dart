@@ -5,12 +5,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EditProfileSocialTile extends StatelessWidget {
   const EditProfileSocialTile({
-    Key? key,
+    super.key,
     required this.label,
     required this.leadingIcon,
     required this.onTap,
     this.content,
-  }) : super(key: key);
+  });
 
   final String label;
   final Widget leadingIcon;

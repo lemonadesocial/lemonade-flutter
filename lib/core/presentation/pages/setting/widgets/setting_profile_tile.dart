@@ -18,8 +18,8 @@ import 'package:share_plus/share_plus.dart';
 
 class SettingProfileTile extends StatelessWidget {
   const SettingProfileTile({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
