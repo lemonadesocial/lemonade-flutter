@@ -189,9 +189,8 @@ class _AdaptableReactorsDialog extends StatelessWidget {
   final ReactionEntry? reactionEntry;
 
   const _AdaptableReactorsDialog({
-    Key? key,
     this.reactionEntry,
-  }) : super(key: key);
+  });
 
   Future<bool?> show(BuildContext context) => showDialog(
         context: context,

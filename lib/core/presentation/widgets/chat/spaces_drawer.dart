@@ -51,21 +51,19 @@ class SpacesDrawer extends StatelessWidget {
                   Navigator.of(context).pop();
                 },
               ),
-              ...chatSpaceState.spaces
-                  .map(
-                    (space) => _buildSpaceItem(
-                      context,
-                      space: space,
-                      isActive: chatSpaceState.activeSpace?.id == space.id,
-                      onTap: () {
-                        context.read<ChatSpaceBloc>().add(
-                              ChatSpaceEvent.setActiveSpace(space: space),
-                            );
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  )
-                  .toList(),
+              ...chatSpaceState.spaces.map(
+                (space) => _buildSpaceItem(
+                  context,
+                  space: space,
+                  isActive: chatSpaceState.activeSpace?.id == space.id,
+                  onTap: () {
+                    context.read<ChatSpaceBloc>().add(
+                          ChatSpaceEvent.setActiveSpace(space: space),
+                        );
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ),
               const Spacer(),
               _buildSpaceActions(context),
             ],

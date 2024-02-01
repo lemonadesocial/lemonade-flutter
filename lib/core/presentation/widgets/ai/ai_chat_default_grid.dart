@@ -124,8 +124,7 @@ class AIChatDefaultGrid extends StatelessWidget {
 }
 
 class AIGridItem extends StatelessWidget {
-  const AIGridItem({Key? key, this.onTap, required this.item})
-      : super(key: key);
+  const AIGridItem({super.key, this.onTap, required this.item});
   final Function()? onTap;
   final AIChatGridViewModel? item;
 

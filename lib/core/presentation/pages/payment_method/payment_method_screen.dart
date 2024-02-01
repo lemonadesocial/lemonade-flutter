@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 
 @RoutePage()
 class PaymentMethodScreen extends StatelessWidget {
-  const PaymentMethodScreen({Key? key}) : super(key: key);
+  const PaymentMethodScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

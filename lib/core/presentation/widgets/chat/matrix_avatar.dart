@@ -29,8 +29,8 @@ class MatrixAvatar extends StatelessWidget {
     this.radius,
     this.isDirectChat,
     this.presence,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -63,11 +63,9 @@ class CreateEventBasePage extends StatelessWidget {
                               onChange: (value) => context
                                   .read<CreateEventBloc>()
                                   .add(EventTitleChanged(title: value)),
-                              errorText: state.title.displayError != null
-                                  ? state.title.displayError!.getMessage(
-                                      t.event.eventCreation.title,
-                                    )
-                                  : null,
+                              errorText: state.title.displayError?.getMessage(
+                                t.event.eventCreation.title,
+                              ),
                             ),
                           ),
                         ),
@@ -88,11 +86,10 @@ class CreateEventBasePage extends StatelessWidget {
                                           description: value,
                                         ),
                                       ),
-                              errorText: state.description.displayError != null
-                                  ? state.description.displayError!.getMessage(
-                                      t.event.eventCreation.description,
-                                    )
-                                  : null,
+                              errorText:
+                                  state.description.displayError?.getMessage(
+                                t.event.eventCreation.description,
+                              ),
                             ),
                           ),
                         ),

@@ -35,8 +35,8 @@ class MxcImage extends StatefulWidget {
     this.retryDuration = const Duration(seconds: 2),
     this.thumbnailMethod = ThumbnailMethod.scale,
     this.cacheKey,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<MxcImage> createState() => _MxcImageState();

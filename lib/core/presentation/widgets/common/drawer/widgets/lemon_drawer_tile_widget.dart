@@ -7,7 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LemonDrawerTileWidget extends StatelessWidget {
   const LemonDrawerTileWidget({
-    Key? key,
+    super.key,
     required this.title,
     this.leading,
     required this.onTap,
@@ -15,7 +15,7 @@ class LemonDrawerTileWidget extends StatelessWidget {
     this.featureAvailable = true,
     this.titleColor,
     this.color,
-  }) : super(key: key);
+  });
 
   final String title;
   final Widget? leading;

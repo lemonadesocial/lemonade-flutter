@@ -31,13 +31,13 @@ class AppLock extends StatefulWidget {
   final ThemeData? theme;
 
   const AppLock({
-    Key? key,
+    super.key,
     required this.builder,
     required this.lockScreen,
     this.enabled = true,
     this.backgroundLockLatency = const Duration(seconds: 0),
     this.theme,
-  }) : super(key: key);
+  });
 
   static _AppLockState? of(BuildContext context) =>
       context.findAncestorStateOfType<_AppLockState>();

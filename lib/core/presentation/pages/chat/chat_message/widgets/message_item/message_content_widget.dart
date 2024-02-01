@@ -240,7 +240,6 @@ class _ButtonContent extends StatelessWidget {
     required this.icon,
     required this.textColor,
     required this.onPressed,
-    super.key,
   });
 
   @override

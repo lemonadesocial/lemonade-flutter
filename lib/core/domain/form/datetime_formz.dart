@@ -16,7 +16,7 @@ enum DateTimeValidationError {
 final class DateTimeFormz
     extends FormzInput<DateTime?, DateTimeValidationError> {
   const DateTimeFormz.pure() : super.pure(null);
-  const DateTimeFormz.dirty(DateTime dateTime) : super.pure(dateTime);
+  const DateTimeFormz.dirty(DateTime super.dateTime) : super.pure();
 
   @override
   DateTimeValidationError? validator(DateTime? value) {

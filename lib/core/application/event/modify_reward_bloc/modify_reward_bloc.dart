@@ -135,19 +135,17 @@ class ModifyRewardBloc extends Bloc<ModifyRewardEvent, ModifyRewardState> {
       emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
       final result = await _eventRepository.createEventReward(
         input: [
-          ...event.existingRewards
-              .map(
-                (reward) => Input$EventRewardInput(
-                  $_id: reward.id,
-                  active: true,
-                  title: reward.title!,
-                  limit: reward.limit?.toDouble(),
-                  limit_per: reward.limitPer!.toDouble(),
-                  icon_color: reward.iconColor,
-                  icon_url: reward.iconUrl,
-                ),
-              )
-              .toList(),
+          ...event.existingRewards.map(
+            (reward) => Input$EventRewardInput(
+              $_id: reward.id,
+              active: true,
+              title: reward.title!,
+              limit: reward.limit?.toDouble(),
+              limit_per: reward.limitPer!.toDouble(),
+              icon_color: reward.iconColor,
+              icon_url: reward.iconUrl,
+            ),
+          ),
           Input$EventRewardInput(
             active: true,
             title: title.value,
@@ -200,7 +198,7 @@ class ModifyRewardBloc extends Bloc<ModifyRewardEvent, ModifyRewardState> {
                 icon_url: reward.iconUrl,
               );
             },
-          ).toList(),
+          ),
         ],
         eventId: event.eventId,
       );

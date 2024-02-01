@@ -15,7 +15,7 @@ import 'package:restart_app/restart_app.dart';
 
 @RoutePage()
 class ShorebirdUpdatePage extends StatefulWidget {
-  const ShorebirdUpdatePage({Key? key}) : super(key: key);
+  const ShorebirdUpdatePage({super.key});
 
   @override
   State<ShorebirdUpdatePage> createState() => _ShorebirdUpdatePageState();
