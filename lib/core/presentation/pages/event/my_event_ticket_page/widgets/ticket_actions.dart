@@ -1,5 +1,5 @@
 import 'package:app/core/domain/event/entities/event.dart';
-import 'package:app/core/domain/event/entities/event_payment.dart';
+import 'package:app/core/domain/event/entities/event_ticket.dart';
 import 'package:app/core/presentation/pages/event/my_event_ticket_page/widgets/ticket_qr_code_popup.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -16,12 +16,12 @@ import 'package:app/core/utils/modal_utils.dart';
 
 class EventTicketActions extends StatelessWidget {
   final Event event;
-  final EventPayment? eventPayment;
+  final List<EventTicket>? remainingTickets;
 
   const EventTicketActions({
     super.key,
     required this.event,
-    this.eventPayment,
+    this.remainingTickets,
   });
 
   @override
@@ -92,8 +92,7 @@ class EventTicketActions extends StatelessWidget {
               height: 27.w,
             ),
           ),
-          badgeIcon: eventPayment?.ticketCountRemaining != null &&
-                  eventPayment?.ticketCountRemaining?.toInt() != 0
+          badgeIcon: remainingTickets?.isNotEmpty == true
               ? Container(
                   width: Sizing.small,
                   height: Sizing.xSmall,
@@ -103,7 +102,7 @@ class EventTicketActions extends StatelessWidget {
                   ),
                   child: Center(
                     child: Text(
-                      '${eventPayment?.ticketCountRemaining?.toInt() ?? 0}',
+                      remainingTickets!.length.toString(),
                       style: Typo.small.copyWith(
                         color: colorScheme.onPrimary,
                         fontWeight: FontWeight.w700,
@@ -112,8 +111,6 @@ class EventTicketActions extends StatelessWidget {
                   ),
                 )
               : null,
-          // TODO: navigate to assign screen
-          // onPressed:,
         ),
         ActionItem(
           label: t.common.actions.mail,
