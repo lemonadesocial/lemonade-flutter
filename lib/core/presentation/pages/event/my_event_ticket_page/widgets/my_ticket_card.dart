@@ -1,11 +1,11 @@
 import 'package:app/core/domain/event/entities/event.dart';
-import 'package:app/core/domain/event/entities/event_payment.dart';
+import 'package:app/core/domain/event/entities/event_ticket.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/utils/date_format_utils.dart';
-import 'package:app/core/utils/number_utils.dart';
+import 'package:app/core/utils/event_tickets_utils.dart';
+import 'package:app/core/utils/list_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
-import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
@@ -13,12 +13,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MyTicketCard extends StatelessWidget {
   final Event event;
-  final EventPayment? eventPayment;
+  final EventTicket? myTicket;
 
   const MyTicketCard({
     super.key,
     required this.event,
-    this.eventPayment,
+    this.myTicket,
   });
 
   @override
@@ -27,7 +27,7 @@ class MyTicketCard extends StatelessWidget {
       children: [
         TicketCardTop(
           event: event,
-          eventPayment: eventPayment,
+          myTicket: myTicket,
         ),
         TicketCardBottom(
           event: event,
@@ -39,33 +39,30 @@ class MyTicketCard extends StatelessWidget {
 
 class TicketCardTop extends StatelessWidget {
   final Event event;
-  final EventPayment? eventPayment;
+  final EventTicket? myTicket;
 
   const TicketCardTop({
     super.key,
     required this.event,
-    this.eventPayment,
+    this.myTicket,
   });
-
-  String get ticketTitle {
-    if (eventPayment == null) {
-      return t.event.free.toUpperCase();
-    }
-    PurchasableTicketType? ticketType =
-        List.from(event.eventTicketTypes ?? []).firstWhere(
-      (item) => item.id == eventPayment?.ticketType,
-      orElse: () => null,
-    );
-
-    return '${ticketType?.title ?? ''} - ${NumberUtils.formatCurrency(
-      amount: ticketType?.defaultPrice?.fiatCost?.toDouble() ?? 0,
-      currency: event.currency,
-    )}';
-  }
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    EventTicketPrice? defaultPrice;
+    EventTicketType? ticketType =
+        List.from(event.eventTicketTypes ?? []).firstWhere(
+      (item) => item.id == myTicket?.type,
+      orElse: () => null,
+    );
+
+    if (ticketType?.prices?.isNotEmpty == true) {
+      defaultPrice = ListUtils.findWithConditionOrFirst<EventTicketPrice?>(
+        items: ticketType?.prices ?? [],
+        condition: (price) => price?.isDefault == true,
+      );
+    }
     return Stack(
       children: [
         ClipRRect(
@@ -103,12 +100,23 @@ class TicketCardTop extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(
-                        ticketTitle.toUpperCase(),
-                        style: Typo.mediumPlus.copyWith(
-                          fontWeight: FontWeight.w600,
-                          fontFamily: FontFamily.spaceGrotesk,
+                      FutureBuilder<String>(
+                        future: EventTicketUtils.getDisplayedTicketPriceAsync(
+                          eventId: event.id ?? '',
+                          ticketPrice: defaultPrice,
                         ),
+                        builder: (context, snapshot) {
+                          final title = snapshot.hasData
+                              ? '${ticketType?.title ?? ''} - ${snapshot.data ?? ''}'
+                              : '--';
+                          return Text(
+                            title.toUpperCase(),
+                            style: Typo.mediumPlus.copyWith(
+                              fontWeight: FontWeight.w600,
+                              fontFamily: FontFamily.spaceGrotesk,
+                            ),
+                          );
+                        },
                       ),
                       SizedBox(height: Spacing.smMedium),
                       Text(
