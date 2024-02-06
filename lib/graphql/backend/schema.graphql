@@ -1973,7 +1973,6 @@ type Mutation {
   updateEventRewardUse(input: UpdateEventRewardUseInput!): Boolean!
   acceptEvent(_id: MongoID!): EventRsvp!
   declineEvent(_id: MongoID!): EventRsvp!
-  checkinUser(event: MongoID!, user: MongoID!): EventRsvp!
   createEventSessionReservation(input: EventSessionReservationInput!): Boolean!
   deleteEventSessionReservation(input: EventSessionReservationInput!): Boolean!
   createEventStory(input: EventStoryInput!): Boolean!
