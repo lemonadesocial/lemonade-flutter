@@ -15,7 +15,6 @@ import 'package:app/core/failure.dart';
 import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:dartz/dartz.dart';
-import 'package:dio/dio.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:injectable/injectable.dart';
 import 'package:matrix/matrix.dart';
