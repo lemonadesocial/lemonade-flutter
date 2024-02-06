@@ -1,4 +1,3 @@
-import 'package:app/core/service/wallet/wallet_connect_service.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -10,11 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class WalletConnectPopup extends StatelessWidget {
-  final Function(SupportedWalletApp walletApp) onSelect;
-
   const WalletConnectPopup({
     super.key,
-    required this.onSelect,
   });
 
   @override
@@ -53,7 +49,7 @@ class WalletConnectPopup extends StatelessWidget {
             ),
             SizedBox(height: Spacing.medium),
             SelectWalletAppButton(
-              onPressed: () => onSelect(SupportedWalletApp.metamask),
+              onPressed: () => null,
               label: t.nft.supportedWalletApps.metamask,
               icon: Assets.icons.icMetamask.svg(),
             ),

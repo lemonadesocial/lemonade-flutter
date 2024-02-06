@@ -1,37 +1,28 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+part 'ethereum_transaction.freezed.dart';
 part 'ethereum_transaction.g.dart';
 
-@JsonSerializable(includeIfNull: false)
-class EthereumTransaction {
-  final String from;
-  final String to;
-  final String value;
-  final String? nonce;
-  final String? gasPrice;
-  final String? maxFeePerGas;
-  final String? maxPriorityFeePerGas;
-  final String? gas;
-  final String? gasLimit;
-  final String? data;
+@freezed
+class EthereumTransaction with _$EthereumTransaction {
+  EthereumTransaction._();
 
-  EthereumTransaction({
-    required this.from,
-    required this.to,
-    required this.value,
-    this.nonce,
-    this.gasPrice,
-    this.maxFeePerGas,
-    this.maxPriorityFeePerGas,
-    this.gas,
-    this.gasLimit,
-    this.data,
-  });
+  @JsonSerializable(includeIfNull: false)
+  factory EthereumTransaction({
+    required String from,
+    required String to,
+    required String value,
+    String? nonce,
+    String? gasPrice,
+    String? maxFeePerGas,
+    String? maxPriorityFeePerGas,
+    String? gas,
+    String? gasLimit,
+    String? data,
+  }) = _EthereumTransaction;
 
   factory EthereumTransaction.fromJson(Map<String, dynamic> json) =>
       _$EthereumTransactionFromJson(json);
-
-  Map<String, dynamic> toJson() => _$EthereumTransactionToJson(this);
 
   @override
   String toString() {

@@ -1,4 +1,4 @@
 #!/usr/bin/env sh
-flutter clean
-flutter packages pub get
+fvm flutter clean
+fvm flutter packages pub get
 ./build_runner.sh

@@ -62,12 +62,6 @@ class AddTicketTierPricingForm extends StatelessWidget {
             event: event ?? Event(),
           ),
         ),
-        BlocProvider(
-          create: (context) => WalletBloc()
-            ..add(
-              const WalletEvent.getActiveSessions(),
-            ),
-        ),
       ],
       child: AddTicketTierPricingFormView(
         onConfirm: onConfirm,
