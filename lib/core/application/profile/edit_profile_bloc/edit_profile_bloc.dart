@@ -183,6 +183,11 @@ class EditProfileBloc extends Cubit<EditProfileState> {
       }
     } catch (e) {
       debugPrint('Error uploading file: $e');
+      emit(
+        state.copyWith(
+          status: EditProfileStatus.error,
+        ),
+      );
     }
   }
 
