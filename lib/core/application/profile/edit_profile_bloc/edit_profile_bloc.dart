@@ -174,24 +174,16 @@ class EditProfileBloc extends Cubit<EditProfileState> {
     final client = getIt<AppGQL>().client;
     final fileUploadService = FileUploadService(client);
     try {
-      await fileUploadService.uploadFile(state.profilePhoto);
-      print('File upload successful!');
+      String? imageId = await fileUploadService.uploadSingleFile(
+        state.profilePhoto,
+        FileDirectory.user,
+      );
+      if (imageId != null) {
+        mImageId = imageId;
+      }
     } catch (e) {
-      print('Error uploading file: $e');
+      debugPrint('Error uploading file: $e');
     }
-
-    // final response = await postService.uploadImage(
-    //   state.profilePhoto!,
-    //   directory: 'photos',
-    // );
-    // response.fold(
-    //   (l) => emit(
-    //     state.copyWith(
-    //       status: EditProfileStatus.error,
-    //     ),
-    //   ),
-    //   (imageId) => mImageId = imageId,
-    // );
   }
 
   Future<void> editProfile() async {
