@@ -2,8 +2,11 @@ import 'package:app/core/domain/common/common_enums.dart';
 import 'package:app/core/domain/onboarding/onboarding_inputs.dart';
 import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/presentation/pages/setting/enums/notification_type.dart';
+import 'package:app/core/service/file/file_upload_service.dart';
 import 'package:app/core/service/post/post_service.dart';
+import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/core/utils/image_utils.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -168,18 +171,27 @@ class EditProfileBloc extends Cubit<EditProfileState> {
   }
 
   Future<void> uploadImage() async {
-    final response = await postService.uploadImage(
-      state.profilePhoto!,
-      directory: 'photos',
-    );
-    response.fold(
-      (l) => emit(
-        state.copyWith(
-          status: EditProfileStatus.error,
-        ),
-      ),
-      (imageId) => mImageId = imageId,
-    );
+    final client = getIt<AppGQL>().client;
+    final fileUploadService = FileUploadService(client);
+    try {
+      await fileUploadService.uploadFile(state.profilePhoto);
+      print('File upload successful!');
+    } catch (e) {
+      print('Error uploading file: $e');
+    }
+
+    // final response = await postService.uploadImage(
+    //   state.profilePhoto!,
+    //   directory: 'photos',
+    // );
+    // response.fold(
+    //   (l) => emit(
+    //     state.copyWith(
+    //       status: EditProfileStatus.error,
+    //     ),
+    //   ),
+    //   (imageId) => mImageId = imageId,
+    // );
   }
 
   Future<void> editProfile() async {
