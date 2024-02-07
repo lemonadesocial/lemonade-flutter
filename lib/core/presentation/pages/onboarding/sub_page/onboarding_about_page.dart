@@ -20,7 +20,7 @@ import 'package:app/core/presentation/widgets/common/button/linear_gradient_butt
 
 @RoutePage()
 class OnboardingAboutPage extends StatelessWidget {
-  const OnboardingAboutPage({Key? key}) : super(key: key);
+  const OnboardingAboutPage({super.key});
 
   @override
   Widget build(BuildContext context) {

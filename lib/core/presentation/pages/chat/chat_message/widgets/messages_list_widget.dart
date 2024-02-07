@@ -14,9 +14,9 @@ import 'package:scroll_to_index/scroll_to_index.dart';
 class MessagesList extends StatelessWidget {
   final ChatController controller;
   const MessagesList({
-    Key? key,
+    super.key,
     required this.controller,
-  }) : super(key: key);
+  });
 
   int? findChildIndexCallback(Key key, Map<String, int> thisEventsKeyMap) {
     // this method is called very often. As such, it has to be optimized for speed.

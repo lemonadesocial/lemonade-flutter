@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SettingDeleteAccountDialog extends StatefulWidget {
-  const SettingDeleteAccountDialog({Key? key}) : super(key: key);
+  const SettingDeleteAccountDialog({super.key});
 
   @override
   State<SettingDeleteAccountDialog> createState() =>

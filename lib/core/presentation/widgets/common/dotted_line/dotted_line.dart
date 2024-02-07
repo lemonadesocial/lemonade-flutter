@@ -22,7 +22,7 @@ import 'package:flutter/material.dart';
 class DottedLine extends StatelessWidget {
   /// Creates dotted line with the given parameters
   const DottedLine({
-    Key? key,
+    super.key,
     this.direction = Axis.horizontal,
     this.alignment = WrapAlignment.center,
     this.lineLength = double.infinity,
@@ -42,8 +42,7 @@ class DottedLine extends StatelessWidget {
         assert(
             dashGapGradient == null || dashGapGradient.length == 2,
             'The dashGapGradient must have only two colors.\n'
-            'The beginning color and the ending color of the gradient.'),
-        super(key: key);
+            'The beginning color and the ending color of the gradient.');
 
   /// The direction of the entire dotted line. Default [Axis.horizontal].
   final Axis direction;

@@ -8,7 +8,7 @@ import 'package:app/gen/assets.gen.dart';
 
 class GenderChipWidget extends StatelessWidget {
   const GenderChipWidget({
-    Key? key,
+    super.key,
     required this.label,
     required this.leading,
     required this.onSelect,
@@ -16,7 +16,7 @@ class GenderChipWidget extends StatelessWidget {
     required this.inActiveColor,
     required this.defaultColor,
     this.isSelected,
-  }) : super(key: key);
+  });
 
   final String label;
   final SvgGenImage leading;

@@ -47,20 +47,18 @@ class MessageActions extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                ...defaultEmojis
-                    .map(
-                      (emoji) => InkWell(
-                        onTap: () {
-                          Navigator.of(context).pop();
-                          onReact?.call(emoji);
-                        },
-                        child: Text(
-                          emoji,
-                          style: const TextStyle(fontSize: 36),
-                        ),
-                      ),
-                    )
-                    .toList(),
+                ...defaultEmojis.map(
+                  (emoji) => InkWell(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      onReact?.call(emoji);
+                    },
+                    child: Text(
+                      emoji,
+                      style: const TextStyle(fontSize: 36),
+                    ),
+                  ),
+                ),
                 IconButton(
                   onPressed: () async {
                     Navigator.of(context).pop();

@@ -9,10 +9,10 @@ import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 
 class CreatePostImageWidget extends StatelessWidget {
   const CreatePostImageWidget({
-    Key? key,
+    super.key,
     required this.imageFile,
     required this.onDismiss,
-  }) : super(key: key);
+  });
 
   final XFile imageFile;
   final VoidCallback onDismiss;

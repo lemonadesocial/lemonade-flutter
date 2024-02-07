@@ -13,10 +13,10 @@ import 'package:image_picker/image_picker.dart';
 
 class EditProfileAvatar extends StatelessWidget {
   const EditProfileAvatar({
-    Key? key,
+    super.key,
     this.imageUrl,
     this.imageFile,
-  }) : super(key: key);
+  });
 
   final String? imageUrl;
   final XFile? imageFile;

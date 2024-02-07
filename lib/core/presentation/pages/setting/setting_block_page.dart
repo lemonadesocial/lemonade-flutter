@@ -18,7 +18,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 @RoutePage()
 class SettingBlockPage extends StatefulWidget {
-  const SettingBlockPage({Key? key}) : super(key: key);
+  const SettingBlockPage({super.key});
 
   @override
   State<SettingBlockPage> createState() => _SettingBlockPageState();

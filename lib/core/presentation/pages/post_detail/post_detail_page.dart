@@ -24,10 +24,10 @@ class PostDetailPage extends StatelessWidget {
   final TogglePostReactionBloc togglePostReactionBloc;
 
   const PostDetailPage({
-    Key? key,
+    super.key,
     required this.post,
     required this.togglePostReactionBloc,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

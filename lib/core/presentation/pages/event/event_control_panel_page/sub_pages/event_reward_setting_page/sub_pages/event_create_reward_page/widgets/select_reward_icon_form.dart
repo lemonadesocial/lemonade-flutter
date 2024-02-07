@@ -23,10 +23,10 @@ class SelectRewardIconForm extends StatefulWidget {
   final Reward? initialReward;
 
   const SelectRewardIconForm({
-    Key? key,
+    super.key,
     required this.onConfirm,
     this.initialReward,
-  }) : super(key: key);
+  });
 
   @override
   SelectRewardIconFormState createState() => SelectRewardIconFormState();

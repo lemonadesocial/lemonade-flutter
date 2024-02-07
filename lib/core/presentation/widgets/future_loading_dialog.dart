@@ -57,12 +57,12 @@ class LoadingDialog<T> extends StatefulWidget {
   bool get isCupertinoStyle => !kIsWeb && Platform.isIOS;
 
   const LoadingDialog({
-    Key? key,
+    super.key,
     required this.future,
     this.title,
     this.onError,
     this.backLabel,
-  }) : super(key: key);
+  });
   @override
   LoadingDialogState<T> createState() => LoadingDialogState<T>();
 }

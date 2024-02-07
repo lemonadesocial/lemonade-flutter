@@ -130,7 +130,7 @@ class OtherTicketItem extends StatelessWidget {
                     price: ticketPrice,
                   ),
                 );
-              }).toList(),
+              }),
             ],
           ),
         ),

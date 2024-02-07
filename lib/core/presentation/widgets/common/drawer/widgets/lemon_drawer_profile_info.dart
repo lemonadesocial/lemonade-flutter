@@ -19,8 +19,8 @@ import 'package:slang/builder/utils/string_extensions.dart';
 
 class LemonDrawerProfileInfo extends StatelessWidget {
   const LemonDrawerProfileInfo({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

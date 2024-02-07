@@ -27,7 +27,7 @@ import 'package:app/core/presentation/pages/create_post/widgets/create_post_imag
 
 @RoutePage()
 class CreatePostPage extends StatelessWidget {
-  const CreatePostPage({Key? key}) : super(key: key);
+  const CreatePostPage({super.key});
 
   @override
   Widget build(BuildContext context) {

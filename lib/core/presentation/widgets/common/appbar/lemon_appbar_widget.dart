@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
   const LemonAppBar({
-    Key? key,
+    super.key,
     this.title,
     this.titleBuilder,
     this.leading,
@@ -13,7 +13,7 @@ class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.padding,
     this.hideLeading,
     this.bottom,
-  }) : super(key: key);
+  });
 
   final Widget? leading;
   final String? title;

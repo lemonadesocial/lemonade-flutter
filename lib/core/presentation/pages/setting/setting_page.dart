@@ -35,7 +35,7 @@ class SettingPage extends StatelessWidget {
 }
 
 class SettingPageView extends StatelessWidget {
-  const SettingPageView({Key? key}) : super(key: key);
+  const SettingPageView({super.key});
 
   Future<String> getVersion() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();

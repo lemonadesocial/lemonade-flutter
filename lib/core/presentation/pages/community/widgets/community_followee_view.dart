@@ -13,7 +13,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CommunityFolloweeView extends StatelessWidget {
-  const CommunityFolloweeView({Key? key}) : super(key: key);
+  const CommunityFolloweeView({super.key});
 
   @override
   Widget build(BuildContext context) {

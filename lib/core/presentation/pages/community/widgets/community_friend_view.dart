@@ -16,7 +16,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 
 class CommunityFriendView extends StatelessWidget {
-  const CommunityFriendView({Key? key}) : super(key: key);
+  const CommunityFriendView({super.key});
 
   @override
   Widget build(BuildContext context) {

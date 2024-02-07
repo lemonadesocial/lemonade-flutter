@@ -43,8 +43,8 @@ class MessageItem extends StatefulWidget {
     this.scrollToEventId,
     this.selected = false,
     required this.timeline,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<MessageItem> createState() => _MessageItemState();

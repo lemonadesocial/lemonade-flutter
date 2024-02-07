@@ -14,9 +14,9 @@ class MessageContent extends StatelessWidget {
   const MessageContent(
     this.event, {
     this.onInfoTab,
-    Key? key,
+    super.key,
     required this.textColor,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -240,8 +240,7 @@ class _ButtonContent extends StatelessWidget {
     required this.icon,
     required this.textColor,
     required this.onPressed,
-    Key? key,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

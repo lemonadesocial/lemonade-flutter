@@ -19,7 +19,7 @@ import 'package:slang/builder/utils/string_extensions.dart';
 
 @RoutePage()
 class NotificationSettingPage extends StatelessWidget {
-  const NotificationSettingPage({Key? key}) : super(key: key);
+  const NotificationSettingPage({super.key});
 
   @override
   Widget build(BuildContext context) {

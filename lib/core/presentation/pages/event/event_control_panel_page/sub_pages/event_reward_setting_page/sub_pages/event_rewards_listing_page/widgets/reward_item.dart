@@ -52,19 +52,17 @@ class RewardItem extends StatelessWidget {
         final result = await getIt<EventRewardRepository>().deleteEventReward(
           eventId: eventId,
           input: [
-            ...newRewards
-                .map(
-                  (reward) => Input$EventRewardInput(
-                    $_id: reward.id,
-                    active: reward.active!,
-                    title: reward.title!,
-                    limit: reward.limit?.toDouble(),
-                    limit_per: reward.limitPer!.toDouble(),
-                    icon_color: reward.iconColor,
-                    icon_url: reward.iconUrl,
-                  ),
-                )
-                .toList(),
+            ...newRewards.map(
+              (reward) => Input$EventRewardInput(
+                $_id: reward.id,
+                active: reward.active!,
+                title: reward.title!,
+                limit: reward.limit?.toDouble(),
+                limit_per: reward.limitPer!.toDouble(),
+                icon_color: reward.iconColor,
+                icon_url: reward.iconUrl,
+              ),
+            ),
           ],
         );
         if (result.isRight()) {
