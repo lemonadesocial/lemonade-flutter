@@ -321,7 +321,7 @@ type File {
   state: FileState!
   owner: MongoID!
   type: String!
-  size: Float!
+  size: Float
   url: String!
   bucket: String!
   key: String!
@@ -1986,6 +1986,8 @@ type Mutation {
   createFile(input: FileInput, url: String!): File!
   updateFile(input: FileInput!, _id: MongoID!): File!
   toggleFileLike(_id: MongoID!): File!
+  createFileUploads(upload_infos: [FileUploadInfo!]!, directory: String!): [FileWithPresignedUrl!]!
+  confirmFileUploads(ids: [MongoID!]!): Boolean!
   flagUser(_id: MongoID!, reason: String!): Boolean!
   flagEvent(_id: MongoID!, reason: String!): Boolean!
   flagPost(_id: MongoID!, reason: String!): Boolean!
@@ -2380,6 +2382,34 @@ input EventTicketTypeOffersInput {
 
 input FileInput {
   description: String
+}
+
+type FileWithPresignedUrl {
+  _id: MongoID
+  stamp: DateTimeISO!
+  state: FileState!
+  owner: MongoID!
+  type: String!
+  size: Float
+  url: String!
+  bucket: String!
+  key: String!
+  links: [FileLink!]
+  likes: Float!
+  likers: [MongoID!]
+  description: String
+  owner_expanded: User
+  liked: Boolean
+  link_events_expanded(skip: Int! = 0, limit: Int! = 25): [Event]
+  link_stores_expanded(skip: Int! = 0, limit: Int! = 25): [Store]
+  link_store_products_expanded(skip: Int! = 0, limit: Int! = 25): [StoreProduct]
+  link_users_expanded(skip: Int! = 0, limit: Int! = 25): [User]
+  presigned_url: String!
+}
+
+input FileUploadInfo {
+  description: String
+  extension: String!
 }
 
 input CreateNewPaymentAccountInput {

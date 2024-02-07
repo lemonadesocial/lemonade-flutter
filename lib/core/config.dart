@@ -35,9 +35,6 @@ class AppConfig {
   // Matrix
   static get matrixHomeserver => dotenv.env['MATRIX_HOMESERVER'];
 
-  // Legacy api
-  static get legacyApi => dotenv.env['LMD_API_LEGACY'];
-
   /// Matrix chat
   static get pushNotificationsAppId => dotenv.env['PUSH_NOTIFICATION_APP_ID'];
 
