@@ -18,7 +18,7 @@ class UserDto with _$UserDto {
     @JsonKey(name: 'last_name', includeIfNull: false) String? lastName,
     @JsonKey(name: 'image_avatar', includeIfNull: false) String? imageAvatar,
     @JsonKey(name: 'new_photos_expanded', includeIfNull: false)
-    List<DbFileDto>? newPhotosExpanded,
+    List<DbFileDto?>? newPhotosExpanded,
     @JsonKey(name: 'date_of_birth', includeIfNull: false) DateTime? dateOfBirth,
     @JsonKey(name: 'phone_verified', includeIfNull: false) bool? phoneVerified,
     @JsonKey(name: 'google_user_info', includeIfNull: false)
