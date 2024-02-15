@@ -97,7 +97,12 @@ class User with _$User {
       firstName: dto.firstName,
       lastName: dto.lastName,
       imageAvatar: dto.imageAvatar,
-      newPhotosExpanded: dto.newPhotosExpanded?.map(DbFile.fromDto).toList(),
+      newPhotosExpanded: (dto.newPhotosExpanded ?? [])
+          .where((item) => item != null)
+          .map(
+            (item) => DbFile.fromDto(item!),
+          )
+          .toList(),
       dateOfBirth: dto.dateOfBirth,
       phoneVerified: dto.phoneVerified,
       googleUserInfo: dto.googleUserInfo != null

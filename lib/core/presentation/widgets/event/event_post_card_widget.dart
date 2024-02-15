@@ -127,7 +127,7 @@ class EventPostCard extends StatelessWidget {
       height: Sizing.small,
       child: Stack(
         children: hosts.asMap().entries.map((entry) {
-          final file = (entry.value?.newPhotosExpanded != null)
+          final file = (entry.value?.newPhotosExpanded?.isNotEmpty == true)
               ? entry.value?.newPhotosExpanded!.first
               : null;
           return Positioned(
