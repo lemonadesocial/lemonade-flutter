@@ -1,16 +1,12 @@
 import 'package:app/core/data/event/dtos/event_join_request_dto/event_join_request_dto.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_join_request.dart';
-import 'package:app/core/domain/event/event_repository.dart';
-import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/widgets/event_join_request_actions_bar.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/widgets/event_join_request_item.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
-import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/graphql/backend/event/query/get_event_join_request.graphql.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/injection/register_module.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -23,10 +19,15 @@ enum ModifyJoinRequestAction {
 class EventJoinRequestList extends StatefulWidget {
   final Enum$JoinRequestState state;
   final Event? event;
+  final Widget Function({
+    required EventJoinRequest eventJoinRequest,
+    void Function()? refresh,
+  })? itemBuilder;
   const EventJoinRequestList({
     super.key,
     required this.state,
     this.event,
+    this.itemBuilder,
   });
 
   @override
@@ -34,33 +35,6 @@ class EventJoinRequestList extends StatefulWidget {
 }
 
 class _EventJoinRequestListState extends State<EventJoinRequestList> {
-  Future<void> _modifyJoinRequest({
-    required eventId,
-    required EventJoinRequest joinRequest,
-    required ModifyJoinRequestAction action,
-  }) async {
-    await showFutureLoadingDialog(
-      context: context,
-      future: () async {
-        if (action == ModifyJoinRequestAction.approve) {
-          return await getIt<EventRepository>().approveUserJoinRequest(
-            input: Input$ApproveUserJoinRequestsInput(
-              event: eventId,
-              requests: [joinRequest.id ?? ''],
-            ),
-          );
-        }
-
-        return await getIt<EventRepository>().declineUserJoinRequest(
-          input: Input$DeclineUserJoinRequestsInput(
-            event: eventId,
-            requests: [joinRequest.id ?? ''],
-          ),
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
@@ -101,9 +75,9 @@ class _EventJoinRequestListState extends State<EventJoinRequestList> {
           }).toList();
 
           if (joinRequests.isEmpty) {
-            return const Center(
+            return Center(
               child: EmptyList(
-                emptyText: '',
+                emptyText: t.event.eventApproval.noRequestFound,
               ),
             );
           }
@@ -121,32 +95,15 @@ class _EventJoinRequestListState extends State<EventJoinRequestList> {
                   SliverList.separated(
                     itemCount: joinRequests.length,
                     itemBuilder: (context, index) {
-                      final joinRequest = joinRequests[index];
+                      if (widget.itemBuilder != null) {
+                        return widget.itemBuilder!(
+                          eventJoinRequest: joinRequests[index],
+                          refresh: () => refetch?.call(),
+                        );
+                      }
+
                       return EventJoinRequestItem(
                         eventJoinRequest: joinRequests[index],
-                        actionBarBuilder: () {
-                          if (widget.state == Enum$JoinRequestState.pending) {
-                            return EventJoinRequestActionsBar(
-                              onPressApprove: () async {
-                                await _modifyJoinRequest(
-                                  eventId: eventId,
-                                  joinRequest: joinRequest,
-                                  action: ModifyJoinRequestAction.approve,
-                                );
-                                refetch?.call();
-                              },
-                              onPressDecline: () async {
-                                await _modifyJoinRequest(
-                                  eventId: eventId,
-                                  joinRequest: joinRequest,
-                                  action: ModifyJoinRequestAction.decline,
-                                );
-                                refetch?.call();
-                              },
-                            );
-                          }
-                          return const SizedBox.shrink();
-                        },
                       );
                     },
                     separatorBuilder: (context, index) => SizedBox(
