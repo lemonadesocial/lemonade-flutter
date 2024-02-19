@@ -4,6 +4,7 @@ import 'package:app/core/application/poap/claim_poap_bloc/claim_poap_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/poap/input/poap_input.dart';
 import 'package:app/core/domain/token/entities/token_entities.dart';
+import 'package:app/core/presentation/widgets/common/app_backdrop/app_backdrop.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
@@ -101,22 +102,31 @@ class GuestEventPoapOfferItemState extends State<GuestEventPoapOfferItemView>
                         LemonRadius.small,
                       ),
                     ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(LemonRadius.xSmall),
-                      child: CachedNetworkImage(
-                        fit: BoxFit.cover,
-                        imageUrl: snapshot.data?.url ?? '',
-                        placeholder: (_, __) =>
-                            ImagePlaceholder.defaultPlaceholder(),
-                        errorWidget: (_, __, ___) =>
-                            ImagePlaceholder.defaultPlaceholder(),
-                      ),
+                    child: Stack(
+                      children: [
+                        Opacity(
+                          opacity: 0.5,
+                          child: ImageFiltered(
+                            imageFilter:
+                                ImageFilter.blur(sigmaX: 40, sigmaY: 40),
+                            child: CachedNetworkImage(
+                              fit: BoxFit.cover,
+                              imageUrl: snapshot.data?.url ?? '',
+                              placeholder: (_, __) =>
+                                  ImagePlaceholder.defaultPlaceholder(),
+                              errorWidget: (_, __, ___) =>
+                                  ImagePlaceholder.defaultPlaceholder(),
+                            ),
+                          ),
+                        ),
+                        const AppBackdrop(),
+                      ],
                     ),
                   ),
                 ),
               ),
             ),
-            const _Blur(),
+            // AppBackdrop(),
             Container(
               decoration: BoxDecoration(
                 color: colorScheme.onPrimary.withOpacity(0.05),
