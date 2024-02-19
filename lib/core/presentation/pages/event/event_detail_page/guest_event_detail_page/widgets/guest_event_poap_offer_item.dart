@@ -313,28 +313,3 @@ class GuestEventPoapOfferItemState extends State<GuestEventPoapOfferItemView>
     );
   }
 }
-
-class _Blur extends StatelessWidget {
-  const _Blur();
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: Sizing.xLarge * 3.5,
-      height: Sizing.xLarge * 3.5,
-      child: ClipRRect(
-        child: BackdropFilter(
-          filter: ImageFilter.blur(
-            sigmaX: 50,
-            sigmaY: 50,
-          ),
-          child: Container(
-            width: Sizing.xLarge * 3.5,
-            height: Sizing.xLarge * 3.5,
-            color: Colors.black.withOpacity(0.5),
-          ),
-        ),
-      ),
-    );
-  }
-}

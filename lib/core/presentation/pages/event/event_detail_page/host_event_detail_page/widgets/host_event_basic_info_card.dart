@@ -5,6 +5,7 @@ import 'package:app/core/domain/event/entities/event_ticket.dart';
 import 'package:app/core/domain/event/input/get_tickets_input/get_tickets_input.dart';
 import 'package:app/core/domain/event/repository/event_ticket_repository.dart';
 import 'package:app/core/failure.dart';
+import 'package:app/core/presentation/widgets/common/app_backdrop/app_backdrop.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/auth_utils.dart';
@@ -67,13 +68,16 @@ class HostEventBasicInfoCard extends StatelessWidget {
               Positioned.fill(
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(15.r),
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(
-                      sigmaX: 40,
-                      sigmaY: 40,
-                    ),
-                    child: Container(
-                      color: colorScheme.onPrimary.withOpacity(0.06),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          colorScheme.onPrimary.withOpacity(0.02),
+                          colorScheme.onPrimary.withOpacity(0.06),
+                        ],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                      ),
                     ),
                   ),
                 ),

@@ -108,7 +108,7 @@ class GuestEventDetailClock extends StatelessWidget {
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
-                          colorScheme.onPrimary.withOpacity(0.03),
+                          colorScheme.onPrimary.withOpacity(0.02),
                           colorScheme.onPrimary.withOpacity(0.06),
                         ],
                         begin: Alignment.topCenter,
