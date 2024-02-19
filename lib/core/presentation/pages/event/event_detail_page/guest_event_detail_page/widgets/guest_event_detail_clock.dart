@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_ticket.dart';
 import 'package:app/core/domain/event/input/get_tickets_input/get_tickets_input.dart';
@@ -104,14 +102,16 @@ class GuestEventDetailClock extends StatelessWidget {
               Positioned.fill(
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(15.r),
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(
-                      sigmaX: 40,
-                      sigmaY: 40,
-                    ),
-                    child: Container(
-                      // color: Colors.red,
-                      color: colorScheme.onPrimary.withOpacity(0.06),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          colorScheme.onPrimary.withOpacity(0.02),
+                          colorScheme.onPrimary.withOpacity(0.06),
+                        ],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                      ),
                     ),
                   ),
                 ),
