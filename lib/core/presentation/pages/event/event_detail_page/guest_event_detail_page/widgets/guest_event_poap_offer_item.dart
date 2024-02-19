@@ -126,7 +126,6 @@ class GuestEventPoapOfferItemState extends State<GuestEventPoapOfferItemView>
                 ),
               ),
             ),
-            // AppBackdrop(),
             Container(
               decoration: BoxDecoration(
                 color: colorScheme.onPrimary.withOpacity(0.05),

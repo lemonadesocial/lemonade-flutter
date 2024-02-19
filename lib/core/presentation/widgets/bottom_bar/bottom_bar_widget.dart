@@ -57,17 +57,20 @@ class BottomBarState extends State<BottomBar>
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return BottomAppBar(
+      notchMargin: 0,
+      padding: EdgeInsets.zero,
+      elevation: 0.0,
+      shape: const CircularNotchedRectangle(),
       height: BottomBar.bottomBarHeight,
       color: colorScheme.surfaceVariant,
-      shape: const CircularNotchedRectangle(),
-      notchMargin: 6.w,
       child: ClipRect(
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             _buildTabItem(context, tabs[0]),
             _buildTabItem(context, tabs[1]),
             Container(
-              width: 65.w,
+              width: 45.w,
               height: BottomBar.bottomBarHeight,
               color: Colors.transparent,
             ),
@@ -79,7 +82,10 @@ class BottomBarState extends State<BottomBar>
     );
   }
 
-  Widget _buildTabItem(BuildContext context, TabData tabData) {
+  Widget _buildTabItem(
+    BuildContext context,
+    TabData tabData,
+  ) {
     final isSelected = _selectedTab == tabData.tab;
     final icon = _buildIcon(context, tabData, isSelected);
     return Expanded(
