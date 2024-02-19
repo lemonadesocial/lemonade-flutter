@@ -10,46 +10,78 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class JoinRequestUserAvatar extends StatelessWidget {
   final User? user;
+  final Axis direction;
+  final double? avatarSize;
+
   const JoinRequestUserAvatar({
     super.key,
     this.user,
+    this.direction = Axis.horizontal,
+    this.avatarSize,
   });
+
+  double get _size => avatarSize ?? Sizing.medium;
+
+  @override
+  Widget build(BuildContext context) {
+    return direction == Axis.horizontal
+        ? Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              _avatar(),
+              SizedBox(width: Spacing.xSmall),
+              _Name(user: user),
+            ],
+          )
+        : Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _avatar(),
+              SizedBox(height: Spacing.small),
+              _Name(user: user),
+            ],
+          );
+  }
+
+  Widget _avatar() {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(Sizing.medium),
+      child: CachedNetworkImage(
+        width: _size,
+        height: _size,
+        imageUrl: user?.imageAvatar ?? '',
+        placeholder: (_, __) => ImagePlaceholder.defaultPlaceholder(),
+        errorWidget: (_, __, ___) => ImagePlaceholder.defaultPlaceholder(),
+      ),
+    );
+  }
+}
+
+class _Name extends StatelessWidget {
+  const _Name({
+    required this.user,
+  });
+  final User? user;
 
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(Sizing.medium),
-          child: CachedNetworkImage(
-            width: Sizing.medium,
-            height: Sizing.medium,
-            imageUrl: user?.imageAvatar ?? '',
-            placeholder: (_, __) => ImagePlaceholder.defaultPlaceholder(),
-            errorWidget: (_, __, ___) => ImagePlaceholder.defaultPlaceholder(),
+        Text(
+          user?.displayName ?? t.common.anonymous,
+          style: Typo.medium.copyWith(
+            color: colorScheme.onPrimary,
           ),
         ),
-        SizedBox(width: Spacing.xSmall),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              user?.displayName ?? t.common.anonymous,
-              style: Typo.medium.copyWith(
-                color: colorScheme.onPrimary,
-              ),
-            ),
-            SizedBox(height: 2.w),
-            Text(
-              '@${user?.username ?? t.common.anonymous}',
-              style: Typo.small.copyWith(
-                color: colorScheme.onSecondary,
-              ),
-            ),
-          ],
+        SizedBox(height: 2.w),
+        Text(
+          '@${user?.username ?? t.common.anonymous}',
+          style: Typo.small.copyWith(
+            color: colorScheme.onSecondary,
+          ),
         ),
       ],
     );

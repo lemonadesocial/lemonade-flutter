@@ -241,6 +241,9 @@ final eventDetailRoutes = AutoRoute(
     AutoRoute(
       page: EventApprovalSettingRoute.page,
     ),
+    AutoRoute(
+      page: EventJoinRequestDetailRoute.page,
+    ),
   ],
 );
 

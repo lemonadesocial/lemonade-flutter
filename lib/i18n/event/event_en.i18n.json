@@ -290,7 +290,19 @@
             "rejected": "Rejected"
         },
         "yourRequestDeclined": "Your join request has been declined.",
-        "noRequestFound": "No requests found"
+        "noRequestFound": "No requests found",
+        "appliedForReservation": "Applied for reservation",
+        "pendingApproval" : "Pending approval",
+        "approveToLetThemIn": "Approve to let them in",
+        "approvedBy": "Approved by $name",
+        "declinedBy": "Declined by $name",
+        "viewApplication": "View Application",
+        "application": "Application",
+        "guestDetail": "Guest details",
+        "applicationQuestions(ordinal)": {
+            "one": "$count question",
+            "other": "$count questions"
+        } 
     },
     "allTicketTiers": "All ticket tiers",
     "claimed": "claimed",

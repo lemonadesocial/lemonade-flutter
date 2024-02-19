@@ -137,6 +137,7 @@ dependencies:
   flutter_timezone: ^1.0.8
   currency_text_input_formatter: ^2.1.10
   mobile_scanner: 3.5.5
+  modal_bottom_sheet: ^3.0.0-pre
   
 dependency_overrides:
   matrix_api_lite:

@@ -15,6 +15,8 @@ class EventJoinRequestTicketInfo extends StatelessWidget {
   final Color? borderColor;
   final double? radius;
   final TextStyle? textStyle;
+  final EdgeInsets? padding;
+  final Function()? onPress;
 
   const EventJoinRequestTicketInfo({
     super.key,
@@ -24,6 +26,8 @@ class EventJoinRequestTicketInfo extends StatelessWidget {
     this.borderColor,
     this.radius,
     this.textStyle,
+    this.padding,
+    this.onPress,
   });
 
   int get totalTicketCount => (eventJoinRequest.ticketInfo ?? [])
@@ -37,59 +41,65 @@ class EventJoinRequestTicketInfo extends StatelessWidget {
     final _borderColor = borderColor ?? colorScheme.outline;
     final _radius = radius ?? LemonRadius.xSmall;
     final _textStyle = textStyle ?? Typo.small;
+    final _padding = padding ?? EdgeInsets.all(Spacing.xSmall);
 
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            color: backgroundColor,
-            border: Border.all(color: _borderColor),
-            borderRadius: BorderRadius.circular(_radius),
-          ),
-          padding: EdgeInsets.all(Spacing.xSmall),
-          child: Row(
-            children: [
-              ThemeSvgIcon(
-                color: colorScheme.onSecondary,
-                builder: (colorFilter) => Assets.icons.icTicket.svg(
-                  colorFilter: colorFilter,
-                  width: Sizing.xSmall,
-                  height: Sizing.xSmall,
-                ),
-              ),
-              SizedBox(width: Spacing.superExtraSmall),
-              Text('$totalTicketCount', style: _textStyle),
-            ],
-          ),
-        ),
-        if (showPrice) ...[
-          SizedBox(width: Spacing.superExtraSmall),
+    return InkWell(
+      onTap: () {
+        onPress?.call();
+      },
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
           Container(
             decoration: BoxDecoration(
               color: backgroundColor,
               border: Border.all(color: _borderColor),
               borderRadius: BorderRadius.circular(_radius),
             ),
-            padding: EdgeInsets.all(Spacing.xSmall),
+            padding: _padding,
             child: Row(
               children: [
                 ThemeSvgIcon(
                   color: colorScheme.onSecondary,
-                  builder: (colorFilter) => Assets.icons.icCashVariant.svg(
+                  builder: (colorFilter) => Assets.icons.icTicket.svg(
                     colorFilter: colorFilter,
                     width: Sizing.xSmall,
                     height: Sizing.xSmall,
                   ),
                 ),
                 SizedBox(width: Spacing.superExtraSmall),
-                // TODO: will calculate total cost here
-                Text('\$300', style: _textStyle),
+                Text('$totalTicketCount', style: _textStyle),
               ],
             ),
           ),
+          if (showPrice) ...[
+            SizedBox(width: Spacing.superExtraSmall),
+            Container(
+              decoration: BoxDecoration(
+                color: backgroundColor,
+                border: Border.all(color: _borderColor),
+                borderRadius: BorderRadius.circular(_radius),
+              ),
+              padding: _padding,
+              child: Row(
+                children: [
+                  ThemeSvgIcon(
+                    color: colorScheme.onSecondary,
+                    builder: (colorFilter) => Assets.icons.icCashVariant.svg(
+                      colorFilter: colorFilter,
+                      width: Sizing.xSmall,
+                      height: Sizing.xSmall,
+                    ),
+                  ),
+                  SizedBox(width: Spacing.superExtraSmall),
+                  // TODO: will calculate total cost here
+                  Text('\$300', style: _textStyle),
+                ],
+              ),
+            ),
+          ],
         ],
-      ],
+      ),
     );
   }
 }
