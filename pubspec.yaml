@@ -20,6 +20,7 @@ dependencies:
   # networking 
   graphql_flutter: ^5.1.2
   dio: ^5.3.2
+  http: ^1.1.2
 
   # data
   freezed_annotation: ^2.2.0
@@ -51,9 +52,9 @@ dependencies:
 
   # assets
   flutter_svg: ^2.0.7
-  cached_network_image: 3.3.0
+  cached_network_image: 3.3.1
   image_picker: ^1.0.2
-  image_cropper: ^4.0.1
+  image_cropper: ^5.0.1
 
   # UI
   flutter_portal: ^1.1.4
@@ -116,7 +117,7 @@ dependencies:
   shorebird_code_push: ^1.1.0
 
   # payment
-  flutter_stripe: ^9.4.0
+  flutter_stripe: 9.4.0
   
   # other
   path_provider: ^2.0.15
@@ -132,11 +133,16 @@ dependencies:
   formz: ^0.6.1
   flutter_app_badger: ^1.5.0
   uuid: ^3.0.7
-  flutter_google_places_hoc081098: ^1.2.0
-  google_maps_webservice: ^0.0.20-nullsafety.5
+  flutter_google_places_hoc081098: 2.0.0-beta.1
+  google_maps_webservice:
+    git:
+      url: https://github.com/mthinh/google_maps_webservice.git 
+      ref: master
   flutter_timezone: ^1.0.8
   currency_text_input_formatter: ^2.1.10
   mobile_scanner: 3.5.5
+  web3modal_flutter: 
+    path: ./packages/web3modal_flutter
   
 dependency_overrides:
   matrix_api_lite:
@@ -154,7 +160,7 @@ dev_dependencies:
     sdk: flutter
 
   # lints
-  flutter_lints: ^2.0.0
+  flutter_lints: ^3.0.1
 
   # code generators
   build_runner: ^2.4.7
@@ -163,7 +169,7 @@ dev_dependencies:
   auto_route_generator: ^7.1.1
   injectable_generator: ^2.1.6
   flutter_gen_runner: ^5.3.1
-  graphql_codegen: ^0.12.2
+  graphql_codegen: ^0.13.11
 
 # generate asset 
 flutter_gen:

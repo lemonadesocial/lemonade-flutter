@@ -208,6 +208,8 @@ definitions:
       name: Release shorebird ipa staging
       script: |
         BUILD_NUMBER=$(($(app-store-connect get-latest-testflight-build-number "$APP_ID") + 1))
+        shorebird flutter versions list
+        shorebird flutter versions use 3.16.9
         shorebird release ios-alpha --flavor staging -- \
           --build-number=$BUILD_NUMBER \
           --export-options-plist=/Users/builder/export_options.plist \
@@ -217,6 +219,8 @@ definitions:
       name: Release shorebird android apk staging
       script: |
         BUILD_NUMBER=$(($(google-play get-latest-build-number --package-name "$PACKAGE_NAME" --tracks="$GOOGLE_PLAY_TRACK") + 1))      
+        shorebird flutter versions list
+        shorebird flutter versions use 3.16.9
         shorebird release android --artifact apk --flavor staging -- \
           --build-number=$BUILD_NUMBER \
           --flavor="staging" \

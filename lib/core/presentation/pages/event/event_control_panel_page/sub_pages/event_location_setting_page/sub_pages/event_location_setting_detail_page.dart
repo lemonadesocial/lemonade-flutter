@@ -16,7 +16,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_google_places_hoc081098/flutter_google_places_hoc081098.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:formz/formz.dart';
-import 'package:google_maps_webservice/places.dart';
+import 'package:google_maps_webservice/places.dart' as google_places_service;
 import 'package:google_api_headers/google_api_headers.dart';
 
 @RoutePage()
@@ -212,7 +212,7 @@ class _EventLocationSettingDetailPageState
     final p = await PlacesAutocomplete.show(
       context: context,
       apiKey: AppConfig.googleMapKey,
-      onError: (PlacesAutocompleteResponse response) {
+      onError: (response) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(response.errorMessage ?? 'Unknown error'),
@@ -222,12 +222,14 @@ class _EventLocationSettingDetailPageState
       mode: Mode.overlay,
       resultTextStyle: Theme.of(context).textTheme.titleMedium,
     );
-
-    await displayPrediction(p, ScaffoldMessenger.of(context));
+    await displayPrediction(
+      p != null ? google_places_service.Prediction.fromJson(p.toJson()) : null,
+      ScaffoldMessenger.of(context),
+    );
   }
 
   Future<void> displayPrediction(
-    Prediction? p,
+    google_places_service.Prediction? p,
     ScaffoldMessengerState messengerState,
   ) async {
     if (p == null) {
@@ -235,7 +237,7 @@ class _EventLocationSettingDetailPageState
     }
     FocusScope.of(context).requestFocus(FocusNode());
     // Get place detail (lat/lng)
-    final places = GoogleMapsPlaces(
+    final places = google_places_service.GoogleMapsPlaces(
       apiKey: AppConfig.googleMapKey,
       apiHeaders: await const GoogleApiHeaders().getHeaders(),
     );

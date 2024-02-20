@@ -155,13 +155,7 @@ class _ERC20PricingMethodFormState extends State<ERC20PricingMethodForm> {
               ),
               if (walletState.activeSession == null) ...[
                 SizedBox(height: Spacing.xSmall),
-                ConnectWalletButton(
-                  onSelect: (walletApp) {
-                    context.read<WalletBloc>().add(
-                          WalletEvent.connectWallet(walletApp: walletApp),
-                        );
-                  },
-                ),
+                const ConnectWalletButton(),
               ],
             ],
           );

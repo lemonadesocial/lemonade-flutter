@@ -1,28 +1,13 @@
 import 'package:app/core/config.dart';
 import 'package:app/core/constants/web3/chains.dart';
+import 'package:app/core/domain/web3/entities/chain.dart';
 import 'package:app/core/domain/web3/entities/ethereum_transaction.dart';
 import 'package:app/core/domain/web3/web3_repository.dart';
+import 'package:app/core/utils/list/unique_list_extension.dart';
 import 'package:app/core/utils/wc_utils.dart';
-import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:injectable/injectable.dart';
-import 'package:url_launcher/url_launcher_string.dart';
-import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
-
-enum SupportedWalletApp {
-  metamask(
-    scheme: 'metamask',
-    url: 'https://metamask.io',
-  );
-
-  final String scheme;
-  final String url;
-
-  const SupportedWalletApp({
-    required this.scheme,
-    required this.url,
-  });
-}
+import 'package:web3modal_flutter/web3modal_flutter.dart';
 
 enum SupportedSessionEvent {
   accountsChanged,
@@ -60,10 +45,12 @@ class WalletConnectService {
   ];
   static const defaultEvents = SupportedSessionEvent.values;
 
-  Web3App? _app;
-  String? _url;
+  late W3MService _w3mService;
+  IWeb3App? _app;
   String? _currentWalletChainId;
   String? _currentWalletAccount;
+
+  W3MService get w3mService => _w3mService;
 
   bool get initialized => _app != null;
 
@@ -74,11 +61,30 @@ class WalletConnectService {
   Future<bool> init() async {
     try {
       if (initialized) return true;
-      _app = await Web3App.createInstance(
+      final chains =
+          (await getIt<Web3Repository>().getChainsList()).getOrElse(() => []);
+      final supportedChainIds =
+          chains.map((chain) => chain.fullChainId ?? '').toList();
+
+      final optionalNamespaces = W3MNamespace(
+        chains: [
+          ...supportedChainIds,
+          ...W3MChainPresets.chains.values.map((e) => e.namespace),
+        ].unique(),
+        methods: MethodsConstants.allMethods,
+        events: EventsConstants.allEvents,
+      );
+
+      _w3mService = W3MService(
         projectId: AppConfig.walletConnectProjectId,
         metadata: lemonadeDAppMetadata,
         logLevel: AppConfig.isProduction ? LogLevel.nothing : LogLevel.debug,
+        optionalNamespaces: {
+          defaultNamespace: optionalNamespaces,
+        },
       );
+      await _w3mService.init();
+      _app = _w3mService.web3App;
       // Register event handler for all chain in active session if available;
       final activeSession = await getActiveSession();
 
@@ -86,8 +92,6 @@ class WalletConnectService {
         WCUtils.getSessionsChains(activeSession?.namespaces),
       );
 
-      final chains =
-          (await getIt<Web3Repository>().getChainsList()).getOrElse(() => []);
       // Register event handler of all supported chains
       _registerEventHandler(
         chains.map((chain) => chain.fullChainId ?? '').toList(),
@@ -120,87 +124,16 @@ class WalletConnectService {
     return activeSessions?.first;
   }
 
-  Future<bool> connectWallet({
-    required SupportedWalletApp walletApp,
-    String? chainId,
-  }) async {
-    try {
-      if (_app == null) {
-        await init();
-      }
-
-      final chains =
-          (await getIt<Web3Repository>().getChainsList()).getOrElse(() => []);
-      final supportedChainIds =
-          chains.map((chain) => chain.fullChainId ?? '').toList();
-      final supportedEvents = defaultEvents.map((item) => item.name).toList();
-      final requiredNamespace = RequiredNamespace(
-        chains: chainId != null
-            ? [chainId]
-            : [AppConfig.isProduction ? ETHEREUM.chainId : GOERLI.chainId],
-        methods: defaultMethods,
-        events: supportedEvents,
-      );
-
-      final optionalNamespaces = RequiredNamespace(
-        chains: supportedChainIds,
-        methods: [...defaultMethods, ...optionalMethods],
-        events: supportedEvents,
-      );
-      final ConnectResponse connectResponse = await _app!.connect(
-        requiredNamespaces: {
-          defaultNamespace: requiredNamespace,
-        },
-        optionalNamespaces: {
-          defaultNamespace: optionalNamespaces,
-        },
-      );
-
-      final Uri? uri = connectResponse.uri;
-
-      if (uri != null) {
-        final String encodedUrl = Uri.encodeComponent('$uri');
-
-        _url = encodedUrl;
-
-        await launchUrlString(
-          _getDeepLinkUrl(walletApp),
-          mode: LaunchMode.externalApplication,
-        );
-
-        var session = await connectResponse.session.future;
-
-        _registerEventHandler(WCUtils.getSessionsChains(session.namespaces));
-
-        return true;
-      }
-      return false;
-    } on JsonRpcError catch (e) {
-      SnackBarUtils.showSnackbar(e.message ?? '');
-      return false;
-    } catch (e) {
-      return false;
-    }
-  }
-
   Future<String?> personalSign({
     required String message,
     required String wallet,
-    required SupportedWalletApp walletApp,
     String? chainId,
   }) async {
-    final activeSession = await getActiveSession();
-
-    launchUrlString(
-      _getDeepLinkUrl(walletApp),
-      mode: LaunchMode.externalApplication,
-    );
+    await _w3mService.launchConnectedWallet();
 
     final data = await _app!.request(
-      topic: activeSession!.topic,
-      chainId: chainId ??
-          _currentWalletChainId ??
-          WCUtils.getSessionsChains(activeSession.namespaces).first,
+      topic: w3mService.session?.topic ?? '',
+      chainId: chainId ?? _currentWalletChainId ?? ETHEREUM.chainId,
       request: SessionRequestParams(
         method: 'personal_sign',
         params: [message, wallet],
@@ -214,22 +147,16 @@ class WalletConnectService {
   Future<String> requestTransaction({
     required String chainId,
     required EthereumTransaction transaction,
-    required SupportedWalletApp walletApp,
   }) async {
-    final activeSession = await getActiveSession();
-
-    launchUrlString(
-      _getDeepLinkUrl(walletApp),
-      mode: LaunchMode.externalApplication,
-    );
+    await _w3mService.launchConnectedWallet();
 
     final transactionId = await _app!.request(
-      topic: activeSession!.topic,
+      topic: w3mService.session?.topic ?? '',
       chainId: chainId,
       request: SessionRequestParams(
         method: 'eth_sendTransaction',
         params: [
-          transaction.toJson(),
+          transaction.copyWith(data: transaction.data ?? '').toJson(),
         ],
       ),
     );
@@ -237,45 +164,27 @@ class WalletConnectService {
   }
 
   Future<void> disconnect() async {
-    final activeSession = await getActiveSession();
-    if (activeSession != null) {
-      await _app?.disconnectSession(
-        topic: activeSession.topic,
-        reason: Errors.getSdkError(Errors.USER_DISCONNECTED),
-      );
-    }
+    await _w3mService.disconnect(disconnectAllSessions: true);
   }
 
-  Future<String?> switchNetwork({
-    required String newChainId,
-    required SupportedWalletApp walletApp,
+  Future<void> switchChain({
+    required Chain chain,
   }) async {
-    final activeSession = await getActiveSession();
+    if (_w3mService.session == null) {
+      return;
+    }
 
-    if (activeSession == null) return null;
-
-    launchUrlString(
-      _getDeepLinkUrl(walletApp),
-      mode: LaunchMode.externalApplication,
-    );
-
-    final walletChainId = await _app!.request(
-      topic: activeSession.topic,
-      chainId: newChainId,
-      request: const SessionRequestParams(
-        method: 'eth_chainId',
-        params: [],
+    await _w3mService.selectChain(
+      W3MChainInfo(
+        chainName: chain.name ?? '',
+        chainId: chain.chainId ?? '',
+        namespace: chain.fullChainId ?? '',
+        tokenName: chain.nativeToken?.name ?? '',
+        rpcUrl: chain.rpcUrl ?? '',
       ),
+      switchChain: true,
     );
-    final formatted =
-        '$defaultNamespace:${int.parse((walletChainId as String).replaceFirst("0x", ""), radix: 16)}';
-    _currentWalletChainId = formatted;
-
-    return formatted;
   }
-
-  String _getDeepLinkUrl(SupportedWalletApp walletApp) =>
-      '${walletApp.scheme}://wc?uri=$_url';
 
   _onSessionEvent(SessionEvent? sessionEvent) {
     var eventName = sessionEvent?.name;
