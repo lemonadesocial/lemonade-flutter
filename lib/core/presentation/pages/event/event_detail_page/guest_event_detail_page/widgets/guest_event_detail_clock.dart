@@ -100,7 +100,8 @@ class GuestEventDetailClock extends StatelessWidget {
                                       height: 42.w,
                                       decoration: BoxDecoration(
                                         border: Border.all(
-                                            color: colorScheme.outline),
+                                          color: colorScheme.outline,
+                                        ),
                                         borderRadius: BorderRadius.circular(
                                           LemonRadius.extraSmall,
                                         ),

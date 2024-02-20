@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:app/core/application/poap/claim_poap_bloc/claim_poap_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/poap/input/poap_input.dart';
