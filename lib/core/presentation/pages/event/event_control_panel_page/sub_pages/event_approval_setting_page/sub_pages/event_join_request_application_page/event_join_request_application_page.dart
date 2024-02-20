@@ -93,11 +93,9 @@ class EventJoinRequestApplicationPage extends StatelessWidget {
                   colorScheme: colorScheme,
                   onPressDecline: () async {
                     await onPressDecline?.call();
-                    Navigator.of(context, rootNavigator: true).pop();
                   },
                   onPressApprove: () async {
                     await onPressApprove?.call();
-                    Navigator.of(context, rootNavigator: true).pop();
                   },
                 ),
             ],

@@ -49,9 +49,9 @@ class EventAcceptedExportList extends StatelessWidget {
         }).toList();
 
         if (eventAcceptedList.isEmpty) {
-          return const Center(
+          return Center(
             child: EmptyList(
-              emptyText: '',
+              emptyText: t.event.eventApproval.noGuestFound,
             ),
           );
         }

@@ -37,10 +37,12 @@ class EventJoinRequestApplicationUserCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                JoinRequestUserAvatar(
-                  direction: Axis.vertical,
-                  user: eventJoinRequest.userExpanded,
-                  avatarSize: Sizing.large,
+                Flexible(
+                  child: JoinRequestUserAvatar(
+                    direction: Axis.vertical,
+                    user: eventJoinRequest.userExpanded,
+                    avatarSize: Sizing.large,
+                  ),
                 ),
                 Column(
                   mainAxisSize: MainAxisSize.max,

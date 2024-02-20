@@ -182,7 +182,6 @@ class _EventPendingJoinRequestItemState
             joinRequest: widget.eventJoinRequest,
             action: ModifyJoinRequestAction.approve,
           );
-          widget.onRefetch?.call();
         },
         onPressDecline: () async {
           await _modifyJoinRequest(
@@ -190,8 +189,8 @@ class _EventPendingJoinRequestItemState
             joinRequest: widget.eventJoinRequest,
             action: ModifyJoinRequestAction.decline,
           );
-          widget.onRefetch?.call();
         },
+        onRefetchList: widget.onRefetch,
       ),
     );
   }
@@ -211,6 +210,7 @@ class _EventPendingJoinRequestItemState
             joinRequest: widget.eventJoinRequest,
             action: ModifyJoinRequestAction.approve,
           );
+          Navigator.of(context, rootNavigator: true).pop();
           widget.onRefetch?.call();
         },
         onPressDecline: () async {
@@ -219,6 +219,7 @@ class _EventPendingJoinRequestItemState
             joinRequest: widget.eventJoinRequest,
             action: ModifyJoinRequestAction.decline,
           );
+          Navigator.of(context, rootNavigator: true).pop();
           widget.onRefetch?.call();
         },
       ),

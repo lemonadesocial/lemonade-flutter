@@ -27,6 +27,7 @@ class JoinRequestUserAvatar extends StatelessWidget {
     return direction == Axis.horizontal
         ? Row(
             crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
             children: [
               _avatar(),
               SizedBox(width: Spacing.xSmall),
@@ -67,23 +68,27 @@ class _Name extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          user?.displayName ?? t.common.anonymous,
-          style: Typo.medium.copyWith(
-            color: colorScheme.onPrimary,
+    return ConstrainedBox(
+      constraints: BoxConstraints(maxWidth: Sizing.xLarge * 3),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            user?.displayName ?? t.common.anonymous,
+            style: Typo.medium.copyWith(
+              color: colorScheme.onPrimary,
+            ),
+            overflow: TextOverflow.ellipsis,
           ),
-        ),
-        SizedBox(height: 2.w),
-        Text(
-          '@${user?.username ?? t.common.anonymous}',
-          style: Typo.small.copyWith(
-            color: colorScheme.onSecondary,
+          SizedBox(height: 2.w),
+          Text(
+            '@${user?.username ?? t.common.anonymous}',
+            style: Typo.small.copyWith(
+              color: colorScheme.onSecondary,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

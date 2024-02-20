@@ -291,6 +291,7 @@
         },
         "yourRequestDeclined": "Your join request has been declined.",
         "noRequestFound": "No requests found",
+        "noGuestFound": "No guests found",
         "appliedForReservation": "Applied for reservation",
         "pendingApproval" : "Pending approval",
         "approveToLetThemIn": "Approve to let them in",
@@ -302,7 +303,8 @@
         "applicationQuestions(ordinal)": {
             "one": "$count question",
             "other": "$count questions"
-        } 
+        },
+        "assignedBy": "Assigned by $name"       
     },
     "allTicketTiers": "All ticket tiers",
     "claimed": "claimed",
