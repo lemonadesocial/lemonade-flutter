@@ -1,5 +1,4 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
-import 'package:app/core/application/wallet/wallet_bloc/wallet_bloc.dart';
 import 'package:app/core/presentation/pages/profile/views/profile_page_view.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -14,29 +13,21 @@ class MyProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) =>
-              WalletBloc()..add(const WalletEventInitWalletConnect()),
-        ),
-      ],
-      child: Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        body: BlocBuilder<AuthBloc, AuthState>(
-          builder: (context, state) {
-            return state.maybeWhen(
-              authenticated: (authSession) =>
-                  ProfilePageView(userProfile: authSession),
-              processing: () => Center(
-                child: Loading.defaultLoading(context),
-              ),
-              orElse: () => Center(
-                child: Text(t.common.somethingWrong),
-              ),
-            );
-          },
-        ),
+    return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.primary,
+      body: BlocBuilder<AuthBloc, AuthState>(
+        builder: (context, state) {
+          return state.maybeWhen(
+            authenticated: (authSession) =>
+                ProfilePageView(userProfile: authSession),
+            processing: () => Center(
+              child: Loading.defaultLoading(context),
+            ),
+            orElse: () => Center(
+              child: Text(t.common.somethingWrong),
+            ),
+          );
+        },
       ),
     );
   }

@@ -17,7 +17,7 @@ import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
+import 'package:web3modal_flutter/web3modal_flutter.dart';
 
 class PayoutAccountsWidget extends StatefulWidget {
   const PayoutAccountsWidget({super.key});
@@ -92,14 +92,12 @@ class _PayoutAccountsWidgetState extends State<PayoutAccountsWidget> {
           future: getIt<WalletConnectService>().getActiveSession(),
           builder: (context, walletConnectSnapshot) {
             final activeSession = walletConnectSnapshot.data;
-            final sessionAccount =
-                activeSession?.namespaces.entries.first.value.accounts.first;
+            final userWalletAddress =
+                getIt<WalletConnectService>().w3mService.address ?? '';
             return PayoutAccountItem(
               title: t.event.ticketTierSetting.crypto,
               subTitle: activeSession != null
-                  ? Web3Utils.formatIdentifier(
-                      NamespaceUtils.getAccount(sessionAccount ?? ''),
-                    )
+                  ? Web3Utils.formatIdentifier(userWalletAddress)
                   : t.common.actions.connectWallet,
               icon: ThemeSvgIcon(
                 color: colorScheme.onSecondary,
@@ -121,22 +119,14 @@ class _PayoutAccountsWidgetState extends State<PayoutAccountsWidget> {
                 }
 
                 return ConnectWalletButton(
-                  onSelect: (walletApp) {
-                    getIt<WalletConnectService>()
-                        .connectWallet(walletApp: walletApp)
-                        .then(
-                      (success) {
-                        if (success) {
-                          setState(() {});
-                        }
-                      },
-                    );
-                  },
-                  builder: (showOptions) => LinearGradientButton(
-                    onTap: () => showOptions(context),
+                  builder: (onPressConnect, connectButtonState) =>
+                      LinearGradientButton(
+                    loadingWhen:
+                        connectButtonState == ConnectButtonState.connecting,
                     height: Sizing.medium,
                     radius: BorderRadius.circular(LemonRadius.small * 2),
                     label: t.common.actions.connect,
+                    onTap: () => onPressConnect(context),
                   ),
                 );
               },

@@ -101,7 +101,6 @@ class BuyTicketsWithCryptoBloc
             chainId: chain?.fullChainId,
             message: Web3Utils.toHex(_currentPayment?.id ?? ''),
             wallet: event.userWalletAddress,
-            walletApp: SupportedWalletApp.metamask,
           )
           .timeout(
             const Duration(
@@ -200,7 +199,6 @@ class BuyTicketsWithCryptoBloc
           .requestTransaction(
             chainId: chain?.fullChainId ?? '',
             transaction: ethereumTxn,
-            walletApp: SupportedWalletApp.metamask,
           )
           .timeout(
             const Duration(

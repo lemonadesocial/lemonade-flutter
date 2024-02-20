@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:app/core/application/wallet/wallet_bloc/wallet_bloc.dart';
 import 'package:app/core/constants/web3/chains.dart';
+import 'package:app/core/domain/web3/entities/chain.dart';
 import 'package:app/core/domain/web3/entities/chain_metadata.dart';
 import 'package:app/core/domain/web3/entities/ethereum_transaction.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
@@ -39,13 +40,7 @@ class _SendTokenViewState extends State<SendTokenPoc> {
     return BlocBuilder<WalletBloc, WalletState>(
       builder: (context, state) {
         if (state.activeSession == null) {
-          return ConnectWalletButton(
-            onSelect: (walletApp) {
-              context.read<WalletBloc>().add(
-                    WalletEvent.connectWallet(walletApp: walletApp),
-                  );
-            },
-          );
+          return const ConnectWalletButton();
         }
 
         final userWalletAddress = NamespaceUtils.getAccount(
@@ -70,10 +65,8 @@ class _SendTokenViewState extends State<SendTokenPoc> {
                 label: "switch network",
                 onTap: () async {
                   await getIt<WalletConnectService>()
-                      .switchNetwork(
-                    // newChainId: 'eip155:5',
-                    newChainId: 'eip155:11155111',
-                    walletApp: SupportedWalletApp.metamask,
+                      .switchChain(
+                    chain: Chain(),
                   )
                       .catchError((error) {
                     return null;
@@ -98,7 +91,6 @@ class _SendTokenViewState extends State<SendTokenPoc> {
                         await getIt<WalletConnectService>().personalSign(
                       message: Web3Utils.toHex('Your payment ID: 123'),
                       wallet: userWalletAddress,
-                      walletApp: SupportedWalletApp.metamask,
                     );
                     setState(() {
                       signature = mSignature;
@@ -196,7 +188,6 @@ class _SendTokenViewState extends State<SendTokenPoc> {
                               pow(10, chainMetadata!.nativeCurrency.decimals),
                         ).toRadixString(16),
                       ),
-                      walletApp: SupportedWalletApp.metamask,
                     );
                     setState(() {
                       txHash = txId;

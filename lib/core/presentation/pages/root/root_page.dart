@@ -70,6 +70,7 @@ class _RootPageViewState extends State<RootPage> {
                 ),
                 AutoTabsScaffold(
                   extendBody: true,
+                  extendBodyBehindAppBar: true,
                   scaffoldKey: DrawerUtils.drawerGlobalKey,
                   drawerEnableOpenDragGesture:
                       isAuthenticated == true ? true : false,
