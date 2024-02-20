@@ -3,6 +3,7 @@ fragment EventAcceptedExport on EventAcceptedExport {
   name
   firstName: first_name
   lastName: last_name
+  imageAvatar: image_avatar
   username
   email
   phone

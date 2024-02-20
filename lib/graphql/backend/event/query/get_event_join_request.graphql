@@ -1,7 +1,23 @@
 # import '../fragment/event_join_request_fragment.graphql'
 
-query GetEventJoinRequests($event: MongoID!, $skip: Int!, $limit: Int!, $state: JoinRequestState) {
-  getEventJoinRequests(event: $event, skip: $skip, limit: $limit, state: $state) {
+query GetEventJoinRequests(
+  $event: MongoID!
+  $skip: Int!
+  $limit: Int!
+  $state: JoinRequestState
+) {
+  getEventJoinRequests(
+    event: $event
+    skip: $skip
+    limit: $limit
+    state: $state
+  ) {
+    ...EventJoinRequest
+  }
+}
+
+query GetEventJoinRequest($event: MongoID!, $id: MongoID!) {
+  getEventJoinRequest(event: $event, _id: $id) {
     ...EventJoinRequest
   }
 }

@@ -245,6 +245,9 @@ final eventDetailRoutes = AutoRoute(
     AutoRoute(
       page: ChatSettingRoute.page,
     ),
+    AutoRoute(
+      page: EventJoinRequestDetailRoute.page,
+    ),
   ],
 );
 

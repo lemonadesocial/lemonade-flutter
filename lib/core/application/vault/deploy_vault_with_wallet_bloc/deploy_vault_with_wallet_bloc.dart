@@ -43,7 +43,6 @@ class DeployVaultWithWalletBloc
           value: initSafeTransactionData.value ?? '0x0',
           data: initSafeTransactionData.data ?? '',
         ),
-        walletApp: SupportedWalletApp.metamask,
       );
       final rpcClient = Web3Client(event.network.rpcUrl!, http.Client());
       final receipt = await rpcClient.getTransactionReceipt(txHash);

@@ -4,6 +4,7 @@ import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/connectivity/connectivity_bloc.dart';
 import 'package:app/core/application/notification/watch_notifications_bloc/watch_notification_bloc.dart';
 import 'package:app/core/application/profile/block_user_bloc/block_user_bloc.dart';
+import 'package:app/core/application/wallet/wallet_bloc/wallet_bloc.dart';
 import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/service/connectivity/connectivity_service.dart';
 import 'package:app/core/service/firebase/firebase_service.dart';
@@ -31,6 +32,7 @@ import 'package:app/core/application/newsfeed/newsfeed_listing_bloc/newsfeed_lis
 import 'package:app/core/data/post/newsfeed_repository_impl.dart';
 import 'package:app/core/service/newsfeed/newsfeed_service.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:web3modal_flutter/web3modal_flutter.dart';
 
 class LemonadeApp extends StatefulWidget {
   const LemonadeApp({super.key});
@@ -90,7 +92,15 @@ class _LemonadeAppViewState extends State<LemonadeApp> {
           BlocProvider(
             create: (context) => WatchNotificationsBloc(),
           ),
-          BlocProvider(create: (context) => ConnectivityBloc()),
+          BlocProvider(
+            create: (context) => ConnectivityBloc(),
+          ),
+          BlocProvider(
+            create: (context) => WalletBloc()
+              ..add(
+                const WalletEvent.getActiveSessions(),
+              ),
+          ),
         ],
         child: child,
       );
@@ -190,26 +200,29 @@ class _AppState extends State<_App> {
           orElse: () {},
         );
       },
-      child: MaterialApp.router(
-        scaffoldMessengerKey: SnackBarUtils.rootScaffoldMessengerKey,
-        locale: _getCurrentLocale(context),
-        // use provider
-        supportedLocales: _supportedLocales,
-        localizationsDelegates: _localizationsDelegates,
-        themeMode: ThemeMode.dark,
-        darkTheme: lemonadeAppDarkThemeData,
-        theme: lemonadeAppLightThemeData,
-        routerDelegate: widget.router.delegate(
-          navigatorObservers: () => <NavigatorObserver>[MyRouterObserver()],
+      child: Web3ModalTheme(
+        isDarkMode: true,
+        child: MaterialApp.router(
+          scaffoldMessengerKey: SnackBarUtils.rootScaffoldMessengerKey,
+          locale: _getCurrentLocale(context),
+          // use provider
+          supportedLocales: _supportedLocales,
+          localizationsDelegates: _localizationsDelegates,
+          themeMode: ThemeMode.dark,
+          darkTheme: lemonadeAppDarkThemeData,
+          theme: lemonadeAppLightThemeData,
+          routerDelegate: widget.router.delegate(
+            navigatorObservers: () => <NavigatorObserver>[MyRouterObserver()],
+          ),
+          routeInformationParser:
+              widget.router.defaultRouteParser(includePrefixMatches: true),
+          builder: (context, widget) {
+            ErrorWidget.builder = (FlutterErrorDetails errorDetails) {
+              return CustomError(errorDetails: errorDetails);
+            };
+            return FlutterEasyLoading(child: widget);
+          },
         ),
-        routeInformationParser:
-            widget.router.defaultRouteParser(includePrefixMatches: true),
-        builder: (context, widget) {
-          ErrorWidget.builder = (FlutterErrorDetails errorDetails) {
-            return CustomError(errorDetails: errorDetails);
-          };
-          return FlutterEasyLoading(child: widget);
-        },
       ),
     );
   }

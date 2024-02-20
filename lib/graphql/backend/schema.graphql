@@ -29,6 +29,7 @@ type Query {
   getEvent(_id: MongoID!): Event
   getEvents(skip: Int! = 0, limit: Int! = 25, _id: [MongoID!], site: MongoID, search: String, accepted: MongoID, highlight: Boolean): [Event!]!
   getHomeEvents(skip: Int! = 0, limit: Int! = 25, search: String, tense: EventTense, longitude: Float, latitude: Float, search_range: Float): [Event!]!
+  getEventInvitedStatistics(_id: MongoID!): GetEventInvitedStatisticsResponse!
   getProfileEvents(skip: Int! = 0, limit: Int! = 25, user: MongoID): [Event!]!
   getPastEvents(skip: Int! = 0, limit: Int! = 25, site: MongoID, user: MongoID, sort: JSON): [Event!]!
   getUpcomingEvents(skip: Int! = 0, limit: Int! = 25, site: MongoID, user: MongoID, host: Boolean, sort: JSON): [Event!]!
@@ -87,6 +88,9 @@ type Query {
 
   """Get the request to join an event by the current user"""
   getMyEventJoinRequest(event: MongoID!): EventJoinRequest
+
+  """Get the request to join an event by id"""
+  getEventJoinRequest(event: MongoID!, _id: MongoID!): EventJoinRequest!
   getUserContacts(skip: Int! = 0, limit: Int! = 25, input: GetUserContactsInput): GetUserContactsResponse!
   getUserDiscovery(longitude: Float!, latitude: Float!, search_range: Float, event: MongoID): UserDiscovery!
   getUserDiscoverySwipes(skip: Int! = 0, limit: Int! = 25, state: UserDiscoverySwipeState, other_wallets: Boolean): [UserDiscoverySwipe!]!
@@ -946,6 +950,7 @@ input GetCommentsArgs {
 type EventAcceptedExport {
   _id: MongoID!
   name: String
+  image_avatar: String
   first_name: String
   last_name: String
   username: String
@@ -1048,6 +1053,27 @@ enum EventTense {
   Past
 }
 
+type GetEventInvitedStatisticsResponse {
+  total: Int!
+  total_joined: Int!
+  guests: [Guest!]!
+  top_inviter: MongoID
+  top_inviter_expanded: User
+}
+
+type Guest {
+  invited_by: MongoID!
+  invited_by_expanded: User
+  joined: Boolean!
+
+  """Exists only if joined from email"""
+  user: MongoID
+  user_expanded: User
+
+  """Exists only if invited via email but has not joined to be a user"""
+  email: String
+}
+
 type EventPaymentSummary {
   currency: String!
   decimals: Float!
@@ -1099,7 +1125,7 @@ type EventSessionReservation {
   user: MongoID!
   event: MongoID!
   session: MongoID!
-  payment_ticket_type: MongoID
+  ticket_type: MongoID
   user_expanded: User
 }
 
@@ -1109,7 +1135,7 @@ input GetEventSessionReservationsInput {
 
 type EventSessionReservationSummary {
   session: MongoID!
-  payment_ticket_type: MongoID
+  ticket_type: MongoID
   count: Float!
 }
 
@@ -1173,6 +1199,8 @@ type Chain {
   chain_id: String!
   name: String!
   rpc_url: String!
+  block_time: Float!
+  safe_confirmations: Float!
   logo_url: String
   tokens: [Token!]
 }
@@ -1318,7 +1346,7 @@ enum NotificationType {
   event_unlock_verify_accept_request
   event_unlock_verify_request
   event_update
-  payment_assign
+  ticket_assigned
   payment_authorized
   payment_failed
   payment_refunded
@@ -1592,7 +1620,7 @@ type Site {
   favicon_url: String
   logo_url: String
   logo_mobile_url: String
-  passport: SitePassport
+  passports: [SitePassport!]
   privacy_url: String
   theme_data: JSON
   theme_type: String
@@ -1668,6 +1696,7 @@ type SitePassport {
   baseV1Address: String!
   baseV1ChainId: Float!
   passportV1CallAddress: String!
+  ssiGroup: String!
   passportV1AxelarAddress: JSON
   crowdfundAddress: JSON
 }
@@ -1766,7 +1795,7 @@ type EventJoinRequest {
   event: MongoID!
   user: MongoID!
   ticket_info: [TicketInfo!]!
-  payment: NewPaymentBase
+  payment: MongoID
   approved_at: DateTimeISO
   approved_by: MongoID
   declined_at: DateTimeISO
@@ -1781,20 +1810,6 @@ type EventJoinRequest {
 type TicketInfo {
   count: Float!
   ticket_type: MongoID!
-}
-
-type NewPaymentBase {
-  _id: MongoID!
-  stamps: JSON!
-  amount: String!
-  currency: String!
-  state: NewPaymentState!
-  user: MongoID!
-  account: MongoID!
-  billing_info: BillingInfo
-  transfer_metadata: JSON
-  transfer_params: JSON
-  failure_reason: String
 }
 
 enum JoinRequestState {
@@ -1973,6 +1988,7 @@ type Mutation {
   updateEventRewardUse(input: UpdateEventRewardUseInput!): Boolean!
   acceptEvent(_id: MongoID!): EventRsvp!
   declineEvent(_id: MongoID!): EventRsvp!
+  checkinUser(event: MongoID!, user: MongoID!): EventRsvp!
   createEventSessionReservation(input: EventSessionReservationInput!): Boolean!
   deleteEventSessionReservation(input: EventSessionReservationInput!): Boolean!
   createEventStory(input: EventStoryInput!): Boolean!
@@ -2166,6 +2182,7 @@ input EventInput {
   private: Boolean
   published: Boolean
   approval_required: Boolean
+  required_profile_fields: [String!]
   rewards: [EventRewardInput!]
   sessions: [EventSessionInput!]
   speaker_emails: [String!]
@@ -2554,6 +2571,7 @@ input CreateSiteInput {
   favicon_url: String
   logo_url: String
   logo_mobile_url: String
+  passports: [SitePassportInput!]
   privacy_url: String
   theme_data: JSON
   theme_type: String
@@ -2585,6 +2603,18 @@ input SiteOnboardingStepInput {
   data: JSON
 }
 
+input SitePassportInput {
+  name: String!
+  image: String!
+  logo: String!
+  baseV1Address: String!
+  baseV1ChainId: Float!
+  passportV1CallAddress: String!
+  ssiGroup: String!
+  passportV1AxelarAddress: JSON
+  crowdfundAddress: JSON
+}
+
 input UpdateSiteInput {
   client: String
   hostnames: [String!]
@@ -2603,6 +2633,7 @@ input UpdateSiteInput {
   favicon_url: String
   logo_url: String
   logo_mobile_url: String
+  passports: [SitePassportInput!]
   privacy_url: String
   theme_data: JSON
   theme_type: String

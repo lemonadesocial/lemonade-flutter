@@ -34,7 +34,6 @@ class SignWalletBloc extends Bloc<SignWalletEvent, SignWalletState> {
     final signature = await walletConnectService.personalSign(
       message: signedMessage,
       wallet: event.wallet,
-      walletApp: SupportedWalletApp.metamask,
     );
 
     if (signature == null) {

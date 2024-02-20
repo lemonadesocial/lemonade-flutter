@@ -68,24 +68,7 @@ class TicketCardTop extends StatelessWidget {
         ClipRRect(
           child: Container(
             decoration: BoxDecoration(
-              border: Border(
-                top: BorderSide(
-                  color: colorScheme.outline,
-                  width: 1.w,
-                ),
-                right: BorderSide(
-                  color: colorScheme.outline,
-                  width: 1.w,
-                ),
-                left: BorderSide(
-                  color: colorScheme.outline,
-                  width: 1.w,
-                ),
-                bottom: BorderSide(
-                  color: colorScheme.outline,
-                  width: 0.w,
-                ),
-              ),
+              border: Border.all(color: colorScheme.outline, width: 0.5.w),
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(15.r),
                 topRight: Radius.circular(15.r),
@@ -184,7 +167,7 @@ class TicketCardBottom extends StatelessWidget {
           padding: EdgeInsets.all(Spacing.medium),
           width: double.infinity,
           decoration: BoxDecoration(
-            border: Border.all(color: colorScheme.outline, width: 1.w),
+            border: Border.all(color: colorScheme.outline, width: 0.5.w),
             borderRadius: BorderRadius.only(
               bottomLeft: Radius.circular(15.r),
               bottomRight: Radius.circular(15.r),

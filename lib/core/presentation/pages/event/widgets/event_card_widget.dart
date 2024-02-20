@@ -32,6 +32,7 @@ class EventCard extends StatelessWidget {
           border: Border.all(color: colorScheme.outline),
         ),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             _buildCardHeader(),
             _buildCardBody(),
@@ -42,17 +43,22 @@ class EventCard extends StatelessWidget {
     );
   }
 
-  _buildCardHeader() => Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: Spacing.xSmall,
-          vertical: Spacing.xSmall,
+  _buildCardHeader() {
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: Spacing.xSmall,
+        vertical: Spacing.xSmall,
+      ),
+      child: LemonCircleAvatar(
+        url: ImageUtils.generateUrl(
+          file: event.hostExpanded?.newPhotosExpanded?.isNotEmpty == true
+              ? event.hostExpanded?.newPhotosExpanded?.first
+              : null,
+          imageConfig: ImageConfig.profile,
         ),
-        child: LemonCircleAvatar(
-          size: Sizing.medium,
-          url: AvatarUtils.getAvatarUrl(user: event.hostExpanded),
-          label: event.hostExpanded?.name ?? '',
-        ),
-      );
+      ),
+    );
+  }
 
   _buildCardBody() => event.newNewPhotosExpanded?.isNotEmpty == true
       ? Container(
