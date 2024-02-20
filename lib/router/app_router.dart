@@ -241,6 +241,10 @@ final eventDetailRoutes = AutoRoute(
     AutoRoute(
       page: EventApprovalSettingRoute.page,
     ),
+    AutoRoute(page: ChatRoute.page),
+    AutoRoute(
+      page: ChatSettingRoute.page,
+    ),
     AutoRoute(
       page: EventJoinRequestDetailRoute.page,
     ),

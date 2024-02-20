@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:app/core/application/poap/claim_poap_bloc/claim_poap_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/poap/input/poap_input.dart';
@@ -105,18 +103,14 @@ class GuestEventPoapOfferItemState extends State<GuestEventPoapOfferItemView>
                     child: Stack(
                       children: [
                         Opacity(
-                          opacity: 0.5,
-                          child: ImageFiltered(
-                            imageFilter:
-                                ImageFilter.blur(sigmaX: 40, sigmaY: 40),
-                            child: CachedNetworkImage(
-                              fit: BoxFit.cover,
-                              imageUrl: snapshot.data?.url ?? '',
-                              placeholder: (_, __) =>
-                                  ImagePlaceholder.defaultPlaceholder(),
-                              errorWidget: (_, __, ___) =>
-                                  ImagePlaceholder.defaultPlaceholder(),
-                            ),
+                          opacity: 0.15,
+                          child: CachedNetworkImage(
+                            fit: BoxFit.cover,
+                            imageUrl: snapshot.data?.url ?? '',
+                            placeholder: (_, __) =>
+                                ImagePlaceholder.defaultPlaceholder(),
+                            errorWidget: (_, __, ___) =>
+                                ImagePlaceholder.defaultPlaceholder(),
                           ),
                         ),
                         const AppBackdrop(),
