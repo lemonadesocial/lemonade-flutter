@@ -4,6 +4,7 @@ import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_p
 import 'package:app/core/presentation/widgets/common/dotted_line/dotted_line.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/date_format_utils.dart';
+import 'package:app/core/utils/modal_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
@@ -26,6 +27,40 @@ class EventJoinRequestStatusHistory extends StatelessWidget {
 
   bool get isRejected => eventJoinRequest.declinedBy != null;
 
+  Widget _declinedBadge(BuildContext context) => InkWell(
+        onTap: () => showComingSoonDialog(context),
+        child: Container(
+          padding: EdgeInsets.symmetric(
+            vertical: Spacing.superExtraSmall,
+            horizontal: Spacing.extraSmall,
+          ),
+          decoration: BoxDecoration(
+            color: LemonColor.darkBackground,
+            borderRadius: BorderRadius.circular(LemonRadius.xSmall),
+          ),
+          child: Row(
+            children: [
+              Text(
+                t.event.eventApproval.declined,
+                style: Typo.small.copyWith(
+                  color: const Color(0xFFF57968),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(width: Spacing.superExtraSmall),
+              ThemeSvgIcon(
+                color: Theme.of(context).colorScheme.onSecondary,
+                builder: (filter) => Assets.icons.icArrowDown.svg(
+                  width: Sizing.xSmall,
+                  height: Sizing.xSmall,
+                  colorFilter: filter,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
@@ -47,13 +82,15 @@ class EventJoinRequestStatusHistory extends StatelessWidget {
                     ),
                     title: '',
                     subTitle: '',
-                    more: EventJoinRequestTicketInfo(
-                      eventJoinRequest: eventJoinRequest,
-                      showPrice: false,
-                      padding: EdgeInsets.all(Spacing.extraSmall),
-                      backgroundColor: LemonColor.darkBackground,
-                      borderColor: Colors.transparent,
-                    ),
+                    more: isRejected
+                        ? _declinedBadge(context)
+                        : EventJoinRequestTicketInfo(
+                            eventJoinRequest: eventJoinRequest,
+                            showPrice: false,
+                            padding: EdgeInsets.all(Spacing.extraSmall),
+                            backgroundColor: LemonColor.darkBackground,
+                            borderColor: Colors.transparent,
+                          ),
                   ),
                   _Step(
                     leading: const _StatusIcon(

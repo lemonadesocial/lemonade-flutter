@@ -304,7 +304,8 @@
             "one": "$count question",
             "other": "$count questions"
         },
-        "assignedBy": "Assigned by $name"       
+        "assignedBy": "Assigned by $name",
+        "declined": "Declined"
     },
     "allTicketTiers": "All ticket tiers",
     "claimed": "claimed",
