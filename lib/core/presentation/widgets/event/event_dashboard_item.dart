@@ -1,7 +1,5 @@
-import 'package:app/gen/fonts.gen.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -10,18 +8,15 @@ class EventDashboardItem extends StatelessWidget {
     super.key,
     required this.icon,
     required this.child,
-    required this.title,
     required this.onTap,
   });
 
   final Widget icon;
   final Widget child;
-  final String title;
   final Function() onTap;
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     return Flexible(
       child: InkWell(
         onTap: onTap,
@@ -43,7 +38,7 @@ class EventDashboardItem extends StatelessWidget {
             children: [
               Expanded(
                 child: Container(
-                  height: 111.w,
+                  height: 61.w,
                   padding: const EdgeInsets.all(15),
                   clipBehavior: Clip.antiAlias,
                   decoration: ShapeDecoration(
@@ -57,25 +52,10 @@ class EventDashboardItem extends StatelessWidget {
                     ),
                   ),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       icon,
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            title,
-                            style: Typo.small.copyWith(
-                              color: colorScheme.onPrimary,
-                              fontWeight: FontWeight.w700,
-                              fontFamily: FontFamily.nohemiVariable,
-                            ),
-                          ),
-                          child,
-                        ],
-                      ),
                     ],
                   ),
                 ),

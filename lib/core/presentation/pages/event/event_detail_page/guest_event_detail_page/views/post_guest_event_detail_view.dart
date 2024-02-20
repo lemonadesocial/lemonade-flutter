@@ -4,7 +4,6 @@ import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_dashboard.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_hosts.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_photos.dart';
-import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_rewards.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_location.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_poap_offers.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/post_guest_event_animated_app_bar.dart';
@@ -23,7 +22,6 @@ class PostGuestEventDetailView extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-    final bottomPadding = MediaQuery.of(context).padding.bottom;
 
     return Scaffold(
       backgroundColor: colorScheme.primary,
@@ -54,16 +52,7 @@ class PostGuestEventDetailView extends StatelessWidget {
                     ),
                   ),
                   SliverPadding(
-                    padding: EdgeInsets.only(top: Spacing.smMedium * 2),
-                  ),
-                  SliverPadding(
-                    padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-                    sliver: SliverToBoxAdapter(
-                      child: GuestEventDetailRewards(event: event),
-                    ),
-                  ),
-                  SliverPadding(
-                    padding: EdgeInsets.only(top: Spacing.smMedium),
+                    padding: EdgeInsets.only(top: Spacing.xLarge),
                   ),
                   SliverPadding(
                     padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
@@ -123,7 +112,7 @@ class PostGuestEventDetailView extends StatelessWidget {
                     child: GuestEventDetailHosts(event: event),
                   ),
                   SliverToBoxAdapter(
-                    child: SizedBox(height: bottomPadding),
+                    child: SizedBox(height: Spacing.xLarge),
                   ),
                 ],
               ),

@@ -307,21 +307,3 @@ class GuestEventDetailClock extends StatelessWidget {
     );
   }
 }
-
-class _Circle extends StatelessWidget {
-  const _Circle();
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return Container(
-      width: 18.w,
-      height: 18.w,
-      decoration: BoxDecoration(
-        color: colorScheme.background,
-        borderRadius: BorderRadius.circular(LemonRadius.normal),
-      ),
-    );
-  }
-}
