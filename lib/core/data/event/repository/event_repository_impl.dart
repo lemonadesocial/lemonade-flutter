@@ -315,6 +315,30 @@ class EventRepositoryImpl implements EventRepository {
   }
 
   @override
+  Future<Either<Failure, EventJoinRequest>> getEventJoinRequest({
+    required Variables$Query$GetEventJoinRequest input,
+    FetchPolicy? fetchPolicy,
+  }) async {
+    final result = await client.query$GetEventJoinRequest(
+      Options$Query$GetEventJoinRequest(
+        variables: input,
+        fetchPolicy: fetchPolicy,
+      ),
+    );
+
+    if (result.hasException || result.parsedData?.getEventJoinRequest == null) {
+      return Left(Failure.withGqlException(result.exception));
+    }
+    return Right(
+      EventJoinRequest.fromDto(
+        EventJoinRequestDto.fromJson(
+          result.parsedData!.getEventJoinRequest.toJson(),
+        ),
+      ),
+    );
+  }
+
+  @override
   Future<Either<Failure, EventJoinRequest?>> getMyEventJoinRequest({
     required String eventId,
   }) async {

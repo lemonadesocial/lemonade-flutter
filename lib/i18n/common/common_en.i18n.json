@@ -53,7 +53,9 @@
         "add": "Add",
         "remove": "Remove",
         "revoke": "Revoke",
-        "saveChanges": "Save changes"
+        "saveChanges": "Save changes",
+        "accept": "Accept",
+        "decline": "Decline"
     },
     "followed": "Followed",
     "anonymous": "anonymous",

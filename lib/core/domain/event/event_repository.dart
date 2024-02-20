@@ -12,6 +12,7 @@ import 'package:app/graphql/backend/event/mutation/create_event.graphql.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:dartz/dartz.dart';
 import 'package:app/graphql/backend/event/query/get_event_join_request.graphql.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 
 abstract class EventRepository {
   Future<Either<Failure, List<Event>>> getEvents({
@@ -69,6 +70,11 @@ abstract class EventRepository {
 
   Future<Either<Failure, List<EventJoinRequest>>> getEventJoinRequests({
     required Variables$Query$GetEventJoinRequests input,
+  });
+
+  Future<Either<Failure, EventJoinRequest>> getEventJoinRequest({
+    required Variables$Query$GetEventJoinRequest input,
+    FetchPolicy? fetchPolicy,
   });
 
   Future<Either<Failure, EventJoinRequest?>> getMyEventJoinRequest({

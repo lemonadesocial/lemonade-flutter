@@ -19,6 +19,7 @@ class EventAcceptedExport with _$EventAcceptedExport {
     String? ticketType,
     String? ticketDiscount,
     String? ticketDiscountAmount,
+    String? imageAvatar,
     DateTime? checkinDate,
   }) = _EventAcceptedExport;
 
