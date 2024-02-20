@@ -5,7 +5,6 @@ import 'package:app/core/domain/post/input/get_posts_input.dart';
 import 'package:app/core/domain/post/input/post_reaction_input.dart';
 import 'package:app/core/failure.dart';
 import 'package:dartz/dartz.dart';
-import 'package:image_picker/image_picker.dart';
 
 import 'package:app/core/application/post/create_post_bloc/create_post_bloc.dart';
 
@@ -18,8 +17,6 @@ abstract class PostRepository {
     PostRefType? postRefType,
     String? postRefId,
   });
-
-  Future<Either<Failure, String>> uploadImage(XFile file, String directory);
 
   Future<Either<Failure, bool>> togglePostReaction({
     required PostReactionInput input,

@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.4.1](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.4.0...v1.4.1) (2024-02-01)
+
+
+### Bug Fixes
+
+* update my tickets page api and display price logic ([#388](https://github.com/lemonadesocial/lemonade-flutter/issues/388)) ([d154c24](https://github.com/lemonadesocial/lemonade-flutter/commit/d154c24969dec53ac8ca6454496928adbd9d730f))
+* update setting page, update profile page ([#390](https://github.com/lemonadesocial/lemonade-flutter/issues/390)) ([5f2124c](https://github.com/lemonadesocial/lemonade-flutter/commit/5f2124ce64df035c4b91efb3c88f367184c0e73c))
+
 ## [1.4.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.3.0...v1.4.0) (2024-02-01)
 
 

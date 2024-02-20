@@ -1,4 +1,7 @@
+import 'package:app/core/service/file/file_upload_service.dart';
 import 'package:app/core/service/post/post_service.dart';
+import 'package:app/core/utils/gql/gql.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:image_picker/image_picker.dart';
@@ -80,13 +83,19 @@ class CreatePostBloc extends Cubit<CreatePostState> {
   }
 
   Future<void> uploadImage(XFile file) async {
-    final response = await postService.uploadImage(file, directory: 'post');
-    response.fold(
-      (l) => emit(state.copyWith(status: CreatePostStatus.error)),
-      (imageId) {
+    try {
+      final client = getIt<AppGQL>().client;
+      final fileUploadService = FileUploadService(client);
+      String? imageId = await fileUploadService.uploadSingleFile(
+        file,
+        FileDirectory.post,
+      );
+      if (imageId != null) {
         postRefType = PostRefType.file;
         postRefId = imageId;
-      },
-    );
+      }
+    } catch (e) {
+      emit(state.copyWith(status: CreatePostStatus.error));
+    }
   }
 }
