@@ -52,7 +52,11 @@ class EventRejectedJoinRequestItem extends StatelessWidget {
                 const Spacer(),
                 EventJoinRequestTicketInfoBuilder(
                   eventJoinRequest: eventJoinRequest,
-                  builder: ({required totalTicketCount}) {
+                  builder: ({
+                    required totalTicketCount,
+                    required displayedTotalCost,
+                    required isLoading,
+                  }) {
                     return DottedBorder(
                       dashPattern: [5.w],
                       color: colorScheme.outline,

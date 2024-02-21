@@ -33,7 +33,7 @@ class Web3Utils {
       decimalDigits: decimalDigits,
     );
 
-    return _removeTrailingZeros('${formatter.format(amount)} $currency').trim();
+    return removeTrailingZeros('${formatter.format(amount)} $currency').trim();
   }
 
   static ChainMetadata? getNetworkMetadataById(String id) {
@@ -72,7 +72,7 @@ class Web3Utils {
     return etherAmount.getInWei;
   }
 
-  static String _removeTrailingZeros(String n) {
+  static String removeTrailingZeros(String n) {
     return n.replaceAll(RegExp(r"([.]*0+)(?!.*\d)"), "");
   }
 }

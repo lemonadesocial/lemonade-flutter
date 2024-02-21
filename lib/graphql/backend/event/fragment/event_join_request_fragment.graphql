@@ -32,6 +32,10 @@ fragment EventJoinRequest on EventJoinRequest {
     amount
     currency
     state
+    account_expanded {
+      provider
+      type
+    }
   }
   ticket_info {
     count

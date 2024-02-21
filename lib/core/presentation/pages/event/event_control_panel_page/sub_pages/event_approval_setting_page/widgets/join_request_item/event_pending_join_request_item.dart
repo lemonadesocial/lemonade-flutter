@@ -142,7 +142,7 @@ class _EventPendingJoinRequestItemState
               children: [
                 EventJoinRequestTicketInfo(
                   eventJoinRequest: widget.eventJoinRequest,
-                  showPrice: false,
+                  showPrice: true,
                   onPress: () => goToJoinRequestDetail(context, event),
                 ),
                 const Spacer(),
