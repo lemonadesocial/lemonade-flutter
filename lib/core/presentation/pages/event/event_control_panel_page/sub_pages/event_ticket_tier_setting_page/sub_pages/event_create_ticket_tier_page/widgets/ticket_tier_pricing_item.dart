@@ -74,7 +74,7 @@ class TicketTierPricingItem extends StatelessWidget {
     }
 
     return FutureBuilder<Either<Failure, Chain?>>(
-      future: ticketPrice.network != null
+      future: ticketPrice.network?.isNotEmpty == true
           ? getIt<Web3Repository>()
               .getChainById(chainId: ticketPrice.network ?? '')
           : Future.value(

@@ -125,13 +125,14 @@ class SelectTicketItem extends StatelessWidget {
                 ...(ticketType.prices ?? []).map((ticketPrice) {
                   // Only apply for crypto flow, hide price item with network different
                   // with current selected network filter
-                  if (ticketPrice.network != null &&
+                  if (ticketPrice.network?.isNotEmpty == true &&
                       networkFilter != null &&
                       ticketPrice.network != networkFilter) {
                     return const SizedBox.shrink();
                   }
 
-                  final isCryptoCurrency = ticketPrice.network != null;
+                  final isCryptoCurrency =
+                      ticketPrice.network?.isNotEmpty == true;
 
                   if (isCryptoCurrency &&
                       selectedPaymentMethod ==
@@ -147,7 +148,7 @@ class SelectTicketItem extends StatelessWidget {
 
                   // Only apply for crypto flow, hide price item with network different
                   // with current selected network filter
-                  if (ticketPrice.network != null &&
+                  if (ticketPrice.network?.isNotEmpty == true &&
                       networkFilter != null &&
                       ticketPrice.network != networkFilter) {
                     return const SizedBox.shrink();
@@ -228,7 +229,7 @@ class _PriceItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final isCryptoCurrency = network != null;
+    final isCryptoCurrency = network?.isNotEmpty == true;
 
     return ChainQuery(
       chainId: price.network ?? '',
@@ -240,7 +241,7 @@ class _PriceItem extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                if (isCryptoCurrency && price.network != null) ...[
+                if (isCryptoCurrency && price.network?.isNotEmpty == true) ...[
                   Container(
                     decoration: ShapeDecoration(
                       color: LemonColor.chineseBlack,
@@ -289,7 +290,8 @@ class _PriceItem extends StatelessWidget {
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      if (isCryptoCurrency && price.network != null) ...[
+                      if (isCryptoCurrency &&
+                          price.network?.isNotEmpty == true) ...[
                         SizedBox(height: 2.w),
                         Text(
                           chain?.name ?? '',

@@ -61,7 +61,9 @@ class EventTicketUtils {
     return ticketTypes
         .where(
           (element) => (element.prices ?? []).any(
-            (price) => price.currency != null ? price.network == null : false,
+            (price) => price.currency != null
+                ? price.network == null || price.network?.isEmpty == true
+                : false,
           ),
         )
         .toList();
@@ -73,7 +75,9 @@ class EventTicketUtils {
     return ticketTypes
         .where(
           (element) => (element.prices ?? []).any(
-            (price) => price.currency != null ? price.network != null : false,
+            (price) => price.currency != null
+                ? price.network?.isNotEmpty == true
+                : false,
           ),
         )
         .toList();
@@ -86,9 +90,12 @@ class EventTicketUtils {
   }) {
     if (ticketType == null || currency == null) return null;
 
-    return (ticketType.prices ?? []).firstWhereOrNull(
-      (element) => element.currency == currency && element.network == network,
-    );
+    return (ticketType.prices ?? []).firstWhereOrNull((element) {
+      if (network?.isNotEmpty == true) {
+        return element.currency == currency && element.network == network;
+      }
+      return element.currency == currency;
+    });
   }
 
   static EventCurrency? getEventCurrency({
@@ -99,7 +106,7 @@ class EventTicketUtils {
     if (currency == null) return null;
     return currencies.firstWhereOrNull(
       (element) {
-        if (network != null) {
+        if (network?.isNotEmpty == true) {
           return element.currency == currency && element.network == network;
         }
         return element.currency == currency;
@@ -112,7 +119,7 @@ class EventTicketUtils {
   }) {
     List<String> networks = [];
     for (var eventCurrency in currencies) {
-      if (eventCurrency.network != null) {
+      if (eventCurrency.network?.isNotEmpty == true) {
         networks.add(eventCurrency.network!);
       }
     }
