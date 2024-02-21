@@ -294,6 +294,10 @@
         "noGuestFound": "No guests found",
         "appliedForReservation": "Applied for reservation",
         "pendingApproval" : "Pending approval",
+        "pendingRequests(ordinal)": {
+            "one": "$count pending request",
+            "other": "$count pending requests"
+        },
         "approveToLetThemIn": "Approve to let them in",
         "approvedBy": "Approved by $name",
         "declinedBy": "Declined by $name",
@@ -318,5 +322,7 @@
     "rewardsCount(ordinal)": {
         "one": "reward",
         "other": "rewards"
-    }
+    },
+    "checkedIn": "checked in",
+    "invited": "invited"
 }
