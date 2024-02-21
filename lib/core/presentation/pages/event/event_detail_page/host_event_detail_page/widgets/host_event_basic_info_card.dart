@@ -64,10 +64,10 @@ class HostEventBasicInfoCard extends StatelessWidget {
               decoration: BoxDecoration(
                 color: colorScheme.onPrimary.withOpacity(0.06),
                 borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(15.r),
-                  topLeft: Radius.circular(15.r),
-                  bottomLeft: Radius.circular(6.r),
-                  bottomRight: Radius.circular(6.r),
+                  topRight: Radius.circular(LemonRadius.medium),
+                  topLeft: Radius.circular(LemonRadius.medium),
+                  bottomLeft: Radius.circular(LemonRadius.extraSmall),
+                  bottomRight: Radius.circular(LemonRadius.extraSmall),
                 ),
               ),
               child: Stack(
@@ -75,10 +75,10 @@ class HostEventBasicInfoCard extends StatelessWidget {
                   Positioned.fill(
                     child: ClipRRect(
                       borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(15.r),
-                        topLeft: Radius.circular(15.r),
-                        bottomLeft: Radius.circular(6.r),
-                        bottomRight: Radius.circular(6.r),
+                        topRight: Radius.circular(LemonRadius.medium),
+                        topLeft: Radius.circular(LemonRadius.medium),
+                        bottomLeft: Radius.circular(LemonRadius.extraSmall),
+                        bottomRight: Radius.circular(LemonRadius.extraSmall),
                       ),
                       child: Container(
                         decoration: BoxDecoration(
@@ -103,7 +103,6 @@ class HostEventBasicInfoCard extends StatelessWidget {
                           children: [
                             Padding(
                               padding: EdgeInsets.symmetric(
-                                vertical: Spacing.smMedium,
                                 horizontal: Spacing.smMedium,
                               ),
                               child: Row(
@@ -238,7 +237,8 @@ class HostEventBasicInfoCard extends StatelessWidget {
                     height: 73.w,
                     decoration: BoxDecoration(
                       color: colorScheme.onPrimary.withOpacity(0.06),
-                      borderRadius: BorderRadius.all(Radius.circular(6.r)),
+                      borderRadius: BorderRadius.all(
+                          Radius.circular(LemonRadius.extraSmall)),
                     ),
                     child: Padding(
                       padding: EdgeInsets.only(left: Spacing.smMedium),
@@ -252,38 +252,11 @@ class HostEventBasicInfoCard extends StatelessWidget {
                             style: Typo.extraMedium
                                 .copyWith(color: colorScheme.onPrimary),
                           ),
-                          Text(t.event.scanQR.checkedIn,
-                              style: Typo.small
-                                  .copyWith(color: colorScheme.onSecondary)),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: Spacing.extraSmall,
-                ),
-                Expanded(
-                  child: Container(
-                    height: 73.w,
-                    decoration: BoxDecoration(
-                      color: colorScheme.onPrimary.withOpacity(0.06),
-                      borderRadius: BorderRadius.all(Radius.circular(6.r)),
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.only(left: Spacing.smMedium),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // TODO: Will fill ? with real value after confirm with Designer
-                          Text(
-                            '?',
-                            style: Typo.extraMedium
-                                .copyWith(color: colorScheme.onPrimary),
+                          SizedBox(
+                            height: 2.h,
                           ),
                           Text(
-                            t.event.attending,
+                            t.event.checkedIn.capitalize(),
                             style: Typo.small
                                 .copyWith(color: colorScheme.onSecondary),
                           ),
@@ -300,7 +273,44 @@ class HostEventBasicInfoCard extends StatelessWidget {
                     height: 73.w,
                     decoration: BoxDecoration(
                       color: colorScheme.onPrimary.withOpacity(0.06),
-                      borderRadius: BorderRadius.all(Radius.circular(6.r)),
+                      borderRadius: BorderRadius.all(
+                          Radius.circular(LemonRadius.extraSmall)),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.only(left: Spacing.smMedium),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // TODO: Will fill ? with real value after confirm with Designer
+                          Text(
+                            '?',
+                            style: Typo.extraMedium
+                                .copyWith(color: colorScheme.onPrimary),
+                          ),
+                          SizedBox(
+                            height: 2.h,
+                          ),
+                          Text(
+                            t.event.attending.capitalize(),
+                            style: Typo.small
+                                .copyWith(color: colorScheme.onSecondary),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: Spacing.extraSmall,
+                ),
+                Expanded(
+                  child: Container(
+                    height: 73.w,
+                    decoration: BoxDecoration(
+                      color: colorScheme.onPrimary.withOpacity(0.06),
+                      borderRadius: BorderRadius.all(
+                          Radius.circular(LemonRadius.extraSmall)),
                     ),
                     child: Padding(
                       padding: EdgeInsets.only(left: Spacing.smMedium),
@@ -312,6 +322,9 @@ class HostEventBasicInfoCard extends StatelessWidget {
                             event.invitedCount?.toString() ?? '',
                             style: Typo.extraMedium
                                 .copyWith(color: colorScheme.onPrimary),
+                          ),
+                          SizedBox(
+                            height: 2.h,
                           ),
                           Text(
                             t.event.invited.capitalize(),
@@ -331,17 +344,19 @@ class HostEventBasicInfoCard extends StatelessWidget {
             InkWell(
               onTap: () {
                 Vibrate.feedback(FeedbackType.light);
-                showComingSoonDialog(context);
+                AutoRouter.of(context).push(
+                  const EventApprovalSettingRoute(),
+                );
               },
               child: Container(
                 height: 54.w,
                 decoration: BoxDecoration(
                   color: colorScheme.onPrimary.withOpacity(0.06),
                   borderRadius: BorderRadius.only(
-                    bottomRight: Radius.circular(15.r),
-                    bottomLeft: Radius.circular(15.r),
-                    topLeft: Radius.circular(6.r),
-                    topRight: Radius.circular(6.r),
+                    bottomRight: Radius.circular(LemonRadius.medium),
+                    bottomLeft: Radius.circular(LemonRadius.medium),
+                    topLeft: Radius.circular(LemonRadius.extraSmall),
+                    topRight: Radius.circular(LemonRadius.extraSmall),
                   ),
                 ),
                 child: Stack(
@@ -355,7 +370,6 @@ class HostEventBasicInfoCard extends StatelessWidget {
                             children: [
                               Padding(
                                 padding: EdgeInsets.symmetric(
-                                  vertical: Spacing.smMedium,
                                   horizontal: Spacing.smMedium,
                                 ),
                                 child: Row(
@@ -364,8 +378,8 @@ class HostEventBasicInfoCard extends StatelessWidget {
                                   children: [
                                     Center(
                                       child: Assets.icons.icError.svg(
-                                        width: Sizing.small,
-                                        height: Sizing.small,
+                                        width: 20.w,
+                                        height: 20.w,
                                       ),
                                     ),
                                     SizedBox(width: Spacing.small),

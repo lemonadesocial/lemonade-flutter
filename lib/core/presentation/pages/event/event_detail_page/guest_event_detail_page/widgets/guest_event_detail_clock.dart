@@ -258,15 +258,11 @@ class GuestEventDetailClock extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   mainAxisSize: MainAxisSize.max,
                                   children: [
-                                    Container(
-                                      width: 25.w,
-                                      height: 25.w,
-                                      clipBehavior: Clip.antiAlias,
-                                      decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                          image: Assets.images.icCheckInGradient
-                                              .provider(),
-                                        ),
+                                    ThemeSvgIcon(
+                                      builder: (filter) =>
+                                          Assets.icons.icCheckin.svg(
+                                        width: 24.w,
+                                        height: 24.w,
                                       ),
                                     ),
                                     SizedBox(width: Spacing.small),

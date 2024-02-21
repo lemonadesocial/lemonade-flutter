@@ -324,5 +324,6 @@
         "other": "rewards"
     },
     "checkedIn": "checked in",
-    "invited": "invited"
+    "invited": "invited",
+    "checkinGuests": "Check in guests"
 }
