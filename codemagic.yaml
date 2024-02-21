@@ -4,7 +4,7 @@ definitions:
     max_build_duration: 75
   env_versions: &env_versions
     flutter: fvm
-    xcode: 14.3.1
+    xcode: 15.2
     cocoapods: 1.13.0
   integrations:
     app_store_connect_integrations: &app_store_connect_integrations
