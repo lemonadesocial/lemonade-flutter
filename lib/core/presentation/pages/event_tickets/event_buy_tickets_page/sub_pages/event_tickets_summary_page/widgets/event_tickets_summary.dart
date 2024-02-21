@@ -73,7 +73,7 @@ class TicketSummaryItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final isCrypto = network != null;
+    final isCrypto = network?.isNotEmpty == true;
 
     return Container(
       margin: EdgeInsets.only(bottom: Spacing.xSmall),

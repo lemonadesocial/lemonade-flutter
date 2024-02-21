@@ -5,7 +5,6 @@ import 'package:app/core/domain/payment/entities/payment.dart';
 import 'package:app/core/domain/payment/input/update_payment_input/update_payment_input.dart';
 import 'package:app/core/domain/payment/payment_repository.dart';
 import 'package:app/injection/register_module.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -76,23 +75,25 @@ class BuyTicketsBloc extends Bloc<BuyTicketsEvent, BuyTicketsState> {
     final payment = event.payment;
     _currentPayment = payment;
     try {
-      final stripePublicKey = payment.transferMetadata?['public_key'];
-      final stripeClientSecret = payment.transferMetadata?['client_secret'];
-      final paymentMethodId = event.paymentMethod;
+      // TODO: will remove after confirmation with BE
+      // @deprecated
+      // final stripePublicKey = payment.transferMetadata?.tryGet('public_key') ?? '';
+      // final stripeClientSecret = payment.transferMetadata?.tryGet('client_secret') ?? '';
+      // final paymentMethodId = event.paymentMethod;
 
-      Stripe.publishableKey = stripePublicKey;
+      // Stripe.publishableKey = stripePublicKey;
 
-      // if payment method not defined then have to use stripe payment sheet
-      if (paymentMethodId == null || paymentMethodId.isEmpty) {
-        await Stripe.instance.initPaymentSheet(
-          paymentSheetParameters: SetupPaymentSheetParameters(
-            paymentIntentClientSecret: stripeClientSecret,
-            style: ThemeMode.dark,
-          ),
-        );
+      // // if payment method not defined then have to use stripe payment sheet
+      // if (paymentMethodId == null || paymentMethodId.isEmpty) {
+      //   await Stripe.instance.initPaymentSheet(
+      //     paymentSheetParameters: SetupPaymentSheetParameters(
+      //       paymentIntentClientSecret: stripeClientSecret,
+      //       style: ThemeMode.dark,
+      //     ),
+      //   );
 
-        await Stripe.instance.presentPaymentSheet();
-      }
+      //   await Stripe.instance.presentPaymentSheet();
+      // }
 
       add(
         BuyTicketsEvent.processUpdatePayment(

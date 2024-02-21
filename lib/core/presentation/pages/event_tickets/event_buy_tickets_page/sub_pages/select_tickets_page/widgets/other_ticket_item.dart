@@ -95,13 +95,14 @@ class OtherTicketItem extends StatelessWidget {
               SizedBox(height: Spacing.xSmall),
               ...(ticketType.prices ?? []).map((ticketPrice) {
                 // show other chains price
-                if (ticketPrice.network != null &&
+                if (ticketPrice.network?.isNotEmpty == true &&
                     networkFilter != null &&
                     ticketPrice.network == networkFilter) {
                   return const SizedBox.shrink();
                 }
 
-                final isCryptoCurrency = ticketPrice.network != null;
+                final isCryptoCurrency =
+                    ticketPrice.network?.isNotEmpty == true;
 
                 if (isCryptoCurrency &&
                     selectedPaymentMethod == SelectTicketsPaymentMethod.card) {
@@ -155,7 +156,7 @@ class _PriceItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final isCryptoCurrency = network != null;
+    final isCryptoCurrency = network?.isNotEmpty == true;
 
     return ChainQuery(
       chainId: price.network ?? '',
@@ -171,7 +172,7 @@ class _PriceItem extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                if (isCryptoCurrency && price.network != null) ...[
+                if (isCryptoCurrency && price.network?.isNotEmpty == true) ...[
                   Container(
                     decoration: ShapeDecoration(
                       color: colorScheme.surface,
@@ -220,7 +221,8 @@ class _PriceItem extends StatelessWidget {
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      if (isCryptoCurrency && price.network != null) ...[
+                      if (isCryptoCurrency &&
+                          price.network?.isNotEmpty == true) ...[
                         SizedBox(height: 2.w),
                         Text(
                           chain?.name ?? '',
