@@ -143,7 +143,9 @@ class _EventHostItem extends StatelessWidget {
                             errorWidget: (_, __, ___) =>
                                 ImagePlaceholder.defaultPlaceholder(),
                             imageUrl: ImageUtils.generateUrl(
-                              file: host?.newPhotosExpanded?.first,
+                              file: host?.newPhotosExpanded?.isNotEmpty == true
+                                  ? host?.newPhotosExpanded?.first
+                                  : null,
                               imageConfig: ImageConfig.eventPhoto,
                             ),
                           ),
