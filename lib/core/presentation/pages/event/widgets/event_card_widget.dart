@@ -54,6 +54,7 @@ class EventCard extends StatelessWidget {
               : null,
           imageConfig: ImageConfig.profile,
         ),
+        label: event.hostExpanded?.name ?? '',
       ),
     );
   }
