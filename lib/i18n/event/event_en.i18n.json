@@ -294,7 +294,7 @@
         "noRequestFound": "No requests found",
         "noGuestFound": "No guests found",
         "appliedForReservation": "Applied for reservation",
-        "pendingApproval" : "Pending approval",
+        "pendingApproval": "Pending approval",
         "pendingRequests(ordinal)": {
             "one": "$count pending request",
             "other": "$count pending requests"
@@ -326,5 +326,18 @@
     },
     "checkedIn": "checked in",
     "invited": "invited",
-    "checkinGuests": "Check in guests"   
+    "checkinGuests": "Check in guests",
+    "issueTickets": {
+        "issueTicketsTitle": "Issue tickets",
+        "issueTicketsDescription": "Grant event access for free!",
+        "issueTicketsSummaryTitle": "Summary",
+        "issueTicketsSummaryDescription": "Make sure the details below are correct. Issuing tickets is an irreversible action.",
+        "totalTickets": "Total tickets",
+        "confirmAndIssue": "Confirm & Issue",
+        "issueTicketsLoadingTitle": "Issuing tickets",
+        "issueTicketsLoadingDescription": "Please wait while we issues tickets to your\nguests. This should only take a few seconds.",
+        "ticketsIssuedSuccessTitle": "Tickets issued!",
+        "ticketIssuedSuccessDescription": "Tickets have been sent to your guests. They\ncan now access this event for free!",
+        "assignMore": "Assign more"
+    }
 }
