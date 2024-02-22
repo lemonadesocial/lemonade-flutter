@@ -86,14 +86,6 @@ class HostActionsBar extends StatelessWidget {
             ),
           ],
         ),
-        // child: Row(
-        //   mainAxisAlignment: MainAxisAlignment.center,
-        //   children: [
-        //     const Icon(Icons.qr_code, color: Colors.white),
-        //     SizedBox(width: Spacing.extraSmall),
-        //     Text(t.event.scanQR.scan, style: Typo.mediumPlus),
-        //   ],
-        // ),
       ),
     );
   }
