@@ -247,9 +247,8 @@ class HostEventBasicInfoCard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // TODO: Will fill ? with real value after confirm with Designer
                           Text(
-                            '?',
+                            event.checkInCount?.toString() ?? '',
                             style: Typo.extraMedium
                                 .copyWith(color: colorScheme.onPrimary),
                           ),
@@ -284,9 +283,8 @@ class HostEventBasicInfoCard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // TODO: Will fill ? with real value after confirm with Designer
                           Text(
-                            '?',
+                            event.attendingCount?.toString() ?? '',
                             style: Typo.extraMedium
                                 .copyWith(color: colorScheme.onPrimary),
                           ),
