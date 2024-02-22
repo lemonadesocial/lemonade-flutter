@@ -113,7 +113,8 @@ class HostEventBasicInfoCard extends StatelessWidget {
                                     height: 42.w,
                                     decoration: BoxDecoration(
                                       border: Border.all(
-                                          color: colorScheme.outline),
+                                        color: colorScheme.outline,
+                                      ),
                                       borderRadius: BorderRadius.circular(
                                         LemonRadius.extraSmall,
                                       ),
@@ -237,7 +238,8 @@ class HostEventBasicInfoCard extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: colorScheme.onPrimary.withOpacity(0.06),
                       borderRadius: BorderRadius.all(
-                          Radius.circular(LemonRadius.extraSmall)),
+                        Radius.circular(LemonRadius.extraSmall),
+                      ),
                     ),
                     child: Padding(
                       padding: EdgeInsets.only(left: Spacing.smMedium),
@@ -273,7 +275,8 @@ class HostEventBasicInfoCard extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: colorScheme.onPrimary.withOpacity(0.06),
                       borderRadius: BorderRadius.all(
-                          Radius.circular(LemonRadius.extraSmall)),
+                        Radius.circular(LemonRadius.extraSmall),
+                      ),
                     ),
                     child: Padding(
                       padding: EdgeInsets.only(left: Spacing.smMedium),
@@ -309,7 +312,8 @@ class HostEventBasicInfoCard extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: colorScheme.onPrimary.withOpacity(0.06),
                       borderRadius: BorderRadius.all(
-                          Radius.circular(LemonRadius.extraSmall)),
+                        Radius.circular(LemonRadius.extraSmall),
+                      ),
                     ),
                     child: Padding(
                       padding: EdgeInsets.only(left: Spacing.smMedium),
