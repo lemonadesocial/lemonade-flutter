@@ -277,7 +277,8 @@
         "selectAllTicketTiers": "Select all ticket tiers",
         "selectTicketTiers": "Select ticket tiers",
         "createRewardSuccessfully": "Create reward successfully",
-        "updateRewardSuccessfully": "Update reward successfully"
+        "updateRewardSuccessfully": "Update reward successfully",
+        "addAnotherReward": "Add another reward"
     },
     "eventApproval": {
         "waitingApproval": "Awaiting Approval",
@@ -325,5 +326,5 @@
     },
     "checkedIn": "checked in",
     "invited": "invited",
-    "checkinGuests": "Check in guests"
+    "checkinGuests": "Check in guests"   
 }
