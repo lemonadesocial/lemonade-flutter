@@ -52,7 +52,7 @@ class EventJoinRequestApplicationUserCard extends StatelessWidget {
                     EventJoinRequestTicketInfo(
                       padding: EdgeInsets.all(Spacing.extraSmall),
                       eventJoinRequest: eventJoinRequest,
-                      showPrice: false,
+                      showPrice: true,
                     ),
                     _Social(user: user),
                   ],

@@ -27,7 +27,7 @@ class EventOrderSummary extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-    final isCryptoCurrency = selectedNetwork != null;
+    final isCryptoCurrency = selectedNetwork?.isNotEmpty == true;
     final currencyInfo =
         PaymentUtils.getCurrencyInfo(pricingInfo, currency: selectedCurrency);
 

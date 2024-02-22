@@ -35,7 +35,7 @@ class EventOrderSlideToPay extends StatelessWidget {
     final t = Translations.of(context);
     final currencyInfo =
         PaymentUtils.getCurrencyInfo(pricingInfo, currency: selectedCurrency);
-    final amountText = selectedNetwork != null
+    final amountText = selectedNetwork?.isNotEmpty == true
         ? Web3Utils.formatCryptoCurrency(
             pricingInfo?.cryptoTotal ?? BigInt.zero,
             currency: selectedCurrency,

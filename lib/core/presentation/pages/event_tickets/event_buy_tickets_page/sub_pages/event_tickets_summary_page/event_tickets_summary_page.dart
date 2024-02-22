@@ -118,7 +118,7 @@ class EventTicketsSummaryPageView extends StatelessWidget {
               orElse: () => [] as List<PurchasableTicketType>,
               success: (response, _) => response.ticketTypes ?? [],
             );
-    final isCryptoCurrency = selectedNetwork != null;
+    final isCryptoCurrency = selectedNetwork?.isNotEmpty == true;
 
     return MultiBlocListener(
       listeners: [

@@ -94,7 +94,7 @@ class SelectEventTicketsBloc
   ) async {
     selectedCurrency = event.currency;
     selectedNetwork = event.network;
-    bool isCryptoCurrency = selectedNetwork != null;
+    bool isCryptoCurrency = selectedNetwork?.isNotEmpty == true;
 
     final newSelectedTickets = [
       event.ticket,
