@@ -3,6 +3,7 @@ import 'package:app/core/domain/event/entities/event_ticket.dart';
 import 'package:app/core/domain/event/input/get_tickets_input/get_tickets_input.dart';
 import 'package:app/core/domain/event/repository/event_ticket_repository.dart';
 import 'package:app/core/failure.dart';
+import 'package:app/core/presentation/pages/event/my_event_ticket_page/widgets/ticket_qr_code_popup.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/auth_utils.dart';
@@ -24,8 +25,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 
-class GuestEventDetailClock extends StatelessWidget {
-  const GuestEventDetailClock({
+class GuestEventDetailBasicInfo extends StatelessWidget {
+  const GuestEventDetailBasicInfo({
     super.key,
     required this.event,
   });
@@ -227,7 +228,10 @@ class GuestEventDetailClock extends StatelessWidget {
             InkWell(
               onTap: () {
                 Vibrate.feedback(FeedbackType.light);
-                showComingSoonDialog(context);
+                showDialog(
+                  context: context,
+                  builder: (context) => const TicketQRCodePopup(),
+                );
               },
               child: Container(
                 height: 54.w,
