@@ -1,5 +1,29 @@
 # Changelog
 
+## [1.5.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.4.1...v1.5.0) (2024-02-23)
+
+
+### Features
+
+* enhance UI of guest event detail ([#399](https://github.com/lemonadesocial/lemonade-flutter/issues/399)) ([0a7b5f6](https://github.com/lemonadesocial/lemonade-flutter/commit/0a7b5f6559e1c35e669d6b54bee436be8ab67a2f))
+* event host approval UI update ([#398](https://github.com/lemonadesocial/lemonade-flutter/issues/398)) ([75e2cac](https://github.com/lemonadesocial/lemonade-flutter/commit/75e2cacb12d7cd4d5d8f1241aa2b157a2319bc61))
+* host event detail UI ([#405](https://github.com/lemonadesocial/lemonade-flutter/issues/405)) ([e7113c7](https://github.com/lemonadesocial/lemonade-flutter/commit/e7113c78a9fbc0ce39d2a2ff138e60bc2b793a33))
+* migrate to official wallet connect library ([#393](https://github.com/lemonadesocial/lemonade-flutter/issues/393)) ([505baea](https://github.com/lemonadesocial/lemonade-flutter/commit/505baea1d04b1916fd6dcf5710407d421fe91396))
+* new file uploads ([#392](https://github.com/lemonadesocial/lemonade-flutter/issues/392)) ([7929c64](https://github.com/lemonadesocial/lemonade-flutter/commit/7929c6469bf1d8cb6176aa5b124c4ba8119330c8))
+* upgrade fvm flutter version to 3.16.9 ([#387](https://github.com/lemonadesocial/lemonade-flutter/issues/387)) ([9c3c80a](https://github.com/lemonadesocial/lemonade-flutter/commit/9c3c80a16bc542212e5a21297517ccb34eab5b4b))
+
+
+### Bug Fixes
+
+* check cohost permission in event detail ([#410](https://github.com/lemonadesocial/lemonade-flutter/issues/410)) ([b0d9fbb](https://github.com/lemonadesocial/lemonade-flutter/commit/b0d9fbb5e5aee6740523d68c768ec026de41cce5))
+* check network null or empty ([#403](https://github.com/lemonadesocial/lemonade-flutter/issues/403)) ([40a91f6](https://github.com/lemonadesocial/lemonade-flutter/commit/40a91f6f37095ac92fb661c5768e3f278a8c3b36))
+* event host item avatar crash ([#401](https://github.com/lemonadesocial/lemonade-flutter/issues/401)) ([2a2793f](https://github.com/lemonadesocial/lemonade-flutter/commit/2a2793f11e831052bca97939687320eb75e88a16))
+* lagging event detail issues ([#396](https://github.com/lemonadesocial/lemonade-flutter/issues/396)) ([34453b3](https://github.com/lemonadesocial/lemonade-flutter/commit/34453b38c4f0d136f65fcc082539172e5092d549))
+* layout claim poap success popup ([#404](https://github.com/lemonadesocial/lemonade-flutter/issues/404)) ([f53b292](https://github.com/lemonadesocial/lemonade-flutter/commit/f53b292f324e16aae6f82def4caba1d630526626))
+* minor issues ([#397](https://github.com/lemonadesocial/lemonade-flutter/issues/397)) ([ed3600a](https://github.com/lemonadesocial/lemonade-flutter/commit/ed3600a1ca08e4a9178210881a9808cd434442cf))
+* new photo expanded breaking in user dto ([#395](https://github.com/lemonadesocial/lemonade-flutter/issues/395)) ([1b94a06](https://github.com/lemonadesocial/lemonade-flutter/commit/1b94a063eb2918c711605468c654243f1289fe6b))
+* show join request total payment amount ([#402](https://github.com/lemonadesocial/lemonade-flutter/issues/402)) ([bb2dc08](https://github.com/lemonadesocial/lemonade-flutter/commit/bb2dc08e3e4b2fc74b4a4471ae3c4cde2dee934c))
+
 ## [1.4.1](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.4.0...v1.4.1) (2024-02-01)
 
 
