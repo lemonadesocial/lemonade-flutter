@@ -104,7 +104,7 @@ class HostEventDetailConfigGrid extends StatelessWidget {
         crossAxisCount: 4,
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,
-        childAspectRatio: 1.2,
+        childAspectRatio: 1.3,
       ),
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {

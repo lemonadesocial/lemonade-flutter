@@ -51,6 +51,7 @@ class Event with _$Event {
     int? invitedCount,
     int? checkInCount,
     int? attendingCount,
+    int? pendingRequestCount,
   }) = _Event;
 
   factory Event.fromDto(EventDto dto) {
@@ -115,6 +116,7 @@ class Event with _$Event {
       invitedCount: dto.invitedCount ?? 0,
       checkInCount: dto.checkInCount ?? 0,
       attendingCount: dto.attendingCount ?? 0,
+      pendingRequestCount: dto.pendingRequestCount ?? 0,
     );
   }
 }
