@@ -49,6 +49,9 @@ class Event with _$Event {
     bool? approvalRequired,
     List<String>? requiredProfileFields,
     int? invitedCount,
+    int? checkInCount,
+    int? attendingCount,
+    int? pendingRequestCount,
   }) = _Event;
 
   factory Event.fromDto(EventDto dto) {
@@ -111,6 +114,9 @@ class Event with _$Event {
       approvalRequired: dto.approvalRequired,
       requiredProfileFields: dto.requiredProfileFields ?? [],
       invitedCount: dto.invitedCount ?? 0,
+      checkInCount: dto.checkInCount ?? 0,
+      attendingCount: dto.attendingCount ?? 0,
+      pendingRequestCount: dto.pendingRequestCount ?? 0,
     );
   }
 }

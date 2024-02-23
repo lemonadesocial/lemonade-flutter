@@ -75,7 +75,7 @@ class EventAcceptedExportList extends StatelessWidget {
                     );
                   },
                   separatorBuilder: (context, index) => SizedBox(
-                    height: Spacing.small,
+                    height: Spacing.superExtraSmall,
                   ),
                 ),
               ],

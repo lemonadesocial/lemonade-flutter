@@ -17,6 +17,11 @@ class EventUtils {
     return event.host == userId;
   }
 
+  static bool isCohost({required Event event, required String userId}) {
+    if (event.id == null) return false;
+    return event.cohosts?.contains(userId) ?? false;
+  }
+
   static String getEventThumbnailUrl({required Event event}) {
     if (event.newNewPhotosExpanded == null ||
         event.newNewPhotosExpanded!.isEmpty) {

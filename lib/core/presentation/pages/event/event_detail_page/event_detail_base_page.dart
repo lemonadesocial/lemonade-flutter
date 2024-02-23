@@ -53,12 +53,12 @@ class _EventDetailBasePageView extends StatelessWidget {
                 orElse: () => '',
                 authenticated: (session) => session.userId,
               );
-
+          final isCohost = EventUtils.isCohost(event: event, userId: userId);
           final isAttending =
               EventUtils.isAttending(event: event, userId: userId);
           final isOwnEvent =
               EventUtils.isOwnEvent(event: event, userId: userId);
-          if (isOwnEvent) {
+          if (isOwnEvent || isCohost) {
             return const HostEventDetailView();
           }
           return isAttending

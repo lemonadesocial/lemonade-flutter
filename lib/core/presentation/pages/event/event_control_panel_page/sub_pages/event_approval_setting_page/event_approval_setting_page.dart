@@ -100,10 +100,36 @@ class _EventApprovalSettingPageState extends State<EventApprovalSettingPage>
       ),
       body: SafeArea(
         child: !approvalRequired
-            ? SizedBox(
-                child: EventAcceptedExportList(
-                  event: event,
-                ),
+            ? Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: Spacing.xSmall,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        _CustomTab(
+                          tabItem: JoinRequestTabItem(
+                            title: t.event.eventApproval.tabs.reservations,
+                            icon: Assets.icons.icDone,
+                            activeColor: LemonColor.paleViolet,
+                            inactiveColor: colorScheme.onSecondary,
+                          ),
+                          onPress: () => null,
+                          isActive: true,
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: Spacing.superExtraSmall),
+                  Expanded(
+                    child: EventAcceptedExportList(
+                      event: event,
+                    ),
+                  ),
+                ],
               )
             : Column(
                 children: [
@@ -118,7 +144,6 @@ class _EventApprovalSettingPageState extends State<EventApprovalSettingPage>
                       itemBuilder: (context, index) {
                         final tabItem = tabItems[index];
                         return _CustomTab(
-                          colorScheme: colorScheme,
                           tabItem: tabItem,
                           onPress: () => _tabController.animateTo(index),
                           isActive: activeIndex == index,
@@ -176,13 +201,11 @@ class _EventApprovalSettingPageState extends State<EventApprovalSettingPage>
 
 class _CustomTab extends StatelessWidget {
   const _CustomTab({
-    required this.colorScheme,
     required this.tabItem,
     required this.onPress,
     this.isActive = false,
   });
 
-  final ColorScheme colorScheme;
   final JoinRequestTabItem tabItem;
   final Function() onPress;
   final bool isActive;

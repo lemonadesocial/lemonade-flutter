@@ -180,7 +180,6 @@
         "rewards": "Rewards"
     },
     "rewards": "Rewards",
-    "rewardsDescription": "Enhance you guests’ experience with unique rewards and make this event stand out!",
     "addPoap": "Add POAP",
     "editEvent": "Edit event",
     "editEventSuccessfully": "Edit event successfully",
@@ -339,5 +338,7 @@
         "ticketsIssuedSuccessTitle": "Tickets issued!",
         "ticketIssuedSuccessDescription": "Tickets have been sent to your guests. They\ncan now access this event for free!",
         "assignMore": "Assign more"
-    }
+    },
+    "addCollectible": "Add collectible",
+    "addCollectibleDescription": "Attach unique collectibles to this event to make it stand out!"
 }
