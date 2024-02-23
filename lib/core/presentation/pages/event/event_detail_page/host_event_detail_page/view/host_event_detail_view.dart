@@ -1,6 +1,6 @@
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/post_guest_event_animated_app_bar.dart';
-import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/widgets/host_actions_bar.dart';
+import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/widgets/host_checkin_guests_action.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/widgets/host_event_basic_info_card.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/widgets/host_event_detail_config_grid.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/widgets/host_event_location.dart';
@@ -61,12 +61,12 @@ class HostEventDetailView extends StatelessWidget {
                     ),
                   ),
                   SliverPadding(
-                    padding: EdgeInsets.only(top: Spacing.medium),
+                    padding: EdgeInsets.only(top: Spacing.large),
                   ),
                   SliverPadding(
                     padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
                     sliver: SliverToBoxAdapter(
-                      child: HostActionsBar(
+                      child: HostCheckinGuestsAction(
                         event: event,
                       ),
                     ),

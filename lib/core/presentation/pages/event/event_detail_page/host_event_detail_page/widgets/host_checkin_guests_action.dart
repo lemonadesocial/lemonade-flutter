@@ -10,8 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 
-class HostActionsBar extends StatelessWidget {
-  const HostActionsBar({
+class HostCheckinGuestsAction extends StatelessWidget {
+  const HostCheckinGuestsAction({
     super.key,
     required this.event,
   });

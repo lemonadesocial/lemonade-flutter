@@ -8,6 +8,7 @@ import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
@@ -24,195 +25,49 @@ class HostEventPoapRewardCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
-    return Container(
-      width: double.infinity,
-      height: 230.h,
-      padding: EdgeInsets.symmetric(horizontal: Spacing.medium, vertical: 24.h),
-      clipBehavior: Clip.antiAlias,
-      decoration: ShapeDecoration(
-        shape: RoundedRectangleBorder(
-          side: BorderSide(
-            width: 2.w,
-            color: colorScheme.outline,
-          ),
-          borderRadius: BorderRadius.circular(LemonRadius.medium),
-        ),
-      ),
+    return DottedBorder(
+      strokeWidth: 2.w,
+      color: colorScheme.outline,
+      dashPattern: [8.w],
+      borderType: BorderType.RRect,
+      radius: Radius.circular(LemonRadius.medium),
+      padding: EdgeInsets.symmetric(
+          horizontal: Spacing.small, vertical: Spacing.small),
       child: Stack(
         children: [
           Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(
-                width: double.infinity,
                 child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
-                      width: 72.w,
-                      height: 72.h,
+                      width: 133.w,
+                      height: 133.h,
                       clipBehavior: Clip.antiAlias,
                       decoration: ShapeDecoration(
-                        color: LemonColor.white06,
+                        color: colorScheme.onPrimary.withOpacity(0.06),
                         shape: RoundedRectangleBorder(
                           borderRadius:
                               BorderRadius.circular(LemonRadius.xSmall),
                         ),
                       ),
                     ),
-                    SizedBox(width: 18.w),
-                    Expanded(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: 60.w,
-                            height: 18.h,
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 36.w,
-                              vertical: 18.h,
-                            ),
-                            clipBehavior: Clip.antiAlias,
-                            decoration: ShapeDecoration(
-                              color: LemonColor.white06,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(3.r),
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 9.h),
-                          Container(
-                            width: double.infinity,
-                            height: 27.h,
-                            clipBehavior: Clip.antiAlias,
-                            decoration: const BoxDecoration(),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  width: double.infinity,
-                                  height: 12.h,
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 36.w,
-                                    vertical: 18.h,
-                                  ),
-                                  clipBehavior: Clip.antiAlias,
-                                  decoration: ShapeDecoration(
-                                    color: LemonColor.white06,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(3.r),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(height: 3.h),
-                                Container(
-                                  width: 160.w,
-                                  height: 12.h,
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 36.w,
-                                    vertical: 18.h,
-                                  ),
-                                  clipBehavior: Clip.antiAlias,
-                                  decoration: ShapeDecoration(
-                                    color: LemonColor.white06,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(3.r),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 20.h),
-              SizedBox(
-                width: double.infinity,
-                height: 85.h,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
                     SizedBox(
-                      width: double.infinity,
-                      height: 28,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: double.infinity,
-                            clipBehavior: Clip.antiAlias,
-                            decoration: const BoxDecoration(),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
-                                  width: 60.w,
-                                  height: 18.h,
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 36.w,
-                                    vertical: 18.h,
-                                  ),
-                                  clipBehavior: Clip.antiAlias,
-                                  decoration: ShapeDecoration(
-                                    color: LemonColor.white06,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(3.r),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(width: Spacing.xSmall),
-                                Container(
-                                  width: 60.w,
-                                  height: 18.h,
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 36.w,
-                                    vertical: 18.h,
-                                  ),
-                                  clipBehavior: Clip.antiAlias,
-                                  decoration: ShapeDecoration(
-                                    color: LemonColor.white06,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(3.r),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
+                      width: Spacing.xSmall,
                     ),
-                    SizedBox(height: 15.h),
                     Container(
-                      width: double.infinity,
-                      height: 42.h,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 36.w,
-                        vertical: 18.h,
-                      ),
+                      width: 133.w,
+                      height: 133.h,
                       clipBehavior: Clip.antiAlias,
                       decoration: ShapeDecoration(
-                        color: LemonColor.white06,
+                        color: colorScheme.onPrimary.withOpacity(0.06),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(9.r),
+                          borderRadius:
+                              BorderRadius.circular(LemonRadius.xSmall),
                         ),
                       ),
                     ),
@@ -221,31 +76,20 @@ class HostEventPoapRewardCard extends StatelessWidget {
               ),
             ],
           ),
-          Center(
+          Container(
+            height: 134.h,
+            padding: EdgeInsets.all(Spacing.small),
             child: Column(
-              mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  t.event.rewards,
+                  t.event.addCollectibleDescription,
                   textAlign: TextAlign.center,
-                  style: Typo.extraMedium.copyWith(
-                    fontFamily: FontFamily.nohemiVariable,
-                    fontWeight: FontWeight.w700,
-                    height: 0,
-                  ),
+                  style: Typo.medium.copyWith(color: colorScheme.onSecondary),
                 ),
                 SizedBox(
-                  height: Spacing.extraSmall,
-                ),
-                Text(
-                  t.event.rewardsDescription,
-                  textAlign: TextAlign.center,
-                  style: Typo.small.copyWith(color: colorScheme.onSecondary),
-                ),
-                SizedBox(
-                  height: Spacing.smMedium,
+                  height: Spacing.xSmall,
                 ),
                 InkWell(
                   onTap: () {
@@ -253,8 +97,8 @@ class HostEventPoapRewardCard extends StatelessWidget {
                     showComingSoonDialog(context);
                   },
                   child: LinearGradientButton(
-                    width: 108.w,
-                    label: t.event.addPoap,
+                    width: 134.w,
+                    label: t.event.addCollectible,
                     trailing: ThemeSvgIcon(
                       builder: (filter) =>
                           Assets.icons.icSendMessage.svg(colorFilter: filter),
@@ -269,7 +113,7 @@ class HostEventPoapRewardCard extends StatelessWidget {
                 ),
               ],
             ),
-          ),
+          )
         ],
       ),
     );
