@@ -12,7 +12,6 @@ import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -63,145 +62,156 @@ class HostEventBasicInfoCard extends StatelessWidget {
               decoration: BoxDecoration(
                 color: colorScheme.onPrimary.withOpacity(0.06),
                 borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(LemonRadius.medium),
-                  topLeft: Radius.circular(LemonRadius.medium),
-                  bottomLeft: Radius.circular(LemonRadius.extraSmall),
-                  bottomRight: Radius.circular(LemonRadius.extraSmall),
+                  topRight: Radius.circular(15.r),
+                  topLeft: Radius.circular(15.r),
+                  bottomLeft: Radius.circular(6.r),
+                  bottomRight: Radius.circular(6.r),
                 ),
               ),
               child: Stack(
-                alignment: AlignmentDirectional.center,
                 children: [
-                  Positioned.fill(
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(LemonRadius.medium),
-                        topLeft: Radius.circular(LemonRadius.medium),
-                        bottomLeft: Radius.circular(LemonRadius.extraSmall),
-                        bottomRight: Radius.circular(LemonRadius.extraSmall),
-                      ),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              colorScheme.onPrimary.withOpacity(0.03),
-                              colorScheme.onPrimary.withOpacity(0.01),
-                            ],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomCenter,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
                   Row(
                     mainAxisSize: MainAxisSize.max,
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Container(
-                        width: 42.w,
-                        height: 42.w,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: colorScheme.outline,
-                          ),
-                          borderRadius: BorderRadius.circular(
-                            LemonRadius.extraSmall,
-                          ),
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(
-                            LemonRadius.extraSmall,
-                          ),
-                          child: CachedNetworkImage(
-                            fit: BoxFit.cover,
-                            imageUrl: EventUtils.getEventThumbnailUrl(
-                              event: event,
-                            ),
-                            errorWidget: (context, url, error) =>
-                                ImagePlaceholder.defaultPlaceholder(),
-                            placeholder: (context, url) =>
-                                ImagePlaceholder.defaultPlaceholder(),
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: Spacing.small),
-                      Flexible(
-                        child: SizedBox(
-                          height: 42.h,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                event.title ?? '',
-                                style: Typo.small.copyWith(
-                                  color: colorScheme.onSecondary,
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily: FontFamily.switzerVariable,
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
+                      Expanded(
+                        child: Stack(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                vertical: Spacing.smMedium,
+                                horizontal: Spacing.smMedium,
                               ),
-                              SizedBox(
-                                height: 3.h,
-                              ),
-                              Text(
-                                durationToEvent != null
-                                    ? t.event.eventStartIn(
-                                        time: prettyDuration(
-                                          durationToEvent!,
-                                          tersity:
-                                              (durationToEvent?.inDays ?? 0) < 1
-                                                  ? (durationToEvent?.inHours ??
-                                                              0) >=
-                                                          1
-                                                      ? DurationTersity.hour
-                                                      : DurationTersity.minute
-                                                  : DurationTersity.day,
-                                          upperTersity: DurationTersity.day,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Container(
+                                    width: 42.w,
+                                    height: 42.w,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: colorScheme.outline,
+                                      ),
+                                      borderRadius: BorderRadius.circular(
+                                        LemonRadius.extraSmall,
+                                      ),
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(
+                                        LemonRadius.extraSmall,
+                                      ),
+                                      child: CachedNetworkImage(
+                                        fit: BoxFit.cover,
+                                        imageUrl:
+                                            EventUtils.getEventThumbnailUrl(
+                                          event: event,
                                         ),
-                                      )
-                                    : t.event.eventEnded,
-                                style: Typo.mediumPlus.copyWith(
-                                  color: colorScheme.onPrimary,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: FontFamily.nohemiVariable,
-                                ),
+                                        errorWidget: (context, url, error) =>
+                                            ImagePlaceholder
+                                                .defaultPlaceholder(),
+                                        placeholder: (context, url) =>
+                                            ImagePlaceholder
+                                                .defaultPlaceholder(),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(width: Spacing.small),
+                                  Flexible(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          event.title ?? '',
+                                          style: Typo.small.copyWith(
+                                            color: colorScheme.onSecondary,
+                                            fontWeight: FontWeight.w400,
+                                            fontFamily:
+                                                FontFamily.switzerVariable,
+                                          ),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        SizedBox(
+                                          height: 3.h,
+                                        ),
+                                        Text(
+                                          durationToEvent != null
+                                              ? t.event.eventStartIn(
+                                                  time: prettyDuration(
+                                                    durationToEvent!,
+                                                    tersity: (durationToEvent
+                                                                    ?.inDays ??
+                                                                0) <
+                                                            1
+                                                        ? (durationToEvent
+                                                                        ?.inHours ??
+                                                                    0) >=
+                                                                1
+                                                            ? DurationTersity
+                                                                .hour
+                                                            : DurationTersity
+                                                                .minute
+                                                        : DurationTersity.day,
+                                                    upperTersity:
+                                                        DurationTersity.day,
+                                                  ),
+                                                )
+                                              : t.event.eventEnded,
+                                          style: Typo.mediumPlus.copyWith(
+                                            color: colorScheme.onPrimary,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily:
+                                                FontFamily.nohemiVariable,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
-                      SizedBox(width: Spacing.small),
-                      Container(
-                        width: 36.w,
-                        height: 36.w,
-                        decoration: ShapeDecoration(
-                          color: LemonColor.white06,
-                          shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.circular(LemonRadius.xSmall),
-                          ),
-                        ),
-                        child: InkWell(
-                          onTap: () {
-                            Vibrate.feedback(FeedbackType.light);
-                            AutoRouter.of(context)
-                                .navigate(const EventControlPanelRoute());
-                          },
-                          child: Center(
-                            child: ThemeSvgIcon(
-                              color: colorScheme.onSecondary,
-                              builder: (filter) => Assets.icons.icEdit.svg(
-                                width: 15.w,
-                                height: 15.w,
-                                colorFilter: filter,
+                      Stack(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(
+                              right: Spacing.smMedium,
+                            ),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: colorScheme.onPrimary.withOpacity(0.06),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(9.r)),
+                              ),
+                              width: Sizing.medium,
+                              height: Sizing.medium,
+                              child: InkWell(
+                                onTap: () {
+                                  Vibrate.feedback(FeedbackType.light);
+                                  AutoRouter.of(context)
+                                      .navigate(const EventControlPanelRoute());
+                                },
+                                child: Center(
+                                  child: ThemeSvgIcon(
+                                    color: colorScheme.onSecondary,
+                                    builder: (filter) =>
+                                        Assets.icons.icEdit.svg(
+                                      colorFilter: filter,
+                                      width: 15.w,
+                                      height: 15.w,
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
                           ),
-                        ),
+                        ],
                       ),
                     ],
                   ),
@@ -376,8 +386,10 @@ class HostEventBasicInfoCard extends StatelessWidget {
                                     SizedBox(width: Spacing.small),
                                     Text(
                                       t.event.eventApproval.pendingRequests(
-                                        n: event.pending?.length ?? 0,
-                                        count: event.pending?.length ?? 0,
+                                        count: event.pendingRequestCount
+                                                ?.toString() ??
+                                            0,
+                                        n: event.pendingRequestCount ?? 0,
                                       ),
                                       style: Typo.medium.copyWith(
                                         color: colorScheme.onSecondary,

@@ -144,6 +144,9 @@ const eventFragment = '''
   virtual
   private
   invited_count
+  checkin_count
+  attending_count
+  pending_request_count
   rewards {
     _id
     active

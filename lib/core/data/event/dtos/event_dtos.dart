@@ -55,6 +55,7 @@ class EventDto with _$EventDto {
     @JsonKey(name: 'invited_count') int? invitedCount,
     @JsonKey(name: 'checkin_count') int? checkInCount,
     @JsonKey(name: 'attending_count') int? attendingCount,
+    @JsonKey(name: 'pending_request_count') int? pendingRequestCount,
   }) = _EventDto;
 
   factory EventDto.fromJson(Map<String, dynamic> json) =>
