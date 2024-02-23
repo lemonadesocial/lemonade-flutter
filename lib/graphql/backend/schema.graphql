@@ -171,7 +171,6 @@ type User {
   new_photos: [MongoID!]
   tag_recommended: Boolean
   tag_site: Boolean
-  tag_support: Boolean
   tag_timeline: Boolean
   tag_verified: Boolean
   tagline: String
@@ -190,7 +189,6 @@ type User {
   lemon_refresh_at: DateTimeISO
   fcm_tokens: [String!]
   matrix_localpart: String
-  matrix_support_room_id: String
   payment_verification: UserPaymentVerification
   url: String
   url_go: String
@@ -445,6 +443,10 @@ type Event {
   virtual: Boolean
   welcome_text: String
   welcome_video: Video
+
+  """Number of users who have tickets"""
+  attending_count: Float
+  checkin_count: Float
   payment_ticket_count: Float
   payment_ticket_unassigned_count: Float
   eventbrite_enabled: Boolean
@@ -457,6 +459,7 @@ type Event {
   url_go: String
   broadcasts: [Broadcast!]
   event_ticket_types: [EventTicketType!]
+  pending_request_count: Float
   sessions: [EventSession!]
   has_terms_accepted: Boolean
   data: JSON
@@ -624,6 +627,7 @@ type BroadcastMetaData {
 type EventTicketType {
   _id: MongoID!
   active: Boolean
+  private: Boolean
   event: MongoID!
   title: String!
   prices: [EventTicketPrice!]!
@@ -958,6 +962,7 @@ type EventAcceptedExport {
   phone: String
   amount: String
   currency: String
+  ticket_type_id: MongoID
   ticket_type: String
   ticket_count: Float
   ticket_discount: String
@@ -1153,6 +1158,7 @@ type GetEventTicketTypesResponse {
 type PurchasableTicketType {
   _id: MongoID!
   active: Boolean
+  private: Boolean
   event: MongoID!
   title: String!
   prices: [EventTicketPrice!]!
@@ -2053,6 +2059,7 @@ type Mutation {
   deleteStripeCard(_id: MongoID!): StripeCard!
   assignTickets(input: AssignTicketsInput!): Boolean!
   redeemTickets(input: RedeemTicketsInput!): RedeemTicketsResponse!
+  createTickets(ticket_type: MongoID!, ticket_assignments: [TicketAssignment!]!): [Ticket!]!
   buyTickets(input: BuyTicketsInput!): BuyTicketsResponse!
   approveUserJoinRequests(input: ApproveUserJoinRequestsInput!): Boolean!
   declineUserJoinRequests(input: DeclineUserJoinRequestsInput!): Boolean!
@@ -2366,6 +2373,7 @@ input EventPaymentTicketDiscountInput {
 
 input EventTicketTypeInput {
   active: Boolean
+  private: Boolean
   event: MongoID
   title: String
   prices: [EventTicketPriceInput!]
@@ -2795,6 +2803,11 @@ input RedeemTicketsInput {
 input RedeemItem {
   ticket_type: MongoID!
   count: Int!
+}
+
+input TicketAssignment {
+  email: String!
+  count: Float!
 }
 
 type BuyTicketsResponse {

@@ -11,6 +11,7 @@ fragment EventAcceptedExport on EventAcceptedExport {
   currency
   ticketCount: ticket_count
   ticketType: ticket_type
+  ticketTypeId: ticket_type_id
   ticketDiscount: ticket_discount
   ticketDiscountAmount: ticket_discount_amount
   checkinDate: checkin_date

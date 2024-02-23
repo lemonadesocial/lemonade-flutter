@@ -17,6 +17,7 @@ class EventAcceptedExport with _$EventAcceptedExport {
     String? currency,
     double? ticketCount,
     String? ticketType,
+    String? ticketTypeId,
     String? ticketDiscount,
     String? ticketDiscountAmount,
     String? imageAvatar,
