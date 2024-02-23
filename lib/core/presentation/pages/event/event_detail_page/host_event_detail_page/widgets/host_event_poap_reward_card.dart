@@ -3,9 +3,7 @@ import 'package:app/core/presentation/widgets/common/button/linear_gradient_butt
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/modal_utils.dart';
 import 'package:app/gen/assets.gen.dart';
-import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:dotted_border/dotted_border.dart';
@@ -32,7 +30,9 @@ class HostEventPoapRewardCard extends StatelessWidget {
       borderType: BorderType.RRect,
       radius: Radius.circular(LemonRadius.medium),
       padding: EdgeInsets.symmetric(
-          horizontal: Spacing.small, vertical: Spacing.small),
+        horizontal: Spacing.small,
+        vertical: Spacing.small,
+      ),
       child: Stack(
         children: [
           Column(
@@ -113,7 +113,7 @@ class HostEventPoapRewardCard extends StatelessWidget {
                 ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
