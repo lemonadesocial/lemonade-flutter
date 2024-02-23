@@ -263,6 +263,9 @@ final eventDetailRoutes = AutoRoute(
         ),
       ],
     ),
+    AutoRoute(
+      page: EventProgramRoute.page,
+    ),
   ],
 );
 
