@@ -181,10 +181,10 @@ class PostGuestEventDetailView extends StatelessWidget {
                                             .onPrimary, // Adjust the icon color as needed
                                       ),
                                     ),
-                                    Text('Program')
+                                    const Text('Program'),
                                   ],
                                 ),
-                              )
+                              ),
                             ],
                           ),
                         ),
