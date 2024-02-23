@@ -342,85 +342,87 @@ class HostEventBasicInfoCard extends StatelessWidget {
             SizedBox(
               height: Spacing.extraSmall,
             ),
-            InkWell(
-              onTap: () {
-                Vibrate.feedback(FeedbackType.light);
-                AutoRouter.of(context).push(
-                  const EventApprovalSettingRoute(),
-                );
-              },
-              child: Container(
-                height: 54.w,
-                decoration: BoxDecoration(
-                  color: colorScheme.onPrimary.withOpacity(0.06),
-                  borderRadius: BorderRadius.only(
-                    bottomRight: Radius.circular(LemonRadius.medium),
-                    bottomLeft: Radius.circular(LemonRadius.medium),
-                    topLeft: Radius.circular(LemonRadius.extraSmall),
-                    topRight: Radius.circular(LemonRadius.extraSmall),
+            if (event.approvalRequired == true) ...[
+              InkWell(
+                onTap: () {
+                  Vibrate.feedback(FeedbackType.light);
+                  AutoRouter.of(context).push(
+                    const EventApprovalSettingRoute(),
+                  );
+                },
+                child: Container(
+                  height: 54.w,
+                  decoration: BoxDecoration(
+                    color: colorScheme.onPrimary.withOpacity(0.06),
+                    borderRadius: BorderRadius.only(
+                      bottomRight: Radius.circular(LemonRadius.medium),
+                      bottomLeft: Radius.circular(LemonRadius.medium),
+                      topLeft: Radius.circular(LemonRadius.extraSmall),
+                      topRight: Radius.circular(LemonRadius.extraSmall),
+                    ),
                   ),
-                ),
-                child: Stack(
-                  children: [
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: Stack(
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: Spacing.smMedium,
+                  child: Stack(
+                    children: [
+                      Row(
+                        mainAxisSize: MainAxisSize.max,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: Stack(
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: Spacing.smMedium,
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      Center(
+                                        child: Assets.icons.icError.svg(
+                                          width: 20.w,
+                                          height: 20.w,
+                                        ),
+                                      ),
+                                      SizedBox(width: Spacing.small),
+                                      Text(
+                                        t.event.eventApproval.pendingRequests(
+                                          count: event.pendingRequestCount
+                                                  ?.toString() ??
+                                              0,
+                                          n: event.pendingRequestCount ?? 0,
+                                        ),
+                                        style: Typo.medium.copyWith(
+                                          color: colorScheme.onSecondary,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    Center(
-                                      child: Assets.icons.icError.svg(
-                                        width: 20.w,
-                                        height: 20.w,
-                                      ),
-                                    ),
-                                    SizedBox(width: Spacing.small),
-                                    Text(
-                                      t.event.eventApproval.pendingRequests(
-                                        count: event.pendingRequestCount
-                                                ?.toString() ??
-                                            0,
-                                        n: event.pendingRequestCount ?? 0,
-                                      ),
-                                      style: Typo.medium.copyWith(
-                                        color: colorScheme.onSecondary,
-                                      ),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ],
+                              ],
+                            ),
+                          ),
+                          Stack(
+                            children: [
+                              SizedBox(
+                                width: Sizing.xLarge,
+                                child: Center(
+                                  child: Assets.icons.icArrowBack.svg(
+                                    width: 25.w,
+                                    height: 25.w,
+                                  ),
                                 ),
                               ),
                             ],
                           ),
-                        ),
-                        Stack(
-                          children: [
-                            SizedBox(
-                              width: Sizing.xLarge,
-                              child: Center(
-                                child: Assets.icons.icArrowBack.svg(
-                                  width: 25.w,
-                                  height: 25.w,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
+            ],
           ],
         );
       },
