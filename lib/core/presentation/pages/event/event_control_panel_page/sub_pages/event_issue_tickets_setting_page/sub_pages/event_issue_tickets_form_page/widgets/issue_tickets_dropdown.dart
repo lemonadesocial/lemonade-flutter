@@ -1,3 +1,5 @@
+import 'package:app/core/application/event_tickets/issue_tickets_bloc/issue_tickets_bloc.dart';
+import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -8,62 +10,70 @@ import 'package:app/theme/typo.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class IssueTicketsDropdown extends StatelessWidget {
+  final List<EventTicketType> ticketTypes;
   const IssueTicketsDropdown({
     super.key,
+    required this.ticketTypes,
   });
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    return DropdownButtonHideUnderline(
-      child: DropdownButton2(
-        value: '2',
-        onChanged: (value) {
-          // TODO: handle by bloc
-        },
-        customButton: Container(
-          padding: EdgeInsets.all(Spacing.smMedium),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(LemonRadius.small),
-            color: colorScheme.secondaryContainer,
-          ),
-          child: _TicketTierItem(
-            trailing: ThemeSvgIcon(
-              color: colorScheme.onSecondary,
-              builder: (filter) => Assets.icons.icArrowDown.svg(
-                width: Sizing.xSmall,
-                height: Sizing.xSmall,
-                colorFilter: filter,
+
+    return BlocBuilder<IssueTicketsBloc, IssueTicketsBlocState>(
+      builder: (context, state) => DropdownButtonHideUnderline(
+        child: DropdownButton2(
+          value: state.selectedTicketType?.id,
+          onChanged: (value) {
+            context.read<IssueTicketsBloc>().add(
+                  IssueTicketsBlocEvent.selectTicketType(
+                    ticketType: ticketTypes
+                        .firstWhere((element) => element.id == value),
+                  ),
+                );
+          },
+          customButton: Container(
+            padding: EdgeInsets.all(Spacing.smMedium),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(LemonRadius.small),
+              color: colorScheme.secondaryContainer,
+            ),
+            child: _TicketTierItem(
+              key: Key(state.selectedTicketType?.id ?? ''),
+              ticketType: state.selectedTicketType,
+              trailing: ThemeSvgIcon(
+                color: colorScheme.onSecondary,
+                builder: (filter) => Assets.icons.icArrowDown.svg(
+                  width: Sizing.xSmall,
+                  height: Sizing.xSmall,
+                  colorFilter: filter,
+                ),
               ),
             ),
           ),
-        ),
-        items: const [
-          // TODO: mock data only
-          DropdownMenuItem(
-            value: '1',
-            child: _TicketTierItem(
-              title: "Ticket 1",
+          items: ticketTypes
+              .map(
+                (ticketType) => DropdownMenuItem(
+                  value: ticketType.id,
+                  child: _TicketTierItem(
+                    ticketType: ticketType,
+                  ),
+                ),
+              )
+              .toList(),
+          dropdownStyleData: DropdownStyleData(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(LemonRadius.small),
+              color: colorScheme.secondaryContainer,
             ),
+            offset: Offset(0, -Spacing.superExtraSmall),
           ),
-          DropdownMenuItem(
-            value: '2',
-            child: _TicketTierItem(
-              title: "Ticket 2",
-            ),
+          menuItemStyleData: const MenuItemStyleData(
+            overlayColor: MaterialStatePropertyAll(LemonColor.darkBackground),
           ),
-        ],
-        dropdownStyleData: DropdownStyleData(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(LemonRadius.small),
-            color: colorScheme.secondaryContainer,
-          ),
-          offset: Offset(0, -Spacing.superExtraSmall),
-        ),
-        menuItemStyleData: const MenuItemStyleData(
-          overlayColor: MaterialStatePropertyAll(LemonColor.darkBackground),
         ),
       ),
     );
@@ -72,10 +82,11 @@ class IssueTicketsDropdown extends StatelessWidget {
 
 class _TicketTierItem extends StatelessWidget {
   final Widget? trailing;
-  final String? title;
+  final EventTicketType? ticketType;
   const _TicketTierItem({
+    super.key,
     this.trailing,
-    this.title,
+    this.ticketType,
   });
 
   @override
@@ -98,7 +109,7 @@ class _TicketTierItem extends StatelessWidget {
         Expanded(
           flex: 1,
           child: Text(
-            title ?? "Default tickets",
+            ticketType?.title ?? '',
             style: Typo.mediumPlus.copyWith(
               color: colorScheme.onPrimary,
             ),
