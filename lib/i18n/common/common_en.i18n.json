@@ -150,5 +150,6 @@
     "claimed": "claimed",
     "anonymousLemon": "Anonymous Lemon",
     "defaultEmptyList": "No items to display at the moment.",
-    "email": "Email"
+    "email": "Email",
+    "alert": "Alert"
 }

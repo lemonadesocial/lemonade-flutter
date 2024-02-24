@@ -50,5 +50,6 @@
     "newMessage": "New message",
     "searchPeople": "Search people",
     "chatDetails": "Chat details",
-    "leave": "Leave"
+    "leave": "Leave",
+    "roomNotExistDesc": "Oops! It seems like the chat room you are trying to access does not exist."
 }
