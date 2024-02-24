@@ -21,6 +21,7 @@ import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 
 @RoutePage()
 class EventsListingPage extends StatelessWidget {
@@ -128,8 +129,9 @@ class _EventsListingViewState extends State<_EventsListingView> {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final themeColor = Theme.of(context).colorScheme;
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
+      backgroundColor: colorScheme.primary,
       appBar: LemonAppBar(
         title: t.event.events,
         actions: [
@@ -137,18 +139,19 @@ class _EventsListingViewState extends State<_EventsListingView> {
             padding: EdgeInsets.only(right: Spacing.xSmall),
             child: GestureDetector(
               onTap: () {
+                Vibrate.feedback(FeedbackType.light);
                 AutoRouter.of(context).navigateNamed('/chat');
               },
               child: ThemeSvgIcon(
-                color: themeColor.onSurface,
-                builder: (filter) =>
-                    Assets.icons.icChat.svg(colorFilter: filter),
+                color: colorScheme.onPrimary,
+                builder: (filter) => Assets.icons.icChatBubble.svg(
+                  colorFilter: filter,
+                ),
               ),
             ),
           ),
         ],
       ),
-      backgroundColor: themeColor.primary,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: Spacing.small),
         child: Column(

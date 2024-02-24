@@ -6,7 +6,6 @@ import 'package:app/core/presentation/pages/setting/widgets/setting_tile_widget.
 import 'package:app/core/presentation/widgets/back_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
-import 'package:app/core/utils/modal_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -99,7 +98,8 @@ class SettingPageView extends StatelessWidget {
                     },
                   ),
                   featureAvailable: true,
-                  onTap: () => showComingSoonDialog(context),
+                  onTap: () =>
+                      AutoRouter.of(context).push(const CreateVaultRoute()),
                 ),
                 SizedBox(height: Spacing.xSmall),
                 SettingTileWidget(

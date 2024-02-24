@@ -25,6 +25,7 @@ class GuestEventDetailDashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -35,7 +36,36 @@ class GuestEventDetailDashboard extends StatelessWidget {
           onTap: () {
             Vibrate.feedback(FeedbackType.light);
             if (event.matrixEventRoomId == null ||
-                event.matrixEventRoomId!.isEmpty) return;
+                event.matrixEventRoomId!.isEmpty) {
+              return showDialog(
+                barrierDismissible: false,
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    backgroundColor: colorScheme.secondary,
+                    title: Text(t.common.alert),
+                    content: SingleChildScrollView(
+                      child: ListBody(
+                        children: <Widget>[
+                          Text(t.chat.roomNotExistDesc),
+                        ],
+                      ),
+                    ),
+                    actions: <Widget>[
+                      TextButton(
+                        child: Text(
+                          t.common.actions.ok,
+                          style: Typo.medium.copyWith(color: Colors.white),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+            }
             AutoRouter.of(context).navigate(
               ChatRoute(roomId: event.matrixEventRoomId ?? ''),
             );

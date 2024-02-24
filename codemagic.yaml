@@ -5,7 +5,7 @@ definitions:
   env_versions: &env_versions
     flutter: fvm
     xcode: 15.2
-    cocoapods: 1.13.0
+    cocoapods: 1.14.2
   integrations:
     app_store_connect_integrations: &app_store_connect_integrations
       app_store_connect: Lemonade
