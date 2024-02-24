@@ -2,8 +2,10 @@ import 'package:app/core/presentation/widgets/animation/success_circle_animation
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 class EventIssueTicketsSuccessView extends StatelessWidget {
@@ -18,7 +20,6 @@ class EventIssueTicketsSuccessView extends StatelessWidget {
       mainAxisSize: MainAxisSize.max,
       children: [
         const Spacer(),
-        // TODO:
         const SuccessCircleAnimationWidget(),
         const Spacer(),
         Row(
@@ -66,6 +67,11 @@ class EventIssueTicketsSuccessView extends StatelessWidget {
             children: [
               Expanded(
                 child: LinearGradientButton.primaryButton(
+                  onTap: () {
+                    AutoRouter.of(context).popAndPush(
+                      const EventIssueTicketsSettingRoute(),
+                    );
+                  },
                   label: t.event.issueTickets.assignMore,
                   textColor: colorScheme.onPrimary,
                 ),
@@ -73,6 +79,7 @@ class EventIssueTicketsSuccessView extends StatelessWidget {
               SizedBox(width: Spacing.xSmall),
               Expanded(
                 child: LinearGradientButton.secondaryButton(
+                  onTap: () => AutoRouter.of(context).pop(),
                   label: t.common.done,
                   textColor: colorScheme.onPrimary,
                 ),

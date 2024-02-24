@@ -1,12 +1,18 @@
+import 'package:app/core/application/event_tickets/issue_tickets_bloc/issue_tickets_bloc.dart';
+import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/presentation/widgets/common/dotted_line/dotted_line.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
+import 'package:app/core/utils/email_validator.dart';
+import 'package:app/core/utils/image_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:collection/collection.dart';
 
 class EventIssueTicketsSummary extends StatelessWidget {
   const EventIssueTicketsSummary({super.key});
@@ -15,70 +21,87 @@ class EventIssueTicketsSummary extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
-    // TODO:
-    const length = 3;
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        const _TicketTierInfo(),
-        SizedBox(height: Spacing.superExtraSmall),
-        Container(
-          padding: EdgeInsets.all(Spacing.smMedium),
-          decoration: BoxDecoration(
-            color: colorScheme.secondaryContainer,
-            borderRadius: BorderRadius.circular(Spacing.superExtraSmall),
-          ),
-          child: Column(
-            children: List.generate(length, (index) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const _SummaryRow(
-                    label: "mthinh3@gmail.com",
-                    value: '2',
-                  ),
-                  if (index != length - 1)
-                    SizedBox(
-                      height: Spacing.superExtraSmall,
-                    ),
-                ],
-              );
-            }),
-          ),
-        ),
-        SizedBox(height: Spacing.superExtraSmall),
-        Container(
-          padding: EdgeInsets.all(Spacing.smMedium),
-          decoration: BoxDecoration(
-            color: colorScheme.secondaryContainer,
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(LemonRadius.medium),
-              bottomRight: Radius.circular(LemonRadius.medium),
-              topLeft: Radius.circular(LemonRadius.extraSmall),
-              topRight: Radius.circular(LemonRadius.extraSmall),
+    return BlocBuilder<IssueTicketsBloc, IssueTicketsBlocState>(
+      builder: (context, state) {
+        final filteredAssignments = state.ticketAssignments.where((item) {
+          return EmailValidator.validate(item.email) && item.count > 0;
+        }).toList();
+        final totalTicketCount = filteredAssignments.isEmpty
+            ? 0
+            : filteredAssignments
+                .map((item) => item.count)
+                .reduce((a, b) => a + b)
+                .toInt();
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _TicketTierInfo(
+              ticketType: state.selectedTicketType,
             ),
-          ),
-          child: Column(
-            children: [
-              _SummaryRow(
-                label: t.event.issueTickets.totalTickets,
-                textColor: colorScheme.onPrimary,
-                textStyle: Typo.medium.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: colorScheme.onPrimary,
+            SizedBox(height: Spacing.superExtraSmall),
+            if (filteredAssignments.isNotEmpty)
+              Container(
+                padding: EdgeInsets.all(Spacing.smMedium),
+                decoration: BoxDecoration(
+                  color: colorScheme.secondaryContainer,
+                  borderRadius: BorderRadius.circular(Spacing.superExtraSmall),
                 ),
-                value: '6',
+                child: Column(
+                  children: filteredAssignments.asMap().entries.map((entry) {
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        _SummaryRow(
+                          label: entry.value.email,
+                          value: entry.value.count.toInt().toString(),
+                        ),
+                        if (entry.key != filteredAssignments.length - 1)
+                          SizedBox(
+                            height: Spacing.superExtraSmall,
+                          ),
+                      ],
+                    );
+                  }).toList(),
+                ),
               ),
-            ],
-          ),
-        ),
-      ],
+            SizedBox(height: Spacing.superExtraSmall),
+            Container(
+              padding: EdgeInsets.all(Spacing.smMedium),
+              decoration: BoxDecoration(
+                color: colorScheme.secondaryContainer,
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(LemonRadius.medium),
+                  bottomRight: Radius.circular(LemonRadius.medium),
+                  topLeft: Radius.circular(LemonRadius.extraSmall),
+                  topRight: Radius.circular(LemonRadius.extraSmall),
+                ),
+              ),
+              child: Column(
+                children: [
+                  _SummaryRow(
+                    label: t.event.issueTickets.totalTickets,
+                    textColor: colorScheme.onPrimary,
+                    textStyle: Typo.medium.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: colorScheme.onPrimary,
+                    ),
+                    value: totalTicketCount.toString(),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
 
 class _TicketTierInfo extends StatelessWidget {
-  const _TicketTierInfo();
+  final EventTicketType? ticketType;
+  const _TicketTierInfo({
+    this.ticketType,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +123,9 @@ class _TicketTierInfo extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
             child: CachedNetworkImage(
-              imageUrl: "",
+              imageUrl: ImageUtils.generateUrl(
+                file: ticketType?.photosExpanded?.firstOrNull,
+              ),
               errorWidget: (_, __, ___) => ImagePlaceholder.ticketThumbnail(),
               placeholder: (_, __) => ImagePlaceholder.ticketThumbnail(),
               width: Sizing.small,
@@ -111,7 +136,7 @@ class _TicketTierInfo extends StatelessWidget {
           Expanded(
             flex: 1,
             child: Text(
-              "Default tickets",
+              ticketType?.title ?? '',
               style: Typo.mediumPlus.copyWith(
                 color: colorScheme.onPrimary,
               ),

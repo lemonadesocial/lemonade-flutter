@@ -1,4 +1,5 @@
 import 'package:app/core/data/event/dtos/event_ticket_dto/event_ticket_dto.dart';
+import 'package:app/core/domain/user/entities/user.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'event_ticket.freezed.dart';
@@ -11,6 +12,7 @@ class EventTicket {
   final String? event;
   final String? invitedBy;
   final String? type;
+  final User? assignedToExpanded;
 
   const EventTicket({
     this.id,
@@ -20,6 +22,7 @@ class EventTicket {
     this.event,
     this.invitedBy,
     this.type,
+    this.assignedToExpanded,
   });
 
   factory EventTicket.fromDto(EventTicketDto dto) => EventTicket(
@@ -30,6 +33,9 @@ class EventTicket {
         event: dto.event,
         invitedBy: dto.invitedBy,
         type: dto.type,
+        assignedToExpanded: dto.assignedToExpanded != null
+            ? User.fromDto(dto.assignedToExpanded!)
+            : null,
       );
 }
 
