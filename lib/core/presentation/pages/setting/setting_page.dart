@@ -99,7 +99,7 @@ class SettingPageView extends StatelessWidget {
                   ),
                   featureAvailable: true,
                   onTap: () =>
-                      AutoRouter.of(context).push(const CreateVaultRoute()),
+                      AutoRouter.of(context).push(const VaultRootRoute()),
                 ),
                 SizedBox(height: Spacing.xSmall),
                 SettingTileWidget(
