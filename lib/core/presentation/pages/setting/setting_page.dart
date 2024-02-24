@@ -99,7 +99,8 @@ class SettingPageView extends StatelessWidget {
                     },
                   ),
                   featureAvailable: true,
-                  onTap: () => showComingSoonDialog(context),
+                  onTap: () =>
+                      AutoRouter.of(context).push(const CreateVaultRoute()),
                 ),
                 SizedBox(height: Spacing.xSmall),
                 SettingTileWidget(
