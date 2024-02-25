@@ -44,16 +44,25 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>FirebaseCrashlyticsCollectionEnabled</key>
 	<string>$(CRASHLYTICS_COLLECTION_ENABLED)</string>
+	<key>FlutterDeepLinkingEnabled</key>
+	<true/>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>metamask</string>
+		<string>trust</string>
+		<string>safe</string>
+		<string>rainbow</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Allow access to your camera to capture and update your profile avatar</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>We require your location information to accurately show nearby badges. This data will only be used when you use this feature and confidentiality will be maintained.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>We require your location information to accurately show nearby badges. This data will only be used when you use this feature and confidentiality will be maintained.</string>
-	<key>NSCameraUsageDescription</key>
-	<string>Allow access to your camera to capture and update your profile avatar</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Allow access to your photo library to enable uploading your profile avatar</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
@@ -82,12 +91,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>LSApplicationQueriesSchemes</key>
-	<array>
-	  <string>metamask</string>
-	  <string>trust</string>
-	  <string>safe</string>
-	  <string>rainbow</string>
-	</array>
 </dict>
 </plist>
