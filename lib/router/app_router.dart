@@ -153,7 +153,7 @@ final eventRoutes = [
 
 final eventDetailRoutes = AutoRoute(
   page: EventDetailRoute.page,
-  path: '/events/:id',
+  path: '/event/:id',
   children: [
     AutoRoute(
       initial: true,
