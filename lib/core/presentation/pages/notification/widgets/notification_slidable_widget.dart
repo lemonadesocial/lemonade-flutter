@@ -1,4 +1,3 @@
-import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -19,7 +18,6 @@ class NotificationSlidable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final t = Translations.of(context);
 
     return Slidable(
       key: ValueKey(id),
@@ -43,7 +41,6 @@ class NotificationSlidable extends StatelessWidget {
             backgroundColor: LemonColor.red,
             foregroundColor: colorScheme.onPrimary,
             icon: Icons.delete,
-            label: t.common.delete,
           ),
         ],
       ),
