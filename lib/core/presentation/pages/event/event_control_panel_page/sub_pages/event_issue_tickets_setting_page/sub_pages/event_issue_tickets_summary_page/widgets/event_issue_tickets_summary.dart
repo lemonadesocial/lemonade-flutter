@@ -2,7 +2,6 @@ import 'package:app/core/application/event_tickets/issue_tickets_bloc/issue_tick
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/presentation/widgets/common/dotted_line/dotted_line.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
-import 'package:app/core/utils/email_validator.dart';
 import 'package:app/core/utils/image_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/sizing.dart';
@@ -23,12 +22,9 @@ class EventIssueTicketsSummary extends StatelessWidget {
     final t = Translations.of(context);
     return BlocBuilder<IssueTicketsBloc, IssueTicketsBlocState>(
       builder: (context, state) {
-        final filteredAssignments = state.ticketAssignments.where((item) {
-          return EmailValidator.validate(item.email) && item.count > 0;
-        }).toList();
-        final totalTicketCount = filteredAssignments.isEmpty
+        final totalTicketCount = state.ticketAssignments.isEmpty
             ? 0
-            : filteredAssignments
+            : state.ticketAssignments
                 .map((item) => item.count)
                 .reduce((a, b) => a + b)
                 .toInt();
@@ -39,7 +35,7 @@ class EventIssueTicketsSummary extends StatelessWidget {
               ticketType: state.selectedTicketType,
             ),
             SizedBox(height: Spacing.superExtraSmall),
-            if (filteredAssignments.isNotEmpty)
+            if (state.ticketAssignments.isNotEmpty)
               Container(
                 padding: EdgeInsets.all(Spacing.smMedium),
                 decoration: BoxDecoration(
@@ -47,7 +43,8 @@ class EventIssueTicketsSummary extends StatelessWidget {
                   borderRadius: BorderRadius.circular(Spacing.superExtraSmall),
                 ),
                 child: Column(
-                  children: filteredAssignments.asMap().entries.map((entry) {
+                  children:
+                      state.ticketAssignments.asMap().entries.map((entry) {
                     return Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -55,7 +52,7 @@ class EventIssueTicketsSummary extends StatelessWidget {
                           label: entry.value.email,
                           value: entry.value.count.toInt().toString(),
                         ),
-                        if (entry.key != filteredAssignments.length - 1)
+                        if (entry.key != state.ticketAssignments.length - 1)
                           SizedBox(
                             height: Spacing.superExtraSmall,
                           ),
