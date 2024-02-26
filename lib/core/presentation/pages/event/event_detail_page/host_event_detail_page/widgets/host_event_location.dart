@@ -24,83 +24,97 @@ class HostEventLocation extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
-    return SizedBox(
-      width: double.infinity,
-      height: 144.w,
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          SizedBox(
-            width: 144.w,
-            child: ClipRRect(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(LemonRadius.medium),
-                bottomLeft: Radius.circular(LemonRadius.medium),
-              ),
-              child: Stack(
-                children: [
-                  Positioned.fill(
-                    child: CachedNetworkImage(
-                      fit: BoxFit.cover,
-                      placeholder: (_, __) => ImagePlaceholder.eventCard(),
-                      errorWidget: (_, __, ___) => ImagePlaceholder.eventCard(),
-                      imageUrl: MapUtils.createGoogleMapsURL(
-                        lat: event.latitude ?? 0,
-                        lng: event.longitude ?? 0,
-                        attended: true,
+    return InkWell(
+      onTap: () => MapUtils.showMapOptionBottomSheet(
+        context,
+        latitude: event.latitude ?? 0,
+        longitude: event.longitude ?? 0,
+      ),
+      child: SizedBox(
+        width: double.infinity,
+        height: 144.w,
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            SizedBox(
+              width: 144.w,
+              child: ClipRRect(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(LemonRadius.medium),
+                  bottomLeft: Radius.circular(LemonRadius.medium),
+                ),
+                child: Stack(
+                  children: [
+                    Positioned.fill(
+                      child: CachedNetworkImage(
+                        fit: BoxFit.cover,
+                        placeholder: (_, __) => ImagePlaceholder.eventCard(),
+                        errorWidget: (_, __, ___) =>
+                            ImagePlaceholder.eventCard(),
+                        imageUrl: MapUtils.createGoogleMapsURL(
+                          lat: event.latitude ?? 0,
+                          lng: event.longitude ?? 0,
+                          attended: true,
+                        ),
                       ),
                     ),
-                  ),
-                  Align(
-                    alignment: Alignment.center,
-                    child: RippleMarker(
-                      size: 90.w,
-                      color: LemonColor.rippleMarkerColor,
+                    Align(
+                      alignment: Alignment.center,
+                      child: RippleMarker(
+                        size: 90.w,
+                        color: LemonColor.rippleMarkerColor,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Expanded(
-            child: Container(
-              padding: EdgeInsets.symmetric(
-                vertical: Spacing.smMedium,
-                horizontal: Spacing.small,
-              ),
-              decoration: BoxDecoration(
-                color: colorScheme.surfaceVariant,
-                borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(15.sp),
-                  bottomRight: Radius.circular(15.sp),
+                  ],
                 ),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Assets.icons.icLocationPin.svg(),
-                  const Spacer(),
-                  Text(
-                    t.event.eventLocation,
-                    style: Typo.mediumPlus.copyWith(
-                      fontFamily: FontFamily.switzerVariable,
-                      fontWeight: FontWeight.w600,
-                    ),
+            ),
+            Expanded(
+              child: Container(
+                padding: EdgeInsets.symmetric(
+                  vertical: Spacing.smMedium,
+                  horizontal: Spacing.small,
+                ),
+                decoration: BoxDecoration(
+                  color: colorScheme.surfaceVariant,
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(15.sp),
+                    bottomRight: Radius.circular(15.sp),
                   ),
-                  SizedBox(height: Spacing.superExtraSmall),
-                  Text(
-                    event.address?.street1 ?? '',
-                    style: Typo.small.copyWith(
-                      fontFamily: FontFamily.switzerVariable,
-                      fontWeight: FontWeight.w600,
-                      color: colorScheme.onSurfaceVariant,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Assets.icons.icLocationPin.svg(),
+                    const Spacer(),
+                    Text(
+                      event.address?.title ?? t.event.eventLocation,
+                      style: Typo.mediumPlus.copyWith(
+                        fontFamily: FontFamily.switzerVariable,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                  ),
-                ],
+                    SizedBox(height: Spacing.superExtraSmall),
+                    FutureBuilder(
+                      future: MapUtils.getLocationName(
+                        lat: event.latitude ?? 0,
+                        lng: event.longitude ?? 0,
+                      ),
+                      builder: (context, snapshot) => Text(
+                        snapshot.data ?? event.address?.street1 ?? '',
+                        style: Typo.small.copyWith(
+                          fontFamily: FontFamily.switzerVariable,
+                          fontWeight: FontWeight.w600,
+                          color: colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
