@@ -104,6 +104,10 @@ fragment EventFields on Event {
     guest_limit_per
     virtual
     private
+    invited_count
+    checkin_count
+    attending_count
+    pending_request_count
 }
 
 fragment EventCohostRequestFragment on EventCohostRequest {

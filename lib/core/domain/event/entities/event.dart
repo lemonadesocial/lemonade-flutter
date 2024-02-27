@@ -115,10 +115,10 @@ class Event with _$Event {
           .toList(),
       approvalRequired: dto.approvalRequired,
       requiredProfileFields: dto.requiredProfileFields ?? [],
-      invitedCount: dto.invitedCount ?? 0,
-      checkInCount: dto.checkInCount ?? 0,
-      attendingCount: dto.attendingCount ?? 0,
-      pendingRequestCount: dto.pendingRequestCount ?? 0,
+      invitedCount: dto.invitedCount?.toInt() ?? 0,
+      checkInCount: dto.checkInCount?.toInt() ?? 0,
+      attendingCount: dto.attendingCount?.toInt() ?? 0,
+      pendingRequestCount: dto.pendingRequestCount?.toInt() ?? 0,
       sessions: List.from(dto.sessions ?? [])
           .map((item) => EventSession.fromDto(item))
           .toList(),

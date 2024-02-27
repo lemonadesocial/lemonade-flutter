@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.6.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.5.0...v1.6.0) (2024-02-26)
+
+
+### Features
+
+* issues tickets flow ui ([#406](https://github.com/lemonadesocial/lemonade-flutter/issues/406)) ([beee416](https://github.com/lemonadesocial/lemonade-flutter/commit/beee4160dce8734d6a0ae7e9e8897ceffbc08817))
+* issues tickets from host to user ([#414](https://github.com/lemonadesocial/lemonade-flutter/issues/414)) ([76951bd](https://github.com/lemonadesocial/lemonade-flutter/commit/76951bd0779798710b3d656355993fffd729b1d5))
+
+
+### Bug Fixes
+
+* navigate to vault screen in profile and enhance navigate to chat in event detail ([#416](https://github.com/lemonadesocial/lemonade-flutter/issues/416)) ([422ab7f](https://github.com/lemonadesocial/lemonade-flutter/commit/422ab7f2002be569056867df883bd087fe2e91f3))
+* show view guests button for auto approve event ([#415](https://github.com/lemonadesocial/lemonade-flutter/issues/415)) ([88451ad](https://github.com/lemonadesocial/lemonade-flutter/commit/88451ade70acb8cb16ffd30fbdbf0048cfb67824))
+
 ## [1.5.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.4.1...v1.5.0) (2024-02-23)
 
 

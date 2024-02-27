@@ -2,6 +2,7 @@ import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/ripple_marker.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
+import 'package:app/core/utils/event_utils.dart';
 import 'package:app/core/utils/map_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
@@ -32,14 +33,13 @@ class GuestEventLocation extends StatelessWidget {
         );
     final isAttending = (event.accepted ?? []).contains(userId);
 
-    return FutureBuilder(
-      future: isAttending
-          ? MapUtils.getLocationName(
-              lat: event.latitude ?? 0,
-              lng: event.longitude ?? 0,
-            )
-          : Future.delayed(const Duration(milliseconds: 300), () => ''),
-      builder: (context, snapshot) => SizedBox(
+    return InkWell(
+      onTap: () => MapUtils.showMapOptionBottomSheet(
+        context,
+        latitude: event.latitude ?? 0,
+        longitude: event.longitude ?? 0,
+      ),
+      child: SizedBox(
         width: double.infinity,
         height: 144.w,
         child: Row(
@@ -99,7 +99,7 @@ class GuestEventLocation extends StatelessWidget {
                         : Assets.icons.icLock.svg(),
                     const Spacer(),
                     Text(
-                      t.event.eventLocation,
+                      event.address?.title ?? t.event.eventLocation,
                       style: Typo.mediumPlus.copyWith(
                         fontFamily: FontFamily.switzerVariable,
                         fontWeight: FontWeight.w600,
@@ -108,9 +108,7 @@ class GuestEventLocation extends StatelessWidget {
                     SizedBox(height: Spacing.superExtraSmall),
                     if (isAttending)
                       Text(
-                        snapshot.connectionState == ConnectionState.done
-                            ? snapshot.data ?? ''
-                            : '...',
+                        EventUtils.getAddress(event),
                         style: Typo.small.copyWith(
                           color: colorScheme.onSurfaceVariant,
                         ),

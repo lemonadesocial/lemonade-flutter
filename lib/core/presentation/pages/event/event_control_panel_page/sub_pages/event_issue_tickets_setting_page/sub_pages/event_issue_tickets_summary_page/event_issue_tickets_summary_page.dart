@@ -74,9 +74,11 @@ class EventIssueTicketsSummaryPage extends StatelessWidget {
                 child: LinearGradientButton.primaryButton(
                   label: t.event.issueTickets.confirmAndIssue,
                   textColor: colorScheme.onPrimary,
-                  onTap: () => AutoRouter.of(context).push(
-                    const EventIssueTicketsProcessingRoute(),
-                  ),
+                  onTap: () async {
+                    AutoRouter.of(context).replaceAll([
+                      const EventIssueTicketsProcessingRoute(),
+                    ]);
+                  },
                 ),
               ),
             ),

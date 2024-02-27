@@ -23,6 +23,9 @@ type Query {
   getEventbriteEvents(input: GetEventbriteEventsInput, skip: Int! = 0, limit: Int! = 25): [EventbriteEvent!]!
   getEventCheckins(input: GetEventCheckinsInput!): [EventCheckin!]!
   getEventCohostRequests(input: GetEventCohostRequestsInput!): [EventCohostRequest!]!
+
+  """For guests, return attending guests basic information of an event"""
+  getEventGuestDirectory(_id: MongoID!): [BasicUserInfo!]!
   getEventCurrencies(_id: MongoID!, used: Boolean): [EventCurrency!]!
   getMyEvents(state: GetEventsState, skip: Int! = 0, limit: Int! = 25): [Event!]!
   getHostingEvents(skip: Int! = 0, limit: Int! = 25, site: MongoID, user: MongoID, state: FilterEventInput, sort: JSON): [Event!]!
@@ -449,6 +452,7 @@ type Event {
   checkin_count: Float
   payment_ticket_count: Float
   payment_ticket_unassigned_count: Float
+  guest_directory_enabled: Boolean
   eventbrite_enabled: Boolean
   eventbrite_event_id: String
   eventbrite_tickets_imported: Boolean
@@ -1031,6 +1035,16 @@ enum EventCohostRequestState {
 input GetEventCohostRequestsInput {
   event: MongoID!
   state: EventCohostRequestState
+}
+
+type BasicUserInfo {
+  _id: MongoID!
+  name: String!
+  image_avatar: String
+  username: String
+  job_title: String
+  company_name: String
+  matrix_localpart: String
 }
 
 type EventCurrency {
@@ -2203,6 +2217,7 @@ input EventInput {
   virtual: Boolean
   welcome_text: String
   welcome_video: VideoInput
+  guest_directory_enabled: Boolean
 }
 
 input AccessPassInput {

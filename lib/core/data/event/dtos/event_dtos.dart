@@ -53,11 +53,10 @@ class EventDto with _$EventDto {
     @JsonKey(name: 'approval_required') bool? approvalRequired,
     @JsonKey(name: 'required_profile_fields')
     List<String>? requiredProfileFields,
-    @JsonKey(name: 'invited_count') int? invitedCount,
-    @JsonKey(name: 'checkin_count') int? checkInCount,
-    @JsonKey(name: 'attending_count') int? attendingCount,
-    @JsonKey(name: 'pending_request_count') int? pendingRequestCount,
-    List<EventSessionDto>? sessions,
+    @JsonKey(name: 'invited_count') double? invitedCount,
+    @JsonKey(name: 'checkin_count') double? checkInCount,
+    @JsonKey(name: 'attending_count') double? attendingCount,
+    @JsonKey(name: 'pending_request_count') double? pendingRequestCount,
   }) = _EventDto;
 
   factory EventDto.fromJson(Map<String, dynamic> json) =>

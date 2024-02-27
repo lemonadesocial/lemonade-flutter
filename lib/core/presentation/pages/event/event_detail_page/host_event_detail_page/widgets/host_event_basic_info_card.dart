@@ -221,211 +221,237 @@ class HostEventBasicInfoCard extends StatelessWidget {
             SizedBox(
               height: Spacing.extraSmall,
             ),
-            Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    height: 73.w,
-                    decoration: BoxDecoration(
-                      color: colorScheme.onPrimary.withOpacity(0.06),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(LemonRadius.extraSmall),
+            InkWell(
+              onTap: () {
+                AutoRouter.of(context).push(const EventApprovalSettingRoute());
+              },
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      height: 73.w,
+                      decoration: BoxDecoration(
+                        color: colorScheme.onPrimary.withOpacity(0.06),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(LemonRadius.extraSmall),
+                        ),
                       ),
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.only(left: Spacing.smMedium),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            event.checkInCount?.toString() ?? '',
-                            style: Typo.mediumPlus.copyWith(
-                              color: colorScheme.onPrimary,
-                              fontFamily: FontFamily.nohemiVariable,
-                              fontWeight: FontWeight.bold,
+                      child: Padding(
+                        padding: EdgeInsets.only(left: Spacing.smMedium),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              event.checkInCount?.toString() ?? '',
+                              style: Typo.mediumPlus.copyWith(
+                                color: colorScheme.onPrimary,
+                                fontFamily: FontFamily.nohemiVariable,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          SizedBox(
-                            height: 2.h,
-                          ),
-                          Text(
-                            t.event.checkedIn.capitalize(),
-                            style: Typo.small
-                                .copyWith(color: colorScheme.onSecondary),
-                          ),
-                        ],
+                            SizedBox(
+                              height: 2.h,
+                            ),
+                            Text(
+                              t.event.checkedIn.capitalize(),
+                              style: Typo.small
+                                  .copyWith(color: colorScheme.onSecondary),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  width: Spacing.extraSmall,
-                ),
-                Expanded(
-                  child: Container(
-                    height: 73.w,
-                    decoration: BoxDecoration(
-                      color: colorScheme.onPrimary.withOpacity(0.06),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(LemonRadius.extraSmall),
+                  SizedBox(
+                    width: Spacing.extraSmall,
+                  ),
+                  Expanded(
+                    child: Container(
+                      height: 73.w,
+                      decoration: BoxDecoration(
+                        color: colorScheme.onPrimary.withOpacity(0.06),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(LemonRadius.extraSmall),
+                        ),
                       ),
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.only(left: Spacing.smMedium),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            event.attendingCount?.toString() ?? '',
-                            style: Typo.mediumPlus.copyWith(
-                              color: colorScheme.onPrimary,
-                              fontFamily: FontFamily.nohemiVariable,
-                              fontWeight: FontWeight.bold,
+                      child: Padding(
+                        padding: EdgeInsets.only(left: Spacing.smMedium),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              event.attendingCount?.toString() ?? '',
+                              style: Typo.mediumPlus.copyWith(
+                                color: colorScheme.onPrimary,
+                                fontFamily: FontFamily.nohemiVariable,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          SizedBox(
-                            height: 2.h,
-                          ),
-                          Text(
-                            t.event.attending.capitalize(),
-                            style: Typo.small
-                                .copyWith(color: colorScheme.onSecondary),
-                          ),
-                        ],
+                            SizedBox(
+                              height: 2.h,
+                            ),
+                            Text(
+                              t.event.attending.capitalize(),
+                              style: Typo.small
+                                  .copyWith(color: colorScheme.onSecondary),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  width: Spacing.extraSmall,
-                ),
-                Expanded(
-                  child: Container(
-                    height: 73.w,
-                    decoration: BoxDecoration(
-                      color: colorScheme.onPrimary.withOpacity(0.06),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(LemonRadius.extraSmall),
+                  SizedBox(
+                    width: Spacing.extraSmall,
+                  ),
+                  Expanded(
+                    child: Container(
+                      height: 73.w,
+                      decoration: BoxDecoration(
+                        color: colorScheme.onPrimary.withOpacity(0.06),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(LemonRadius.extraSmall),
+                        ),
                       ),
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.only(left: Spacing.smMedium),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            event.invitedCount?.toString() ?? '',
-                            style: Typo.mediumPlus.copyWith(
-                              color: colorScheme.onPrimary,
-                              fontFamily: FontFamily.nohemiVariable,
-                              fontWeight: FontWeight.bold,
+                      child: Padding(
+                        padding: EdgeInsets.only(left: Spacing.smMedium),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              event.invitedCount?.toString() ?? '',
+                              style: Typo.mediumPlus.copyWith(
+                                color: colorScheme.onPrimary,
+                                fontFamily: FontFamily.nohemiVariable,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          SizedBox(
-                            height: 2.h,
-                          ),
-                          Text(
-                            t.event.invited.capitalize(),
-                            style: Typo.small
-                                .copyWith(color: colorScheme.onSecondary),
-                          ),
-                        ],
+                            SizedBox(
+                              height: 2.h,
+                            ),
+                            Text(
+                              t.event.invited.capitalize(),
+                              style: Typo.small
+                                  .copyWith(color: colorScheme.onSecondary),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             SizedBox(
               height: Spacing.extraSmall,
             ),
-            if (event.approvalRequired == true) ...[
-              InkWell(
-                onTap: () {
-                  Vibrate.feedback(FeedbackType.light);
-                  AutoRouter.of(context).push(
-                    const EventApprovalSettingRoute(),
-                  );
-                },
-                child: Container(
-                  height: 54.w,
-                  decoration: BoxDecoration(
-                    color: colorScheme.onPrimary.withOpacity(0.06),
-                    borderRadius: BorderRadius.only(
-                      bottomRight: Radius.circular(LemonRadius.medium),
-                      bottomLeft: Radius.circular(LemonRadius.medium),
-                      topLeft: Radius.circular(LemonRadius.extraSmall),
-                      topRight: Radius.circular(LemonRadius.extraSmall),
-                    ),
-                  ),
+            _ViewGuestsButton(event: event),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _ViewGuestsButton extends StatelessWidget {
+  const _ViewGuestsButton({
+    required this.event,
+  });
+
+  final Event event;
+
+  @override
+  Widget build(BuildContext context) {
+    final t = Translations.of(context);
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return InkWell(
+      onTap: () {
+        Vibrate.feedback(FeedbackType.light);
+        AutoRouter.of(context).push(
+          const EventApprovalSettingRoute(),
+        );
+      },
+      child: Container(
+        height: 54.w,
+        decoration: BoxDecoration(
+          color: colorScheme.onPrimary.withOpacity(0.06),
+          borderRadius: BorderRadius.only(
+            bottomRight: Radius.circular(LemonRadius.medium),
+            bottomLeft: Radius.circular(LemonRadius.medium),
+            topLeft: Radius.circular(LemonRadius.extraSmall),
+            topRight: Radius.circular(LemonRadius.extraSmall),
+          ),
+        ),
+        child: Stack(
+          children: [
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
                   child: Stack(
                     children: [
-                      Row(
-                        mainAxisSize: MainAxisSize.max,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: Stack(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: Spacing.smMedium,
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Center(
-                                        child: Assets.icons.icError.svg(
-                                          width: 20.w,
-                                          height: 20.w,
-                                        ),
-                                      ),
-                                      SizedBox(width: Spacing.small),
-                                      Text(
-                                        t.event.eventApproval.pendingRequests(
-                                          count: event.pendingRequestCount
-                                                  ?.toString() ??
-                                              0,
-                                          n: event.pendingRequestCount ?? 0,
-                                        ),
-                                        style: Typo.medium.copyWith(
-                                          color: colorScheme.onSecondary,
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: Spacing.smMedium,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Center(
+                              child: event.approvalRequired == true
+                                  ? Assets.icons.icError.svg(
+                                      width: 20.w,
+                                      height: 20.w,
+                                    )
+                                  : Assets.icons.icGuests.svg(
+                                      width: 20.w,
+                                      height: 20.w,
+                                    ),
                             ),
-                          ),
-                          Stack(
-                            children: [
-                              SizedBox(
-                                width: Sizing.xLarge,
-                                child: Center(
-                                  child: Assets.icons.icArrowBack.svg(
-                                    width: 25.w,
-                                    height: 25.w,
-                                  ),
-                                ),
+                            SizedBox(width: Spacing.small),
+                            Text(
+                              event.approvalRequired == true
+                                  ? t.event.eventApproval.pendingRequests(
+                                      count: event.pendingRequestCount
+                                              ?.toString() ??
+                                          0,
+                                      n: event.pendingRequestCount ?? 0,
+                                    )
+                                  : t.event.eventApproval.guests,
+                              style: Typo.medium.copyWith(
+                                color: colorScheme.onSecondary,
                               ),
-                            ],
-                          ),
-                        ],
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
                 ),
-              ),
-            ],
+                Stack(
+                  children: [
+                    SizedBox(
+                      width: Sizing.xLarge,
+                      child: Center(
+                        child: Assets.icons.icArrowBack.svg(
+                          width: 25.w,
+                          height: 25.w,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ],
-        );
-      },
+        ),
+      ),
     );
   }
 }

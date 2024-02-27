@@ -15,6 +15,7 @@ import 'package:app/core/failure.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:dartz/dartz.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:app/graphql/backend/event/mutation/create_tickets.graphql.dart';
 
 abstract class EventTicketRepository {
   Future<Either<Failure, EventTicketsPricingInfo>> calculateTicketsPricing({
@@ -58,5 +59,9 @@ abstract class EventTicketRepository {
   Future<Either<Failure, bool>> deleteEventTicketType({
     required String ticketTypeId,
     required String eventId,
+  });
+
+  Future<Either<Failure, List<EventTicket>>> createTickets({
+    required Variables$Mutation$CreateTickets input,
   });
 }
