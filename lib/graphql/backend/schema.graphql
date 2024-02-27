@@ -1008,6 +1008,7 @@ type EventCheckin {
   active: Boolean!
   event: MongoID!
   user: MongoID!
+  user_expanded: User
 }
 
 input GetEventCheckinsInput {

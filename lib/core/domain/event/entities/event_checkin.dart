@@ -1,3 +1,4 @@
+import 'package:app/core/domain/user/entities/user.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'event_checkin.freezed.dart';
@@ -10,6 +11,7 @@ class EventCheckin with _$EventCheckin {
     bool? active,
     String? event,
     String? user,
+    User? userExpanded,
   }) = _EventCheckin;
 
   factory EventCheckin.fromJson(Map<String, dynamic> json) =>

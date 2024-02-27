@@ -1,7 +1,5 @@
-import 'package:app/core/domain/event/entities/event_accepted_export.dart';
+import 'package:app/core/domain/event/entities/event_guest.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
-import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
-import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
@@ -11,11 +9,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class EventAcceptedExportItem extends StatelessWidget {
-  final EventAcceptedExport eventAccepted;
-  const EventAcceptedExportItem({
+class EventInvitedItem extends StatelessWidget {
+  final EventGuest guest;
+  const EventInvitedItem({
     super.key,
-    required this.eventAccepted,
+    required this.guest,
   });
 
   @override
@@ -33,9 +31,9 @@ class EventAcceptedExportItem extends StatelessWidget {
           ),
           child: Row(
             children: [
-              _GuestInfo(eventAccepted: eventAccepted),
+              _GuestInfo(guest: guest),
               const Spacer(),
-              _TicketCount(eventAccepted: eventAccepted),
+              _Status(guest: guest),
             ],
           ),
         ),
@@ -44,12 +42,12 @@ class EventAcceptedExportItem extends StatelessWidget {
   }
 }
 
-class _TicketCount extends StatelessWidget {
-  const _TicketCount({
-    required this.eventAccepted,
+class _Status extends StatelessWidget {
+  const _Status({
+    required this.guest,
   });
 
-  final EventAcceptedExport eventAccepted;
+  final EventGuest guest;
 
   @override
   Widget build(BuildContext context) {
@@ -62,17 +60,10 @@ class _TicketCount extends StatelessWidget {
       ),
       child: Row(
         children: [
-          ThemeSvgIcon(
-            color: colorScheme.onSecondary,
-            builder: (filter) => Assets.icons.icTicket.svg(
-              width: Sizing.xSmall,
-              height: Sizing.xSmall,
-              colorFilter: filter,
-            ),
-          ),
-          SizedBox(width: Spacing.superExtraSmall),
           Text(
-            eventAccepted.ticketCount?.toInt().toString() ?? '',
+            guest.joined == true
+                ? t.event.eventInvited.joined
+                : t.event.eventInvited.notJoined,
             style: Typo.small.copyWith(
               color: colorScheme.onSecondary,
             ),
@@ -85,10 +76,10 @@ class _TicketCount extends StatelessWidget {
 
 class _GuestInfo extends StatelessWidget {
   const _GuestInfo({
-    required this.eventAccepted,
+    required this.guest,
   });
 
-  final EventAcceptedExport eventAccepted;
+  final EventGuest guest;
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +94,7 @@ class _GuestInfo extends StatelessWidget {
           child: CachedNetworkImage(
             width: Sizing.medium,
             height: Sizing.medium,
-            imageUrl: eventAccepted.imageAvatar ?? '',
+            imageUrl: guest.userExpanded?.imageAvatar ?? '',
             placeholder: (_, __) => ImagePlaceholder.defaultPlaceholder(),
             errorWidget: (_, __, ___) => ImagePlaceholder.defaultPlaceholder(),
           ),
@@ -115,7 +106,9 @@ class _GuestInfo extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                eventAccepted.name ?? eventAccepted.email ?? t.common.anonymous,
+                guest.userExpanded?.name ??
+                    guest.userExpanded?.email ??
+                    t.common.anonymous,
                 style: Typo.medium.copyWith(
                   color: colorScheme.onPrimary,
                 ),
@@ -123,9 +116,9 @@ class _GuestInfo extends StatelessWidget {
               ),
               SizedBox(height: 2.w),
               Text(
-                eventAccepted.username != null
-                    ? '@${eventAccepted.username}'
-                    : eventAccepted.email ?? '',
+                guest.userExpanded?.username != null
+                    ? '@${guest.userExpanded?.username}'
+                    : guest.userExpanded?.email ?? '',
                 style: Typo.small.copyWith(
                   color: colorScheme.onSecondary,
                 ),

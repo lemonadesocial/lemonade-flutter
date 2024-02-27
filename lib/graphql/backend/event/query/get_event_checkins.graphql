@@ -1,8 +1,15 @@
 query GetEventCheckins($input: GetEventCheckinsInput!) {
-    getEventCheckins(input: $input) {
-        _id
-        active
-        event
-        user
+  getEventCheckins(input: $input) {
+    id: _id
+    active
+    event
+    user
+    userExpanded: user_expanded {
+      userId: _id
+      name
+      username
+      imageAvatar: image_avatar
+      email
     }
+  }
 }
