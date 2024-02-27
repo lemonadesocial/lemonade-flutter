@@ -13,8 +13,11 @@ class FeatureItem {
   final ThemeSvgIcon iconData;
   final Function onTap;
 
-  FeatureItem(
-      {required this.label, required this.iconData, required this.onTap});
+  FeatureItem({
+    required this.label,
+    required this.iconData,
+    required this.onTap,
+  });
 }
 
 class EventFeaturesHelper {

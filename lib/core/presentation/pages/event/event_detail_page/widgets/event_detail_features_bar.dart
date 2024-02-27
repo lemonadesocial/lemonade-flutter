@@ -18,7 +18,6 @@ class EventDetailFeaturesBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final t = Translations.of(context);
     late List features = [];
     final userId = context.read<AuthBloc>().state.maybeWhen(
           orElse: () => '',
