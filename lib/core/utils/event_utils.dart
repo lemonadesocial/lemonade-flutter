@@ -39,4 +39,15 @@ class EventUtils {
         .toList()
         .isNotEmpty;
   }
+
+  static String getAddress(Event event) {
+    final address = event.address;
+    return [
+      address?.street1,
+      address?.street2,
+      address?.city,
+      address?.region,
+      address?.country,
+    ].where((element) => element != null).join(', ');
+  }
 }
