@@ -287,7 +287,9 @@
             "reservations": "Reservations",
             "pending": "Pending",
             "confirmed": "Confirmed",
-            "rejected": "Rejected"
+            "rejected": "Rejected",
+            "invited": "Invited",
+            "checkins": "Checkins"
         },
         "yourRequestDeclined": "Your join request has been declined.",
         "noRequestFound": "No requests found",
@@ -310,6 +312,10 @@
         },
         "assignedBy": "Assigned by $name",
         "declined": "Declined"
+    },
+    "eventInvited": {
+        "joined": "Registered",
+        "notJoined": "Pending"
     },
     "allTicketTiers": "All ticket tiers",
     "claimed": "claimed",

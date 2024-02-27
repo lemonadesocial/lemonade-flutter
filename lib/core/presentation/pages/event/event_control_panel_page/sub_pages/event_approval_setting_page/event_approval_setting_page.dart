@@ -1,5 +1,7 @@
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/view/event_accepted_export_list.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/view/event_checkins_list.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/view/event_invited_list.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/view/event_join_requests_list.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/widgets/join_request_item/event_confirmed_join_request_item.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/widgets/join_request_item/event_pending_join_request_item.dart';
@@ -16,6 +18,7 @@ import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:scroll_to_index/scroll_to_index.dart';
 
 @RoutePage()
 class EventApprovalSettingPage extends StatefulWidget {
@@ -26,13 +29,13 @@ class EventApprovalSettingPage extends StatefulWidget {
       _EventApprovalSettingPageState();
 }
 
-class JoinRequestTabItem {
+class _TabItem {
   final String title;
   final SvgGenImage icon;
   final Color activeColor;
   final Color inactiveColor;
 
-  const JoinRequestTabItem({
+  const _TabItem({
     required this.title,
     required this.icon,
     required this.activeColor,
@@ -43,13 +46,65 @@ class JoinRequestTabItem {
 class _EventApprovalSettingPageState extends State<EventApprovalSettingPage>
     with TickerProviderStateMixin {
   late TabController _tabController;
+  final AutoScrollController _listController = AutoScrollController(
+    axis: Axis.horizontal,
+  );
   int activeIndex = 0;
+  late final List<_TabItem> tabItems;
   @override
   initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    final event = context.read<GetEventDetailBloc>().state.maybeWhen(
+          orElse: () => null,
+          fetched: (event) => event,
+        );
+    tabItems = [
+      _TabItem(
+        title: t.event.eventApproval.tabs.reservations,
+        icon: Assets.icons.icDone,
+        activeColor: LemonColor.paleViolet,
+        inactiveColor: LemonColor.white54,
+      ),
+      _TabItem(
+        title: t.event.eventApproval.tabs.invited,
+        icon: Assets.icons.icAccountOutline,
+        activeColor: LemonColor.white,
+        inactiveColor: LemonColor.white54,
+      ),
+      _TabItem(
+        title: t.event.eventApproval.tabs.checkins,
+        icon: Assets.icons.icChecked,
+        activeColor: LemonColor.white,
+        inactiveColor: LemonColor.white54,
+      ),
+      if (event?.approvalRequired == true) ...[
+        _TabItem(
+          title: t.event.eventApproval.tabs.pending,
+          icon: Assets.icons.icInfo,
+          activeColor: LemonColor.errorRedBg,
+          inactiveColor: LemonColor.white54,
+        ),
+        _TabItem(
+          title: t.event.eventApproval.tabs.confirmed,
+          icon: Assets.icons.icDone,
+          activeColor: LemonColor.paleViolet,
+          inactiveColor: LemonColor.white54,
+        ),
+        _TabItem(
+          title: t.event.eventApproval.tabs.rejected,
+          icon: Assets.icons.icClose,
+          activeColor: LemonColor.errorRedBg,
+          inactiveColor: LemonColor.white54,
+        ),
+      ],
+    ];
+    _tabController = TabController(length: tabItems.length, vsync: this);
     _tabController.addListener(() {
       if (activeIndex != _tabController.index) {
+        _listController.scrollToIndex(
+          _tabController.index,
+          preferPosition: AutoScrollPosition.middle,
+        );
         setState(() {
           activeIndex = _tabController.index;
         });
@@ -71,129 +126,92 @@ class _EventApprovalSettingPageState extends State<EventApprovalSettingPage>
           orElse: () => null,
           fetched: (event) => event,
         );
-    final approvalRequired = event?.approvalRequired ?? false;
-    final tabItems = [
-      JoinRequestTabItem(
-        title: t.event.eventApproval.tabs.pending,
-        icon: Assets.icons.icInfo,
-        activeColor: LemonColor.errorRedBg,
-        inactiveColor: colorScheme.onSecondary,
-      ),
-      JoinRequestTabItem(
-        title: t.event.eventApproval.tabs.reservations,
-        icon: Assets.icons.icDone,
-        activeColor: LemonColor.paleViolet,
-        inactiveColor: colorScheme.onSecondary,
-      ),
-      JoinRequestTabItem(
-        title: t.event.eventApproval.tabs.rejected,
-        icon: Assets.icons.icClose,
-        activeColor: LemonColor.errorRedBg,
-        inactiveColor: colorScheme.onSecondary,
-      ),
-    ];
-
     return Scaffold(
       backgroundColor: colorScheme.background,
       appBar: LemonAppBar(
         title: t.event.eventApproval.guests,
       ),
       body: SafeArea(
-        child: !approvalRequired
-            ? Column(
+        child: Column(
+          children: [
+            SizedBox(
+              height: Sizing.medium,
+              child: ListView.separated(
+                controller: _listController,
+                padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
+                itemCount: tabItems.length,
+                separatorBuilder: (context, index) =>
+                    SizedBox(width: Spacing.extraSmall),
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  final tabItem = tabItems[index];
+                  return AutoScrollTag(
+                    index: index,
+                    controller: _listController,
+                    key: ValueKey(index),
+                    child: _CustomTab(
+                      tabItem: tabItem,
+                      onPress: () => _tabController.animateTo(index),
+                      isActive: activeIndex == index,
+                    ),
+                  );
+                },
+              ),
+            ),
+            Expanded(
+              child: TabBarView(
+                controller: _tabController,
                 children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: Spacing.xSmall,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        _CustomTab(
-                          tabItem: JoinRequestTabItem(
-                            title: t.event.eventApproval.tabs.reservations,
-                            icon: Assets.icons.icDone,
-                            activeColor: LemonColor.paleViolet,
-                            inactiveColor: colorScheme.onSecondary,
-                          ),
-                          onPress: () => null,
-                          isActive: true,
-                        ),
-                      ],
-                    ),
+                  EventAcceptedExportList(
+                    event: event,
                   ),
-                  SizedBox(height: Spacing.superExtraSmall),
-                  Expanded(
-                    child: EventAcceptedExportList(
+                  EventInvitedList(
+                    event: event,
+                  ),
+                  EventCheckInsList(
+                    event: event,
+                  ),
+                  if (event?.approvalRequired == true) ...[
+                    EventJoinRequestList(
+                      state: Enum$JoinRequestState.pending,
                       event: event,
+                      itemBuilder: ({
+                        required eventJoinRequest,
+                        refresh,
+                      }) =>
+                          EventPendingJoinRequestItem(
+                        eventJoinRequest: eventJoinRequest,
+                        onRefetch: refresh,
+                      ),
                     ),
-                  ),
-                ],
-              )
-            : Column(
-                children: [
-                  SizedBox(
-                    height: Sizing.medium,
-                    child: ListView.separated(
-                      padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
-                      itemCount: tabItems.length,
-                      separatorBuilder: (context, index) =>
-                          SizedBox(width: Spacing.extraSmall),
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) {
-                        final tabItem = tabItems[index];
-                        return _CustomTab(
-                          tabItem: tabItem,
-                          onPress: () => _tabController.animateTo(index),
-                          isActive: activeIndex == index,
-                        );
-                      },
+                    EventJoinRequestList(
+                      state: Enum$JoinRequestState.approved,
+                      event: event,
+                      itemBuilder: ({
+                        required eventJoinRequest,
+                        refresh,
+                      }) =>
+                          EventConfirmedJoinRequestItem(
+                        eventJoinRequest: eventJoinRequest,
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    child: TabBarView(
-                      controller: _tabController,
-                      children: [
-                        EventJoinRequestList(
-                          state: Enum$JoinRequestState.pending,
-                          event: event,
-                          itemBuilder: ({
-                            required eventJoinRequest,
-                            refresh,
-                          }) =>
-                              EventPendingJoinRequestItem(
-                            eventJoinRequest: eventJoinRequest,
-                            onRefetch: refresh,
-                          ),
-                        ),
-                        EventJoinRequestList(
-                          state: Enum$JoinRequestState.approved,
-                          event: event,
-                          itemBuilder: ({
-                            required eventJoinRequest,
-                            refresh,
-                          }) =>
-                              EventConfirmedJoinRequestItem(
-                            eventJoinRequest: eventJoinRequest,
-                          ),
-                        ),
-                        EventJoinRequestList(
-                          state: Enum$JoinRequestState.declined,
-                          event: event,
-                          itemBuilder: ({
-                            required eventJoinRequest,
-                            refresh,
-                          }) =>
-                              EventRejectedJoinRequestItem(
-                            eventJoinRequest: eventJoinRequest,
-                          ),
-                        ),
-                      ],
+                    EventJoinRequestList(
+                      state: Enum$JoinRequestState.declined,
+                      event: event,
+                      itemBuilder: ({
+                        required eventJoinRequest,
+                        refresh,
+                      }) =>
+                          EventRejectedJoinRequestItem(
+                        eventJoinRequest: eventJoinRequest,
+                      ),
                     ),
-                  ),
+                  ],
                 ],
               ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -206,7 +224,7 @@ class _CustomTab extends StatelessWidget {
     this.isActive = false,
   });
 
-  final JoinRequestTabItem tabItem;
+  final _TabItem tabItem;
   final Function() onPress;
   final bool isActive;
 
