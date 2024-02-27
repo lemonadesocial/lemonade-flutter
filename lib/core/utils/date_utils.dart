@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class DateUtils {
   static DateTime get today => DateTime.now();
 
@@ -103,5 +105,13 @@ class DateUtils {
     if (date == null) return false;
     final originToday = DateTime(today.year, today.month, today.day);
     return date.isBefore(originToday);
+  }
+
+  static String formatTimeRange(DateTime? start, DateTime? end) {
+    if (start == null || end == null) return '';
+    String formattedStartTime = DateFormat.jm().format(start);
+    String formattedEndTime = DateFormat.jm().format(end);
+    String formattedTimeRange = '$formattedStartTime - $formattedEndTime';
+    return formattedTimeRange;
   }
 }

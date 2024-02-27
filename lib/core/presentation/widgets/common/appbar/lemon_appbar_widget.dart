@@ -29,9 +29,9 @@ class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final primary = Theme.of(context).colorScheme.primary;
+    final background = Theme.of(context).colorScheme.background;
     return AppBar(
-      backgroundColor: backgroundColor ?? primary,
+      backgroundColor: backgroundColor ?? background,
       automaticallyImplyLeading: hideLeading ?? true,
       leading: hideLeading ?? false ? null : leading ?? const LemonBackButton(),
       actions: actions,

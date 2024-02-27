@@ -408,7 +408,7 @@ class _ViewGuestsButton extends StatelessWidget {
                                       width: 20.w,
                                       height: 20.w,
                                     )
-                                  : Assets.icons.icGuests.svg(
+                                  : Assets.icons.icGuestsGradient.svg(
                                       width: 20.w,
                                       height: 20.w,
                                     ),

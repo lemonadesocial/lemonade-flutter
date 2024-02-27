@@ -1,4 +1,5 @@
 import 'package:app/core/data/common/dtos/common_dtos.dart';
+import 'package:app/core/data/event/dtos/event_session/event_session_dto.dart';
 import 'package:app/core/data/event/dtos/event_ticket_types_dto/event_ticket_types_dto.dart';
 import 'package:app/core/data/event/dtos/reward_dto/reward_dto.dart';
 import 'package:app/core/data/payment/dtos/payment_account_dto/payment_account_dto.dart';
@@ -56,6 +57,7 @@ class EventDto with _$EventDto {
     @JsonKey(name: 'checkin_count') double? checkInCount,
     @JsonKey(name: 'attending_count') double? attendingCount,
     @JsonKey(name: 'pending_request_count') double? pendingRequestCount,
+    List<EventSessionDto>? sessions,
   }) = _EventDto;
 
   factory EventDto.fromJson(Map<String, dynamic> json) =>

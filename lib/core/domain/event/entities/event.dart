@@ -1,5 +1,6 @@
 import 'package:app/core/data/event/dtos/event_dtos.dart';
 import 'package:app/core/domain/common/entities/common.dart';
+import 'package:app/core/domain/event/entities/event_session.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/entities/reward.dart';
 import 'package:app/core/domain/event/event_enums.dart';
@@ -52,6 +53,7 @@ class Event with _$Event {
     int? checkInCount,
     int? attendingCount,
     int? pendingRequestCount,
+    List<EventSession>? sessions,
   }) = _Event;
 
   factory Event.fromDto(EventDto dto) {
@@ -117,6 +119,9 @@ class Event with _$Event {
       checkInCount: dto.checkInCount?.toInt() ?? 0,
       attendingCount: dto.attendingCount?.toInt() ?? 0,
       pendingRequestCount: dto.pendingRequestCount?.toInt() ?? 0,
+      sessions: List.from(dto.sessions ?? [])
+          .map((item) => EventSession.fromDto(item))
+          .toList(),
     );
   }
 }
