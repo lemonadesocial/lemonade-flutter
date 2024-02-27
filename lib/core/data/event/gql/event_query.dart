@@ -91,6 +91,27 @@ const eventTicketTypesFragment = '''
   }
 ''';
 
+const eventProgramFragment = '''
+  fragment eventProgramFragment on Event {
+    sessions {
+      _id
+      title
+      start
+      end
+      broadcast
+      description
+      photos
+      speaker_users
+      photos_expanded {
+        url
+      }
+      speaker_users_expanded {
+        ...eventHostExpandedFragment
+      }
+    }
+  }
+''';
+
 const eventPaymentAccountFragment = '''
   $paymentAccountFragment
 
@@ -175,6 +196,7 @@ final getEventDetailQuery = gql('''
   $eventOfferFragment
   $eventPaymentAccountFragment
   $eventTicketTypesFragment
+  $eventProgramFragment
 
   query(\$id: MongoID!) {
     getEvent(_id: \$id) {
@@ -182,6 +204,7 @@ final getEventDetailQuery = gql('''
       ...eventOfferFragment
       ...eventPaymentAccountFragment
       ...eventTicketTypesFragment
+      ...eventProgramFragment
     }
   }
 ''');

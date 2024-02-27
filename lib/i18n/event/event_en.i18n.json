@@ -340,5 +340,6 @@
         "assignMore": "Assign more"
     },
     "addCollectible": "Add collectible",
-    "addCollectibleDescription": "Attach unique collectibles to this event to make it stand out!"
+    "addCollectibleDescription": "Attach unique collectibles to this event to make it stand out!",
+    "eventProgram": "Program"
 }

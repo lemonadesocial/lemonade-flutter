@@ -9,6 +9,7 @@ import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_location.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_poap_offers.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/post_guest_event_animated_app_bar.dart';
+import 'package:app/core/presentation/pages/event/event_detail_page/widgets/event_detail_features_bar.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/utils/event_utils.dart';
@@ -126,71 +127,7 @@ class PostGuestEventDetailView extends StatelessWidget {
                       ),
                     ],
                   ),
-                  Positioned(
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    child: Container(
-                      height: 100.h,
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          colors: [
-                            Color.fromRGBO(33, 33, 33, 0.87),
-                            Color.fromRGBO(23, 23, 23, 0.87),
-                          ],
-                        ),
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(LemonRadius.normal),
-                          topRight: Radius.circular(LemonRadius.normal),
-                        ),
-                      ),
-                      padding: EdgeInsets.symmetric(
-                        vertical: Spacing.small,
-                        horizontal: Spacing.medium,
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(LemonRadius.normal),
-                          topRight: Radius.circular(LemonRadius.normal),
-                        ),
-                        child: BackdropFilter(
-                          filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                          child: ListView(
-                            scrollDirection: Axis.horizontal,
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  AutoRouter.of(context)
-                                      .navigate(const EventProgramRoute());
-                                },
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      width: 54.w,
-                                      height: 42.h,
-                                      decoration: BoxDecoration(
-                                        color: colorScheme.onPrimary
-                                            .withOpacity(0.06),
-                                        borderRadius:
-                                            BorderRadius.circular(21.r),
-                                      ),
-                                      child: Icon(
-                                        Icons.home,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onPrimary, // Adjust the icon color as needed
-                                      ),
-                                    ),
-                                    const Text('Program'),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  const EventDetailFeaturesBar()
                 ],
               ),
             );
