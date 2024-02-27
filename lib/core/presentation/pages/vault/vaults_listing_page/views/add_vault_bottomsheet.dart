@@ -83,7 +83,7 @@ class AddVaultBottomSheet extends StatelessWidget {
                       title: t.vault.vaultType.community,
                       description:
                           t.vault.createVaultBottomSheet.communityDescription,
-                      icon: Assets.icons.icGuests.svg(
+                      icon: Assets.icons.icGuestsGradient.svg(
                         width: Sizing.small,
                         height: Sizing.small,
                       ),

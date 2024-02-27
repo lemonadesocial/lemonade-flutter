@@ -169,7 +169,7 @@
     "configuration": {
         "invite": "Invite",
         "tickets": "Tickets",
-        "checkIn": "Check-in",
+        "checkIn": "Check in",
         "coHosts": "Co-hosts",
         "controlPanel": "Control panel",
         "controlPanelDescription": "Exclusive perks & rewards",
@@ -177,7 +177,12 @@
         "dashboardDescription": "Find what’s exciting around",
         "speakers": "Speakers",
         "promitions": "Promotions",
-        "rewards": "Rewards"
+        "rewards": "Rewards",
+        "lounge": "Lounge",
+        "program": "Program",
+        "faq": "FAQ",
+        "info": "Info",
+        "guests": "Guests"
     },
     "rewards": "Rewards",
     "addPoap": "Add POAP",
