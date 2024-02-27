@@ -1,6 +1,7 @@
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/ripple_marker.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
+import 'package:app/core/utils/event_utils.dart';
 import 'package:app/core/utils/map_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
@@ -95,18 +96,12 @@ class HostEventLocation extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: Spacing.superExtraSmall),
-                    FutureBuilder(
-                      future: MapUtils.getLocationName(
-                        lat: event.latitude ?? 0,
-                        lng: event.longitude ?? 0,
-                      ),
-                      builder: (context, snapshot) => Text(
-                        snapshot.data ?? event.address?.street1 ?? '',
-                        style: Typo.small.copyWith(
-                          fontFamily: FontFamily.switzerVariable,
-                          fontWeight: FontWeight.w600,
-                          color: colorScheme.onSurfaceVariant,
-                        ),
+                    Text(
+                      EventUtils.getAddress(event),
+                      style: Typo.small.copyWith(
+                        fontFamily: FontFamily.switzerVariable,
+                        fontWeight: FontWeight.w600,
+                        color: colorScheme.onSurfaceVariant,
                       ),
                     ),
                   ],
