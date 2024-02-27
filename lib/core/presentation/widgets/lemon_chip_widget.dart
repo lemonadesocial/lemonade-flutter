@@ -7,11 +7,23 @@ class LemonChip extends StatelessWidget {
   final String label;
   final bool isActive;
   final Function()? onTap;
+  final Color? activeBackgroundColor;
+  final Color? inactiveBackgroundColor;
+  final Color? activeTextColor;
+  final Color? inactiveTextColor;
+  final Color? borderColor;
+  final Widget? icon;
   const LemonChip({
     super.key,
     required this.label,
     this.isActive = false,
     this.onTap,
+    this.activeBackgroundColor,
+    this.inactiveBackgroundColor,
+    this.activeTextColor,
+    this.inactiveTextColor,
+    this.borderColor,
+    this.icon,
   });
 
   @override
@@ -21,23 +33,36 @@ class LemonChip extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(
-          horizontal: Spacing.xSmall,
+          horizontal: Spacing.small,
           vertical: Spacing.extraSmall,
         ),
         constraints: BoxConstraints(minWidth: Sizing.large),
         decoration: BoxDecoration(
-          color: isActive ? themeColor.onSurface : themeColor.surface,
+          color: isActive
+              ? activeBackgroundColor ?? themeColor.onSurface
+              : inactiveBackgroundColor ?? themeColor.surface,
           borderRadius: BorderRadius.circular(LemonRadius.normal),
+          border:
+              Border.all(color: borderColor ?? Colors.transparent, width: 1),
         ),
-        child: Center(
-          widthFactor: 1,
-          heightFactor: 1,
-          child: Text(
-            label,
-            style: Typo.medium.copyWith(
-              color: isActive ? themeColor.surface : themeColor.onSecondary,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (icon != null) ...[
+              Padding(
+                padding: EdgeInsets.only(right: Spacing.superExtraSmall),
+                child: icon,
+              ),
+            ],
+            Text(
+              label,
+              style: Typo.medium.copyWith(
+                color: isActive
+                    ? activeTextColor ?? themeColor.surface
+                    : inactiveTextColor ?? themeColor.onSecondary,
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );
