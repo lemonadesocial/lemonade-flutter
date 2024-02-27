@@ -9,6 +9,7 @@ query GetEventCheckins($input: GetEventCheckinsInput!) {
       name
       username
       imageAvatar: image_avatar
+      email
     }
   }
 }

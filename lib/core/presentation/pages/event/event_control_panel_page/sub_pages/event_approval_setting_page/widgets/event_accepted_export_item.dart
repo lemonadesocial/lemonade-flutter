@@ -115,7 +115,7 @@ class _GuestInfo extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                eventAccepted.name ?? t.common.anonymous,
+                eventAccepted.name ?? eventAccepted.email ?? t.common.anonymous,
                 style: Typo.medium.copyWith(
                   color: colorScheme.onPrimary,
                 ),
@@ -123,7 +123,9 @@ class _GuestInfo extends StatelessWidget {
               ),
               SizedBox(height: 2.w),
               Text(
-                '@${eventAccepted.username ?? t.common.anonymous}',
+                eventAccepted.username != null
+                    ? '@${eventAccepted.username}'
+                    : eventAccepted.email ?? '',
                 style: Typo.small.copyWith(
                   color: colorScheme.onSecondary,
                 ),

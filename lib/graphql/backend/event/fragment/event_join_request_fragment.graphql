@@ -12,6 +12,7 @@ fragment EventJoinRequest on EventJoinRequest {
     image_avatar
     username
     wallets
+    email
   }
   approved_by_expanded {
     _id
@@ -19,6 +20,7 @@ fragment EventJoinRequest on EventJoinRequest {
     image_avatar
     username
     wallets
+    email
   }
   declined_by_expanded {
     _id
@@ -26,6 +28,7 @@ fragment EventJoinRequest on EventJoinRequest {
     image_avatar
     username
     wallets
+    email
   }
   payment_expanded {
     _id

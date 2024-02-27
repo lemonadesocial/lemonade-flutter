@@ -74,7 +74,7 @@ class _Name extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            user?.displayName ?? t.common.anonymous,
+            user?.displayName ?? user?.email ?? t.common.anonymous,
             style: Typo.medium.copyWith(
               color: colorScheme.onPrimary,
             ),
@@ -82,7 +82,7 @@ class _Name extends StatelessWidget {
           ),
           SizedBox(height: 2.w),
           Text(
-            '@${user?.username ?? t.common.anonymous}',
+            user?.username != null ? '@${user?.username}' : user?.email ?? '',
             style: Typo.small.copyWith(
               color: colorScheme.onSecondary,
             ),
