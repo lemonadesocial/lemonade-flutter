@@ -3,6 +3,7 @@ import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_session.dart';
 import 'package:app/core/presentation/pages/event/event_program_page/widgets/event_program_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
+import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_chip_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -55,7 +56,7 @@ class EventProgramPageState extends State<EventProgramPage> {
     return Scaffold(
       backgroundColor: colorScheme.primary,
       appBar: LemonAppBar(
-        title: t.event.eventProgram,
+        title: t.event.program.eventProgram,
       ),
       body: Column(
         children: [
@@ -63,51 +64,57 @@ class EventProgramPageState extends State<EventProgramPage> {
           SizedBox(
             height: Spacing.medium,
           ),
-          Expanded(
-            child: ListView.builder(
-              padding: EdgeInsets.only(
-                left: Spacing.smMedium,
-                right: Spacing.smMedium,
-                bottom: Spacing.large,
-              ),
-              itemCount: filteredSessions.length,
-              itemBuilder: (context, index) {
-                bool shouldShowDottedLine =
-                    index != filteredSessions.length - 1;
-                bool showGapBetween = index + 1 < filteredSessions.length
-                    ? filteredSessions[index].start?.day !=
-                        filteredSessions[index + 1].start?.day
-                    : false;
-                if (index == 0) {
-                  return EventProgramWidget(
-                    session: filteredSessions[index],
-                    showDate: true,
-                    index: index,
-                    showDottedLine: shouldShowDottedLine,
-                    showGapBetween: showGapBetween,
-                  );
-                }
-                // Hide date if 2 start day similar each other
-                if (filteredSessions[index].start?.day ==
-                    filteredSessions[index - 1].start?.day) {
-                  return EventProgramWidget(
-                    session: filteredSessions[index],
-                    showDate: false,
-                    index: index,
-                    showDottedLine: shouldShowDottedLine,
-                    showGapBetween: showGapBetween,
-                  );
-                }
-                return EventProgramWidget(
-                  session: filteredSessions[index],
-                  showDate: true,
-                  index: index,
-                  showDottedLine: shouldShowDottedLine,
-                  showGapBetween: showGapBetween,
-                );
-              },
-            ),
-          ),
+          event.sessions!.isEmpty
+              ? Center(
+                  child: EmptyList(
+                    emptyText: t.event.program.noProgramFound,
+                  ),
+                )
+              : Expanded(
+                  child: ListView.builder(
+                    padding: EdgeInsets.only(
+                      left: Spacing.smMedium,
+                      right: Spacing.smMedium,
+                      bottom: Spacing.large,
+                    ),
+                    itemCount: filteredSessions.length,
+                    itemBuilder: (context, index) {
+                      bool shouldShowDottedLine =
+                          index != filteredSessions.length - 1;
+                      bool showGapBetween = index + 1 < filteredSessions.length
+                          ? filteredSessions[index].start?.day !=
+                              filteredSessions[index + 1].start?.day
+                          : false;
+                      if (index == 0) {
+                        return EventProgramWidget(
+                          session: filteredSessions[index],
+                          showDate: true,
+                          index: index,
+                          showDottedLine: shouldShowDottedLine,
+                          showGapBetween: showGapBetween,
+                        );
+                      }
+                      // Hide date if 2 start day similar each other
+                      if (filteredSessions[index].start?.day ==
+                          filteredSessions[index - 1].start?.day) {
+                        return EventProgramWidget(
+                          session: filteredSessions[index],
+                          showDate: false,
+                          index: index,
+                          showDottedLine: shouldShowDottedLine,
+                          showGapBetween: showGapBetween,
+                        );
+                      }
+                      return EventProgramWidget(
+                        session: filteredSessions[index],
+                        showDate: true,
+                        index: index,
+                        showDottedLine: shouldShowDottedLine,
+                        showGapBetween: showGapBetween,
+                      );
+                    },
+                  ),
+                ),
         ],
       ),
     );
@@ -139,7 +146,7 @@ class EventProgramPageState extends State<EventProgramPage> {
 
     return LemonChip(
       label: isFirstChip
-          ? t.event.allSessions
+          ? t.event.program.allSessions
           : DateFormat('dd-MMM')
               .format(DateFormat('dd-MMM-yyyy').parse(sessionDay)),
       isActive: isActive,

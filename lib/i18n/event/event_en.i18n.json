@@ -352,6 +352,9 @@
     },
     "addCollectible": "Add collectible",
     "addCollectibleDescription": "Attach unique collectibles to this event to make it stand out!",
-    "eventProgram": "Program",
-    "allSessions": "All sessions"
+    "program": {
+        "eventProgram": "Program",
+        "allSessions": "All sessions",
+        "noProgramFound": "No program found"
+    }
 }

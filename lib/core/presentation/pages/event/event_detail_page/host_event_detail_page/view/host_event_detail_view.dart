@@ -105,6 +105,9 @@ class HostEventDetailView extends StatelessWidget {
                       SliverPadding(
                         padding: EdgeInsets.symmetric(vertical: Spacing.medium),
                       ),
+                      SliverToBoxAdapter(
+                        child: SizedBox(height: Spacing.xLarge * 2),
+                      ),
                     ],
                   ),
                   EventDetailFeaturesBar(
