@@ -132,19 +132,21 @@ class EventProgramPageState extends State<EventProgramPage> {
 
   Widget _buildLemonChip(String sessionDay, int index, BuildContext context) {
     final bool isFirstChip = index == 0;
-    final bool isActive = (selectedDay != null &&
-        selectedDay!.day == DateFormat('dd-MMM-yyyy').parse(sessionDay).day);
+    final bool isActive = (isFirstChip && selectedDay == null) ||
+        (selectedDay != null &&
+            selectedDay!.day ==
+                DateFormat('dd-MMM-yyyy').parse(sessionDay).day);
 
     return LemonChip(
       label: isFirstChip
           ? t.event.allSessions
           : DateFormat('dd-MMM')
               .format(DateFormat('dd-MMM-yyyy').parse(sessionDay)),
-      isActive: isFirstChip ? (selectedDay == null) : isActive,
+      isActive: isActive,
       inactiveBackgroundColor: Colors.transparent,
       activeBackgroundColor: LemonColor.white09,
       activeTextColor: Theme.of(context).colorScheme.onPrimary,
-      borderColor: LemonColor.white09,
+      borderColor: isActive ? Colors.transparent : LemonColor.white09,
       icon: isFirstChip
           ? Assets.icons.icEventExclusive.svg(
               width: 15.w,
