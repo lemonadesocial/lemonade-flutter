@@ -10,7 +10,6 @@ import 'package:app/core/utils/drawer_utils.dart';
 import 'package:app/core/utils/onboarding_utils.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
-import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';

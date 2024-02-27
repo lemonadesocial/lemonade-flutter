@@ -37,14 +37,18 @@ class EventProgramPageState extends State<EventProgramPage> {
     );
 
     List<String> sessionDays = event.sessions!
-        .map((session) =>
-            DateFormat('dd-MMM-yyyy').format(session.start ?? DateTime.now()))
+        .map(
+          (session) =>
+              DateFormat('dd-MMM-yyyy').format(session.start ?? DateTime.now()),
+        )
         .toSet()
         .toList();
 
     List<EventSession> filteredSessions = event.sessions
-            ?.where((session) =>
-                selectedDay == null || session.start?.day == selectedDay?.day)
+            ?.where(
+              (session) =>
+                  selectedDay == null || session.start?.day == selectedDay?.day,
+            )
             .toList() ??
         [];
 

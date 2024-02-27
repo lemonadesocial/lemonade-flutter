@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
@@ -12,7 +11,6 @@ class EventDetailFeaturesBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
     return Positioned(
       left: 0,
