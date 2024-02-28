@@ -56,8 +56,8 @@ class CollectibleCardWidget extends StatelessWidget {
                 ),
               ),
               _ClaimInfo(
-                network: token?.network ?? '',
-                contract: token?.contract?.toLowerCase() ?? '',
+                network: token.network ?? '',
+                contract: token.contract?.toLowerCase() ?? '',
               ),
             ],
           );
