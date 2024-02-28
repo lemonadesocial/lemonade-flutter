@@ -4,7 +4,7 @@ import 'package:app/core/presentation/pages/event/event_detail_page/host_event_d
 import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/widgets/host_event_basic_info_card.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/widgets/host_event_detail_config_grid.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/widgets/host_event_location.dart';
-import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/widgets/host_collectibles_section.dart';
+import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/widgets/host_collectibles_section/host_collectibles_section.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/widgets/event_detail_features_bar.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
@@ -80,13 +80,6 @@ class HostEventDetailView extends StatelessWidget {
                       SliverPadding(
                         padding: EdgeInsets.only(top: Spacing.xLarge),
                       ),
-                      // SliverPadding(
-                      //   padding:
-                      //       EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-                      //   sliver: SliverToBoxAdapter(
-                      //     child: HostEventPoapRewardCard(event: event),
-                      //   ),
-                      // ),
                       SliverPadding(
                         padding:
                             EdgeInsets.symmetric(horizontal: Spacing.smMedium),
