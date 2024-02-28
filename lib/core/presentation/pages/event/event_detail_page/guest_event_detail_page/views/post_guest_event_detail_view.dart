@@ -118,7 +118,7 @@ class PostGuestEventDetailView extends StatelessWidget {
                         child: GuestEventDetailHosts(event: event),
                       ),
                       SliverToBoxAdapter(
-                        child: SizedBox(height: Spacing.xLarge * 2),
+                        child: SizedBox(height: Spacing.xLarge * 3),
                       ),
                     ],
                   ),
