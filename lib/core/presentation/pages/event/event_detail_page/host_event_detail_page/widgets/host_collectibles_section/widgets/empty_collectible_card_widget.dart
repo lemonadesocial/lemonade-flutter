@@ -1,4 +1,3 @@
-import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/modal_utils.dart';
@@ -11,18 +10,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 
-class HostEventPoapRewardCard extends StatelessWidget {
-  const HostEventPoapRewardCard({
+class EmptyCollectibleCardWidget extends StatelessWidget {
+  const EmptyCollectibleCardWidget({
     super.key,
-    required this.event,
   });
-
-  final Event event;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final t = Translations.of(context);
     return DottedBorder(
       strokeWidth: 2.w,
       color: colorScheme.outline,
