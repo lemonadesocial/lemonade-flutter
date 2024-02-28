@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.7.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.6.0...v1.7.0) (2024-02-28)
+
+
+### Features
+
+* add invited and checkins list to guest approval page ([#428](https://github.com/lemonadesocial/lemonade-flutter/issues/428)) ([8188d5a](https://github.com/lemonadesocial/lemonade-flutter/commit/8188d5a9159b9d56e0c0061934073d1bcacf83dd))
+* add loading animation when issuing tickets ([#420](https://github.com/lemonadesocial/lemonade-flutter/issues/420)) ([2a913c6](https://github.com/lemonadesocial/lemonade-flutter/commit/2a913c66334227c39b48076361ba191a9af010f0))
+* event program ([#412](https://github.com/lemonadesocial/lemonade-flutter/issues/412)) ([e0695f0](https://github.com/lemonadesocial/lemonade-flutter/commit/e0695f055e6d0e089d13c0ff502183c66535bcb9))
+
+
+### Bug Fixes
+
+* add view map option for event location, fix navigation when press event statistics ([#424](https://github.com/lemonadesocial/lemonade-flutter/issues/424)) ([8626183](https://github.com/lemonadesocial/lemonade-flutter/commit/8626183447b236118ae039b59488761ea8c429de))
+* fix issue event statistics is reset when udpate event ([#423](https://github.com/lemonadesocial/lemonade-flutter/issues/423)) ([ba0d8f5](https://github.com/lemonadesocial/lemonade-flutter/commit/ba0d8f536f3af2d48b30e954dabab67ce4c1652c))
+* remove delete text in notification slide ([#421](https://github.com/lemonadesocial/lemonade-flutter/issues/421)) ([b142205](https://github.com/lemonadesocial/lemonade-flutter/commit/b142205c517d57c1800058088896b7a092430dad))
+* show sender avatar in matrix chat ([#422](https://github.com/lemonadesocial/lemonade-flutter/issues/422)) ([4710866](https://github.com/lemonadesocial/lemonade-flutter/commit/4710866184b9d19db452a997ab6a4b8ccee3aa3c))
+* show wrong event price on newsfeed ([#427](https://github.com/lemonadesocial/lemonade-flutter/issues/427)) ([31edbc7](https://github.com/lemonadesocial/lemonade-flutter/commit/31edbc79ebdcbc6a5c9a643cd6746ecaabda58e5))
+* weird UI issues + lock orientations ([#429](https://github.com/lemonadesocial/lemonade-flutter/issues/429)) ([d756dc5](https://github.com/lemonadesocial/lemonade-flutter/commit/d756dc5f7c59cf1408e2771f66431865bd1eb264))
+
 ## [1.6.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.5.0...v1.6.0) (2024-02-26)
 
 
