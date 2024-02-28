@@ -1,7 +1,6 @@
 import 'package:app/core/application/event/edit_event_detail_bloc/edit_event_detail_bloc.dart';
 import 'package:app/core/application/event/get_event_cohost_requests_bloc/get_event_cohost_requests_bloc.dart';
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
-import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/create_event_config_grid.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_control_panel_base_page/widgets/event_collaborations_grid_config.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_control_panel_base_page/widgets/event_tickets_grid_config.dart';
@@ -47,8 +46,8 @@ class EventControlPanelBasePage extends StatelessWidget {
                         ),
                       );
                   context.read<GetEventDetailBloc>().add(
-                        GetEventDetailEvent.replace(
-                          event: state.event ?? Event(),
+                        GetEventDetailEvent.fetch(
+                          eventId: state.event?.id ?? '',
                         ),
                       );
                 }

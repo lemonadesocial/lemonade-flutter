@@ -41,19 +41,39 @@ fragment EventOfferFragment on Event {
 fragment EventTicketTypesFragment on Event {
     required_profile_fields
     event_ticket_types {
+      _id
+      active
+      event
+      title
+      prices {
+        cost
+        currency
+        network
+        default
+      }
+      ticket_limit
+      ticket_count
+      default
+      address_required
+      description
+      description_line
+      external_ids
+      offers {
         _id
-        title
-        prices {
-            cost
-            currency
-            network
-            default
-        }
-        description
-        photos_expanded(limit: 1) {
-            key
-            bucket
-        }
+        provider
+        provider_network
+        provider_id
+        position
+        auto
+        broadcast_rooms
+      }
+      photos
+      photos_expanded(limit: 1) {
+        _id
+        url
+        key 
+        bucket
+      }
     }
 }
 
