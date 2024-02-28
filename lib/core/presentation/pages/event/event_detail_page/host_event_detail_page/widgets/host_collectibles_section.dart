@@ -301,7 +301,6 @@ class HostCollectiblesSection extends StatelessWidget {
 
 class _ClaimInfo extends StatelessWidget {
   const _ClaimInfo({
-    super.key,
     required this.network,
     required this.contract,
   });
