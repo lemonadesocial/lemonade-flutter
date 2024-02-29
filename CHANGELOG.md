@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.8.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.7.0...v1.8.0) (2024-02-29)
+
+
+### Features
+
+* display collectibles for host event ([#431](https://github.com/lemonadesocial/lemonade-flutter/issues/431)) ([d3bcc97](https://github.com/lemonadesocial/lemonade-flutter/commit/d3bcc972bbd259446f29775ddd93d9f7d6ca8b3c))
+
+
+### Bug Fixes
+
+* event detail not refresh correctly when finish update event detail ([#432](https://github.com/lemonadesocial/lemonade-flutter/issues/432)) ([9dbe88a](https://github.com/lemonadesocial/lemonade-flutter/commit/9dbe88a8c02f2f088c8f0ec2fd495380ac9e3b07))
+
 ## [1.7.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.6.0...v1.7.0) (2024-02-28)
 
 
