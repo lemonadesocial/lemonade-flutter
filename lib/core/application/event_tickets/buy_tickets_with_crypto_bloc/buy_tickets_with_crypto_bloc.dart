@@ -92,6 +92,20 @@ class BuyTicketsWithCryptoBloc
       );
     }
 
+    final isFree = BigInt.parse(event.input.total) == BigInt.zero;
+    // if isFree then consider as payment done and listen for notification
+    if (isFree) {
+      return emit(
+        BuyTicketsWithCryptoState.done(
+          data: state.data.copyWith(
+            eventJoinRequest: _currentEventJoinRequest,
+            payment: _currentPayment,
+            txHash: _txHash,
+          ),
+        ),
+      );
+    }
+
     try {
       final getChainResult =
           await _web3Repository.getChainById(chainId: selectedNetwork!);

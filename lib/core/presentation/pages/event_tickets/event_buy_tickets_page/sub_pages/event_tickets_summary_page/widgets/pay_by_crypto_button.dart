@@ -28,6 +28,7 @@ class PayByCryptoButton extends StatelessWidget {
   final String selectedCurrency;
   final String? selectedNetwork;
   final List<PurchasableItem> selectedTickets;
+  final bool isFree;
 
   const PayByCryptoButton({
     super.key,
@@ -35,6 +36,7 @@ class PayByCryptoButton extends StatelessWidget {
     required this.selectedCurrency,
     required this.selectedTickets,
     this.selectedNetwork,
+    this.isFree = false,
   });
 
   @override
@@ -44,6 +46,7 @@ class PayByCryptoButton extends StatelessWidget {
       selectedCurrency: selectedCurrency,
       selectedNetwork: selectedNetwork,
       selectedTickets: selectedTickets,
+      isFree: isFree,
     );
   }
 }
@@ -53,6 +56,7 @@ class PayByCryptoButtonView extends StatefulWidget {
   final String selectedCurrency;
   final String? selectedNetwork;
   final List<PurchasableItem> selectedTickets;
+  final bool isFree;
 
   const PayByCryptoButtonView({
     super.key,
@@ -60,6 +64,7 @@ class PayByCryptoButtonView extends StatefulWidget {
     required this.selectedCurrency,
     required this.selectedTickets,
     this.selectedNetwork,
+    this.isFree = false,
   });
 
   @override
@@ -132,6 +137,26 @@ class _PayByCryptoButtonViewState extends State<PayByCryptoButtonView> {
         ),
         child: BlocBuilder<WalletBloc, WalletState>(
           builder: (context, walletState) {
+            final event = context.read<EventProviderBloc>().event;
+
+            if (widget.isFree) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  EventOrderSlideToPay(
+                    onSlideToPay: () => clickInitPaymentAndSigned(
+                      event: event,
+                      userWalletAddress: '',
+                    ),
+                    slideActionKey: _slideToActionKey,
+                    selectedCurrency: widget.selectedCurrency,
+                    selectedNetwork: widget.selectedNetwork,
+                    pricingInfo: widget.pricingInfo,
+                  ),
+                ],
+              );
+            }
+
             if (walletState.activeSession == null) {
               return const ConnectWalletButton();
             }
@@ -139,7 +164,6 @@ class _PayByCryptoButtonViewState extends State<PayByCryptoButtonView> {
             final w3mService = getIt<WalletConnectService>().w3mService;
             final userWalletAddress = w3mService.address ?? '';
 
-            final event = context.read<EventProviderBloc>().event;
             return BlocBuilder<BuyTicketsWithCryptoBloc,
                 BuyTicketsWithCryptoState>(
               builder: (context, state) {

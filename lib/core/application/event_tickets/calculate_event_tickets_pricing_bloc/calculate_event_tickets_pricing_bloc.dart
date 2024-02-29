@@ -31,15 +31,20 @@ class CalculateEventTicketPricingBloc extends Bloc<
       emit(
         CalculateEventTicketPricingState.failure(
           pricingInfo: _currentPricingInfo,
+          isFree: false,
         ),
       );
     }, (pricingInfo) {
       _currentPricingInfo = pricingInfo.copyWith(
         promoCode: event.input.discount,
       );
+      final isFree = _currentPricingInfo?.total != null
+          ? BigInt.parse(_currentPricingInfo!.total!) == BigInt.zero
+          : false;
       emit(
         CalculateEventTicketPricingState.success(
           pricingInfo: _currentPricingInfo!,
+          isFree: isFree,
         ),
       );
     });
@@ -61,8 +66,10 @@ class CalculateEventTicketPricingState with _$CalculateEventTicketPricingState {
       CalculateTicketsPricingStateLoading;
   factory CalculateEventTicketPricingState.success({
     required EventTicketsPricingInfo pricingInfo,
+    required bool isFree,
   }) = CalculateTicketsPricingStateSuccess;
   factory CalculateEventTicketPricingState.failure({
     EventTicketsPricingInfo? pricingInfo,
+    required bool isFree,
   }) = CalculateTicketsPricingStateFailure;
 }

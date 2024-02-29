@@ -22,6 +22,7 @@ class EventOrderSummaryFooter extends StatelessWidget {
     this.selectedNetwork,
     this.onSelectCard,
     this.onCardAdded,
+    this.isFree = false,
   });
 
   final Function() onSlideToPay;
@@ -31,6 +32,7 @@ class EventOrderSummaryFooter extends StatelessWidget {
   final Function(PaymentCard paymentCard)? onCardAdded;
   final String selectedCurrency;
   final String? selectedNetwork;
+  final bool isFree;
 
   String get paymentAccountId {
     return pricingInfo?.paymentAccounts?.isNotEmpty == true
@@ -64,6 +66,20 @@ class EventOrderSummaryFooter extends StatelessWidget {
         ),
         child: BlocBuilder<SelectPaymentCardCubit, SelectPaymentCardState>(
           builder: (context, state) {
+            if (isFree) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  EventOrderSlideToPay(
+                    onSlideToPay: onSlideToPay,
+                    pricingInfo: pricingInfo,
+                    slideActionKey: slideActionKey,
+                    selectedCurrency: selectedCurrency,
+                    selectedNetwork: selectedNetwork,
+                  ),
+                ],
+              );
+            }
             return state.when(
               empty: () {
                 return SelectCardButton(

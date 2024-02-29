@@ -139,7 +139,7 @@ class EventTicketsSummaryPageView extends StatelessWidget {
             CalculateEventTicketPricingState>(
           listener: (context, state) {
             state.maybeWhen(
-              success: (pricingInfo) {
+              success: (pricingInfo, isFree) {
                 if (isCryptoCurrency) return;
                 if (pricingInfo.paymentAccounts?.isEmpty == true) return;
                 context.read<GetPaymentCardsBloc>().add(
@@ -218,13 +218,7 @@ class EventTicketsSummaryPageView extends StatelessWidget {
           if (eventJoinRequest != null) {
             return;
           }
-          final currentPayment = isCryptoCurrency
-              ? context.read<BuyTicketsWithCryptoBloc>().state.data.payment
-              : context.read<BuyTicketsBloc>().state.maybeWhen(
-                    orElse: () => null,
-                    done: (payment, _) => payment,
-                  );
-          if (currentPayment?.id == payment.id && eventId == event.id) {
+          if (eventId == event.id) {
             _waitForNotificationTimer.cancel();
             AutoRouter.of(context).replaceAll(
               [
@@ -295,7 +289,7 @@ class EventTicketsSummaryPageView extends StatelessWidget {
                                   idle: () => const SizedBox.shrink(),
                                   loading: () =>
                                       Loading.defaultLoading(context),
-                                  failure: (pricingInfo) {
+                                  failure: (pricingInfo, isFree) {
                                     if (pricingInfo != null) {
                                       return EventTicketsSummary(
                                         ticketTypes: ticketTypes,
@@ -309,7 +303,8 @@ class EventTicketsSummaryPageView extends StatelessWidget {
                                       emptyText: t.common.somethingWrong,
                                     );
                                   },
-                                  success: (pricingInfo) => EventTicketsSummary(
+                                  success: (pricingInfo, isFree) =>
+                                      EventTicketsSummary(
                                     ticketTypes: ticketTypes,
                                     selectedTickets: selectedTickets,
                                     selectedCurrency: selectedCurrency,
@@ -325,8 +320,9 @@ class EventTicketsSummaryPageView extends StatelessWidget {
                               builder: (context, state) => AddPromoCodeInput(
                                 pricingInfo: state.maybeWhen(
                                   orElse: () => null,
-                                  failure: ((pricingInfo) => pricingInfo),
-                                  success: (pricingInfo) => pricingInfo,
+                                  failure: ((pricingInfo, isFree) =>
+                                      pricingInfo),
+                                  success: (pricingInfo, isFree) => pricingInfo,
                                 ),
                                 onPressApply: (promoCode) {
                                   context
@@ -354,7 +350,7 @@ class EventTicketsSummaryPageView extends StatelessWidget {
                                   idle: () => const SizedBox.shrink(),
                                   loading: () =>
                                       Loading.defaultLoading(context),
-                                  failure: (pricingInfo) {
+                                  failure: (pricingInfo, isFree) {
                                     if (pricingInfo != null) {
                                       return EventOrderSummary(
                                         selectedCurrency: selectedCurrency,
@@ -366,7 +362,8 @@ class EventTicketsSummaryPageView extends StatelessWidget {
                                       emptyText: t.common.somethingWrong,
                                     );
                                   },
-                                  success: (pricingInfo) => EventOrderSummary(
+                                  success: (pricingInfo, isFree) =>
+                                      EventOrderSummary(
                                     selectedCurrency: selectedCurrency,
                                     selectedNetwork: selectedNetwork,
                                     pricingInfo: pricingInfo,
@@ -385,8 +382,13 @@ class EventTicketsSummaryPageView extends StatelessWidget {
                           builder: (context, state) {
                             final pricingInfo = state.maybeWhen(
                               orElse: () => null,
-                              failure: ((pricingInfo) => pricingInfo),
-                              success: (pricingInfo) => pricingInfo,
+                              failure: ((pricingInfo, isFree) => pricingInfo),
+                              success: (pricingInfo, isFree) => pricingInfo,
+                            );
+                            final isFree = state.maybeWhen(
+                              orElse: () => false,
+                              failure: (pricingInfo, isFree) => isFree,
+                              success: (pricingInfo, isFree) => isFree,
                             );
 
                             if (pricingInfo == null) {
@@ -398,10 +400,12 @@ class EventTicketsSummaryPageView extends StatelessWidget {
                                 selectedCurrency: selectedCurrency,
                                 selectedNetwork: selectedNetwork,
                                 pricingInfo: pricingInfo,
+                                isFree: isFree,
                               );
                             }
 
                             return EventOrderSummaryFooter(
+                              isFree: isFree,
                               selectedCurrency: selectedCurrency,
                               onSlideToPay: () {
                                 if (pricingInfo.paymentAccounts == null ||
@@ -428,11 +432,13 @@ class EventTicketsSummaryPageView extends StatelessWidget {
                                           currency: selectedCurrency,
                                           items: selectedTickets,
                                           total: pricingInfo.total ?? '0',
-                                          transferParams:
-                                              BuyTicketsTransferParamsInput(
-                                            paymentMethod:
-                                                selectedCard?.providerId ?? '',
-                                          ),
+                                          transferParams: isFree
+                                              ? null
+                                              : BuyTicketsTransferParamsInput(
+                                                  paymentMethod: selectedCard
+                                                          ?.providerId ??
+                                                      '',
+                                                ),
                                         ),
                                       ),
                                     );
