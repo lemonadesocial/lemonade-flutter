@@ -1,6 +1,7 @@
 import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/event/entities/event_session.dart';
 import 'package:app/core/presentation/widgets/common/dotted_line/dotted_line.dart';
+import 'package:app/core/presentation/widgets/common/readmore/readmore_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/image_utils.dart';
@@ -38,8 +39,7 @@ class EventProgramWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-
-    DbFile? photo = session.photosExpanded?.isNotEmpty ?? false
+    DbFile? photo = session.photosExpanded?.isNotEmpty == true
         ? session.photosExpanded!.first
         : null;
     final imageUrl = photo?.url ?? '';
@@ -110,7 +110,7 @@ class EventProgramWidget extends StatelessWidget {
                           child: Center(
                             child: Text(
                               session.start != null
-                                  ? session.start!.day.toString()
+                                  ? session.start?.day.toString() ?? ''
                                   : '',
                               style: Typo.small.copyWith(
                                 fontWeight: FontWeight.w600,
@@ -139,120 +139,74 @@ class EventProgramWidget extends StatelessWidget {
                 child: Container(
                   padding: EdgeInsets.all(Spacing.smMedium),
                   decoration: BoxDecoration(
-                    color: LemonColor.white09,
+                    color: LemonColor.atomicBlack,
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              color: colorScheme.onPrimary.withOpacity(0.06),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(LemonRadius.xSmall),
-                              ),
-                            ),
-                            width: Sizing.medium,
-                            height: Sizing.medium,
-                            child: Center(
-                              child: CachedNetworkImage(
-                                fit: BoxFit.cover,
-                                imageUrl: imageUrl,
-                                errorWidget: (context, url, error) =>
-                                    ThemeSvgIcon(
-                                  color: colorScheme.onSecondary,
-                                  builder: (filter) =>
-                                      Assets.icons.icEventExclusive.svg(
-                                    colorFilter: filter,
-                                    width: 15.w,
-                                    height: 15.w,
-                                  ),
-                                ),
-                                placeholder: (context, url) => ThemeSvgIcon(
-                                  color: colorScheme.onSecondary,
-                                  builder: (filter) =>
-                                      Assets.icons.icEventExclusive.svg(
-                                    colorFilter: filter,
-                                    width: 15.w,
-                                    height: 15.w,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
+                          // session thumbnail
+                          _ProgramThumbnail(imageUrl: imageUrl),
                           SizedBox(
                             width: Spacing.xSmall,
                           ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                date_utils.DateUtils.formatTimeRange(
-                                  session.start,
-                                  session.end,
-                                ),
-                                style: Typo.small
-                                    .copyWith(color: colorScheme.onSecondary),
-                              ),
-                              SizedBox(
-                                height: 3.h,
-                              ),
-                              Text(
-                                session.title ?? '',
-                                style: Typo.medium.copyWith(
-                                  color: colorScheme.onPrimary,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      session.description != null && session.description != ''
-                          ? Column(
+                          Flexible(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                SizedBox(
-                                  height: Spacing.extraSmall,
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                    left: Sizing.medium + Spacing.xSmall,
+                                Text(
+                                  date_utils.DateUtils.formatTimeRange(
+                                    session.start,
+                                    session.end,
                                   ),
-                                  child: Text(
-                                    session.description ?? '',
-                                    style: Typo.small.copyWith(
+                                  style: Typo.small
+                                      .copyWith(color: colorScheme.onSecondary),
+                                ),
+                                SizedBox(
+                                  height: 3.h,
+                                ),
+                                Text(
+                                  session.title ?? '',
+                                  style: Typo.medium.copyWith(
+                                    color: colorScheme.onPrimary,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                if (session.description?.isNotEmpty ==
+                                    true) ...[
+                                  SizedBox(
+                                    height: Spacing.extraSmall,
+                                  ),
+                                  ReadMoreWidget(
+                                    body: session.description ?? '',
+                                    textStyle: Typo.small.copyWith(
                                       color: colorScheme.onSecondary,
                                       height: 1.3,
                                     ),
+                                    maxLines: 2,
+                                    seeMoreLessTextStyle: Typo.small.copyWith(
+                                      color: LemonColor.paleViolet,
+                                    ),
                                   ),
-                                ),
+                                  if (session
+                                          .speakerUsersExpanded?.isNotEmpty ==
+                                      true) ...[
+                                    SizedBox(height: Spacing.xSmall),
+                                    SpeakersInfo(
+                                      session: session,
+                                    ),
+                                  ],
+                                ],
                               ],
-                            )
-                          : const SizedBox.shrink(),
-                      Padding(
-                        padding: EdgeInsets.only(
-                          left: Sizing.medium + Spacing.xSmall,
-                        ),
-                        child: Text(
-                          session.description ?? '',
-                          style: Typo.small.copyWith(
-                            color: colorScheme.onSecondary,
+                            ),
                           ),
-                        ),
+                        ],
                       ),
-                      session.speakerUsersExpanded!.isNotEmpty
-                          ? Padding(
-                              padding: EdgeInsets.only(
-                                top: Spacing.smMedium,
-                                left: Sizing.medium + Spacing.xSmall,
-                              ),
-                              child: SpeakersInfo(
-                                session: session,
-                              ),
-                            )
-                          : const SizedBox.shrink(),
                     ],
                   ),
                 ),
@@ -261,6 +215,52 @@ class EventProgramWidget extends StatelessWidget {
           ],
         ),
       ],
+    );
+  }
+}
+
+class _ProgramThumbnail extends StatelessWidget {
+  const _ProgramThumbnail({
+    required this.imageUrl,
+  });
+
+  final String imageUrl;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Container(
+      decoration: BoxDecoration(
+        color: colorScheme.onPrimary.withOpacity(0.06),
+        borderRadius: BorderRadius.circular(LemonRadius.xSmall),
+      ),
+      width: Sizing.medium,
+      height: Sizing.medium,
+      child: Center(
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(LemonRadius.xSmall),
+          child: CachedNetworkImage(
+            fit: BoxFit.cover,
+            imageUrl: imageUrl,
+            errorWidget: (context, url, error) => ThemeSvgIcon(
+              color: colorScheme.onSecondary,
+              builder: (filter) => Assets.icons.icEventExclusive.svg(
+                colorFilter: filter,
+                width: 15.w,
+                height: 15.w,
+              ),
+            ),
+            placeholder: (context, url) => ThemeSvgIcon(
+              color: colorScheme.onSecondary,
+              builder: (filter) => Assets.icons.icEventExclusive.svg(
+                colorFilter: filter,
+                width: 15.w,
+                height: 15.w,
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
@@ -299,7 +299,9 @@ class SpeakersInfo extends StatelessWidget {
   }
 
   Widget _buildSpeakersAvatar(ColorScheme colorScheme) {
-    final speakers = [...session.speakerUsersExpanded ?? []];
+    final speakers = [
+      ...(session.speakerUsersExpanded ?? []),
+    ];
     return SizedBox(
       width: (1 + 1 / 2 * (speakers.length - 1)) * Sizing.small,
       height: 20.w,

@@ -5,6 +5,7 @@ import 'package:app/core/presentation/pages/event/event_program_page/widgets/eve
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_chip_widget.dart';
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
@@ -37,21 +38,28 @@ class EventProgramPageState extends State<EventProgramPage> {
       orElse: () => Event(),
     );
 
-    List<String> sessionDays = event.sessions!
+    final eventSessions = (event.sessions ?? []).map(
+      (session) => session.copyWith(
+        start: session.start?.toLocal(),
+        end: session.end?.toLocal(),
+      ),
+    );
+
+    List<String> sessionDays = eventSessions
         .map(
-          (session) =>
-              DateFormat('dd-MMM-yyyy').format(session.start ?? DateTime.now()),
+          (session) => DateFormat('dd-MMM-yyyy')
+              .format(session.start?.toLocal() ?? DateTime.now()),
         )
         .toSet()
         .toList();
 
-    List<EventSession> filteredSessions = event.sessions
-            ?.where(
-              (session) =>
-                  selectedDay == null || session.start?.day == selectedDay?.day,
-            )
-            .toList() ??
-        [];
+    List<EventSession> filteredSessions = eventSessions
+        .where(
+          (session) =>
+              selectedDay == null ||
+              session.start?.toLocal().day == selectedDay?.day,
+        )
+        .toList();
 
     return Scaffold(
       backgroundColor: colorScheme.primary,
@@ -79,8 +87,9 @@ class EventProgramPageState extends State<EventProgramPage> {
                     ),
                     itemCount: filteredSessions.length,
                     itemBuilder: (context, index) {
-                      bool shouldShowDottedLine =
-                          index != filteredSessions.length - 1;
+                      bool shouldShowDottedLine = true;
+                      // TODO: will consider update this logic
+                      // index != filteredSessions.length - 1;
                       bool showGapBetween = index + 1 < filteredSessions.length
                           ? filteredSessions[index].start?.day !=
                               filteredSessions[index + 1].start?.day
@@ -126,9 +135,34 @@ class EventProgramPageState extends State<EventProgramPage> {
       padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
-        itemCount: sessionDays.length,
+        itemCount: sessionDays.length + 1,
         itemBuilder: (context, index) {
-          final sessionDay = sessionDays[index];
+          if (index == 0) {
+            final isActive = selectedDay == null;
+            return LemonChip(
+              label: t.event.program.allSessions,
+              isActive: isActive,
+              inactiveBackgroundColor: Colors.transparent,
+              activeBackgroundColor: LemonColor.white09,
+              activeTextColor: Theme.of(context).colorScheme.onPrimary,
+              borderColor: isActive ? Colors.transparent : LemonColor.white09,
+              icon: ThemeSvgIcon(
+                color: isActive ? LemonColor.paleViolet : null,
+                builder: (filter) => Assets.icons.icEventExclusive.svg(
+                  width: 15.w,
+                  height: 15.w,
+                  colorFilter: filter,
+                  color: selectedDay == null ? LemonColor.paleViolet : null,
+                ),
+              ),
+              onTap: () {
+                setState(() {
+                  selectedDay = null;
+                });
+              },
+            );
+          }
+          final sessionDay = sessionDays[index - 1];
           return _buildLemonChip(sessionDay, index, context);
         },
         separatorBuilder: (context, index) =>
@@ -138,33 +172,19 @@ class EventProgramPageState extends State<EventProgramPage> {
   }
 
   Widget _buildLemonChip(String sessionDay, int index, BuildContext context) {
-    final bool isFirstChip = index == 0;
-    final bool isActive = (isFirstChip && selectedDay == null) ||
-        (selectedDay != null &&
-            selectedDay!.day ==
-                DateFormat('dd-MMM-yyyy').parse(sessionDay).day);
-
+    final parsedSessionDay = DateFormat('dd-MMM-yyyy').parse(sessionDay);
+    final bool isActive =
+        selectedDay != null && selectedDay?.day == parsedSessionDay.day;
     return LemonChip(
-      label: isFirstChip
-          ? t.event.program.allSessions
-          : DateFormat('dd-MMM')
-              .format(DateFormat('dd-MMM-yyyy').parse(sessionDay)),
+      label: DateFormat('dd-MMM').format(parsedSessionDay),
       isActive: isActive,
       inactiveBackgroundColor: Colors.transparent,
       activeBackgroundColor: LemonColor.white09,
       activeTextColor: Theme.of(context).colorScheme.onPrimary,
       borderColor: isActive ? Colors.transparent : LemonColor.white09,
-      icon: isFirstChip
-          ? Assets.icons.icEventExclusive.svg(
-              width: 15.w,
-              height: 15.w,
-              color: selectedDay == null ? LemonColor.paleViolet : null,
-            )
-          : null,
       onTap: () {
         setState(() {
-          selectedDay =
-              isFirstChip ? null : DateFormat('dd-MMM-yyyy').parse(sessionDay);
+          selectedDay = parsedSessionDay;
         });
       },
     );
