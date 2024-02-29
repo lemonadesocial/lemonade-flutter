@@ -75,6 +75,7 @@ class HostCollectiblesSection extends StatelessWidget {
           );
         }
         return GridView.builder(
+          shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
