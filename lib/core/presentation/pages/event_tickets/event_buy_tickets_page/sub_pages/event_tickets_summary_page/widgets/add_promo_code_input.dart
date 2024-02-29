@@ -3,6 +3,7 @@ import 'package:app/core/domain/event/entities/event_tickets_pricing_info.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/utils/text_formatter/upper_case_text_formatter.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
@@ -40,14 +41,14 @@ class _AddPromoCodeInputState extends State<AddPromoCodeInput> {
       listener: (context, state) {
         state.maybeWhen(
           orElse: () => null,
-          failure: (pricingInfo) {
+          failure: (pricingInfo, isFree) {
             setState(() {
               promoTextController.text = pricingInfo?.promoCode ?? '';
               applied = pricingInfo?.promoCode?.isNotEmpty == true &&
                   pricingInfo?.discount != null;
             });
           },
-          success: (pricingInfo) {
+          success: (pricingInfo, isFree) {
             setState(() {
               promoTextController.text = pricingInfo.promoCode ?? '';
               applied = pricingInfo.promoCode?.isNotEmpty == true &&
@@ -61,6 +62,9 @@ class _AddPromoCodeInputState extends State<AddPromoCodeInput> {
         child: SizedBox(
           height: Sizing.xLarge,
           child: LemonTextField(
+            inputFormatters: [
+              UpperCaseTextFormatter(),
+            ],
             onChange: (value) {
               setState(() {
                 applied = false;

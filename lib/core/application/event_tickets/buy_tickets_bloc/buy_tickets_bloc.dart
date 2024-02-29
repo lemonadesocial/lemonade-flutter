@@ -32,6 +32,7 @@ class BuyTicketsBloc extends Bloc<BuyTicketsEvent, BuyTicketsState> {
   Future<void> _onBuy(StartBuyTickets event, Emitter emit) async {
     emit(BuyTicketsState.loading());
     final paymentMethod = event.input.transferParams?.paymentMethod ?? '';
+
     if (_currentPayment != null) {
       add(
         BuyTicketsEvent.processPaymentIntent(
@@ -42,6 +43,7 @@ class BuyTicketsBloc extends Bloc<BuyTicketsEvent, BuyTicketsState> {
     }
 
     final result = await eventTicketRepository.buyTickets(input: event.input);
+
     result.fold(
       (l) => emit(
         BuyTicketsState.failure(
@@ -54,6 +56,17 @@ class BuyTicketsBloc extends Bloc<BuyTicketsEvent, BuyTicketsState> {
           return emit(
             BuyTicketsState.failure(
               failureReason: InitPaymentFailure(),
+            ),
+          );
+        }
+
+        final isFree = BigInt.parse(event.input.total) == BigInt.zero;
+        // if isFree then consider as payment done and listen for notification
+        if (isFree) {
+          return emit(
+            BuyTicketsState.done(
+              payment: response.payment,
+              eventJoinRequest: _eventJoinRequest,
             ),
           );
         }
