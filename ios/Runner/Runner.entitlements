@@ -6,7 +6,8 @@
 	<string>development</string>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
-		<string>applinks:lemonade-53666233.web.app</string>
+		<string>applinks:staging.lemonade.social</string>
+		<string>applinks:lemonade.social</string>
 	</array>
 </dict>
 </plist>
