@@ -1,3 +1,4 @@
+import 'package:app/core/domain/event/event_enums.dart';
 import 'package:app/core/presentation/widgets/back_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/drawer/widgets/lemon_drawer_profile_info.dart';
@@ -111,6 +112,40 @@ class LemonDrawer extends StatelessWidget {
                       context.read<AuthBloc>().state.maybeWhen(
                             authenticated: (authSession) =>
                                 context.router.push(const CommunityRoute()),
+                            orElse: () => context.router.navigate(
+                              const LoginRoute(),
+                            ),
+                          );
+                    },
+                  ),
+                  SizedBox(
+                    height: Spacing.xSmall,
+                  ),
+                  LemonDrawerTileWidget(
+                    title: t.event.myEvents.capitalize(),
+                    leading: ThemeSvgIcon(
+                      color: colorScheme.onPrimary,
+                      builder: (filter) {
+                        return Assets.icons.icHouseParty.svg(
+                          colorFilter: filter,
+                          width: 18.w,
+                          height: 18.w,
+                        );
+                      },
+                    ),
+                    featureAvailable: true,
+                    trailing: Assets.icons.icArrowBack.svg(
+                      width: 18.w,
+                      height: 18.w,
+                    ),
+                    onTap: () {
+                      Vibrate.feedback(FeedbackType.light);
+                      context.read<AuthBloc>().state.maybeWhen(
+                            authenticated: (authSession) => context.router.push(
+                              EventsListingRoute(
+                                eventListingType: EventListingType.hosting,
+                              ),
+                            ),
                             orElse: () => context.router.navigate(
                               const LoginRoute(),
                             ),

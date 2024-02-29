@@ -219,14 +219,29 @@ class EventTicketManagementView extends StatelessWidget {
                                     opacity: 1, // 0.5 for disabled state,
                                     child: LinearGradientButton(
                                       onTap: () async {
-                                        AutoRouter.of(context)
-                                            .root
-                                            .popUntilRouteWithPath(
-                                              '/events/${event.id}',
-                                            );
-                                        await AutoRouter.of(context).root.pop();
-                                        AutoRouter.of(context).root.navigate(
+                                        final hasEventsList =
+                                            AutoRouter.of(context)
+                                                .root
+                                                .stack
+                                                .any(
+                                                  (route) =>
+                                                      route.routeData.name ==
+                                                      EventsListingRoute.name,
+                                                );
+                                        if (!hasEventsList) {
+                                          AutoRouter.of(context)
+                                              .root
+                                              .popUntilRoot();
+                                        } else {
+                                          AutoRouter.of(context)
+                                              .root
+                                              .popUntilRouteWithPath(
+                                                '/events',
+                                              );
+                                        }
+                                        AutoRouter.of(context).root.push(
                                               EventDetailRoute(
+                                                key: UniqueKey(),
                                                 eventId: event.id ?? '',
                                               ),
                                             );

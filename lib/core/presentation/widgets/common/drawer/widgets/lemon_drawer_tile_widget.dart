@@ -29,7 +29,10 @@ class LemonDrawerTileWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return InkWell(
-      onTap: onTap,
+      onTap: () {
+        Navigator.of(context, rootNavigator: true).pop();
+        onTap();
+      },
       child: Container(
         height: 60.h,
         decoration: BoxDecoration(

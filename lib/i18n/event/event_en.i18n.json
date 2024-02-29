@@ -24,6 +24,7 @@
     "aboutTheEvent": "About the event",
     "eventStartIn": "Starting in $time",
     "eventEnded": "Event ended",
+    "myEvents": "My events",
     "dashboard": {
         "liveChat": "Live chat",
         "invite": "Invite",
