@@ -122,9 +122,9 @@ class PostGuestEventDetailView extends StatelessWidget {
                       ),
                     ],
                   ),
-                  EventDetailFeaturesBar(
-                    event: event,
-                  ),
+                  // EventDetailFeaturesBar(
+                  //   event: event,
+                  // ),
                 ],
               ),
             );
