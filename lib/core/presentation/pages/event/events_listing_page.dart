@@ -25,7 +25,11 @@ import 'package:flutter_vibrate/flutter_vibrate.dart';
 
 @RoutePage()
 class EventsListingPage extends StatelessWidget {
-  const EventsListingPage({super.key});
+  final EventListingType? eventListingType;
+  const EventsListingPage({
+    super.key,
+    this.eventListingType,
+  });
 
   HomeEventListingBloc resolveHomeEventsListingBloc() => HomeEventListingBloc(
         EventService(getIt<EventRepository>()),
@@ -52,15 +56,19 @@ class EventsListingPage extends StatelessWidget {
       homeEventListingBloc: resolveHomeEventsListingBloc(),
       attendingEventListingBloc: resolveAttendingEventsListingBloc(userId),
       hostingEventsListingBloc: resolveHostingEventsListingBloc(userId),
+      eventListingType: eventListingType,
     );
   }
 }
 
 class _EventsListingView extends StatefulWidget {
+  final EventListingType? eventListingType;
+
   const _EventsListingView({
     required this.homeEventListingBloc,
     required this.attendingEventListingBloc,
     required this.hostingEventsListingBloc,
+    this.eventListingType,
   });
   final HomeEventListingBloc homeEventListingBloc;
   final AttendingEventListingBloc attendingEventListingBloc;
@@ -73,6 +81,16 @@ class _EventsListingView extends StatefulWidget {
 class _EventsListingViewState extends State<_EventsListingView> {
   EventListingType eventListingType = EventListingType.all;
   EventTimeFilter? eventTimeFilter;
+
+  @override
+  initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        eventListingType = widget.eventListingType ?? EventListingType.all;
+      });
+    });
+  }
 
   void _onAuthStateChanged(AuthState authState) {
     authState.maybeWhen(
