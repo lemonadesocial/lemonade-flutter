@@ -41,6 +41,14 @@
         <action android:name="FLUTTER_NOTIFICATION_CLICK" />
         <category android:name="android.intent.category.DEFAULT" />
       </intent-filter>
+      <meta-data android:name="flutter_deeplinking_enabled" android:value="true" />
+      <intent-filter android:autoVerify="true">
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <data android:scheme="http" android:host="staging.lemonade.social" />
+        <data android:scheme="https" />
+      </intent-filter>
     </activity>
     <!-- Flutter web auth -->
     <activity android:name="com.linusu.flutter_web_auth_2.CallbackActivity" android:exported="true">
