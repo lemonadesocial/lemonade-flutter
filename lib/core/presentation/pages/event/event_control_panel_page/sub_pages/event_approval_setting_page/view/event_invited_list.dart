@@ -7,6 +7,7 @@ import 'package:app/graphql/backend/event/query/get_event_invited_statistics.gra
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 
 class EventInvitedList extends StatelessWidget {
   final Event? event;
@@ -20,6 +21,7 @@ class EventInvitedList extends StatelessWidget {
     final t = Translations.of(context);
     return Query$GetEventInvitedStatistics$Widget(
       options: Options$Query$GetEventInvitedStatistics(
+        fetchPolicy: FetchPolicy.networkOnly,
         variables: Variables$Query$GetEventInvitedStatistics(
           id: event?.id ?? '',
         ),

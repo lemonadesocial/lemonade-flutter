@@ -106,9 +106,7 @@ class _GuestInfo extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                guest.userExpanded?.name ??
-                    guest.userExpanded?.email ??
-                    t.common.anonymous,
+                guest.userExpanded?.name ?? guest.email ?? t.common.anonymous,
                 style: Typo.medium.copyWith(
                   color: colorScheme.onPrimary,
                 ),
@@ -118,7 +116,7 @@ class _GuestInfo extends StatelessWidget {
               Text(
                 guest.userExpanded?.username != null
                     ? '@${guest.userExpanded?.username}'
-                    : guest.userExpanded?.email ?? '',
+                    : guest.email ?? '',
                 style: Typo.small.copyWith(
                   color: colorScheme.onSecondary,
                 ),
