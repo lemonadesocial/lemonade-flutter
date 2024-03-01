@@ -48,6 +48,8 @@ class FirebaseService {
             ? firebase_options_production.DefaultFirebaseOptions.currentPlatform
             : firebase_options_staging.DefaultFirebaseOptions.currentPlatform,
       );
+      FirebaseCrashlytics.instance
+          .setCrashlyticsCollectionEnabled(kDebugMode == false);
       FirebaseService._firebaseMessaging = FirebaseMessaging.instance;
       channel = const AndroidNotificationChannel(
         'high_importance_channel',
@@ -97,8 +99,6 @@ class FirebaseService {
           }
         },
       );
-      FirebaseCrashlytics.instance
-          .setCrashlyticsCollectionEnabled(kDebugMode == false);
       FlutterError.onError = (flutterErrorDetails) async {
         // Prevent flush crash analytics error
         // https://github.com/Baseflow/flutter_cached_network_image/issues/336

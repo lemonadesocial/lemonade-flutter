@@ -58,8 +58,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(AuthState.onBoardingRequired(authSession: currentUser));
         return;
       }
-      await FirebaseAnalytics.instance.setUserId(id: currentUser.userId);
-      await FirebaseCrashlytics.instance.setUserIdentifier(currentUser.userId);
+      if (!kDebugMode) {
+        await FirebaseAnalytics.instance.setUserId(id: currentUser.userId);
+        await FirebaseCrashlytics.instance
+            .setUserIdentifier(currentUser.userId);
+      }
       emit(AuthState.authenticated(authSession: currentUser));
       return;
     }
@@ -74,9 +77,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   Future<void> _onRefresh(AuthEventRefresh event, Emitter emit) async {
     emit(const AuthState.processing());
     final currentUser = await _createSession();
-    await FirebaseAnalytics.instance.setUserId(id: currentUser?.userId);
-    await FirebaseCrashlytics.instance.setUserIdentifier(currentUser!.userId);
-    emit(AuthState.authenticated(authSession: currentUser));
+    if (!kDebugMode) {
+      await FirebaseAnalytics.instance.setUserId(id: currentUser?.userId);
+      await FirebaseCrashlytics.instance.setUserIdentifier(currentUser!.userId);
+    }
+    emit(AuthState.authenticated(authSession: currentUser!));
   }
 
   Future<void> _onLogin(AuthEventLogin event, Emitter emit) async {
@@ -88,8 +93,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     final result = await appOauth.logout();
     result.fold((l) => null, (success) async {
       if (success) {
-        FirebaseCrashlytics.instance.setUserIdentifier('');
-        FirebaseAnalytics.instance.setUserId(id: null);
+        if (!kDebugMode) {
+          // Reset crashlytics
+          FirebaseCrashlytics.instance.setUserIdentifier('');
+          FirebaseAnalytics.instance.setUserId(id: null);
+        }
         await firebaseService.removeFcmToken();
       }
     });
@@ -97,8 +105,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   Future<void> _onForceLogout(AuthEventForceLogout event, Emitter emit) async {
     // This will trigger token state listener to call _onUnAuthenticated
-    FirebaseCrashlytics.instance.setUserIdentifier('');
-    FirebaseAnalytics.instance.setUserId(id: null);
+    if (!kDebugMode) {
+      // Reset crashlytics
+      FirebaseCrashlytics.instance.setUserIdentifier('');
+      FirebaseAnalytics.instance.setUserId(id: null);
+    }
     await firebaseService.removeFcmToken();
     await appOauth.forceLogout();
   }
