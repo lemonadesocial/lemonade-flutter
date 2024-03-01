@@ -216,6 +216,9 @@ class FirebaseService {
   void addFcmToken() async {
     String? fcmToken = await getToken();
     if (fcmToken == null || fcmToken == '') {
+      if (kDebugMode) {
+        print('No FCM token found!');
+      }
       return;
     }
     await getIt<AppGQL>().client.mutate(
@@ -248,8 +251,9 @@ class FirebaseService {
     }
   }
 
-  void _onTokenStateChange(OAuthTokenState tokenState) {
+  Future<void> _onTokenStateChange(OAuthTokenState tokenState) async {
     if (tokenState == OAuthTokenState.valid) {
+      await requestPermission();
       addFcmToken();
     } else if (tokenState == OAuthTokenState.invalid) {
       if (_firebaseMessaging != null) {
