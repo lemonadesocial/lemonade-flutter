@@ -2,7 +2,6 @@ import 'package:app/core/application/poap/claim_poap_bloc/claim_poap_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/poap/input/poap_input.dart';
 import 'package:app/core/domain/token/entities/token_entities.dart';
-import 'package:app/core/presentation/widgets/common/app_backdrop/app_backdrop.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
@@ -84,45 +83,27 @@ class GuestEventPoapOfferItemState extends State<GuestEventPoapOfferItemView>
         child: Stack(
           children: [
             Positioned(
-              top: Spacing.superExtraSmall,
-              left: Spacing.superExtraSmall,
-              child: SizedBox(
-                width: Sizing.xLarge * 2,
-                height: Sizing.xLarge * 2,
-                child: FutureBuilder(
-                  future: MediaUtils.getNftMedia(
-                    widget.token?.metadata?.image,
-                    widget.token?.metadata?.animation_url,
-                  ),
-                  builder: (context, snapshot) => Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(
-                        LemonRadius.small,
-                      ),
-                    ),
-                    child: Stack(
-                      children: [
-                        Opacity(
-                          opacity: 0.15,
-                          child: CachedNetworkImage(
-                            fit: BoxFit.cover,
-                            imageUrl: snapshot.data?.url ?? '',
-                            placeholder: (_, __) =>
-                                ImagePlaceholder.defaultPlaceholder(),
-                            errorWidget: (_, __, ___) =>
-                                ImagePlaceholder.defaultPlaceholder(),
-                          ),
-                        ),
-                        const AppBackdrop(),
-                      ],
-                    ),
+              left: -120.w,
+              top: -120.w,
+              child: Container(
+                width: 240.w,
+                height: 240.w,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: RadialGradient(
+                    center: Alignment.topLeft,
+                    radius: 1,
+                    colors: [
+                      Color.fromRGBO(255, 255, 255, 0.12),
+                      Color.fromRGBO(255, 255, 255, 0),
+                    ],
                   ),
                 ),
               ),
             ),
             Container(
               decoration: BoxDecoration(
-                color: colorScheme.onPrimary.withOpacity(0.05),
+                color: colorScheme.onPrimary.withOpacity(0.06),
                 borderRadius: BorderRadius.circular(15.r),
               ),
               padding: EdgeInsets.symmetric(
