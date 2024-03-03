@@ -1,4 +1,3 @@
-import 'package:app/core/domain/event/event_enums.dart';
 import 'package:app/core/presentation/widgets/back_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/drawer/widgets/lemon_drawer_profile_info.dart';
