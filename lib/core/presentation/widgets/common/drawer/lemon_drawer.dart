@@ -141,11 +141,9 @@ class LemonDrawer extends StatelessWidget {
                     onTap: () {
                       Vibrate.feedback(FeedbackType.light);
                       context.read<AuthBloc>().state.maybeWhen(
-                            authenticated: (authSession) => context.router.push(
-                              EventsListingRoute(
-                                eventListingType: EventListingType.hosting,
-                              ),
-                            ),
+                            authenticated: (authSession) =>
+                                AutoRouter.of(context)
+                                    .navigate(const MyEventsRoute()),
                             orElse: () => context.router.navigate(
                               const LoginRoute(),
                             ),

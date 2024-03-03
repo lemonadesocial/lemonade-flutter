@@ -113,6 +113,7 @@
     "remaining": "remaining",
     "summary": "summary",
     "empty": {
+        "myEvents": "You don't have any events.",
         "remainingTickets": "You don't have any remaining tickets.",
         "tickets": "You don't have any tickets.",
         "reservations": "You don't have any reservations."
