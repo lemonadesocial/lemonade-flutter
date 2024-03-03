@@ -265,6 +265,18 @@ final eventDetailRoutes = AutoRoute(
       ],
     ),
     AutoRoute(
+      page: EventInviteSettingRoute.page,
+      children: [
+        AutoRoute(
+          initial: true,
+          page: EventInviteFormRoute.page,
+        ),
+        AutoRoute(
+          page: EventInviteProcessingRoute.page,
+        ),
+      ],
+    ),
+    AutoRoute(
       page: EventProgramRoute.page,
     ),
   ],

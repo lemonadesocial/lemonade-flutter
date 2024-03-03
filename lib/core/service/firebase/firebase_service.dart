@@ -48,6 +48,8 @@ class FirebaseService {
             ? firebase_options_production.DefaultFirebaseOptions.currentPlatform
             : firebase_options_staging.DefaultFirebaseOptions.currentPlatform,
       );
+      FirebaseCrashlytics.instance
+          .setCrashlyticsCollectionEnabled(kDebugMode == false);
       FirebaseService._firebaseMessaging = FirebaseMessaging.instance;
       channel = const AndroidNotificationChannel(
         'high_importance_channel',
@@ -97,8 +99,6 @@ class FirebaseService {
           }
         },
       );
-      FirebaseCrashlytics.instance
-          .setCrashlyticsCollectionEnabled(kDebugMode == false);
       FlutterError.onError = (flutterErrorDetails) async {
         // Prevent flush crash analytics error
         // https://github.com/Baseflow/flutter_cached_network_image/issues/336
@@ -216,6 +216,9 @@ class FirebaseService {
   void addFcmToken() async {
     String? fcmToken = await getToken();
     if (fcmToken == null || fcmToken == '') {
+      if (kDebugMode) {
+        print('No FCM token found!');
+      }
       return;
     }
     await getIt<AppGQL>().client.mutate(
@@ -248,8 +251,9 @@ class FirebaseService {
     }
   }
 
-  void _onTokenStateChange(OAuthTokenState tokenState) {
+  Future<void> _onTokenStateChange(OAuthTokenState tokenState) async {
     if (tokenState == OAuthTokenState.valid) {
+      await requestPermission();
       addFcmToken();
     } else if (tokenState == OAuthTokenState.invalid) {
       if (_firebaseMessaging != null) {

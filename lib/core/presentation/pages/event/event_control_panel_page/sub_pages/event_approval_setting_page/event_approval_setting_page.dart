@@ -8,10 +8,10 @@ import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_p
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/widgets/join_request_item/event_rejected_join_request_item.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
-import 'package:app/core/utils/modal_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
@@ -133,7 +133,9 @@ class _EventApprovalSettingPageState extends State<EventApprovalSettingPage>
         title: t.event.eventApproval.guests,
         actions: [
           InkWell(
-            onTap: () => showComingSoonDialog(context),
+            onTap: () => AutoRouter.of(context).push(
+              const EventInviteSettingRoute(),
+            ),
             child: ThemeSvgIcon(
               color: colorScheme.onSurface,
               builder: (filter) => Assets.icons.icAdd.svg(

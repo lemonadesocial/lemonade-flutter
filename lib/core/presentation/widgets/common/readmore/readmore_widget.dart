@@ -1,3 +1,5 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers
+
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
@@ -13,10 +15,14 @@ class ReadMoreWidget extends StatelessWidget {
     super.key,
     required this.body,
     this.textStyle,
+    this.seeMoreLessTextStyle,
+    this.maxLines = 5,
   });
 
   final String body;
   final TextStyle? textStyle;
+  final TextStyle? seeMoreLessTextStyle;
+  final int maxLines;
 
   @override
   Widget build(BuildContext context) {
@@ -35,14 +41,16 @@ class ReadMoreWidget extends StatelessWidget {
         final tp = TextPainter(text: span, textDirection: TextDirection.ltr);
         tp.layout(maxWidth: constraints.maxWidth);
         final numLines = tp.computeLineMetrics().length;
-        return numLines <= 5
+        final _moreLessTextStyle = seeMoreLessTextStyle ?? moreLessTextStyle;
+
+        return numLines <= maxLines
             ? Linkify(
                 text: body,
                 overflow: TextOverflow.ellipsis,
                 style: mTextStyle,
                 linkStyle: linkStyle,
                 onOpen: onOpen,
-                maxLines: 5,
+                maxLines: maxLines,
                 options: option,
               )
             : ExpandableNotifier(
@@ -52,7 +60,7 @@ class ReadMoreWidget extends StatelessWidget {
                     children: [
                       Linkify(
                         text: body,
-                        maxLines: 5,
+                        maxLines: maxLines,
                         overflow: TextOverflow.ellipsis,
                         style: mTextStyle,
                         linkStyle: linkStyle,
@@ -62,7 +70,7 @@ class ReadMoreWidget extends StatelessWidget {
                       ExpandableButton(
                         child: Text(
                           t.common.showMore,
-                          style: moreLessTextStyle,
+                          style: _moreLessTextStyle,
                         ),
                       ),
                     ],
@@ -80,7 +88,7 @@ class ReadMoreWidget extends StatelessWidget {
                       ExpandableButton(
                         child: Text(
                           t.common.showLess,
-                          style: moreLessTextStyle,
+                          style: _moreLessTextStyle,
                         ),
                       ),
                     ],

@@ -360,5 +360,14 @@
     },
     "collectibles": {
         "addAnotherCollectble": "Add another collectible"
+    },
+    "inviteEvent": {
+        "inviteEventTitle": "Invite",
+        "inviteEventDescription": "Invite your guests via email",
+        "inviteMore": "Invite more",
+        "inviteLoadingTitle": "Inviting",
+        "inviteLoadingDescription": "Please wait while we invite to your\nguests. This should only take a few seconds.",
+        "inviteSuccessTitle": "Invited!",
+        "inviteSuccessDescription": "Your guests have been invted to\n$eventName!"
     }
 }

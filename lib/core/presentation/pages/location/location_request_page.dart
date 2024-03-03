@@ -84,6 +84,9 @@ class LocationRequestPage extends StatelessWidget {
                 },
               ),
             ),
+            SizedBox(
+              height: Spacing.smMedium,
+            ),
           ],
         ),
       ),
