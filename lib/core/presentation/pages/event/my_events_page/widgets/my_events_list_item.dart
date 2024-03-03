@@ -12,6 +12,7 @@ import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MyEventsListItem extends StatelessWidget {
@@ -160,6 +161,7 @@ class _EventJoinCount extends StatelessWidget {
             style: Typo.xSmall.copyWith(
               color: colorScheme.onSecondary,
               fontWeight: FontWeight.w600,
+              fontSize: 9.sp,
             ),
           ),
         ],
