@@ -27,6 +27,11 @@ class EventInviteProcessingPage extends StatelessWidget {
           padding: EdgeInsets.only(bottom: Spacing.smMedium),
           child: Mutation$InviteEvent$Widget(
             options: WidgetOptions$Mutation$InviteEvent(
+              onCompleted: (_, __) {
+                context.read<GetEventDetailBloc>().add(
+                      GetEventDetailEvent.fetch(eventId: event?.id ?? ''),
+                    );
+              },
               onError: (error) {
                 AutoRouter.of(context).replaceAll([
                   EventInviteFormRoute(),
