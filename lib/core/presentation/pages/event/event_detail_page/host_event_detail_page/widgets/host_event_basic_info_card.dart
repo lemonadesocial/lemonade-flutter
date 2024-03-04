@@ -3,6 +3,7 @@ import 'package:app/core/domain/event/entities/event_ticket.dart';
 import 'package:app/core/domain/event/input/get_tickets_input/get_tickets_input.dart';
 import 'package:app/core/domain/event/repository/event_ticket_repository.dart';
 import 'package:app/core/failure.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/event_approval_setting_page.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/auth_utils.dart';
@@ -221,13 +222,15 @@ class HostEventBasicInfoCard extends StatelessWidget {
             SizedBox(
               height: Spacing.extraSmall,
             ),
-            InkWell(
-              onTap: () {
-                AutoRouter.of(context).push(const EventApprovalSettingRoute());
-              },
-              child: Row(
-                children: [
-                  Expanded(
+            Row(
+              children: [
+                Expanded(
+                  child: InkWell(
+                    onTap: () => AutoRouter.of(context).push(
+                      EventApprovalSettingRoute(
+                        initialTab: EventGuestsTabs.checkins,
+                      ),
+                    ),
                     child: Container(
                       height: 73.w,
                       decoration: BoxDecoration(
@@ -263,10 +266,17 @@ class HostEventBasicInfoCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(
-                    width: Spacing.extraSmall,
-                  ),
-                  Expanded(
+                ),
+                SizedBox(
+                  width: Spacing.extraSmall,
+                ),
+                Expanded(
+                  child: InkWell(
+                    onTap: () => AutoRouter.of(context).push(
+                      EventApprovalSettingRoute(
+                        initialTab: EventGuestsTabs.reservations,
+                      ),
+                    ),
                     child: Container(
                       height: 73.w,
                       decoration: BoxDecoration(
@@ -302,10 +312,17 @@ class HostEventBasicInfoCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(
-                    width: Spacing.extraSmall,
-                  ),
-                  Expanded(
+                ),
+                SizedBox(
+                  width: Spacing.extraSmall,
+                ),
+                Expanded(
+                  child: InkWell(
+                    onTap: () => AutoRouter.of(context).push(
+                      EventApprovalSettingRoute(
+                        initialTab: EventGuestsTabs.invited,
+                      ),
+                    ),
                     child: Container(
                       height: 73.w,
                       decoration: BoxDecoration(
@@ -341,8 +358,8 @@ class HostEventBasicInfoCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
             SizedBox(
               height: Spacing.extraSmall,
@@ -371,7 +388,10 @@ class _ViewGuestsButton extends StatelessWidget {
       onTap: () {
         Vibrate.feedback(FeedbackType.light);
         AutoRouter.of(context).push(
-          const EventApprovalSettingRoute(),
+          EventApprovalSettingRoute(
+            initialTab:
+                event.approvalRequired == true ? EventGuestsTabs.pending : null,
+          ),
         );
       },
       child: Container(
