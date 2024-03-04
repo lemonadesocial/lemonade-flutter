@@ -262,13 +262,16 @@ class _EventItem extends StatelessWidget {
                           imageConfig: ImageConfig.eventPhoto,
                         ),
                         fit: BoxFit.cover,
-                        placeholder: (_, __) =>
-                            ImagePlaceholder.defaultPlaceholder(),
+                        placeholder: (_, __) => ImagePlaceholder.eventCard(),
                         errorWidget: (_, __, ___) =>
-                            ImagePlaceholder.defaultPlaceholder(),
+                            ImagePlaceholder.eventCard(),
                       ),
                     )
-                  : ImagePlaceholder.defaultPlaceholder(),
+                  : ClipRRect(
+                      borderRadius:
+                          BorderRadius.circular(LemonRadius.extraSmall),
+                      child: ImagePlaceholder.eventCard(),
+                    ),
             ),
             Positioned(
               bottom: Spacing.xSmall,

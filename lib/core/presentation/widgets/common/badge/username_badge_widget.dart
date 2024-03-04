@@ -23,8 +23,8 @@ class TextBadge extends StatelessWidget {
       child: Center(
         child: Text(
           label,
-          style: Typo.xSmall.copyWith(
-            color: colorScheme.onSurfaceVariant,
+          style: Typo.small.copyWith(
+            color: colorScheme.onSecondary,
           ),
         ),
       ),
