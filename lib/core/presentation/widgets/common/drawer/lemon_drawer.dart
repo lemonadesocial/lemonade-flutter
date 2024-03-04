@@ -36,6 +36,7 @@ class LemonDrawer extends StatelessWidget {
                 padding: EdgeInsets.only(right: Spacing.smMedium),
                 child: InkWell(
                   onTap: () {
+                    Navigator.of(context, rootNavigator: true).pop();
                     Vibrate.feedback(FeedbackType.light);
                     AutoRouter.of(context).navigate(const SettingRoute());
                   },
