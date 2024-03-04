@@ -334,6 +334,7 @@ class _SelectTicketViewState extends State<SelectTicketView> {
                               right: Spacing.smMedium,
                             ),
                             child: PaymentMethodsSwitcher(
+                              selectedTickets: selectedTickets,
                               selectedPaymentMethod: selectedPaymentMethod,
                               onSelect: (paymentMethod) => context
                                   .read<SelectEventTicketsBloc>()
