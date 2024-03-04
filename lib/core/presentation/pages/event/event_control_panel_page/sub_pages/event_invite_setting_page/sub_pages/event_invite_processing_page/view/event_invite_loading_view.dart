@@ -69,6 +69,12 @@ class _CircularLoadingState extends State<_CircularLoading>
   late Animation<double> _animation;
 
   @override
+  void dispose() {
+    _animationContrl.dispose();
+    super.dispose();
+  }
+
+  @override
   void initState() {
     super.initState();
     _animationContrl = AnimationController(
