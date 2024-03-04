@@ -21,9 +21,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
+enum EventGuestsTabs {
+  reservations(tabIndex: 0),
+  invited(tabIndex: 1),
+  checkins(tabIndex: 2),
+  pending(tabIndex: 3),
+  confirmed(tabIndex: 4),
+  declined(tabIndex: 5);
+
+  const EventGuestsTabs({
+    required this.tabIndex,
+  });
+
+  final int tabIndex;
+}
+
 @RoutePage()
 class EventApprovalSettingPage extends StatefulWidget {
-  const EventApprovalSettingPage({super.key});
+  final EventGuestsTabs? initialTab;
+
+  const EventApprovalSettingPage({
+    super.key,
+    this.initialTab,
+  });
 
   @override
   State<EventApprovalSettingPage> createState() =>
@@ -111,6 +131,12 @@ class _EventApprovalSettingPageState extends State<EventApprovalSettingPage>
         });
       }
     });
+    if (widget.initialTab != null) {
+      if (widget.initialTab!.tabIndex > tabItems.length - 1) {
+        return;
+      }
+      _tabController.animateTo(widget.initialTab!.tabIndex);
+    }
   }
 
   @override
