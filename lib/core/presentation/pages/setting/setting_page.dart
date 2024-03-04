@@ -53,7 +53,7 @@ class SettingPageView extends StatelessWidget {
               processing: EasyLoading.show,
               unauthenticated: (_) async {
                 await EasyLoading.dismiss();
-                context.router.popUntilRoot();
+                context.router.root.popUntilRoot();
               },
               orElse: EasyLoading.dismiss,
             );
@@ -65,7 +65,7 @@ class SettingPageView extends StatelessWidget {
               loading: EasyLoading.show,
               success: () async {
                 await EasyLoading.dismiss();
-                context.router.popUntilRoot();
+                context.router.root.popUntilRoot();
                 context.read<AuthBloc>().add(const AuthEvent.forceLogout());
               },
               orElse: EasyLoading.dismiss,
