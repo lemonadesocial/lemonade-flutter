@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.9.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.8.0...v1.9.0) (2024-03-04)
+
+
+### Features
+
+* add my events shortcut from app drawer ([#439](https://github.com/lemonadesocial/lemonade-flutter/issues/439)) ([dae3726](https://github.com/lemonadesocial/lemonade-flutter/commit/dae37262598adc739bd75968c04458279ca04c29))
+* basic invite event flow ([#443](https://github.com/lemonadesocial/lemonade-flutter/issues/443)) ([6f18a01](https://github.com/lemonadesocial/lemonade-flutter/commit/6f18a01e8f788ec33ae30531f69a6ad6a0a68391))
+* my events ([#444](https://github.com/lemonadesocial/lemonade-flutter/issues/444)) ([a5beab6](https://github.com/lemonadesocial/lemonade-flutter/commit/a5beab654e814b175f33a9787fc0d8d865e309ef))
+* support universal links ([#418](https://github.com/lemonadesocial/lemonade-flutter/issues/418)) ([84f6b15](https://github.com/lemonadesocial/lemonade-flutter/commit/84f6b15a8d0a85ff26bad7a7c65da6a6e28df2f4))
+* update payment flow for 100% discount code ([#437](https://github.com/lemonadesocial/lemonade-flutter/issues/437)) ([4c62a6e](https://github.com/lemonadesocial/lemonade-flutter/commit/4c62a6e43671ff32a05d4581069c5665592b72f0))
+
+
+### Bug Fixes
+
+* event program for guest refinement ([#440](https://github.com/lemonadesocial/lemonade-flutter/issues/440)) ([ad90740](https://github.com/lemonadesocial/lemonade-flutter/commit/ad907402647a455426afe0febcbec5b7da8a1efe))
+* request notification permission android ([#441](https://github.com/lemonadesocial/lemonade-flutter/issues/441)) ([6332477](https://github.com/lemonadesocial/lemonade-flutter/commit/6332477f2c68a688465e62d5b888ea231d55b0c7))
+
 ## [1.8.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.7.0...v1.8.0) (2024-02-29)
 
 
