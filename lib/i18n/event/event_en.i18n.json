@@ -116,7 +116,8 @@
         "myEvents": "You don't have any events.",
         "remainingTickets": "You don't have any remaining tickets.",
         "tickets": "You don't have any tickets.",
-        "reservations": "You don't have any reservations."
+        "reservations": "You don't have any reservations.",
+        "rewards": "Don't have any rewards."
     },
     "paymentNotSupported": "Paid tickets are not supported yet. Please kindly use our website",
     "eventCreation": {
