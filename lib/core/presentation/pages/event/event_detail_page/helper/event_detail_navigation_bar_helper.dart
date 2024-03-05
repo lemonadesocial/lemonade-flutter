@@ -123,11 +123,8 @@ class EventDetailNavigationBarHelper {
         label: t.event.configuration.info,
         iconData: ThemeSvgIcon(
           color: colorScheme.onSecondary,
-          builder: (filter) => Assets.icons.icInfo.svg(
-            colorFilter: filter,
-            width: iconSize,
-            height: iconSize,
-          ),
+          builder: (filter) => Assets.icons.icInfo
+              .svg(colorFilter: filter, width: iconSize, height: iconSize),
         ),
         onTap: () {
           Vibrate.feedback(FeedbackType.light);
