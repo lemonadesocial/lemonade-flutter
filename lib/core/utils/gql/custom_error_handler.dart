@@ -84,45 +84,50 @@ class CustomErrorHandler {
     String errorCode,
     String errorMessage,
   ) {
-    String message;
     // If production, show meaningful error message
-    if (AppConfig.isProduction) {
-      switch (errorCode) {
-        case GraphQLErrorCodeStrings.GRAPHQL_PARSE_FAILED:
-          message = "Syntax error. Please try again.";
-          break;
-        case GraphQLErrorCodeStrings.GRAPHQL_VALIDATION_FAILED:
-          message = "Invalid request. Please check and try again later.";
-          break;
-        case GraphQLErrorCodeStrings.BAD_USER_INPUT:
-          message = "Invalid input. Please review and try again later.";
-          break;
-        case GraphQLErrorCodeStrings.PERSISTED_QUERY_NOT_FOUND:
-          message = "Request not found. Please try again later.";
-          break;
-        case GraphQLErrorCodeStrings.PERSISTED_QUERY_NOT_SUPPORTED:
-          message = "Request not supported. Please try again later.";
-          break;
-        case GraphQLErrorCodeStrings.OPERATION_RESOLUTION_FAILURE:
-          message = "Request issue. Please try again later.";
-          break;
-        case GraphQLErrorCodeStrings.BAD_REQUEST:
-          message = "Request problem. Please try again later.";
-          break;
-        case GraphQLErrorCodeStrings.INTERNAL_SERVER_ERROR:
-          message = "Internal server error. Please try again later.";
-          break;
-        default:
-          message = "Oops! Something went wrong. Please try again later.";
-          break;
-      }
-      SnackBarUtils.showErrorSnackbar(
-        errorMessage.isNotEmpty ? errorMessage : message,
-      );
-      return;
-    }
-    // Show detail error code and error message in Staging and development
-    SnackBarUtils.showErrorSnackbar("Code: $errorCode, $errorMessage");
+    // @deprecated
+    // String message;
+    // if (AppConfig.isProduction) {
+    //   switch (errorCode) {
+    //     case GraphQLErrorCodeStrings.GRAPHQL_PARSE_FAILED:
+    //       message = "Syntax error. Please try again.";
+    //       break;
+    //     case GraphQLErrorCodeStrings.GRAPHQL_VALIDATION_FAILED:
+    //       message = "Invalid request. Please check and try again later.";
+    //       break;
+    //     case GraphQLErrorCodeStrings.BAD_USER_INPUT:
+    //       message = "Invalid input. Please review and try again later.";
+    //       break;
+    //     case GraphQLErrorCodeStrings.PERSISTED_QUERY_NOT_FOUND:
+    //       message = "Request not found. Please try again later.";
+    //       break;
+    //     case GraphQLErrorCodeStrings.PERSISTED_QUERY_NOT_SUPPORTED:
+    //       message = "Request not supported. Please try again later.";
+    //       break;
+    //     case GraphQLErrorCodeStrings.OPERATION_RESOLUTION_FAILURE:
+    //       message = "Request issue. Please try again later.";
+    //       break;
+    //     case GraphQLErrorCodeStrings.BAD_REQUEST:
+    //       message = "Request problem. Please try again later.";
+    //       break;
+    //     case GraphQLErrorCodeStrings.INTERNAL_SERVER_ERROR:
+    //       message = "Internal server error. Please try again later.";
+    //       break;
+    //     default:
+    //       message = "Oops! Something went wrong. Please try again later.";
+    //       break;
+    //   }
+    //   SnackBarUtils.showErrorSnackbar(
+    //     errorMessage.isNotEmpty ? errorMessage : message,
+    //   );
+    //   return;
+    // }
+
+    // On Production, we don't show erroCode
+    final errorMessageContent = AppConfig.isProduction
+        ? errorMessage
+        : "Code: $errorCode, $errorMessage";
+    SnackBarUtils.showErrorSnackbar(errorMessageContent);
     return;
   }
 }
