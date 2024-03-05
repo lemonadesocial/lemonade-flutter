@@ -186,7 +186,6 @@ class _AppState extends State<_App> {
 
   @override
   Widget build(BuildContext context) {
-    SnackBarUtils.init(lemonadeAppDarkThemeData.colorScheme);
     return BlocListener<ConnectivityBloc, ConnectivityState>(
       listenWhen: (prev, cur) => prev != cur,
       listener: (context, state) {
