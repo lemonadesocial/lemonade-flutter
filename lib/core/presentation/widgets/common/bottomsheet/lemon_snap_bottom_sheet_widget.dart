@@ -13,6 +13,7 @@ class LemonSnapBottomSheet extends StatelessWidget {
   final DraggableScrollableController? controller;
   final Color? backgroundColor;
   final bool? resizeToAvoidBottomInset;
+  final Decoration? decoration;
 
   const LemonSnapBottomSheet({
     super.key,
@@ -25,6 +26,7 @@ class LemonSnapBottomSheet extends StatelessWidget {
     this.controller,
     this.backgroundColor,
     this.resizeToAvoidBottomInset = true,
+    this.decoration,
   });
 
   @override
@@ -47,15 +49,16 @@ class LemonSnapBottomSheet extends StatelessWidget {
         expand: false,
         builder: (BuildContext context, ScrollController scrollController) {
           return Container(
-            decoration: ShapeDecoration(
-              color: backgroundColor ?? colorScheme.secondary,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(LemonRadius.small),
-                  topLeft: Radius.circular(LemonRadius.small),
+            decoration: decoration ??
+                ShapeDecoration(
+                  color: backgroundColor ?? colorScheme.secondary,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(LemonRadius.small),
+                      topLeft: Radius.circular(LemonRadius.small),
+                    ),
+                  ),
                 ),
-              ),
-            ),
             child: Column(
               children: [
                 _buildIndicator(),
