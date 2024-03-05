@@ -56,17 +56,20 @@ class _GuestEventRewardUsesPageView extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-
-    List<EventRewardUse>? eventRewardUses =
+    List<EventRewardUse> eventRewardUses =
         context.watch<GetEventRewardUsesBloc>().state.eventRewardUses ?? [];
+
     List<Reward> eventRewards =
         context.watch<GetEventDetailBloc>().state.maybeWhen(
               fetched: (event) => event.rewards ?? [],
               orElse: () => [],
             );
     int totalEventRewardUses = eventRewardUses.length;
-    int? totalLimitPer =
-        eventRewards.map((obj) => obj.limitPer).reduce((a, b) => a! + b!);
+
+    int totalLimitPer = eventRewards.fold<int>(
+      0,
+      (previousValue, element) => previousValue + (element.limitPer ?? 0),
+    );
 
     return Scaffold(
       backgroundColor: colorScheme.background,

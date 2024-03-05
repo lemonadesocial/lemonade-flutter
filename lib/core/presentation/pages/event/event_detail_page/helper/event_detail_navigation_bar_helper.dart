@@ -1,3 +1,5 @@
+import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/presentation/pages/event/my_event_ticket_page/widgets/ticket_qr_code_popup.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/modal_utils.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -11,7 +13,7 @@ import 'package:flutter_vibrate/flutter_vibrate.dart';
 
 class FeatureItem {
   final String label;
-  final ThemeSvgIcon iconData;
+  final ThemeSvgIcon? iconData;
   final Function onTap;
   final Color? backgroundColor;
   final Color? textColor;
@@ -23,10 +25,21 @@ class FeatureItem {
     this.backgroundColor,
     this.textColor,
   });
+
+  factory FeatureItem.empty() => FeatureItem(
+        label: '',
+        iconData: null,
+        onTap: () {},
+        backgroundColor: Colors.transparent,
+      );
 }
 
 class EventDetailNavigationBarHelper {
-  static List<FeatureItem> getEventFeaturesForGuest(BuildContext context) {
+  static List<FeatureItem> getEventFeaturesForGuest({
+    required BuildContext context,
+    required Event event,
+    bool? isSmallIcon = true,
+  }) {
     final colorScheme = Theme.of(context).colorScheme;
     final List<FeatureItem> features = [
       FeatureItem(
@@ -41,7 +54,10 @@ class EventDetailNavigationBarHelper {
         ),
         onTap: () {
           Vibrate.feedback(FeedbackType.light);
-          showComingSoonDialog(context);
+          showDialog(
+            context: context,
+            builder: (context) => const TicketQRCodePopup(),
+          );
         },
         backgroundColor: LemonColor.paleViolet18,
         textColor: colorScheme.onPrimary,
@@ -57,7 +73,7 @@ class EventDetailNavigationBarHelper {
         ),
         onTap: () {
           Vibrate.feedback(FeedbackType.light);
-          showComingSoonDialog(context);
+          AutoRouter.of(context).navigate(const GuestEventRewardUsesRoute());
         },
       ),
       FeatureItem(
@@ -121,12 +137,13 @@ class EventDetailNavigationBarHelper {
     return features;
   }
 
-  static List<FeatureItem> getEventFeaturesForHost(
-    BuildContext context,
-    bool isSmallIcon,
-  ) {
+  static List<FeatureItem> getEventFeaturesForHost({
+    required BuildContext context,
+    required Event event,
+    bool? isSmallIcon = true,
+  }) {
     final colorScheme = Theme.of(context).colorScheme;
-    final iconSize = isSmallIcon ? 18.w : 24.w;
+    final iconSize = isSmallIcon == true ? 18.w : 24.w;
     final List<FeatureItem> features = [
       FeatureItem(
         label: t.event.configuration.checkIn,
@@ -140,7 +157,11 @@ class EventDetailNavigationBarHelper {
         ),
         onTap: () {
           Vibrate.feedback(FeedbackType.light);
-          showComingSoonDialog(context);
+          AutoRouter.of(context).navigate(
+            ScanQRCheckinRewardsRoute(
+              event: event,
+            ),
+          );
         },
         backgroundColor: LemonColor.paleViolet18,
         textColor: colorScheme.onPrimary,
@@ -156,7 +177,9 @@ class EventDetailNavigationBarHelper {
         ),
         onTap: () {
           Vibrate.feedback(FeedbackType.light);
-          showComingSoonDialog(context);
+          AutoRouter.of(context).navigate(
+            const EventRewardSettingRoute(),
+          );
         },
       ),
       FeatureItem(
@@ -184,7 +207,9 @@ class EventDetailNavigationBarHelper {
         ),
         onTap: () {
           Vibrate.feedback(FeedbackType.light);
-          showComingSoonDialog(context);
+          AutoRouter.of(context).push(
+            const EventApprovalSettingRoute(),
+          );
         },
       ),
       FeatureItem(
@@ -201,35 +226,35 @@ class EventDetailNavigationBarHelper {
           AutoRouter.of(context).navigate(const EventProgramRoute());
         },
       ),
-      FeatureItem(
-        label: t.event.configuration.faq,
-        iconData: ThemeSvgIcon(
-          builder: (filter) => Assets.icons.icFaq.svg(
-            colorFilter: filter,
-            width: iconSize,
-            height: iconSize,
-          ),
-        ),
-        onTap: () {
-          Vibrate.feedback(FeedbackType.light);
-          showComingSoonDialog(context);
-        },
-      ),
-      FeatureItem(
-        label: t.event.configuration.info,
-        iconData: ThemeSvgIcon(
-          color: colorScheme.onSecondary,
-          builder: (filter) => Assets.icons.icInfo.svg(
-            colorFilter: filter,
-            width: iconSize,
-            height: iconSize,
-          ),
-        ),
-        onTap: () {
-          Vibrate.feedback(FeedbackType.light);
-          showComingSoonDialog(context);
-        },
-      ),
+      // FeatureItem(
+      //   label: t.event.configuration.faq,
+      //   iconData: ThemeSvgIcon(
+      //     builder: (filter) => Assets.icons.icFaq.svg(
+      //       colorFilter: filter,
+      //       width: iconSize,
+      //       height: iconSize,
+      //     ),
+      //   ),
+      //   onTap: () {
+      //     Vibrate.feedback(FeedbackType.light);
+      //     showComingSoonDialog(context);
+      //   },
+      // ),
+      // FeatureItem(
+      //   label: t.event.configuration.info,
+      //   iconData: ThemeSvgIcon(
+      //     color: colorScheme.onSecondary,
+      //     builder: (filter) => Assets.icons.icInfo.svg(
+      //       colorFilter: filter,
+      //       width: iconSize,
+      //       height: iconSize,
+      //     ),
+      //   ),
+      //   onTap: () {
+      //     Vibrate.feedback(FeedbackType.light);
+      //     showComingSoonDialog(context);
+      //   },
+      // ),
       FeatureItem(
         label: t.event.configuration.controlPanel,
         iconData: ThemeSvgIcon(
@@ -242,7 +267,9 @@ class EventDetailNavigationBarHelper {
         ),
         onTap: () {
           Vibrate.feedback(FeedbackType.light);
-          showComingSoonDialog(context);
+          AutoRouter.of(context).push(
+            const EventControlPanelRoute(),
+          );
         },
       ),
       FeatureItem(

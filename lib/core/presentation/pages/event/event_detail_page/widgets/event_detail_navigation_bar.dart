@@ -142,9 +142,17 @@ class _EventDetailNavigationBarState extends State<EventDetailNavigationBar>
     final isOwnEvent =
         EventUtils.isOwnEvent(event: widget.event, userId: userId);
     if (isOwnEvent || isCohost) {
-      features = EventFeaturesHelper.getEventFeaturesForHost(context, true);
+      features = EventDetailNavigationBarHelper.getEventFeaturesForHost(
+        context: context,
+        event: widget.event,
+        isSmallIcon: true,
+      );
     } else if (isAttending) {
-      features = EventFeaturesHelper.getEventFeaturesForHost(context, true);
+      features = EventDetailNavigationBarHelper.getEventFeaturesForGuest(
+        context: context,
+        event: widget.event,
+        isSmallIcon: true,
+      );
     }
     return SliverToBoxAdapter(
       child: LayoutBuilder(
@@ -184,9 +192,17 @@ class _EventDetailNavigationBarState extends State<EventDetailNavigationBar>
         EventUtils.isOwnEvent(event: widget.event, userId: userId);
 
     if (isOwnEvent || isCohost) {
-      features = EventFeaturesHelper.getEventFeaturesForHost(context, false);
+      features = EventDetailNavigationBarHelper.getEventFeaturesForHost(
+        context: context,
+        event: widget.event,
+        isSmallIcon: false,
+      );
     } else if (isAttending) {
-      features = EventFeaturesHelper.getEventFeaturesForHost(context, false);
+      features = EventDetailNavigationBarHelper.getEventFeaturesForGuest(
+        context: context,
+        event: widget.event,
+        isSmallIcon: false,
+      );
     }
     return SliverPadding(
       padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
@@ -228,6 +244,10 @@ class _EventDetailNavigationBarState extends State<EventDetailNavigationBar>
                 if (isNotFullRow && !isLargeDevice) {
                   chunkPortion = [
                     ...chunkPortion,
+                    ...List.filled(
+                      numOfItems - chunkPortion.length,
+                      FeatureItem.empty(),
+                    ),
                   ];
                 }
                 return AnimatedBuilder(
