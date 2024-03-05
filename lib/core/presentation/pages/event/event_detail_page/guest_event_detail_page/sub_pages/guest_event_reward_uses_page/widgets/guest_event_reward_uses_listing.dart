@@ -3,7 +3,6 @@ import 'package:app/core/application/event/get_event_reward_uses_bloc/get_event_
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_reward_use.dart';
 import 'package:app/core/domain/event/entities/reward.dart';
-import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/event/horizontal_rewards_list.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
