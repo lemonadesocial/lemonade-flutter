@@ -41,6 +41,7 @@ class EventDetailNavigationBarHelper {
     bool? isSmallIcon = true,
   }) {
     final colorScheme = Theme.of(context).colorScheme;
+    final iconSize = isSmallIcon == true ? 18.w : 24.w;
     final List<FeatureItem> features = [
       FeatureItem(
         label: t.event.configuration.checkIn,
@@ -48,8 +49,8 @@ class EventDetailNavigationBarHelper {
           color: LemonColor.paleViolet,
           builder: (filter) => Assets.icons.icCheckin.svg(
             colorFilter: filter,
-            width: 18.w,
-            height: 18.w,
+            width: iconSize,
+            height: iconSize,
           ),
         ),
         onTap: () {
@@ -67,8 +68,8 @@ class EventDetailNavigationBarHelper {
         iconData: ThemeSvgIcon(
           builder: (filter) => Assets.icons.icReward.svg(
             colorFilter: filter,
-            width: 18.w,
-            height: 18.w,
+            width: iconSize,
+            height: iconSize,
           ),
         ),
         onTap: () {
@@ -81,8 +82,8 @@ class EventDetailNavigationBarHelper {
         iconData: ThemeSvgIcon(
           builder: (filter) => Assets.icons.icLounge.svg(
             colorFilter: filter,
-            width: 18.w,
-            height: 18.w,
+            width: iconSize,
+            height: iconSize,
           ),
         ),
         onTap: () {
@@ -95,8 +96,8 @@ class EventDetailNavigationBarHelper {
         iconData: ThemeSvgIcon(
           builder: (filter) => Assets.icons.icProgram.svg(
             colorFilter: filter,
-            width: 18.w,
-            height: 18.w,
+            width: iconSize,
+            height: iconSize,
           ),
         ),
         onTap: () {
@@ -109,8 +110,8 @@ class EventDetailNavigationBarHelper {
         iconData: ThemeSvgIcon(
           builder: (filter) => Assets.icons.icFaq.svg(
             colorFilter: filter,
-            width: 18.w,
-            height: 18.w,
+            width: iconSize,
+            height: iconSize,
           ),
         ),
         onTap: () {
@@ -124,8 +125,8 @@ class EventDetailNavigationBarHelper {
           color: colorScheme.onSecondary,
           builder: (filter) => Assets.icons.icInfo.svg(
             colorFilter: filter,
-            width: 18.w,
-            height: 18.w,
+            width: iconSize,
+            height: iconSize,
           ),
         ),
         onTap: () {
@@ -226,35 +227,35 @@ class EventDetailNavigationBarHelper {
           AutoRouter.of(context).navigate(const EventProgramRoute());
         },
       ),
-      // FeatureItem(
-      //   label: t.event.configuration.faq,
-      //   iconData: ThemeSvgIcon(
-      //     builder: (filter) => Assets.icons.icFaq.svg(
-      //       colorFilter: filter,
-      //       width: iconSize,
-      //       height: iconSize,
-      //     ),
-      //   ),
-      //   onTap: () {
-      //     Vibrate.feedback(FeedbackType.light);
-      //     showComingSoonDialog(context);
-      //   },
-      // ),
-      // FeatureItem(
-      //   label: t.event.configuration.info,
-      //   iconData: ThemeSvgIcon(
-      //     color: colorScheme.onSecondary,
-      //     builder: (filter) => Assets.icons.icInfo.svg(
-      //       colorFilter: filter,
-      //       width: iconSize,
-      //       height: iconSize,
-      //     ),
-      //   ),
-      //   onTap: () {
-      //     Vibrate.feedback(FeedbackType.light);
-      //     showComingSoonDialog(context);
-      //   },
-      // ),
+      FeatureItem(
+        label: t.event.configuration.faq,
+        iconData: ThemeSvgIcon(
+          builder: (filter) => Assets.icons.icFaq.svg(
+            colorFilter: filter,
+            width: iconSize,
+            height: iconSize,
+          ),
+        ),
+        onTap: () {
+          Vibrate.feedback(FeedbackType.light);
+          showComingSoonDialog(context);
+        },
+      ),
+      FeatureItem(
+        label: t.event.configuration.info,
+        iconData: ThemeSvgIcon(
+          color: colorScheme.onSecondary,
+          builder: (filter) => Assets.icons.icInfo.svg(
+            colorFilter: filter,
+            width: iconSize,
+            height: iconSize,
+          ),
+        ),
+        onTap: () {
+          Vibrate.feedback(FeedbackType.light);
+          showComingSoonDialog(context);
+        },
+      ),
       FeatureItem(
         label: t.event.configuration.controlPanel,
         iconData: ThemeSvgIcon(
