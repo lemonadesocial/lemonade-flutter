@@ -8,10 +8,10 @@ import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_p
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/widgets/join_request_item/event_rejected_join_request_item.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
-import 'package:app/core/utils/modal_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
@@ -21,9 +21,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
+enum EventGuestsTabs {
+  reservations(tabIndex: 0),
+  invited(tabIndex: 1),
+  checkins(tabIndex: 2),
+  pending(tabIndex: 3),
+  confirmed(tabIndex: 4),
+  declined(tabIndex: 5);
+
+  const EventGuestsTabs({
+    required this.tabIndex,
+  });
+
+  final int tabIndex;
+}
+
 @RoutePage()
 class EventApprovalSettingPage extends StatefulWidget {
-  const EventApprovalSettingPage({super.key});
+  final EventGuestsTabs? initialTab;
+
+  const EventApprovalSettingPage({
+    super.key,
+    this.initialTab,
+  });
 
   @override
   State<EventApprovalSettingPage> createState() =>
@@ -111,6 +131,12 @@ class _EventApprovalSettingPageState extends State<EventApprovalSettingPage>
         });
       }
     });
+    if (widget.initialTab != null) {
+      if (widget.initialTab!.tabIndex > tabItems.length - 1) {
+        return;
+      }
+      _tabController.animateTo(widget.initialTab!.tabIndex);
+    }
   }
 
   @override
@@ -133,7 +159,9 @@ class _EventApprovalSettingPageState extends State<EventApprovalSettingPage>
         title: t.event.eventApproval.guests,
         actions: [
           InkWell(
-            onTap: () => showComingSoonDialog(context),
+            onTap: () => AutoRouter.of(context).push(
+              const EventInviteSettingRoute(),
+            ),
             child: ThemeSvgIcon(
               color: colorScheme.onSurface,
               builder: (filter) => Assets.icons.icAdd.svg(

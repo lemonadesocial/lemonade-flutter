@@ -1,4 +1,3 @@
-import 'package:app/core/domain/event/event_enums.dart';
 import 'package:app/core/presentation/widgets/back_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/drawer/widgets/lemon_drawer_profile_info.dart';
@@ -37,6 +36,7 @@ class LemonDrawer extends StatelessWidget {
                 padding: EdgeInsets.only(right: Spacing.smMedium),
                 child: InkWell(
                   onTap: () {
+                    Navigator.of(context, rootNavigator: true).pop();
                     Vibrate.feedback(FeedbackType.light);
                     AutoRouter.of(context).navigate(const SettingRoute());
                   },
@@ -141,11 +141,9 @@ class LemonDrawer extends StatelessWidget {
                     onTap: () {
                       Vibrate.feedback(FeedbackType.light);
                       context.read<AuthBloc>().state.maybeWhen(
-                            authenticated: (authSession) => context.router.push(
-                              EventsListingRoute(
-                                eventListingType: EventListingType.hosting,
-                              ),
-                            ),
+                            authenticated: (authSession) =>
+                                AutoRouter.of(context)
+                                    .navigate(const MyEventsRoute()),
                             orElse: () => context.router.navigate(
                               const LoginRoute(),
                             ),

@@ -94,6 +94,7 @@ class AppRouter extends $AppRouter {
         AutoRoute(page: SettingBlockRoute.page),
         AutoRoute(page: LocationRequestRoute.page),
         AutoRoute(page: AIRoute.page),
+        AutoRoute(page: MyEventsRoute.page),
         chatRoutes,
         eventBuyTicketsRoutes,
         createEventRoutes,
@@ -260,6 +261,18 @@ final eventDetailRoutes = AutoRoute(
         ),
         AutoRoute(
           page: EventIssueTicketsProcessingRoute.page,
+        ),
+      ],
+    ),
+    AutoRoute(
+      page: EventInviteSettingRoute.page,
+      children: [
+        AutoRoute(
+          initial: true,
+          page: EventInviteFormRoute.page,
+        ),
+        AutoRoute(
+          page: EventInviteProcessingRoute.page,
         ),
       ],
     ),

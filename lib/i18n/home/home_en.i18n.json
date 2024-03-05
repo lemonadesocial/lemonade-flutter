@@ -12,5 +12,6 @@
     "poap":"POAP",
     "poapDesc": "turn tickets into digital collectibles",
     "collectible": "Collectible",
-    "collectibleDesc": "virtual or IRL collectibles"
+    "collectibleDesc": "virtual or IRL collectibles",
+    "emptyPosts": "No posts yet"
 }
