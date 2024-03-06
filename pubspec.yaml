@@ -144,7 +144,6 @@ dependencies:
   modal_bottom_sheet: ^3.0.0-pre
   web3modal_flutter: 
     path: ./packages/web3modal_flutter
-  another_flushbar: ^1.12.30
   
 dependency_overrides:
   matrix_api_lite:
