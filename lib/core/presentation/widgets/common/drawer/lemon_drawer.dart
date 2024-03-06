@@ -122,7 +122,7 @@ class LemonDrawer extends StatelessWidget {
                     height: Spacing.xSmall,
                   ),
                   LemonDrawerTileWidget(
-                    title: t.event.myEvents.capitalize(),
+                    title: t.event.events.capitalize(),
                     leading: ThemeSvgIcon(
                       color: colorScheme.onPrimary,
                       builder: (filter) {

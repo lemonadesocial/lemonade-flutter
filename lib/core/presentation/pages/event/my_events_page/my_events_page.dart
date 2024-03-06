@@ -50,7 +50,7 @@ class MyEventsPageView extends StatelessWidget {
     return Scaffold(
       backgroundColor: colorScheme.background,
       appBar: LemonAppBar(
-        title: t.event.myEvents,
+        title: t.event.events.capitalize(),
       ),
       body: DefaultTabController(
         initialIndex: 0,

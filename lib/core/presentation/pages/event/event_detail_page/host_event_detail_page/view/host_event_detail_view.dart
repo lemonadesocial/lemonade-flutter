@@ -110,9 +110,9 @@ class HostEventDetailView extends StatelessWidget {
                       ),
                     ],
                   ),
-                  EventDetailNavigationBar(
-                    event: event,
-                  ),
+                  // EventDetailNavigationBar(
+                  //   event: event,
+                  // ),
                 ],
               ),
             );

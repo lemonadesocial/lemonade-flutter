@@ -92,15 +92,61 @@ class MyEventsListItem extends StatelessWidget {
                             SizedBox(
                               height: 2.h,
                             ),
-                            Text(
-                              DateFormatUtils.custom(
-                                event.start,
-                                pattern: 'E, dd MMM yyyy',
-                              ),
-                              style: Typo.small.copyWith(
-                                color: colorScheme.onSecondary,
-                              ),
-                            ),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  DateFormatUtils.custom(
+                                    event.start,
+                                    pattern: 'E, dd MMM yyyy',
+                                  ),
+                                  style: Typo.small.copyWith(
+                                    color: colorScheme.onSecondary,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: Spacing.superExtraSmall,
+                                ),
+                                Container(
+                                  width: 2.w,
+                                  height: 2.h,
+                                  decoration: ShapeDecoration(
+                                    color: colorScheme.onSurfaceVariant,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(LemonRadius.xSmall),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    SizedBox(
+                                      width: Spacing.superExtraSmall,
+                                    ),
+                                    ThemeSvgIcon(
+                                      color: colorScheme.onSecondary,
+                                      builder: (filter) =>
+                                          Assets.icons.icProfileOutline.svg(
+                                        colorFilter: filter,
+                                        width: Sizing.small / 2,
+                                        height: Sizing.small / 2,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: Spacing.superExtraSmall,
+                                    ),
+                                    Text(
+                                      event.invitedCount.toString(),
+                                      style: Typo.small.copyWith(
+                                        color: colorScheme.onSecondary,
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            )
                           ],
                         ),
                       ),
@@ -109,12 +155,6 @@ class MyEventsListItem extends StatelessWidget {
                 ),
               ],
             ),
-            if (event.accepted?.isNotEmpty == true)
-              Positioned(
-                top: 0,
-                right: 0,
-                child: _EventJoinCount(count: event.accepted?.length ?? 0),
-              ),
           ],
         ),
       ),
