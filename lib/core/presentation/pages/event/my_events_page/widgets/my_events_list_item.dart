@@ -144,9 +144,9 @@ class MyEventsListItem extends StatelessWidget {
                                       ),
                                     ),
                                   ],
-                                )
+                                ),
                               ],
-                            )
+                            ),
                           ],
                         ),
                       ),
@@ -157,53 +157,6 @@ class MyEventsListItem extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _EventJoinCount extends StatelessWidget {
-  const _EventJoinCount({required this.count});
-  final int count;
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return Container(
-      width: 60.w,
-      height: 24.h,
-      decoration: ShapeDecoration(
-        color: LemonColor.white06,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(LemonRadius.xSmall),
-            topRight: Radius.circular(LemonRadius.xSmall),
-          ),
-        ),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          ThemeSvgIcon(
-            color: colorScheme.onSecondary,
-            builder: (filter) => Assets.icons.icProfile.svg(
-              colorFilter: filter,
-              width: Sizing.small / 2,
-              height: Sizing.small / 2,
-            ),
-          ),
-          SizedBox(width: 5.w),
-          Text(
-            count.toString(),
-            style: Typo.xSmall.copyWith(
-              color: colorScheme.onSecondary,
-              fontWeight: FontWeight.w600,
-              fontSize: 9.sp,
-            ),
-          ),
-        ],
       ),
     );
   }
