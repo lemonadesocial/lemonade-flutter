@@ -8,10 +8,8 @@ import 'package:app/core/presentation/widgets/poap/poap_claim_transfer_controlle
 import 'package:app/core/service/shorebird_codepush_service.dart';
 import 'package:app/core/utils/drawer_utils.dart';
 import 'package:app/core/utils/onboarding_utils.dart';
-import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
-import 'package:app/theme/theme.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -40,10 +38,6 @@ class _RootPageViewState extends State<RootPage> {
 
   @override
   Widget build(BuildContext context) {
-    SnackBarUtils.init(
-      colorScheme: lemonadeAppDarkThemeData.colorScheme,
-      context: context,
-    );
     final appCastConfiguration = AppcastConfiguration(
       url: AppConfig.appCastUrl,
       supportedOS: ['android', 'ios'],
