@@ -92,14 +92,60 @@ class MyEventsListItem extends StatelessWidget {
                             SizedBox(
                               height: 2.h,
                             ),
-                            Text(
-                              DateFormatUtils.custom(
-                                event.start,
-                                pattern: 'E, dd MMM yyyy',
-                              ),
-                              style: Typo.small.copyWith(
-                                color: colorScheme.onSecondary,
-                              ),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  DateFormatUtils.custom(
+                                    event.start,
+                                    pattern: 'E, dd MMM yyyy',
+                                  ),
+                                  style: Typo.small.copyWith(
+                                    color: colorScheme.onSecondary,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: Spacing.superExtraSmall,
+                                ),
+                                Container(
+                                  width: 2.w,
+                                  height: 2.h,
+                                  decoration: ShapeDecoration(
+                                    color: colorScheme.onSurfaceVariant,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(LemonRadius.xSmall),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    SizedBox(
+                                      width: Spacing.superExtraSmall,
+                                    ),
+                                    ThemeSvgIcon(
+                                      color: colorScheme.onSecondary,
+                                      builder: (filter) =>
+                                          Assets.icons.icProfileOutline.svg(
+                                        colorFilter: filter,
+                                        width: Sizing.small / 2,
+                                        height: Sizing.small / 2,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: Spacing.superExtraSmall,
+                                    ),
+                                    Text(
+                                      event.invitedCount.toString(),
+                                      style: Typo.small.copyWith(
+                                        color: colorScheme.onSecondary,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
                           ],
                         ),
@@ -109,61 +155,8 @@ class MyEventsListItem extends StatelessWidget {
                 ),
               ],
             ),
-            if (event.accepted?.isNotEmpty == true)
-              Positioned(
-                top: 0,
-                right: 0,
-                child: _EventJoinCount(count: event.accepted?.length ?? 0),
-              ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _EventJoinCount extends StatelessWidget {
-  const _EventJoinCount({required this.count});
-  final int count;
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return Container(
-      width: 60.w,
-      height: 24.h,
-      decoration: ShapeDecoration(
-        color: LemonColor.white06,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(LemonRadius.xSmall),
-            topRight: Radius.circular(LemonRadius.xSmall),
-          ),
-        ),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          ThemeSvgIcon(
-            color: colorScheme.onSecondary,
-            builder: (filter) => Assets.icons.icProfile.svg(
-              colorFilter: filter,
-              width: Sizing.small / 2,
-              height: Sizing.small / 2,
-            ),
-          ),
-          SizedBox(width: 5.w),
-          Text(
-            count.toString(),
-            style: Typo.xSmall.copyWith(
-              color: colorScheme.onSecondary,
-              fontWeight: FontWeight.w600,
-              fontSize: 9.sp,
-            ),
-          ),
-        ],
       ),
     );
   }
