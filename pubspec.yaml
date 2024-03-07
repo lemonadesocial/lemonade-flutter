@@ -1,7 +1,7 @@
 name: app
 description: Lemonade Social App
 publish_to: 'none' 
-version: 1.9.1
+version: 1.10.0
 
 environment:
   flutter: "3.16.9"
@@ -144,6 +144,7 @@ dependencies:
   modal_bottom_sheet: ^3.0.0-pre
   web3modal_flutter: 
     path: ./packages/web3modal_flutter
+  another_flushbar: ^1.12.30
   
 dependency_overrides:
   matrix_api_lite:
