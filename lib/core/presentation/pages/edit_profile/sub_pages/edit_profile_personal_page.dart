@@ -1,4 +1,6 @@
+import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/profile/edit_profile_bloc/edit_profile_bloc.dart';
+import 'package:app/core/data/user/dtos/user_query.dart';
 import 'package:app/core/domain/common/common_enums.dart';
 import 'package:app/core/domain/post/post_repository.dart';
 import 'package:app/core/domain/user/entities/user.dart';
@@ -10,6 +12,7 @@ import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/core/service/post/post_service.dart';
 import 'package:app/core/utils/calendar_utils.dart';
+import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/core/utils/text_formatter/date_text_formatter.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
@@ -26,28 +29,42 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
-class EditProfilePersonalDialog extends StatelessWidget with LemonBottomSheet {
-  const EditProfilePersonalDialog({
-    required this.userProfile,
-    super.key,
-  });
-
+class EditProfilePersonalDialog extends StatefulWidget with LemonBottomSheet {
   final User userProfile;
+  const EditProfilePersonalDialog({super.key, required this.userProfile});
+
+  @override
+  EditProfilePersonalDialogState createState() =>
+      EditProfilePersonalDialogState();
+}
+
+class EditProfilePersonalDialogState extends State<EditProfilePersonalDialog> {
+  final bloc = EditProfileBloc(
+    getIt<UserRepository>(),
+    PostService(getIt<PostRepository>()),
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.userProfile.dateOfBirth != null) {
+      bloc.birthDayCtrl.text =
+          DateFormat('dd/MM/yyyy').format(widget.userProfile.dateOfBirth!);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
-    final bloc = EditProfileBloc(
-      getIt<UserRepository>(),
-      PostService(getIt<PostRepository>()),
-    );
     return BlocProvider(
       create: (context) => bloc,
       child: BlocConsumer<EditProfileBloc, EditProfileState>(
         listener: (context, state) {
           if (state.status == EditProfileStatus.success) {
-            context.router.popUntilRoot();
+            context.read<AuthBloc>().add(const AuthEvent.refreshData());
+            SnackBarUtils.showSuccessSnackbar(t.profile.editProfileSuccess);
+            bloc.clearState();
           }
         },
         builder: (context, state) {
@@ -86,14 +103,14 @@ class EditProfilePersonalDialog extends StatelessWidget with LemonBottomSheet {
                               label: t.profile.jobTitle,
                               onChange: bloc.onJobTitleChange,
                               hintText: t.profile.hint.jobTitle,
-                              initialText: userProfile.jobTitle,
+                              initialText: widget.userProfile.jobTitle,
                             ),
                             SizedBox(height: Spacing.smMedium),
                             LemonTextField(
                               label: t.profile.organization,
                               onChange: bloc.onOrganizationChange,
                               hintText: t.profile.hint.organization,
-                              initialText: userProfile.companyName,
+                              initialText: widget.userProfile.companyName,
                             ),
                             SizedBox(height: Spacing.smMedium),
                             FrostedGlassDropDownV2(
@@ -103,14 +120,14 @@ class EditProfilePersonalDialog extends StatelessWidget with LemonBottomSheet {
                                   .map((e) => e.industry)
                                   .toList(),
                               onValueChange: bloc.onIndustrySelect,
-                              selectedValue:
-                                  bloc.state.industry ?? userProfile.industry,
+                              selectedValue: bloc.state.industry ??
+                                  widget.userProfile.industry,
                             ),
                             SizedBox(height: Spacing.smMedium),
                             LemonTextField(
                               label: t.profile.educationQualification,
                               onChange: bloc.onEducationChange,
-                              initialText: userProfile.education,
+                              initialText: widget.userProfile.education,
                             ),
                             SizedBox(height: Spacing.smMedium),
                             FrostedGlassDropDownV2(
@@ -120,15 +137,14 @@ class EditProfilePersonalDialog extends StatelessWidget with LemonBottomSheet {
                                   .map((e) => e.newGender)
                                   .toList(),
                               onValueChange: bloc.onGenderSelect,
-                              selectedValue:
-                                  bloc.state.gender ?? userProfile.gender,
+                              selectedValue: bloc.state.gender ??
+                                  widget.userProfile.gender,
                             ),
                             SizedBox(height: Spacing.smMedium),
                             LemonTextField(
                               label: t.profile.dob,
                               onChange: bloc.onBirthdayChange,
                               controller: bloc.birthDayCtrl,
-                              initialText: userProfile.education,
                               hintText: t.profile.hint.dob,
                               inputFormatters: [
                                 CustomDateTextFormatter(),
@@ -166,12 +182,6 @@ class EditProfilePersonalDialog extends StatelessWidget with LemonBottomSheet {
                                   child: Assets.icons.icCalendar.svg(),
                                 ),
                               ),
-                              borderColor: isDateValidated(state.dob)
-                                  ? null
-                                  : LemonColor.errorRedBg,
-                              statusWidget: isDateValidated(state.dob)
-                                  ? null
-                                  : statusWidget(context),
                             ),
                             SizedBox(height: Spacing.smMedium),
                             FrostedGlassDropDownV2(
@@ -181,8 +191,8 @@ class EditProfilePersonalDialog extends StatelessWidget with LemonBottomSheet {
                                   .map((e) => e.ethnicity)
                                   .toList(),
                               onValueChange: bloc.onEthnicitySelect,
-                              selectedValue:
-                                  bloc.state.ethnicity ?? userProfile.ethnicity,
+                              selectedValue: bloc.state.ethnicity ??
+                                  widget.userProfile.ethnicity,
                             ),
                           ],
                         ),
@@ -191,10 +201,7 @@ class EditProfilePersonalDialog extends StatelessWidget with LemonBottomSheet {
                     Container(
                       margin: EdgeInsets.symmetric(vertical: Spacing.smMedium),
                       child: LinearGradientButton(
-                        onTap: bloc.state.status == EditProfileStatus.editing &&
-                                isDateValidated(state.dob)
-                            ? bloc.editProfile
-                            : null,
+                        onTap: bloc.editProfile,
                         label: t.profile.saveChanges,
                         textStyle: Typo.medium.copyWith(
                           fontFamily: FontFamily.nohemiVariable,
@@ -202,9 +209,7 @@ class EditProfilePersonalDialog extends StatelessWidget with LemonBottomSheet {
                         ),
                         height: Sizing.large,
                         radius: BorderRadius.circular(LemonRadius.large),
-                        mode: bloc.state.status != EditProfileStatus.initial
-                            ? GradientButtonMode.lavenderMode
-                            : GradientButtonMode.defaultMode,
+                        mode: GradientButtonMode.lavenderMode,
                         loadingWhen:
                             bloc.state.status == EditProfileStatus.loading,
                       ),
@@ -218,16 +223,6 @@ class EditProfilePersonalDialog extends StatelessWidget with LemonBottomSheet {
         },
       ),
     );
-  }
-
-  bool isDateValidated(String? input) {
-    try {
-      if (input == null || input.isEmpty) return true;
-      final date = DateFormat(dateFormat).parseStrict(input);
-      return date.year >= 1900;
-    } on FormatException {
-      return false;
-    }
   }
 
   Widget statusWidget(BuildContext context) {

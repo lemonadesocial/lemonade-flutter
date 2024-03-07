@@ -11,6 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 
 part 'edit_profile_state.dart';
 
@@ -226,6 +227,14 @@ class EditProfileBloc extends Cubit<EditProfileState> {
         uploadPhoto: mImageId != null ? [mImageId!] : null,
         notificationFilterInput:
             notificationFilterInput.isEmpty ? null : notificationFilterInput,
+        dob: state.dob != null
+            ? DateTime.parse(
+                DateFormat('dd/MM/yyyy')
+                    .parse(state.dob ?? '')
+                    .toUtc()
+                    .toIso8601String(),
+              )
+            : null,
       ),
     );
     response.fold(
