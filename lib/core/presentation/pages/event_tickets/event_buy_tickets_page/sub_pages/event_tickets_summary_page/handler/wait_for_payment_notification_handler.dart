@@ -12,14 +12,16 @@ import 'package:flutter/material.dart';
 class WaitForPaymentNotificationHandler {
   Timer? timer;
 
+  static get maxDurationToWaitForNotification => const Duration(minutes: 3);
+
+  static get delayIntervalDuration => const Duration(seconds: 5);
+
   Future<Payment?> _checkPayment(String paymentId) async {
     int remainingAttempt = 10;
     Payment? payment;
     while (remainingAttempt > 0) {
       Future.delayed(
-        const Duration(
-          seconds: 5,
-        ),
+        delayIntervalDuration,
       );
       final paymentResult = await getIt<PaymentRepository>().getPayment(
         input: GetPaymentInput(
@@ -44,7 +46,7 @@ class WaitForPaymentNotificationHandler {
     Function()? onPaymentDone,
     Function()? onPaymentFailed,
   }) async {
-    timer = Timer(const Duration(minutes: 3), () async {
+    timer = Timer(maxDurationToWaitForNotification, () async {
       final paymentResult = await getIt<PaymentRepository>().getPayment(
         input: GetPaymentInput(
           id: paymentId,
@@ -71,14 +73,14 @@ class WaitForPaymentNotificationHandler {
     Function()? onPaymentDone,
     Function()? onPaymentFailed,
   }) async {
-    timer = Timer(const Duration(minutes: 3), () async {
+    timer = Timer(maxDurationToWaitForNotification, () async {
       final getChainResult =
           await getIt<Web3Repository>().getChainById(chainId: chainId);
       final chain = getChainResult.getOrElse(() => null);
       final receipt = await Web3Utils.waitForReceipt(
         rpcUrl: chain?.rpcUrl ?? '',
         txHash: txHash,
-        deplayDuration: const Duration(seconds: 5),
+        deplayDuration: delayIntervalDuration,
       );
       // This make sure BE already confirmed after transaction receipt is retured
       await Future.delayed(
