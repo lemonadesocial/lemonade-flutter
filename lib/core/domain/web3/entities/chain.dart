@@ -16,6 +16,8 @@ class Chain with _$Chain {
     String? logoUrl,
     List<ERC20Token>? tokens,
     ERC20Token? nativeToken,
+    double? blockTime,
+    double? safeConfirmations,
   }) = _Chain;
 
   factory Chain.fromDto(ChainDto dto) {
@@ -34,6 +36,8 @@ class Chain with _$Chain {
       logoUrl: dto.logoUrl,
       tokens: tokens,
       nativeToken: nativeToken,
+      blockTime: dto.blockTime,
+      safeConfirmations: dto.safeConfirmations,
     );
   }
 }

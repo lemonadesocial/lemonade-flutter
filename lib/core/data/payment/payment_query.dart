@@ -109,3 +109,13 @@ final getPaymentAccountsQuery = gql('''
     }
   }
 ''');
+
+final getPaymentQuery = gql('''
+  $paymentFragment
+
+  query GetNewPayment(\$id: MongoID!) {
+    getNewPayment(_id: \$id) {
+      ...paymentFragment
+    }
+  }
+''');

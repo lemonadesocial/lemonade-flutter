@@ -7,6 +7,7 @@ import 'package:app/core/application/event_tickets/select_event_tickets_bloc/sel
 import 'package:app/core/application/payment/get_payment_cards_bloc/get_payment_cards_bloc.dart';
 import 'package:app/core/application/payment/payment_listener/payment_listener.dart';
 import 'package:app/core/application/payment/select_payment_card_cubit/select_payment_card_cubit.dart';
+import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/input/buy_tickets_input/buy_tickets_input.dart';
 import 'package:app/core/domain/event/input/calculate_tickets_pricing_input/calculate_tickets_pricing_input.dart';
@@ -104,6 +105,32 @@ class EventTicketsSummaryPageView extends StatelessWidget {
         );
   }
 
+  Future<void> _onNavigateWhenPaymentConfirmed(
+    BuildContext context,
+    Event event,
+  ) {
+    return AutoRouter.of(context).replaceAll(
+      [
+        RSVPEventSuccessPopupRoute(
+          event: event,
+          buttonBuilder: (newContext) => LinearGradientButton(
+            onTap: () => AutoRouter.of(newContext).replace(
+              const EventPickMyTicketRoute(),
+            ),
+            height: Sizing.large,
+            textStyle: Typo.medium.copyWith(
+              fontWeight: FontWeight.w600,
+              color: Theme.of(context).colorScheme.onPrimary.withOpacity(0.87),
+              fontFamily: FontFamily.nohemiVariable,
+            ),
+            radius: BorderRadius.circular(LemonRadius.small * 2),
+            label: t.common.next,
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -166,7 +193,20 @@ class EventTicketsSummaryPageView extends StatelessWidget {
             if (eventJoinRequest != null) {
               return _handleEventRequireApproval(context);
             }
-            _waitForNotificationTimer.start(context);
+            _waitForNotificationTimer.start(
+              context,
+              paymentId: payment?.id ?? '',
+              onPaymentFailed: () {
+                context.read<BuyTicketsBloc>().add(
+                      BuyTicketsEvent.receivedPaymentFailedFromNotification(
+                        payment: payment,
+                      ),
+                    );
+              },
+              onPaymentDone: () {
+                _onNavigateWhenPaymentConfirmed(context, event);
+              },
+            );
           },
         ),
         BuyTicketsWithCryptoListener.create(
@@ -174,7 +214,23 @@ class EventTicketsSummaryPageView extends StatelessWidget {
             if (data.eventJoinRequest != null) {
               return _handleEventRequireApproval(context);
             }
-            _waitForNotificationTimer.start(context);
+            _waitForNotificationTimer.startWithCrypto(
+              context,
+              chainId: selectedNetwork ?? '',
+              txHash: data.txHash ?? '',
+              paymentId: data.payment?.id ?? '',
+              onPaymentFailed: () {
+                context.read<BuyTicketsWithCryptoBloc>().add(
+                      BuyTicketsWithCryptoEvent
+                          .receivedPaymentFailedFromNotification(
+                        payment: data.payment,
+                      ),
+                    );
+              },
+              onPaymentDone: () {
+                _onNavigateWhenPaymentConfirmed(context, event);
+              },
+            );
           },
         ),
       ],
@@ -220,26 +276,7 @@ class EventTicketsSummaryPageView extends StatelessWidget {
           }
           if (eventId == event.id) {
             _waitForNotificationTimer.cancel();
-            AutoRouter.of(context).replaceAll(
-              [
-                RSVPEventSuccessPopupRoute(
-                  event: event,
-                  buttonBuilder: (newContext) => LinearGradientButton(
-                    onTap: () => AutoRouter.of(newContext).replace(
-                      const EventPickMyTicketRoute(),
-                    ),
-                    height: Sizing.large,
-                    textStyle: Typo.medium.copyWith(
-                      fontWeight: FontWeight.w600,
-                      color: colorScheme.onPrimary.withOpacity(0.87),
-                      fontFamily: FontFamily.nohemiVariable,
-                    ),
-                    radius: BorderRadius.circular(LemonRadius.small * 2),
-                    label: t.common.next,
-                  ),
-                ),
-              ],
-            );
+            _onNavigateWhenPaymentConfirmed(context, event);
           }
         },
         child: WillPopScope(
