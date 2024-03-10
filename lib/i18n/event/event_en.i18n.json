@@ -370,5 +370,18 @@
         "inviteLoadingDescription": "Please wait while we invite to your\nguests. This should only take a few seconds.",
         "inviteSuccessTitle": "Invited!",
         "inviteSuccessDescription": "Your guests have been invted to\n$eventName!"
-    }
+    },
+    "requiredFields": {
+        "tellUsMore": "Tell us more",
+        "description": "Information required by hosts to reserve your spot. Complete your profile now!",
+        "completeProfile": "Complete profile"
+    },
+    "applicationForm": {
+        "applicationForm": "Application form",
+        "applicationFormDescription": "Information required to reserve your spot. This will update your profile automatically!",
+        "updatingProfile": "Updating profile",
+        "updatingProfileDescription": "Please wait while we update your profile. This should only take a few seconds.",
+        "updatedApplicationFormDescription": "You are all set to reserve your tickets"
+    },
+    "reserve": "Reserve"
 }

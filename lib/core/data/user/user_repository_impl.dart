@@ -46,6 +46,7 @@ class UserRepositoryImpl implements UserRepository {
       final result = await _gqlClient.query(
         QueryOptions(
           document: getUserQuery,
+          fetchPolicy: FetchPolicy.networkOnly,
           parserFn: (data) {
             return User.fromDto(UserDto.fromJson(data['getUser']));
           },

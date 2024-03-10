@@ -279,6 +279,21 @@ final eventDetailRoutes = AutoRoute(
     AutoRoute(
       page: EventProgramRoute.page,
     ),
+    AutoRoute(
+      page: GuestEventApplicationRoute.page,
+      children: [
+        AutoRoute(
+          initial: true,
+          page: GuestEventApplicationInfoRoute.page,
+        ),
+        AutoRoute(
+          page: GuestEventApplicationFormRoute.page,
+        ),
+        AutoRoute(
+          page: GuestEventApplicationFormProcessingRoute.page,
+        ),
+      ],
+    ),
   ],
 );
 

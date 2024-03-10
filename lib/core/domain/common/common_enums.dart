@@ -81,7 +81,8 @@ enum ProfileFieldKey {
   educationTitle('education_title'),
   newGender('new_gender'),
   ethnicity('ethnicity'),
-  dateOfBirth('date_of_birth');
+  dateOfBirth('date_of_birth'),
+  handleGithub('handle_github');
 
   final String key;
 

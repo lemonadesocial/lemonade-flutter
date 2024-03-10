@@ -55,7 +55,8 @@
         "revoke": "Revoke",
         "saveChanges": "Save changes",
         "accept": "Accept",
-        "decline": "Decline"
+        "decline": "Decline",
+        "submit": "Submit"
     },
     "followed": "Followed",
     "anonymous": "anonymous",

@@ -38,7 +38,7 @@ class EditProfileFieldItem extends StatelessWidget {
       case ProfileFieldKey.displayName:
         return LemonTextField(
           label: t.onboarding.displayName,
-          hintText: t.profile.hint.displayName,
+          hintText: '',
           initialText: userProfile.displayName ?? '',
           onChange: onChange,
         );
@@ -79,7 +79,16 @@ class EditProfileFieldItem extends StatelessWidget {
           initialText: userProfile.education ?? '',
           onChange: onChange,
         );
-
+      case ProfileFieldKey.handleGithub:
+        return LemonTextField(
+          label: t.profile.githubUsername,
+          hintText: '',
+          initialText: userProfile.handleGithub ?? '',
+          onChange: onChange,
+        );
+      //
+      // Dropdown
+      //
       case ProfileFieldKey.newGender:
         return FrostedGlassDropDownV2(
           label: t.profile.gender,

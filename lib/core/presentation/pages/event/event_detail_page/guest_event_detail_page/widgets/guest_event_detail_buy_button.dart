@@ -75,6 +75,7 @@ class _GuestEventDetailBuyButtonView extends StatelessWidget {
     if (profileRequiredFields.isEmpty) {
       return true;
     }
+    context.read<AuthBloc>().add(const AuthEvent.refreshData());
     final userResult = await showFutureLoadingDialog(
       context: context,
       future: () => getIt<UserRepository>().getMe(),
@@ -91,29 +92,6 @@ class _GuestEventDetailBuyButtonView extends StatelessWidget {
       if (missingFields.isEmpty) {
         return true;
       }
-      final formattedMissingFields =
-          missingFields.map(StringUtils.camelCaseToWords).toList();
-      showDialog(
-        context: context,
-        builder: (context) {
-          return LemonAlertDialog(
-            onClose: () {
-              AutoRouter.of(context).pop();
-              AutoRouter.of(context).push(
-                EditProfileRoute(
-                  userProfile: user,
-                ),
-              );
-            },
-            buttonLabel: t.common.actions.ok,
-            child: Text(
-              t.event.profileRequiredFields(
-                fields: formattedMissingFields.join(', '),
-              ),
-            ),
-          );
-        },
-      );
       return false;
     });
   }
@@ -190,6 +168,8 @@ class _GuestEventDetailBuyButtonView extends StatelessWidget {
                       final isQualified =
                           await _checkProfileRequiredFields(context);
                       if (!isQualified) {
+                        AutoRouter.of(context)
+                            .navigate(GuestEventApplicationRoute(event: event));
                         return;
                       }
                       AutoRouter.of(context).navigate(
