@@ -84,11 +84,24 @@ class PostDetailCard extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Text(
-                    postName,
-                    style: Typo.medium.copyWith(
-                      color: colorScheme.onPrimary.withOpacity(0.87),
-                      fontWeight: FontWeight.w600,
+                  GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () {
+                      final isMe =
+                          AuthUtils.isMe(context, user: post.userExpanded!);
+                      if (isMe) {
+                        AutoRouter.of(context).navigate(const MyProfileRoute());
+                      } else {
+                        AutoRouter.of(context)
+                            .navigate(ProfileRoute(userId: post.user));
+                      }
+                    },
+                    child: Text(
+                      postName,
+                      style: Typo.medium.copyWith(
+                        color: colorScheme.onPrimary.withOpacity(0.87),
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                   if (postCreatedAt != null)
