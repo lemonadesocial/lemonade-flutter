@@ -75,4 +75,30 @@ class Web3Utils {
   static String removeTrailingZeros(String n) {
     return n.replaceAll(RegExp(r"([.]*0+)(?!.*\d)"), "");
   }
+
+  static Future<TransactionReceipt?> waitForReceipt({
+    required String rpcUrl,
+    required String txHash,
+    int maxAttempt = 10,
+    Duration? deplayDuration,
+  }) async {
+    final web3Client = Web3Client(rpcUrl, http.Client());
+    TransactionReceipt? receipt;
+    int remainingAttempt = maxAttempt;
+    while (remainingAttempt > 0) {
+      await Future.delayed(
+        deplayDuration ??
+            const Duration(
+              seconds: 0,
+            ),
+      );
+      receipt = await web3Client.getTransactionReceipt(txHash);
+      if (receipt != null) {
+        return receipt;
+      }
+      remainingAttempt--;
+    }
+
+    return receipt;
+  }
 }

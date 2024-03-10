@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.10.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.9.0...v1.10.0) (2024-03-07)
+
+
+### Features
+
+* event features bar animation ([#451](https://github.com/lemonadesocial/lemonade-flutter/issues/451)) ([289a288](https://github.com/lemonadesocial/lemonade-flutter/commit/289a288dc0e690c5917915febb6b2ea20dce267d))
+
+
+### Bug Fixes
+
+* hide discard warning if no tickets selected ([#447](https://github.com/lemonadesocial/lemonade-flutter/issues/447)) ([67d7201](https://github.com/lemonadesocial/lemonade-flutter/commit/67d7201fb60514f8adbec4fa0a9a4a26c2bc26e9))
+* pop setting page after logout ([#449](https://github.com/lemonadesocial/lemonade-flutter/issues/449)) ([0cb13e3](https://github.com/lemonadesocial/lemonade-flutter/commit/0cb13e394f3273892c20a449fabcb52fc60a2f54))
+* update navigation logic for guests tab in host event view ([#446](https://github.com/lemonadesocial/lemonade-flutter/issues/446)) ([56c10ac](https://github.com/lemonadesocial/lemonade-flutter/commit/56c10ac01989df113f379a2be2d9274781408902))
+* update snackbar to top using another_flushbar library ([#453](https://github.com/lemonadesocial/lemonade-flutter/issues/453)) ([e9dfd9b](https://github.com/lemonadesocial/lemonade-flutter/commit/e9dfd9b718e07a3b25339ca8a7fcbf670c309c19))
+* update user profile ui ([#448](https://github.com/lemonadesocial/lemonade-flutter/issues/448)) ([c6c7b86](https://github.com/lemonadesocial/lemonade-flutter/commit/c6c7b8689aba0411553f2106222ee4fc913240a1))
+
 ## [1.9.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.8.0...v1.9.0) (2024-03-04)
 
 

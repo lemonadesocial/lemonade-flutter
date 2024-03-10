@@ -11,6 +11,8 @@ class ChainDto with _$ChainDto {
     String? name,
     @JsonKey(name: 'rpc_url') String? rpcUrl,
     @JsonKey(name: 'logo_url') String? logoUrl,
+    @JsonKey(name: 'block_time') double? blockTime,
+    @JsonKey(name: 'safe_confirmations') double? safeConfirmations,
     List<ERC20TokenDto>? tokens,
   }) = _ChainDto;
 
