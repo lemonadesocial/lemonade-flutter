@@ -28,8 +28,12 @@ class GuestEventApplicationPage extends StatelessWidget
         ),
         BlocProvider(
           create: (context) => EventApplicationFormBloc()
-            ..add(EventApplicationFormBlocEvent.initFieldState(
-                event: event, user: user)),
+            ..add(
+              EventApplicationFormBlocEvent.initFieldState(
+                event: event,
+                user: user,
+              ),
+            ),
         ),
       ],
       child: this,

@@ -10,7 +10,6 @@ import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
 
 class EventCard extends StatelessWidget {
   final Event event;

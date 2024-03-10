@@ -76,7 +76,7 @@ class GuestEventApplicationInfoPage extends StatelessWidget {
                           ),
                         ],
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),

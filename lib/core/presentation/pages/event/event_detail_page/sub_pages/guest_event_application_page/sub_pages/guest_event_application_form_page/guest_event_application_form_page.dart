@@ -90,7 +90,7 @@ class GuestEventApplicationFormPage extends StatelessWidget {
                           Vibrate.feedback(FeedbackType.light);
                           FocusManager.instance.primaryFocus?.unfocus();
                           AutoRouter.of(context).replaceAll([
-                            const GuestEventApplicationFormProcessingRoute()
+                            const GuestEventApplicationFormProcessingRoute(),
                           ]);
                         },
                         label: t.common.actions.submit,

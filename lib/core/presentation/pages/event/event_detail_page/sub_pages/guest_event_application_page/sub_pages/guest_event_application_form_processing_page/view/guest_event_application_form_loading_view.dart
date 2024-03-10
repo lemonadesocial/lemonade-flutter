@@ -40,7 +40,7 @@ class GuestEventApplicationFormLoadingView extends StatelessWidget {
                 ),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: Spacing.large)
+              SizedBox(height: Spacing.large),
             ],
           ),
         ],
