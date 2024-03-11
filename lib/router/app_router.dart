@@ -279,6 +279,9 @@ final eventDetailRoutes = AutoRoute(
     AutoRoute(
       page: EventProgramRoute.page,
     ),
+    AutoRoute(
+      page: GuestEventApprovalStatusRoute.page,
+    ),
   ],
 );
 
