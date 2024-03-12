@@ -81,8 +81,8 @@ class EditProfileFieldItem extends StatelessWidget {
         );
       case ProfileFieldKey.handleGithub:
         return LemonTextField(
-          label: t.profile.githubUsername,
-          hintText: '',
+          label: t.profile.socials.github,
+          hintText: t.profile.hint.username,
           initialText: userProfile.handleGithub ?? '',
           onChange: onChange,
         );

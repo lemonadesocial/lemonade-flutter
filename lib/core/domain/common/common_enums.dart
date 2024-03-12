@@ -84,7 +84,7 @@ enum ProfileFieldKey {
   dateOfBirth('date_of_birth'),
   handleGithub('handle_github');
 
-  final String key;
+  final String fieldKey;
 
-  const ProfileFieldKey(this.key);
+  const ProfileFieldKey(this.fieldKey);
 }
