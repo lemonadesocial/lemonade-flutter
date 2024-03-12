@@ -1,10 +1,17 @@
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/entities/event_application.dart';
 import 'package:app/core/domain/user/entities/user.dart';
+import 'package:app/core/utils/social_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
+import 'package:app/gen/assets.gen.dart';
+import 'package:app/graphql/backend/event/query/get_event_application_answers.graphql.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:matrix/matrix.dart' as matrix;
+import 'package:sliver_tools/sliver_tools.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class EventJoinRequestApplicationForm extends StatelessWidget {
   final User? user;
@@ -24,17 +31,66 @@ class EventJoinRequestApplicationForm extends StatelessWidget {
     List<String> formattedFieldNames =
         profileRequiredFields.map(StringUtils.camelCaseToWords).toList();
 
-    return SliverList.separated(
-      itemCount: profileRequiredFields.length,
-      itemBuilder: (context, index) {
-        final userJson = user?.toJson();
-        final value = userJson?.tryGet(profileRequiredFields[index]);
-        return _FormField(
-          label: StringUtils.capitalize(formattedFieldNames[index]),
-          value: value is String ? value : null,
-        );
-      },
-      separatorBuilder: (context, index) => SizedBox(height: Spacing.medium),
+    return MultiSliver(
+      children: [
+        SliverList.separated(
+          itemCount: profileRequiredFields.length,
+          itemBuilder: (context, index) {
+            final userJson = user?.toJson();
+            final value = userJson?.tryGet(profileRequiredFields[index]);
+            final isSocialFieldName = SocialUtils.isSocialFieldName(
+              fieldName: profileRequiredFields[index],
+            );
+            return _FormField(
+              label: StringUtils.capitalize(formattedFieldNames[index]),
+              value: value is String
+                  ? isSocialFieldName
+                      ? SocialUtils.buildSocialLinkBySocialFieldName(
+                          socialFieldName: profileRequiredFields[index],
+                          socialUserName: value,
+                        )
+                      : value
+                  : null,
+            );
+          },
+          separatorBuilder: (context, index) =>
+              SizedBox(height: Spacing.medium),
+        ),
+        SizedBox(height: Spacing.medium),
+        Query$Answers$Widget(
+          options: Options$Query$Answers(
+            variables: Variables$Query$Answers(
+              event: event?.id ?? '',
+            ),
+          ),
+          builder: (
+            result, {
+            refetch,
+            fetchMore,
+          }) {
+            final applicationAnswers =
+                (result.parsedData?.getEventApplicationAnswers ?? [])
+                    .map(
+                      (item) => EventApplicationAnswer.fromJson(
+                        item.toJson(),
+                      ),
+                    )
+                    .toList();
+            return SliverList.separated(
+              itemCount: applicationAnswers.length,
+              itemBuilder: (context, index) {
+                return _FormField(
+                  label: applicationAnswers[index].questionExpanded?.question ??
+                      '',
+                  value: applicationAnswers[index].answer ?? '',
+                );
+              },
+              separatorBuilder: (context, index) =>
+                  SizedBox(height: Spacing.medium),
+            );
+          },
+        ),
+      ],
     );
   }
 }
@@ -69,13 +125,52 @@ class _FormField extends StatelessWidget {
             borderRadius: BorderRadius.circular(LemonRadius.small),
           ),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                value ?? '',
-                style: Typo.mediumPlus.copyWith(
-                  color: colorScheme.onPrimary,
+              Flexible(
+                flex: 10,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Linkify(
+                      // ''
+                      text: value ?? '',
+                      style: Typo.mediumPlus.copyWith(
+                        color: colorScheme.onPrimary,
+                      ),
+                      linkStyle: Typo.mediumPlus.copyWith(
+                        color: colorScheme.onPrimary,
+                        decoration: TextDecoration.none,
+                      ),
+                      onOpen: (link) async {
+                        await launchUrl(
+                          Uri.parse(link.url),
+                        );
+                      },
+                    ),
+                  ],
                 ),
               ),
+              if (StringUtils.isUrl(value ?? ''))
+                Flexible(
+                  flex: 1,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          final match =
+                              StringUtils.urlRegx.firstMatch(value ?? '');
+                          if (match != null) {
+                            final url = match.group(0);
+                            launchUrl(Uri.parse(url ?? ''));
+                          }
+                        },
+                        child: Assets.icons.icExpand.svg(),
+                      ),
+                    ],
+                  ),
+                ),
             ],
           ),
         ),

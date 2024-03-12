@@ -1,0 +1,19 @@
+query Answers($event: MongoID!) {
+  getEventApplicationAnswers(event: $event) {
+    answers {
+      _id
+      answer
+      question
+      question_expanded {
+        question
+        _id
+      }
+      user
+    }
+    user
+    user_expanded {
+      _id
+      username
+    }
+  }
+}

@@ -60,6 +60,7 @@ const userProfileFragment = '''
   ethnicity
   new_gender
   industry
+  handle_github
   handle_facebook
   handle_instagram
   handle_linkedin
