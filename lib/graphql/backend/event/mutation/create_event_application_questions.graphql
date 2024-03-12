@@ -1,0 +1,7 @@
+# import '../fragment/event_application_question.graphql'
+
+mutation CreateEventApplicationQuestions($event: MongoID!, $questions: [String!]!) {
+    createEventApplicationQuestions(event: $event, questions: $questions) {
+        ...EventApplicationQuestion
+    }
+}

@@ -20,6 +20,7 @@ type Query {
   getComments(input: GetCommentsArgs!, skip: Int! = 0, limit: Int! = 25): [Comment!]!
   getConfigs(keys: [String!]!): JSON!
   exportEventAccepted(_id: MongoID!): [EventAcceptedExport!]!
+  getEventApplicationAnswers(event: MongoID!): [GroupedEventApplicationAnswers!]!
   getEventbriteEvents(input: GetEventbriteEventsInput, skip: Int! = 0, limit: Int! = 25): [EventbriteEvent!]!
   getEventCheckins(input: GetEventCheckinsInput!): [EventCheckin!]!
   getEventCohostRequests(input: GetEventCohostRequestsInput!): [EventCohostRequest!]!
@@ -48,8 +49,10 @@ type Query {
   listFiatCurrencies: [FiatCurrency!]!
   listChains: [Chain!]!
   listNewPaymentAccounts(skip: Int! = 0, limit: Int! = 25, _id: [MongoID!], type: PaymentAccountType, provider: NewPaymentProvider): [NewPaymentAccount!]!
+  getMyPayments(state: FilterPaymentStateInput, event: MongoID): [NewPayment!]!
   getNewPayment(_id: MongoID!): NewPayment
   listNewPayments(skip: Int! = 0, limit: Int! = 25, event: MongoID!, users: [MongoID!]): [NewPayment!]!
+  getPaymentRefundSignature(_id: MongoID!): String!
   getPosts(input: GetPostsInput, skip: Int! = 0, limit: Int! = 25): [Post!]!
   getNewsfeed(offset: Float): Newsfeed
   getNotifications(skip: Int! = 0, limit: Int! = 25, type: NotificationTypeFilterInput): [Notification!]!
@@ -444,6 +447,7 @@ type Event {
   unlisted: Boolean
   videos: [Video!]
   virtual: Boolean
+  virtual_url: String
   welcome_text: String
   welcome_video: Video
 
@@ -480,6 +484,7 @@ type Event {
   payment_accounts_expanded(skip: Int! = 0, limit: Int! = 25): [NewPaymentAccount!]
   payment_ticket_discounts: [EventPaymentTicketDiscount!]
   tickets: [TicketBase!]
+  application_questions: [EventApplicationQuestionBase!]
 }
 
 enum EventState {
@@ -852,6 +857,7 @@ type NewPaymentAccount {
 
 enum PaymentAccountType {
   ethereum
+  ethereum_escrow
   digital
 }
 
@@ -860,7 +866,7 @@ enum NewPaymentProvider {
   safe
 }
 
-union AccountInfo = EthereumAccount | SafeAccount | DigitalAccount | StripeAccount
+union AccountInfo = EthereumAccount | SafeAccount | DigitalAccount | StripeAccount | EthereumEscrowAccount
 
 type EthereumAccount {
   currencies: [String!]!
@@ -876,7 +882,6 @@ type SafeAccount {
   network: String!
   owners: [String!]!
   threshold: Float!
-  gelato_task_id: String
   pending: Boolean
 }
 
@@ -891,6 +896,21 @@ type StripeAccount {
   currency_map: JSON
   account_id: String!
   publishable_key: String!
+}
+
+type EthereumEscrowAccount {
+  currencies: [String!]!
+  currency_map: JSON
+  address: String!
+  network: String!
+  minimum_deposit_percent: Int!
+  host_refund_percent: Float!
+  refund_policies: [RefundPolicy!]
+}
+
+type RefundPolicy {
+  timestamp: Float!
+  percent: Float!
 }
 
 type EventPaymentTicketDiscount {
@@ -919,6 +939,12 @@ type TicketBase {
   assigned_email: String
   assigned_to: MongoID
   invited_by: MongoID
+}
+
+type EventApplicationQuestionBase {
+  _id: MongoID!
+  question: String!
+  event: MongoID!
 }
 
 type Badge {
@@ -972,6 +998,25 @@ type EventAcceptedExport {
   ticket_discount: String
   ticket_discount_amount: String
   checkin_date: DateTimeISO
+}
+
+type GroupedEventApplicationAnswers {
+  user: MongoID!
+  user_expanded: User!
+  answers: [EventApplicationAnswer!]!
+}
+
+type EventApplicationAnswer {
+  _id: MongoID!
+  user: MongoID!
+  question: MongoID!
+  answer: String!
+  question_expanded: EventApplicationQuestion!
+}
+
+type EventApplicationQuestion {
+  _id: MongoID!
+  question: String!
 }
 
 type EventbriteEvent {
@@ -1243,11 +1288,14 @@ type NewPayment {
   state: NewPaymentState!
   user: MongoID!
   account: MongoID!
+  ref_data: JSON
   billing_info: BillingInfo
   transfer_metadata: JSON
   transfer_params: JSON
   failure_reason: String
   account_expanded: NewPaymentAccount
+  ticket_types_expanded: [EventTicketType!]
+  due_amount: String
 }
 
 enum NewPaymentState {
@@ -1273,6 +1321,12 @@ type BillingInfo {
   email: String
   firstname: String
   lastname: String
+}
+
+input FilterPaymentStateInput {
+  eq: NewPaymentState
+  in: [NewPaymentState!]
+  nin: [NewPaymentState!]
 }
 
 type Post {
@@ -1784,6 +1838,13 @@ type PricingInfo {
   subtotal: String!
   total: String!
   payment_accounts: [NewPaymentAccount!]
+  deposit_infos: [EscrowDepositInfo!]
+}
+
+type EscrowDepositInfo {
+  payment_account_id: MongoID!
+  minimum_percent: Float!
+  minimum_amount: String!
 }
 
 input CalculateTicketsPricingInput {
@@ -1821,7 +1882,7 @@ type EventJoinRequest {
   approved_by: MongoID
   declined_at: DateTimeISO
   declined_by: MongoID
-  user_expanded: User
+  user_expanded: UserWithEmail
   event_expanded: Event
   approved_by_expanded: User
   declined_by_expanded: User
@@ -1831,6 +1892,103 @@ type EventJoinRequest {
 type TicketInfo {
   count: Float!
   ticket_type: MongoID!
+}
+
+type UserWithEmail {
+  _id: MongoID
+  active: Boolean!
+  created_at: DateTimeISO!
+  updated_at: DateTimeISO!
+  name: String!
+  verified: Boolean
+  phone: String
+  phone_verified: Boolean
+  email: String
+  email_marketing: Boolean
+  email_verified: Boolean
+  country: String
+  display_name: String
+  first_name: String
+  last_name: String
+  type: UserType
+  search_range: Float
+  lemon_amount: Float!
+  lemon_cap: Float!
+  discovery: UserDiscoverySettings
+  addresses: [Address!]
+  age: Float
+  blocked: [MongoID!]
+  calendly_url: String
+  currency: String
+  company_address: Address
+  company_name: String
+  cover: MongoID
+  date_of_birth: DateTimeISO
+  description: String
+  education_title: String
+  ethnicity: String
+  events: [MongoID!]
+  frequent_questions: [FrequentQuestion!]
+  handle_facebook: String
+  handle_github: String
+  handle_instagram: String
+  handle_linkedin: String
+  handle_twitter: String
+  image_avatar: String
+  industry: String
+  interests: [String!]
+  job_title: String
+  languages: [String!]
+  layout_sections: [LayoutSection!]
+  location_line: String
+  music: [String!]
+  offers: [UserOffer!]
+  preferred_network: String
+  pronoun: String
+  new_gender: String
+  new_photos: [MongoID!]
+  tag_recommended: Boolean
+  tag_site: Boolean
+  tag_timeline: Boolean
+  tag_verified: Boolean
+  tagline: String
+  timezone: String
+  username: String
+  settings: JSON
+  wallets: [String!]
+  wallet_custodial: String
+  attended: Float
+  followers: Float
+  following: Float
+  friends: Float
+  hosted: Float
+  posts: Float
+  discord_user_info: JSON
+  lemon_refresh_at: DateTimeISO
+  fcm_tokens: [String!]
+  matrix_localpart: String
+  payment_verification: UserPaymentVerification
+  url: String
+  url_go: String
+  daos: [UserDao!]
+  data: JSON
+  eventbrite_user_info: JSON
+  google_user_info: JSON
+  stripe_user_info: JSON
+  terms_accepted_adult: Boolean
+  terms_accepted_conditions: Boolean
+  notification_filters: [JSON!]
+  razorpay_customer: String
+  shopify_user_info: JSON
+  twitch_user_info: JSON
+  twitter_user_info: JSON
+  twitter2_user_info: JSON
+  zoom_user_info: JSON
+  icebreakers: [UserIcebreaker!]
+  cover_expanded: File
+  events_expanded(skip: Int! = 0, limit: Int! = 25): [Event]
+  new_photos_expanded(skip: Int! = 0, limit: Int! = 25): [File]
+  blocked_expanded: [User]
 }
 
 enum JoinRequestState {
@@ -1990,6 +2148,9 @@ type Mutation {
   createComment(input: CommentInput!): Comment!
   deleteComment(_id: MongoID!): Boolean!
   generateCubejsToken(events: [MongoID!], site: MongoID, user: MongoID): String!
+  createEventApplicationQuestions(event: MongoID!, questions: [String!]!): [EventApplicationQuestionBase!]!
+  deleteEventApplicationQuestions(questions: [MongoID!]!, event: MongoID!): Boolean!
+  submitEventApplicationAnswers(answers: [EventApplicationAnswerInput!]!, event: MongoID!): [EventApplicationAnswerBase!]!
   createEventFromEventbrite(input: CreateEventFromEventbriteInput!, id: String!): Event!
   createEventbriteWebhookForEvent(eventbrite_event: String!, _id: MongoID!): Boolean!
   createEventBroadcast(input: CreateEventBroadcastInput!, event: MongoID!): Boolean!
@@ -2124,6 +2285,18 @@ input CommentInput {
   comment: MongoID
 }
 
+type EventApplicationAnswerBase {
+  _id: MongoID!
+  user: MongoID!
+  question: MongoID!
+  answer: String!
+}
+
+input EventApplicationAnswerInput {
+  question: MongoID!
+  answer: String!
+}
+
 input CreateEventFromEventbriteInput {
   title: String
   description: String
@@ -2171,6 +2344,7 @@ input EventInput {
   title: String
   start: DateTimeISO
   end: DateTimeISO
+  application_required: Boolean
   application_form_url: String
   accepted_store_promotion: MongoID
   accepted_user_fields_required: [String!]
@@ -2216,6 +2390,7 @@ input EventInput {
   terms_text: String
   timezone: String
   virtual: Boolean
+  virtual_url: String
   welcome_text: String
   welcome_video: VideoInput
   guest_directory_enabled: Boolean

@@ -377,5 +377,13 @@
         "inviteLoadingDescription": "Please wait while we invite to your\nguests. This should only take a few seconds.",
         "inviteSuccessTitle": "Invited!",
         "inviteSuccessDescription": "Your guests have been invted to\n$eventName!"
-    }
+    },
+    "applicationForm": {
+        "createApplicationFom": "Create application form",
+        "editApplicationForm": "Edit application form",
+        "applicationDescription": "Information required to reserve your spot.",
+        "question": "Question",
+        "questionHint": "Input your question here",
+        "createQuestionsSuccessfully": "Create application form questions successfully!"
+    }    
 }
