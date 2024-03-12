@@ -436,9 +436,6 @@ class EventRepositoryImpl implements EventRepository {
     required String eventId,
     required List<String> questions,
   }) async {
-    print(">>>>>>>> createEventApplicationQuestions");
-    print(eventId);
-    print(questions);
     final result = await client.mutate$CreateEventApplicationQuestions(
       Options$Mutation$CreateEventApplicationQuestions(
         variables: Variables$Mutation$CreateEventApplicationQuestions(
@@ -448,7 +445,6 @@ class EventRepositoryImpl implements EventRepository {
         fetchPolicy: FetchPolicy.networkOnly,
       ),
     );
-    print(result);
     if (result.hasException) {
       return Left(Failure.withGqlException(result.exception));
     }

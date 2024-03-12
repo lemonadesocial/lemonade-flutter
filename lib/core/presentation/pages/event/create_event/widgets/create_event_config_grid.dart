@@ -6,7 +6,6 @@ import 'package:app/core/application/event/event_location_setting_bloc/event_loc
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_configuration.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/event_config_card.dart';
-import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_application_form_setting_page/event_application_form_setting_page.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_datetime_settings_page/event_datetime_settings_page.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_guest_settings_page/event_guest_settings_page.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_location_setting_page/event_location_setting_page.dart';
