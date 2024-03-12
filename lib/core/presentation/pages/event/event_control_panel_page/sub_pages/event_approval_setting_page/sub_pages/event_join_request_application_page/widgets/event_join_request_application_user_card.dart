@@ -99,7 +99,7 @@ class _Social extends StatelessWidget {
             onTap: () async {
               launchUrl(
                 Uri.parse(
-                  '${_socialUrls[entry.key]}/${entry.value ?? ''}}',
+                  '${_socialUrls[entry.key]}/${entry.value ?? ''}',
                 ),
               );
             },

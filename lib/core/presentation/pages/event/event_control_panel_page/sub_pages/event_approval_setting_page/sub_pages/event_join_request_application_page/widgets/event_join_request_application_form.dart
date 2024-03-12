@@ -61,6 +61,7 @@ class EventJoinRequestApplicationForm extends StatelessWidget {
           options: Options$Query$Answers(
             variables: Variables$Query$Answers(
               event: event?.id ?? '',
+              user: user?.userId ?? '',
             ),
           ),
           builder: (
