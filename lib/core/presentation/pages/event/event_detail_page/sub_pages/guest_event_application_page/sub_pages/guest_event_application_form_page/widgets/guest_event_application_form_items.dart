@@ -25,12 +25,13 @@ class GuestEventApplicationFormItems extends StatelessWidget {
       builder: (context, state) {
         return Column(
           children: profileRequiredFields.map((field) {
-            if (ProfileFieldKey.values.any((element) => element.key == field)) {
+            if (ProfileFieldKey.values
+                .any((element) => element.fieldKey == field)) {
               return Column(
                 children: [
                   EditProfileFieldItem(
                     profileFieldKey: ProfileFieldKey.values.firstWhere(
-                      (element) => element.key == field,
+                      (element) => element.fieldKey == field,
                     ),
                     userProfile: userProfile!,
                     onChange: (value) {
