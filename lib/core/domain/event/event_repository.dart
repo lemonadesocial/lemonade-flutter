@@ -94,7 +94,8 @@ abstract class EventRepository {
     required String eventId,
   });
 
-  Future<Either<Failure, List<EventApplicationQuestion>>> createEventApplicationQuestions({
+  Future<Either<Failure, List<EventApplicationQuestion>>>
+      createEventApplicationQuestions({
     required String eventId,
     required List<String> questions,
   });
