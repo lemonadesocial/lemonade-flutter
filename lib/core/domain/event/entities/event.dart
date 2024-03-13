@@ -7,6 +7,7 @@ import 'package:app/core/domain/event/event_enums.dart';
 import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:app/core/domain/event/entities/event_application_question.dart';
 
 part 'event.freezed.dart';
 
@@ -54,6 +55,7 @@ class Event with _$Event {
     int? attendingCount,
     int? pendingRequestCount,
     List<EventSession>? sessions,
+    List<EventApplicationQuestion>? applicationQuestions,
   }) = _Event;
 
   factory Event.fromDto(EventDto dto) {
@@ -121,6 +123,9 @@ class Event with _$Event {
       pendingRequestCount: dto.pendingRequestCount?.toInt() ?? 0,
       sessions: List.from(dto.sessions ?? [])
           .map((item) => EventSession.fromDto(item))
+          .toList(),
+      applicationQuestions: List.from(dto.applicationQuestions ?? [])
+          .map((item) => EventApplicationQuestion.fromDto(item))
           .toList(),
     );
   }

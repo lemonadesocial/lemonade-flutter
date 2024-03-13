@@ -191,12 +191,22 @@ const eventFragment = '''
 }
 ''';
 
+const eventApplicationQuestionsFragment = '''
+  fragment eventApplicationQuestionsFragment on Event {
+    application_questions {
+      _id
+      question
+    }
+  }
+''';
+
 final getEventDetailQuery = gql('''
   $eventFragment
   $eventOfferFragment
   $eventPaymentAccountFragment
   $eventTicketTypesFragment
   $eventProgramFragment
+  $eventApplicationQuestionsFragment
 
   query(\$id: MongoID!) {
     getEvent(_id: \$id) {
@@ -205,6 +215,7 @@ final getEventDetailQuery = gql('''
       ...eventPaymentAccountFragment
       ...eventTicketTypesFragment
       ...eventProgramFragment
+      ...eventApplicationQuestionsFragment
     }
   }
 ''');

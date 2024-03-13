@@ -1,3 +1,4 @@
+import 'package:app/core/domain/event/entities/event_application_question.dart';
 import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,17 +30,21 @@ class Input$EventApplicationQuestion {
 class EventApplicationFormSettingBloc extends Bloc<
     EventApplicationFormSettingBlocEvent,
     EventApplicationFormSettingBlocState> {
-  EventApplicationFormSettingBloc()
-      : super(
-          EventApplicationFormSettingBlocState(
-            questions: [],
-            isValid: false,
-          ),
+  final List<EventApplicationQuestion>? initialQuestions;
+  EventApplicationFormSettingBloc({
+    this.initialQuestions,
+  }) : super(
+          EventApplicationFormSettingBlocState.initial(),
         ) {
     on<EventApplicationFormSettingBlocEventUpdateQuestion>(onUpdateQuestion);
     on<EventApplicationFormSettingBlocEventAddQuestion>(onAddQuestion);
     on<EventApplicationFormSettingBlocEventRemoveQuestion>(onRemoveQuestion);
     on<EventApplicationFormSettingBlocEventSubmitCreate>(onSubmitCreate);
+    on<EventApplicationFormSettingBlocEventPopulateInitialQuestions>(
+        onPopulateInitialQuestions);
+    if (initialQuestions != null) {
+      add(EventApplicationFormSettingBlocEvent.populateInitialQuestions());
+    }
   }
 
   final _eventRepository = getIt<EventRepository>();
@@ -119,6 +124,30 @@ class EventApplicationFormSettingBloc extends Bloc<
       },
     );
   }
+
+  void onPopulateInitialQuestions(
+    EventApplicationFormSettingBlocEventPopulateInitialQuestions event,
+    Emitter emit,
+  ) {
+    if (initialQuestions == null) {
+      return;
+    }
+    emit(
+      _validate(
+        EventApplicationFormSettingBlocState(
+          questions: initialQuestions!
+              .map(
+                (item) => Input$EventApplicationQuestion(
+                  label: item.question ?? '',
+                  required: true,
+                ),
+              )
+              .toList(),
+          isValid: false,
+        ),
+      ),
+    );
+  }
 }
 
 @freezed
@@ -136,6 +165,8 @@ class EventApplicationFormSettingBlocEvent
   factory EventApplicationFormSettingBlocEvent.submitCreate({
     required String? eventId,
   }) = EventApplicationFormSettingBlocEventSubmitCreate;
+  factory EventApplicationFormSettingBlocEvent.populateInitialQuestions() =
+      EventApplicationFormSettingBlocEventPopulateInitialQuestions;
 }
 
 @freezed
@@ -147,6 +178,15 @@ class EventApplicationFormSettingBlocState
     required List<Input$EventApplicationQuestion> questions,
     required bool isValid,
   }) = _EventApplicationFormSettingBlocState;
+
+  factory EventApplicationFormSettingBlocState.initial() =>
+      EventApplicationFormSettingBlocState(
+        status: EventApplicationFormStatus.initial,
+        questions: [
+          Input$EventApplicationQuestion(label: "", required: true),
+        ],
+        isValid: false,
+      );
 }
 
 enum EventApplicationFormStatus {

@@ -1,9 +1,11 @@
 import 'package:app/core/data/common/dtos/common_dtos.dart';
+import 'package:app/core/data/event/dtos/event_application_question_dto/event_application_question_dto.dart';
 import 'package:app/core/data/event/dtos/event_session/event_session_dto.dart';
 import 'package:app/core/data/event/dtos/event_ticket_types_dto/event_ticket_types_dto.dart';
 import 'package:app/core/data/event/dtos/reward_dto/reward_dto.dart';
 import 'package:app/core/data/payment/dtos/payment_account_dto/payment_account_dto.dart';
 import 'package:app/core/data/user/dtos/user_dtos.dart';
+import 'package:app/core/domain/event/entities/event_application_question.dart';
 import 'package:app/core/domain/event/event_enums.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -58,6 +60,8 @@ class EventDto with _$EventDto {
     @JsonKey(name: 'attending_count') double? attendingCount,
     @JsonKey(name: 'pending_request_count') double? pendingRequestCount,
     List<EventSessionDto>? sessions,
+    @JsonKey(name: 'application_questions')
+    List<EventApplicationQuestionDto>? applicationQuestions,
   }) = _EventDto;
 
   factory EventDto.fromJson(Map<String, dynamic> json) =>
