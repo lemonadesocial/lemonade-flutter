@@ -109,6 +109,12 @@ class EventJoinRequestStatusHistory extends StatelessWidget {
                 eventJoinRequest.paymentExpanded?.accountExpanded?.type ==
                     PaymentAccountType.ethereumEscrow;
 
+            if (!isEscrow &&
+                eventJoinRequest.paymentExpanded?.state !=
+                    PaymentState.succeeded) {
+              return const SizedBox.shrink();
+            }
+
             if (formattedTotalAmount.isEmpty ||
                 formattedDepositAmount.isEmpty) {
               return const SizedBox.shrink();
