@@ -325,7 +325,16 @@
         "declinedApprovalGuestViewDescription": "Unfortunately, your request has been declined. You'll receive a full refund of your payment.",
         "approvedApprovalGuestViewTitle": "Congratulations!",
         "approvedApprovalGuestViewDescription": "Hosts have approved your request. Complete your payment now to secure your tickets.",
-        "completePayment": "Complete payment"
+        "completePayment": "Complete payment",
+        "payment": {
+            "fullPayment": "full payment",
+            "pending": "pending",
+            "refund": "refund",
+            "refunded": "refunded",
+            "inProcess": "In process",
+            "refundComplete": "Refund complete",
+            "paid": "paid"
+        }
     },
     "eventInvited": {
         "joined": "Registered",

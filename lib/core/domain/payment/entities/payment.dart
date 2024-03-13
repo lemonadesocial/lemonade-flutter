@@ -1,4 +1,5 @@
 import 'package:app/core/data/payment/dtos/payment_dto/payment_dto.dart';
+import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/payment/entities/billing_info/billing_info.dart';
 import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
 import 'package:app/core/domain/payment/payment_enums.dart';
@@ -23,6 +24,9 @@ class Payment with _$Payment {
     String? amount,
     PaymentAccount? accountExpanded,
     String? account,
+    String? dueAmount,
+    List<EventTicketType>? ticketTypesExpanded,
+    Map<String, dynamic>? refData,
   }) = _Payment;
 
   factory Payment.fromDto(PaymentDto dto) => Payment(
@@ -42,5 +46,10 @@ class Payment with _$Payment {
             ? PaymentAccount.fromDto(dto.accountExpanded!)
             : null,
         account: dto.account,
+        dueAmount: dto.dueAmount,
+        ticketTypesExpanded: (dto.ticketTypesExpanded ?? [])
+            .map((item) => EventTicketType.fromDto(item))
+            .toList(),
+        refData: dto.refData,
       );
 }

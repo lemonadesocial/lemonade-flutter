@@ -1,3 +1,4 @@
+import 'package:app/core/data/event/dtos/event_ticket_types_dto/event_ticket_types_dto.dart';
 import 'package:app/core/data/payment/dtos/billing_info_dto/billing_info_dto.dart';
 import 'package:app/core/data/payment/dtos/payment_account_dto/payment_account_dto.dart';
 import 'package:app/core/domain/payment/payment_enums.dart';
@@ -21,6 +22,10 @@ class PaymentDto with _$PaymentDto {
     String? amount,
     @JsonKey(name: 'account_expanded') PaymentAccountDto? accountExpanded,
     String? account,
+    @JsonKey(name: 'due_amount') String? dueAmount,
+    @JsonKey(name: 'ticket_types_expanded')
+    List<EventTicketTypeDto>? ticketTypesExpanded,
+    @JsonKey(name: 'ref_data') Map<String, dynamic>? refData,
   }) = _PaymentDto;
 
   factory PaymentDto.fromJson(Map<String, dynamic> json) =>

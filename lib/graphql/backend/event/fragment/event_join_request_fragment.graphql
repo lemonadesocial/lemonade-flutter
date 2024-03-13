@@ -1,3 +1,5 @@
+# import '../../payment/fragment/payment_fragment.graphql'
+
 fragment EventJoinRequest on EventJoinRequest {
   _id
   created_at
@@ -31,14 +33,7 @@ fragment EventJoinRequest on EventJoinRequest {
     email
   }
   payment_expanded {
-    _id
-    amount
-    currency
-    state
-    account_expanded {
-      provider
-      type
-    }
+    ...PaymentFragment
   }
   ticket_info {
     count

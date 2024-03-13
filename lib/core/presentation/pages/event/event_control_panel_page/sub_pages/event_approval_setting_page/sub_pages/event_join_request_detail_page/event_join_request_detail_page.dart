@@ -125,6 +125,8 @@ class _EventJoinRequestDetailPageState
               slivers: [
                 SliverToBoxAdapter(
                   child: EventJoinRequestStatusHistory(
+                    // TODO: For testing purpose, will remove when PR done
+                    // eventJoinRequest: mockEscrowJoinRequest(_eventJoinRequest),
                     eventJoinRequest: _eventJoinRequest,
                   ),
                 ),

@@ -31,20 +31,34 @@ const paymentAccountFragment = '''
       }
 
       ... on SafeAccount {
-          currencies
-          currency_map
-          address
-          network
-          owners
-          threshold
-          pending
+        currencies
+        currency_map
+        address
+        network
+        owners
+        threshold
+        pending
+      }
+
+      ... on EthereumEscrowAccount {
+        address
+        currencies
+        currency_map
+        host_refund_percent
+        minimum_deposit_percent
+        network
+        refund_policies {
+          percent
+          timestamp
         }
+      }
     }
   }
 ''';
 
 const paymentFragment = '''
   $paymentAccountFragment
+
 
   fragment paymentFragment on NewPayment {
     _id
@@ -64,6 +78,28 @@ const paymentFragment = '''
     failure_reason
     account_expanded {
       ...paymentAccountFragment
+    }
+    due_amount
+    ref_data
+    ticket_tytpes_expanded {
+      _id
+      active
+      event
+      title
+      prices {
+        cost
+        currency
+        network
+        default
+      }
+      default
+      address_required
+      description
+      photos_expanded {
+        _id
+        bucket
+        key
+      }
     }
   }
 ''';
