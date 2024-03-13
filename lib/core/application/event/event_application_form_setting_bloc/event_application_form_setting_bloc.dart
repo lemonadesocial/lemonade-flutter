@@ -41,7 +41,8 @@ class EventApplicationFormSettingBloc extends Bloc<
     on<EventApplicationFormSettingBlocEventRemoveQuestion>(onRemoveQuestion);
     on<EventApplicationFormSettingBlocEventSubmitCreate>(onSubmitCreate);
     on<EventApplicationFormSettingBlocEventPopulateInitialQuestions>(
-        onPopulateInitialQuestions);
+      onPopulateInitialQuestions,
+    );
     if (initialQuestions != null) {
       add(EventApplicationFormSettingBlocEvent.populateInitialQuestions());
     }

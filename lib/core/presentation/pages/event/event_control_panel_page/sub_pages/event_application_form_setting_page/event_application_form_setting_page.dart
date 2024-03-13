@@ -18,7 +18,8 @@ class EventApplicationFormSettingPage extends StatelessWidget
         );
     return BlocProvider(
       create: (context) => EventApplicationFormSettingBloc(
-          initialQuestions: event?.applicationQuestions ?? []),
+        initialQuestions: event?.applicationQuestions ?? [],
+      ),
       child: this,
     );
   }

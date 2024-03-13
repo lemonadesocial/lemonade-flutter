@@ -5,7 +5,6 @@ import 'package:app/core/data/event/dtos/event_ticket_types_dto/event_ticket_typ
 import 'package:app/core/data/event/dtos/reward_dto/reward_dto.dart';
 import 'package:app/core/data/payment/dtos/payment_account_dto/payment_account_dto.dart';
 import 'package:app/core/data/user/dtos/user_dtos.dart';
-import 'package:app/core/domain/event/entities/event_application_question.dart';
 import 'package:app/core/domain/event/event_enums.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
