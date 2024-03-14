@@ -70,3 +70,32 @@ enum LemonGender {
 
   const LemonGender(this.newGender);
 }
+
+enum ProfileFieldKey {
+  // Basic info
+  displayName('display_name', 'Display name'),
+  pronouns('pronouns', 'Pronouns'),
+  tagline('tagline', 'Tagline'),
+  description('description', 'Bio'),
+
+// Personal info
+  companyName('company_name', 'Organization'),
+  jobTitle('job_title', 'Job Title'),
+  industry('industry', 'Industry'),
+  dateOfBirth('date_of_birth', 'Date of Birth'),
+  educationTitle('education_title', 'Education'),
+  newGender('new_gender', 'Gender'),
+  ethnicity('ethnicity', 'Ethnicity'),
+
+  // Socials
+  handleTwitter('handle_twitter', 'Twitter'),
+  handleLinkedin('handle_linkedin', 'Linkedin'),
+  handleInstagram('handle_instagram', 'Instagram '),
+  handleGithub('handle_github', 'Github'),
+  handleCalendly('calendly_url', 'Calendly');
+
+  final String fieldKey;
+  final String label;
+
+  const ProfileFieldKey(this.fieldKey, this.label);
+}

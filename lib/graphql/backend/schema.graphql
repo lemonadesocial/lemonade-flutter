@@ -20,7 +20,7 @@ type Query {
   getComments(input: GetCommentsArgs!, skip: Int! = 0, limit: Int! = 25): [Comment!]!
   getConfigs(keys: [String!]!): JSON!
   exportEventAccepted(_id: MongoID!): [EventAcceptedExport!]!
-  getEventApplicationAnswers(event: MongoID!): [GroupedEventApplicationAnswers!]!
+  getEventApplicationAnswers(event: MongoID!, user: MongoID): [EventApplicationAnswer!]!
   getEventbriteEvents(input: GetEventbriteEventsInput, skip: Int! = 0, limit: Int! = 25): [EventbriteEvent!]!
   getEventCheckins(input: GetEventCheckinsInput!): [EventCheckin!]!
   getEventCohostRequests(input: GetEventCohostRequestsInput!): [EventCohostRequest!]!
@@ -52,7 +52,7 @@ type Query {
   getMyPayments(state: FilterPaymentStateInput, event: MongoID): [NewPayment!]!
   getNewPayment(_id: MongoID!): NewPayment
   listNewPayments(skip: Int! = 0, limit: Int! = 25, event: MongoID!, users: [MongoID!]): [NewPayment!]!
-  getPaymentRefundSignature(_id: MongoID!): String!
+  getPaymentRefundSignature(_id: MongoID!): PaymentRefundSignature!
   getPosts(input: GetPostsInput, skip: Int! = 0, limit: Int! = 25): [Post!]!
   getNewsfeed(offset: Float): Newsfeed
   getNotifications(skip: Int! = 0, limit: Int! = 25, type: NotificationTypeFilterInput): [Notification!]!
@@ -382,6 +382,7 @@ type Event {
   declined: [MongoID!]
   payment_fee: Float!
   application_form_url: String
+  application_profile_fields: [ApplicationProfileField!]
   accepted_store_promotion: MongoID
   accepted_user_fields_required: [String!]
   access_pass: AccessPass
@@ -484,7 +485,7 @@ type Event {
   payment_accounts_expanded(skip: Int! = 0, limit: Int! = 25): [NewPaymentAccount!]
   payment_ticket_discounts: [EventPaymentTicketDiscount!]
   tickets: [TicketBase!]
-  application_questions: [EventApplicationQuestionBase!]
+  application_questions: [EventApplicationQuestion!]
 }
 
 enum EventState {
@@ -492,6 +493,11 @@ enum EventState {
   started
   ended
   cancelled
+}
+
+type ApplicationProfileField {
+  field: String!
+  required: Boolean
 }
 
 type AccessPass {
@@ -941,10 +947,10 @@ type TicketBase {
   invited_by: MongoID
 }
 
-type EventApplicationQuestionBase {
+type EventApplicationQuestion {
   _id: MongoID!
   question: String!
-  event: MongoID!
+  required: Boolean
 }
 
 type Badge {
@@ -1000,23 +1006,12 @@ type EventAcceptedExport {
   checkin_date: DateTimeISO
 }
 
-type GroupedEventApplicationAnswers {
-  user: MongoID!
-  user_expanded: User!
-  answers: [EventApplicationAnswer!]!
-}
-
 type EventApplicationAnswer {
   _id: MongoID!
   user: MongoID!
   question: MongoID!
   answer: String!
   question_expanded: EventApplicationQuestion!
-}
-
-type EventApplicationQuestion {
-  _id: MongoID!
-  question: String!
 }
 
 type EventbriteEvent {
@@ -1327,6 +1322,11 @@ input FilterPaymentStateInput {
   eq: NewPaymentState
   in: [NewPaymentState!]
   nin: [NewPaymentState!]
+}
+
+type PaymentRefundSignature {
+  fullRefund: Boolean!
+  signature: String!
 }
 
 type Post {
@@ -2148,9 +2148,9 @@ type Mutation {
   createComment(input: CommentInput!): Comment!
   deleteComment(_id: MongoID!): Boolean!
   generateCubejsToken(events: [MongoID!], site: MongoID, user: MongoID): String!
-  createEventApplicationQuestions(event: MongoID!, questions: [String!]!): [EventApplicationQuestionBase!]!
+  submitEventApplicationQuestions(event: MongoID!, questions: [QuestionInput!]!): Boolean!
   deleteEventApplicationQuestions(questions: [MongoID!]!, event: MongoID!): Boolean!
-  submitEventApplicationAnswers(answers: [EventApplicationAnswerInput!]!, event: MongoID!): [EventApplicationAnswerBase!]!
+  submitEventApplicationAnswers(answers: [EventApplicationAnswerInput!]!, event: MongoID!): Boolean!
   createEventFromEventbrite(input: CreateEventFromEventbriteInput!, id: String!): Event!
   createEventbriteWebhookForEvent(eventbrite_event: String!, _id: MongoID!): Boolean!
   createEventBroadcast(input: CreateEventBroadcastInput!, event: MongoID!): Boolean!
@@ -2285,11 +2285,10 @@ input CommentInput {
   comment: MongoID
 }
 
-type EventApplicationAnswerBase {
-  _id: MongoID!
-  user: MongoID!
-  question: MongoID!
-  answer: String!
+input QuestionInput {
+  question: String
+  required: Boolean
+  _id: MongoID
 }
 
 input EventApplicationAnswerInput {
@@ -2346,6 +2345,7 @@ input EventInput {
   end: DateTimeISO
   application_required: Boolean
   application_form_url: String
+  application_profile_fields: [ApplicationProfileFieldInput!]
   accepted_store_promotion: MongoID
   accepted_user_fields_required: [String!]
   access_pass: AccessPassInput
@@ -2394,6 +2394,11 @@ input EventInput {
   welcome_text: String
   welcome_video: VideoInput
   guest_directory_enabled: Boolean
+}
+
+input ApplicationProfileFieldInput {
+  field: String!
+  required: Boolean
 }
 
 input AccessPassInput {
