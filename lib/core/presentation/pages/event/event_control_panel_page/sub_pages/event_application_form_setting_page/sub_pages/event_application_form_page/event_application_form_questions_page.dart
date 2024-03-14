@@ -6,7 +6,6 @@ import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/dotted_line/dotted_line.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
-import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -14,7 +13,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 class ProfileFieldKeyOption {
   final int id;
@@ -74,12 +72,12 @@ class EventApplicationFormQuestionsPage extends StatelessWidget {
         ),
       );
     }
-    final items = profileFieldKeyOptions
-        .map(
-          (fieldKeyOption) => MultiSelectItem<ProfileFieldKeyOption>(
-              fieldKeyOption, fieldKeyOption.label),
-        )
-        .toList();
+    // final items = profileFieldKeyOptions
+    //     .map(
+    //       (fieldKeyOption) => MultiSelectItem<ProfileFieldKeyOption>(
+    //           fieldKeyOption, fieldKeyOption.label),
+    //     )
+    //     .toList();
     return Scaffold(
       appBar: LemonAppBar(
         title: t.event.applicationForm.applicationFormTitle,
@@ -113,75 +111,75 @@ class EventApplicationFormQuestionsPage extends StatelessWidget {
                     SliverToBoxAdapter(
                       child: SizedBox(height: Spacing.smMedium),
                     ),
-                    SliverToBoxAdapter(
-                      child: BlocBuilder<EventApplicationFormSettingBloc,
-                          EventApplicationFormSettingBlocState>(
-                        builder: (context, state) => Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              width: 1,
-                              color: colorScheme.outlineVariant,
-                            ),
-                            borderRadius:
-                                BorderRadius.circular(LemonRadius.small),
-                          ),
-                          child: MultiSelectBottomSheetField(
-                            initialChildSize: 0.6,
-                            listType: MultiSelectListType.LIST,
-                            searchable: false,
-                            itemsTextStyle: Typo.medium
-                                .copyWith(color: colorScheme.onPrimary),
-                            selectedItemsTextStyle: Typo.medium
-                                .copyWith(color: colorScheme.onPrimary),
-                            selectedColor: colorScheme.primaryContainer,
-                            checkColor: colorScheme.onPrimary,
-                            buttonText:
-                                Text(t.event.applicationForm.profileInfo),
-                            cancelText:
-                                Text(t.common.actions.cancel.toUpperCase()),
-                            confirmText:
-                                Text(t.common.actions.ok.toUpperCase()),
-                            title: Padding(
-                              padding: EdgeInsets.only(
-                                left: Spacing.smMedium,
-                                right: Spacing.smMedium,
-                                top: Spacing.medium,
-                              ),
-                              child: Text(
-                                t.event.applicationForm.profileInfoDescription,
-                                style: Typo.extraLarge.copyWith(
-                                  color: colorScheme.onPrimary,
-                                  fontWeight: FontWeight.w800,
-                                  fontFamily: FontFamily.nohemiVariable,
-                                ),
-                              ),
-                            ),
-                            items: items,
-                            onConfirm: (values) {
-                              List<String> requiredProfileFields = [
-                                ...values
-                                    .whereType<ProfileFieldKeyOption>()
-                                    .map((option) => option.fieldKey),
-                              ];
-                              context
-                                  .read<EventApplicationFormSettingBloc>()
-                                  .add(
-                                    EventApplicationFormSettingBlocEvent
-                                        .updateRequiredProfileFields(
-                                      requiredProfileFields:
-                                          requiredProfileFields,
-                                    ),
-                                  );
-                            },
-                            chipDisplay: MultiSelectChipDisplay(
-                              chipColor: colorScheme.secondaryContainer,
-                              textStyle: Typo.medium
-                                  .copyWith(color: colorScheme.onPrimary),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
+                    // SliverToBoxAdapter(
+                    //   child: BlocBuilder<EventApplicationFormSettingBloc,
+                    //       EventApplicationFormSettingBlocState>(
+                    //     builder: (context, state) => Container(
+                    //       decoration: BoxDecoration(
+                    //         border: Border.all(
+                    //           width: 1,
+                    //           color: colorScheme.outlineVariant,
+                    //         ),
+                    //         borderRadius:
+                    //             BorderRadius.circular(LemonRadius.small),
+                    //       ),
+                    //       child: MultiSelectBottomSheetField(
+                    //         initialChildSize: 0.6,
+                    //         listType: MultiSelectListType.LIST,
+                    //         searchable: false,
+                    //         itemsTextStyle: Typo.medium
+                    //             .copyWith(color: colorScheme.onPrimary),
+                    //         selectedItemsTextStyle: Typo.medium
+                    //             .copyWith(color: colorScheme.onPrimary),
+                    //         selectedColor: colorScheme.primaryContainer,
+                    //         checkColor: colorScheme.onPrimary,
+                    //         buttonText:
+                    //             Text(t.event.applicationForm.profileInfo),
+                    //         cancelText:
+                    //             Text(t.common.actions.cancel.toUpperCase()),
+                    //         confirmText:
+                    //             Text(t.common.actions.ok.toUpperCase()),
+                    //         title: Padding(
+                    //           padding: EdgeInsets.only(
+                    //             left: Spacing.smMedium,
+                    //             right: Spacing.smMedium,
+                    //             top: Spacing.medium,
+                    //           ),
+                    //           child: Text(
+                    //             t.event.applicationForm.profileInfoDescription,
+                    //             style: Typo.extraLarge.copyWith(
+                    //               color: colorScheme.onPrimary,
+                    //               fontWeight: FontWeight.w800,
+                    //               fontFamily: FontFamily.nohemiVariable,
+                    //             ),
+                    //           ),
+                    //         ),
+                    //         items: items,
+                    //         onConfirm: (values) {
+                    //           List<String> requiredProfileFields = [
+                    //             ...values
+                    //                 .whereType<ProfileFieldKeyOption>()
+                    //                 .map((option) => option.fieldKey),
+                    //           ];
+                    //           context
+                    //               .read<EventApplicationFormSettingBloc>()
+                    //               .add(
+                    //                 EventApplicationFormSettingBlocEvent
+                    //                     .updateRequiredProfileFields(
+                    //                   requiredProfileFields:
+                    //                       requiredProfileFields,
+                    //                 ),
+                    //               );
+                    //         },
+                    //         chipDisplay: MultiSelectChipDisplay(
+                    //           chipColor: colorScheme.secondaryContainer,
+                    //           textStyle: Typo.medium
+                    //               .copyWith(color: colorScheme.onPrimary),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                     SliverToBoxAdapter(
                       child: Container(
                         padding: EdgeInsets.symmetric(vertical: Spacing.xLarge),
