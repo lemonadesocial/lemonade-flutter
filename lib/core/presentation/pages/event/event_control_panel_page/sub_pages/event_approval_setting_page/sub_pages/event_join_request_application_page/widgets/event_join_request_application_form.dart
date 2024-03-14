@@ -1,5 +1,6 @@
+import 'package:app/core/data/event/dtos/event_application_answer_dto/event_application_answer_dto.dart';
 import 'package:app/core/domain/event/entities/event.dart';
-import 'package:app/core/domain/event/entities/event_application.dart';
+import 'package:app/core/domain/event/entities/event_application_answer.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/utils/social_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
@@ -73,8 +74,10 @@ class EventJoinRequestApplicationForm extends StatelessWidget {
             final applicationAnswers =
                 (result.parsedData?.getEventApplicationAnswers ?? [])
                     .map(
-                      (item) => EventApplicationAnswer.fromJson(
-                        item.toJson(),
+                      (item) => EventApplicationAnswer.fromDto(
+                        EventApplicationAnswerDto.fromJson(
+                          item.toJson(),
+                        ),
                       ),
                     )
                     .toList();
@@ -135,7 +138,6 @@ class _FormField extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Linkify(
-                      // ''
                       text: value ?? '',
                       style: Typo.mediumPlus.copyWith(
                         color: colorScheme.onPrimary,
