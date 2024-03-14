@@ -105,8 +105,11 @@ class EventApplicationFormProfileSettingBloc extends Bloc<
     EventApplicationFormProfileSettingBlocEventSubmit event,
     Emitter emit,
   ) async {
-    emit(state.copyWith(
-        status: EventApplicationFormProfileSettingStatus.loading));
+    emit(
+      state.copyWith(
+        status: EventApplicationFormProfileSettingStatus.loading,
+      ),
+    );
     final result = await _eventRepository.updateEvent(
       input: Input$EventInput(
         application_profile_fields: state.applicationProfileFields
@@ -121,8 +124,11 @@ class EventApplicationFormProfileSettingBloc extends Bloc<
       id: event.eventId,
     );
     result.fold(
-      (failure) => emit(state.copyWith(
-          status: EventApplicationFormProfileSettingStatus.error)),
+      (failure) => emit(
+        state.copyWith(
+          status: EventApplicationFormProfileSettingStatus.error,
+        ),
+      ),
       (eventDetail) => emit(
         state.copyWith(
           status: EventApplicationFormProfileSettingStatus.success,
@@ -144,9 +150,9 @@ class EventApplicationFormProfileSettingBlocEvent
   }) = EventApplicationFormProfileSettingBlocEventToggleRequired;
   factory EventApplicationFormProfileSettingBlocEvent.populateInitialProfileFields() =
       EventApplicationFormProfileSettingBlocEventPopulateInitialProfileFields;
-  factory EventApplicationFormProfileSettingBlocEvent.submit(
-          {required String eventId}) =
-      EventApplicationFormProfileSettingBlocEventSubmit;
+  factory EventApplicationFormProfileSettingBlocEvent.submit({
+    required String eventId,
+  }) = EventApplicationFormProfileSettingBlocEventSubmit;
 }
 
 @freezed

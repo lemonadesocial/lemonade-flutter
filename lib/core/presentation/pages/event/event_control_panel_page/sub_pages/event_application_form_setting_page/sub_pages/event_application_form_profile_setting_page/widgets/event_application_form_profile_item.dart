@@ -119,8 +119,9 @@ class EventApplicationFormProfileItem extends StatelessWidget {
                                       .add(
                                         EventApplicationFormProfileSettingBlocEvent
                                             .toggleRequired(
-                                                fieldKey: item.fieldKey,
-                                                isRequired: value),
+                                          fieldKey: item.fieldKey,
+                                          isRequired: value,
+                                        ),
                                       );
                                 },
                               ),
@@ -129,7 +130,7 @@ class EventApplicationFormProfileItem extends StatelessWidget {
                         ),
                       ],
                     )
-                  : const SizedBox.shrink()
+                  : const SizedBox.shrink(),
             ],
           ),
         );

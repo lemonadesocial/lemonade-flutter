@@ -17,7 +17,8 @@ class EventApplicationFormSettingBloc extends Bloc<
           EventApplicationFormSettingBlocState.initial(),
         ) {
     on<EventApplicationFormSettingBlocEventUpdateRequiredProfileFields>(
-        onUpdateRequiredProfileFields);
+      onUpdateRequiredProfileFields,
+    );
     on<EventApplicationFormSettingBlocEventUpdateQuestion>(onUpdateQuestion);
     on<EventApplicationFormSettingBlocEventAddQuestion>(onAddQuestion);
     on<EventApplicationFormSettingBlocEventRemoveQuestion>(onRemoveQuestion);

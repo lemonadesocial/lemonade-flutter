@@ -19,8 +19,11 @@ class BottomSheetUtils {
     );
   }
 
-  static showSnapBottomSheetWithRadius(BuildContext context,
-      {Widget? child, Color? color}) {
+  static showSnapBottomSheetWithRadius(
+    BuildContext context, {
+    Widget? child,
+    Color? color,
+  }) {
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
