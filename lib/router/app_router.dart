@@ -239,12 +239,9 @@ final eventDetailRoutes = AutoRoute(
         ),
         AutoRoute(
           page: EventApplicationFormSettingRoute.page,
-          children: [
-            AutoRoute(
-              initial: true,
-              page: EventApplicationFormQuestionsRoute.page,
-            ),
-          ],
+        ),
+        AutoRoute(
+          page: EventApplicationFormProfileSettingRoute.page,
         ),
       ],
     ),

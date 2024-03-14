@@ -386,6 +386,7 @@
         "enterQuestion": "Enter question",
         "required": "Required",
         "saveForm": "Save form",
-        "saveFormSuccessfully": "Saved application form successfully"
+        "saveFormSuccessfully": "Update application form successfully",
+        "updateApplicationFormSuccessfully": "Update application form successfully"
     }    
 }

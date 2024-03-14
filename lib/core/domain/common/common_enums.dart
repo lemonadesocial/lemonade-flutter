@@ -72,17 +72,27 @@ enum LemonGender {
 }
 
 enum ProfileFieldKey {
+  // Basic info
   displayName('display_name', 'Display name'),
+  pronouns('pronouns', 'Pronouns'),
   tagline('tagline', 'Tagline'),
-  description('description', 'Description'),
-  jobTitle('job_title', 'Job title'),
-  companyName('company_name', 'Company name'),
+  description('description', 'Bio'),
+
+// Personal info
+  companyName('company_name', 'Organization'),
+  jobTitle('job_title', 'Job Title'),
   industry('industry', 'Industry'),
+  dateOfBirth('date_of_birth', 'Date of Birth'),
   educationTitle('education_title', 'Education'),
   newGender('new_gender', 'Gender'),
   ethnicity('ethnicity', 'Ethnicity'),
-  dateOfBirth('date_of_birth', 'Date of birth'),
-  handleGithub('handle_github', 'Github username');
+
+  // Socials
+  handleTwitter('handle_twitter', 'Twitter'),
+  handleLinkedin('handle_linkedin', 'Linkedin'),
+  handleInstagram('handle_instagram', 'Instagram '),
+  handleGithub('handle_github', 'Github'),
+  handleCalendly('calendly_url', 'Calendly');
 
   final String fieldKey;
   final String label;

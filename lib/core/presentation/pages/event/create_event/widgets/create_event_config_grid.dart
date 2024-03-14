@@ -55,7 +55,7 @@ class CreateEventConfigGrid extends StatelessWidget {
         break;
       case EventConfigurationType.applicationForm:
         return AutoRouter.of(context)
-            .navigate(const EventApplicationFormSettingRoute());
+            .navigate(EventApplicationFormSettingRoute());
       default:
         page = null;
         break;

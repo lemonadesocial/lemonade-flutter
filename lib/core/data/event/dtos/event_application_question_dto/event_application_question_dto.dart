@@ -5,10 +5,11 @@ part 'event_application_question_dto.g.dart';
 
 @freezed
 class EventApplicationQuestionDto with _$EventApplicationQuestionDto {
-  factory EventApplicationQuestionDto(
-      {@JsonKey(name: '_id') String? id,
-      String? question,
-      bool? required}) = _EventApplicationQuestionDto;
+  factory EventApplicationQuestionDto({
+    @JsonKey(name: '_id') String? id,
+    String? question,
+    bool? required,
+  }) = _EventApplicationQuestionDto;
 
   factory EventApplicationQuestionDto.fromJson(Map<String, dynamic> json) =>
       _$EventApplicationQuestionDtoFromJson(json);

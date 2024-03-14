@@ -78,7 +78,6 @@ class EventApplicationFormSettingBloc extends Bloc<
   ) {
     List<Input$QuestionInput> newQuestions = [...state.questions];
     newQuestions.removeAt(event.index);
-
     emit(
       _validate(
         state.copyWith(questions: newQuestions),

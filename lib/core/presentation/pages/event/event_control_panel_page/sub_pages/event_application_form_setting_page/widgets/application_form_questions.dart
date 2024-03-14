@@ -63,7 +63,7 @@ class ApplicationFormQuestions extends StatelessWidget {
                                 ),
                               );
                         },
-                        removable: questions.length > 1,
+                        removable: true,
                       ),
                       if (entry.key != questions.length - 1)
                         SizedBox(height: Spacing.medium),
@@ -136,13 +136,14 @@ class _QuestionFormField extends StatelessWidget {
   final int index;
   final Function(bool value)? onToggleRequired;
 
-  const _QuestionFormField(
-      {required this.questionInput,
-      this.onLabelChanged,
-      this.onRemove,
-      this.removable = false,
-      this.index = 0,
-      this.onToggleRequired});
+  const _QuestionFormField({
+    required this.questionInput,
+    this.onLabelChanged,
+    this.onRemove,
+    this.removable = false,
+    this.index = 0,
+    this.onToggleRequired,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -201,7 +202,7 @@ class _QuestionFormField extends StatelessWidget {
                           ),
                         ],
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
