@@ -5,8 +5,12 @@ import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_p
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/dotted_line/dotted_line.dart';
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
+import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/theme/color.dart';
+import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
@@ -111,6 +115,7 @@ class EventApplicationFormQuestionsPage extends StatelessWidget {
                     SliverToBoxAdapter(
                       child: SizedBox(height: Spacing.smMedium),
                     ),
+
                     // SliverToBoxAdapter(
                     //   child: BlocBuilder<EventApplicationFormSettingBloc,
                     //       EventApplicationFormSettingBlocState>(
@@ -180,6 +185,75 @@ class EventApplicationFormQuestionsPage extends StatelessWidget {
                     //     ),
                     //   ),
                     // ),
+
+                    SliverToBoxAdapter(
+                      child: Container(
+                        padding: EdgeInsets.all(Spacing.smMedium),
+                        decoration: BoxDecoration(
+                          color: LemonColor.white06,
+                          borderRadius:
+                              BorderRadius.circular(LemonRadius.normal),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(
+                                  LemonRadius.large * 2,
+                                ),
+                                color: LemonColor.white06,
+                              ),
+                              width: Sizing.medium,
+                              height: Sizing.medium,
+                              child: Center(
+                                child: ThemeSvgIcon(
+                                  color: colorScheme.onSecondary,
+                                  builder: (filter) =>
+                                      Assets.icons.icProfileOutline.svg(
+                                    colorFilter: filter,
+                                    width: 15.w,
+                                    height: 15.w,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: Spacing.small),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    t.event.applicationForm.profileInfo,
+                                    style: Typo.medium.copyWith(
+                                      color: colorScheme.onPrimary,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 2.h,
+                                  ),
+                                  Text(
+                                    t.event.applicationForm
+                                        .profileInfoDescription,
+                                    style: Typo.small.copyWith(
+                                      color: colorScheme.onSecondary,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(width: Spacing.small),
+                            ThemeSvgIcon(
+                              color: colorScheme.onSecondary,
+                              builder: (filter) =>
+                                  Assets.icons.icArrowRight.svg(
+                                colorFilter: filter,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                     SliverToBoxAdapter(
                       child: Container(
                         padding: EdgeInsets.symmetric(vertical: Spacing.xLarge),
