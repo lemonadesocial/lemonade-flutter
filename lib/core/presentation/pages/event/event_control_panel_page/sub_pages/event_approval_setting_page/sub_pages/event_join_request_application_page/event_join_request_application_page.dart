@@ -76,10 +76,11 @@ class EventJoinRequestApplicationPage extends StatelessWidget {
                         height: Spacing.smMedium * 2,
                       ),
                     ),
-                    EventJoinRequestApplicationForm(
-                      user: user,
-                      event: event,
-                    ),
+                    if (user != null)
+                      EventJoinRequestApplicationForm(
+                        user: user,
+                        event: event,
+                      ),
                     SliverToBoxAdapter(
                       child: SizedBox(
                         height: Spacing.xLarge * 4,

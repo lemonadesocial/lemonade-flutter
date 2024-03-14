@@ -48,4 +48,14 @@ class StringUtils {
         )
         .toLowerCase();
   }
+
+  static RegExp get urlRegx => RegExp(
+        r'^(.*?)((?:https?:\/\/|www\.)[^\s/$.?#].[^\s]*)',
+        caseSensitive: false,
+        dotAll: true,
+      );
+
+  static bool isUrl(String text) {
+    return urlRegx.hasMatch(text);
+  }
 }

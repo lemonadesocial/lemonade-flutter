@@ -5,12 +5,11 @@ import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_p
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/widgets/join_request_user_avatar.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
-import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class EventJoinRequestApplicationUserCard extends StatelessWidget {
   final EventJoinRequest eventJoinRequest;
@@ -98,11 +97,9 @@ class _Social extends StatelessWidget {
         ].asMap().entries.map((entry) {
           return GestureDetector(
             onTap: () async {
-              AutoRouter.of(context).navigate(
-                WebviewRoute(
-                  uri: Uri.parse(
-                    '${_socialUrls[entry.key]}/${entry.value ?? ''}}',
-                  ),
+              launchUrl(
+                Uri.parse(
+                  '${_socialUrls[entry.key]}/${entry.value ?? ''}',
                 ),
               );
             },

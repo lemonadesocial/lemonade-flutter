@@ -113,6 +113,9 @@ class _EventJoinRequestDetailPageState
           orElse: () => null,
           fetched: (eventDetail) => eventDetail,
         );
+    final totalApplicationQuestionCount =
+        (event?.applicationQuestions ?? []).length +
+            (event?.applicationProfileFields ?? []).length;
     return Scaffold(
       appBar: LemonAppBar(
         title: t.event.eventApproval.guestDetail,
@@ -148,8 +151,8 @@ class _EventJoinRequestDetailPageState
                       ),
                       subtitle: Text(
                         t.event.eventApproval.applicationQuestions(
-                          n: (event?.requiredProfileFields ?? []).length,
-                          count: (event?.requiredProfileFields ?? []).length,
+                          n: totalApplicationQuestionCount,
+                          count: totalApplicationQuestionCount,
                         ),
                         style: Typo.small.copyWith(
                           color: colorScheme.onSecondary,

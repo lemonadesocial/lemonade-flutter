@@ -69,7 +69,9 @@ class _GuestEventDetailBuyButtonView extends StatelessWidget {
   }
 
   Future<bool> _checkProfileRequiredFields(BuildContext context) async {
-    List<String> profileRequiredFields = (event.requiredProfileFields ?? [])
+    List<String> profileRequiredFields = (event.applicationProfileFields ?? [])
+        .where((e) => e.required == true)
+        .map((e) => e.field ?? '')
         .map(StringUtils.snakeToCamel)
         .toList();
     if (profileRequiredFields.isEmpty) {
