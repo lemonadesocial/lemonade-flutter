@@ -1882,7 +1882,7 @@ type EventJoinRequest {
   approved_by: MongoID
   declined_at: DateTimeISO
   declined_by: MongoID
-  user_expanded: UserWithEmail
+  user_expanded: User
   event_expanded: Event
   approved_by_expanded: User
   declined_by_expanded: User
