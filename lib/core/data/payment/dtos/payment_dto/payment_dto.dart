@@ -15,7 +15,7 @@ class PaymentDto with _$PaymentDto {
     @JsonKey(name: 'transfer_params') Map<String, dynamic>? transferParams,
     @JsonKey(name: 'transfer_metadata') Map<String, dynamic>? transferMetadata,
     PaymentState? state,
-    dynamic stamps,
+    Map<String, DateTime>? stamps,
     @JsonKey(name: 'failure_reason') String? failureReason,
     String? currency,
     @JsonKey(name: 'billing_info') BillingInfoDto? billingInfo,

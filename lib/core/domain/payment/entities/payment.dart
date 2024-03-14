@@ -17,7 +17,7 @@ class Payment with _$Payment {
     Map<String, dynamic>? transferParams,
     Map<String, dynamic>? transferMetadata,
     PaymentState? state,
-    dynamic stamps,
+    Map<String, DateTime>? stamps,
     String? failureReason,
     String? currency,
     BillingInfo? billingInfo,

@@ -1,5 +1,6 @@
 import 'package:app/core/domain/event/entities/event_join_request.dart';
 import 'package:app/core/domain/payment/payment_enums.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/sub_pages/event_join_request_detail_page/widgets/escrow_first_deposit_amount_builder.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/sub_pages/event_join_request_detail_page/widgets/event_join_request_escrow_payment_status_widget.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/sub_pages/event_join_request_detail_page/widgets/event_join_request_payment_amount_builder.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/sub_pages/event_join_request_detail_page/widgets/event_join_request_payment_status_widget.dart';
@@ -7,6 +8,7 @@ import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_p
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/widgets/event_join_request_ticket_info.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/widgets/join_request_user_avatar.dart';
 import 'package:app/core/presentation/widgets/common/dotted_line/dotted_line.dart';
+import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/modal_utils.dart';
@@ -108,7 +110,6 @@ class EventJoinRequestStatusHistory extends StatelessWidget {
             final isEscrow =
                 eventJoinRequest.paymentExpanded?.accountExpanded?.type ==
                     PaymentAccountType.ethereumEscrow;
-
             if (!isEscrow &&
                 eventJoinRequest.paymentExpanded?.state !=
                     PaymentState.succeeded) {
@@ -119,22 +120,52 @@ class EventJoinRequestStatusHistory extends StatelessWidget {
                 formattedDepositAmount.isEmpty) {
               return const SizedBox.shrink();
             }
-            return RichText(
-              text: TextSpan(
-                text:
-                    '${isEscrow ? formattedDepositAmount : formattedTotalAmount} ',
-                style: Typo.small.copyWith(
-                  color: LemonColor.malachiteGreen,
-                ),
-                children: [
-                  TextSpan(
-                    text: t.event.eventApproval.payment.paid,
-                    style: Typo.small.copyWith(
-                      color: colorScheme.onSecondary,
+            return EscrowFirstDepositAmountBuilder(
+              eventJoinRequest: eventJoinRequest,
+              builder: ({
+                required formattedFirstDepositAmount,
+                required formattedFirstDueAmount,
+                required isLoading,
+              }) {
+                if (isEscrow) {
+                  if (isLoading) {
+                    return Loading.defaultLoading(context);
+                  }
+                  return RichText(
+                    text: TextSpan(
+                      text: '$formattedFirstDepositAmount ',
+                      style: Typo.small.copyWith(
+                        color: LemonColor.malachiteGreen,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: t.event.eventApproval.payment.paid,
+                          style: Typo.small.copyWith(
+                            color: colorScheme.onSecondary,
+                          ),
+                        ),
+                      ],
                     ),
+                  );
+                }
+
+                return RichText(
+                  text: TextSpan(
+                    text: '$formattedTotalAmount ',
+                    style: Typo.small.copyWith(
+                      color: LemonColor.malachiteGreen,
+                    ),
+                    children: [
+                      TextSpan(
+                        text: t.event.eventApproval.payment.paid,
+                        style: Typo.small.copyWith(
+                          color: colorScheme.onSecondary,
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                );
+              },
             );
           },
         ),
@@ -167,13 +198,15 @@ class EventJoinRequestStatusHistory extends StatelessWidget {
                 pattern: 'dd, MMM, HH:mm',
               ),
       ),
-      if (eventJoinRequest.paymentExpanded?.accountExpanded?.type ==
+      if (eventJoinRequest.paymentExpanded != null &&
+          eventJoinRequest.paymentExpanded?.accountExpanded?.type ==
               PaymentAccountType.ethereumEscrow &&
           !eventJoinRequest.isPending)
         EventJoinRequestEscrowPaymentStatusWidget(
           eventJoinRequest: eventJoinRequest,
         ),
-      if (eventJoinRequest.paymentExpanded?.accountExpanded?.type !=
+      if (eventJoinRequest.paymentExpanded != null &&
+          eventJoinRequest.paymentExpanded?.accountExpanded?.type !=
               PaymentAccountType.ethereumEscrow &&
           eventJoinRequest.isApproved)
         EventJoinRequestPaymentStatusWidget(eventJoinRequest: eventJoinRequest),
