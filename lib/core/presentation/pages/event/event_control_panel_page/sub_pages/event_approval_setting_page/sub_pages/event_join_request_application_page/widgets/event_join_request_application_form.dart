@@ -24,7 +24,8 @@ class EventJoinRequestApplicationForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<String> profileRequiredFields = (event?.requiredProfileFields ?? [])
+    List<String> profileRequiredFields = (event?.applicationProfileFields ?? [])
+        .map((item) => item.field ?? '')
         .map(StringUtils.snakeToCamel)
         .toList();
 
