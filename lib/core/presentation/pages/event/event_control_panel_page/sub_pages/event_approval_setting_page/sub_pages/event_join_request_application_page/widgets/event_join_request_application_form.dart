@@ -57,9 +57,9 @@ class EventJoinRequestApplicationForm extends StatelessWidget {
               SizedBox(height: Spacing.medium),
         ),
         SizedBox(height: Spacing.medium),
-        Query$Answers$Widget(
-          options: Options$Query$Answers(
-            variables: Variables$Query$Answers(
+        Query$GetEventApplicationAnswers$Widget(
+          options: Options$Query$GetEventApplicationAnswers(
+            variables: Variables$Query$GetEventApplicationAnswers(
               event: event?.id ?? '',
               user: user?.userId ?? '',
             ),

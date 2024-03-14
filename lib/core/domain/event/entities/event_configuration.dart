@@ -19,7 +19,8 @@ enum EventConfigurationType {
   coHosts,
   speakers,
   ticketTiers,
-  rewards
+  rewards,
+  applicationForm
 }
 
 class EventConfiguration {
@@ -74,6 +75,12 @@ class EventConfiguration {
         title: 'Offline',
         description: 'Add location',
         icon: const Icon(Icons.factory_outlined),
+      ),
+      EventConfiguration(
+        type: EventConfigurationType.applicationForm,
+        title: 'Application Form',
+        description: '',
+        icon: const Icon(Icons.format_list_bulleted_sharp),
       ),
     ];
     return eventConfigs;

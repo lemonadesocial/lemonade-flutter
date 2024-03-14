@@ -1,11 +1,12 @@
-query Answers($event: MongoID!, $user: MongoID) {
+query GetEventApplicationAnswers($event: MongoID!, $user: MongoID) {
   getEventApplicationAnswers(event: $event, user: $user) {
     _id
     answer
     question
     question_expanded {
-      _id
       question
+      _id
+      required
     }
     user
   }
