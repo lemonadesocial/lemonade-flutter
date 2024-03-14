@@ -237,6 +237,12 @@ final eventDetailRoutes = AutoRoute(
             ),
           ],
         ),
+        AutoRoute(
+          page: EventApplicationFormSettingRoute.page,
+        ),
+        AutoRoute(
+          page: EventApplicationFormProfileSettingRoute.page,
+        ),
       ],
     ),
     AutoRoute(
