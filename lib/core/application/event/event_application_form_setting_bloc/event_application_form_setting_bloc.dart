@@ -1,31 +1,11 @@
 import 'package:app/core/domain/event/entities/event_application_question.dart';
 import 'package:app/core/domain/event/event_repository.dart';
+import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'event_application_form_setting_bloc.freezed.dart';
-
-// TODO: Temporary due to backend will refactor to this soon
-class Input$EventApplicationQuestion {
-  Input$EventApplicationQuestion({
-    required this.label,
-    required this.required,
-  });
-
-  final String label;
-  final bool required;
-
-  copyWith({
-    String? label,
-    bool? required,
-  }) {
-    return Input$EventApplicationQuestion(
-      label: label ?? this.label,
-      required: required ?? this.required,
-    );
-  }
-}
 
 class EventApplicationFormSettingBloc extends Bloc<
     EventApplicationFormSettingBlocEvent,
@@ -36,6 +16,8 @@ class EventApplicationFormSettingBloc extends Bloc<
   }) : super(
           EventApplicationFormSettingBlocState.initial(),
         ) {
+    on<EventApplicationFormSettingBlocEventUpdateRequiredProfileFields>(
+        onUpdateRequiredProfileFields);
     on<EventApplicationFormSettingBlocEventUpdateQuestion>(onUpdateQuestion);
     on<EventApplicationFormSettingBlocEventAddQuestion>(onAddQuestion);
     on<EventApplicationFormSettingBlocEventRemoveQuestion>(onRemoveQuestion);
@@ -49,6 +31,15 @@ class EventApplicationFormSettingBloc extends Bloc<
   }
 
   final _eventRepository = getIt<EventRepository>();
+
+  void onUpdateRequiredProfileFields(
+    EventApplicationFormSettingBlocEventUpdateRequiredProfileFields event,
+    Emitter emit,
+  ) {
+    emit(
+      state.copyWith(requiredProfileFields: event.requiredProfileFields),
+    );
+  }
 
   void onUpdateQuestion(
     EventApplicationFormSettingBlocEventUpdateQuestion event,
@@ -69,9 +60,9 @@ class EventApplicationFormSettingBloc extends Bloc<
     EventApplicationFormSettingBlocEventAddQuestion event,
     Emitter emit,
   ) {
-    List<Input$EventApplicationQuestion> newQuestions = [
+    List<Input$QuestionInput> newQuestions = [
       ...state.questions,
-      Input$EventApplicationQuestion(label: "", required: true),
+      Input$QuestionInput(question: "", required: false),
     ];
 
     emit(
@@ -85,7 +76,7 @@ class EventApplicationFormSettingBloc extends Bloc<
     EventApplicationFormSettingBlocEventRemoveQuestion event,
     Emitter emit,
   ) {
-    List<Input$EventApplicationQuestion> newQuestions = [...state.questions];
+    List<Input$QuestionInput> newQuestions = [...state.questions];
     newQuestions.removeAt(event.index);
 
     emit(
@@ -99,7 +90,7 @@ class EventApplicationFormSettingBloc extends Bloc<
     EventApplicationFormSettingBlocState state,
   ) {
     final allQuestionsIsValid = state.questions
-        .map((question) => question.label != '')
+        .map((question) => question.question != '')
         .every((element) => element == true);
     return state.copyWith(
       isValid: allQuestionsIsValid,
@@ -111,16 +102,14 @@ class EventApplicationFormSettingBloc extends Bloc<
     Emitter emit,
   ) async {
     emit(state.copyWith(status: EventApplicationFormStatus.loading));
-    final listQuestionsString =
-        state.questions.map((question) => question.label).toList();
-    final result = await _eventRepository.createEventApplicationQuestions(
+    final result = await _eventRepository.submitEventApplicationQuestions(
       eventId: event.eventId ?? '',
-      questions: listQuestionsString,
+      questions: state.questions,
     );
     result.fold(
       (failure) =>
           emit(state.copyWith(status: EventApplicationFormStatus.error)),
-      (questions) {
+      (result) {
         emit(state.copyWith(status: EventApplicationFormStatus.success));
       },
     );
@@ -138,13 +127,15 @@ class EventApplicationFormSettingBloc extends Bloc<
         EventApplicationFormSettingBlocState(
           questions: initialQuestions!
               .map(
-                (item) => Input$EventApplicationQuestion(
-                  label: item.question ?? '',
-                  required: true,
+                (item) => Input$QuestionInput(
+                  $_id: item.id,
+                  question: item.question ?? '',
+                  required: item.required,
                 ),
               )
               .toList(),
           isValid: false,
+          requiredProfileFields: [],
         ),
       ),
     );
@@ -156,7 +147,7 @@ class EventApplicationFormSettingBlocEvent
     with _$EventApplicationFormSettingBlocEvent {
   factory EventApplicationFormSettingBlocEvent.updateQuestion({
     required int index,
-    required Input$EventApplicationQuestion questions,
+    required Input$QuestionInput questions,
   }) = EventApplicationFormSettingBlocEventUpdateQuestion;
   factory EventApplicationFormSettingBlocEvent.addQuestion() =
       EventApplicationFormSettingBlocEventAddQuestion;
@@ -168,6 +159,9 @@ class EventApplicationFormSettingBlocEvent
   }) = EventApplicationFormSettingBlocEventSubmitCreate;
   factory EventApplicationFormSettingBlocEvent.populateInitialQuestions() =
       EventApplicationFormSettingBlocEventPopulateInitialQuestions;
+  factory EventApplicationFormSettingBlocEvent.updateRequiredProfileFields({
+    required List<String> requiredProfileFields,
+  }) = EventApplicationFormSettingBlocEventUpdateRequiredProfileFields;
 }
 
 @freezed
@@ -176,17 +170,19 @@ class EventApplicationFormSettingBlocState
   factory EventApplicationFormSettingBlocState({
     @Default(EventApplicationFormStatus.initial)
     EventApplicationFormStatus status,
-    required List<Input$EventApplicationQuestion> questions,
+    required List<Input$QuestionInput> questions,
     required bool isValid,
+    required List<String> requiredProfileFields,
   }) = _EventApplicationFormSettingBlocState;
 
   factory EventApplicationFormSettingBlocState.initial() =>
       EventApplicationFormSettingBlocState(
         status: EventApplicationFormStatus.initial,
         questions: [
-          Input$EventApplicationQuestion(label: "", required: true),
+          Input$QuestionInput(question: "", required: false),
         ],
         isValid: false,
+        requiredProfileFields: [],
       );
 }
 

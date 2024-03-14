@@ -20,7 +20,7 @@ type Query {
   getComments(input: GetCommentsArgs!, skip: Int! = 0, limit: Int! = 25): [Comment!]!
   getConfigs(keys: [String!]!): JSON!
   exportEventAccepted(_id: MongoID!): [EventAcceptedExport!]!
-  getEventApplicationAnswers(event: MongoID!): [GroupedEventApplicationAnswers!]!
+  getEventApplicationAnswers(event: MongoID!, user: MongoID): [EventApplicationAnswer!]!
   getEventbriteEvents(input: GetEventbriteEventsInput, skip: Int! = 0, limit: Int! = 25): [EventbriteEvent!]!
   getEventCheckins(input: GetEventCheckinsInput!): [EventCheckin!]!
   getEventCohostRequests(input: GetEventCohostRequestsInput!): [EventCohostRequest!]!
@@ -49,10 +49,8 @@ type Query {
   listFiatCurrencies: [FiatCurrency!]!
   listChains: [Chain!]!
   listNewPaymentAccounts(skip: Int! = 0, limit: Int! = 25, _id: [MongoID!], type: PaymentAccountType, provider: NewPaymentProvider): [NewPaymentAccount!]!
-  getMyPayments(state: FilterPaymentStateInput, event: MongoID): [NewPayment!]!
   getNewPayment(_id: MongoID!): NewPayment
   listNewPayments(skip: Int! = 0, limit: Int! = 25, event: MongoID!, users: [MongoID!]): [NewPayment!]!
-  getPaymentRefundSignature(_id: MongoID!): String!
   getPosts(input: GetPostsInput, skip: Int! = 0, limit: Int! = 25): [Post!]!
   getNewsfeed(offset: Float): Newsfeed
   getNotifications(skip: Int! = 0, limit: Int! = 25, type: NotificationTypeFilterInput): [Notification!]!
@@ -484,7 +482,7 @@ type Event {
   payment_accounts_expanded(skip: Int! = 0, limit: Int! = 25): [NewPaymentAccount!]
   payment_ticket_discounts: [EventPaymentTicketDiscount!]
   tickets: [TicketBase!]
-  application_questions: [EventApplicationQuestionBase!]
+  application_questions: [EventApplicationQuestion!]
 }
 
 enum EventState {
@@ -857,7 +855,6 @@ type NewPaymentAccount {
 
 enum PaymentAccountType {
   ethereum
-  ethereum_escrow
   digital
 }
 
@@ -866,7 +863,7 @@ enum NewPaymentProvider {
   safe
 }
 
-union AccountInfo = EthereumAccount | SafeAccount | DigitalAccount | StripeAccount | EthereumEscrowAccount
+union AccountInfo = EthereumAccount | SafeAccount | DigitalAccount | StripeAccount
 
 type EthereumAccount {
   currencies: [String!]!
@@ -882,6 +879,7 @@ type SafeAccount {
   network: String!
   owners: [String!]!
   threshold: Float!
+  gelato_task_id: String
   pending: Boolean
 }
 
@@ -896,21 +894,6 @@ type StripeAccount {
   currency_map: JSON
   account_id: String!
   publishable_key: String!
-}
-
-type EthereumEscrowAccount {
-  currencies: [String!]!
-  currency_map: JSON
-  address: String!
-  network: String!
-  minimum_deposit_percent: Int!
-  host_refund_percent: Float!
-  refund_policies: [RefundPolicy!]
-}
-
-type RefundPolicy {
-  timestamp: Float!
-  percent: Float!
 }
 
 type EventPaymentTicketDiscount {
@@ -941,10 +924,10 @@ type TicketBase {
   invited_by: MongoID
 }
 
-type EventApplicationQuestionBase {
+type EventApplicationQuestion {
   _id: MongoID!
   question: String!
-  event: MongoID!
+  required: Boolean
 }
 
 type Badge {
@@ -1000,23 +983,12 @@ type EventAcceptedExport {
   checkin_date: DateTimeISO
 }
 
-type GroupedEventApplicationAnswers {
-  user: MongoID!
-  user_expanded: User!
-  answers: [EventApplicationAnswer!]!
-}
-
 type EventApplicationAnswer {
   _id: MongoID!
   user: MongoID!
   question: MongoID!
   answer: String!
   question_expanded: EventApplicationQuestion!
-}
-
-type EventApplicationQuestion {
-  _id: MongoID!
-  question: String!
 }
 
 type EventbriteEvent {
@@ -1288,14 +1260,11 @@ type NewPayment {
   state: NewPaymentState!
   user: MongoID!
   account: MongoID!
-  ref_data: JSON
   billing_info: BillingInfo
   transfer_metadata: JSON
   transfer_params: JSON
   failure_reason: String
   account_expanded: NewPaymentAccount
-  ticket_types_expanded: [EventTicketType!]
-  due_amount: String
 }
 
 enum NewPaymentState {
@@ -1321,12 +1290,6 @@ type BillingInfo {
   email: String
   firstname: String
   lastname: String
-}
-
-input FilterPaymentStateInput {
-  eq: NewPaymentState
-  in: [NewPaymentState!]
-  nin: [NewPaymentState!]
 }
 
 type Post {
@@ -1838,13 +1801,6 @@ type PricingInfo {
   subtotal: String!
   total: String!
   payment_accounts: [NewPaymentAccount!]
-  deposit_infos: [EscrowDepositInfo!]
-}
-
-type EscrowDepositInfo {
-  payment_account_id: MongoID!
-  minimum_percent: Float!
-  minimum_amount: String!
 }
 
 input CalculateTicketsPricingInput {
@@ -2148,9 +2104,9 @@ type Mutation {
   createComment(input: CommentInput!): Comment!
   deleteComment(_id: MongoID!): Boolean!
   generateCubejsToken(events: [MongoID!], site: MongoID, user: MongoID): String!
-  createEventApplicationQuestions(event: MongoID!, questions: [String!]!): [EventApplicationQuestionBase!]!
+  submitEventApplicationQuestions(event: MongoID!, questions: [QuestionInput!]!): Boolean!
   deleteEventApplicationQuestions(questions: [MongoID!]!, event: MongoID!): Boolean!
-  submitEventApplicationAnswers(answers: [EventApplicationAnswerInput!]!, event: MongoID!): [EventApplicationAnswerBase!]!
+  submitEventApplicationAnswers(answers: [EventApplicationAnswerInput!]!, event: MongoID!): Boolean!
   createEventFromEventbrite(input: CreateEventFromEventbriteInput!, id: String!): Event!
   createEventbriteWebhookForEvent(eventbrite_event: String!, _id: MongoID!): Boolean!
   createEventBroadcast(input: CreateEventBroadcastInput!, event: MongoID!): Boolean!
@@ -2285,11 +2241,10 @@ input CommentInput {
   comment: MongoID
 }
 
-type EventApplicationAnswerBase {
-  _id: MongoID!
-  user: MongoID!
-  question: MongoID!
-  answer: String!
+input QuestionInput {
+  question: String
+  required: Boolean
+  _id: MongoID
 }
 
 input EventApplicationAnswerInput {

@@ -196,6 +196,7 @@ const eventApplicationQuestionsFragment = '''
     application_questions {
       _id
       question
+      required
     }
   }
 ''';

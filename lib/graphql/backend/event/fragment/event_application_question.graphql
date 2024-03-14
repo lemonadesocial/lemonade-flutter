@@ -1,5 +1,0 @@
-fragment EventApplicationQuestion on EventApplicationQuestionBase {
-    id: _id
-    question
-    event
-}

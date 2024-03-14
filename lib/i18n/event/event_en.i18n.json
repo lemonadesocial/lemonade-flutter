@@ -379,11 +379,13 @@
         "inviteSuccessDescription": "Your guests have been invted to\n$eventName!"
     },
     "applicationForm": {
-        "createApplicationFom": "Create application form",
-        "editApplicationForm": "Edit application form",
-        "applicationDescription": "Information required to reserve your spot.",
-        "question": "Question",
-        "questionHint": "Input your question here",
-        "createQuestionsSuccessfully": "Create application form questions successfully!"
+        "applicationFormTitle": "Application form",
+        "profileInfo": "Profile info",
+        "profileInfoDescription": "Details you want to know about guests",
+        "applicationQuestions": "Application questions",
+        "enterQuestion": "Enter question",
+        "required": "Required",
+        "saveForm": "Save form",
+        "saveFormSuccessfully": "Saved application form successfully"
     }    
 }

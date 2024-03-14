@@ -6,7 +6,6 @@ import 'package:app/core/data/event/gql/event_mutation.dart';
 import 'package:app/core/data/event/gql/event_query.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_accepted_export.dart';
-import 'package:app/core/domain/event/entities/event_application_question.dart';
 import 'package:app/core/domain/event/entities/event_checkin.dart';
 import 'package:app/core/domain/event/entities/event_cohost_request.dart';
 import 'package:app/core/domain/event/entities/event_join_request.dart';
@@ -18,7 +17,7 @@ import 'package:app/core/domain/event/input/get_events_listing_input.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/graphql/backend/event/mutation/create_event.graphql.dart';
-import 'package:app/graphql/backend/event/mutation/create_event_application_questions.graphql.dart';
+import 'package:app/graphql/backend/event/mutation/submit_event_application_questions.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/manage_event_cohost_requests.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/update_event_checkin.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/update_event.graphql.dart';
@@ -431,14 +430,13 @@ class EventRepositoryImpl implements EventRepository {
   }
 
   @override
-  Future<Either<Failure, List<EventApplicationQuestion>>>
-      createEventApplicationQuestions({
+  Future<Either<Failure, bool>> submitEventApplicationQuestions({
     required String eventId,
-    required List<String> questions,
+    required List<Input$QuestionInput> questions,
   }) async {
-    final result = await client.mutate$CreateEventApplicationQuestions(
-      Options$Mutation$CreateEventApplicationQuestions(
-        variables: Variables$Mutation$CreateEventApplicationQuestions(
+    final result = await client.mutate$SubmitEventApplicationQuestions(
+      Options$Mutation$SubmitEventApplicationQuestions(
+        variables: Variables$Mutation$SubmitEventApplicationQuestions(
           event: eventId,
           questions: questions,
         ),
@@ -448,14 +446,6 @@ class EventRepositoryImpl implements EventRepository {
     if (result.hasException) {
       return Left(Failure.withGqlException(result.exception));
     }
-    return Right(
-      (result.parsedData?.createEventApplicationQuestions ?? [])
-          .map(
-            (item) => EventApplicationQuestion.fromJson(
-              item.toJson(),
-            ),
-          )
-          .toList(),
-    );
+    return Right(result.parsedData?.submitEventApplicationQuestions ?? false);
   }
 }

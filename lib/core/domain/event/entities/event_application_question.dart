@@ -9,6 +9,7 @@ class EventApplicationQuestion with _$EventApplicationQuestion {
   factory EventApplicationQuestion({
     String? id,
     String? question,
+    bool? required,
   }) = _EventApplicationQuestion;
 
   factory EventApplicationQuestion.fromJson(Map<String, dynamic> json) =>
@@ -18,5 +19,6 @@ class EventApplicationQuestion with _$EventApplicationQuestion {
       EventApplicationQuestion(
         id: dto.id,
         question: dto.question,
+        required: dto.required,
       );
 }

@@ -2,7 +2,7 @@ import 'package:app/core/application/event/event_application_form_setting_bloc/e
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
-import 'package:app/gen/fonts.gen.dart';
+import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
@@ -10,6 +10,8 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_switch/flutter_switch.dart';
 
 class ApplicationFormQuestions extends StatelessWidget {
   final Function()? onAddButtonPressed;
@@ -35,15 +37,24 @@ class ApplicationFormQuestions extends StatelessWidget {
                       _QuestionFormField(
                         index: entry.key,
                         questionInput: entry.value,
-                        onLabelChanged: (label) => context
-                            .read<EventApplicationFormSettingBloc>()
-                            .add(
-                              EventApplicationFormSettingBlocEvent
-                                  .updateQuestion(
-                                index: entry.key,
-                                questions: entry.value.copyWith(label: label),
-                              ),
-                            ),
+                        onLabelChanged: (label) =>
+                            context.read<EventApplicationFormSettingBloc>().add(
+                                  EventApplicationFormSettingBlocEvent
+                                      .updateQuestion(
+                                    index: entry.key,
+                                    questions:
+                                        entry.value.copyWith(question: label),
+                                  ),
+                                ),
+                        onToggleRequired: (requiredValue) =>
+                            context.read<EventApplicationFormSettingBloc>().add(
+                                  EventApplicationFormSettingBlocEvent
+                                      .updateQuestion(
+                                    index: entry.key,
+                                    questions: entry.value
+                                        .copyWith(required: requiredValue),
+                                  ),
+                                ),
                         onRemove: () {
                           context.read<EventApplicationFormSettingBloc>().add(
                                 EventApplicationFormSettingBlocEvent
@@ -118,19 +129,20 @@ class _AddButton extends StatelessWidget {
 }
 
 class _QuestionFormField extends StatelessWidget {
-  final Input$EventApplicationQuestion questionInput;
+  final Input$QuestionInput questionInput;
   final Function(String value)? onLabelChanged;
   final Function()? onRemove;
   final bool removable;
   final int index;
+  final Function(bool value)? onToggleRequired;
 
-  const _QuestionFormField({
-    required this.questionInput,
-    this.onLabelChanged,
-    this.onRemove,
-    this.removable = false,
-    this.index = 0,
-  });
+  const _QuestionFormField(
+      {required this.questionInput,
+      this.onLabelChanged,
+      this.onRemove,
+      this.removable = false,
+      this.index = 0,
+      this.onToggleRequired});
 
   @override
   Widget build(BuildContext context) {
@@ -140,58 +152,88 @@ class _QuestionFormField extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          '${t.event.applicationForm.question} ${index + 1}',
-          style: Typo.medium.copyWith(
-            color: colorScheme.onSecondary,
-            fontFamily: FontFamily.nohemiVariable,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        SizedBox(
-          height: Spacing.xSmall,
-        ),
-        IntrinsicHeight(
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Expanded(
-                flex: 3,
-                child: LemonTextField(
-                  initialText: questionInput.label,
-                  hintText: t.event.applicationForm.questionHint,
-                  onChange: onLabelChanged,
-                ),
-              ),
-              SizedBox(width: Spacing.xSmall),
-              InkWell(
-                onTap: removable ? onRemove : null,
-                child: Container(
-                  width: Sizing.medium,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color:
-                          removable ? Colors.transparent : colorScheme.outline,
-                    ),
-                    color: removable
-                        ? LemonColor.atomicBlack
-                        : colorScheme.background,
-                    borderRadius: BorderRadius.circular(LemonRadius.normal),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              flex: 3,
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: colorScheme.outline,
                   ),
-                  child: Center(
-                    child: ThemeSvgIcon(
-                      color: colorScheme.onSecondary,
-                      builder: (filter) => Assets.icons.icClose.svg(
-                        width: Sizing.xSmall,
-                        height: Sizing.xSmall,
-                        colorFilter: filter,
+                  borderRadius: BorderRadius.circular(LemonRadius.small),
+                ),
+                child: Column(
+                  children: [
+                    LemonTextField(
+                      initialText: questionInput.question,
+                      hintText: t.event.applicationForm.enterQuestion,
+                      onChange: onLabelChanged,
+                      borderColor: Colors.transparent,
+                    ),
+                    Container(
+                      height: Sizing.large,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+                      color: LemonColor.white06,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            t.event.applicationForm.required,
+                            style: Typo.medium
+                                .copyWith(color: colorScheme.onSecondary),
+                          ),
+                          FlutterSwitch(
+                            inactiveColor: colorScheme.outline,
+                            inactiveToggleColor: colorScheme.onSurfaceVariant,
+                            activeColor: LemonColor.paleViolet,
+                            activeToggleColor: colorScheme.onPrimary,
+                            height: 24.h,
+                            width: 42.w,
+                            value: questionInput.required ?? false,
+                            onToggle: (value) {
+                              if (onToggleRequired != null) {
+                                onToggleRequired!(value);
+                              }
+                            },
+                          ),
+                        ],
                       ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(width: Spacing.xSmall),
+            InkWell(
+              onTap: removable ? onRemove : null,
+              child: Container(
+                width: Sizing.regular,
+                height: Sizing.regular,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: removable ? Colors.transparent : colorScheme.outline,
+                  ),
+                  color: removable
+                      ? LemonColor.atomicBlack
+                      : colorScheme.background,
+                  borderRadius: BorderRadius.circular(LemonRadius.normal),
+                ),
+                child: Center(
+                  child: ThemeSvgIcon(
+                    color: colorScheme.onSecondary,
+                    builder: (filter) => Assets.icons.icClose.svg(
+                      width: Sizing.xSmall,
+                      height: Sizing.xSmall,
+                      colorFilter: filter,
                     ),
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ],
     );
