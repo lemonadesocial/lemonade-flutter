@@ -60,7 +60,9 @@ class EventApplicationFormProfileSettingBloc extends Bloc<
           applicationProfileFields: [
             ...state.applicationProfileFields,
             EventApplicationProfileField(
-                field: event.fieldKey, required: false),
+              field: event.fieldKey,
+              required: false,
+            ),
           ],
         ),
       );
