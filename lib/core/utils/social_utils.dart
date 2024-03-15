@@ -11,6 +11,14 @@ class SocialUtils {
 
   static RegExp get facebookRegx => RegExp(r'facebook', caseSensitive: false);
 
+  static RegExp get mirrorRegx => RegExp(r'mirror', caseSensitive: false);
+
+  static RegExp get farcasterRegx => RegExp(r'farcaster', caseSensitive: false);
+
+  static RegExp get lensRegx => RegExp(r'lens', caseSensitive: false);
+
+  static RegExp get calendlyRegx => RegExp(r'calendly', caseSensitive: false);
+
   static bool isSocialFieldName({
     required String fieldName,
   }) {
@@ -18,7 +26,10 @@ class SocialUtils {
         githubRegx.hasMatch(fieldName) ||
         instagramRegx.hasMatch(fieldName) ||
         linkedInRegx.hasMatch(fieldName) ||
-        facebookRegx.hasMatch(fieldName);
+        facebookRegx.hasMatch(fieldName) ||
+        mirrorRegx.hasMatch(fieldName) ||
+        farcasterRegx.hasMatch(fieldName) ||
+        lensRegx.hasMatch(fieldName);
   }
 
   static String buildSocialLinkBySocialFieldName({
@@ -47,6 +58,18 @@ class SocialUtils {
 
     if (facebookRegx.hasMatch(socialFieldName)) {
       urlPrefix = AppConfig.facebookUrl;
+    }
+
+    if (mirrorRegx.hasMatch(socialFieldName)) {
+      urlPrefix = AppConfig.mirrorUrl;
+    }
+
+    if (farcasterRegx.hasMatch(socialFieldName)) {
+      urlPrefix = AppConfig.farcasterUrl;
+    }
+
+    if (lensRegx.hasMatch(socialFieldName)) {
+      urlPrefix = AppConfig.lensUrl;
     }
 
     return '$urlPrefix/$socialUserName';

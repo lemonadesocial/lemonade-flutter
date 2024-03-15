@@ -60,6 +60,9 @@ class EventApplicationFormProfileSettingPage extends StatelessWidget
       ProfileFieldKey.handleLinkedin,
       ProfileFieldKey.handleGithub,
       ProfileFieldKey.handleCalendly,
+      ProfileFieldKey.handleMirror,
+      ProfileFieldKey.handleFarcaster,
+      ProfileFieldKey.handleLens,
     ];
     List<ProfileFieldKey> personalInfoKeys = [
       ProfileFieldKey.companyName,
