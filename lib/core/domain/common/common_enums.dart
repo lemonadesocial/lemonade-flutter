@@ -92,7 +92,10 @@ enum ProfileFieldKey {
   handleLinkedin('handle_linkedin', 'Linkedin'),
   handleInstagram('handle_instagram', 'Instagram '),
   handleGithub('handle_github', 'Github'),
-  handleCalendly('calendly_url', 'Calendly');
+  handleCalendly('calendly_url', 'Calendly'),
+  handleMirror('handle_mirror', 'Mirror'),
+  handleFarcaster('handle_farcaster', 'Farcaster'),
+  handleLens('handle_lens', 'Lens');
 
   final String fieldKey;
   final String label;

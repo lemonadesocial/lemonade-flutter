@@ -29,6 +29,10 @@ class AppConfig {
   static get facebookUrl => 'https://www.facebook.com';
   static get linkedinUrl => 'https://www.linkedin.com/in';
   static get githubUrl => 'https://github.com';
+  static get mirrorUrl => 'https://mirror.xyz';
+  static get farcasterUrl => 'https://www.farcaster.xyz';
+  static get lensUrl => 'https://www.lens.xyz';
+  static get calendlyUrl => 'https://calendly.com';
 
   // Wallet connect
   static get walletConnectProjectId => dotenv.env['WALLET_CONNECT_PROJECT_ID'];
