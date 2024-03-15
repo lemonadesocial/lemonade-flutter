@@ -38,6 +38,7 @@ class GuestEventApplicationFormAnswersItems extends StatelessWidget {
                   onChange: (value) {
                     context.read<EventApplicationFormBloc>().add(
                           EventApplicationFormBlocEvent.updateAnswer(
+                            event: event,
                             questionId: applicationQuestion.id ?? '',
                             answer: value,
                           ),

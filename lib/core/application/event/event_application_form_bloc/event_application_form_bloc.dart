@@ -1,4 +1,5 @@
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/entities/event_application_profile_field.dart';
 import 'package:app/core/domain/event/entities/event_application_question.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/utils/string_utils.dart';
@@ -29,11 +30,12 @@ class EventApplicationFormBloc
     Emitter emit,
   ) {
     final user = event.user;
-    final eventProfileFields = event.event?.applicationProfileFields ?? [];
+    final applicationProfileFields =
+        event.event?.applicationProfileFields ?? [];
     final applicationQuestions = event.event?.applicationQuestions ?? [];
     final Map<String, String> initialFieldState = {};
     final userMap = user?.toJson();
-    for (var applicationProfileField in eventProfileFields) {
+    for (var applicationProfileField in applicationProfileFields) {
       final key = applicationProfileField.field ?? '';
       initialFieldState[key] =
           userMap![StringUtils.snakeToCamel(key)].toString();
@@ -57,15 +59,23 @@ class EventApplicationFormBloc
     EventApplicationFormBlocEventUpdateField event,
     Emitter emit,
   ) {
+    final applicationProfileFields =
+        event.event?.applicationProfileFields ?? [];
     final Map<String, String> newFieldState = {...state.fieldsState};
     newFieldState[event.key!] = event.value!;
-    emit(_validate(state.copyWith(fieldsState: newFieldState)));
+    emit(
+      _validate(
+        state: state.copyWith(fieldsState: newFieldState),
+        applicationProfileFields: applicationProfileFields,
+      ),
+    );
   }
 
   void updateAnswer(
     EventApplicationFormBlocEventUpdateAnswer event,
     Emitter emit,
   ) {
+    final applicationQuestions = event.event?.applicationQuestions ?? [];
     final newAnswers = state.answers.map((answer) {
       if (answer.question == event.questionId) {
         return answer.copyWith(answer: event.answer);
@@ -73,18 +83,45 @@ class EventApplicationFormBloc
       return answer;
     }).toList();
     emit(
-      _validate(state.copyWith(answers: newAnswers)),
+      _validate(
+        state: state.copyWith(answers: newAnswers),
+        applicationQuestions: applicationQuestions,
+      ),
     );
   }
 
-  EventApplicationFormBlocState _validate(
-    EventApplicationFormBlocState state,
-  ) {
-    final isValidProfileFields =
-        state.fieldsState.values.every((value) => !value.isNullOrEmpty);
-    final isValidAnswers =
-        state.answers.every((answer) => !answer.answer.isNullOrEmpty);
-    return state.copyWith(isValid: isValidProfileFields && isValidAnswers);
+  EventApplicationFormBlocState _validate({
+    required EventApplicationFormBlocState state,
+    List<EventApplicationProfileField>? applicationProfileFields,
+    List<EventApplicationQuestion>? applicationQuestions,
+  }) {
+    // Check profile required fields valid
+    final allProfileRequiredFields = state.fieldsState.entries.where((entry) {
+      final isRequiredField = applicationProfileFields?.any(
+        (applicationProfileField) =>
+            applicationProfileField.field == entry.key &&
+            applicationProfileField.required == true,
+      );
+      return isRequiredField == true;
+    });
+    final isValidProfileFields = allProfileRequiredFields.every(
+      (allProfileRequiredField) => !allProfileRequiredField.value.isNullOrEmpty,
+    );
+
+    // Check questions required valid
+    final allAnswerRequiredFields = state.answers.where((answer) {
+      final isRequiredField = applicationQuestions?.any(
+        (applicationQuestion) =>
+            applicationQuestion.id == answer.question &&
+            applicationQuestion.required == true,
+      );
+      return isRequiredField == true;
+    });
+    final isValidAnswersField = allAnswerRequiredFields.every(
+      (allProfileRequiredField) =>
+          !allProfileRequiredField.answer.isNullOrEmpty,
+    );
+    return state.copyWith(isValid: isValidProfileFields && isValidAnswersField);
   }
 }
 
@@ -95,10 +132,12 @@ class EventApplicationFormBlocEvent with _$EventApplicationFormBlocEvent {
     User? user,
   }) = EventApplicationFormBlocEventInitFieldState;
   factory EventApplicationFormBlocEvent.updateField({
+    required Event? event,
     String? key,
     String? value,
   }) = EventApplicationFormBlocEventUpdateField;
   factory EventApplicationFormBlocEvent.updateAnswer({
+    required Event? event,
     required String questionId,
     required String answer,
   }) = EventApplicationFormBlocEventUpdateAnswer;

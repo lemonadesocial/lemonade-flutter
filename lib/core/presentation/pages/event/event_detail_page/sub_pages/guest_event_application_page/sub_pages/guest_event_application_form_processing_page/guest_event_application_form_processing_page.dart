@@ -1,5 +1,7 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/event/event_application_form_bloc/event_application_form_bloc.dart';
+import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
+import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/sub_pages/guest_event_application_page/sub_pages/guest_event_application_form_processing_page/view/guest_event_application_form_loading_view.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/sub_pages/guest_event_application_page/sub_pages/guest_event_application_form_processing_page/view/guest_event_application_form_success_view.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
@@ -17,6 +19,10 @@ class GuestEventApplicationFormProcessingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final event = context.watch<GetEventDetailBloc>().state.maybeWhen(
+          fetched: (event) => event,
+          orElse: () => Event(),
+        );
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -27,10 +33,8 @@ class GuestEventApplicationFormProcessingPage extends StatelessWidget {
                 context.read<AuthBloc>().add(const AuthEvent.refreshData());
               },
               onError: (error) {
-                AutoRouter.of(context).replaceAll([
-                  EventIssueTicketsFormRoute(),
-                  const EventIssueTicketsSummaryRoute(),
-                ]);
+                AutoRouter.of(context)
+                    .replaceAll([EventBuyTicketsRoute(event: event)]);
               },
             ),
             builder: (runMutation, result) {

@@ -43,6 +43,7 @@ class GuestEventApplicationFormProfileItems extends StatelessWidget {
                           EventApplicationFormBlocEvent.updateField(
                             key: applicationProfileField.field,
                             value: value,
+                            event: event,
                           ),
                         );
                   },
