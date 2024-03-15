@@ -9,8 +9,8 @@ import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class GuestEventApplicationFormItems extends StatelessWidget {
-  const GuestEventApplicationFormItems({
+class GuestEventApplicationFormProfileItems extends StatelessWidget {
+  const GuestEventApplicationFormProfileItems({
     super.key,
   });
 
@@ -46,6 +46,7 @@ class GuestEventApplicationFormItems extends StatelessWidget {
                           ),
                         );
                   },
+                  showRequired: applicationProfileField.required,
                 ),
                 SizedBox(
                   height: Spacing.smMedium,

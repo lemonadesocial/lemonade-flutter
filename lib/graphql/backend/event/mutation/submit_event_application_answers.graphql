@@ -1,0 +1,5 @@
+mutation SubmitEventApplicationQuestions($event: MongoID!, $questions: [QuestionInput!]!) {
+  submitEventApplicationQuestions(event: $event, questions: $questions)
+}mutation SubmitEventApplicationAnswers($answers: [EventApplicationAnswerInput!]!, $event: MongoID!) {
+  submitEventApplicationAnswers(answers: $answers, event: $event)
+}

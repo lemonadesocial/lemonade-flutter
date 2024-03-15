@@ -72,16 +72,6 @@ class _GuestEventDetailBuyButtonView extends StatelessWidget {
         .map((e) => e.field ?? '')
         .map(StringUtils.snakeToCamel)
         .toList();
-    // if (profileRequiredFields.isEmpty) {
-    //   AutoRouter.of(context).navigate(
-    //     GuestEventApplicationRoute(
-    //       event: event,
-    //       user: user
-    //     ),
-    //   );
-    //   return;
-    // }
-    // context.read<AuthBloc>().add(const AuthEvent.refreshData());
     final userResult = await showFutureLoadingDialog(
       context: context,
       future: () => getIt<UserRepository>().getMe(),

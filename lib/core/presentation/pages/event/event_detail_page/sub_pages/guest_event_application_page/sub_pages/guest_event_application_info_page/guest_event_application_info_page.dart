@@ -109,7 +109,7 @@ class GuestEventApplicationInfoPage extends StatelessWidget {
                       padding: EdgeInsets.symmetric(vertical: Spacing.smMedium),
                       child: LinearGradientButton(
                         onTap: () {
-                          AutoRouter.of(context).navigate(
+                          AutoRouter.of(context).replace(
                             const GuestEventApplicationFormRoute(),
                           );
                         },

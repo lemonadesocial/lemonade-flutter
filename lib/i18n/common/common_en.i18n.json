@@ -153,5 +153,6 @@
     "defaultEmptyList": "No items to display at the moment.",
     "email": "Email",
     "alert": "Alert",
-    "create": "Create"
+    "create": "Create",
+    "required": "Required"
 }

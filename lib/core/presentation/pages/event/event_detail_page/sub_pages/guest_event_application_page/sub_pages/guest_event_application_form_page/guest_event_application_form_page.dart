@@ -1,7 +1,12 @@
 import 'package:app/core/application/event/event_application_form_bloc/event_application_form_bloc.dart';
-import 'package:app/core/presentation/pages/event/event_detail_page/sub_pages/guest_event_application_page/sub_pages/guest_event_application_form_page/widgets/guest_event_application_form_items.dart';
+import 'package:app/core/application/profile/user_profile_bloc/user_profile_bloc.dart';
+import 'package:app/core/domain/user/entities/user.dart';
+import 'package:app/core/presentation/pages/event/event_detail_page/sub_pages/guest_event_application_page/sub_pages/guest_event_application_form_page/widgets/guest_event_application_form_answers_items.dart';
+import 'package:app/core/presentation/pages/event/event_detail_page/sub_pages/guest_event_application_page/sub_pages/guest_event_application_form_page/widgets/guest_event_application_form_profile_items.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
+import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
+import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -27,44 +32,74 @@ class GuestEventApplicationFormPage extends StatelessWidget {
         onTap: () {
           FocusManager.instance.primaryFocus?.unfocus();
         },
-        child: Stack(
+        child: Column(
           children: [
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-              child: CustomScrollView(
-                slivers: [
-                  SliverToBoxAdapter(
-                    child: Text(
-                      t.event.applicationForm.applicationForm,
-                      style: Typo.extraLarge.copyWith(
-                        color: colorScheme.onPrimary,
-                        fontFamily: FontFamily.nohemiVariable,
-                        fontWeight: FontWeight.w800,
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+                child: CustomScrollView(
+                  slivers: [
+                    SliverToBoxAdapter(
+                      child: Text(
+                        t.event.applicationForm.applicationForm,
+                        style: Typo.extraLarge.copyWith(
+                          color: colorScheme.onPrimary,
+                          fontFamily: FontFamily.nohemiVariable,
+                          fontWeight: FontWeight.w800,
+                        ),
                       ),
                     ),
-                  ),
-                  SliverToBoxAdapter(
-                    child: SizedBox(
-                      height: Spacing.superExtraSmall,
-                    ),
-                  ),
-                  SliverToBoxAdapter(
-                    child: Text(
-                      t.event.applicationForm.applicationFormDescription,
-                      style: Typo.mediumPlus.copyWith(
-                        color: colorScheme.onSecondary,
+                    SliverToBoxAdapter(
+                      child: SizedBox(
+                        height: Spacing.superExtraSmall,
                       ),
                     ),
-                  ),
-                  SliverToBoxAdapter(
-                    child: SizedBox(
-                      height: Spacing.medium,
+                    SliverToBoxAdapter(
+                      child: Text(
+                        t.event.applicationForm.applicationFormDescription,
+                        style: Typo.mediumPlus.copyWith(
+                          color: colorScheme.onSecondary,
+                        ),
+                      ),
                     ),
-                  ),
-                  const SliverToBoxAdapter(
-                    child: GuestEventApplicationFormItems(),
-                  ),
-                ],
+                    SliverToBoxAdapter(
+                      child: SizedBox(
+                        height: Spacing.medium,
+                      ),
+                    ),
+                    BlocBuilder<UserProfileBloc, UserProfileState>(
+                      builder: (context, state) {
+                        return state.when(
+                          failure: () => SliverToBoxAdapter(
+                            child: EmptyList(
+                              emptyText: t.common.somethingWrong,
+                            ),
+                          ),
+                          loading: () {
+                            return SliverToBoxAdapter(
+                              child: Loading.defaultLoading(context),
+                            );
+                          },
+                          fetched: (User userProfile) {
+                            return const SliverToBoxAdapter(
+                              child: Column(
+                                children: [
+                                  GuestEventApplicationFormProfileItems(),
+                                  GuestEventApplicationFormAnswersItems(),
+                                ],
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    ),
+                    SliverToBoxAdapter(
+                      child: SizedBox(
+                        height: Spacing.xLarge * 3,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
             Align(

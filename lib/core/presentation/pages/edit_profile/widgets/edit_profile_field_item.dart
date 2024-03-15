@@ -21,6 +21,7 @@ class EditProfileFieldItem extends StatelessWidget {
     this.onDateSelect,
     this.selectedValue,
     this.controller,
+    this.showRequired,
   });
 
   final User userProfile;
@@ -29,6 +30,7 @@ class EditProfileFieldItem extends StatelessWidget {
   final ValueChanged<DateTime>? onDateSelect;
   final String? selectedValue;
   final TextEditingController? controller;
+  final bool? showRequired;
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +43,7 @@ class EditProfileFieldItem extends StatelessWidget {
           hintText: '',
           initialText: userProfile.displayName ?? '',
           onChange: onChange,
+          showRequired: showRequired,
         );
       case ProfileFieldKey.tagline:
         return LemonTextField(
@@ -49,6 +52,7 @@ class EditProfileFieldItem extends StatelessWidget {
           initialText: userProfile.tagline ?? '',
           onChange: onChange,
           minLines: 2,
+          showRequired: showRequired,
         );
       case ProfileFieldKey.description:
         return LemonTextField(
@@ -57,6 +61,7 @@ class EditProfileFieldItem extends StatelessWidget {
           initialText: userProfile.description ?? '',
           onChange: onChange,
           minLines: 4,
+          showRequired: showRequired,
         );
       case ProfileFieldKey.jobTitle:
         return LemonTextField(
@@ -64,6 +69,7 @@ class EditProfileFieldItem extends StatelessWidget {
           hintText: t.profile.hint.jobTitle,
           initialText: userProfile.jobTitle ?? '',
           onChange: onChange,
+          showRequired: showRequired,
         );
       case ProfileFieldKey.companyName:
         return LemonTextField(
@@ -71,6 +77,7 @@ class EditProfileFieldItem extends StatelessWidget {
           hintText: t.profile.hint.organization,
           initialText: userProfile.companyName ?? '',
           onChange: onChange,
+          showRequired: showRequired,
         );
       case ProfileFieldKey.educationTitle:
         return LemonTextField(
@@ -78,6 +85,7 @@ class EditProfileFieldItem extends StatelessWidget {
           hintText: t.profile.hint.educationQualification,
           initialText: userProfile.education ?? '',
           onChange: onChange,
+          showRequired: showRequired,
         );
       case ProfileFieldKey.handleGithub:
         return LemonTextField(
@@ -85,6 +93,7 @@ class EditProfileFieldItem extends StatelessWidget {
           hintText: t.profile.hint.username,
           initialText: userProfile.handleGithub ?? '',
           onChange: onChange,
+          showRequired: showRequired,
         );
       //
       // Dropdown
@@ -100,6 +109,7 @@ class EditProfileFieldItem extends StatelessWidget {
             }
           },
           selectedValue: selectedValue,
+          showRequired: showRequired,
         );
 
       case ProfileFieldKey.ethnicity:
@@ -113,6 +123,7 @@ class EditProfileFieldItem extends StatelessWidget {
             }
           },
           selectedValue: selectedValue,
+          showRequired: showRequired,
         );
       case ProfileFieldKey.dateOfBirth:
         return LemonTextField(
@@ -120,6 +131,7 @@ class EditProfileFieldItem extends StatelessWidget {
           onChange: onChange,
           controller: controller,
           hintText: t.profile.hint.dob,
+          showRequired: showRequired,
           inputFormatters: [
             CustomDateTextFormatter(),
             LengthLimitingTextInputFormatter(10),
