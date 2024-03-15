@@ -13,6 +13,7 @@ import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 
 class ProfileFieldKeyModel {
   final String fieldKey;
@@ -164,6 +165,7 @@ class EventApplicationFormProfileSettingPage extends StatelessWidget
                       builder: (context, state) =>
                           LinearGradientButton.primaryButton(
                         onTap: () {
+                          Vibrate.feedback(FeedbackType.light);
                           context
                               .read<EventApplicationFormProfileSettingBloc>()
                               .add(
