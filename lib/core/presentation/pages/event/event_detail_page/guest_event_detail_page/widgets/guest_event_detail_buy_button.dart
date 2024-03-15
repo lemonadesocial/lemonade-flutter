@@ -9,7 +9,6 @@ import 'package:app/core/domain/event/repository/event_ticket_repository.dart';
 import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
-import 'package:app/core/presentation/widgets/common/dialog/lemon_alert_dialog.dart';
 import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/event_tickets_utils.dart';
@@ -17,7 +16,6 @@ import 'package:app/core/utils/list_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
-import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/sizing.dart';
@@ -68,16 +66,22 @@ class _GuestEventDetailBuyButtonView extends StatelessWidget {
     return result.result;
   }
 
-  Future<bool> _checkProfileRequiredFields(BuildContext context) async {
+  Future<void> _checkProfileRequiredFields(BuildContext context) async {
     List<String> profileRequiredFields = (event.applicationProfileFields ?? [])
         .where((e) => e.required == true)
         .map((e) => e.field ?? '')
         .map(StringUtils.snakeToCamel)
         .toList();
-    if (profileRequiredFields.isEmpty) {
-      return true;
-    }
-    context.read<AuthBloc>().add(const AuthEvent.refreshData());
+    // if (profileRequiredFields.isEmpty) {
+    //   AutoRouter.of(context).navigate(
+    //     GuestEventApplicationRoute(
+    //       event: event,
+    //       user: user
+    //     ),
+    //   );
+    //   return;
+    // }
+    // context.read<AuthBloc>().add(const AuthEvent.refreshData());
     final userResult = await showFutureLoadingDialog(
       context: context,
       future: () => getIt<UserRepository>().getMe(),
@@ -92,9 +96,16 @@ class _GuestEventDetailBuyButtonView extends StatelessWidget {
         return fieldValue == null;
       });
       if (missingFields.isEmpty) {
-        return true;
+        AutoRouter.of(context).navigate(
+          EventBuyTicketsRoute(
+            event: event,
+          ),
+        );
+        return;
       }
-      return false;
+      AutoRouter.of(context)
+          .navigate(GuestEventApplicationRoute(event: event, user: user));
+      return;
     });
   }
 
@@ -152,17 +163,7 @@ class _GuestEventDetailBuyButtonView extends StatelessWidget {
                         return;
                       }
 
-                      final isQualified =
-                          await _checkProfileRequiredFields(context);
-                      if (!isQualified) {
-                        AutoRouter.of(context)
-                            .navigate(GuestEventApplicationRoute(event: event));
-                        return;
-                      }
-
-                      AutoRouter.of(context).navigate(
-                        EventBuyTicketsRoute(event: event),
-                      );
+                      await _checkProfileRequiredFields(context);
                     },
                     orElse: () {
                       AutoRouter.of(context).navigate(

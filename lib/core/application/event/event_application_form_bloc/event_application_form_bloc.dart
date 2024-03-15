@@ -39,9 +39,6 @@ class EventApplicationFormBloc
     EventApplicationFormBlocEventUpdateField event,
     Emitter emit,
   ) {
-    if (event.key == null || event.value == null) {
-      return;
-    }
     final Map<String, String> newFieldState = {...state.fieldsState};
     newFieldState[event.key!] = event.value!;
     emit(_validate(state.copyWith(fieldsState: newFieldState)));
