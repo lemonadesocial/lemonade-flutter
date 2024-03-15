@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_switch/flutter_switch.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 
 class ApplicationFormQuestions extends StatelessWidget {
   final Function()? onAddButtonPressed;
@@ -35,7 +36,6 @@ class ApplicationFormQuestions extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       _QuestionFormField(
-                        index: entry.key,
                         questionInput: entry.value,
                         onLabelChanged: (label) =>
                             context.read<EventApplicationFormSettingBloc>().add(
@@ -46,15 +46,17 @@ class ApplicationFormQuestions extends StatelessWidget {
                                         entry.value.copyWith(question: label),
                                   ),
                                 ),
-                        onToggleRequired: (requiredValue) =>
-                            context.read<EventApplicationFormSettingBloc>().add(
-                                  EventApplicationFormSettingBlocEvent
-                                      .updateQuestion(
-                                    index: entry.key,
-                                    questions: entry.value
-                                        .copyWith(required: requiredValue),
-                                  ),
+                        onToggleRequired: (requiredValue) {
+                          Vibrate.feedback(FeedbackType.light);
+                          context.read<EventApplicationFormSettingBloc>().add(
+                                EventApplicationFormSettingBlocEvent
+                                    .updateQuestion(
+                                  index: entry.key,
+                                  questions: entry.value
+                                      .copyWith(required: requiredValue),
                                 ),
+                              );
+                        },
                         onRemove: () {
                           context.read<EventApplicationFormSettingBloc>().add(
                                 EventApplicationFormSettingBlocEvent
@@ -63,7 +65,6 @@ class ApplicationFormQuestions extends StatelessWidget {
                                 ),
                               );
                         },
-                        removable: true,
                       ),
                       if (entry.key != questions.length - 1)
                         SizedBox(height: Spacing.medium),
@@ -132,16 +133,12 @@ class _QuestionFormField extends StatelessWidget {
   final Input$QuestionInput questionInput;
   final Function(String value)? onLabelChanged;
   final Function()? onRemove;
-  final bool removable;
-  final int index;
   final Function(bool value)? onToggleRequired;
 
   const _QuestionFormField({
     required this.questionInput,
     this.onLabelChanged,
     this.onRemove,
-    this.removable = false,
-    this.index = 0,
     this.onToggleRequired,
   });
 
@@ -177,7 +174,13 @@ class _QuestionFormField extends StatelessWidget {
                       height: Sizing.large,
                       padding:
                           EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-                      color: LemonColor.white06,
+                      decoration: BoxDecoration(
+                        color: LemonColor.white06,
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(LemonRadius.small),
+                          bottomRight: Radius.circular(LemonRadius.small),
+                        ),
+                      ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -209,17 +212,15 @@ class _QuestionFormField extends StatelessWidget {
             ),
             SizedBox(width: Spacing.xSmall),
             InkWell(
-              onTap: removable ? onRemove : null,
+              onTap: onRemove,
               child: Container(
                 width: Sizing.regular,
                 height: Sizing.regular,
                 decoration: BoxDecoration(
                   border: Border.all(
-                    color: removable ? Colors.transparent : colorScheme.outline,
+                    color: Colors.transparent,
                   ),
-                  color: removable
-                      ? LemonColor.atomicBlack
-                      : colorScheme.background,
+                  color: LemonColor.atomicBlack,
                   borderRadius: BorderRadius.circular(LemonRadius.normal),
                 ),
                 child: Center(

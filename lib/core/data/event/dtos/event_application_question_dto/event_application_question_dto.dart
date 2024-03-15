@@ -8,7 +8,7 @@ class EventApplicationQuestionDto with _$EventApplicationQuestionDto {
   factory EventApplicationQuestionDto({
     @JsonKey(name: '_id') String? id,
     String? question,
-    bool? required,
+    @JsonKey(name: 'required') bool? isRequired,
   }) = _EventApplicationQuestionDto;
 
   factory EventApplicationQuestionDto.fromJson(Map<String, dynamic> json) =>

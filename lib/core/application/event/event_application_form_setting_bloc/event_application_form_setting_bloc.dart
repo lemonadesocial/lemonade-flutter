@@ -130,7 +130,7 @@ class EventApplicationFormSettingBloc extends Bloc<
                 (item) => Input$QuestionInput(
                   $_id: item.id,
                   question: item.question ?? '',
-                  required: item.required,
+                  required: item.isRequired,
                 ),
               )
               .toList(),
@@ -178,9 +178,7 @@ class EventApplicationFormSettingBlocState
   factory EventApplicationFormSettingBlocState.initial() =>
       EventApplicationFormSettingBlocState(
         status: EventApplicationFormStatus.initial,
-        questions: [
-          Input$QuestionInput(question: "", required: false),
-        ],
+        questions: [],
         isValid: false,
         requiredProfileFields: [],
       );
