@@ -17,6 +17,7 @@ import 'package:app/core/domain/event/input/get_events_listing_input.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/graphql/backend/event/mutation/create_event.graphql.dart';
+import 'package:app/graphql/backend/event/mutation/submit_event_application_questions.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/manage_event_cohost_requests.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/update_event_checkin.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/update_event.graphql.dart';
@@ -426,5 +427,25 @@ class EventRepositoryImpl implements EventRepository {
           )
           .toList(),
     );
+  }
+
+  @override
+  Future<Either<Failure, bool>> submitEventApplicationQuestions({
+    required String eventId,
+    required List<Input$QuestionInput> questions,
+  }) async {
+    final result = await client.mutate$SubmitEventApplicationQuestions(
+      Options$Mutation$SubmitEventApplicationQuestions(
+        variables: Variables$Mutation$SubmitEventApplicationQuestions(
+          event: eventId,
+          questions: questions,
+        ),
+        fetchPolicy: FetchPolicy.networkOnly,
+      ),
+    );
+    if (result.hasException) {
+      return Left(Failure.withGqlException(result.exception));
+    }
+    return Right(result.parsedData?.submitEventApplicationQuestions ?? false);
   }
 }

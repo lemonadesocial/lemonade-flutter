@@ -237,6 +237,12 @@ final eventDetailRoutes = AutoRoute(
             ),
           ],
         ),
+        AutoRoute(
+          page: EventApplicationFormSettingRoute.page,
+        ),
+        AutoRoute(
+          page: EventApplicationFormProfileSettingRoute.page,
+        ),
       ],
     ),
     AutoRoute(
@@ -293,6 +299,9 @@ final eventDetailRoutes = AutoRoute(
           page: GuestEventApplicationFormProcessingRoute.page,
         ),
       ],
+    ),
+    AutoRoute(
+      page: GuestEventApprovalStatusRoute.page,
     ),
   ],
 );

@@ -318,7 +318,23 @@
             "other": "$count questions"
         },
         "assignedBy": "Assigned by $name",
-        "declined": "Declined"
+        "declined": "Declined",
+        "awaitingHostApprovalGuestViewTitle": "Awaiting Host Approval",
+        "awaitingHostApprovalGuestViewDescription": "Your reservation is not confirmed yet! We will notify you when you’re approved. In case your request is declined, you will get a full refund!",
+        "declinedApprovalGuestViewTitle": "Declined!",
+        "declinedApprovalGuestViewDescription": "Unfortunately, your request has been declined. You'll receive a full refund of your payment.",
+        "approvedApprovalGuestViewTitle": "Congratulations!",
+        "approvedApprovalGuestViewDescription": "Hosts have approved your request. Complete your payment now to secure your tickets.",
+        "completePayment": "Complete payment",
+        "payment": {
+            "fullPayment": "full payment",
+            "pending": "pending",
+            "refund": "refund",
+            "refunded": "refunded",
+            "inProcess": "In process",
+            "refundComplete": "Refund complete",
+            "paid": "paid"
+        }
     },
     "eventInvited": {
         "joined": "Registered",
@@ -381,7 +397,16 @@
         "applicationFormDescription": "Information required to reserve your spot. This will update your profile automatically!",
         "updatingProfile": "Updating profile",
         "updatingProfileDescription": "Please wait while we update your profile. This should only take a few seconds.",
-        "updatedApplicationFormDescription": "You are all set to reserve your tickets"
+        "updatedApplicationFormDescription": "You are all set to reserve your tickets",
+        "applicationFormTitle": "Application form",
+        "profileInfo": "Profile info",
+        "profileInfoDescription": "Details you want to know about guests",
+        "applicationQuestions": "Application questions",
+        "enterQuestion": "Enter question",
+        "required": "Required",
+        "saveForm": "Save form",
+        "saveFormSuccessfully": "Update application form successfully",
+        "updateApplicationFormSuccessfully": "Update application form successfully"
     },
     "reserve": "Reserve"
 }

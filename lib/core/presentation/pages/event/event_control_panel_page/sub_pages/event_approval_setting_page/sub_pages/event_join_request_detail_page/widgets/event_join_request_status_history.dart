@@ -1,7 +1,14 @@
 import 'package:app/core/domain/event/entities/event_join_request.dart';
+import 'package:app/core/domain/payment/payment_enums.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/sub_pages/event_join_request_detail_page/widgets/escrow_first_deposit_amount_builder.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/sub_pages/event_join_request_detail_page/widgets/event_join_request_escrow_payment_status_widget.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/sub_pages/event_join_request_detail_page/widgets/event_join_request_payment_amount_builder.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/sub_pages/event_join_request_detail_page/widgets/event_join_request_payment_status_widget.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/sub_pages/event_join_request_detail_page/widgets/event_join_request_status_history_step.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/widgets/event_join_request_ticket_info.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/widgets/join_request_user_avatar.dart';
 import 'package:app/core/presentation/widgets/common/dotted_line/dotted_line.dart';
+import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/modal_utils.dart';
@@ -43,7 +50,7 @@ class EventJoinRequestStatusHistory extends StatelessWidget {
               Text(
                 t.event.eventApproval.declined,
                 style: Typo.small.copyWith(
-                  color: const Color(0xFFF57968),
+                  color: LemonColor.coralReef,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -64,200 +71,164 @@ class EventJoinRequestStatusHistory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
+    final colorScheme = Theme.of(context).colorScheme;
+
+    final steps = [
+      EventJoinRequestStatusHistoryStep(
+        leading: JoinRequestUserAvatar(
+          user: eventJoinRequest.userExpanded,
+        ),
+        title: '',
+        subTitle: '',
+        more: isRejected
+            ? _declinedBadge(context)
+            : EventJoinRequestTicketInfo(
+                eventJoinRequest: eventJoinRequest,
+                showPrice: false,
+                padding: EdgeInsets.all(Spacing.extraSmall),
+                backgroundColor: LemonColor.darkBackground,
+                borderColor: Colors.transparent,
+              ),
+      ),
+      EventJoinRequestStatusHistoryStep(
+        leading: const EventJoinrequestStatusHistoryIcon(
+          status: EventJoinRequestHistoryStatus.done,
+        ),
+        title: t.event.eventApproval.appliedForReservation,
+        subTitle: DateFormatUtils.custom(
+          eventJoinRequest.createdAt,
+          pattern: 'dd, MMM, HH:mm',
+        ),
+        more: EventJoinRequestPaymentAmountsBuilder(
+          eventId: eventJoinRequest.eventExpanded?.id ?? '',
+          eventJoinRequest: eventJoinRequest,
+          builder: ({
+            required formattedTotalAmount,
+            required formattedDueAmount,
+            required formattedDepositAmount,
+          }) {
+            final isEscrow =
+                eventJoinRequest.paymentExpanded?.accountExpanded?.type ==
+                    PaymentAccountType.ethereumEscrow;
+            if (!isEscrow &&
+                eventJoinRequest.paymentExpanded?.state !=
+                    PaymentState.succeeded) {
+              return const SizedBox.shrink();
+            }
+
+            if (formattedTotalAmount.isEmpty ||
+                formattedDepositAmount.isEmpty) {
+              return const SizedBox.shrink();
+            }
+            return EscrowFirstDepositAmountBuilder(
+              eventJoinRequest: eventJoinRequest,
+              builder: ({
+                required formattedFirstDepositAmount,
+                required formattedFirstDueAmount,
+                required isLoading,
+              }) {
+                if (isEscrow) {
+                  if (isLoading) {
+                    return Loading.defaultLoading(context);
+                  }
+                  return RichText(
+                    text: TextSpan(
+                      text: '$formattedFirstDepositAmount ',
+                      style: Typo.small.copyWith(
+                        color: LemonColor.malachiteGreen,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: t.event.eventApproval.payment.paid,
+                          style: Typo.small.copyWith(
+                            color: colorScheme.onSecondary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+
+                return RichText(
+                  text: TextSpan(
+                    text: '$formattedTotalAmount ',
+                    style: Typo.small.copyWith(
+                      color: LemonColor.malachiteGreen,
+                    ),
+                    children: [
+                      TextSpan(
+                        text: t.event.eventApproval.payment.paid,
+                        style: Typo.small.copyWith(
+                          color: colorScheme.onSecondary,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            );
+          },
+        ),
+      ),
+      EventJoinRequestStatusHistoryStep(
+        leading: EventJoinrequestStatusHistoryIcon(
+          status: isPending
+              ? EventJoinRequestHistoryStatus.pending
+              : isRejected
+                  ? EventJoinRequestHistoryStatus.rejected
+                  : EventJoinRequestHistoryStatus.done,
+        ),
+        title: isPending
+            ? t.event.eventApproval.pendingApproval
+            : isRejected
+                ? t.event.eventApproval.declinedBy(
+                    name:
+                        '@${eventJoinRequest.declinedByExpanded?.username ?? ''}',
+                  )
+                : t.event.eventApproval.approvedBy(
+                    name:
+                        '@${eventJoinRequest.approvedByExpanded?.username ?? ''}',
+                  ),
+        subTitle: isPending
+            ? t.event.eventApproval.approveToLetThemIn
+            : DateFormatUtils.custom(
+                isRejected
+                    ? eventJoinRequest.declinedAt
+                    : eventJoinRequest.approvedAt,
+                pattern: 'dd, MMM, HH:mm',
+              ),
+      ),
+      if (eventJoinRequest.paymentExpanded != null &&
+          eventJoinRequest.paymentExpanded?.accountExpanded?.type ==
+              PaymentAccountType.ethereumEscrow &&
+          !eventJoinRequest.isPending)
+        EventJoinRequestEscrowPaymentStatusWidget(
+          eventJoinRequest: eventJoinRequest,
+        ),
+      if (eventJoinRequest.paymentExpanded != null &&
+          eventJoinRequest.paymentExpanded?.accountExpanded?.type !=
+              PaymentAccountType.ethereumEscrow &&
+          eventJoinRequest.isApproved)
+        EventJoinRequestPaymentStatusWidget(eventJoinRequest: eventJoinRequest),
+    ];
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Stack(
           children: [
-            const _Background(length: 3),
+            _Background(length: steps.length),
             const Positioned.fill(
               child: _DashLine(),
             ),
             Positioned.fill(
               child: _StepContainer(
-                children: [
-                  _Step(
-                    leading: JoinRequestUserAvatar(
-                      user: eventJoinRequest.userExpanded,
-                    ),
-                    title: '',
-                    subTitle: '',
-                    more: isRejected
-                        ? _declinedBadge(context)
-                        : EventJoinRequestTicketInfo(
-                            eventJoinRequest: eventJoinRequest,
-                            showPrice: false,
-                            padding: EdgeInsets.all(Spacing.extraSmall),
-                            backgroundColor: LemonColor.darkBackground,
-                            borderColor: Colors.transparent,
-                          ),
-                  ),
-                  _Step(
-                    leading: const _StatusIcon(
-                      status: _Status.done,
-                    ),
-                    title: t.event.eventApproval.appliedForReservation,
-                    subTitle: DateFormatUtils.custom(
-                      eventJoinRequest.createdAt,
-                      pattern: 'dd, MMM, HH:mm',
-                    ),
-                  ),
-                  _Step(
-                    leading: _StatusIcon(
-                      status: isPending
-                          ? _Status.pending
-                          : isRejected
-                              ? _Status.rejected
-                              : _Status.done,
-                    ),
-                    title: isPending
-                        ? t.event.eventApproval.pendingApproval
-                        : isRejected
-                            ? t.event.eventApproval.declinedBy(
-                                name:
-                                    '@${eventJoinRequest.declinedByExpanded?.username ?? ''}',
-                              )
-                            : t.event.eventApproval.approvedBy(
-                                name:
-                                    '@${eventJoinRequest.approvedByExpanded?.username ?? ''}',
-                              ),
-                    subTitle: isPending
-                        ? t.event.eventApproval.approveToLetThemIn
-                        : DateFormatUtils.custom(
-                            isRejected
-                                ? eventJoinRequest.declinedAt
-                                : eventJoinRequest.approvedAt,
-                            pattern: 'dd, MMM, HH:mm',
-                          ),
-                  ),
-                ],
+                children: steps,
               ),
             ),
           ],
         ),
       ],
-    );
-  }
-}
-
-class _Step extends StatelessWidget {
-  final Widget leading;
-  final String title;
-  final String subTitle;
-  final Widget? more;
-  const _Step({
-    required this.leading,
-    required this.title,
-    required this.subTitle,
-    this.more,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        leading,
-        SizedBox(width: Spacing.xSmall),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              title,
-              style: Typo.small.copyWith(
-                color: colorScheme.onPrimary,
-              ),
-            ),
-            SizedBox(height: 2.w),
-            Text(
-              subTitle,
-              style: Typo.small.copyWith(
-                color: colorScheme.onSecondary,
-              ),
-            ),
-          ],
-        ),
-        const Spacer(),
-        if (more != null) more!,
-      ],
-    );
-  }
-}
-
-enum _Status {
-  pending,
-  done,
-  rejected,
-}
-
-class _StatusIcon extends StatelessWidget {
-  final _Status status;
-  const _StatusIcon({
-    required this.status,
-  });
-
-  Widget getIcon(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    if (status == _Status.pending) {
-      return Container(
-        height: 9.w,
-        width: 9.w,
-        decoration: ShapeDecoration(
-          color: colorScheme.onSecondary,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(LemonRadius.xSmall),
-          ),
-        ),
-      );
-    }
-
-    if (status == _Status.done) {
-      return ThemeSvgIcon(
-        color: colorScheme.onSecondary,
-        builder: (filter) => Assets.icons.icDone.svg(
-          width: Sizing.xSmall,
-          height: Sizing.xSmall,
-          colorFilter: filter,
-        ),
-      );
-    }
-
-    if (status == _Status.rejected) {
-      return ThemeSvgIcon(
-        color: colorScheme.onSecondary,
-        builder: (filter) => Assets.icons.icClose.svg(
-          width: Sizing.xSmall,
-          height: Sizing.xSmall,
-          colorFilter: filter,
-        ),
-      );
-    }
-
-    return const SizedBox.shrink();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: Sizing.medium,
-      width: Sizing.medium,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(Sizing.medium),
-        color: status == _Status.pending
-            ? LemonColor.atomicBlack
-            : LemonColor.darkBackground,
-        border: Border.all(
-          color: status == _Status.pending
-              ? LemonColor.darkBackground
-              : Colors.transparent,
-          width: 2.w,
-        ),
-      ),
-      child: Center(
-        child: getIcon(context),
-      ),
     );
   }
 }

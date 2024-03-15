@@ -1,4 +1,5 @@
 import 'package:app/core/data/payment/dtos/payment_account_dto/payment_account_dto.dart';
+import 'package:app/core/domain/payment/entities/refund_policy/refund_policy.dart';
 import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -50,6 +51,10 @@ class AccountInfo with _$AccountInfo {
     bool? pending,
     // Stripe
     String? publishableKey,
+    // Escrow
+    int? minimumDepositPercent,
+    double? hostRefundPercent,
+    List<RefundPolicy>? refundPolicies,
   }) = _AccountInfo;
 
   factory AccountInfo.fromDto(AccountInfoDto dto) => AccountInfo(
@@ -73,6 +78,12 @@ class AccountInfo with _$AccountInfo {
         pending: dto.pending,
         // Stripe
         publishableKey: dto.publishableKey,
+        // escrow
+        minimumDepositPercent: dto.minimumDepositPercent,
+        hostRefundPercent: dto.hostRefundPercent,
+        refundPolicies: (dto.refundPolicies ?? [])
+            .map((item) => RefundPolicy.fromDto(item))
+            .toList(),
       );
 }
 

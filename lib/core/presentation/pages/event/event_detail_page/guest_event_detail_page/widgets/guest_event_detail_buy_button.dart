@@ -69,7 +69,9 @@ class _GuestEventDetailBuyButtonView extends StatelessWidget {
   }
 
   Future<bool> _checkProfileRequiredFields(BuildContext context) async {
-    List<String> profileRequiredFields = (event.requiredProfileFields ?? [])
+    List<String> profileRequiredFields = (event.applicationProfileFields ?? [])
+        .where((e) => e.required == true)
+        .map((e) => e.field ?? '')
         .map(StringUtils.snakeToCamel)
         .toList();
     if (profileRequiredFields.isEmpty) {
@@ -98,7 +100,6 @@ class _GuestEventDetailBuyButtonView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = Translations.of(context);
     final authState = context.watch<AuthBloc>().state;
     final colorScheme = Theme.of(context).colorScheme;
     final defaultTicketType =
@@ -141,30 +142,16 @@ class _GuestEventDetailBuyButtonView extends StatelessWidget {
                     authenticated: (_) async {
                       final result = await _checkJoinRequest(context);
                       final eventJoinRequest = result?.getOrElse(() => null);
-                      final isPendingJoinRequest = eventJoinRequest != null &&
-                          eventJoinRequest.approvedBy == null &&
-                          eventJoinRequest.declinedBy == null;
-                      final isDeclinedJoinRequest = eventJoinRequest != null &&
-                          eventJoinRequest.declinedBy != null;
-                      if (isPendingJoinRequest) {
-                        showDialog(
-                          context: context,
-                          builder: (context) => LemonAlertDialog(
-                            child: Text(t.event.eventApproval.waitingApproval),
+                      if (eventJoinRequest != null) {
+                        AutoRouter.of(context).push(
+                          GuestEventApprovalStatusRoute(
+                            event: event,
+                            eventJoinRequest: eventJoinRequest,
                           ),
                         );
                         return;
                       }
-                      if (isDeclinedJoinRequest) {
-                        showDialog(
-                          context: context,
-                          builder: (context) => LemonAlertDialog(
-                            child:
-                                Text(t.event.eventApproval.yourRequestDeclined),
-                          ),
-                        );
-                        return;
-                      }
+
                       final isQualified =
                           await _checkProfileRequiredFields(context);
                       if (!isQualified) {
@@ -172,6 +159,7 @@ class _GuestEventDetailBuyButtonView extends StatelessWidget {
                             .navigate(GuestEventApplicationRoute(event: event));
                         return;
                       }
+
                       AutoRouter.of(context).navigate(
                         EventBuyTicketsRoute(event: event),
                       );

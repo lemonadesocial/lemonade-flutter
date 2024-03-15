@@ -1,5 +1,6 @@
 import 'package:app/core/data/event/dtos/event_dtos.dart';
 import 'package:app/core/domain/common/entities/common.dart';
+import 'package:app/core/domain/event/entities/event_application_profile_field.dart';
 import 'package:app/core/domain/event/entities/event_session.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/entities/reward.dart';
@@ -7,6 +8,7 @@ import 'package:app/core/domain/event/event_enums.dart';
 import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:app/core/domain/event/entities/event_application_question.dart';
 
 part 'event.freezed.dart';
 
@@ -54,6 +56,8 @@ class Event with _$Event {
     int? attendingCount,
     int? pendingRequestCount,
     List<EventSession>? sessions,
+    List<EventApplicationQuestion>? applicationQuestions,
+    List<EventApplicationProfileField>? applicationProfileFields,
   }) = _Event;
 
   factory Event.fromDto(EventDto dto) {
@@ -121,6 +125,12 @@ class Event with _$Event {
       pendingRequestCount: dto.pendingRequestCount?.toInt() ?? 0,
       sessions: List.from(dto.sessions ?? [])
           .map((item) => EventSession.fromDto(item))
+          .toList(),
+      applicationQuestions: List.from(dto.applicationQuestions ?? [])
+          .map((item) => EventApplicationQuestion.fromDto(item))
+          .toList(),
+      applicationProfileFields: List.from(dto.applicationProfileFields ?? [])
+          .map((item) => EventApplicationProfileField.fromDto(item))
           .toList(),
     );
   }
