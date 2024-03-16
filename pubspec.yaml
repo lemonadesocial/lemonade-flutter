@@ -144,6 +144,7 @@ dependencies:
   modal_bottom_sheet: ^3.0.0-pre
   web3modal_flutter: 
     path: ./packages/web3modal_flutter
+  dynamic_color: ^1.7.0
   
 dependency_overrides:
   matrix_api_lite:
