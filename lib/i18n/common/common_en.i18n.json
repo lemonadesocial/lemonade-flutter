@@ -154,5 +154,6 @@
     "email": "Email",
     "alert": "Alert",
     "create": "Create",
-    "required": "Required"
+    "required": "Required",
+    "optional": "Optional"
 }
