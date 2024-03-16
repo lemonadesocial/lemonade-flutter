@@ -73,7 +73,7 @@ class GuestEventApprovalStatusPage extends StatelessWidget {
           const Spacer(),
           SafeArea(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+              padding: EdgeInsets.all(Spacing.smMedium),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,

@@ -1,3 +1,4 @@
+import 'package:app/core/data/event/dtos/event_application_answer_dto/event_application_answer_dto.dart';
 import 'package:app/core/data/event/dtos/event_cohost_request_dto/event_cohost_request_dto.dart';
 import 'package:app/core/data/event/dtos/event_dtos.dart';
 import 'package:app/core/data/event/dtos/event_join_request_dto/event_join_request_dto.dart';
@@ -6,6 +7,7 @@ import 'package:app/core/data/event/gql/event_mutation.dart';
 import 'package:app/core/data/event/gql/event_query.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_accepted_export.dart';
+import 'package:app/core/domain/event/entities/event_application_answer.dart';
 import 'package:app/core/domain/event/entities/event_checkin.dart';
 import 'package:app/core/domain/event/entities/event_cohost_request.dart';
 import 'package:app/core/domain/event/entities/event_join_request.dart';
@@ -21,6 +23,7 @@ import 'package:app/graphql/backend/event/mutation/submit_event_application_ques
 import 'package:app/graphql/backend/event/mutation/manage_event_cohost_requests.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/update_event_checkin.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/update_event.graphql.dart';
+import 'package:app/graphql/backend/event/query/get_event_application_answers.graphql.dart';
 import 'package:app/graphql/backend/event/query/get_event_cohost_requests.graphql.dart';
 import 'package:app/graphql/backend/event/query/get_event_checkins.graphql.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
@@ -447,5 +450,35 @@ class EventRepositoryImpl implements EventRepository {
       return Left(Failure.withGqlException(result.exception));
     }
     return Right(result.parsedData?.submitEventApplicationQuestions ?? false);
+  }
+
+  @override
+  Future<Either<Failure, List<EventApplicationAnswer>>>
+      getEventApplicationAnswers({
+    required String eventId,
+    required String userId,
+  }) async {
+    final result = await client.query$GetEventApplicationAnswers(
+      Options$Query$GetEventApplicationAnswers(
+        variables: Variables$Query$GetEventApplicationAnswers(
+          event: eventId,
+          user: userId,
+        ),
+        fetchPolicy: FetchPolicy.networkOnly,
+      ),
+    );
+    if (result.hasException) {
+      return Left(Failure.withGqlException(result.exception));
+    }
+    // return Right(result.parsedData?.getEventApplicationAnswers ?? false);
+    return Right(
+      (result.parsedData?.getEventApplicationAnswers ?? [])
+          .map(
+            (item) => EventApplicationAnswer.fromDto(
+              EventApplicationAnswerDto.fromJson(item.toJson()),
+            ),
+          )
+          .toList(),
+    );
   }
 }

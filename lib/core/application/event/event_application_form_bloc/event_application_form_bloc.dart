@@ -1,5 +1,4 @@
 import 'package:app/core/domain/event/entities/event.dart';
-import 'package:app/core/domain/event/entities/event_application_profile_field.dart';
 import 'package:app/core/domain/event/entities/event_application_question.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/utils/string_utils.dart';
@@ -37,8 +36,8 @@ class EventApplicationFormBloc
     final userMap = user?.toJson();
     for (var applicationProfileField in applicationProfileFields) {
       final key = applicationProfileField.field ?? '';
-      initialFieldState[key] =
-          userMap![StringUtils.snakeToCamel(key)].toString();
+      final value = userMap![StringUtils.snakeToCamel(key)];
+      initialFieldState[key] = value != null ? value.toString() : "";
     }
     emit(
       state.copyWith(
@@ -59,14 +58,12 @@ class EventApplicationFormBloc
     EventApplicationFormBlocEventUpdateField event,
     Emitter emit,
   ) {
-    final applicationProfileFields =
-        event.event?.applicationProfileFields ?? [];
     final Map<String, String> newFieldState = {...state.fieldsState};
     newFieldState[event.key!] = event.value!;
     emit(
       _validate(
         state: state.copyWith(fieldsState: newFieldState),
-        applicationProfileFields: applicationProfileFields,
+        event: event.event,
       ),
     );
   }
@@ -75,7 +72,7 @@ class EventApplicationFormBloc
     EventApplicationFormBlocEventUpdateAnswer event,
     Emitter emit,
   ) {
-    final applicationQuestions = event.event?.applicationQuestions ?? [];
+    // final applicationQuestions = event.event?.applicationQuestions ?? [];
     final newAnswers = state.answers.map((answer) {
       if (answer.question == event.questionId) {
         return answer.copyWith(answer: event.answer);
@@ -85,16 +82,17 @@ class EventApplicationFormBloc
     emit(
       _validate(
         state: state.copyWith(answers: newAnswers),
-        applicationQuestions: applicationQuestions,
+        event: event.event,
       ),
     );
   }
 
   EventApplicationFormBlocState _validate({
     required EventApplicationFormBlocState state,
-    List<EventApplicationProfileField>? applicationProfileFields,
-    List<EventApplicationQuestion>? applicationQuestions,
+    Event? event,
   }) {
+    final applicationProfileFields = event?.applicationProfileFields ?? [];
+    final applicationQuestions = event?.applicationQuestions ?? [];
     // Check profile required fields valid
     final allProfileRequiredFields = state.fieldsState.entries.where((entry) {
       final isRequiredField = applicationProfileFields?.any(
@@ -104,6 +102,7 @@ class EventApplicationFormBloc
       );
       return isRequiredField == true;
     });
+
     final isValidProfileFields = allProfileRequiredFields.every(
       (allProfileRequiredField) => !allProfileRequiredField.value.isNullOrEmpty,
     );
@@ -117,6 +116,7 @@ class EventApplicationFormBloc
       );
       return isRequiredField == true;
     });
+
     final isValidAnswersField = allAnswerRequiredFields.every(
       (allProfileRequiredField) =>
           !allProfileRequiredField.answer.isNullOrEmpty,

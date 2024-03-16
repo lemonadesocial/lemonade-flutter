@@ -117,6 +117,7 @@ class GuestEventApplicationInfoPage extends StatelessWidget {
                         textStyle: Typo.medium.copyWith(
                           fontFamily: FontFamily.nohemiVariable,
                           fontWeight: FontWeight.w600,
+                          color: colorScheme.onPrimary,
                         ),
                         height: Sizing.large,
                         radius: BorderRadius.circular(LemonRadius.large),
