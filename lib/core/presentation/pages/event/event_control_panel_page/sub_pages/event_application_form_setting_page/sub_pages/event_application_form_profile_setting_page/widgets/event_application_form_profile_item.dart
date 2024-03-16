@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_switch/flutter_switch.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 
 class EventApplicationFormProfileItem extends StatelessWidget {
   final ProfileFieldKey item;
@@ -58,6 +59,7 @@ class EventApplicationFormProfileItem extends StatelessWidget {
                     ),
                     InkWell(
                       onTap: () {
+                        Vibrate.feedback(FeedbackType.light);
                         context
                             .read<EventApplicationFormProfileSettingBloc>()
                             .add(
@@ -113,6 +115,7 @@ class EventApplicationFormProfileItem extends StatelessWidget {
                                 width: 42.w,
                                 value: isRequired,
                                 onToggle: (value) {
+                                  Vibrate.feedback(FeedbackType.light);
                                   context
                                       .read<
                                           EventApplicationFormProfileSettingBloc>()

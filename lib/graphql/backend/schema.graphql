@@ -158,9 +158,12 @@ type User {
   events: [MongoID!]
   frequent_questions: [FrequentQuestion!]
   handle_facebook: String
+  handle_farcaster: String
   handle_github: String
   handle_instagram: String
+  handle_lens: String
   handle_linkedin: String
+  handle_mirror: String
   handle_twitter: String
   image_avatar: String
   industry: String
@@ -1264,6 +1267,7 @@ type Chain {
   safe_confirmations: Float!
   logo_url: String
   tokens: [Token!]
+  escrow_manager_contract: String
 }
 
 type Token {
@@ -1930,9 +1934,12 @@ type UserWithEmail {
   events: [MongoID!]
   frequent_questions: [FrequentQuestion!]
   handle_facebook: String
+  handle_farcaster: String
   handle_github: String
   handle_instagram: String
+  handle_lens: String
   handle_linkedin: String
+  handle_mirror: String
   handle_twitter: String
   image_avatar: String
   industry: String
@@ -3090,9 +3097,12 @@ input UserInput {
   events: [MongoID!]
   frequent_questions: [FrequentQuestionInput!]
   handle_facebook: String
+  handle_farcaster: String
   handle_github: String
   handle_instagram: String
+  handle_lens: String
   handle_linkedin: String
+  handle_mirror: String
   handle_twitter: String
   icebreakers: [UserIcebreakerInput!]
   industry: String

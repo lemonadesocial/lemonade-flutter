@@ -1,6 +1,7 @@
 import 'package:app/core/application/event/event_provider_bloc/event_provider_bloc.dart';
 import 'package:app/core/presentation/widgets/animation/success_circle_animation_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
+import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -23,7 +24,9 @@ class GuestEventApplicationFormSuccessView extends StatelessWidget {
       mainAxisSize: MainAxisSize.max,
       children: [
         const Spacer(),
-        const SuccessCircleAnimationWidget(),
+        SuccessCircleAnimationWidget(
+          successWidget: Assets.icons.icSuccessGrey.svg(),
+        ),
         const Spacer(),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,

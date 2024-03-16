@@ -44,7 +44,7 @@ class GuestEventApplicationFormAnswersItems extends StatelessWidget {
                           ),
                         );
                   },
-                  showRequired: applicationQuestion.required,
+                  showRequired: applicationQuestion.isRequired,
                 ),
                 SizedBox(
                   height: Spacing.smMedium,

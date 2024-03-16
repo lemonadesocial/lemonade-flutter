@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SuccessCircleAnimationWidget extends StatelessWidget {
-  const SuccessCircleAnimationWidget({super.key});
+  const SuccessCircleAnimationWidget({super.key, this.successWidget});
+
+  final Widget? successWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +50,7 @@ class SuccessCircleAnimationWidget extends StatelessWidget {
           ),
           Align(
             alignment: Alignment.center,
-            child: Assets.icons.icSuccess.svg(),
+            child: successWidget ?? Assets.icons.icSuccess.svg(),
           ),
         ],
       ),

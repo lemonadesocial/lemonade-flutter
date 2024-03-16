@@ -112,7 +112,7 @@ class EventApplicationFormBloc
       final isRequiredField = applicationQuestions?.any(
         (applicationQuestion) =>
             applicationQuestion.id == answer.question &&
-            applicationQuestion.required == true,
+            applicationQuestion.isRequired == true,
       );
       return isRequiredField == true;
     });
