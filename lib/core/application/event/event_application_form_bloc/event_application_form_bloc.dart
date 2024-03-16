@@ -95,7 +95,7 @@ class EventApplicationFormBloc
     final applicationQuestions = event?.applicationQuestions ?? [];
     // Check profile required fields valid
     final allProfileRequiredFields = state.fieldsState.entries.where((entry) {
-      final isRequiredField = applicationProfileFields?.any(
+      final isRequiredField = applicationProfileFields.any(
         (applicationProfileField) =>
             applicationProfileField.field == entry.key &&
             applicationProfileField.required == true,
@@ -109,7 +109,7 @@ class EventApplicationFormBloc
 
     // Check questions required valid
     final allAnswerRequiredFields = state.answers.where((answer) {
-      final isRequiredField = applicationQuestions?.any(
+      final isRequiredField = applicationQuestions.any(
         (applicationQuestion) =>
             applicationQuestion.id == answer.question &&
             applicationQuestion.isRequired == true,
