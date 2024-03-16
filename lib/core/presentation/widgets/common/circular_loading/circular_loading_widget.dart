@@ -29,6 +29,12 @@ class CircularLoadingState extends State<CircularLoading>
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _animationContrl.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return SizedBox(
