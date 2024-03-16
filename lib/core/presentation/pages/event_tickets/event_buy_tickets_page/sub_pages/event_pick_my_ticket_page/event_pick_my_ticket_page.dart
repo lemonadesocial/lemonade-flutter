@@ -210,8 +210,9 @@ class EventPickMyTicketView extends StatelessWidget {
                   final isInvalid = state.selectedTicketType == null;
                   return Padding(
                     padding: EdgeInsets.symmetric(
-                        horizontal: Spacing.smMedium,
-                        vertical: Spacing.smMedium),
+                      horizontal: Spacing.smMedium,
+                      vertical: Spacing.smMedium,
+                    ),
                     child: SizedBox(
                       height: Sizing.large,
                       child: Opacity(
