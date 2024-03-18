@@ -101,7 +101,7 @@ class _GuestEventDetailBuyButtonView extends StatelessWidget {
 
     User? user = userResult.fold((l) => null, (user) => user);
     if (user != null) {
-      final userJson = user.toJson() ?? {};
+      final userJson = user.toJson();
       final missingFields = profileRequiredFields.where((field) {
         final fieldValue = userJson.tryGet(field);
         if (fieldValue is String) {
