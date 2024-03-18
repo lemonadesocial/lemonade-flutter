@@ -7,9 +7,9 @@ import 'package:app/core/presentation/pages/event/event_detail_page/sub_pages/gu
 import 'package:app/core/presentation/pages/event/event_detail_page/sub_pages/guest_event_application_page/sub_pages/guest_event_application_form_processing_page/view/guest_event_application_form_success_view.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/injection/register_module.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -42,18 +42,18 @@ class _GuestEventApplicationFormProcessingPageState
         context.read<EventApplicationFormBloc>().state.fieldsState;
     final answers = context.read<EventApplicationFormBloc>().state.answers;
 
-    try {
-      await getIt<UserRepository>().updateUser(
-        input: Input$UserInput.fromJson(profileFields),
-      );
-      await getIt<EventRepository>().submitEventApplicationAnswers(
-        answers: answers,
-        eventId: event.id ?? '',
-      );
-    } catch (error) {
-      if (kDebugMode) {
-        print("Error: $error");
-      }
+    final updateUserResult = await getIt<UserRepository>().updateUser(
+      input: Input$UserInput.fromJson(profileFields),
+    );
+    final submitAnswersResult =
+        await getIt<EventRepository>().submitEventApplicationAnswers(
+      answers: answers,
+      eventId: event.id ?? '',
+    );
+    if (updateUserResult.isLeft() || submitAnswersResult.isLeft()) {
+      AutoRouter.of(context).replaceAll([
+        const GuestEventApplicationFormRoute(),
+      ]);
     }
   }
 

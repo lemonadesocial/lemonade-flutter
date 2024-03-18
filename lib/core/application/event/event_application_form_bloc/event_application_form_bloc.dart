@@ -98,7 +98,7 @@ class EventApplicationFormBloc
   }) {
     final applicationProfileFields = event?.applicationProfileFields ?? [];
     final applicationQuestions = event?.applicationQuestions ?? [];
-    
+
     // Get all required profile fileds
     final List<EventApplicationProfileField> requiredProfileFields =
         applicationProfileFields
@@ -106,9 +106,12 @@ class EventApplicationFormBloc
             .toList();
 
     // Check if state.fieldsState contain these required profile fields or not
-    final isValidProfileFields = requiredProfileFields.every((requiredProfileField) {
+    final isValidProfileFields =
+        requiredProfileFields.every((requiredProfileField) {
       final matchingAnswer = state.fieldsState.entries.firstWhere(
-        (entry) => entry.key == requiredProfileField.field && requiredProfileField.required == true,
+        (entry) =>
+            entry.key == requiredProfileField.field &&
+            requiredProfileField.required == true,
       );
       return !matchingAnswer.value.isNullOrEmpty;
     });
