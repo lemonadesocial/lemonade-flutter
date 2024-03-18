@@ -159,6 +159,7 @@ class LinearGradientButton extends StatelessWidget {
     Function()? onTap,
     bool? loadingWhen,
     Color? textColor,
+    Widget? leading,
   }) =>
       LinearGradientButton(
         onTap: onTap,
@@ -172,5 +173,6 @@ class LinearGradientButton extends StatelessWidget {
         mode: GradientButtonMode.defaultMode,
         height: Sizing.large,
         radius: BorderRadius.circular(LemonRadius.small * 2),
+        leading: leading,
       );
 }

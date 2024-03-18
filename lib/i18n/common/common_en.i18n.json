@@ -56,7 +56,8 @@
         "saveChanges": "Save changes",
         "accept": "Accept",
         "decline": "Decline",
-        "submit": "Submit"
+        "submit": "Submit",
+        "continueNext": "Continue"
     },
     "followed": "Followed",
     "anonymous": "anonymous",
