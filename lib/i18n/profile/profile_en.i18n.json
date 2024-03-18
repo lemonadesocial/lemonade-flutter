@@ -41,5 +41,12 @@
     "unBlockConfirm": "Are you sure you want to unblock this profile?",
     "blockSuccess": "Block user successfully",
     "unblockSuccess": "Unblock user successfully",
-    "blockedMessage": "This content isn't available"
+    "blockedMessage": "This content isn't available",
+    "socials" :{
+        "facebook": "Facebook",
+        "linkedIn": "LinkedIn",
+        "github": "Github",
+        "instagram": "Instagram",
+        "twitter": "Twitter"
+    }
 }

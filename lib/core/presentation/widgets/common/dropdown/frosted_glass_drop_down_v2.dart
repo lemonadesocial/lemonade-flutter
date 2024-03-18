@@ -14,6 +14,7 @@ class FrostedGlassDropDownV2 extends StatelessWidget {
     this.selectedValue,
     this.label,
     this.hintText,
+    this.showRequired,
   });
 
   final String? label;
@@ -21,6 +22,7 @@ class FrostedGlassDropDownV2 extends StatelessWidget {
   final List<String> listItem;
   final String? selectedValue;
   final ValueChanged<String?> onValueChange;
+  final bool? showRequired;
 
   @override
   Widget build(BuildContext context) {
@@ -29,11 +31,29 @@ class FrostedGlassDropDownV2 extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (label != null) ...[
-          Text(
-            label!,
-            style: Typo.small.copyWith(
-              color: colorScheme.onPrimary.withOpacity(0.36),
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                label!,
+                style: Typo.small.copyWith(
+                  color: colorScheme.onPrimary.withOpacity(0.36),
+                ),
+              ),
+              if (showRequired == true) ...[
+                SizedBox(
+                  width: Spacing.superExtraSmall,
+                ),
+                Text(
+                  "*",
+                  style: Typo.mediumPlus.copyWith(
+                    color: LemonColor.coralReef,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ],
           ),
           SizedBox(height: Spacing.superExtraSmall),
         ],

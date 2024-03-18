@@ -55,7 +55,8 @@
         "revoke": "Revoke",
         "saveChanges": "Save changes",
         "accept": "Accept",
-        "decline": "Decline"
+        "decline": "Decline",
+        "submit": "Submit"
     },
     "followed": "Followed",
     "anonymous": "anonymous",
@@ -152,5 +153,7 @@
     "defaultEmptyList": "No items to display at the moment.",
     "email": "Email",
     "alert": "Alert",
-    "create": "Create"
+    "create": "Create",
+    "required": "Required",
+    "optional": "Optional"
 }

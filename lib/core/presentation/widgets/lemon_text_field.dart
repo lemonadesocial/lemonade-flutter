@@ -27,6 +27,7 @@ class LemonTextField extends StatelessWidget {
     this.errorText,
     this.readOnly,
     this.onTap,
+    this.showRequired,
   });
 
   final ValueChanged<String>? onChange;
@@ -48,6 +49,7 @@ class LemonTextField extends StatelessWidget {
   final String? errorText;
   final bool? readOnly;
   final Function()? onTap;
+  final bool? showRequired;
 
   @override
   Widget build(BuildContext context) {
@@ -66,11 +68,29 @@ class LemonTextField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (label != null) ...[
-          Text(
-            label!,
-            style: Typo.small.copyWith(
-              color: theme.colorScheme.onPrimary.withOpacity(0.36),
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                label!,
+                style: Typo.small.copyWith(
+                  color: theme.colorScheme.onPrimary.withOpacity(0.36),
+                ),
+              ),
+              if (showRequired == true) ...[
+                SizedBox(
+                  width: Spacing.superExtraSmall,
+                ),
+                Text(
+                  "*",
+                  style: Typo.mediumPlus.copyWith(
+                    color: LemonColor.coralReef,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ],
           ),
           SizedBox(height: Spacing.superExtraSmall),
         ],

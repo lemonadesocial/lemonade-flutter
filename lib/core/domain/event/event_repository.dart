@@ -1,5 +1,6 @@
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_accepted_export.dart';
+import 'package:app/core/domain/event/entities/event_application_answer.dart';
 import 'package:app/core/domain/event/entities/event_checkin.dart';
 import 'package:app/core/domain/event/entities/event_cohost_request.dart';
 import 'package:app/core/domain/event/entities/event_join_request.dart';
@@ -96,5 +97,16 @@ abstract class EventRepository {
   Future<Either<Failure, bool>> submitEventApplicationQuestions({
     required String eventId,
     required List<Input$QuestionInput> questions,
+  });
+
+  Future<Either<Failure, List<EventApplicationAnswer>>>
+      getEventApplicationAnswers({
+    required String eventId,
+    required String userId,
+  });
+
+  Future<Either<Failure, bool>> submitEventApplicationAnswers({
+    required String eventId,
+    required List<Input$EventApplicationAnswerInput> answers,
   });
 }

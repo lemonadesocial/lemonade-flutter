@@ -38,7 +38,7 @@ class EventApplicationFormProfileItem extends StatelessWidget {
         return Container(
           decoration: BoxDecoration(
             color: LemonColor.darkBackground,
-            borderRadius: BorderRadius.circular(LemonRadius.small),
+            borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
           ),
           child: Column(
             children: [

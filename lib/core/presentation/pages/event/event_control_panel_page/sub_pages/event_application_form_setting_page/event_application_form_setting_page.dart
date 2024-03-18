@@ -58,6 +58,17 @@ class EventApplicationFormSettingPage extends StatelessWidget {
           orElse: () => '',
         );
     final getEventDetailBloc = context.read<GetEventDetailBloc>();
+    int requiredProfileFieldsCount = event?.applicationProfileFields?.fold(
+          0,
+          (sum, field) => sum! + (field.required == true ? 1 : 0),
+        ) ??
+        0;
+    int optionalProfileFieldsCount = event?.applicationProfileFields?.fold(
+          0,
+          (sum, field) => sum! + (field.required == false ? 1 : 0),
+        ) ??
+        0;
+
     return BlocProvider(
       create: (context) => EventApplicationFormSettingBloc(
         initialQuestions: event?.applicationQuestions ?? [],
@@ -153,8 +164,12 @@ class EventApplicationFormSettingPage extends StatelessWidget {
                                         height: 2.h,
                                       ),
                                       Text(
-                                        t.event.applicationForm
-                                            .profileInfoDescription,
+                                        event?.applicationProfileFields
+                                                    ?.isEmpty ??
+                                                true
+                                            ? t.event.applicationForm
+                                                .profileInfoDescription
+                                            : '$requiredProfileFieldsCount ${t.common.required.toLowerCase()}, $optionalProfileFieldsCount ${t.common.optional.toLowerCase()}',
                                         style: Typo.small.copyWith(
                                           color: colorScheme.onSecondary,
                                         ),

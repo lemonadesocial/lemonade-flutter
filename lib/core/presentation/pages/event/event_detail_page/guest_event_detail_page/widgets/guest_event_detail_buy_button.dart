@@ -1,15 +1,16 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/event/buy_event_ticket_bloc/buy_event_ticket_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/entities/event_application_answer.dart';
 import 'package:app/core/domain/event/entities/event_join_request.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/core/domain/event/input/get_event_currencies_input/get_event_currencies_input.dart';
 import 'package:app/core/domain/event/repository/event_ticket_repository.dart';
+import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
-import 'package:app/core/presentation/widgets/common/dialog/lemon_alert_dialog.dart';
 import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/event_tickets_utils.dart';
@@ -17,7 +18,6 @@ import 'package:app/core/utils/list_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
-import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/sizing.dart';
@@ -68,20 +68,39 @@ class _GuestEventDetailBuyButtonView extends StatelessWidget {
     return result.result;
   }
 
-  Future<bool> _checkProfileRequiredFields(BuildContext context) async {
+  Future<void> _checkProfileRequiredFields(BuildContext context) async {
+    User? currentUser = context.read<AuthBloc>().state.maybeWhen(
+          authenticated: (authSession) => authSession,
+          orElse: () => null,
+        );
     List<String> profileRequiredFields = (event.applicationProfileFields ?? [])
         .where((e) => e.required == true)
         .map((e) => e.field ?? '')
         .map(StringUtils.snakeToCamel)
         .toList();
-    if (profileRequiredFields.isEmpty) {
-      return true;
-    }
-    final userResult = await showFutureLoadingDialog(
+
+    final results = await showFutureLoadingDialog(
       context: context,
-      future: () => getIt<UserRepository>().getMe(),
+      future: () => Future.wait(
+        [
+          getIt<UserRepository>().getMe(),
+          getIt<EventRepository>().getEventApplicationAnswers(
+            eventId: event.id ?? '',
+            userId: currentUser?.userId ?? '',
+          ),
+        ],
+      ),
     );
-    return userResult.result!.fold((l) => true, (user) {
+
+    // Extract results from the futures
+    final Either<Failure, User?> userResult =
+        results.result?[0] as Either<Failure, User>;
+    final Either<Failure, List<EventApplicationAnswer?>>
+        applicationAnswersResult =
+        results.result?[1] as Either<Failure, List<EventApplicationAnswer>>;
+
+    User? user = userResult.fold((l) => null, (user) => user);
+    if (user != null) {
       final userJson = user.toJson();
       final missingFields = profileRequiredFields.where((field) {
         final fieldValue = userJson.tryGet(field);
@@ -90,34 +109,27 @@ class _GuestEventDetailBuyButtonView extends StatelessWidget {
         }
         return fieldValue == null;
       });
-      if (missingFields.isEmpty) {
-        return true;
-      }
-      final formattedMissingFields =
-          missingFields.map(StringUtils.camelCaseToWords).toList();
-      showDialog(
-        context: context,
-        builder: (context) {
-          return LemonAlertDialog(
-            onClose: () {
-              AutoRouter.of(context).pop();
-              AutoRouter.of(context).push(
-                EditProfileRoute(
-                  userProfile: user,
-                ),
-              );
-            },
-            buttonLabel: t.common.actions.ok,
-            child: Text(
-              t.event.profileRequiredFields(
-                fields: formattedMissingFields.join(', '),
-              ),
+
+      List<EventApplicationAnswer?>? eventApplicationAnswers =
+          applicationAnswersResult.fold(
+        (l) => null,
+        (answers) => answers,
+      );
+      // TODO: Right now backend missing return data in this case for guest
+      if (eventApplicationAnswers != null) {
+        if (missingFields.isEmpty && eventApplicationAnswers.isNotEmpty) {
+          AutoRouter.of(context).navigate(
+            EventBuyTicketsRoute(
+              event: event,
             ),
           );
-        },
-      );
-      return false;
-    });
+          return;
+        }
+      }
+      AutoRouter.of(context)
+          .navigate(GuestEventApplicationRoute(event: event, user: user));
+    }
+    return;
   }
 
   @override
@@ -174,15 +186,7 @@ class _GuestEventDetailBuyButtonView extends StatelessWidget {
                         return;
                       }
 
-                      final isQualified =
-                          await _checkProfileRequiredFields(context);
-                      if (!isQualified) {
-                        return;
-                      }
-
-                      AutoRouter.of(context).navigate(
-                        EventBuyTicketsRoute(event: event),
-                      );
+                      await _checkProfileRequiredFields(context);
                     },
                     orElse: () {
                       AutoRouter.of(context).navigate(

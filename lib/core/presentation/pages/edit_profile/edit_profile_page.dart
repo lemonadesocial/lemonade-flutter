@@ -1,14 +1,15 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/profile/edit_profile_bloc/edit_profile_bloc.dart';
+import 'package:app/core/domain/common/common_enums.dart';
 import 'package:app/core/domain/post/post_repository.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/presentation/pages/edit_profile/sub_pages/edit_profile_personal_page.dart';
 import 'package:app/core/presentation/pages/edit_profile/sub_pages/edit_profile_social_page.dart';
 import 'package:app/core/presentation/pages/edit_profile/widgets/edit_profile_avatar.dart';
+import 'package:app/core/presentation/pages/edit_profile/widgets/edit_profile_field_item.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
-import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/core/service/post/post_service.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -75,10 +76,10 @@ class EditProfilePage extends StatelessWidget {
                                 ),
                                 SizedBox(width: 15.w),
                                 Expanded(
-                                  child: LemonTextField(
-                                    label: t.onboarding.displayName,
-                                    hintText: t.profile.hint.displayName,
-                                    initialText: userProfile.displayName,
+                                  child: EditProfileFieldItem(
+                                    profileFieldKey:
+                                        ProfileFieldKey.displayName,
+                                    userProfile: userProfile,
                                     onChange: bloc.onDisplayNameChange,
                                   ),
                                 ),
@@ -91,19 +92,15 @@ class EditProfilePage extends StatelessWidget {
                                   state.username ?? userProfile.username ?? '',
                             ),
                             SizedBox(height: Spacing.smMedium),
-                            LemonTextField(
-                              label: t.profile.tagline,
-                              hintText: t.profile.hint.tagline,
-                              initialText: userProfile.tagline,
-                              minLines: 2,
+                            EditProfileFieldItem(
+                              profileFieldKey: ProfileFieldKey.tagline,
+                              userProfile: userProfile,
                               onChange: bloc.onTaglineChange,
                             ),
                             SizedBox(height: Spacing.smMedium),
-                            LemonTextField(
-                              label: t.onboarding.shortBio,
-                              hintText: t.profile.hint.shortBio,
-                              initialText: userProfile.description,
-                              minLines: 4,
+                            EditProfileFieldItem(
+                              profileFieldKey: ProfileFieldKey.description,
+                              userProfile: userProfile,
                               onChange: bloc.onShortBioChange,
                             ),
                             SizedBox(height: Spacing.smMedium),

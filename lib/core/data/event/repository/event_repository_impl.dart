@@ -1,3 +1,4 @@
+import 'package:app/core/data/event/dtos/event_application_answer_dto/event_application_answer_dto.dart';
 import 'package:app/core/data/event/dtos/event_cohost_request_dto/event_cohost_request_dto.dart';
 import 'package:app/core/data/event/dtos/event_dtos.dart';
 import 'package:app/core/data/event/dtos/event_join_request_dto/event_join_request_dto.dart';
@@ -6,6 +7,7 @@ import 'package:app/core/data/event/gql/event_mutation.dart';
 import 'package:app/core/data/event/gql/event_query.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_accepted_export.dart';
+import 'package:app/core/domain/event/entities/event_application_answer.dart';
 import 'package:app/core/domain/event/entities/event_checkin.dart';
 import 'package:app/core/domain/event/entities/event_cohost_request.dart';
 import 'package:app/core/domain/event/entities/event_join_request.dart';
@@ -17,10 +19,12 @@ import 'package:app/core/domain/event/input/get_events_listing_input.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/graphql/backend/event/mutation/create_event.graphql.dart';
+import 'package:app/graphql/backend/event/mutation/submit_event_application_answers.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/submit_event_application_questions.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/manage_event_cohost_requests.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/update_event_checkin.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/update_event.graphql.dart';
+import 'package:app/graphql/backend/event/query/get_event_application_answers.graphql.dart';
 import 'package:app/graphql/backend/event/query/get_event_cohost_requests.graphql.dart';
 import 'package:app/graphql/backend/event/query/get_event_checkins.graphql.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
@@ -447,5 +451,54 @@ class EventRepositoryImpl implements EventRepository {
       return Left(Failure.withGqlException(result.exception));
     }
     return Right(result.parsedData?.submitEventApplicationQuestions ?? false);
+  }
+
+  @override
+  Future<Either<Failure, List<EventApplicationAnswer>>>
+      getEventApplicationAnswers({
+    required String eventId,
+    required String userId,
+  }) async {
+    final result = await client.query$GetEventApplicationAnswers(
+      Options$Query$GetEventApplicationAnswers(
+        variables: Variables$Query$GetEventApplicationAnswers(
+          event: eventId,
+          user: userId,
+        ),
+        fetchPolicy: FetchPolicy.networkOnly,
+      ),
+    );
+    if (result.hasException) {
+      return Left(Failure.withGqlException(result.exception));
+    }
+    return Right(
+      (result.parsedData?.getEventApplicationAnswers ?? [])
+          .map(
+            (item) => EventApplicationAnswer.fromDto(
+              EventApplicationAnswerDto.fromJson(item.toJson()),
+            ),
+          )
+          .toList(),
+    );
+  }
+
+  @override
+  Future<Either<Failure, bool>> submitEventApplicationAnswers({
+    required String eventId,
+    required List<Input$EventApplicationAnswerInput> answers,
+  }) async {
+    final result = await client.mutate$SubmitEventApplicationAnswers(
+      Options$Mutation$SubmitEventApplicationAnswers(
+        variables: Variables$Mutation$SubmitEventApplicationAnswers(
+          event: eventId,
+          answers: answers,
+        ),
+        fetchPolicy: FetchPolicy.networkOnly,
+      ),
+    );
+    if (result.hasException) {
+      return Left(Failure.withGqlException(result.exception));
+    }
+    return Right(result.parsedData?.submitEventApplicationAnswers ?? false);
   }
 }
