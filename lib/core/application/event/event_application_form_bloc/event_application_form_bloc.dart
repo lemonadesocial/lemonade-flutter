@@ -37,7 +37,11 @@ class EventApplicationFormBloc
     for (var applicationProfileField in applicationProfileFields) {
       final key = applicationProfileField.field ?? '';
       final value = userMap![StringUtils.snakeToCamel(key)];
-      initialFieldState[key] = value != null ? value.toString() : "";
+      if (value != null && value is String) {
+        initialFieldState[key] = value;
+      } else {
+        initialFieldState[key] = "";
+      }
     }
     emit(
       state.copyWith(
@@ -59,7 +63,7 @@ class EventApplicationFormBloc
     Emitter emit,
   ) {
     final Map<String, String> newFieldState = {...state.fieldsState};
-    newFieldState[event.key!] = event.value!;
+    newFieldState[event.key] = event.value;
     emit(
       _validate(
         state: state.copyWith(fieldsState: newFieldState),
@@ -100,24 +104,24 @@ class EventApplicationFormBloc
             applicationProfileField.field == entry.key &&
             applicationProfileField.required == true,
       );
-      return isRequiredField == true;
+      return isRequiredField;
     });
 
     final isValidProfileFields = allProfileRequiredFields.every(
-      (allProfileRequiredField) => !allProfileRequiredField.value.isNullOrEmpty,
+      (requiredProfileField) => !requiredProfileField.value.isNullOrEmpty,
     );
 
     // Check questions required valid
-    final allAnswerRequiredFields = state.answers.where((answer) {
+    final allAnswersRequiredFields = state.answers.where((answer) {
       final isRequiredField = applicationQuestions.any(
         (applicationQuestion) =>
             applicationQuestion.id == answer.question &&
             applicationQuestion.isRequired == true,
       );
-      return isRequiredField == true;
+      return isRequiredField;
     });
 
-    final isValidAnswersField = allAnswerRequiredFields.every(
+    final isValidAnswersField = allAnswersRequiredFields.every(
       (allProfileRequiredField) =>
           !allProfileRequiredField.answer.isNullOrEmpty,
     );
@@ -133,8 +137,8 @@ class EventApplicationFormBlocEvent with _$EventApplicationFormBlocEvent {
   }) = EventApplicationFormBlocEventInitFieldState;
   factory EventApplicationFormBlocEvent.updateField({
     required Event? event,
-    String? key,
-    String? value,
+    required String key,
+    required String value,
   }) = EventApplicationFormBlocEventUpdateField;
   factory EventApplicationFormBlocEvent.updateAnswer({
     required Event? event,

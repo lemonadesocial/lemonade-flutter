@@ -58,12 +58,12 @@ class EventApplicationFormSettingPage extends StatelessWidget {
           orElse: () => '',
         );
     final getEventDetailBloc = context.read<GetEventDetailBloc>();
-    int sumProfileRequiredFields = event?.applicationProfileFields?.fold(
+    int requiredProfileFieldsCount = event?.applicationProfileFields?.fold(
           0,
           (sum, field) => sum! + (field.required == true ? 1 : 0),
         ) ??
         0;
-    int sumProfileOptionalFields = event?.applicationProfileFields?.fold(
+    int optionalProfileFieldsCount = event?.applicationProfileFields?.fold(
           0,
           (sum, field) => sum! + (field.required == false ? 1 : 0),
         ) ??
@@ -169,7 +169,7 @@ class EventApplicationFormSettingPage extends StatelessWidget {
                                                 true
                                             ? t.event.applicationForm
                                                 .profileInfoDescription
-                                            : '$sumProfileRequiredFields ${t.common.required.toLowerCase()}, $sumProfileOptionalFields ${t.common.optional.toLowerCase()}',
+                                            : '$requiredProfileFieldsCount ${t.common.required.toLowerCase()}, $optionalProfileFieldsCount ${t.common.optional.toLowerCase()}',
                                         style: Typo.small.copyWith(
                                           color: colorScheme.onSecondary,
                                         ),
