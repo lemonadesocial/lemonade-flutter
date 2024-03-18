@@ -408,5 +408,26 @@
         "saveFormSuccessfully": "Update application form successfully",
         "updateApplicationFormSuccessfully": "Update application form successfully"
     },
-    "reserve": "Reserve"
+    "reserve": "Reserve",
+    "rsvpStatus": {
+        "approvalRequired": "Approval required",
+        "fromCohostToJoin": "from cohosts to join",
+        "limitedSpots": "Limited spots",
+        "registerBeforeEventFillsUp": "Register before event fills up",
+        "pendingApproval": "Pending approval",
+        "pendingApprovalDescription": "Your request has been sent! Hosts need to review & approve your request.",
+        "requestApproved": "Request approved!",
+        "requestApprovedDescription": "Your request has been approved by the hosts! Complete payment to secure your tickets.",
+        "completePayment": "Complete payment",
+        "requestDeclined": "Request denined",
+        "requestDeclinedDepositDescription": "Hosts have denied your request to join. Claim your 100% refund of $amount",
+        "requestDeclinedDirectDescription": "Hosts have denied your request to join.",
+        "claimRefund": "Claim refund",
+        "refundedDescription": "Your ticket deposit of $amount has been refunded. This may take some time to reflect in your wallet"
+    },
+    "cancelReservation": {
+        "cancelReservationTitle": "Cancel Reservation?",
+        "cancelReservationFullAmountDescription": "As hosts have not yet approved your request, you can claim your 100% refund of 0.2 ETH",
+        "cancelReservationPartialAmountDescription": "Since you canceled $time before the event, you are eligible for an $percentage deposit refund."
+    }
 }

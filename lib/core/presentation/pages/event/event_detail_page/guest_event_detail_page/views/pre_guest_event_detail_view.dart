@@ -2,10 +2,11 @@ import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/application/report/report_bloc/report_bloc.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_appbar.dart';
-import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_buy_button.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_general_info.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_hosts.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_photos.dart';
+import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_rsvp_status/guest_event_detail_rsvp_status.dart';
+import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_rsvp_status/guest_event_detail_rsvp_status_button.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_location.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_more_actions.dart';
 import 'package:app/core/presentation/widgets/back_button_widget.dart';
@@ -95,6 +96,24 @@ class PreGuestEventDetailViewState extends State<PreGuestEventDetailView> {
                           ),
                         ),
                       ),
+                      if (event.approvalRequired == true ||
+                          event.guestLimit != null) ...[
+                        SliverPadding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: Spacing.smMedium,
+                          ),
+                          sliver: SliverToBoxAdapter(
+                            child: GuestEventDetailRSVPStatus(
+                              event: event,
+                            ),
+                          ),
+                        ),
+                        SliverPadding(
+                          padding: EdgeInsets.symmetric(
+                            vertical: Spacing.smMedium,
+                          ),
+                        ),
+                      ],
                       if (event.latitude != null &&
                           event.longitude != null) ...[
                         SliverPadding(
@@ -155,7 +174,7 @@ class PreGuestEventDetailViewState extends State<PreGuestEventDetailView> {
                   if (!isOwnEvent)
                     Align(
                       alignment: Alignment.bottomCenter,
-                      child: GuestEventDetailBuyButton(
+                      child: GuestEventDetailRSVPStatusButton(
                         event: event,
                       ),
                     ),
