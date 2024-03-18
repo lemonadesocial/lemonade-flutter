@@ -64,6 +64,7 @@ class EventDto with _$EventDto {
     List<EventApplicationQuestionDto>? applicationQuestions,
     @JsonKey(name: 'application_profile_fields')
     List<EventApplicationProfileFieldDto>? applicationProfileFields,
+    @JsonKey(name: 'application_form_submission') DateTime? applicationFormSubmission,
   }) = _EventDto;
 
   factory EventDto.fromJson(Map<String, dynamic> json) =>

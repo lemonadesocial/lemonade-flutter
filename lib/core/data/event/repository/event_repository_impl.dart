@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:app/core/data/event/dtos/event_application_answer_dto/event_application_answer_dto.dart';
 import 'package:app/core/data/event/dtos/event_cohost_request_dto/event_cohost_request_dto.dart';
 import 'package:app/core/data/event/dtos/event_dtos.dart';
@@ -487,6 +489,7 @@ class EventRepositoryImpl implements EventRepository {
     required String eventId,
     required List<Input$EventApplicationAnswerInput> answers,
   }) async {
+    print(jsonEncode(answers));
     final result = await client.mutate$SubmitEventApplicationAnswers(
       Options$Mutation$SubmitEventApplicationAnswers(
         variables: Variables$Mutation$SubmitEventApplicationAnswers(

@@ -202,6 +202,7 @@ const eventApplicationFormFragment = '''
       question
       required
     }
+    application_form_submission
   }
 ''';
 

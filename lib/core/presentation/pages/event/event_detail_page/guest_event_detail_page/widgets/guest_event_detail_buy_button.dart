@@ -79,27 +79,12 @@ class _GuestEventDetailBuyButtonView extends StatelessWidget {
         .map(StringUtils.snakeToCamel)
         .toList();
 
-    final results = await showFutureLoadingDialog(
+    final userResult = await showFutureLoadingDialog(
       context: context,
-      future: () => Future.wait(
-        [
-          getIt<UserRepository>().getMe(),
-          getIt<EventRepository>().getEventApplicationAnswers(
-            eventId: event.id ?? '',
-            userId: currentUser?.userId ?? '',
-          ),
-        ],
-      ),
+      future: () => getIt<UserRepository>().getMe(),
     );
 
-    // Extract results from the futures
-    final Either<Failure, User?> userResult =
-        results.result?[0] as Either<Failure, User>;
-    final Either<Failure, List<EventApplicationAnswer?>>
-        applicationAnswersResult =
-        results.result?[1] as Either<Failure, List<EventApplicationAnswer>>;
-
-    User? user = userResult.fold((l) => null, (user) => user);
+    User? user = userResult.result?.fold((l) => null, (user) => user);
     if (user != null) {
       final userJson = user.toJson();
       final missingFields = profileRequiredFields.where((field) {
@@ -109,22 +94,12 @@ class _GuestEventDetailBuyButtonView extends StatelessWidget {
         }
         return fieldValue == null;
       });
-
-      List<EventApplicationAnswer?>? eventApplicationAnswers =
-          applicationAnswersResult.fold(
-        (l) => null,
-        (answers) => answers,
-      );
-      // TODO: Right now backend missing return data in this case for guest
-      if (eventApplicationAnswers != null) {
-        if (missingFields.isEmpty && eventApplicationAnswers.isNotEmpty) {
-          AutoRouter.of(context).navigate(
-            EventBuyTicketsRoute(
-              event: event,
-            ),
-          );
-          return;
-        }
+      if (event.applicationFormSubmission != null && missingFields.isEmpty) {
+        return AutoRouter.of(context).navigate(
+          EventBuyTicketsRoute(
+            event: event,
+          ),
+        );
       }
       AutoRouter.of(context)
           .navigate(GuestEventApplicationRoute(event: event, user: user));
