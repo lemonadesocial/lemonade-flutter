@@ -97,6 +97,7 @@ class EventApplicationFormProfileSettingPage extends StatelessWidget
                   eventId: event?.id ?? '',
                 ),
               );
+              AutoRouter.of(context).pop();
             }
           },
           child: Stack(
@@ -112,7 +113,12 @@ class EventApplicationFormProfileSettingPage extends StatelessWidget
                       itemCount: basicInfoKeys.length,
                       itemBuilder: (context, index) {
                         final field = basicInfoKeys[index];
-                        return EventApplicationFormProfileItem(item: field);
+                        return EventApplicationFormProfileItem(
+                          item: field,
+                          isSpecialRadiusTop: index == 0,
+                          isSpecialRadiusBottom:
+                              index == basicInfoKeys.length - 1,
+                        );
                       },
                       separatorBuilder: (context, index) => SizedBox(
                         height: Spacing.superExtraSmall,
@@ -125,7 +131,12 @@ class EventApplicationFormProfileSettingPage extends StatelessWidget
                       itemCount: socialInfoKeys.length,
                       itemBuilder: (context, index) {
                         final field = socialInfoKeys[index];
-                        return EventApplicationFormProfileItem(item: field);
+                        return EventApplicationFormProfileItem(
+                          item: field,
+                          isSpecialRadiusTop: index == 0,
+                          isSpecialRadiusBottom:
+                              index == socialInfoKeys.length - 1,
+                        );
                       },
                       separatorBuilder: (context, index) => SizedBox(
                         height: Spacing.superExtraSmall,
@@ -138,7 +149,12 @@ class EventApplicationFormProfileSettingPage extends StatelessWidget
                       itemCount: personalInfoKeys.length,
                       itemBuilder: (context, index) {
                         final field = personalInfoKeys[index];
-                        return EventApplicationFormProfileItem(item: field);
+                        return EventApplicationFormProfileItem(
+                          item: field,
+                          isSpecialRadiusTop: index == 0,
+                          isSpecialRadiusBottom:
+                              index == personalInfoKeys.length - 1,
+                        );
                       },
                       separatorBuilder: (context, index) => SizedBox(
                         height: Spacing.superExtraSmall,

@@ -90,6 +90,7 @@ class EventApplicationFormSettingPage extends StatelessWidget {
                   eventId: eventId,
                 ),
               );
+              AutoRouter.of(context).pop();
             }
           },
           child: GestureDetector(

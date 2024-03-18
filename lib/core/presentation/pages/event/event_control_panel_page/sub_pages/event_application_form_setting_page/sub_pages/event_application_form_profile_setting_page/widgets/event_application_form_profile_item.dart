@@ -1,5 +1,6 @@
 import 'package:app/core/application/event/event_application_form_profile_setting_bloc/event_application_form_profile_setting_bloc.dart';
 import 'package:app/core/domain/common/common_enums.dart';
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
@@ -14,15 +15,26 @@ import 'package:flutter_vibrate/flutter_vibrate.dart';
 
 class EventApplicationFormProfileItem extends StatelessWidget {
   final ProfileFieldKey item;
+  final bool? isSpecialRadiusTop;
+  final bool? isSpecialRadiusBottom;
   const EventApplicationFormProfileItem({
     super.key,
     required this.item,
+    this.isSpecialRadiusTop,
+    this.isSpecialRadiusBottom,
   });
 
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+    final double topRadius = isSpecialRadiusTop == true
+        ? LemonRadius.medium
+        : LemonRadius.extraSmall;
+    final double bottomRadius = isSpecialRadiusBottom == true
+        ? LemonRadius.medium
+        : LemonRadius.extraSmall;
+
     return BlocBuilder<EventApplicationFormProfileSettingBloc,
         EventApplicationFormProfileSettingBlocState>(
       builder: (context, state) {
@@ -37,8 +49,13 @@ class EventApplicationFormProfileItem extends StatelessWidget {
 
         return Container(
           decoration: BoxDecoration(
-            color: LemonColor.darkBackground,
-            borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
+            color: LemonColor.chineseBlack,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(topRadius),
+              topRight: Radius.circular(topRadius),
+              bottomLeft: Radius.circular(bottomRadius),
+              bottomRight: Radius.circular(bottomRadius),
+            ),
           ),
           child: Column(
             children: [
@@ -100,10 +117,24 @@ class EventApplicationFormProfileItem extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                t.event.applicationForm.required,
-                                style: Typo.medium
-                                    .copyWith(color: colorScheme.onSecondary),
+                              Row(
+                                children: [
+                                  ThemeSvgIcon(
+                                    color: colorScheme.onSurface,
+                                    builder: (filter) =>
+                                        Assets.icons.icAsterisk.svg(
+                                      colorFilter: filter,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: Spacing.xSmall,
+                                  ),
+                                  Text(
+                                    t.event.applicationForm.required,
+                                    style: Typo.medium.copyWith(
+                                        color: colorScheme.onSecondary),
+                                  ),
+                                ],
                               ),
                               FlutterSwitch(
                                 inactiveColor: colorScheme.outline,
