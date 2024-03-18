@@ -1,4 +1,5 @@
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/entities/event_application_profile_field.dart';
 import 'package:app/core/domain/event/entities/event_application_question.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/utils/string_utils.dart';
@@ -97,34 +98,34 @@ class EventApplicationFormBloc
   }) {
     final applicationProfileFields = event?.applicationProfileFields ?? [];
     final applicationQuestions = event?.applicationQuestions ?? [];
-    // Check profile required fields valid
-    final allRequiredFieldsProfile = state.fieldsState.entries.where((entry) {
-      final isRequiredField = applicationProfileFields.any(
-        (applicationProfileField) =>
-            applicationProfileField.field == entry.key &&
-            applicationProfileField.required == true,
+    
+    // Get all required profile fileds
+    final List<EventApplicationProfileField> requiredProfileFields =
+        applicationProfileFields
+            .where((question) => question.required == true)
+            .toList();
+
+    // Check if state.fieldsState contain these required profile fields or not
+    final isValidProfileFields = requiredProfileFields.every((requiredProfileField) {
+      final matchingAnswer = state.fieldsState.entries.firstWhere(
+        (entry) => entry.key == requiredProfileField.field && requiredProfileField.required == true,
       );
-      return isRequiredField;
+      return !matchingAnswer.value.isNullOrEmpty;
     });
 
-    final isValidProfileFields = allRequiredFieldsProfile.every(
-      (requiredProfileField) => !requiredProfileField.value.isNullOrEmpty,
-    );
+    // Get all required questions
+    final List<EventApplicationQuestion> requiredQuestions =
+        applicationQuestions
+            .where((question) => question.isRequired == true)
+            .toList();
 
-    // Check questions required valid
-    final allRequiredFieldsAnswers = state.answers.where((answer) {
-      final isRequiredField = applicationQuestions.any(
-        (applicationQuestion) =>
-            applicationQuestion.id == answer.question &&
-            applicationQuestion.isRequired == true,
+    // Check if state.answers contain these required questions or not
+    final isValidAnswersField = requiredQuestions.every((requiredQuestion) {
+      final matchingAnswer = state.answers.firstWhere(
+        (answer) => answer.question == requiredQuestion.id,
       );
-      return isRequiredField;
+      return !matchingAnswer.answer.isNullOrEmpty;
     });
-
-    final isValidAnswersField = allRequiredFieldsAnswers.every(
-      (allProfileRequiredField) =>
-          !allProfileRequiredField.answer.isNullOrEmpty,
-    );
     return state.copyWith(isValid: isValidProfileFields && isValidAnswersField);
   }
 }
