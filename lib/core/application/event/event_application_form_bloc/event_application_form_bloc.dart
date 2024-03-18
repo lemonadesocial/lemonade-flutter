@@ -98,7 +98,7 @@ class EventApplicationFormBloc
     final applicationProfileFields = event?.applicationProfileFields ?? [];
     final applicationQuestions = event?.applicationQuestions ?? [];
     // Check profile required fields valid
-    final allProfileRequiredFields = state.fieldsState.entries.where((entry) {
+    final allRequiredFieldsProfile = state.fieldsState.entries.where((entry) {
       final isRequiredField = applicationProfileFields.any(
         (applicationProfileField) =>
             applicationProfileField.field == entry.key &&
@@ -107,12 +107,12 @@ class EventApplicationFormBloc
       return isRequiredField;
     });
 
-    final isValidProfileFields = allProfileRequiredFields.every(
+    final isValidProfileFields = allRequiredFieldsProfile.every(
       (requiredProfileField) => !requiredProfileField.value.isNullOrEmpty,
     );
 
     // Check questions required valid
-    final allAnswersRequiredFields = state.answers.where((answer) {
+    final allRequiredFieldsAnswers = state.answers.where((answer) {
       final isRequiredField = applicationQuestions.any(
         (applicationQuestion) =>
             applicationQuestion.id == answer.question &&
@@ -121,7 +121,7 @@ class EventApplicationFormBloc
       return isRequiredField;
     });
 
-    final isValidAnswersField = allAnswersRequiredFields.every(
+    final isValidAnswersField = allRequiredFieldsAnswers.every(
       (allProfileRequiredField) =>
           !allProfileRequiredField.answer.isNullOrEmpty,
     );
