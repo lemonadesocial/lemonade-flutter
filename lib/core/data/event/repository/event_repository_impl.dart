@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:app/core/data/event/dtos/event_application_answer_dto/event_application_answer_dto.dart';
 import 'package:app/core/data/event/dtos/event_cohost_request_dto/event_cohost_request_dto.dart';
 import 'package:app/core/data/event/dtos/event_dtos.dart';
