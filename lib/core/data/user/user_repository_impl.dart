@@ -284,4 +284,21 @@ class UserRepositoryImpl implements UserRepository {
       User.fromDto(UserDto.fromJson(result.parsedData!.getUser!.toJson())),
     );
   }
+
+  @override
+  Future<Either<Failure, bool>> updateUser({
+    required Input$UserInput input,
+  }) async {
+    final result = await _gqlClient.mutate$UpdateUser(
+      Options$Mutation$UpdateUser(
+        variables: Variables$Mutation$UpdateUser(
+          input: input,
+        ),
+      ),
+    );
+    if (result.hasException) {
+      return Left(Failure.withGqlException(result.exception));
+    }
+    return Right(result.parsedData != null);
+  }
 }

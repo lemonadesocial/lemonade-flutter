@@ -93,12 +93,15 @@ class _GuestEventDetailBuyButtonView extends StatelessWidget {
     );
 
     // Extract results from the futures
-    final dynamic userResult = results.result?[0];
-    final dynamic applicationAnswers = results.result?[1];
+    final Either<Failure, User?> userResult =
+        results.result?[0] as Either<Failure, User>;
+    final Either<Failure, List<EventApplicationAnswer?>>
+        applicationAnswersResult =
+        results.result?[1] as Either<Failure, List<EventApplicationAnswer>>;
 
-    if (userResult != null && applicationAnswers != null) {
-      User user = userResult.fold((l) => null, (user) => user);
-      final userJson = user.toJson();
+    User? user = userResult.fold((l) => null, (user) => user);
+    if (user != null) {
+      final userJson = user.toJson() ?? {};
       final missingFields = profileRequiredFields.where((field) {
         final fieldValue = userJson.tryGet(field);
         if (fieldValue is String) {
@@ -107,25 +110,26 @@ class _GuestEventDetailBuyButtonView extends StatelessWidget {
         return fieldValue == null;
       });
 
-      List<EventApplicationAnswer> eventApplicationAnswers =
-          applicationAnswers.fold(
+      List<EventApplicationAnswer?>? eventApplicationAnswers =
+          applicationAnswersResult.fold(
         (l) => null,
         (answers) => answers,
       );
-
       // TODO: Right now backend missing return data in this case for guest
-      if (missingFields.isEmpty && eventApplicationAnswers.isNotEmpty) {
-        AutoRouter.of(context).navigate(
-          EventBuyTicketsRoute(
-            event: event,
-          ),
-        );
-        return;
+      if (eventApplicationAnswers != null) {
+        if (missingFields.isEmpty && eventApplicationAnswers.isNotEmpty) {
+          AutoRouter.of(context).navigate(
+            EventBuyTicketsRoute(
+              event: event,
+            ),
+          );
+          return;
+        }
       }
       AutoRouter.of(context)
           .navigate(GuestEventApplicationRoute(event: event, user: user));
-      return;
     }
+    return;
   }
 
   @override

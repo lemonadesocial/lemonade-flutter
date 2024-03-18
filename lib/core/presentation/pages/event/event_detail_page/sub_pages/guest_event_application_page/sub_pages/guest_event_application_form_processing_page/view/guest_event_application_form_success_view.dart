@@ -66,8 +66,9 @@ class GuestEventApplicationFormSuccessView extends StatelessWidget {
             children: [
               Expanded(
                 child: LinearGradientButton.primaryButton(
-                  onTap: () {
-                    AutoRouter.of(context).popAndPush(
+                  onTap: () async {
+                    await AutoRouter.of(context).pop();
+                    AutoRouter.of(context).navigate(
                       EventBuyTicketsRoute(event: event),
                     );
                   },

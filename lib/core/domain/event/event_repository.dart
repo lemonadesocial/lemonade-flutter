@@ -104,4 +104,9 @@ abstract class EventRepository {
     required String eventId,
     required String userId,
   });
+
+  Future<Either<Failure, bool>> submitEventApplicationAnswers({
+    required String eventId,
+    required List<Input$EventApplicationAnswerInput> answers,
+  });
 }

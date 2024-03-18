@@ -50,4 +50,6 @@ abstract class UserRepository {
   Future<Either<Failure, User>> getUser({
     required String userId,
   });
+
+  Future<Either<Failure, bool>> updateUser({required Input$UserInput input});
 }
