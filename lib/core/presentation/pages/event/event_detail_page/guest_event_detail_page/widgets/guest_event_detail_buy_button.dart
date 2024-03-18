@@ -1,7 +1,6 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/event/buy_event_ticket_bloc/buy_event_ticket_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
-import 'package:app/core/domain/event/entities/event_application_answer.dart';
 import 'package:app/core/domain/event/entities/event_join_request.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/event_repository.dart';
@@ -69,10 +68,6 @@ class _GuestEventDetailBuyButtonView extends StatelessWidget {
   }
 
   Future<void> _checkProfileRequiredFields(BuildContext context) async {
-    User? currentUser = context.read<AuthBloc>().state.maybeWhen(
-          authenticated: (authSession) => authSession,
-          orElse: () => null,
-        );
     List<String> profileRequiredFields = (event.applicationProfileFields ?? [])
         .where((e) => e.required == true)
         .map((e) => e.field ?? '')

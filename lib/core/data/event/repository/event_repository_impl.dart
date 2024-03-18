@@ -489,7 +489,6 @@ class EventRepositoryImpl implements EventRepository {
     required String eventId,
     required List<Input$EventApplicationAnswerInput> answers,
   }) async {
-    print(jsonEncode(answers));
     final result = await client.mutate$SubmitEventApplicationAnswers(
       Options$Mutation$SubmitEventApplicationAnswers(
         variables: Variables$Mutation$SubmitEventApplicationAnswers(

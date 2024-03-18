@@ -132,7 +132,8 @@ class EventApplicationFormProfileItem extends StatelessWidget {
                                   Text(
                                     t.event.applicationForm.required,
                                     style: Typo.medium.copyWith(
-                                        color: colorScheme.onSecondary),
+                                      color: colorScheme.onSecondary,
+                                    ),
                                   ),
                                 ],
                               ),
