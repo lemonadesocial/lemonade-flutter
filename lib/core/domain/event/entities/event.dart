@@ -58,6 +58,7 @@ class Event with _$Event {
     List<EventSession>? sessions,
     List<EventApplicationQuestion>? applicationQuestions,
     List<EventApplicationProfileField>? applicationProfileFields,
+    DateTime? applicationFormSubmission,
   }) = _Event;
 
   factory Event.fromDto(EventDto dto) {
@@ -132,6 +133,7 @@ class Event with _$Event {
       applicationProfileFields: List.from(dto.applicationProfileFields ?? [])
           .map((item) => EventApplicationProfileField.fromDto(item))
           .toList(),
+      applicationFormSubmission: dto.applicationFormSubmission,
     );
   }
 }

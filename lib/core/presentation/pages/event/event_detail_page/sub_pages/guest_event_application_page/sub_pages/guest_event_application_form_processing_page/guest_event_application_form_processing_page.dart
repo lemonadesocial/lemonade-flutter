@@ -55,6 +55,12 @@ class _GuestEventApplicationFormProcessingPageState
         const GuestEventApplicationFormRoute(),
       ]);
     }
+    // Refresh event detail
+    context.read<GetEventDetailBloc>().add(
+          GetEventDetailEvent.fetch(
+            eventId: event.id ?? '',
+          ),
+        );
   }
 
   @override

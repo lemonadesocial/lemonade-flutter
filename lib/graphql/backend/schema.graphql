@@ -489,6 +489,7 @@ type Event {
   payment_ticket_discounts: [EventPaymentTicketDiscount!]
   tickets: [TicketBase!]
   application_questions: [EventApplicationQuestion!]
+  application_form_submission: DateTimeISO
 }
 
 enum EventState {
@@ -1013,7 +1014,7 @@ type EventApplicationAnswer {
   _id: MongoID!
   user: MongoID!
   question: MongoID!
-  answer: String!
+  answer: String
   question_expanded: EventApplicationQuestion!
 }
 
@@ -2293,14 +2294,14 @@ input CommentInput {
 }
 
 input QuestionInput {
+  _id: MongoID
   question: String
   required: Boolean
-  _id: MongoID
 }
 
 input EventApplicationAnswerInput {
   question: MongoID!
-  answer: String!
+  answer: String
 }
 
 input CreateEventFromEventbriteInput {
