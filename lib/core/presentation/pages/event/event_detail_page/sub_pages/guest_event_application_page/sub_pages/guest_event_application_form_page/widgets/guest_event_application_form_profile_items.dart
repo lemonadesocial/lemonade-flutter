@@ -8,6 +8,7 @@ import 'package:app/core/presentation/pages/edit_profile/widgets/edit_profile_fi
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:matrix/matrix.dart' as matrix;
 
 class GuestEventApplicationFormProfileItems extends StatelessWidget {
   const GuestEventApplicationFormProfileItems({
@@ -30,13 +31,19 @@ class GuestEventApplicationFormProfileItems extends StatelessWidget {
       builder: (context, state) {
         return Column(
           children: applicationProfileFields.map((applicationProfileField) {
+            final profileFieldKey = ProfileFieldKey.values.firstWhere(
+              (element) => element.fieldKey == applicationProfileField.field,
+            );
+            String selectedValue = state.fieldsState
+                        .tryGet(profileFieldKey.fieldKey)
+                        .toString() !=
+                    ''
+                ? state.fieldsState.tryGet(profileFieldKey.fieldKey).toString()
+                : user.toJson().tryGet(profileFieldKey.fieldKey).toString();
             return Column(
               children: [
                 EditProfileFieldItem(
-                  profileFieldKey: ProfileFieldKey.values.firstWhere(
-                    (element) =>
-                        element.fieldKey == applicationProfileField.field,
-                  ),
+                  profileFieldKey: profileFieldKey,
                   userProfile: user,
                   onChange: (value) {
                     context.read<EventApplicationFormBloc>().add(
@@ -48,6 +55,7 @@ class GuestEventApplicationFormProfileItems extends StatelessWidget {
                         );
                   },
                   showRequired: applicationProfileField.required,
+                  selectedValue: selectedValue,
                 ),
                 SizedBox(
                   height: Spacing.smMedium,

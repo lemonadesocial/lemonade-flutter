@@ -83,8 +83,7 @@ class _ActionButtons extends StatelessWidget {
       children: [
         Expanded(
           child: LinearGradientButton(
-            onTap: () =>
-                context.router.push(EditProfileRoute(userProfile: user)),
+            onTap: () => context.router.push(const EditProfileRoute()),
             label: t.common.actions.editProfile,
             textStyle: Typo.small.copyWith(
               fontWeight: FontWeight.w600,

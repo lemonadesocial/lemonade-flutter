@@ -82,7 +82,7 @@ class SettingProfileTile extends StatelessWidget {
             ],
             onItemPressed: (item) async {
               if (item?.label == t.common.actions.editProfile) {
-                context.router.push(EditProfileRoute(userProfile: authSession));
+                context.router.push(const EditProfileRoute());
               }
               if (item?.label == t.common.actions.shareProfile) {
                 try {
