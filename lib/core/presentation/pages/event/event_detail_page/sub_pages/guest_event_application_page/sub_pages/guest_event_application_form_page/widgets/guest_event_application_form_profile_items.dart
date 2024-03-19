@@ -40,7 +40,6 @@ class GuestEventApplicationFormProfileItems extends StatelessWidget {
               children: [
                 EditProfileFieldItem(
                   profileFieldKey: profileFieldKey,
-                  // userProfile: user,
                   onChange: (value) {
                     context.read<EventApplicationFormBloc>().add(
                           EventApplicationFormBlocEvent.updateField(
