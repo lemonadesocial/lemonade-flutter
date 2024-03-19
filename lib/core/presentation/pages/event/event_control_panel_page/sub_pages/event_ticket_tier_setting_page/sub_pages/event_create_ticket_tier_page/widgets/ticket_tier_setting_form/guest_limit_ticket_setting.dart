@@ -11,39 +11,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 
-class CreateTicketGuestForm extends StatelessWidget {
-  const CreateTicketGuestForm({super.key});
+class GuestLimitTicketSetting extends StatefulWidget {
+  const GuestLimitTicketSetting({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final t = Translations.of(context);
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          t.event.ticketTierSetting.guests,
-          style: Typo.mediumPlus.copyWith(
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        SizedBox(height: Spacing.small),
-        const GuestLimit(),
-        SizedBox(height: Spacing.smMedium),
-        const ActivateTicket(),
-      ],
-    );
-  }
+  State<GuestLimitTicketSetting> createState() =>
+      _GuestLimitTicketSettingState();
 }
 
-class GuestLimit extends StatefulWidget {
-  const GuestLimit({super.key});
-
-  @override
-  State<GuestLimit> createState() => _GuestLimitState();
-}
-
-class _GuestLimitState extends State<GuestLimit> {
+class _GuestLimitTicketSettingState extends State<GuestLimitTicketSetting> {
   bool limitFieldVisible = false;
 
   @override
@@ -94,7 +70,7 @@ class _GuestLimitState extends State<GuestLimit> {
               FlutterSwitch(
                 inactiveColor: colorScheme.outline,
                 inactiveToggleColor: colorScheme.onSurfaceVariant,
-                activeColor: LemonColor.switchActive,
+                activeColor: LemonColor.paleViolet,
                 activeToggleColor: colorScheme.onPrimary,
                 height: Sizing.small,
                 width: 42.w,
@@ -133,65 +109,6 @@ class _GuestLimitState extends State<GuestLimit> {
             hintText: t.event.ticketTierSetting.limitOfGuestsAllowed,
           ),
       ],
-    );
-  }
-}
-
-class ActivateTicket extends StatelessWidget {
-  const ActivateTicket({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return Container(
-      padding: EdgeInsets.all(Spacing.smMedium),
-      decoration: BoxDecoration(
-        color: colorScheme.onPrimary.withOpacity(0.06),
-        borderRadius: BorderRadius.circular(LemonRadius.normal),
-      ),
-      child: Row(
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                t.event.ticketTierSetting.activateTicket,
-                style: Typo.medium.copyWith(
-                  color: colorScheme.onPrimary.withOpacity(0.87),
-                ),
-              ),
-              SizedBox(height: 2.w),
-              Text(
-                t.event.ticketTierSetting.visibleToGuests,
-                style: Typo.small.copyWith(
-                  color: colorScheme.onSurfaceVariant,
-                ),
-              ),
-            ],
-          ),
-          const Spacer(),
-          BlocBuilder<ModifyTicketTypeBloc, ModifyTicketTypeState>(
-            builder: (context, state) => FlutterSwitch(
-              inactiveColor: colorScheme.outline,
-              inactiveToggleColor: colorScheme.onSurfaceVariant,
-              activeColor: LemonColor.switchActive,
-              activeToggleColor: colorScheme.onPrimary,
-              height: Sizing.small,
-              width: 42.w,
-              value: state.active ?? false,
-              onToggle: (value) {
-                context.read<ModifyTicketTypeBloc>().add(
-                      ModifyTicketTypeEvent.onActiveChanged(
-                        active: value,
-                      ),
-                    );
-              },
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

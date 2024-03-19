@@ -4,7 +4,7 @@ import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/repository/event_ticket_repository.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/create_ticket_basic_info_form.dart';
-import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/create_ticket_guest_form.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/ticket_tier_setting_form/ticket_tier_setting_form.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/create_ticket_pricing_form.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
@@ -69,6 +69,10 @@ class EventCreateTicketTierPagerView extends StatelessWidget {
           .toList(),
       ticket_limit: state.limit,
       active: state.active,
+      private: state.private,
+      limited: state.limited,
+      added_whitelist_emails: state.addedWhitelistEmails,
+      removed_whitelist_emails: state.removedWhitelistEmails,
     );
     if (initialTicketType != null) {
       return await getIt<EventTicketRepository>().updateEventTicketType(
@@ -130,8 +134,10 @@ class EventCreateTicketTierPagerView extends StatelessWidget {
                     height: Spacing.smMedium,
                   ),
                 ),
-                const SliverToBoxAdapter(
-                  child: CreateTicketGuestForm(),
+                SliverToBoxAdapter(
+                  child: TicketTierSettingForm(
+                    ticketType: initialTicketType,
+                  ),
                 ),
                 SliverToBoxAdapter(
                   child: SizedBox(

@@ -35,6 +35,9 @@ class PurchasableTicketTypeDto with _$PurchasableTicketTypeDto {
   factory PurchasableTicketTypeDto({
     @JsonKey(name: '_id') String? id,
     bool? active,
+    bool? limited,
+    bool? private,
+    bool? whitelisted,
     @JsonKey(name: 'address_required') bool? addressRequired,
     List<EventTicketPriceDto>? prices,
     @JsonKey(name: 'default') bool? isDefault,
@@ -58,6 +61,8 @@ class EventTicketTypeDto with _$EventTicketTypeDto {
   factory EventTicketTypeDto({
     @JsonKey(name: '_id') String? id,
     bool? active,
+    bool? private,
+    bool? limited,
     @JsonKey(name: 'address_required') bool? addressRequired,
     List<EventTicketPriceDto>? prices,
     @JsonKey(name: 'default') bool? isDefault,
@@ -72,6 +77,8 @@ class EventTicketTypeDto with _$EventTicketTypeDto {
     @JsonKey(name: 'photos_expanded') List<DbFileDto>? photosExpanded,
     @JsonKey(name: 'ticket_limit') double? ticketLimit,
     @JsonKey(name: 'ticket_count') double? ticketCount,
+    @JsonKey(name: 'limited_whitelist_users')
+    List<WhitelistUserInfoDto>? limitedWhitelistUsers,
   }) = _EventTicketTypeDto;
 
   factory EventTicketTypeDto.fromJson(Map<String, dynamic> json) =>
@@ -89,4 +96,15 @@ class EventTicketPriceDto with _$EventTicketPriceDto {
 
   factory EventTicketPriceDto.fromJson(Map<String, dynamic> json) =>
       _$EventTicketPriceDtoFromJson(json);
+}
+
+@freezed
+class WhitelistUserInfoDto with _$WhitelistUserInfoDto {
+  factory WhitelistUserInfoDto({
+    @JsonKey(name: '_id') String? id,
+    String? email,
+  }) = _WhitelistUserInfoDto;
+
+  factory WhitelistUserInfoDto.fromJson(Map<String, dynamic> json) =>
+      _$WhitelistUserInfoDtoFromJson(json);
 }

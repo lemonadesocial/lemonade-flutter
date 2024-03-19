@@ -49,11 +49,15 @@ class TicketDiscount {
       );
 }
 
+// Used for Guest
 @freezed
 class PurchasableTicketType with _$PurchasableTicketType {
   factory PurchasableTicketType({
     String? id,
     bool? active,
+    bool? limited,
+    bool? private,
+    bool? whitelisted,
     bool? addressRequired,
     bool? isDefault,
     String? description,
@@ -74,6 +78,9 @@ class PurchasableTicketType with _$PurchasableTicketType {
       PurchasableTicketType(
         id: dto.id,
         active: dto.active,
+        limited: dto.limited,
+        private: dto.private,
+        whitelisted: dto.whitelisted,
         addressRequired: dto.addressRequired,
         isDefault: dto.isDefault,
         description: dto.description,
@@ -97,11 +104,14 @@ class PurchasableTicketType with _$PurchasableTicketType {
       );
 }
 
+// Used for Host
 @freezed
 class EventTicketType with _$EventTicketType {
   factory EventTicketType({
     String? id,
     bool? active,
+    bool? private,
+    bool? limited,
     bool? addressRequired,
     bool? isDefault,
     String? description,
@@ -118,11 +128,14 @@ class EventTicketType with _$EventTicketType {
     List<DbFile>? photosExpanded,
     double? ticketLimit,
     double? ticketCount,
+    List<WhitelistUserInfo>? limitedWhitelistUsers,
   }) = _EventTicketType;
 
   factory EventTicketType.fromDto(EventTicketTypeDto dto) => EventTicketType(
         id: dto.id,
         active: dto.active,
+        private: dto.private,
+        limited: dto.limited,
         addressRequired: dto.addressRequired,
         isDefault: dto.isDefault,
         description: dto.description,
@@ -145,6 +158,9 @@ class EventTicketType with _$EventTicketType {
             .toList(),
         ticketLimit: dto.ticketLimit,
         ticketCount: dto.ticketCount,
+        limitedWhitelistUsers: List.from(dto.limitedWhitelistUsers ?? [])
+            .map((item) => WhitelistUserInfo.fromDto(item))
+            .toList(),
       );
 }
 
@@ -172,5 +188,21 @@ class EventTicketPrice {
         network: dto.network,
         currency: dto.currency,
         isDefault: dto.isDefault,
+      );
+}
+
+@freezed
+class WhitelistUserInfo with _$WhitelistUserInfo {
+  const WhitelistUserInfo._();
+
+  factory WhitelistUserInfo({
+    String? id,
+    String? email,
+  }) = _WhitelistUserInfo;
+
+  factory WhitelistUserInfo.fromDto(WhitelistUserInfoDto dto) =>
+      WhitelistUserInfo(
+        id: dto.id,
+        email: dto.email,
       );
 }

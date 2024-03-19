@@ -56,6 +56,8 @@ const eventTicketTypesFragment = '''
     event_ticket_types {
       _id
       active
+      private
+      limited
       event
       title
       prices {
@@ -86,6 +88,10 @@ const eventTicketTypesFragment = '''
         url
         key 
         bucket
+      }
+      limited_whitelist_users {
+        _id
+        email
       }
     }
   }
