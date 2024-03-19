@@ -102,7 +102,7 @@ class RSVPEventSuccessPopupPage extends StatelessWidget {
                       height: Spacing.large,
                     ),
                   ],
-                )
+                ),
               ],
             ),
             Positioned(
