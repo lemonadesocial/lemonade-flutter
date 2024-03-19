@@ -80,51 +80,54 @@ class GuestEventApplicationInfoPage extends StatelessWidget {
                   ],
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      t.event.requiredFields.tellUsMore,
-                      textAlign: TextAlign.center,
-                      style: Typo.extraLarge.copyWith(
-                        color: colorScheme.onPrimary,
-                        fontSize: 26.sp,
-                        fontWeight: FontWeight.w800,
-                        fontFamily: FontFamily.nohemiVariable,
-                      ),
-                    ),
-                    SizedBox(height: Spacing.superExtraSmall),
-                    Text(
-                      t.event.requiredFields.description,
-                      textAlign: TextAlign.center,
-                      style: Typo.mediumPlus.copyWith(
-                        color: colorScheme.onSecondary,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    SizedBox(height: 30.h),
-                    Container(
-                      padding: EdgeInsets.symmetric(vertical: Spacing.smMedium),
-                      child: LinearGradientButton(
-                        onTap: () {
-                          AutoRouter.of(context).replace(
-                            const GuestEventApplicationFormRoute(),
-                          );
-                        },
-                        label: t.event.requiredFields.completeProfile,
-                        textStyle: Typo.medium.copyWith(
-                          fontFamily: FontFamily.nohemiVariable,
-                          fontWeight: FontWeight.w600,
+              SafeArea(
+                child: Padding(
+                  padding: EdgeInsets.all(Spacing.smMedium),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        t.event.requiredFields.tellUsMore,
+                        textAlign: TextAlign.center,
+                        style: Typo.extraLarge.copyWith(
                           color: colorScheme.onPrimary,
+                          fontSize: 26.sp,
+                          fontWeight: FontWeight.w800,
+                          fontFamily: FontFamily.nohemiVariable,
                         ),
-                        height: Sizing.large,
-                        radius: BorderRadius.circular(LemonRadius.large),
-                        mode: GradientButtonMode.lavenderMode,
                       ),
-                    ),
-                  ],
+                      SizedBox(height: Spacing.superExtraSmall),
+                      Text(
+                        t.event.requiredFields.description,
+                        textAlign: TextAlign.center,
+                        style: Typo.mediumPlus.copyWith(
+                          color: colorScheme.onSecondary,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      SizedBox(height: 30.h),
+                      Container(
+                        padding:
+                            EdgeInsets.symmetric(vertical: Spacing.smMedium),
+                        child: LinearGradientButton(
+                          onTap: () {
+                            AutoRouter.of(context).replace(
+                              const GuestEventApplicationFormRoute(),
+                            );
+                          },
+                          label: t.event.requiredFields.completeProfile,
+                          textStyle: Typo.medium.copyWith(
+                            fontFamily: FontFamily.nohemiVariable,
+                            fontWeight: FontWeight.w600,
+                            color: colorScheme.onPrimary,
+                          ),
+                          height: Sizing.large,
+                          radius: BorderRadius.circular(LemonRadius.large),
+                          mode: GradientButtonMode.lavenderMode,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
