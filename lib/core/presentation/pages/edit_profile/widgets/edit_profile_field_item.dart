@@ -3,6 +3,7 @@ import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/widgets/common/dropdown/frosted_glass_drop_down_v2.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/core/utils/calendar_utils.dart';
+import 'package:app/core/utils/string_utils.dart';
 import 'package:app/core/utils/text_formatter/date_text_formatter.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -11,27 +12,26 @@ import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:matrix/matrix.dart' as matrix;
 
 class EditProfileFieldItem extends StatelessWidget {
   const EditProfileFieldItem({
     super.key,
     required this.profileFieldKey,
-    required this.userProfile,
     required this.onChange,
     this.onDateSelect,
-    this.selectedValue,
     this.controller,
     this.showRequired,
+    required this.value,
   });
 
-  final User userProfile;
+  // final User userProfile;
   final ProfileFieldKey profileFieldKey;
   final ValueChanged<String> onChange;
   final ValueChanged<DateTime>? onDateSelect;
-  final String? selectedValue;
+  // final String? selectedValue;
   final TextEditingController? controller;
   final bool? showRequired;
+  final String? value;
 
   @override
   Widget build(BuildContext context) {
@@ -51,36 +51,35 @@ class EditProfileFieldItem extends StatelessWidget {
               onChange(value);
             }
           },
-          selectedValue: selectedValue,
+          selectedValue: value == '' ? null : value,
           showRequired: showRequired,
         );
-      // case ProfileFieldKey.newGender:
-      //   return FrostedGlassDropDownV2(
-      //     label: t.profile.gender,
-      //     hintText: t.profile.hint.gender,
-      //     listItem: LemonGender.values.map((e) => e.newGender).toList(),
-      //     onValueChange: (value) {
-      //       if (value != null) {
-      //         onChange(value);
-      //       }
-      //     },
-      //     selectedValue: selectedValue,
-      //     showRequired: showRequired,
-      //   );
-
-      // case ProfileFieldKey.ethnicity:
-      //   return FrostedGlassDropDownV2(
-      //     label: t.profile.ethnicity,
-      //     hintText: t.profile.hint.ethnicity,
-      //     listItem: LemonEthnicity.values.map((e) => e.ethnicity).toList(),
-      //     onValueChange: (value) {
-      //       if (value != null) {
-      //         onChange(value);
-      //       }
-      //     },
-      //     selectedValue: selectedValue,
-      //     showRequired: showRequired,
-      //   );
+      case ProfileFieldKey.newGender:
+        return FrostedGlassDropDownV2(
+          label: t.profile.gender,
+          hintText: t.profile.hint.gender,
+          listItem: LemonGender.values.map((e) => e.newGender).toList(),
+          onValueChange: (value) {
+            if (value != null) {
+              onChange(value);
+            }
+          },
+          selectedValue: value == '' ? null : value,
+          showRequired: showRequired,
+        );
+      case ProfileFieldKey.ethnicity:
+        return FrostedGlassDropDownV2(
+          label: t.profile.ethnicity,
+          hintText: t.profile.hint.ethnicity,
+          listItem: LemonEthnicity.values.map((e) => e.ethnicity).toList(),
+          onValueChange: (value) {
+            if (value != null) {
+              onChange(value);
+            }
+          },
+          selectedValue: value == '' ? null : value,
+          showRequired: showRequired,
+        );
       //
       // DateTimePicker mode
       //
@@ -129,8 +128,7 @@ class EditProfileFieldItem extends StatelessWidget {
         return LemonTextField(
           label: profileFieldKey.label,
           hintText: '',
-          initialText:
-              userProfile.toJson().tryGet(profileFieldKey.fieldKey) ?? '',
+          initialText: value,
           onChange: onChange,
           showRequired: showRequired,
         );

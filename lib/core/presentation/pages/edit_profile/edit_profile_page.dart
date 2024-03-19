@@ -99,8 +99,8 @@ class EditProfilePage extends StatelessWidget {
                                       child: EditProfileFieldItem(
                                         profileFieldKey:
                                             ProfileFieldKey.displayName,
-                                        userProfile: userProfile,
                                         onChange: bloc.onDisplayNameChange,
+                                        value: userProfile.displayName,
                                       ),
                                     ),
                                   ],
@@ -115,14 +115,14 @@ class EditProfilePage extends StatelessWidget {
                                 SizedBox(height: Spacing.smMedium),
                                 EditProfileFieldItem(
                                   profileFieldKey: ProfileFieldKey.tagline,
-                                  userProfile: userProfile,
                                   onChange: bloc.onTaglineChange,
+                                  value: userProfile.tagline,
                                 ),
                                 SizedBox(height: Spacing.smMedium),
                                 EditProfileFieldItem(
                                   profileFieldKey: ProfileFieldKey.description,
-                                  userProfile: userProfile,
                                   onChange: bloc.onShortBioChange,
+                                  value: userProfile.description,
                                 ),
                                 SizedBox(height: Spacing.smMedium),
                                 InkWell(

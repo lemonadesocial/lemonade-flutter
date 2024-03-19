@@ -34,17 +34,13 @@ class GuestEventApplicationFormProfileItems extends StatelessWidget {
             final profileFieldKey = ProfileFieldKey.values.firstWhere(
               (element) => element.fieldKey == applicationProfileField.field,
             );
-            String selectedValue = state.fieldsState
-                        .tryGet(profileFieldKey.fieldKey)
-                        .toString() !=
-                    ''
-                ? state.fieldsState.tryGet(profileFieldKey.fieldKey).toString()
-                : user.toJson().tryGet(profileFieldKey.fieldKey).toString();
+            String? value =
+                state.fieldsState.tryGet(profileFieldKey.fieldKey).toString();
             return Column(
               children: [
                 EditProfileFieldItem(
                   profileFieldKey: profileFieldKey,
-                  userProfile: user,
+                  // userProfile: user,
                   onChange: (value) {
                     context.read<EventApplicationFormBloc>().add(
                           EventApplicationFormBlocEvent.updateField(
@@ -55,7 +51,7 @@ class GuestEventApplicationFormProfileItems extends StatelessWidget {
                         );
                   },
                   showRequired: applicationProfileField.required,
-                  selectedValue: selectedValue,
+                  value: value,
                 ),
                 SizedBox(
                   height: Spacing.smMedium,
