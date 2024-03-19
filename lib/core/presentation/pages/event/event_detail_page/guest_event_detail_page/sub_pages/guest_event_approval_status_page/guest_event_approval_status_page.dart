@@ -91,7 +91,7 @@ class GuestEventApprovalStatusPage extends StatelessWidget {
                     description,
                     textAlign: TextAlign.center,
                   ),
-                  SizedBox(height: Spacing.xSmall * 4),
+                  SizedBox(height: Spacing.xSmall * 2.5),
                   if (isApproved)
                     LinearGradientButton.primaryButton(
                       onTap: () async {
