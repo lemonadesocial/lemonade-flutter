@@ -43,7 +43,7 @@ class RSVPEventSuccessPopupPage extends StatelessWidget {
           children: [
             Column(
               mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const _SuccessCircle(),
                 Column(
@@ -57,6 +57,7 @@ class RSVPEventSuccessPopupPage extends StatelessWidget {
                         style: Typo.extraLarge.copyWith(
                           fontFamily: FontFamily.nohemiVariable,
                           fontWeight: FontWeight.w900,
+                          color: colorScheme.onPrimary,
                           height: 1.2,
                         ),
                       ),
@@ -94,6 +95,9 @@ class RSVPEventSuccessPopupPage extends StatelessWidget {
                                   BorderRadius.circular(LemonRadius.small * 2),
                               label: t.event.takeMeToEvent,
                             ),
+                    ),
+                    SizedBox(
+                      height: 40.h,
                     ),
                   ],
                 ),
