@@ -1,9 +1,7 @@
 import 'package:app/core/domain/common/common_enums.dart';
-import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/widgets/common/dropdown/frosted_glass_drop_down_v2.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/core/utils/calendar_utils.dart';
-import 'package:app/core/utils/string_utils.dart';
 import 'package:app/core/utils/text_formatter/date_text_formatter.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
