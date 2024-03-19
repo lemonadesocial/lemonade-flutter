@@ -81,11 +81,14 @@ class GuestEventApplicationFormPage extends StatelessWidget {
                             );
                           },
                           fetched: (User userProfile) {
-                            return const SliverToBoxAdapter(
+                            return SliverToBoxAdapter(
                               child: Column(
                                 children: [
-                                  GuestEventApplicationFormProfileItems(),
-                                  GuestEventApplicationFormAnswersItems(),
+                                  const GuestEventApplicationFormProfileItems(),
+                                  SizedBox(
+                                    height: Spacing.extraSmall,
+                                  ),
+                                  const GuestEventApplicationFormAnswersItems(),
                                 ],
                               ),
                             );

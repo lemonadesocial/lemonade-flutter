@@ -89,15 +89,22 @@ class _GuestEventDetailBuyButtonView extends StatelessWidget {
         }
         return fieldValue == null;
       });
-      if (event.applicationFormSubmission != null && missingFields.isEmpty) {
-        return AutoRouter.of(context).navigate(
-          EventBuyTicketsRoute(
-            event: event,
-          ),
-        );
+      final hasApplicationFields =
+          event.applicationProfileFields?.isNotEmpty ?? false;
+      final hasApplicationQuestions =
+          event.applicationQuestions?.isNotEmpty ?? false;
+      final hasMissingFields = missingFields.isNotEmpty;
+      final isMissingSubmission =
+          event.applicationQuestions?.isNotEmpty == true &&
+              event.applicationFormSubmission == null;
+
+      if ((hasApplicationFields || hasApplicationQuestions) &&
+          (hasMissingFields || isMissingSubmission)) {
+        AutoRouter.of(context)
+            .navigate(GuestEventApplicationRoute(event: event, user: user));
+      } else {
+        AutoRouter.of(context).navigate(EventBuyTicketsRoute(event: event));
       }
-      AutoRouter.of(context)
-          .navigate(GuestEventApplicationRoute(event: event, user: user));
     }
     return;
   }

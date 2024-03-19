@@ -94,14 +94,14 @@ class EditProfilePersonalDialogState extends State<EditProfilePersonalDialog> {
                             SizedBox(height: Spacing.smMedium),
                             EditProfileFieldItem(
                               profileFieldKey: ProfileFieldKey.jobTitle,
-                              userProfile: widget.userProfile,
                               onChange: bloc.onJobTitleChange,
+                              value: widget.userProfile.jobTitle,
                             ),
                             SizedBox(height: Spacing.smMedium),
                             EditProfileFieldItem(
                               profileFieldKey: ProfileFieldKey.companyName,
-                              userProfile: widget.userProfile,
                               onChange: bloc.onOrganizationChange,
+                              value: widget.userProfile.companyName,
                             ),
                             SizedBox(height: Spacing.smMedium),
                             FrostedGlassDropDownV2(
@@ -117,21 +117,19 @@ class EditProfilePersonalDialogState extends State<EditProfilePersonalDialog> {
                             SizedBox(height: Spacing.smMedium),
                             EditProfileFieldItem(
                               profileFieldKey: ProfileFieldKey.educationTitle,
-                              userProfile: widget.userProfile,
                               onChange: bloc.onOrganizationChange,
+                              value: widget.userProfile.education,
                             ),
                             SizedBox(height: Spacing.smMedium),
                             EditProfileFieldItem(
                               profileFieldKey: ProfileFieldKey.newGender,
-                              userProfile: widget.userProfile,
                               onChange: bloc.onGenderSelect,
-                              selectedValue: bloc.state.gender ??
+                              value: bloc.state.gender ??
                                   widget.userProfile.gender,
                             ),
                             SizedBox(height: Spacing.smMedium),
                             EditProfileFieldItem(
                               profileFieldKey: ProfileFieldKey.dateOfBirth,
-                              userProfile: widget.userProfile,
                               onChange: bloc.onBirthdayChange,
                               controller: bloc.birthDayCtrl,
                               onDateSelect: (selectedDate) =>
@@ -140,13 +138,13 @@ class EditProfilePersonalDialogState extends State<EditProfilePersonalDialog> {
                                   selectedDate,
                                 ),
                               ),
+                              value: widget.userProfile.dateOfBirth.toString(),
                             ),
                             SizedBox(height: Spacing.smMedium),
                             EditProfileFieldItem(
                               profileFieldKey: ProfileFieldKey.ethnicity,
-                              userProfile: widget.userProfile,
                               onChange: bloc.onEthnicitySelect,
-                              selectedValue: bloc.state.ethnicity ??
+                              value: bloc.state.ethnicity ??
                                   widget.userProfile.ethnicity,
                             ),
                           ],

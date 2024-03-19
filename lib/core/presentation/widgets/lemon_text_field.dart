@@ -72,16 +72,7 @@ class LemonTextField extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(
-                label!,
-                style: Typo.small.copyWith(
-                  color: theme.colorScheme.onPrimary.withOpacity(0.36),
-                ),
-              ),
               if (showRequired == true) ...[
-                SizedBox(
-                  width: Spacing.superExtraSmall,
-                ),
                 Text(
                   "*",
                   style: Typo.mediumPlus.copyWith(
@@ -89,7 +80,18 @@ class LemonTextField extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
+                SizedBox(
+                  width: Spacing.superExtraSmall,
+                ),
               ],
+              Expanded(
+                child: Text(
+                  label ?? '',
+                  style: Typo.small.copyWith(
+                    color: theme.colorScheme.onPrimary.withOpacity(0.36),
+                  ),
+                ),
+              ),
             ],
           ),
           SizedBox(height: Spacing.superExtraSmall),
