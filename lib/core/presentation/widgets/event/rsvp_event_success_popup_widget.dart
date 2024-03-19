@@ -43,12 +43,9 @@ class RSVPEventSuccessPopupPage extends StatelessWidget {
           children: [
             Column(
               mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 const _SuccessCircle(),
-                SizedBox(
-                  height: 56.w,
-                ),
                 Column(
                   children: [
                     Padding(
@@ -97,9 +94,6 @@ class RSVPEventSuccessPopupPage extends StatelessWidget {
                                   BorderRadius.circular(LemonRadius.small * 2),
                               label: t.event.takeMeToEvent,
                             ),
-                    ),
-                    SizedBox(
-                      height: Spacing.large,
                     ),
                   ],
                 ),
