@@ -140,7 +140,8 @@ class EditProfilePersonalDialogState extends State<EditProfilePersonalDialog> {
                                 onDateSelect: (selectedDate) {
                                   bloc.birthDayCtrl.text =
                                       date_utils.DateUtils.toLocalDateString(
-                                          selectedDate);
+                                    selectedDate,
+                                  );
                                   bloc.onBirthdayChange(selectedDate);
                                 },
                                 value:
