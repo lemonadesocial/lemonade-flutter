@@ -13,18 +13,17 @@ class ApplicantRepositoryImpl implements ApplicantRepository {
 
   @override
   Future<Either<Failure, Applicant>> getApplicantInfo({
-    required List<String> usersId,
+    required String userId,
     required String eventId,
   }) async {
     final result = await _gqlClient.query$GetApplicantsInfo(
       Options$Query$GetApplicantsInfo(
         variables: Variables$Query$GetApplicantsInfo(
-          users: usersId,
+          users: [userId],
           event: eventId,
         ),
       ),
     );
-
     if (result.hasException) {
       return Left(Failure.withGqlException(result.exception));
     }

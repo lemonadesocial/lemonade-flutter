@@ -2,9 +2,6 @@ import 'package:app/core/domain/applicant/applicant_repository.dart';
 import 'package:app/core/domain/applicant/entities/applicant.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_join_request.dart';
-import 'package:app/core/domain/onboarding/onboarding_inputs.dart';
-import 'package:app/core/domain/user/entities/user.dart';
-import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/sub_pages/event_join_request_application_page/widgets/event_join_request_application_form.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/sub_pages/event_join_request_application_page/widgets/event_join_request_application_user_card.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
@@ -42,7 +39,6 @@ class EventJoinRequestApplicationPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-
     return Scaffold(
       backgroundColor: LemonColor.atomicBlack,
       appBar: LemonAppBar(
@@ -51,7 +47,7 @@ class EventJoinRequestApplicationPage extends StatelessWidget {
       ),
       body: FutureBuilder(
         future: getIt<ApplicantRepository>().getApplicantInfo(
-          usersId: [eventJoinRequest.user ?? ''],
+          userId: eventJoinRequest.user ?? '',
           eventId: event?.id ?? '',
         ),
         builder: (context, snapshot) {

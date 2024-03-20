@@ -4,7 +4,7 @@ import 'package:dartz/dartz.dart';
 
 abstract class ApplicantRepository {
   Future<Either<Failure, Applicant>> getApplicantInfo({
-    required List<String> usersId,
+    required String userId,
     required String eventId,
   });
 }

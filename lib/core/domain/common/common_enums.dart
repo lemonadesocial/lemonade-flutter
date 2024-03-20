@@ -101,4 +101,13 @@ enum ProfileFieldKey {
   final String label;
 
   const ProfileFieldKey(this.fieldKey, this.label);
+
+  static String getFieldLabel(String fieldKey) {
+    for (ProfileFieldKey field in ProfileFieldKey.values) {
+      if (field.fieldKey == fieldKey) {
+        return field.label;
+      }
+    }
+    return fieldKey; // Return the field key itself if no match is found
+  }
 }

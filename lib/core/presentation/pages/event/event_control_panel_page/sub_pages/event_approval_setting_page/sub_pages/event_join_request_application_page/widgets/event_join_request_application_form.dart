@@ -1,5 +1,6 @@
 import 'package:app/core/data/event/dtos/event_application_answer_dto/event_application_answer_dto.dart';
 import 'package:app/core/domain/applicant/entities/applicant.dart';
+import 'package:app/core/domain/common/common_enums.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_application_answer.dart';
 import 'package:app/core/utils/social_utils.dart';
@@ -12,7 +13,6 @@ import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:matrix/matrix.dart' as matrix;
-import 'package:slang/builder/utils/string_extensions.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -30,10 +30,6 @@ class EventJoinRequestApplicationForm extends StatelessWidget {
     List<String> profileRequiredFields = (event?.applicationProfileFields ?? [])
         .map((item) => item.field ?? '')
         .toList();
-
-    List<String> formattedFieldNames =
-        profileRequiredFields.map(StringUtils.underToWords).toList();
-
     return MultiSliver(
       children: [
         SliverList.separated(
@@ -44,22 +40,26 @@ class EventJoinRequestApplicationForm extends StatelessWidget {
             final isSocialFieldName = SocialUtils.isSocialFieldName(
               fieldName: profileRequiredFields[index],
             );
-            String? finalValue = null;
+            String? finalValue;
             if (value is String) {
-              if (date_utils.DateUtils.isValidDateTime(value)) {
-
-              }
-              if (isSocialFieldName) {
-                finalValue = SocialUtils.buildSocialLinkBySocialFieldName(
-                  socialFieldName: profileRequiredFields[index],
-                  socialUserName: value,
-                );
+              final isValidDate = date_utils.DateUtils.isValidDateTime(value);
+              if (isValidDate) {
+                finalValue =
+                    date_utils.DateUtils.formatDateTimeToDDMMYYYY(value);
               } else {
-                finalValue = value;
+                // If it's a social field name, build social link, otherwise return the value itself
+                finalValue = isSocialFieldName
+                    ? SocialUtils.buildSocialLinkBySocialFieldName(
+                        socialFieldName: profileRequiredFields[index],
+                        socialUserName: value,
+                      )
+                    : value;
               }
             }
             return _FormField(
-              label: StringUtils.capitalize(formattedFieldNames[index]),
+              label: ProfileFieldKey.getFieldLabel(
+                profileRequiredFields[index],
+              ),
               value: finalValue,
             );
           },
