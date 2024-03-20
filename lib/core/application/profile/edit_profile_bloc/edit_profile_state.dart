@@ -7,7 +7,7 @@ class EditProfileState with _$EditProfileState {
     String? username,
     LemonPronoun? pronoun,
     String? companyName,
-    String? dob,
+    DateTime? dob,
     String? displayName,
     String? education,
     String? industry,

@@ -26,7 +26,6 @@ class EditProfileFieldItem extends StatelessWidget {
   final ProfileFieldKey profileFieldKey;
   final ValueChanged<String> onChange;
   final ValueChanged<DateTime>? onDateSelect;
-  // final String? selectedValue;
   final TextEditingController? controller;
   final bool? showRequired;
   final String? value;
@@ -97,7 +96,11 @@ class EditProfileFieldItem extends StatelessWidget {
               context,
               onDateSelect: (selectedDate) {
                 if (onDateSelect != null) {
-                  onDateSelect!(selectedDate);
+                  onDateSelect!(
+                    DateTime.parse(
+                      selectedDate.toUtc().toIso8601String(),
+                    ),
+                  );
                 }
               },
             ),

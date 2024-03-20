@@ -2,6 +2,7 @@ import 'package:intl/intl.dart';
 
 class DateUtils {
   static DateTime get today => DateTime.now();
+  static const dateFormatDayMonthYear = 'dd/MM/yyyy';
 
   /// return [start, end] of current week
   static List<DateTime> get thisWeek {
@@ -113,5 +114,18 @@ class DateUtils {
     String formattedEndTime = DateFormat.jm().format(end);
     String formattedTimeRange = '$formattedStartTime - $formattedEndTime';
     return formattedTimeRange;
+  }
+
+  static String toLocalDateString(DateTime input) {
+    return DateFormat(DateUtils.dateFormatDayMonthYear).format(
+      input.toLocal(),
+    );
+  }
+
+  static DateTime parseDateString(String dateString) {
+    DateFormat format = DateFormat(DateUtils.dateFormatDayMonthYear);
+    return DateTime.parse(
+      format.parse(dateString).toUtc().toIso8601String(),
+    );
   }
 }
