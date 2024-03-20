@@ -156,9 +156,9 @@ class User with _$User {
       calendlyUrl: dto.calendlyUrl,
       wallets: dto.wallets,
       walletCustodial: dto.walletCustodial,
-      gender: dto.newGender,
+      newGender: dto.newGender,
       companyName: dto.companyName,
-      education: dto.educationTitle,
+      educationTitle: dto.educationTitle,
       ethnicity: dto.ethnicity,
       notificationFilterList:
           dto.notificationFilter.map((e) => e.type).toList(),
