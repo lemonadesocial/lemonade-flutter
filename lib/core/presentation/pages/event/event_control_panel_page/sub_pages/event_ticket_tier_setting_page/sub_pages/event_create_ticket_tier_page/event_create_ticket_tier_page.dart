@@ -24,9 +24,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 @RoutePage()
 class EventCreateTicketTierPage extends StatelessWidget {
   final EventTicketType? initialTicketType;
+  final Function()? onRefresh;
+
   const EventCreateTicketTierPage({
     super.key,
     this.initialTicketType,
+    this.onRefresh,
   });
 
   @override
@@ -37,6 +40,7 @@ class EventCreateTicketTierPage extends StatelessWidget {
       ),
       child: EventCreateTicketTierPagerView(
         initialTicketType: initialTicketType,
+        onRefresh: onRefresh,
       ),
     );
   }
@@ -44,9 +48,12 @@ class EventCreateTicketTierPage extends StatelessWidget {
 
 class EventCreateTicketTierPagerView extends StatelessWidget {
   final EventTicketType? initialTicketType;
+  final Function()? onRefresh;
+
   const EventCreateTicketTierPagerView({
     super.key,
     this.initialTicketType,
+    this.onRefresh,
   });
 
   Future<Either<Failure, EventTicketType>> submitModifyTicket(
@@ -166,12 +173,8 @@ class EventCreateTicketTierPagerView extends StatelessWidget {
                               submitModifyTicket(state, eventId: eventId),
                         );
                         if (futureResult.result?.isRight() == true) {
+                          onRefresh?.call();
                           context.router.pop();
-                          context.read<GetEventDetailBloc>().add(
-                                GetEventDetailEvent.fetch(
-                                  eventId: eventId,
-                                ),
-                              );
                         }
                       },
                       height: 42.w,

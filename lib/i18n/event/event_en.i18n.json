@@ -261,7 +261,7 @@
             "whitelistSettingTitle": "Whitelist",
             "whitelistedUser": "Whitelisted users",
             "addEmail": "Add email",
-            "whiteListAddEmailDescription": "Emails added below can purchase this ticket tier.\nThis can be edited later.",
+            "whiteListAddEmailDescription": "Emails added below can purchase this ticket tier. This can be edited later.",
             "addToWhitelist": "Add to whitelist"
         }
     },

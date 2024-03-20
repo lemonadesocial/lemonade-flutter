@@ -26,6 +26,7 @@ class ModifyTicketTypeBloc
     on<_ModifyTicketTypeEventOnMarkDefault>(_onMarkDefault);
     on<_ModifyTicketTypeEventOnWhitelistRemoved>(_onWhitelistRemoved);
     on<_ModifyTicketTypeEventOnWhitelistAdded>(_onWhitelistAdded);
+    on<_ModifyTicketTypeEventOnWhitelistAddedModify>(_onWhitelistAddedModified);
     on<_ModifyTicketTypeEventOnValidate>(_onValidate);
     on<_ModifyTicketTypeEventPopulateTicketType>(_onPopulateTicketType);
     if (initialTicketType != null) {
@@ -167,6 +168,16 @@ class ModifyTicketTypeBloc
     Emitter emit,
   ) {
     final newState = state.copyWith(
+      addedWhitelistEmails: [...state.addedWhitelistEmails, ...event.emails],
+    );
+    emit(_validate(newState));
+  }
+
+  void _onWhitelistAddedModified(
+    _ModifyTicketTypeEventOnWhitelistAddedModify event,
+    Emitter emit,
+  ) {
+    final newState = state.copyWith(
       addedWhitelistEmails: event.emails,
     );
     emit(_validate(newState));
@@ -263,6 +274,9 @@ class ModifyTicketTypeEvent with _$ModifyTicketTypeEvent {
   factory ModifyTicketTypeEvent.onWhitelistAdded({
     required List<String> emails,
   }) = _ModifyTicketTypeEventOnWhitelistAdded;
+  factory ModifyTicketTypeEvent.onWhitelistAddedModified({
+    required List<String> emails,
+  }) = _ModifyTicketTypeEventOnWhitelistAddedModify;
   factory ModifyTicketTypeEvent.onPricesChanged({
     required TicketPriceInput ticketPrice,
     int? index,
