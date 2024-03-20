@@ -120,14 +120,14 @@ class EditProfilePersonalDialogState extends State<EditProfilePersonalDialog> {
                             EditProfileFieldItem(
                               profileFieldKey: ProfileFieldKey.educationTitle,
                               onChange: bloc.onOrganizationChange,
-                              value: widget.userProfile.educationTitle,
+                              value: widget.userProfile.education,
                             ),
                             SizedBox(height: Spacing.smMedium),
                             EditProfileFieldItem(
                               profileFieldKey: ProfileFieldKey.newGender,
                               onChange: bloc.onGenderSelect,
                               value: bloc.state.gender ??
-                                  widget.userProfile.newGender,
+                                  widget.userProfile.gender,
                             ),
                             SizedBox(height: Spacing.smMedium),
                             Focus(
