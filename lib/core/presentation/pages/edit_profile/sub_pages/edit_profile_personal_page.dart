@@ -21,6 +21,7 @@ import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:app/core/utils/date_utils.dart' as date_utils;
 
 class EditProfilePersonalDialog extends StatefulWidget with LemonBottomSheet {
   final User userProfile;
@@ -42,7 +43,8 @@ class EditProfilePersonalDialogState extends State<EditProfilePersonalDialog> {
     super.initState();
     if (widget.userProfile.dateOfBirth != null) {
       bloc.birthDayCtrl.text =
-          DateFormat('dd/MM/yyyy').format(widget.userProfile.dateOfBirth!);
+          DateFormat(date_utils.DateUtils.dateFormatDayMonthYear)
+              .format(widget.userProfile.dateOfBirth!);
     }
   }
 
@@ -118,27 +120,48 @@ class EditProfilePersonalDialogState extends State<EditProfilePersonalDialog> {
                             EditProfileFieldItem(
                               profileFieldKey: ProfileFieldKey.educationTitle,
                               onChange: bloc.onOrganizationChange,
-                              value: widget.userProfile.education,
+                              value: widget.userProfile.educationTitle,
                             ),
                             SizedBox(height: Spacing.smMedium),
                             EditProfileFieldItem(
                               profileFieldKey: ProfileFieldKey.newGender,
                               onChange: bloc.onGenderSelect,
                               value: bloc.state.gender ??
-                                  widget.userProfile.gender,
+                                  widget.userProfile.newGender,
                             ),
                             SizedBox(height: Spacing.smMedium),
-                            EditProfileFieldItem(
-                              profileFieldKey: ProfileFieldKey.dateOfBirth,
-                              onChange: bloc.onBirthdayChange,
-                              controller: bloc.birthDayCtrl,
-                              onDateSelect: (selectedDate) =>
-                                  bloc.onBirthdayChange(
-                                DateFormat(dateFormat).format(
-                                  selectedDate,
-                                ),
+                            Focus(
+                              child: EditProfileFieldItem(
+                                controller: bloc.birthDayCtrl,
+                                profileFieldKey: ProfileFieldKey.dateOfBirth,
+                                onChange: (value) {
+                                  bloc.birthDayCtrl.text = value;
+                                },
+                                onDateSelect: (selectedDate) {
+                                  bloc.birthDayCtrl.text =
+                                      date_utils.DateUtils.toLocalDateString(
+                                          selectedDate);
+                                  bloc.onBirthdayChange(selectedDate);
+                                },
+                                value:
+                                    widget.userProfile.dateOfBirth.toString(),
                               ),
-                              value: widget.userProfile.dateOfBirth.toString(),
+                              onFocusChange: (hasFocus) {
+                                if (!hasFocus) {
+                                  // Handle when on blur input
+                                  bloc.birthDayCtrl.text =
+                                      date_utils.DateUtils.toLocalDateString(
+                                    date_utils.DateUtils.parseDateString(
+                                      bloc.birthDayCtrl.text,
+                                    ),
+                                  );
+                                  bloc.onBirthdayChange(
+                                    date_utils.DateUtils.parseDateString(
+                                      (bloc.birthDayCtrl.text),
+                                    ),
+                                  );
+                                }
+                              },
                             ),
                             SizedBox(height: Spacing.smMedium),
                             EditProfileFieldItem(
@@ -194,6 +217,4 @@ class EditProfilePersonalDialogState extends State<EditProfilePersonalDialog> {
       ],
     );
   }
-
-  final dateFormat = 'dd/MM/yyyy';
 }
