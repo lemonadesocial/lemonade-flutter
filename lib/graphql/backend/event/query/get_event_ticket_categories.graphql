@@ -1,0 +1,7 @@
+# import '../fragment/event_ticket_category_fragment.graphql'
+
+query GetEventTicketCategories($event: MongoID!) {
+  getEventTicketCategories(event: $event) {
+    ...EventTicketCategoryFragment    
+  }
+}

@@ -1,0 +1,11 @@
+# import '../fragment/event_ticket_category_fragment.graphql'
+
+mutation CreateEventTicketCategory($input: CreateEventTicketCategoryInput!) {
+  createEventTicketCategory(input: $input) {
+    _id
+    description
+    event
+    ticket_types
+    title
+  }
+}

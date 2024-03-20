@@ -1,5 +1,6 @@
 import 'package:app/core/data/event/dtos/buy_tickets_response_dto/buy_tickets_response_dto.dart';
 import 'package:app/core/data/event/dtos/event_currency_dto/event_currency_dto.dart';
+import 'package:app/core/data/event/dtos/event_ticket_category_dto/event_ticket_category_dto.dart';
 import 'package:app/core/data/event/dtos/event_ticket_types_dto/event_ticket_types_dto.dart';
 import 'package:app/core/data/event/dtos/event_ticket_dto/event_ticket_dto.dart';
 import 'package:app/core/data/event/dtos/event_tickets_pricing_info_dto/event_tickets_pricing_info_dto.dart';
@@ -8,6 +9,7 @@ import 'package:app/core/data/event/gql/event_tickets_mutation.dart';
 import 'package:app/core/data/event/gql/event_tickets_query.dart';
 import 'package:app/core/domain/event/entities/buy_tickets_response.dart';
 import 'package:app/core/domain/event/entities/event_currency.dart';
+import 'package:app/core/domain/event/entities/event_ticket_category.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/entities/event_ticket.dart';
 import 'package:app/core/domain/event/entities/event_tickets_pricing_info.dart';
@@ -22,6 +24,7 @@ import 'package:app/core/domain/event/input/redeem_tickets_input/redeem_tickets_
 import 'package:app/core/domain/event/repository/event_ticket_repository.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/core/utils/gql/gql.dart';
+import 'package:app/graphql/backend/event/mutation/create_event_ticket_category.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/create_event_ticket_type.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/create_tickets.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/delete_event_ticket_type.graphql.dart';
@@ -285,6 +288,31 @@ class EventTicketRepositoryImpl implements EventTicketRepository {
             ),
           )
           .toList(),
+    );
+  }
+
+  @override
+  Future<Either<Failure, EventTicketCategory>> createEventTicketCategory({
+    required Input$CreateEventTicketCategoryInput input,
+  }) async {
+    final result = await _client.mutate$CreateEventTicketCategory(
+      Options$Mutation$CreateEventTicketCategory(
+        variables: Variables$Mutation$CreateEventTicketCategory(
+          input: input,
+        ),
+      ),
+    );
+
+    if (result.hasException || result.parsedData == null) {
+      return Left(Failure());
+    }
+
+    return Right(
+      EventTicketCategory.fromDto(
+        EventTicketCategoryDto.fromJson(
+          result.parsedData!.createEventTicketCategory.toJson(),
+        ),
+      ),
     );
   }
 }

@@ -27,6 +27,7 @@ class ModifyTicketTypeBloc
     on<_ModifyTicketTypeEventOnWhitelistRemoved>(_onWhitelistRemoved);
     on<_ModifyTicketTypeEventOnWhitelistAdded>(_onWhitelistAdded);
     on<_ModifyTicketTypeEventOnWhitelistAddedModify>(_onWhitelistAddedModified);
+    on<_ModifyTicketTypeEventOnCategoryChanged>(_onCategoryChanged);
     on<_ModifyTicketTypeEventOnValidate>(_onValidate);
     on<_ModifyTicketTypeEventPopulateTicketType>(_onPopulateTicketType);
     if (initialTicketType != null) {
@@ -194,6 +195,16 @@ class ModifyTicketTypeBloc
     emit(_validate(newState));
   }
 
+  void _onCategoryChanged(
+    _ModifyTicketTypeEventOnCategoryChanged event,
+    Emitter emit,
+  ) {
+    final newState = state.copyWith(
+      category: event.category,
+    );
+    emit(_validate(newState));
+  }
+
   void _onValidate(
     _ModifyTicketTypeEventOnValidate event,
     Emitter emit,
@@ -241,6 +252,7 @@ class ModifyTicketTypeBloc
               [],
           addedWhitelistEmails: [],
           removedWhitelistEmails: [],
+          category: initialTicketType?.category?.id,
           isValid: false,
         ),
       ),
@@ -287,6 +299,9 @@ class ModifyTicketTypeEvent with _$ModifyTicketTypeEvent {
   factory ModifyTicketTypeEvent.onMarkDefault({
     required int index,
   }) = _ModifyTicketTypeEventOnMarkDefault;
+  factory ModifyTicketTypeEvent.onCategoryChanged({
+    String? category,
+  }) = _ModifyTicketTypeEventOnCategoryChanged;
   factory ModifyTicketTypeEvent.onValidate() = _ModifyTicketTypeEventOnValidate;
   factory ModifyTicketTypeEvent.populateInitialTicketType() =
       _ModifyTicketTypeEventPopulateTicketType;
@@ -305,6 +320,7 @@ class ModifyTicketTypeState with _$ModifyTicketTypeState {
     required List<String> addedWhitelistEmails,
     required List<TicketPriceInput> prices,
     required bool isValid,
+    String? category,
   }) = _ModifyTicketTypeState;
 
   factory ModifyTicketTypeState.initial() => ModifyTicketTypeState(
@@ -318,5 +334,6 @@ class ModifyTicketTypeState with _$ModifyTicketTypeState {
         isValid: false,
         removedWhitelistEmails: [],
         addedWhitelistEmails: [],
+        category: null,
       );
 }

@@ -1,6 +1,7 @@
 import 'package:app/core/data/event/dtos/event_ticket_types_dto/event_ticket_types_dto.dart';
 import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/entities/event_ticket_category.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'event_ticket_types.freezed.dart';
@@ -72,6 +73,7 @@ class PurchasableTicketType with _$PurchasableTicketType {
     String? defaultCurrency,
     EventTicketPrice? defaultPrice,
     List<DbFile>? photosExpanded,
+    EventTicketCategory? category,
   }) = _PurchasableTicketType;
 
   factory PurchasableTicketType.fromDto(PurchasableTicketTypeDto dto) =>
@@ -101,6 +103,9 @@ class PurchasableTicketType with _$PurchasableTicketType {
         photosExpanded: List.from(dto.photosExpanded ?? [])
             .map((item) => DbFile.fromDto(item))
             .toList(),
+        category: dto.category != null
+            ? EventTicketCategory.fromDto(dto.category!)
+            : null,
       );
 }
 
@@ -129,6 +134,7 @@ class EventTicketType with _$EventTicketType {
     double? ticketLimit,
     double? ticketCount,
     List<WhitelistUserInfo>? limitedWhitelistUsers,
+    EventTicketCategory? category,
   }) = _EventTicketType;
 
   factory EventTicketType.fromDto(EventTicketTypeDto dto) => EventTicketType(
@@ -161,6 +167,9 @@ class EventTicketType with _$EventTicketType {
         limitedWhitelistUsers: List.from(dto.limitedWhitelistUsers ?? [])
             .map((item) => WhitelistUserInfo.fromDto(item))
             .toList(),
+        category: dto.category != null
+            ? EventTicketCategory.fromDto(dto.category!)
+            : null,
       );
 }
 

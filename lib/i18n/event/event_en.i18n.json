@@ -263,6 +263,14 @@
             "addEmail": "Add email",
             "whiteListAddEmailDescription": "Emails added below can purchase this ticket tier. This can be edited later.",
             "addToWhitelist": "Add to whitelist"
+        },
+        "categorySetting": {
+            "newCategory": "New category",
+            "newCategoryDescription": "Streamline the buying process for events with numerous ticket tiers",
+            "selectCategory": "Select category",
+            "addCategory": "Add category",
+            "name": "Name",
+            "description": "Description"
         }
     },
     "speakers": {

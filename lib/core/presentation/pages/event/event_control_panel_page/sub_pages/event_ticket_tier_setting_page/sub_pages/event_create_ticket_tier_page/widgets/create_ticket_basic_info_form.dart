@@ -1,4 +1,6 @@
+import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/application/event_tickets/modify_ticket_type_bloc/modify_ticket_type_bloc.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/ticket_category_dropdown.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -20,6 +22,10 @@ class CreateTicketBasicInfoForm extends StatelessWidget {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
     final modifyTicketTypeBloc = context.read<ModifyTicketTypeBloc>();
+    final event = context
+        .read<GetEventDetailBloc>()
+        .state
+        .maybeWhen(orElse: () => null, fetched: (event) => event);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -89,6 +95,8 @@ class CreateTicketBasicInfoForm extends StatelessWidget {
             hintText: t.event.ticketTierSetting.ticketDescription,
           ),
         ),
+        SizedBox(height: Spacing.smMedium),
+        if (event != null) TicketCategoryDropdown(event: event),
       ],
     );
   }

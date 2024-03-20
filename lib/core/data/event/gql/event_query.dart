@@ -93,6 +93,13 @@ const eventTicketTypesFragment = '''
         _id
         email
       }
+      category {
+        _id
+        title
+        event
+        description
+        ticket_types
+      }
     }
   }
 ''';

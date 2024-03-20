@@ -21,6 +21,7 @@ type Query {
   getConfigs(keys: [String!]!): JSON!
   exportEventAccepted(_id: MongoID!): [EventAcceptedExport!]!
   getEventApplicationAnswers(event: MongoID!, user: MongoID): [EventApplicationAnswer!]!
+  getApplicantsInfo(users: [MongoID!]!, event: MongoID!): [Applicant!]!
   getEventbriteEvents(input: GetEventbriteEventsInput, skip: Int! = 0, limit: Int! = 25): [EventbriteEvent!]!
   getEventCheckins(input: GetEventCheckinsInput!): [EventCheckin!]!
   getEventCohostRequests(input: GetEventCohostRequestsInput!): [EventCohostRequest!]!
@@ -42,10 +43,12 @@ type Query {
   getEventRewardUses(input: GetEventRewardUsesInput!): [EventRewardUse!]!
   getEventSessionReservations(input: GetEventSessionReservationsInput): [EventSessionReservation!]!
   getEventSessionReservationSummary(input: GetEventSessionReservationSummaryInput!): [EventSessionReservationSummary!]!
+  getEventTicketCategories(event: MongoID!): [EventTicketCategory!]!
   listEventTicketTypes(event: MongoID!): [EventTicketType!]!
   getEventTicketTypes(input: GetEventTicketTypesInput!): GetEventTicketTypesResponse!
   getFiles(skip: Int! = 0, limit: Int! = 25, id_lt: MongoID, user: MongoID, links: FileLinkInput): [File!]!
   getFrequentQuestions(input: GetFrequentQuestionsInput!): [FrequentQuestion!]!
+  getGuildRooms: [GuildRoom!]!
   getKratosFlow(email: String!): String!
   listFiatCurrencies: [FiatCurrency!]!
   listChains: [Chain!]!
@@ -664,6 +667,7 @@ type EventTicketType {
   ticket_limit_per: Float
   photos_expanded(skip: Int! = 0, limit: Int! = 25): [File]
   limited_whitelist_users: [WhitelistUserInfo!]
+  category: EventTicketCategory
 }
 
 type EventTicketPrice {
@@ -676,6 +680,14 @@ type EventTicketPrice {
 type WhitelistUserInfo {
   _id: MongoID
   email: String!
+}
+
+type EventTicketCategory {
+  _id: MongoID!
+  title: String!
+  event: MongoID!
+  description: String
+  ticket_types: [MongoID!]
 }
 
 type EventSession {
@@ -1026,6 +1038,33 @@ type EventApplicationAnswer {
   question_expanded: EventApplicationQuestion!
 }
 
+type Applicant {
+  _id: MongoID
+  active: Boolean!
+  email: String
+  display_name: String
+  calendly_url: String
+  company_name: String
+  date_of_birth: DateTimeISO
+  description: String
+  education_title: String
+  ethnicity: String
+  handle_farcaster: String
+  handle_github: String
+  handle_instagram: String
+  handle_lens: String
+  handle_linkedin: String
+  handle_mirror: String
+  handle_twitter: String
+  image_avatar: String
+  industry: String
+  job_title: String
+  pronoun: String
+  new_gender: String
+  tagline: String
+  username: String
+}
+
 type EventbriteEvent {
   id: String!
   title: String!
@@ -1240,6 +1279,7 @@ type PurchasableTicketType {
   discountable: Boolean!
   limit: Float!
   whitelisted: Boolean
+  photos_expanded(skip: Int! = 0, limit: Int! = 25): [File]
 }
 
 type TicketDiscount {
@@ -1250,6 +1290,7 @@ type TicketDiscount {
 
 input GetEventTicketTypesInput {
   event: MongoID!
+  category: MongoID
   discount: String
 }
 
@@ -1262,6 +1303,19 @@ input FileLinkInput {
 
 input GetFrequentQuestionsInput {
   type: [FrequentQuestionType!]!
+}
+
+type GuildRoom {
+  _id: MongoID!
+  created_at: DateTimeISO!
+  created_by: MongoID!
+  title: String!
+  guild_id: Float!
+  guild_role_ids: Int
+  guild_role_require_all: Boolean
+  joins: Float
+  matrix_room_id: String!
+  created_by_expanded: User
 }
 
 type FiatCurrency {
@@ -2193,6 +2247,9 @@ type Mutation {
   deleteEventSessionReservation(input: EventSessionReservationInput!): Boolean!
   createEventStory(input: EventStoryInput!): Boolean!
   deleteEventStory(input: EventStoryInput!): Boolean!
+  createEventTicketCategory(input: CreateEventTicketCategoryInput!): EventTicketCategory!
+  deleteEventTicketCategory(categories: [MongoID!]!, event: MongoID!): Boolean!
+  updateTicketTypeCategory(input: UpdateTicketTypeCategoryInput!): Boolean!
   createEventTicketDiscounts(event: MongoID!, inputs: [EventPaymentTicketDiscountInput!]!): Event!
   deleteEventTicketDiscounts(event: MongoID!, discounts: [String!]!): Event!
   mailEventTicket(event: MongoID!, payment: MongoID, emails: [String!]!): Boolean!
@@ -2207,6 +2264,9 @@ type Mutation {
   flagUser(_id: MongoID!, reason: String!): Boolean!
   flagEvent(_id: MongoID!, reason: String!): Boolean!
   flagPost(_id: MongoID!, reason: String!): Boolean!
+  createGuildRoom(input: GuildRoomInput!): GuildRoom!
+  deleteGuildRoom(_id: MongoID!): Boolean!
+  joinGuildRoom(_id: MongoID!): Boolean!
   generateMatrixToken: String!
   createNewPaymentAccount(input: CreateNewPaymentAccountInput!): NewPaymentAccount!
   updateNewPaymentAccount(input: UpdateNewPaymentAccountInput!): NewPaymentAccount!
@@ -2575,6 +2635,18 @@ input EventStoryInput {
   file: MongoID!
 }
 
+input CreateEventTicketCategoryInput {
+  title: String!
+  description: String
+  event: MongoID!
+}
+
+input UpdateTicketTypeCategoryInput {
+  ticket_types: [MongoID!]
+  category: MongoID!
+  event: MongoID!
+}
+
 input EventPaymentTicketDiscountInput {
   code: String!
   ratio: Float!
@@ -2605,6 +2677,7 @@ input EventTicketTypeInput {
   offers: [EventTicketTypeOffersInput!]
   added_whitelist_emails: [String!]
   removed_whitelist_emails: [String!]
+  category: MongoID
 }
 
 input EventTicketPriceInput {
@@ -2654,6 +2727,14 @@ type FileWithPresignedUrl {
 input FileUploadInfo {
   description: String
   extension: String!
+}
+
+input GuildRoomInput {
+  title: String!
+  guild_id: Float!
+  guild_role_ids: Int
+  guild_role_require_all: Boolean
+  matrix_room_id: String!
 }
 
 input CreateNewPaymentAccountInput {
