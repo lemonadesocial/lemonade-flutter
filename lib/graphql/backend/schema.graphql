@@ -21,6 +21,7 @@ type Query {
   getConfigs(keys: [String!]!): JSON!
   exportEventAccepted(_id: MongoID!): [EventAcceptedExport!]!
   getEventApplicationAnswers(event: MongoID!, user: MongoID): [EventApplicationAnswer!]!
+  getApplicantsInfo(users: [MongoID!]!, event: MongoID!): [Applicant!]!
   getEventbriteEvents(input: GetEventbriteEventsInput, skip: Int! = 0, limit: Int! = 25): [EventbriteEvent!]!
   getEventCheckins(input: GetEventCheckinsInput!): [EventCheckin!]!
   getEventCohostRequests(input: GetEventCohostRequestsInput!): [EventCohostRequest!]!
@@ -42,6 +43,8 @@ type Query {
   getEventRewardUses(input: GetEventRewardUsesInput!): [EventRewardUse!]!
   getEventSessionReservations(input: GetEventSessionReservationsInput): [EventSessionReservation!]!
   getEventSessionReservationSummary(input: GetEventSessionReservationSummaryInput!): [EventSessionReservationSummary!]!
+  getEventTicketCategories(event: MongoID!): [EventTicketCategory!]!
+  listEventTicketTypes(event: MongoID!): [EventTicketType!]!
   getEventTicketTypes(input: GetEventTicketTypesInput!): GetEventTicketTypesResponse!
   getFiles(skip: Int! = 0, limit: Int! = 25, id_lt: MongoID, user: MongoID, links: FileLinkInput): [File!]!
   getFrequentQuestions(input: GetFrequentQuestionsInput!): [FrequentQuestion!]!
@@ -670,6 +673,11 @@ type EventTicketPrice {
   cost: String!
 }
 
+type WhitelistUserInfo {
+  _id: MongoID
+  email: String!
+}
+
 type EventSession {
   _id: MongoID
   title: String!
@@ -1018,6 +1026,33 @@ type EventApplicationAnswer {
   question_expanded: EventApplicationQuestion!
 }
 
+type Applicant {
+  _id: MongoID
+  active: Boolean!
+  email: String
+  display_name: String
+  calendly_url: String
+  company_name: String
+  date_of_birth: DateTimeISO
+  description: String
+  education_title: String
+  ethnicity: String
+  handle_farcaster: String
+  handle_github: String
+  handle_instagram: String
+  handle_lens: String
+  handle_linkedin: String
+  handle_mirror: String
+  handle_twitter: String
+  image_avatar: String
+  industry: String
+  job_title: String
+  pronoun: String
+  new_gender: String
+  tagline: String
+  username: String
+}
+
 type EventbriteEvent {
   id: String!
   title: String!
@@ -1240,6 +1275,7 @@ type TicketDiscount {
 
 input GetEventTicketTypesInput {
   event: MongoID!
+  category: MongoID
   discount: String
 }
 

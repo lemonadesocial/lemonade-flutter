@@ -1,3 +1,5 @@
+import 'package:app/core/domain/applicant/applicant_repository.dart';
+import 'package:app/core/domain/applicant/entities/applicant.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_join_request.dart';
 import 'package:app/core/domain/onboarding/onboarding_inputs.dart';
@@ -48,17 +50,15 @@ class EventJoinRequestApplicationPage extends StatelessWidget {
         title: t.event.eventApproval.application,
       ),
       body: FutureBuilder(
-        future: getIt<UserRepository>().getUserProfile(
-          GetProfileInput(
-            id: eventJoinRequest.user ?? '',
-          ),
+        future: getIt<ApplicantRepository>().getApplicantInfo(
+          usersId: [eventJoinRequest.user ?? ''],
+          eventId: event?.id ?? '',
         ),
         builder: (context, snapshot) {
-          User? user = snapshot.data?.fold(
+          Applicant? applicant = snapshot.data?.fold(
             (l) => null,
-            (user) => user,
+            (applicant) => applicant,
           );
-
           return Stack(
             children: [
               Padding(
@@ -68,7 +68,7 @@ class EventJoinRequestApplicationPage extends StatelessWidget {
                     SliverToBoxAdapter(
                       child: EventJoinRequestApplicationUserCard(
                         eventJoinRequest: eventJoinRequest,
-                        user: user,
+                        applicant: applicant,
                       ),
                     ),
                     SliverToBoxAdapter(
@@ -76,9 +76,9 @@ class EventJoinRequestApplicationPage extends StatelessWidget {
                         height: Spacing.smMedium * 2,
                       ),
                     ),
-                    if (user != null)
+                    if (applicant != null)
                       EventJoinRequestApplicationForm(
-                        user: user,
+                        applicant: applicant,
                         event: event,
                       ),
                     SliverToBoxAdapter(

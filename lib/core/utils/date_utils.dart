@@ -114,4 +114,13 @@ class DateUtils {
     String formattedTimeRange = '$formattedStartTime - $formattedEndTime';
     return formattedTimeRange;
   }
+
+  static bool isValidDateTime(String input) {
+    try {
+      DateTime.parse(input);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
 }
