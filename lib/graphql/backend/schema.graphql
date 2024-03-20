@@ -21,6 +21,7 @@ type Query {
   getConfigs(keys: [String!]!): JSON!
   exportEventAccepted(_id: MongoID!): [EventAcceptedExport!]!
   getEventApplicationAnswers(event: MongoID!, user: MongoID): [EventApplicationAnswer!]!
+  getApplicantsInfo(users: [MongoID!]!, event: MongoID!): [Applicant!]!
   getEventbriteEvents(input: GetEventbriteEventsInput, skip: Int! = 0, limit: Int! = 25): [EventbriteEvent!]!
   getEventCheckins(input: GetEventCheckinsInput!): [EventCheckin!]!
   getEventCohostRequests(input: GetEventCohostRequestsInput!): [EventCohostRequest!]!
@@ -1016,6 +1017,33 @@ type EventApplicationAnswer {
   question: MongoID!
   answer: String
   question_expanded: EventApplicationQuestion!
+}
+
+type Applicant {
+  _id: MongoID
+  active: Boolean!
+  email: String
+  display_name: String
+  calendly_url: String
+  company_name: String
+  date_of_birth: DateTimeISO
+  description: String
+  education_title: String
+  ethnicity: String
+  handle_farcaster: String
+  handle_github: String
+  handle_instagram: String
+  handle_lens: String
+  handle_linkedin: String
+  handle_mirror: String
+  handle_twitter: String
+  image_avatar: String
+  industry: String
+  job_title: String
+  pronoun: String
+  new_gender: String
+  tagline: String
+  username: String
 }
 
 type EventbriteEvent {

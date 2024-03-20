@@ -128,4 +128,20 @@ class DateUtils {
       format.parse(dateString).toUtc().toIso8601String(),
     );
   }
+
+  static bool isValidDateTime(String input) {
+    try {
+      DateTime.parse(input);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  static formatDateTimeToDDMMYYYY(String input) {
+    DateTime dateTime = DateTime.parse(input);
+    String formattedDate =
+        DateFormat(DateUtils.dateFormatDayMonthYear).format(dateTime);
+    return formattedDate;
+  }
 }

@@ -49,6 +49,10 @@ class StringUtils {
         .toLowerCase();
   }
 
+  static String underToWords(String text) {
+    return text.replaceAll('_', ' ').toLowerCase();
+  }
+
   static RegExp get urlRegx => RegExp(
         r'^(.*?)((?:https?:\/\/|www\.)[^\s/$.?#].[^\s]*)',
         caseSensitive: false,
