@@ -43,8 +43,6 @@ type Query {
   getEventRewardUses(input: GetEventRewardUsesInput!): [EventRewardUse!]!
   getEventSessionReservations(input: GetEventSessionReservationsInput): [EventSessionReservation!]!
   getEventSessionReservationSummary(input: GetEventSessionReservationSummaryInput!): [EventSessionReservationSummary!]!
-  getEventTicketCategories(event: MongoID!): [EventTicketCategory!]!
-  listEventTicketTypes(event: MongoID!): [EventTicketType!]!
   getEventTicketTypes(input: GetEventTicketTypesInput!): GetEventTicketTypesResponse!
   getFiles(skip: Int! = 0, limit: Int! = 25, id_lt: MongoID, user: MongoID, links: FileLinkInput): [File!]!
   getFrequentQuestions(input: GetFrequentQuestionsInput!): [FrequentQuestion!]!
@@ -673,11 +671,6 @@ type EventTicketPrice {
   cost: String!
 }
 
-type WhitelistUserInfo {
-  _id: MongoID
-  email: String!
-}
-
 type EventSession {
   _id: MongoID
   title: String!
@@ -1275,7 +1268,6 @@ type TicketDiscount {
 
 input GetEventTicketTypesInput {
   event: MongoID!
-  category: MongoID
   discount: String
 }
 

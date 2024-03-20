@@ -108,6 +108,6 @@ enum ProfileFieldKey {
         return field.label;
       }
     }
-    return fieldKey; // Return the field key itself if no match is found
+    return fieldKey;
   }
 }
