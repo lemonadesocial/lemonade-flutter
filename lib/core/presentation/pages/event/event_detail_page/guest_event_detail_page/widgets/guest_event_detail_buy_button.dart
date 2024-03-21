@@ -26,7 +26,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:matrix/matrix.dart' as matrix;
 import 'package:collection/collection.dart';
 
 class GuestEventDetailBuyButton extends StatelessWidget {
@@ -81,25 +80,12 @@ class _GuestEventDetailBuyButtonView extends StatelessWidget {
 
     User? user = userResult.result?.fold((l) => null, (user) => user);
     if (user != null) {
-      final userJson = user.toJson();
-      final missingFields = profileRequiredFields.where((field) {
-        final fieldValue = userJson.tryGet(field);
-        if (fieldValue is String) {
-          return fieldValue.isEmpty == true;
-        }
-        return fieldValue == null;
-      });
-      final hasApplicationFields =
-          event.applicationProfileFields?.isNotEmpty ?? false;
+      final alreadySubmitted = event.applicationFormSubmission != null;
+      final hasRequiredProfileFields = profileRequiredFields.isNotEmpty;
       final hasApplicationQuestions =
           event.applicationQuestions?.isNotEmpty ?? false;
-      final hasMissingFields = missingFields.isNotEmpty;
-      final isMissingSubmission =
-          event.applicationQuestions?.isNotEmpty == true &&
-              event.applicationFormSubmission == null;
-
-      if ((hasApplicationFields || hasApplicationQuestions) &&
-          (hasMissingFields || isMissingSubmission)) {
+      if ((hasRequiredProfileFields && !alreadySubmitted) ||
+          (hasApplicationQuestions && !alreadySubmitted)) {
         AutoRouter.of(context)
             .navigate(GuestEventApplicationRoute(event: event, user: user));
       } else {

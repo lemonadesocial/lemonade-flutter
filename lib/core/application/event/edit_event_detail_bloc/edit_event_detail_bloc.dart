@@ -30,6 +30,7 @@ class EditEventDetailBloc
         end: event.end != null
             ? DateTime.parse(event.end!.toUtc().toIso8601String())
             : null,
+        approval_required: event.approvalRequired,
         guest_limit: event.guestLimit != null
             ? double.parse(event.guestLimit ?? '')
             : null,
@@ -80,6 +81,7 @@ class EditEventDetailEvent with _$EditEventDetailEvent {
     String? guestLimitPer,
     bool? private,
     List<String>? speakerUsers,
+    bool? approvalRequired,
   }) = EditEventDetailEventUpdateEvent;
 }
 

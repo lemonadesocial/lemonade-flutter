@@ -129,6 +129,9 @@ class EventApplicationFormBloc
       );
       return !matchingAnswer.answer.isNullOrEmpty;
     });
+
+    print("isValidProfileFields : $isValidProfileFields");
+    print("isValidAnswersField : $isValidAnswersField");
     return state.copyWith(isValid: isValidProfileFields && isValidAnswersField);
   }
 }

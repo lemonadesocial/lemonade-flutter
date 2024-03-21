@@ -51,7 +51,7 @@ class EventApplicationFormProfileSettingPage extends StatelessWidget
     final t = Translations.of(context);
     List<ProfileFieldKey> basicInfoKeys = [
       ProfileFieldKey.displayName,
-      ProfileFieldKey.pronouns,
+      ProfileFieldKey.pronoun,
       ProfileFieldKey.tagline,
       ProfileFieldKey.description,
     ];
