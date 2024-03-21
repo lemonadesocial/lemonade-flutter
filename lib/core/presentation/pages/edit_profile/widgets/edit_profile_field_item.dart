@@ -38,6 +38,23 @@ class EditProfileFieldItem extends StatelessWidget {
       //
       // Dropdown
       //
+      case ProfileFieldKey.pronoun:
+        // Handle for wrong pronoun existing data
+        final newValue = value!.isNotEmpty
+            ? value![0].toUpperCase() + value!.substring(1)
+            : "";
+        return FrostedGlassDropDownV2(
+          label: t.profile.pronoun,
+          hintText: t.profile.pronoun,
+          listItem: LemonPronoun.values.map((e) => e.pronoun).toList(),
+          onValueChange: (value) {
+            if (value != null) {
+              onChange(value);
+            }
+          },
+          selectedValue: value == '' ? null : newValue,
+          showRequired: showRequired,
+        );
       case ProfileFieldKey.industry:
         return FrostedGlassDropDownV2(
           label: t.profile.industry,

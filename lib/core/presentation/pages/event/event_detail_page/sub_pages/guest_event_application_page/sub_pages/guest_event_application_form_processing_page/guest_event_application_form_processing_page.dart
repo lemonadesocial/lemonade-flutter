@@ -47,15 +47,18 @@ class _GuestEventApplicationFormProcessingPageState
     final updateUserResult = await getIt<UserRepository>().updateUser(
       input: Input$UserInput.fromJson(profileFields),
     );
+    if (updateUserResult.isLeft()) {
+      AutoRouter.of(context).replace(const GuestEventApplicationFormRoute());
+      return;
+    }
     final submitAnswersResult =
         await getIt<EventRepository>().submitEventApplicationAnswers(
       answers: answers,
       eventId: event.id ?? '',
     );
-    if (updateUserResult.isLeft() || submitAnswersResult.isLeft()) {
-      AutoRouter.of(context).replaceAll([
-        const GuestEventApplicationFormRoute(),
-      ]);
+    if (submitAnswersResult.isLeft()) {
+      AutoRouter.of(context).pop();
+      return;
     }
     // Refresh event detail
     context.read<GetEventDetailBloc>().add(

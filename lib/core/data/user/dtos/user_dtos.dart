@@ -46,6 +46,7 @@ class UserDto with _$UserDto {
     String? username,
     String? phone,
     String? email,
+    String? pronoun,
     String? description,
     bool? active,
     String? cover,

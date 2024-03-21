@@ -84,7 +84,7 @@ class GuestEventApplicationFormPage extends StatelessWidget {
                             return SliverToBoxAdapter(
                               child: Column(
                                 children: [
-                                  GuestEventApplicationFormProfileItems(),
+                                  const GuestEventApplicationFormProfileItems(),
                                   SizedBox(
                                     height: Spacing.extraSmall,
                                   ),
