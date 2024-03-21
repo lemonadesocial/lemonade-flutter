@@ -2,11 +2,13 @@ import 'dart:io';
 
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/presentation/widgets/bottom_bar/app_tabs.dart';
+import 'package:app/core/presentation/widgets/home/bottom_bar_create_button.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/utils/avatar_utils.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
+import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,7 +20,7 @@ import 'package:app/core/application/newsfeed/newsfeed_listing_bloc/newsfeed_lis
 class BottomBar extends StatefulWidget {
   const BottomBar({super.key});
 
-  static double get bottomBarHeight => Platform.isIOS ? 48.w : 64.w;
+  static double get bottomBarHeight => Platform.isIOS ? 56.w : 72.w;
 
   @override
   BottomBarState createState() => BottomBarState();
@@ -57,37 +59,43 @@ class BottomBarState extends State<BottomBar>
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return BottomAppBar(
-      notchMargin: 0,
       padding: EdgeInsets.zero,
       elevation: 0.0,
-      shape: const CircularNotchedRectangle(),
       height: BottomBar.bottomBarHeight,
       color: colorScheme.surfaceVariant,
       child: ClipRect(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            _buildTabItem(context, tabs[0]),
-            _buildTabItem(context, tabs[1]),
-            Container(
-              width: 45.w,
-              height: BottomBar.bottomBarHeight,
-              color: Colors.transparent,
+        child: Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.rectangle,
+            border: Border(
+              top: BorderSide(color: colorScheme.outline),
             ),
-            _buildTabItem(context, tabs[2]),
-            _buildTabItem(context, tabs[3]),
-          ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _buildTabItem(context, 0),
+              _buildTabItem(context, 1),
+              const Expanded(
+                child: Center(
+                  child: BottomBarCreateButton(),
+                ),
+              ),
+              _buildTabItem(context, 2),
+              _buildTabItem(context, 3),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildTabItem(
-    BuildContext context,
-    TabData tabData,
-  ) {
+  Widget _buildTabItem(BuildContext context, int index) {
+    final tabData = tabs[index];
     final isSelected = _selectedTab == tabData.tab;
     final icon = _buildIcon(context, tabData, isSelected);
+    final marginLeft = index == 0 ? Spacing.smMedium : 0.0;
+    final marginRight = index == 3 ? Spacing.smMedium : 0.0;
     return Expanded(
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
@@ -97,6 +105,7 @@ class BottomBarState extends State<BottomBar>
         child: Container(
           height: BottomBar.bottomBarHeight,
           color: Colors.transparent,
+          margin: EdgeInsets.only(right: marginRight, left: marginLeft),
           child: Stack(
             alignment: Alignment.center,
             children: [
