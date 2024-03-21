@@ -12,7 +12,6 @@ class EventTicketCategory with _$EventTicketCategory {
     String? title,
     String? event,
     String? description,
-    List<String>? ticketTypes,
   }) = _EventTicketCategory;
 
   factory EventTicketCategory.fromDto(EventTicketCategoryDto dto) =>
@@ -21,6 +20,5 @@ class EventTicketCategory with _$EventTicketCategory {
         title: dto.title,
         event: dto.event,
         description: dto.description,
-        ticketTypes: dto.ticketTypes,
       );
 }

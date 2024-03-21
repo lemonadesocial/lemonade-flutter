@@ -40,11 +40,11 @@ fragment EventTicketType on EventTicketType {
     _id
     email
   }
-  category {
+  category
+  category_expanded {
     _id
-    description
-    event
-    ticket_types
     title
+    event
+    description
   }
 }

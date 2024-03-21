@@ -73,7 +73,8 @@ class PurchasableTicketType with _$PurchasableTicketType {
     String? defaultCurrency,
     EventTicketPrice? defaultPrice,
     List<DbFile>? photosExpanded,
-    EventTicketCategory? category,
+    String? category,
+    EventTicketCategory? categoryExpanded,
   }) = _PurchasableTicketType;
 
   factory PurchasableTicketType.fromDto(PurchasableTicketTypeDto dto) =>
@@ -103,8 +104,9 @@ class PurchasableTicketType with _$PurchasableTicketType {
         photosExpanded: List.from(dto.photosExpanded ?? [])
             .map((item) => DbFile.fromDto(item))
             .toList(),
-        category: dto.category != null
-            ? EventTicketCategory.fromDto(dto.category!)
+        category: dto.category,
+        categoryExpanded: dto.categoryExpanded != null
+            ? EventTicketCategory.fromDto(dto.categoryExpanded!)
             : null,
       );
 }
@@ -134,7 +136,8 @@ class EventTicketType with _$EventTicketType {
     double? ticketLimit,
     double? ticketCount,
     List<WhitelistUserInfo>? limitedWhitelistUsers,
-    EventTicketCategory? category,
+    String? category,
+    EventTicketCategory? categoryExpanded,
   }) = _EventTicketType;
 
   factory EventTicketType.fromDto(EventTicketTypeDto dto) => EventTicketType(
@@ -167,8 +170,9 @@ class EventTicketType with _$EventTicketType {
         limitedWhitelistUsers: List.from(dto.limitedWhitelistUsers ?? [])
             .map((item) => WhitelistUserInfo.fromDto(item))
             .toList(),
-        category: dto.category != null
-            ? EventTicketCategory.fromDto(dto.category!)
+        category: dto.category,
+        categoryExpanded: dto.categoryExpanded != null
+            ? EventTicketCategory.fromDto(dto.categoryExpanded!)
             : null,
       );
 }

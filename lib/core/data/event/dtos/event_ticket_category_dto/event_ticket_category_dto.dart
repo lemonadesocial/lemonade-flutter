@@ -10,7 +10,6 @@ class EventTicketCategoryDto with _$EventTicketCategoryDto {
     String? title,
     String? event,
     String? description,
-    @JsonKey(name: 'ticket_types') List<String>? ticketTypes,
   }) = _EventTicketCategoryDto;
 
   factory EventTicketCategoryDto.fromJson(Map<String, dynamic> json) =>

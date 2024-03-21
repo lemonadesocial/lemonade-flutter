@@ -655,6 +655,7 @@ type EventTicketType {
   event: MongoID!
   title: String!
   prices: [EventTicketPrice!]!
+  category: MongoID
   default: Boolean
   address_required: Boolean
   description: String
@@ -667,7 +668,7 @@ type EventTicketType {
   ticket_limit_per: Float
   photos_expanded(skip: Int! = 0, limit: Int! = 25): [File]
   limited_whitelist_users: [WhitelistUserInfo!]
-  category: EventTicketCategory
+  category_expanded: EventTicketCategory
 }
 
 type EventTicketPrice {
@@ -687,7 +688,6 @@ type EventTicketCategory {
   title: String!
   event: MongoID!
   description: String
-  ticket_types: [MongoID!]
 }
 
 type EventSession {
@@ -1269,6 +1269,7 @@ type PurchasableTicketType {
   event: MongoID!
   title: String!
   prices: [EventTicketPrice!]!
+  category: MongoID
   default: Boolean
   address_required: Boolean
   description: String
@@ -1280,6 +1281,7 @@ type PurchasableTicketType {
   limit: Float!
   whitelisted: Boolean
   photos_expanded(skip: Int! = 0, limit: Int! = 25): [File]
+  category_expanded: EventTicketCategory
 }
 
 type TicketDiscount {
@@ -1290,7 +1292,6 @@ type TicketDiscount {
 
 input GetEventTicketTypesInput {
   event: MongoID!
-  category: MongoID
   discount: String
 }
 
@@ -2249,7 +2250,7 @@ type Mutation {
   deleteEventStory(input: EventStoryInput!): Boolean!
   createEventTicketCategory(input: CreateEventTicketCategoryInput!): EventTicketCategory!
   deleteEventTicketCategory(categories: [MongoID!]!, event: MongoID!): Boolean!
-  updateTicketTypeCategory(input: UpdateTicketTypeCategoryInput!): Boolean!
+  updateEventTicketCategory(input: UpdateTicketTypeCategoryInput!): Boolean!
   createEventTicketDiscounts(event: MongoID!, inputs: [EventPaymentTicketDiscountInput!]!): Event!
   deleteEventTicketDiscounts(event: MongoID!, discounts: [String!]!): Event!
   mailEventTicket(event: MongoID!, payment: MongoID, emails: [String!]!): Boolean!
@@ -2637,14 +2638,17 @@ input EventStoryInput {
 
 input CreateEventTicketCategoryInput {
   title: String!
-  description: String
   event: MongoID!
+  description: String
+  ticket_types: [MongoID!]
 }
 
 input UpdateTicketTypeCategoryInput {
-  ticket_types: [MongoID!]
-  category: MongoID!
+  _id: MongoID!
+  title: String!
   event: MongoID!
+  description: String
+  ticket_types: [MongoID!]
 }
 
 input EventPaymentTicketDiscountInput {
@@ -2666,6 +2670,7 @@ input EventTicketTypeInput {
   event: MongoID
   title: String
   prices: [EventTicketPriceInput!]
+  category: MongoID
   default: Boolean
   address_required: Boolean
   description: String
@@ -2677,7 +2682,6 @@ input EventTicketTypeInput {
   offers: [EventTicketTypeOffersInput!]
   added_whitelist_emails: [String!]
   removed_whitelist_emails: [String!]
-  category: MongoID
 }
 
 input EventTicketPriceInput {

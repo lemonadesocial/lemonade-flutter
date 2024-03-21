@@ -93,12 +93,12 @@ const eventTicketTypesFragment = '''
         _id
         email
       }
-      category {
+      category
+      category_expanded {
         _id
         title
         event
         description
-        ticket_types
       }
     }
   }

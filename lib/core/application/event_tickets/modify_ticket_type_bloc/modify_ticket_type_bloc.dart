@@ -252,7 +252,7 @@ class ModifyTicketTypeBloc
               [],
           addedWhitelistEmails: [],
           removedWhitelistEmails: [],
-          category: initialTicketType?.category?.id,
+          category: initialTicketType?.category,
           isValid: false,
         ),
       ),

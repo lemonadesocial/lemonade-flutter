@@ -5,7 +5,6 @@ mutation CreateEventTicketCategory($input: CreateEventTicketCategoryInput!) {
     _id
     description
     event
-    ticket_types
     title
   }
 }

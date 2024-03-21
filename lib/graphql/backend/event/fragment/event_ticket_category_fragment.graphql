@@ -3,5 +3,4 @@ fragment EventTicketCategoryFragment on EventTicketCategory {
   title
   description
   event
-  ticket_types
 }

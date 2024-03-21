@@ -50,7 +50,9 @@ class PurchasableTicketTypeDto with _$PurchasableTicketTypeDto {
     List<String>? photos,
     String? title,
     @JsonKey(name: 'photos_expanded') List<DbFileDto>? photosExpanded,
-    EventTicketCategoryDto? category,
+    String? category,
+    @JsonKey(name: 'category_expanded')
+    EventTicketCategoryDto? categoryExpanded,
   }) = _PurchasableTicketTypeDto;
 
   factory PurchasableTicketTypeDto.fromJson(Map<String, dynamic> json) =>
@@ -80,7 +82,9 @@ class EventTicketTypeDto with _$EventTicketTypeDto {
     @JsonKey(name: 'ticket_count') double? ticketCount,
     @JsonKey(name: 'limited_whitelist_users')
     List<WhitelistUserInfoDto>? limitedWhitelistUsers,
-    EventTicketCategoryDto? category,
+    String? category,
+    @JsonKey(name: 'category_expanded')
+    EventTicketCategoryDto? categoryExpanded,
   }) = _EventTicketTypeDto;
 
   factory EventTicketTypeDto.fromJson(Map<String, dynamic> json) =>
