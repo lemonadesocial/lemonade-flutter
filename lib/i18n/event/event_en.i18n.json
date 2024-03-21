@@ -262,7 +262,8 @@
             "whitelistedUser": "Whitelisted users",
             "addEmail": "Add email",
             "whiteListAddEmailDescription": "Emails added below can purchase this ticket tier. This can be edited later.",
-            "addToWhitelist": "Add to whitelist"
+            "addToWhitelist": "Add to whitelist",
+            "whitelistInputPlaceholder": "Email 1\nEmail 2\n..."
         }
     },
     "speakers": {

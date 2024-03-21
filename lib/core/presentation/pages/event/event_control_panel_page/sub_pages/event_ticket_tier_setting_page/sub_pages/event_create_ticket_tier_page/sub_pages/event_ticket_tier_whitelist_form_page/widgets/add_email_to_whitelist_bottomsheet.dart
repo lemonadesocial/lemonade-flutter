@@ -136,6 +136,7 @@ class EmailInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
     final border = OutlineInputBorder(
       borderRadius: BorderRadius.circular(LemonRadius.small),
@@ -149,7 +150,8 @@ class EmailInput extends StatelessWidget {
         expands: true,
         cursorColor: colorScheme.onSecondary,
         decoration: InputDecoration(
-          hintText: "Email 1\nEmail 2\n...",
+          hintText: t.event.ticketTierSetting.whitelistSetting
+              .whitelistInputPlaceholder,
           filled: true,
           enabledBorder: border,
           focusedBorder: border,
