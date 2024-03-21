@@ -68,7 +68,7 @@ class BottomBarState extends State<BottomBar>
           decoration: BoxDecoration(
             shape: BoxShape.rectangle,
             border: Border(
-              top: BorderSide(color: colorScheme.outline),
+              top: BorderSide(color: LemonColor.white09),
             ),
           ),
           child: Row(
