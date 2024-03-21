@@ -47,6 +47,7 @@ class _PayoutAccountsWidgetState extends State<PayoutAccountsWidget> {
           t.event.ticketTierSetting.payoutAccounts,
           style: Typo.medium.copyWith(
             fontWeight: FontWeight.w600,
+            color: colorScheme.onPrimary,
           ),
         ),
         SizedBox(height: Spacing.xSmall),
@@ -57,7 +58,7 @@ class _PayoutAccountsWidgetState extends State<PayoutAccountsWidget> {
               : t.event.ticketTierSetting.connectAccount,
           icon: ThemeSvgIcon(
             color: colorScheme.onSecondary,
-            builder: (filter) => Assets.icons.icCash.svg(
+            builder: (filter) => Assets.icons.icBank.svg(
               colorFilter: filter,
             ),
           ),
@@ -67,7 +68,7 @@ class _PayoutAccountsWidgetState extends State<PayoutAccountsWidget> {
                 onTap: () {},
                 child: ThemeSvgIcon(
                   color: colorScheme.onSurfaceVariant,
-                  builder: (filter) => Assets.icons.icForward.svg(
+                  builder: (filter) => Assets.icons.icArrowRight.svg(
                     colorFilter: filter,
                   ),
                 ),
@@ -111,7 +112,7 @@ class _PayoutAccountsWidgetState extends State<PayoutAccountsWidget> {
                     onTap: () {},
                     child: ThemeSvgIcon(
                       color: colorScheme.onSurfaceVariant,
-                      builder: (filter) => Assets.icons.icForward.svg(
+                      builder: (filter) => Assets.icons.icArrowRight.svg(
                         colorFilter: filter,
                       ),
                     ),
@@ -167,10 +168,8 @@ class PayoutAccountItem extends StatelessWidget {
             width: Sizing.medium,
             height: Sizing.medium,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
-              border: Border.all(
-                color: LemonColor.chineseBlack,
-              ),
+              color: colorScheme.secondaryContainer,
+              borderRadius: BorderRadius.circular(Sizing.medium),
             ),
             child: Center(
               child: icon,

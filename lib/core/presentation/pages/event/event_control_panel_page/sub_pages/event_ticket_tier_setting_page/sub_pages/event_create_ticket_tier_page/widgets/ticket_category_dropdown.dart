@@ -21,6 +21,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:collection/collection.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
@@ -144,6 +145,7 @@ class TicketCategoryDropdown extends StatelessWidget {
                     color: colorScheme.secondaryContainer,
                   ),
                   offset: Offset(0, -Spacing.superExtraSmall),
+                  maxHeight: 200.w,
                 ),
                 menuItemStyleData: const MenuItemStyleData(
                   overlayColor:

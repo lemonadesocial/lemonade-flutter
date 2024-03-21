@@ -271,7 +271,8 @@
             "addCategory": "Add category",
             "name": "Name",
             "description": "Description"
-        }
+        },
+        "emptyTicketTypes": "No ticket tiers found"
     },
     "speakers": {
         "speakersCountInfo(ordinal)": {
