@@ -146,7 +146,7 @@ class LemonDrawerProfileInfo extends StatelessWidget {
 
   _onPressEditProfile(BuildContext context, User authSession) {
     Vibrate.feedback(FeedbackType.light);
-    AutoRouter.of(context).navigate(EditProfileRoute(userProfile: authSession));
+    AutoRouter.of(context).navigate(const EditProfileRoute());
   }
 
   _onPressQRCode(BuildContext context) {

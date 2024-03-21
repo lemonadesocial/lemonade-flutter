@@ -43,55 +43,63 @@ class RSVPEventSuccessPopupPage extends StatelessWidget {
           children: [
             Column(
               mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const _SuccessCircle(),
-                SizedBox(
-                  height: 56.w,
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: Spacing.xLarge),
-                  child: Text(
-                    primaryMessage ??
-                        eventRsvp?.messages?.primary ??
-                        t.event.youreIn,
-                    style: Typo.extraLarge.copyWith(
-                      fontFamily: FontFamily.nohemiVariable,
-                      fontWeight: FontWeight.w900,
-                      height: 1.2,
-                    ),
-                  ),
-                ),
-                SizedBox(height: Spacing.superExtraSmall),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: Spacing.xLarge),
-                  child: Text(
-                    secondaryMessage ??
-                        eventRsvp?.messages?.secondary ??
-                        t.event.rsvpSuccessful(eventName: event.title ?? ''),
-                    style: Typo.mediumPlus.copyWith(
-                      fontWeight: FontWeight.w400,
-                      color: colorScheme.onSecondary,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                SizedBox(height: Spacing.xLarge),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: Spacing.xLarge),
-                  child: buttonBuilder != null
-                      ? buttonBuilder?.call(context)
-                      : LinearGradientButton(
-                          onTap: () => onPressed?.call(context),
-                          mode: GradientButtonMode.lavenderMode,
-                          height: Sizing.large,
-                          textStyle: Typo.medium.copyWith(
-                            fontWeight: FontWeight.w600,
-                            color: colorScheme.onPrimary.withOpacity(0.87),
-                            fontFamily: FontFamily.nohemiVariable,
-                          ),
-                          radius: BorderRadius.circular(LemonRadius.small * 2),
-                          label: t.event.takeMeToEvent,
+                Column(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: Spacing.xLarge),
+                      child: Text(
+                        primaryMessage ??
+                            eventRsvp?.messages?.primary ??
+                            t.event.youreIn,
+                        style: Typo.extraLarge.copyWith(
+                          fontFamily: FontFamily.nohemiVariable,
+                          fontWeight: FontWeight.w900,
+                          color: colorScheme.onPrimary,
+                          height: 1.2,
                         ),
+                      ),
+                    ),
+                    SizedBox(height: Spacing.superExtraSmall),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: Spacing.xLarge),
+                      child: Text(
+                        secondaryMessage ??
+                            eventRsvp?.messages?.secondary ??
+                            t.event
+                                .rsvpSuccessful(eventName: event.title ?? ''),
+                        style: Typo.mediumPlus.copyWith(
+                          fontWeight: FontWeight.w400,
+                          color: colorScheme.onSecondary,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    SizedBox(height: Spacing.xLarge),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: Spacing.xLarge),
+                      child: buttonBuilder != null
+                          ? buttonBuilder?.call(context)
+                          : LinearGradientButton(
+                              onTap: () => onPressed?.call(context),
+                              mode: GradientButtonMode.lavenderMode,
+                              height: Sizing.large,
+                              textStyle: Typo.medium.copyWith(
+                                fontWeight: FontWeight.w600,
+                                color: colorScheme.onPrimary.withOpacity(0.87),
+                                fontFamily: FontFamily.nohemiVariable,
+                              ),
+                              radius:
+                                  BorderRadius.circular(LemonRadius.small * 2),
+                              label: t.event.takeMeToEvent,
+                            ),
+                    ),
+                    SizedBox(
+                      height: 40.h,
+                    ),
+                  ],
                 ),
               ],
             ),

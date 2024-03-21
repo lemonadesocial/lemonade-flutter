@@ -8,9 +8,12 @@ import 'package:app/core/presentation/pages/edit_profile/widgets/edit_profile_fi
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:matrix/matrix.dart' as matrix;
+import 'package:app/core/utils/date_utils.dart' as date_utils;
 
 class GuestEventApplicationFormProfileItems extends StatelessWidget {
-  const GuestEventApplicationFormProfileItems({
+  final birthDayCtrl = TextEditingController();
+  GuestEventApplicationFormProfileItems({
     super.key,
   });
 
@@ -30,25 +33,74 @@ class GuestEventApplicationFormProfileItems extends StatelessWidget {
       builder: (context, state) {
         return Column(
           children: applicationProfileFields.map((applicationProfileField) {
+            final profileFieldKey = ProfileFieldKey.values.firstWhere(
+              (element) => element.fieldKey == applicationProfileField.field,
+            );
+            String? value =
+                state.fieldsState.tryGet(profileFieldKey.fieldKey).toString();
             return Column(
               children: [
-                EditProfileFieldItem(
-                  profileFieldKey: ProfileFieldKey.values.firstWhere(
-                    (element) =>
-                        element.fieldKey == applicationProfileField.field,
-                  ),
-                  userProfile: user,
-                  onChange: (value) {
-                    context.read<EventApplicationFormBloc>().add(
-                          EventApplicationFormBlocEvent.updateField(
-                            key: applicationProfileField.field ?? '',
-                            value: value,
-                            event: event,
+                // Special handle for date picker
+                if (profileFieldKey == ProfileFieldKey.dateOfBirth)
+                  Focus(
+                    child: EditProfileFieldItem(
+                      controller: birthDayCtrl,
+                      profileFieldKey: profileFieldKey,
+                      onChange: (value) {
+                        birthDayCtrl.text = value;
+                      },
+                      onDateSelect: (selectedDate) {
+                        birthDayCtrl.text =
+                            date_utils.DateUtils.toLocalDateString(
+                          selectedDate,
+                        );
+                        context.read<EventApplicationFormBloc>().add(
+                              EventApplicationFormBlocEvent.updateField(
+                                key: applicationProfileField.field ?? '',
+                                value: selectedDate.toUtc().toIso8601String(),
+                                event: event,
+                              ),
+                            );
+                      },
+                      value: value,
+                      showRequired: applicationProfileField.required,
+                    ),
+                    onFocusChange: (hasFocus) {
+                      if (!hasFocus) {
+                        // On blur
+                        birthDayCtrl.text =
+                            date_utils.DateUtils.toLocalDateString(
+                          date_utils.DateUtils.parseDateString(
+                            birthDayCtrl.text,
                           ),
                         );
-                  },
-                  showRequired: applicationProfileField.required,
-                ),
+                        context.read<EventApplicationFormBloc>().add(
+                              EventApplicationFormBlocEvent.updateField(
+                                key: applicationProfileField.field ?? '',
+                                value: date_utils.DateUtils.parseDateString(
+                                  (birthDayCtrl.text),
+                                ).toIso8601String(),
+                                event: event,
+                              ),
+                            );
+                      }
+                    },
+                  )
+                else
+                  EditProfileFieldItem(
+                    profileFieldKey: profileFieldKey,
+                    onChange: (value) {
+                      context.read<EventApplicationFormBloc>().add(
+                            EventApplicationFormBlocEvent.updateField(
+                              key: applicationProfileField.field ?? '',
+                              value: value,
+                              event: event,
+                            ),
+                          );
+                    },
+                    value: value,
+                    showRequired: applicationProfileField.required,
+                  ),
                 SizedBox(
                   height: Spacing.smMedium,
                 ),

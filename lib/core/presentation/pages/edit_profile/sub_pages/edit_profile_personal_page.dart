@@ -21,6 +21,7 @@ import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:app/core/utils/date_utils.dart' as date_utils;
 
 class EditProfilePersonalDialog extends StatefulWidget with LemonBottomSheet {
   final User userProfile;
@@ -42,7 +43,8 @@ class EditProfilePersonalDialogState extends State<EditProfilePersonalDialog> {
     super.initState();
     if (widget.userProfile.dateOfBirth != null) {
       bloc.birthDayCtrl.text =
-          DateFormat('dd/MM/yyyy').format(widget.userProfile.dateOfBirth!);
+          DateFormat(date_utils.DateUtils.dateFormatDayMonthYear)
+              .format(widget.userProfile.dateOfBirth!);
     }
   }
 
@@ -94,14 +96,14 @@ class EditProfilePersonalDialogState extends State<EditProfilePersonalDialog> {
                             SizedBox(height: Spacing.smMedium),
                             EditProfileFieldItem(
                               profileFieldKey: ProfileFieldKey.jobTitle,
-                              userProfile: widget.userProfile,
                               onChange: bloc.onJobTitleChange,
+                              value: widget.userProfile.jobTitle,
                             ),
                             SizedBox(height: Spacing.smMedium),
                             EditProfileFieldItem(
                               profileFieldKey: ProfileFieldKey.companyName,
-                              userProfile: widget.userProfile,
                               onChange: bloc.onOrganizationChange,
+                              value: widget.userProfile.companyName,
                             ),
                             SizedBox(height: Spacing.smMedium),
                             FrostedGlassDropDownV2(
@@ -117,36 +119,56 @@ class EditProfilePersonalDialogState extends State<EditProfilePersonalDialog> {
                             SizedBox(height: Spacing.smMedium),
                             EditProfileFieldItem(
                               profileFieldKey: ProfileFieldKey.educationTitle,
-                              userProfile: widget.userProfile,
                               onChange: bloc.onOrganizationChange,
+                              value: widget.userProfile.education,
                             ),
                             SizedBox(height: Spacing.smMedium),
                             EditProfileFieldItem(
                               profileFieldKey: ProfileFieldKey.newGender,
-                              userProfile: widget.userProfile,
                               onChange: bloc.onGenderSelect,
-                              selectedValue: bloc.state.gender ??
+                              value: bloc.state.gender ??
                                   widget.userProfile.gender,
                             ),
                             SizedBox(height: Spacing.smMedium),
-                            EditProfileFieldItem(
-                              profileFieldKey: ProfileFieldKey.dateOfBirth,
-                              userProfile: widget.userProfile,
-                              onChange: bloc.onBirthdayChange,
-                              controller: bloc.birthDayCtrl,
-                              onDateSelect: (selectedDate) =>
-                                  bloc.onBirthdayChange(
-                                DateFormat(dateFormat).format(
-                                  selectedDate,
-                                ),
+                            Focus(
+                              child: EditProfileFieldItem(
+                                controller: bloc.birthDayCtrl,
+                                profileFieldKey: ProfileFieldKey.dateOfBirth,
+                                onChange: (value) {
+                                  bloc.birthDayCtrl.text = value;
+                                },
+                                onDateSelect: (selectedDate) {
+                                  bloc.birthDayCtrl.text =
+                                      date_utils.DateUtils.toLocalDateString(
+                                    selectedDate,
+                                  );
+                                  bloc.onBirthdayChange(selectedDate);
+                                },
+                                value:
+                                    widget.userProfile.dateOfBirth.toString(),
                               ),
+                              onFocusChange: (hasFocus) {
+                                if (!hasFocus) {
+                                  // Handle when on blur input
+                                  bloc.birthDayCtrl.text =
+                                      date_utils.DateUtils.toLocalDateString(
+                                    date_utils.DateUtils.parseDateString(
+                                      bloc.birthDayCtrl.text,
+                                    ),
+                                  );
+                                  bloc.onBirthdayChange(
+                                    date_utils.DateUtils.parseDateString(
+                                      (bloc.birthDayCtrl.text),
+                                    ),
+                                  );
+                                }
+                              },
                             ),
                             SizedBox(height: Spacing.smMedium),
                             EditProfileFieldItem(
                               profileFieldKey: ProfileFieldKey.ethnicity,
-                              userProfile: widget.userProfile,
                               onChange: bloc.onEthnicitySelect,
-                              selectedValue: bloc.state.ethnicity ??
+                              value: bloc.state.ethnicity ??
                                   widget.userProfile.ethnicity,
                             ),
                           ],
@@ -196,6 +218,4 @@ class EditProfilePersonalDialogState extends State<EditProfilePersonalDialog> {
       ],
     );
   }
-
-  final dateFormat = 'dd/MM/yyyy';
 }

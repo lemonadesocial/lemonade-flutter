@@ -55,7 +55,9 @@ class _EventTicketTiersListState extends State<EventTicketTiersList> {
 
         final filteredTicketTypes = widget.ticketTypes
             .where(
-              (element) => selectedCategory != null ? element.category?.id == selectedCategory : true,
+              (element) => selectedCategory != null
+                  ? element.category?.id == selectedCategory
+                  : true,
             )
             .toList();
 

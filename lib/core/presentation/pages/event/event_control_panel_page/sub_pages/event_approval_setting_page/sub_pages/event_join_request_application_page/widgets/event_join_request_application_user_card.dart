@@ -1,6 +1,6 @@
 import 'package:app/core/config.dart';
+import 'package:app/core/domain/applicant/entities/applicant.dart';
 import 'package:app/core/domain/event/entities/event_join_request.dart';
-import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/widgets/event_join_request_ticket_info.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/widgets/join_request_user_avatar.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
@@ -13,11 +13,11 @@ import 'package:url_launcher/url_launcher.dart';
 
 class EventJoinRequestApplicationUserCard extends StatelessWidget {
   final EventJoinRequest eventJoinRequest;
-  final User? user;
+  final Applicant? applicant;
   const EventJoinRequestApplicationUserCard({
     super.key,
     required this.eventJoinRequest,
-    this.user,
+    this.applicant,
   });
 
   @override
@@ -53,7 +53,7 @@ class EventJoinRequestApplicationUserCard extends StatelessWidget {
                       eventJoinRequest: eventJoinRequest,
                       showPrice: true,
                     ),
-                    _Social(user: user),
+                    _Social(applicant: applicant),
                   ],
                 ),
               ],
@@ -66,9 +66,9 @@ class EventJoinRequestApplicationUserCard extends StatelessWidget {
 }
 
 class _Social extends StatelessWidget {
-  final User? user;
+  final Applicant? applicant;
   const _Social({
-    this.user,
+    this.applicant,
   });
 
   List<SvgGenImage> get _socialIconsSvg => [
@@ -91,9 +91,9 @@ class _Social extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          user?.handleLinkedin,
-          user?.handleInstagram,
-          user?.handleTwitter,
+          applicant?.handleLinkedin,
+          applicant?.handleInstagram,
+          applicant?.handleTwitter,
         ].asMap().entries.map((entry) {
           return GestureDetector(
             onTap: () async {

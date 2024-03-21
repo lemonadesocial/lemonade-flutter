@@ -1,9 +1,11 @@
 import 'package:app/core/data/event/dtos/event_application_answer_dto/event_application_answer_dto.dart';
+import 'package:app/core/domain/applicant/entities/applicant.dart';
+import 'package:app/core/domain/common/common_enums.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_application_answer.dart';
-import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/utils/social_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
+import 'package:app/core/utils/date_utils.dart' as date_utils;
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/event/query/get_event_application_answers.graphql.dart';
 import 'package:app/theme/spacing.dart';
@@ -15,11 +17,11 @@ import 'package:sliver_tools/sliver_tools.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class EventJoinRequestApplicationForm extends StatelessWidget {
-  final User? user;
+  final Applicant? applicant;
   final Event? event;
   const EventJoinRequestApplicationForm({
     super.key,
-    this.user,
+    this.applicant,
     this.event,
   });
 
@@ -27,32 +29,38 @@ class EventJoinRequestApplicationForm extends StatelessWidget {
   Widget build(BuildContext context) {
     List<String> profileRequiredFields = (event?.applicationProfileFields ?? [])
         .map((item) => item.field ?? '')
-        .map(StringUtils.snakeToCamel)
         .toList();
-
-    List<String> formattedFieldNames =
-        profileRequiredFields.map(StringUtils.camelCaseToWords).toList();
-
     return MultiSliver(
       children: [
         SliverList.separated(
           itemCount: profileRequiredFields.length,
           itemBuilder: (context, index) {
-            final userJson = user?.toJson();
-            final value = userJson?.tryGet(profileRequiredFields[index]);
+            final applicantJson = applicant?.toJson();
+            final value = applicantJson?.tryGet(profileRequiredFields[index]);
             final isSocialFieldName = SocialUtils.isSocialFieldName(
               fieldName: profileRequiredFields[index],
             );
+            String? finalValue;
+            if (value is String) {
+              final isValidDate = date_utils.DateUtils.isValidDateTime(value);
+              if (isValidDate) {
+                finalValue =
+                    date_utils.DateUtils.formatDateTimeToDDMMYYYY(value);
+              } else {
+                // If it's a social field name, build social link, otherwise return the value itself
+                finalValue = isSocialFieldName
+                    ? SocialUtils.buildSocialLinkBySocialFieldName(
+                        socialFieldName: profileRequiredFields[index],
+                        socialUserName: value,
+                      )
+                    : value;
+              }
+            }
             return _FormField(
-              label: StringUtils.capitalize(formattedFieldNames[index]),
-              value: value is String
-                  ? isSocialFieldName
-                      ? SocialUtils.buildSocialLinkBySocialFieldName(
-                          socialFieldName: profileRequiredFields[index],
-                          socialUserName: value,
-                        )
-                      : value
-                  : null,
+              label: ProfileFieldKey.getFieldLabel(
+                profileRequiredFields[index],
+              ),
+              value: finalValue,
             );
           },
           separatorBuilder: (context, index) =>
@@ -63,7 +71,7 @@ class EventJoinRequestApplicationForm extends StatelessWidget {
           options: Options$Query$GetEventApplicationAnswers(
             variables: Variables$Query$GetEventApplicationAnswers(
               event: event?.id ?? '',
-              user: user?.userId ?? '',
+              user: applicant?.id ?? '',
             ),
           ),
           builder: (

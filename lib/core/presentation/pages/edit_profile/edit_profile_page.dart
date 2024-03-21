@@ -10,6 +10,8 @@ import 'package:app/core/presentation/pages/edit_profile/widgets/edit_profile_av
 import 'package:app/core/presentation/pages/edit_profile/widgets/edit_profile_field_item.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
+import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
+import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/service/post/post_service.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -29,10 +31,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class EditProfilePage extends StatelessWidget {
   const EditProfilePage({
     super.key,
-    required this.userProfile,
   });
-
-  final User userProfile;
 
   @override
   Widget build(BuildContext context) {
@@ -42,149 +41,177 @@ class EditProfilePage extends StatelessWidget {
       getIt<UserRepository>(),
       PostService(getIt<PostRepository>()),
     );
-    return BlocProvider(
-      create: (context) => bloc,
-      child: BlocConsumer<EditProfileBloc, EditProfileState>(
-        listener: (context, state) {
-          if (state.status == EditProfileStatus.success) {
-            context.read<AuthBloc>().add(const AuthEvent.refreshData());
-            SnackBarUtils.showSuccessSnackbar(t.profile.editProfileSuccess);
-            bloc.clearState();
-          }
-        },
-        builder: (context, state) {
-          return GestureDetector(
-            onTap: () => FocusScope.of(context).unfocus(),
-            child: Scaffold(
-              appBar: LemonAppBar(title: t.profile.editProfile),
-              backgroundColor: colorScheme.primary,
-              body: Padding(
-                padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            _PersonalCardWidget(userProfile: userProfile),
-                            SizedBox(height: 30.h),
-                            Row(
+
+    return FutureBuilder(
+      future: getIt<UserRepository>().getMe(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return SizedBox(
+            height: 120.w,
+            child: Loading.defaultLoading(context),
+          );
+        }
+        User? userProfile = snapshot.data!.fold(
+          (l) => null,
+          (user) => user,
+        );
+        if (userProfile == null) {
+          return Center(
+            child: EmptyList(
+              emptyText: t.common.somethingWrong,
+            ),
+          );
+        }
+        return BlocProvider(
+          create: (context) => bloc,
+          child: BlocConsumer<EditProfileBloc, EditProfileState>(
+            listener: (context, state) {
+              if (state.status == EditProfileStatus.success) {
+                context.read<AuthBloc>().add(const AuthEvent.refreshData());
+                SnackBarUtils.showSuccessSnackbar(t.profile.editProfileSuccess);
+                bloc.clearState();
+              }
+            },
+            builder: (context, state) {
+              return GestureDetector(
+                onTap: () => FocusScope.of(context).unfocus(),
+                child: Scaffold(
+                  appBar: LemonAppBar(title: t.profile.editProfile),
+                  backgroundColor: colorScheme.primary,
+                  body: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: SingleChildScrollView(
+                            child: Column(
                               children: [
-                                EditProfileAvatar(
-                                  imageFile: state.profilePhoto,
-                                  imageUrl: userProfile.imageAvatar,
+                                _PersonalCardWidget(userProfile: userProfile),
+                                SizedBox(height: 30.h),
+                                Row(
+                                  children: [
+                                    EditProfileAvatar(
+                                      imageFile: state.profilePhoto,
+                                      imageUrl: userProfile.imageAvatar,
+                                    ),
+                                    SizedBox(width: 15.w),
+                                    Expanded(
+                                      child: EditProfileFieldItem(
+                                        profileFieldKey:
+                                            ProfileFieldKey.displayName,
+                                        onChange: bloc.onDisplayNameChange,
+                                        value: userProfile.displayName,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                SizedBox(width: 15.w),
-                                Expanded(
-                                  child: EditProfileFieldItem(
-                                    profileFieldKey:
-                                        ProfileFieldKey.displayName,
+                                SizedBox(height: Spacing.smMedium),
+                                _UserEditor(
+                                  bloc,
+                                  userName: state.username ??
+                                      userProfile.username ??
+                                      '',
+                                ),
+                                SizedBox(height: Spacing.smMedium),
+                                EditProfileFieldItem(
+                                  profileFieldKey: ProfileFieldKey.tagline,
+                                  onChange: bloc.onTaglineChange,
+                                  value: userProfile.tagline,
+                                ),
+                                SizedBox(height: Spacing.smMedium),
+                                EditProfileFieldItem(
+                                  profileFieldKey: ProfileFieldKey.description,
+                                  onChange: bloc.onShortBioChange,
+                                  value: userProfile.description,
+                                ),
+                                SizedBox(height: Spacing.smMedium),
+                                InkWell(
+                                  onTap: () => const EditProfileSocialDialog()
+                                      .showAsBottomSheet(context),
+                                  child: Container(
+                                    padding: EdgeInsets.all(Spacing.xSmall),
+                                    decoration: BoxDecoration(
+                                      color: colorScheme.onPrimary
+                                          .withOpacity(0.06),
+                                      borderRadius: BorderRadius.circular(
+                                        LemonRadius.normal,
+                                      ),
+                                    ),
+                                    child: ListTile(
+                                      title: Text(t.profile.socialHandle),
+                                      subtitle:
+                                          Text(t.profile.socialHandleDesc),
+                                      trailing: Assets.icons.icArrowBack.svg(
+                                        width: 18.w,
+                                        height: 18.w,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height: Spacing.smMedium),
+                                InkWell(
+                                  onTap: () => EditProfilePersonalDialog(
                                     userProfile: userProfile,
-                                    onChange: bloc.onDisplayNameChange,
+                                  ).showAsBottomSheet(context),
+                                  child: Container(
+                                    padding: EdgeInsets.all(Spacing.xSmall),
+                                    decoration: BoxDecoration(
+                                      color: colorScheme.onPrimary
+                                          .withOpacity(0.06),
+                                      borderRadius: BorderRadius.circular(
+                                        LemonRadius.normal,
+                                      ),
+                                    ),
+                                    child: ListTile(
+                                      title: Text(t.profile.personalInfo),
+                                      subtitle:
+                                          Text(t.profile.personalInfoDesc),
+                                      trailing: Assets.icons.icArrowBack.svg(
+                                        width: 18.w,
+                                        height: 18.w,
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ],
                             ),
-                            SizedBox(height: Spacing.smMedium),
-                            _UserEditor(
-                              bloc,
-                              userName:
-                                  state.username ?? userProfile.username ?? '',
-                            ),
-                            SizedBox(height: Spacing.smMedium),
-                            EditProfileFieldItem(
-                              profileFieldKey: ProfileFieldKey.tagline,
-                              userProfile: userProfile,
-                              onChange: bloc.onTaglineChange,
-                            ),
-                            SizedBox(height: Spacing.smMedium),
-                            EditProfileFieldItem(
-                              profileFieldKey: ProfileFieldKey.description,
-                              userProfile: userProfile,
-                              onChange: bloc.onShortBioChange,
-                            ),
-                            SizedBox(height: Spacing.smMedium),
-                            InkWell(
-                              onTap: () => const EditProfileSocialDialog()
-                                  .showAsBottomSheet(context),
-                              child: Container(
-                                padding: EdgeInsets.all(Spacing.xSmall),
-                                decoration: BoxDecoration(
-                                  color:
-                                      colorScheme.onPrimary.withOpacity(0.06),
-                                  borderRadius: BorderRadius.circular(
-                                    LemonRadius.normal,
-                                  ),
-                                ),
-                                child: ListTile(
-                                  title: Text(t.profile.socialHandle),
-                                  subtitle: Text(t.profile.socialHandleDesc),
-                                  trailing: Assets.icons.icArrowBack.svg(
-                                    width: 18.w,
-                                    height: 18.w,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            SizedBox(height: Spacing.smMedium),
-                            InkWell(
-                              onTap: () => EditProfilePersonalDialog(
-                                userProfile: userProfile,
-                              ).showAsBottomSheet(context),
-                              child: Container(
-                                padding: EdgeInsets.all(Spacing.xSmall),
-                                decoration: BoxDecoration(
-                                  color:
-                                      colorScheme.onPrimary.withOpacity(0.06),
-                                  borderRadius: BorderRadius.circular(
-                                    LemonRadius.normal,
-                                  ),
-                                ),
-                                child: ListTile(
-                                  title: Text(t.profile.personalInfo),
-                                  subtitle: Text(t.profile.personalInfoDesc),
-                                  trailing: Assets.icons.icArrowBack.svg(
-                                    width: 18.w,
-                                    height: 18.w,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.symmetric(vertical: Spacing.smMedium),
-                      child: LinearGradientButton(
-                        onTap: bloc.state.status == EditProfileStatus.editing
-                            ? () {
-                                FocusScope.of(context).unfocus();
-                                bloc.editProfile();
-                              }
-                            : null,
-                        label: t.profile.saveChanges,
-                        textStyle: Typo.medium.copyWith(
-                          fontFamily: FontFamily.nohemiVariable,
-                          fontWeight: FontWeight.w600,
+                        Container(
+                          margin:
+                              EdgeInsets.symmetric(vertical: Spacing.smMedium),
+                          child: LinearGradientButton(
+                            onTap:
+                                bloc.state.status == EditProfileStatus.editing
+                                    ? () {
+                                        FocusScope.of(context).unfocus();
+                                        bloc.editProfile();
+                                      }
+                                    : null,
+                            label: t.profile.saveChanges,
+                            textStyle: Typo.medium.copyWith(
+                              fontFamily: FontFamily.nohemiVariable,
+                              fontWeight: FontWeight.w600,
+                            ),
+                            height: Sizing.large,
+                            radius: BorderRadius.circular(LemonRadius.large),
+                            mode: bloc.state.status != EditProfileStatus.initial
+                                ? GradientButtonMode.lavenderMode
+                                : GradientButtonMode.defaultMode,
+                            loadingWhen:
+                                bloc.state.status == EditProfileStatus.loading,
+                          ),
                         ),
-                        height: Sizing.large,
-                        radius: BorderRadius.circular(LemonRadius.large),
-                        mode: bloc.state.status != EditProfileStatus.initial
-                            ? GradientButtonMode.lavenderMode
-                            : GradientButtonMode.defaultMode,
-                        loadingWhen:
-                            bloc.state.status == EditProfileStatus.loading,
-                      ),
+                        SizedBox(height: Spacing.smMedium),
+                      ],
                     ),
-                    SizedBox(height: Spacing.smMedium),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-          );
-        },
-      ),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 }
