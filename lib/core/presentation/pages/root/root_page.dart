@@ -3,7 +3,6 @@ import 'package:app/core/application/payment/payment_listener/payment_listener.d
 import 'package:app/core/config.dart';
 import 'package:app/core/presentation/widgets/bottom_bar/bottom_bar_widget.dart';
 import 'package:app/core/presentation/widgets/common/drawer/lemon_drawer.dart';
-import 'package:app/core/presentation/widgets/home/bottom_bar_create_button.dart';
 import 'package:app/core/presentation/widgets/poap/poap_claim_transfer_controller_widget/poap_claim_transfer_controller_widget.dart';
 import 'package:app/core/service/shorebird_codepush_service.dart';
 import 'package:app/core/utils/drawer_utils.dart';
