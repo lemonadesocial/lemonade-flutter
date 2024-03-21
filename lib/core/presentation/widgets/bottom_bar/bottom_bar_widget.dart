@@ -20,7 +20,7 @@ import 'package:app/core/application/newsfeed/newsfeed_listing_bloc/newsfeed_lis
 class BottomBar extends StatefulWidget {
   const BottomBar({super.key});
 
-  static double get bottomBarHeight => Platform.isIOS ? 56.w : 72.w;
+  static double get bottomBarHeight => Platform.isIOS ? 48.w : 72.w;
 
   @override
   BottomBarState createState() => BottomBarState();
