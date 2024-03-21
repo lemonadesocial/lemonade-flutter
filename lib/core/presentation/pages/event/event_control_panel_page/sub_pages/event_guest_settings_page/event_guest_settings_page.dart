@@ -88,8 +88,6 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
   Widget _buildContent(ColorScheme colorScheme) {
     return BlocBuilder<EventGuestSettingsBloc, EventGuestSettingState>(
       builder: (context, state) {
-        print(">>> state.approvalRequired");
-        print(state.approvalRequired);
         return Stack(
           children: [
             SingleChildScrollView(

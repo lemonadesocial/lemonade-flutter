@@ -10,7 +10,6 @@ import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:slang/builder/utils/string_extensions.dart';
 
 class EditProfileFieldItem extends StatelessWidget {
   const EditProfileFieldItem({
