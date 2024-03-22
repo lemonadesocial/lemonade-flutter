@@ -1,5 +1,6 @@
 import 'package:app/core/domain/event/entities/buy_tickets_response.dart';
 import 'package:app/core/domain/event/entities/event_currency.dart';
+import 'package:app/core/domain/event/entities/event_ticket_category.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/entities/event_ticket.dart';
 import 'package:app/core/domain/event/entities/event_tickets_pricing_info.dart';
@@ -63,5 +64,9 @@ abstract class EventTicketRepository {
 
   Future<Either<Failure, List<EventTicket>>> createTickets({
     required Variables$Mutation$CreateTickets input,
+  });
+
+  Future<Either<Failure, EventTicketCategory>> createEventTicketCategory({
+    required Input$CreateEventTicketCategoryInput input,
   });
 }

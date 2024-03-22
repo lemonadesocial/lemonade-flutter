@@ -80,6 +80,7 @@ class EventCreateTicketTierPagerView extends StatelessWidget {
       limited: state.limited,
       added_whitelist_emails: state.addedWhitelistEmails,
       removed_whitelist_emails: state.removedWhitelistEmails,
+      category: state.category,
     );
     if (initialTicketType != null) {
       return await getIt<EventTicketRepository>().updateEventTicketType(

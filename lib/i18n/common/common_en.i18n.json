@@ -156,5 +156,6 @@
     "alert": "Alert",
     "create": "Create",
     "required": "Required",
-    "optional": "Optional"
+    "optional": "Optional",
+    "all": "All"
 }

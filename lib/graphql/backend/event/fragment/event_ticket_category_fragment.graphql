@@ -1,0 +1,6 @@
+fragment EventTicketCategoryFragment on EventTicketCategory {
+  _id
+  title
+  description
+  event
+}

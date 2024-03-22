@@ -43,10 +43,12 @@ type Query {
   getEventRewardUses(input: GetEventRewardUsesInput!): [EventRewardUse!]!
   getEventSessionReservations(input: GetEventSessionReservationsInput): [EventSessionReservation!]!
   getEventSessionReservationSummary(input: GetEventSessionReservationSummaryInput!): [EventSessionReservationSummary!]!
+  getEventTicketCategories(event: MongoID!): [EventTicketCategory!]!
   listEventTicketTypes(event: MongoID!): [EventTicketType!]!
   getEventTicketTypes(input: GetEventTicketTypesInput!): GetEventTicketTypesResponse!
   getFiles(skip: Int! = 0, limit: Int! = 25, id_lt: MongoID, user: MongoID, links: FileLinkInput): [File!]!
   getFrequentQuestions(input: GetFrequentQuestionsInput!): [FrequentQuestion!]!
+  getGuildRooms: [GuildRoom!]!
   getKratosFlow(email: String!): String!
   listFiatCurrencies: [FiatCurrency!]!
   listChains: [Chain!]!
@@ -653,6 +655,7 @@ type EventTicketType {
   event: MongoID!
   title: String!
   prices: [EventTicketPrice!]!
+  category: MongoID
   default: Boolean
   address_required: Boolean
   description: String
@@ -665,6 +668,7 @@ type EventTicketType {
   ticket_limit_per: Float
   photos_expanded(skip: Int! = 0, limit: Int! = 25): [File]
   limited_whitelist_users: [WhitelistUserInfo!]
+  category_expanded: EventTicketCategory
 }
 
 type EventTicketPrice {
@@ -677,6 +681,13 @@ type EventTicketPrice {
 type WhitelistUserInfo {
   _id: MongoID
   email: String!
+}
+
+type EventTicketCategory {
+  _id: MongoID!
+  title: String!
+  event: MongoID!
+  description: String
 }
 
 type EventSession {
@@ -1258,6 +1269,7 @@ type PurchasableTicketType {
   event: MongoID!
   title: String!
   prices: [EventTicketPrice!]!
+  category: MongoID
   default: Boolean
   address_required: Boolean
   description: String
@@ -1268,6 +1280,8 @@ type PurchasableTicketType {
   discountable: Boolean!
   limit: Float!
   whitelisted: Boolean
+  photos_expanded(skip: Int! = 0, limit: Int! = 25): [File]
+  category_expanded: EventTicketCategory
 }
 
 type TicketDiscount {
@@ -1290,6 +1304,19 @@ input FileLinkInput {
 
 input GetFrequentQuestionsInput {
   type: [FrequentQuestionType!]!
+}
+
+type GuildRoom {
+  _id: MongoID!
+  created_at: DateTimeISO!
+  created_by: MongoID!
+  title: String!
+  guild_id: Float!
+  guild_role_ids: Int
+  guild_role_require_all: Boolean
+  joins: Float
+  matrix_room_id: String!
+  created_by_expanded: User
 }
 
 type FiatCurrency {
@@ -2221,6 +2248,9 @@ type Mutation {
   deleteEventSessionReservation(input: EventSessionReservationInput!): Boolean!
   createEventStory(input: EventStoryInput!): Boolean!
   deleteEventStory(input: EventStoryInput!): Boolean!
+  createEventTicketCategory(input: CreateEventTicketCategoryInput!): EventTicketCategory!
+  deleteEventTicketCategory(categories: [MongoID!]!, event: MongoID!): Boolean!
+  updateEventTicketCategory(input: UpdateTicketTypeCategoryInput!): Boolean!
   createEventTicketDiscounts(event: MongoID!, inputs: [EventPaymentTicketDiscountInput!]!): Event!
   deleteEventTicketDiscounts(event: MongoID!, discounts: [String!]!): Event!
   mailEventTicket(event: MongoID!, payment: MongoID, emails: [String!]!): Boolean!
@@ -2235,6 +2265,9 @@ type Mutation {
   flagUser(_id: MongoID!, reason: String!): Boolean!
   flagEvent(_id: MongoID!, reason: String!): Boolean!
   flagPost(_id: MongoID!, reason: String!): Boolean!
+  createGuildRoom(input: GuildRoomInput!): GuildRoom!
+  deleteGuildRoom(_id: MongoID!): Boolean!
+  joinGuildRoom(_id: MongoID!): Boolean!
   generateMatrixToken: String!
   createNewPaymentAccount(input: CreateNewPaymentAccountInput!): NewPaymentAccount!
   updateNewPaymentAccount(input: UpdateNewPaymentAccountInput!): NewPaymentAccount!
@@ -2603,6 +2636,21 @@ input EventStoryInput {
   file: MongoID!
 }
 
+input CreateEventTicketCategoryInput {
+  title: String!
+  event: MongoID!
+  description: String
+  ticket_types: [MongoID!]
+}
+
+input UpdateTicketTypeCategoryInput {
+  _id: MongoID!
+  title: String!
+  event: MongoID!
+  description: String
+  ticket_types: [MongoID!]
+}
+
 input EventPaymentTicketDiscountInput {
   code: String!
   ratio: Float!
@@ -2622,6 +2670,7 @@ input EventTicketTypeInput {
   event: MongoID
   title: String
   prices: [EventTicketPriceInput!]
+  category: MongoID
   default: Boolean
   address_required: Boolean
   description: String
@@ -2682,6 +2731,14 @@ type FileWithPresignedUrl {
 input FileUploadInfo {
   description: String
   extension: String!
+}
+
+input GuildRoomInput {
+  title: String!
+  guild_id: Float!
+  guild_role_ids: Int
+  guild_role_require_all: Boolean
+  matrix_room_id: String!
 }
 
 input CreateNewPaymentAccountInput {

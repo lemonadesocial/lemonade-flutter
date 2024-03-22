@@ -264,7 +264,16 @@
             "whiteListAddEmailDescription": "Emails added below can purchase this ticket tier. This can be edited later.",
             "addToWhitelist": "Add to whitelist",
             "whitelistInputPlaceholder": "Email 1\nEmail 2\n..."
-        }
+        },
+        "categorySetting": {
+            "newCategory": "New category",
+            "newCategoryDescription": "Streamline the buying process for events with numerous ticket tiers",
+            "selectCategory": "Select category",
+            "addCategory": "Add category",
+            "name": "Name",
+            "description": "Description"
+        },
+        "emptyTicketTypes": "No ticket tiers found"
     },
     "speakers": {
         "speakersCountInfo(ordinal)": {

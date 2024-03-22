@@ -1,7 +1,7 @@
 import 'package:app/core/data/common/dtos/common_dtos.dart';
 import 'package:app/core/data/event/dtos/event_dtos.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-
+import 'package:app/core/data/event/dtos/event_ticket_category_dto/event_ticket_category_dto.dart';
 part 'event_ticket_types_dto.freezed.dart';
 
 part 'event_ticket_types_dto.g.dart';
@@ -50,6 +50,9 @@ class PurchasableTicketTypeDto with _$PurchasableTicketTypeDto {
     List<String>? photos,
     String? title,
     @JsonKey(name: 'photos_expanded') List<DbFileDto>? photosExpanded,
+    String? category,
+    @JsonKey(name: 'category_expanded')
+    EventTicketCategoryDto? categoryExpanded,
   }) = _PurchasableTicketTypeDto;
 
   factory PurchasableTicketTypeDto.fromJson(Map<String, dynamic> json) =>
@@ -79,6 +82,9 @@ class EventTicketTypeDto with _$EventTicketTypeDto {
     @JsonKey(name: 'ticket_count') double? ticketCount,
     @JsonKey(name: 'limited_whitelist_users')
     List<WhitelistUserInfoDto>? limitedWhitelistUsers,
+    String? category,
+    @JsonKey(name: 'category_expanded')
+    EventTicketCategoryDto? categoryExpanded,
   }) = _EventTicketTypeDto;
 
   factory EventTicketTypeDto.fromJson(Map<String, dynamic> json) =>
