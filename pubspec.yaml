@@ -145,6 +145,7 @@ dependencies:
   web3modal_flutter: 
     path: ./packages/web3modal_flutter
   dynamic_color: ^1.7.0
+  flutter_styled_toast: ^2.2.1
   
 dependency_overrides:
   matrix_api_lite:

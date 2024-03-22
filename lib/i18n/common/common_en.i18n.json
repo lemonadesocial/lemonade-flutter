@@ -145,6 +145,7 @@
     "copiedToClipboard": "Copied to clipboard",
     "pending": "Pending",
     "error": {
+        "label": "Error",
         "privateKeyNotFound": "Credential not found"
     },
     "addNew": "Add new",
@@ -157,5 +158,9 @@
     "create": "Create",
     "required": "Required",
     "optional": "Optional",
-    "all": "All"
+    "all": "All",
+    "commingSoon": "Comming soon",
+    "commingSoonDescription": "Currently only available on web",
+    "info": "Info",
+    "success": "Success"
 }

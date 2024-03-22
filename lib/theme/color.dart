@@ -114,6 +114,7 @@ class LemonColor {
 
   //Snackbar
   static const snackBarSuccess = Color(0xff5fcb90);
+  static const jet = Color(0xff353535);
 
   // report
   static const report = Color(0xffFF6565);
@@ -124,6 +125,8 @@ class LemonColor {
   static const coralReef = Color(0xFFF57968);
 
   static const malachiteGreen = Color(0xFF67F38E);
+
+  
 }
 
 final ColorScheme lemonadeLightThemeColorScheme = ColorScheme.light(
