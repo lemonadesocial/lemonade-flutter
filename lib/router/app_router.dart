@@ -314,6 +314,9 @@ final eventBuyTicketsRoutes = AutoRoute(
       page: EventBuyTicketsInitialRoute.page,
     ),
     AutoRoute(
+      page: EventBuyTicketsSelectTicketCategoryRoute.page,
+    ),
+    AutoRoute(
       page: SelectTicketsRoute.page,
     ),
     AutoRoute(

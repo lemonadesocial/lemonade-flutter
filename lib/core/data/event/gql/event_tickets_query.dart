@@ -40,6 +40,13 @@ final getEventTicketTypesQuery = gql('''
         photos
         discountable
         limit
+        category
+        category_expanded {
+          _id
+          title
+          description
+          event
+        }
       }
       limit
     }

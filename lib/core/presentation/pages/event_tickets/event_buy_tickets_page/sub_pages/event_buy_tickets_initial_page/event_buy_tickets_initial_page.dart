@@ -46,13 +46,13 @@ class EventBuyTicketsInitialPageView extends StatelessWidget {
           orElse: () => null,
           failure: () {
             AutoRouter.of(context).replace(
-              const SelectTicketsRoute(),
+              const EventBuyTicketsSelectTicketCategoryRoute(),
             );
           },
           success: (eventTickets) {
             if (eventTickets.isEmpty) {
               AutoRouter.of(context).replace(
-                const SelectTicketsRoute(),
+                const EventBuyTicketsSelectTicketCategoryRoute(),
               );
             } else {
               AutoRouter.of(context).replace(

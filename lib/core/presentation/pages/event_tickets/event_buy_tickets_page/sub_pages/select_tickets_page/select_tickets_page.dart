@@ -73,6 +73,78 @@ class SelectTicketView extends StatefulWidget {
 class _SelectTicketViewState extends State<SelectTicketView> {
   String? networkFilter;
 
+  @override
+  void initState() {
+    super.initState();
+    _updatePaymentMethod(context);
+  }
+
+  void _updatePaymentMethod(BuildContext context) {
+    final getEventTicketTypesBloc = context.read<GetEventTicketTypesBloc>();
+    if (getEventTicketTypesBloc.state is! GetEventTicketTypesStateSuccess) {
+      return;
+    }
+    final response =
+        (getEventTicketTypesBloc.state as GetEventTicketTypesStateSuccess)
+            .eventTicketTypesResponse;
+    final selectTicketBloc = context.read<SelectEventTicketsBloc>();
+    final selectedTicketCategory =
+        selectTicketBloc.state.selectedTicketCategory;
+    context.read<SelectEventTicketsBloc>().add(
+          SelectEventTicketsEvent.onEventTicketTypesResponseLoaded(
+            eventTicketTypesResponse: response,
+          ),
+        );
+    final ticketTypesByCategory = EventTicketUtils.filterTicketTypeByCategory(
+      response.ticketTypes ?? [],
+      category: selectedTicketCategory,
+    );
+
+    if (ticketTypesByCategory.isEmpty) {
+      return;
+    }
+
+    final stripeTicketTypes = EventTicketUtils.getTicketTypesSupportStripe(
+      ticketTypes: ticketTypesByCategory,
+    );
+    final erc20TicketTypes = EventTicketUtils.getTicketTypesSupportCrypto(
+      ticketTypes: ticketTypesByCategory,
+    );
+
+    if (stripeTicketTypes.isEmpty) {
+      context.read<SelectEventTicketsBloc>().add(
+            SelectEventTicketsEvent.selectPaymentMethod(
+              paymentMethod: SelectTicketsPaymentMethod.wallet,
+            ),
+          );
+    }
+
+    if (erc20TicketTypes.isEmpty) {
+      context.read<SelectEventTicketsBloc>().add(
+            SelectEventTicketsEvent.selectPaymentMethod(
+              paymentMethod: SelectTicketsPaymentMethod.card,
+            ),
+          );
+    }
+
+    // auto increase if only 1 ticket tier and only 1 price option in that tier
+    if (ticketTypesByCategory.length == 1 &&
+        ticketTypesByCategory.first.prices?.isNotEmpty == true &&
+        ticketTypesByCategory.first.prices?.length == 1) {
+      final price = ticketTypesByCategory.first.prices!.first;
+      context.read<SelectEventTicketsBloc>().add(
+            SelectEventTicketsEvent.select(
+              ticket: PurchasableItem(
+                count: 1,
+                id: ticketTypesByCategory.first.id!,
+              ),
+              currency: price.currency ?? '',
+              network: price.network,
+            ),
+          );
+    }
+  }
+
   void _handleEventRequireApproval() async {
     // pop whole buy event page stack
     await AutoRouter.of(context).root.pop();
@@ -144,6 +216,8 @@ class _SelectTicketViewState extends State<SelectTicketView> {
           authenticated: (session) => session.userId,
         );
     final selectTicketBloc = context.watch<SelectEventTicketsBloc>();
+    final selectedTicketCategory =
+        selectTicketBloc.state.selectedTicketCategory;
     final selectedPaymentMethod = selectTicketBloc.state.paymentMethod;
     final selectedTickets = selectTicketBloc.state.selectedTickets;
     final selectedCurrency = selectTicketBloc.state.selectedCurrency;
@@ -157,58 +231,7 @@ class _SelectTicketViewState extends State<SelectTicketView> {
             state.maybeWhen(
               orElse: () => null,
               success: (response, supportedCurrencies) {
-                context.read<SelectEventTicketsBloc>().add(
-                      SelectEventTicketsEvent.onEventTicketTypesResponseLoaded(
-                        eventTicketTypesResponse: response,
-                      ),
-                    );
-                final allTicketTypes = response.ticketTypes ?? [];
-
-                if (allTicketTypes.isEmpty) {
-                  return;
-                }
-
-                final stripeTicketTypes =
-                    EventTicketUtils.getTicketTypesSupportStripe(
-                  ticketTypes: response.ticketTypes ?? [],
-                );
-                final erc20TicketTypes =
-                    EventTicketUtils.getTicketTypesSupportCrypto(
-                  ticketTypes: response.ticketTypes ?? [],
-                );
-
-                if (stripeTicketTypes.isEmpty) {
-                  context.read<SelectEventTicketsBloc>().add(
-                        SelectEventTicketsEvent.selectPaymentMethod(
-                          paymentMethod: SelectTicketsPaymentMethod.wallet,
-                        ),
-                      );
-                }
-
-                if (erc20TicketTypes.isEmpty) {
-                  context.read<SelectEventTicketsBloc>().add(
-                        SelectEventTicketsEvent.selectPaymentMethod(
-                          paymentMethod: SelectTicketsPaymentMethod.card,
-                        ),
-                      );
-                }
-
-                // auto increase if only 1 ticket tier and only 1 price option in that tier
-                if (allTicketTypes.length == 1 &&
-                    allTicketTypes.first.prices?.isNotEmpty == true &&
-                    allTicketTypes.first.prices?.length == 1) {
-                  final price = allTicketTypes.first.prices!.first;
-                  context.read<SelectEventTicketsBloc>().add(
-                        SelectEventTicketsEvent.select(
-                          ticket: PurchasableItem(
-                            count: 1,
-                            id: allTicketTypes.first.id!,
-                          ),
-                          currency: price.currency ?? '',
-                          network: price.network,
-                        ),
-                      );
-                }
+                _updatePaymentMethod(context);
               },
             );
           },
@@ -311,13 +334,18 @@ class _SelectTicketViewState extends State<SelectTicketView> {
                         loading: () => const SizedBox.shrink(),
                         failure: () => const SizedBox.shrink(),
                         success: (response, supportedCurrencies) {
+                          final ticketTypesByCategory =
+                              EventTicketUtils.filterTicketTypeByCategory(
+                            response.ticketTypes ?? [],
+                            category: selectedTicketCategory,
+                          );
                           final stripeTicketTypes =
                               EventTicketUtils.getTicketTypesSupportStripe(
-                            ticketTypes: response.ticketTypes ?? [],
+                            ticketTypes: ticketTypesByCategory,
                           );
                           final erc20TicketTypes =
                               EventTicketUtils.getTicketTypesSupportCrypto(
-                            ticketTypes: response.ticketTypes ?? [],
+                            ticketTypes: ticketTypesByCategory,
                           );
 
                           // if there's only one supported payment methods (wallet or card)
@@ -356,13 +384,18 @@ class _SelectTicketViewState extends State<SelectTicketView> {
                       failure: () =>
                           EmptyList(emptyText: t.common.somethingWrong),
                       success: (response, supportedCurrencies) {
+                        final ticketTypesByCategory =
+                            EventTicketUtils.filterTicketTypeByCategory(
+                          response.ticketTypes ?? [],
+                          category: selectedTicketCategory,
+                        );
                         final filteredTicketTypes = selectedPaymentMethod ==
                                 SelectTicketsPaymentMethod.card
                             ? EventTicketUtils.getTicketTypesSupportStripe(
-                                ticketTypes: response.ticketTypes ?? [],
+                                ticketTypes: ticketTypesByCategory,
                               )
                             : EventTicketUtils.getTicketTypesSupportCrypto(
-                                ticketTypes: response.ticketTypes ?? [],
+                                ticketTypes: ticketTypesByCategory,
                               );
                         final supportedPaymentNetworks =
                             EventTicketUtils.getEventSupportedPaymentNetworks(
@@ -480,8 +513,7 @@ class _SelectTicketViewState extends State<SelectTicketView> {
                                         ),
                                         child:
                                             OtherPaymentMethodTicketTypesList(
-                                          ticketTypes:
-                                              response.ticketTypes ?? [],
+                                          ticketTypes: ticketTypesByCategory,
                                           networkFilter: networkFilter,
                                           selectedCurrency: selectedCurrency,
                                           selectedNetwork: selectedNetwork,
@@ -498,8 +530,7 @@ class _SelectTicketViewState extends State<SelectTicketView> {
                                           horizontal: Spacing.smMedium,
                                         ),
                                         child: OtherChainTicketTypesList(
-                                          ticketTypes:
-                                              response.ticketTypes ?? [],
+                                          ticketTypes: ticketTypesByCategory,
                                           networkFilter: networkFilter,
                                           selectedCurrency: selectedCurrency,
                                           selectedNetwork: selectedNetwork,
