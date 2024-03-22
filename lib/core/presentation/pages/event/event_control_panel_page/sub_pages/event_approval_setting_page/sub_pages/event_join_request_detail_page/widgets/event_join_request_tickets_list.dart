@@ -10,7 +10,7 @@ import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
-import 'package:app/core/utils/modal_utils.dart';
+import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
@@ -409,7 +409,7 @@ class _TicketAssignmentItem extends StatelessWidget {
                 ),
                 SizedBox(width: Spacing.small),
                 InkWell(
-                  onTap: () => showComingSoonDialog(context),
+                  onTap: () => SnackBarUtils.showComingSoon(context: context),
                   child: ThemeSvgIcon(
                     color: colorScheme.onSecondary,
                     builder: (filter) => Assets.icons.icMoreHoriz.svg(

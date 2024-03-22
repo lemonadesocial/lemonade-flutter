@@ -216,7 +216,6 @@ class _AppState extends State<_App> {
           fullWidth: false,
           isHideKeyboard: false,
           isIgnoring: true,
-
           child: MaterialApp.router(
             scaffoldMessengerKey: SnackBarUtils.rootScaffoldMessengerKey,
             locale: _getCurrentLocale(context),

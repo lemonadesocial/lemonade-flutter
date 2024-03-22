@@ -1,5 +1,5 @@
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
-import 'package:app/core/utils/modal_utils.dart';
+import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
@@ -26,7 +26,7 @@ class AddMoreCollectibleCardWidget extends StatelessWidget {
       child: InkWell(
         onTap: () {
           Vibrate.feedback(FeedbackType.light);
-          showComingSoonDialog(context);
+          SnackBarUtils.showComingSoon(context: context);
         },
         child: Center(
           child: Column(

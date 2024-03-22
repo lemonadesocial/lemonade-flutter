@@ -5,7 +5,7 @@ import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/event_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
-import 'package:app/core/utils/modal_utils.dart';
+import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -188,7 +188,8 @@ class _EventHostItem extends StatelessWidget {
                               ),
                               child: InkWell(
                                 onTap: () {
-                                  showComingSoonDialog(context);
+                                  SnackBarUtils.showComingSoon(
+                                      context: context);
                                 },
                                 child: Center(
                                   child: Text(

@@ -1,7 +1,7 @@
 import 'package:app/core/application/chat/chat_space_bloc/chat_space_bloc.dart';
 import 'package:app/core/presentation/widgets/chat/matrix_avatar.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
-import 'package:app/core/utils/modal_utils.dart';
+import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -165,7 +165,7 @@ class SpacesDrawer extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () {
-              showComingSoonDialog(context);
+              SnackBarUtils.showComingSoon(context: context);
             },
             child: Container(
               padding: EdgeInsets.symmetric(
@@ -191,7 +191,7 @@ class SpacesDrawer extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () {
-              showComingSoonDialog(context);
+              SnackBarUtils.showComingSoon(context: context);
             },
             child: Container(
               padding: EdgeInsets.symmetric(

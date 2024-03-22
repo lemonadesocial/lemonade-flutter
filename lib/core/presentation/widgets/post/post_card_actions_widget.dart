@@ -3,7 +3,8 @@ import 'package:app/core/application/post/toggle_post_reaction_bloc/toggle_post_
 import 'package:app/core/domain/post/entities/post_entities.dart';
 import 'package:app/core/domain/post/input/post_reaction_input.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
-import 'package:app/core/utils/modal_utils.dart';
+import 'package:app/core/utils/snackbar_utils.dart';
+import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
@@ -98,7 +99,7 @@ class PostCardActions extends StatelessWidget {
           GestureDetector(
             behavior: HitTestBehavior.translucent,
             onTap: () {
-              showComingSoonDialog(context);
+              SnackBarUtils.showComingSoon(context: context);
             },
             child: ThemeSvgIcon(
               color: colorScheme.onSecondary,

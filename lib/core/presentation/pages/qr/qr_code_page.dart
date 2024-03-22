@@ -3,7 +3,7 @@ import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.
 import 'package:app/core/presentation/widgets/lemon_back_button_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/auth_utils.dart';
-import 'package:app/core/utils/modal_utils.dart';
+import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -78,7 +78,7 @@ class QrCodePage extends StatelessWidget {
         leading: LemonBackButton(color: colorScheme.onPrimary),
         actions: [
           InkWell(
-            onTap: () => showComingSoonDialog(context),
+            onTap: () => SnackBarUtils.showComingSoon(context: context),
             child: ThemeSvgIcon(
               color: colorScheme.onPrimary,
               builder: (filter) =>

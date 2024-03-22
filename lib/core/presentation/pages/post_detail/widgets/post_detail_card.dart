@@ -17,7 +17,7 @@ import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/core/utils/avatar_utils.dart';
 import 'package:app/core/utils/bottomsheet_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
-import 'package:app/core/utils/modal_utils.dart';
+import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -113,7 +113,7 @@ class PostDetailCard extends StatelessWidget {
                   const Spacer(),
                   GestureDetector(
                     onTap: () {
-                      showComingSoonDialog(context);
+                      SnackBarUtils.showComingSoon(context: context);
                     },
                     child: isOwnPost
                         ? const SizedBox.shrink()
