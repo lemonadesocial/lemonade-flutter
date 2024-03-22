@@ -59,7 +59,7 @@ class HostEventDetailConfigGrid extends StatelessWidget {
         ),
         onTap: () {
           Vibrate.feedback(FeedbackType.light);
-          SnackBarUtils.showComingSoon(context: context);
+          SnackBarUtils.showComingSoon();
         },
       ),
       EventConfigGridViewModel(

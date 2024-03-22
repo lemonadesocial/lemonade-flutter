@@ -197,7 +197,7 @@ class LemonDrawer extends StatelessWidget {
                     featureAvailable: false,
                     onTap: () {
                       Vibrate.feedback(FeedbackType.light);
-                      SnackBarUtils.showComingSoon(context: context);
+                      SnackBarUtils.showComingSoon();
                     },
                   ),
                 ],

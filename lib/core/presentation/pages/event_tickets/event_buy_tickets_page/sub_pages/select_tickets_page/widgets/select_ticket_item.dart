@@ -313,69 +313,11 @@ class _PriceItem extends StatelessWidget {
             onIncrease: onIncrease,
             disabled: disabled,
             onPressDisabled: () {
-              SnackBarUtils.showCustomSnackbar(
-                MultipleTicketsErrorSnackbar.create(context),
+              SnackBarUtils.showError(
+                title: t.common.error.label,
+                subTitle: t.event.eventBuyTickets.multipleTicketsError,
               );
             },
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class MultipleTicketsErrorSnackbar {
-  static SnackBar create(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return SnackBar(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(
-          LemonRadius.normal,
-        ),
-      ),
-      behavior: SnackBarBehavior.floating,
-      margin: EdgeInsets.only(bottom: size.height - size.height * 0.2),
-      backgroundColor: LemonColor.chineseBlack,
-      showCloseIcon: true,
-      closeIconColor: colorScheme.onSecondary,
-      content: Row(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(LemonRadius.normal),
-              color: LemonColor.errorRedBg.withOpacity(0.2),
-            ),
-            width: Sizing.medium,
-            height: Sizing.medium,
-            child: Center(
-              child: Assets.icons.icError.svg(),
-            ),
-          ),
-          SizedBox(width: Spacing.small),
-          Flexible(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  t.event.error,
-                  style: Typo.small.copyWith(
-                    color: colorScheme.onPrimary.withOpacity(0.87),
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                SizedBox(
-                  height: 2.w,
-                ),
-                Text(
-                  t.event.eventBuyTickets.multipleTicketsError,
-                  style: Typo.small.copyWith(
-                    color: colorScheme.onSecondary,
-                  ),
-                ),
-              ],
-            ),
           ),
         ],
       ),

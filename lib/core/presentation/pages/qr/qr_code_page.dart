@@ -54,7 +54,7 @@ class QrCodePage extends StatelessWidget {
           text: '${AppConfig.webUrl}/$username',
         ),
       );
-      SnackBarUtils.showSnackbar(t.common.profileUrlCopied);
+      // SnackBarUtils.showInfo(context: context, title: t.common.profileUrlCopied);
     } catch (e) {
       if (kDebugMode) {
         print("Error copy profile link $e");
@@ -78,7 +78,7 @@ class QrCodePage extends StatelessWidget {
         leading: LemonBackButton(color: colorScheme.onPrimary),
         actions: [
           InkWell(
-            onTap: () => SnackBarUtils.showComingSoon(context: context),
+            onTap: () => SnackBarUtils.showComingSoon(),
             child: ThemeSvgIcon(
               color: colorScheme.onPrimary,
               builder: (filter) =>

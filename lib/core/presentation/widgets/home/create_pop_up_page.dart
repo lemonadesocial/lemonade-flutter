@@ -70,7 +70,7 @@ class CreatePopUpPage extends StatelessWidget with LemonBottomSheet {
               label: t.home.event,
               content: t.home.eventDesc,
               onTap: () {
-                SnackBarUtils.showComingSoon(context: context);
+                SnackBarUtils.showComingSoon();
               },
               suffixIcon: ThemeSvgIcon(
                 color: LemonColor.paleViolet,

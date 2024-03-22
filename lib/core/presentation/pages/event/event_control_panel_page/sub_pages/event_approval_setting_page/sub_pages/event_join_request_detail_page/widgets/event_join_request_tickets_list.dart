@@ -409,7 +409,7 @@ class _TicketAssignmentItem extends StatelessWidget {
                 ),
                 SizedBox(width: Spacing.small),
                 InkWell(
-                  onTap: () => SnackBarUtils.showComingSoon(context: context),
+                  onTap: () => SnackBarUtils.showComingSoon(),
                   child: ThemeSvgIcon(
                     color: colorScheme.onSecondary,
                     builder: (filter) => Assets.icons.icMoreHoriz.svg(

@@ -71,8 +71,7 @@ class CommunityFriendView extends StatelessWidget {
                                   ),
                                   onTap: () {
                                     Vibrate.feedback(FeedbackType.light);
-                                    SnackBarUtils.showComingSoon(
-                                        context: context);
+                                    SnackBarUtils.showComingSoon();
                                   },
                                 ),
                               ),
@@ -91,8 +90,7 @@ class CommunityFriendView extends StatelessWidget {
                                   ),
                                   onTap: () {
                                     Vibrate.feedback(FeedbackType.light);
-                                    SnackBarUtils.showComingSoon(
-                                        context: context);
+                                    SnackBarUtils.showComingSoon();
                                   },
                                 ),
                               ),

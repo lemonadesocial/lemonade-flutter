@@ -30,7 +30,7 @@ class EventTicketsGridConfig extends StatelessWidget {
         AutoRouter.of(context).navigate(const EventRewardSettingRoute());
         break;
       default:
-        SnackBarUtils.showComingSoon(context: context);
+        SnackBarUtils.showComingSoon();
     }
   }
 

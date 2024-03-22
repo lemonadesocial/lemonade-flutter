@@ -11,7 +11,7 @@ class DiscoverCards extends StatelessWidget {
   const DiscoverCards({super.key});
 
   void alertComingSoon(BuildContext context) {
-    SnackBarUtils.showComingSoon(context: context);
+    SnackBarUtils.showComingSoon();
   }
 
   @override

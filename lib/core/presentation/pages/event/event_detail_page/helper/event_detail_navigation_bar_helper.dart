@@ -88,7 +88,7 @@ class EventDetailNavigationBarHelper {
         ),
         onTap: () {
           Vibrate.feedback(FeedbackType.light);
-          SnackBarUtils.showComingSoon(context: context);
+          SnackBarUtils.showComingSoon();
         },
       ),
       FeatureItem(
@@ -116,7 +116,7 @@ class EventDetailNavigationBarHelper {
         ),
         onTap: () {
           Vibrate.feedback(FeedbackType.light);
-          SnackBarUtils.showComingSoon(context: context);
+          SnackBarUtils.showComingSoon();
         },
       ),
       FeatureItem(
@@ -128,7 +128,7 @@ class EventDetailNavigationBarHelper {
         ),
         onTap: () {
           Vibrate.feedback(FeedbackType.light);
-          SnackBarUtils.showComingSoon(context: context);
+          SnackBarUtils.showComingSoon();
         },
       ),
     ];
@@ -191,7 +191,7 @@ class EventDetailNavigationBarHelper {
         ),
         onTap: () {
           Vibrate.feedback(FeedbackType.light);
-          SnackBarUtils.showComingSoon(context: context);
+          SnackBarUtils.showComingSoon();
         },
       ),
       FeatureItem(
@@ -235,7 +235,7 @@ class EventDetailNavigationBarHelper {
         ),
         onTap: () {
           Vibrate.feedback(FeedbackType.light);
-          SnackBarUtils.showComingSoon(context: context);
+          SnackBarUtils.showComingSoon();
         },
       ),
       FeatureItem(
@@ -250,7 +250,7 @@ class EventDetailNavigationBarHelper {
         ),
         onTap: () {
           Vibrate.feedback(FeedbackType.light);
-          SnackBarUtils.showComingSoon(context: context);
+          SnackBarUtils.showComingSoon();
         },
       ),
       FeatureItem(
@@ -281,7 +281,7 @@ class EventDetailNavigationBarHelper {
         ),
         onTap: () {
           Vibrate.feedback(FeedbackType.light);
-          SnackBarUtils.showComingSoon(context: context);
+          SnackBarUtils.showComingSoon();
         },
       ),
     ];

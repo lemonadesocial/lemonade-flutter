@@ -1,4 +1,5 @@
 import 'package:app/core/presentation/widgets/common/snackbar/custom_snackbar_widget.dart';
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
@@ -22,24 +23,24 @@ class SnackBarUtils {
     _colorScheme = colorScheme;
   }
 
-  static void showCustomSnackbar(SnackBar snackbar) {
-    rootScaffoldMessengerKey.currentState?.showSnackBar(snackbar);
-  }
+  // static void showCustomSnackbar(SnackBar snackbar) {
+  //   rootScaffoldMessengerKey.currentState?.showSnackBar(snackbar);
+  // }
 
-  static void showSnackbar(String message, {Color? backgroundColor}) {
-    rootScaffoldMessengerKey.currentState?.showSnackBar(
-      SnackBar(
-        content: Text(
-          message,
-          style: Typo.medium
-              .copyWith(color: _colorScheme?.onPrimary ?? LemonColor.white),
-        ),
-        behavior: SnackBarBehavior.floating,
-        backgroundColor:
-            backgroundColor ?? _colorScheme?.primary ?? LemonColor.black,
-      ),
-    );
-  }
+  // static void showSnackbar(String message, {Color? backgroundColor}) {
+  //   rootScaffoldMessengerKey.currentState?.showSnackBar(
+  //     SnackBar(
+  //       content: Text(
+  //         message,
+  //         style: Typo.medium
+  //             .copyWith(color: _colorScheme?.onPrimary ?? LemonColor.white),
+  //       ),
+  //       behavior: SnackBarBehavior.floating,
+  //       backgroundColor:
+  //           backgroundColor ?? _colorScheme?.primary ?? LemonColor.black,
+  //     ),
+  //   );
+  // }
 
   static void showErrorSnackbar(String message) {
     rootScaffoldMessengerKey.currentState?.showSnackBar(
@@ -69,11 +70,10 @@ class SnackBarUtils {
     );
   }
 
-  static void showComingSoon({
-    required BuildContext context,
-  }) {
+  static void showComingSoon() {
     showToastWidget(
       CustomSnackbar(
+        colorScheme: SnackBarUtils._colorScheme,
         title: t.common.comingSoon,
         subTitle: t.common.commingSoonDescription,
         icon: Container(
@@ -95,25 +95,37 @@ class SnackBarUtils {
           ),
         ),
       ),
-      context: context,
       isIgnoring: false,
     );
   }
 
   static void showCustom({
-    required BuildContext context,
     String? title,
     String? subTitle,
     Widget? icon,
   }) {
     showToastWidget(
       CustomSnackbar(
+        colorScheme: SnackBarUtils._colorScheme,
         title: title ?? '',
         subTitle: subTitle ?? '',
         icon: icon,
       ),
-      context: context,
       isIgnoring: false,
+    );
+  }
+
+  static void showInfo({
+    String? title,
+    String? subTitle,
+  }) {
+    showToastWidget(
+      CustomSnackbar(
+        colorScheme: SnackBarUtils._colorScheme,
+        title: title ?? t.common.info,
+        subTitle: subTitle ?? '',
+      ),
+      isIgnoring: true,
     );
   }
 
@@ -124,8 +136,9 @@ class SnackBarUtils {
   }) {
     showToastWidget(
       CustomSnackbar(
+        colorScheme: SnackBarUtils._colorScheme,
         title: title ?? t.common.success,
-        subTitle: subTitle ?? t.event.editEventSuccessfully,
+        subTitle: subTitle ?? '',
         icon: Assets.icons.icSuccess.svg(),
       ),
       context: context,
@@ -134,17 +147,16 @@ class SnackBarUtils {
   }
 
   static void showError({
-    required BuildContext context,
     String? title,
     String? subTitle,
   }) {
     showToastWidget(
       CustomSnackbar(
+        colorScheme: SnackBarUtils._colorScheme,
         title: title ?? t.common.error.label,
         subTitle: subTitle ?? t.common.somethingWrong,
         icon: Assets.icons.icError.svg(),
       ),
-      context: context,
       isIgnoring: false,
     );
   }

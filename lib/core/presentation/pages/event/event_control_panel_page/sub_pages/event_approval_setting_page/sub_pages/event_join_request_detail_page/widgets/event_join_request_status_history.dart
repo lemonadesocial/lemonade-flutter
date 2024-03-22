@@ -35,7 +35,7 @@ class EventJoinRequestStatusHistory extends StatelessWidget {
   bool get isRejected => eventJoinRequest.declinedBy != null;
 
   Widget _declinedBadge(BuildContext context) => InkWell(
-        onTap: () => SnackBarUtils.showComingSoon(context: context),
+        onTap: () => SnackBarUtils.showComingSoon(),
         child: Container(
           padding: EdgeInsets.symmetric(
             vertical: Spacing.superExtraSmall,

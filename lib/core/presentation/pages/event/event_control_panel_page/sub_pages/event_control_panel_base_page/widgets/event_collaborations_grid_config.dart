@@ -30,7 +30,7 @@ class EventCollaborationsGridConfig extends StatelessWidget {
         AutoRouter.of(context).navigate(const EventSpeakersRoute());
         break;
       default:
-        SnackBarUtils.showComingSoon(context: context);
+        SnackBarUtils.showComingSoon();
     }
   }
 

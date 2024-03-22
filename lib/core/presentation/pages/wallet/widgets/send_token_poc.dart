@@ -82,8 +82,8 @@ class _SendTokenViewState extends State<SendTokenPoc> {
                         getIt<WalletConnectService>().currentWalletAppAccount;
                     if (currentWalletAppAccount != null &&
                         userWalletAddress != currentWalletAppAccount) {
-                      SnackBarUtils.showSnackbar(
-                        'Please switch to your connected account',
+                      SnackBarUtils.showInfo(
+                        title: 'Please switch to your connected account',
                       );
                       return;
                     }

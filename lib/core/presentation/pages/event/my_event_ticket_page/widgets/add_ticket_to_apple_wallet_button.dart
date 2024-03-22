@@ -16,7 +16,7 @@ class AddTicketToAppleWalletButton extends StatelessWidget {
 
     return InkWell(
       onTap: () {
-        SnackBarUtils.showComingSoon(context: context);
+        SnackBarUtils.showComingSoon();
       },
       child: Container(
         height: 54.w,

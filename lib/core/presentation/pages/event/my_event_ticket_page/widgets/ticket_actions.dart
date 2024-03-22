@@ -44,7 +44,7 @@ class EventTicketActions extends StatelessWidget {
               height: 27.w,
             ),
           ),
-          onPressed: () => SnackBarUtils.showComingSoon(context: context),
+          onPressed: () => SnackBarUtils.showComingSoon(),
         ),
         ActionItem(
           label: t.common.actions.invite,
@@ -58,7 +58,7 @@ class EventTicketActions extends StatelessWidget {
               height: 27.w,
             ),
           ),
-          onPressed: () => SnackBarUtils.showComingSoon(context: context),
+          onPressed: () => SnackBarUtils.showComingSoon(),
         ),
         ActionItem(
           label: t.common.actions.qrCode,
@@ -123,7 +123,7 @@ class EventTicketActions extends StatelessWidget {
               height: 27.w,
             ),
           ),
-          onPressed: () => SnackBarUtils.showComingSoon(context: context),
+          onPressed: () => SnackBarUtils.showComingSoon(),
         ),
       ],
     );

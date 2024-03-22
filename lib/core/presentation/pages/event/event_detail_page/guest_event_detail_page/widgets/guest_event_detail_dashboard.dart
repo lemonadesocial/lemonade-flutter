@@ -78,7 +78,7 @@ class GuestEventDetailDashboard extends StatelessWidget {
           child: EventTotalJoinWidget(event: event),
           onTap: () {
             Vibrate.feedback(FeedbackType.light);
-            SnackBarUtils.showComingSoon(context: context);
+            SnackBarUtils.showComingSoon();
           },
         ),
         SizedBox(width: 10.w),

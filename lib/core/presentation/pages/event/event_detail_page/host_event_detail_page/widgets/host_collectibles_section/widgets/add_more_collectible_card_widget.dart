@@ -26,7 +26,7 @@ class AddMoreCollectibleCardWidget extends StatelessWidget {
       child: InkWell(
         onTap: () {
           Vibrate.feedback(FeedbackType.light);
-          SnackBarUtils.showComingSoon(context: context);
+          SnackBarUtils.showComingSoon();
         },
         child: Center(
           child: Column(

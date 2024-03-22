@@ -61,7 +61,7 @@ class CreateEventConfigGrid extends StatelessWidget {
         break;
     }
     if (page == null) {
-      return SnackBarUtils.showComingSoon(context: context);
+      return SnackBarUtils.showComingSoon();
     }
     showModalBottomSheet(
       context: context,

@@ -75,7 +75,7 @@ class _PayoutAccountsWidgetState extends State<PayoutAccountsWidget> {
               );
             }
             return LinearGradientButton(
-              onTap: () => SnackBarUtils.showComingSoon(context: context),
+              onTap: () => SnackBarUtils.showComingSoon(),
               // TODO:
               // onTap: () => Navigator.of(context).push(
               //   MaterialPageRoute(

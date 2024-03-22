@@ -165,7 +165,7 @@ class SpacesDrawer extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () {
-              SnackBarUtils.showComingSoon(context: context);
+              SnackBarUtils.showComingSoon();
             },
             child: Container(
               padding: EdgeInsets.symmetric(
@@ -191,7 +191,7 @@ class SpacesDrawer extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () {
-              SnackBarUtils.showComingSoon(context: context);
+              SnackBarUtils.showComingSoon();
             },
             child: Container(
               padding: EdgeInsets.symmetric(

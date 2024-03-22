@@ -188,8 +188,7 @@ class _EventHostItem extends StatelessWidget {
                               ),
                               child: InkWell(
                                 onTap: () {
-                                  SnackBarUtils.showComingSoon(
-                                      context: context);
+                                  SnackBarUtils.showComingSoon();
                                 },
                                 child: Center(
                                   child: Text(

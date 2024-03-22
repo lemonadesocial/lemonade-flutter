@@ -90,7 +90,7 @@ class EmptyCollectibleCardWidget extends StatelessWidget {
                 InkWell(
                   onTap: () {
                     Vibrate.feedback(FeedbackType.light);
-                    SnackBarUtils.showComingSoon(context: context);
+                    SnackBarUtils.showComingSoon();
                   },
                   child: LinearGradientButton(
                     width: 134.w,

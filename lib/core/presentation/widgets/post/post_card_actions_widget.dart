@@ -99,7 +99,7 @@ class PostCardActions extends StatelessWidget {
           GestureDetector(
             behavior: HitTestBehavior.translucent,
             onTap: () {
-              SnackBarUtils.showComingSoon(context: context);
+              SnackBarUtils.showComingSoon();
             },
             child: ThemeSvgIcon(
               color: colorScheme.onSecondary,

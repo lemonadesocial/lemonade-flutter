@@ -164,7 +164,7 @@ class RewardItem extends StatelessWidget {
                       ),
                     );
                   default:
-                    SnackBarUtils.showComingSoon(context: context);
+                    SnackBarUtils.showComingSoon();
                 }
               },
               child: ThemeSvgIcon(

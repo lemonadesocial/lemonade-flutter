@@ -50,7 +50,7 @@ class EditProfileSocialDialog extends StatelessWidget with LemonBottomSheet {
                       leadingIcon: Assets.icons.icSocialX.svg(),
                       content: 'https://twitter.com/',
                       onTap: () =>
-                          SnackBarUtils.showComingSoon(context: context),
+                          SnackBarUtils.showComingSoon(),
                     ),
                     SizedBox(height: Spacing.medium),
                     EditProfileSocialTile(
@@ -58,7 +58,7 @@ class EditProfileSocialDialog extends StatelessWidget with LemonBottomSheet {
                       leadingIcon: Assets.icons.icSocialLinkedin.svg(),
                       content: 'https://linkedIn.com/',
                       onTap: () =>
-                          SnackBarUtils.showComingSoon(context: context),
+                          SnackBarUtils.showComingSoon(),
                     ),
                     SizedBox(height: Spacing.medium),
                     EditProfileSocialTile(
@@ -66,7 +66,7 @@ class EditProfileSocialDialog extends StatelessWidget with LemonBottomSheet {
                       leadingIcon: Assets.icons.icSocialInstagram.svg(),
                       content: 'https://instagram.com/',
                       onTap: () =>
-                          SnackBarUtils.showComingSoon(context: context),
+                          SnackBarUtils.showComingSoon(),
                     ),
                     SizedBox(height: Spacing.medium),
                     EditProfileSocialTile(
@@ -74,7 +74,7 @@ class EditProfileSocialDialog extends StatelessWidget with LemonBottomSheet {
                       leadingIcon: Assets.icons.icSocialFacebook.svg(),
                       content: 'https://facebook.com/',
                       onTap: () =>
-                          SnackBarUtils.showComingSoon(context: context),
+                          SnackBarUtils.showComingSoon(),
                     ),
                   ],
                 ),

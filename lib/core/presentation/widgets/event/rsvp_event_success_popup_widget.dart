@@ -108,7 +108,7 @@ class RSVPEventSuccessPopupPage extends StatelessWidget {
               left: 0,
               right: 0,
               child: InkWell(
-                onTap: () => SnackBarUtils.showComingSoon(context: context),
+                onTap: () => SnackBarUtils.showComingSoon(),
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
                   child: Row(

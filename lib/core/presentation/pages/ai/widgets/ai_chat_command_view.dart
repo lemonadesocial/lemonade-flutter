@@ -32,7 +32,7 @@ class AIChatCommandView extends StatelessWidget {
         label: t.home.room,
         onTap: () {
           Vibrate.feedback(FeedbackType.light);
-          SnackBarUtils.showComingSoon(context: context);
+          SnackBarUtils.showComingSoon();
         },
       ),
       AICommandViewModel(
@@ -47,14 +47,14 @@ class AIChatCommandView extends StatelessWidget {
       //   label: t.home.poap,
       //   onTap: () {
       //     Vibrate.feedback(FeedbackType.light);
-      //     SnackBarUtils.showComingSoon(context: context);
+      //     SnackBarUtils.showComingSoon();
       //   },
       // ),
       // AICommandViewModel(
       //   label: t.home.collectible,
       //   onTap: () {
       //     Vibrate.feedback(FeedbackType.light);
-      //     SnackBarUtils.showComingSoon(context: context);
+      //     SnackBarUtils.showComingSoon();
       //   },
       // ),
     ];
@@ -77,7 +77,7 @@ class AIChatCommandView extends StatelessWidget {
         label: t.ai.discover.collaborators,
         onTap: () {
           Vibrate.feedback(FeedbackType.light);
-          SnackBarUtils.showComingSoon(context: context);
+          SnackBarUtils.showComingSoon();
         },
       ),
       // TODO: Temporary comment for AppStore/PlayStore review
@@ -85,14 +85,14 @@ class AIChatCommandView extends StatelessWidget {
       //   label: t.ai.discover.collectibles,
       //   onTap: () {
       //     Vibrate.feedback(FeedbackType.light);
-      //     SnackBarUtils.showComingSoon(context: context);
+      //     SnackBarUtils.showComingSoon();
       //   },
       // ),
       // AICommandViewModel(
       //   label: t.ai.discover.communities,
       //   onTap: () {
       //     Vibrate.feedback(FeedbackType.light);
-      //     SnackBarUtils.showComingSoon(context: context);
+      //     SnackBarUtils.showComingSoon();
       //   },
       // ),
     ];

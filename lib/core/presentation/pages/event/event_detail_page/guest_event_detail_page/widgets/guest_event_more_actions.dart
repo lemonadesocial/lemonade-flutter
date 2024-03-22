@@ -55,7 +55,7 @@ class GuestEventMoreActions extends StatelessWidget {
               ),
             ],
       onEmptyPressed: () {
-        SnackBarUtils.showComingSoon(context: context);
+        SnackBarUtils.showComingSoon();
       },
       onItemPressed: (item) {
         if (item?.value == 'report') {

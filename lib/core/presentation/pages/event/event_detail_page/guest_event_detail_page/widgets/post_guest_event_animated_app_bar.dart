@@ -34,7 +34,7 @@ class PostGuestEventAnimatedAppBar extends LemonAnimatedAppBar {
           child: InkWell(
             onTap: () {
               Vibrate.feedback(FeedbackType.light);
-              SnackBarUtils.showComingSoon(context: context);
+              SnackBarUtils.showComingSoon();
             },
             child: ThemeSvgIcon(
               color: colorScheme.onPrimary,

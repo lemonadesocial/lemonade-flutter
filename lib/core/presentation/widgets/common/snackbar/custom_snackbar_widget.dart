@@ -17,6 +17,7 @@ class CustomSnackbar extends StatelessWidget {
     this.title = '',
     this.subTitle = '',
     this.icon,
+    this.colorScheme,
   });
 
   /// The title of snackbar
@@ -28,9 +29,11 @@ class CustomSnackbar extends StatelessWidget {
   /// The custom icon of snackbar
   final Widget? icon;
 
+  final ColorScheme? colorScheme;
+
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.w),
       margin: EdgeInsets.only(
@@ -64,7 +67,7 @@ class CustomSnackbar extends StatelessWidget {
               Text(
                 title,
                 style: Typo.medium.copyWith(
-                    color: colorScheme.onPrimary, fontWeight: FontWeight.w600),
+                    color: colorScheme?.onPrimary, fontWeight: FontWeight.w600),
               ),
               subTitle != ''
                   ? Padding(
@@ -72,7 +75,7 @@ class CustomSnackbar extends StatelessWidget {
                       child: Text(
                         subTitle,
                         style:
-                            Typo.small.copyWith(color: colorScheme.onSecondary),
+                            Typo.small.copyWith(color: colorScheme?.onSecondary),
                       ),
                     )
                   : const SizedBox.shrink(),

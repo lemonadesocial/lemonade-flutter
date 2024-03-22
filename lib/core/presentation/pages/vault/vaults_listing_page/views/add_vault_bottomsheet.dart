@@ -80,7 +80,7 @@ class AddVaultBottomSheet extends StatelessWidget {
                     SizedBox(height: Spacing.xSmall),
                     _CreateVaultOptionItem(
                       onPressed: () =>
-                          SnackBarUtils.showComingSoon(context: context),
+                          SnackBarUtils.showComingSoon(),
                       title: t.vault.vaultType.community,
                       description:
                           t.vault.createVaultBottomSheet.communityDescription,
@@ -99,7 +99,7 @@ class AddVaultBottomSheet extends StatelessWidget {
                     SizedBox(height: Spacing.medium),
                     // TODO: temporary hide
                     // InkWell(
-                    //   onTap: () => SnackBarUtils.showComingSoon(context: context),
+                    //   onTap: () => SnackBarUtils.showComingSoon(),
                     //   child: Row(
                     //     mainAxisAlignment: MainAxisAlignment.center,
                     //     children: [

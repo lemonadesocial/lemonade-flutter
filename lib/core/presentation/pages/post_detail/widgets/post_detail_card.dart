@@ -113,7 +113,7 @@ class PostDetailCard extends StatelessWidget {
                   const Spacer(),
                   GestureDetector(
                     onTap: () {
-                      SnackBarUtils.showComingSoon(context: context);
+                      SnackBarUtils.showComingSoon();
                     },
                     child: isOwnPost
                         ? const SizedBox.shrink()
