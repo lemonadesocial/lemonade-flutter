@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.11.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.10.0...v1.11.0) (2024-03-22)
+
+
+### Features
+
+* event application form setting for host ([#463](https://github.com/lemonadesocial/lemonade-flutter/issues/463)) ([6edc96c](https://github.com/lemonadesocial/lemonade-flutter/commit/6edc96cac7bf65a3bc20ab056a1865439767b851))
+* event approval status for guest view ([#461](https://github.com/lemonadesocial/lemonade-flutter/issues/461)) ([01f0b4a](https://github.com/lemonadesocial/lemonade-flutter/commit/01f0b4a758b9284d3d2cc61269885d961843bab7))
+* get event applications answers for host to review guest application ([#462](https://github.com/lemonadesocial/lemonade-flutter/issues/462)) ([5f80d54](https://github.com/lemonadesocial/lemonade-flutter/commit/5f80d54ab95c0314dd7185c1fd16bfb60e3e927e))
+* guest application form ([#460](https://github.com/lemonadesocial/lemonade-flutter/issues/460)) ([94bfd53](https://github.com/lemonadesocial/lemonade-flutter/commit/94bfd53cf3c4a42f881075a0aa10e782bf4bd5e9))
+* handle more socials url for user profile ([#466](https://github.com/lemonadesocial/lemonade-flutter/issues/466)) ([b475f98](https://github.com/lemonadesocial/lemonade-flutter/commit/b475f987e6f0090aa159fe2a66a2850573bd22b5))
+* host tracking escrow payment ([#464](https://github.com/lemonadesocial/lemonade-flutter/issues/464)) ([8c86f89](https://github.com/lemonadesocial/lemonade-flutter/commit/8c86f89f93eb59d67c94eabdd44248f852437079))
+* rsvp statues for guest event detail ([#468](https://github.com/lemonadesocial/lemonade-flutter/issues/468)) ([6b6fdd5](https://github.com/lemonadesocial/lemonade-flutter/commit/6b6fdd5b3ae3cdfa3866a2ae9839712b1e244cb3))
+
+
+### Bug Fixes
+
+* handle fallback for payment flow when noti not coming up for too long ([#458](https://github.com/lemonadesocial/lemonade-flutter/issues/458)) ([cd02fc5](https://github.com/lemonadesocial/lemonade-flutter/commit/cd02fc58076d34b4cf37dc6b73f67b60ce50da72))
+
 ## [1.10.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.9.0...v1.10.0) (2024-03-07)
 
 
