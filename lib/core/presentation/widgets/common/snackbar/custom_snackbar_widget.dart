@@ -67,8 +67,9 @@ class CustomSnackbar extends StatelessWidget {
                 Text(
                   title,
                   style: Typo.medium.copyWith(
-                      color: colorScheme?.onPrimary,
-                      fontWeight: FontWeight.w600),
+                    color: colorScheme?.onPrimary,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
                 message != ''
                     ? Padding(
