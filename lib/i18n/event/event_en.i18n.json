@@ -229,6 +229,12 @@
         "activateTicket": "Activate ticket",
         "visibleToGuests": "Visible to guests",
         "addTicket": "Add ticket",
+        "listTicket": "List ticket",
+        "openPublicPurchase": "Open for public purchase",
+        "canOnlyAssigned": "Can only be assigned for free",
+        "lockTicket": "Lock ticket",
+        "anyoneCanBuy": "Anyone can buy",
+        "onlyWhitelisted": "Only whitelisted users can buy",
         "paymentMethod": "Payment method",
         "addPaymentMethod": "Add payment method",
         "howUserPay": "How do you want the users to pay?",
@@ -250,6 +256,14 @@
             "edit": "edit",
             "inactivate": "inactivate",
             "delete": "delete"
+        },
+        "whitelistSetting": {
+            "whitelistSettingTitle": "Whitelist",
+            "whitelistedUser": "Whitelisted users",
+            "addEmail": "Add email",
+            "whiteListAddEmailDescription": "Emails added below can purchase this ticket tier. This can be edited later.",
+            "addToWhitelist": "Add to whitelist",
+            "whitelistInputPlaceholder": "Email 1\nEmail 2\n..."
         }
     },
     "speakers": {

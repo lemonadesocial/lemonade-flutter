@@ -4,7 +4,7 @@ import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/repository/event_ticket_repository.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/create_ticket_basic_info_form.dart';
-import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/create_ticket_guest_form.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/ticket_tier_setting_form/ticket_tier_setting_form.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/create_ticket_pricing_form.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
@@ -24,9 +24,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 @RoutePage()
 class EventCreateTicketTierPage extends StatelessWidget {
   final EventTicketType? initialTicketType;
+  final Function()? onRefresh;
+
   const EventCreateTicketTierPage({
     super.key,
     this.initialTicketType,
+    this.onRefresh,
   });
 
   @override
@@ -37,6 +40,7 @@ class EventCreateTicketTierPage extends StatelessWidget {
       ),
       child: EventCreateTicketTierPagerView(
         initialTicketType: initialTicketType,
+        onRefresh: onRefresh,
       ),
     );
   }
@@ -44,9 +48,12 @@ class EventCreateTicketTierPage extends StatelessWidget {
 
 class EventCreateTicketTierPagerView extends StatelessWidget {
   final EventTicketType? initialTicketType;
+  final Function()? onRefresh;
+
   const EventCreateTicketTierPagerView({
     super.key,
     this.initialTicketType,
+    this.onRefresh,
   });
 
   Future<Either<Failure, EventTicketType>> submitModifyTicket(
@@ -69,6 +76,10 @@ class EventCreateTicketTierPagerView extends StatelessWidget {
           .toList(),
       ticket_limit: state.limit,
       active: state.active,
+      private: state.private,
+      limited: state.limited,
+      added_whitelist_emails: state.addedWhitelistEmails,
+      removed_whitelist_emails: state.removedWhitelistEmails,
     );
     if (initialTicketType != null) {
       return await getIt<EventTicketRepository>().updateEventTicketType(
@@ -130,8 +141,10 @@ class EventCreateTicketTierPagerView extends StatelessWidget {
                     height: Spacing.smMedium,
                   ),
                 ),
-                const SliverToBoxAdapter(
-                  child: CreateTicketGuestForm(),
+                SliverToBoxAdapter(
+                  child: TicketTierSettingForm(
+                    ticketType: initialTicketType,
+                  ),
                 ),
                 SliverToBoxAdapter(
                   child: SizedBox(
@@ -160,12 +173,8 @@ class EventCreateTicketTierPagerView extends StatelessWidget {
                               submitModifyTicket(state, eventId: eventId),
                         );
                         if (futureResult.result?.isRight() == true) {
+                          onRefresh?.call();
                           context.router.pop();
-                          context.read<GetEventDetailBloc>().add(
-                                GetEventDetailEvent.fetch(
-                                  eventId: eventId,
-                                ),
-                              );
                         }
                       },
                       height: 42.w,

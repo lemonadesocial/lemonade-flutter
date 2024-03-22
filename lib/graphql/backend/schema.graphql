@@ -43,6 +43,7 @@ type Query {
   getEventRewardUses(input: GetEventRewardUsesInput!): [EventRewardUse!]!
   getEventSessionReservations(input: GetEventSessionReservationsInput): [EventSessionReservation!]!
   getEventSessionReservationSummary(input: GetEventSessionReservationSummaryInput!): [EventSessionReservationSummary!]!
+  listEventTicketTypes(event: MongoID!): [EventTicketType!]!
   getEventTicketTypes(input: GetEventTicketTypesInput!): GetEventTicketTypesResponse!
   getFiles(skip: Int! = 0, limit: Int! = 25, id_lt: MongoID, user: MongoID, links: FileLinkInput): [File!]!
   getFrequentQuestions(input: GetFrequentQuestionsInput!): [FrequentQuestion!]!
@@ -648,6 +649,7 @@ type EventTicketType {
   _id: MongoID!
   active: Boolean
   private: Boolean
+  limited: Boolean
   event: MongoID!
   title: String!
   prices: [EventTicketPrice!]!
@@ -662,6 +664,7 @@ type EventTicketType {
   ticket_limit: Float
   ticket_limit_per: Float
   photos_expanded(skip: Int! = 0, limit: Int! = 25): [File]
+  limited_whitelist_users: [WhitelistUserInfo!]
 }
 
 type EventTicketPrice {
@@ -669,6 +672,11 @@ type EventTicketPrice {
   currency: String!
   network: String
   cost: String!
+}
+
+type WhitelistUserInfo {
+  _id: MongoID
+  email: String!
 }
 
 type EventSession {
@@ -1246,6 +1254,7 @@ type PurchasableTicketType {
   _id: MongoID!
   active: Boolean
   private: Boolean
+  limited: Boolean
   event: MongoID!
   title: String!
   prices: [EventTicketPrice!]!
@@ -1258,6 +1267,7 @@ type PurchasableTicketType {
   photos: [MongoID!]
   discountable: Boolean!
   limit: Float!
+  whitelisted: Boolean
 }
 
 type TicketDiscount {
@@ -2606,6 +2616,9 @@ input EventPaymentTicketDiscountInput {
 input EventTicketTypeInput {
   active: Boolean
   private: Boolean
+  limited: Boolean
+  limited_whitelist_ids: [MongoID!]
+  limited_whitelist_emails: [String!]
   event: MongoID
   title: String
   prices: [EventTicketPriceInput!]
@@ -2618,6 +2631,8 @@ input EventTicketTypeInput {
   ticket_limit: Float
   ticket_limit_per: Float
   offers: [EventTicketTypeOffersInput!]
+  added_whitelist_emails: [String!]
+  removed_whitelist_emails: [String!]
 }
 
 input EventTicketPriceInput {

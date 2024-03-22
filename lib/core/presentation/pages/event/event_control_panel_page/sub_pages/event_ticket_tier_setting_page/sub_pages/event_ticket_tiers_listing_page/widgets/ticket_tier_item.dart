@@ -32,9 +32,11 @@ enum TicketTierActions {
 
 class TicketTierItem extends StatelessWidget {
   final EventTicketType eventTicketType;
+  final Function()? onRefresh;
   const TicketTierItem({
     super.key,
     required this.eventTicketType,
+    this.onRefresh,
   });
 
   Future<void> modifyTicket(
@@ -220,6 +222,7 @@ class TicketTierItem extends StatelessWidget {
                   context.router.push(
                     EventCreateTicketTierRoute(
                       initialTicketType: eventTicketType,
+                      onRefresh: onRefresh,
                     ),
                   );
                   break;
