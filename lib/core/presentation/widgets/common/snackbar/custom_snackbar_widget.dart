@@ -33,7 +33,6 @@ class CustomSnackbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.w),
       margin: EdgeInsets.only(
@@ -59,27 +58,30 @@ class CustomSnackbar extends StatelessWidget {
           SizedBox(
             width: Spacing.xSmall,
           ),
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: Typo.medium.copyWith(
-                    color: colorScheme?.onPrimary, fontWeight: FontWeight.w600),
-              ),
-              message != ''
-                  ? Padding(
-                      padding: EdgeInsets.only(top: 2.h),
-                      child: Text(
-                        message,
-                        style:
-                            Typo.small.copyWith(color: colorScheme?.onSecondary),
-                      ),
-                    )
-                  : const SizedBox.shrink(),
-            ],
+          Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  title,
+                  style: Typo.medium.copyWith(
+                      color: colorScheme?.onPrimary,
+                      fontWeight: FontWeight.w600),
+                ),
+                message != ''
+                    ? Padding(
+                        padding: EdgeInsets.only(top: 2.h),
+                        child: Text(
+                          message,
+                          style: Typo.small
+                              .copyWith(color: colorScheme?.onSecondary),
+                        ),
+                      )
+                    : const SizedBox.shrink(),
+              ],
+            ),
           ),
         ],
       ),

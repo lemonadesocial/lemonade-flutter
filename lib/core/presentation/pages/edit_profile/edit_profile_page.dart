@@ -68,7 +68,9 @@ class EditProfilePage extends StatelessWidget {
             listener: (context, state) {
               if (state.status == EditProfileStatus.success) {
                 context.read<AuthBloc>().add(const AuthEvent.refreshData());
-                SnackBarUtils.showSuccessSnackbar(t.profile.editProfileSuccess);
+                SnackBarUtils.showSuccess(
+                  message: t.profile.editProfileSuccess,
+                );
                 bloc.clearState();
               }
             },

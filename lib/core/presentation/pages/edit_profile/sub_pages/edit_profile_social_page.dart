@@ -49,32 +49,28 @@ class EditProfileSocialDialog extends StatelessWidget with LemonBottomSheet {
                       label: 'X',
                       leadingIcon: Assets.icons.icSocialX.svg(),
                       content: 'https://twitter.com/',
-                      onTap: () =>
-                          SnackBarUtils.showComingSoon(),
+                      onTap: () => SnackBarUtils.showComingSoon(),
                     ),
                     SizedBox(height: Spacing.medium),
                     EditProfileSocialTile(
                       label: 'LinkedIn',
                       leadingIcon: Assets.icons.icSocialLinkedin.svg(),
                       content: 'https://linkedIn.com/',
-                      onTap: () =>
-                          SnackBarUtils.showComingSoon(),
+                      onTap: () => SnackBarUtils.showComingSoon(),
                     ),
                     SizedBox(height: Spacing.medium),
                     EditProfileSocialTile(
                       label: 'Instagram',
                       leadingIcon: Assets.icons.icSocialInstagram.svg(),
                       content: 'https://instagram.com/',
-                      onTap: () =>
-                          SnackBarUtils.showComingSoon(),
+                      onTap: () => SnackBarUtils.showComingSoon(),
                     ),
                     SizedBox(height: Spacing.medium),
                     EditProfileSocialTile(
                       label: 'Facebook',
                       leadingIcon: Assets.icons.icSocialFacebook.svg(),
                       content: 'https://facebook.com/',
-                      onTap: () =>
-                          SnackBarUtils.showComingSoon(),
+                      onTap: () => SnackBarUtils.showComingSoon(),
                     ),
                   ],
                 ),

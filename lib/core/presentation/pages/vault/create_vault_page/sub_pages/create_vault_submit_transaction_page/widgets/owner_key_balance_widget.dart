@@ -58,7 +58,7 @@ class _OwnerKeyBalanceWidgetState extends State<OwnerKeyBalanceWidget> {
                   await Clipboard.setData(
                     ClipboardData(text: widget.ownerAddress),
                   );
-                  SnackBarUtils.showSuccessSnackbar(t.common.copiedToClipboard);
+                  SnackBarUtils.showInfo(message: t.common.copiedToClipboard);
                 },
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

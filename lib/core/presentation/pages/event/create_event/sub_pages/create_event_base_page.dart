@@ -31,8 +31,8 @@ class CreateEventBasePage extends StatelessWidget {
     return BlocListener<CreateEventBloc, CreateEventState>(
       listener: (context, state) {
         if (state.status.isSuccess) {
-          SnackBarUtils.showSuccessSnackbar(
-            t.event.eventCreation.createEventSuccessfully,
+          SnackBarUtils.showSuccess(
+            message: t.event.eventCreation.createEventSuccessfully,
           );
           AutoRouter.of(context).popTop();
         }

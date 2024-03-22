@@ -192,8 +192,8 @@ class _AppState extends State<_App> {
       listenWhen: (prev, cur) => prev != cur,
       listener: (context, state) {
         state.maybeWhen(
-          connected: () => SnackBarUtils.showSuccessSnackbar(
-            t.common.internetConnectionStatus.connected,
+          connected: () => SnackBarUtils.showSuccess(
+            message: t.common.internetConnectionStatus.connected,
           ),
           notConnected: () => SnackBarUtils.showError(
             message: t.common.internetConnectionStatus.disconnected,
@@ -217,7 +217,6 @@ class _AppState extends State<_App> {
           isHideKeyboard: false,
           isIgnoring: true,
           child: MaterialApp.router(
-            scaffoldMessengerKey: SnackBarUtils.rootScaffoldMessengerKey,
             locale: _getCurrentLocale(context),
             // use provider
             supportedLocales: _supportedLocales,

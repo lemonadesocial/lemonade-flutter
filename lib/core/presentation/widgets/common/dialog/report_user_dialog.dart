@@ -40,7 +40,7 @@ class ReportUserDialog extends StatelessWidget with LemonBottomSheet {
           if (state.status == ReportUserStatus.success) {
             context.router.popUntilRoot();
             AuthUtils.getUser(context)!.blockedList!.add(user);
-            SnackBarUtils.showSuccessSnackbar(t.profile.reportSuccess);
+            SnackBarUtils.showSuccess(message: t.profile.reportSuccess);
           }
 
           if (state.status == ReportUserStatus.error) {

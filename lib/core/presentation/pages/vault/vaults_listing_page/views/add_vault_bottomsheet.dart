@@ -79,8 +79,7 @@ class AddVaultBottomSheet extends StatelessWidget {
                     ),
                     SizedBox(height: Spacing.xSmall),
                     _CreateVaultOptionItem(
-                      onPressed: () =>
-                          SnackBarUtils.showComingSoon(),
+                      onPressed: () => SnackBarUtils.showComingSoon(),
                       title: t.vault.vaultType.community,
                       description:
                           t.vault.createVaultBottomSheet.communityDescription,

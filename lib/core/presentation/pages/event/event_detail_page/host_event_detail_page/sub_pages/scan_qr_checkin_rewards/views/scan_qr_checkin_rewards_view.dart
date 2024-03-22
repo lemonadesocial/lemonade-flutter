@@ -70,8 +70,8 @@ class _ScanQRCheckinRewardsViewState extends State<ScanQRCheckinRewardsView> {
         state.maybeWhen(
           orElse: () => null,
           success: () {
-            SnackBarUtils.showSuccessSnackbar(
-              t.event.scanQR.checkedinSuccessfully,
+            SnackBarUtils.showSuccess(
+              message: t.event.scanQR.checkedinSuccessfully,
             );
             AutoRouter.of(context).pop();
           },

@@ -82,8 +82,8 @@ class EventApplicationFormSettingPage extends StatelessWidget {
             EventApplicationFormSettingBlocState>(
           listener: (context, state) {
             if (state.status == EventApplicationFormStatus.success) {
-              SnackBarUtils.showSuccessSnackbar(
-                t.event.applicationForm.saveFormSuccessfully,
+              SnackBarUtils.showSuccess(
+                message: t.event.applicationForm.saveFormSuccessfully,
               );
               getEventDetailBloc.add(
                 GetEventDetailEvent.fetch(
