@@ -76,170 +76,202 @@ class SelectTicketItem extends StatelessWidget {
     final isLocked =
         ticketType.limited == true && ticketType.whitelisted == false;
 
-    return Stack(
-      children: [
-        Opacity(
-          opacity: isLocked ? 0.5 : 1,
-          child: Padding(
-            padding: EdgeInsets.all(Spacing.smMedium),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // image
-                Container(
-                  width: Sizing.medium,
-                  height: Sizing.medium,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
+    return InkWell(
+      onTap: () {
+        if (!isLocked) {
+          return;
+        }
+        SnackBarUtils.showCustom(
+          icon: Container(
+            width: Sizing.medium,
+            height: Sizing.medium,
+            decoration: BoxDecoration(
+              color: LemonColor.chineseBlack,
+              borderRadius: BorderRadius.circular(Sizing.medium),
+            ),
+            child: Center(
+              child: ThemeSvgIcon(
+                color: colorScheme.onSecondary,
+                builder: (colorFilter) => Assets.icons.icLock.svg(
+                  width: Sizing.xSmall,
+                  height: Sizing.xSmall,
+                  colorFilter: colorFilter,
+                ),
+              ),
+            ),
+          ),
+          title: t.event.eventBuyTickets.ticketLocked,
+          message: t.event.eventBuyTickets.ticketLockedDescription,
+        );
+      },
+      child: Stack(
+        children: [
+          Opacity(
+            opacity: isLocked ? 0.5 : 1,
+            child: Padding(
+              padding: EdgeInsets.all(Spacing.smMedium),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // image
+                  Container(
+                    width: Sizing.medium,
+                    height: Sizing.medium,
+                    decoration: BoxDecoration(
+                      borderRadius:
+                          BorderRadius.circular(LemonRadius.extraSmall),
+                    ),
+                    child: ClipRRect(
+                      borderRadius:
+                          BorderRadius.circular(LemonRadius.extraSmall),
+                      child: CachedNetworkImage(
+                        // TODO: api does not support yet
+                        imageUrl: "",
+                        placeholder: (_, __) => ticketThumbnail,
+                        errorWidget: (_, __, ___) => ticketThumbnail,
+                      ),
+                    ),
                   ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
-                    child: CachedNetworkImage(
-                      // TODO: api does not support yet
-                      imageUrl: "",
-                      placeholder: (_, __) => ticketThumbnail,
-                      errorWidget: (_, __, ___) => ticketThumbnail,
+                  SizedBox(width: Spacing.xSmall),
+                  // ticket type name and description
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Text(
+                          ticketType.title ?? '',
+                          style: Typo.medium.copyWith(
+                            color: colorScheme.onPrimary.withOpacity(0.87),
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        if (ticketType.description != null &&
+                            ticketType.description!.isNotEmpty) ...[
+                          SizedBox(height: 2.w),
+                          Padding(
+                            padding: EdgeInsets.only(
+                              right: isLocked ? Spacing.xLarge : 0,
+                            ),
+                            child: Text(
+                              ticketType.description ?? '',
+                              style: Typo.medium.copyWith(
+                                color: colorScheme.onSecondary,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              maxLines: 4,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                        SizedBox(height: Spacing.xSmall),
+                        if (!isLocked)
+                          ...(ticketType.prices ?? []).map((ticketPrice) {
+                            // Only apply for crypto flow, hide price item with network different
+                            // with current selected network filter
+                            if (ticketPrice.network?.isNotEmpty == true &&
+                                networkFilter != null &&
+                                ticketPrice.network != networkFilter) {
+                              return const SizedBox.shrink();
+                            }
+
+                            final isCryptoCurrency =
+                                ticketPrice.network?.isNotEmpty == true;
+
+                            if (isCryptoCurrency &&
+                                selectedPaymentMethod ==
+                                    SelectTicketsPaymentMethod.card) {
+                              return const SizedBox.shrink();
+                            }
+
+                            if (!isCryptoCurrency &&
+                                selectedPaymentMethod ==
+                                    SelectTicketsPaymentMethod.wallet) {
+                              return const SizedBox.shrink();
+                            }
+
+                            // Only apply for crypto flow, hide price item with network different
+                            // with current selected network filter
+                            if (ticketPrice.network?.isNotEmpty == true &&
+                                networkFilter != null &&
+                                ticketPrice.network != networkFilter) {
+                              return const SizedBox.shrink();
+                            }
+
+                            bool enabled = true;
+                            if (selectedCurrency == null) {
+                              enabled = true;
+                            } else {
+                              enabled = ticketPrice.currency ==
+                                      selectedCurrency &&
+                                  (isCryptoCurrency
+                                      ? ticketPrice.network == selectedNetwork
+                                      : true);
+                            }
+                            final decimals = EventTicketUtils.getEventCurrency(
+                                  currencies: eventCurrencies,
+                                  currency: ticketPrice.currency,
+                                  network: ticketPrice.network,
+                                )?.decimals?.toInt() ??
+                                2;
+
+                            return Container(
+                              margin:
+                                  EdgeInsets.only(bottom: Spacing.extraSmall),
+                              child: _PriceItem(
+                                decimals: decimals,
+                                count: enabled ? count : 0,
+                                currency: ticketPrice.currency!,
+                                network: ticketPrice.network,
+                                price: ticketPrice,
+                                disabled: !enabled,
+                                onIncrease: (newCount) {
+                                  add(
+                                    newCount: newCount,
+                                    currency: ticketPrice.currency!,
+                                    network: ticketPrice.network,
+                                  );
+                                },
+                                onDecrease: (newCount) {
+                                  minus(
+                                    newCount: newCount,
+                                    currency: ticketPrice.currency!,
+                                    network: ticketPrice.network,
+                                  );
+                                },
+                              ),
+                            );
+                          }),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          if (isLocked)
+            Positioned(
+              top: Spacing.smMedium,
+              right: Spacing.smMedium,
+              child: Container(
+                width: Sizing.medium,
+                height: Sizing.medium,
+                decoration: BoxDecoration(
+                  color: LemonColor.chineseBlack,
+                  borderRadius: BorderRadius.circular(LemonRadius.xSmall),
+                ),
+                child: Center(
+                  child: ThemeSvgIcon(
+                    color: LemonColor.coralReef,
+                    builder: (colorFilter) => Assets.icons.icLock.svg(
+                      colorFilter: colorFilter,
                     ),
                   ),
                 ),
-                SizedBox(width: Spacing.xSmall),
-                // ticket type name and description
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Text(
-                        ticketType.title ?? '',
-                        style: Typo.medium.copyWith(
-                          color: colorScheme.onPrimary.withOpacity(0.87),
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      if (ticketType.description != null &&
-                          ticketType.description!.isNotEmpty) ...[
-                        SizedBox(height: 2.w),
-                        Padding(
-                          padding: EdgeInsets.only(
-                            right: isLocked ? Spacing.xLarge : 0,
-                          ),
-                          child: Text(
-                            ticketType.description ?? '',
-                            style: Typo.medium.copyWith(
-                              color: colorScheme.onSecondary,
-                              fontWeight: FontWeight.w600,
-                            ),
-                            maxLines: 4,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ],
-                      SizedBox(height: Spacing.xSmall),
-                      if (!isLocked)
-                        ...(ticketType.prices ?? []).map((ticketPrice) {
-                          // Only apply for crypto flow, hide price item with network different
-                          // with current selected network filter
-                          if (ticketPrice.network?.isNotEmpty == true &&
-                              networkFilter != null &&
-                              ticketPrice.network != networkFilter) {
-                            return const SizedBox.shrink();
-                          }
-
-                          final isCryptoCurrency =
-                              ticketPrice.network?.isNotEmpty == true;
-
-                          if (isCryptoCurrency &&
-                              selectedPaymentMethod ==
-                                  SelectTicketsPaymentMethod.card) {
-                            return const SizedBox.shrink();
-                          }
-
-                          if (!isCryptoCurrency &&
-                              selectedPaymentMethod ==
-                                  SelectTicketsPaymentMethod.wallet) {
-                            return const SizedBox.shrink();
-                          }
-
-                          // Only apply for crypto flow, hide price item with network different
-                          // with current selected network filter
-                          if (ticketPrice.network?.isNotEmpty == true &&
-                              networkFilter != null &&
-                              ticketPrice.network != networkFilter) {
-                            return const SizedBox.shrink();
-                          }
-
-                          bool enabled = true;
-                          if (selectedCurrency == null) {
-                            enabled = true;
-                          } else {
-                            enabled =
-                                ticketPrice.currency == selectedCurrency &&
-                                    (isCryptoCurrency
-                                        ? ticketPrice.network == selectedNetwork
-                                        : true);
-                          }
-                          final decimals = EventTicketUtils.getEventCurrency(
-                                currencies: eventCurrencies,
-                                currency: ticketPrice.currency,
-                                network: ticketPrice.network,
-                              )?.decimals?.toInt() ??
-                              2;
-
-                          return Container(
-                            margin: EdgeInsets.only(bottom: Spacing.extraSmall),
-                            child: _PriceItem(
-                              decimals: decimals,
-                              count: enabled ? count : 0,
-                              currency: ticketPrice.currency!,
-                              network: ticketPrice.network,
-                              price: ticketPrice,
-                              disabled: !enabled,
-                              onIncrease: (newCount) {
-                                add(
-                                  newCount: newCount,
-                                  currency: ticketPrice.currency!,
-                                  network: ticketPrice.network,
-                                );
-                              },
-                              onDecrease: (newCount) {
-                                minus(
-                                  newCount: newCount,
-                                  currency: ticketPrice.currency!,
-                                  network: ticketPrice.network,
-                                );
-                              },
-                            ),
-                          );
-                        }),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        if (isLocked)
-          Positioned(
-            top: Spacing.smMedium,
-            right: Spacing.smMedium,
-            child: Container(
-              width: Sizing.medium,
-              height: Sizing.medium,
-              decoration: BoxDecoration(
-                color: LemonColor.chineseBlack,
-                borderRadius: BorderRadius.circular(LemonRadius.xSmall),
-              ),
-              child: Center(
-                child: ThemeSvgIcon(
-                  color: LemonColor.coralReef,
-                  builder: (colorFilter) => Assets.icons.icLock.svg(
-                    colorFilter: colorFilter,
-                  ),
-                ),
               ),
             ),
-          ),
-      ],
+        ],
+      ),
     );
   }
 }

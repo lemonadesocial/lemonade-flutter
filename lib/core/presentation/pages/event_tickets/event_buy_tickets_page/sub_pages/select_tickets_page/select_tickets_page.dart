@@ -388,7 +388,19 @@ class _SelectTicketViewState extends State<SelectTicketView> {
                             EventTicketUtils.filterTicketTypeByCategory(
                           response.ticketTypes ?? [],
                           category: selectedTicketCategory,
-                        );
+                        )..sort(
+                                (a, b) {
+                                  final aOrder = a.limited == true &&
+                                          a.whitelisted == false
+                                      ? -1
+                                      : 1;
+                                  final bOrder = b.limited == true &&
+                                          b.whitelisted == false
+                                      ? -1
+                                      : 1;
+                                  return bOrder.compareTo(aOrder);
+                                },
+                              );
                         final filteredTicketTypes = selectedPaymentMethod ==
                                 SelectTicketsPaymentMethod.card
                             ? EventTicketUtils.getTicketTypesSupportStripe(
