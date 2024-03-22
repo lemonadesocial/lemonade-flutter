@@ -55,7 +55,32 @@ class EventBuyTicketsSelectTicketCategoryPage extends StatelessWidget {
                 ],
               ),
             ),
-            BlocBuilder<GetEventTicketTypesBloc, GetEventTicketTypesState>(
+            BlocConsumer<GetEventTicketTypesBloc, GetEventTicketTypesState>(
+              listener: (context, state) {
+                state.maybeWhen(
+                  orElse: () => null,
+                  success: (response, currencies) {
+                    final allTickets = response.ticketTypes ?? [];
+                    final allCategories = allTickets
+                        .where((element) => element.categoryExpanded != null)
+                        .map((e) => e.categoryExpanded!)
+                        .toSet()
+                        .toList();
+                    if (allCategories.isEmpty || allCategories.length == 1) {
+                      context.read<SelectEventTicketsBloc>().add(
+                            SelectEventTicketsEvent.selectTicketCategory(
+                              category: allCategories.isEmpty
+                                  ? null
+                                  : allCategories.first.id,
+                            ),
+                          );
+                      context.router.replace(
+                        const SelectTicketsRoute(),
+                      );
+                    }
+                  },
+                );
+              },
               builder: (context, state) {
                 return state.when(
                   loading: () => SliverToBoxAdapter(

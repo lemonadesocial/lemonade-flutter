@@ -51,7 +51,9 @@
         },
         "redeem": "Redeem",
         "onOtherChain": "on other chain",
-        "viaOtherPaymentMethod": "via other payment method"
+        "viaOtherPaymentMethod": "via other payment method",
+        "ticketLocked": "Ticket locked!",
+        "ticketLockedDescription": "You need to be on the whitelist to purchase it"
     },
     "eventOrder": {
         "itemTotal": "Item total",
