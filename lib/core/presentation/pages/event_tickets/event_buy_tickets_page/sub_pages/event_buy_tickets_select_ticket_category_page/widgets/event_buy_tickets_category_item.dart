@@ -107,13 +107,15 @@ class EventBuyTicketsCategoryItem extends StatelessWidget {
                         fontFamily: FontFamily.nohemiVariable,
                       ),
                     ),
-                    SizedBox(height: 2.w),
-                    Text(
-                      ticketCategory!.title ?? '',
-                      style: Typo.small.copyWith(
-                        color: colorScheme.onSecondary,
+                    if (ticketCategory?.description?.isNotEmpty == true) ...[
+                      SizedBox(height: 2.w),
+                      Text(
+                        ticketCategory!.description ?? '',
+                        style: Typo.small.copyWith(
+                          color: colorScheme.onSecondary,
+                        ),
                       ),
-                    ),
+                    ],
                   ],
                 ),
               ),
