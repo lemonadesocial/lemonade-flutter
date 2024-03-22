@@ -45,7 +45,7 @@ class ReportUserDialog extends StatelessWidget with LemonBottomSheet {
 
           if (state.status == ReportUserStatus.error) {
             context.router.pop();
-            SnackBarUtils.showErrorSnackbar(t.common.somethingWrong);
+            SnackBarUtils.showError();
           }
         },
         builder: (context, state) {

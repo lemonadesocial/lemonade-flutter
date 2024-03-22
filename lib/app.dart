@@ -195,8 +195,8 @@ class _AppState extends State<_App> {
           connected: () => SnackBarUtils.showSuccessSnackbar(
             t.common.internetConnectionStatus.connected,
           ),
-          notConnected: () => SnackBarUtils.showErrorSnackbar(
-            t.common.internetConnectionStatus.disconnected,
+          notConnected: () => SnackBarUtils.showError(
+            message: t.common.internetConnectionStatus.disconnected,
           ),
           orElse: () {},
         );

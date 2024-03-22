@@ -48,7 +48,7 @@ class _SettingBlockPageState extends State<SettingBlockPage> {
         }
 
         if (state.status == BlockUserStatus.error) {
-          SnackBarUtils.showErrorSnackbar(t.common.somethingWrong);
+          SnackBarUtils.showError();
         }
       },
       child: Scaffold(

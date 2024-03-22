@@ -315,7 +315,7 @@ class _PriceItem extends StatelessWidget {
             onPressDisabled: () {
               SnackBarUtils.showError(
                 title: t.common.error.label,
-                subTitle: t.event.eventBuyTickets.multipleTicketsError,
+                message: t.event.eventBuyTickets.multipleTicketsError,
               );
             },
           ),

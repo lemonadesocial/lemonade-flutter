@@ -97,7 +97,7 @@ class _SendTokenViewState extends State<SendTokenPoc> {
                     });
                   } catch (e) {
                     if (e is JsonRpcError) {
-                      SnackBarUtils.showErrorSnackbar(e.message ?? '');
+                      SnackBarUtils.showError(message: e.message ?? '');
                     }
                   }
                 },
@@ -194,7 +194,7 @@ class _SendTokenViewState extends State<SendTokenPoc> {
                     });
                   } catch (e) {
                     if (e is JsonRpcError) {
-                      SnackBarUtils.showErrorSnackbar(e.message ?? '');
+                      SnackBarUtils.showError(message: e.message ?? '');
                     }
                   }
                 },

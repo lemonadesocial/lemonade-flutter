@@ -106,8 +106,8 @@ class _OwnerKeyBalanceWidgetState extends State<OwnerKeyBalanceWidget> {
                   stripeOnrampSupportedNetworkByCurrencyMap
                       .tryGet(destinationCurrency) as String?;
               if (destinationNetwork == null) {
-                return SnackBarUtils.showErrorSnackbar(
-                  t.payment.stripeOnramp.networkNotSupported,
+                return SnackBarUtils.showError(
+                  message: t.payment.stripeOnramp.networkNotSupported,
                 );
               }
 

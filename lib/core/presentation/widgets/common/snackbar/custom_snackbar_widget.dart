@@ -9,13 +9,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// Basic settings
 /// * [title] - title of snackbar
-/// * [subTitle] - sub-title if needed
+/// * [message] - sub-title if needed
 /// * [icon] - left icon
 class CustomSnackbar extends StatelessWidget {
   const CustomSnackbar({
     super.key,
     this.title = '',
-    this.subTitle = '',
+    this.message = '',
     this.icon,
     this.colorScheme,
   });
@@ -24,7 +24,7 @@ class CustomSnackbar extends StatelessWidget {
   final String title;
 
   /// The sub-title of snackbar
-  final String subTitle;
+  final String message;
 
   /// The custom icon of snackbar
   final Widget? icon;
@@ -69,11 +69,11 @@ class CustomSnackbar extends StatelessWidget {
                 style: Typo.medium.copyWith(
                     color: colorScheme?.onPrimary, fontWeight: FontWeight.w600),
               ),
-              subTitle != ''
+              message != ''
                   ? Padding(
                       padding: EdgeInsets.only(top: 2.h),
                       child: Text(
-                        subTitle,
+                        message,
                         style:
                             Typo.small.copyWith(color: colorScheme?.onSecondary),
                       ),

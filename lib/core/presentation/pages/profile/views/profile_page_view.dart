@@ -72,7 +72,7 @@ class _ProfilePageViewState extends State<ProfilePageView>
         }
 
         if (state.status == BlockUserStatus.error) {
-          SnackBarUtils.showErrorSnackbar(t.common.somethingWrong);
+          SnackBarUtils.showError();
         }
       },
       child: Scaffold(
