@@ -11,11 +11,33 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:matrix/matrix.dart' as matrix;
 import 'package:app/core/utils/date_utils.dart' as date_utils;
 
-class GuestEventApplicationFormProfileItems extends StatelessWidget {
-  final birthDayCtrl = TextEditingController();
-  GuestEventApplicationFormProfileItems({
+class GuestEventApplicationFormProfileItems extends StatefulWidget {
+  const GuestEventApplicationFormProfileItems({
     super.key,
   });
+
+  @override
+  State<GuestEventApplicationFormProfileItems> createState() =>
+      _GuestEventApplicationFormProfileItemsState();
+}
+
+class _GuestEventApplicationFormProfileItemsState
+    extends State<GuestEventApplicationFormProfileItems> {
+  final birthDayCtrl = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    final fieldState =
+        context.read<EventApplicationFormBloc>().state.fieldsState;
+    if (fieldState.tryGet(ProfileFieldKey.dateOfBirth.fieldKey) != null &&
+        fieldState.tryGet(ProfileFieldKey.dateOfBirth.fieldKey) != '') {
+      String dateOfBirthValue =
+          fieldState.tryGet(ProfileFieldKey.dateOfBirth.fieldKey).toString();
+      birthDayCtrl.text =
+          date_utils.DateUtils.formatDateTimeToDDMMYYYY(dateOfBirthValue);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,9 +57,13 @@ class GuestEventApplicationFormProfileItems extends StatelessWidget {
           children: applicationProfileFields.map((applicationProfileField) {
             final profileFieldKey = ProfileFieldKey.values.firstWhere(
               (element) => element.fieldKey == applicationProfileField.field,
+              orElse: () => ProfileFieldKey.unknown,
             );
             String? value =
                 state.fieldsState.tryGet(profileFieldKey.fieldKey).toString();
+            if (profileFieldKey == ProfileFieldKey.unknown) {
+              return const SizedBox();
+            }
             return Column(
               children: [
                 // Special handle for date picker

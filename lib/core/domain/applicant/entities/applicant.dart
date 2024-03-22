@@ -27,6 +27,8 @@ class Applicant with _$Applicant {
     String? pronoun,
     String? tagline,
     String? username,
+    @JsonKey(name: 'new_gender') required String? newGender,
+    @JsonKey(name: 'job_title') required String? jobTitle,
   }) = _Applicant;
 
   factory Applicant.fromJson(Map<String, dynamic> json) =>

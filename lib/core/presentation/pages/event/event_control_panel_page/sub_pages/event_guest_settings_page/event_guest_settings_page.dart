@@ -47,6 +47,10 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
       context.read<EventGuestSettingsBloc>().add(
             PrivateChanged(private: widget.event?.private ?? false),
           );
+      final eventApprovalRequired = widget.event?.approvalRequired ?? true;
+      context.read<EventGuestSettingsBloc>().add(
+            RequireApprovalChanged(approvalRequired: eventApprovalRequired),
+          );
     } else {
       final eventGuestSettingBloc =
           context.read<EventGuestSettingsBloc>().state;
@@ -221,6 +225,10 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
                                             .read<EventGuestSettingsBloc>()
                                             .state
                                             .private,
+                                        approvalRequired: context
+                                            .read<EventGuestSettingsBloc>()
+                                            .state
+                                            .approvalRequired,
                                       ),
                                     );
                               },

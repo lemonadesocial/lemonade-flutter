@@ -4,9 +4,13 @@ enum SortDirection {
 }
 
 enum LemonPronoun {
-  he,
-  she,
-  they,
+  he('He'),
+  she('She'),
+  they('They');
+
+  final String pronoun;
+
+  const LemonPronoun(this.pronoun);
 }
 
 enum LemonIndustry {
@@ -72,9 +76,12 @@ enum LemonGender {
 }
 
 enum ProfileFieldKey {
+  // Handle for unknown case
+  unknown('unknown', 'Unknown'),
+
   // Basic info
   displayName('display_name', 'Display name'),
-  pronouns('pronouns', 'Pronouns'),
+  pronoun('pronoun', 'Pronoun'),
   tagline('tagline', 'Tagline'),
   description('description', 'Bio'),
 
