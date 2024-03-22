@@ -150,8 +150,9 @@ class CreateVaultSubmitTransactionPageView extends StatelessWidget {
               deployVaultState.maybeWhen(
                 orElse: () => null,
                 failure: (failureReason) {
-                  SnackBarUtils.showErrorSnackbar(
-                    failureReason?.errorMessage ?? t.common.somethingWrong,
+                  SnackBarUtils.showError(
+                    message:
+                        failureReason?.errorMessage ?? t.common.somethingWrong,
                   );
                 },
                 success: (safeWalletAddress) {

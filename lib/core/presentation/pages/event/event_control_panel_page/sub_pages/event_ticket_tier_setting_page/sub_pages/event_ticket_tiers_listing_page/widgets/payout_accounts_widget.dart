@@ -5,7 +5,7 @@ import 'package:app/core/presentation/widgets/common/button/linear_gradient_butt
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/presentation/widgets/web3/connect_wallet_button.dart';
 import 'package:app/core/service/wallet/wallet_connect_service.dart';
-import 'package:app/core/utils/modal_utils.dart';
+import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -75,7 +75,7 @@ class _PayoutAccountsWidgetState extends State<PayoutAccountsWidget> {
               );
             }
             return LinearGradientButton(
-              onTap: () => showComingSoonDialog(context),
+              onTap: () => SnackBarUtils.showComingSoon(),
               // TODO:
               // onTap: () => Navigator.of(context).push(
               //   MaterialPageRoute(

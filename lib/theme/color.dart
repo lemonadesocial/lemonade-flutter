@@ -114,6 +114,7 @@ class LemonColor {
 
   //Snackbar
   static const snackBarSuccess = Color(0xff5fcb90);
+  static const jet = Color(0xff353535);
 
   // report
   static const report = Color(0xffFF6565);

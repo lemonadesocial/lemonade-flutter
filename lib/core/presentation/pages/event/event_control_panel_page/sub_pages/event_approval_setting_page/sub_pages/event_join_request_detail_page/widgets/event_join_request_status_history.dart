@@ -11,7 +11,7 @@ import 'package:app/core/presentation/widgets/common/dotted_line/dotted_line.dar
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/date_format_utils.dart';
-import 'package:app/core/utils/modal_utils.dart';
+import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
@@ -35,7 +35,7 @@ class EventJoinRequestStatusHistory extends StatelessWidget {
   bool get isRejected => eventJoinRequest.declinedBy != null;
 
   Widget _declinedBadge(BuildContext context) => InkWell(
-        onTap: () => showComingSoonDialog(context),
+        onTap: () => SnackBarUtils.showComingSoon(),
         child: Container(
           padding: EdgeInsets.symmetric(
             vertical: Spacing.superExtraSmall,

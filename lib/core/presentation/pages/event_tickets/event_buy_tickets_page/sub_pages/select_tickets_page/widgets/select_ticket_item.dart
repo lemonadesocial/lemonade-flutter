@@ -10,7 +10,6 @@ import 'package:app/core/utils/event_tickets_utils.dart';
 import 'package:app/core/utils/number_utils.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/core/utils/web3_utils.dart';
-import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
@@ -313,69 +312,11 @@ class _PriceItem extends StatelessWidget {
             onIncrease: onIncrease,
             disabled: disabled,
             onPressDisabled: () {
-              SnackBarUtils.showCustomSnackbar(
-                MultipleTicketsErrorSnackbar.create(context),
+              SnackBarUtils.showError(
+                title: t.common.error.label,
+                message: t.event.eventBuyTickets.multipleTicketsError,
               );
             },
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class MultipleTicketsErrorSnackbar {
-  static SnackBar create(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return SnackBar(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(
-          LemonRadius.normal,
-        ),
-      ),
-      behavior: SnackBarBehavior.floating,
-      margin: EdgeInsets.only(bottom: size.height - size.height * 0.2),
-      backgroundColor: LemonColor.chineseBlack,
-      showCloseIcon: true,
-      closeIconColor: colorScheme.onSecondary,
-      content: Row(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(LemonRadius.normal),
-              color: LemonColor.errorRedBg.withOpacity(0.2),
-            ),
-            width: Sizing.medium,
-            height: Sizing.medium,
-            child: Center(
-              child: Assets.icons.icError.svg(),
-            ),
-          ),
-          SizedBox(width: Spacing.small),
-          Flexible(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  t.event.error,
-                  style: Typo.small.copyWith(
-                    color: colorScheme.onPrimary.withOpacity(0.87),
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                SizedBox(
-                  height: 2.w,
-                ),
-                Text(
-                  t.event.eventBuyTickets.multipleTicketsError,
-                  style: Typo.small.copyWith(
-                    color: colorScheme.onSecondary,
-                  ),
-                ),
-              ],
-            ),
           ),
         ],
       ),

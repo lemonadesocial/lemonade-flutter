@@ -1,6 +1,7 @@
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/bottomsheet/lemon_snap_bottom_sheet_widget.dart';
 import 'package:app/core/utils/device_utils.dart';
+import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -11,7 +12,6 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:app/core/utils/modal_utils.dart';
 
 class AddVaultBottomSheet extends StatelessWidget {
   const AddVaultBottomSheet({
@@ -79,7 +79,7 @@ class AddVaultBottomSheet extends StatelessWidget {
                     ),
                     SizedBox(height: Spacing.xSmall),
                     _CreateVaultOptionItem(
-                      onPressed: () => showComingSoonDialog(context),
+                      onPressed: () => SnackBarUtils.showComingSoon(),
                       title: t.vault.vaultType.community,
                       description:
                           t.vault.createVaultBottomSheet.communityDescription,
@@ -98,7 +98,7 @@ class AddVaultBottomSheet extends StatelessWidget {
                     SizedBox(height: Spacing.medium),
                     // TODO: temporary hide
                     // InkWell(
-                    //   onTap: () => showComingSoonDialog(context),
+                    //   onTap: () => SnackBarUtils.showComingSoon(),
                     //   child: Row(
                     //     mainAxisAlignment: MainAxisAlignment.center,
                     //     children: [

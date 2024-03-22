@@ -89,8 +89,9 @@ class EventApplicationFormProfileSettingPage extends StatelessWidget
           listener: (context, state) {
             if (state.status ==
                 EventApplicationFormProfileSettingStatus.success) {
-              SnackBarUtils.showSuccessSnackbar(
-                t.event.applicationForm.updateApplicationFormSuccessfully,
+              SnackBarUtils.showSuccess(
+                message:
+                    t.event.applicationForm.updateApplicationFormSuccessfully,
               );
               getEventDetailBloc.add(
                 GetEventDetailEvent.fetch(

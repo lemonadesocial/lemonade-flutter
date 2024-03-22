@@ -53,8 +53,8 @@ class ShowRecoveryPhraseBottomSheet extends StatelessWidget {
                               await Clipboard.setData(
                                 ClipboardData(text: seedPhrase),
                               );
-                              SnackBarUtils.showSuccessSnackbar(
-                                t.common.copiedToClipboard,
+                              SnackBarUtils.showInfo(
+                                message: t.common.copiedToClipboard,
                               );
                             },
                             width: 80.w,

@@ -31,6 +31,7 @@ import 'package:app/core/presentation/widgets/custom_error_widget.dart';
 import 'package:app/core/application/newsfeed/newsfeed_listing_bloc/newsfeed_listing_bloc.dart';
 import 'package:app/core/data/post/newsfeed_repository_impl.dart';
 import 'package:app/core/service/newsfeed/newsfeed_service.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:web3modal_flutter/web3modal_flutter.dart';
 
@@ -191,37 +192,50 @@ class _AppState extends State<_App> {
       listenWhen: (prev, cur) => prev != cur,
       listener: (context, state) {
         state.maybeWhen(
-          connected: () => SnackBarUtils.showSuccessSnackbar(
-            t.common.internetConnectionStatus.connected,
+          connected: () => SnackBarUtils.showSuccess(
+            message: t.common.internetConnectionStatus.connected,
           ),
-          notConnected: () => SnackBarUtils.showErrorSnackbar(
-            t.common.internetConnectionStatus.disconnected,
+          notConnected: () => SnackBarUtils.showError(
+            message: t.common.internetConnectionStatus.disconnected,
           ),
           orElse: () {},
         );
       },
       child: Web3ModalTheme(
         isDarkMode: true,
-        child: MaterialApp.router(
-          scaffoldMessengerKey: SnackBarUtils.rootScaffoldMessengerKey,
-          locale: _getCurrentLocale(context),
-          // use provider
-          supportedLocales: _supportedLocales,
-          localizationsDelegates: _localizationsDelegates,
-          themeMode: ThemeMode.dark,
-          darkTheme: lemonadeAppDarkThemeData,
-          theme: lemonadeAppLightThemeData,
-          routerDelegate: widget.router.delegate(
-            navigatorObservers: () => <NavigatorObserver>[MyRouterObserver()],
+        child: StyledToast(
+          locale: const Locale('en', 'US'),
+          toastPositions: StyledToastPosition.top,
+          toastAnimation: StyledToastAnimation.slideFromTop,
+          reverseAnimation: StyledToastAnimation.fade,
+          curve: Curves.linearToEaseOut,
+          reverseCurve: Curves.linearToEaseOut,
+          duration: const Duration(seconds: 4),
+          animDuration: const Duration(milliseconds: 800),
+          dismissOtherOnShow: true,
+          fullWidth: false,
+          isHideKeyboard: false,
+          isIgnoring: true,
+          child: MaterialApp.router(
+            locale: _getCurrentLocale(context),
+            // use provider
+            supportedLocales: _supportedLocales,
+            localizationsDelegates: _localizationsDelegates,
+            themeMode: ThemeMode.dark,
+            darkTheme: lemonadeAppDarkThemeData,
+            theme: lemonadeAppLightThemeData,
+            routerDelegate: widget.router.delegate(
+              navigatorObservers: () => <NavigatorObserver>[MyRouterObserver()],
+            ),
+            routeInformationParser:
+                widget.router.defaultRouteParser(includePrefixMatches: true),
+            builder: (context, widget) {
+              ErrorWidget.builder = (FlutterErrorDetails errorDetails) {
+                return CustomError(errorDetails: errorDetails);
+              };
+              return FlutterEasyLoading(child: widget);
+            },
           ),
-          routeInformationParser:
-              widget.router.defaultRouteParser(includePrefixMatches: true),
-          builder: (context, widget) {
-            ErrorWidget.builder = (FlutterErrorDetails errorDetails) {
-              return CustomError(errorDetails: errorDetails);
-            };
-            return FlutterEasyLoading(child: widget);
-          },
         ),
       ),
     );

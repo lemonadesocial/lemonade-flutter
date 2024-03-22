@@ -83,8 +83,8 @@ class _EventLocationSettingDetailPageState
           listener: (context, state) async {
             if (state.status.isSuccess) {
               context.read<AuthBloc>().add(const AuthEvent.refreshData());
-              SnackBarUtils.showSuccessSnackbar(
-                t.event.locationSetting.addNewLocationSuccessfully,
+              SnackBarUtils.showSuccess(
+                message: t.event.locationSetting.addNewLocationSuccessfully,
               );
               AutoRouter.of(context).popTop();
             }
