@@ -20,6 +20,7 @@ class SelectEventTicketsBloc
   String? selectedCurrency;
   // only for SelectTicketsPaymentMethod.wallet
   String? selectedNetwork;
+  String? selectedTicketCategory;
 
   SelectEventTicketsBloc()
       : super(
@@ -40,6 +41,7 @@ class SelectEventTicketsBloc
     // TODO:
     on<SelectEventTicketsEventOnSelectCurrency>(_onSelectCurrency);
     on<SelectEventTicketsEventOnSelectPaymentMethod>(_onSelectPaymentMethod);
+    on<SelectEventTicketsEventOnSelectTicketCategory>(_onSelectTicketCategory);
     on<SelectEventTicketsEventOnClear>(_onClear);
   }
 
@@ -84,6 +86,24 @@ class SelectEventTicketsBloc
         selectedCurrency: selectedCurrency,
         selectedTickets: [],
         isSelectionValid: false,
+      ),
+    );
+  }
+
+  void _onSelectTicketCategory(
+    SelectEventTicketsEventOnSelectTicketCategory event,
+    Emitter emit,
+  ) {
+    selectedTicketCategory = event.category;
+    emit(
+      state.copyWith(
+        selectedTickets: [],
+        isSelectionValid: false,
+        selectedTicketCategory: selectedTicketCategory,
+        isPaymentRequired: false,
+        selectedCurrency: null,
+        selectedNetwork: null,
+        totalAmount: null,
       ),
     );
   }
@@ -202,6 +222,9 @@ class SelectEventTicketsEvent with _$SelectEventTicketsEvent {
   factory SelectEventTicketsEvent.selectPaymentMethod({
     required SelectTicketsPaymentMethod paymentMethod,
   }) = SelectEventTicketsEventOnSelectPaymentMethod;
+  factory SelectEventTicketsEvent.selectTicketCategory({
+    String? category,
+  }) = SelectEventTicketsEventOnSelectTicketCategory;
   factory SelectEventTicketsEvent.clear() = SelectEventTicketsEventOnClear;
 }
 
@@ -215,5 +238,6 @@ class SelectEventTicketsState with _$SelectEventTicketsState {
     String? selectedCurrency,
     Either<double, BigInt>? totalAmount,
     String? selectedNetwork,
+    String? selectedTicketCategory,
   }) = _SelectEventTicketsState;
 }

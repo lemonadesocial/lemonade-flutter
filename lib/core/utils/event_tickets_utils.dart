@@ -200,4 +200,13 @@ class EventTicketUtils {
       decimals: currency?.decimals?.toInt(),
     );
   }
+
+  static List<PurchasableTicketType> filterTicketTypeByCategory(
+    List<PurchasableTicketType> ticketTypes, {
+    String? category,
+  }) {
+    return ticketTypes
+        .where((element) => element.category == category)
+        .toList();
+  }
 }

@@ -33,6 +33,7 @@
     "confirmed": "confirmed",
     "eventBuyTickets": {
         "selectTickets": "Select tickets",
+        "selectCategory": "Select category",
         "orderSummary": "Order summary",
         "enterPromoCode": "Enter promo code",
         "selectCurrency": "Please select currency first",
@@ -105,6 +106,10 @@
     "tickets(ordinal)": {
         "one": "ticket",
         "other": "tickets"
+    },
+    "otherTickets(ordinal)": {
+        "one": "other ticket",
+        "other": "other tickets"
     },
     "reservations(ordinal)": {
         "one": "reservation",
