@@ -3,8 +3,6 @@ import 'dart:convert';
 
 import 'package:app/core/config.dart';
 import 'package:app/core/data/fcm/fcm_mutation.dart';
-import 'package:app/core/managers/crash_analytics_manager.dart';
-import 'package:app/core/presentation/widgets/custom_error_widget.dart';
 import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/core/oauth/oauth.dart';
 import 'package:app/injection/register_module.dart';
@@ -22,7 +20,6 @@ import 'package:matrix/matrix.dart';
 import 'package:app/firebase_options_production.dart'
     as firebase_options_production;
 import 'package:app/firebase_options_staging.dart' as firebase_options_staging;
-import 'package:sentry_flutter/sentry_flutter.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   if (kDebugMode) {

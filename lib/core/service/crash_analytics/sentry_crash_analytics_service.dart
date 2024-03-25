@@ -17,22 +17,25 @@ class SentryCrashAnalyticsService implements CrashAnalyticsService {
         'MissingPluginException(No implementation found for method setAccelerationSamplingPeriod on channel dev.fluttercommunity.plus/sensors/method)') {
       return null;
     }
-
     if (event.throwable is OperationException) {
       final exception = event.throwable as OperationException;
-      event = event.copyWith(fingerprint: [
-        '{{ default }}',
-        exception.graphqlErrors.toString(),
-        exception.originalStackTrace.toString(),
-      ]);
+      event = event.copyWith(
+        fingerprint: [
+          '{{ default }}',
+          exception.graphqlErrors.toString(),
+          exception.originalStackTrace.toString(),
+        ],
+      );
     }
     if (event.throwable is LinkException) {
       final exception = event.throwable as LinkException;
-      event = event.copyWith(fingerprint: [
-        '{{ default }}',
-        exception.originalException.toString(),
-        exception.originalStackTrace.toString(),
-      ]);
+      event = event.copyWith(
+        fingerprint: [
+          '{{ default }}',
+          exception.originalException.toString(),
+          exception.originalStackTrace.toString(),
+        ],
+      );
     }
     return event;
   }

@@ -1,10 +1,6 @@
-import 'dart:async';
-
 import 'package:app/app.dart';
-import 'package:app/core/config.dart';
 import 'package:app/core/managers/crash_analytics_manager.dart';
 import 'package:app/core/oauth/oauth.dart';
-import 'package:app/core/service/crash_analytics/sentry_crash_analytics_service.dart';
 import 'package:app/core/service/firebase/firebase_service.dart';
 import 'package:app/core/service/matrix/matrix_service.dart';
 import 'package:app/core/service/wallet/wallet_connect_service.dart';

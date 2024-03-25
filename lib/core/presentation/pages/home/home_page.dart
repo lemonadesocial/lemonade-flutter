@@ -44,8 +44,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final List<String> items = ['Item 1', 'Item 2'];
-
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
@@ -81,20 +79,7 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       backgroundColor: LemonColor.black,
-      // body: const HomeNewsfeedListView(),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'This is a Widget Error Example',
-            ),
-            Text(
-              items[2],
-            ),
-          ],
-        ),
-      ),
+      body: const HomeNewsfeedListView(),
     );
   }
 }
