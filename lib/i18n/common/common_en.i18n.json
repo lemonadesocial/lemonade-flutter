@@ -162,5 +162,14 @@
     "commingSoon": "Comming soon",
     "commingSoonDescription": "Currently only available on web",
     "info": "Info",
-    "success": "Success"
+    "success": "Success",
+    "feedback": {
+        "name": "Name",
+        "email": "Email",
+        "whatHappen": "What happen?",
+        "feedbackSubmitted": "Feedback submitted",
+        "thankForFeedback": "Thank you for your feedback!",
+        "feedbackDescription": "Our team has been notified. If you'd like to help, tell us what happened below.",
+        "submitFeedback": "Submit feedback"
+    }
 }

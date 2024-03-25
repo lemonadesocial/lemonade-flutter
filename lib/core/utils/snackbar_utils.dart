@@ -6,8 +6,14 @@ import 'package:app/theme/sizing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 
+final GlobalKey<ScaffoldMessengerState> _rootScaffoldMessengerKey =
+    GlobalKey<ScaffoldMessengerState>();
+
 class SnackBarUtils {
   static ColorScheme? _colorScheme;
+
+  static GlobalKey<ScaffoldMessengerState> get rootScaffoldMessengerKey =>
+      _rootScaffoldMessengerKey;
 
   static init(ColorScheme colorScheme) {
     _colorScheme = colorScheme;

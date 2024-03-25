@@ -1,10 +1,12 @@
 // ignore_for_file: constant_identifier_names
 
 import 'package:app/core/config.dart';
+import 'package:app/core/managers/crash_analytics_manager.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class GraphQLErrorCodeStrings {
   static const String GRAPHQL_PARSE_FAILED = "GRAPHQL_PARSE_FAILED";
@@ -59,6 +61,11 @@ class CustomErrorHandler {
       final errorCode = getFirstErrorCode(errors);
       final errorMessage = getErrorMessage(errors);
       showSnackbarError(errorCode, errorMessage);
+      if (errorCode == GraphQLErrorCodeStrings.INTERNAL_SERVER_ERROR) {
+        CrashAnalyticsManager()
+            .crashAnalyticsService
+            ?.captureError(errors, exception.originalStackTrace);
+      }
     }
     FirebaseCrashlytics.instance.log(exception.toString());
     return null;
@@ -76,6 +83,10 @@ class CustomErrorHandler {
     final errorCode = getFirstErrorCode(errors);
     final errorMessage = getErrorMessage(errors);
     showSnackbarError(errorCode, errorMessage);
+    Sentry.captureException(
+      errors,
+      stackTrace: errors?.first.extensions,
+    );
     FirebaseCrashlytics.instance.log(response.errors.toString());
     return null;
   }
