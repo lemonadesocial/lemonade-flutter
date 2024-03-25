@@ -128,35 +128,27 @@ class PostProfileCardView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    GestureDetector(
-                      behavior: HitTestBehavior.translucent,
-                      onTap: () {
-                        final isMe =
-                            AuthUtils.isMe(context, user: post.userExpanded!);
-                        if (isMe) {
-                          AutoRouter.of(context)
-                              .navigate(const MyProfileRoute());
-                        } else {
-                          AutoRouter.of(context)
-                              .navigate(ProfileRoute(userId: post.user));
-                        }
-                      },
-                      child: Text(
-                        postName,
-                        style: Typo.medium.copyWith(
-                          color: colorScheme.onPrimary.withOpacity(0.87),
-                          fontWeight: FontWeight.w600,
+                    Flexible(
+                      child: RichText(
+                        text: TextSpan(
+                          text: postName,
+                          style: Typo.medium.copyWith(
+                            color: colorScheme.onPrimary.withOpacity(0.87),
+                            fontWeight: FontWeight.w600,
+                          ),
+                          children: [
+                            if (postCreatedAt != null)
+                              TextSpan(
+                                text: '  •  ${timeago.format(postCreatedAt!)}',
+                                style: Typo.medium.copyWith(
+                                    color: colorScheme.onSurfaceVariant),
+                              ),
+                          ],
                         ),
                       ),
                     ),
-                    if (postCreatedAt != null)
-                      Text(
-                        '  •  ${timeago.format(postCreatedAt!)}',
-                        style: Typo.medium
-                            .copyWith(color: colorScheme.onSurfaceVariant),
-                      ),
-                    const Spacer(),
                     GestureDetector(
                       onTap: () {
                         SnackBarUtils.showComingSoon();
