@@ -51,20 +51,23 @@ class _EventPendingJoinRequestItemState
       context: context,
       future: () async {
         if (action == ModifyJoinRequestAction.approve) {
-          return await getIt<EventRepository>().approveUserJoinRequest(
+          await getIt<EventRepository>().approveUserJoinRequest(
             input: Input$ApproveUserJoinRequestsInput(
               event: eventId,
               requests: [joinRequest.id ?? ''],
             ),
           );
+        } else {
+          await getIt<EventRepository>().declineUserJoinRequest(
+            input: Input$DeclineUserJoinRequestsInput(
+              event: eventId,
+              requests: [joinRequest.id ?? ''],
+            ),
+          );
         }
-
-        return await getIt<EventRepository>().declineUserJoinRequest(
-          input: Input$DeclineUserJoinRequestsInput(
-            event: eventId,
-            requests: [joinRequest.id ?? ''],
-          ),
-        );
+        context.read<GetEventDetailBloc>().add(
+              GetEventDetailEvent.fetch(eventId: eventId),
+            );
       },
     );
   }
@@ -172,7 +175,7 @@ class _EventPendingJoinRequestItemState
     );
   }
 
-  Future<Object?> goToJoinRequestDetail(BuildContext context, Event? event) {
+  Future<void> goToJoinRequestDetail(BuildContext context, Event? event) {
     return AutoRouter.of(context).push(
       EventJoinRequestDetailRoute(
         eventJoinRequest: widget.eventJoinRequest,
