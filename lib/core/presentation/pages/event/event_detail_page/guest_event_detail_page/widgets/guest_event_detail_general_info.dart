@@ -40,9 +40,6 @@ class GuestEventDetailGeneralInfo extends StatelessWidget {
         ),
         if (event.description != null && event.description!.isNotEmpty) ...[
           ReadMoreWidget(body: event.description ?? ''),
-          SizedBox(
-            height: Spacing.xSmall * 3,
-          ),
         ],
       ],
     );

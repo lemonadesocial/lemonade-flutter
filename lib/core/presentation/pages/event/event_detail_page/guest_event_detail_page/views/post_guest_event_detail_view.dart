@@ -34,6 +34,40 @@ class PostGuestEventDetailView extends StatelessWidget {
           ),
           loading: () => Loading.defaultLoading(context),
           fetched: (event) {
+            final widgets = [
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: Spacing.smMedium,
+                ),
+                child: GuestEventDetailBasicInfo(event: event),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: Spacing.smMedium,
+                ),
+                child: GuestEventDetailDashboard(event: event),
+              ),
+              if (EventUtils.hasPoapOffers(event))
+                GuestEventPoapOffers(
+                  event: event,
+                ),
+              if (event.latitude != null && event.longitude != null)
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: Spacing.smMedium,
+                  ),
+                  child: GuestEventLocation(event: event),
+                ),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: Spacing.smMedium,
+                ),
+                child: GuestEventDetailAboutCard(event: event),
+              ),
+              if ((event.newNewPhotosExpanded ?? []).isNotEmpty)
+                GuestEventDetailPhotos(event: event),
+              GuestEventDetailHosts(event: event),
+            ];
             return SafeArea(
               bottom: false,
               child: Stack(
@@ -47,74 +81,14 @@ class PostGuestEventDetailView extends StatelessWidget {
                           event: event,
                         ),
                       ),
-                      SliverPadding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-                        sliver: SliverToBoxAdapter(
-                          child: GuestEventDetailBasicInfo(event: event),
+                      SliverList.separated(
+                        itemCount: widgets.length,
+                        itemBuilder: (context, index) {
+                          return widgets[index];
+                        },
+                        separatorBuilder: (context, index) => SizedBox(
+                          height: Spacing.smMedium * 2,
                         ),
-                      ),
-                      SliverPadding(
-                        padding: EdgeInsets.only(top: Spacing.xLarge),
-                      ),
-                      SliverPadding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-                        sliver: SliverToBoxAdapter(
-                          child: GuestEventDetailDashboard(event: event),
-                        ),
-                      ),
-                      if (EventUtils.hasPoapOffers(event)) ...[
-                        SliverPadding(
-                          padding: EdgeInsets.only(
-                            top: Spacing.smMedium * 2,
-                          ),
-                        ),
-                        SliverToBoxAdapter(
-                          child: GuestEventPoapOffers(
-                            event: event,
-                          ),
-                        ),
-                      ],
-                      SliverPadding(
-                        padding: EdgeInsets.only(top: Spacing.smMedium),
-                      ),
-                      if (event.latitude != null &&
-                          event.longitude != null) ...[
-                        SliverPadding(
-                          padding: EdgeInsets.symmetric(
-                            vertical: Spacing.smMedium,
-                            horizontal: Spacing.smMedium,
-                          ),
-                          sliver: SliverToBoxAdapter(
-                            child: GuestEventLocation(event: event),
-                          ),
-                        ),
-                      ],
-                      SliverPadding(
-                        padding: EdgeInsets.symmetric(
-                          vertical: Spacing.smMedium,
-                          horizontal: Spacing.smMedium,
-                        ),
-                        sliver: SliverToBoxAdapter(
-                          child: GuestEventDetailAboutCard(event: event),
-                        ),
-                      ),
-                      SliverPadding(
-                        padding: EdgeInsets.only(
-                          top: Spacing.smMedium,
-                        ),
-                      ),
-                      SliverToBoxAdapter(
-                        child: GuestEventDetailPhotos(event: event),
-                      ),
-                      SliverPadding(
-                        padding: EdgeInsets.symmetric(
-                          vertical: Spacing.smMedium,
-                        ),
-                      ),
-                      SliverToBoxAdapter(
-                        child: GuestEventDetailHosts(event: event),
                       ),
                       SliverToBoxAdapter(
                         child: SizedBox(height: Spacing.xLarge * 3),

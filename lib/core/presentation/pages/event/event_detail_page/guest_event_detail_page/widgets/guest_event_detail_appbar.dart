@@ -11,15 +11,36 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class GuestEventDetailAppBar extends StatelessWidget {
+class GuestEventDetailAppBar extends StatefulWidget {
   const GuestEventDetailAppBar({
     super.key,
     required this.event,
-    required this.isCollapsed,
+    required this.scrollController,
   });
 
+  final ScrollController scrollController;
   final Event event;
-  final bool isCollapsed;
+
+  @override
+  State<GuestEventDetailAppBar> createState() => _GuestEventDetailAppBarState();
+}
+
+class _GuestEventDetailAppBarState extends State<GuestEventDetailAppBar> {
+  bool _isSliverAppBarCollapsed = false;
+
+  @override
+  initState() {
+    super.initState();
+    widget.scrollController.addListener(() {
+      final mIsSliverAppBarCollapsed = widget.scrollController.hasClients &&
+          widget.scrollController.offset > 150.w;
+      if (_isSliverAppBarCollapsed == mIsSliverAppBarCollapsed) return;
+      setState(() {
+        _isSliverAppBarCollapsed = mIsSliverAppBarCollapsed;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final isIpad = DeviceUtils.isIpad();
@@ -33,9 +54,9 @@ class GuestEventDetailAppBar extends StatelessWidget {
       centerTitle: true,
       title: AnimatedOpacity(
         duration: const Duration(milliseconds: 300),
-        opacity: isCollapsed ? 1 : 0,
+        opacity: _isSliverAppBarCollapsed ? 1 : 0,
         child: Text(
-          event.title ?? '',
+          widget.event.title ?? '',
           style: Typo.extraMedium.copyWith(
             fontFamily: FontFamily.switzerVariable,
           ),
@@ -44,7 +65,7 @@ class GuestEventDetailAppBar extends StatelessWidget {
       flexibleSpace: FlexibleSpaceBar(
         expandedTitleScale: 1,
         collapseMode: CollapseMode.pin,
-        background: _EventDetailCover(event: event),
+        background: _EventDetailCover(event: widget.event),
       ),
     );
   }
