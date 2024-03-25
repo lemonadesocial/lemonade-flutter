@@ -143,7 +143,8 @@ class PostProfileCardView extends StatelessWidget {
                               TextSpan(
                                 text: '  •  ${timeago.format(postCreatedAt!)}',
                                 style: Typo.medium.copyWith(
-                                    color: colorScheme.onSurfaceVariant),
+                                  color: colorScheme.onSurfaceVariant,
+                                ),
                               ),
                           ],
                         ),
