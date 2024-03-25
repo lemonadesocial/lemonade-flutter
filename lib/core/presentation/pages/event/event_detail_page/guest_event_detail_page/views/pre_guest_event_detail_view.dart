@@ -1,6 +1,7 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/application/report/report_bloc/report_bloc.dart';
+import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_appbar.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_general_info.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_hosts.dart';
@@ -29,24 +30,10 @@ class PreGuestEventDetailView extends StatefulWidget {
 
 class PreGuestEventDetailViewState extends State<PreGuestEventDetailView> {
   late final ScrollController _scrollController = ScrollController();
-  bool _isSliverAppBarCollapsed = false;
   final reportBloc = ReportBloc();
 
   @override
-  void initState() {
-    super.initState();
-    _scrollController.addListener(() {
-      final mIsSliverAppBarCollapsed =
-          _scrollController.hasClients && _scrollController.offset > 150.w;
-      if (_isSliverAppBarCollapsed == mIsSliverAppBarCollapsed) return;
-      setState(() {
-        _isSliverAppBarCollapsed = mIsSliverAppBarCollapsed;
-      });
-    });
-  }
-
-  @override
-  void dispose() {
+  dispose() {
     _scrollController.dispose();
     super.dispose();
   }
@@ -73,6 +60,29 @@ class PreGuestEventDetailViewState extends State<PreGuestEventDetailView> {
           fetched: (event) {
             final isOwnEvent =
                 EventUtils.isOwnEvent(event: event, userId: userId);
+            final widgets = [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+                child: GuestEventDetailGeneralInfo(
+                  event: event,
+                ),
+              ),
+              if (event.approvalRequired == true || event.guestLimit != null)
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+                  child: GuestEventDetailRSVPStatus(
+                    event: event,
+                  ),
+                ),
+              if (event.latitude != null && event.longitude != null)
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+                  child: GuestEventLocation(event: event),
+                ),
+              if ((event.newNewPhotosExpanded ?? []).isNotEmpty)
+                GuestEventDetailPhotos(event: event),
+              GuestEventDetailHosts(event: event),
+            ];
             return SafeArea(
               child: Stack(
                 children: [
@@ -81,95 +91,29 @@ class PreGuestEventDetailViewState extends State<PreGuestEventDetailView> {
                     controller: _scrollController,
                     slivers: [
                       GuestEventDetailAppBar(
-                        isCollapsed: _isSliverAppBarCollapsed,
+                        scrollController: _scrollController,
                         event: event,
                       ),
                       SliverPadding(
                         padding: EdgeInsets.only(top: Spacing.large),
                       ),
-                      SliverPadding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-                        sliver: SliverToBoxAdapter(
-                          child: GuestEventDetailGeneralInfo(
-                            event: event,
-                          ),
+                      SliverList.separated(
+                        itemCount: widgets.length,
+                        itemBuilder: (context, index) {
+                          return widgets[index];
+                        },
+                        separatorBuilder: (context, index) => SizedBox(
+                          height: Spacing.smMedium * 2,
                         ),
-                      ),
-                      if (event.approvalRequired == true ||
-                          event.guestLimit != null) ...[
-                        SliverPadding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: Spacing.smMedium,
-                          ),
-                          sliver: SliverToBoxAdapter(
-                            child: GuestEventDetailRSVPStatus(
-                              event: event,
-                            ),
-                          ),
-                        ),
-                        SliverPadding(
-                          padding: EdgeInsets.symmetric(
-                            vertical: Spacing.smMedium,
-                          ),
-                        ),
-                      ],
-                      if (event.latitude != null &&
-                          event.longitude != null) ...[
-                        SliverPadding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: Spacing.smMedium,
-                          ),
-                          sliver: SliverToBoxAdapter(
-                            child: GuestEventLocation(event: event),
-                          ),
-                        ),
-                        SliverPadding(
-                          padding: EdgeInsets.symmetric(
-                            vertical: Spacing.smMedium,
-                          ),
-                        ),
-                      ],
-                      SliverToBoxAdapter(
-                        child: GuestEventDetailPhotos(event: event),
-                      ),
-                      SliverPadding(
-                        padding: EdgeInsets.symmetric(
-                          vertical: Spacing.smMedium,
-                        ),
-                      ),
-                      SliverToBoxAdapter(
-                        child: GuestEventDetailHosts(event: event),
                       ),
                       SliverToBoxAdapter(
                         child: SizedBox(height: 84.w),
                       ),
                     ],
                   ),
-                  Align(
-                    alignment: Alignment.topCenter,
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: Spacing.extraSmall,
-                        vertical: Spacing.extraSmall,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          BlurCircle(
-                            child: LemonBackButton(
-                              color: _isSliverAppBarCollapsed
-                                  ? colorScheme.onPrimary
-                                  : colorScheme.onSurface,
-                            ),
-                          ),
-                          GuestEventMoreActions(
-                            event: event,
-                            isAppBarCollapsed: _isSliverAppBarCollapsed,
-                          ),
-                        ],
-                      ),
-                    ),
+                  _FloatingButtonsBar(
+                    scrollController: _scrollController,
+                    event: event,
                   ),
                   if (!isOwnEvent)
                     Align(
@@ -182,6 +126,66 @@ class PreGuestEventDetailViewState extends State<PreGuestEventDetailView> {
               ),
             );
           },
+        ),
+      ),
+    );
+  }
+}
+
+class _FloatingButtonsBar extends StatefulWidget {
+  final Event event;
+  final ScrollController scrollController;
+
+  const _FloatingButtonsBar({
+    required this.event,
+    required this.scrollController,
+  });
+
+  @override
+  State<_FloatingButtonsBar> createState() => _FloatingButtonsBarState();
+}
+
+class _FloatingButtonsBarState extends State<_FloatingButtonsBar> {
+  bool _isSliverAppBarCollapsed = false;
+
+  @override
+  initState() {
+    super.initState();
+    widget.scrollController.addListener(() {
+      final mIsSliverAppBarCollapsed = widget.scrollController.hasClients &&
+          widget.scrollController.offset > 150.w;
+      if (_isSliverAppBarCollapsed == mIsSliverAppBarCollapsed) return;
+      setState(() {
+        _isSliverAppBarCollapsed = mIsSliverAppBarCollapsed;
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Align(
+      alignment: Alignment.topCenter,
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: Spacing.extraSmall,
+          vertical: Spacing.extraSmall,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            BlurCircle(
+              child: LemonBackButton(
+                color: _isSliverAppBarCollapsed
+                    ? colorScheme.onPrimary
+                    : colorScheme.onSurface,
+              ),
+            ),
+            GuestEventMoreActions(
+              event: widget.event,
+              isAppBarCollapsed: _isSliverAppBarCollapsed,
+            ),
+          ],
         ),
       ),
     );
