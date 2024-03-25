@@ -83,10 +83,10 @@ class CustomErrorHandler {
     final errorCode = getFirstErrorCode(errors);
     final errorMessage = getErrorMessage(errors);
     showSnackbarError(errorCode, errorMessage);
-    Sentry.captureException(
-      errors,
-      stackTrace: errors?.first.extensions,
-    );
+    CrashAnalyticsManager().crashAnalyticsService?.captureError(
+          errors,
+          StackTrace.fromString(errors.toString()),
+        );
     FirebaseCrashlytics.instance.log(response.errors.toString());
     return null;
   }
