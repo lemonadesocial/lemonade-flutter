@@ -6,7 +6,6 @@ import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 
 class GraphQLErrorCodeStrings {
   static const String GRAPHQL_PARSE_FAILED = "GRAPHQL_PARSE_FAILED";
