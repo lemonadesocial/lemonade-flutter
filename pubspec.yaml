@@ -149,8 +149,6 @@ dependencies:
   web3modal_flutter: 
     path: ./packages/web3modal_flutter
   dynamic_color: ^1.7.0
-  feedback: ^3.0.1
-  feedback_sentry: ^3.0.0
 
 dependency_overrides:
   matrix_api_lite:

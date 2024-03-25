@@ -618,22 +618,6 @@ packages:
       url: "https://github.com/sieuhuflit/fcm_shared_isolate.git"
     source: git
     version: "0.1.0"
-  feedback:
-    dependency: "direct main"
-    description:
-      name: feedback
-      sha256: fe585cb251d08074e25ba8a7f19c58861bda48387855c27ff84d8f8622873de6
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.0.1"
-  feedback_sentry:
-    dependency: "direct main"
-    description:
-      name: feedback_sentry
-      sha256: "22a901f05ed773b04b604edcdbf67b36f0a9ac12747f3d68f33aea159465f841"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.0.0"
   ffi:
     dependency: transitive
     description:

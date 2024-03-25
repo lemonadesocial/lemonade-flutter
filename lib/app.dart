@@ -35,7 +35,6 @@ import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:web3modal_flutter/web3modal_flutter.dart';
-import 'package:feedback/feedback.dart';
 
 class LemonadeApp extends StatefulWidget {
   const LemonadeApp({super.key});
@@ -203,49 +202,47 @@ class _AppState extends State<_App> {
           orElse: () {},
         );
       },
-      child: BetterFeedback(
-        child: Web3ModalTheme(
-          isDarkMode: true,
-          child: StyledToast(
-            locale: const Locale('en', 'US'),
-            toastPositions: StyledToastPosition.top,
-            toastAnimation: StyledToastAnimation.slideFromTop,
-            reverseAnimation: StyledToastAnimation.fade,
-            curve: Curves.linearToEaseOut,
-            reverseCurve: Curves.linearToEaseOut,
-            duration: const Duration(seconds: 4),
-            animDuration: const Duration(milliseconds: 800),
-            dismissOtherOnShow: true,
-            fullWidth: false,
-            isHideKeyboard: false,
-            isIgnoring: true,
-            child: MaterialApp.router(
-              scaffoldMessengerKey: SnackBarUtils.rootScaffoldMessengerKey,
-              locale: _getCurrentLocale(context),
-              // use provider
-              supportedLocales: _supportedLocales,
-              localizationsDelegates: _localizationsDelegates,
-              themeMode: ThemeMode.dark,
-              darkTheme: lemonadeAppDarkThemeData,
-              theme: lemonadeAppLightThemeData,
-              routerDelegate: widget.router.delegate(
-                navigatorObservers: () => <NavigatorObserver>[
-                  MyRouterObserver(),
-                  SentryNavigatorObserver(),
-                ],
-              ),
-              routeInformationParser:
-                  widget.router.defaultRouteParser(includePrefixMatches: true),
-              builder: (context, widget) {
-                Widget error = const CustomError();
-                if (widget is Scaffold || widget is Navigator) {
-                  error = Scaffold(body: Center(child: error));
-                }
-                ErrorWidget.builder = (errorDetails) => error;
-                if (widget != null) return FlutterEasyLoading(child: widget);
-                throw StateError('widget is null');
-              },
+      child: Web3ModalTheme(
+        isDarkMode: true,
+        child: StyledToast(
+          locale: const Locale('en', 'US'),
+          toastPositions: StyledToastPosition.top,
+          toastAnimation: StyledToastAnimation.slideFromTop,
+          reverseAnimation: StyledToastAnimation.fade,
+          curve: Curves.linearToEaseOut,
+          reverseCurve: Curves.linearToEaseOut,
+          duration: const Duration(seconds: 4),
+          animDuration: const Duration(milliseconds: 800),
+          dismissOtherOnShow: true,
+          fullWidth: false,
+          isHideKeyboard: false,
+          isIgnoring: true,
+          child: MaterialApp.router(
+            scaffoldMessengerKey: SnackBarUtils.rootScaffoldMessengerKey,
+            locale: _getCurrentLocale(context),
+            // use provider
+            supportedLocales: _supportedLocales,
+            localizationsDelegates: _localizationsDelegates,
+            themeMode: ThemeMode.dark,
+            darkTheme: lemonadeAppDarkThemeData,
+            theme: lemonadeAppLightThemeData,
+            routerDelegate: widget.router.delegate(
+              navigatorObservers: () => <NavigatorObserver>[
+                MyRouterObserver(),
+                SentryNavigatorObserver(),
+              ],
             ),
+            routeInformationParser:
+                widget.router.defaultRouteParser(includePrefixMatches: true),
+            builder: (context, widget) {
+              Widget error = const CustomError();
+              if (widget is Scaffold || widget is Navigator) {
+                error = Scaffold(body: Center(child: error));
+              }
+              ErrorWidget.builder = (errorDetails) => error;
+              if (widget != null) return FlutterEasyLoading(child: widget);
+              throw StateError('widget is null');
+            },
           ),
         ),
       ),
