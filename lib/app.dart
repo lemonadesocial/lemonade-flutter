@@ -33,6 +33,7 @@ import 'package:app/core/data/post/newsfeed_repository_impl.dart';
 import 'package:app/core/service/newsfeed/newsfeed_service.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:web3modal_flutter/web3modal_flutter.dart';
 
 class LemonadeApp extends StatefulWidget {
@@ -217,6 +218,7 @@ class _AppState extends State<_App> {
           isHideKeyboard: false,
           isIgnoring: true,
           child: MaterialApp.router(
+            scaffoldMessengerKey: SnackBarUtils.rootScaffoldMessengerKey,
             locale: _getCurrentLocale(context),
             // use provider
             supportedLocales: _supportedLocales,
@@ -225,15 +227,21 @@ class _AppState extends State<_App> {
             darkTheme: lemonadeAppDarkThemeData,
             theme: lemonadeAppLightThemeData,
             routerDelegate: widget.router.delegate(
-              navigatorObservers: () => <NavigatorObserver>[MyRouterObserver()],
+              navigatorObservers: () => <NavigatorObserver>[
+                MyRouterObserver(),
+                SentryNavigatorObserver(),
+              ],
             ),
             routeInformationParser:
                 widget.router.defaultRouteParser(includePrefixMatches: true),
             builder: (context, widget) {
-              ErrorWidget.builder = (FlutterErrorDetails errorDetails) {
-                return CustomError(errorDetails: errorDetails);
-              };
-              return FlutterEasyLoading(child: widget);
+              Widget error = const CustomError();
+              if (widget is Scaffold || widget is Navigator) {
+                error = Scaffold(body: Center(child: error));
+              }
+              ErrorWidget.builder = (errorDetails) => error;
+              if (widget != null) return FlutterEasyLoading(child: widget);
+              throw StateError('widget is null');
             },
           ),
         ),

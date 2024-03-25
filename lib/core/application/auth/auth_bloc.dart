@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/domain/user/user_repository.dart';
+import 'package:app/core/managers/crash_analytics_manager.dart';
 import 'package:app/core/oauth/oauth.dart';
 import 'package:app/core/service/firebase/firebase_service.dart';
 import 'package:app/core/utils/onboarding_utils.dart';
@@ -62,6 +63,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         await FirebaseAnalytics.instance.setUserId(id: currentUser.userId);
         await FirebaseCrashlytics.instance
             .setUserIdentifier(currentUser.userId);
+        CrashAnalyticsManager().crashAnalyticsService?.setUser(currentUser);
       }
       emit(AuthState.authenticated(authSession: currentUser));
       return;
@@ -80,6 +82,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     if (!kDebugMode) {
       await FirebaseAnalytics.instance.setUserId(id: currentUser?.userId);
       await FirebaseCrashlytics.instance.setUserIdentifier(currentUser!.userId);
+      CrashAnalyticsManager().crashAnalyticsService?.setUser(currentUser);
     }
     emit(AuthState.authenticated(authSession: currentUser!));
   }
@@ -98,6 +101,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           FirebaseCrashlytics.instance.setUserIdentifier('');
           FirebaseAnalytics.instance.setUserId(id: null);
         }
+        CrashAnalyticsManager().crashAnalyticsService?.clearSetUser();
         await firebaseService.removeFcmToken();
       }
     });
@@ -110,6 +114,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       FirebaseCrashlytics.instance.setUserIdentifier('');
       FirebaseAnalytics.instance.setUserId(id: null);
     }
+    CrashAnalyticsManager().crashAnalyticsService?.clearSetUser();
     await firebaseService.removeFcmToken();
     await appOauth.forceLogout();
   }

@@ -119,6 +119,9 @@ dependencies:
 
   # payment
   flutter_stripe: 9.4.0
+
+  # crash analytics
+  sentry_flutter: ^7.18.0
   
   # other
   path_provider: ^2.0.15
@@ -146,7 +149,7 @@ dependencies:
   web3modal_flutter: 
     path: ./packages/web3modal_flutter
   dynamic_color: ^1.7.0
-  
+
 dependency_overrides:
   matrix_api_lite:
     git:
@@ -173,6 +176,9 @@ dev_dependencies:
   injectable_generator: ^2.1.6
   flutter_gen_runner: ^5.3.1
   graphql_codegen: ^0.13.11
+
+  # crash analytics
+  sentry_dart_plugin: ^1.7.1
 
 # generate asset 
 flutter_gen:
@@ -225,3 +231,11 @@ flutter:
           weight: 500
         - asset: assets/fonts/Nohemi-Regular.ttf
           weight: 400
+
+sentry:
+  upload_debug_symbols: true
+  upload_source_maps: false
+  upload_sources: false
+  project: lemonade-flutter
+  org: lemonadesocial
+  auth_token: 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
