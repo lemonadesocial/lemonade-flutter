@@ -7,6 +7,7 @@ import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_location.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_poap_offers.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/post_guest_event_animated_app_bar.dart';
+import 'package:app/core/presentation/pages/event/event_detail_page/widgets/event_detail_navigation_bar.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/utils/event_utils.dart';
@@ -95,9 +96,9 @@ class PostGuestEventDetailView extends StatelessWidget {
                       ),
                     ],
                   ),
-                  // EventDetailNavigationBar(
-                  //   event: event,
-                  // ),
+                  EventDetailNavigationBar(
+                    event: event,
+                  ),
                 ],
               ),
             );
