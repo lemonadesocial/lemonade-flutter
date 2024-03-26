@@ -1,19 +1,15 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/profile/edit_profile_bloc/edit_profile_bloc.dart';
 import 'package:app/core/domain/common/common_enums.dart';
-import 'package:app/core/domain/post/post_repository.dart';
 import 'package:app/core/domain/user/entities/user.dart';
-import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/presentation/pages/edit_profile/widgets/edit_profile_field_item.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/dropdown/frosted_glass_drop_down_v2.dart';
 import 'package:app/core/presentation/widgets/lemon_bottom_sheet_mixin.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
-import 'package:app/core/service/post/post_service.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/injection/register_module.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
@@ -33,10 +29,7 @@ class EditProfilePersonalDialog extends StatefulWidget with LemonBottomSheet {
 }
 
 class EditProfilePersonalDialogState extends State<EditProfilePersonalDialog> {
-  final bloc = EditProfileBloc(
-    getIt<UserRepository>(),
-    PostService(getIt<PostRepository>()),
-  );
+  final bloc = EditProfileBloc();
 
   @override
   void initState() {
@@ -59,7 +52,7 @@ class EditProfilePersonalDialogState extends State<EditProfilePersonalDialog> {
           if (state.status == EditProfileStatus.success) {
             context.read<AuthBloc>().add(const AuthEvent.refreshData());
             SnackBarUtils.showSuccess(message: t.profile.editProfileSuccess);
-            bloc.clearState();
+            context.read<EditProfileBloc>().add(EditProfileEvent.clearState());
           }
         },
         builder: (context, state) {
@@ -96,13 +89,21 @@ class EditProfilePersonalDialogState extends State<EditProfilePersonalDialog> {
                             SizedBox(height: Spacing.smMedium),
                             EditProfileFieldItem(
                               profileFieldKey: ProfileFieldKey.jobTitle,
-                              onChange: bloc.onJobTitleChange,
+                              onChange: (input) {
+                                context.read<EditProfileBloc>().add(
+                                    EditProfileEvent.jobTitleChange(
+                                        input: input));
+                              },
                               value: widget.userProfile.jobTitle,
                             ),
                             SizedBox(height: Spacing.smMedium),
                             EditProfileFieldItem(
                               profileFieldKey: ProfileFieldKey.companyName,
-                              onChange: bloc.onOrganizationChange,
+                              onChange: (input) {
+                                context.read<EditProfileBloc>().add(
+                                    EditProfileEvent.organizationChange(
+                                        input: input));
+                              },
                               value: widget.userProfile.companyName,
                             ),
                             SizedBox(height: Spacing.smMedium),
@@ -112,20 +113,32 @@ class EditProfilePersonalDialogState extends State<EditProfilePersonalDialog> {
                               listItem: LemonIndustry.values
                                   .map((e) => e.industry)
                                   .toList(),
-                              onValueChange: bloc.onIndustrySelect,
+                              onValueChange: (value) {
+                                context.read<EditProfileBloc>().add(
+                                    EditProfileEvent.industrySelect(
+                                        industry: value));
+                              },
                               selectedValue: bloc.state.industry ??
                                   widget.userProfile.industry,
                             ),
                             SizedBox(height: Spacing.smMedium),
                             EditProfileFieldItem(
                               profileFieldKey: ProfileFieldKey.educationTitle,
-                              onChange: bloc.onEducationChange,
+                              onChange: (value) {
+                                context.read<EditProfileBloc>().add(
+                                    EditProfileEvent.educationChange(
+                                        input: value));
+                              },
                               value: widget.userProfile.educationTitle,
                             ),
                             SizedBox(height: Spacing.smMedium),
                             EditProfileFieldItem(
                               profileFieldKey: ProfileFieldKey.newGender,
-                              onChange: bloc.onGenderSelect,
+                              onChange: (value) {
+                                context.read<EditProfileBloc>().add(
+                                    EditProfileEvent.genderSelect(
+                                        gender: value));
+                              },
                               value: bloc.state.gender ??
                                   widget.userProfile.newGender,
                             ),
@@ -142,7 +155,9 @@ class EditProfilePersonalDialogState extends State<EditProfilePersonalDialog> {
                                       date_utils.DateUtils.toLocalDateString(
                                     selectedDate,
                                   );
-                                  bloc.onBirthdayChange(selectedDate);
+                                  context.read<EditProfileBloc>().add(
+                                      EditProfileEvent.birthdayChange(
+                                          input: selectedDate));
                                 },
                                 value:
                                     widget.userProfile.dateOfBirth.toString(),
@@ -156,18 +171,27 @@ class EditProfilePersonalDialogState extends State<EditProfilePersonalDialog> {
                                       bloc.birthDayCtrl.text,
                                     ),
                                   );
-                                  bloc.onBirthdayChange(
-                                    date_utils.DateUtils.parseDateString(
-                                      (bloc.birthDayCtrl.text),
-                                    ),
-                                  );
+                                  context.read<EditProfileBloc>().add(
+                                        EditProfileEvent.birthdayChange(
+                                          input: date_utils.DateUtils
+                                              .parseDateString(
+                                            (bloc.birthDayCtrl.text),
+                                          ),
+                                        ),
+                                      );
                                 }
                               },
                             ),
                             SizedBox(height: Spacing.smMedium),
                             EditProfileFieldItem(
                               profileFieldKey: ProfileFieldKey.ethnicity,
-                              onChange: bloc.onEthnicitySelect,
+                              onChange: (value) {
+                                context.read<EditProfileBloc>().add(
+                                      EditProfileEvent.ethnicitySelect(
+                                        ethnicity: value,
+                                      ),
+                                    );
+                              },
                               value: bloc.state.ethnicity ??
                                   widget.userProfile.ethnicity,
                             ),
@@ -175,21 +199,30 @@ class EditProfilePersonalDialogState extends State<EditProfilePersonalDialog> {
                         ),
                       ),
                     ),
-                    Container(
-                      margin: EdgeInsets.symmetric(vertical: Spacing.smMedium),
-                      child: LinearGradientButton(
-                        onTap: bloc.editProfile,
-                        label: t.profile.saveChanges,
-                        textStyle: Typo.medium.copyWith(
-                          fontFamily: FontFamily.nohemiVariable,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        height: Sizing.large,
-                        radius: BorderRadius.circular(LemonRadius.large),
-                        mode: GradientButtonMode.lavenderMode,
-                        loadingWhen:
-                            bloc.state.status == EditProfileStatus.loading,
-                      ),
+                    BlocBuilder<EditProfileBloc, EditProfileState>(
+                      builder: (context, state) {
+                        return Container(
+                          margin:
+                              EdgeInsets.symmetric(vertical: Spacing.smMedium),
+                          child: LinearGradientButton(
+                            onTap: () {
+                              context.read<EditProfileBloc>().add(
+                                    EditProfileEvent.submitEditProfile(),
+                                  );
+                            },
+                            label: t.profile.saveChanges,
+                            textStyle: Typo.medium.copyWith(
+                              fontFamily: FontFamily.nohemiVariable,
+                              fontWeight: FontWeight.w600,
+                            ),
+                            height: Sizing.large,
+                            radius: BorderRadius.circular(LemonRadius.large),
+                            mode: GradientButtonMode.lavenderMode,
+                            loadingWhen:
+                                bloc.state.status == EditProfileStatus.loading,
+                          ),
+                        );
+                      },
                     ),
                     SizedBox(height: Spacing.smMedium),
                   ],

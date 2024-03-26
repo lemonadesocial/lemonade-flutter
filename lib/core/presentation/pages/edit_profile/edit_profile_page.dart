@@ -1,7 +1,6 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/profile/edit_profile_bloc/edit_profile_bloc.dart';
 import 'package:app/core/domain/common/common_enums.dart';
-import 'package:app/core/domain/post/post_repository.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/presentation/pages/edit_profile/sub_pages/edit_profile_personal_page.dart';
@@ -12,7 +11,6 @@ import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
-import 'package:app/core/service/post/post_service.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
@@ -37,11 +35,6 @@ class EditProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
-    final bloc = EditProfileBloc(
-      getIt<UserRepository>(),
-      PostService(getIt<PostRepository>()),
-    );
-
     return FutureBuilder(
       future: getIt<UserRepository>().getMe(),
       builder: (context, snapshot) {
@@ -63,7 +56,7 @@ class EditProfilePage extends StatelessWidget {
           );
         }
         return BlocProvider(
-          create: (context) => bloc,
+          create: (context) => EditProfileBloc(),
           child: BlocConsumer<EditProfileBloc, EditProfileState>(
             listener: (context, state) {
               if (state.status == EditProfileStatus.success) {
@@ -71,7 +64,9 @@ class EditProfilePage extends StatelessWidget {
                 SnackBarUtils.showSuccess(
                   message: t.profile.editProfileSuccess,
                 );
-                bloc.clearState();
+                context
+                    .read<EditProfileBloc>()
+                    .add(EditProfileEvent.clearState());
               }
             },
             builder: (context, state) {
@@ -101,7 +96,14 @@ class EditProfilePage extends StatelessWidget {
                                       child: EditProfileFieldItem(
                                         profileFieldKey:
                                             ProfileFieldKey.displayName,
-                                        onChange: bloc.onDisplayNameChange,
+                                        onChange: (input) {
+                                          context.read<EditProfileBloc>().add(
+                                                EditProfileEvent
+                                                    .displayNameChange(
+                                                  input: input,
+                                                ),
+                                              );
+                                        },
                                         value: userProfile.displayName,
                                       ),
                                     ),
@@ -109,7 +111,6 @@ class EditProfilePage extends StatelessWidget {
                                 ),
                                 SizedBox(height: Spacing.smMedium),
                                 _UserEditor(
-                                  bloc,
                                   userName: state.username ??
                                       userProfile.username ??
                                       '',
@@ -117,13 +118,25 @@ class EditProfilePage extends StatelessWidget {
                                 SizedBox(height: Spacing.smMedium),
                                 EditProfileFieldItem(
                                   profileFieldKey: ProfileFieldKey.tagline,
-                                  onChange: bloc.onTaglineChange,
+                                  onChange: (input) {
+                                    context.read<EditProfileBloc>().add(
+                                          EditProfileEvent.taglineChange(
+                                            input: input,
+                                          ),
+                                        );
+                                  },
                                   value: userProfile.tagline,
                                 ),
                                 SizedBox(height: Spacing.smMedium),
                                 EditProfileFieldItem(
                                   profileFieldKey: ProfileFieldKey.description,
-                                  onChange: bloc.onShortBioChange,
+                                  onChange: (input) {
+                                    context.read<EditProfileBloc>().add(
+                                          EditProfileEvent.shortBioChange(
+                                            input: input,
+                                          ),
+                                        );
+                                  },
                                   value: userProfile.description,
                                 ),
                                 SizedBox(height: Spacing.smMedium),
@@ -179,30 +192,38 @@ class EditProfilePage extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Container(
-                          margin:
-                              EdgeInsets.symmetric(vertical: Spacing.smMedium),
-                          child: LinearGradientButton(
-                            onTap:
-                                bloc.state.status == EditProfileStatus.editing
-                                    ? () {
-                                        FocusScope.of(context).unfocus();
-                                        bloc.editProfile();
-                                      }
-                                    : null,
-                            label: t.profile.saveChanges,
-                            textStyle: Typo.medium.copyWith(
-                              fontFamily: FontFamily.nohemiVariable,
-                              fontWeight: FontWeight.w600,
-                            ),
-                            height: Sizing.large,
-                            radius: BorderRadius.circular(LemonRadius.large),
-                            mode: bloc.state.status != EditProfileStatus.initial
-                                ? GradientButtonMode.lavenderMode
-                                : GradientButtonMode.defaultMode,
-                            loadingWhen:
-                                bloc.state.status == EditProfileStatus.loading,
-                          ),
+                        BlocBuilder<EditProfileBloc, EditProfileState>(
+                          builder: (context, state) {
+                            return Container(
+                              margin: EdgeInsets.symmetric(
+                                vertical: Spacing.smMedium,
+                              ),
+                              child: LinearGradientButton(
+                                onTap: () {
+                                  if (state.status ==
+                                      EditProfileStatus.editing) {
+                                    FocusScope.of(context).unfocus();
+                                    context.read<EditProfileBloc>().add(
+                                          EditProfileEvent.submitEditProfile(),
+                                        );
+                                  }
+                                },
+                                label: t.profile.saveChanges,
+                                textStyle: Typo.medium.copyWith(
+                                  fontFamily: FontFamily.nohemiVariable,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                height: Sizing.large,
+                                radius:
+                                    BorderRadius.circular(LemonRadius.large),
+                                mode: state.status != EditProfileStatus.initial
+                                    ? GradientButtonMode.lavenderMode
+                                    : GradientButtonMode.defaultMode,
+                                loadingWhen:
+                                    state.status == EditProfileStatus.loading,
+                              ),
+                            );
+                          },
                         ),
                         SizedBox(height: Spacing.smMedium),
                       ],
@@ -299,12 +320,10 @@ class _PersonalCardWidget extends StatelessWidget {
 }
 
 class _UserEditor extends StatelessWidget {
-  const _UserEditor(
-    this.bloc, {
+  const _UserEditor({
     required this.userName,
   });
 
-  final EditProfileBloc bloc;
   final String userName;
 
   @override
@@ -330,7 +349,9 @@ class _UserEditor extends StatelessWidget {
               ),
             ) as String?;
             if (userName != null) {
-              bloc.onUsernameChange(userName);
+              context.read<EditProfileBloc>().add(
+                    EditProfileEvent.usernameChange(input: userName),
+                  );
             }
           },
           child: Container(
