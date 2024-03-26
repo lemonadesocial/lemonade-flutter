@@ -1,6 +1,6 @@
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
-import 'package:app/core/presentation/widgets/common/bottomsheet/lemon_snap_bottom_sheet_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
+import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
@@ -10,6 +10,7 @@ import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:collection/collection.dart';
+import 'package:scroll_to_index/scroll_to_index.dart';
 
 class TicketTierFeatureDropdown<T> extends StatelessWidget {
   final T? value;
@@ -96,6 +97,8 @@ class TicketTierFeatureDropdownList<T, V> extends StatefulWidget {
 
 class TicketTierFeatureDropdownListState<T, V>
     extends State<TicketTierFeatureDropdownList<T, V>> {
+  final AutoScrollController _scrollController = AutoScrollController();
+
   V? value;
 
   @override
@@ -104,25 +107,48 @@ class TicketTierFeatureDropdownListState<T, V>
     setState(() {
       value = widget.value;
     });
+    _scrollToDefaultItem();
+  }
+
+  @override
+  dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollToDefaultItem() {
+    final targetIndex = widget.data
+        .indexWhere((element) => widget.getValue(element) == widget.value);
+    if (targetIndex < 0) {
+      return;
+    }
+    _scrollController.scrollToIndex(
+      targetIndex,
+      preferPosition: AutoScrollPosition.middle,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    return LemonSnapBottomSheet(
-      defaultSnapSize: 1,
-      backgroundColor: LemonColor.atomicBlack,
-      builder: (controller) {
-        return Column(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            LemonAppBar(
-              title: widget.title ?? '',
-              backgroundColor: LemonColor.atomicBlack,
+    return Container(
+      color: LemonColor.atomicBlack,
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          LemonAppBar(
+            title: widget.title ?? '',
+            backgroundColor: LemonColor.atomicBlack,
+          ),
+          if (widget.data.isEmpty)
+            const Expanded(
+              child: EmptyList(),
             ),
-            SizedBox(
-              height: 0.75.sh,
+          if (widget.data.isNotEmpty)
+            Flexible(
+              flex: 1,
               child: CustomScrollView(
+                controller: _scrollController,
                 slivers: [
                   SliverList.builder(
                     itemCount: widget.data.length,
@@ -130,28 +156,33 @@ class TicketTierFeatureDropdownListState<T, V>
                       final item = widget.data[index];
                       final itemValue = widget.getValue(item);
                       final selected = itemValue == value;
-                      return InkWell(
-                        onTap: () {
-                          setState(() {
-                            value = itemValue;
-                          });
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: Spacing.smMedium,
-                            vertical: Spacing.extraSmall,
-                          ),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  widget.getDisplayLabel(widget.data[index]),
-                                  style: Typo.mediumPlus,
+                      return AutoScrollTag(
+                        key: ValueKey(itemValue),
+                        controller: _scrollController,
+                        index: index,
+                        child: InkWell(
+                          onTap: () {
+                            setState(() {
+                              value = itemValue;
+                            });
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: Spacing.smMedium,
+                              vertical: Spacing.extraSmall,
+                            ),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    widget.getDisplayLabel(widget.data[index]),
+                                    style: Typo.mediumPlus,
+                                  ),
                                 ),
-                              ),
-                              if (!selected) Assets.icons.icUncheck.svg(),
-                              if (selected) Assets.icons.icChecked.svg(),
-                            ],
+                                if (!selected) Assets.icons.icUncheck.svg(),
+                                if (selected) Assets.icons.icChecked.svg(),
+                              ],
+                            ),
                           ),
                         ),
                       );
@@ -160,29 +191,29 @@ class TicketTierFeatureDropdownListState<T, V>
                 ],
               ),
             ),
-          ],
-        );
-      },
-      footerBuilder: () => Container(
-        color: LemonColor.atomicBlack,
-        padding: EdgeInsets.all(Spacing.smMedium),
-        child: SafeArea(
-          child: LinearGradientButton(
-            onTap: () {
-              widget.onConfirm?.call(
-                widget.data
-                    .firstWhereOrNull((item) => widget.getValue(item) == value),
-              );
-            },
-            height: 42.w,
-            radius: BorderRadius.circular(LemonRadius.small * 2),
-            mode: GradientButtonMode.lavenderMode,
-            label: t.common.confirm,
-            textStyle: Typo.medium.copyWith(
-              fontWeight: FontWeight.w600,
+          Container(
+            color: LemonColor.atomicBlack,
+            padding: EdgeInsets.all(Spacing.smMedium),
+            child: SafeArea(
+              child: LinearGradientButton(
+                onTap: () {
+                  widget.onConfirm?.call(
+                    widget.data.firstWhereOrNull(
+                      (item) => widget.getValue(item) == value,
+                    ),
+                  );
+                },
+                height: 42.w,
+                radius: BorderRadius.circular(LemonRadius.small * 2),
+                mode: GradientButtonMode.lavenderMode,
+                label: t.common.confirm,
+                textStyle: Typo.medium.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }

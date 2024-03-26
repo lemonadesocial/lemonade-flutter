@@ -9,7 +9,6 @@ import 'package:app/core/domain/web3/entities/chain.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/add_ticket_tier_pricing_form/erc20_pricing_method_form.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/add_ticket_tier_pricing_form/fiat_pricing_method_form.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
-import 'package:app/core/presentation/widgets/common/bottomsheet/lemon_snap_bottom_sheet_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
@@ -157,12 +156,11 @@ class _AddTicketTierPricingFormViewState
       },
       child: GestureDetector(
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-        child: LemonSnapBottomSheet(
-          defaultSnapSize: 1,
-          backgroundColor: LemonColor.atomicBlack,
-          resizeToAvoidBottomInset: false,
-          builder: (controller) => Column(
+        child: Container(
+          color: LemonColor.atomicBlack,
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
               LemonAppBar(
                 title: "",
@@ -248,76 +246,87 @@ class _AddTicketTierPricingFormViewState
                   ],
                 ),
               ),
-            ],
-          ),
-          footerBuilder: () => BlocBuilder<WalletBloc, WalletState>(
-            builder: (context, walletState) {
-              return Container(
-                color: LemonColor.atomicBlack,
-                padding: EdgeInsets.all(Spacing.smMedium),
-                child: SafeArea(
-                  child: BlocBuilder<ConnectPaymentAccountBloc,
-                      ConnectPaymentAccountState>(
-                    builder: (context, connectPaymentAccountState) =>
-                        BlocBuilder<ModifyTicketPriceBloc,
-                            ModifyTicketPriceState>(
-                      builder: (context, modifyTicketPriceState) {
-                        final isConnectingPaymentAccount =
-                            connectPaymentAccountState.maybeWhen(
-                          orElse: () => false,
-                          checkingPaymentAccount: () => true,
-                        );
-                        final isValid =
-                            pricingMethod == TicketPricingMethod.fiat
+              const Spacer(),
+              BlocBuilder<WalletBloc, WalletState>(
+                builder: (context, walletState) {
+                  return Container(
+                    color: LemonColor.atomicBlack,
+                    padding: EdgeInsets.all(Spacing.smMedium),
+                    child: SafeArea(
+                      child: BlocBuilder<ConnectPaymentAccountBloc,
+                          ConnectPaymentAccountState>(
+                        builder: (context, connectPaymentAccountState) =>
+                            BlocBuilder<ModifyTicketPriceBloc,
+                                ModifyTicketPriceState>(
+                          builder: (context, modifyTicketPriceState) {
+                            final isConnectingPaymentAccount =
+                                connectPaymentAccountState.maybeWhen(
+                              orElse: () => false,
+                              checkingPaymentAccount: () => true,
+                            );
+                            final isValid = pricingMethod ==
+                                    TicketPricingMethod.fiat
                                 ? modifyTicketPriceState.isValid
                                 : modifyTicketPriceState.isValid &&
                                     modifyTicketPriceState.network != null &&
                                     walletState.activeSession != null;
-                        return Opacity(
-                          opacity: isValid ? 1 : 0.5,
-                          child: LinearGradientButton(
-                            onTap: () {
-                              final currency = modifyTicketPriceState.currency;
-                              final selectedChain =
-                                  modifyTicketPriceState.network;
-                              final userWalletAddress =
-                                  NamespaceUtils.getAccount(
-                                walletState.activeSession?.namespaces.entries
-                                        .first.value.accounts.first ??
-                                    '',
-                              );
-                              if (!isValid || isConnectingPaymentAccount) {
-                                return;
-                              }
-                              rootContext.read<ConnectPaymentAccountBloc>().add(
-                                    ConnectPaymentAccountEvent
-                                        .checkEventHasPaymentAccount(
-                                      currency: currency!,
-                                      selectedChain: selectedChain,
-                                      userWalletAddress: pricingMethod ==
-                                              TicketPricingMethod.fiat
-                                          ? null
-                                          : userWalletAddress,
-                                    ),
+                            return Opacity(
+                              opacity: isValid ? 1 : 0.5,
+                              child: LinearGradientButton(
+                                onTap: () {
+                                  final currency =
+                                      modifyTicketPriceState.currency;
+                                  final selectedChain =
+                                      modifyTicketPriceState.network;
+                                  final userWalletAddress =
+                                      NamespaceUtils.getAccount(
+                                    walletState
+                                            .activeSession
+                                            ?.namespaces
+                                            .entries
+                                            .first
+                                            .value
+                                            .accounts
+                                            .first ??
+                                        '',
                                   );
-                            },
-                            height: 42.w,
-                            radius:
-                                BorderRadius.circular(LemonRadius.small * 2),
-                            mode: GradientButtonMode.lavenderMode,
-                            label: t.common.confirm,
-                            textStyle: Typo.medium.copyWith(
-                              fontWeight: FontWeight.w600,
-                            ),
-                            loadingWhen: isConnectingPaymentAccount,
-                          ),
-                        );
-                      },
+                                  if (!isValid || isConnectingPaymentAccount) {
+                                    return;
+                                  }
+                                  rootContext
+                                      .read<ConnectPaymentAccountBloc>()
+                                      .add(
+                                        ConnectPaymentAccountEvent
+                                            .checkEventHasPaymentAccount(
+                                          currency: currency!,
+                                          selectedChain: selectedChain,
+                                          userWalletAddress: pricingMethod ==
+                                                  TicketPricingMethod.fiat
+                                              ? null
+                                              : userWalletAddress,
+                                        ),
+                                      );
+                                },
+                                height: 42.w,
+                                radius: BorderRadius.circular(
+                                  LemonRadius.small * 2,
+                                ),
+                                mode: GradientButtonMode.lavenderMode,
+                                label: t.common.confirm,
+                                textStyle: Typo.medium.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                loadingWhen: isConnectingPaymentAccount,
+                              ),
+                            );
+                          },
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              );
-            },
+                  );
+                },
+              ),
+            ],
           ),
         ),
       ),
