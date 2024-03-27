@@ -86,12 +86,15 @@ class TicketCategoryDropdown extends StatelessWidget {
                                 ),
                               ),
                             );
-
-                            final isSuccess =
-                                response.result?.isRight() == true;
-                            if (isSuccess) {
-                              refetch?.call();
-                            }
+                            response.result?.fold((l) => null,
+                                (newCategory) async {
+                              await refetch?.call();
+                              context.read<ModifyTicketTypeBloc>().add(
+                                    ModifyTicketTypeEvent.onCategoryChanged(
+                                      category: newCategory.id,
+                                    ),
+                                  );
+                            });
                           },
                         );
                       },

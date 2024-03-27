@@ -97,7 +97,7 @@ class _SelectTicketViewState extends State<SelectTicketView> {
         );
     final ticketTypesByCategory = EventTicketUtils.filterTicketTypeByCategory(
       response.ticketTypes ?? [],
-      category: selectedTicketCategory,
+      category: selectedTicketCategory?.id,
     );
 
     if (ticketTypesByCategory.isEmpty) {
@@ -127,10 +127,12 @@ class _SelectTicketViewState extends State<SelectTicketView> {
           );
     }
 
-    // auto increase if only 1 ticket tier and only 1 price option in that tier
+    // auto select if only 1 ticket tier and only 1 price option in that tier
     if (ticketTypesByCategory.length == 1 &&
         ticketTypesByCategory.first.prices?.isNotEmpty == true &&
-        ticketTypesByCategory.first.prices?.length == 1) {
+        ticketTypesByCategory.first.prices?.length == 1 &&
+        ticketTypesByCategory.first.limited == true &&
+        ticketTypesByCategory.first.whitelisted == true) {
       final price = ticketTypesByCategory.first.prices!.first;
       context.read<SelectEventTicketsBloc>().add(
             SelectEventTicketsEvent.select(
@@ -310,7 +312,9 @@ class _SelectTicketViewState extends State<SelectTicketView> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          t.event.eventBuyTickets.selectTickets,
+                          selectedTicketCategory != null
+                              ? selectedTicketCategory.title ?? ''
+                              : t.event.eventBuyTickets.selectTickets,
                           style: Typo.extraLarge.copyWith(
                             color: colorScheme.onPrimary,
                             fontFamily: FontFamily.nohemiVariable,
@@ -337,7 +341,7 @@ class _SelectTicketViewState extends State<SelectTicketView> {
                           final ticketTypesByCategory =
                               EventTicketUtils.filterTicketTypeByCategory(
                             response.ticketTypes ?? [],
-                            category: selectedTicketCategory,
+                            category: selectedTicketCategory?.id,
                           );
                           final stripeTicketTypes =
                               EventTicketUtils.getTicketTypesSupportStripe(
@@ -387,7 +391,7 @@ class _SelectTicketViewState extends State<SelectTicketView> {
                         final ticketTypesByCategory =
                             EventTicketUtils.filterTicketTypeByCategory(
                           response.ticketTypes ?? [],
-                          category: selectedTicketCategory,
+                          category: selectedTicketCategory?.id,
                         )..sort(
                                 (a, b) {
                                   final aOrder = a.limited == true &&
@@ -409,10 +413,18 @@ class _SelectTicketViewState extends State<SelectTicketView> {
                             : EventTicketUtils.getTicketTypesSupportCrypto(
                                 ticketTypes: ticketTypesByCategory,
                               );
-                        final supportedPaymentNetworks =
-                            EventTicketUtils.getEventSupportedPaymentNetworks(
-                          currencies: supportedCurrencies,
-                        );
+
+                        final supportedPaymentNetworks = filteredTicketTypes
+                            .expand(
+                              (ticketType) => (ticketType.prices ?? [])
+                                  .map((price) => price.network)
+                                  .where(
+                                    (network) => network?.isNotEmpty == true,
+                                  ),
+                            )
+                            .whereType<String>()
+                            .toSet()
+                            .toList();
 
                         return Flexible(
                           child: Column(

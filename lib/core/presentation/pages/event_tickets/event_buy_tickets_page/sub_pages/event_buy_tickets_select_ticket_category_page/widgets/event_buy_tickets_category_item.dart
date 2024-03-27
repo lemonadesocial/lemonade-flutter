@@ -14,7 +14,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class EventBuyTicketsCategoryItem extends StatelessWidget {
   final EventTicketCategory? ticketCategory;
   final List<PurchasableTicketType> allTicketTypes;
-  final Function(String? category) onSelect;
+  final Function(EventTicketCategory? category) onSelect;
 
   const EventBuyTicketsCategoryItem({
     super.key,
@@ -32,7 +32,7 @@ class EventBuyTicketsCategoryItem extends StatelessWidget {
       category: ticketCategory?.id,
     ).length;
     return InkWell(
-      onTap: () => onSelect(ticketCategory?.id),
+      onTap: () => onSelect(ticketCategory),
       child: SizedBox(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
