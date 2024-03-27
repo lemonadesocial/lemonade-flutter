@@ -152,7 +152,6 @@ class OtherTicketItem extends StatelessWidget {
         ),
         if (isLocked)
           Positioned(
-            // top: Spacing.smMedium,
             right: 0,
             child: Container(
               width: Sizing.medium,

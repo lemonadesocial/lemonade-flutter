@@ -413,12 +413,14 @@ class _SelectTicketViewState extends State<SelectTicketView> {
                             : EventTicketUtils.getTicketTypesSupportCrypto(
                                 ticketTypes: ticketTypesByCategory,
                               );
-                        
+
                         final supportedPaymentNetworks = filteredTicketTypes
                             .expand(
                               (ticketType) => (ticketType.prices ?? [])
                                   .map((price) => price.network)
-                                  .where((network) => network?.isNotEmpty == true),
+                                  .where(
+                                    (network) => network?.isNotEmpty == true,
+                                  ),
                             )
                             .whereType<String>()
                             .toSet()
