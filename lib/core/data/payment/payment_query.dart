@@ -81,7 +81,7 @@ const paymentFragment = '''
     }
     due_amount
     ref_data
-    ticket_tytpes_expanded {
+    ticket_types_expanded {
       _id
       active
       event
