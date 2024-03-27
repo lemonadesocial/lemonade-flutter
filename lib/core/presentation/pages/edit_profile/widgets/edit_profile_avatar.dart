@@ -24,7 +24,6 @@ class EditProfileAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final bloc = context.read<EditProfileBloc>();
     return SizedBox(
       width: 80.w,
       height: 80.w,
@@ -53,7 +52,11 @@ class EditProfileAvatar extends StatelessWidget {
                   bottom: 0,
                   right: 0,
                   child: InkWell(
-                    onTap: bloc.selectProfileImage,
+                    onTap: () {
+                      context.read<EditProfileBloc>().add(
+                            EditProfileEvent.selectProfileImage(),
+                          );
+                    },
                     child: Container(
                       width: 36.w,
                       height: 36.w,
@@ -70,7 +73,11 @@ class EditProfileAvatar extends StatelessWidget {
               ],
             )
           : InkWell(
-              onTap: bloc.selectProfileImage,
+              onTap: () {
+                context.read<EditProfileBloc>().add(
+                      EditProfileEvent.selectProfileImage(),
+                    );
+              },
               child: Container(
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
