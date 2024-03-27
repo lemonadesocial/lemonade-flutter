@@ -13,7 +13,7 @@ class BottomBarCreateButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final authState = BlocProvider.of<AuthBloc>(context).state;
+    final authState = context.watch<AuthBloc>().state;
     return InkWell(
       onTap: () {
         authState.maybeWhen(

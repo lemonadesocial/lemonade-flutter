@@ -234,10 +234,7 @@ class _EventDetailNavigationBarState extends State<EventDetailNavigationBar>
               itemBuilder: (context, index) {
                 // Render bottom space for list
                 if (index == chunkListResult.length) {
-                  return Container(
-                    height: 220.w,
-                    color: Colors.transparent,
-                  );
+                  return const SizedBox();
                 }
                 var chunkPortion = chunkListResult[index];
                 final isNotFullRow = chunkPortion.length < numOfItems;
