@@ -52,186 +52,189 @@ class EditProfilePersonalDialogState extends State<EditProfilePersonalDialog> {
         }
       },
       child: BlocBuilder<EditProfileBloc, EditProfileState>(
-          builder: (context, state) {
-        return GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
-          child: Scaffold(
-            appBar: LemonAppBar(
+        builder: (context, state) {
+          return GestureDetector(
+            onTap: () => FocusScope.of(context).unfocus(),
+            child: Scaffold(
+              appBar: LemonAppBar(
+                backgroundColor: colorScheme.onPrimaryContainer,
+              ),
               backgroundColor: colorScheme.onPrimaryContainer,
-            ),
-            backgroundColor: colorScheme.onPrimaryContainer,
-            body: Padding(
-              padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            t.profile.personalInfo,
-                            style: Typo.extraLarge.copyWith(
-                              fontWeight: FontWeight.w800,
+              body: Padding(
+                padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              t.profile.personalInfo,
+                              style: Typo.extraLarge.copyWith(
+                                fontWeight: FontWeight.w800,
+                              ),
                             ),
-                          ),
-                          SizedBox(height: Spacing.superExtraSmall),
-                          Text(
-                            t.profile.personalInfoLongDesc,
-                            style: Typo.mediumPlus.copyWith(
-                              color: colorScheme.onPrimary.withOpacity(0.56),
+                            SizedBox(height: Spacing.superExtraSmall),
+                            Text(
+                              t.profile.personalInfoLongDesc,
+                              style: Typo.mediumPlus.copyWith(
+                                color: colorScheme.onPrimary.withOpacity(0.56),
+                              ),
                             ),
-                          ),
-                          SizedBox(height: Spacing.smMedium),
-                          EditProfileFieldItem(
-                            profileFieldKey: ProfileFieldKey.jobTitle,
-                            onChange: (input) {
-                              context.read<EditProfileBloc>().add(
-                                    EditProfileEvent.jobTitleChange(
-                                      input: input,
-                                    ),
-                                  );
-                            },
-                            value: widget.userProfile.jobTitle,
-                          ),
-                          SizedBox(height: Spacing.smMedium),
-                          EditProfileFieldItem(
-                            profileFieldKey: ProfileFieldKey.companyName,
-                            onChange: (input) {
-                              context.read<EditProfileBloc>().add(
-                                    EditProfileEvent.organizationChange(
-                                      input: input,
-                                    ),
-                                  );
-                            },
-                            value: widget.userProfile.companyName,
-                          ),
-                          SizedBox(height: Spacing.smMedium),
-                          FrostedGlassDropDownV2(
-                            label: t.profile.industry,
-                            hintText: t.profile.hint.industry,
-                            listItem: LemonIndustry.values
-                                .map((e) => e.industry)
-                                .toList(),
-                            onValueChange: (value) {
-                              context.read<EditProfileBloc>().add(
-                                    EditProfileEvent.industrySelect(
-                                      industry: value,
-                                    ),
-                                  );
-                            },
-                            selectedValue:
-                                state.industry ?? widget.userProfile.industry,
-                          ),
-                          SizedBox(height: Spacing.smMedium),
-                          EditProfileFieldItem(
-                            profileFieldKey: ProfileFieldKey.educationTitle,
-                            onChange: (value) {
-                              context.read<EditProfileBloc>().add(
-                                    EditProfileEvent.educationChange(
-                                      input: value,
-                                    ),
-                                  );
-                            },
-                            value: widget.userProfile.educationTitle,
-                          ),
-                          SizedBox(height: Spacing.smMedium),
-                          EditProfileFieldItem(
-                            profileFieldKey: ProfileFieldKey.newGender,
-                            onChange: (value) {
-                              context.read<EditProfileBloc>().add(
-                                    EditProfileEvent.genderSelect(
-                                      gender: value,
-                                    ),
-                                  );
-                            },
-                            value: state.gender ?? widget.userProfile.newGender,
-                          ),
-                          SizedBox(height: Spacing.smMedium),
-                          Focus(
-                            child: EditProfileFieldItem(
-                              controller: birthDayCtrl,
-                              profileFieldKey: ProfileFieldKey.dateOfBirth,
+                            SizedBox(height: Spacing.smMedium),
+                            EditProfileFieldItem(
+                              profileFieldKey: ProfileFieldKey.jobTitle,
+                              onChange: (input) {
+                                context.read<EditProfileBloc>().add(
+                                      EditProfileEvent.jobTitleChange(
+                                        input: input,
+                                      ),
+                                    );
+                              },
+                              value: widget.userProfile.jobTitle,
+                            ),
+                            SizedBox(height: Spacing.smMedium),
+                            EditProfileFieldItem(
+                              profileFieldKey: ProfileFieldKey.companyName,
+                              onChange: (input) {
+                                context.read<EditProfileBloc>().add(
+                                      EditProfileEvent.organizationChange(
+                                        input: input,
+                                      ),
+                                    );
+                              },
+                              value: widget.userProfile.companyName,
+                            ),
+                            SizedBox(height: Spacing.smMedium),
+                            FrostedGlassDropDownV2(
+                              label: t.profile.industry,
+                              hintText: t.profile.hint.industry,
+                              listItem: LemonIndustry.values
+                                  .map((e) => e.industry)
+                                  .toList(),
+                              onValueChange: (value) {
+                                context.read<EditProfileBloc>().add(
+                                      EditProfileEvent.industrySelect(
+                                        industry: value,
+                                      ),
+                                    );
+                              },
+                              selectedValue:
+                                  state.industry ?? widget.userProfile.industry,
+                            ),
+                            SizedBox(height: Spacing.smMedium),
+                            EditProfileFieldItem(
+                              profileFieldKey: ProfileFieldKey.educationTitle,
                               onChange: (value) {
-                                birthDayCtrl.text = value;
-                              },
-                              onDateSelect: (selectedDate) {
-                                birthDayCtrl.text =
-                                    date_utils.DateUtils.toLocalDateString(
-                                  selectedDate,
-                                );
                                 context.read<EditProfileBloc>().add(
-                                      EditProfileEvent.birthdayChange(
-                                        input: selectedDate,
+                                      EditProfileEvent.educationChange(
+                                        input: value,
                                       ),
                                     );
                               },
-                              value: widget.userProfile.dateOfBirth.toString(),
+                              value: widget.userProfile.educationTitle,
                             ),
-                            onFocusChange: (hasFocus) {
-                              if (!hasFocus) {
-                                // Handle when on blur input
-                                birthDayCtrl.text =
-                                    date_utils.DateUtils.toLocalDateString(
-                                  date_utils.DateUtils.parseDateString(
-                                    birthDayCtrl.text,
-                                  ),
-                                );
+                            SizedBox(height: Spacing.smMedium),
+                            EditProfileFieldItem(
+                              profileFieldKey: ProfileFieldKey.newGender,
+                              onChange: (value) {
                                 context.read<EditProfileBloc>().add(
-                                      EditProfileEvent.birthdayChange(
-                                        input: date_utils.DateUtils
-                                            .parseDateString(
-                                          (birthDayCtrl.text),
-                                        ),
+                                      EditProfileEvent.genderSelect(
+                                        gender: value,
                                       ),
                                     );
-                              }
-                            },
-                          ),
-                          SizedBox(height: Spacing.smMedium),
-                          EditProfileFieldItem(
-                            profileFieldKey: ProfileFieldKey.ethnicity,
-                            onChange: (value) {
-                              context.read<EditProfileBloc>().add(
-                                    EditProfileEvent.ethnicitySelect(
-                                      ethnicity: value,
+                              },
+                              value:
+                                  state.gender ?? widget.userProfile.newGender,
+                            ),
+                            SizedBox(height: Spacing.smMedium),
+                            Focus(
+                              child: EditProfileFieldItem(
+                                controller: birthDayCtrl,
+                                profileFieldKey: ProfileFieldKey.dateOfBirth,
+                                onChange: (value) {
+                                  birthDayCtrl.text = value;
+                                },
+                                onDateSelect: (selectedDate) {
+                                  birthDayCtrl.text =
+                                      date_utils.DateUtils.toLocalDateString(
+                                    selectedDate,
+                                  );
+                                  context.read<EditProfileBloc>().add(
+                                        EditProfileEvent.birthdayChange(
+                                          input: selectedDate,
+                                        ),
+                                      );
+                                },
+                                value:
+                                    widget.userProfile.dateOfBirth.toString(),
+                              ),
+                              onFocusChange: (hasFocus) {
+                                if (!hasFocus) {
+                                  // Handle when on blur input
+                                  birthDayCtrl.text =
+                                      date_utils.DateUtils.toLocalDateString(
+                                    date_utils.DateUtils.parseDateString(
+                                      birthDayCtrl.text,
                                     ),
                                   );
-                            },
-                            value:
-                                state.ethnicity ?? widget.userProfile.ethnicity,
-                          ),
-                        ],
+                                  context.read<EditProfileBloc>().add(
+                                        EditProfileEvent.birthdayChange(
+                                          input: date_utils.DateUtils
+                                              .parseDateString(
+                                            (birthDayCtrl.text),
+                                          ),
+                                        ),
+                                      );
+                                }
+                              },
+                            ),
+                            SizedBox(height: Spacing.smMedium),
+                            EditProfileFieldItem(
+                              profileFieldKey: ProfileFieldKey.ethnicity,
+                              onChange: (value) {
+                                context.read<EditProfileBloc>().add(
+                                      EditProfileEvent.ethnicitySelect(
+                                        ethnicity: value,
+                                      ),
+                                    );
+                              },
+                              value: state.ethnicity ??
+                                  widget.userProfile.ethnicity,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.symmetric(vertical: Spacing.smMedium),
-                    child: LinearGradientButton(
-                      onTap: () {
-                        context.read<EditProfileBloc>().add(
-                              EditProfileEvent.submitEditProfile(),
-                            );
-                      },
-                      label: t.profile.saveChanges,
-                      textStyle: Typo.medium.copyWith(
-                        fontFamily: FontFamily.nohemiVariable,
-                        fontWeight: FontWeight.w600,
+                    Container(
+                      margin: EdgeInsets.symmetric(vertical: Spacing.smMedium),
+                      child: LinearGradientButton(
+                        onTap: () {
+                          context.read<EditProfileBloc>().add(
+                                EditProfileEvent.submitEditProfile(),
+                              );
+                        },
+                        label: t.profile.saveChanges,
+                        textStyle: Typo.medium.copyWith(
+                          fontFamily: FontFamily.nohemiVariable,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        height: Sizing.large,
+                        radius: BorderRadius.circular(LemonRadius.large),
+                        mode: GradientButtonMode.lavenderMode,
+                        loadingWhen: state.status == EditProfileStatus.loading,
                       ),
-                      height: Sizing.large,
-                      radius: BorderRadius.circular(LemonRadius.large),
-                      mode: GradientButtonMode.lavenderMode,
-                      loadingWhen: state.status == EditProfileStatus.loading,
                     ),
-                  ),
-                  SizedBox(height: Spacing.smMedium),
-                ],
+                    SizedBox(height: Spacing.smMedium),
+                  ],
+                ),
               ),
             ),
-          ),
-        );
-      }),
+          );
+        },
+      ),
     );
   }
 
