@@ -318,7 +318,9 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
     emit(state.copyWith(status: EditProfileStatus.initial));
   }
 
-  Future<void> uploadImage() async {
+  Future<void> uploadImage(
+    Emitter<EditProfileState> emit,
+  ) async {
     final client = getIt<AppGQL>().client;
     final fileUploadService = FileUploadService(client);
     try {
@@ -349,7 +351,7 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
       ),
     );
     if (state.profilePhoto != null) {
-      await uploadImage();
+      await uploadImage(emit);
     }
     final notificationFilterInput = <NotificationFilterInput>[];
     state.notificationMap?.forEach((type, value) {

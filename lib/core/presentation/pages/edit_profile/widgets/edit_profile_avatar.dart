@@ -24,7 +24,6 @@ class EditProfileAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final bloc = context.read<EditProfileBloc>();
     return SizedBox(
       width: 80.w,
       height: 80.w,

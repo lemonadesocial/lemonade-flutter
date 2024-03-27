@@ -88,8 +88,10 @@ class EditProfilePersonalDialogState extends State<EditProfilePersonalDialog> {
                             profileFieldKey: ProfileFieldKey.jobTitle,
                             onChange: (input) {
                               context.read<EditProfileBloc>().add(
-                                  EditProfileEvent.jobTitleChange(
-                                      input: input));
+                                    EditProfileEvent.jobTitleChange(
+                                      input: input,
+                                    ),
+                                  );
                             },
                             value: widget.userProfile.jobTitle,
                           ),
@@ -139,7 +141,10 @@ class EditProfilePersonalDialogState extends State<EditProfilePersonalDialog> {
                             profileFieldKey: ProfileFieldKey.newGender,
                             onChange: (value) {
                               context.read<EditProfileBloc>().add(
-                                  EditProfileEvent.genderSelect(gender: value));
+                                    EditProfileEvent.genderSelect(
+                                      gender: value,
+                                    ),
+                                  );
                             },
                             value: state.gender ?? widget.userProfile.newGender,
                           ),

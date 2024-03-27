@@ -27,8 +27,11 @@ class NotificationSettingPage extends StatelessWidget {
         );
     return BlocProvider(
       create: (context) => EditProfileBloc()
-        ..add(EditProfileEvent.mapNotificationType(
-            notificationFilterString: notificationFilterString)),
+        ..add(
+          EditProfileEvent.mapNotificationType(
+            notificationFilterString: notificationFilterString,
+          ),
+        ),
       child: BlocConsumer<EditProfileBloc, EditProfileState>(
         listener: (context, state) {
           if (state.status == EditProfileStatus.success) {
