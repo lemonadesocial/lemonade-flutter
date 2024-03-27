@@ -1,3 +1,4 @@
+import 'package:app/core/domain/event/entities/event_ticket_category.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/payment/entities/purchasable_item/purchasable_item.dart';
 import 'package:app/core/utils/event_tickets_utils.dart';
@@ -20,7 +21,7 @@ class SelectEventTicketsBloc
   String? selectedCurrency;
   // only for SelectTicketsPaymentMethod.wallet
   String? selectedNetwork;
-  String? selectedTicketCategory;
+  EventTicketCategory? selectedTicketCategory;
 
   SelectEventTicketsBloc()
       : super(
@@ -223,7 +224,7 @@ class SelectEventTicketsEvent with _$SelectEventTicketsEvent {
     required SelectTicketsPaymentMethod paymentMethod,
   }) = SelectEventTicketsEventOnSelectPaymentMethod;
   factory SelectEventTicketsEvent.selectTicketCategory({
-    String? category,
+    EventTicketCategory? category,
   }) = SelectEventTicketsEventOnSelectTicketCategory;
   factory SelectEventTicketsEvent.clear() = SelectEventTicketsEventOnClear;
 }
@@ -238,6 +239,6 @@ class SelectEventTicketsState with _$SelectEventTicketsState {
     String? selectedCurrency,
     Either<double, BigInt>? totalAmount,
     String? selectedNetwork,
-    String? selectedTicketCategory,
+    EventTicketCategory? selectedTicketCategory,
   }) = _SelectEventTicketsState;
 }

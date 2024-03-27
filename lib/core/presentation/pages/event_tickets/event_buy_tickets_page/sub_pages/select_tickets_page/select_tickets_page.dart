@@ -97,7 +97,7 @@ class _SelectTicketViewState extends State<SelectTicketView> {
         );
     final ticketTypesByCategory = EventTicketUtils.filterTicketTypeByCategory(
       response.ticketTypes ?? [],
-      category: selectedTicketCategory,
+      category: selectedTicketCategory?.id,
     );
 
     if (ticketTypesByCategory.isEmpty) {
@@ -312,7 +312,9 @@ class _SelectTicketViewState extends State<SelectTicketView> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          t.event.eventBuyTickets.selectTickets,
+                          selectedTicketCategory != null
+                              ? selectedTicketCategory.title ?? ''
+                              : t.event.eventBuyTickets.selectTickets,
                           style: Typo.extraLarge.copyWith(
                             color: colorScheme.onPrimary,
                             fontFamily: FontFamily.nohemiVariable,
@@ -339,7 +341,7 @@ class _SelectTicketViewState extends State<SelectTicketView> {
                           final ticketTypesByCategory =
                               EventTicketUtils.filterTicketTypeByCategory(
                             response.ticketTypes ?? [],
-                            category: selectedTicketCategory,
+                            category: selectedTicketCategory?.id,
                           );
                           final stripeTicketTypes =
                               EventTicketUtils.getTicketTypesSupportStripe(
@@ -389,7 +391,7 @@ class _SelectTicketViewState extends State<SelectTicketView> {
                         final ticketTypesByCategory =
                             EventTicketUtils.filterTicketTypeByCategory(
                           response.ticketTypes ?? [],
-                          category: selectedTicketCategory,
+                          category: selectedTicketCategory?.id,
                         )..sort(
                                 (a, b) {
                                   final aOrder = a.limited == true &&

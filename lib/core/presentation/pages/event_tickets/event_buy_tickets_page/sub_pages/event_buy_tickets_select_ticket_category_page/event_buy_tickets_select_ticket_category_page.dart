@@ -71,7 +71,7 @@ class EventBuyTicketsSelectTicketCategoryPage extends StatelessWidget {
                             SelectEventTicketsEvent.selectTicketCategory(
                               category: allCategories.isEmpty
                                   ? null
-                                  : allCategories.first.id,
+                                  : allCategories.first,
                             ),
                           );
                       context.router.replace(
