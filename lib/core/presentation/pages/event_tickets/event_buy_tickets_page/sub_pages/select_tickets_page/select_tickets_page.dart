@@ -127,10 +127,12 @@ class _SelectTicketViewState extends State<SelectTicketView> {
           );
     }
 
-    // auto increase if only 1 ticket tier and only 1 price option in that tier
+    // auto select if only 1 ticket tier and only 1 price option in that tier
     if (ticketTypesByCategory.length == 1 &&
         ticketTypesByCategory.first.prices?.isNotEmpty == true &&
-        ticketTypesByCategory.first.prices?.length == 1) {
+        ticketTypesByCategory.first.prices?.length == 1 &&
+        ticketTypesByCategory.first.limited == true &&
+        ticketTypesByCategory.first.whitelisted == true) {
       final price = ticketTypesByCategory.first.prices!.first;
       context.read<SelectEventTicketsBloc>().add(
             SelectEventTicketsEvent.select(
