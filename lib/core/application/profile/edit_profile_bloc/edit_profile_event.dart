@@ -26,6 +26,22 @@ class EditProfileEvent with _$EditProfileEvent {
       EditProfileEventUsernameChange;
   factory EditProfileEvent.birthdayChange({required DateTime input}) =
       EditProfileEventBirthdayChange;
+  factory EditProfileEvent.twitterChange({required String input}) =
+      EditProfileEventTwitterChange;
+  factory EditProfileEvent.linkedinChange({required String input}) =
+      EditProfileEventLinkedinChange;
+  factory EditProfileEvent.instagramChange({required String input}) =
+      EditProfileEventInstagramChange;
+  factory EditProfileEvent.facebookChange({required String input}) =
+      EditProfileEventFacebookChange;
+  factory EditProfileEvent.farcasterChange({required String input}) =
+      EditProfileEventFarcasterChange;
+  factory EditProfileEvent.githubChange({required String input}) =
+      EditProfileEventGithubChange;
+  factory EditProfileEvent.lensChange({required String input}) =
+      EditProfileEventLensChange;
+  factory EditProfileEvent.mirrorChange({required String input}) =
+      EditProfileEventMirrorChange;
   factory EditProfileEvent.mapNotificationType({
     required List<String> notificationFilterString,
   }) = EditProfileEventMapNotificationType;

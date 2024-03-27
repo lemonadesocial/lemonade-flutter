@@ -1,12 +1,11 @@
-import 'package:app/core/application/event/event_application_form_profile_setting_bloc/event_application_form_profile_setting_bloc.dart';
 import 'package:app/core/domain/common/common_enums.dart';
 import 'package:app/core/domain/onboarding/onboarding_inputs.dart';
 import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/presentation/pages/setting/enums/notification_type.dart';
 import 'package:app/core/service/file/file_upload_service.dart';
-import 'package:app/core/service/post/post_service.dart';
 import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/core/utils/image_utils.dart';
+import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -32,13 +31,20 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
     on<EditProfileEventEthnicitySelect>(onEthnicitySelect);
     on<EditProfileEventUsernameChange>(onUsernameChange);
     on<EditProfileEventBirthdayChange>(onBirthDayChange);
+    on<EditProfileEventTwitterChange>(onTwitterChange);
+    on<EditProfileEventLinkedinChange>(onLinkedinChange);
+    on<EditProfileEventInstagramChange>(onInstagramChange);
+    on<EditProfileEventFarcasterChange>(onFarcasterChange);
+    on<EditProfileEventGithubChange>(onGithubChange);
+    on<EditProfileEventLensChange>(onLensChange);
+    on<EditProfileEventMirrorChange>(onMirrorChange);
+
     on<EditProfileEventMapNotificationType>(mapNotificationType);
     on<EditProfileEventNotificationCheck>(onNotificationCheck);
     on<EditProfileEventSubmitEditProfile>(submitEditProfile);
   }
 
   final userRepository = getIt<UserRepository>();
-  final birthDayCtrl = TextEditingController();
   final notificationMap = <NotificationSettingType, bool>{};
 
   String? mImageId;
@@ -185,7 +191,91 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
     emit(
       state.copyWith(
         status: EditProfileStatus.editing,
-        // dob: event.input,
+        dob: event.input,
+      ),
+    );
+  }
+
+  Future<void> onTwitterChange(
+    EditProfileEventTwitterChange event,
+    Emitter<EditProfileState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        status: EditProfileStatus.editing,
+        handleTwitter: event.input,
+      ),
+    );
+  }
+
+  Future<void> onLinkedinChange(
+    EditProfileEventLinkedinChange event,
+    Emitter<EditProfileState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        status: EditProfileStatus.editing,
+        handleLinkedin: event.input,
+      ),
+    );
+  }
+
+  Future<void> onInstagramChange(
+    EditProfileEventInstagramChange event,
+    Emitter<EditProfileState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        status: EditProfileStatus.editing,
+        handleInstagram: event.input,
+      ),
+    );
+  }
+
+  Future<void> onFarcasterChange(
+    EditProfileEventFarcasterChange event,
+    Emitter<EditProfileState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        status: EditProfileStatus.editing,
+        handleFarcaster: event.input,
+      ),
+    );
+  }
+
+  Future<void> onGithubChange(
+    EditProfileEventGithubChange event,
+    Emitter<EditProfileState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        status: EditProfileStatus.editing,
+        handleGithub: event.input,
+      ),
+    );
+  }
+
+  Future<void> onLensChange(
+    EditProfileEventLensChange event,
+    Emitter<EditProfileState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        status: EditProfileStatus.editing,
+        handleLens: event.input,
+      ),
+    );
+  }
+
+  Future<void> onMirrorChange(
+    EditProfileEventMirrorChange event,
+    Emitter<EditProfileState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        status: EditProfileStatus.editing,
+        handleMirror: event.input,
       ),
     );
   }
@@ -271,23 +361,30 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
         );
       }
     });
-    final response = await userRepository.updateUserProfile(
-      UpdateUserProfileInput(
+    final response = await userRepository.updateUser(
+      input: Input$UserInput(
         username: state.username,
-        pronoun: state.pronoun,
-        displayName: state.displayName,
+        pronoun: state.pronoun?.pronoun,
+        display_name: state.displayName,
         tagline: state.tagline,
-        shortBio: state.shortBio,
-        jobTitle: state.jobTitle,
-        educationTitle: state.education,
+        description: state.shortBio,
+        job_title: state.jobTitle,
+        education_title: state.education,
         industry: state.industry,
-        newGender: state.gender,
+        new_gender: state.gender,
         ethnicity: state.ethnicity,
-        companyName: state.companyName,
-        uploadPhoto: mImageId != null ? [mImageId!] : null,
-        notificationFilterInput:
-            notificationFilterInput.isEmpty ? null : notificationFilterInput,
-        dob: state.dob,
+        company_name: state.companyName,
+        new_photos: mImageId != null ? [mImageId!] : null,
+        // notification_filters:
+        //     notificationFilterInput.isEmpty ? null : notificationFilterInput,
+        date_of_birth: state.dob,
+        handle_twitter: state.handleTwitter,
+        handle_instagram: state.handleInstagram,
+        handle_farcaster: state.handleFarcaster,
+        handle_github: state.handleGithub,
+        handle_lens: state.handleLens,
+        handle_linkedin: state.handleLinkedin,
+        handle_mirror: state.handleMirror,
       ),
     );
     response.fold(
