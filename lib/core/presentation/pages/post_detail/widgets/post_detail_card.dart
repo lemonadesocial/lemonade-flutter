@@ -8,7 +8,6 @@ import 'package:app/core/presentation/dpos/common/dropdown_item_dpo.dart';
 import 'package:app/core/presentation/widgets/event/event_post_card_widget.dart';
 import 'package:app/core/presentation/widgets/floating_frosted_glass_dropdown_widget.dart';
 import 'package:app/core/presentation/widgets/hero_image_viewer_widget.dart';
-import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/core/presentation/widgets/post/post_card_actions_widget.dart';
 import 'package:app/core/presentation/widgets/report/report_bottom_sheet.dart';
@@ -211,7 +210,6 @@ class PostDetailCard extends StatelessWidget {
   Widget _buildFile(ColorScheme colorScheme, DbFile? file) {
     return Container(
       width: double.infinity,
-      height: 270,
       decoration: BoxDecoration(
         border: Border.all(
           color: colorScheme.outline,
@@ -225,9 +223,9 @@ class PostDetailCard extends StatelessWidget {
           imageUrl: ImageUtils.generateUrl(file: file),
           child: CachedNetworkImage(
             imageUrl: ImageUtils.generateUrl(file: file),
-            fit: BoxFit.cover,
-            errorWidget: (_, __, ___) => ImagePlaceholder.defaultPlaceholder(),
-            placeholder: (_, __) => ImagePlaceholder.defaultPlaceholder(),
+            fit: BoxFit.contain,
+            errorWidget: (_, __, ___) => const SizedBox.shrink(),
+            placeholder: (_, __) => const SizedBox.shrink(),
           ),
         ),
       ),

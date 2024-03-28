@@ -59,7 +59,6 @@ const paymentAccountFragment = '''
 const paymentFragment = '''
   $paymentAccountFragment
 
-
   fragment paymentFragment on NewPayment {
     _id
     stamps
@@ -81,26 +80,6 @@ const paymentFragment = '''
     }
     due_amount
     ref_data
-    ticket_types_expanded {
-      _id
-      active
-      event
-      title
-      prices {
-        cost
-        currency
-        network
-        default
-      }
-      default
-      address_required
-      description
-      photos_expanded {
-        _id
-        bucket
-        key
-      }
-    }
   }
 ''';
 
