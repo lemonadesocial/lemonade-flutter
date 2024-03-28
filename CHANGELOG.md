@@ -1,5 +1,28 @@
 # Changelog
 
+## [1.12.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.11.0...v1.12.0) (2024-03-28)
+
+
+### Features
+
+* bottom toolbar refinement ([#475](https://github.com/lemonadesocial/lemonade-flutter/issues/475)) ([76ab9a1](https://github.com/lemonadesocial/lemonade-flutter/commit/76ab9a19bee5288a0c85071c35611dbd904b10bd))
+* bring back event bottom drawer ([#489](https://github.com/lemonadesocial/lemonade-flutter/issues/489)) ([f237fa5](https://github.com/lemonadesocial/lemonade-flutter/commit/f237fa5f0de78be9142233c02e1060390d573b48))
+* edit social profile ([#491](https://github.com/lemonadesocial/lemonade-flutter/issues/491)) ([41c293f](https://github.com/lemonadesocial/lemonade-flutter/commit/41c293f1a73aa1b8480c5fb763661452231ae19c))
+* event ticket category ([#473](https://github.com/lemonadesocial/lemonade-flutter/issues/473)) ([2de3342](https://github.com/lemonadesocial/lemonade-flutter/commit/2de33428e06926775587c605bde5370350bf1b01))
+* integrate sentry ([#484](https://github.com/lemonadesocial/lemonade-flutter/issues/484)) ([e99fab3](https://github.com/lemonadesocial/lemonade-flutter/commit/e99fab38e7fc5dc510892fda12c14807a747fbcc))
+* lock - whitelist ticket type ([#470](https://github.com/lemonadesocial/lemonade-flutter/issues/470)) ([86aadf3](https://github.com/lemonadesocial/lemonade-flutter/commit/86aadf3f0db877cf8dcaa392372f4a1b7e1c3c4c))
+* locked/categorized ticket types for guest view ([#479](https://github.com/lemonadesocial/lemonade-flutter/issues/479)) ([2de7230](https://github.com/lemonadesocial/lemonade-flutter/commit/2de72300238b2889a52bf2bf092f0d36f237ec06))
+* remake snackbar ([#478](https://github.com/lemonadesocial/lemonade-flutter/issues/478)) ([ee33ad0](https://github.com/lemonadesocial/lemonade-flutter/commit/ee33ad085bc95082f27c1eb9fa2ea3dad465220d))
+
+
+### Bug Fixes
+
+* enhance select currency dropdown when create ticket price ([#490](https://github.com/lemonadesocial/lemonade-flutter/issues/490)) ([6f34173](https://github.com/lemonadesocial/lemonade-flutter/commit/6f341739ba1fda29acf4e51a626f31d4fea65a1e))
+* fix typo querying payment ([#492](https://github.com/lemonadesocial/lemonade-flutter/issues/492)) ([1857bce](https://github.com/lemonadesocial/lemonade-flutter/commit/1857bcef33d35efd0d7907b73966e4b36dd43d42))
+* missing refresh event when approve decline join request ([#488](https://github.com/lemonadesocial/lemonade-flutter/issues/488)) ([6bd96f2](https://github.com/lemonadesocial/lemonade-flutter/commit/6bd96f219651f12f7395b50378e1ab8fff2fc9ef))
+* post item title overflow ([#486](https://github.com/lemonadesocial/lemonade-flutter/issues/486)) ([4fafd4e](https://github.com/lemonadesocial/lemonade-flutter/commit/4fafd4e2ee8b385c892ba371a6c11f7e509c95b1))
+* refactor event detail layout ([#485](https://github.com/lemonadesocial/lemonade-flutter/issues/485)) ([e8095ae](https://github.com/lemonadesocial/lemonade-flutter/commit/e8095ae074d1be9b9784247fcb139237a40a1867))
+
 ## [1.11.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.10.0...v1.11.0) (2024-03-22)
 
 
