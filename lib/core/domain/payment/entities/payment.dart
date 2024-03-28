@@ -48,7 +48,8 @@ class Payment with _$Payment {
         account: dto.account,
         dueAmount: dto.dueAmount,
         ticketTypesExpanded: (dto.ticketTypesExpanded ?? [])
-            .map((item) => EventTicketType.fromDto(item))
+            .where((element) => element != null)
+            .map((item) => EventTicketType.fromDto(item!))
             .toList(),
         refData: dto.refData,
       );
