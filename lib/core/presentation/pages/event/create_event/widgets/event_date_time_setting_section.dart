@@ -100,8 +100,11 @@ class EventDateTimeSettingSection extends StatelessWidget {
 }
 
 class _DateTimeRowItem extends StatelessWidget {
-  const _DateTimeRowItem(
-      {required this.color, required this.text, required this.date});
+  const _DateTimeRowItem({
+    required this.color,
+    required this.text,
+    required this.date,
+  });
   final Color color;
   final String text;
   final String date;

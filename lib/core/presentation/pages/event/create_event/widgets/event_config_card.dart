@@ -73,7 +73,7 @@ class EventConfigCard extends StatelessWidget {
                           fontWeight: FontWeight.w400,
                         ),
                       ),
-                    )
+                    ),
                 ],
               ),
             ),

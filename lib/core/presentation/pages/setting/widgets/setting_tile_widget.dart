@@ -5,18 +5,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SettingTileWidget extends StatelessWidget {
-  const SettingTileWidget(
-      {super.key,
-      required this.title,
-      this.leading,
-      this.leadingCircle = true,
-      required this.onTap,
-      this.subTitle,
-      this.trailing,
-      this.featureAvailable = true,
-      this.titleStyle,
-      this.color,
-      this.radius});
+  const SettingTileWidget({
+    super.key,
+    required this.title,
+    this.leading,
+    this.leadingCircle = true,
+    required this.onTap,
+    this.subTitle,
+    this.trailing,
+    this.featureAvailable = true,
+    this.titleStyle,
+    this.color,
+    this.radius,
+  });
 
   final String title;
   final String? subTitle;
