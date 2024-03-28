@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.12.1](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.12.0...v1.12.1) (2024-03-28)
+
+
+### Bug Fixes
+
+* handle ticket_types_expanded and resize post image in newsfeed ([#497](https://github.com/lemonadesocial/lemonade-flutter/issues/497)) ([bb90d5e](https://github.com/lemonadesocial/lemonade-flutter/commit/bb90d5e146f0bc407f1e5584a0e96d8c1dfc597b))
+
 ## [1.12.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.11.0...v1.12.0) (2024-03-28)
 
 
