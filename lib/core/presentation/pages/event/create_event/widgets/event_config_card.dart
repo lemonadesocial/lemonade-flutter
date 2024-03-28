@@ -1,6 +1,7 @@
 import 'package:app/core/presentation/widgets/loading_widget.dart';
-import 'package:app/gen/fonts.gen.dart';
 import 'package:app/theme/color.dart';
+import 'package:app/theme/sizing.dart';
+import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -29,25 +30,24 @@ class EventConfigCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: 70.h,
-        padding: EdgeInsets.symmetric(horizontal: 10.w),
+        padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
         decoration: BoxDecoration(
-          color: selected == true ? LemonColor.white12 : Colors.transparent,
-          border: selected == true
-              ? null
-              : Border.all(color: colorScheme.outlineVariant),
+          color: selected == true ? LemonColor.atomicBlack : Colors.transparent,
+          border:
+              selected == true ? null : Border.all(color: LemonColor.white09),
           borderRadius: BorderRadius.circular(10.r),
         ),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              width: 40.w,
-              height: 40.h,
+              width: Sizing.medium,
+              height: Sizing.medium,
               margin: EdgeInsets.only(right: 10.w),
               decoration: BoxDecoration(
-                color:
-                    selected == true ? LemonColor.white12 : colorScheme.surface,
-                borderRadius: BorderRadius.circular(10.r),
+                color: colorScheme.secondaryContainer,
+                borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
               ),
               child: loading == true ? Loading.defaultLoading(context) : icon,
             ),
@@ -58,20 +58,22 @@ class EventConfigCard extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: Typo.small.copyWith(
-                      color: colorScheme.onSurface,
-                      fontFamily: FontFamily.circularStd,
-                      fontWeight: FontWeight.w600,
+                    style: Typo.medium.copyWith(
+                      color: colorScheme.onPrimary,
+                      fontWeight: FontWeight.w400,
                     ),
                   ),
                   if (description?.isNotEmpty == true)
-                    Text(
-                      description!,
-                      style: Typo.extraSmall.copyWith(
-                        color: colorScheme.onSecondary,
-                        fontFamily: FontFamily.circularStd,
+                    Padding(
+                      padding: EdgeInsets.only(top: 2.h),
+                      child: Text(
+                        description!,
+                        style: Typo.small.copyWith(
+                          color: colorScheme.onSecondary,
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
-                    ),
+                    )
                 ],
               ),
             ),

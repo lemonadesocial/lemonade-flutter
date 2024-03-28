@@ -5,26 +5,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SettingTileWidget extends StatelessWidget {
-  const SettingTileWidget({
-    super.key,
-    required this.title,
-    this.leading,
-    required this.onTap,
-    this.subTitle,
-    this.trailing,
-    this.featureAvailable = true,
-    this.titleColor,
-    this.color,
-  });
+  const SettingTileWidget(
+      {super.key,
+      required this.title,
+      this.leading,
+      this.leadingCircle = true,
+      required this.onTap,
+      this.subTitle,
+      this.trailing,
+      this.featureAvailable = true,
+      this.titleStyle,
+      this.color,
+      this.radius});
 
   final String title;
   final String? subTitle;
   final Widget? leading;
+  final bool? leadingCircle;
   final Widget? trailing;
   final VoidCallback onTap;
   final bool featureAvailable;
-  final Color? titleColor;
+  final TextStyle? titleStyle;
   final Color? color;
+  final double? radius;
 
   @override
   Widget build(BuildContext context) {
@@ -35,26 +38,30 @@ class SettingTileWidget extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: color ?? colorScheme.onPrimary.withOpacity(0.06),
-          borderRadius: BorderRadius.circular(LemonRadius.normal),
+          borderRadius: BorderRadius.circular(radius ?? LemonRadius.normal),
         ),
         clipBehavior: Clip.hardEdge,
         child: Stack(
           children: [
             Padding(
-              padding: EdgeInsets.all(Spacing.small),
+              padding: EdgeInsets.all(Spacing.smMedium),
               child: Row(
                 children: [
                   leading != null
-                      ? Container(
-                          width: 42.w,
-                          height: 42.w,
-                          padding: EdgeInsets.all(Spacing.xSmall),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: colorScheme.secondaryContainer,
-                          ),
-                          child: leading,
-                        )
+                      ? leadingCircle == true
+                          ? Container(
+                              width: 42.w,
+                              height: 42.w,
+                              padding: EdgeInsets.all(Spacing.xSmall),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: colorScheme.secondaryContainer,
+                              ),
+                              child: leading,
+                            )
+                          : SizedBox(
+                              child: leading,
+                            )
                       : const SizedBox(),
                   leading != null
                       ? SizedBox(width: Spacing.small)
@@ -65,10 +72,11 @@ class SettingTileWidget extends StatelessWidget {
                       children: [
                         Text(
                           title,
-                          style: Typo.medium.copyWith(
-                            color: titleColor ?? colorScheme.onPrimary,
-                            fontWeight: FontWeight.w600,
-                          ),
+                          style: titleStyle ??
+                              Typo.medium.copyWith(
+                                color: colorScheme.onPrimary,
+                                fontWeight: FontWeight.w600,
+                              ),
                         ),
                         SizedBox(
                           height: 2.h,

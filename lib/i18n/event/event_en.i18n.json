@@ -130,6 +130,7 @@
     "eventCreation": {
         "createEvent": "Create event",
         "title": "Title",
+        "titleHint": "Enter title",
         "description": "Description",
         "descriptionPlaceholder": "What is this experience about ?",
         "createEventSuccessfully": "Create event successfully",

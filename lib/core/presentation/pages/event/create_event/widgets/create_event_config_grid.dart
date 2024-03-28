@@ -157,10 +157,10 @@ class CreateEventConfigGrid extends StatelessWidget {
         crossAxisCount: 2,
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,
-        childAspectRatio: 2.5,
+        childAspectRatio: 2.3,
       ),
       delegate: SliverChildBuilderDelegate(
-        childCount: 6,
+        childCount: 4,
         (BuildContext context, int index) {
           final eventConfig = eventConfigs[index];
           EventConfigurationType? eventConfigType = eventConfig.type;
