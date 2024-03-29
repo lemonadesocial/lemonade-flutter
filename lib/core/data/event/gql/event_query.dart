@@ -181,6 +181,7 @@ const eventFragment = '''
   checkin_count
   attending_count
   pending_request_count
+  guest_directory_enabled
   rewards {
     _id
     active

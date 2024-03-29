@@ -27,15 +27,29 @@ class ChatPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final room = getIt<MatrixService>().client.getRoomById(roomId);
-    if (room == null) {
-      return Scaffold(
-        backgroundColor: colorScheme.background,
-        appBar: const LemonAppBar(),
-        body: Loading.defaultLoading(context),
-      );
-    }
-    return ChatPageWithRoom(sideView: sideView, room: room);
+    final matrixClient = getIt<MatrixService>().client;
+
+    return FutureBuilder(
+      future: matrixClient.roomsLoading,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Scaffold(
+            backgroundColor: colorScheme.background,
+            appBar: const LemonAppBar(),
+            body: Loading.defaultLoading(context),
+          );
+        }
+        final room = matrixClient.getRoomById(roomId);
+        if (room == null) {
+          return Scaffold(
+            backgroundColor: colorScheme.background,
+            appBar: const LemonAppBar(),
+            body: Loading.defaultLoading(context),
+          );
+        }
+        return ChatPageWithRoom(sideView: sideView, room: room);
+      },
+    );
   }
 }
 

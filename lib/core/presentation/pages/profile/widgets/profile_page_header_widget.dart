@@ -39,7 +39,7 @@ class ProfilePageHeader extends StatelessWidget {
       child: Column(
         children: [
           Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _ProfileAvatar(user: user),
               SizedBox(width: Spacing.small),
@@ -247,24 +247,31 @@ class _ProfileUserNameAndTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        if (user.username?.isNotEmpty == true)
-          TextBadge(label: '@${user.username}'),
-        Text(
-          displayName ?? t.common.anonymous,
-          style: Typo.extraMedium,
-          overflow: TextOverflow.ellipsis,
-          maxLines: 2,
-        ),
-        Text(
-          user.jobTitle ?? user.tagline ?? '...',
-          style: Typo.medium.copyWith(color: colorScheme.onSecondary),
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-        ),
-      ],
+    return Flexible(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (user.username?.isNotEmpty == true)
+                TextBadge(label: '@${user.username}'),
+            ],
+          ),
+          Text(
+            displayName ?? t.common.anonymous,
+            style: Typo.extraMedium,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 3,
+          ),
+          Text(
+            user.jobTitle ?? user.tagline ?? '...',
+            style: Typo.medium.copyWith(color: colorScheme.onSecondary),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
+      ),
     );
   }
 }

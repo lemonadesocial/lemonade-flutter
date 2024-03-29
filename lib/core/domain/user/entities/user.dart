@@ -93,6 +93,7 @@ class User with _$User {
     List<User>? blockedList,
     bool? termsAcceptedAdult,
     bool? termsAcceptedConditions,
+    String? matrixLocalpart,
   }) = _User;
 
   factory User.fromDto(UserDto dto) {
@@ -165,6 +166,7 @@ class User with _$User {
       blockedList: dto.blockedExpanded.map((e) => User.fromDto(e)).toList(),
       termsAcceptedAdult: dto.termsAcceptedAdult,
       termsAcceptedConditions: dto.termsAcceptedConditions,
+      matrixLocalpart: dto.matrixLocalpart,
     );
   }
 
