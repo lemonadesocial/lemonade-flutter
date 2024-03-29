@@ -289,6 +289,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.1"
+  calendar_date_picker2:
+    dependency: "direct main"
+    description:
+      name: calendar_date_picker2
+      sha256: e4bd75b55d721743f8736a8afe3ab6149f402c200135c952bbb82f1e10df4405
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.5.5"
   canonical_json:
     dependency: transitive
     description:
@@ -2804,6 +2812,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.2"
+  wheel_picker:
+    dependency: "direct main"
+    description:
+      name: wheel_picker
+      sha256: "532352faabd2905967b03d1266e2d6c1693ea03ef97bdee73a1062fafff0e8bf"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.4"
   win32:
     dependency: transitive
     description:
