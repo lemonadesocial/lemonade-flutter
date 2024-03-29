@@ -1,12 +1,16 @@
+import 'package:app/core/application/event/event_datetime_settings_bloc/event_datetime_settings_bloc.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_datetime_settings_page/event_datetime_settings_page.dart';
 import 'package:app/core/presentation/widgets/common/circle_dot_widget.dart';
 import 'package:app/gen/assets.gen.dart';
+import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:app/core/utils/date_utils.dart' as date_utils;
 
 class EventDateTimeSettingSection extends StatelessWidget {
   const EventDateTimeSettingSection({super.key});
@@ -14,6 +18,7 @@ class EventDateTimeSettingSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final t = Translations.of(context);
     return Column(
       children: [
         Container(
@@ -30,39 +35,46 @@ class EventDateTimeSettingSection extends StatelessWidget {
               ),
             ),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _DateTimeRowItem(
-                color: LemonColor.malachiteGreen,
-                text: 'Starts',
-                date: '15 Jan at 8:00pm',
-                onTap: () {
-                  showCupertinoModalBottomSheet(
-                    backgroundColor: LemonColor.atomicBlack,
-                    context: context,
-                    enableDrag: false,
-                    builder: (innerContext) =>
-                        const EventDatetimeSettingsPage(),
-                  );
-                },
-              ),
-              SizedBox(height: Spacing.smMedium),
-              _DateTimeRowItem(
-                color: LemonColor.coralReef,
-                text: 'Ends',
-                date: '16 Jan at 9:00pm',
-                onTap: () {
-                  showCupertinoModalBottomSheet(
-                    backgroundColor: LemonColor.atomicBlack,
-                    context: context,
-                    enableDrag: false,
-                    builder: (innerContext) =>
-                        const EventDatetimeSettingsPage(),
-                  );
-                },
-              ),
-            ],
+          child: BlocBuilder<EventDateTimeSettingsBloc,
+              EventDateTimeSettingsState>(
+            builder: (context, state) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _DateTimeRowItem(
+                    color: LemonColor.malachiteGreen,
+                    text: t.event.datetimeSettings.starts,
+                    date: date_utils.DateUtils.formatForDateSetting(
+                        state.start.value ?? DateTime.now()),
+                    onTap: () {
+                      showCupertinoModalBottomSheet(
+                        backgroundColor: LemonColor.atomicBlack,
+                        context: context,
+                        enableDrag: false,
+                        builder: (innerContext) =>
+                            const EventDatetimeSettingsPage(),
+                      );
+                    },
+                  ),
+                  SizedBox(height: Spacing.smMedium),
+                  _DateTimeRowItem(
+                    color: LemonColor.coralReef,
+                    text: t.event.datetimeSettings.ends,
+                    date: date_utils.DateUtils.formatForDateSetting(
+                        state.end.value ?? DateTime.now()),
+                    onTap: () {
+                      showCupertinoModalBottomSheet(
+                        backgroundColor: LemonColor.atomicBlack,
+                        context: context,
+                        enableDrag: false,
+                        builder: (innerContext) =>
+                            const EventDatetimeSettingsPage(),
+                      );
+                    },
+                  ),
+                ],
+              );
+            },
           ),
         ),
         SizedBox(

@@ -54,185 +54,204 @@ class _EventDatetimeSettingsPageState
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
+    final colorScheme = Theme.of(context).colorScheme;
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-        appBar: LemonAppBar(
+          appBar: LemonAppBar(
+            backgroundColor: LemonColor.atomicBlack,
+            title: t.event.dateAndTime,
+          ),
           backgroundColor: LemonColor.atomicBlack,
-          title: t.event.dateAndTime,
-        ),
-        backgroundColor: LemonColor.atomicBlack,
-        resizeToAvoidBottomInset: true,
-        body: CustomScrollView(
-          slivers: [
-            SliverPadding(
-              padding: EdgeInsets.symmetric(
-                horizontal: Spacing.smMedium,
+          resizeToAvoidBottomInset: true,
+          body: Stack(
+            children: [
+              CustomScrollView(
+                slivers: [
+                  SliverPadding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: Spacing.smMedium,
+                    ),
+                    sliver: const SliverToBoxAdapter(
+                      child: EventDatetimeSettingRowItem(
+                        expanded: true,
+                      ),
+                    ),
+                  ),
+                  SliverPadding(
+                    padding: EdgeInsets.only(
+                      left: Spacing.smMedium,
+                      right: Spacing.smMedium,
+                      bottom: Spacing.smMedium,
+                    ),
+                    sliver: SliverToBoxAdapter(
+                      child: Container(
+                        height: 1,
+                        color: LemonColor.white03,
+                      ),
+                    ),
+                  ),
+                  SliverPadding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: Spacing.smMedium,
+                    ),
+                    sliver: const SliverToBoxAdapter(
+                      child: EventDatetimeSettingRowItem(),
+                    ),
+                  ),
+                ],
               ),
-              sliver: const SliverToBoxAdapter(
-                child: EventDatetimeSettingRowItem(
-                  expanded: true,
-                ),
-              ),
-            ),
-            SliverPadding(
-              padding: EdgeInsets.only(
-                left: Spacing.smMedium,
-                right: Spacing.smMedium,
-                bottom: Spacing.smMedium,
-              ),
-              sliver: SliverToBoxAdapter(
+              Align(
+                alignment: Alignment.bottomCenter,
                 child: Container(
-                  height: 1,
-                  color: LemonColor.white03,
+                  padding: EdgeInsets.all(Spacing.smMedium),
+                  child: SafeArea(
+                    child: LinearGradientButton.primaryButton(
+                      onTap: () {},
+                      label: t.common.actions.saveChanges,
+                      textColor: colorScheme.onPrimary,
+                    ),
+                  ),
                 ),
               ),
-            ),
-            SliverPadding(
-              padding: EdgeInsets.symmetric(
-                horizontal: Spacing.smMedium,
-              ),
-              sliver: const SliverToBoxAdapter(
-                child: EventDatetimeSettingRowItem(),
-              ),
-            ),
-          ],
-        ),
-        //   BlocListener<EditEventDetailBloc, EditEventDetailState>(
-        //     listener: (context, state) {
-        //       if (state.status == EditEventDetailBlocStatus.success) {
-        //         AutoRouter.of(context).pop();
-        //       }
-        //     },
-        //     child: BlocListener<EventDateTimeSettingsBloc,
-        //         EventDateTimeSettingsState>(
-        //       listener: (context, state) async {
-        //         if (state.start.value == null) {
-        //           startDateInputController.text = '';
-        //         }
-        //         if (state.end.value == null) {
-        //           endDateInputController.text = '';
-        //         }
-        //       },
-        //       child: BlocBuilder<EventDateTimeSettingsBloc,
-        //           EventDateTimeSettingsState>(
-        //         builder: (context, state) {
-        //           if (state.start.value == null && state.end.value == null) {
-        //             return const SizedBox();
-        //           }
-        //           return Stack(
-        //             children: [
-        //               Padding(
-        //                 padding: EdgeInsets.symmetric(
-        //                   horizontal: Spacing.xSmall,
-        //                   vertical: Spacing.small,
-        //                 ),
-        //                 child: Column(
-        //                   children: [
-        //                     EventDatetimeSettingRowItem(),
-        //                     // DatePickerTextField(
-        //                     //   controller: startDateInputController,
-        //                     //   label: t.event.datetimeSettings.startDate,
-        //                     //   initialValue: state.start.value,
-        //                     //   onChanged: (value) => context
-        //                     //       .read<EventDateTimeSettingsBloc>()
-        //                     //       .add(StartDateChanged(datetime: value)),
-        //                     //   errorText: state.start.error?.getMessage(
-        //                     //     t.event.datetimeSettings.startDate,
-        //                     //   ),
-        //                     // ),
-        //                     // SizedBox(
-        //                     //   height: Spacing.medium,
-        //                     // ),
-        //                     // TimePickerTextField(
-        //                     //   controller: startTimeInputController,
-        //                     //   label: t.event.datetimeSettings.startTime,
-        //                     //   initialValue: state.start.value,
-        //                     //   onChanged: (value) => context
-        //                     //       .read<EventDateTimeSettingsBloc>()
-        //                     //       .add(StartTimeChanged(datetime: value)),
-        //                     // ),
-        //                     // SizedBox(
-        //                     //   height: Spacing.medium,
-        //                     // ),
-        //                     // DatePickerTextField(
-        //                     //   controller: endDateInputController,
-        //                     //   label: t.event.datetimeSettings.endDate,
-        //                     //   initialValue: state.end.value,
-        //                     //   onChanged: (value) => context
-        //                     //       .read<EventDateTimeSettingsBloc>()
-        //                     //       .add(EndDateChanged(datetime: value)),
-        //                     //   errorText: state.end.error?.getMessage(
-        //                     //     t.event.datetimeSettings.endDate,
-        //                     //   ),
-        //                     // ),
-        //                     // SizedBox(
-        //                     //   height: Spacing.medium,
-        //                     // ),
-        //                     // TimePickerTextField(
-        //                     //   controller: endTimeInputController,
-        //                     //   label: t.event.datetimeSettings.endTime,
-        //                     //   initialValue: state.end.value,
-        //                     //   onChanged: (value) => context
-        //                     //       .read<EventDateTimeSettingsBloc>()
-        //                     //       .add(EndTimeChanged(datetime: value)),
-        //                     // ),
-        //                   ],
-        //                 ),
-        //               ),
-        //               widget.event != null
-        //                   ? BlocBuilder<EditEventDetailBloc,
-        //                       EditEventDetailState>(
-        //                       builder: (context, state) {
-        //                         return Align(
-        //                           alignment: Alignment.bottomCenter,
-        //                           child: SafeArea(
-        //                             child: Padding(
-        //                               padding: EdgeInsets.symmetric(
-        //                                 horizontal: Spacing.smMedium,
-        //                                 vertical: Spacing.smMedium,
-        //                               ),
-        //                               child: LinearGradientButton(
-        //                                 label: t.common.actions.save,
-        //                                 height: 48.h,
-        //                                 radius: BorderRadius.circular(24),
-        //                                 textStyle: Typo.medium.copyWith(),
-        //                                 mode: GradientButtonMode.lavenderMode,
-        //                                 onTap: () {
-        //                                   final start = context
-        //                                       .read<EventDateTimeSettingsBloc>()
-        //                                       .state
-        //                                       .start
-        //                                       .value;
-        //                                   final end = context
-        //                                       .read<EventDateTimeSettingsBloc>()
-        //                                       .state
-        //                                       .end
-        //                                       .value;
-        //                                   context.read<EditEventDetailBloc>().add(
-        //                                         EditEventDetailEvent.update(
-        //                                           eventId: widget.event?.id ?? '',
-        //                                           start: start,
-        //                                           end: end,
-        //                                         ),
-        //                                       );
-        //                                 },
-        //                                 loadingWhen: state.status ==
-        //                                     EditEventDetailBlocStatus.loading,
-        //                               ),
-        //                             ),
-        //                           ),
-        //                         );
-        //                       },
-        //                     )
-        //                   : const SizedBox(),
-        //             ],
-        //           );
-        //         },
-        //       ),
-        //     ),
-        //   ),
-      ),
+            ],
+          )
+
+          //   BlocListener<EditEventDetailBloc, EditEventDetailState>(
+          //     listener: (context, state) {
+          //       if (state.status == EditEventDetailBlocStatus.success) {
+          //         AutoRouter.of(context).pop();
+          //       }
+          //     },
+          //     child: BlocListener<EventDateTimeSettingsBloc,
+          //         EventDateTimeSettingsState>(
+          //       listener: (context, state) async {
+          //         if (state.start.value == null) {
+          //           startDateInputController.text = '';
+          //         }
+          //         if (state.end.value == null) {
+          //           endDateInputController.text = '';
+          //         }
+          //       },
+          //       child: BlocBuilder<EventDateTimeSettingsBloc,
+          //           EventDateTimeSettingsState>(
+          //         builder: (context, state) {
+          //           if (state.start.value == null && state.end.value == null) {
+          //             return const SizedBox();
+          //           }
+          //           return Stack(
+          //             children: [
+          //               Padding(
+          //                 padding: EdgeInsets.symmetric(
+          //                   horizontal: Spacing.xSmall,
+          //                   vertical: Spacing.small,
+          //                 ),
+          //                 child: Column(
+          //                   children: [
+          //                     EventDatetimeSettingRowItem(),
+          //                     // DatePickerTextField(
+          //                     //   controller: startDateInputController,
+          //                     //   label: t.event.datetimeSettings.startDate,
+          //                     //   initialValue: state.start.value,
+          //                     //   onChanged: (value) => context
+          //                     //       .read<EventDateTimeSettingsBloc>()
+          //                     //       .add(StartDateChanged(datetime: value)),
+          //                     //   errorText: state.start.error?.getMessage(
+          //                     //     t.event.datetimeSettings.startDate,
+          //                     //   ),
+          //                     // ),
+          //                     // SizedBox(
+          //                     //   height: Spacing.medium,
+          //                     // ),
+          //                     // TimePickerTextField(
+          //                     //   controller: startTimeInputController,
+          //                     //   label: t.event.datetimeSettings.startTime,
+          //                     //   initialValue: state.start.value,
+          //                     //   onChanged: (value) => context
+          //                     //       .read<EventDateTimeSettingsBloc>()
+          //                     //       .add(StartTimeChanged(datetime: value)),
+          //                     // ),
+          //                     // SizedBox(
+          //                     //   height: Spacing.medium,
+          //                     // ),
+          //                     // DatePickerTextField(
+          //                     //   controller: endDateInputController,
+          //                     //   label: t.event.datetimeSettings.endDate,
+          //                     //   initialValue: state.end.value,
+          //                     //   onChanged: (value) => context
+          //                     //       .read<EventDateTimeSettingsBloc>()
+          //                     //       .add(EndDateChanged(datetime: value)),
+          //                     //   errorText: state.end.error?.getMessage(
+          //                     //     t.event.datetimeSettings.endDate,
+          //                     //   ),
+          //                     // ),
+          //                     // SizedBox(
+          //                     //   height: Spacing.medium,
+          //                     // ),
+          //                     // TimePickerTextField(
+          //                     //   controller: endTimeInputController,
+          //                     //   label: t.event.datetimeSettings.endTime,
+          //                     //   initialValue: state.end.value,
+          //                     //   onChanged: (value) => context
+          //                     //       .read<EventDateTimeSettingsBloc>()
+          //                     //       .add(EndTimeChanged(datetime: value)),
+          //                     // ),
+          //                   ],
+          //                 ),
+          //               ),
+          //               widget.event != null
+          //                   ? BlocBuilder<EditEventDetailBloc,
+          //                       EditEventDetailState>(
+          //                       builder: (context, state) {
+          //                         return Align(
+          //                           alignment: Alignment.bottomCenter,
+          //                           child: SafeArea(
+          //                             child: Padding(
+          //                               padding: EdgeInsets.symmetric(
+          //                                 horizontal: Spacing.smMedium,
+          //                                 vertical: Spacing.smMedium,
+          //                               ),
+          //                               child: LinearGradientButton(
+          //                                 label: t.common.actions.save,
+          //                                 height: 48.h,
+          //                                 radius: BorderRadius.circular(24),
+          //                                 textStyle: Typo.medium.copyWith(),
+          //                                 mode: GradientButtonMode.lavenderMode,
+          //                                 onTap: () {
+          //                                   final start = context
+          //                                       .read<EventDateTimeSettingsBloc>()
+          //                                       .state
+          //                                       .start
+          //                                       .value;
+          //                                   final end = context
+          //                                       .read<EventDateTimeSettingsBloc>()
+          //                                       .state
+          //                                       .end
+          //                                       .value;
+          //                                   context.read<EditEventDetailBloc>().add(
+          //                                         EditEventDetailEvent.update(
+          //                                           eventId: widget.event?.id ?? '',
+          //                                           start: start,
+          //                                           end: end,
+          //                                         ),
+          //                                       );
+          //                                 },
+          //                                 loadingWhen: state.status ==
+          //                                     EditEventDetailBlocStatus.loading,
+          //                               ),
+          //                             ),
+          //                           ),
+          //                         );
+          //                       },
+          //                     )
+          //                   : const SizedBox(),
+          //             ],
+          //           );
+          //         },
+          //       ),
+          //     ),
+          //   ),
+          ),
     );
   }
 }

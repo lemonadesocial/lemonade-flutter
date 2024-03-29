@@ -144,4 +144,10 @@ class DateUtils {
         DateFormat(DateUtils.dateFormatDayMonthYear).format(dateTime);
     return formattedDate;
   }
+
+  static formatForDateSetting(DateTime dateTime) {
+    String formattedDate = DateFormat('d MMM').format(dateTime);
+    String formattedTime = DateFormat('h:mma').format(dateTime).toLowerCase();
+    return '$formattedDate at $formattedTime';
+  }
 }
