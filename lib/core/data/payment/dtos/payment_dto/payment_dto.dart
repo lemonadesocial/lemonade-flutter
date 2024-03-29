@@ -24,7 +24,7 @@ class PaymentDto with _$PaymentDto {
     String? account,
     @JsonKey(name: 'due_amount') String? dueAmount,
     @JsonKey(name: 'ticket_types_expanded')
-    List<EventTicketTypeDto>? ticketTypesExpanded,
+    List<EventTicketTypeDto?>? ticketTypesExpanded,
     @JsonKey(name: 'ref_data') Map<String, dynamic>? refData,
   }) = _PaymentDto;
 
