@@ -1,0 +1,19 @@
+# import '../fragment/event_story_fragment.graphql';
+
+query GetEventStories(
+  $lastId: MongoID
+  $id: MongoID!
+  $object: String!
+  $user: MongoID
+  $limit: Int = 50
+) {
+  stories: getFiles(
+    limit: $limit
+    skip: 0
+    user: $user
+    id_lt: $lastId
+    links: { id: $id, model: $object, path: "stories" }
+  ) {
+    ...EventStory
+  }
+}

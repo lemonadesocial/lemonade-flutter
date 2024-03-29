@@ -128,6 +128,7 @@ fragment EventFields on Event {
     checkin_count
     attending_count
     pending_request_count
+    guest_directory_enabled
 }
 
 fragment EventCohostRequestFragment on EventCohostRequest {

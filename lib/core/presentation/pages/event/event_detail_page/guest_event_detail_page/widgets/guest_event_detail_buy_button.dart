@@ -12,7 +12,9 @@ import 'package:app/core/failure.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/core/utils/event_tickets_utils.dart';
+import 'package:app/core/utils/event_utils.dart';
 import 'package:app/core/utils/list_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -95,6 +97,11 @@ class _GuestEventDetailBuyButtonView extends StatelessWidget {
     return;
   }
 
+  bool _checkInvited(BuildContext context) {
+    final userId = AuthUtils.getUserId(context);
+    return EventUtils.isInvited(event, userId: userId);
+  }
+
   @override
   Widget build(BuildContext context) {
     final authState = context.watch<AuthBloc>().state;
@@ -137,6 +144,13 @@ class _GuestEventDetailBuyButtonView extends StatelessWidget {
                 onTap: () {
                   authState.maybeWhen(
                     authenticated: (_) async {
+                      if (event.private == true) {
+                        if (!_checkInvited(context)) {
+                          AutoRouter.of(context)
+                              .push(const GuestEventPrivateAlertRoute());
+                          return;
+                        }
+                      }
                       final result = await _checkJoinRequest(context);
                       final eventJoinRequest = result?.getOrElse(() => null);
                       if (eventJoinRequest != null) {

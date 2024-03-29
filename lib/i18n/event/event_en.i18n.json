@@ -462,5 +462,17 @@
         "cancelReservationTitle": "Cancel Reservation?",
         "cancelReservationFullAmountDescription": "As hosts have not yet approved your request, you can claim your 100% refund of 0.2 ETH",
         "cancelReservationPartialAmountDescription": "Since you canceled $time before the event, you are eligible for an $percentage deposit refund."
+    },
+    "eventLounge": {
+        "eventLoungeTitle": "Lounge",
+        "liveChatDescription": "Connect with other attendees!",
+        "newMessages": "New messages"
+    },
+    "eventGuestDirectory": {
+        "eventGuestDirectoryTitle": "Guests"
+    },
+    "eventPrivate": {
+        "eventPrivateTitle": "This is a private event",
+        "eventPrivateErrorDescription": "You must be on the invite list to purchase tickets to this event"
     }
 }

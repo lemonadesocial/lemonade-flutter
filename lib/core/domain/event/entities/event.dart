@@ -59,6 +59,7 @@ class Event with _$Event {
     List<EventApplicationQuestion>? applicationQuestions,
     List<EventApplicationProfileField>? applicationProfileFields,
     DateTime? applicationFormSubmission,
+    bool? guestDirectoryEnabled,
   }) = _Event;
 
   factory Event.fromDto(EventDto dto) {
@@ -134,6 +135,7 @@ class Event with _$Event {
           .map((item) => EventApplicationProfileField.fromDto(item))
           .toList(),
       applicationFormSubmission: dto.applicationFormSubmission,
+      guestDirectoryEnabled: dto.guestDirectoryEnabled,
     );
   }
 }

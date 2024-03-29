@@ -24,7 +24,8 @@ class _WheelTimePickerState extends State<WheelTimePicker> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    const textStyle = TextStyle(fontSize: 16.0, height: 2.5, color: Colors.white);
+    const textStyle =
+        TextStyle(fontSize: 16.0, height: 2.5, color: Colors.white);
     final wheelStyle = WheelPickerStyle(
       size: 400,
       itemExtent: textStyle.fontSize! * textStyle.height!,
@@ -55,7 +56,9 @@ class _WheelTimePickerState extends State<WheelTimePicker> {
                 style: wheelStyle,
                 selectedIndexColor: colorScheme.onPrimary,
               ),
-              SizedBox(width: 34.w,),
+              SizedBox(
+                width: 34.w,
+              ),
               WheelPicker(
                 builder: itemBuilder,
                 controller: minutesWheel,
@@ -63,7 +66,9 @@ class _WheelTimePickerState extends State<WheelTimePicker> {
                 enableTap: true,
                 selectedIndexColor: colorScheme.onPrimary,
               ),
-              SizedBox(width: 34.w,),
+              SizedBox(
+                width: 34.w,
+              ),
               WheelPicker(
                 itemCount: 2,
                 builder: (context, index) {
