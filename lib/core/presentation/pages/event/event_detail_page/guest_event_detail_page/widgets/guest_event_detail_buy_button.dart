@@ -16,14 +16,11 @@ import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/core/utils/event_tickets_utils.dart';
 import 'package:app/core/utils/event_utils.dart';
 import 'package:app/core/utils/list_utils.dart';
-import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
-import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -107,7 +104,6 @@ class _GuestEventDetailBuyButtonView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = Translations.of(context);
     final authState = context.watch<AuthBloc>().state;
     final colorScheme = Theme.of(context).colorScheme;
     final defaultTicketType =
@@ -150,31 +146,9 @@ class _GuestEventDetailBuyButtonView extends StatelessWidget {
                     authenticated: (_) async {
                       if (event.private == true) {
                         if (!_checkInvited(context)) {
-                          return SnackBarUtils.showCustom(
-                            title: t.event.eventPrivate.eventPrivateTitle,
-                            message: t.event.eventPrivate
-                                .eventPrivateErrorDescription,
-                            icon: Container(
-                              width: Sizing.medium,
-                              height: Sizing.medium,
-                              decoration: BoxDecoration(
-                                color: LemonColor.chineseBlack,
-                                borderRadius:
-                                    BorderRadius.circular(Sizing.medium),
-                              ),
-                              child: Center(
-                                child: ThemeSvgIcon(
-                                  color: colorScheme.onSecondary,
-                                  builder: (colorFilter) =>
-                                      Assets.icons.icLock.svg(
-                                    width: Sizing.xSmall,
-                                    height: Sizing.xSmall,
-                                    colorFilter: colorFilter,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          );
+                          AutoRouter.of(context)
+                              .push(const GuestEventPrivateAlertRoute());
+                          return;
                         }
                       }
                       final result = await _checkJoinRequest(context);
