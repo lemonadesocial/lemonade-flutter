@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 class LemonOutlineButton extends StatelessWidget {
   final String? label;
   final Widget? leading;
+  final Widget? trailing;
   final Function()? onTap;
   final double? height;
   final EdgeInsets? padding;
@@ -19,6 +20,7 @@ class LemonOutlineButton extends StatelessWidget {
     super.key,
     this.label,
     this.leading,
+    this.trailing,
     this.onTap,
     this.padding,
     this.height,
@@ -68,6 +70,10 @@ class LemonOutlineButton extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                       ),
                 ),
+              if (trailing != null) ...[
+                if (trailing != null) SizedBox(width: Spacing.extraSmall),
+                trailing!,
+              ],
             ],
           ),
         ),

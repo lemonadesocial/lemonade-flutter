@@ -467,5 +467,9 @@
     },
     "eventGuestDirectory": {
         "eventGuestDirectoryTitle": "Guests"
+    },
+    "eventPrivate": {
+        "eventPrivateTitle": "This is a private event",
+        "eventPrivateErrorDescription": "You must be on the invite list to purchase tickets to this event"
     }
 }

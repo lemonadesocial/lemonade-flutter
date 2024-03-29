@@ -50,4 +50,11 @@ class EventUtils {
       address?.country,
     ].where((element) => element != null).join(', ');
   }
+
+  static bool isInvited(
+    Event event, {
+    required String userId,
+  }) {
+    return (event.invited ?? []).contains(userId);
+  }
 }
