@@ -5,17 +5,19 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 class LemonBackButton extends StatelessWidget {
-  const LemonBackButton({
-    super.key,
-    this.color,
-  });
+  const LemonBackButton({super.key, this.color, this.onPressBack});
 
   final Color? color;
+  final Function()? onPressBack;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        if (onPressBack != null) {
+          onPressBack?.call();
+          return;
+        }
         AutoRouter.of(context).pop();
       },
       child: ThemeSvgIcon(

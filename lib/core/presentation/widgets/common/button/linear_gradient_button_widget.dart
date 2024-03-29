@@ -139,19 +139,23 @@ class LinearGradientButton extends StatelessWidget {
     Function()? onTap,
     bool? loadingWhen,
     Color? textColor,
+    Widget? trailing,
+    TextStyle? textStyle,
   }) =>
       LinearGradientButton(
         onTap: onTap,
         label: label,
         loadingWhen: loadingWhen ?? false,
-        textStyle: Typo.medium.copyWith(
-          fontFamily: FontFamily.nohemiVariable,
-          fontWeight: FontWeight.w600,
-          color: textColor,
-        ),
+        textStyle: textStyle ??
+            Typo.medium.copyWith(
+              fontFamily: FontFamily.nohemiVariable,
+              fontWeight: FontWeight.w600,
+              color: textColor,
+            ),
         mode: GradientButtonMode.lavenderMode,
         height: Sizing.large,
         radius: BorderRadius.circular(LemonRadius.small * 2),
+        trailing: trailing,
       );
 
   factory LinearGradientButton.secondaryButton({

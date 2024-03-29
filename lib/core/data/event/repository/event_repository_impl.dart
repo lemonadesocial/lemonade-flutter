@@ -3,6 +3,7 @@ import 'package:app/core/data/event/dtos/event_cohost_request_dto/event_cohost_r
 import 'package:app/core/data/event/dtos/event_dtos.dart';
 import 'package:app/core/data/event/dtos/event_join_request_dto/event_join_request_dto.dart';
 import 'package:app/core/data/event/dtos/event_rsvp_dto/event_rsvp_dto.dart';
+import 'package:app/core/data/event/dtos/event_story_dto/event_story_dto.dart';
 import 'package:app/core/data/event/gql/event_mutation.dart';
 import 'package:app/core/data/event/gql/event_query.dart';
 import 'package:app/core/domain/event/entities/event.dart';
@@ -12,6 +13,7 @@ import 'package:app/core/domain/event/entities/event_checkin.dart';
 import 'package:app/core/domain/event/entities/event_cohost_request.dart';
 import 'package:app/core/domain/event/entities/event_join_request.dart';
 import 'package:app/core/domain/event/entities/event_rsvp.dart';
+import 'package:app/core/domain/event/entities/event_story.dart';
 import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/core/domain/event/input/accept_event_input/accept_event_input.dart';
 import 'package:app/core/domain/event/input/get_event_detail_input.dart';
@@ -19,11 +21,13 @@ import 'package:app/core/domain/event/input/get_events_listing_input.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/graphql/backend/event/mutation/create_event.graphql.dart';
+import 'package:app/graphql/backend/event/mutation/create_event_story.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/submit_event_application_answers.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/submit_event_application_questions.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/manage_event_cohost_requests.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/update_event_checkin.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/update_event.graphql.dart';
+import 'package:app/graphql/backend/event/mutation/update_event_story_image.graphql.dart';
 import 'package:app/graphql/backend/event/query/get_event_application_answers.graphql.dart';
 import 'package:app/graphql/backend/event/query/get_event_cohost_requests.graphql.dart';
 import 'package:app/graphql/backend/event/query/get_event_checkins.graphql.dart';
@@ -500,5 +504,41 @@ class EventRepositoryImpl implements EventRepository {
       return Left(Failure.withGqlException(result.exception));
     }
     return Right(result.parsedData?.submitEventApplicationAnswers ?? false);
+  }
+
+  @override
+  Future<Either<Failure, bool>> createEventStory({
+    required Input$EventStoryInput input,
+  }) async {
+    final result = await client.mutate$CreateEventStory(
+      Options$Mutation$CreateEventStory(
+        variables: Variables$Mutation$CreateEventStory(input: input),
+      ),
+    );
+    if (result.hasException || result.parsedData == null) {
+      return Left(Failure.withGqlException(result.exception));
+    }
+    return Right(result.parsedData!.createEventStory);
+  }
+
+  @override
+  Future<Either<Failure, EventStory>> updateEventStoryImage({
+    required Variables$Mutation$UpdateEventStoryImage input,
+  }) async {
+    final result = await client.mutate$UpdateEventStoryImage(
+      Options$Mutation$UpdateEventStoryImage(
+        variables: input,
+      ),
+    );
+    if (result.hasException || result.parsedData == null) {
+      return Left(Failure.withGqlException(result.exception));
+    }
+    return Right(
+      EventStory.fromDto(
+        EventStoryDto.fromJson(
+          result.parsedData!.story.toJson(),
+        ),
+      ),
+    );
   }
 }

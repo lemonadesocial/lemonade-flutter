@@ -88,9 +88,7 @@ class EventDetailNavigationBarHelper {
         ),
         onTap: () {
           Vibrate.feedback(FeedbackType.light);
-          // TODO: hide event lounge
-          // AutoRouter.of(context).navigate(const GuestEventStoriesRoute());
-          SnackBarUtils.showComingSoon();
+          AutoRouter.of(context).navigate(const GuestEventStoriesRoute());
         },
       ),
       FeatureItem(
