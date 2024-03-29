@@ -7,6 +7,7 @@ import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/service/matrix/matrix_service.dart';
+import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/event/query/get_event_stories.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -37,17 +38,22 @@ class GuestEventStoriesPage extends StatelessWidget {
     final chatRoom = matrixClient.getRoomById(event?.matrixEventRoomId ?? '');
 
     return Scaffold(
-      floatingActionButton: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(Sizing.xLarge),
-          color: LemonColor.lavender,
-        ),
-        width: Sizing.xLarge,
-        height: Sizing.xLarge,
-        child: Center(
-          child: Assets.icons.icAdd.svg(
-            height: Sizing.small,
-            width: Sizing.small,
+      floatingActionButton: InkWell(
+        onTap: () {
+          SnackBarUtils.showComingSoon();
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(Sizing.xLarge),
+            color: LemonColor.lavender,
+          ),
+          width: Sizing.xLarge,
+          height: Sizing.xLarge,
+          child: Center(
+            child: Assets.icons.icAdd.svg(
+              height: Sizing.small,
+              width: Sizing.small,
+            ),
           ),
         ),
       ),
