@@ -1,9 +1,12 @@
 import 'package:app/core/domain/form/datetime_formz.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:formz/formz.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
+import 'package:app/core/utils/date_utils.dart' as date_utils;
+
 
 part 'event_datetime_settings_bloc.freezed.dart';
 
@@ -16,6 +19,7 @@ class EventDateTimeSettingsBloc
     on<StartTimeChanged>(_onStartTimeChanged);
     on<EndDateChanged>(_onEndDateChanged);
     on<EndTimeChanged>(_onEndTimeChanged);
+    on<TimezoneChanged>(_onTimezoneChanged);
   }
 
   Future<void> _onInit(
@@ -24,8 +28,10 @@ class EventDateTimeSettingsBloc
   ) async {
     final start = DateTimeFormz.dirty(event.startDateTime);
     final end = DateTimeFormz.dirty(event.endDateTime);
+    
+    final timezone = date_utils.DateUtils.getUserTimezoneOption();
     emit(
-      state.copyWith(start: start, end: end),
+      state.copyWith(start: start, end: end, timezone: timezone),
     );
   }
 
@@ -113,6 +119,17 @@ class EventDateTimeSettingsBloc
       ),
     );
   }
+
+  Future<void> _onTimezoneChanged(
+    TimezoneChanged event,
+    Emitter<EventDateTimeSettingsState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        timezone: event.timezone,
+      ),
+    );
+  }
 }
 
 @freezed
@@ -137,6 +154,10 @@ class EventDateTimeSettingsEvent with _$EventDateTimeSettingsEvent {
   const factory EventDateTimeSettingsEvent.endTimeChanged({
     required DateTime datetime,
   }) = EndTimeChanged;
+
+  const factory EventDateTimeSettingsEvent.timezoneChanged({
+    required String timezone,
+  }) = TimezoneChanged;
 }
 
 @freezed
@@ -146,5 +167,6 @@ class EventDateTimeSettingsState with _$EventDateTimeSettingsState {
     @Default(DateTimeFormz.pure()) DateTimeFormz end,
     @Default(FormzSubmissionStatus.initial) FormzSubmissionStatus status,
     @Default(false) bool isValid,
+    String? timezone,
   }) = _EventDateTimeSettingsState;
 }

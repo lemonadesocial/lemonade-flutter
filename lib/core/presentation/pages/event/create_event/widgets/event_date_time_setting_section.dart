@@ -4,6 +4,7 @@ import 'package:app/core/presentation/widgets/common/circle_dot_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
+import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
@@ -97,31 +98,46 @@ class EventDateTimeSettingSection extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Assets.icons.icGlobe.svg(),
-                  SizedBox(
-                    width: Spacing.smMedium / 2,
+                  Row(
+                    children: [
+                      Assets.icons.icGlobe.svg(),
+                      SizedBox(
+                        width: Spacing.smMedium / 2,
+                      ),
+                      Text(
+                        t.event.timezone,
+                        style: Typo.medium.copyWith(
+                          color: colorScheme.onSecondary,
+                        ),
+                      ),
+                    ],
                   ),
-                  Text(
-                    'Timezone',
-                    style: Typo.medium.copyWith(
-                      color: colorScheme.onSecondary,
-                    ),
+                  SizedBox(
+                    height: Spacing.superExtraSmall,
+                  ),
+                  BlocBuilder<EventDateTimeSettingsBloc,
+                      EventDateTimeSettingsState>(
+                    builder: (context, state) {
+                      return Row(
+                        children: [
+                          Text(
+                            state.timezone ?? '',
+                            style: Typo.medium.copyWith(
+                              color: colorScheme.onSecondary,
+                            ),
+                          ),
+                        ],
+                      );
+                    },
                   ),
                 ],
               ),
-              Row(
-                children: [
-                  Text(
-                    'GMT+05:30 Calcutta',
-                    style: Typo.medium.copyWith(
-                      color: colorScheme.onSecondary,
-                    ),
-                  ),
-                  SizedBox(width: Spacing.superExtraSmall),
-                  Assets.icons.icArrowUpDown.svg(),
-                ],
+              Assets.icons.icArrowUpDown.svg(
+                width: Sizing.xSmall,
+                height: Sizing.xSmall,
               ),
             ],
           ),

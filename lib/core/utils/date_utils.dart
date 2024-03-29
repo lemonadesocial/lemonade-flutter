@@ -1,3 +1,4 @@
+import 'package:app/core/constants/event/event_constants.dart';
 import 'package:intl/intl.dart';
 
 class DateUtils {
@@ -149,5 +150,24 @@ class DateUtils {
     String formattedDate = DateFormat('d MMM').format(dateTime);
     String formattedTime = DateFormat('h:mma').format(dateTime).toLowerCase();
     return '$formattedDate at $formattedTime';
+  }
+
+  static String padWithZero(int time) {
+    return time.toString().padLeft(2, '0');
+  }
+
+  static String getUserTimezoneOption() {
+    Duration offset = DateTime.now().timeZoneOffset;
+    String sign = (offset.inHours.isNegative) ? '-' : '+';
+    int hours = offset.inHours;
+    int minutes = offset.inMinutes.remainder(60);
+    String timezone = 'GMT$sign${padWithZero(hours)}:${padWithZero(minutes)}';
+    Map<String, String>? selectedOption =
+        EventDateTimeConstants.timezoneOptions.firstWhere(
+      (option) => option['text']!.contains(timezone),
+      orElse: () => {},
+    );
+
+    return selectedOption['text'] ?? 'Unknown';
   }
 }
