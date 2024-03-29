@@ -1,0 +1,24 @@
+# import '../../schema.graphql';
+
+fragment EventStory on File {
+  _id
+  key
+  bucket
+  likes
+  liked
+  stamp
+  owner
+  owner_expanded {
+    _id
+    name
+    username
+    new_photos_expanded(limit: 1) {
+      _id
+      key
+      bucket
+    }
+  }
+  description
+  type
+  url
+}

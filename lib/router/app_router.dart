@@ -303,6 +303,12 @@ final eventDetailRoutes = AutoRoute(
     AutoRoute(
       page: GuestEventApprovalStatusRoute.page,
     ),
+    AutoRoute(
+      page: GuestEventStoriesRoute.page,
+    ),
+    AutoRoute(
+      page: GuestEventGuestDirectoryRoute.page,
+    ),
   ],
 );
 

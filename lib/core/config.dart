@@ -21,7 +21,7 @@ class AppConfig {
   static get aiUrl => dotenv.env['AI_URL'];
   static get wssAIUrl => dotenv.env['WSS_AI_URL'];
 
-  static get isProduction => dotenv.env['ENV'] == 'production';
+  static bool get isProduction => dotenv.env['ENV'] == 'production';
 
   // Social
   static get twitterUrl => 'https://twitter.com';

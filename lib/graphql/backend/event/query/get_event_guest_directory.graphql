@@ -1,0 +1,11 @@
+query GetEventGuestDirectory($id: MongoID!) {
+  getEventGuestDirectory(_id: $id) {
+    _id
+    company_name
+    image_avatar
+    job_title
+    matrix_localpart
+    name
+    username
+  }
+}
