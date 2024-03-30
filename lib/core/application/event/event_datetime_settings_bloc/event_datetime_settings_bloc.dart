@@ -1,12 +1,10 @@
 import 'package:app/core/domain/form/datetime_formz.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:formz/formz.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:app/core/utils/date_utils.dart' as date_utils;
-
 
 part 'event_datetime_settings_bloc.freezed.dart';
 
@@ -28,8 +26,7 @@ class EventDateTimeSettingsBloc
   ) async {
     final start = DateTimeFormz.dirty(event.startDateTime);
     final end = DateTimeFormz.dirty(event.endDateTime);
-    
-    final timezone = date_utils.DateUtils.getUserTimezoneOption();
+    final timezone = date_utils.DateUtils.getUserTimezoneOptionValue();
     emit(
       state.copyWith(start: start, end: end, timezone: timezone),
     );

@@ -39,7 +39,7 @@ class _WheelTimePickerState extends State<WheelTimePicker> {
       return Text("$index".padLeft(2, '0'), style: textStyle);
     }
 
-    return Container(
+    return SizedBox(
       width: 200.0,
       child: Stack(
         fit: StackFit.expand,

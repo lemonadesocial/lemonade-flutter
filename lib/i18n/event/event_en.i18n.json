@@ -178,7 +178,10 @@
         "addNewLocationSuccessfully": "Add new location successfully",
         "removeNewLocationSuccessfully": "Remove location successfully"
     },
-    "timezone": "Timezone",
+    "timezoneSetting": {
+        "timezone": "Timezone",
+        "chooseTimezone": "Choose Timezone"
+    },
     "configuration": {
         "invite": "Invite",
         "tickets": "Tickets",

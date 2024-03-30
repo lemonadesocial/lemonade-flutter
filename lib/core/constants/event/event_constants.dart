@@ -4,24 +4,6 @@ class EventConstants {
 
   /// Guest limit 100
   static String defaultEventGuestLimit = '100';
-}
-
-class EventDateTimeConstants {
-  static final DateTime currentDateTime = DateTime.now();
-
-  static final DateTime defaultStartDateTime = DateTime(
-    currentDateTime.year,
-    currentDateTime.month,
-    currentDateTime.day + 3,
-    10,
-  );
-
-  static final DateTime defaultEndDateTime = DateTime(
-    currentDateTime.year,
-    currentDateTime.month,
-    currentDateTime.day + 6,
-    18,
-  );
 
   static final List<Map<String, String>> timezoneOptions = [
     {'text': '(GMT-12:00) International Date Line West', 'value': 'Etc/GMT+12'},
@@ -174,4 +156,22 @@ class EventDateTimeConstants {
     },
     {"text": "(GMT+13:00) Nuku'alofa", "value": 'Pacific/Tongatapu'},
   ];
+}
+
+class EventDateTimeConstants {
+  static final DateTime currentDateTime = DateTime.now();
+
+  static final DateTime defaultStartDateTime = DateTime(
+    currentDateTime.year,
+    currentDateTime.month,
+    currentDateTime.day + 3,
+    10,
+  );
+
+  static final DateTime defaultEndDateTime = DateTime(
+    currentDateTime.year,
+    currentDateTime.month,
+    currentDateTime.day + 6,
+    18,
+  );
 }

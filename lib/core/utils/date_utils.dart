@@ -156,18 +156,31 @@ class DateUtils {
     return time.toString().padLeft(2, '0');
   }
 
-  static String getUserTimezoneOption() {
+  static String getUserTimezoneOptionText() {
     Duration offset = DateTime.now().timeZoneOffset;
     String sign = (offset.inHours.isNegative) ? '-' : '+';
     int hours = offset.inHours;
     int minutes = offset.inMinutes.remainder(60);
     String timezone = 'GMT$sign${padWithZero(hours)}:${padWithZero(minutes)}';
     Map<String, String>? selectedOption =
-        EventDateTimeConstants.timezoneOptions.firstWhere(
+        EventConstants.timezoneOptions.firstWhere(
       (option) => option['text']!.contains(timezone),
       orElse: () => {},
     );
+    return selectedOption['text'] ?? '';
+  }
 
-    return selectedOption['text'] ?? 'Unknown';
+  static String getUserTimezoneOptionValue() {
+    Duration offset = DateTime.now().timeZoneOffset;
+    String sign = (offset.inHours.isNegative) ? '-' : '+';
+    int hours = offset.inHours;
+    int minutes = offset.inMinutes.remainder(60);
+    String timezone = 'GMT$sign${padWithZero(hours)}:${padWithZero(minutes)}';
+    Map<String, String>? selectedOption =
+        EventConstants.timezoneOptions.firstWhere(
+      (option) => option['text']!.contains(timezone),
+      orElse: () => {},
+    );
+    return selectedOption['value'] ?? '';
   }
 }

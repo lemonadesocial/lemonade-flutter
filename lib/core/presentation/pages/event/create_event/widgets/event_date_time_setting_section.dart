@@ -1,4 +1,6 @@
 import 'package:app/core/application/event/event_datetime_settings_bloc/event_datetime_settings_bloc.dart';
+import 'package:app/core/constants/event/event_constants.dart';
+import 'package:app/core/presentation/pages/event/create_event/widgets/timezone_select_bottomsheet.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_datetime_settings_page/event_datetime_settings_page.dart';
 import 'package:app/core/presentation/widgets/common/circle_dot_widget.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -81,65 +83,85 @@ class EventDateTimeSettingSection extends StatelessWidget {
         SizedBox(
           height: Spacing.superExtraSmall,
         ),
-        Container(
-          padding: EdgeInsets.all(Spacing.xSmall),
-          clipBehavior: Clip.antiAlias,
-          decoration: ShapeDecoration(
-            color: LemonColor.atomicBlack,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(LemonRadius.extraSmall),
-                topRight: Radius.circular(LemonRadius.extraSmall),
-                bottomLeft: Radius.circular(LemonRadius.small),
-                bottomRight: Radius.circular(LemonRadius.small),
+        InkWell(
+          onTap: () {
+            showCupertinoModalBottomSheet(
+              bounce: true,
+              backgroundColor: LemonColor.atomicBlack,
+              context: context,
+              enableDrag: false,
+              builder: (newContext) {
+                return const TimezoneSelectBottomSheet();
+              },
+            );
+          },
+          child: Container(
+            padding: EdgeInsets.all(Spacing.xSmall),
+            clipBehavior: Clip.antiAlias,
+            decoration: ShapeDecoration(
+              color: LemonColor.atomicBlack,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(LemonRadius.extraSmall),
+                  topRight: Radius.circular(LemonRadius.extraSmall),
+                  bottomLeft: Radius.circular(LemonRadius.small),
+                  bottomRight: Radius.circular(LemonRadius.small),
+                ),
               ),
             ),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Assets.icons.icGlobe.svg(),
-                      SizedBox(
-                        width: Spacing.smMedium / 2,
-                      ),
-                      Text(
-                        t.event.timezone,
-                        style: Typo.medium.copyWith(
-                          color: colorScheme.onSecondary,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Assets.icons.icGlobe.svg(),
+                        SizedBox(
+                          width: Spacing.smMedium / 2,
                         ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: Spacing.superExtraSmall,
-                  ),
-                  BlocBuilder<EventDateTimeSettingsBloc,
-                      EventDateTimeSettingsState>(
-                    builder: (context, state) {
-                      return Row(
-                        children: [
-                          Text(
-                            state.timezone ?? '',
-                            style: Typo.medium.copyWith(
-                              color: colorScheme.onSecondary,
-                            ),
+                        Text(
+                          t.event.timezoneSetting.timezone,
+                          style: Typo.medium.copyWith(
+                            color: colorScheme.onSecondary,
                           ),
-                        ],
-                      );
-                    },
-                  ),
-                ],
-              ),
-              Assets.icons.icArrowUpDown.svg(
-                width: Sizing.xSmall,
-                height: Sizing.xSmall,
-              ),
-            ],
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: Spacing.superExtraSmall,
+                    ),
+                    BlocBuilder<EventDateTimeSettingsBloc,
+                        EventDateTimeSettingsState>(
+                      builder: (context, state) {
+                        final timezoneText =
+                            EventConstants.timezoneOptions.toList().firstWhere(
+                                      (element) =>
+                                          element['value'] == state.timezone,
+                                      orElse: () => {},
+                                    )['text'] ??
+                                '';
+                        return Row(
+                          children: [
+                            Text(
+                              timezoneText,
+                              style: Typo.medium.copyWith(
+                                color: colorScheme.onSecondary,
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                  ],
+                ),
+                Assets.icons.icArrowUpDown.svg(
+                  width: Sizing.xSmall,
+                  height: Sizing.xSmall,
+                ),
+              ],
+            ),
           ),
         ),
       ],
