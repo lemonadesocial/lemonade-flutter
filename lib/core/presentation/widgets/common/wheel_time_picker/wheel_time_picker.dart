@@ -4,7 +4,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wheel_picker/wheel_picker.dart';
 
 class WheelTimePicker extends StatefulWidget {
-  const WheelTimePicker({super.key});
+  const WheelTimePicker({super.key, this.timeOfDay});
+
+  final TimeOfDay? timeOfDay;
 
   @override
   State<WheelTimePicker> createState() => _WheelTimePickerState();
@@ -14,11 +16,13 @@ class _WheelTimePickerState extends State<WheelTimePicker> {
   final now = TimeOfDay.now();
   late final hoursWheel = WheelPickerController(
     itemCount: 12,
-    initialIndex: now.hour % 12,
+    initialIndex:
+        widget.timeOfDay != null ? widget.timeOfDay!.hour % 12 : now.hour % 12,
   );
   late final minutesWheel = WheelPickerController(
     itemCount: 60,
-    initialIndex: now.minute,
+    initialIndex:
+        widget.timeOfDay != null ? widget.timeOfDay!.minute : now.minute,
     mounts: [hoursWheel],
   );
 
@@ -75,7 +79,13 @@ class _WheelTimePickerState extends State<WheelTimePicker> {
                 builder: (context, index) {
                   return Text(["AM", "PM"][index], style: textStyle);
                 },
-                initialIndex: (now.period == DayPeriod.am) ? 0 : 1,
+                initialIndex: widget.timeOfDay != null
+                    ? (widget.timeOfDay!.period == DayPeriod.am)
+                        ? 0
+                        : 1
+                    : (now.period == DayPeriod.am)
+                        ? 0
+                        : 1,
                 looping: false,
                 style: wheelStyle.copyWith(
                     shiftAnimationStyle: const WheelShiftAnimationStyle(

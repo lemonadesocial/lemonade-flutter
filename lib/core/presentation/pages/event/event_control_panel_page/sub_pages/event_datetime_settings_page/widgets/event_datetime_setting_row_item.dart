@@ -161,10 +161,12 @@ class _EventDatetimeSettingRowItemState
                       dayTextStyle:
                           Typo.small.copyWith(color: colorScheme.onPrimary),
                     ),
-                    value: [widget.selectedDateTime],
+                    value: [widget.selectedDateTime.toLocal()],
                     onValueChanged: (dates) {},
                   ),
-                  const WheelTimePicker(),
+                  WheelTimePicker(
+                    timeOfDay: TimeOfDay.fromDateTime(widget.selectedDateTime.toLocal()),
+                  ),
                 ],
               ),
             ),
