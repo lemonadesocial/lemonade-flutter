@@ -22,6 +22,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:formz/formz.dart';
 
+import 'package:timezone/timezone.dart' as tz;
+
 @RoutePage()
 class CreateEventBasePage extends StatelessWidget {
   const CreateEventBasePage({super.key});
@@ -136,14 +138,6 @@ class CreateEventBasePage extends StatelessWidget {
 
   _buildSubmitButton(BuildContext context) {
     final t = Translations.of(context);
-    final eventGuestSettingsState =
-        context.read<EventGuestSettingsBloc>().state;
-    final start = context.read<EventDateTimeSettingsBloc>().state.start.value ??
-        EventDateTimeConstants.defaultStartDateTime;
-    final end = context.read<EventDateTimeSettingsBloc>().state.end.value ??
-        EventDateTimeConstants.defaultEndDateTime;
-    final selectedAddress =
-        context.read<EventLocationSettingBloc>().state.selectedAddress;
     return BlocBuilder<CreateEventBloc, CreateEventState>(
       builder: (context, state) {
         return Padding(
@@ -159,10 +153,32 @@ class CreateEventBasePage extends StatelessWidget {
             mode: GradientButtonMode.lavenderMode,
             onTap: () {
               Vibrate.feedback(FeedbackType.light);
+              final eventGuestSettingsState =
+                  context.read<EventGuestSettingsBloc>().state;
+              final start =
+                  context.read<EventDateTimeSettingsBloc>().state.start.value ??
+                      EventDateTimeConstants.defaultStartDateTime;
+              final end =
+                  context.read<EventDateTimeSettingsBloc>().state.end.value ??
+                      EventDateTimeConstants.defaultEndDateTime;
+              final selectedAddress = context
+                  .read<EventLocationSettingBloc>()
+                  .state
+                  .selectedAddress;
+              final timezone =
+                  context.read<EventDateTimeSettingsBloc>().state.timezone ??
+                      '';
+
+              print("?????");
+              final detroit = tz.getLocation('America/Detroit');
+
+              print(">>>");
+              print(detroit);
               context.read<CreateEventBloc>().add(
                     FormSubmitted(
                       start: start,
                       end: end,
+                      timezone: timezone,
                       address: selectedAddress,
                       guestLimit: eventGuestSettingsState.guestLimit,
                       guestLimitPer: eventGuestSettingsState.guestLimitPer,

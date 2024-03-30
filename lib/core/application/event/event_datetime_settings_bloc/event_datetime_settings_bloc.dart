@@ -18,6 +18,8 @@ class EventDateTimeSettingsBloc
     on<EndDateChanged>(_onEndDateChanged);
     on<EndTimeChanged>(_onEndTimeChanged);
     on<TimezoneChanged>(_onTimezoneChanged);
+    on<EventDateTimeSettingsEventSetExpandedStarts>(_onSetExpandedStarts);
+    on<EventDateTimeSettingsEventSetExpandedEnds>(_onSetExpandedEnds);
   }
 
   Future<void> _onInit(
@@ -127,6 +129,30 @@ class EventDateTimeSettingsBloc
       ),
     );
   }
+
+  Future<void> _onSetExpandedStarts(
+    EventDateTimeSettingsEventSetExpandedStarts event,
+    Emitter<EventDateTimeSettingsState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        expandedStarts: true,
+        expandedEnds: false,
+      ),
+    );
+  }
+
+  Future<void> _onSetExpandedEnds(
+    EventDateTimeSettingsEventSetExpandedEnds event,
+    Emitter<EventDateTimeSettingsState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        expandedStarts: false,
+        expandedEnds: true,
+      ),
+    );
+  }
 }
 
 @freezed
@@ -155,6 +181,12 @@ class EventDateTimeSettingsEvent with _$EventDateTimeSettingsEvent {
   const factory EventDateTimeSettingsEvent.timezoneChanged({
     required String timezone,
   }) = TimezoneChanged;
+
+  const factory EventDateTimeSettingsEvent.setExpandedStarts() =
+      EventDateTimeSettingsEventSetExpandedStarts;
+
+  const factory EventDateTimeSettingsEvent.setExpandedEnds() =
+      EventDateTimeSettingsEventSetExpandedEnds;
 }
 
 @freezed
@@ -164,6 +196,8 @@ class EventDateTimeSettingsState with _$EventDateTimeSettingsState {
     @Default(DateTimeFormz.pure()) DateTimeFormz end,
     @Default(FormzSubmissionStatus.initial) FormzSubmissionStatus status,
     @Default(false) bool isValid,
+    @Default(true) bool expandedStarts,
+    @Default(false) bool expandedEnds,
     String? timezone,
   }) = _EventDateTimeSettingsState;
 }

@@ -166,12 +166,12 @@ class EventDateTimeConstants {
     currentDateTime.month,
     currentDateTime.day + 3,
     10,
-  );
+  ).toUtc();
 
   static final DateTime defaultEndDateTime = DateTime(
     currentDateTime.year,
     currentDateTime.month,
     currentDateTime.day + 6,
     18,
-  );
+  ).toUtc();
 }

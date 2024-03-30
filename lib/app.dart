@@ -35,6 +35,7 @@ import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:web3modal_flutter/web3modal_flutter.dart';
+import 'package:timezone/data/latest.dart' as tz;
 
 class LemonadeApp extends StatefulWidget {
   const LemonadeApp({super.key});
@@ -61,6 +62,7 @@ class _LemonadeAppViewState extends State<LemonadeApp> {
       );
       setupInteractedMessage();
       FlutterNativeSplash.remove();
+      tz.initializeTimeZones();
     });
     EasyLoading.instance
       ..indicatorType = EasyLoadingIndicatorType.ring

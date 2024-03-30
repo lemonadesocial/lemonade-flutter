@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:formz/formz.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:timezone/timezone.dart';
 
 part 'create_event_bloc.freezed.dart';
 
@@ -66,57 +67,71 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
     FormSubmitted event,
     Emitter<CreateEventState> emit,
   ) async {
-    final title = StringFormz.dirty(state.title.value);
-    final description = StringFormz.dirty(state.description.value);
+    print(event.start);
+    print(event.end);
+    print(event.timezone);
+    final detroit = getLocation('America/Detroit');
+    print("location : ${detroit.toString()}");
+    final TZDateTime timeZoneDateTime = TZDateTime.from(event.start, detroit);
+    print("timeZoneDateTime : ${timeZoneDateTime}");
+
     emit(
       state.copyWith(
-        title: title,
-        description: description,
-        isValid: Formz.validate([title, description]),
+        isValid: true,
       ),
     );
-    if (state.isValid) {
-      final timezone = await FlutterTimezone.getLocalTimezone();
-      emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
-      var input = Input$EventInput(
-        title: title.value,
-        description: description.value,
-        private: event.private,
-        approval_required: event.approvalRequired,
-        start: DateTime.parse(event.start.toUtc().toIso8601String()),
-        end: DateTime.parse(event.end.toUtc().toIso8601String()),
-        timezone: timezone,
-        guest_limit: double.parse(
-          event.guestLimit ?? EventConstants.defaultEventGuestLimit,
-        ),
-        guest_limit_per: double.parse(
-          event.guestLimitPer ?? EventConstants.defaultEventGuestLimitPer,
-        ),
-        virtual: state.virtual,
-        address: event.address != null
-            ? Input$AddressInput(
-                title: event.address!.title,
-                street_1: event.address!.street1,
-                street_2: event.address!.street2,
-                region: event.address!.region,
-                city: event.address!.city,
-                country: event.address!.country,
-                postal: event.address!.postal,
-                recipient_name: event.address!.recipientName,
-                latitude: event.address!.latitude,
-                longitude: event.address!.longitude,
-              )
-            : null,
-        published: true,
-      );
-      final result = await _eventRepository.createEvent(input: input);
-      result.fold(
-        (failure) =>
-            emit(state.copyWith(status: FormzSubmissionStatus.failure)),
-        (createEvent) =>
-            emit(state.copyWith(status: FormzSubmissionStatus.success)),
-      );
-    }
+
+    //   final title = StringFormz.dirty(state.title.value);
+    //   final description = StringFormz.dirty(state.description.value);
+    //   emit(
+    //     state.copyWith(
+    //       title: title,
+    //       description: description,
+    //       isValid: Formz.validate([title, description]),
+    //     ),
+    //   );
+    //   if (state.isValid) {
+    //     final timezone = await FlutterTimezone.getLocalTimezone();
+    //     emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
+    //     var input = Input$EventInput(
+    //       title: title.value,
+    //       description: description.value,
+    //       private: event.private,
+    //       approval_required: event.approvalRequired,
+    //       start: DateTime.parse(event.start.toUtc().toIso8601String()),
+    //       end: DateTime.parse(event.end.toUtc().toIso8601String()),
+    //       timezone: timezone,
+    //       guest_limit: double.parse(
+    //         event.guestLimit ?? EventConstants.defaultEventGuestLimit,
+    //       ),
+    //       guest_limit_per: double.parse(
+    //         event.guestLimitPer ?? EventConstants.defaultEventGuestLimitPer,
+    //       ),
+    //       virtual: state.virtual,
+    //       address: event.address != null
+    //           ? Input$AddressInput(
+    //               title: event.address!.title,
+    //               street_1: event.address!.street1,
+    //               street_2: event.address!.street2,
+    //               region: event.address!.region,
+    //               city: event.address!.city,
+    //               country: event.address!.country,
+    //               postal: event.address!.postal,
+    //               recipient_name: event.address!.recipientName,
+    //               latitude: event.address!.latitude,
+    //               longitude: event.address!.longitude,
+    //             )
+    //           : null,
+    //       published: true,
+    //     );
+    //     final result = await _eventRepository.createEvent(input: input);
+    //     result.fold(
+    //       (failure) =>
+    //           emit(state.copyWith(status: FormzSubmissionStatus.failure)),
+    //       (createEvent) =>
+    //           emit(state.copyWith(status: FormzSubmissionStatus.success)),
+    //     );
+    //   }
   }
 }
 
@@ -135,6 +150,7 @@ class CreateEventEvent with _$CreateEventEvent {
   const factory CreateEventEvent.formSubmitted({
     required DateTime start,
     required DateTime end,
+    required String timezone,
     bool? private,
     bool? approvalRequired,
     Address? address,
