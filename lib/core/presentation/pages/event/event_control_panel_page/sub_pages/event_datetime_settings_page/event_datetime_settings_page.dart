@@ -13,12 +13,20 @@ class EventDatetimeSettingsPage extends StatelessWidget {
   const EventDatetimeSettingsPage({
     super.key,
     this.event,
+    this.expandedStarts = true,
+    this.expandedEnds = false,
   });
   final Event? event;
+  final bool? expandedStarts;
+  final bool? expandedEnds;
 
   @override
   Widget build(BuildContext context) {
-    return EventDatetimeSettingsPageView(event: event);
+    return EventDatetimeSettingsPageView(
+      event: event,
+      expandedStarts: expandedStarts,
+      expandedEnds: expandedEnds,
+    );
   }
 }
 
@@ -26,8 +34,12 @@ class EventDatetimeSettingsPageView extends StatefulWidget {
   const EventDatetimeSettingsPageView({
     super.key,
     this.event,
+    this.expandedStarts,
+    this.expandedEnds,
   });
   final Event? event;
+  final bool? expandedStarts;
+  final bool? expandedEnds;
 
   @override
   State<EventDatetimeSettingsPageView> createState() =>
@@ -52,7 +64,7 @@ class _EventDatetimeSettingsPageState
       child: Scaffold(
           appBar: LemonAppBar(
             backgroundColor: LemonColor.atomicBlack,
-            title: t.event.dateAndTime,
+            title: t.event.datetimeSettings.chooseDateAndTime,
           ),
           backgroundColor: LemonColor.atomicBlack,
           resizeToAvoidBottomInset: true,
@@ -64,9 +76,9 @@ class _EventDatetimeSettingsPageState
                     padding: EdgeInsets.symmetric(
                       horizontal: Spacing.smMedium,
                     ),
-                    sliver: const SliverToBoxAdapter(
+                    sliver: SliverToBoxAdapter(
                       child: EventDatetimeSettingRowItem(
-                        expanded: true,
+                        expanded: widget.expandedStarts == true,
                       ),
                     ),
                   ),
@@ -87,8 +99,10 @@ class _EventDatetimeSettingsPageState
                     padding: EdgeInsets.symmetric(
                       horizontal: Spacing.smMedium,
                     ),
-                    sliver: const SliverToBoxAdapter(
-                      child: EventDatetimeSettingRowItem(),
+                    sliver: SliverToBoxAdapter(
+                      child: EventDatetimeSettingRowItem(
+                        expanded: widget.expandedEnds == true,
+                      ),
                     ),
                   ),
                 ],

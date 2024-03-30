@@ -159,7 +159,8 @@
         "endDate": "End date",
         "endTime": "End time",
         "starts": "Starts",
-        "ends": "Ends"
+        "ends": "Ends",
+        "chooseDateAndTime": "Choose date & time"
     },
     "locationSetting": {
         "addLocation": "Add location",

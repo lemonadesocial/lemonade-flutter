@@ -48,14 +48,15 @@ class EventDateTimeSettingSection extends StatelessWidget {
                     color: LemonColor.malachiteGreen,
                     text: t.event.datetimeSettings.starts,
                     date: date_utils.DateUtils.formatForDateSetting(
-                        state.start.value ?? DateTime.now()),
+                      state.start.value ?? DateTime.now(),
+                    ),
                     onTap: () {
                       showCupertinoModalBottomSheet(
                         backgroundColor: LemonColor.atomicBlack,
                         context: context,
                         enableDrag: false,
                         builder: (innerContext) =>
-                            const EventDatetimeSettingsPage(),
+                            const EventDatetimeSettingsPage(expandedStarts: true, expandedEnds: false),
                       );
                     },
                   ),
@@ -64,14 +65,15 @@ class EventDateTimeSettingSection extends StatelessWidget {
                     color: LemonColor.coralReef,
                     text: t.event.datetimeSettings.ends,
                     date: date_utils.DateUtils.formatForDateSetting(
-                        state.end.value ?? DateTime.now()),
+                      state.end.value ?? DateTime.now(),
+                    ),
                     onTap: () {
                       showCupertinoModalBottomSheet(
                         backgroundColor: LemonColor.atomicBlack,
                         context: context,
                         enableDrag: false,
                         builder: (innerContext) =>
-                            const EventDatetimeSettingsPage(),
+                            const EventDatetimeSettingsPage(expandedStarts: false, expandedEnds: true),
                       );
                     },
                   ),

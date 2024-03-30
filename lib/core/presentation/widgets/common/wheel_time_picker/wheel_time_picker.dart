@@ -1,3 +1,4 @@
+import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wheel_picker/wheel_picker.dart';
@@ -57,7 +58,7 @@ class _WheelTimePickerState extends State<WheelTimePicker> {
                 selectedIndexColor: colorScheme.onPrimary,
               ),
               SizedBox(
-                width: 34.w,
+                width: Spacing.small,
               ),
               WheelPicker(
                 builder: itemBuilder,
@@ -67,7 +68,7 @@ class _WheelTimePickerState extends State<WheelTimePicker> {
                 selectedIndexColor: colorScheme.onPrimary,
               ),
               SizedBox(
-                width: 34.w,
+                width: Spacing.small,
               ),
               WheelPicker(
                 itemCount: 2,
@@ -97,11 +98,13 @@ class _WheelTimePickerState extends State<WheelTimePicker> {
   }
 
   Widget _centerBar(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Center(
       child: Container(
-        height: 38.0,
+        height: 32.h,
+        margin: EdgeInsets.symmetric(horizontal: Spacing.xLarge),
         decoration: BoxDecoration(
-          color: const Color(0xFFC3C9FA).withAlpha(26),
+          color: colorScheme.secondary,
           borderRadius: BorderRadius.circular(8.0),
         ),
       ),
