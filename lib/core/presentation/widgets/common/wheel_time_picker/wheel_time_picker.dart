@@ -88,10 +88,11 @@ class _WheelTimePickerState extends State<WheelTimePicker> {
                         : 1,
                 looping: false,
                 style: wheelStyle.copyWith(
-                    shiftAnimationStyle: const WheelShiftAnimationStyle(
-                  duration: Duration(seconds: 1),
-                  curve: Curves.bounceOut,
-                )),
+                  shiftAnimationStyle: const WheelShiftAnimationStyle(
+                    duration: Duration(seconds: 1),
+                    curve: Curves.bounceOut,
+                  ),
+                ),
               ),
             ],
           ),

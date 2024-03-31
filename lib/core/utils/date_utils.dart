@@ -186,4 +186,17 @@ class DateUtils {
     );
     return selectedOption['value'] ?? '';
   }
+
+  // Combine the date and time
+  static DateTime combineDateAndTime(DateTime keepDate, DateTime keepTime) {
+    DateTime combinedDateTime = DateTime(
+      keepDate.year,
+      keepDate.month,
+      keepDate.day,
+      keepTime.hour,
+      keepTime.minute,
+      keepTime.second,
+    );
+    return combinedDateTime;
+  }
 }

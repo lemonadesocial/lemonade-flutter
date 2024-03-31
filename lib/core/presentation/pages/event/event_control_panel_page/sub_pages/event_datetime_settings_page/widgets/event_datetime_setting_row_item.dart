@@ -8,6 +8,7 @@ import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:app/core/utils/date_utils.dart' as date_utils;
 
 enum EventDatetimeTabs {
   date(tabIndex: 0),
@@ -53,8 +54,9 @@ class EventDatetimeSettingRowItem extends StatefulWidget {
 class _EventDatetimeSettingRowItemState
     extends State<EventDatetimeSettingRowItem> with TickerProviderStateMixin {
   late TabController _tabController;
-  late final List<_TabItem> tabItems;
+  // late final List<_TabItem> tabItems;
   int activeIndex = 0;
+  late DateTime newSelectedDateTime;
 
   @override
   initState() {
@@ -64,15 +66,10 @@ class _EventDatetimeSettingRowItemState
         activeIndex = 0;
       });
     }
-    tabItems = [
-      _TabItem(
-        title: DateFormat('dd MMM').format(widget.selectedDateTime.toLocal()),
-      ),
-      _TabItem(
-        title: DateFormat('h:mma').format(widget.selectedDateTime.toLocal()),
-      ),
-    ];
-    _tabController = TabController(length: tabItems.length, vsync: this);
+    setState(() {
+      newSelectedDateTime = widget.selectedDateTime;
+    });
+    _tabController = TabController(length: 2, vsync: this);
     _tabController.addListener(() {
       if (activeIndex != _tabController.index) {
         setState(() {
@@ -118,7 +115,9 @@ class _EventDatetimeSettingRowItemState
               Row(
                 children: [
                   _CustomTab(
-                    tabItem: tabItems[0],
+                    tabItem: _TabItem(
+                      title: DateFormat('dd MMM').format(newSelectedDateTime),
+                    ),
                     onPress: () {
                       _tabController.animateTo(0);
                       widget.onSelectTab();
@@ -127,7 +126,9 @@ class _EventDatetimeSettingRowItemState
                   ),
                   SizedBox(width: Spacing.smMedium / 2),
                   _CustomTab(
-                    tabItem: tabItems[1],
+                    tabItem: _TabItem(
+                      title: DateFormat('h:mma').format(newSelectedDateTime),
+                    ),
                     onPress: () {
                       _tabController.animateTo(1);
                       widget.onSelectTab();
@@ -161,11 +162,17 @@ class _EventDatetimeSettingRowItemState
                       dayTextStyle:
                           Typo.small.copyWith(color: colorScheme.onPrimary),
                     ),
-                    value: [widget.selectedDateTime.toLocal()],
-                    onValueChanged: (dates) {},
+                    value: [newSelectedDateTime],
+                    onValueChanged: (dates) {
+                      setState(() {
+                        newSelectedDateTime =  date_utils.DateUtils.combineDateAndTime(dates[0]!, newSelectedDateTime);
+                      });
+                    },
                   ),
                   WheelTimePicker(
-                    timeOfDay: TimeOfDay.fromDateTime(widget.selectedDateTime.toLocal()),
+                    timeOfDay: TimeOfDay.fromDateTime(
+                      widget.selectedDateTime,
+                    ),
                   ),
                 ],
               ),

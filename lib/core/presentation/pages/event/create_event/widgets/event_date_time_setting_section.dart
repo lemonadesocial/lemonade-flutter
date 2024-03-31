@@ -22,6 +22,7 @@ class EventDateTimeSettingSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
+
     return Column(
       children: [
         Container(
@@ -49,8 +50,8 @@ class EventDateTimeSettingSection extends StatelessWidget {
                     text: t.event.datetimeSettings.starts,
                     date: date_utils.DateUtils.formatForDateSetting(
                       state.start.value != null
-                          ? state.start.value!.toLocal()
-                          : DateTime.now().toLocal(),
+                          ? state.start.value!
+                          : DateTime.now(),
                     ),
                     onTap: () {
                       context.read<EventDateTimeSettingsBloc>().add(
@@ -71,8 +72,8 @@ class EventDateTimeSettingSection extends StatelessWidget {
                     text: t.event.datetimeSettings.ends,
                     date: date_utils.DateUtils.formatForDateSetting(
                       state.end.value != null
-                          ? state.end.value!.toLocal()
-                          : DateTime.now().toLocal(),
+                          ? state.end.value!
+                          : DateTime.now(),
                     ),
                     onTap: () {
                       context.read<EventDateTimeSettingsBloc>().add(

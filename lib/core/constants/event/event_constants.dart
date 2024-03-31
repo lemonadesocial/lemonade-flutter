@@ -161,17 +161,17 @@ class EventConstants {
 class EventDateTimeConstants {
   static final DateTime currentDateTime = DateTime.now();
 
-  static final DateTime defaultStartDateTime = DateTime(
+  static final DateTime defaultStartDateTime = DateTime.utc(
     currentDateTime.year,
     currentDateTime.month,
     currentDateTime.day + 3,
     10,
-  ).toUtc();
+  );
 
-  static final DateTime defaultEndDateTime = DateTime(
+  static final DateTime defaultEndDateTime = DateTime.utc(
     currentDateTime.year,
     currentDateTime.month,
     currentDateTime.day + 6,
     18,
-  ).toUtc();
+  );
 }
