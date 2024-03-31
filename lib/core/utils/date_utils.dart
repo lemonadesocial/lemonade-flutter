@@ -178,7 +178,6 @@ class DateUtils {
     int minutes = offset.inMinutes.remainder(60);
     String timezone =
         'GMT$sign${padWithZero(hours.abs())}:${padWithZero(minutes)}';
-    print(timezone);
     Map<String, String>? selectedOption =
         EventConstants.timezoneOptions.firstWhere(
       (option) => option['text']!.contains(timezone),
