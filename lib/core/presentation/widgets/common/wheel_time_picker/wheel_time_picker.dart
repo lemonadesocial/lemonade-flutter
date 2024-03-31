@@ -4,9 +4,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wheel_picker/wheel_picker.dart';
 
 class WheelTimePicker extends StatefulWidget {
-  const WheelTimePicker({super.key, this.timeOfDay});
+  const WheelTimePicker(
+      {super.key, this.timeOfDay, required this.onTimeChanged});
 
   final TimeOfDay? timeOfDay;
+  final Function(TimeOfDay) onTimeChanged;
 
   @override
   State<WheelTimePicker> createState() => _WheelTimePickerState();
@@ -44,6 +46,36 @@ class _WheelTimePickerState extends State<WheelTimePicker> {
       return Text("$index".padLeft(2, '0'), style: textStyle);
     }
 
+    void onHourChanged(int newHour) {
+      final newTime = TimeOfDay(
+        hour: (newHour + widget.timeOfDay!.periodOffset),
+        minute: widget.timeOfDay!.minute,
+      );
+      widget.onTimeChanged(newTime);
+    }
+
+    void onMinutesChanged(int newMinutes) {
+      final newTime = TimeOfDay(
+        hour: widget.timeOfDay!.hour,
+        minute: newMinutes,
+      );
+      widget.onTimeChanged(newTime);
+    }
+
+    void onPeriodChanged(int index) {
+      final newHour = index == 0
+          ? widget.timeOfDay!.hour > 12
+              ? widget.timeOfDay!.hour - 12
+              : widget.timeOfDay!.hour
+          : widget.timeOfDay!.hour < 12
+              ? widget.timeOfDay!.hour + 12
+              : widget.timeOfDay!.hour;
+
+      final newTime =
+          TimeOfDay(hour: newHour, minute: widget.timeOfDay!.minute);
+      widget.onTimeChanged(newTime);
+    }
+
     return SizedBox(
       width: 200.0,
       child: Stack(
@@ -60,6 +92,9 @@ class _WheelTimePickerState extends State<WheelTimePicker> {
                 looping: true,
                 style: wheelStyle,
                 selectedIndexColor: colorScheme.onPrimary,
+                onIndexChanged: (index) {
+                  onHourChanged(index);
+                },
               ),
               SizedBox(
                 width: Spacing.small,
@@ -70,6 +105,9 @@ class _WheelTimePickerState extends State<WheelTimePicker> {
                 style: wheelStyle,
                 enableTap: true,
                 selectedIndexColor: colorScheme.onPrimary,
+                onIndexChanged: (index) {
+                  onMinutesChanged(index);
+                },
               ),
               SizedBox(
                 width: Spacing.small,
@@ -93,6 +131,9 @@ class _WheelTimePickerState extends State<WheelTimePicker> {
                     curve: Curves.bounceOut,
                   ),
                 ),
+                onIndexChanged: (index) {
+                  onPeriodChanged(index);
+                },
               ),
             ],
           ),

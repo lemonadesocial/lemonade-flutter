@@ -56,7 +56,7 @@ class _EventDatetimeSettingRowItemState
   late TabController _tabController;
   // late final List<_TabItem> tabItems;
   int activeIndex = 0;
-  late DateTime newSelectedDateTime;
+  late DateTime tempSelectedDateTime;
 
   @override
   initState() {
@@ -67,7 +67,7 @@ class _EventDatetimeSettingRowItemState
       });
     }
     setState(() {
-      newSelectedDateTime = widget.selectedDateTime;
+      tempSelectedDateTime = widget.selectedDateTime;
     });
     _tabController = TabController(length: 2, vsync: this);
     _tabController.addListener(() {
@@ -116,7 +116,7 @@ class _EventDatetimeSettingRowItemState
                 children: [
                   _CustomTab(
                     tabItem: _TabItem(
-                      title: DateFormat('dd MMM').format(newSelectedDateTime),
+                      title: DateFormat('dd MMM').format(tempSelectedDateTime),
                     ),
                     onPress: () {
                       _tabController.animateTo(0);
@@ -127,7 +127,7 @@ class _EventDatetimeSettingRowItemState
                   SizedBox(width: Spacing.smMedium / 2),
                   _CustomTab(
                     tabItem: _TabItem(
-                      title: DateFormat('h:mma').format(newSelectedDateTime),
+                      title: DateFormat('h:mma').format(tempSelectedDateTime),
                     ),
                     onPress: () {
                       _tabController.animateTo(1);
@@ -162,17 +162,34 @@ class _EventDatetimeSettingRowItemState
                       dayTextStyle:
                           Typo.small.copyWith(color: colorScheme.onPrimary),
                     ),
-                    value: [newSelectedDateTime],
+                    value: [tempSelectedDateTime],
                     onValueChanged: (dates) {
                       setState(() {
-                        newSelectedDateTime =  date_utils.DateUtils.combineDateAndTime(dates[0]!, newSelectedDateTime);
+                        tempSelectedDateTime =
+                            date_utils.DateUtils.combineDateAndTime(
+                                dates[0]!, tempSelectedDateTime);
                       });
                     },
                   ),
                   WheelTimePicker(
                     timeOfDay: TimeOfDay.fromDateTime(
-                      widget.selectedDateTime,
+                      tempSelectedDateTime,
                     ),
+                    onTimeChanged: (timeOfDay) {
+                      setState(() {
+                        tempSelectedDateTime =
+                            date_utils.DateUtils.combineDateAndTime(
+                          tempSelectedDateTime,
+                          DateTime(
+                            DateTime.now().year,
+                            DateTime.now().month,
+                            DateTime.now().day,
+                            timeOfDay.hour,
+                            timeOfDay.minute,
+                          ),
+                        );
+                      });
+                    },
                   ),
                 ],
               ),
