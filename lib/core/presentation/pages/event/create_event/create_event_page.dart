@@ -35,6 +35,8 @@ class CreateEventPage extends StatelessWidget implements AutoRouteWrapper {
               EventDateTimeSettingsEvent.init(
                 startDateTime: EventDateTimeConstants.defaultStartDateTime,
                 endDateTime: EventDateTimeConstants.defaultEndDateTime,
+                tempStartDateTime: EventDateTimeConstants.defaultStartDateTime,
+                tempEndDateTime: EventDateTimeConstants.defaultEndDateTime,
               ),
             ),
         ),

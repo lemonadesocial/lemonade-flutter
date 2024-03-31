@@ -478,5 +478,9 @@
     "eventPrivate": {
         "eventPrivateTitle": "This is a private event",
         "eventPrivateErrorDescription": "You must be on the invite list to purchase tickets to this event"
+    },
+    "dateTimeSettingError": {
+        "mustBeFuture": "Start & end time must be future",
+        "endMustAfterStart": "End date must be after start date"
     }
 }

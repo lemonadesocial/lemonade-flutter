@@ -1,4 +1,5 @@
 import 'package:app/core/constants/event/event_constants.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class DateUtils {
@@ -187,14 +188,14 @@ class DateUtils {
   }
 
   // Combine the date and time
-  static DateTime combineDateAndTime(DateTime keepDate, DateTime keepTime) {
+  static DateTime combineDateAndTime(DateTime keepDate, TimeOfDay timeOfDay) {
     DateTime combinedDateTime = DateTime(
       keepDate.year,
       keepDate.month,
       keepDate.day,
-      keepTime.hour,
-      keepTime.minute,
-      keepTime.second,
+      timeOfDay.hour,
+      timeOfDay.minute,
+      0,
     );
     return combinedDateTime;
   }

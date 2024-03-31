@@ -1,4 +1,5 @@
 import 'package:app/core/domain/form/datetime_formz.dart';
+import 'package:app/i18n/i18n.g.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
@@ -14,9 +15,10 @@ class EventDateTimeSettingsBloc
   EventDateTimeSettingsBloc() : super(const EventDateTimeSettingsState()) {
     on<EventDateTimeSettingsEventInit>(_onInit);
     on<StartDateChanged>(_onStartDateChanged);
-    on<StartTimeChanged>(_onStartTimeChanged);
     on<EndDateChanged>(_onEndDateChanged);
-    on<EndTimeChanged>(_onEndTimeChanged);
+    on<TempStartDateTimeChanged>(_onTempStartDateTimeChanged);
+    on<TempEndDateTimeChanged>(_onTempEndDateTimeChanged);
+    on<EventDateTimeSettingsEventSaveChanges>(_onSaveChanges);
     on<TimezoneChanged>(_onTimezoneChanged);
     on<EventDateTimeSettingsEventSetExpandedStarts>(_onSetExpandedStarts);
     on<EventDateTimeSettingsEventSetExpandedEnds>(_onSetExpandedEnds);
@@ -26,11 +28,18 @@ class EventDateTimeSettingsBloc
     EventDateTimeSettingsEventInit event,
     Emitter emit,
   ) async {
+    emit(state.copyWith(status: FormzSubmissionStatus.initial));
     final start = DateTimeFormz.dirty(event.startDateTime);
     final end = DateTimeFormz.dirty(event.endDateTime);
     final timezone = date_utils.DateUtils.getUserTimezoneOptionValue();
     emit(
-      state.copyWith(start: start, end: end, timezone: timezone),
+      state.copyWith(
+        start: start,
+        end: end,
+        tempStart: start,
+        tempEnd: end,
+        timezone: timezone,
+      ),
     );
   }
 
@@ -64,18 +73,6 @@ class EventDateTimeSettingsBloc
     }
   }
 
-  Future<void> _onStartTimeChanged(
-    StartTimeChanged event,
-    Emitter<EventDateTimeSettingsState> emit,
-  ) async {
-    final startTime = DateTimeFormz.dirty(event.datetime);
-    emit(
-      state.copyWith(
-        start: startTime,
-      ),
-    );
-  }
-
   Future<void> _onEndDateChanged(
     EndDateChanged event,
     Emitter<EventDateTimeSettingsState> emit,
@@ -107,16 +104,66 @@ class EventDateTimeSettingsBloc
     }
   }
 
-  Future<void> _onEndTimeChanged(
-    EndTimeChanged event,
-    Emitter<EventDateTimeSettingsState> emit,
+  Future<void> _onTempStartDateTimeChanged(
+    TempStartDateTimeChanged event,
+    Emitter emit,
   ) async {
-    final endTime = DateTimeFormz.dirty(event.datetime);
+    emit(state.copyWith(status: FormzSubmissionStatus.initial));
+    final tempStartDate = DateTimeFormz.dirty(event.datetime);
     emit(
-      state.copyWith(
-        end: endTime,
-      ),
+      state.copyWith(tempStart: tempStartDate),
     );
+  }
+
+  Future<void> _onTempEndDateTimeChanged(
+    TempEndDateTimeChanged event,
+    Emitter emit,
+  ) async {
+    emit(state.copyWith(status: FormzSubmissionStatus.initial));
+    final tempEndDate = DateTimeFormz.dirty(event.datetime);
+    emit(
+      state.copyWith(tempEnd: tempEndDate),
+    );
+  }
+
+  Future<void> _onSaveChanges(
+    EventDateTimeSettingsEventSaveChanges event,
+    Emitter emit,
+  ) async {
+    emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
+    final tempStartDate = DateTimeFormz.dirty(state.tempStart.value!);
+    final tempEndDate = DateTimeFormz.dirty(state.tempEnd.value!);
+    if (tempStartDate.value!.isBefore(DateTime.now()) ||
+        tempEndDate.value!.isBefore(DateTime.now())) {
+      emit(
+        state.copyWith(
+          start: tempStartDate,
+          end: tempEndDate,
+          isValid: false,
+          status: FormzSubmissionStatus.failure,
+          errorMessage: t.event.dateTimeSettingError.mustBeFuture,
+        ),
+      );
+    } else if (tempEndDate.value!.isBefore(tempStartDate.value!)) {
+      emit(
+        state.copyWith(
+          start: tempStartDate,
+          end: tempEndDate,
+          isValid: false,
+          status: FormzSubmissionStatus.failure,
+          errorMessage: t.event.dateTimeSettingError.endMustAfterStart,
+        ),
+      );
+    } else {
+      emit(
+        state.copyWith(
+          start: tempStartDate,
+          end: tempEndDate,
+          isValid: true,
+          status: FormzSubmissionStatus.success,
+        ),
+      );
+    }
   }
 
   Future<void> _onTimezoneChanged(
@@ -134,6 +181,7 @@ class EventDateTimeSettingsBloc
     EventDateTimeSettingsEventSetExpandedStarts event,
     Emitter<EventDateTimeSettingsState> emit,
   ) async {
+    emit(state.copyWith(status: FormzSubmissionStatus.initial));
     emit(
       state.copyWith(
         expandedStarts: true,
@@ -146,6 +194,7 @@ class EventDateTimeSettingsBloc
     EventDateTimeSettingsEventSetExpandedEnds event,
     Emitter<EventDateTimeSettingsState> emit,
   ) async {
+    emit(state.copyWith(status: FormzSubmissionStatus.initial));
     emit(
       state.copyWith(
         expandedStarts: false,
@@ -160,23 +209,25 @@ class EventDateTimeSettingsEvent with _$EventDateTimeSettingsEvent {
   factory EventDateTimeSettingsEvent.init({
     required DateTime startDateTime,
     required DateTime endDateTime,
+    required DateTime tempStartDateTime,
+    required DateTime tempEndDateTime,
   }) = EventDateTimeSettingsEventInit;
 
   const factory EventDateTimeSettingsEvent.startDateChanged({
     required DateTime datetime,
   }) = StartDateChanged;
 
-  const factory EventDateTimeSettingsEvent.startTimeChanged({
-    required DateTime datetime,
-  }) = StartTimeChanged;
-
   const factory EventDateTimeSettingsEvent.endDateChanged({
     required DateTime datetime,
   }) = EndDateChanged;
 
-  const factory EventDateTimeSettingsEvent.endTimeChanged({
+  const factory EventDateTimeSettingsEvent.tempStartDateTimeChanged({
     required DateTime datetime,
-  }) = EndTimeChanged;
+  }) = TempStartDateTimeChanged;
+
+  const factory EventDateTimeSettingsEvent.tempEndDateTimeChanged({
+    required DateTime datetime,
+  }) = TempEndDateTimeChanged;
 
   const factory EventDateTimeSettingsEvent.timezoneChanged({
     required String timezone,
@@ -187,6 +238,9 @@ class EventDateTimeSettingsEvent with _$EventDateTimeSettingsEvent {
 
   const factory EventDateTimeSettingsEvent.setExpandedEnds() =
       EventDateTimeSettingsEventSetExpandedEnds;
+
+  const factory EventDateTimeSettingsEvent.saveChanges() =
+      EventDateTimeSettingsEventSaveChanges;
 }
 
 @freezed
@@ -194,10 +248,13 @@ class EventDateTimeSettingsState with _$EventDateTimeSettingsState {
   const factory EventDateTimeSettingsState({
     @Default(DateTimeFormz.pure()) DateTimeFormz start,
     @Default(DateTimeFormz.pure()) DateTimeFormz end,
+    @Default(DateTimeFormz.pure()) DateTimeFormz tempStart,
+    @Default(DateTimeFormz.pure()) DateTimeFormz tempEnd,
     @Default(FormzSubmissionStatus.initial) FormzSubmissionStatus status,
     @Default(false) bool isValid,
     @Default(true) bool expandedStarts,
     @Default(false) bool expandedEnds,
+    @Default("") String errorMessage,
     String? timezone,
   }) = _EventDateTimeSettingsState;
 }

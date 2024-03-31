@@ -3,12 +3,15 @@ import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_datetime_settings_page/widgets/event_datetime_setting_row_item.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
+import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:app/core/utils/date_utils.dart' as date_utils;
+import 'package:formz/formz.dart';
 
 @RoutePage()
 class EventDatetimeSettingsPage extends StatelessWidget {
@@ -56,15 +59,28 @@ class _EventDatetimeSettingsPageState
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
     return GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: Scaffold(
-          appBar: LemonAppBar(
-            backgroundColor: LemonColor.atomicBlack,
-            title: t.event.datetimeSettings.chooseDateAndTime,
-          ),
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        appBar: LemonAppBar(
           backgroundColor: LemonColor.atomicBlack,
-          resizeToAvoidBottomInset: true,
-          body: BlocBuilder<EventDateTimeSettingsBloc,
+          title: t.event.datetimeSettings.chooseDateAndTime,
+        ),
+        backgroundColor: LemonColor.atomicBlack,
+        resizeToAvoidBottomInset: true,
+        body:
+            BlocListener<EventDateTimeSettingsBloc, EventDateTimeSettingsState>(
+          listener: (context, state) async {
+            if (state.isValid == false &&
+                state.status == FormzSubmissionStatus.failure &&
+                state.errorMessage != '') {
+              SnackBarUtils.showError(message: state.errorMessage);
+            }
+            if (state.isValid == true &&
+                state.status == FormzSubmissionStatus.success) {
+              AutoRouter.of(context).pop();
+            }
+          },
+          child: BlocBuilder<EventDateTimeSettingsBloc,
               EventDateTimeSettingsState>(
             builder: (context, state) {
               return Stack(
@@ -80,12 +96,39 @@ class _EventDatetimeSettingsPageState
                             label: t.event.datetimeSettings.starts,
                             dotColor: LemonColor.snackBarSuccess,
                             selectedDateTime:
-                                state.start.value ?? DateTime.now(),
+                                state.tempStart.value ?? DateTime.now(),
                             expanded: state.expandedStarts == true,
                             onSelectTab: () =>
                                 context.read<EventDateTimeSettingsBloc>().add(
                                       const EventDateTimeSettingsEventSetExpandedStarts(),
                                     ),
+                            onDateChanged: (DateTime datetime) {
+                              context.read<EventDateTimeSettingsBloc>().add(
+                                    EventDateTimeSettingsEvent
+                                        .tempStartDateTimeChanged(
+                                      datetime: date_utils.DateUtils
+                                          .combineDateAndTime(
+                                        datetime,
+                                        TimeOfDay(
+                                          hour: state.tempStart.value!.hour,
+                                          minute: state.tempStart.value!.minute,
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                            },
+                            onTimeChanged: (TimeOfDay timeOfDay) {
+                              context.read<EventDateTimeSettingsBloc>().add(
+                                    EventDateTimeSettingsEvent
+                                        .tempStartDateTimeChanged(
+                                      datetime: date_utils.DateUtils
+                                          .combineDateAndTime(
+                                        state.tempStart.value ?? DateTime.now(),
+                                        timeOfDay,
+                                      ),
+                                    ),
+                                  );
+                            },
                           ),
                         ),
                       ),
@@ -111,11 +154,39 @@ class _EventDatetimeSettingsPageState
                             label: t.event.datetimeSettings.ends,
                             dotColor: LemonColor.coralReef,
                             expanded: state.expandedEnds == true,
-                            selectedDateTime: state.end.value ?? DateTime.now(),
+                            selectedDateTime:
+                                state.tempEnd.value ?? DateTime.now(),
                             onSelectTab: () =>
                                 context.read<EventDateTimeSettingsBloc>().add(
                                       const EventDateTimeSettingsEventSetExpandedEnds(),
                                     ),
+                            onDateChanged: (DateTime datetime) {
+                              context.read<EventDateTimeSettingsBloc>().add(
+                                    EventDateTimeSettingsEvent
+                                        .tempEndDateTimeChanged(
+                                      datetime: date_utils.DateUtils
+                                          .combineDateAndTime(
+                                        datetime,
+                                        TimeOfDay(
+                                          hour: state.tempEnd.value!.hour,
+                                          minute: state.tempEnd.value!.minute,
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                            },
+                            onTimeChanged: (TimeOfDay timeOfDay) {
+                              context.read<EventDateTimeSettingsBloc>().add(
+                                    EventDateTimeSettingsEvent
+                                        .tempEndDateTimeChanged(
+                                      datetime: date_utils.DateUtils
+                                          .combineDateAndTime(
+                                        state.tempStart.value ?? DateTime.now(),
+                                        timeOfDay,
+                                      ),
+                                    ),
+                                  );
+                            },
                           ),
                         ),
                       ),
@@ -127,9 +198,15 @@ class _EventDatetimeSettingsPageState
                       padding: EdgeInsets.all(Spacing.smMedium),
                       child: SafeArea(
                         child: LinearGradientButton.primaryButton(
-                          onTap: () {},
+                          onTap: () {
+                            context.read<EventDateTimeSettingsBloc>().add(
+                                  const EventDateTimeSettingsEventSaveChanges(),
+                                );
+                          },
                           label: t.common.actions.saveChanges,
                           textColor: colorScheme.onPrimary,
+                          loadingWhen:
+                              state.status == FormzSubmissionStatus.inProgress,
                         ),
                       ),
                     ),
@@ -138,7 +215,11 @@ class _EventDatetimeSettingsPageState
               );
             },
           ),
-        )
+        ),
+      ),
+    );
+  }
+}
 
         //   BlocListener<EditEventDetailBloc, EditEventDetailState>(
         //     listener: (context, state) {
@@ -275,6 +356,4 @@ class _EventDatetimeSettingsPageState
         //     ),
         //   ),
         // ),
-        );
-  }
-}
+        

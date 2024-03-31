@@ -8,7 +8,6 @@ import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
-import 'package:app/core/utils/date_utils.dart' as date_utils;
 
 enum EventDatetimeTabs {
   date(tabIndex: 0),
@@ -35,6 +34,8 @@ class EventDatetimeSettingRowItem extends StatefulWidget {
   final Color? dotColor;
   final DateTime selectedDateTime;
   final Function() onSelectTab;
+  final Function(DateTime datetime) onDateChanged;
+  final Function(TimeOfDay timeOfDay) onTimeChanged;
 
   const EventDatetimeSettingRowItem({
     super.key,
@@ -44,6 +45,8 @@ class EventDatetimeSettingRowItem extends StatefulWidget {
     this.dotColor,
     required this.selectedDateTime,
     required this.onSelectTab,
+    required this.onDateChanged,
+    required this.onTimeChanged,
   });
 
   @override
@@ -54,9 +57,7 @@ class EventDatetimeSettingRowItem extends StatefulWidget {
 class _EventDatetimeSettingRowItemState
     extends State<EventDatetimeSettingRowItem> with TickerProviderStateMixin {
   late TabController _tabController;
-  // late final List<_TabItem> tabItems;
   int activeIndex = 0;
-  late DateTime tempSelectedDateTime;
 
   @override
   initState() {
@@ -66,9 +67,6 @@ class _EventDatetimeSettingRowItemState
         activeIndex = 0;
       });
     }
-    setState(() {
-      tempSelectedDateTime = widget.selectedDateTime;
-    });
     _tabController = TabController(length: 2, vsync: this);
     _tabController.addListener(() {
       if (activeIndex != _tabController.index) {
@@ -116,7 +114,8 @@ class _EventDatetimeSettingRowItemState
                 children: [
                   _CustomTab(
                     tabItem: _TabItem(
-                      title: DateFormat('dd MMM').format(tempSelectedDateTime),
+                      title:
+                          DateFormat('dd MMM').format(widget.selectedDateTime),
                     ),
                     onPress: () {
                       _tabController.animateTo(0);
@@ -127,7 +126,9 @@ class _EventDatetimeSettingRowItemState
                   SizedBox(width: Spacing.smMedium / 2),
                   _CustomTab(
                     tabItem: _TabItem(
-                      title: DateFormat('h:mma').format(tempSelectedDateTime),
+                      title: DateFormat('h:mma')
+                          .format(widget.selectedDateTime)
+                          .toLowerCase(),
                     ),
                     onPress: () {
                       _tabController.animateTo(1);
@@ -146,6 +147,7 @@ class _EventDatetimeSettingRowItemState
             child: SizedBox(
               height: 300.h,
               child: TabBarView(
+                physics: const NeverScrollableScrollPhysics(),
                 controller: _tabController,
                 children: [
                   CalendarDatePicker2(
@@ -162,33 +164,19 @@ class _EventDatetimeSettingRowItemState
                       dayTextStyle:
                           Typo.small.copyWith(color: colorScheme.onPrimary),
                     ),
-                    value: [tempSelectedDateTime],
+                    value: [widget.selectedDateTime],
                     onValueChanged: (dates) {
-                      setState(() {
-                        tempSelectedDateTime =
-                            date_utils.DateUtils.combineDateAndTime(
-                                dates[0]!, tempSelectedDateTime);
-                      });
+                      if (dates.isNotEmpty) {
+                        widget.onDateChanged(dates[0]!);
+                      }
                     },
                   ),
                   WheelTimePicker(
                     timeOfDay: TimeOfDay.fromDateTime(
-                      tempSelectedDateTime,
+                      widget.selectedDateTime,
                     ),
                     onTimeChanged: (timeOfDay) {
-                      setState(() {
-                        tempSelectedDateTime =
-                            date_utils.DateUtils.combineDateAndTime(
-                          tempSelectedDateTime,
-                          DateTime(
-                            DateTime.now().year,
-                            DateTime.now().month,
-                            DateTime.now().day,
-                            timeOfDay.hour,
-                            timeOfDay.minute,
-                          ),
-                        );
-                      });
+                      widget.onTimeChanged(timeOfDay);
                     },
                   ),
                 ],
