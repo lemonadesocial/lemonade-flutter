@@ -86,7 +86,6 @@ class _EventDatetimeSettingRowItemState
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final t = Translations.of(context);
     return Column(
       children: [
         Padding(

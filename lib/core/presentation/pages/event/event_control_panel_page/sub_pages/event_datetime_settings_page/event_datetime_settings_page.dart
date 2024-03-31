@@ -1,8 +1,11 @@
 import 'package:app/core/application/event/event_datetime_settings_bloc/event_datetime_settings_bloc.dart';
+import 'package:app/core/constants/event/event_constants.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_datetime_settings_page/widgets/event_datetime_setting_row_item.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
+import 'package:app/core/presentation/widgets/common/popup/go_back_confirmation_popup.dart';
+import 'package:app/core/presentation/widgets/poap/poap_claim_transfer_controller_widget/widgets/claim_modification_popup.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
@@ -64,6 +67,32 @@ class _EventDatetimeSettingsPageState
         appBar: LemonAppBar(
           backgroundColor: LemonColor.atomicBlack,
           title: t.event.datetimeSettings.chooseDateAndTime,
+          customBackHandler: () {
+            final start =
+                context.read<EventDateTimeSettingsBloc>().state.start.value;
+            final end =
+                context.read<EventDateTimeSettingsBloc>().state.end.value;
+            final tempStart =
+                context.read<EventDateTimeSettingsBloc>().state.tempStart.value;
+            final tempEnd =
+                context.read<EventDateTimeSettingsBloc>().state.tempEnd.value;
+            if (tempStart != start || tempEnd != end) {
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (_) => GoBackConfirmationPopup(
+                  onConfirmed: () {
+                    context
+                        .read<EventDateTimeSettingsBloc>()
+                        .add(const EventDateTimeSettingsEventReset());
+                    AutoRouter.of(context).pop();
+                  },
+                ),
+              );
+            } else {
+              AutoRouter.of(context).pop();
+            }
+          },
         ),
         backgroundColor: LemonColor.atomicBlack,
         resizeToAvoidBottomInset: true,

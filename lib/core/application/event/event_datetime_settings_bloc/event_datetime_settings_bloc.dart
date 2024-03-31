@@ -22,6 +22,7 @@ class EventDateTimeSettingsBloc
     on<TimezoneChanged>(_onTimezoneChanged);
     on<EventDateTimeSettingsEventSetExpandedStarts>(_onSetExpandedStarts);
     on<EventDateTimeSettingsEventSetExpandedEnds>(_onSetExpandedEnds);
+    on<EventDateTimeSettingsEventReset>(_onReset);
   }
 
   Future<void> _onInit(
@@ -159,6 +160,8 @@ class EventDateTimeSettingsBloc
         state.copyWith(
           start: tempStartDate,
           end: tempEndDate,
+          tempStart: tempStartDate,
+          tempEnd: tempEndDate,
           isValid: true,
           status: FormzSubmissionStatus.success,
         ),
@@ -197,6 +200,25 @@ class EventDateTimeSettingsBloc
     emit(state.copyWith(status: FormzSubmissionStatus.initial));
     emit(
       state.copyWith(
+        expandedStarts: false,
+        expandedEnds: true,
+      ),
+    );
+  }
+
+  Future<void> _onReset(
+    EventDateTimeSettingsEventReset event,
+    Emitter<EventDateTimeSettingsState> emit,
+  ) async {
+    emit(state.copyWith(status: FormzSubmissionStatus.initial));
+    final start = DateTimeFormz.dirty(state.start.value!);
+    final end = DateTimeFormz.dirty(state.end.value!);
+    emit(
+      state.copyWith(
+        start: start,
+        end: end,
+        tempStart: start,
+        tempEnd: end,
         expandedStarts: false,
         expandedEnds: true,
       ),
@@ -241,6 +263,9 @@ class EventDateTimeSettingsEvent with _$EventDateTimeSettingsEvent {
 
   const factory EventDateTimeSettingsEvent.saveChanges() =
       EventDateTimeSettingsEventSaveChanges;
+      
+  const factory EventDateTimeSettingsEvent.reset() =
+      EventDateTimeSettingsEventReset;
 }
 
 @freezed

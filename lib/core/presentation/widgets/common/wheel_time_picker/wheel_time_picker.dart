@@ -90,6 +90,7 @@ class _WheelTimePickerState extends State<WheelTimePicker> {
                 builder: itemBuilder,
                 controller: hoursWheel,
                 looping: true,
+                enableTap: false,
                 style: wheelStyle,
                 selectedIndexColor: colorScheme.onPrimary,
                 onIndexChanged: (index) {
@@ -103,7 +104,7 @@ class _WheelTimePickerState extends State<WheelTimePicker> {
                 builder: itemBuilder,
                 controller: minutesWheel,
                 style: wheelStyle,
-                enableTap: true,
+                enableTap: false,
                 selectedIndexColor: colorScheme.onPrimary,
                 onIndexChanged: (index) {
                   onMinutesChanged(index);
@@ -125,6 +126,7 @@ class _WheelTimePickerState extends State<WheelTimePicker> {
                         ? 0
                         : 1,
                 looping: false,
+                enableTap: false,
                 style: wheelStyle.copyWith(
                   shiftAnimationStyle: const WheelShiftAnimationStyle(
                     duration: Duration(seconds: 1),

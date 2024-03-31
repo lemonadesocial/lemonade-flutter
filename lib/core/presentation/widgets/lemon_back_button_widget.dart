@@ -8,15 +8,21 @@ class LemonBackButton extends StatelessWidget {
   const LemonBackButton({
     super.key,
     this.color,
+    this.customBackHandler,
   });
 
   final Color? color;
+  final Function()? customBackHandler;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        AutoRouter.of(context).pop();
+        if (customBackHandler != null) {
+          customBackHandler!();
+        } else {
+          AutoRouter.of(context).pop();
+        }
       },
       child: ThemeSvgIcon(
         color: color ?? Theme.of(context).colorScheme.onSurface,
