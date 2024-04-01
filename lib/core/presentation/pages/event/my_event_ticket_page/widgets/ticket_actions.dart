@@ -1,10 +1,15 @@
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_ticket.dart';
+import 'package:app/core/domain/event/repository/event_ticket_repository.dart';
 import 'package:app/core/presentation/pages/event/my_event_ticket_page/widgets/ticket_qr_code_popup.dart';
+import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/gen/assets.gen.dart';
+import 'package:app/graphql/backend/event/mutation/email_event_ticket.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
@@ -28,12 +33,13 @@ class EventTicketActions extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
+    final currentUser = AuthUtils.getUser(context);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         ActionItem(
-          label: t.common.actions.download,
+          label: t.common.actions.receipt,
           backgroundColor: LemonColor.downloadBgColor,
           icon: ThemeSvgIcon(
             color: LemonColor.downloadIcColor,
@@ -123,7 +129,29 @@ class EventTicketActions extends StatelessWidget {
               height: 27.w,
             ),
           ),
-          onPressed: () => SnackBarUtils.showComingSoon(),
+          onPressed: () async {
+            final result = await showFutureLoadingDialog(
+              context: context,
+              future: () => getIt<EventTicketRepository>().mailEventTicket(
+                input: Variables$Mutation$MailEventTicket(
+                  event: event.id ?? '',
+                  emails: [
+                    currentUser?.email ?? '',
+                  ],
+                ),
+              ),
+            );
+
+            result.result?.fold((l) => null, (success) {
+              if (!success) {
+                return;
+              }
+              SnackBarUtils.showSuccess(
+                message: t.event.eventMail
+                    .eventMailTicketsSuccess(email: currentUser?.email ?? ''),
+              );
+            });
+          },
         ),
       ],
     );
