@@ -57,7 +57,8 @@
         "accept": "Accept",
         "decline": "Decline",
         "submit": "Submit",
-        "continueNext": "Continue"
+        "continueNext": "Continue",
+        "post": "Post"
     },
     "followed": "Followed",
     "anonymous": "anonymous",

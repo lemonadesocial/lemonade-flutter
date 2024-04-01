@@ -1,0 +1,7 @@
+# import '../fragment/event_story_fragment.graphql';
+
+mutation UpdateEventStoryImage($id: MongoID!, $description: String!) {
+  story: updateFile(_id: $id, input: {description: $description}) {
+    ...EventStory
+  }
+}

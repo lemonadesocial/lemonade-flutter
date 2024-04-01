@@ -12,6 +12,7 @@ enum FileDirectory {
   store,
   storeProduct,
   user,
+  stories,
   post;
 }
 
