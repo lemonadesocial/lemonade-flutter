@@ -1,0 +1,3 @@
+mutation MailEventTicket($event: MongoID!, $emails: [String!]!, $payment: MongoID) {
+  mailEventTicket(event: $event, emails: $emails, payment: $payment)
+}

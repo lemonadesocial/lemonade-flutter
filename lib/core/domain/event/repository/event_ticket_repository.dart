@@ -13,6 +13,7 @@ import 'package:app/core/domain/event/input/get_event_ticket_types_input/get_eve
 import 'package:app/core/domain/event/input/get_tickets_input/get_tickets_input.dart';
 import 'package:app/core/domain/event/input/redeem_tickets_input/redeem_tickets_input.dart';
 import 'package:app/core/failure.dart';
+import 'package:app/graphql/backend/event/mutation/email_event_ticket.graphql.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:dartz/dartz.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -68,5 +69,9 @@ abstract class EventTicketRepository {
 
   Future<Either<Failure, EventTicketCategory>> createEventTicketCategory({
     required Input$CreateEventTicketCategoryInput input,
+  });
+
+  Future<Either<Failure, bool>> mailEventTicket({
+    required Variables$Mutation$MailEventTicket input,
   });
 }

@@ -28,6 +28,7 @@ import 'package:app/graphql/backend/event/mutation/create_event_ticket_category.
 import 'package:app/graphql/backend/event/mutation/create_event_ticket_type.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/create_tickets.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/delete_event_ticket_type.graphql.dart';
+import 'package:app/graphql/backend/event/mutation/email_event_ticket.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/update_event_ticket_type.graphql.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/injection/register_module.dart';
@@ -314,5 +315,22 @@ class EventTicketRepositoryImpl implements EventTicketRepository {
         ),
       ),
     );
+  }
+
+  @override
+  Future<Either<Failure, bool>> mailEventTicket({
+    required Variables$Mutation$MailEventTicket input,
+  }) async {
+    final result = await _client.mutate$MailEventTicket(
+      Options$Mutation$MailEventTicket(
+        variables: input,
+      ),
+    );
+
+    if (result.hasException || result.parsedData == null) {
+      return Left(Failure());
+    }
+
+    return Right(result.parsedData?.mailEventTicket ?? false);
   }
 }
