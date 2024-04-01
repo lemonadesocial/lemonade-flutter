@@ -263,7 +263,7 @@ class EventDateTimeSettingsEvent with _$EventDateTimeSettingsEvent {
 
   const factory EventDateTimeSettingsEvent.saveChanges() =
       EventDateTimeSettingsEventSaveChanges;
-      
+
   const factory EventDateTimeSettingsEvent.reset() =
       EventDateTimeSettingsEventReset;
 }

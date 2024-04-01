@@ -7,6 +7,7 @@ import 'package:app/core/presentation/widgets/common/button/linear_gradient_butt
 import 'package:app/core/presentation/widgets/common/popup/go_back_confirmation_popup.dart';
 import 'package:app/core/presentation/widgets/poap/poap_claim_transfer_controller_widget/widgets/claim_modification_popup.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
+import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
@@ -106,6 +107,12 @@ class _EventDatetimeSettingsPageState
             }
             if (state.isValid == true &&
                 state.status == FormzSubmissionStatus.success) {
+              SnackBarUtils.showCustom(
+                  title: "${t.common.saved}!",
+                  message: t.event.datetimeSettings.dateTimeUpdated,
+                  icon: Assets.icons.icSave.svg(),
+                  showIconContainer: true,
+                  iconContainerColor: LemonColor.acidGreen);
               AutoRouter.of(context).pop();
             }
           },

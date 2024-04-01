@@ -126,6 +126,8 @@ class LemonColor {
   static const coralReef = Color(0xFFF57968);
 
   static const malachiteGreen = Color(0xFF67F38E);
+
+  static const acidGreen = Color(0x2DC69DF7);
 }
 
 final ColorScheme lemonadeLightThemeColorScheme = ColorScheme.light(

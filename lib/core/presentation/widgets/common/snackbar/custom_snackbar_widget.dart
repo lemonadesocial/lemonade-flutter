@@ -18,6 +18,8 @@ class CustomSnackbar extends StatelessWidget {
     this.message = '',
     this.icon,
     this.colorScheme,
+    this.showIconContainer = false,
+    this.iconContainerColor,
   });
 
   /// The title of snackbar
@@ -30,6 +32,10 @@ class CustomSnackbar extends StatelessWidget {
   final Widget? icon;
 
   final ColorScheme? colorScheme;
+
+  final bool? showIconContainer;
+
+  final Color? iconContainerColor;
 
   @override
   Widget build(BuildContext context) {
@@ -48,13 +54,33 @@ class CustomSnackbar extends StatelessWidget {
       ),
       child: Row(
         children: [
-          icon != null
-              ? SizedBox(
-                  width: Sizing.medium,
-                  height: Sizing.medium,
-                  child: icon,
+          showIconContainer == true
+              ? Container(
+                  width: 36,
+                  height: 36,
+                  padding: const EdgeInsets.all(12),
+                  decoration: ShapeDecoration(
+                    color:
+                        iconContainerColor ?? colorScheme?.secondaryContainer,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(100),
+                    ),
+                  ),
+                  child: icon != null
+                      ? SizedBox(
+                          width: Sizing.medium,
+                          height: Sizing.medium,
+                          child: icon,
+                        )
+                      : const SizedBox(),
                 )
-              : const SizedBox(),
+              : icon != null
+                  ? SizedBox(
+                      width: Sizing.small,
+                      height: Sizing.small,
+                      child: icon,
+                    )
+                  : const SizedBox(),
           SizedBox(
             width: Spacing.xSmall,
           ),

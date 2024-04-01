@@ -160,7 +160,8 @@
         "endTime": "End time",
         "starts": "Starts",
         "ends": "Ends",
-        "chooseDateAndTime": "Choose date & time"
+        "chooseDateAndTime": "Choose date & time",
+        "dateTimeUpdated": "Date and Time has been updated"
     },
     "locationSetting": {
         "addLocation": "Add location",

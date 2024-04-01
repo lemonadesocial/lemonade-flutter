@@ -174,5 +174,6 @@
         "submitFeedback": "Submit feedback"
     },
     "gotIt": "Got it",
-    "goBackConfirmationDescription": "Going back will reset any information you have added. Still want to go back?"
+    "goBackConfirmationDescription": "Going back will reset any information you have added. Still want to go back?",
+    "saved": "Saved"
 }
