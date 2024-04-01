@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.13.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.12.1...v1.13.0) (2024-04-01)
+
+
+### Features
+
+* event lounge listing & event guest directory ([#499](https://github.com/lemonadesocial/lemonade-flutter/issues/499)) ([86b70cc](https://github.com/lemonadesocial/lemonade-flutter/commit/86b70ccce719f18b8334bf9aab44449db3ce9358))
+
+
+### Bug Fixes
+
+* prevent uninvited guests to select tickets on private event ([#502](https://github.com/lemonadesocial/lemonade-flutter/issues/502)) ([c538cfa](https://github.com/lemonadesocial/lemonade-flutter/commit/c538cfa96610bbdbcf30de76031381c94c08e5bf))
+* remove unnecessary navigate to event select category if categories is empty or only 1 item ([#501](https://github.com/lemonadesocial/lemonade-flutter/issues/501)) ([3d3c462](https://github.com/lemonadesocial/lemonade-flutter/commit/3d3c4626c889200bb14fdbfac9c5520e89cb4bcc))
+* use fadein transition animation for initial pages in event buy tickets route ([#506](https://github.com/lemonadesocial/lemonade-flutter/issues/506)) ([642bffc](https://github.com/lemonadesocial/lemonade-flutter/commit/642bffce4c654085b172ffb63a7f8d78a5d1f0f7))
+
 ## [1.12.1](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.12.0...v1.12.1) (2024-03-28)
 
 
