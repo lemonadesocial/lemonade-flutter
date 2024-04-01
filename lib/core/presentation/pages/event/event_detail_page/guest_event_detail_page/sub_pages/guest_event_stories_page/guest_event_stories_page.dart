@@ -6,6 +6,7 @@ import 'package:app/core/domain/event/entities/event_story.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/sub_pages/guest_event_stories_page/widgets/event_story_item.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/sub_pages/guest_event_stories_page/widgets/guest_event_create_story_bottomsheet.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
+import 'package:app/core/presentation/widgets/common/dialog/lemon_alert_dialog.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
@@ -177,6 +178,15 @@ class _ActionBar extends StatelessWidget {
             flex: 1,
             child: InkWell(
               onTap: () {
+                if (chatRoom == null) {
+                  showDialog(
+                    context: context,
+                    builder: (context) => LemonAlertDialog(
+                      child: Text(t.chat.roomNotExistDesc),
+                    ),
+                  );
+                  return;
+                }
                 AutoRouter.of(context).navigate(
                   ChatRoute(roomId: event?.matrixEventRoomId ?? ''),
                 );
