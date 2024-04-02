@@ -46,7 +46,7 @@ class _GuestEventDetailBuyButtonView extends StatelessWidget {
 
   final Event event;
 
-  String getDislayPrice() {
+  String getDisplayPrice() {
     final defaultTicketType =
         ListUtils.findWithConditionOrFirst<EventTicketType>(
       items: event.eventTicketTypes ?? [],
@@ -142,7 +142,7 @@ class _GuestEventDetailBuyButtonView extends StatelessWidget {
                   builder: (filter) =>
                       Assets.icons.icTicketBold.svg(colorFilter: filter),
                 ),
-                label: getDislayPrice(),
+                label: getDisplayPrice(),
                 radius: BorderRadius.circular(LemonRadius.small * 2),
                 mode: GradientButtonMode.lavenderMode,
                 loadingWhen: isLoading,
