@@ -1,3 +1,4 @@
+import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/data/event/dtos/event_join_request_dto/event_join_request_dto.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_join_request.dart';
@@ -15,6 +16,7 @@ import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class GuestEventDetailRSVPStatus extends StatelessWidget {
@@ -28,6 +30,15 @@ class GuestEventDetailRSVPStatus extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+
+    final isLoggedIn = context
+        .read<AuthBloc>()
+        .state
+        .maybeWhen(orElse: () => false, authenticated: (_) => true);
+
+    if (!isLoggedIn) {
+      return GuestEventDetailApprovalRequiredBadge(event: event);
+    }
 
     return Query$GetMyEventJoinRequest$Widget(
       options: Options$Query$GetMyEventJoinRequest(
