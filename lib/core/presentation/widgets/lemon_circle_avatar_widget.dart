@@ -33,7 +33,9 @@ class LemonCircleAvatar extends StatelessWidget {
             children: [
               _buildAvatar(themeColor),
               SizedBox(width: Spacing.xSmall),
-              Text(label!),
+              Flexible(
+                child: Text(label!),
+              ),
             ],
           );
   }
