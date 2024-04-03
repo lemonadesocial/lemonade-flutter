@@ -5,7 +5,6 @@ import 'package:app/core/presentation/widgets/chat/create_chat_button.dart';
 import 'package:app/core/presentation/widgets/chat/matrix_avatar.dart';
 import 'package:app/core/presentation/widgets/chat/spaces_drawer.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
-import 'package:app/core/presentation/widgets/common/collapsible/collapsible_section_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/service/matrix/matrix_service.dart';
 import 'package:app/core/utils/stream_extension.dart';
@@ -13,14 +12,30 @@ import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
+import 'package:app/theme/color.dart';
+import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:matrix/matrix.dart';
 
-class ChatListPageView extends StatelessWidget {
+class ChatListPageView extends StatefulWidget {
   const ChatListPageView({super.key});
+
+  @override
+  State<ChatListPageView> createState() => _ChatListPageViewState();
+}
+
+class _ChatListPageViewState extends State<ChatListPageView>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,42 +100,51 @@ class ChatListPageView extends StatelessWidget {
           builder: (context, snapshot) =>
               BlocBuilder<ChatListBloc, ChatListState>(
             builder: (context, chatListState) {
-              return CustomScrollView(
-                slivers: [
-                  if (chatListState.unreadDmRooms.isNotEmpty) ...[
-                    _ChatListSection(
-                      title: StringUtils.capitalize(t.chat.unread),
-                      rooms: chatListState.unreadDmRooms,
-                      itemBuilder: (room) => ChatListItem(room: room),
+              return Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  TabBar(
+                    controller: _tabController,
+                    labelStyle: Typo.medium.copyWith(
+                      color: colorScheme.onPrimary,
+                      fontWeight: FontWeight.w500,
                     ),
-                    SliverToBoxAdapter(
-                      child: Padding(
-                        padding: EdgeInsets.only(top: 9.h),
-                        child: Divider(
-                          color: colorScheme.outline,
-                          height: 1,
+                    unselectedLabelStyle: Typo.medium.copyWith(
+                      color: colorScheme.onSurfaceVariant,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    indicatorColor: LemonColor.paleViolet,
+                    tabs: [
+                      Tab(text: StringUtils.capitalize(t.chat.directMessages)),
+                      Tab(text: StringUtils.capitalize(t.chat.channels)),
+                    ],
+                  ),
+                  SizedBox(height: Spacing.extraSmall),
+                  Expanded(
+                    child: TabBarView(
+                      controller: _tabController,
+                      children: [
+                        CustomScrollView(
+                          slivers: [
+                            _ChatListSection(
+                              title:
+                                  StringUtils.capitalize(t.chat.directMessages),
+                              rooms: chatListState.dmRooms,
+                              itemBuilder: (room) => ChatListItem(room: room),
+                            ),
+                          ],
                         ),
-                      ),
+                        CustomScrollView(
+                          slivers: [
+                            _ChatListSection(
+                              title: StringUtils.capitalize(t.chat.channels),
+                              rooms: chatListState.channelRooms,
+                              itemBuilder: (room) => ChatListItem(room: room),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                  ],
-                  _ChatListSection(
-                    title: StringUtils.capitalize(t.chat.channels),
-                    rooms: chatListState.channelRooms,
-                    itemBuilder: (room) => ChatListItem(room: room),
-                  ),
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 9.h),
-                      child: Divider(
-                        color: colorScheme.outline,
-                        height: 1,
-                      ),
-                    ),
-                  ),
-                  _ChatListSection(
-                    title: StringUtils.capitalize(t.chat.directMessages),
-                    rooms: chatListState.dmRooms,
-                    itemBuilder: (room) => ChatListItem(room: room),
                   ),
                 ],
               );
@@ -146,11 +170,11 @@ class _ChatListSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverToBoxAdapter(
-      child: CollapsibleSection(
-        title: title,
-        children: rooms.map(itemBuilder).toList(),
-      ),
+    return SliverList.separated(
+      itemCount: rooms.length,
+      itemBuilder: (context, index) => itemBuilder(rooms[index]),
+      separatorBuilder: (context, index) =>
+          SizedBox(height: Spacing.extraSmall),
     );
   }
 }

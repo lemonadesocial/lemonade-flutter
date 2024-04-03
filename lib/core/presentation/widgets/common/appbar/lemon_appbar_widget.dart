@@ -13,7 +13,7 @@ class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.padding,
     this.hideLeading,
     this.bottom,
-    this.customBackHandler,
+    this.onPressBack,
   });
 
   final Widget? leading;
@@ -24,7 +24,7 @@ class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
   final EdgeInsets? padding;
   final bool? hideLeading;
   final PreferredSizeWidget? bottom;
-  final Function()? customBackHandler;
+  final Function()? onPressBack;
 
   @override
   Size get preferredSize => Size.fromHeight(60.w);
@@ -39,7 +39,7 @@ class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
           ? null
           : leading ??
               LemonBackButton(
-                customBackHandler: customBackHandler,
+                onPressBack: onPressBack,
               ),
       actions: actions,
       title: title != null

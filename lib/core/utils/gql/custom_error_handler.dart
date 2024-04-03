@@ -84,7 +84,7 @@ class CustomErrorHandler {
     showSnackbarError(errorCode, errorMessage);
     CrashAnalyticsManager().crashAnalyticsService?.captureError(
           errors,
-          StackTrace.fromString(errors.toString()),
+          StackTrace.fromString(request.toString()),
         );
     FirebaseCrashlytics.instance.log(response.errors.toString());
     return null;

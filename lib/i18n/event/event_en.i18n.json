@@ -483,5 +483,8 @@
     "dateTimeSettingError": {
         "mustBeFuture": "Start & end time must be future",
         "endMustAfterStart": "End date must be after start date"
+    },
+    "eventMail": {
+        "eventMailTicketsSuccess": "Tickets sent to $email"
     }
 }

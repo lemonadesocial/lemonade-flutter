@@ -318,15 +318,18 @@ final eventDetailRoutes = AutoRoute(
 final eventBuyTicketsRoutes = AutoRoute(
   page: EventBuyTicketsRoute.page,
   children: [
-    AutoRoute(
+    CustomRoute(
       initial: true,
       page: EventBuyTicketsInitialRoute.page,
+      transitionsBuilder: TransitionsBuilders.fadeIn,
     ),
-    AutoRoute(
+    CustomRoute(
       page: EventBuyTicketsSelectTicketCategoryRoute.page,
+      transitionsBuilder: TransitionsBuilders.fadeIn,
     ),
-    AutoRoute(
+    CustomRoute(
       page: SelectTicketsRoute.page,
+      transitionsBuilder: TransitionsBuilders.fadeIn,
     ),
     AutoRoute(
       page: EventTicketsSummaryRoute.page,
