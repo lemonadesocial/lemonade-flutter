@@ -66,7 +66,7 @@ class _EventDatetimeSettingsPageState
         appBar: LemonAppBar(
           backgroundColor: LemonColor.atomicBlack,
           title: t.event.datetimeSettings.chooseDateAndTime,
-          customBackHandler: () {
+          onPressBack: () {
             final start =
                 context.read<EventDateTimeSettingsBloc>().state.start.value;
             final end =

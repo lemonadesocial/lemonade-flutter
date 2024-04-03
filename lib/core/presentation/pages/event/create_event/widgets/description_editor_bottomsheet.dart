@@ -61,7 +61,7 @@ class DescriptionEditorBottomSheetState
           appBar: LemonAppBar(
             backgroundColor: LemonColor.atomicBlack,
             title: t.event.eventCreation.description,
-            customBackHandler: () {
+            onPressBack: () {
               widget.onTapBack(result);
             },
           ),
