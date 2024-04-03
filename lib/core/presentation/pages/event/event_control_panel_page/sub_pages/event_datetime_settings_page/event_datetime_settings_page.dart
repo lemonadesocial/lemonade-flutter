@@ -106,11 +106,12 @@ class _EventDatetimeSettingsPageState
             if (state.isValid == true &&
                 state.status == FormzSubmissionStatus.success) {
               SnackBarUtils.showCustom(
-                  title: "${t.common.saved}!",
-                  message: t.event.datetimeSettings.dateTimeUpdated,
-                  icon: Assets.icons.icSave.svg(),
-                  showIconContainer: true,
-                  iconContainerColor: LemonColor.acidGreen);
+                title: "${t.common.saved}!",
+                message: t.event.datetimeSettings.dateTimeUpdated,
+                icon: Assets.icons.icSave.svg(),
+                showIconContainer: true,
+                iconContainerColor: LemonColor.acidGreen,
+              );
               AutoRouter.of(context).pop();
             }
           },

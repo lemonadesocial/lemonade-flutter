@@ -4,8 +4,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wheel_picker/wheel_picker.dart';
 
 class WheelTimePicker extends StatefulWidget {
-  const WheelTimePicker(
-      {super.key, this.timeOfDay, required this.onTimeChanged});
+  const WheelTimePicker({
+    super.key,
+    this.timeOfDay,
+    required this.onTimeChanged,
+  });
 
   final TimeOfDay? timeOfDay;
   final Function(TimeOfDay) onTimeChanged;

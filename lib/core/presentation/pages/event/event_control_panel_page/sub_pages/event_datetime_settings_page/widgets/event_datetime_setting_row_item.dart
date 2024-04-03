@@ -1,6 +1,5 @@
 import 'package:app/core/presentation/widgets/common/circle_dot_widget.dart';
 import 'package:app/core/presentation/widgets/common/wheel_time_picker/wheel_time_picker.dart';
-import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
