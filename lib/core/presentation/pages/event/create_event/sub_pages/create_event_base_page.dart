@@ -11,6 +11,7 @@ import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
+import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
@@ -22,6 +23,7 @@ import 'package:app/i18n/i18n.g.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:formz/formz.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
@@ -87,6 +89,13 @@ class CreateEventBasePage extends StatelessWidget {
                           sliver: SliverToBoxAdapter(
                             child: SettingTileWidget(
                               title: t.event.eventCreation.description,
+                              subTitle: StringUtils.stripHtmlTags(
+                                context
+                                    .read<CreateEventBloc>()
+                                    .state
+                                    .description
+                                    .value,
+                              ),
                               leading: Assets.icons.icDescription.svg(),
                               leadingCircle: false,
                               trailing: Assets.icons.icArrowBack.svg(
@@ -103,7 +112,7 @@ class CreateEventBasePage extends StatelessWidget {
                                   context: context,
                                   enableDrag: false,
                                   builder: (innerContext) =>
-                                      DescriptionEditorBottomSheet(),
+                                      const DescriptionEditorBottomSheet(),
                                 );
                               },
                             ),

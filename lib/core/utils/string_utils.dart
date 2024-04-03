@@ -62,4 +62,9 @@ class StringUtils {
   static bool isUrl(String text) {
     return urlRegx.hasMatch(text);
   }
+
+  static String stripHtmlTags(String htmlString) {
+    RegExp exp = RegExp(r"<[^>]*>", multiLine: true, caseSensitive: true);
+    return htmlString.replaceAll(exp, ' ').trim();
+  }
 }

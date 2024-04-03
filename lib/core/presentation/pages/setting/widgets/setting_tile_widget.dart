@@ -82,7 +82,7 @@ class SettingTileWidget extends StatelessWidget {
                         SizedBox(
                           height: 2.h,
                         ),
-                        subTitle == null
+                        subTitle == null || subTitle == ''
                             ? const SizedBox.shrink()
                             : Text(
                                 subTitle!,
@@ -91,6 +91,7 @@ class SettingTileWidget extends StatelessWidget {
                                       colorScheme.onPrimary.withOpacity(0.36),
                                   fontWeight: FontWeight.w400,
                                 ),
+                                maxLines: 1,
                               ),
                       ],
                     ),

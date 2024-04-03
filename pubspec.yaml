@@ -152,6 +152,7 @@ dependencies:
   calendar_date_picker2: ^0.5.5
   wheel_picker: ^0.0.4
   html_editor_enhanced: ^2.5.1
+  flutter_widget_from_html: ^0.14.11
 
 dependency_overrides:
   matrix_api_lite:
