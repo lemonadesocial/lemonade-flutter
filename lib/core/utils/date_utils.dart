@@ -189,7 +189,7 @@ class DateUtils {
 
   // Combine the date and time
   static DateTime combineDateAndTime(DateTime keepDate, TimeOfDay timeOfDay) {
-    DateTime combinedDateTime = DateTime(
+    DateTime combinedDateTime = DateTime.utc(
       keepDate.year,
       keepDate.month,
       keepDate.day,

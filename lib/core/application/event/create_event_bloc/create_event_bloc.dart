@@ -1,6 +1,8 @@
+import 'package:app/core/constants/event/event_constants.dart';
 import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/core/domain/form/string_formz.dart';
+import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
@@ -64,71 +66,60 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
     FormSubmitted event,
     Emitter<CreateEventState> emit,
   ) async {
-    print(event.start);
-    print(event.end);
-    print(event.timezone);
-    final detroit = getLocation('America/Detroit');
-    print("location : ${detroit.toString()}");
-    final TZDateTime timeZoneDateTime = TZDateTime.from(event.start, detroit);
-    print("timeZoneDateTime : ${timeZoneDateTime}");
-
+    final location = getLocation(event.timezone);
+    final TZDateTime startTimeZoneDateTime =
+        TZDateTime.from(event.start, location);
+    final TZDateTime endTimeZoneDateTime = TZDateTime.from(event.end, location);
+    final title = StringFormz.dirty(state.title.value);
+    final description = StringFormz.dirty(state.description.value);
     emit(
       state.copyWith(
-        isValid: true,
+        title: title,
+        description: description,
+        isValid: Formz.validate([title, description]),
       ),
     );
-
-    //   final title = StringFormz.dirty(state.title.value);
-    //   final description = StringFormz.dirty(state.description.value);
-    //   emit(
-    //     state.copyWith(
-    //       title: title,
-    //       description: description,
-    //       isValid: Formz.validate([title, description]),
-    //     ),
-    //   );
-    //   if (state.isValid) {
-    //     final timezone = await FlutterTimezone.getLocalTimezone();
-    //     emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
-    //     var input = Input$EventInput(
-    //       title: title.value,
-    //       description: description.value,
-    //       private: event.private,
-    //       approval_required: event.approvalRequired,
-    //       start: DateTime.parse(event.start.toUtc().toIso8601String()),
-    //       end: DateTime.parse(event.end.toUtc().toIso8601String()),
-    //       timezone: timezone,
-    //       guest_limit: double.parse(
-    //         event.guestLimit ?? EventConstants.defaultEventGuestLimit,
-    //       ),
-    //       guest_limit_per: double.parse(
-    //         event.guestLimitPer ?? EventConstants.defaultEventGuestLimitPer,
-    //       ),
-    //       virtual: state.virtual,
-    //       address: event.address != null
-    //           ? Input$AddressInput(
-    //               title: event.address!.title,
-    //               street_1: event.address!.street1,
-    //               street_2: event.address!.street2,
-    //               region: event.address!.region,
-    //               city: event.address!.city,
-    //               country: event.address!.country,
-    //               postal: event.address!.postal,
-    //               recipient_name: event.address!.recipientName,
-    //               latitude: event.address!.latitude,
-    //               longitude: event.address!.longitude,
-    //             )
-    //           : null,
-    //       published: true,
-    //     );
-    //     final result = await _eventRepository.createEvent(input: input);
-    //     result.fold(
-    //       (failure) =>
-    //           emit(state.copyWith(status: FormzSubmissionStatus.failure)),
-    //       (createEvent) =>
-    //           emit(state.copyWith(status: FormzSubmissionStatus.success)),
-    //     );
-    //   }
+    if (state.isValid) {
+      emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
+      var input = Input$EventInput(
+        title: title.value,
+        description: description.value,
+        private: event.private,
+        approval_required: event.approvalRequired,
+        start: DateTime.parse(startTimeZoneDateTime.toIso8601String()),
+        end: DateTime.parse(endTimeZoneDateTime.toIso8601String()),
+        timezone: event.timezone,
+        guest_limit: double.parse(
+          event.guestLimit ?? EventConstants.defaultEventGuestLimit,
+        ),
+        guest_limit_per: double.parse(
+          event.guestLimitPer ?? EventConstants.defaultEventGuestLimitPer,
+        ),
+        virtual: state.virtual,
+        address: event.address != null
+            ? Input$AddressInput(
+                title: event.address!.title,
+                street_1: event.address!.street1,
+                street_2: event.address!.street2,
+                region: event.address!.region,
+                city: event.address!.city,
+                country: event.address!.country,
+                postal: event.address!.postal,
+                recipient_name: event.address!.recipientName,
+                latitude: event.address!.latitude,
+                longitude: event.address!.longitude,
+              )
+            : null,
+        published: true,
+      );
+      final result = await _eventRepository.createEvent(input: input);
+      result.fold(
+        (failure) =>
+            emit(state.copyWith(status: FormzSubmissionStatus.failure)),
+        (createEvent) =>
+            emit(state.copyWith(status: FormzSubmissionStatus.success)),
+      );
+    }
   }
 }
 
