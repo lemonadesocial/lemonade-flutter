@@ -4,8 +4,10 @@ import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/theme/color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 enum EventPrivacy { public, private }
 
@@ -44,43 +46,41 @@ class EventConfiguration {
         type: EventConfigurationType.visibility,
         title: 'Public',
         description: 'Anyone can discover',
-        icon: const Icon(Icons.remove_red_eye_outlined),
+        icon: Icon(
+          Icons.remove_red_eye_outlined,
+          size: 18,
+          color: LemonColor.white54,
+        ),
       ),
       EventConfiguration(
         type: EventConfigurationType.guestSettings,
         title: 'Guest limit',
         description: '100 guests, 2 guests unlocks',
-        icon: const Icon(Icons.groups_rounded),
-      ),
-      EventConfiguration(
-        type: EventConfigurationType.startDateTime,
-        title: 'Mon, November 20 - 10:00',
-        description: 'Start',
-        icon: const Icon(Icons.calendar_month_outlined),
-      ),
-      EventConfiguration(
-        type: EventConfigurationType.endDateTime,
-        title: 'Mon, November 20 - 10:00',
-        description: 'End',
-        icon: const Icon(Icons.calendar_month_outlined),
+        icon: Icon(
+          Icons.groups_rounded,
+          size: 18,
+          color: LemonColor.white54,
+        ),
       ),
       EventConfiguration(
         type: EventConfigurationType.virtual,
         title: 'Virtual',
         description: '',
-        icon: const Icon(Icons.videocam_rounded),
+        icon: Icon(
+          Icons.videocam_rounded,
+          size: 18,
+          color: LemonColor.white54,
+        ),
       ),
       EventConfiguration(
         type: EventConfigurationType.location,
         title: 'Offline',
         description: 'Add location',
-        icon: const Icon(Icons.factory_outlined),
-      ),
-      EventConfiguration(
-        type: EventConfigurationType.applicationForm,
-        title: 'Application Form',
-        description: '',
-        icon: const Icon(Icons.format_list_bulleted_sharp),
+        icon: Icon(
+          Icons.factory_outlined,
+          size: 18,
+          color: LemonColor.white54,
+        ),
       ),
     ];
     return eventConfigs;
@@ -89,6 +89,7 @@ class EventConfiguration {
   static List<EventConfiguration> collaborationsEventConfiguations(
     BuildContext context,
   ) {
+    final colorScheme = Theme.of(context).colorScheme;
     final eventCohostRequests =
         context.watch<GetEventCohostRequestsBloc>().state.maybeWhen(
               fetched: (eventCohostRequests) => eventCohostRequests,
@@ -105,7 +106,11 @@ class EventConfiguration {
         description: eventCohostRequests.isNotEmpty
             ? '${eventCohostRequests.length} ${t.event.cohosts.cohostsCountInfo(n: eventCohostRequests.length)}'
             : t.common.actions.add,
-        icon: const Icon(Icons.person_add),
+        icon: Icon(
+          Icons.person_add,
+          color: colorScheme.onSecondary,
+          size: 18.w,
+        ),
       ),
       EventConfiguration(
         type: EventConfigurationType.speakers,
@@ -115,7 +120,11 @@ class EventConfiguration {
                 n: speakerUsers.length,
               )}'
             : t.common.actions.add,
-        icon: const Icon(Icons.speaker),
+        icon: Icon(
+          Icons.speaker,
+          color: colorScheme.onSecondary,
+          size: 18.w,
+        ),
       ),
     ];
     return eventConfigs;
@@ -176,10 +185,9 @@ class EventConfiguration {
             '$eventTicketTypesCount ${t.event.ticketTypesCount(n: eventTicketTypesCount)}',
         icon: Center(
           child: Assets.icons.icTicket.svg(
-            colorFilter: ColorFilter.mode(
-              colorScheme.onPrimary,
-              BlendMode.srcIn,
-            ),
+            width: 18.w,
+            height: 18.w,
+            color: colorScheme.onSecondary,
           ),
         ),
       ),
@@ -188,7 +196,13 @@ class EventConfiguration {
         title: t.event.configuration.rewards,
         description:
             '$eventRewardsCount ${t.event.rewardsCount(n: eventRewardsCount)}',
-        icon: const Center(child: Icon(Icons.star_border_outlined)),
+        icon: Center(
+          child: Icon(
+            Icons.star_border_outlined,
+            color: colorScheme.onSecondary,
+            size: 18.w,
+          ),
+        ),
       ),
     ];
     return eventConfigs;

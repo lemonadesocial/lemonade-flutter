@@ -58,6 +58,7 @@
         "decline": "Decline",
         "submit": "Submit",
         "continueNext": "Continue",
+        "leave": "Leave",
         "post": "Post",
         "receipt": "receipt"
     },
@@ -174,5 +175,7 @@
         "feedbackDescription": "Our team has been notified. If you'd like to help, tell us what happened below.",
         "submitFeedback": "Submit feedback"
     },
-    "gotIt": "Got it"
+    "gotIt": "Got it",
+    "goBackConfirmationDescription": "Going back will reset any information you have added. Still want to go back?",
+    "saved": "Saved"
 }

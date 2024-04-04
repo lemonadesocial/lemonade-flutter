@@ -193,7 +193,10 @@ class SettingPageView extends StatelessWidget {
                           return Assets.icons.icDelete.svg(colorFilter: filter);
                         },
                       ),
-                      titleColor: LemonColor.deleteAccountRed,
+                      titleStyle: Typo.medium.copyWith(
+                        color: LemonColor.deleteAccountRed,
+                        fontWeight: FontWeight.w600,
+                      ),
                       trailing: Assets.icons.icArrowBack.svg(
                         width: 18.w,
                         height: 18.w,

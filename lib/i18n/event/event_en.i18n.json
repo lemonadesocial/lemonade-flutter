@@ -130,6 +130,7 @@
     "eventCreation": {
         "createEvent": "Create event",
         "title": "Title",
+        "titleHint": "Enter title",
         "description": "Description",
         "descriptionPlaceholder": "What is this experience about ?",
         "createEventSuccessfully": "Create event successfully",
@@ -156,7 +157,11 @@
         "startDate": "Start date",
         "startTime": "Start time",
         "endDate": "End date",
-        "endTime": "End time"
+        "endTime": "End time",
+        "starts": "Starts",
+        "ends": "Ends",
+        "chooseDateAndTime": "Choose date & time",
+        "dateTimeUpdated": "Date and Time has been updated"
     },
     "locationSetting": {
         "addLocation": "Add location",
@@ -175,7 +180,10 @@
         "addNewLocationSuccessfully": "Add new location successfully",
         "removeNewLocationSuccessfully": "Remove location successfully"
     },
-    "timezone": "Timezone",
+    "timezoneSetting": {
+        "timezone": "Timezone",
+        "chooseTimezone": "Choose Timezone"
+    },
     "configuration": {
         "invite": "Invite",
         "tickets": "Tickets",
@@ -471,6 +479,10 @@
     "eventPrivate": {
         "eventPrivateTitle": "This is a private event",
         "eventPrivateErrorDescription": "You must be on the invite list to purchase tickets to this event"
+    },
+    "dateTimeSettingError": {
+        "mustBeFuture": "Start & end time must be future",
+        "endMustAfterStart": "End date must be after start date"
     },
     "eventMail": {
         "eventMailTicketsSuccess": "Tickets sent to $email"

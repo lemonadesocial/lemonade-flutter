@@ -74,7 +74,7 @@ dependencies:
   lottie: ^2.6.0
   expandable: ^5.0.1
   photo_view: ^0.14.0
-  visibility_detector: ^0.4.0+2
+  visibility_detector: ^0.3.3
   dropdown_button2: ^2.3.9
   adaptive_dialog: ^1.9.0+2
   dotted_border: ^2.0.0+3
@@ -149,6 +149,10 @@ dependencies:
   web3modal_flutter: 
     path: ./packages/web3modal_flutter
   dynamic_color: ^1.7.0
+  calendar_date_picker2: ^0.5.5
+  wheel_picker: ^0.0.4
+  html_editor_enhanced: ^2.5.1
+  flutter_widget_from_html: ^0.14.11
 
 dependency_overrides:
   matrix_api_lite:

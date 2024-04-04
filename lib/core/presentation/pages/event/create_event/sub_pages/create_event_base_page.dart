@@ -4,10 +4,16 @@ import 'package:app/core/application/event/event_guest_settings_bloc/event_guest
 import 'package:app/core/application/event/event_location_setting_bloc/event_location_setting_bloc.dart';
 import 'package:app/core/constants/event/event_constants.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/create_event_config_grid.dart';
+import 'package:app/core/presentation/pages/event/create_event/widgets/description_editor_bottomsheet.dart';
+import 'package:app/core/presentation/pages/event/create_event/widgets/event_date_time_setting_section.dart';
+import 'package:app/core/presentation/pages/setting/widgets/setting_tile_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
+import 'package:app/core/utils/string_utils.dart';
+import 'package:app/gen/assets.gen.dart';
+import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
@@ -18,6 +24,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:formz/formz.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 @RoutePage()
 class CreateEventBasePage extends StatelessWidget {
@@ -58,8 +65,8 @@ class CreateEventBasePage extends StatelessWidget {
                           ),
                           sliver: SliverToBoxAdapter(
                             child: LemonTextField(
+                              hintText: t.event.eventCreation.titleHint,
                               initialText: state.title.value,
-                              label: t.event.eventCreation.title,
                               onChange: (value) => context
                                   .read<CreateEventBloc>()
                                   .add(EventTitleChanged(title: value)),
@@ -70,31 +77,72 @@ class CreateEventBasePage extends StatelessWidget {
                           ),
                         ),
                         SliverPadding(
-                          padding: EdgeInsets.only(top: 10.h),
+                          padding: EdgeInsets.only(top: Spacing.xSmall),
                         ),
                         SliverPadding(
                           padding: EdgeInsets.symmetric(
                             horizontal: Spacing.smMedium,
                           ),
                           sliver: SliverToBoxAdapter(
-                            child: LemonTextField(
-                              initialText: state.description.value,
-                              label: t.event.eventCreation.description,
-                              onChange: (value) =>
-                                  context.read<CreateEventBloc>().add(
-                                        EventDescriptionChanged(
-                                          description: value,
-                                        ),
-                                      ),
-                              errorText:
-                                  state.description.displayError?.getMessage(
-                                t.event.eventCreation.description,
+                            child: SettingTileWidget(
+                              title: t.event.eventCreation.description,
+                              subTitle: StringUtils.stripHtmlTags(
+                                context
+                                    .read<CreateEventBloc>()
+                                    .state
+                                    .description
+                                    .value,
                               ),
+                              leading: Assets.icons.icDescription.svg(),
+                              leadingCircle: false,
+                              trailing: Assets.icons.icArrowBack.svg(
+                                width: 18.w,
+                                height: 18.w,
+                              ),
+                              titleStyle: Typo.medium.copyWith(
+                                color: colorScheme.onSecondary,
+                              ),
+                              radius: LemonRadius.small,
+                              onTap: () {
+                                showCupertinoModalBottomSheet(
+                                  backgroundColor: LemonColor.atomicBlack,
+                                  context: context,
+                                  enableDrag: false,
+                                  builder: (innerContext) =>
+                                      DescriptionEditorBottomSheet(
+                                    content: context
+                                        .read<CreateEventBloc>()
+                                        .state
+                                        .description
+                                        .value,
+                                    onTapBack: (result) {
+                                      AutoRouter.of(context).pop();
+                                      context.read<CreateEventBloc>().add(
+                                            EventDescriptionChanged(
+                                              description: result,
+                                            ),
+                                          );
+                                    },
+                                  ),
+                                );
+                              },
+                              isError: state.description.displayError != null,
                             ),
                           ),
                         ),
                         SliverPadding(
-                          padding: EdgeInsets.only(top: 40.h),
+                          padding: EdgeInsets.only(top: 30.h),
+                        ),
+                        SliverPadding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: Spacing.smMedium,
+                          ),
+                          sliver: const SliverToBoxAdapter(
+                            child: EventDateTimeSettingSection(),
+                          ),
+                        ),
+                        SliverPadding(
+                          padding: EdgeInsets.only(top: 30.h),
                         ),
                         SliverPadding(
                           padding: EdgeInsets.symmetric(
@@ -122,14 +170,6 @@ class CreateEventBasePage extends StatelessWidget {
 
   _buildSubmitButton(BuildContext context) {
     final t = Translations.of(context);
-    final eventGuestSettingsState =
-        context.read<EventGuestSettingsBloc>().state;
-    final start = context.read<EventDateTimeSettingsBloc>().state.start.value ??
-        EventDateTimeConstants.defaultStartDateTime;
-    final end = context.read<EventDateTimeSettingsBloc>().state.end.value ??
-        EventDateTimeConstants.defaultEndDateTime;
-    final selectedAddress =
-        context.read<EventLocationSettingBloc>().state.selectedAddress;
     return BlocBuilder<CreateEventBloc, CreateEventState>(
       builder: (context, state) {
         return Padding(
@@ -145,10 +185,26 @@ class CreateEventBasePage extends StatelessWidget {
             mode: GradientButtonMode.lavenderMode,
             onTap: () {
               Vibrate.feedback(FeedbackType.light);
+              final eventGuestSettingsState =
+                  context.read<EventGuestSettingsBloc>().state;
+              final start =
+                  context.read<EventDateTimeSettingsBloc>().state.start.value ??
+                      EventDateTimeConstants.defaultStartDateTime;
+              final end =
+                  context.read<EventDateTimeSettingsBloc>().state.end.value ??
+                      EventDateTimeConstants.defaultEndDateTime;
+              final selectedAddress = context
+                  .read<EventLocationSettingBloc>()
+                  .state
+                  .selectedAddress;
+              final timezone =
+                  context.read<EventDateTimeSettingsBloc>().state.timezone ??
+                      '';
               context.read<CreateEventBloc>().add(
                     FormSubmitted(
                       start: start,
                       end: end,
+                      timezone: timezone,
                       address: selectedAddress,
                       guestLimit: eventGuestSettingsState.guestLimit,
                       guestLimitPer: eventGuestSettingsState.guestLimitPer,

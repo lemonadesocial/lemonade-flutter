@@ -52,6 +52,8 @@ class SnackBarUtils {
     String? title,
     String? message,
     Widget? icon,
+    bool? showIconContainer,
+    Color? iconContainerColor,
   }) {
     showToastWidget(
       CustomSnackbar(
@@ -59,6 +61,8 @@ class SnackBarUtils {
         title: title ?? '',
         message: message ?? '',
         icon: icon,
+        showIconContainer: showIconContainer,
+        iconContainerColor: iconContainerColor,
       ),
       isIgnoring: false,
     );

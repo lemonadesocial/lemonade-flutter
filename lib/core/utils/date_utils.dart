@@ -1,3 +1,5 @@
+import 'package:app/core/constants/event/event_constants.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class DateUtils {
@@ -143,5 +145,58 @@ class DateUtils {
     String formattedDate =
         DateFormat(DateUtils.dateFormatDayMonthYear).format(dateTime);
     return formattedDate;
+  }
+
+  static formatForDateSetting(DateTime dateTime) {
+    String formattedDate = DateFormat('d MMM').format(dateTime);
+    String formattedTime = DateFormat('h:mma').format(dateTime).toLowerCase();
+    return '$formattedDate at $formattedTime';
+  }
+
+  static String padWithZero(int time) {
+    return time.toString().padLeft(2, '0');
+  }
+
+  static String getUserTimezoneOptionText() {
+    Duration offset = DateTime.now().timeZoneOffset;
+    String sign = (offset.inHours.isNegative) ? '-' : '+';
+    int hours = offset.inHours;
+    int minutes = offset.inMinutes.remainder(60);
+    String timezone =
+        'GMT$sign${padWithZero(hours.abs())}:${padWithZero(minutes)}';
+    Map<String, String>? selectedOption =
+        EventConstants.timezoneOptions.firstWhere(
+      (option) => option['text']!.contains(timezone),
+      orElse: () => {},
+    );
+    return selectedOption['text'] ?? '';
+  }
+
+  static String getUserTimezoneOptionValue() {
+    Duration offset = DateTime.now().timeZoneOffset;
+    String sign = (offset.inHours.isNegative) ? '-' : '+';
+    int hours = offset.inHours;
+    int minutes = offset.inMinutes.remainder(60);
+    String timezone =
+        'GMT$sign${padWithZero(hours.abs())}:${padWithZero(minutes)}';
+    Map<String, String>? selectedOption =
+        EventConstants.timezoneOptions.firstWhere(
+      (option) => option['text']!.contains(timezone),
+      orElse: () => {},
+    );
+    return selectedOption['value'] ?? '';
+  }
+
+  // Combine the date and time
+  static DateTime combineDateAndTime(DateTime keepDate, TimeOfDay timeOfDay) {
+    DateTime combinedDateTime = DateTime.utc(
+      keepDate.year,
+      keepDate.month,
+      keepDate.day,
+      timeOfDay.hour,
+      timeOfDay.minute,
+      0,
+    );
+    return combinedDateTime;
   }
 }

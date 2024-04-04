@@ -1,3 +1,4 @@
+import 'package:app/core/utils/validators/datetime_validators.dart';
 import 'package:formz/formz.dart';
 
 enum DateTimeValidationError {
@@ -23,9 +24,9 @@ final class DateTimeFormz
     if (value == null) {
       return null;
     }
-    // if (!MustBeFutureValidator().isValid(value)) {
-    //   return DateTimeValidationError.mustBeFuture;
-    // }
+    if (!MustBeFutureValidator().isValid(value)) {
+      return DateTimeValidationError.mustBeFuture;
+    }
     return null;
   }
 }
