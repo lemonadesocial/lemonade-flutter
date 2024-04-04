@@ -16,8 +16,6 @@ class EventDateTimeSettingsBloc
     on<EventDateTimeSettingsEventInit>(_onInit);
     on<StartDateChanged>(_onStartDateChanged);
     on<EndDateChanged>(_onEndDateChanged);
-    on<TempStartDateTimeChanged>(_onTempStartDateTimeChanged);
-    on<TempEndDateTimeChanged>(_onTempEndDateTimeChanged);
     on<EventDateTimeSettingsEventSaveChanges>(_onSaveChanges);
     on<TimezoneChanged>(_onTimezoneChanged);
     on<EventDateTimeSettingsEventReset>(_onReset);
@@ -35,8 +33,6 @@ class EventDateTimeSettingsBloc
       state.copyWith(
         start: start,
         end: end,
-        tempStart: start,
-        tempEnd: end,
         timezone: timezone,
       ),
     );
@@ -103,51 +99,51 @@ class EventDateTimeSettingsBloc
     }
   }
 
-  Future<void> _onTempStartDateTimeChanged(
-    TempStartDateTimeChanged event,
-    Emitter emit,
-  ) async {
-    emit(state.copyWith(status: FormzSubmissionStatus.initial));
-    final tempStartDate = DateTimeFormz.dirty(event.datetime);
-    emit(
-      state.copyWith(tempStart: tempStartDate),
-    );
-  }
+  // Future<void> _onTempStartDateTimeChanged(
+  //   TempStartDateTimeChanged event,
+  //   Emitter emit,
+  // ) async {
+  //   emit(state.copyWith(status: FormzSubmissionStatus.initial));
+  //   final tempStartDate = DateTimeFormz.dirty(event.datetime);
+  //   emit(
+  //     state.copyWith(tempStart: tempStartDate),
+  //   );
+  // }
 
-  Future<void> _onTempEndDateTimeChanged(
-    TempEndDateTimeChanged event,
-    Emitter emit,
-  ) async {
-    emit(state.copyWith(status: FormzSubmissionStatus.initial));
-    final tempEndDate = DateTimeFormz.dirty(event.datetime);
-    emit(
-      state.copyWith(tempEnd: tempEndDate),
-    );
-  }
+  // Future<void> _onTempEndDateTimeChanged(
+  //   TempEndDateTimeChanged event,
+  //   Emitter emit,
+  // ) async {
+  //   emit(state.copyWith(status: FormzSubmissionStatus.initial));
+  //   final tempEndDate = DateTimeFormz.dirty(event.datetime);
+  //   emit(
+  //     state.copyWith(tempEnd: tempEndDate),
+  //   );
+  // }
 
   Future<void> _onSaveChanges(
     EventDateTimeSettingsEventSaveChanges event,
     Emitter emit,
   ) async {
     emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
-    final tempStartDate = DateTimeFormz.dirty(state.tempStart.value!);
-    final tempEndDate = DateTimeFormz.dirty(state.tempEnd.value!);
-    if (tempStartDate.value!.isBefore(DateTime.now()) ||
-        tempEndDate.value!.isBefore(DateTime.now())) {
+    final tempStart = event.tempStart;
+    final tempEnd = event.tempEnd;
+    if (tempStart.isBefore(DateTime.now()) ||
+        tempEnd.isBefore(DateTime.now())) {
       emit(
         state.copyWith(
-          start: tempStartDate,
-          end: tempEndDate,
+          start: DateTimeFormz.dirty(tempStart),
+          end: DateTimeFormz.dirty(tempEnd),
           isValid: false,
           status: FormzSubmissionStatus.failure,
           errorMessage: t.event.dateTimeSettingError.mustBeFuture,
         ),
       );
-    } else if (tempEndDate.value!.isBefore(tempStartDate.value!)) {
+    } else if (tempEnd!.isBefore(tempStart!)) {
       emit(
         state.copyWith(
-          start: tempStartDate,
-          end: tempEndDate,
+          start: DateTimeFormz.dirty(tempStart),
+          end: DateTimeFormz.dirty(tempEnd),
           isValid: false,
           status: FormzSubmissionStatus.failure,
           errorMessage: t.event.dateTimeSettingError.endMustAfterStart,
@@ -156,10 +152,8 @@ class EventDateTimeSettingsBloc
     } else {
       emit(
         state.copyWith(
-          start: tempStartDate,
-          end: tempEndDate,
-          tempStart: tempStartDate,
-          tempEnd: tempEndDate,
+          start: DateTimeFormz.dirty(tempStart),
+          end: DateTimeFormz.dirty(tempEnd),
           isValid: true,
           status: FormzSubmissionStatus.success,
         ),
@@ -189,8 +183,6 @@ class EventDateTimeSettingsBloc
       state.copyWith(
         start: start,
         end: end,
-        tempStart: start,
-        tempEnd: end,
       ),
     );
   }
@@ -213,20 +205,14 @@ class EventDateTimeSettingsEvent with _$EventDateTimeSettingsEvent {
     required DateTime datetime,
   }) = EndDateChanged;
 
-  const factory EventDateTimeSettingsEvent.tempStartDateTimeChanged({
-    required DateTime datetime,
-  }) = TempStartDateTimeChanged;
-
-  const factory EventDateTimeSettingsEvent.tempEndDateTimeChanged({
-    required DateTime datetime,
-  }) = TempEndDateTimeChanged;
-
   const factory EventDateTimeSettingsEvent.timezoneChanged({
     required String timezone,
   }) = TimezoneChanged;
 
-  const factory EventDateTimeSettingsEvent.saveChanges() =
-      EventDateTimeSettingsEventSaveChanges;
+  const factory EventDateTimeSettingsEvent.saveChanges({
+    required DateTime tempStart,
+    required DateTime tempEnd,
+  }) = EventDateTimeSettingsEventSaveChanges;
 
   const factory EventDateTimeSettingsEvent.reset() =
       EventDateTimeSettingsEventReset;
@@ -237,8 +223,6 @@ class EventDateTimeSettingsState with _$EventDateTimeSettingsState {
   const factory EventDateTimeSettingsState({
     @Default(DateTimeFormz.pure()) DateTimeFormz start,
     @Default(DateTimeFormz.pure()) DateTimeFormz end,
-    @Default(DateTimeFormz.pure()) DateTimeFormz tempStart,
-    @Default(DateTimeFormz.pure()) DateTimeFormz tempEnd,
     @Default(FormzSubmissionStatus.initial) FormzSubmissionStatus status,
     @Default(false) bool isValid,
     @Default("") String errorMessage,

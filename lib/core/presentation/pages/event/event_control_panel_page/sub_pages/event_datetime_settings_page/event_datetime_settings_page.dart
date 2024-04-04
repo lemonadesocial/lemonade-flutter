@@ -65,13 +65,19 @@ class _EventDatetimeSettingsPageState
 
   bool? expandedStarts;
   bool? expandedEnds;
+  DateTime? tempStart;
+  DateTime? tempEnd;
 
   @override
   void initState() {
     super.initState();
+    final start = context.read<EventDateTimeSettingsBloc>().state.start.value;
+    final end = context.read<EventDateTimeSettingsBloc>().state.end.value;
     setState(() {
       expandedStarts = widget.expandedStarts;
       expandedEnds = widget.expandedEnds;
+      tempStart = start;
+      tempEnd = end;
     });
   }
 
@@ -90,10 +96,6 @@ class _EventDatetimeSettingsPageState
                 context.read<EventDateTimeSettingsBloc>().state.start.value;
             final end =
                 context.read<EventDateTimeSettingsBloc>().state.end.value;
-            final tempStart =
-                context.read<EventDateTimeSettingsBloc>().state.tempStart.value;
-            final tempEnd =
-                context.read<EventDateTimeSettingsBloc>().state.tempEnd.value;
             if (tempStart != start || tempEnd != end) {
               showDialog(
                 context: context,
@@ -149,8 +151,7 @@ class _EventDatetimeSettingsPageState
                           child: EventDatetimeSettingRowItem(
                             label: t.event.datetimeSettings.starts,
                             dotColor: LemonColor.snackBarSuccess,
-                            selectedDateTime:
-                                state.tempStart.value ?? DateTime.now(),
+                            selectedDateTime: tempStart ?? DateTime.now(),
                             expanded: expandedStarts == true,
                             onSelectTab: () {
                               setState(() {
@@ -159,31 +160,25 @@ class _EventDatetimeSettingsPageState
                               });
                             },
                             onDateChanged: (DateTime datetime) {
-                              context.read<EventDateTimeSettingsBloc>().add(
-                                    EventDateTimeSettingsEvent
-                                        .tempStartDateTimeChanged(
-                                      datetime: date_utils.DateUtils
-                                          .combineDateAndTime(
-                                        datetime,
-                                        TimeOfDay(
-                                          hour: state.tempStart.value!.hour,
-                                          minute: state.tempStart.value!.minute,
-                                        ),
-                                      ),
-                                    ),
-                                  );
+                              setState(() {
+                                tempStart =
+                                    date_utils.DateUtils.combineDateAndTime(
+                                  datetime,
+                                  TimeOfDay(
+                                    hour: tempStart!.hour,
+                                    minute: tempStart!.minute,
+                                  ),
+                                );
+                              });
                             },
                             onTimeChanged: (TimeOfDay timeOfDay) {
-                              context.read<EventDateTimeSettingsBloc>().add(
-                                    EventDateTimeSettingsEvent
-                                        .tempStartDateTimeChanged(
-                                      datetime: date_utils.DateUtils
-                                          .combineDateAndTime(
-                                        state.tempStart.value ?? DateTime.now(),
-                                        timeOfDay,
-                                      ),
-                                    ),
-                                  );
+                              setState(() {
+                                tempStart =
+                                    date_utils.DateUtils.combineDateAndTime(
+                                  tempStart ?? DateTime.now(),
+                                  timeOfDay,
+                                );
+                              });
                             },
                           ),
                         ),
@@ -210,8 +205,7 @@ class _EventDatetimeSettingsPageState
                             label: t.event.datetimeSettings.ends,
                             dotColor: LemonColor.coralReef,
                             expanded: expandedEnds == true,
-                            selectedDateTime:
-                                state.tempEnd.value ?? DateTime.now(),
+                            selectedDateTime: tempEnd ?? DateTime.now(),
                             onSelectTab: () {
                               setState(() {
                                 expandedStarts = false;
@@ -219,31 +213,25 @@ class _EventDatetimeSettingsPageState
                               });
                             },
                             onDateChanged: (DateTime datetime) {
-                              context.read<EventDateTimeSettingsBloc>().add(
-                                    EventDateTimeSettingsEvent
-                                        .tempEndDateTimeChanged(
-                                      datetime: date_utils.DateUtils
-                                          .combineDateAndTime(
-                                        datetime,
-                                        TimeOfDay(
-                                          hour: state.tempEnd.value!.hour,
-                                          minute: state.tempEnd.value!.minute,
-                                        ),
-                                      ),
-                                    ),
-                                  );
+                              setState(() {
+                                tempEnd =
+                                    date_utils.DateUtils.combineDateAndTime(
+                                  datetime,
+                                  TimeOfDay(
+                                    hour: tempEnd!.hour,
+                                    minute: tempEnd!.minute,
+                                  ),
+                                );
+                              });
                             },
                             onTimeChanged: (TimeOfDay timeOfDay) {
-                              context.read<EventDateTimeSettingsBloc>().add(
-                                    EventDateTimeSettingsEvent
-                                        .tempEndDateTimeChanged(
-                                      datetime: date_utils.DateUtils
-                                          .combineDateAndTime(
-                                        state.tempStart.value ?? DateTime.now(),
-                                        timeOfDay,
-                                      ),
-                                    ),
-                                  );
+                              setState(() {
+                                tempEnd =
+                                    date_utils.DateUtils.combineDateAndTime(
+                                  tempEnd ?? DateTime.now(),
+                                  timeOfDay,
+                                );
+                              });
                             },
                           ),
                         ),
@@ -258,7 +246,10 @@ class _EventDatetimeSettingsPageState
                         child: LinearGradientButton.primaryButton(
                           onTap: () {
                             context.read<EventDateTimeSettingsBloc>().add(
-                                  const EventDateTimeSettingsEventSaveChanges(),
+                                  EventDateTimeSettingsEventSaveChanges(
+                                    tempStart: tempStart ?? DateTime.now(),
+                                    tempEnd: tempEnd ?? DateTime.now(),
+                                  ),
                                 );
                           },
                           label: t.common.actions.saveChanges,
