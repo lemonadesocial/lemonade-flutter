@@ -139,7 +139,7 @@ class EventDateTimeSettingsBloc
           errorMessage: t.event.dateTimeSettingError.mustBeFuture,
         ),
       );
-    } else if (tempEnd!.isBefore(tempStart!)) {
+    } else if (tempEnd.isBefore(tempStart)) {
       emit(
         state.copyWith(
           start: DateTimeFormz.dirty(tempStart),
