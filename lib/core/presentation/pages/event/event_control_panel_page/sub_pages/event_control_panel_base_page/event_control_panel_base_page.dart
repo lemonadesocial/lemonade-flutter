@@ -54,7 +54,6 @@ class EventControlPanelBasePage extends StatelessWidget {
               },
               child: SafeArea(
                 child: CustomScrollView(
-                  // physics: const BouncingScrollPhysics(),
                   slivers: [
                     SliverPadding(
                       padding: EdgeInsets.only(
