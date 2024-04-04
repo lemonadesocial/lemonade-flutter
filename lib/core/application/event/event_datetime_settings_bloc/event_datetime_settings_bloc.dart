@@ -20,8 +20,6 @@ class EventDateTimeSettingsBloc
     on<TempEndDateTimeChanged>(_onTempEndDateTimeChanged);
     on<EventDateTimeSettingsEventSaveChanges>(_onSaveChanges);
     on<TimezoneChanged>(_onTimezoneChanged);
-    on<EventDateTimeSettingsEventSetExpandedStarts>(_onSetExpandedStarts);
-    on<EventDateTimeSettingsEventSetExpandedEnds>(_onSetExpandedEnds);
     on<EventDateTimeSettingsEventReset>(_onReset);
   }
 
@@ -180,32 +178,6 @@ class EventDateTimeSettingsBloc
     );
   }
 
-  Future<void> _onSetExpandedStarts(
-    EventDateTimeSettingsEventSetExpandedStarts event,
-    Emitter<EventDateTimeSettingsState> emit,
-  ) async {
-    emit(state.copyWith(status: FormzSubmissionStatus.initial));
-    emit(
-      state.copyWith(
-        expandedStarts: true,
-        expandedEnds: false,
-      ),
-    );
-  }
-
-  Future<void> _onSetExpandedEnds(
-    EventDateTimeSettingsEventSetExpandedEnds event,
-    Emitter<EventDateTimeSettingsState> emit,
-  ) async {
-    emit(state.copyWith(status: FormzSubmissionStatus.initial));
-    emit(
-      state.copyWith(
-        expandedStarts: false,
-        expandedEnds: true,
-      ),
-    );
-  }
-
   Future<void> _onReset(
     EventDateTimeSettingsEventReset event,
     Emitter<EventDateTimeSettingsState> emit,
@@ -219,8 +191,6 @@ class EventDateTimeSettingsBloc
         end: end,
         tempStart: start,
         tempEnd: end,
-        expandedStarts: false,
-        expandedEnds: true,
       ),
     );
   }
@@ -255,12 +225,6 @@ class EventDateTimeSettingsEvent with _$EventDateTimeSettingsEvent {
     required String timezone,
   }) = TimezoneChanged;
 
-  const factory EventDateTimeSettingsEvent.setExpandedStarts() =
-      EventDateTimeSettingsEventSetExpandedStarts;
-
-  const factory EventDateTimeSettingsEvent.setExpandedEnds() =
-      EventDateTimeSettingsEventSetExpandedEnds;
-
   const factory EventDateTimeSettingsEvent.saveChanges() =
       EventDateTimeSettingsEventSaveChanges;
 
@@ -277,8 +241,6 @@ class EventDateTimeSettingsState with _$EventDateTimeSettingsState {
     @Default(DateTimeFormz.pure()) DateTimeFormz tempEnd,
     @Default(FormzSubmissionStatus.initial) FormzSubmissionStatus status,
     @Default(false) bool isValid,
-    @Default(true) bool expandedStarts,
-    @Default(false) bool expandedEnds,
     @Default("") String errorMessage,
     String? timezone,
   }) = _EventDateTimeSettingsState;

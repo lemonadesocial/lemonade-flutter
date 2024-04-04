@@ -54,15 +54,15 @@ class EventDateTimeSettingSection extends StatelessWidget {
                           : DateTime.now(),
                     ),
                     onTap: () {
-                      context.read<EventDateTimeSettingsBloc>().add(
-                            const EventDateTimeSettingsEventSetExpandedStarts(),
-                          );
                       showCupertinoModalBottomSheet(
                         backgroundColor: LemonColor.atomicBlack,
                         context: context,
                         enableDrag: false,
                         builder: (innerContext) =>
-                            const EventDatetimeSettingsPage(),
+                            const EventDatetimeSettingsPage(
+                          expandedStarts: true,
+                          expandedEnds: false,
+                        ),
                       );
                     },
                   ),
@@ -76,15 +76,15 @@ class EventDateTimeSettingSection extends StatelessWidget {
                           : DateTime.now(),
                     ),
                     onTap: () {
-                      context.read<EventDateTimeSettingsBloc>().add(
-                            const EventDateTimeSettingsEventSetExpandedEnds(),
-                          );
                       showCupertinoModalBottomSheet(
                         backgroundColor: LemonColor.atomicBlack,
                         context: context,
                         enableDrag: false,
                         builder: (innerContext) =>
-                            const EventDatetimeSettingsPage(),
+                            const EventDatetimeSettingsPage(
+                          expandedStarts: false,
+                          expandedEnds: true,
+                        ),
                       );
                     },
                   ),

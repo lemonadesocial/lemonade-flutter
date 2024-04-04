@@ -20,13 +20,19 @@ class EventDatetimeSettingsPage extends StatelessWidget {
   const EventDatetimeSettingsPage({
     super.key,
     this.event,
+    this.expandedStarts,
+    this.expandedEnds,
   });
+  final bool? expandedStarts;
+  final bool? expandedEnds;
   final Event? event;
 
   @override
   Widget build(BuildContext context) {
     return EventDatetimeSettingsPageView(
       event: event,
+      expandedStarts: expandedStarts,
+      expandedEnds: expandedEnds,
     );
   }
 }
@@ -38,6 +44,7 @@ class EventDatetimeSettingsPageView extends StatefulWidget {
     this.expandedStarts,
     this.expandedEnds,
   });
+
   final Event? event;
   final bool? expandedStarts;
   final bool? expandedEnds;
@@ -55,6 +62,18 @@ class _EventDatetimeSettingsPageState
   final TextEditingController startTimeInputController =
       TextEditingController();
   final TextEditingController endTimeInputController = TextEditingController();
+
+  bool? expandedStarts;
+  bool? expandedEnds;
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      expandedStarts = widget.expandedStarts;
+      expandedEnds = widget.expandedEnds;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -132,11 +151,13 @@ class _EventDatetimeSettingsPageState
                             dotColor: LemonColor.snackBarSuccess,
                             selectedDateTime:
                                 state.tempStart.value ?? DateTime.now(),
-                            expanded: state.expandedStarts == true,
-                            onSelectTab: () =>
-                                context.read<EventDateTimeSettingsBloc>().add(
-                                      const EventDateTimeSettingsEventSetExpandedStarts(),
-                                    ),
+                            expanded: expandedStarts == true,
+                            onSelectTab: () {
+                              setState(() {
+                                expandedStarts = true;
+                                expandedEnds = false;
+                              });
+                            },
                             onDateChanged: (DateTime datetime) {
                               context.read<EventDateTimeSettingsBloc>().add(
                                     EventDateTimeSettingsEvent
@@ -188,13 +209,15 @@ class _EventDatetimeSettingsPageState
                           child: EventDatetimeSettingRowItem(
                             label: t.event.datetimeSettings.ends,
                             dotColor: LemonColor.coralReef,
-                            expanded: state.expandedEnds == true,
+                            expanded: expandedEnds == true,
                             selectedDateTime:
                                 state.tempEnd.value ?? DateTime.now(),
-                            onSelectTab: () =>
-                                context.read<EventDateTimeSettingsBloc>().add(
-                                      const EventDateTimeSettingsEventSetExpandedEnds(),
-                                    ),
+                            onSelectTab: () {
+                              setState(() {
+                                expandedStarts = false;
+                                expandedEnds = true;
+                              });
+                            },
                             onDateChanged: (DateTime datetime) {
                               context.read<EventDateTimeSettingsBloc>().add(
                                     EventDateTimeSettingsEvent
