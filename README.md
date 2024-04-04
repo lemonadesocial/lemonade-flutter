@@ -72,6 +72,7 @@ Uncomment this one to force update app version
 
 ## How to fix when sign commit gpg stuck
 
+```
 rm -rf ~/.gnupg/*.lock
-
 rm -rf ~/.gnupg/public-keys.d/*.lock
+```
