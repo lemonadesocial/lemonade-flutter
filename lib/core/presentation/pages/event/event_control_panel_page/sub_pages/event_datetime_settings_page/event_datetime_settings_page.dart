@@ -247,8 +247,8 @@ class _EventDatetimeSettingsPageState
                           onTap: () {
                             context.read<EventDateTimeSettingsBloc>().add(
                                   EventDateTimeSettingsEventSaveChanges(
-                                    tempStart: tempStart ?? DateTime.now(),
-                                    tempEnd: tempEnd ?? DateTime.now(),
+                                    newStart: tempStart ?? DateTime.now(),
+                                    newEnd: tempEnd ?? DateTime.now(),
                                   ),
                                 );
                           },
