@@ -2,7 +2,9 @@
 
 import 'package:app/core/config.dart';
 import 'package:app/core/managers/crash_analytics_manager.dart';
+import 'package:app/core/oauth/oauth.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -19,6 +21,7 @@ class GraphQLErrorCodeStrings {
   static const String BAD_REQUEST = "BAD_REQUEST";
   static const String INTERNAL_SERVER_ERROR = "INTERNAL_SERVER_ERROR";
   static const String UNKNOWN_ERROR = "UNKNOWN_ERROR";
+  static const String UNAUTHENTICATED = "UNAUTHENTICATED";
 }
 
 class CustomErrorHandler {
@@ -81,7 +84,15 @@ class CustomErrorHandler {
     final errors = response.errors;
     final errorCode = getFirstErrorCode(errors);
     final errorMessage = getErrorMessage(errors);
-    showSnackbarError(errorCode, errorMessage);
+
+    // TODO: temp solution to prevent show error to user when logged out
+    // the root cause is some query widget auto trigger api called after logout
+    final unauthenticatedCall =
+        (errorCode == GraphQLErrorCodeStrings.UNAUTHENTICATED &&
+            getIt<AppOauth>().tokenState != OAuthTokenState.valid);
+    if (!unauthenticatedCall) {
+      showSnackbarError(errorCode, errorMessage);
+    }
     CrashAnalyticsManager().crashAnalyticsService?.captureError(
           errors,
           StackTrace.fromString(request.toString()),

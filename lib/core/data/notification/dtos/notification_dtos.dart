@@ -1,3 +1,4 @@
+import 'package:app/core/data/event/dtos/event_dtos.dart';
 import 'package:app/core/data/user/dtos/user_dtos.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -17,6 +18,7 @@ class NotificationDto with _$NotificationDto {
     String? from,
     @JsonKey(name: 'is_seen') bool? isSeen,
     @JsonKey(name: 'ref_event') String? refEvent,
+    @JsonKey(name: 'ref_event_expanded') EventDto? refEventExpanded,
     @JsonKey(name: 'ref_room') String? refRoom,
     @JsonKey(name: 'ref_store_order') String? refStoreOrder,
     @JsonKey(name: 'ref_user') String? refUser,

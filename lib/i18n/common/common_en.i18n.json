@@ -59,7 +59,9 @@
         "submit": "Submit",
         "continueNext": "Continue",
         "post": "Post",
-        "receipt": "receipt"
+        "receipt": "receipt",
+        "viewTicket": "View ticket",
+        "viewEvent": "View event"
     },
     "followed": "Followed",
     "anonymous": "anonymous",

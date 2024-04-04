@@ -17,8 +17,6 @@ class NotificationSlidable extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
     return Slidable(
       key: ValueKey(id),
       endActionPane: ActionPane(
@@ -38,9 +36,9 @@ class NotificationSlidable extends StatelessWidget {
             onPressed: (context) {
               onRemove?.call();
             },
-            backgroundColor: LemonColor.red,
-            foregroundColor: colorScheme.onPrimary,
-            icon: Icons.delete,
+            backgroundColor: LemonColor.coralReef.withOpacity(0.18),
+            foregroundColor: LemonColor.coralReef,
+            icon: Icons.delete_outline_rounded,
           ),
         ],
       ),

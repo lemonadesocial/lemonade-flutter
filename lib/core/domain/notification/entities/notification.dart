@@ -1,4 +1,5 @@
 import 'package:app/core/data/notification/dtos/notification_dtos.dart';
+import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 
 class Notification {
@@ -10,6 +11,7 @@ class Notification {
   String? from;
   bool? isSeen;
   String? refEvent;
+  Event? refEventExpanded;
   String? refRoom;
   String? refStoreOrder;
   String? refUser;
@@ -24,6 +26,7 @@ class Notification {
     this.from,
     this.isSeen,
     this.refEvent,
+    this.refEventExpanded,
     this.refRoom,
     this.refStoreOrder,
     this.refUser,
@@ -41,6 +44,11 @@ class Notification {
       from: dto.from,
       isSeen: dto.isSeen,
       refEvent: dto.refEvent,
+      refEventExpanded: dto.refEventExpanded != null
+          ? Event.fromDto(
+              dto.refEventExpanded!,
+            )
+          : null,
       refRoom: dto.refRoom,
       refStoreOrder: dto.refStoreOrder,
       refUser: dto.refUser,
