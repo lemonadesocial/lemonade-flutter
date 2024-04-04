@@ -32,10 +32,6 @@ class EventControlPanelPage extends StatelessWidget
                     event?.start ?? EventDateTimeConstants.defaultStartDateTime,
                 endDateTime:
                     event?.end ?? EventDateTimeConstants.defaultEndDateTime,
-                tempStartDateTime:
-                    event?.start ?? EventDateTimeConstants.defaultStartDateTime,
-                tempEndDateTime:
-                    event?.end ?? EventDateTimeConstants.defaultEndDateTime,
               ),
             ),
         ),
