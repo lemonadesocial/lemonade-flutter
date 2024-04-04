@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:timezone/timezone.dart';
+import 'package:app/core/utils/date_utils.dart' as date_utils;
 
 part 'create_event_bloc.freezed.dart';
 
@@ -66,10 +67,12 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
     FormSubmitted event,
     Emitter<CreateEventState> emit,
   ) async {
+    // Convert the target selected datetime into utc
     final location = getLocation(event.timezone);
-    final TZDateTime startTimeZoneDateTime =
-        TZDateTime.from(event.start, location);
-    final TZDateTime endTimeZoneDateTime = TZDateTime.from(event.end, location);
+    final startUtcDateTime = event.start
+        .add(Duration(milliseconds: location.currentTimeZone.offset * -1));
+    final endUtcDateTime = event.end
+        .add(Duration(milliseconds: location.currentTimeZone.offset * -1));
     final title = StringFormz.dirty(state.title.value);
     final description = StringFormz.dirty(state.description.value);
     emit(
@@ -86,8 +89,8 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
         description: description.value,
         private: event.private,
         approval_required: event.approvalRequired,
-        start: DateTime.parse(startTimeZoneDateTime.toIso8601String()),
-        end: DateTime.parse(endTimeZoneDateTime.toIso8601String()),
+        start: DateTime.parse(startUtcDateTime.toIso8601String()),
+        end: DateTime.parse(endUtcDateTime.toIso8601String()),
         timezone: event.timezone,
         guest_limit: double.parse(
           event.guestLimit ?? EventConstants.defaultEventGuestLimit,

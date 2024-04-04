@@ -126,6 +126,7 @@ class CreateEventBasePage extends StatelessWidget {
                                   ),
                                 );
                               },
+                              isError: state.description.displayError != null,
                             ),
                           ),
                         ),

@@ -1,4 +1,5 @@
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,7 @@ class SettingTileWidget extends StatelessWidget {
     this.titleStyle,
     this.color,
     this.radius,
+    this.isError,
   });
 
   final String title;
@@ -29,6 +31,7 @@ class SettingTileWidget extends StatelessWidget {
   final TextStyle? titleStyle;
   final Color? color;
   final double? radius;
+  final bool? isError;
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +43,12 @@ class SettingTileWidget extends StatelessWidget {
         decoration: BoxDecoration(
           color: color ?? colorScheme.onPrimary.withOpacity(0.06),
           borderRadius: BorderRadius.circular(radius ?? LemonRadius.normal),
+          border: isError == true
+              ? Border.all(
+                  color: LemonColor.errorRedBg,
+                  width: 1,
+                )
+              : null,
         ),
         clipBehavior: Clip.hardEdge,
         child: Stack(
