@@ -113,7 +113,7 @@ definitions:
     - &build_ipa_staging
       name: Build ipa staging
       script: |
-        BUILD_NUMBER="332"
+        BUILD_NUMBER=$(($(app-store-connect get-latest-testflight-build-number "$APP_ID") + 1))
         flutter build ipa --release \
           --build-number=$BUILD_NUMBER \
           --export-options-plist=/Users/builder/export_options.plist \
