@@ -65,6 +65,8 @@
 	<string>We require your location information to accurately show nearby badges. This data will only be used when you use this feature and confidentiality will be maintained.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Allow access to your photo library to enable uploading your profile avatar</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Allow access to your microphone to turn speech to text</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>
