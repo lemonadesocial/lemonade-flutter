@@ -184,7 +184,6 @@ class EventTicketPrice {
   final String? network;
   final String? currency;
   final bool? isDefault;
-  final int? decimals;
 
   EventTicketPrice({
     this.cost,
@@ -193,7 +192,6 @@ class EventTicketPrice {
     this.network,
     this.currency,
     this.isDefault,
-    this.decimals,
   });
 
   factory EventTicketPrice.fromDto(EventTicketPriceDto dto) => EventTicketPrice(
@@ -203,7 +201,6 @@ class EventTicketPrice {
         network: dto.network,
         currency: dto.currency,
         isDefault: dto.isDefault,
-        decimals: dto.decimals,
       );
 }
 

@@ -676,7 +676,6 @@ type EventTicketPrice {
   currency: String!
   network: String
   cost: String!
-  decimals: Int
 }
 
 type WhitelistUserInfo {
@@ -1313,7 +1312,7 @@ type GuildRoom {
   created_by: MongoID!
   title: String!
   guild_id: Float!
-  guild_role_ids: [Int!]
+  guild_role_ids: Int
   guild_role_require_all: Boolean
   joins: Float
   matrix_room_id: String!
@@ -1330,7 +1329,6 @@ type Chain {
   chain_id: String!
   name: String!
   rpc_url: String!
-  block_explorer_url: String
   block_time: Float!
   safe_confirmations: Float!
   logo_url: String
@@ -1361,7 +1359,7 @@ type NewPayment {
   transfer_params: JSON
   failure_reason: String
   account_expanded: NewPaymentAccount
-  ticket_types_expanded: [EventTicketType]
+  ticket_types_expanded: [EventTicketType!]
   due_amount: String
 }
 
@@ -2691,7 +2689,6 @@ input EventTicketPriceInput {
   currency: String!
   network: String
   cost: String!
-  decimals: Int
 }
 
 input EventTicketTypeOffersInput {
@@ -2739,7 +2736,7 @@ input FileUploadInfo {
 input GuildRoomInput {
   title: String!
   guild_id: Float!
-  guild_role_ids: [Int!]
+  guild_role_ids: Int
   guild_role_require_all: Boolean
   matrix_room_id: String!
 }

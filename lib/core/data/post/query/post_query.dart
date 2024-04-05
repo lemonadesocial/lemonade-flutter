@@ -38,7 +38,6 @@ const postFragment = '''
         currency
         network
         cost
-        decimals
       }
     }
     start

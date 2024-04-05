@@ -97,7 +97,6 @@ class EventTicketPriceDto with _$EventTicketPriceDto {
     String? cost,
     String? currency,
     String? network,
-    int? decimals,
     @JsonKey(name: 'default') bool? isDefault,
   }) = _EventTicketPriceDto;
 
