@@ -17,6 +17,7 @@ import 'package:app/core/domain/payment/input/update_payment_input/update_paymen
 import 'package:app/core/domain/payment/payment_repository.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/core/utils/gql/gql.dart';
+import 'package:app/graphql/backend/payment/mutation/mail_ticket_payment_receipt.graphql.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:dartz/dartz.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -159,5 +160,24 @@ class PaymentRepositoryImpl extends PaymentRepository {
     );
     if (result.hasException) return Left(Failure());
     return Right(result.parsedData!);
+  }
+
+  @override
+  Future<Either<Failure, bool>> mailTicketPaymentReciept({
+    required String ticketId,
+  }) async {
+    final result = await _client.mutate$MailTicketPaymentReceipt(
+      Options$Mutation$MailTicketPaymentReceipt(
+        variables: Variables$Mutation$MailTicketPaymentReceipt(
+          ticket: ticketId,
+        ),
+      ),
+    );
+
+    if (result.hasException || result.parsedData == null) {
+      return Left(Failure());
+    }
+
+    return Right(result.parsedData?.mailTicketPaymentReceipt ?? false);
   }
 }

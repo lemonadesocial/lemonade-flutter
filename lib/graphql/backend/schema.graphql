@@ -666,6 +666,7 @@ type EventTicketType {
   ticket_count: Float
   ticket_limit: Float
   ticket_limit_per: Float
+  position: Int
   photos_expanded(skip: Int! = 0, limit: Int! = 25): [File]
   limited_whitelist_users: [WhitelistUserInfo!]
   category_expanded: EventTicketCategory
@@ -689,6 +690,7 @@ type EventTicketCategory {
   title: String!
   event: MongoID!
   description: String
+  position: Int
 }
 
 type EventSession {
@@ -1278,6 +1280,7 @@ type PurchasableTicketType {
   external_ids: [String!]
   offers: [EventOffer!]
   photos: [MongoID!]
+  position: Int
   discountable: Boolean!
   limit: Float!
   whitelisted: Boolean
@@ -2223,6 +2226,8 @@ type Mutation {
   createComment(input: CommentInput!): Comment!
   deleteComment(_id: MongoID!): Boolean!
   generateCubejsToken(events: [MongoID!], site: MongoID, user: MongoID): String!
+  mailTicketPaymentReceipt(ticket: MongoID!): Boolean!
+  mailEventTicket(event: MongoID!, payment: MongoID, emails: [String!]!): Boolean!
   submitEventApplicationQuestions(event: MongoID!, questions: [QuestionInput!]!): Boolean!
   deleteEventApplicationQuestions(questions: [MongoID!]!, event: MongoID!): Boolean!
   submitEventApplicationAnswers(answers: [EventApplicationAnswerInput!]!, event: MongoID!): Boolean!
@@ -2250,12 +2255,13 @@ type Mutation {
   deleteEventSessionReservation(input: EventSessionReservationInput!): Boolean!
   createEventStory(input: EventStoryInput!): Boolean!
   deleteEventStory(input: EventStoryInput!): Boolean!
+  reorderTicketTypeCategories(event: MongoID!, categories: [ReorderTicketTypeCategoryInput!]!): Boolean!
   createEventTicketCategory(input: CreateEventTicketCategoryInput!): EventTicketCategory!
   deleteEventTicketCategory(categories: [MongoID!]!, event: MongoID!): Boolean!
   updateEventTicketCategory(input: UpdateTicketTypeCategoryInput!): Boolean!
   createEventTicketDiscounts(event: MongoID!, inputs: [EventPaymentTicketDiscountInput!]!): Event!
   deleteEventTicketDiscounts(event: MongoID!, discounts: [String!]!): Event!
-  mailEventTicket(event: MongoID!, payment: MongoID, emails: [String!]!): Boolean!
+  reorderTicketTypes(event: MongoID!, types: [ReorderTicketTypeInput!]!): Boolean!
   createEventTicketType(input: EventTicketTypeInput!): EventTicketType!
   updateEventTicketType(input: EventTicketTypeInput!, _id: MongoID!): EventTicketType!
   deleteEventTicketType(event: MongoID!, _id: MongoID!): Boolean!
@@ -2638,10 +2644,16 @@ input EventStoryInput {
   file: MongoID!
 }
 
+input ReorderTicketTypeCategoryInput {
+  _id: MongoID!
+  position: Int
+}
+
 input CreateEventTicketCategoryInput {
   title: String!
   event: MongoID!
   description: String
+  position: Int
   ticket_types: [MongoID!]
 }
 
@@ -2650,6 +2662,7 @@ input UpdateTicketTypeCategoryInput {
   title: String!
   event: MongoID!
   description: String
+  position: Int
   ticket_types: [MongoID!]
 }
 
@@ -2661,6 +2674,11 @@ input EventPaymentTicketDiscountInput {
   ticket_limit: Float
   ticket_limit_per: Float
   ticket_types: [MongoID!]
+}
+
+input ReorderTicketTypeInput {
+  _id: MongoID!
+  position: Int
 }
 
 input EventTicketTypeInput {
@@ -2681,6 +2699,7 @@ input EventTicketTypeInput {
   photos: [MongoID!]
   ticket_limit: Float
   ticket_limit_per: Float
+  position: Int
   offers: [EventTicketTypeOffersInput!]
   added_whitelist_emails: [String!]
   removed_whitelist_emails: [String!]

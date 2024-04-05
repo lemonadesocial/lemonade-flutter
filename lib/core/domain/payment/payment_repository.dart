@@ -34,4 +34,8 @@ abstract class PaymentRepository {
   Future<Either<Failure, PaymentAccount>> createPaymentAccount({
     required CreatePaymentAccountInput input,
   });
+
+  Future<Either<Failure, bool>> mailTicketPaymentReciept({
+    required String ticketId,
+  });
 }

@@ -1,0 +1,3 @@
+mutation MailTicketPaymentReceipt($ticket: MongoID!) {
+  mailTicketPaymentReceipt(ticket: $ticket)
+}
