@@ -161,7 +161,8 @@
         "starts": "Starts",
         "ends": "Ends",
         "chooseDateAndTime": "Choose date & time",
-        "dateTimeUpdated": "Date and Time has been updated"
+        "dateTimeUpdated": "Date and Time has been updated",
+        "timezoneUpdated": "Timezone has been updated"
     },
     "locationSetting": {
         "addLocation": "Add location",

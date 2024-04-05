@@ -1,7 +1,11 @@
+import 'package:app/core/application/event/edit_event_detail_bloc/edit_event_detail_bloc.dart';
 import 'package:app/core/application/event/event_datetime_settings_bloc/event_datetime_settings_bloc.dart';
 import 'package:app/core/constants/event/event_constants.dart';
+import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
+import 'package:app/core/utils/snackbar_utils.dart';
+import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
@@ -15,7 +19,8 @@ import 'package:wheel_picker/wheel_picker.dart';
 const double timezoneWheelSize = 225;
 
 class TimezoneSelectBottomSheet extends StatefulWidget {
-  const TimezoneSelectBottomSheet({super.key});
+  const TimezoneSelectBottomSheet({super.key, this.event});
+  final Event? event;
 
   @override
   State<TimezoneSelectBottomSheet> createState() =>
@@ -53,77 +58,116 @@ class _TimezoneSelectBottomSheetState extends State<TimezoneSelectBottomSheet> {
       surroundingOpacity: .25,
       magnification: 1.2,
     );
-
-    return SingleChildScrollView(
-      controller: ModalScrollController.of(context),
-      padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).viewInsets.bottom,
-      ),
-      child: Container(
-        decoration: BoxDecoration(
-          color: LemonColor.atomicBlack,
+    return BlocListener<EditEventDetailBloc, EditEventDetailState>(
+      listener: (context, state) {
+        if (state.status == EditEventDetailBlocStatus.success) {
+          SnackBarUtils.showCustom(
+            title: "${t.common.saved}!",
+            message: t.event.datetimeSettings.timezoneUpdated,
+            icon: Assets.icons.icSave.svg(),
+            showIconContainer: true,
+            iconContainerColor: LemonColor.acidGreen,
+          );
+          AutoRouter.of(context).pop();
+        }
+      },
+      child: SingleChildScrollView(
+        controller: ModalScrollController.of(context),
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
         ),
-        child: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              LemonAppBar(
-                backgroundColor: LemonColor.atomicBlack,
-                title: t.event.timezoneSetting.chooseTimezone,
-              ),
-              Stack(
-                children: [
-                  _centerBar(context),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    child: BlocBuilder<EventDateTimeSettingsBloc,
-                        EventDateTimeSettingsState>(
-                      builder: (context, state) {
-                        return WheelPicker(
-                          style: wheelStyle,
-                          controller: timezoneWheelController,
-                          builder: (BuildContext context, int index) {
-                            String? textDisplay = EventConstants.timezoneOptions
-                                    .toList()[index]['text'] ??
-                                '';
-                            return Text(
-                              textDisplay,
-                              style: textStyle,
-                            );
-                          },
-                          selectedIndexColor: colorScheme.onPrimary,
-                          onIndexChanged: (index) {
-                            final element =
-                                EventConstants.timezoneOptions.elementAt(index);
-                            setState(() {
-                              selectedTimezone = element['value'];
-                            });
-                          },
-                        );
-                      },
+        child: Container(
+          decoration: BoxDecoration(
+            color: LemonColor.atomicBlack,
+          ),
+          child: SafeArea(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                LemonAppBar(
+                  backgroundColor: LemonColor.atomicBlack,
+                  title: t.event.timezoneSetting.chooseTimezone,
+                ),
+                Stack(
+                  children: [
+                    _centerBar(context),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      child: BlocBuilder<EventDateTimeSettingsBloc,
+                          EventDateTimeSettingsState>(
+                        builder: (context, state) {
+                          return WheelPicker(
+                            style: wheelStyle,
+                            controller: timezoneWheelController,
+                            builder: (BuildContext context, int index) {
+                              String? textDisplay =
+                                  EventConstants.timezoneOptions.toList()[index]
+                                          ['text'] ??
+                                      '';
+                              return Text(
+                                textDisplay,
+                                style: textStyle,
+                              );
+                            },
+                            selectedIndexColor: colorScheme.onPrimary,
+                            onIndexChanged: (index) {
+                              final element = EventConstants.timezoneOptions
+                                  .elementAt(index);
+                              setState(() {
+                                selectedTimezone = element['value'];
+                              });
+                            },
+                          );
+                        },
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(
-                  vertical: Spacing.smMedium,
-                  horizontal: Spacing.xSmall,
+                  ],
                 ),
-                child: LinearGradientButton.primaryButton(
-                  onTap: () {
-                    context.read<EventDateTimeSettingsBloc>().add(
-                          EventDateTimeSettingsEvent.timezoneChanged(
-                            timezone: selectedTimezone ?? '',
-                          ),
-                        );
-                    AutoRouter.of(context).pop();
+                BlocBuilder<EditEventDetailBloc, EditEventDetailState>(
+                  builder: (context, state) {
+                    return Container(
+                      padding: EdgeInsets.symmetric(
+                        vertical: Spacing.smMedium,
+                        horizontal: Spacing.xSmall,
+                      ),
+                      child: LinearGradientButton.primaryButton(
+                        onTap: () {
+                          context.read<EventDateTimeSettingsBloc>().add(
+                                EventDateTimeSettingsEvent.timezoneChanged(
+                                  timezone: selectedTimezone ?? '',
+                                ),
+                              );
+                          // Edit event
+                          if (widget.event != null) {
+                            context.read<EditEventDetailBloc>().add(
+                                  EditEventDetailEvent.update(
+                                    eventId: widget.event?.id ?? '',
+                                    timezone: selectedTimezone ?? '',
+                                  ),
+                                );
+                          }
+                          // Create new event
+                          else {
+                            SnackBarUtils.showCustom(
+                              title: "${t.common.saved}!",
+                              message: t.event.datetimeSettings.timezoneUpdated,
+                              icon: Assets.icons.icSave.svg(),
+                              showIconContainer: true,
+                              iconContainerColor: LemonColor.acidGreen,
+                            );
+                            AutoRouter.of(context).pop();
+                          }
+                        },
+                        label: t.common.actions.saveChanges,
+                        loadingWhen:
+                            state.status == EditEventDetailBlocStatus.loading,
+                      ),
+                    );
                   },
-                  label: t.common.actions.saveChanges,
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
