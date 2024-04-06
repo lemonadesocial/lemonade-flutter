@@ -23,38 +23,37 @@ class EditEventDetailBloc
     emit(state.copyWith(status: EditEventDetailBlocStatus.loading));
     final result = await eventRepository.updateEvent(
       input: Input$EventInput(
-        virtual: event.virtual,
-        start: event.start != null
-            ? DateTime.parse(event.start!.toUtc().toIso8601String())
-            : null,
-        end: event.end != null
-            ? DateTime.parse(event.end!.toUtc().toIso8601String())
-            : null,
-        approval_required: event.approvalRequired,
-        guest_limit: event.guestLimit != null
-            ? double.parse(event.guestLimit ?? '')
-            : null,
-        guest_limit_per: event.guestLimitPer != null
-            ? double.parse(event.guestLimitPer ?? '')
-            : null,
-        private: event.private ?? false,
-        address: event.address != null
-            ? Input$AddressInput(
-                title: event.address!.title,
-                street_1: event.address!.street1,
-                street_2: event.address!.street2,
-                region: event.address!.region,
-                city: event.address!.city,
-                country: event.address!.country,
-                postal: event.address!.postal,
-                recipient_name: event.address!.recipientName,
-                latitude: event.address!.latitude,
-                longitude: event.address!.longitude,
-              )
-            : null,
-        speaker_users: event.speakerUsers ?? [],
-        timezone: event.timezone
-      ),
+          virtual: event.virtual,
+          start: event.start != null
+              ? DateTime.parse(event.start!.toUtc().toIso8601String())
+              : null,
+          end: event.end != null
+              ? DateTime.parse(event.end!.toUtc().toIso8601String())
+              : null,
+          approval_required: event.approvalRequired,
+          guest_limit: event.guestLimit != null
+              ? double.parse(event.guestLimit ?? '')
+              : null,
+          guest_limit_per: event.guestLimitPer != null
+              ? double.parse(event.guestLimitPer ?? '')
+              : null,
+          private: event.private ?? false,
+          address: event.address != null
+              ? Input$AddressInput(
+                  title: event.address!.title,
+                  street_1: event.address!.street1,
+                  street_2: event.address!.street2,
+                  region: event.address!.region,
+                  city: event.address!.city,
+                  country: event.address!.country,
+                  postal: event.address!.postal,
+                  recipient_name: event.address!.recipientName,
+                  latitude: event.address!.latitude,
+                  longitude: event.address!.longitude,
+                )
+              : null,
+          speaker_users: event.speakerUsers ?? [],
+          timezone: event.timezone),
       id: event.eventId,
     );
     result.fold(
