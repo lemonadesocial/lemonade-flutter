@@ -1,6 +1,7 @@
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_ticket.dart';
 import 'package:app/core/domain/event/repository/event_ticket_repository.dart';
+import 'package:app/core/domain/payment/payment_repository.dart';
 import 'package:app/core/presentation/pages/event/my_event_ticket_page/widgets/ticket_qr_code_popup.dart';
 import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
@@ -21,12 +22,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EventTicketActions extends StatelessWidget {
   final Event event;
+  final EventTicket? assignedToMeTicket;
   final List<EventTicket>? remainingTickets;
 
   const EventTicketActions({
     super.key,
     required this.event,
     this.remainingTickets,
+    this.assignedToMeTicket,
   });
 
   @override
@@ -38,51 +41,6 @@ class EventTicketActions extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        ActionItem(
-          label: t.common.actions.receipt,
-          backgroundColor: LemonColor.downloadBgColor,
-          icon: ThemeSvgIcon(
-            color: LemonColor.downloadIcColor,
-            // color: Colors.red,
-            builder: (filter) => Assets.icons.icDownload.svg(
-              colorFilter: filter,
-              width: 27.w,
-              height: 27.w,
-            ),
-          ),
-          onPressed: () => SnackBarUtils.showComingSoon(),
-        ),
-        ActionItem(
-          label: t.common.actions.invite,
-          backgroundColor: LemonColor.inviteBgColor,
-          icon: ThemeSvgIcon(
-            color: LemonColor.inviteIcColor,
-            // color: Colors.red,
-            builder: (filter) => Assets.icons.icInvite.svg(
-              colorFilter: filter,
-              width: 27.w,
-              height: 27.w,
-            ),
-          ),
-          onPressed: () => SnackBarUtils.showComingSoon(),
-        ),
-        ActionItem(
-          label: t.common.actions.qrCode,
-          backgroundColor: LemonColor.chineseBlack,
-          icon: ThemeSvgIcon(
-            builder: (filter) => Assets.icons.icQr.svg(
-              colorFilter: filter,
-              width: 27.w,
-              height: 27.w,
-            ),
-          ),
-          onPressed: () => {
-            showDialog(
-              context: context,
-              builder: (context) => const TicketQRCodePopup(),
-            ),
-          },
-        ),
         ActionItem(
           onPressed: () {
             AutoRouter.of(context)
@@ -119,6 +77,88 @@ class EventTicketActions extends StatelessWidget {
               : null,
         ),
         ActionItem(
+          label: t.common.actions.invite,
+          backgroundColor: LemonColor.inviteBgColor,
+          icon: ThemeSvgIcon(
+            color: LemonColor.inviteIcColor,
+            // color: Colors.red,
+            builder: (filter) => Assets.icons.icInvite.svg(
+              colorFilter: filter,
+              width: 27.w,
+              height: 27.w,
+            ),
+          ),
+          onPressed: () => SnackBarUtils.showComingSoon(),
+        ),
+        ActionItem(
+          label: t.common.actions.qrCode,
+          backgroundColor: LemonColor.chineseBlack,
+          icon: ThemeSvgIcon(
+            builder: (filter) => Assets.icons.icQr.svg(
+              colorFilter: filter,
+              width: 27.w,
+              height: 27.w,
+            ),
+          ),
+          onPressed: () => {
+            showDialog(
+              context: context,
+              builder: (context) => const TicketQRCodePopup(),
+            ),
+          },
+        ),
+        ActionItem(
+          label: t.common.actions.receipt,
+          backgroundColor: LemonColor.downloadBgColor,
+          icon: ThemeSvgIcon(
+            color: LemonColor.downloadIcColor,
+            // color: Colors.red,
+            builder: (filter) => Assets.icons.icReceipt.svg(
+              colorFilter: filter,
+              width: 27.w,
+              height: 27.w,
+            ),
+          ),
+          onPressed: () async {
+            final result = await showFutureLoadingDialog(
+              context: context,
+              future: () => getIt<PaymentRepository>().mailTicketPaymentReciept(
+                ticketId: assignedToMeTicket?.id ?? '',
+              ),
+            );
+            result.result?.fold((l) => null, (success) {
+              if (!success) {
+                SnackBarUtils.showError(
+                  message: t.event.eventMail.receiptNotAvailableError,
+                );
+                return;
+              }
+              SnackBarUtils.showCustom(
+                showIconContainer: false,
+                icon: Container(
+                  width: Sizing.medium,
+                  height: Sizing.medium,
+                  decoration: BoxDecoration(
+                    color: colorScheme.secondaryContainer,
+                    borderRadius: BorderRadius.circular(Sizing.medium),
+                  ),
+                  child: Center(
+                    child: ThemeSvgIcon(
+                      color: colorScheme.onSecondary,
+                      builder: (colorFilter) => Assets.icons.icReceipt.svg(
+                        colorFilter: colorFilter,
+                      ),
+                    ),
+                  ),
+                ),
+                title: t.event.eventMail.receiptSentTitle,
+                message: t.event.eventMail
+                    .checkYourInbox(email: currentUser?.email ?? ''),
+              );
+            });
+          },
+        ),
+        ActionItem(
           label: t.common.actions.mail,
           backgroundColor: LemonColor.mailBgColor,
           icon: ThemeSvgIcon(
@@ -146,9 +186,29 @@ class EventTicketActions extends StatelessWidget {
               if (!success) {
                 return;
               }
-              SnackBarUtils.showSuccess(
+              SnackBarUtils.showCustom(
+                showIconContainer: false,
+                icon: Container(
+                  width: Sizing.medium,
+                  height: Sizing.medium,
+                  decoration: BoxDecoration(
+                    color: colorScheme.secondaryContainer,
+                    borderRadius: BorderRadius.circular(Sizing.medium),
+                  ),
+                  child: Center(
+                    child: ThemeSvgIcon(
+                      color: colorScheme.onSecondary,
+                      builder: (colorFilter) => Assets.icons.icTicket.svg(
+                        colorFilter: colorFilter,
+                        width: 18.w,
+                        height: 18.w,
+                      ),
+                    ),
+                  ),
+                ),
+                title: t.event.eventMail.rsvpSentTitle,
                 message: t.event.eventMail
-                    .eventMailTicketsSuccess(email: currentUser?.email ?? ''),
+                    .checkYourInbox(email: currentUser?.email ?? ''),
               );
             });
           },
