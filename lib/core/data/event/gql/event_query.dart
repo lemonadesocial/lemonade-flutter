@@ -159,6 +159,7 @@ const eventFragment = '''
   }
   start
   end
+  timezone
   cost
   currency
   description

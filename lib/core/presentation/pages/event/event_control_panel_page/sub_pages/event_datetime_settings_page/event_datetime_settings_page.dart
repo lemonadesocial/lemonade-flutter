@@ -1,3 +1,4 @@
+import 'package:app/core/application/event/edit_event_detail_bloc/edit_event_detail_bloc.dart';
 import 'package:app/core/application/event/event_datetime_settings_bloc/event_datetime_settings_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_datetime_settings_page/widgets/event_datetime_setting_row_item.dart';
@@ -136,133 +137,128 @@ class _EventDatetimeSettingsPageState
               AutoRouter.of(context).pop();
             }
           },
-          child: BlocBuilder<EventDateTimeSettingsBloc,
-              EventDateTimeSettingsState>(
-            builder: (context, state) {
-              return Stack(
-                children: [
-                  CustomScrollView(
-                    slivers: [
-                      SliverPadding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: Spacing.smMedium,
-                        ),
-                        sliver: SliverToBoxAdapter(
-                          child: EventDatetimeSettingRowItem(
-                            label: t.event.datetimeSettings.starts,
-                            dotColor: LemonColor.snackBarSuccess,
-                            selectedDateTime: tempStart ?? DateTime.now(),
-                            expanded: expandedStarts == true,
-                            onSelectTab: () {
-                              setState(() {
-                                expandedStarts = true;
-                                expandedEnds = false;
-                              });
-                            },
-                            onDateChanged: (DateTime datetime) {
-                              setState(() {
-                                tempStart =
-                                    date_utils.DateUtils.combineDateAndTime(
-                                  datetime,
-                                  TimeOfDay(
-                                    hour: tempStart!.hour,
-                                    minute: tempStart!.minute,
-                                  ),
-                                );
-                              });
-                            },
-                            onTimeChanged: (TimeOfDay timeOfDay) {
-                              setState(() {
-                                tempStart =
-                                    date_utils.DateUtils.combineDateAndTime(
-                                  tempStart ?? DateTime.now(),
-                                  timeOfDay,
-                                );
-                              });
-                            },
-                          ),
-                        ),
+          child: Stack(
+            children: [
+              CustomScrollView(
+                slivers: [
+                  SliverPadding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: Spacing.smMedium,
+                    ),
+                    sliver: SliverToBoxAdapter(
+                      child: EventDatetimeSettingRowItem(
+                        label: t.event.datetimeSettings.starts,
+                        dotColor: LemonColor.snackBarSuccess,
+                        selectedDateTime: tempStart ?? DateTime.now(),
+                        expanded: expandedStarts == true,
+                        onSelectTab: () {
+                          setState(() {
+                            expandedStarts = true;
+                            expandedEnds = false;
+                          });
+                        },
+                        onDateChanged: (DateTime datetime) {
+                          setState(() {
+                            tempStart = date_utils.DateUtils.combineDateAndTime(
+                              datetime,
+                              TimeOfDay(
+                                hour: tempStart!.hour,
+                                minute: tempStart!.minute,
+                              ),
+                            );
+                          });
+                        },
+                        onTimeChanged: (TimeOfDay timeOfDay) {
+                          setState(() {
+                            tempStart = date_utils.DateUtils.combineDateAndTime(
+                              tempStart ?? DateTime.now(),
+                              timeOfDay,
+                            );
+                          });
+                        },
                       ),
-                      SliverPadding(
-                        padding: EdgeInsets.only(
-                          left: Spacing.smMedium,
-                          right: Spacing.smMedium,
-                          bottom: Spacing.smMedium,
-                        ),
-                        sliver: SliverToBoxAdapter(
-                          child: Container(
-                            height: 1,
-                            color: LemonColor.white03,
-                          ),
-                        ),
-                      ),
-                      SliverPadding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: Spacing.smMedium,
-                        ),
-                        sliver: SliverToBoxAdapter(
-                          child: EventDatetimeSettingRowItem(
-                            label: t.event.datetimeSettings.ends,
-                            dotColor: LemonColor.coralReef,
-                            expanded: expandedEnds == true,
-                            selectedDateTime: tempEnd ?? DateTime.now(),
-                            onSelectTab: () {
-                              setState(() {
-                                expandedStarts = false;
-                                expandedEnds = true;
-                              });
-                            },
-                            onDateChanged: (DateTime datetime) {
-                              setState(() {
-                                tempEnd =
-                                    date_utils.DateUtils.combineDateAndTime(
-                                  datetime,
-                                  TimeOfDay(
-                                    hour: tempEnd!.hour,
-                                    minute: tempEnd!.minute,
-                                  ),
-                                );
-                              });
-                            },
-                            onTimeChanged: (TimeOfDay timeOfDay) {
-                              setState(() {
-                                tempEnd =
-                                    date_utils.DateUtils.combineDateAndTime(
-                                  tempEnd ?? DateTime.now(),
-                                  timeOfDay,
-                                );
-                              });
-                            },
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Container(
-                      padding: EdgeInsets.all(Spacing.smMedium),
-                      child: SafeArea(
-                        child: LinearGradientButton.primaryButton(
-                          onTap: () {
-                            context.read<EventDateTimeSettingsBloc>().add(
-                                  EventDateTimeSettingsEventSaveChanges(
-                                    newStart: tempStart ?? DateTime.now(),
-                                    newEnd: tempEnd ?? DateTime.now(),
-                                  ),
-                                );
-                          },
-                          label: t.common.actions.saveChanges,
-                          textColor: colorScheme.onPrimary,
-                          loadingWhen:
-                              state.status == FormzSubmissionStatus.inProgress,
-                        ),
+                  SliverPadding(
+                    padding: EdgeInsets.only(
+                      left: Spacing.smMedium,
+                      right: Spacing.smMedium,
+                      bottom: Spacing.smMedium,
+                    ),
+                    sliver: SliverToBoxAdapter(
+                      child: Container(
+                        height: 1,
+                        color: LemonColor.white03,
+                      ),
+                    ),
+                  ),
+                  SliverPadding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: Spacing.smMedium,
+                    ),
+                    sliver: SliverToBoxAdapter(
+                      child: EventDatetimeSettingRowItem(
+                        label: t.event.datetimeSettings.ends,
+                        dotColor: LemonColor.coralReef,
+                        expanded: expandedEnds == true,
+                        selectedDateTime: tempEnd ?? DateTime.now(),
+                        onSelectTab: () {
+                          setState(() {
+                            expandedStarts = false;
+                            expandedEnds = true;
+                          });
+                        },
+                        onDateChanged: (DateTime datetime) {
+                          setState(() {
+                            tempEnd = date_utils.DateUtils.combineDateAndTime(
+                              datetime,
+                              TimeOfDay(
+                                hour: tempEnd!.hour,
+                                minute: tempEnd!.minute,
+                              ),
+                            );
+                          });
+                        },
+                        onTimeChanged: (TimeOfDay timeOfDay) {
+                          setState(() {
+                            tempEnd = date_utils.DateUtils.combineDateAndTime(
+                              tempEnd ?? DateTime.now(),
+                              timeOfDay,
+                            );
+                          });
+                        },
                       ),
                     ),
                   ),
                 ],
-              );
-            },
+              ),
+              BlocBuilder<EventDateTimeSettingsBloc,
+                  EventDateTimeSettingsState>(builder: (context, state) {
+                return Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    padding: EdgeInsets.all(Spacing.smMedium),
+                    child: SafeArea(
+                      child: LinearGradientButton.primaryButton(
+                        onTap: () {
+                          context.read<EventDateTimeSettingsBloc>().add(
+                                EventDateTimeSettingsEventSaveChanges(
+                                  event: widget.event,
+                                  newStart: tempStart ?? DateTime.now(),
+                                  newEnd: tempEnd ?? DateTime.now(),
+                                ),
+                              );
+                        },
+                        label: t.common.actions.saveChanges,
+                        textColor: colorScheme.onPrimary,
+                        loadingWhen:
+                            state.status == FormzSubmissionStatus.inProgress,
+                      ),
+                    ),
+                  ),
+                );
+              }),
+            ],
           ),
         ),
       ),

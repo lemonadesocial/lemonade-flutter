@@ -8,6 +8,7 @@ import 'package:app/core/constants/event/event_constants.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:app/core/utils/date_utils.dart' as date_utils;
 
 @RoutePage()
 class EventControlPanelPage extends StatelessWidget
@@ -29,9 +30,10 @@ class EventControlPanelPage extends StatelessWidget
             ..add(
               EventDateTimeSettingsEvent.init(
                 startDateTime:
-                    event?.start!.toLocal() ?? EventDateTimeConstants.defaultStartDateTime,
+                    event?.start ?? EventDateTimeConstants.defaultStartDateTime,
                 endDateTime:
-                    event?.end!.toLocal() ?? EventDateTimeConstants.defaultEndDateTime,
+                    event?.end ?? EventDateTimeConstants.defaultEndDateTime,
+                timezone: event?.timezone,
               ),
             ),
         ),

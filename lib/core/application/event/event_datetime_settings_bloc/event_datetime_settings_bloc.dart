@@ -1,11 +1,16 @@
+import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/core/domain/form/datetime_formz.dart';
+import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:app/core/utils/date_utils.dart' as date_utils;
+import 'package:timezone/timezone.dart';
 
 part 'event_datetime_settings_bloc.freezed.dart';
 
@@ -18,20 +23,29 @@ class EventDateTimeSettingsBloc
     on<TimezoneChanged>(_onTimezoneChanged);
     on<EventDateTimeSettingsEventReset>(_onReset);
   }
+  final EventRepository eventRepository = getIt<EventRepository>();
 
   Future<void> _onInit(
     EventDateTimeSettingsEventInit event,
     Emitter emit,
   ) async {
     emit(state.copyWith(status: FormzSubmissionStatus.initial));
-    final start = DateTimeFormz.dirty(event.startDateTime);
-    final end = DateTimeFormz.dirty(event.endDateTime);
-    final timezone = date_utils.DateUtils.getUserTimezoneOptionValue();
+    final location = getLocation(
+      event.timezone ?? date_utils.DateUtils.getUserTimezoneOptionValue(),
+    );
+    final start = DateTimeFormz.dirty(
+      event.startDateTime
+          .add(Duration(milliseconds: location.currentTimeZone.offset)),
+    );
+    final end = DateTimeFormz.dirty(
+      event.endDateTime
+          .add(Duration(milliseconds: location.currentTimeZone.offset)),
+    );
     emit(
       state.copyWith(
         start: start,
         end: end,
-        timezone: timezone,
+        timezone: event.timezone,
       ),
     );
   }
@@ -64,14 +78,40 @@ class EventDateTimeSettingsBloc
         ),
       );
     } else {
-      emit(
-        state.copyWith(
-          start: DateTimeFormz.dirty(newStart),
-          end: DateTimeFormz.dirty(newEnd),
-          isValid: true,
-          status: FormzSubmissionStatus.success,
-        ),
-      );
+      // Edit mode
+      if (event.event != null) {
+        final location = getLocation(state.timezone ?? '');
+        final startUtcDateTime = newStart
+            .add(Duration(milliseconds: location.currentTimeZone.offset * -1));
+        final endUtcDateTime = newEnd
+            .add(Duration(milliseconds: location.currentTimeZone.offset * -1));
+
+        final result = await eventRepository.updateEvent(
+          input: Input$EventInput(
+            start: DateTime.parse(startUtcDateTime.toIso8601String()),
+            end: DateTime.parse(endUtcDateTime.toIso8601String()),
+          ),
+          id: event.event?.id ?? '',
+        );
+        result.fold(
+          (failure) =>
+              emit(state.copyWith(status: FormzSubmissionStatus.failure)),
+          (eventDetail) => emit(
+            state.copyWith(
+              status: FormzSubmissionStatus.success,
+            ),
+          ),
+        );
+      } else {
+        emit(
+          state.copyWith(
+            start: DateTimeFormz.dirty(newStart),
+            end: DateTimeFormz.dirty(newEnd),
+            isValid: true,
+            status: FormzSubmissionStatus.success,
+          ),
+        );
+      }
     }
   }
 
@@ -105,8 +145,9 @@ class EventDateTimeSettingsBloc
 @freezed
 class EventDateTimeSettingsEvent with _$EventDateTimeSettingsEvent {
   factory EventDateTimeSettingsEvent.init({
-    required DateTime startDateTime,
     required DateTime endDateTime,
+    required DateTime startDateTime,
+    String? timezone,
   }) = EventDateTimeSettingsEventInit;
 
   const factory EventDateTimeSettingsEvent.timezoneChanged({
@@ -114,6 +155,7 @@ class EventDateTimeSettingsEvent with _$EventDateTimeSettingsEvent {
   }) = TimezoneChanged;
 
   const factory EventDateTimeSettingsEvent.saveChanges({
+    Event? event,
     required DateTime newStart,
     required DateTime newEnd,
   }) = EventDateTimeSettingsEventSaveChanges;

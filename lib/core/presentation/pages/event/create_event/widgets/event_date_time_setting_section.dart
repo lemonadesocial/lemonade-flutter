@@ -60,8 +60,8 @@ class EventDateTimeSettingSection extends StatelessWidget {
                         backgroundColor: LemonColor.atomicBlack,
                         context: context,
                         enableDrag: false,
-                        builder: (innerContext) =>
-                            const EventDatetimeSettingsPage(
+                        builder: (innerContext) => EventDatetimeSettingsPage(
+                          event: event,
                           expandedStarts: true,
                           expandedEnds: false,
                         ),
@@ -82,8 +82,8 @@ class EventDateTimeSettingSection extends StatelessWidget {
                         backgroundColor: LemonColor.atomicBlack,
                         context: context,
                         enableDrag: false,
-                        builder: (innerContext) =>
-                            const EventDatetimeSettingsPage(
+                        builder: (innerContext) => EventDatetimeSettingsPage(
+                          event: event,
                           expandedStarts: false,
                           expandedEnds: true,
                         ),

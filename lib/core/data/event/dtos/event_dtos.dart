@@ -67,6 +67,7 @@ class EventDto with _$EventDto {
     @JsonKey(name: 'application_form_submission')
     DateTime? applicationFormSubmission,
     @JsonKey(name: 'guest_directory_enabled') bool? guestDirectoryEnabled,
+    String? timezone,
   }) = _EventDto;
 
   factory EventDto.fromJson(Map<String, dynamic> json) =>
