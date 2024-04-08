@@ -91,7 +91,10 @@ class SnackBarUtils {
         colorScheme: SnackBarUtils._colorScheme,
         title: title ?? t.common.success,
         message: message ?? '',
-        icon: Assets.icons.icSuccess.svg(),
+        icon: Assets.icons.icSuccess.svg(
+          width: Sizing.small,
+          height: Sizing.small,
+        ),
       ),
       isIgnoring: false,
     );
@@ -106,7 +109,10 @@ class SnackBarUtils {
         colorScheme: SnackBarUtils._colorScheme,
         title: title ?? t.common.error.label,
         message: message ?? t.common.somethingWrong,
-        icon: Assets.icons.icError.svg(),
+        icon: Assets.icons.icError.svg(
+          width: Sizing.small,
+          height: Sizing.small,
+        ),
       ),
       isIgnoring: false,
     );
