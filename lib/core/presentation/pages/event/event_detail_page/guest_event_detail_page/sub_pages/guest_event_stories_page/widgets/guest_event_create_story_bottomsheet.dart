@@ -86,6 +86,7 @@ class _GuestEventCreateStoryBottomsheetState
                                   '${t.home.whatOnYourMind}, ${currentUser?.name}?',
                             ),
                             maxLines: null,
+                            cursorColor: colorScheme.onSecondary,
                             onChanged: (value) {
                               context.read<CreateEventStoryBloc>().add(
                                     CreateEventStoryEvent.onDescriptionChanged(

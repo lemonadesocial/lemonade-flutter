@@ -191,7 +191,7 @@ class EventDetailNavigationBarHelper {
         ),
         onTap: () {
           Vibrate.feedback(FeedbackType.light);
-          SnackBarUtils.showComingSoon();
+          AutoRouter.of(context).navigate(const GuestEventStoriesRoute());
         },
       ),
       FeatureItem(

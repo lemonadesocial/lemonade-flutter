@@ -471,7 +471,8 @@
     "eventLounge": {
         "eventLoungeTitle": "Lounge",
         "liveChatDescription": "Connect with other attendees!",
-        "newMessages": "New messages"
+        "newMessages": "New messages",
+        "emptyStories": "No posts added yet, Create one and start\ninteracting now!"
     },
     "eventGuestDirectory": {
         "eventGuestDirectoryTitle": "Guests"

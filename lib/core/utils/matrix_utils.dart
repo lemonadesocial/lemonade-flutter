@@ -5,6 +5,6 @@ class LemonadeMatrixUtils {
     required String lemonadeMatrixLocalpart,
   }) {
     final isProd = AppConfig.isProduction;
-    return '@$lemonadeMatrixLocalpart:${isProd ? 'lemonade.social' : 'staging.social'}';
+    return '@$lemonadeMatrixLocalpart:${isProd ? 'lemonade.social' : 'staging.lemonade.social'}';
   }
 }
