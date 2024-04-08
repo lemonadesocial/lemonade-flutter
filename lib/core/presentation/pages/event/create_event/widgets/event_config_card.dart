@@ -30,7 +30,7 @@ class EventConfigCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
+        padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall, vertical: Spacing.xSmall),
         decoration: BoxDecoration(
           color: selected == true ? LemonColor.atomicBlack : Colors.transparent,
           border:
