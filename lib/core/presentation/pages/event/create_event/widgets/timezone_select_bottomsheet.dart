@@ -1,5 +1,6 @@
 import 'package:app/core/application/event/edit_event_detail_bloc/edit_event_detail_bloc.dart';
 import 'package:app/core/application/event/event_datetime_settings_bloc/event_datetime_settings_bloc.dart';
+import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/constants/event/event_constants.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
@@ -13,6 +14,7 @@ import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:wheel_picker/wheel_picker.dart';
 
@@ -58,9 +60,10 @@ class _TimezoneSelectBottomSheetState extends State<TimezoneSelectBottomSheet> {
       surroundingOpacity: .25,
       magnification: 1.2,
     );
-    return BlocListener<EditEventDetailBloc, EditEventDetailState>(
-      listener: (context, state) {
-        if (state.status == EditEventDetailBlocStatus.success) {
+    return BlocListener<EventDateTimeSettingsBloc, EventDateTimeSettingsState>(
+      listener: (context, state) async {
+        if (state.isValid == true &&
+            state.status == FormzSubmissionStatus.success) {
           SnackBarUtils.showCustom(
             title: "${t.common.saved}!",
             message: t.event.datetimeSettings.timezoneUpdated,
@@ -68,6 +71,11 @@ class _TimezoneSelectBottomSheetState extends State<TimezoneSelectBottomSheet> {
             showIconContainer: true,
             iconContainerColor: LemonColor.acidGreen,
           );
+          context.read<GetEventDetailBloc>().add(
+                GetEventDetailEvent.fetch(
+                  eventId: widget.event!.id ?? '',
+                ),
+              );
           AutoRouter.of(context).pop();
         }
       },
@@ -124,7 +132,8 @@ class _TimezoneSelectBottomSheetState extends State<TimezoneSelectBottomSheet> {
                     ),
                   ],
                 ),
-                BlocBuilder<EditEventDetailBloc, EditEventDetailState>(
+                BlocBuilder<EventDateTimeSettingsBloc,
+                    EventDateTimeSettingsState>(
                   builder: (context, state) {
                     return Container(
                       padding: EdgeInsets.symmetric(
@@ -133,16 +142,11 @@ class _TimezoneSelectBottomSheetState extends State<TimezoneSelectBottomSheet> {
                       ),
                       child: LinearGradientButton.primaryButton(
                         onTap: () {
-                          context.read<EventDateTimeSettingsBloc>().add(
-                                EventDateTimeSettingsEvent.timezoneChanged(
-                                  timezone: selectedTimezone ?? '',
-                                ),
-                              );
                           // Edit event
                           if (widget.event != null) {
-                            context.read<EditEventDetailBloc>().add(
-                                  EditEventDetailEvent.update(
-                                    eventId: widget.event?.id ?? '',
+                            context.read<EventDateTimeSettingsBloc>().add(
+                                  EventDateTimeSettingsEventSaveChangesTimezone(
+                                    event: widget.event,
                                     timezone: selectedTimezone ?? '',
                                   ),
                                 );
@@ -161,7 +165,7 @@ class _TimezoneSelectBottomSheetState extends State<TimezoneSelectBottomSheet> {
                         },
                         label: t.common.actions.saveChanges,
                         loadingWhen:
-                            state.status == EditEventDetailBlocStatus.loading,
+                            state.status == FormzSubmissionStatus.inProgress,
                       ),
                     );
                   },

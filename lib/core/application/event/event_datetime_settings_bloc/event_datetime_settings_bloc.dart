@@ -20,7 +20,7 @@ class EventDateTimeSettingsBloc
   EventDateTimeSettingsBloc() : super(const EventDateTimeSettingsState()) {
     on<EventDateTimeSettingsEventInit>(_onInit);
     on<EventDateTimeSettingsEventSaveChanges>(_onSaveChanges);
-    on<TimezoneChanged>(_onTimezoneChanged);
+    on<EventDateTimeSettingsEventSaveChangesTimezone>(_onSaveChangesTimezone);
     on<EventDateTimeSettingsEventReset>(_onReset);
   }
   final EventRepository eventRepository = getIt<EventRepository>();
@@ -30,9 +30,9 @@ class EventDateTimeSettingsBloc
     Emitter emit,
   ) async {
     emit(state.copyWith(status: FormzSubmissionStatus.initial));
-    final location = getLocation(
-      event.timezone ?? date_utils.DateUtils.getUserTimezoneOptionValue(),
-    );
+    final finalTimezone =
+        event.timezone ?? date_utils.DateUtils.getUserTimezoneOptionValue();
+    final location = getLocation(finalTimezone);
     final start = DateTimeFormz.dirty(
       event.startDateTime
           .add(Duration(milliseconds: location.currentTimeZone.offset)),
@@ -45,7 +45,7 @@ class EventDateTimeSettingsBloc
       state.copyWith(
         start: start,
         end: end,
-        timezone: event.timezone,
+        timezone: finalTimezone,
       ),
     );
   }
@@ -57,7 +57,13 @@ class EventDateTimeSettingsBloc
     emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
     final newStart = event.newStart;
     final newEnd = event.newEnd;
-    if (newStart.isBefore(DateTime.now()) || newEnd.isBefore(DateTime.now())) {
+    final location = getLocation(state.timezone ?? '');
+    final startUtcDateTime = newStart
+        .add(Duration(milliseconds: location.currentTimeZone.offset * -1));
+    final endUtcDateTime = newEnd
+        .add(Duration(milliseconds: location.currentTimeZone.offset * -1));
+
+    if (startUtcDateTime.isBefore(DateTime.now().toUtc()) || endUtcDateTime.isBefore(DateTime.now().toUtc())) {
       emit(
         state.copyWith(
           start: DateTimeFormz.dirty(newStart),
@@ -80,12 +86,6 @@ class EventDateTimeSettingsBloc
     } else {
       // Edit mode
       if (event.event != null) {
-        final location = getLocation(state.timezone ?? '');
-        final startUtcDateTime = newStart
-            .add(Duration(milliseconds: location.currentTimeZone.offset * -1));
-        final endUtcDateTime = newEnd
-            .add(Duration(milliseconds: location.currentTimeZone.offset * -1));
-
         final result = await eventRepository.updateEvent(
           input: Input$EventInput(
             start: DateTime.parse(startUtcDateTime.toIso8601String()),
@@ -98,7 +98,10 @@ class EventDateTimeSettingsBloc
               emit(state.copyWith(status: FormzSubmissionStatus.failure)),
           (eventDetail) => emit(
             state.copyWith(
+              isValid: true,
               status: FormzSubmissionStatus.success,
+              start: DateTimeFormz.dirty(newStart),
+              end: DateTimeFormz.dirty(newEnd),
             ),
           ),
         );
@@ -115,15 +118,46 @@ class EventDateTimeSettingsBloc
     }
   }
 
-  Future<void> _onTimezoneChanged(
-    TimezoneChanged event,
-    Emitter<EventDateTimeSettingsState> emit,
+  Future<void> _onSaveChangesTimezone(
+    EventDateTimeSettingsEventSaveChangesTimezone event,
+    Emitter emit,
   ) async {
-    emit(
-      state.copyWith(
-        timezone: event.timezone,
-      ),
-    );
+    emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
+    // Edit mode
+    if (event.event != null) {
+      final location = getLocation(state.timezone ?? '');
+      final startUtcDateTime = state.start.value!
+          .add(Duration(milliseconds: location.currentTimeZone.offset * -1));
+      final endUtcDateTime = state.end.value!
+          .add(Duration(milliseconds: location.currentTimeZone.offset * -1));
+
+      final result = await eventRepository.updateEvent(
+        input: Input$EventInput(
+            start: DateTime.parse(startUtcDateTime.toIso8601String()),
+            end: DateTime.parse(endUtcDateTime.toIso8601String()),
+            timezone: event.timezone),
+        id: event.event?.id ?? '',
+      );
+      result.fold(
+        (failure) =>
+            emit(state.copyWith(status: FormzSubmissionStatus.failure)),
+        (eventDetail) => emit(
+          state.copyWith(
+            status: FormzSubmissionStatus.success,
+            isValid: true,
+            timezone: event.timezone,
+          ),
+        ),
+      );
+    } else {
+      emit(
+        state.copyWith(
+          timezone: event.timezone,
+          isValid: true,
+          status: FormzSubmissionStatus.success,
+        ),
+      );
+    }
   }
 
   Future<void> _onReset(
@@ -150,15 +184,16 @@ class EventDateTimeSettingsEvent with _$EventDateTimeSettingsEvent {
     String? timezone,
   }) = EventDateTimeSettingsEventInit;
 
-  const factory EventDateTimeSettingsEvent.timezoneChanged({
-    required String timezone,
-  }) = TimezoneChanged;
-
   const factory EventDateTimeSettingsEvent.saveChanges({
     Event? event,
     required DateTime newStart,
     required DateTime newEnd,
   }) = EventDateTimeSettingsEventSaveChanges;
+
+  const factory EventDateTimeSettingsEvent.saveChangesTimezone({
+    Event? event,
+    required String timezone,
+  }) = EventDateTimeSettingsEventSaveChangesTimezone;
 
   const factory EventDateTimeSettingsEvent.reset() =
       EventDateTimeSettingsEventReset;
