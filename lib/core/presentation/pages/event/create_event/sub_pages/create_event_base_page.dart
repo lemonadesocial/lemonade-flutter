@@ -109,9 +109,9 @@ class CreateEventBasePage extends StatelessWidget {
                                   EventDescriptionFieldRoute(
                                     description: state.description.value,
                                     onDescriptionChanged: (value) {
-                                      context
-                                          .read<CreateEventBloc>()
-                                          .add(EventDescriptionChanged(description: value));
+                                      context.read<CreateEventBloc>().add(
+                                          EventDescriptionChanged(
+                                              description: value));
                                     },
                                   ),
                                 );

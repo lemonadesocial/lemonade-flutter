@@ -360,6 +360,9 @@ final createEventRoutes = AutoRoute(
       page: CreateEventBaseRoute.page,
     ),
     AutoRoute(
+      page: EventDescriptionFieldRoute.page,
+    ),
+    AutoRoute(
       page: EventGuestSettingsRoute.page,
     ),
     AutoRoute(

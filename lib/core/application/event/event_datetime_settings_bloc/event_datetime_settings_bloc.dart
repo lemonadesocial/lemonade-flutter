@@ -63,7 +63,8 @@ class EventDateTimeSettingsBloc
     final endUtcDateTime = newEnd
         .add(Duration(milliseconds: location.currentTimeZone.offset * -1));
 
-    if (startUtcDateTime.isBefore(DateTime.now().toUtc()) || endUtcDateTime.isBefore(DateTime.now().toUtc())) {
+    if (startUtcDateTime.isBefore(DateTime.now().toUtc()) ||
+        endUtcDateTime.isBefore(DateTime.now().toUtc())) {
       emit(
         state.copyWith(
           start: DateTimeFormz.dirty(newStart),
