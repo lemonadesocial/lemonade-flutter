@@ -45,7 +45,7 @@ class GuestEventStoriesPage extends StatelessWidget {
         fetchPolicy: FetchPolicy.networkOnly,
         variables: Variables$Query$GetEventStories(
           id: event?.id ?? '',
-          limit: 50,
+          limit: 100,
           object: "Event",
         ),
       ),
@@ -127,8 +127,10 @@ class GuestEventStoriesPage extends StatelessWidget {
                         .toList();
 
                     if (eventStories.isEmpty) {
-                      return const SliverToBoxAdapter(
-                        child: EmptyList(),
+                      return SliverToBoxAdapter(
+                        child: EmptyList(
+                          emptyText: t.event.eventLounge.emptyStories,
+                        ),
                       );
                     }
 

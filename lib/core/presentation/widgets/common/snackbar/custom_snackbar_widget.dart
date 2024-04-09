@@ -75,11 +75,7 @@ class CustomSnackbar extends StatelessWidget {
                       : const SizedBox(),
                 )
               : icon != null
-                  ? SizedBox(
-                      width: Sizing.small,
-                      height: Sizing.small,
-                      child: icon,
-                    )
+                  ? icon!
                   : const SizedBox(),
           SizedBox(
             width: Spacing.xSmall,

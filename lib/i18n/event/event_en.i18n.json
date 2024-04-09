@@ -473,7 +473,8 @@
     "eventLounge": {
         "eventLoungeTitle": "Lounge",
         "liveChatDescription": "Connect with other attendees!",
-        "newMessages": "New messages"
+        "newMessages": "New messages",
+        "emptyStories": "No posts added yet, Create one and start\ninteracting now!"
     },
     "eventGuestDirectory": {
         "eventGuestDirectoryTitle": "Guests"
@@ -487,6 +488,9 @@
         "endMustAfterStart": "End date must be after start date"
     },
     "eventMail": {
-        "eventMailTicketsSuccess": "Tickets sent to $email"
+        "receiptSentTitle": "Ticket receipt sent!",
+        "rsvpSentTitle": "RSVP confirmation sent!",
+        "checkYourInbox": "Check your inbox at $email",
+        "receiptNotAvailableError": "Only the user who made the purchase can access the receipt"
     }
 }

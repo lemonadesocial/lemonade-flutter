@@ -101,11 +101,11 @@ class _GuestLimitTicketSettingState extends State<GuestLimitTicketSetting> {
             onChange: (value) {
               context.read<ModifyTicketTypeBloc>().add(
                     ModifyTicketTypeEvent.onGuestsLimitChanged(
-                      limit: double.parse(value),
+                      limit: value.isNotEmpty ? double.parse(value) : 0,
                     ),
                   );
             },
-            textInputType: const TextInputType.numberWithOptions(signed: true),
+            textInputType: TextInputType.number,
             hintText: t.event.ticketTierSetting.limitOfGuestsAllowed,
           ),
       ],

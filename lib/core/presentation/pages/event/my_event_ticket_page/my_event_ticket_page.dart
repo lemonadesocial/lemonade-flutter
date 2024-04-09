@@ -74,6 +74,8 @@ class MyEventTicketPageView extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
     final userId = AuthUtils.getUserId(context);
+    final getMyTicketsBloc = context.watch<GetMyTicketsBloc>();
+
     return Scaffold(
       backgroundColor: colorScheme.background,
       appBar: const LemonAppBar(
@@ -87,6 +89,15 @@ class MyEventTicketPageView extends StatelessWidget {
             ),
             loading: () => Loading.defaultLoading(context),
             fetched: (eventDetail) {
+              if (getMyTicketsBloc.state is GetMyTicketsStateLoading) {
+                return Loading.defaultLoading(context);
+              }
+              if (getMyTicketsBloc.state is GetMyTicketsStateFailure) {
+                return EmptyList(
+                  emptyText: t.common.somethingWrong,
+                );
+              }
+
               return Padding(
                 padding: EdgeInsets.symmetric(horizontal: Spacing.small),
                 child: CustomScrollView(
@@ -113,7 +124,19 @@ class MyEventTicketPageView extends StatelessWidget {
                           SizedBox(height: Spacing.medium),
                           BlocBuilder<GetMyTicketsBloc, GetMyTicketsState>(
                             builder: (context, myTicketsState) {
-                              List<EventTicket> ingTickets =
+                              final assignedToMeTicket =
+                                  myTicketsState.maybeWhen(
+                                orElse: () => null,
+                                success: (myTickets) =>
+                                    myTickets.firstWhereOrNull(
+                                  (ticket) =>
+                                      EventTicketUtils.isTicketAssignedToMe(
+                                    ticket,
+                                    userId: userId,
+                                  ),
+                                ),
+                              );
+                              List<EventTicket> remainingTickets =
                                   myTicketsState.maybeWhen(
                                 orElse: () => [],
                                 success: (myTickets) => myTickets
@@ -128,7 +151,8 @@ class MyEventTicketPageView extends StatelessWidget {
                               );
                               return EventTicketActions(
                                 event: eventDetail,
-                                remainingTickets: ingTickets,
+                                assignedToMeTicket: assignedToMeTicket,
+                                remainingTickets: remainingTickets,
                               );
                             },
                           ),

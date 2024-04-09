@@ -131,6 +131,7 @@ class UserRepositoryImpl implements UserRepository {
     final result = await _gqlClient.query(
       QueryOptions(
         document: getUserFollowsQuery,
+        fetchPolicy: FetchPolicy.networkOnly,
         parserFn: (data) => List.from(data['getUserFollows'] ?? [])
             .map(
               (item) => UserFollow.fromDto(
