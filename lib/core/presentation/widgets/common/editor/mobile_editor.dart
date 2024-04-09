@@ -11,10 +11,12 @@ class MobileEditor extends StatefulWidget {
     super.key,
     required this.editorState,
     this.editorStyle,
+    this.autoFocus,
   });
 
   final EditorState editorState;
   final EditorStyle? editorStyle;
+  final bool? autoFocus;
 
   @override
   State<MobileEditor> createState() => _MobileEditorState();
@@ -97,7 +99,7 @@ class _MobileEditorState extends State<MobileEditor> {
                 );
               },
               child: AppFlowyEditor(
-                autoFocus: true,
+                autoFocus: widget.autoFocus ?? true,
                 editorStyle: editorStyle,
                 editorState: editorState,
                 editorScrollController: editorScrollController,

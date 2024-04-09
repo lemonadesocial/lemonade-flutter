@@ -10,6 +10,7 @@ import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -64,15 +65,19 @@ class EventControlPanelBasePage extends StatelessWidget {
                           EdgeInsets.symmetric(horizontal: Spacing.smMedium),
                       sliver: SliverToBoxAdapter(
                         child: EventConfigCard(
-                          title: "Title & Description",
-                          description: "Description",
+                          title: t.event.eventCreation.titleAndDescription,
+                          description: event.description,
+                          maxLinesDescription: 1,
                           icon: Icon(
                             Icons.remove_red_eye_outlined,
                             size: 18,
                             color: LemonColor.white54,
                           ),
                           selected: false,
-                          onTap: () {},
+                          onTap: () {
+                            AutoRouter.of(context).navigate(
+                                const EventTitleDescriptionSettingRoute());
+                          },
                         ),
                       ),
                     ),

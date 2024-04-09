@@ -13,6 +13,7 @@ class EventConfigCard extends StatelessWidget {
   final Function() onTap;
   final bool? selected;
   final bool? loading;
+  final int? maxLinesDescription;
 
   const EventConfigCard({
     super.key,
@@ -22,6 +23,7 @@ class EventConfigCard extends StatelessWidget {
     required this.onTap,
     this.selected,
     this.loading,
+    this.maxLinesDescription,
   });
 
   @override
@@ -69,6 +71,7 @@ class EventConfigCard extends StatelessWidget {
                       padding: EdgeInsets.only(top: 2.h),
                       child: Text(
                         description!,
+                        maxLines: maxLinesDescription ?? 2,
                         style: Typo.small.copyWith(
                           color: colorScheme.onSecondary,
                           fontWeight: FontWeight.w400,

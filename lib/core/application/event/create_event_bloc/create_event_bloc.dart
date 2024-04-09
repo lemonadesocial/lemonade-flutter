@@ -82,11 +82,6 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
         isValid: Formz.validate([title, description]),
       ),
     );
-    print(">>>>>>>");
-    print(startUtcDateTime);
-    print(endUtcDateTime);
-    print(event.timezone);
-    return;
     if (state.isValid) {
       emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
       var input = Input$EventInput(

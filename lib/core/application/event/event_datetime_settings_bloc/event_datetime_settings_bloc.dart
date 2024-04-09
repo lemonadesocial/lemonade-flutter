@@ -126,7 +126,7 @@ class EventDateTimeSettingsBloc
     emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
     // Edit mode
     if (event.event != null) {
-      final location = getLocation(state.timezone ?? '');
+      final location = getLocation(event.timezone);
       final startUtcDateTime = state.start.value!
           .add(Duration(milliseconds: location.currentTimeZone.offset * -1));
       final endUtcDateTime = state.end.value!

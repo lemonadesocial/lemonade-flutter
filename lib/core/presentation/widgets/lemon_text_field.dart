@@ -6,29 +6,29 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LemonTextField extends StatelessWidget {
-  const LemonTextField({
-    super.key,
-    this.onChange,
-    this.initialText,
-    this.hintText,
-    this.minLines = 1,
-    this.maxLines,
-    this.borderColor,
-    this.statusWidget,
-    this.label,
-    this.suffixIcon,
-    this.leadingIcon,
-    this.autofocus = false,
-    this.inputFormatters,
-    this.controller,
-    this.contentPadding,
-    this.textInputType,
-    this.focusNode,
-    this.errorText,
-    this.readOnly,
-    this.onTap,
-    this.showRequired,
-  });
+  const LemonTextField(
+      {super.key,
+      this.onChange,
+      this.initialText,
+      this.hintText,
+      this.minLines = 1,
+      this.maxLines,
+      this.borderColor,
+      this.statusWidget,
+      this.label,
+      this.suffixIcon,
+      this.leadingIcon,
+      this.autofocus = false,
+      this.inputFormatters,
+      this.controller,
+      this.contentPadding,
+      this.textInputType,
+      this.focusNode,
+      this.errorText,
+      this.readOnly,
+      this.onTap,
+      this.showRequired,
+      this.fillColor});
 
   final ValueChanged<String>? onChange;
   final String? initialText;
@@ -50,6 +50,7 @@ class LemonTextField extends StatelessWidget {
   final bool? readOnly;
   final Function()? onTap;
   final bool? showRequired;
+  final Color? fillColor;
 
   @override
   Widget build(BuildContext context) {
@@ -121,6 +122,8 @@ class LemonTextField extends StatelessWidget {
             contentPadding: contentPadding ?? EdgeInsets.all(Spacing.smMedium),
             suffixIcon: suffixIcon,
             prefixIcon: leadingIcon,
+            filled: true,
+            fillColor: fillColor ?? Colors.transparent,
           ),
           inputFormatters: inputFormatters,
           readOnly: readOnly ?? false,
