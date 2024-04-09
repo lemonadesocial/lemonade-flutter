@@ -67,4 +67,13 @@ class StringUtils {
     RegExp exp = RegExp(r"<[^>]*>", multiLine: true, caseSensitive: true);
     return htmlString.replaceAll(exp, ' ').trim();
   }
+
+  static String removeMarkdownSyntax(String? markdown) {
+    if (markdown == null) {
+      return '';
+    }
+    RegExp regex = RegExp(r'[*_~`#]');
+    final result = markdown.replaceAll(regex, '');
+    return result;
+  }
 }

@@ -4,6 +4,7 @@ import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/bottomsheet_utils.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
+import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -11,6 +12,7 @@ import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class GuestEventDetailAboutCard extends StatelessWidget {
@@ -113,7 +115,7 @@ class GuestEventDetailAboutCard extends StatelessWidget {
                   height: Spacing.smMedium,
                 ),
                 Text(
-                  event.description ?? '',
+                  StringUtils.removeMarkdownSyntax(event.description ?? ''),
                   style: Typo.mediumPlus.copyWith(
                     color: colorScheme.onSurface,
                   ),
