@@ -81,7 +81,21 @@ class CheckListItemBaseWidget extends StatelessWidget {
             ),
             if (child != null)
               Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: Spacing.small,
+                  vertical: Spacing.small,
+                ),
                 decoration: BoxDecoration(
+                  color: fulfilled
+                      ? Colors.transparent
+                      : colorScheme.secondaryContainer,
+                  border: fulfilled
+                      ? Border(
+                          left: BorderSide(color: colorScheme.outline),
+                          right: BorderSide(color: colorScheme.outline),
+                          bottom: BorderSide(color: colorScheme.outline),
+                        )
+                      : null,
                   borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(LemonRadius.medium),
                     bottomRight: Radius.circular(LemonRadius.medium),
