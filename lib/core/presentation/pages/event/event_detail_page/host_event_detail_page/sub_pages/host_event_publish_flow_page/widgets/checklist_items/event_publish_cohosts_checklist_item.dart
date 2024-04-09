@@ -39,7 +39,7 @@ class EventPublishCohostsChecklistItem extends StatelessWidget {
       title: t.event.eventPublish.addCohosts,
       icon: Assets.icons.icHostOutline,
       fulfilled: fulfilled,
-      child: Column(
+      child: hosts.isNotEmpty ? Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           ...hosts.map((entry) {
@@ -49,7 +49,7 @@ class EventPublishCohostsChecklistItem extends StatelessWidget {
             );
           }),
         ],
-      ),
+      ) : null,
     );
   }
 }
