@@ -9,10 +9,11 @@ import 'package:auto_route/auto_route.dart';
 
 @RoutePage()
 class EventDescriptionFieldPage extends StatefulWidget {
-  const EventDescriptionFieldPage(
-      {super.key,
-      required this.description,
-      required this.onDescriptionChanged});
+  const EventDescriptionFieldPage({
+    super.key,
+    required this.description,
+    required this.onDescriptionChanged,
+  });
   final String description;
   final Function(String value) onDescriptionChanged;
 

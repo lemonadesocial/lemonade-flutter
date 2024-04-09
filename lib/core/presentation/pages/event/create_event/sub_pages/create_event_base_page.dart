@@ -4,7 +4,6 @@ import 'package:app/core/application/event/event_guest_settings_bloc/event_guest
 import 'package:app/core/application/event/event_location_setting_bloc/event_location_setting_bloc.dart';
 import 'package:app/core/constants/event/event_constants.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/create_event_config_grid.dart';
-import 'package:app/core/presentation/pages/event/create_event/sub_pages/event_description_field_page.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/event_date_time_setting_section.dart';
 import 'package:app/core/presentation/pages/setting/widgets/setting_tile_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
@@ -14,7 +13,6 @@ import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/router/app_router.gr.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
@@ -25,7 +23,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:formz/formz.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 @RoutePage()
 class CreateEventBasePage extends StatelessWidget {
@@ -110,8 +107,10 @@ class CreateEventBasePage extends StatelessWidget {
                                     description: state.description.value,
                                     onDescriptionChanged: (value) {
                                       context.read<CreateEventBloc>().add(
-                                          EventDescriptionChanged(
-                                              description: value));
+                                            EventDescriptionChanged(
+                                              description: value,
+                                            ),
+                                          );
                                     },
                                   ),
                                 );

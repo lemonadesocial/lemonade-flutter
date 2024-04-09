@@ -76,7 +76,8 @@ class EventControlPanelBasePage extends StatelessWidget {
                           selected: false,
                           onTap: () {
                             AutoRouter.of(context).navigate(
-                                const EventTitleDescriptionSettingRoute());
+                              const EventTitleDescriptionSettingRoute(),
+                            );
                           },
                         ),
                       ),

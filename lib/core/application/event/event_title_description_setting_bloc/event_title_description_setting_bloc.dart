@@ -1,16 +1,12 @@
-import 'package:app/core/constants/event/event_constants.dart';
-import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/core/domain/form/string_formz.dart';
-import 'package:app/core/presentation/pages/event/create_event/widgets/timezone_select_bottomsheet.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:appflowy_editor/appflowy_editor.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:timezone/timezone.dart';
 
 part 'event_title_description_setting_bloc.freezed.dart';
 
