@@ -65,79 +65,80 @@ class Event with _$Event {
 
   factory Event.fromDto(EventDto dto) {
     return Event(
-        id: dto.id,
-        hostExpanded:
-            dto.hostExpanded != null ? User.fromDto(dto.hostExpanded!) : null,
-        cohostsExpanded: List.from(dto.cohostsExpanded ?? [])
-            .map((item) => item != null ? User.fromDto(item) : null)
-            .toList(),
-        newNewPhotosExpanded: (dto.newNewPhotosExpanded ?? [])
-            .map((i) => i == null ? null : DbFile.fromDto(i))
-            .toList(),
-        title: dto.title,
-        slug: dto.slug,
-        speakerUsers: List<String>.from(dto.speakerUsers ?? [])
-            .map((item) => item)
-            .toList(),
-        speakerUsersExpanded: List.from(dto.speakerUsersExpanded ?? [])
-            .map((item) => item != null ? User.fromDto(item) : null)
-            .toList(),
-        cohosts:
-            List<String>.from(dto.cohosts ?? []).map((item) => item).toList(),
-        host: dto.host,
-        broadcasts: List<BroadcastDto>.from(dto.broadcasts ?? [])
-            .map(Broadcast.fromDto)
-            .toList(),
-        description: dto.description,
-        start: dto.start,
-        end: dto.end,
-        cost: dto.cost,
-        currency: dto.currency,
-        accepted:
-            List<String>.from(dto.accepted ?? []).map((item) => item).toList(),
-        invited:
-            List<String>.from(dto.invited ?? []).map((item) => item).toList(),
-        pending:
-            List<String>.from(dto.pending ?? []).map((item) => item).toList(),
-        latitude: dto.latitude,
-        longitude: dto.longitude,
-        matrixEventRoomId: dto.matrixEventRoomId,
-        offers: List.from(dto.offers ?? [])
-            .map((item) => EventOffer.fromDto(item))
-            .toList(),
-        eventTicketTypes: List.from(dto.eventTicketTypes ?? [])
-            .map((item) => EventTicketType.fromDto(item))
-            .toList(),
-        address: dto.address != null ? Address.fromDto(dto.address!) : null,
-        paymentAccountsNew: dto.paymentAccountsNew ?? [],
-        paymentAccountsExpanded: List.from(dto.paymentAccountsExpanded ?? [])
-            .map((item) => PaymentAccount.fromDto(item))
-            .toList(),
-        guestLimit: dto.guestLimit,
-        guestLimitPer: dto.guestLimitPer,
-        virtual: dto.virtual,
-        private: dto.private,
-        rewards: List.from(dto.rewards ?? [])
-            .map((item) => Reward.fromDto(item))
-            .toList(),
-        approvalRequired: dto.approvalRequired,
-        requiredProfileFields: dto.requiredProfileFields ?? [],
-        invitedCount: dto.invitedCount?.toInt() ?? 0,
-        checkInCount: dto.checkInCount?.toInt() ?? 0,
-        attendingCount: dto.attendingCount?.toInt() ?? 0,
-        pendingRequestCount: dto.pendingRequestCount?.toInt() ?? 0,
-        sessions: List.from(dto.sessions ?? [])
-            .map((item) => EventSession.fromDto(item))
-            .toList(),
-        applicationQuestions: List.from(dto.applicationQuestions ?? [])
-            .map((item) => EventApplicationQuestion.fromDto(item))
-            .toList(),
-        applicationProfileFields: List.from(dto.applicationProfileFields ?? [])
-            .map((item) => EventApplicationProfileField.fromDto(item))
-            .toList(),
-        applicationFormSubmission: dto.applicationFormSubmission,
-        guestDirectoryEnabled: dto.guestDirectoryEnabled,
-        timezone: dto.timezone);
+      id: dto.id,
+      hostExpanded:
+          dto.hostExpanded != null ? User.fromDto(dto.hostExpanded!) : null,
+      cohostsExpanded: List.from(dto.cohostsExpanded ?? [])
+          .map((item) => item != null ? User.fromDto(item) : null)
+          .toList(),
+      newNewPhotosExpanded: (dto.newNewPhotosExpanded ?? [])
+          .map((i) => i == null ? null : DbFile.fromDto(i))
+          .toList(),
+      title: dto.title,
+      slug: dto.slug,
+      speakerUsers: List<String>.from(dto.speakerUsers ?? [])
+          .map((item) => item)
+          .toList(),
+      speakerUsersExpanded: List.from(dto.speakerUsersExpanded ?? [])
+          .map((item) => item != null ? User.fromDto(item) : null)
+          .toList(),
+      cohosts:
+          List<String>.from(dto.cohosts ?? []).map((item) => item).toList(),
+      host: dto.host,
+      broadcasts: List<BroadcastDto>.from(dto.broadcasts ?? [])
+          .map(Broadcast.fromDto)
+          .toList(),
+      description: dto.description,
+      start: dto.start,
+      end: dto.end,
+      cost: dto.cost,
+      currency: dto.currency,
+      accepted:
+          List<String>.from(dto.accepted ?? []).map((item) => item).toList(),
+      invited:
+          List<String>.from(dto.invited ?? []).map((item) => item).toList(),
+      pending:
+          List<String>.from(dto.pending ?? []).map((item) => item).toList(),
+      latitude: dto.latitude,
+      longitude: dto.longitude,
+      matrixEventRoomId: dto.matrixEventRoomId,
+      offers: List.from(dto.offers ?? [])
+          .map((item) => EventOffer.fromDto(item))
+          .toList(),
+      eventTicketTypes: List.from(dto.eventTicketTypes ?? [])
+          .map((item) => EventTicketType.fromDto(item))
+          .toList(),
+      address: dto.address != null ? Address.fromDto(dto.address!) : null,
+      paymentAccountsNew: dto.paymentAccountsNew ?? [],
+      paymentAccountsExpanded: List.from(dto.paymentAccountsExpanded ?? [])
+          .map((item) => PaymentAccount.fromDto(item))
+          .toList(),
+      guestLimit: dto.guestLimit,
+      guestLimitPer: dto.guestLimitPer,
+      virtual: dto.virtual,
+      private: dto.private,
+      rewards: List.from(dto.rewards ?? [])
+          .map((item) => Reward.fromDto(item))
+          .toList(),
+      approvalRequired: dto.approvalRequired,
+      requiredProfileFields: dto.requiredProfileFields ?? [],
+      invitedCount: dto.invitedCount?.toInt() ?? 0,
+      checkInCount: dto.checkInCount?.toInt() ?? 0,
+      attendingCount: dto.attendingCount?.toInt() ?? 0,
+      pendingRequestCount: dto.pendingRequestCount?.toInt() ?? 0,
+      sessions: List.from(dto.sessions ?? [])
+          .map((item) => EventSession.fromDto(item))
+          .toList(),
+      applicationQuestions: List.from(dto.applicationQuestions ?? [])
+          .map((item) => EventApplicationQuestion.fromDto(item))
+          .toList(),
+      applicationProfileFields: List.from(dto.applicationProfileFields ?? [])
+          .map((item) => EventApplicationProfileField.fromDto(item))
+          .toList(),
+      applicationFormSubmission: dto.applicationFormSubmission,
+      guestDirectoryEnabled: dto.guestDirectoryEnabled,
+      timezone: dto.timezone,
+    );
   }
 }
 

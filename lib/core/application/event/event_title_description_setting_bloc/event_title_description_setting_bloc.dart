@@ -20,10 +20,12 @@ class EventTitleDescriptionSettingBloc extends Bloc<
     on<EventTitleDescriptionSettingEventSaveChanges>(_onSaveChanges);
 
     if (eventDetail != null) {
-      add(EventTitleDescriptionSettingEvent.init(
-        title: eventDetail?.title ?? '',
-        description: eventDetail?.description ?? '',
-      ));
+      add(
+        EventTitleDescriptionSettingEvent.init(
+          title: eventDetail?.title ?? '',
+          description: eventDetail?.description ?? '',
+        ),
+      );
     }
   }
   final _eventRepository = getIt<EventRepository>();
@@ -72,9 +74,10 @@ class EventTitleDescriptionSettingBloc extends Bloc<
       emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
       final result = await _eventRepository.updateEvent(
         input: Input$EventInput(
-            title: state.title.value,
-            description:
-                documentToMarkdown(state.descriptionEditorState!.document)),
+          title: state.title.value,
+          description:
+              documentToMarkdown(state.descriptionEditorState!.document),
+        ),
         id: event.eventId,
       );
       result.fold(

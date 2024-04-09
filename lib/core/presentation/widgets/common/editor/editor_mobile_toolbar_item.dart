@@ -107,7 +107,6 @@ class _EditorMobileToolbarIconItemState
 
   @override
   Widget build(BuildContext context) {
-    final enable = widget.enable?.call() ?? true;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: GestureDetector(

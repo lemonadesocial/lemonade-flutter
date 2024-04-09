@@ -1,4 +1,3 @@
-import 'package:app/core/application/event/edit_event_detail_bloc/edit_event_detail_bloc.dart';
 import 'package:app/core/application/event/event_datetime_settings_bloc/event_datetime_settings_bloc.dart';
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
@@ -239,31 +238,33 @@ class _EventDatetimeSettingsPageState
                 ],
               ),
               BlocBuilder<EventDateTimeSettingsBloc,
-                  EventDateTimeSettingsState>(builder: (context, state) {
-                return Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    padding: EdgeInsets.all(Spacing.smMedium),
-                    child: SafeArea(
-                      child: LinearGradientButton.primaryButton(
-                        onTap: () {
-                          context.read<EventDateTimeSettingsBloc>().add(
-                                EventDateTimeSettingsEventSaveChanges(
-                                  event: widget.event,
-                                  newStart: tempStart ?? DateTime.now(),
-                                  newEnd: tempEnd ?? DateTime.now(),
-                                ),
-                              );
-                        },
-                        label: t.common.actions.saveChanges,
-                        textColor: colorScheme.onPrimary,
-                        loadingWhen:
-                            state.status == FormzSubmissionStatus.inProgress,
+                  EventDateTimeSettingsState>(
+                builder: (context, state) {
+                  return Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      padding: EdgeInsets.all(Spacing.smMedium),
+                      child: SafeArea(
+                        child: LinearGradientButton.primaryButton(
+                          onTap: () {
+                            context.read<EventDateTimeSettingsBloc>().add(
+                                  EventDateTimeSettingsEventSaveChanges(
+                                    event: widget.event,
+                                    newStart: tempStart ?? DateTime.now(),
+                                    newEnd: tempEnd ?? DateTime.now(),
+                                  ),
+                                );
+                          },
+                          label: t.common.actions.saveChanges,
+                          textColor: colorScheme.onPrimary,
+                          loadingWhen:
+                              state.status == FormzSubmissionStatus.inProgress,
+                        ),
                       ),
                     ),
-                  ),
-                );
-              }),
+                  );
+                },
+              ),
             ],
           ),
         ),

@@ -8,7 +8,6 @@ import 'package:app/core/constants/event/event_constants.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:app/core/utils/date_utils.dart' as date_utils;
 
 @RoutePage()
 class EventControlPanelPage extends StatelessWidget

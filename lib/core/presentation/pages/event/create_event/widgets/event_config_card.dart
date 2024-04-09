@@ -33,7 +33,9 @@ class EventConfigCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(
-            horizontal: Spacing.xSmall, vertical: Spacing.xSmall),
+          horizontal: Spacing.xSmall,
+          vertical: Spacing.xSmall,
+        ),
         decoration: BoxDecoration(
           color: selected == true ? LemonColor.atomicBlack : Colors.transparent,
           border:

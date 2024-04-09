@@ -134,9 +134,10 @@ class EventDateTimeSettingsBloc
 
       final result = await eventRepository.updateEvent(
         input: Input$EventInput(
-            start: DateTime.parse(startUtcDateTime.toIso8601String()),
-            end: DateTime.parse(endUtcDateTime.toIso8601String()),
-            timezone: event.timezone),
+          start: DateTime.parse(startUtcDateTime.toIso8601String()),
+          end: DateTime.parse(endUtcDateTime.toIso8601String()),
+          timezone: event.timezone,
+        ),
         id: event.event?.id ?? '',
       );
       result.fold(
