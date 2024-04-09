@@ -224,9 +224,10 @@ class _AppState extends State<_App> {
             scaffoldMessengerKey: SnackBarUtils.rootScaffoldMessengerKey,
             locale: _getCurrentLocale(context),
             // use provider
-            // supportedLocales: _supportedLocales,
-            supportedLocales:
-                AppFlowyEditorLocalizations.delegate.supportedLocales,
+            supportedLocales: [
+              ...AppLocaleUtils.supportedLocales,
+              ...AppFlowyEditorLocalizations.delegate.supportedLocales,
+            ],
             localizationsDelegates: const [
               GlobalMaterialLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
@@ -258,8 +259,6 @@ class _AppState extends State<_App> {
       ),
     );
   }
-
-  get _supportedLocales => AppLocaleUtils.supportedLocales;
 
   Locale _getCurrentLocale(BuildContext context) =>
       TranslationProvider.of(context).flutterLocale;
