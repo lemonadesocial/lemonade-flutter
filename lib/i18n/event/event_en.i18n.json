@@ -490,5 +490,23 @@
         "rsvpSentTitle": "RSVP confirmation sent!",
         "checkYourInbox": "Check your inbox at $email",
         "receiptNotAvailableError": "Only the user who made the purchase can access the receipt"
+    },
+    "eventPublish": {
+        "eventPublishTitle": "Publish your event",
+        "eventPublishDescription": "Your guide to crafting an unforgettable event!",
+        "addTickets": "Add tickets",
+        "addCoverPhoto": "Add cover photo",
+        "addCollectible": "Add collectible",
+        "addRewards": "Add rewards",
+        "addProgram": "Add program",
+        "addCohosts": "Add co-hosts",
+        "addSpeakers": "Add speakers",
+        "addFAQ": "Add FAQs",
+        "ratingBar": {
+            "average": "Average",
+            "good": "Good",
+            "great": "Great",
+            "awesome": "Awesome"
+        }
     }
 }

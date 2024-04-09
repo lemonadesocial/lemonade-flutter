@@ -168,6 +168,9 @@ final eventDetailRoutes = AutoRoute(
       page: ClaimRewardsRoute.page,
     ),
     AutoRoute(
+      page: HostEventPublishFlowRoute.page,
+    ),
+    AutoRoute(
       page: GuestEventRewardUsesRoute.page,
     ),
     AutoRoute(

@@ -60,6 +60,7 @@ class Event with _$Event {
     List<EventApplicationProfileField>? applicationProfileFields,
     DateTime? applicationFormSubmission,
     bool? guestDirectoryEnabled,
+    bool? published,
   }) = _Event;
 
   factory Event.fromDto(EventDto dto) {
@@ -136,6 +137,7 @@ class Event with _$Event {
           .toList(),
       applicationFormSubmission: dto.applicationFormSubmission,
       guestDirectoryEnabled: dto.guestDirectoryEnabled,
+      published: dto.published,
     );
   }
 }

@@ -60,7 +60,8 @@
         "continueNext": "Continue",
         "leave": "Leave",
         "post": "Post",
-        "receipt": "receipt"
+        "receipt": "receipt",
+        "publish": "Publish"
     },
     "followed": "Followed",
     "anonymous": "anonymous",
