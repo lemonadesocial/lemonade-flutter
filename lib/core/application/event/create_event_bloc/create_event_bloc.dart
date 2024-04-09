@@ -112,14 +112,20 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
                 longitude: event.address!.longitude,
               )
             : null,
-        published: true,
+        published: false,
       );
       final result = await _eventRepository.createEvent(input: input);
       result.fold(
         (failure) =>
             emit(state.copyWith(status: FormzSubmissionStatus.failure)),
-        (createEvent) =>
-            emit(state.copyWith(status: FormzSubmissionStatus.success)),
+        (createEventResponse) {
+          emit(
+            state.copyWith(
+              status: FormzSubmissionStatus.success,
+              eventId: createEventResponse.createEvent.$_id,
+            ),
+          );
+        },
       );
     }
   }
@@ -157,5 +163,6 @@ class CreateEventState with _$CreateEventState {
     @Default(true) bool virtual,
     @Default(false) bool isValid,
     @Default(FormzSubmissionStatus.initial) FormzSubmissionStatus status,
+    String? eventId,
   }) = _CreateEventState;
 }

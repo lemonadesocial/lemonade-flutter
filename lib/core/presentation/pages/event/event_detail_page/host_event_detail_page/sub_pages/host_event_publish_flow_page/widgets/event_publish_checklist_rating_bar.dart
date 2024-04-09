@@ -1,26 +1,34 @@
+import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/sub_pages/host_event_publish_flow_page/helper/event_publish_helper.dart';
+import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/sub_pages/host_event_publish_flow_page/host_event_publish_flow_page.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-const position = [0.15, 0.4, 0.625, 1];
-
 class EventPublishChecklistRatingBar extends StatelessWidget {
+  final EventPublishRating rating;
   const EventPublishChecklistRatingBar({
     super.key,
+    required this.rating,
   });
 
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
+    final currentProgress = EventPublishHelper.progressByRating[rating] ??
+        EventPublishHelper.progressByRating[EventPublishRating.average]!;
+    final progressColor = EventPublishHelper.colorByRating[rating] ??
+        EventPublishHelper.colorByRating[EventPublishRating.average]!;
     return SizedBox(
       child: Stack(
         children: [
           Positioned.fill(
             top: 2.w,
-            child: const _Line(),
+            child: _Line(
+              progress: currentProgress,
+              progressColor: progressColor,
+            ),
           ),
           Row(
             mainAxisSize: MainAxisSize.max,
@@ -28,16 +36,19 @@ class EventPublishChecklistRatingBar extends StatelessWidget {
             children: [
               _Dot(
                 label: t.event.eventPublish.ratingBar.average,
+                active: rating == EventPublishRating.average,
               ),
               _Dot(
-                active: true,
                 label: t.event.eventPublish.ratingBar.good,
+                active: rating == EventPublishRating.good,
               ),
               _Dot(
                 label: t.event.eventPublish.ratingBar.great,
+                active: rating == EventPublishRating.great,
               ),
               _Dot(
                 label: t.event.eventPublish.ratingBar.awesome,
+                active: rating == EventPublishRating.awesome,
               ),
             ],
           ),
@@ -87,7 +98,12 @@ class _Dot extends StatelessWidget {
 }
 
 class _Line extends StatelessWidget {
-  const _Line();
+  final double progress;
+  final Color progressColor;
+  const _Line({
+    required this.progress,
+    required this.progressColor,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -107,12 +123,11 @@ class _Line extends StatelessWidget {
             final maxWidth = constraints.maxWidth;
             return AnimatedContainer(
               duration: const Duration(milliseconds: 300),
-              // TODO: use position
-              width: 0.625 * maxWidth - 6.w,
+              width: progress * maxWidth - 6.w,
               height: 3.w,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(3.r),
-                color: LemonColor.snackBarSuccess,
+                color: progressColor,
               ),
             );
           },

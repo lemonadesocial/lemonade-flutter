@@ -494,6 +494,7 @@
     "eventPublish": {
         "eventPublishTitle": "Publish your event",
         "eventPublishDescription": "Your guide to crafting an unforgettable event!",
+        "eventPublishSuccess": "Your event is successfully published!",
         "addTickets": "Add tickets",
         "addCoverPhoto": "Add cover photo",
         "addCollectible": "Add collectible",

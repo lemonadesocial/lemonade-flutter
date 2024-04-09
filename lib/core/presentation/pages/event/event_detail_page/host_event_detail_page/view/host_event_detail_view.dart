@@ -49,27 +49,27 @@ class HostEventDetailView extends StatelessWidget {
                         pinned: true,
                         delegate: PostGuestEventAnimatedAppBar(
                           event: event,
-                          actions:
-                              // event.published == true
-                              //     ?
-                              [
-                            Padding(
-                              padding: EdgeInsets.only(right: Spacing.smMedium),
-                              child: LinearGradientButton.primaryButton(
-                                onTap: () => AutoRouter.of(context).push(
-                                  const HostEventPublishFlowRoute(),
-                                ),
-                                height: Sizing.medium,
-                                textStyle: Typo.small.copyWith(
-                                  color: colorScheme.onPrimary,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                                trailing: Assets.icons.icUpload.svg(),
-                                label: t.common.actions.publish,
-                              ),
-                            ),
-                          ],
-                          // : null,
+                          actions: event.published == false
+                              ? [
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                      right: Spacing.smMedium,
+                                    ),
+                                    child: LinearGradientButton.primaryButton(
+                                      onTap: () => AutoRouter.of(context).push(
+                                        const HostEventPublishFlowRoute(),
+                                      ),
+                                      height: Sizing.medium,
+                                      textStyle: Typo.small.copyWith(
+                                        color: colorScheme.onPrimary,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                      trailing: Assets.icons.icUpload.svg(),
+                                      label: t.common.actions.publish,
+                                    ),
+                                  ),
+                                ]
+                              : null,
                         ),
                       ),
                       SliverPadding(

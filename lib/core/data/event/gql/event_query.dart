@@ -222,6 +222,14 @@ const eventApplicationFormFragment = '''
   }
 ''';
 
+const eventFrequentQuestionsFragment = '''
+  fragment eventFrequentQuestionsFragment on Event {
+    frequent_questions {
+      _id
+    }
+  }
+''';
+
 final getEventDetailQuery = gql('''
   $eventFragment
   $eventOfferFragment
@@ -229,6 +237,7 @@ final getEventDetailQuery = gql('''
   $eventTicketTypesFragment
   $eventProgramFragment
   $eventApplicationFormFragment
+  $eventFrequentQuestionsFragment
 
   query(\$id: MongoID!) {
     getEvent(_id: \$id) {
@@ -238,6 +247,7 @@ final getEventDetailQuery = gql('''
       ...eventTicketTypesFragment
       ...eventProgramFragment
       ...eventApplicationFormFragment
+      ...eventFrequentQuestionsFragment
     }
   }
 ''');

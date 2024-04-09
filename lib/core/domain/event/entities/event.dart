@@ -1,6 +1,7 @@
 import 'package:app/core/data/event/dtos/event_dtos.dart';
 import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/event/entities/event_application_profile_field.dart';
+import 'package:app/core/domain/event/entities/event_frequent_question.dart';
 import 'package:app/core/domain/event/entities/event_session.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/entities/reward.dart';
@@ -61,6 +62,7 @@ class Event with _$Event {
     DateTime? applicationFormSubmission,
     bool? guestDirectoryEnabled,
     bool? published,
+    List<EventFrequentQuestion>? frequentQuestions,
   }) = _Event;
 
   factory Event.fromDto(EventDto dto) {
@@ -138,6 +140,9 @@ class Event with _$Event {
       applicationFormSubmission: dto.applicationFormSubmission,
       guestDirectoryEnabled: dto.guestDirectoryEnabled,
       published: dto.published,
+      frequentQuestions: List.from(dto.frequentQuestions ?? [])
+          .map((item) => EventFrequentQuestion.fromDto(item))
+          .toList(),
     );
   }
 }
