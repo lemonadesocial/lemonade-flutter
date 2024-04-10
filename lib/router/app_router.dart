@@ -190,6 +190,9 @@ final eventDetailRoutes = AutoRoute(
           page: EventControlPanelBaseRoute.page,
         ),
         AutoRoute(
+          page: EventTitleDescriptionSettingRoute.page,
+        ),
+        AutoRoute(
           page: EventGuestSettingsRoute.page,
         ),
         AutoRoute(
@@ -358,6 +361,9 @@ final createEventRoutes = AutoRoute(
     AutoRoute(
       initial: true,
       page: CreateEventBaseRoute.page,
+    ),
+    AutoRoute(
+      page: EventDescriptionFieldRoute.page,
     ),
     AutoRoute(
       page: EventGuestSettingsRoute.page,

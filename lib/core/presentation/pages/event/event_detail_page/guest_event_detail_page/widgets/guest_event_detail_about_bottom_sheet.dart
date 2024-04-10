@@ -7,6 +7,7 @@ import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class GuestEventDetailAboutBottomSheet extends StatelessWidget {
@@ -79,12 +80,7 @@ class GuestEventDetailAboutBottomSheet extends StatelessWidget {
                 SliverToBoxAdapter(
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-                    child: Text(
-                      event.description ?? '',
-                      style: Typo.mediumPlus.copyWith(
-                        color: colorScheme.onSurface,
-                      ),
-                    ),
+                    child: MarkdownBody(data: event.description ?? ''),
                   ),
                 ),
               ],

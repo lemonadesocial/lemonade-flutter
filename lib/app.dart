@@ -17,6 +17,7 @@ import 'package:app/router/app_router.dart';
 import 'package:app/router/my_router_observer.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/theme.dart';
+import 'package:appflowy_editor/appflowy_editor.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +36,7 @@ import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:web3modal_flutter/web3modal_flutter.dart';
-import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/data/latest_all.dart' as tz;
 
 class LemonadeApp extends StatefulWidget {
   const LemonadeApp({super.key});
@@ -223,8 +224,16 @@ class _AppState extends State<_App> {
             scaffoldMessengerKey: SnackBarUtils.rootScaffoldMessengerKey,
             locale: _getCurrentLocale(context),
             // use provider
-            supportedLocales: _supportedLocales,
-            localizationsDelegates: _localizationsDelegates,
+            supportedLocales: [
+              ...AppLocaleUtils.supportedLocales,
+              ...AppFlowyEditorLocalizations.delegate.supportedLocales,
+            ],
+            localizationsDelegates: const [
+              GlobalMaterialLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              AppFlowyEditorLocalizations.delegate,
+            ],
             themeMode: ThemeMode.dark,
             darkTheme: lemonadeAppDarkThemeData,
             theme: lemonadeAppLightThemeData,
@@ -250,10 +259,6 @@ class _AppState extends State<_App> {
       ),
     );
   }
-
-  get _supportedLocales => AppLocaleUtils.supportedLocales;
-
-  get _localizationsDelegates => GlobalMaterialLocalizations.delegates;
 
   Locale _getCurrentLocale(BuildContext context) =>
       TranslationProvider.of(context).flutterLocale;

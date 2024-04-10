@@ -53,6 +53,7 @@ class EditEventDetailBloc
               )
             : null,
         speaker_users: event.speakerUsers ?? [],
+        timezone: event.timezone,
       ),
       id: event.eventId,
     );
@@ -82,6 +83,7 @@ class EditEventDetailEvent with _$EditEventDetailEvent {
     bool? private,
     List<String>? speakerUsers,
     bool? approvalRequired,
+    String? timezone,
   }) = EditEventDetailEventUpdateEvent;
 }
 
