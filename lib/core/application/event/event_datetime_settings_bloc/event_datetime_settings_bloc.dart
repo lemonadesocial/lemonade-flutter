@@ -19,7 +19,7 @@ class EventDateTimeSettingsBloc
     extends Bloc<EventDateTimeSettingsEvent, EventDateTimeSettingsState> {
   EventDateTimeSettingsBloc() : super(const EventDateTimeSettingsState()) {
     on<EventDateTimeSettingsEventInit>(_onInit);
-    on<EventDateTimeSettingsEventSaveChanges>(_onSaveChanges);
+    on<EventDateTimeSettingsEventSaveChangesDateTime>(_onSaveChangesDateTime);
     on<EventDateTimeSettingsEventSaveChangesTimezone>(_onSaveChangesTimezone);
     on<EventDateTimeSettingsEventReset>(_onReset);
   }
@@ -50,8 +50,8 @@ class EventDateTimeSettingsBloc
     );
   }
 
-  Future<void> _onSaveChanges(
-    EventDateTimeSettingsEventSaveChanges event,
+  Future<void> _onSaveChangesDateTime(
+    EventDateTimeSettingsEventSaveChangesDateTime event,
     Emitter emit,
   ) async {
     emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
@@ -63,8 +63,10 @@ class EventDateTimeSettingsBloc
     final endUtcDateTime = newEnd
         .add(Duration(milliseconds: location.currentTimeZone.offset * -1));
 
-    if (startUtcDateTime.isBefore(DateTime.now().toUtc()) ||
-        endUtcDateTime.isBefore(DateTime.now().toUtc())) {
+    final now = DateTime.now();
+    final tomorrowMidnight = DateTime.utc(now.year, now.month, now.day + 1);
+    if (newStart.isBefore(tomorrowMidnight) ||
+        newEnd.isBefore(tomorrowMidnight)) {
       emit(
         state.copyWith(
           start: DateTimeFormz.dirty(newStart),
@@ -186,11 +188,11 @@ class EventDateTimeSettingsEvent with _$EventDateTimeSettingsEvent {
     String? timezone,
   }) = EventDateTimeSettingsEventInit;
 
-  const factory EventDateTimeSettingsEvent.saveChanges({
+  const factory EventDateTimeSettingsEvent.saveChangesDateTime({
     Event? event,
     required DateTime newStart,
     required DateTime newEnd,
-  }) = EventDateTimeSettingsEventSaveChanges;
+  }) = EventDateTimeSettingsEventSaveChangesDateTime;
 
   const factory EventDateTimeSettingsEvent.saveChangesTimezone({
     Event? event,

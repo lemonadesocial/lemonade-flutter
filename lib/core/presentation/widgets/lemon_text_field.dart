@@ -28,6 +28,7 @@ class LemonTextField extends StatelessWidget {
     this.readOnly,
     this.onTap,
     this.showRequired,
+    this.filled,
     this.fillColor,
   });
 
@@ -51,6 +52,7 @@ class LemonTextField extends StatelessWidget {
   final bool? readOnly;
   final Function()? onTap;
   final bool? showRequired;
+  final bool? filled;
   final Color? fillColor;
 
   @override
@@ -123,7 +125,7 @@ class LemonTextField extends StatelessWidget {
             contentPadding: contentPadding ?? EdgeInsets.all(Spacing.smMedium),
             suffixIcon: suffixIcon,
             prefixIcon: leadingIcon,
-            filled: true,
+            filled: filled ?? false,
             fillColor: fillColor ?? Colors.transparent,
           ),
           inputFormatters: inputFormatters,

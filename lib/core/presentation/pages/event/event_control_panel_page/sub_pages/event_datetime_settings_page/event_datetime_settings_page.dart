@@ -134,12 +134,13 @@ class _EventDatetimeSettingsPageState
                 showIconContainer: true,
                 iconContainerColor: LemonColor.acidGreen,
               );
+              AutoRouter.of(context).pop();
+              await Future.delayed(const Duration(milliseconds: 500));
               context.read<GetEventDetailBloc>().add(
                     GetEventDetailEvent.fetch(
                       eventId: widget.event!.id ?? '',
                     ),
                   );
-              AutoRouter.of(context).pop();
             }
           },
           child: Stack(
@@ -248,7 +249,7 @@ class _EventDatetimeSettingsPageState
                         child: LinearGradientButton.primaryButton(
                           onTap: () {
                             context.read<EventDateTimeSettingsBloc>().add(
-                                  EventDateTimeSettingsEventSaveChanges(
+                                  EventDateTimeSettingsEventSaveChangesDateTime(
                                     event: widget.event,
                                     newStart: tempStart ?? DateTime.now(),
                                     newEnd: tempEnd ?? DateTime.now(),

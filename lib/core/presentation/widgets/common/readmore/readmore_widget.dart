@@ -7,6 +7,7 @@ import 'package:app/theme/typo.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -17,12 +18,14 @@ class ReadMoreWidget extends StatelessWidget {
     this.textStyle,
     this.seeMoreLessTextStyle,
     this.maxLines = 5,
+    this.isMarkdown = false,
   });
 
   final String body;
   final TextStyle? textStyle;
   final TextStyle? seeMoreLessTextStyle;
   final int maxLines;
+  final bool? isMarkdown;
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +45,52 @@ class ReadMoreWidget extends StatelessWidget {
         tp.layout(maxWidth: constraints.maxWidth);
         final numLines = tp.computeLineMetrics().length;
         final _moreLessTextStyle = seeMoreLessTextStyle ?? moreLessTextStyle;
+
+        // Handle markdown case
+        if (isMarkdown == true) {
+          double fixedNumberOfLines = 5;
+          // Hard code using fontSize 14 + padding 15
+          double fixedHeightAreaBox = (14 + 15) * fixedNumberOfLines;
+          return numLines <= maxLines
+              ? MarkdownBody(data: body)
+              : ExpandableNotifier(
+                  child: Expandable(
+                    collapsed: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        LimitedBox(
+                          maxHeight: fixedHeightAreaBox,
+                          child: Wrap(
+                            clipBehavior: Clip.hardEdge,
+                            direction: Axis.horizontal,
+                            children: [
+                              MarkdownBody(data: body),
+                            ],
+                          ),
+                        ),
+                        ExpandableButton(
+                          child: Text(
+                            t.common.showMore,
+                            style: _moreLessTextStyle,
+                          ),
+                        ),
+                      ],
+                    ),
+                    expanded: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        MarkdownBody(data: body),
+                        ExpandableButton(
+                          child: Text(
+                            t.common.showLess,
+                            style: _moreLessTextStyle,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+        }
 
         return numLines <= maxLines
             ? Linkify(

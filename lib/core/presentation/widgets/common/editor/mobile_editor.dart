@@ -67,7 +67,6 @@ class _MobileEditorState extends State<MobileEditor> {
       toolbarItems: [
         boldToolbarItem,
         italicToolbarItem,
-        underlineToolbarItem,
         bulletedListToolbarItem,
         numberedToolbarItem,
       ],
@@ -109,8 +108,9 @@ class _MobileEditorState extends State<MobileEditor> {
                 header: Padding(
                   padding: EdgeInsets.only(bottom: Spacing.small),
                 ),
+                // Add footer to prevent keyboard hide it
                 footer: const SizedBox(
-                  height: 100,
+                  height: 250,
                 ),
               ),
             ),

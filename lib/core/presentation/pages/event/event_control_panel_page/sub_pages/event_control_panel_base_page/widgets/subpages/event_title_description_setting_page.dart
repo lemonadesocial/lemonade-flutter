@@ -50,7 +50,7 @@ class EventTitleDescriptionSettingView extends StatelessWidget {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-        extendBodyBehindAppBar: PlatformExtension.isDesktopOrWeb,
+        resizeToAvoidBottomInset: false,
         appBar: LemonAppBar(
           title: t.event.eventCreation.titleAndDescription,
           backgroundColor: LemonColor.atomicBlack,

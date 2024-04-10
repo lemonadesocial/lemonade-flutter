@@ -79,6 +79,7 @@ class EventControlPanelBasePage extends StatelessWidget {
                               const EventTitleDescriptionSettingRoute(),
                             );
                           },
+                          paddingVertical: Spacing.xSmall,
                         ),
                       ),
                     ),

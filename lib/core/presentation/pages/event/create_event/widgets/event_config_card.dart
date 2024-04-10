@@ -14,6 +14,7 @@ class EventConfigCard extends StatelessWidget {
   final bool? selected;
   final bool? loading;
   final int? maxLinesDescription;
+  final double? paddingVertical;
 
   const EventConfigCard({
     super.key,
@@ -24,6 +25,7 @@ class EventConfigCard extends StatelessWidget {
     this.selected,
     this.loading,
     this.maxLinesDescription,
+    this.paddingVertical,
   });
 
   @override
@@ -34,7 +36,7 @@ class EventConfigCard extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(
           horizontal: Spacing.xSmall,
-          vertical: Spacing.xSmall,
+          vertical: paddingVertical ?? 0,
         ),
         decoration: BoxDecoration(
           color: selected == true ? LemonColor.atomicBlack : Colors.transparent,
