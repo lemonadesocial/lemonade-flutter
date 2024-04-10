@@ -52,9 +52,12 @@ const eventOfferFragment = '''
 
 const eventTicketTypesFragment = '''
   fragment eventTicketTypesFragment on Event {
+    required_profile_fields
     event_ticket_types {
       _id
       active
+      private
+      limited
       event
       title
       prices {
@@ -86,6 +89,38 @@ const eventTicketTypesFragment = '''
         key 
         bucket
       }
+      limited_whitelist_users {
+        _id
+        email
+      }
+      category
+      category_expanded {
+        _id
+        title
+        event
+        description
+      }
+    }
+  }
+''';
+
+const eventProgramFragment = '''
+  fragment eventProgramFragment on Event {
+    sessions {
+      _id
+      title
+      start
+      end
+      broadcast
+      description
+      photos
+      speaker_users
+      photos_expanded {
+        url
+      }
+      speaker_users_expanded {
+        ...eventHostExpandedFragment
+      }
     }
   }
 ''';
@@ -111,7 +146,7 @@ const eventFragment = '''
   title
   slug
   host
-  require_approval
+  approval_required
   host_expanded {
     ...eventHostExpandedFragment
   }
@@ -122,10 +157,9 @@ const eventFragment = '''
     key
     bucket
   }
-  ...eventPeopleFragment
-  ...eventMatrixFragment
   start
   end
+  timezone
   cost
   currency
   description
@@ -144,6 +178,11 @@ const eventFragment = '''
   guest_limit_per
   virtual
   private
+  invited_count
+  checkin_count
+  attending_count
+  pending_request_count
+  guest_directory_enabled
   rewards {
     _id
     active
@@ -154,7 +193,33 @@ const eventFragment = '''
     limit_per
     payment_ticket_types
   }
+  event_ticket_types {
+    _id
+    prices {
+      currency
+      network
+      cost
+      decimals
+    }
+  }
+  ...eventPeopleFragment
+  ...eventMatrixFragment
 }
+''';
+
+const eventApplicationFormFragment = '''
+  fragment eventApplicationFormFragment on Event {
+    application_profile_fields {
+      field
+      required
+    }
+    application_questions {
+      _id
+      question
+      required
+    }
+    application_form_submission
+  }
 ''';
 
 final getEventDetailQuery = gql('''
@@ -162,6 +227,8 @@ final getEventDetailQuery = gql('''
   $eventOfferFragment
   $eventPaymentAccountFragment
   $eventTicketTypesFragment
+  $eventProgramFragment
+  $eventApplicationFormFragment
 
   query(\$id: MongoID!) {
     getEvent(_id: \$id) {
@@ -169,6 +236,8 @@ final getEventDetailQuery = gql('''
       ...eventOfferFragment
       ...eventPaymentAccountFragment
       ...eventTicketTypesFragment
+      ...eventProgramFragment
+      ...eventApplicationFormFragment
     }
   }
 ''');

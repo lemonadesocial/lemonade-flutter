@@ -16,13 +16,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_google_places_hoc081098/flutter_google_places_hoc081098.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:formz/formz.dart';
-import 'package:google_maps_webservice/places.dart';
+import 'package:google_maps_webservice/places.dart' as google_places_service;
 import 'package:google_api_headers/google_api_headers.dart';
 
 @RoutePage()
 class EventLocationSettingDetailPage extends StatefulWidget {
-  const EventLocationSettingDetailPage({Key? key, this.address})
-      : super(key: key);
+  const EventLocationSettingDetailPage({super.key, this.address});
 
   final Address? address;
 
@@ -84,8 +83,8 @@ class _EventLocationSettingDetailPageState
           listener: (context, state) async {
             if (state.status.isSuccess) {
               context.read<AuthBloc>().add(const AuthEvent.refreshData());
-              SnackBarUtils.showSuccessSnackbar(
-                t.event.locationSetting.addNewLocationSuccessfully,
+              SnackBarUtils.showSuccess(
+                message: t.event.locationSetting.addNewLocationSuccessfully,
               );
               AutoRouter.of(context).popTop();
             }
@@ -125,11 +124,9 @@ class _EventLocationSettingDetailPageState
                                   .add(TitleChanged(title: value)),
                               hintText: t.event.locationSetting.nameThisPlace,
                               controller: titleController,
-                              errorText: state.title.displayError != null
-                                  ? state.title.displayError!.getMessage(
-                                      t.event.locationSetting.nameThisPlace,
-                                    )
-                                  : null,
+                              errorText: state.title.displayError?.getMessage(
+                                t.event.locationSetting.nameThisPlace,
+                              ),
                             ),
                             SizedBox(height: Spacing.smMedium),
                             LemonTextField(
@@ -138,11 +135,9 @@ class _EventLocationSettingDetailPageState
                                   .add(Street1Changed(street1: value)),
                               hintText: t.event.locationSetting.street1,
                               controller: street1Controller,
-                              errorText: state.street1.displayError != null
-                                  ? state.street1.displayError!.getMessage(
-                                      t.event.locationSetting.street1,
-                                    )
-                                  : null,
+                              errorText: state.street1.displayError?.getMessage(
+                                t.event.locationSetting.street1,
+                              ),
                             ),
                             SizedBox(height: Spacing.smMedium),
                             LemonTextField(
@@ -156,11 +151,9 @@ class _EventLocationSettingDetailPageState
                             LemonTextField(
                               hintText: t.event.locationSetting.city,
                               controller: cityController,
-                              errorText: state.city.displayError != null
-                                  ? state.city.displayError!.getMessage(
-                                      t.event.locationSetting.city,
-                                    )
-                                  : null,
+                              errorText: state.city.displayError?.getMessage(
+                                t.event.locationSetting.city,
+                              ),
                               onChange: (value) => context
                                   .read<EventLocationSettingBloc>()
                                   .add(CityChanged(city: value)),
@@ -169,11 +162,9 @@ class _EventLocationSettingDetailPageState
                             LemonTextField(
                               hintText: t.event.locationSetting.region,
                               controller: regionController,
-                              errorText: state.region.displayError != null
-                                  ? state.region.displayError!.getMessage(
-                                      t.event.locationSetting.region,
-                                    )
-                                  : null,
+                              errorText: state.region.displayError?.getMessage(
+                                t.event.locationSetting.region,
+                              ),
                               onChange: (value) => context
                                   .read<EventLocationSettingBloc>()
                                   .add(RegionChanged(region: value)),
@@ -182,11 +173,9 @@ class _EventLocationSettingDetailPageState
                             LemonTextField(
                               hintText: t.event.locationSetting.postalCode,
                               controller: postalController,
-                              errorText: state.postal.displayError != null
-                                  ? state.postal.displayError!.getMessage(
-                                      t.event.locationSetting.postalCode,
-                                    )
-                                  : null,
+                              errorText: state.postal.displayError?.getMessage(
+                                t.event.locationSetting.postalCode,
+                              ),
                               onChange: (value) => context
                                   .read<EventLocationSettingBloc>()
                                   .add(PostalChanged(postal: value)),
@@ -195,11 +184,9 @@ class _EventLocationSettingDetailPageState
                             LemonTextField(
                               hintText: t.event.locationSetting.country,
                               controller: countryController,
-                              errorText: state.country.displayError != null
-                                  ? state.country.displayError!.getMessage(
-                                      t.event.locationSetting.country,
-                                    )
-                                  : null,
+                              errorText: state.country.displayError?.getMessage(
+                                t.event.locationSetting.country,
+                              ),
                               onChange: (value) => context
                                   .read<EventLocationSettingBloc>()
                                   .add(CountryChanged(country: value)),
@@ -225,7 +212,7 @@ class _EventLocationSettingDetailPageState
     final p = await PlacesAutocomplete.show(
       context: context,
       apiKey: AppConfig.googleMapKey,
-      onError: (PlacesAutocompleteResponse response) {
+      onError: (response) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(response.errorMessage ?? 'Unknown error'),
@@ -235,12 +222,14 @@ class _EventLocationSettingDetailPageState
       mode: Mode.overlay,
       resultTextStyle: Theme.of(context).textTheme.titleMedium,
     );
-
-    await displayPrediction(p, ScaffoldMessenger.of(context));
+    await displayPrediction(
+      p != null ? google_places_service.Prediction.fromJson(p.toJson()) : null,
+      ScaffoldMessenger.of(context),
+    );
   }
 
   Future<void> displayPrediction(
-    Prediction? p,
+    google_places_service.Prediction? p,
     ScaffoldMessengerState messengerState,
   ) async {
     if (p == null) {
@@ -248,7 +237,7 @@ class _EventLocationSettingDetailPageState
     }
     FocusScope.of(context).requestFocus(FocusNode());
     // Get place detail (lat/lng)
-    final places = GoogleMapsPlaces(
+    final places = google_places_service.GoogleMapsPlaces(
       apiKey: AppConfig.googleMapKey,
       apiHeaders: await const GoogleApiHeaders().getHeaders(),
     );

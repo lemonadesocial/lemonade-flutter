@@ -74,12 +74,12 @@ class EventCreateRewardPageView extends StatelessWidget {
             if (state.status == FormzSubmissionStatus.success) {
               AutoRouter.of(context).back();
               if (initialReward != null) {
-                SnackBarUtils.showSuccessSnackbar(
-                  t.event.rewardSetting.updateRewardSuccessfully,
+                SnackBarUtils.showSuccess(
+                  message: t.event.rewardSetting.updateRewardSuccessfully,
                 );
               } else {
-                SnackBarUtils.showSuccessSnackbar(
-                  t.event.rewardSetting.createRewardSuccessfully,
+                SnackBarUtils.showSuccess(
+                  message: t.event.rewardSetting.createRewardSuccessfully,
                 );
               }
               getEventDetailBloc.add(
@@ -162,6 +162,7 @@ class EventCreateRewardPageView extends StatelessWidget {
                       padding: EdgeInsets.all(Spacing.smMedium),
                       child: LinearGradientButton(
                         onTap: () async {
+                          FocusScope.of(context).unfocus();
                           if (initialReward != null) {
                             modifyRewardBloc.add(
                               ModifyRewardEvent.onEditSubmitted(

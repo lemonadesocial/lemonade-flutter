@@ -1,4 +1,5 @@
 import 'package:app/core/application/event_tickets/select_event_tickets_bloc/select_event_tickets_bloc.dart';
+import 'package:app/core/domain/payment/entities/purchasable_item/purchasable_item.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/select_tickets_page/widgets/discard_selected_tickets_warning.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -11,12 +12,14 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class PaymentMethodsSwitcher extends StatelessWidget {
   final Function(SelectTicketsPaymentMethod paymentMethod) onSelect;
+  final List<PurchasableItem> selectedTickets;
   final SelectTicketsPaymentMethod selectedPaymentMethod;
 
   const PaymentMethodsSwitcher({
     super.key,
     required this.onSelect,
     required this.selectedPaymentMethod,
+    required this.selectedTickets,
   });
 
   @override
@@ -33,6 +36,10 @@ class PaymentMethodsSwitcher extends StatelessWidget {
             icon: Assets.icons.icCash.svg(),
             onPressed: () {
               if (selectedPaymentMethod == SelectTicketsPaymentMethod.card) {
+                return;
+              }
+              if (selectedTickets.isEmpty) {
+                onSelect(SelectTicketsPaymentMethod.card);
                 return;
               }
               showDialog(
@@ -53,6 +60,10 @@ class PaymentMethodsSwitcher extends StatelessWidget {
             icon: Assets.icons.icWallet.svg(),
             onPressed: () {
               if (selectedPaymentMethod == SelectTicketsPaymentMethod.wallet) {
+                return;
+              }
+              if (selectedTickets.isEmpty) {
+                onSelect(SelectTicketsPaymentMethod.wallet);
                 return;
               }
               showDialog(

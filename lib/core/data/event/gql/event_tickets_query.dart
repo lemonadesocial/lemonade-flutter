@@ -1,6 +1,7 @@
 import 'package:app/core/data/payment/payment_query.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
+// this one for guest
 final getEventTicketTypesQuery = gql('''
   query getEventTicketTypes(\$input: GetEventTicketTypesInput!) {
     getEventTicketTypes(input: \$input) {
@@ -12,6 +13,9 @@ final getEventTicketTypesQuery = gql('''
       ticket_types {
         _id
         active
+        limited
+        private
+        whitelisted
         event
         title
         prices {
@@ -36,6 +40,13 @@ final getEventTicketTypesQuery = gql('''
         photos
         discountable
         limit
+        category
+        category_expanded {
+          _id
+          title
+          description
+          event
+        }
       }
       limit
     }
@@ -52,6 +63,11 @@ final calculateTicketsPricingInfoQuery = gql('''
       discount
       payment_accounts {
         ...paymentAccountFragment
+      }
+      deposit_infos {
+        minimum_amount
+        minimum_percent
+        payment_account_id
       }
     }
   }

@@ -1,0 +1,28 @@
+query GetApplicantsInfo($users: [MongoID!]!, $event: MongoID!) {
+    getApplicantsInfo(users: $users, event: $event) {
+        _id
+        active
+        email
+        display_name
+        calendly_url
+        company_name
+        date_of_birth
+        description
+        education_title
+        ethnicity
+        handle_farcaster
+        handle_github
+        handle_instagram
+        handle_lens
+        handle_linkedin
+        handle_mirror
+        handle_twitter
+        image_avatar
+        industry
+        job_title
+        pronoun
+        new_gender
+        tagline
+        username
+    }
+}

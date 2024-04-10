@@ -47,6 +47,10 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
       context.read<EventGuestSettingsBloc>().add(
             PrivateChanged(private: widget.event?.private ?? false),
           );
+      final eventApprovalRequired = widget.event?.approvalRequired ?? true;
+      context.read<EventGuestSettingsBloc>().add(
+            RequireApprovalChanged(approvalRequired: eventApprovalRequired),
+          );
     } else {
       final eventGuestSettingBloc =
           context.read<EventGuestSettingsBloc>().state;
@@ -101,11 +105,11 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
                     _buildSettingTile(
                       title: t.event.guestSettings.autoApprove,
                       subTitle: t.event.guestSettings.autoApproveDescription,
-                      value: !state.requireApproval,
+                      value: !state.approvalRequired,
                       onChanged: (value) {
                         Vibrate.feedback(FeedbackType.light);
                         context.read<EventGuestSettingsBloc>().add(
-                              RequireApprovalChanged(requireApproval: !value),
+                              RequireApprovalChanged(approvalRequired: !value),
                             );
                       },
                     ),
@@ -221,6 +225,10 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
                                             .read<EventGuestSettingsBloc>()
                                             .state
                                             .private,
+                                        approvalRequired: context
+                                            .read<EventGuestSettingsBloc>()
+                                            .state
+                                            .approvalRequired,
                                       ),
                                     );
                               },

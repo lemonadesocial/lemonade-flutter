@@ -16,7 +16,7 @@ import 'package:app/core/presentation/widgets/common/button/linear_gradient_butt
 
 @RoutePage()
 class OnboardingProfilePhotoPage extends StatelessWidget {
-  const OnboardingProfilePhotoPage({Key? key}) : super(key: key);
+  const OnboardingProfilePhotoPage({super.key});
 
   @override
   Widget build(BuildContext context) {

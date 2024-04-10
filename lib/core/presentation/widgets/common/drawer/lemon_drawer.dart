@@ -2,7 +2,7 @@ import 'package:app/core/presentation/widgets/back_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/drawer/widgets/lemon_drawer_profile_info.dart';
 import 'package:app/core/presentation/widgets/common/drawer/widgets/lemon_drawer_tile_widget.dart';
-import 'package:app/core/utils/modal_utils.dart';
+import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
@@ -36,6 +36,7 @@ class LemonDrawer extends StatelessWidget {
                 padding: EdgeInsets.only(right: Spacing.smMedium),
                 child: InkWell(
                   onTap: () {
+                    Navigator.of(context, rootNavigator: true).pop();
                     Vibrate.feedback(FeedbackType.light);
                     AutoRouter.of(context).navigate(const SettingRoute());
                   },
@@ -121,6 +122,38 @@ class LemonDrawer extends StatelessWidget {
                     height: Spacing.xSmall,
                   ),
                   LemonDrawerTileWidget(
+                    title: t.event.events.capitalize(),
+                    leading: ThemeSvgIcon(
+                      color: colorScheme.onPrimary,
+                      builder: (filter) {
+                        return Assets.icons.icHouseParty.svg(
+                          colorFilter: filter,
+                          width: 18.w,
+                          height: 18.w,
+                        );
+                      },
+                    ),
+                    featureAvailable: true,
+                    trailing: Assets.icons.icArrowBack.svg(
+                      width: 18.w,
+                      height: 18.w,
+                    ),
+                    onTap: () {
+                      Vibrate.feedback(FeedbackType.light);
+                      context.read<AuthBloc>().state.maybeWhen(
+                            authenticated: (authSession) =>
+                                AutoRouter.of(context)
+                                    .navigate(const MyEventsRoute()),
+                            orElse: () => context.router.navigate(
+                              const LoginRoute(),
+                            ),
+                          );
+                    },
+                  ),
+                  SizedBox(
+                    height: Spacing.xSmall,
+                  ),
+                  LemonDrawerTileWidget(
                     title: t.common.ticket(n: 2).capitalize(),
                     leading: ThemeSvgIcon(
                       color: colorScheme.onPrimary,
@@ -164,7 +197,7 @@ class LemonDrawer extends StatelessWidget {
                     featureAvailable: false,
                     onTap: () {
                       Vibrate.feedback(FeedbackType.light);
-                      showComingSoonDialog(context);
+                      SnackBarUtils.showComingSoon();
                     },
                   ),
                 ],

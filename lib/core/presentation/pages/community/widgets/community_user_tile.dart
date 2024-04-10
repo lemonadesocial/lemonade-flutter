@@ -9,9 +9,9 @@ import 'package:flutter/material.dart';
 
 class CommunityUserTile extends StatelessWidget {
   const CommunityUserTile({
-    Key? key,
+    super.key,
     required this.user,
-  }) : super(key: key);
+  });
 
   final CommunityUser user;
 

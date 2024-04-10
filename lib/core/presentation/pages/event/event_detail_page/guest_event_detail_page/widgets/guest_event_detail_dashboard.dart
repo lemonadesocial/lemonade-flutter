@@ -1,6 +1,7 @@
 import 'package:app/core/config.dart';
 import 'package:app/core/domain/event/entities/event.dart';
-import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
+import 'package:app/core/presentation/widgets/event/event_dashboard_item.dart';
+import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -10,6 +11,7 @@ import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -23,80 +25,74 @@ class GuestEventDetailDashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = Translations.of(context);
+    final colorScheme = Theme.of(context).colorScheme;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Expanded(
-          child: LinearGradientButton(
-            onTap: () {
-              if (event.matrixEventRoomId == null ||
-                  event.matrixEventRoomId!.isEmpty) return;
-              AutoRouter.of(context).navigate(
-                ChatRoute(roomId: event.matrixEventRoomId ?? ''),
+        EventDashboardItem(
+          icon: Assets.icons.icChatBubbleGradient
+              .svg(width: Sizing.small, height: Sizing.small),
+          child: const SizedBox.shrink(),
+          onTap: () {
+            Vibrate.feedback(FeedbackType.light);
+            if (event.matrixEventRoomId == null ||
+                event.matrixEventRoomId!.isEmpty) {
+              return showDialog(
+                barrierDismissible: false,
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    backgroundColor: colorScheme.secondary,
+                    title: Text(t.common.alert),
+                    content: SingleChildScrollView(
+                      child: ListBody(
+                        children: <Widget>[
+                          Text(t.chat.roomNotExistDesc),
+                        ],
+                      ),
+                    ),
+                    actions: <Widget>[
+                      TextButton(
+                        child: Text(
+                          t.common.actions.ok,
+                          style: Typo.medium.copyWith(color: Colors.white),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                  );
+                },
               );
-            },
-            height: 42.w,
-            leading: Assets.icons.icChatBubbleGradient.svg(
-              width: Sizing.medium / 2,
-              height: Sizing.medium / 2,
-            ),
-            label: t.event.dashboard.liveChat,
-            textStyle: Typo.medium.copyWith(
-              fontWeight: FontWeight.w800,
-            ),
-          ),
+            }
+            AutoRouter.of(context).navigate(
+              ChatRoute(roomId: event.matrixEventRoomId ?? ''),
+            );
+          },
         ),
-        SizedBox(width: Spacing.extraSmall),
-        Expanded(
-          child: LinearGradientButton(
-            onTap: () {
-              Share.share(
-                '${AppConfig.webUrl}/event/${event.id}',
-              );
-            },
-            height: 42.w,
-            leading: Assets.icons.icShareGradient.svg(
-              width: Sizing.medium / 2,
-              height: Sizing.medium / 2,
-            ),
-            label: t.common.actions.share,
-            textStyle: Typo.medium.copyWith(
-              fontWeight: FontWeight.w800,
-            ),
-          ),
+        SizedBox(width: 10.w),
+        EventDashboardItem(
+          icon: Assets.icons.icUserAddGradient
+              .svg(width: Sizing.small, height: Sizing.small),
+          child: EventTotalJoinWidget(event: event),
+          onTap: () {
+            Vibrate.feedback(FeedbackType.light);
+            SnackBarUtils.showComingSoon();
+          },
         ),
-        // TODO: Maybe will reuse
-        // EventDashboardItem(
-        //   title: t.event.dashboard.liveChat,
-        //   icon: Assets.icons.icChatBubbleGradient.svg(),
-        //   child: const SizedBox.shrink(),
-        //   onTap: () {
-        //     if (event.matrixEventRoomId == null ||
-        //         event.matrixEventRoomId!.isEmpty) return;
-        //     AutoRouter.of(context).navigate(
-        //       ChatRoute(roomId: event.matrixEventRoomId ?? ''),
-        //     );
-        //   },
-        // ),
-        // SizedBox(width: 10.w),
-        // EventDashboardItem(
-        //   title: t.event.dashboard.invite,
-        //   icon: Assets.icons.icUserAddGradient.svg(),
-        //   child: EventTotalJoinWidget(event: event),
-        //   onTap: () {
-        //     showComingSoonDialog(context);
-        //   },
-        // ),
-        // SizedBox(width: 10.w),
-        // EventDashboardItem(
-        //   title: t.event.dashboard.leaderBoard,
-        //   icon: Assets.icons.icLeaderboardGradient.svg(),
-        //   child: const SizedBox.shrink(),
-        //   onTap: () {
-        //     showComingSoonDialog(context);
-        //   },
-        // ),
+        SizedBox(width: 10.w),
+        EventDashboardItem(
+          icon: Assets.icons.icShareGradient
+              .svg(width: Sizing.small, height: Sizing.small),
+          child: const SizedBox.shrink(),
+          onTap: () {
+            Vibrate.feedback(FeedbackType.light);
+            Share.share(
+              '${AppConfig.webUrl}/event/${event.id}',
+            );
+          },
+        ),
       ],
     );
   }

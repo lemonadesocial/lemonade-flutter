@@ -8,7 +8,6 @@ import 'package:app/core/domain/report/input/report_input.dart';
 import 'package:app/core/presentation/dpos/common/dropdown_item_dpo.dart';
 import 'package:app/core/presentation/widgets/event/event_post_card_widget.dart';
 import 'package:app/core/presentation/widgets/floating_frosted_glass_dropdown_widget.dart';
-import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/core/presentation/widgets/post/post_card_actions_widget.dart';
 import 'package:app/core/presentation/widgets/report/report_bottom_sheet.dart';
@@ -17,7 +16,7 @@ import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/core/utils/avatar_utils.dart';
 import 'package:app/core/utils/bottomsheet_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
-import 'package:app/core/utils/modal_utils.dart';
+import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -66,7 +65,7 @@ class PostProfileCardView extends StatelessWidget {
 
   final Post post;
 
-  String get postName => post.userExpanded?.name ?? '';
+  String get postName => post.userExpanded?.name ?? t.common.anonymousLemon;
 
   String get postText => post.text ?? '';
 
@@ -122,30 +121,37 @@ class PostProfileCardView extends StatelessWidget {
               url: AvatarUtils.getAvatarUrl(user: post.userExpanded),
             ),
           ),
-          const SizedBox(width: 9),
+          SizedBox(width: Spacing.xSmall),
           Flexible(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      postName,
-                      style: Typo.medium.copyWith(
-                        color: colorScheme.onPrimary.withOpacity(0.87),
-                        fontWeight: FontWeight.w600,
+                    Flexible(
+                      child: RichText(
+                        text: TextSpan(
+                          text: postName,
+                          style: Typo.medium.copyWith(
+                            color: colorScheme.onPrimary.withOpacity(0.87),
+                            fontWeight: FontWeight.w600,
+                          ),
+                          children: [
+                            if (postCreatedAt != null)
+                              TextSpan(
+                                text: '  •  ${timeago.format(postCreatedAt!)}',
+                                style: Typo.medium.copyWith(
+                                  color: colorScheme.onSurfaceVariant,
+                                ),
+                              ),
+                          ],
+                        ),
                       ),
                     ),
-                    if (postCreatedAt != null)
-                      Text(
-                        '  •  ${timeago.format(postCreatedAt!)}',
-                        style: Typo.medium
-                            .copyWith(color: colorScheme.onSurfaceVariant),
-                      ),
-                    const Spacer(),
                     GestureDetector(
                       onTap: () {
-                        showComingSoonDialog(context);
+                        SnackBarUtils.showComingSoon();
                       },
                       child: isOwnPost
                           ? const SizedBox.shrink()
@@ -245,7 +251,6 @@ class PostProfileCardView extends StatelessWidget {
   Widget _buildFile(ColorScheme colorScheme, DbFile? file) {
     return Container(
       width: double.infinity,
-      height: 270,
       decoration: BoxDecoration(
         border: Border.all(
           color: colorScheme.outline,
@@ -256,9 +261,9 @@ class PostProfileCardView extends StatelessWidget {
         borderRadius: BorderRadius.circular(LemonRadius.xSmall),
         child: CachedNetworkImage(
           imageUrl: ImageUtils.generateUrl(file: file),
-          fit: BoxFit.cover,
-          errorWidget: (_, __, ___) => ImagePlaceholder.defaultPlaceholder(),
-          placeholder: (_, __) => ImagePlaceholder.defaultPlaceholder(),
+          fit: BoxFit.contain,
+          errorWidget: (_, __, ___) => const SizedBox.shrink(),
+          placeholder: (_, __) => const SizedBox.shrink(),
         ),
       ),
     );

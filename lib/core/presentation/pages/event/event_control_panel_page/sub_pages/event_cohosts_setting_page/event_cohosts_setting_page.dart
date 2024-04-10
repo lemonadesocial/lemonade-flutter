@@ -7,6 +7,7 @@ import 'package:app/core/domain/event/entities/event_cohost_request.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_cohosts_setting_page/widgets/event_cohost_item.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
+import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -73,10 +74,10 @@ class _EventCohostsSettingPageViewState
             );
     return Scaffold(
       appBar: LemonAppBar(
-        backgroundColor: colorScheme.onPrimaryContainer,
+        backgroundColor: colorScheme.background,
         title: t.event.configuration.coHosts,
       ),
-      backgroundColor: colorScheme.onPrimaryContainer,
+      backgroundColor: colorScheme.background,
       resizeToAvoidBottomInset: true,
       body: BlocListener<ManageEventCohostRequestsBloc,
           ManageEventCohostRequestsState>(
@@ -111,10 +112,12 @@ class _EventCohostsSettingPageViewState
                 child: loadingEventCohostsRequests ||
                         loadingManageEventCohostRequests
                     ? Loading.defaultLoading(context)
-                    : CohostsList(
-                        eventCohostsRequests: eventCohostsRequests,
-                        event: widget.event,
-                      ),
+                    : eventCohostsRequests.isEmpty
+                        ? const EmptyList()
+                        : CohostsList(
+                            eventCohostsRequests: eventCohostsRequests,
+                            event: widget.event,
+                          ),
               ),
               _buildAddCohostsButton(),
             ],
@@ -127,16 +130,21 @@ class _EventCohostsSettingPageViewState
   Widget _buildAddCohostsButton() {
     return BlocBuilder<EditEventDetailBloc, EditEventDetailState>(
       builder: (context, state) {
-        return LinearGradientButton(
-          label: t.event.cohosts.addCohosts,
-          height: 48.h,
-          radius: BorderRadius.circular(24),
-          textStyle: Typo.medium.copyWith(),
-          mode: GradientButtonMode.lavenderMode,
-          onTap: () {
-            AutoRouter.of(context).navigate(const EventAddCohostsRoute());
-          },
-          loadingWhen: state.status == EditEventDetailBlocStatus.loading,
+        return Align(
+          alignment: Alignment.bottomCenter,
+          child: SafeArea(
+            child: LinearGradientButton(
+              label: t.event.cohosts.addCohosts,
+              height: 48.h,
+              radius: BorderRadius.circular(24),
+              textStyle: Typo.medium.copyWith(),
+              mode: GradientButtonMode.lavenderMode,
+              onTap: () {
+                AutoRouter.of(context).navigate(const EventAddCohostsRoute());
+              },
+              loadingWhen: state.status == EditEventDetailBlocStatus.loading,
+            ),
+          ),
         );
       },
     );

@@ -1,6 +1,7 @@
 import 'package:app/core/data/event/dtos/event_ticket_types_dto/event_ticket_types_dto.dart';
 import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/entities/event_ticket_category.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'event_ticket_types.freezed.dart';
@@ -49,11 +50,15 @@ class TicketDiscount {
       );
 }
 
+// Used for Guest
 @freezed
 class PurchasableTicketType with _$PurchasableTicketType {
   factory PurchasableTicketType({
     String? id,
     bool? active,
+    bool? limited,
+    bool? private,
+    bool? whitelisted,
     bool? addressRequired,
     bool? isDefault,
     String? description,
@@ -68,12 +73,17 @@ class PurchasableTicketType with _$PurchasableTicketType {
     String? defaultCurrency,
     EventTicketPrice? defaultPrice,
     List<DbFile>? photosExpanded,
+    String? category,
+    EventTicketCategory? categoryExpanded,
   }) = _PurchasableTicketType;
 
   factory PurchasableTicketType.fromDto(PurchasableTicketTypeDto dto) =>
       PurchasableTicketType(
         id: dto.id,
         active: dto.active,
+        limited: dto.limited,
+        private: dto.private,
+        whitelisted: dto.whitelisted,
         addressRequired: dto.addressRequired,
         isDefault: dto.isDefault,
         description: dto.description,
@@ -94,14 +104,21 @@ class PurchasableTicketType with _$PurchasableTicketType {
         photosExpanded: List.from(dto.photosExpanded ?? [])
             .map((item) => DbFile.fromDto(item))
             .toList(),
+        category: dto.category,
+        categoryExpanded: dto.categoryExpanded != null
+            ? EventTicketCategory.fromDto(dto.categoryExpanded!)
+            : null,
       );
 }
 
+// Used for Host
 @freezed
 class EventTicketType with _$EventTicketType {
   factory EventTicketType({
     String? id,
     bool? active,
+    bool? private,
+    bool? limited,
     bool? addressRequired,
     bool? isDefault,
     String? description,
@@ -118,11 +135,16 @@ class EventTicketType with _$EventTicketType {
     List<DbFile>? photosExpanded,
     double? ticketLimit,
     double? ticketCount,
+    List<WhitelistUserInfo>? limitedWhitelistUsers,
+    String? category,
+    EventTicketCategory? categoryExpanded,
   }) = _EventTicketType;
 
   factory EventTicketType.fromDto(EventTicketTypeDto dto) => EventTicketType(
         id: dto.id,
         active: dto.active,
+        private: dto.private,
+        limited: dto.limited,
         addressRequired: dto.addressRequired,
         isDefault: dto.isDefault,
         description: dto.description,
@@ -145,6 +167,13 @@ class EventTicketType with _$EventTicketType {
             .toList(),
         ticketLimit: dto.ticketLimit,
         ticketCount: dto.ticketCount,
+        limitedWhitelistUsers: List.from(dto.limitedWhitelistUsers ?? [])
+            .map((item) => WhitelistUserInfo.fromDto(item))
+            .toList(),
+        category: dto.category,
+        categoryExpanded: dto.categoryExpanded != null
+            ? EventTicketCategory.fromDto(dto.categoryExpanded!)
+            : null,
       );
 }
 
@@ -155,6 +184,7 @@ class EventTicketPrice {
   final String? network;
   final String? currency;
   final bool? isDefault;
+  final int? decimals;
 
   EventTicketPrice({
     this.cost,
@@ -163,6 +193,7 @@ class EventTicketPrice {
     this.network,
     this.currency,
     this.isDefault,
+    this.decimals,
   });
 
   factory EventTicketPrice.fromDto(EventTicketPriceDto dto) => EventTicketPrice(
@@ -172,5 +203,22 @@ class EventTicketPrice {
         network: dto.network,
         currency: dto.currency,
         isDefault: dto.isDefault,
+        decimals: dto.decimals,
+      );
+}
+
+@freezed
+class WhitelistUserInfo with _$WhitelistUserInfo {
+  const WhitelistUserInfo._();
+
+  factory WhitelistUserInfo({
+    String? id,
+    String? email,
+  }) = _WhitelistUserInfo;
+
+  factory WhitelistUserInfo.fromDto(WhitelistUserInfoDto dto) =>
+      WhitelistUserInfo(
+        id: dto.id,
+        email: dto.email,
       );
 }

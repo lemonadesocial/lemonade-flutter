@@ -14,10 +14,10 @@ class EventCardTile extends StatelessWidget {
   final Function()? onPressedSelect;
 
   const EventCardTile({
-    Key? key,
+    super.key,
     required this.paymentCard,
     this.onPressedSelect,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

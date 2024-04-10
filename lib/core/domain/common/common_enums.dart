@@ -4,9 +4,13 @@ enum SortDirection {
 }
 
 enum LemonPronoun {
-  he,
-  she,
-  they,
+  he('He'),
+  she('She'),
+  they('They');
+
+  final String pronoun;
+
+  const LemonPronoun(this.pronoun);
 }
 
 enum LemonIndustry {
@@ -69,4 +73,48 @@ enum LemonGender {
   final String newGender;
 
   const LemonGender(this.newGender);
+}
+
+enum ProfileFieldKey {
+  // Handle for unknown case
+  unknown('unknown', 'Unknown'),
+
+  // Basic info
+  displayName('display_name', 'Display name'),
+  pronoun('pronoun', 'Pronoun'),
+  tagline('tagline', 'Tagline'),
+  description('description', 'Bio'),
+
+// Personal info
+  companyName('company_name', 'Organization'),
+  jobTitle('job_title', 'Job Title'),
+  industry('industry', 'Industry'),
+  dateOfBirth('date_of_birth', 'Date of Birth'),
+  educationTitle('education_title', 'Education'),
+  newGender('new_gender', 'Gender'),
+  ethnicity('ethnicity', 'Ethnicity'),
+
+  // Socials
+  handleTwitter('handle_twitter', 'Twitter'),
+  handleLinkedin('handle_linkedin', 'Linkedin'),
+  handleInstagram('handle_instagram', 'Instagram '),
+  handleGithub('handle_github', 'Github'),
+  handleCalendly('calendly_url', 'Calendly'),
+  handleMirror('handle_mirror', 'Mirror'),
+  handleFarcaster('handle_farcaster', 'Farcaster'),
+  handleLens('handle_lens', 'Lens');
+
+  final String fieldKey;
+  final String label;
+
+  const ProfileFieldKey(this.fieldKey, this.label);
+
+  static String getFieldLabel(String fieldKey) {
+    for (ProfileFieldKey field in ProfileFieldKey.values) {
+      if (field.fieldKey == fieldKey) {
+        return field.label;
+      }
+    }
+    return fieldKey;
+  }
 }

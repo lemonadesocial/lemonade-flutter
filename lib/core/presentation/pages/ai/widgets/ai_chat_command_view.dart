@@ -1,7 +1,7 @@
 import 'package:app/core/presentation/pages/ai/ai_view_model.dart';
 import 'package:app/core/presentation/widgets/ai/ai_chat_composer.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
-import 'package:app/core/utils/modal_utils.dart';
+import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
@@ -32,7 +32,7 @@ class AIChatCommandView extends StatelessWidget {
         label: t.home.room,
         onTap: () {
           Vibrate.feedback(FeedbackType.light);
-          showComingSoonDialog(context);
+          SnackBarUtils.showComingSoon();
         },
       ),
       AICommandViewModel(
@@ -47,14 +47,14 @@ class AIChatCommandView extends StatelessWidget {
       //   label: t.home.poap,
       //   onTap: () {
       //     Vibrate.feedback(FeedbackType.light);
-      //     showComingSoonDialog(context);
+      //     SnackBarUtils.showComingSoon();
       //   },
       // ),
       // AICommandViewModel(
       //   label: t.home.collectible,
       //   onTap: () {
       //     Vibrate.feedback(FeedbackType.light);
-      //     showComingSoonDialog(context);
+      //     SnackBarUtils.showComingSoon();
       //   },
       // ),
     ];
@@ -63,7 +63,7 @@ class AIChatCommandView extends StatelessWidget {
         label: t.ai.discover.events,
         onTap: () {
           Vibrate.feedback(FeedbackType.light);
-          AutoRouter.of(context).navigate(const EventsListingRoute());
+          AutoRouter.of(context).navigate(EventsListingRoute());
         },
       ),
       AICommandViewModel(
@@ -77,7 +77,7 @@ class AIChatCommandView extends StatelessWidget {
         label: t.ai.discover.collaborators,
         onTap: () {
           Vibrate.feedback(FeedbackType.light);
-          showComingSoonDialog(context);
+          SnackBarUtils.showComingSoon();
         },
       ),
       // TODO: Temporary comment for AppStore/PlayStore review
@@ -85,14 +85,14 @@ class AIChatCommandView extends StatelessWidget {
       //   label: t.ai.discover.collectibles,
       //   onTap: () {
       //     Vibrate.feedback(FeedbackType.light);
-      //     showComingSoonDialog(context);
+      //     SnackBarUtils.showComingSoon();
       //   },
       // ),
       // AICommandViewModel(
       //   label: t.ai.discover.communities,
       //   onTap: () {
       //     Vibrate.feedback(FeedbackType.light);
-      //     showComingSoonDialog(context);
+      //     SnackBarUtils.showComingSoon();
       //   },
       // ),
     ];
@@ -173,7 +173,7 @@ class Header extends StatelessWidget {
                   t.ai.chattingWith,
                   style: Typo.small.copyWith(color: colorScheme.onSecondary),
                 ),
-                SizedBox(height: 2.h),
+                SizedBox(height: 1.h),
                 Row(
                   children: [
                     Text(

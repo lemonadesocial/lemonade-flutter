@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 class ChatInput extends StatelessWidget {
   final ChatController controller;
 
-  const ChatInput(this.controller, {Key? key}) : super(key: key);
+  const ChatInput(this.controller, {super.key});
 
   @override
   Widget build(BuildContext context) {

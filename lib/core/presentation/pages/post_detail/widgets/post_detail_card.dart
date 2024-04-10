@@ -8,7 +8,6 @@ import 'package:app/core/presentation/dpos/common/dropdown_item_dpo.dart';
 import 'package:app/core/presentation/widgets/event/event_post_card_widget.dart';
 import 'package:app/core/presentation/widgets/floating_frosted_glass_dropdown_widget.dart';
 import 'package:app/core/presentation/widgets/hero_image_viewer_widget.dart';
-import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/core/presentation/widgets/post/post_card_actions_widget.dart';
 import 'package:app/core/presentation/widgets/report/report_bottom_sheet.dart';
@@ -17,7 +16,7 @@ import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/core/utils/avatar_utils.dart';
 import 'package:app/core/utils/bottomsheet_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
-import 'package:app/core/utils/modal_utils.dart';
+import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -77,18 +76,31 @@ class PostDetailCard extends StatelessWidget {
             url: AvatarUtils.getAvatarUrl(user: post.userExpanded),
           ),
         ),
-        const SizedBox(width: 9),
+        SizedBox(width: Spacing.xSmall),
         Flexible(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
-                  Text(
-                    postName,
-                    style: Typo.medium.copyWith(
-                      color: colorScheme.onPrimary.withOpacity(0.87),
-                      fontWeight: FontWeight.w600,
+                  GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () {
+                      final isMe =
+                          AuthUtils.isMe(context, user: post.userExpanded!);
+                      if (isMe) {
+                        AutoRouter.of(context).navigate(const MyProfileRoute());
+                      } else {
+                        AutoRouter.of(context)
+                            .navigate(ProfileRoute(userId: post.user));
+                      }
+                    },
+                    child: Text(
+                      postName,
+                      style: Typo.medium.copyWith(
+                        color: colorScheme.onPrimary.withOpacity(0.87),
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                   if (postCreatedAt != null)
@@ -100,7 +112,7 @@ class PostDetailCard extends StatelessWidget {
                   const Spacer(),
                   GestureDetector(
                     onTap: () {
-                      showComingSoonDialog(context);
+                      SnackBarUtils.showComingSoon();
                     },
                     child: isOwnPost
                         ? const SizedBox.shrink()
@@ -198,7 +210,6 @@ class PostDetailCard extends StatelessWidget {
   Widget _buildFile(ColorScheme colorScheme, DbFile? file) {
     return Container(
       width: double.infinity,
-      height: 270,
       decoration: BoxDecoration(
         border: Border.all(
           color: colorScheme.outline,
@@ -212,9 +223,9 @@ class PostDetailCard extends StatelessWidget {
           imageUrl: ImageUtils.generateUrl(file: file),
           child: CachedNetworkImage(
             imageUrl: ImageUtils.generateUrl(file: file),
-            fit: BoxFit.cover,
-            errorWidget: (_, __, ___) => ImagePlaceholder.defaultPlaceholder(),
-            placeholder: (_, __) => ImagePlaceholder.defaultPlaceholder(),
+            fit: BoxFit.contain,
+            errorWidget: (_, __, ___) => const SizedBox.shrink(),
+            placeholder: (_, __) => const SizedBox.shrink(),
           ),
         ),
       ),

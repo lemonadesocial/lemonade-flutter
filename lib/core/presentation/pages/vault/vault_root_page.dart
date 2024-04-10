@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 @RoutePage()
-class VaultRootPage extends StatelessWidget with AutoRouteWrapper {
+class VaultRootPage extends StatelessWidget implements AutoRouteWrapper {
   const VaultRootPage({super.key});
 
   @override

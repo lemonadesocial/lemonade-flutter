@@ -1,0 +1,14 @@
+mutation CreateTickets($ticketType: MongoID!, $ticketAssignments: [TicketAssignment!]!) {
+  createTickets(ticket_type: $ticketType, ticket_assignments: $ticketAssignments) {
+    _id
+    event
+    type
+    accepted
+    assigned_to
+    assigned_email
+    invited_by
+    assigned_to_expanded {
+      _id
+    }
+  }
+}

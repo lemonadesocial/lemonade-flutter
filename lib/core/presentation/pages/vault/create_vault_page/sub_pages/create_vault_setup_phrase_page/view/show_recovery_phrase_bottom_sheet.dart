@@ -2,6 +2,7 @@ import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.
 import 'package:app/core/presentation/widgets/common/bottomsheet/lemon_snap_bottom_sheet_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_button_widget.dart';
+import 'package:app/core/utils/device_utils.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
@@ -30,7 +31,7 @@ class ShowRecoveryPhraseBottomSheet extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final words = seedPhrase.split(" ");
     return SizedBox(
-      height: 0.65.sh,
+      height: DeviceUtils.hasNotch() ? 0.65.sh : 0.75.sh,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(LemonRadius.small),
         child: Scaffold(
@@ -52,8 +53,8 @@ class ShowRecoveryPhraseBottomSheet extends StatelessWidget {
                               await Clipboard.setData(
                                 ClipboardData(text: seedPhrase),
                               );
-                              SnackBarUtils.showSuccessSnackbar(
-                                t.common.copiedToClipboard,
+                              SnackBarUtils.showInfo(
+                                message: t.common.copiedToClipboard,
                               );
                             },
                             width: 80.w,

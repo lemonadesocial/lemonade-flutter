@@ -32,9 +32,16 @@ enum TicketTierActions {
 
 class TicketTierItem extends StatelessWidget {
   final EventTicketType eventTicketType;
+  final Function()? onRefresh;
+  final bool isFirst;
+  final bool isLast;
+
   const TicketTierItem({
     super.key,
     required this.eventTicketType,
+    this.onRefresh,
+    this.isFirst = false,
+    this.isLast = false,
   });
 
   Future<void> modifyTicket(
@@ -51,6 +58,7 @@ class TicketTierItem extends StatelessWidget {
                 GetEventDetailEvent.fetch(eventId: eventId),
               );
         }
+        await onRefresh?.call();
       },
     );
   }
@@ -70,7 +78,20 @@ class TicketTierItem extends StatelessWidget {
       padding: EdgeInsets.all(Spacing.smMedium),
       decoration: BoxDecoration(
         color: LemonColor.atomicBlack,
-        borderRadius: BorderRadius.circular(LemonRadius.small),
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(
+            isFirst ? LemonRadius.medium : LemonRadius.extraSmall,
+          ),
+          topLeft: Radius.circular(
+            isFirst ? LemonRadius.medium : LemonRadius.extraSmall,
+          ),
+          bottomRight: Radius.circular(
+            isLast ? LemonRadius.medium : LemonRadius.extraSmall,
+          ),
+          bottomLeft: Radius.circular(
+            isLast ? LemonRadius.medium : LemonRadius.extraSmall,
+          ),
+        ),
       ),
       child: Row(
         children: [
@@ -220,6 +241,7 @@ class TicketTierItem extends StatelessWidget {
                   context.router.push(
                     EventCreateTicketTierRoute(
                       initialTicketType: eventTicketType,
+                      onRefresh: onRefresh,
                     ),
                   );
                   break;

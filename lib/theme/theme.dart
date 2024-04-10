@@ -24,4 +24,11 @@ final lemonadeAppDarkThemeData = ThemeData(
     color: LemonColor.black,
     titleTextStyle: Typo.large,
   ),
+  // Change the text buttons.
+  textButtonTheme: const TextButtonThemeData(
+    style: ButtonStyle(
+      // Change the color of the text buttons.
+      foregroundColor: MaterialStatePropertyAll(Colors.white),
+    ),
+  ),
 );

@@ -18,7 +18,7 @@ class UserDto with _$UserDto {
     @JsonKey(name: 'last_name', includeIfNull: false) String? lastName,
     @JsonKey(name: 'image_avatar', includeIfNull: false) String? imageAvatar,
     @JsonKey(name: 'new_photos_expanded', includeIfNull: false)
-    List<DbFileDto>? newPhotosExpanded,
+    List<DbFileDto?>? newPhotosExpanded,
     @JsonKey(name: 'date_of_birth', includeIfNull: false) DateTime? dateOfBirth,
     @JsonKey(name: 'phone_verified', includeIfNull: false) bool? phoneVerified,
     @JsonKey(name: 'google_user_info', includeIfNull: false)
@@ -35,12 +35,18 @@ class UserDto with _$UserDto {
     @JsonKey(name: 'handle_instagram') String? handleInstagram,
     @JsonKey(name: 'handle_facebook') String? handleFacebook,
     @JsonKey(name: 'handle_linkedin') String? handleLinkedin,
+    @JsonKey(name: 'handle_github') String? handleGithub,
+    @JsonKey(name: 'handle_mirror') String? handleMirror,
+    @JsonKey(name: 'handle_farcaster') String? handleFarcaster,
+    @JsonKey(name: 'handle_lens') String? handleLens,
+    @JsonKey(name: 'calendly_url') String? calendlyUrl,
     List<String>? wallets,
     @JsonKey(name: 'wallet_custodial') String? walletCustodial,
     String? name,
     String? username,
     String? phone,
     String? email,
+    String? pronoun,
     String? description,
     bool? active,
     String? cover,
@@ -68,6 +74,7 @@ class UserDto with _$UserDto {
     List<UserDto> blockedExpanded,
     @JsonKey(name: 'terms_accepted_adult') bool? termsAcceptedAdult,
     @JsonKey(name: 'terms_accepted_conditions') bool? termsAcceptedConditions,
+    @JsonKey(name: 'matrix_localpart') String? matrixLocalpart,
   }) = _UserDto;
 
   factory UserDto.fromJson(Map<String, dynamic> json) =>

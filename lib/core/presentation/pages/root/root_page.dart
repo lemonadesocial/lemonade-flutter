@@ -3,14 +3,12 @@ import 'package:app/core/application/payment/payment_listener/payment_listener.d
 import 'package:app/core/config.dart';
 import 'package:app/core/presentation/widgets/bottom_bar/bottom_bar_widget.dart';
 import 'package:app/core/presentation/widgets/common/drawer/lemon_drawer.dart';
-import 'package:app/core/presentation/widgets/home/floating_create_button.dart';
 import 'package:app/core/presentation/widgets/poap/poap_claim_transfer_controller_widget/poap_claim_transfer_controller_widget.dart';
 import 'package:app/core/service/shorebird_codepush_service.dart';
 import 'package:app/core/utils/drawer_utils.dart';
 import 'package:app/core/utils/onboarding_utils.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
-import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -60,13 +58,7 @@ class _RootPageViewState extends State<RootPage> {
           context.read<NewsfeedListingBloc>().add(NewsfeedListingEvent.fetch());
           return UpgradeAlert(
             upgrader: Upgrader(
-              showIgnore: false,
               durationUntilAlertAgain: const Duration(seconds: 30),
-              dialogStyle: UpgradeDialogStyle.cupertino,
-              cupertinoButtonTextStyle: TextStyle(
-                color: Colors.white,
-                fontSize: Typo.small.fontSize!,
-              ),
               appcastConfig: appCastConfiguration,
               debugLogging: kDebugMode,
             ),
@@ -77,6 +69,7 @@ class _RootPageViewState extends State<RootPage> {
                 ),
                 AutoTabsScaffold(
                   extendBody: true,
+                  extendBodyBehindAppBar: true,
                   scaffoldKey: DrawerUtils.drawerGlobalKey,
                   drawerEnableOpenDragGesture:
                       isAuthenticated == true ? true : false,
@@ -94,16 +87,6 @@ class _RootPageViewState extends State<RootPage> {
                     ),
                   ],
                   drawer: const LemonDrawer(),
-                  floatingActionButton: FloatingCreateButton(
-                    onTap: () {
-                      authState.maybeWhen(
-                        authenticated: (session) =>
-                            context.router.push(const AIRoute()),
-                        orElse: () =>
-                            context.router.navigate(const LoginRoute()),
-                      );
-                    },
-                  ),
                   floatingActionButtonLocation:
                       FloatingActionButtonLocation.centerDocked,
                   bottomNavigationBuilder: (_, tabsRouter) {

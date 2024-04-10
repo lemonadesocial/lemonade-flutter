@@ -30,7 +30,7 @@ const uuid = Uuid();
 
 @RoutePage()
 class AIPage extends StatefulWidget {
-  const AIPage({Key? key}) : super(key: key);
+  const AIPage({super.key});
 
   @override
   AIPageState createState() => AIPageState();

@@ -44,14 +44,14 @@ enum CreatePopupGradient {
 
 class CreatePopUpTile extends StatelessWidget {
   const CreatePopUpTile({
-    Key? key,
+    super.key,
     this.onTap,
     required this.colors,
     required this.label,
     required this.content,
     required this.suffixIcon,
     this.featureAvailable = false,
-  }) : super(key: key);
+  });
 
   final VoidCallback? onTap;
   final List<Color> colors;

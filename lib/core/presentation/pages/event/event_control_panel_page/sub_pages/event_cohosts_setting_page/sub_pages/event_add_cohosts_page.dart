@@ -56,10 +56,10 @@ class _EventAddCohostsViewState extends State<EventAddCohostsView> {
     final t = Translations.of(context);
     return Scaffold(
       appBar: LemonAppBar(
-        backgroundColor: colorScheme.onPrimaryContainer,
+        backgroundColor: colorScheme.background,
         title: t.event.cohosts.addCohosts,
       ),
-      backgroundColor: colorScheme.onPrimaryContainer,
+      backgroundColor: colorScheme.background,
       resizeToAvoidBottomInset: true,
       body: BlocListener<ManageEventCohostRequestsBloc,
           ManageEventCohostRequestsState>(
@@ -169,24 +169,29 @@ class _EventAddCohostsViewState extends State<EventAddCohostsView> {
           loading: () => true,
           orElse: () => false,
         );
-        return LinearGradientButton(
-          label: t.common.actions.saveChanges,
-          height: 48.h,
-          radius: BorderRadius.circular(24),
-          textStyle: Typo.medium.copyWith(),
-          mode: GradientButtonMode.lavenderMode,
-          onTap: () {
-            FocusScope.of(context).requestFocus(FocusNode());
-            Vibrate.feedback(FeedbackType.light);
-            context.read<ManageEventCohostRequestsBloc>().add(
-                  ManageEventCohostRequestsEvent.saveChanged(
-                    eventId: widget.event?.id ?? '',
-                    users: selectedUserIds,
-                    decision: true,
-                  ),
-                );
-          },
-          loadingWhen: loading,
+        return Align(
+          alignment: Alignment.bottomCenter,
+          child: SafeArea(
+            child: LinearGradientButton(
+              label: t.common.actions.saveChanges,
+              height: 48.h,
+              radius: BorderRadius.circular(24),
+              textStyle: Typo.medium.copyWith(),
+              mode: GradientButtonMode.lavenderMode,
+              onTap: () {
+                FocusScope.of(context).requestFocus(FocusNode());
+                Vibrate.feedback(FeedbackType.light);
+                context.read<ManageEventCohostRequestsBloc>().add(
+                      ManageEventCohostRequestsEvent.saveChanged(
+                        eventId: widget.event?.id ?? '',
+                        users: selectedUserIds,
+                        decision: true,
+                      ),
+                    );
+              },
+              loadingWhen: loading,
+            ),
+          ),
         );
       },
     );

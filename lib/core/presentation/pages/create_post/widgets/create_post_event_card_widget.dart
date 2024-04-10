@@ -13,10 +13,10 @@ import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 
 class CreatePostEventCardWidget extends StatelessWidget {
   const CreatePostEventCardWidget({
-    Key? key,
+    super.key,
     required this.event,
     required this.onDismiss,
-  }) : super(key: key);
+  });
 
   final Event event;
   final VoidCallback onDismiss;

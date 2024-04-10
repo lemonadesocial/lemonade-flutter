@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
   const LemonAppBar({
-    Key? key,
+    super.key,
     this.title,
     this.titleBuilder,
     this.leading,
@@ -13,7 +13,8 @@ class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.padding,
     this.hideLeading,
     this.bottom,
-  }) : super(key: key);
+    this.onPressBack,
+  });
 
   final Widget? leading;
   final String? title;
@@ -23,17 +24,23 @@ class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
   final EdgeInsets? padding;
   final bool? hideLeading;
   final PreferredSizeWidget? bottom;
+  final Function()? onPressBack;
 
   @override
   Size get preferredSize => Size.fromHeight(60.w);
 
   @override
   Widget build(BuildContext context) {
-    final primary = Theme.of(context).colorScheme.primary;
+    final background = Theme.of(context).colorScheme.background;
     return AppBar(
-      backgroundColor: backgroundColor ?? primary,
+      backgroundColor: backgroundColor ?? background,
       automaticallyImplyLeading: hideLeading ?? true,
-      leading: hideLeading ?? false ? null : leading ?? const LemonBackButton(),
+      leading: hideLeading ?? false
+          ? null
+          : leading ??
+              LemonBackButton(
+                onPressBack: onPressBack,
+              ),
       actions: actions,
       title: title != null
           ? buildCenteredTitle(title!)

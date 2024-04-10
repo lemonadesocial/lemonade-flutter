@@ -1,42 +1,78 @@
 # import '../../schema.graphql'
 
-fragment PaymentAccountFragment on NewPaymentAccount {
+fragment PaymentFragment on NewPayment {
+  _id
+  stamps
+  amount
+  currency
+  state
+  user
+  billing_info {
     _id
-    active
-    created_at
-    user
-    type
-    title
-    provider
-    account_info {
-        ...on EthereumAccount {
-            currencies
-            currency_map
-            address
-            networks
-        }
+    email
+    firstname
+    lastname
+  }
+  transfer_metadata
+  transfer_params
+  failure_reason
+  account_expanded {
+    ...PaymentAccountFragment
+  }
+  due_amount
+  ref_data
+}
 
-        ...on StripeAccount {
-            currencies
-            currency_map
-            account_id
-            publishable_key
-        }
-
-        ...on DigitalAccount {
-            currencies
-            currency_map
-            account_id
-        }
-
-        # ... on SafeAccount {
-        #     currencies
-        #     currency_map
-        #     address
-        #     network
-        #     owners
-        #     threshold
-        #     pending
-        # }
+fragment PaymentAccountFragment on NewPaymentAccount {
+  _id
+  active
+  created_at
+  user
+  type
+  title
+  provider
+  account_info {
+    ... on EthereumAccount {
+      currencies
+      currency_map
+      address
+      networks
     }
+
+    ... on StripeAccount {
+      currencies
+      currency_map
+      account_id
+      publishable_key
+    }
+
+    ... on DigitalAccount {
+      currencies
+      currency_map
+      account_id
+    }
+
+    ... on SafeAccount {
+      currencies
+      currency_map
+      address
+      network
+      owners
+      threshold
+      pending
+    }
+
+    ... on EthereumEscrowAccount {
+      address
+      currencies
+      currency_map
+      host_refund_percent
+      minimum_deposit_percent
+      network
+      refund_policies {
+        percent
+        timestamp
+      }
+    }
+  }
 }

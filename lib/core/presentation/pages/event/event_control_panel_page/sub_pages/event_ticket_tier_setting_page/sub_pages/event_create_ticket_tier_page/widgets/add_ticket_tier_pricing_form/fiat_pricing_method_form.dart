@@ -2,13 +2,13 @@ import 'package:app/core/application/event_tickets/modify_ticket_price_bloc/modi
 import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/ticket_tier_dropdown.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
-import 'package:app/core/utils/bottomsheet_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class FiatPricingMethodForm extends StatefulWidget {
   final PaymentAccount? stripePaymentAccount;
@@ -24,6 +24,8 @@ class FiatPricingMethodForm extends StatefulWidget {
 }
 
 class _FiatPricingMethodFormState extends State<FiatPricingMethodForm> {
+  final defaultCurrency = 'USD';
+
   @override
   void initState() {
     super.initState();
@@ -45,6 +47,14 @@ class _FiatPricingMethodFormState extends State<FiatPricingMethodForm> {
     final initialValue =
         currencyFormatter.format(initialTicketPrice?.cost ?? '');
     widget.amountController.text = initialValue;
+    if (widget.stripePaymentAccount != null &&
+        modifyTicketPriceBloc.state.currency == null) {
+      context.read<ModifyTicketPriceBloc>().add(
+            ModifyTicketPriceEvent.onCurrencyChanged(
+              currency: defaultCurrency,
+            ),
+          );
+    }
   }
 
   void resetAmount() {
@@ -82,8 +92,8 @@ class _FiatPricingMethodFormState extends State<FiatPricingMethodForm> {
                     value: state.currency,
                     getDisplayValue: (v) => v ?? '',
                     placeholder: t.event.ticketTierSetting.currency,
-                    onTap: () => BottomSheetUtils.showSnapBottomSheet(
-                      context,
+                    onTap: () => showCupertinoModalBottomSheet(
+                      context: context,
                       builder: (_) =>
                           TicketTierFeatureDropdownList<String, String>(
                         value: state.currency,

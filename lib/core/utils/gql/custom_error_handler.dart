@@ -1,6 +1,7 @@
 // ignore_for_file: constant_identifier_names
 
 import 'package:app/core/config.dart';
+import 'package:app/core/managers/crash_analytics_manager.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
@@ -59,6 +60,11 @@ class CustomErrorHandler {
       final errorCode = getFirstErrorCode(errors);
       final errorMessage = getErrorMessage(errors);
       showSnackbarError(errorCode, errorMessage);
+      if (errorCode == GraphQLErrorCodeStrings.INTERNAL_SERVER_ERROR) {
+        CrashAnalyticsManager()
+            .crashAnalyticsService
+            ?.captureError(errors, exception.originalStackTrace);
+      }
     }
     FirebaseCrashlytics.instance.log(exception.toString());
     return null;
@@ -76,6 +82,10 @@ class CustomErrorHandler {
     final errorCode = getFirstErrorCode(errors);
     final errorMessage = getErrorMessage(errors);
     showSnackbarError(errorCode, errorMessage);
+    CrashAnalyticsManager().crashAnalyticsService?.captureError(
+          errors,
+          StackTrace.fromString(request.toString()),
+        );
     FirebaseCrashlytics.instance.log(response.errors.toString());
     return null;
   }
@@ -84,45 +94,10 @@ class CustomErrorHandler {
     String errorCode,
     String errorMessage,
   ) {
-    String message;
-    // If production, show meaningful error message
-    if (AppConfig.isProduction) {
-      switch (errorCode) {
-        case GraphQLErrorCodeStrings.GRAPHQL_PARSE_FAILED:
-          message = "Syntax error. Please try again.";
-          break;
-        case GraphQLErrorCodeStrings.GRAPHQL_VALIDATION_FAILED:
-          message = "Invalid request. Please check and try again later.";
-          break;
-        case GraphQLErrorCodeStrings.BAD_USER_INPUT:
-          message = "Invalid input. Please review and try again later.";
-          break;
-        case GraphQLErrorCodeStrings.PERSISTED_QUERY_NOT_FOUND:
-          message = "Request not found. Please try again later.";
-          break;
-        case GraphQLErrorCodeStrings.PERSISTED_QUERY_NOT_SUPPORTED:
-          message = "Request not supported. Please try again later.";
-          break;
-        case GraphQLErrorCodeStrings.OPERATION_RESOLUTION_FAILURE:
-          message = "Request issue. Please try again later.";
-          break;
-        case GraphQLErrorCodeStrings.BAD_REQUEST:
-          message = "Request problem. Please try again later.";
-          break;
-        case GraphQLErrorCodeStrings.INTERNAL_SERVER_ERROR:
-          message = "Internal server error. Please try again later.";
-          break;
-        default:
-          message = "Oops! Something went wrong. Please try again later.";
-          break;
-      }
-      SnackBarUtils.showErrorSnackbar(
-        errorMessage.isNotEmpty ? errorMessage : message,
-      );
-      return;
-    }
-    // Show detail error code and error message in Staging and development
-    SnackBarUtils.showErrorSnackbar("Code: $errorCode, $errorMessage");
+    final errorMessageContent = AppConfig.isProduction
+        ? errorMessage
+        : "Code: $errorCode, $errorMessage";
+    SnackBarUtils.showError(message: errorMessageContent);
     return;
   }
 }

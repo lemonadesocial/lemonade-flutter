@@ -28,4 +28,52 @@ class StringUtils {
         return "${value}th";
     }
   }
+
+  static String snakeToCamel(String text) {
+    return text
+        .toLowerCase()
+        .split('_')
+        .map((word) {
+          return capitalize(word);
+        })
+        .join()
+        .replaceFirst(capitalize(text[0]), text[0]);
+  }
+
+  static String camelCaseToWords(String text) {
+    return text
+        .replaceAllMapped(
+          RegExp('([a-z])([A-Z])'),
+          (Match m) => "${m[1]} ${m[2]}",
+        )
+        .toLowerCase();
+  }
+
+  static String underToWords(String text) {
+    return text.replaceAll('_', ' ').toLowerCase();
+  }
+
+  static RegExp get urlRegx => RegExp(
+        r'^(.*?)((?:https?:\/\/|www\.)[^\s/$.?#].[^\s]*)',
+        caseSensitive: false,
+        dotAll: true,
+      );
+
+  static bool isUrl(String text) {
+    return urlRegx.hasMatch(text);
+  }
+
+  static String stripHtmlTags(String htmlString) {
+    RegExp exp = RegExp(r"<[^>]*>", multiLine: true, caseSensitive: true);
+    return htmlString.replaceAll(exp, ' ').trim();
+  }
+
+  static String removeMarkdownSyntax(String? markdown) {
+    if (markdown == null) {
+      return '';
+    }
+    RegExp regex = RegExp(r'[*_~`#]');
+    final result = markdown.replaceAll(regex, '');
+    return result;
+  }
 }

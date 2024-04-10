@@ -17,6 +17,11 @@ class EventUtils {
     return event.host == userId;
   }
 
+  static bool isCohost({required Event event, required String userId}) {
+    if (event.id == null) return false;
+    return event.cohosts?.contains(userId) ?? false;
+  }
+
   static String getEventThumbnailUrl({required Event event}) {
     if (event.newNewPhotosExpanded == null ||
         event.newNewPhotosExpanded!.isEmpty) {
@@ -33,5 +38,23 @@ class EventUtils {
         .where((item) => item.provider == OfferProvider.poap)
         .toList()
         .isNotEmpty;
+  }
+
+  static String getAddress(Event event) {
+    final address = event.address;
+    return [
+      address?.street1,
+      address?.street2,
+      address?.city,
+      address?.region,
+      address?.country,
+    ].where((element) => element != null).join(', ');
+  }
+
+  static bool isInvited(
+    Event event, {
+    required String userId,
+  }) {
+    return (event.invited ?? []).contains(userId);
   }
 }

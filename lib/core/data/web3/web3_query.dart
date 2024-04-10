@@ -8,6 +8,8 @@ final getChainsListQuery = gql('''
       name
       rpc_url
       logo_url
+      block_time
+      safe_confirmations
       tokens {
         active
         name

@@ -7,6 +7,7 @@ import 'package:app/core/application/event_tickets/select_event_tickets_bloc/sel
 import 'package:app/core/application/payment/get_payment_cards_bloc/get_payment_cards_bloc.dart';
 import 'package:app/core/application/payment/payment_listener/payment_listener.dart';
 import 'package:app/core/application/payment/select_payment_card_cubit/select_payment_card_cubit.dart';
+import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/input/buy_tickets_input/buy_tickets_input.dart';
 import 'package:app/core/domain/event/input/calculate_tickets_pricing_input/calculate_tickets_pricing_input.dart';
@@ -104,6 +105,32 @@ class EventTicketsSummaryPageView extends StatelessWidget {
         );
   }
 
+  Future<void> _onNavigateWhenPaymentConfirmed(
+    BuildContext context,
+    Event event,
+  ) {
+    return AutoRouter.of(context).replaceAll(
+      [
+        RSVPEventSuccessPopupRoute(
+          event: event,
+          buttonBuilder: (newContext) => LinearGradientButton(
+            onTap: () => AutoRouter.of(newContext).replace(
+              const EventPickMyTicketRoute(),
+            ),
+            height: Sizing.large,
+            textStyle: Typo.medium.copyWith(
+              fontWeight: FontWeight.w600,
+              color: Theme.of(context).colorScheme.onPrimary.withOpacity(0.87),
+              fontFamily: FontFamily.nohemiVariable,
+            ),
+            radius: BorderRadius.circular(LemonRadius.small * 2),
+            label: t.common.next,
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -118,7 +145,7 @@ class EventTicketsSummaryPageView extends StatelessWidget {
               orElse: () => [] as List<PurchasableTicketType>,
               success: (response, _) => response.ticketTypes ?? [],
             );
-    final isCryptoCurrency = selectedNetwork != null;
+    final isCryptoCurrency = selectedNetwork?.isNotEmpty == true;
 
     return MultiBlocListener(
       listeners: [
@@ -139,7 +166,7 @@ class EventTicketsSummaryPageView extends StatelessWidget {
             CalculateEventTicketPricingState>(
           listener: (context, state) {
             state.maybeWhen(
-              success: (pricingInfo) {
+              success: (pricingInfo, isFree) {
                 if (isCryptoCurrency) return;
                 if (pricingInfo.paymentAccounts?.isEmpty == true) return;
                 context.read<GetPaymentCardsBloc>().add(
@@ -166,7 +193,20 @@ class EventTicketsSummaryPageView extends StatelessWidget {
             if (eventJoinRequest != null) {
               return _handleEventRequireApproval(context);
             }
-            _waitForNotificationTimer.start(context);
+            _waitForNotificationTimer.start(
+              context,
+              paymentId: payment?.id ?? '',
+              onPaymentFailed: () {
+                context.read<BuyTicketsBloc>().add(
+                      BuyTicketsEvent.receivedPaymentFailedFromNotification(
+                        payment: payment,
+                      ),
+                    );
+              },
+              onPaymentDone: () {
+                _onNavigateWhenPaymentConfirmed(context, event);
+              },
+            );
           },
         ),
         BuyTicketsWithCryptoListener.create(
@@ -174,7 +214,23 @@ class EventTicketsSummaryPageView extends StatelessWidget {
             if (data.eventJoinRequest != null) {
               return _handleEventRequireApproval(context);
             }
-            _waitForNotificationTimer.start(context);
+            _waitForNotificationTimer.startWithCrypto(
+              context,
+              chainId: selectedNetwork ?? '',
+              txHash: data.txHash ?? '',
+              paymentId: data.payment?.id ?? '',
+              onPaymentFailed: () {
+                context.read<BuyTicketsWithCryptoBloc>().add(
+                      BuyTicketsWithCryptoEvent
+                          .receivedPaymentFailedFromNotification(
+                        payment: data.payment,
+                      ),
+                    );
+              },
+              onPaymentDone: () {
+                _onNavigateWhenPaymentConfirmed(context, event);
+              },
+            );
           },
         ),
       ],
@@ -218,34 +274,9 @@ class EventTicketsSummaryPageView extends StatelessWidget {
           if (eventJoinRequest != null) {
             return;
           }
-          final currentPayment = isCryptoCurrency
-              ? context.read<BuyTicketsWithCryptoBloc>().state.data.payment
-              : context.read<BuyTicketsBloc>().state.maybeWhen(
-                    orElse: () => null,
-                    done: (payment, _) => payment,
-                  );
-          if (currentPayment?.id == payment.id && eventId == event.id) {
+          if (eventId == event.id) {
             _waitForNotificationTimer.cancel();
-            AutoRouter.of(context).replaceAll(
-              [
-                RSVPEventSuccessPopupRoute(
-                  event: event,
-                  buttonBuilder: (newContext) => LinearGradientButton(
-                    onTap: () => AutoRouter.of(newContext).replace(
-                      const EventPickMyTicketRoute(),
-                    ),
-                    height: Sizing.large,
-                    textStyle: Typo.medium.copyWith(
-                      fontWeight: FontWeight.w600,
-                      color: colorScheme.onPrimary.withOpacity(0.87),
-                      fontFamily: FontFamily.nohemiVariable,
-                    ),
-                    radius: BorderRadius.circular(LemonRadius.small * 2),
-                    label: t.common.next,
-                  ),
-                ),
-              ],
-            );
+            _onNavigateWhenPaymentConfirmed(context, event);
           }
         },
         child: WillPopScope(
@@ -295,7 +326,7 @@ class EventTicketsSummaryPageView extends StatelessWidget {
                                   idle: () => const SizedBox.shrink(),
                                   loading: () =>
                                       Loading.defaultLoading(context),
-                                  failure: (pricingInfo) {
+                                  failure: (pricingInfo, isFree) {
                                     if (pricingInfo != null) {
                                       return EventTicketsSummary(
                                         ticketTypes: ticketTypes,
@@ -309,7 +340,8 @@ class EventTicketsSummaryPageView extends StatelessWidget {
                                       emptyText: t.common.somethingWrong,
                                     );
                                   },
-                                  success: (pricingInfo) => EventTicketsSummary(
+                                  success: (pricingInfo, isFree) =>
+                                      EventTicketsSummary(
                                     ticketTypes: ticketTypes,
                                     selectedTickets: selectedTickets,
                                     selectedCurrency: selectedCurrency,
@@ -325,8 +357,9 @@ class EventTicketsSummaryPageView extends StatelessWidget {
                               builder: (context, state) => AddPromoCodeInput(
                                 pricingInfo: state.maybeWhen(
                                   orElse: () => null,
-                                  failure: ((pricingInfo) => pricingInfo),
-                                  success: (pricingInfo) => pricingInfo,
+                                  failure: ((pricingInfo, isFree) =>
+                                      pricingInfo),
+                                  success: (pricingInfo, isFree) => pricingInfo,
                                 ),
                                 onPressApply: (promoCode) {
                                   context
@@ -354,7 +387,7 @@ class EventTicketsSummaryPageView extends StatelessWidget {
                                   idle: () => const SizedBox.shrink(),
                                   loading: () =>
                                       Loading.defaultLoading(context),
-                                  failure: (pricingInfo) {
+                                  failure: (pricingInfo, isFree) {
                                     if (pricingInfo != null) {
                                       return EventOrderSummary(
                                         selectedCurrency: selectedCurrency,
@@ -366,7 +399,8 @@ class EventTicketsSummaryPageView extends StatelessWidget {
                                       emptyText: t.common.somethingWrong,
                                     );
                                   },
-                                  success: (pricingInfo) => EventOrderSummary(
+                                  success: (pricingInfo, isFree) =>
+                                      EventOrderSummary(
                                     selectedCurrency: selectedCurrency,
                                     selectedNetwork: selectedNetwork,
                                     pricingInfo: pricingInfo,
@@ -385,8 +419,13 @@ class EventTicketsSummaryPageView extends StatelessWidget {
                           builder: (context, state) {
                             final pricingInfo = state.maybeWhen(
                               orElse: () => null,
-                              failure: ((pricingInfo) => pricingInfo),
-                              success: (pricingInfo) => pricingInfo,
+                              failure: ((pricingInfo, isFree) => pricingInfo),
+                              success: (pricingInfo, isFree) => pricingInfo,
+                            );
+                            final isFree = state.maybeWhen(
+                              orElse: () => false,
+                              failure: (pricingInfo, isFree) => isFree,
+                              success: (pricingInfo, isFree) => isFree,
                             );
 
                             if (pricingInfo == null) {
@@ -398,10 +437,12 @@ class EventTicketsSummaryPageView extends StatelessWidget {
                                 selectedCurrency: selectedCurrency,
                                 selectedNetwork: selectedNetwork,
                                 pricingInfo: pricingInfo,
+                                isFree: isFree,
                               );
                             }
 
                             return EventOrderSummaryFooter(
+                              isFree: isFree,
                               selectedCurrency: selectedCurrency,
                               onSlideToPay: () {
                                 if (pricingInfo.paymentAccounts == null ||
@@ -428,11 +469,13 @@ class EventTicketsSummaryPageView extends StatelessWidget {
                                           currency: selectedCurrency,
                                           items: selectedTickets,
                                           total: pricingInfo.total ?? '0',
-                                          transferParams:
-                                              BuyTicketsTransferParamsInput(
-                                            paymentMethod:
-                                                selectedCard?.providerId ?? '',
-                                          ),
+                                          transferParams: isFree
+                                              ? null
+                                              : BuyTicketsTransferParamsInput(
+                                                  paymentMethod: selectedCard
+                                                          ?.providerId ??
+                                                      '',
+                                                ),
                                         ),
                                       ),
                                     );

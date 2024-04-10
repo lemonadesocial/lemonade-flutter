@@ -7,7 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LemonTextField extends StatelessWidget {
   const LemonTextField({
-    Key? key,
+    super.key,
     this.onChange,
     this.initialText,
     this.hintText,
@@ -27,7 +27,10 @@ class LemonTextField extends StatelessWidget {
     this.errorText,
     this.readOnly,
     this.onTap,
-  }) : super(key: key);
+    this.showRequired,
+    this.filled,
+    this.fillColor,
+  });
 
   final ValueChanged<String>? onChange;
   final String? initialText;
@@ -48,6 +51,9 @@ class LemonTextField extends StatelessWidget {
   final String? errorText;
   final bool? readOnly;
   final Function()? onTap;
+  final bool? showRequired;
+  final bool? filled;
+  final Color? fillColor;
 
   @override
   Widget build(BuildContext context) {
@@ -66,11 +72,31 @@ class LemonTextField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (label != null) ...[
-          Text(
-            label!,
-            style: Typo.small.copyWith(
-              color: theme.colorScheme.onPrimary.withOpacity(0.36),
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              if (showRequired == true) ...[
+                Text(
+                  "*",
+                  style: Typo.mediumPlus.copyWith(
+                    color: LemonColor.coralReef,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                SizedBox(
+                  width: Spacing.superExtraSmall,
+                ),
+              ],
+              Expanded(
+                child: Text(
+                  label ?? '',
+                  style: Typo.small.copyWith(
+                    color: theme.colorScheme.onPrimary.withOpacity(0.36),
+                  ),
+                ),
+              ),
+            ],
           ),
           SizedBox(height: Spacing.superExtraSmall),
         ],
@@ -99,6 +125,8 @@ class LemonTextField extends StatelessWidget {
             contentPadding: contentPadding ?? EdgeInsets.all(Spacing.smMedium),
             suffixIcon: suffixIcon,
             prefixIcon: leadingIcon,
+            filled: filled ?? false,
+            fillColor: fillColor ?? Colors.transparent,
           ),
           inputFormatters: inputFormatters,
           readOnly: readOnly ?? false,

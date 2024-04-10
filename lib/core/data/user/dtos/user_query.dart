@@ -60,10 +60,15 @@ const userProfileFragment = '''
   ethnicity
   new_gender
   industry
+  handle_github
   handle_facebook
   handle_instagram
   handle_linkedin
   handle_twitter
+  handle_mirror
+  handle_farcaster
+  handle_lens
+  calendly_url
   hosted
   icebreakers {
     _id

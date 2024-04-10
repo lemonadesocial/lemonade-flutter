@@ -5,6 +5,7 @@ import 'package:app/core/domain/event/entities/event_currency.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/select_tickets_page/widgets/ticket_counter.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/presentation/widgets/web3/chain/chain_query_widget.dart';
 import 'package:app/core/utils/event_tickets_utils.dart';
 import 'package:app/core/utils/number_utils.dart';
@@ -72,132 +73,203 @@ class SelectTicketItem extends StatelessWidget {
     final ticketThumbnail = ImagePlaceholder.ticketThumbnail(
       iconColor: colorScheme.onSecondary,
     );
-    return Padding(
-      padding: EdgeInsets.all(Spacing.smMedium),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // image
-          Container(
+    final isLocked =
+        ticketType.limited == true && ticketType.whitelisted == false;
+
+    return InkWell(
+      onTap: () {
+        if (!isLocked) {
+          return;
+        }
+        SnackBarUtils.showCustom(
+          icon: Container(
             width: Sizing.medium,
             height: Sizing.medium,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
+              color: LemonColor.chineseBlack,
+              borderRadius: BorderRadius.circular(Sizing.medium),
             ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
-              child: CachedNetworkImage(
-                // TODO: api does not support yet
-                imageUrl: "",
-                placeholder: (_, __) => ticketThumbnail,
-                errorWidget: (_, __, ___) => ticketThumbnail,
+            child: Center(
+              child: ThemeSvgIcon(
+                color: colorScheme.onSecondary,
+                builder: (colorFilter) => Assets.icons.icLock.svg(
+                  width: Sizing.xSmall,
+                  height: Sizing.xSmall,
+                  colorFilter: colorFilter,
+                ),
               ),
             ),
           ),
-          SizedBox(width: Spacing.xSmall),
-          // ticket type name and description
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Text(
-                  ticketType.title ?? '',
-                  style: Typo.medium.copyWith(
-                    color: colorScheme.onPrimary.withOpacity(0.87),
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                if (ticketType.description != null &&
-                    ticketType.description!.isNotEmpty) ...[
-                  SizedBox(height: 2.w),
-                  Text(
-                    ticketType.description ?? '',
-                    style: Typo.medium.copyWith(
-                      color: colorScheme.onSecondary,
-                      fontWeight: FontWeight.w600,
+          title: t.event.eventBuyTickets.ticketLocked,
+          message: t.event.eventBuyTickets.ticketLockedDescription,
+        );
+      },
+      child: Stack(
+        children: [
+          Opacity(
+            opacity: isLocked ? 0.5 : 1,
+            child: Padding(
+              padding: EdgeInsets.all(Spacing.smMedium),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // image
+                  Container(
+                    width: Sizing.medium,
+                    height: Sizing.medium,
+                    decoration: BoxDecoration(
+                      borderRadius:
+                          BorderRadius.circular(LemonRadius.extraSmall),
                     ),
-                    maxLines: 4,
-                    overflow: TextOverflow.ellipsis,
+                    child: ClipRRect(
+                      borderRadius:
+                          BorderRadius.circular(LemonRadius.extraSmall),
+                      child: CachedNetworkImage(
+                        // TODO: api does not support yet
+                        imageUrl: "",
+                        placeholder: (_, __) => ticketThumbnail,
+                        errorWidget: (_, __, ___) => ticketThumbnail,
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: Spacing.xSmall),
+                  // ticket type name and description
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Text(
+                          ticketType.title ?? '',
+                          style: Typo.medium.copyWith(
+                            color: colorScheme.onPrimary.withOpacity(0.87),
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        if (ticketType.description != null &&
+                            ticketType.description!.isNotEmpty) ...[
+                          SizedBox(height: 2.w),
+                          Padding(
+                            padding: EdgeInsets.only(
+                              right: isLocked ? Spacing.xLarge : 0,
+                            ),
+                            child: Text(
+                              ticketType.description ?? '',
+                              style: Typo.medium.copyWith(
+                                color: colorScheme.onSecondary,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              maxLines: 4,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                        SizedBox(height: Spacing.xSmall),
+                        if (!isLocked)
+                          ...(ticketType.prices ?? []).map((ticketPrice) {
+                            // Only apply for crypto flow, hide price item with network different
+                            // with current selected network filter
+                            if (ticketPrice.network?.isNotEmpty == true &&
+                                networkFilter != null &&
+                                ticketPrice.network != networkFilter) {
+                              return const SizedBox.shrink();
+                            }
+
+                            final isCryptoCurrency =
+                                ticketPrice.network?.isNotEmpty == true;
+
+                            if (isCryptoCurrency &&
+                                selectedPaymentMethod ==
+                                    SelectTicketsPaymentMethod.card) {
+                              return const SizedBox.shrink();
+                            }
+
+                            if (!isCryptoCurrency &&
+                                selectedPaymentMethod ==
+                                    SelectTicketsPaymentMethod.wallet) {
+                              return const SizedBox.shrink();
+                            }
+
+                            // Only apply for crypto flow, hide price item with network different
+                            // with current selected network filter
+                            if (ticketPrice.network?.isNotEmpty == true &&
+                                networkFilter != null &&
+                                ticketPrice.network != networkFilter) {
+                              return const SizedBox.shrink();
+                            }
+
+                            bool enabled = true;
+                            if (selectedCurrency == null) {
+                              enabled = true;
+                            } else {
+                              enabled = ticketPrice.currency ==
+                                      selectedCurrency &&
+                                  (isCryptoCurrency
+                                      ? ticketPrice.network == selectedNetwork
+                                      : true);
+                            }
+                            final decimals = EventTicketUtils.getEventCurrency(
+                                  currencies: eventCurrencies,
+                                  currency: ticketPrice.currency,
+                                  network: ticketPrice.network,
+                                )?.decimals?.toInt() ??
+                                2;
+
+                            return Container(
+                              margin:
+                                  EdgeInsets.only(bottom: Spacing.extraSmall),
+                              child: _PriceItem(
+                                decimals: decimals,
+                                count: enabled ? count : 0,
+                                currency: ticketPrice.currency!,
+                                network: ticketPrice.network,
+                                price: ticketPrice,
+                                disabled: !enabled,
+                                onIncrease: (newCount) {
+                                  add(
+                                    newCount: newCount,
+                                    currency: ticketPrice.currency!,
+                                    network: ticketPrice.network,
+                                  );
+                                },
+                                onDecrease: (newCount) {
+                                  minus(
+                                    newCount: newCount,
+                                    currency: ticketPrice.currency!,
+                                    network: ticketPrice.network,
+                                  );
+                                },
+                              ),
+                            );
+                          }),
+                      ],
+                    ),
                   ),
                 ],
-                SizedBox(height: Spacing.xSmall),
-                ...(ticketType.prices ?? []).map((ticketPrice) {
-                  // Only apply for crypto flow, hide price item with network different
-                  // with current selected network filter
-                  if (ticketPrice.network != null &&
-                      networkFilter != null &&
-                      ticketPrice.network != networkFilter) {
-                    return const SizedBox.shrink();
-                  }
-
-                  final isCryptoCurrency = ticketPrice.network != null;
-
-                  if (isCryptoCurrency &&
-                      selectedPaymentMethod ==
-                          SelectTicketsPaymentMethod.card) {
-                    return const SizedBox.shrink();
-                  }
-
-                  if (!isCryptoCurrency &&
-                      selectedPaymentMethod ==
-                          SelectTicketsPaymentMethod.wallet) {
-                    return const SizedBox.shrink();
-                  }
-
-                  // Only apply for crypto flow, hide price item with network different
-                  // with current selected network filter
-                  if (ticketPrice.network != null &&
-                      networkFilter != null &&
-                      ticketPrice.network != networkFilter) {
-                    return const SizedBox.shrink();
-                  }
-
-                  bool enabled = true;
-                  if (selectedCurrency == null) {
-                    enabled = true;
-                  } else {
-                    enabled = ticketPrice.currency == selectedCurrency &&
-                        (isCryptoCurrency
-                            ? ticketPrice.network == selectedNetwork
-                            : true);
-                  }
-                  final decimals = EventTicketUtils.getEventCurrency(
-                        currencies: eventCurrencies,
-                        currency: ticketPrice.currency,
-                        network: ticketPrice.network,
-                      )?.decimals?.toInt() ??
-                      2;
-
-                  return Container(
-                    margin: EdgeInsets.only(bottom: Spacing.extraSmall),
-                    child: _PriceItem(
-                      decimals: decimals,
-                      count: enabled ? count : 0,
-                      currency: ticketPrice.currency!,
-                      network: ticketPrice.network,
-                      price: ticketPrice,
-                      disabled: !enabled,
-                      onIncrease: (newCount) {
-                        add(
-                          newCount: newCount,
-                          currency: ticketPrice.currency!,
-                          network: ticketPrice.network,
-                        );
-                      },
-                      onDecrease: (newCount) {
-                        minus(
-                          newCount: newCount,
-                          currency: ticketPrice.currency!,
-                          network: ticketPrice.network,
-                        );
-                      },
-                    ),
-                  );
-                }).toList(),
-              ],
+              ),
             ),
           ),
+          if (isLocked)
+            Positioned(
+              top: Spacing.smMedium,
+              right: Spacing.smMedium,
+              child: Container(
+                width: Sizing.medium,
+                height: Sizing.medium,
+                decoration: BoxDecoration(
+                  color: LemonColor.chineseBlack,
+                  borderRadius: BorderRadius.circular(LemonRadius.xSmall),
+                ),
+                child: Center(
+                  child: ThemeSvgIcon(
+                    color: LemonColor.coralReef,
+                    builder: (colorFilter) => Assets.icons.icLock.svg(
+                      colorFilter: colorFilter,
+                    ),
+                  ),
+                ),
+              ),
+            ),
         ],
       ),
     );
@@ -228,7 +300,7 @@ class _PriceItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final isCryptoCurrency = network != null;
+    final isCryptoCurrency = network?.isNotEmpty == true;
 
     return ChainQuery(
       chainId: price.network ?? '',
@@ -240,7 +312,7 @@ class _PriceItem extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                if (isCryptoCurrency && price.network != null) ...[
+                if (isCryptoCurrency && price.network?.isNotEmpty == true) ...[
                   Container(
                     decoration: ShapeDecoration(
                       color: LemonColor.chineseBlack,
@@ -289,7 +361,8 @@ class _PriceItem extends StatelessWidget {
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      if (isCryptoCurrency && price.network != null) ...[
+                      if (isCryptoCurrency &&
+                          price.network?.isNotEmpty == true) ...[
                         SizedBox(height: 2.w),
                         Text(
                           chain?.name ?? '',
@@ -311,69 +384,11 @@ class _PriceItem extends StatelessWidget {
             onIncrease: onIncrease,
             disabled: disabled,
             onPressDisabled: () {
-              SnackBarUtils.showCustomSnackbar(
-                MultipleTicketsErrorSnackbar.create(context),
+              SnackBarUtils.showError(
+                title: t.common.error.label,
+                message: t.event.eventBuyTickets.multipleTicketsError,
               );
             },
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class MultipleTicketsErrorSnackbar {
-  static SnackBar create(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return SnackBar(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(
-          LemonRadius.normal,
-        ),
-      ),
-      behavior: SnackBarBehavior.floating,
-      margin: EdgeInsets.only(bottom: size.height - size.height * 0.2),
-      backgroundColor: LemonColor.chineseBlack,
-      showCloseIcon: true,
-      closeIconColor: colorScheme.onSecondary,
-      content: Row(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(LemonRadius.normal),
-              color: LemonColor.errorRedBg.withOpacity(0.2),
-            ),
-            width: Sizing.medium,
-            height: Sizing.medium,
-            child: Center(
-              child: Assets.icons.icError.svg(),
-            ),
-          ),
-          SizedBox(width: Spacing.small),
-          Flexible(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  t.event.error,
-                  style: Typo.small.copyWith(
-                    color: colorScheme.onPrimary.withOpacity(0.87),
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                SizedBox(
-                  height: 2.w,
-                ),
-                Text(
-                  t.event.eventBuyTickets.multipleTicketsError,
-                  style: Typo.small.copyWith(
-                    color: colorScheme.onSecondary,
-                  ),
-                ),
-              ],
-            ),
           ),
         ],
       ),

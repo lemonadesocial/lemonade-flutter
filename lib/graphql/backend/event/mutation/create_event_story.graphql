@@ -1,0 +1,3 @@
+mutation CreateEventStory($input: EventStoryInput!) {
+  createEventStory(input: $input)
+}

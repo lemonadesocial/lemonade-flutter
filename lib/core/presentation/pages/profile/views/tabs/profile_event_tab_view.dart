@@ -262,28 +262,41 @@ class _EventItem extends StatelessWidget {
                           imageConfig: ImageConfig.eventPhoto,
                         ),
                         fit: BoxFit.cover,
-                        placeholder: (_, __) =>
-                            ImagePlaceholder.defaultPlaceholder(),
+                        placeholder: (_, __) => ImagePlaceholder.eventCard(),
                         errorWidget: (_, __, ___) =>
-                            ImagePlaceholder.defaultPlaceholder(),
+                            ImagePlaceholder.eventCard(),
                       ),
                     )
-                  : ImagePlaceholder.defaultPlaceholder(),
+                  : ClipRRect(
+                      borderRadius:
+                          BorderRadius.circular(LemonRadius.extraSmall),
+                      child: ImagePlaceholder.eventCard(),
+                    ),
             ),
             Positioned(
               bottom: Spacing.xSmall,
               left: Spacing.xSmall,
-              child: Text.rich(
-                TextSpan(
-                  text: '${event.title}\n',
-                  style: Typo.small.copyWith(fontWeight: FontWeight.w700),
-                  children: [
-                    TextSpan(
-                      style: Typo.small.copyWith(color: colorScheme.onSurface),
-                      text: DateFormatUtils.dateOnly(event.start),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    constraints: BoxConstraints(
+                      maxWidth: MediaQuery.of(context).size.width * 0.4,
                     ),
-                  ],
-                ),
+                    child: Text(
+                      event.title ?? '',
+                      style: Typo.small.copyWith(fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                  SizedBox(
+                    height: Spacing.superExtraSmall / 2,
+                  ),
+                  Text(
+                    DateFormatUtils.dateOnly(event.start),
+                    style: Typo.small.copyWith(color: colorScheme.onSurface),
+                  ),
+                ],
               ),
             ),
           ],

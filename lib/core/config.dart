@@ -21,22 +21,24 @@ class AppConfig {
   static get aiUrl => dotenv.env['AI_URL'];
   static get wssAIUrl => dotenv.env['WSS_AI_URL'];
 
-  static get isProduction => dotenv.env['ENV'] == 'production';
+  static bool get isProduction => dotenv.env['ENV'] == 'production';
 
   // Social
   static get twitterUrl => 'https://twitter.com';
   static get instagramUrl => 'https://www.instagram.com';
   static get facebookUrl => 'https://www.facebook.com';
   static get linkedinUrl => 'https://www.linkedin.com/in';
+  static get githubUrl => 'https://github.com';
+  static get mirrorUrl => 'https://mirror.xyz';
+  static get farcasterUrl => 'https://www.farcaster.xyz';
+  static get lensUrl => 'https://www.lens.xyz';
+  static get calendlyUrl => 'https://calendly.com';
 
   // Wallet connect
   static get walletConnectProjectId => dotenv.env['WALLET_CONNECT_PROJECT_ID'];
 
   // Matrix
   static get matrixHomeserver => dotenv.env['MATRIX_HOMESERVER'];
-
-  // Legacy api
-  static get legacyApi => dotenv.env['LMD_API_LEGACY'];
 
   /// Matrix chat
   static get pushNotificationsAppId => dotenv.env['PUSH_NOTIFICATION_APP_ID'];
@@ -60,6 +62,9 @@ class AppConfig {
   // Chat LemonAI config
   static get chatLemonAIConfig => dotenv.env['CHAT_LEMON_AI_CONFIG'];
 
-  //Crypto cramp
+  // Crypto cramp
   static get stripeOnrampHost => dotenv.env['STRIPE_ONRAMP_HOST'];
+
+  // Sentry DSN
+  static get sentryDsn => dotenv.env['SENTRY_DSN'];
 }

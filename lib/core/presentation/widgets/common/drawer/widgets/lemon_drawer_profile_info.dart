@@ -19,8 +19,8 @@ import 'package:slang/builder/utils/string_extensions.dart';
 
 class LemonDrawerProfileInfo extends StatelessWidget {
   const LemonDrawerProfileInfo({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -146,7 +146,7 @@ class LemonDrawerProfileInfo extends StatelessWidget {
 
   _onPressEditProfile(BuildContext context, User authSession) {
     Vibrate.feedback(FeedbackType.light);
-    AutoRouter.of(context).navigate(EditProfileRoute(userProfile: authSession));
+    AutoRouter.of(context).navigate(const EditProfileRoute());
   }
 
   _onPressQRCode(BuildContext context) {

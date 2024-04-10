@@ -24,6 +24,7 @@
     "aboutTheEvent": "About the event",
     "eventStartIn": "Starting in $time",
     "eventEnded": "Event ended",
+    "myEvents": "My events",
     "dashboard": {
         "liveChat": "Live chat",
         "invite": "Invite",
@@ -32,6 +33,7 @@
     "confirmed": "confirmed",
     "eventBuyTickets": {
         "selectTickets": "Select tickets",
+        "selectCategory": "Select category",
         "orderSummary": "Order summary",
         "enterPromoCode": "Enter promo code",
         "selectCurrency": "Please select currency first",
@@ -49,7 +51,9 @@
         },
         "redeem": "Redeem",
         "onOtherChain": "on other chain",
-        "viaOtherPaymentMethod": "via other payment method"
+        "viaOtherPaymentMethod": "via other payment method",
+        "ticketLocked": "Ticket locked!",
+        "ticketLockedDescription": "You need to be on the whitelist to purchase it"
     },
     "eventOrder": {
         "itemTotal": "Item total",
@@ -105,6 +109,10 @@
         "one": "ticket",
         "other": "tickets"
     },
+    "otherTickets(ordinal)": {
+        "one": "other ticket",
+        "other": "other tickets"
+    },
     "reservations(ordinal)": {
         "one": "reservation",
         "other": "reservations"
@@ -112,14 +120,18 @@
     "remaining": "remaining",
     "summary": "summary",
     "empty": {
+        "myEvents": "You don't have any events.",
         "remainingTickets": "You don't have any remaining tickets.",
         "tickets": "You don't have any tickets.",
-        "reservations": "You don't have any reservations."
+        "reservations": "You don't have any reservations.",
+        "rewards": "Don't have any rewards."
     },
     "paymentNotSupported": "Paid tickets are not supported yet. Please kindly use our website",
     "eventCreation": {
         "createEvent": "Create event",
         "title": "Title",
+        "titleAndDescription": "Title & Description",
+        "titleHint": "Enter title",
         "description": "Description",
         "descriptionPlaceholder": "What is this experience about ?",
         "createEventSuccessfully": "Create event successfully",
@@ -146,7 +158,12 @@
         "startDate": "Start date",
         "startTime": "Start time",
         "endDate": "End date",
-        "endTime": "End time"
+        "endTime": "End time",
+        "starts": "Starts",
+        "ends": "Ends",
+        "chooseDateAndTime": "Choose date & time",
+        "dateTimeUpdated": "Date and Time has been updated",
+        "timezoneUpdated": "Timezone has been updated"
     },
     "locationSetting": {
         "addLocation": "Add location",
@@ -165,11 +182,14 @@
         "addNewLocationSuccessfully": "Add new location successfully",
         "removeNewLocationSuccessfully": "Remove location successfully"
     },
-    "timezone": "Timezone",
+    "timezoneSetting": {
+        "timezone": "Timezone",
+        "chooseTimezone": "Choose Timezone"
+    },
     "configuration": {
         "invite": "Invite",
         "tickets": "Tickets",
-        "checkIn": "Check-in",
+        "checkIn": "Check in",
         "coHosts": "Co-hosts",
         "controlPanel": "Control panel",
         "controlPanelDescription": "Exclusive perks & rewards",
@@ -177,11 +197,14 @@
         "dashboardDescription": "Find what’s exciting around",
         "speakers": "Speakers",
         "promitions": "Promotions",
-        "rewards": "Rewards"
+        "rewards": "Rewards",
+        "lounge": "Lounge",
+        "program": "Program",
+        "faq": "FAQ",
+        "info": "Info",
+        "guests": "Guests"
     },
     "rewards": "Rewards",
-    "noRewards": "No rewards",
-    "rewardsDescription": "Enhance you guests’ experience with unique rewards and make this event stand out!",
     "addPoap": "Add POAP",
     "editEvent": "Edit event",
     "editEventSuccessfully": "Edit event successfully",
@@ -223,6 +246,12 @@
         "activateTicket": "Activate ticket",
         "visibleToGuests": "Visible to guests",
         "addTicket": "Add ticket",
+        "listTicket": "List ticket",
+        "openPublicPurchase": "Open for public purchase",
+        "canOnlyAssigned": "Can only be assigned for free",
+        "lockTicket": "Lock ticket",
+        "anyoneCanBuy": "Anyone can buy",
+        "onlyWhitelisted": "Only whitelisted users can buy",
         "paymentMethod": "Payment method",
         "addPaymentMethod": "Add payment method",
         "howUserPay": "How do you want the users to pay?",
@@ -244,7 +273,24 @@
             "edit": "edit",
             "inactivate": "inactivate",
             "delete": "delete"
-        }
+        },
+        "whitelistSetting": {
+            "whitelistSettingTitle": "Whitelist",
+            "whitelistedUser": "Whitelisted users",
+            "addEmail": "Add email",
+            "whiteListAddEmailDescription": "Emails added below can purchase this ticket tier. This can be edited later.",
+            "addToWhitelist": "Add to whitelist",
+            "whitelistInputPlaceholder": "Email 1\nEmail 2\n..."
+        },
+        "categorySetting": {
+            "newCategory": "New category",
+            "newCategoryDescription": "Streamline the buying process for events with numerous ticket tiers",
+            "selectCategory": "Select category",
+            "addCategory": "Add category",
+            "name": "Name",
+            "description": "Description"
+        },
+        "emptyTicketTypes": "No ticket tiers found"
     },
     "speakers": {
         "speakersCountInfo(ordinal)": {
@@ -288,9 +334,163 @@
             "reservations": "Reservations",
             "pending": "Pending",
             "confirmed": "Confirmed",
-            "rejected": "Rejected"
+            "rejected": "Rejected",
+            "invited": "Invited",
+            "checkins": "Checkins"
+        },
+        "yourRequestDeclined": "Your join request has been declined.",
+        "noRequestFound": "No requests found",
+        "noGuestFound": "No guests found",
+        "appliedForReservation": "Applied for reservation",
+        "pendingApproval": "Pending approval",
+        "pendingRequests(ordinal)": {
+            "one": "$count pending request",
+            "other": "$count pending requests"
+        },
+        "approveToLetThemIn": "Approve to let them in",
+        "approvedBy": "Approved by $name",
+        "declinedBy": "Declined by $name",
+        "viewApplication": "View Application",
+        "application": "Application",
+        "guestDetail": "Guest details",
+        "applicationQuestions(ordinal)": {
+            "one": "$count question",
+            "other": "$count questions"
+        },
+        "assignedBy": "Assigned by $name",
+        "declined": "Declined",
+        "awaitingHostApprovalGuestViewTitle": "Awaiting Host Approval",
+        "awaitingHostApprovalGuestViewDescription": "Your reservation is not confirmed yet! We will notify you when you’re approved. In case your request is declined, you will get a full refund!",
+        "declinedApprovalGuestViewTitle": "Declined!",
+        "declinedApprovalGuestViewDescription": "Unfortunately, your request has been declined. You'll receive a full refund of your payment.",
+        "approvedApprovalGuestViewTitle": "Congratulations!",
+        "approvedApprovalGuestViewDescription": "Hosts have approved your request. Complete your payment now to secure your tickets.",
+        "completePayment": "Complete payment",
+        "payment": {
+            "fullPayment": "full payment",
+            "pending": "pending",
+            "refund": "refund",
+            "refunded": "refunded",
+            "inProcess": "In process",
+            "refundComplete": "Refund complete",
+            "paid": "paid"
         }
     },
+    "eventInvited": {
+        "joined": "Registered",
+        "notJoined": "Pending"
+    },
     "allTicketTiers": "All ticket tiers",
-    "claimed": "claimed"
+    "claimed": "claimed",
+    "profileRequiredFields": "Please update these fields: $fields in your profile to RSVP the event.",
+    "invitedCount": "$count invited",
+    "ticketTypesCount(ordinal)": {
+        "one": "ticket type",
+        "other": "ticket types"
+    },
+    "rewardsCount(ordinal)": {
+        "one": "reward",
+        "other": "rewards"
+    },
+    "checkedIn": "checked in",
+    "invited": "invited",
+    "checkinGuests": "Check in guests",
+    "issueTickets": {
+        "issueTicketsTitle": "Issue tickets",
+        "issueTicketsDescription": "Grant event access for free!",
+        "issueTicketsSummaryTitle": "Summary",
+        "issueTicketsSummaryDescription": "Make sure the details below are correct. Issuing tickets is an irreversible action.",
+        "totalTickets": "Total tickets",
+        "confirmAndIssue": "Confirm & Issue",
+        "issueTicketsLoadingTitle": "Issuing tickets",
+        "issueTicketsLoadingDescription": "Please wait while we issues tickets to your\nguests. This should only take a few seconds.",
+        "ticketsIssuedSuccessTitle": "Tickets issued!",
+        "ticketIssuedSuccessDescription": "Tickets have been sent to your guests. They\ncan now access this event for free!",
+        "assignMore": "Assign more"
+    },
+    "addCollectible": "Add collectible",
+    "addCollectibleDescription": "Attach unique collectibles to this event to make it stand out!",
+    "program": {
+        "eventProgram": "Program",
+        "allSessions": "All sessions",
+        "noProgramFound": "No program found"
+    },
+    "collectibles": {
+        "addAnotherCollectble": "Add another collectible"
+    },
+    "inviteEvent": {
+        "inviteEventTitle": "Invite",
+        "inviteEventDescription": "Invite your guests via email",
+        "inviteMore": "Invite more",
+        "inviteLoadingTitle": "Inviting",
+        "inviteLoadingDescription": "Please wait while we invite to your\nguests. This should only take a few seconds.",
+        "inviteSuccessTitle": "Invited!",
+        "inviteSuccessDescription": "Your guests have been invted to\n$eventName!"
+    },
+    "requiredFields": {
+        "tellUsMore": "Tell us more",
+        "description": "Information required by hosts to reserve your spot. Complete your profile now!",
+        "completeProfile": "Complete profile"
+    },
+    "applicationForm": {
+        "applicationForm": "Application form",
+        "applicationFormDescription": "Information required to reserve your spot. This will update your profile automatically!",
+        "updatingProfile": "Updating profile",
+        "updatingProfileDescription": "Please wait while we update your profile. This should only take a few seconds.",
+        "updatedApplicationFormDescription": "You are all set to reserve your tickets",
+        "applicationFormTitle": "Application form",
+        "profileInfo": "Profile info",
+        "profileInfoDescription": "Details you want to know about guests",
+        "applicationQuestions": "Application questions",
+        "enterQuestion": "Enter question",
+        "required": "Required",
+        "saveForm": "Save form",
+        "saveFormSuccessfully": "Update application form successfully",
+        "updateApplicationFormSuccessfully": "Update application form successfully"
+    },
+    "reserve": "Reserve",
+    "rsvpStatus": {
+        "approvalRequired": "Approval required",
+        "fromCohostToJoin": "from cohosts to join",
+        "limitedSpots": "Limited spots",
+        "registerBeforeEventFillsUp": "Register before event fills up",
+        "pendingApproval": "Pending approval",
+        "pendingApprovalDescription": "Your request has been sent! Hosts need to review & approve your request.",
+        "requestApproved": "Request approved!",
+        "requestApprovedDescription": "Your request has been approved by the hosts! Complete payment to secure your tickets.",
+        "completePayment": "Complete payment",
+        "requestDeclined": "Request denined",
+        "requestDeclinedDepositDescription": "Hosts have denied your request to join. Claim your 100% refund of $amount",
+        "requestDeclinedDirectDescription": "Hosts have denied your request to join.",
+        "claimRefund": "Claim refund",
+        "refundedDescription": "Your ticket deposit of $amount has been refunded. This may take some time to reflect in your wallet"
+    },
+    "cancelReservation": {
+        "cancelReservationTitle": "Cancel Reservation?",
+        "cancelReservationFullAmountDescription": "As hosts have not yet approved your request, you can claim your 100% refund of 0.2 ETH",
+        "cancelReservationPartialAmountDescription": "Since you canceled $time before the event, you are eligible for an $percentage deposit refund."
+    },
+    "eventLounge": {
+        "eventLoungeTitle": "Lounge",
+        "liveChatDescription": "Connect with other attendees!",
+        "newMessages": "New messages",
+        "emptyStories": "No posts added yet, Create one and start\ninteracting now!"
+    },
+    "eventGuestDirectory": {
+        "eventGuestDirectoryTitle": "Guests"
+    },
+    "eventPrivate": {
+        "eventPrivateTitle": "This is a private event",
+        "eventPrivateErrorDescription": "You must be on the invite list to purchase tickets to this event"
+    },
+    "dateTimeSettingError": {
+        "mustBeFuture": "Start & end time must be future",
+        "endMustAfterStart": "End date must be after start date"
+    },
+    "eventMail": {
+        "receiptSentTitle": "Ticket receipt sent!",
+        "rsvpSentTitle": "RSVP confirmation sent!",
+        "checkYourInbox": "Check your inbox at $email",
+        "receiptNotAvailableError": "Only the user who made the purchase can access the receipt"
+    }
 }

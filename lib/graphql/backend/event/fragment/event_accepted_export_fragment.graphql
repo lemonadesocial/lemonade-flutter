@@ -1,0 +1,18 @@
+fragment EventAcceptedExport on EventAcceptedExport {
+  id: _id
+  name
+  firstName: first_name
+  lastName: last_name
+  imageAvatar: image_avatar
+  username
+  email
+  phone
+  amount
+  currency
+  ticketCount: ticket_count
+  ticketType: ticket_type
+  ticketTypeId: ticket_type_id
+  ticketDiscount: ticket_discount
+  ticketDiscountAmount: ticket_discount_amount
+  checkinDate: checkin_date
+}

@@ -1,3 +1,4 @@
+import 'package:app/core/domain/event/entities/event_ticket_category.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/payment/entities/purchasable_item/purchasable_item.dart';
 import 'package:app/core/utils/event_tickets_utils.dart';
@@ -20,6 +21,7 @@ class SelectEventTicketsBloc
   String? selectedCurrency;
   // only for SelectTicketsPaymentMethod.wallet
   String? selectedNetwork;
+  EventTicketCategory? selectedTicketCategory;
 
   SelectEventTicketsBloc()
       : super(
@@ -40,6 +42,7 @@ class SelectEventTicketsBloc
     // TODO:
     on<SelectEventTicketsEventOnSelectCurrency>(_onSelectCurrency);
     on<SelectEventTicketsEventOnSelectPaymentMethod>(_onSelectPaymentMethod);
+    on<SelectEventTicketsEventOnSelectTicketCategory>(_onSelectTicketCategory);
     on<SelectEventTicketsEventOnClear>(_onClear);
   }
 
@@ -88,13 +91,31 @@ class SelectEventTicketsBloc
     );
   }
 
+  void _onSelectTicketCategory(
+    SelectEventTicketsEventOnSelectTicketCategory event,
+    Emitter emit,
+  ) {
+    selectedTicketCategory = event.category;
+    emit(
+      state.copyWith(
+        selectedTickets: [],
+        isSelectionValid: false,
+        selectedTicketCategory: selectedTicketCategory,
+        isPaymentRequired: false,
+        selectedCurrency: null,
+        selectedNetwork: null,
+        totalAmount: null,
+      ),
+    );
+  }
+
   Future<void> _onSelectTicketType(
     SelectEventTicketsEventOnSelectTicket event,
     Emitter emit,
   ) async {
     selectedCurrency = event.currency;
     selectedNetwork = event.network;
-    bool isCryptoCurrency = selectedNetwork != null;
+    bool isCryptoCurrency = selectedNetwork?.isNotEmpty == true;
 
     final newSelectedTickets = [
       event.ticket,
@@ -202,6 +223,9 @@ class SelectEventTicketsEvent with _$SelectEventTicketsEvent {
   factory SelectEventTicketsEvent.selectPaymentMethod({
     required SelectTicketsPaymentMethod paymentMethod,
   }) = SelectEventTicketsEventOnSelectPaymentMethod;
+  factory SelectEventTicketsEvent.selectTicketCategory({
+    EventTicketCategory? category,
+  }) = SelectEventTicketsEventOnSelectTicketCategory;
   factory SelectEventTicketsEvent.clear() = SelectEventTicketsEventOnClear;
 }
 
@@ -215,5 +239,6 @@ class SelectEventTicketsState with _$SelectEventTicketsState {
     String? selectedCurrency,
     Either<double, BigInt>? totalAmount,
     String? selectedNetwork,
+    EventTicketCategory? selectedTicketCategory,
   }) = _SelectEventTicketsState;
 }

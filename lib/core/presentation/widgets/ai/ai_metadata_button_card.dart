@@ -8,8 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AIMetaDataCard extends StatelessWidget {
-  const AIMetaDataCard({Key? key, this.onTap, required this.item})
-      : super(key: key);
+  const AIMetaDataCard({super.key, this.onTap, required this.item});
   final Function()? onTap;
   final AIChatGridViewModel item;
 

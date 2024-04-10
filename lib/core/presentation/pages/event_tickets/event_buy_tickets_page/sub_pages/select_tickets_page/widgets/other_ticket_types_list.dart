@@ -117,7 +117,8 @@ class OtherChainTicketTypesList extends StatelessWidget {
             .where((type) {
       return (type.prices ?? []).any(
         (element) =>
-            element.network != null && element.network != networkFilter,
+            element.network?.isNotEmpty == true &&
+            element.network != networkFilter,
       );
     }).toList();
 

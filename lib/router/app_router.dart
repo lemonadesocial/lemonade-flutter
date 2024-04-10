@@ -94,6 +94,7 @@ class AppRouter extends $AppRouter {
         AutoRoute(page: SettingBlockRoute.page),
         AutoRoute(page: LocationRequestRoute.page),
         AutoRoute(page: AIRoute.page),
+        AutoRoute(page: MyEventsRoute.page),
         chatRoutes,
         eventBuyTicketsRoutes,
         createEventRoutes,
@@ -153,7 +154,7 @@ final eventRoutes = [
 
 final eventDetailRoutes = AutoRoute(
   page: EventDetailRoute.page,
-  path: '/events/:id',
+  path: '/event/:id',
   children: [
     AutoRoute(
       initial: true,
@@ -170,11 +171,26 @@ final eventDetailRoutes = AutoRoute(
       page: GuestEventRewardUsesRoute.page,
     ),
     AutoRoute(
+      page: EventTicketTierSettingRoute.page,
+      children: [
+        AutoRoute(
+          initial: true,
+          page: EventTicketTiersListingRoute.page,
+        ),
+        AutoRoute(
+          page: EventCreateTicketTierRoute.page,
+        ),
+      ],
+    ),
+    AutoRoute(
       page: EventControlPanelRoute.page,
       children: [
         AutoRoute(
           initial: true,
           page: EventControlPanelBaseRoute.page,
+        ),
+        AutoRoute(
+          page: EventTitleDescriptionSettingRoute.page,
         ),
         AutoRoute(
           page: EventGuestSettingsRoute.page,
@@ -224,10 +240,80 @@ final eventDetailRoutes = AutoRoute(
             ),
           ],
         ),
+        AutoRoute(
+          page: EventApplicationFormSettingRoute.page,
+        ),
+        AutoRoute(
+          page: EventApplicationFormProfileSettingRoute.page,
+        ),
       ],
     ),
     AutoRoute(
       page: EventApprovalSettingRoute.page,
+    ),
+    AutoRoute(
+      page: EventJoinRequestDetailRoute.page,
+    ),
+    AutoRoute(page: ChatRoute.page),
+    AutoRoute(
+      page: ChatSettingRoute.page,
+    ),
+    AutoRoute(
+      page: EventIssueTicketsSettingRoute.page,
+      children: [
+        AutoRoute(
+          initial: true,
+          page: EventIssueTicketsFormRoute.page,
+        ),
+        AutoRoute(
+          page: EventIssueTicketsSummaryRoute.page,
+        ),
+        AutoRoute(
+          page: EventIssueTicketsProcessingRoute.page,
+        ),
+      ],
+    ),
+    AutoRoute(
+      page: EventInviteSettingRoute.page,
+      children: [
+        AutoRoute(
+          initial: true,
+          page: EventInviteFormRoute.page,
+        ),
+        AutoRoute(
+          page: EventInviteProcessingRoute.page,
+        ),
+      ],
+    ),
+    AutoRoute(
+      page: EventProgramRoute.page,
+    ),
+    AutoRoute(
+      page: GuestEventApplicationRoute.page,
+      children: [
+        AutoRoute(
+          initial: true,
+          page: GuestEventApplicationInfoRoute.page,
+        ),
+        AutoRoute(
+          page: GuestEventApplicationFormRoute.page,
+        ),
+        AutoRoute(
+          page: GuestEventApplicationFormProcessingRoute.page,
+        ),
+      ],
+    ),
+    AutoRoute(
+      page: GuestEventApprovalStatusRoute.page,
+    ),
+    AutoRoute(
+      page: GuestEventStoriesRoute.page,
+    ),
+    AutoRoute(
+      page: GuestEventGuestDirectoryRoute.page,
+    ),
+    AutoRoute(
+      page: GuestEventPrivateAlertRoute.page,
     ),
   ],
 );
@@ -235,12 +321,18 @@ final eventDetailRoutes = AutoRoute(
 final eventBuyTicketsRoutes = AutoRoute(
   page: EventBuyTicketsRoute.page,
   children: [
-    AutoRoute(
+    CustomRoute(
       initial: true,
       page: EventBuyTicketsInitialRoute.page,
+      transitionsBuilder: TransitionsBuilders.fadeIn,
     ),
-    AutoRoute(
+    CustomRoute(
+      page: EventBuyTicketsSelectTicketCategoryRoute.page,
+      transitionsBuilder: TransitionsBuilders.fadeIn,
+    ),
+    CustomRoute(
       page: SelectTicketsRoute.page,
+      transitionsBuilder: TransitionsBuilders.fadeIn,
     ),
     AutoRoute(
       page: EventTicketsSummaryRoute.page,
@@ -269,6 +361,9 @@ final createEventRoutes = AutoRoute(
     AutoRoute(
       initial: true,
       page: CreateEventBaseRoute.page,
+    ),
+    AutoRoute(
+      page: EventDescriptionFieldRoute.page,
     ),
     AutoRoute(
       page: EventGuestSettingsRoute.page,

@@ -53,20 +53,20 @@ app.*.map.json
 .githooks/gitlint
 
 # Ignore generated files
-*.g.dart
-*.freezed.dart
-*.gr.dart
-*.gen.dart
-*.config.dart
-*.graphql.dart
+lib/**/*.g.dart
+lib/**/*.freezed.dart
+lib/**/*.gr.dart
+lib/**/*.gen.dart
+lib/**/*.config.dart
+lib/**/*.graphql.dart
 
-**/*.ast.gql.dart
-**/*.req.gql.dart
-**/*.data.gql.dart
-**/*.var.gql.dart
-**/*.gql.g.dart
-**/*.schema.gql.dart
-**/*serializers.gql.dart
+lib/**/*.ast.gql.dart
+lib/**/*.req.gql.dart
+lib/**/*.data.gql.dart
+lib/**/*.var.gql.dart
+lib/**/*.gql.g.dart
+lib/**/*.schema.gql.dart
+lib/**/*serializers.gql.dart
 
 # Ignore shorebird config file
 shorebird.yaml

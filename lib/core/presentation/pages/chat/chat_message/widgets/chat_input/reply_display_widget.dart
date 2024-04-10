@@ -6,7 +6,7 @@ import 'package:matrix/matrix.dart';
 
 class ReplyDisplay extends StatelessWidget {
   final ChatController controller;
-  const ReplyDisplay(this.controller, {Key? key}) : super(key: key);
+  const ReplyDisplay(this.controller, {super.key});
 
   @override
   Widget build(BuildContext context) {

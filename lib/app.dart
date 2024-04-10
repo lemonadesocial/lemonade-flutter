@@ -4,6 +4,7 @@ import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/connectivity/connectivity_bloc.dart';
 import 'package:app/core/application/notification/watch_notifications_bloc/watch_notification_bloc.dart';
 import 'package:app/core/application/profile/block_user_bloc/block_user_bloc.dart';
+import 'package:app/core/application/wallet/wallet_bloc/wallet_bloc.dart';
 import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/service/connectivity/connectivity_service.dart';
 import 'package:app/core/service/firebase/firebase_service.dart';
@@ -16,6 +17,7 @@ import 'package:app/router/app_router.dart';
 import 'package:app/router/my_router_observer.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/theme.dart';
+import 'package:appflowy_editor/appflowy_editor.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +32,11 @@ import 'package:app/core/presentation/widgets/custom_error_widget.dart';
 import 'package:app/core/application/newsfeed/newsfeed_listing_bloc/newsfeed_listing_bloc.dart';
 import 'package:app/core/data/post/newsfeed_repository_impl.dart';
 import 'package:app/core/service/newsfeed/newsfeed_service.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:web3modal_flutter/web3modal_flutter.dart';
+import 'package:timezone/data/latest_all.dart' as tz;
 
 class LemonadeApp extends StatefulWidget {
   const LemonadeApp({super.key});
@@ -57,6 +63,7 @@ class _LemonadeAppViewState extends State<LemonadeApp> {
       );
       setupInteractedMessage();
       FlutterNativeSplash.remove();
+      tz.initializeTimeZones();
     });
     EasyLoading.instance
       ..indicatorType = EasyLoadingIndicatorType.ring
@@ -90,7 +97,15 @@ class _LemonadeAppViewState extends State<LemonadeApp> {
           BlocProvider(
             create: (context) => WatchNotificationsBloc(),
           ),
-          BlocProvider(create: (context) => ConnectivityBloc()),
+          BlocProvider(
+            create: (context) => ConnectivityBloc(),
+          ),
+          BlocProvider(
+            create: (context) => WalletBloc()
+              ..add(
+                const WalletEvent.getActiveSessions(),
+              ),
+          ),
         ],
         child: child,
       );
@@ -181,42 +196,69 @@ class _AppState extends State<_App> {
       listenWhen: (prev, cur) => prev != cur,
       listener: (context, state) {
         state.maybeWhen(
-          connected: () => SnackBarUtils.showSuccessSnackbar(
-            t.common.internetConnectionStatus.connected,
+          connected: () => SnackBarUtils.showSuccess(
+            message: t.common.internetConnectionStatus.connected,
           ),
-          notConnected: () => SnackBarUtils.showErrorSnackbar(
-            t.common.internetConnectionStatus.disconnected,
+          notConnected: () => SnackBarUtils.showError(
+            message: t.common.internetConnectionStatus.disconnected,
           ),
           orElse: () {},
         );
       },
-      child: MaterialApp.router(
-        scaffoldMessengerKey: SnackBarUtils.rootScaffoldMessengerKey,
-        locale: _getCurrentLocale(context),
-        // use provider
-        supportedLocales: _supportedLocales,
-        localizationsDelegates: _localizationsDelegates,
-        themeMode: ThemeMode.dark,
-        darkTheme: lemonadeAppDarkThemeData,
-        theme: lemonadeAppLightThemeData,
-        routerDelegate: widget.router.delegate(
-          navigatorObservers: () => <NavigatorObserver>[MyRouterObserver()],
+      child: Web3ModalTheme(
+        isDarkMode: true,
+        child: StyledToast(
+          locale: const Locale('en', 'US'),
+          toastPositions: StyledToastPosition.top,
+          toastAnimation: StyledToastAnimation.slideFromTop,
+          reverseAnimation: StyledToastAnimation.fade,
+          curve: Curves.linearToEaseOut,
+          reverseCurve: Curves.linearToEaseOut,
+          duration: const Duration(seconds: 4),
+          animDuration: const Duration(milliseconds: 800),
+          dismissOtherOnShow: true,
+          fullWidth: false,
+          isHideKeyboard: false,
+          isIgnoring: true,
+          child: MaterialApp.router(
+            scaffoldMessengerKey: SnackBarUtils.rootScaffoldMessengerKey,
+            locale: _getCurrentLocale(context),
+            // use provider
+            supportedLocales: [
+              ...AppLocaleUtils.supportedLocales,
+              ...AppFlowyEditorLocalizations.delegate.supportedLocales,
+            ],
+            localizationsDelegates: const [
+              GlobalMaterialLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              AppFlowyEditorLocalizations.delegate,
+            ],
+            themeMode: ThemeMode.dark,
+            darkTheme: lemonadeAppDarkThemeData,
+            theme: lemonadeAppLightThemeData,
+            routerDelegate: widget.router.delegate(
+              navigatorObservers: () => <NavigatorObserver>[
+                MyRouterObserver(),
+                SentryNavigatorObserver(),
+              ],
+            ),
+            routeInformationParser:
+                widget.router.defaultRouteParser(includePrefixMatches: true),
+            builder: (context, widget) {
+              Widget error = const CustomError();
+              if (widget is Scaffold || widget is Navigator) {
+                error = Scaffold(body: Center(child: error));
+              }
+              ErrorWidget.builder = (errorDetails) => error;
+              if (widget != null) return FlutterEasyLoading(child: widget);
+              throw StateError('widget is null');
+            },
+          ),
         ),
-        routeInformationParser:
-            widget.router.defaultRouteParser(includePrefixMatches: true),
-        builder: (context, widget) {
-          ErrorWidget.builder = (FlutterErrorDetails errorDetails) {
-            return CustomError(errorDetails: errorDetails);
-          };
-          return FlutterEasyLoading(child: widget);
-        },
       ),
     );
   }
-
-  get _supportedLocales => AppLocaleUtils.supportedLocales;
-
-  get _localizationsDelegates => GlobalMaterialLocalizations.delegates;
 
   Locale _getCurrentLocale(BuildContext context) =>
       TranslationProvider.of(context).flutterLocale;

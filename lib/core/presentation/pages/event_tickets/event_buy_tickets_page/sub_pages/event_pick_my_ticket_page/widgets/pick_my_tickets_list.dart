@@ -1,3 +1,4 @@
+import 'package:app/core/application/event_tickets/get_my_tickets_bloc/get_my_tickets_bloc.dart';
 import 'package:app/core/application/event_tickets/select_self_assign_ticket_bloc/select_self_assign_ticket_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
@@ -28,32 +29,39 @@ class PickMyTicketsList extends StatelessWidget {
         child: Column(
           children: [
             Expanded(
-              child: ListView.separated(
-                itemBuilder: (context, index) {
-                  final group = ticketGroupsMap.entries.toList()[index];
-                  final ticketTypeId = group.key;
-                  final total = group.value.length.toDouble();
-                  final ticketType = ticketTypes.firstWhereOrNull(
-                    (mTicketType) => mTicketType.id == ticketTypeId,
-                  );
-
-                  return PickTicketItem(
-                    ticketType: ticketType,
-                    total: total,
-                    currency: event.currency,
-                    selected: state.selectedTicketType == ticketTypeId,
-                    onPressed: () =>
-                        context.read<SelectSelfAssignTicketBloc>().add(
-                              SelectSelfAssignTicketEvent.select(
-                                ticketTypeId: ticketTypeId,
-                              ),
-                            ),
-                  );
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  context.read<GetMyTicketsBloc>().add(
+                        GetMyTicketsEvent.fetch(),
+                      );
                 },
-                separatorBuilder: (context, index) => SizedBox(
-                  height: Spacing.xSmall,
+                child: ListView.separated(
+                  itemBuilder: (context, index) {
+                    final group = ticketGroupsMap.entries.toList()[index];
+                    final ticketTypeId = group.key;
+                    final total = group.value.length.toDouble();
+                    final ticketType = ticketTypes.firstWhereOrNull(
+                      (mTicketType) => mTicketType.id == ticketTypeId,
+                    );
+
+                    return PickTicketItem(
+                      ticketType: ticketType,
+                      total: total,
+                      currency: event.currency,
+                      selected: state.selectedTicketType == ticketTypeId,
+                      onPressed: () =>
+                          context.read<SelectSelfAssignTicketBloc>().add(
+                                SelectSelfAssignTicketEvent.select(
+                                  ticketTypeId: ticketTypeId,
+                                ),
+                              ),
+                    );
+                  },
+                  separatorBuilder: (context, index) => SizedBox(
+                    height: Spacing.xSmall,
+                  ),
+                  itemCount: ticketGroupsMap.length,
                 ),
-                itemCount: ticketGroupsMap.length,
               ),
             ),
           ],

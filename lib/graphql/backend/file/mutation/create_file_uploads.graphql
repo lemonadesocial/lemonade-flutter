@@ -1,0 +1,14 @@
+mutation CreateFileUploads($uploadInfos: [FileUploadInfo!]!, $directory: String!) {
+  createFileUploads(upload_infos: $uploadInfos, directory: $directory) {
+    id: _id
+    stamp
+    state
+    owner
+    type
+    size
+    url
+    bucket
+    key
+    presignedUrl: presigned_url
+  }
+}

@@ -53,7 +53,14 @@
         "add": "Add",
         "remove": "Remove",
         "revoke": "Revoke",
-        "saveChanges": "Save changes"
+        "saveChanges": "Save changes",
+        "accept": "Accept",
+        "decline": "Decline",
+        "submit": "Submit",
+        "continueNext": "Continue",
+        "leave": "Leave",
+        "post": "Post",
+        "receipt": "receipt"
     },
     "followed": "Followed",
     "anonymous": "anonymous",
@@ -141,9 +148,35 @@
     "copiedToClipboard": "Copied to clipboard",
     "pending": "Pending",
     "error": {
+        "label": "Error",
         "privateKeyNotFound": "Credential not found"
     },
     "addNew": "Add new",
     "countLeft": "$count left",
-    "claimed": "claimed"
+    "claimed": "claimed",
+    "anonymousLemon": "Anonymous Lemon",
+    "defaultEmptyList": "No items to display at the moment.",
+    "email": "Email",
+    "alert": "Alert",
+    "create": "Create",
+    "required": "Required",
+    "optional": "Optional",
+    "all": "All",
+    "commingSoon": "Comming soon",
+    "commingSoonDescription": "Currently only available on web",
+    "info": "Info",
+    "success": "Success",
+    "feedback": {
+        "name": "Name",
+        "email": "Email",
+        "whatHappen": "What happen?",
+        "feedbackSubmitted": "Feedback submitted",
+        "thankForFeedback": "Thank you for your feedback!",
+        "feedbackDescription": "Our team has been notified. If you'd like to help, tell us what happened below.",
+        "submitFeedback": "Submit feedback"
+    },
+    "gotIt": "Got it",
+    "goBackConfirmationDescription": "Going back will reset any information you have added. Still want to go back?",
+    "saved": "Saved",
+    "updatedSuccessfully": "Updated successfully"
 }

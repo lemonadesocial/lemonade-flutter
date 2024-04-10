@@ -27,8 +27,8 @@ class ImageMessage extends StatelessWidget {
     this.height = 300,
     this.animated = false,
     this.onTap,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   String get defaultBlurHash => 'LEHV6nWB2yk8pyo0adR*.7kCMdnj';
 

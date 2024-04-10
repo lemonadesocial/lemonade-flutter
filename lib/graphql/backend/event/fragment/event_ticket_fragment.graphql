@@ -3,6 +3,8 @@
 fragment EventTicketType on EventTicketType {
   _id
   active
+  private
+  limited
   event
   title
   prices {
@@ -33,5 +35,16 @@ fragment EventTicketType on EventTicketType {
     url
     key
     bucket
+  }
+  limited_whitelist_users {
+    _id
+    email
+  }
+  category
+  category_expanded {
+    _id
+    title
+    event
+    description
   }
 }

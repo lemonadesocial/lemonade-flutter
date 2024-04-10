@@ -2,7 +2,7 @@ import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_rsvp.dart';
 import 'package:app/core/presentation/widgets/animation/ripple_animation.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
-import 'package:app/core/utils/modal_utils.dart';
+import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -43,55 +43,63 @@ class RSVPEventSuccessPopupPage extends StatelessWidget {
           children: [
             Column(
               mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const _SuccessCircle(),
-                SizedBox(
-                  height: 56.w,
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: Spacing.xLarge),
-                  child: Text(
-                    primaryMessage ??
-                        eventRsvp?.messages?.primary ??
-                        t.event.youreIn,
-                    style: Typo.extraLarge.copyWith(
-                      fontFamily: FontFamily.nohemiVariable,
-                      fontWeight: FontWeight.w900,
-                      height: 1.2,
-                    ),
-                  ),
-                ),
-                SizedBox(height: Spacing.superExtraSmall),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: Spacing.xLarge),
-                  child: Text(
-                    secondaryMessage ??
-                        eventRsvp?.messages?.secondary ??
-                        t.event.rsvpSuccessful(eventName: event.title ?? ''),
-                    style: Typo.mediumPlus.copyWith(
-                      fontWeight: FontWeight.w400,
-                      color: colorScheme.onSecondary,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                SizedBox(height: Spacing.xLarge),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: Spacing.xLarge),
-                  child: buttonBuilder != null
-                      ? buttonBuilder?.call(context)
-                      : LinearGradientButton(
-                          onTap: () => onPressed?.call(context),
-                          mode: GradientButtonMode.lavenderMode,
-                          height: Sizing.large,
-                          textStyle: Typo.medium.copyWith(
-                            fontWeight: FontWeight.w600,
-                            color: colorScheme.onPrimary.withOpacity(0.87),
-                            fontFamily: FontFamily.nohemiVariable,
-                          ),
-                          radius: BorderRadius.circular(LemonRadius.small * 2),
-                          label: t.event.takeMeToEvent,
+                Column(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: Spacing.xLarge),
+                      child: Text(
+                        primaryMessage ??
+                            eventRsvp?.messages?.primary ??
+                            t.event.youreIn,
+                        style: Typo.extraLarge.copyWith(
+                          fontFamily: FontFamily.nohemiVariable,
+                          fontWeight: FontWeight.w900,
+                          color: colorScheme.onPrimary,
+                          height: 1.2,
                         ),
+                      ),
+                    ),
+                    SizedBox(height: Spacing.superExtraSmall),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: Spacing.xLarge),
+                      child: Text(
+                        secondaryMessage ??
+                            eventRsvp?.messages?.secondary ??
+                            t.event
+                                .rsvpSuccessful(eventName: event.title ?? ''),
+                        style: Typo.mediumPlus.copyWith(
+                          fontWeight: FontWeight.w400,
+                          color: colorScheme.onSecondary,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    SizedBox(height: Spacing.xLarge),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: Spacing.xLarge),
+                      child: buttonBuilder != null
+                          ? buttonBuilder?.call(context)
+                          : LinearGradientButton(
+                              onTap: () => onPressed?.call(context),
+                              mode: GradientButtonMode.lavenderMode,
+                              height: Sizing.large,
+                              textStyle: Typo.medium.copyWith(
+                                fontWeight: FontWeight.w600,
+                                color: colorScheme.onPrimary.withOpacity(0.87),
+                                fontFamily: FontFamily.nohemiVariable,
+                              ),
+                              radius:
+                                  BorderRadius.circular(LemonRadius.small * 2),
+                              label: t.event.takeMeToEvent,
+                            ),
+                    ),
+                    SizedBox(
+                      height: 40.h,
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -100,7 +108,7 @@ class RSVPEventSuccessPopupPage extends StatelessWidget {
               left: 0,
               right: 0,
               child: InkWell(
-                onTap: () => showComingSoonDialog(context),
+                onTap: () => SnackBarUtils.showComingSoon(),
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
                   child: Row(

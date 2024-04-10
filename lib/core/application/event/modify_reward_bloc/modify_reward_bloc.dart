@@ -128,25 +128,24 @@ class ModifyRewardBloc extends Bloc<ModifyRewardEvent, ModifyRewardState> {
     _ModifyRewardEventOnCreateSubmitted event,
     Emitter emit,
   ) async {
-    emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
     final title = StringFormz.dirty(state.title.value);
-    _validate(state.copyWith(title: title));
+    emit(_validate(state.copyWith(title: title)));
+
     if (state.isValid) {
+      emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
       final result = await _eventRepository.createEventReward(
         input: [
-          ...event.existingRewards
-              .map(
-                (reward) => Input$EventRewardInput(
-                  $_id: reward.id,
-                  active: true,
-                  title: reward.title!,
-                  limit: reward.limit?.toDouble(),
-                  limit_per: reward.limitPer!.toDouble(),
-                  icon_color: reward.iconColor,
-                  icon_url: reward.iconUrl,
-                ),
-              )
-              .toList(),
+          ...event.existingRewards.map(
+            (reward) => Input$EventRewardInput(
+              $_id: reward.id,
+              active: true,
+              title: reward.title!,
+              limit: reward.limit?.toDouble(),
+              limit_per: reward.limitPer!.toDouble(),
+              icon_color: reward.iconColor,
+              icon_url: reward.iconUrl,
+            ),
+          ),
           Input$EventRewardInput(
             active: true,
             title: title.value,
@@ -163,6 +162,8 @@ class ModifyRewardBloc extends Bloc<ModifyRewardEvent, ModifyRewardState> {
         (createEvent) =>
             emit(state.copyWith(status: FormzSubmissionStatus.success)),
       );
+    } else {
+      emit(state.copyWith(status: FormzSubmissionStatus.canceled));
     }
   }
 
@@ -197,7 +198,7 @@ class ModifyRewardBloc extends Bloc<ModifyRewardEvent, ModifyRewardState> {
                 icon_url: reward.iconUrl,
               );
             },
-          ).toList(),
+          ),
         ],
         eventId: event.eventId,
       );

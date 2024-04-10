@@ -1,5 +1,6 @@
 import 'package:app/core/domain/event/entities/buy_tickets_response.dart';
 import 'package:app/core/domain/event/entities/event_currency.dart';
+import 'package:app/core/domain/event/entities/event_ticket_category.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/entities/event_ticket.dart';
 import 'package:app/core/domain/event/entities/event_tickets_pricing_info.dart';
@@ -12,9 +13,11 @@ import 'package:app/core/domain/event/input/get_event_ticket_types_input/get_eve
 import 'package:app/core/domain/event/input/get_tickets_input/get_tickets_input.dart';
 import 'package:app/core/domain/event/input/redeem_tickets_input/redeem_tickets_input.dart';
 import 'package:app/core/failure.dart';
+import 'package:app/graphql/backend/event/mutation/email_event_ticket.graphql.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:dartz/dartz.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:app/graphql/backend/event/mutation/create_tickets.graphql.dart';
 
 abstract class EventTicketRepository {
   Future<Either<Failure, EventTicketsPricingInfo>> calculateTicketsPricing({
@@ -58,5 +61,17 @@ abstract class EventTicketRepository {
   Future<Either<Failure, bool>> deleteEventTicketType({
     required String ticketTypeId,
     required String eventId,
+  });
+
+  Future<Either<Failure, List<EventTicket>>> createTickets({
+    required Variables$Mutation$CreateTickets input,
+  });
+
+  Future<Either<Failure, EventTicketCategory>> createEventTicketCategory({
+    required Input$CreateEventTicketCategoryInput input,
+  });
+
+  Future<Either<Failure, bool>> mailEventTicket({
+    required Variables$Mutation$MailEventTicket input,
   });
 }

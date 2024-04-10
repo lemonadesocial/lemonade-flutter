@@ -9,11 +9,13 @@ import 'package:app/core/utils/bottomsheet_utils.dart';
 import 'package:app/core/utils/number_utils.dart';
 import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:collection/collection.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class ERC20PricingMethodForm extends StatefulWidget {
   final TextEditingController amountController;
@@ -100,8 +102,10 @@ class _ERC20PricingMethodFormState extends State<ERC20PricingMethodForm> {
                           placeholder: t.event.ticketTierSetting.token,
                           value: state.currency,
                           getDisplayValue: (tokenSymbol) => tokenSymbol ?? '',
-                          onTap: () => BottomSheetUtils.showSnapBottomSheet(
-                            context,
+                          onTap: () => showCupertinoModalBottomSheet(
+                            context: context,
+                            expand: true,
+                            backgroundColor: LemonColor.atomicBlack,
                             builder: (_) =>
                                 TicketTierFeatureDropdownList<String, String>(
                               value: state.currency,
@@ -155,13 +159,7 @@ class _ERC20PricingMethodFormState extends State<ERC20PricingMethodForm> {
               ),
               if (walletState.activeSession == null) ...[
                 SizedBox(height: Spacing.xSmall),
-                ConnectWalletButton(
-                  onSelect: (walletApp) {
-                    context.read<WalletBloc>().add(
-                          WalletEvent.connectWallet(walletApp: walletApp),
-                        );
-                  },
-                ),
+                const ConnectWalletButton(),
               ],
             ],
           );

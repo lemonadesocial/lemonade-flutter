@@ -19,12 +19,12 @@ import 'package:timeago/timeago.dart' as timeago;
 
 class PostCommentTile extends StatelessWidget {
   const PostCommentTile({
-    Key? key,
+    super.key,
     required this.comment,
-  }) : super(key: key);
+  });
   final PostComment comment;
 
-  String? get username => comment.userExpanded?.username;
+  String? get name => comment.userExpanded?.name;
 
   String? get userAvatar {
     if (comment.userExpanded?.newPhotosExpanded == null ||
@@ -45,7 +45,7 @@ class PostCommentTile extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(
         vertical: Spacing.small,
-        horizontal: Spacing.extraSmall,
+        horizontal: Spacing.xSmall,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -66,7 +66,7 @@ class PostCommentTile extends StatelessWidget {
               url: userAvatar ?? '',
             ),
           ),
-          SizedBox(width: Spacing.superExtraSmall),
+          SizedBox(width: Spacing.xSmall),
           Flexible(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -75,7 +75,7 @@ class PostCommentTile extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      username ?? '',
+                      name ?? t.common.anonymousLemon,
                       style: Typo.medium.copyWith(
                         color: colorScheme.onPrimary.withOpacity(0.87),
                         fontWeight: FontWeight.w600,

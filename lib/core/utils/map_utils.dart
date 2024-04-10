@@ -1,7 +1,18 @@
 import 'dart:math';
 
 import 'package:app/core/config.dart';
+import 'package:app/core/presentation/widgets/map/map_option_bottom_sheet.dart';
+import 'package:app/theme/color.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+enum GeoAppOption {
+  google,
+  apple,
+  waze,
+}
 
 class MapUtils {
   static String createGoogleMapsURL({
@@ -41,5 +52,61 @@ class MapUtils {
     } catch (error) {
       return '';
     }
+  }
+
+  /// Returns a [Uri] that can be launched on the current platform
+  /// to open a maps application showing coordinates ([latitude] and [longitude]).
+  static Uri createCoordinatesUri(
+    double latitude,
+    double longitude, {
+    GeoAppOption? option,
+  }) {
+    if (option == GeoAppOption.apple) {
+      var params = {
+        'll': '$latitude,$longitude',
+      };
+
+      return Uri.https('maps.apple.com', '/', params);
+    }
+
+    if (option == GeoAppOption.waze) {
+      var params = {
+        'll': '$latitude,$longitude',
+      };
+      return Uri.https('www.waze.com', '/ul', params);
+    }
+
+    return Uri.https(
+      'www.google.com',
+      '/maps/search/',
+      {'api': '1', 'query': '$latitude,$longitude'},
+    );
+  }
+
+  /// Launches the maps application for this platform.
+  /// The maps application will show the specified coordinates.
+  /// Returns a Future that resolves to true if the maps application
+  /// was launched successfully, false otherwise.
+  static Future<bool> launchCoordinates(
+    double latitude,
+    double longitude,
+  ) {
+    return launchUrl(createCoordinatesUri(latitude, longitude));
+  }
+
+  static showMapOptionBottomSheet(
+    BuildContext context, {
+    required double latitude,
+    required double longitude,
+  }) {
+    showCupertinoModalBottomSheet(
+      context: context,
+      useRootNavigator: true,
+      backgroundColor: LemonColor.atomicBlack,
+      builder: (context) => MapOptionBottomSheet(
+        lat: latitude,
+        lng: longitude,
+      ),
+    );
   }
 }

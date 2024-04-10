@@ -53,4 +53,10 @@ class EventJoinRequest with _$EventJoinRequest {
             .map((item) => TicketInfo.fromDto(item))
             .toList(),
       );
+
+  bool get isPending => approvedBy == null && declinedBy == null;
+
+  bool get isDeclined => declinedBy != null;
+
+  bool get isApproved => approvedBy != null;
 }

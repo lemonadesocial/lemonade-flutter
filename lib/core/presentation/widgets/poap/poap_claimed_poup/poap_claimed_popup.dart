@@ -36,119 +36,121 @@ class PoapClaimedPopup extends StatelessWidget {
         left: Spacing.smMedium,
         right: Spacing.smMedium,
       ),
-      child: SizedBox(
-        height: 0.6465.sh,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(
-            LemonRadius.small,
-          ),
-          child: Column(
-            children: [
-              SizedBox(
-                height: 339.w,
-                child: Stack(
-                  children: [
-                    Positioned.fill(
-                      child: FutureBuilder(
-                        future: MediaUtils.getNftMedia(
-                          token?.metadata?.image,
-                          token?.metadata?.animation_url,
-                        ),
-                        builder: (context, snapshot) => CachedNetworkImage(
-                          fit: BoxFit.cover,
-                          imageUrl: snapshot.data?.url ?? '',
-                          placeholder: (_, __) =>
-                              ImagePlaceholder.defaultPlaceholder(
-                            radius: BorderRadius.only(
-                              topLeft: Radius.circular(LemonRadius.small),
-                              topRight: Radius.circular(LemonRadius.small),
-                            ),
-                          ),
-                          errorWidget: (_, __, ___) =>
-                              ImagePlaceholder.defaultPlaceholder(
-                            radius: BorderRadius.only(
-                              topLeft: Radius.circular(LemonRadius.small),
-                              topRight: Radius.circular(LemonRadius.small),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: InkWell(
-                        onTap: () => onClose?.call(),
-                        child: Container(
-                          width: 42.w,
-                          height: 42.w,
-                          margin: EdgeInsets.all(Spacing.xSmall),
-                          decoration: BoxDecoration(
-                            color: colorScheme.primary.withOpacity(0.36),
-                            borderRadius: BorderRadius.circular(42.w),
-                          ),
-                          child: Center(
-                            child: Assets.icons.icClose.svg(),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(
+                LemonRadius.small,
               ),
-              Expanded(
-                flex: 1,
-                child: Container(
-                  color: LemonColor.dialogBackground,
-                  padding: EdgeInsets.all(Spacing.medium),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        t.nft.collectibleClaimed,
-                        style: Typo.extraMedium.copyWith(
-                          fontWeight: FontWeight.w600,
-                          fontFamily: FontFamily.switzerVariable,
-                        ),
-                      ),
-                      SizedBox(height: Spacing.xSmall),
-                      Text(
-                        t.nft.collectibleClaimedMintedAndDeposited(
-                          tokenName: token?.metadata?.name ?? '',
-                        ),
-                        style: Typo.medium.copyWith(
-                          color: colorScheme.onSecondary,
-                        ),
-                      ),
-                      SizedBox(height: Spacing.medium),
-                      Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            flex: 1,
-                            child: LinearGradientButton(
-                              label: t.nft.viewInWallet,
-                              onTap: () => onView?.call(),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(
+                    height: 339.w,
+                    child: Stack(
+                      children: [
+                        Positioned.fill(
+                          child: FutureBuilder(
+                            future: MediaUtils.getNftMedia(
+                              token?.metadata?.image,
+                              token?.metadata?.animation_url,
+                            ),
+                            builder: (context, snapshot) => CachedNetworkImage(
+                              fit: BoxFit.cover,
+                              imageUrl: snapshot.data?.url ?? '',
+                              placeholder: (_, __) =>
+                                  ImagePlaceholder.defaultPlaceholder(
+                                radius: BorderRadius.only(
+                                  topLeft: Radius.circular(LemonRadius.small),
+                                  topRight: Radius.circular(LemonRadius.small),
+                                ),
+                              ),
+                              errorWidget: (_, __, ___) =>
+                                  ImagePlaceholder.defaultPlaceholder(
+                                radius: BorderRadius.only(
+                                  topLeft: Radius.circular(LemonRadius.small),
+                                  topRight: Radius.circular(LemonRadius.small),
+                                ),
+                              ),
                             ),
                           ),
-                          SizedBox(width: Spacing.extraSmall),
-                          Expanded(
-                            flex: 1,
-                            child: LinearGradientButton(
-                              label: t.nft.transfer,
-                              mode: GradientButtonMode.lavenderMode,
-                              onTap: () => onTransfer?.call(),
+                        ),
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: InkWell(
+                            onTap: () => onClose?.call(),
+                            child: Container(
+                              width: 42.w,
+                              height: 42.w,
+                              margin: EdgeInsets.all(Spacing.xSmall),
+                              decoration: BoxDecoration(
+                                color: colorScheme.primary.withOpacity(0.36),
+                                borderRadius: BorderRadius.circular(42.w),
+                              ),
+                              child: Center(
+                                child: Assets.icons.icClose.svg(),
+                              ),
                             ),
                           ),
-                        ],
-                      ),
-                    ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
+                  Container(
+                    color: LemonColor.dialogBackground,
+                    padding: EdgeInsets.all(Spacing.medium),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          t.nft.collectibleClaimed,
+                          style: Typo.extraMedium.copyWith(
+                            fontWeight: FontWeight.w600,
+                            fontFamily: FontFamily.switzerVariable,
+                          ),
+                        ),
+                        SizedBox(height: Spacing.xSmall),
+                        Text(
+                          t.nft.collectibleClaimedMintedAndDeposited(
+                            tokenName: token?.metadata?.name ?? '',
+                          ),
+                          style: Typo.medium.copyWith(
+                            color: colorScheme.onSecondary,
+                          ),
+                        ),
+                        SizedBox(height: Spacing.medium),
+                        Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: LinearGradientButton(
+                                label: t.nft.viewInWallet,
+                                onTap: () => onView?.call(),
+                              ),
+                            ),
+                            SizedBox(width: Spacing.extraSmall),
+                            Expanded(
+                              flex: 1,
+                              child: LinearGradientButton(
+                                label: t.nft.transfer,
+                                mode: GradientButtonMode.lavenderMode,
+                                onTap: () => onTransfer?.call(),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:matrix/matrix.dart';
 
 class StateMessageItem extends StatelessWidget {
-  const StateMessageItem(this.event, {Key? key}) : super(key: key);
+  const StateMessageItem(this.event, {super.key});
   final Event event;
 
   @override

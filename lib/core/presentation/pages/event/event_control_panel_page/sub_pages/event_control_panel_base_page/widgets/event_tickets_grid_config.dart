@@ -3,7 +3,7 @@ import 'package:app/core/application/event/get_event_detail_bloc/get_event_detai
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_configuration.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/event_config_card.dart';
-import 'package:app/core/utils/modal_utils.dart';
+import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -30,13 +30,18 @@ class EventTicketsGridConfig extends StatelessWidget {
         AutoRouter.of(context).navigate(const EventRewardSettingRoute());
         break;
       default:
-        showComingSoonDialog(context);
+        SnackBarUtils.showComingSoon();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final eventConfigs = EventConfiguration.ticketsEventConfiguations(context);
+    Event eventDetail = context.watch<GetEventDetailBloc>().state.maybeWhen(
+          orElse: () => Event(),
+          fetched: (eventDetail) => eventDetail,
+        );
+    final eventConfigs =
+        EventConfiguration.ticketsEventConfiguations(context, eventDetail);
     return SliverGrid(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,

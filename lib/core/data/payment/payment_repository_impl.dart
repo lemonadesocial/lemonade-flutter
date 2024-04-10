@@ -11,11 +11,13 @@ import 'package:app/core/domain/payment/entities/payment_card/payment_card.dart'
 import 'package:app/core/domain/payment/input/create_payment_account_input/create_payment_account_input.dart';
 import 'package:app/core/domain/payment/input/create_stripe_card_input/create_stripe_card_input.dart';
 import 'package:app/core/domain/payment/input/get_payment_accounts_input/get_payment_accounts_input.dart';
+import 'package:app/core/domain/payment/input/get_payment_input/get_payment_input.dart';
 import 'package:app/core/domain/payment/input/get_stripe_cards_input/get_stripe_cards_input.dart';
 import 'package:app/core/domain/payment/input/update_payment_input/update_payment_input.dart';
 import 'package:app/core/domain/payment/payment_repository.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/core/utils/gql/gql.dart';
+import 'package:app/graphql/backend/payment/mutation/mail_ticket_payment_receipt.graphql.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:dartz/dartz.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -68,6 +70,29 @@ class PaymentRepositoryImpl extends PaymentRepository {
       return Left(Failure.withGqlException(result.exception));
     }
     return Right(result.parsedData!);
+  }
+
+  @override
+  Future<Either<Failure, Payment?>> getPayment({
+    required GetPaymentInput input,
+  }) async {
+    final result = await _client.mutate(
+      MutationOptions(
+        document: getPaymentQuery,
+        variables: input.toJson(),
+        fetchPolicy: FetchPolicy.networkOnly,
+        parserFn: (data) => data['getNewPayment'] != null
+            ? Payment.fromDto(
+                PaymentDto.fromJson(
+                  data['getNewPayment'],
+                ),
+              )
+            : null,
+      ),
+    );
+
+    if (result.hasException) return Left(Failure());
+    return Right(result.parsedData);
   }
 
   @override
@@ -135,5 +160,24 @@ class PaymentRepositoryImpl extends PaymentRepository {
     );
     if (result.hasException) return Left(Failure());
     return Right(result.parsedData!);
+  }
+
+  @override
+  Future<Either<Failure, bool>> mailTicketPaymentReciept({
+    required String ticketId,
+  }) async {
+    final result = await _client.mutate$MailTicketPaymentReceipt(
+      Options$Mutation$MailTicketPaymentReceipt(
+        variables: Variables$Mutation$MailTicketPaymentReceipt(
+          ticket: ticketId,
+        ),
+      ),
+    );
+
+    if (result.hasException || result.parsedData == null) {
+      return Left(Failure());
+    }
+
+    return Right(result.parsedData?.mailTicketPaymentReceipt ?? false);
   }
 }

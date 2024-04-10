@@ -18,8 +18,8 @@ import 'package:share_plus/share_plus.dart';
 
 class SettingProfileTile extends StatelessWidget {
   const SettingProfileTile({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +82,7 @@ class SettingProfileTile extends StatelessWidget {
             ],
             onItemPressed: (item) async {
               if (item?.label == t.common.actions.editProfile) {
-                context.router.push(EditProfileRoute(userProfile: authSession));
+                context.router.push(const EditProfileRoute());
               }
               if (item?.label == t.common.actions.shareProfile) {
                 try {

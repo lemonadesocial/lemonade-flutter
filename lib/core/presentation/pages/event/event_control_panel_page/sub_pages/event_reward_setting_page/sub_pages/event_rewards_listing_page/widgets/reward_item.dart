@@ -8,7 +8,7 @@ import 'package:app/core/presentation/widgets/floating_frosted_glass_dropdown_wi
 import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
-import 'package:app/core/utils/modal_utils.dart';
+import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -52,19 +52,17 @@ class RewardItem extends StatelessWidget {
         final result = await getIt<EventRewardRepository>().deleteEventReward(
           eventId: eventId,
           input: [
-            ...newRewards
-                .map(
-                  (reward) => Input$EventRewardInput(
-                    $_id: reward.id,
-                    active: reward.active!,
-                    title: reward.title!,
-                    limit: reward.limit?.toDouble(),
-                    limit_per: reward.limitPer!.toDouble(),
-                    icon_color: reward.iconColor,
-                    icon_url: reward.iconUrl,
-                  ),
-                )
-                .toList(),
+            ...newRewards.map(
+              (reward) => Input$EventRewardInput(
+                $_id: reward.id,
+                active: reward.active!,
+                title: reward.title!,
+                limit: reward.limit?.toDouble(),
+                limit_per: reward.limitPer!.toDouble(),
+                icon_color: reward.iconColor,
+                icon_url: reward.iconUrl,
+              ),
+            ),
           ],
         );
         if (result.isRight()) {
@@ -166,7 +164,7 @@ class RewardItem extends StatelessWidget {
                       ),
                     );
                   default:
-                    showComingSoonDialog(context);
+                    SnackBarUtils.showComingSoon();
                 }
               },
               child: ThemeSvgIcon(

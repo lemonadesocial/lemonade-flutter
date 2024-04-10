@@ -3,7 +3,7 @@ import 'package:app/core/data/event/gql/event_query.dart';
 
 const postFragment = '''
   $eventHostExpandedFragment
-
+    
   fragment postFragment on Post {
   _id
   created_at
@@ -31,6 +31,15 @@ const postFragment = '''
     new_new_photos_expanded(limit: 1) {
       key
       bucket
+    }
+    event_ticket_types {
+      _id
+      prices {
+        currency
+        network
+        cost
+        decimals
+      }
     }
     start
     end

@@ -1,11 +1,11 @@
 name: app
 description: Lemonade Social App
 publish_to: 'none' 
-version: 1.3.0
+version: 1.14.0
 
 environment:
-  flutter: "3.13.9"
-  sdk: "3.1.5"
+  flutter: "3.16.9"
+  sdk: "3.2.6"
 
 dependencies:
   flutter:
@@ -20,6 +20,7 @@ dependencies:
   # networking 
   graphql_flutter: ^5.1.2
   dio: ^5.3.2
+  http: ^1.1.2
 
   # data
   freezed_annotation: ^2.2.0
@@ -51,9 +52,9 @@ dependencies:
 
   # assets
   flutter_svg: ^2.0.7
-  cached_network_image: 3.3.0
+  cached_network_image: 3.3.1
   image_picker: ^1.0.2
-  image_cropper: ^4.0.1
+  image_cropper: ^5.0.1
 
   # UI
   flutter_portal: ^1.1.4
@@ -82,6 +83,7 @@ dependencies:
   flutter_switch: ^0.3.2
   flutter_keyboard_visibility: ^5.4.1
   animated_text_kit: ^4.2.2
+  flutter_styled_toast: ^2.2.1
 
   # Webview
   flutter_inappwebview: ^5.8.0
@@ -116,7 +118,10 @@ dependencies:
   shorebird_code_push: ^1.1.0
 
   # payment
-  flutter_stripe: ^9.4.0
+  flutter_stripe: 9.4.0
+
+  # crash analytics
+  sentry_flutter: ^7.18.0
   
   # other
   path_provider: ^2.0.15
@@ -132,12 +137,24 @@ dependencies:
   formz: ^0.6.1
   flutter_app_badger: ^1.5.0
   uuid: ^3.0.7
-  flutter_google_places_hoc081098: ^1.2.0
-  google_maps_webservice: ^0.0.20-nullsafety.5
+  flutter_google_places_hoc081098: 2.0.0-beta.1
+  google_maps_webservice:
+    git:
+      url: https://github.com/mthinh/google_maps_webservice.git 
+      ref: master
   flutter_timezone: ^1.0.8
   currency_text_input_formatter: ^2.1.10
   mobile_scanner: 3.5.5
-  
+  modal_bottom_sheet: ^3.0.0-pre
+  web3modal_flutter: 
+    path: ./packages/web3modal_flutter
+  dynamic_color: ^1.7.0
+  calendar_date_picker2: ^0.5.5
+  wheel_picker: ^0.0.4
+  appflowy_editor: 2.3.1
+  google_fonts: 6.1.0
+  flutter_markdown: ^0.6.20
+
 dependency_overrides:
   matrix_api_lite:
     git:
@@ -154,7 +171,7 @@ dev_dependencies:
     sdk: flutter
 
   # lints
-  flutter_lints: ^2.0.0
+  flutter_lints: ^3.0.1
 
   # code generators
   build_runner: ^2.4.7
@@ -163,7 +180,10 @@ dev_dependencies:
   auto_route_generator: ^7.1.1
   injectable_generator: ^2.1.6
   flutter_gen_runner: ^5.3.1
-  graphql_codegen: ^0.12.2
+  graphql_codegen: ^0.13.11
+
+  # crash analytics
+  sentry_dart_plugin: ^1.7.1
 
 # generate asset 
 flutter_gen:
@@ -216,3 +236,11 @@ flutter:
           weight: 500
         - asset: assets/fonts/Nohemi-Regular.ttf
           weight: 400
+
+sentry:
+  upload_debug_symbols: true
+  upload_source_maps: false
+  upload_sources: false
+  project: lemonade-flutter
+  org: lemonadesocial
+  auth_token: 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

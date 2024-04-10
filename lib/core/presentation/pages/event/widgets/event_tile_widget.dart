@@ -9,10 +9,10 @@ import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 
 class EventTileWidget extends StatelessWidget {
   const EventTileWidget({
-    Key? key,
+    super.key,
     required this.event,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   final Event event;
   final VoidCallback onTap;

@@ -5,7 +5,7 @@ import 'package:app/core/presentation/widgets/common/button/linear_gradient_butt
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/presentation/widgets/web3/connect_wallet_button.dart';
 import 'package:app/core/service/wallet/wallet_connect_service.dart';
-import 'package:app/core/utils/modal_utils.dart';
+import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -17,7 +17,7 @@ import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
+import 'package:web3modal_flutter/web3modal_flutter.dart';
 
 class PayoutAccountsWidget extends StatefulWidget {
   const PayoutAccountsWidget({super.key});
@@ -47,6 +47,7 @@ class _PayoutAccountsWidgetState extends State<PayoutAccountsWidget> {
           t.event.ticketTierSetting.payoutAccounts,
           style: Typo.medium.copyWith(
             fontWeight: FontWeight.w600,
+            color: colorScheme.onPrimary,
           ),
         ),
         SizedBox(height: Spacing.xSmall),
@@ -57,7 +58,7 @@ class _PayoutAccountsWidgetState extends State<PayoutAccountsWidget> {
               : t.event.ticketTierSetting.connectAccount,
           icon: ThemeSvgIcon(
             color: colorScheme.onSecondary,
-            builder: (filter) => Assets.icons.icCash.svg(
+            builder: (filter) => Assets.icons.icBank.svg(
               colorFilter: filter,
             ),
           ),
@@ -67,14 +68,14 @@ class _PayoutAccountsWidgetState extends State<PayoutAccountsWidget> {
                 onTap: () {},
                 child: ThemeSvgIcon(
                   color: colorScheme.onSurfaceVariant,
-                  builder: (filter) => Assets.icons.icForward.svg(
+                  builder: (filter) => Assets.icons.icArrowRight.svg(
                     colorFilter: filter,
                   ),
                 ),
               );
             }
             return LinearGradientButton(
-              onTap: () => showComingSoonDialog(context),
+              onTap: () => SnackBarUtils.showComingSoon(),
               // TODO:
               // onTap: () => Navigator.of(context).push(
               //   MaterialPageRoute(
@@ -92,14 +93,12 @@ class _PayoutAccountsWidgetState extends State<PayoutAccountsWidget> {
           future: getIt<WalletConnectService>().getActiveSession(),
           builder: (context, walletConnectSnapshot) {
             final activeSession = walletConnectSnapshot.data;
-            final sessionAccount =
-                activeSession?.namespaces.entries.first.value.accounts.first;
+            final userWalletAddress =
+                getIt<WalletConnectService>().w3mService.address ?? '';
             return PayoutAccountItem(
               title: t.event.ticketTierSetting.crypto,
               subTitle: activeSession != null
-                  ? Web3Utils.formatIdentifier(
-                      NamespaceUtils.getAccount(sessionAccount ?? ''),
-                    )
+                  ? Web3Utils.formatIdentifier(userWalletAddress)
                   : t.common.actions.connectWallet,
               icon: ThemeSvgIcon(
                 color: colorScheme.onSecondary,
@@ -113,7 +112,7 @@ class _PayoutAccountsWidgetState extends State<PayoutAccountsWidget> {
                     onTap: () {},
                     child: ThemeSvgIcon(
                       color: colorScheme.onSurfaceVariant,
-                      builder: (filter) => Assets.icons.icForward.svg(
+                      builder: (filter) => Assets.icons.icArrowRight.svg(
                         colorFilter: filter,
                       ),
                     ),
@@ -121,22 +120,14 @@ class _PayoutAccountsWidgetState extends State<PayoutAccountsWidget> {
                 }
 
                 return ConnectWalletButton(
-                  onSelect: (walletApp) {
-                    getIt<WalletConnectService>()
-                        .connectWallet(walletApp: walletApp)
-                        .then(
-                      (success) {
-                        if (success) {
-                          setState(() {});
-                        }
-                      },
-                    );
-                  },
-                  builder: (showOptions) => LinearGradientButton(
-                    onTap: () => showOptions(context),
+                  builder: (onPressConnect, connectButtonState) =>
+                      LinearGradientButton(
+                    loadingWhen:
+                        connectButtonState == ConnectButtonState.connecting,
                     height: Sizing.medium,
                     radius: BorderRadius.circular(LemonRadius.small * 2),
                     label: t.common.actions.connect,
+                    onTap: () => onPressConnect(context),
                   ),
                 );
               },
@@ -177,10 +168,8 @@ class PayoutAccountItem extends StatelessWidget {
             width: Sizing.medium,
             height: Sizing.medium,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
-              border: Border.all(
-                color: LemonColor.chineseBlack,
-              ),
+              color: colorScheme.secondaryContainer,
+              borderRadius: BorderRadius.circular(Sizing.medium),
             ),
             child: Center(
               child: icon,

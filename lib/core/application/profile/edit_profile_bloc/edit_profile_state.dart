@@ -7,7 +7,7 @@ class EditProfileState with _$EditProfileState {
     String? username,
     LemonPronoun? pronoun,
     String? companyName,
-    String? dob,
+    DateTime? dob,
     String? displayName,
     String? education,
     String? industry,
@@ -18,6 +18,13 @@ class EditProfileState with _$EditProfileState {
     String? shortBio,
     XFile? profilePhoto,
     List<dynamic>? interestList,
+    String? handleTwitter,
+    String? handleLinkedin,
+    String? handleInstagram,
+    String? handleFarcaster,
+    String? handleGithub,
+    String? handleLens,
+    String? handleMirror,
     Map<NotificationSettingType, bool>? notificationMap,
   }) = _EditProfileState;
 

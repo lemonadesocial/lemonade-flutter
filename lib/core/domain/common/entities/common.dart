@@ -1,33 +1,29 @@
 import 'package:app/core/data/common/dtos/common_dtos.dart';
 import 'package:app/core/domain/user/entities/user.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class Address {
-  Address({
-    this.id,
-    this.street1,
-    this.street2,
-    this.city,
-    this.region,
-    this.postal,
-    this.country,
-    this.title,
-    this.latitude,
-    this.longitude,
-    this.recipientName,
-  });
-  final String? id;
-  final String? street1;
-  final String? street2;
-  final String? city;
-  final String? region;
-  final String? postal;
-  final String? country;
-  final String? title;
-  final double? latitude;
-  final double? longitude;
-  final String? recipientName;
+part 'common.freezed.dart';
+part 'common.g.dart';
 
-  static Address fromDto(AddressDto dto) {
+@freezed
+class Address with _$Address {
+  Address._();
+
+  factory Address({
+    String? id,
+    String? street1,
+    String? street2,
+    String? city,
+    String? region,
+    String? postal,
+    String? country,
+    String? title,
+    double? latitude,
+    double? longitude,
+    String? recipientName,
+  }) = _Address;
+
+  factory Address.fromDto(AddressDto dto) {
     return Address(
       id: dto.id,
       street1: dto.street1,
@@ -42,35 +38,28 @@ class Address {
       recipientName: dto.recipientName,
     );
   }
+
+  factory Address.fromJson(Map<String, dynamic> json) =>
+      _$AddressFromJson(json);
 }
 
-class DbFile {
-  DbFile({
-    this.id,
-    this.url,
-    this.owner,
-    this.bucket,
-    this.ownerExpanded,
-    this.stamp,
-    this.likes,
-    this.liked,
-    this.description,
-    this.key,
-    this.type,
-  });
-  final String? id;
-  final String? url;
-  final String? owner;
-  final String? bucket;
-  final User? ownerExpanded;
-  final String? stamp;
-  final int? likes;
-  final bool? liked;
-  final String? description;
-  final String? key;
-  final String? type;
+@freezed
+class DbFile with _$DbFile {
+  factory DbFile({
+    String? id,
+    String? url,
+    String? owner,
+    String? bucket,
+    User? ownerExpanded,
+    String? stamp,
+    int? likes,
+    bool? liked,
+    String? description,
+    String? key,
+    String? type,
+  }) = _DbFile;
 
-  static DbFile fromDto(DbFileDto dto) {
+  factory DbFile.fromDto(DbFileDto dto) {
     return DbFile(
       id: dto.id,
       url: dto.url,
@@ -86,6 +75,8 @@ class DbFile {
       type: dto.type,
     );
   }
+
+  factory DbFile.fromJson(Map<String, dynamic> json) => _$DbFileFromJson(json);
 }
 
 class GeoPoint {

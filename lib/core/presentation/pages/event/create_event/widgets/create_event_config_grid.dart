@@ -10,8 +10,10 @@ import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_p
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_guest_settings_page/event_guest_settings_page.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_location_setting_page/event_location_setting_page.dart';
 import 'package:app/core/utils/date_format_utils.dart';
-import 'package:app/core/utils/modal_utils.dart';
+import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/router/app_router.gr.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
@@ -51,12 +53,15 @@ class CreateEventConfigGrid extends StatelessWidget {
           event: event,
         );
         break;
+      case EventConfigurationType.applicationForm:
+        return AutoRouter.of(context)
+            .navigate(EventApplicationFormSettingRoute());
       default:
         page = null;
         break;
     }
     if (page == null) {
-      return showComingSoonDialog(context);
+      return SnackBarUtils.showComingSoon();
     }
     showModalBottomSheet(
       context: context,
@@ -104,7 +109,7 @@ class CreateEventConfigGrid extends StatelessWidget {
           childAspectRatio: 2.2,
         ),
         delegate: SliverChildBuilderDelegate(
-          childCount: 6,
+          childCount: eventConfigs.length,
           (BuildContext context, int index) {
             final eventConfig = eventConfigs[index];
             EventConfigurationType? eventConfigType = eventConfig.type;
@@ -152,10 +157,10 @@ class CreateEventConfigGrid extends StatelessWidget {
         crossAxisCount: 2,
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,
-        childAspectRatio: 2.5,
+        childAspectRatio: 2.3,
       ),
       delegate: SliverChildBuilderDelegate(
-        childCount: 6,
+        childCount: 4,
         (BuildContext context, int index) {
           final eventConfig = eventConfigs[index];
           EventConfigurationType? eventConfigType = eventConfig.type;

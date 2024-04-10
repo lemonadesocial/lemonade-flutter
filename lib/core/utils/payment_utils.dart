@@ -4,7 +4,7 @@ import 'package:app/core/domain/payment/entities/payment_account/payment_account
 
 class PaymentUtils {
   static bool isCryptoCurrency(EventCurrency eventCurrency) {
-    return eventCurrency.network != null;
+    return eventCurrency.network?.isNotEmpty == true;
   }
 
   static CurrencyInfo? getCurrencyInfo(

@@ -4,8 +4,8 @@ definitions:
     max_build_duration: 75
   env_versions: &env_versions
     flutter: fvm
-    xcode: 14.3.1
-    cocoapods: 1.13.0
+    xcode: 15.2
+    cocoapods: 1.14.2
   integrations:
     app_store_connect_integrations: &app_store_connect_integrations
       app_store_connect: Lemonade
@@ -202,11 +202,14 @@ definitions:
     - &change_shorebird_version
       name: 🐦 Change Shorebird version
       script: |
-        shorebird flutter versions use 3.13.9
+        shorebird flutter versions list
+        shorebird flutter versions use 3.16.9
     - &release_shorebird_ipa_staging
       name: Release shorebird ipa staging
       script: |
         BUILD_NUMBER=$(($(app-store-connect get-latest-testflight-build-number "$APP_ID") + 1))
+        shorebird flutter versions list
+        shorebird flutter versions use 3.16.9
         shorebird release ios-alpha --flavor staging -- \
           --build-number=$BUILD_NUMBER \
           --export-options-plist=/Users/builder/export_options.plist \
@@ -216,6 +219,8 @@ definitions:
       name: Release shorebird android apk staging
       script: |
         BUILD_NUMBER=$(($(google-play get-latest-build-number --package-name "$PACKAGE_NAME" --tracks="$GOOGLE_PLAY_TRACK") + 1))      
+        shorebird flutter versions list
+        shorebird flutter versions use 3.16.9
         shorebird release android --artifact apk --flavor staging -- \
           --build-number=$BUILD_NUMBER \
           --flavor="staging" \

@@ -5,9 +5,9 @@ import 'package:app/core/domain/form/string_formz.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:formz/formz.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:timezone/timezone.dart';
 
 part 'create_event_bloc.freezed.dart';
 
@@ -66,6 +66,12 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
     FormSubmitted event,
     Emitter<CreateEventState> emit,
   ) async {
+    // Convert the target selected datetime into utc
+    final location = getLocation(event.timezone);
+    final startUtcDateTime = event.start
+        .add(Duration(milliseconds: location.currentTimeZone.offset * -1));
+    final endUtcDateTime = event.end
+        .add(Duration(milliseconds: location.currentTimeZone.offset * -1));
     final title = StringFormz.dirty(state.title.value);
     final description = StringFormz.dirty(state.description.value);
     emit(
@@ -76,16 +82,15 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
       ),
     );
     if (state.isValid) {
-      final timezone = await FlutterTimezone.getLocalTimezone();
       emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
       var input = Input$EventInput(
         title: title.value,
         description: description.value,
         private: event.private,
-        require_approval: event.requireApproval,
-        start: DateTime.parse(event.start.toUtc().toIso8601String()),
-        end: DateTime.parse(event.end.toUtc().toIso8601String()),
-        timezone: timezone,
+        approval_required: event.approvalRequired,
+        start: DateTime.parse(startUtcDateTime.toIso8601String()),
+        end: DateTime.parse(endUtcDateTime.toIso8601String()),
+        timezone: event.timezone,
         guest_limit: double.parse(
           event.guestLimit ?? EventConstants.defaultEventGuestLimit,
         ),
@@ -135,8 +140,9 @@ class CreateEventEvent with _$CreateEventEvent {
   const factory CreateEventEvent.formSubmitted({
     required DateTime start,
     required DateTime end,
+    required String timezone,
     bool? private,
-    bool? requireApproval,
+    bool? approvalRequired,
     Address? address,
     String? guestLimit,
     String? guestLimitPer,

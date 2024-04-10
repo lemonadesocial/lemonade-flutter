@@ -4,8 +4,10 @@ import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/typo.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
@@ -30,8 +32,9 @@ class EventCard extends StatelessWidget {
           border: Border.all(color: colorScheme.outline),
         ),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            _buildCardHeader(),
+            _buildCardHeader(context),
             _buildCardBody(),
             _buildCardFooter(context, colorScheme),
           ],
@@ -40,19 +43,29 @@ class EventCard extends StatelessWidget {
     );
   }
 
-  _buildCardHeader() => Padding(
+  _buildCardHeader(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        AutoRouter.of(context)
+            .navigate(ProfileRoute(userId: event.hostExpanded?.userId ?? ''));
+      },
+      child: Padding(
         padding: EdgeInsets.symmetric(
           horizontal: Spacing.xSmall,
           vertical: Spacing.xSmall,
         ),
         child: LemonCircleAvatar(
           url: ImageUtils.generateUrl(
-            file: event.hostExpanded?.newPhotosExpanded?.first,
+            file: event.hostExpanded?.newPhotosExpanded?.isNotEmpty == true
+                ? event.hostExpanded?.newPhotosExpanded?.first
+                : null,
             imageConfig: ImageConfig.profile,
           ),
           label: event.hostExpanded?.name ?? '',
         ),
-      );
+      ),
+    );
+  }
 
   _buildCardBody() => event.newNewPhotosExpanded?.isNotEmpty == true
       ? Container(

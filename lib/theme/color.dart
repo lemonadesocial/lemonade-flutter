@@ -11,6 +11,7 @@ class LemonColor {
   static Color oliveBlack = const Color(0xff404040);
   static Color tertiaryBlack = const Color(0x4Debebf5);
   static Color white = const Color(0xffffffff);
+  static Color white03 = const Color(0xffFFFFFF).withOpacity(0.03);
   static Color white06 = const Color(0xffFFFFFF).withOpacity(0.06);
   static Color white09 = const Color(0xffFFFFFF).withOpacity(0.09);
   static Color white6 = const Color(0xffFFFFFF).withOpacity(0.6);
@@ -114,12 +115,20 @@ class LemonColor {
 
   //Snackbar
   static const snackBarSuccess = Color(0xff5fcb90);
+  static const jet = Color(0xff353535);
 
   // report
   static const report = Color(0xffFF6565);
 
   //Switch
   static const switchActive = Color(0xFFABC93D);
+
+  static const coralReef = Color(0xFFF57968);
+
+  static const malachiteGreen = Color(0xFF67F38E);
+
+  static const acidGreen = Color(0x2DC69DF7);
+  static const cloudyGrey = Color(0xFF6A6A6A);
 }
 
 final ColorScheme lemonadeLightThemeColorScheme = ColorScheme.light(

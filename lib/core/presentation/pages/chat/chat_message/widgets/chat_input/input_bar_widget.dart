@@ -34,8 +34,8 @@ class InputBar extends StatelessWidget {
     this.autofocus,
     this.textInputAction,
     this.readOnly = false,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   RegExp get commandMatchRegex => RegExp(r'^/(\w*)$');
 

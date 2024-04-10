@@ -10,13 +10,13 @@ class DatePickerTextField extends StatefulWidget {
   final String? errorText;
 
   const DatePickerTextField({
-    Key? key,
+    super.key,
     required this.controller,
     required this.label,
     this.initialValue,
     this.onChanged,
     this.errorText,
-  }) : super(key: key);
+  });
 
   @override
   DatePickerTextFieldState createState() => DatePickerTextFieldState();

@@ -1,8 +1,11 @@
 import 'package:app/core/domain/common/common_enums.dart';
 import 'package:app/core/domain/onboarding/onboarding_inputs.dart';
 import 'package:app/core/domain/user/user_repository.dart';
+import 'package:app/core/service/file/file_upload_service.dart';
 import 'package:app/core/service/post/post_service.dart';
+import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/core/utils/image_utils.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:image_picker/image_picker.dart';
@@ -111,16 +114,19 @@ class OnboardingBloc extends Cubit<OnboardingState> {
 
   Future<void> uploadImage() async {
     emit(state.copyWith(status: OnboardingStatus.loading));
-    final response = await postService.uploadImage(
-      state.profilePhoto!,
-      directory: 'photos',
-    );
-    response.fold(
-      (l) => emit(state.copyWith(status: OnboardingStatus.error)),
-      (imageId) {
+    try {
+      final client = getIt<AppGQL>().client;
+      final fileUploadService = FileUploadService(client);
+      String? imageId = await fileUploadService.uploadSingleFile(
+        state.profilePhoto,
+        FileDirectory.user,
+      );
+      if (imageId != null) {
         updateProfile(imageId: imageId);
-      },
-    );
+      }
+    } catch (e) {
+      emit(state.copyWith(status: OnboardingStatus.error));
+    }
   }
 
   Future<void> updateProfile({String? imageId}) async {

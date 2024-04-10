@@ -1,10 +1,11 @@
 import 'package:app/core/application/event/get_event_checkins_bloc/get_event_checkins_bloc.dart';
 import 'package:app/core/application/event/get_event_cohost_requests_bloc/get_event_cohost_requests_bloc.dart';
+import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/view_model/event_config_grid_view_model.dart';
-import 'package:app/core/utils/modal_utils.dart';
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/gen/assets.gen.dart';
-import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/typo.dart';
@@ -24,98 +25,22 @@ class HostEventDetailConfigGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
+    Event eventDetail = context.watch<GetEventDetailBloc>().state.maybeWhen(
+          orElse: () => Event(),
+          fetched: (eventDetail) => eventDetail,
+        );
+    final eventInvitedCount = eventDetail.invitedCount ?? 0;
+    final eventTicketTypesCount = eventDetail.eventTicketTypes?.length ?? 0;
     final List<EventConfigGridViewModel?> listData = [
-      EventConfigGridViewModel(
-        title: t.event.configuration.invite,
-        subTitle: '12/48 confirmed',
-        showProgressBar: true,
-        progressBarColors: [
-          const Color(0xFFBCF9CE),
-          const Color(0xFF68F28F),
-        ],
-        icon: Container(
-          width: 24.w,
-          height: 24.w,
-          clipBehavior: Clip.antiAlias,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: Assets.images.icUsersAdd.provider(),
-            ),
-          ),
-        ),
-        onTap: () {
-          Vibrate.feedback(FeedbackType.light);
-          showComingSoonDialog(context);
-        },
-      ),
-      EventConfigGridViewModel(
-        title: t.event.configuration.tickets,
-        subTitle: '4 ticket types \n\$12.9K total sales',
-        icon: Container(
-          width: 24.w,
-          height: 24.w,
-          clipBehavior: Clip.antiAlias,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: Assets.images.icTicketGradient.provider(),
-            ),
-          ),
-        ),
-        onTap: () {
-          Vibrate.feedback(FeedbackType.light);
-          showComingSoonDialog(context);
-        },
-      ),
-      EventConfigGridViewModel(
-        title: t.event.configuration.checkIn,
-        subTitle: '0 ${t.event.scanQR.checkedIn}',
-        showProgressBar: true,
-        progressBarColors: [const Color(0xFFF9D3BC), const Color(0xFFF29A68)],
-        icon: Container(
-          width: 24.w,
-          height: 24.w,
-          clipBehavior: Clip.antiAlias,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: Assets.images.icCheckInGradient.provider(),
-            ),
-          ),
-        ),
-        onTap: () {
-          Vibrate.feedback(FeedbackType.light);
-          showComingSoonDialog(context);
-        },
-      ),
-      EventConfigGridViewModel(
-        title: t.event.configuration.coHosts,
-        subTitle: '',
-        icon: Container(
-          width: 24.w,
-          height: 24.w,
-          clipBehavior: Clip.antiAlias,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: Assets.images.icHostGradient.provider(),
-            ),
-          ),
-        ),
-        onTap: () {
-          Vibrate.feedback(FeedbackType.light);
-          AutoRouter.of(context).navigate(const EventCohostsSettingRoute());
-        },
-      ),
       EventConfigGridViewModel(
         title: t.event.configuration.controlPanel,
         subTitle: t.event.configuration.controlPanelDescription,
-        icon: Container(
-          width: 24.w,
-          height: 24.w,
-          clipBehavior: Clip.antiAlias,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: Assets.images.icSettingsGradient.provider(),
-            ),
+        icon: ThemeSvgIcon(
+          builder: (filter) => Assets.icons.icSettingGradient.svg(
+            width: 24.w,
+            height: 24.w,
           ),
         ),
         onTap: () {
@@ -126,19 +51,78 @@ class HostEventDetailConfigGrid extends StatelessWidget {
       EventConfigGridViewModel(
         title: t.event.configuration.dashboard,
         subTitle: t.event.configuration.dashboardDescription,
-        icon: Container(
-          width: 24.w,
-          height: 24.w,
-          clipBehavior: Clip.antiAlias,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: Assets.images.icDashboardGradient.provider(),
-            ),
+        icon: ThemeSvgIcon(
+          builder: (filter) => Assets.icons.icDashboardGradient.svg(
+            width: 24.w,
+            height: 24.w,
           ),
         ),
         onTap: () {
           Vibrate.feedback(FeedbackType.light);
-          showComingSoonDialog(context);
+          SnackBarUtils.showComingSoon();
+        },
+      ),
+      EventConfigGridViewModel(
+        title: t.event.configuration.invite,
+        subTitle: t.event.invitedCount(count: eventInvitedCount),
+        icon: ThemeSvgIcon(
+          builder: (filter) => Assets.icons.icChatBubbleGradient.svg(
+            width: 24.w,
+            height: 24.w,
+          ),
+        ),
+        onTap: () {
+          Vibrate.feedback(FeedbackType.light);
+          if (event.matrixEventRoomId == null ||
+              event.matrixEventRoomId!.isEmpty) {
+            return showDialog(
+              barrierDismissible: false,
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  backgroundColor: colorScheme.secondary,
+                  title: Text(t.common.alert),
+                  content: SingleChildScrollView(
+                    child: ListBody(
+                      children: <Widget>[
+                        Text(t.chat.roomNotExistDesc),
+                      ],
+                    ),
+                  ),
+                  actions: <Widget>[
+                    TextButton(
+                      child: Text(
+                        t.common.actions.ok,
+                        style: Typo.medium.copyWith(color: Colors.white),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                );
+              },
+            );
+          }
+          AutoRouter.of(context).navigate(
+            ChatRoute(roomId: event.matrixEventRoomId ?? ''),
+          );
+        },
+      ),
+      EventConfigGridViewModel(
+        title: t.event.configuration.tickets,
+        subTitle:
+            '$eventTicketTypesCount ${t.event.ticketTypesCount(n: eventTicketTypesCount)}',
+        icon: ThemeSvgIcon(
+          builder: (filter) => Assets.icons.icTicketGradient.svg(
+            width: 24.w,
+            height: 24.w,
+          ),
+        ),
+        onTap: () {
+          Vibrate.feedback(FeedbackType.light);
+          AutoRouter.of(context)
+              .navigate(const EventIssueTicketsSettingRoute());
         },
       ),
     ];
@@ -153,10 +137,10 @@ class HostEventDetailConfigGrid extends StatelessWidget {
         );
     return SliverGrid(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
+        crossAxisCount: 4,
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,
-        childAspectRatio: 0.95,
+        childAspectRatio: 1.3,
       ),
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
@@ -193,7 +177,7 @@ class HostEventDetailConfigGrid extends StatelessWidget {
             onTap: listData[index]!.onTap,
           );
         },
-        childCount: 6,
+        childCount: listData.length,
       ),
     );
   }
@@ -236,80 +220,10 @@ class GridItemWidget extends StatelessWidget {
             ),
           ),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               item?.icon ?? const SizedBox(),
-              SizedBox(
-                width: double.infinity,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      width: double.infinity,
-                      child: Text(
-                        item?.title ?? '',
-                        style: Typo.small.copyWith(
-                          fontFamily: FontFamily.nohemiVariable,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                    item!.showProgressBar == true
-                        ? Padding(
-                            padding: EdgeInsets.symmetric(vertical: 6.h),
-                            child: Container(
-                              width: 79,
-                              height: 2,
-                              decoration: ShapeDecoration(
-                                color: colorScheme.outline,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(100),
-                                ),
-                              ),
-                              child: Stack(
-                                children: [
-                                  Positioned(
-                                    left: -0,
-                                    top: 0,
-                                    child: Container(
-                                      width: 57,
-                                      height: 2,
-                                      decoration: ShapeDecoration(
-                                        gradient: LinearGradient(
-                                          begin: const Alignment(1.00, 0.00),
-                                          end: const Alignment(-1, 0),
-                                          colors: item?.progressBarColors ?? [],
-                                        ),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(100),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          )
-                        : const SizedBox(),
-                    SizedBox(height: 2.h),
-                    SizedBox(
-                      child: Text(
-                        item?.subTitle ?? '',
-                        style: Typo.xSmall.copyWith(
-                          fontSize: 9,
-                          color: colorScheme.onSecondary,
-                          height: 0,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
             ],
           ),
         ),

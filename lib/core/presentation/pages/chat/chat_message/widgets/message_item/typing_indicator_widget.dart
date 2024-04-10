@@ -11,7 +11,7 @@ class TypingIndicators extends StatelessWidget {
   final ChatController controller;
   final client = getIt<MatrixService>().client;
 
-  TypingIndicators(this.controller, {Key? key}) : super(key: key);
+  TypingIndicators(this.controller, {super.key});
 
   @override
   Widget build(BuildContext context) {

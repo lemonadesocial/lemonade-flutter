@@ -1,5 +1,6 @@
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/my_event_tickets_list_page/widgets/event_reservations_list_item_widget.dart';
+import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,17 @@ class EventReservationsListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+
+    if (eventsList.isEmpty) {
+      return const Expanded(
+        child: Center(
+          child: EmptyList(
+            emptyText: '',
+          ),
+        ),
+      );
+    }
+
     return Expanded(
       child: ListView.separated(
         itemBuilder: (context, index) {

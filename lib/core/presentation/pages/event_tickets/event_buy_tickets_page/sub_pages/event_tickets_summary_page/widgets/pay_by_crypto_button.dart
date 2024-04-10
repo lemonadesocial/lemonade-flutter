@@ -9,27 +9,26 @@ import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/slide_to_act/slide_to_act.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
-import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
-import 'package:app/core/presentation/widgets/wallet_connect/wallet_connect_popup/wallet_connect_popup.dart';
+import 'package:app/core/presentation/widgets/web3/connect_wallet_button.dart';
+import 'package:app/core/presentation/widgets/web3/wallet_connect_active_session.dart';
+import 'package:app/core/service/wallet/wallet_connect_service.dart';
 import 'package:app/core/utils/payment_utils.dart';
-import 'package:app/core/utils/web3_utils.dart';
-import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/theme/color.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
 
 class PayByCryptoButton extends StatelessWidget {
   final EventTicketsPricingInfo pricingInfo;
   final String selectedCurrency;
   final String? selectedNetwork;
   final List<PurchasableItem> selectedTickets;
+  final bool isFree;
 
   const PayByCryptoButton({
     super.key,
@@ -37,21 +36,17 @@ class PayByCryptoButton extends StatelessWidget {
     required this.selectedCurrency,
     required this.selectedTickets,
     this.selectedNetwork,
+    this.isFree = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => WalletBloc()
-        ..add(
-          const WalletEvent.initWalletConnect(),
-        ),
-      child: PayByCryptoButtonView(
-        pricingInfo: pricingInfo,
-        selectedCurrency: selectedCurrency,
-        selectedNetwork: selectedNetwork,
-        selectedTickets: selectedTickets,
-      ),
+    return PayByCryptoButtonView(
+      pricingInfo: pricingInfo,
+      selectedCurrency: selectedCurrency,
+      selectedNetwork: selectedNetwork,
+      selectedTickets: selectedTickets,
+      isFree: isFree,
     );
   }
 }
@@ -61,6 +56,7 @@ class PayByCryptoButtonView extends StatefulWidget {
   final String selectedCurrency;
   final String? selectedNetwork;
   final List<PurchasableItem> selectedTickets;
+  final bool isFree;
 
   const PayByCryptoButtonView({
     super.key,
@@ -68,6 +64,7 @@ class PayByCryptoButtonView extends StatefulWidget {
     required this.selectedCurrency,
     required this.selectedTickets,
     this.selectedNetwork,
+    this.isFree = false,
   });
 
   @override
@@ -76,22 +73,6 @@ class PayByCryptoButtonView extends StatefulWidget {
 
 class _PayByCryptoButtonViewState extends State<PayByCryptoButtonView> {
   final _slideToActionKey = GlobalKey<SlideActionState>();
-
-  void showSelectWalletPopup(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (newContext) => WalletConnectPopup(
-        onSelect: (walletApp) {
-          Navigator.of(newContext).pop();
-          context.read<WalletBloc>().add(
-                WalletEventConnectWallet(
-                  walletApp: walletApp,
-                ),
-              );
-        },
-      ),
-    );
-  }
 
   clickInitPaymentAndSigned({
     required Event event,
@@ -156,28 +137,33 @@ class _PayByCryptoButtonViewState extends State<PayByCryptoButtonView> {
         ),
         child: BlocBuilder<WalletBloc, WalletState>(
           builder: (context, walletState) {
-            if (walletState.activeSession == null) {
-              return LinearGradientButton(
-                onTap: () => showSelectWalletPopup(context),
-                height: Sizing.large,
-                radius: BorderRadius.circular(LemonRadius.small * 2),
-                mode: GradientButtonMode.lavenderMode,
-                label: t.event.eventCryptoPayment.connectWallet,
-                textStyle: Typo.medium.copyWith(
-                  fontFamily: FontFamily.nohemiVariable,
-                  fontWeight: FontWeight.w600,
-                  color: colorScheme.onPrimary.withOpacity(0.87),
-                ),
+            final event = context.read<EventProviderBloc>().event;
+
+            if (widget.isFree) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  EventOrderSlideToPay(
+                    onSlideToPay: () => clickInitPaymentAndSigned(
+                      event: event,
+                      userWalletAddress: '',
+                    ),
+                    slideActionKey: _slideToActionKey,
+                    selectedCurrency: widget.selectedCurrency,
+                    selectedNetwork: widget.selectedNetwork,
+                    pricingInfo: widget.pricingInfo,
+                  ),
+                ],
               );
             }
 
-            final sessionAccount = walletState
-                .activeSession!.namespaces.entries.first.value.accounts.first;
-            final userWalletAddress = NamespaceUtils.getAccount(sessionAccount);
-            String displayAddress =
-                Web3Utils.formatIdentifier(userWalletAddress);
+            if (walletState.activeSession == null) {
+              return const ConnectWalletButton();
+            }
 
-            final event = context.read<EventProviderBloc>().event;
+            final w3mService = getIt<WalletConnectService>().w3mService;
+            final userWalletAddress = w3mService.address ?? '';
+
             return BlocBuilder<BuyTicketsWithCryptoBloc,
                 BuyTicketsWithCryptoState>(
               builder: (context, state) {
@@ -222,59 +208,8 @@ class _PayByCryptoButtonViewState extends State<PayByCryptoButtonView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Row(
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            color: LemonColor.chineseBlack,
-                            borderRadius: BorderRadius.circular(
-                              LemonRadius.extraSmall,
-                            ),
-                          ),
-                          width: Sizing.medium,
-                          height: Sizing.medium,
-                          child: Center(
-                            child: Assets.icons.icMetamask.svg(
-                              width: Sizing.xSmall,
-                              height: Sizing.xSmall,
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: Spacing.xSmall),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              t.event.eventPayment.payUsing,
-                              style: Typo.small.copyWith(
-                                color: colorScheme.onSecondary,
-                              ),
-                            ),
-                            Text(displayAddress),
-                          ],
-                        ),
-                        const Spacer(),
-                        Container(
-                          width: Sizing.medium,
-                          height: Sizing.medium,
-                          decoration: BoxDecoration(
-                            color: colorScheme.onPrimary.withOpacity(0.09),
-                            borderRadius:
-                                BorderRadius.circular(LemonRadius.normal),
-                          ),
-                          child: Center(
-                            child: ThemeSvgIcon(
-                              color: colorScheme.onSurfaceVariant,
-                              builder: (filter) => Assets.icons.icEdit.svg(
-                                colorFilter: filter,
-                                height: Sizing.xSmall,
-                                width: Sizing.xSmall,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                    WalletConnectActiveSessionWidget(
+                      title: t.event.eventPayment.payUsing,
                     ),
                     SizedBox(height: Spacing.smMedium),
                     if (state is BuyTicketsWithCryptoStateLoading)

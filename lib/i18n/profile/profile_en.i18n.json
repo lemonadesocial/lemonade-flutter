@@ -8,6 +8,7 @@
     "infoSecureDesc" : "Identity secured by ory.sh open source identity solutions",
     "socialHandleLongDesc" : "Allow profile visitors to check out your other social media accounts",
     "personalInfoLongDesc": "This is not visible to other users",
+    "pronoun": "Pronoun",
     "jobTitle": "Job title",
     "organization": "Organization",
     "industry": "Industry",
@@ -41,5 +42,12 @@
     "unBlockConfirm": "Are you sure you want to unblock this profile?",
     "blockSuccess": "Block user successfully",
     "unblockSuccess": "Unblock user successfully",
-    "blockedMessage": "This content isn't available"
+    "blockedMessage": "This content isn't available",
+    "socials" :{
+        "facebook": "Facebook",
+        "linkedIn": "LinkedIn",
+        "github": "Github",
+        "instagram": "Instagram",
+        "twitter": "Twitter"
+    }
 }

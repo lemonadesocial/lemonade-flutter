@@ -1,4 +1,4 @@
-import 'package:app/core/utils/modal_utils.dart';
+import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -18,7 +18,7 @@ class AddTicketToCalendarButton extends StatelessWidget {
 
     return InkWell(
       onTap: () {
-        showComingSoonDialog(context);
+        SnackBarUtils.showComingSoon();
       },
       child: Container(
         height: 54.w,

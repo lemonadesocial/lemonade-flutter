@@ -1,3 +1,4 @@
+import 'package:app/core/data/payment/dtos/refund_policy_dto/refund_policy_dto.dart';
 import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -37,6 +38,10 @@ class AccountInfoDto with _$AccountInfoDto {
     bool? pending,
     // Stripe
     @JsonKey(name: 'publishable_key') String? publishableKey,
+    // Escrow
+    @JsonKey(name: 'minimum_deposit_percent') int? minimumDepositPercent,
+    @JsonKey(name: 'host_refund_percent') double? hostRefundPercent,
+    @JsonKey(name: 'refund_policies') List<RefundPolicyDto>? refundPolicies,
   }) = _AccountInfoDto;
 
   factory AccountInfoDto.fromJson(Map<String, dynamic> json) =>

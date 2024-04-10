@@ -31,14 +31,27 @@ const paymentAccountFragment = '''
       }
 
       ... on SafeAccount {
-          currencies
-          currency_map
-          address
-          network
-          owners
-          threshold
-          pending
+        currencies
+        currency_map
+        address
+        network
+        owners
+        threshold
+        pending
+      }
+
+      ... on EthereumEscrowAccount {
+        address
+        currencies
+        currency_map
+        host_refund_percent
+        minimum_deposit_percent
+        network
+        refund_policies {
+          percent
+          timestamp
         }
+      }
     }
   }
 ''';
@@ -65,6 +78,8 @@ const paymentFragment = '''
     account_expanded {
       ...paymentAccountFragment
     }
+    due_amount
+    ref_data
   }
 ''';
 
@@ -106,6 +121,16 @@ final getPaymentAccountsQuery = gql('''
       provider: \$provider
     ) {
       ...paymentAccountFragment
+    }
+  }
+''');
+
+final getPaymentQuery = gql('''
+  $paymentFragment
+
+  query GetNewPayment(\$id: MongoID!) {
+    getNewPayment(_id: \$id) {
+      ...paymentFragment
     }
   }
 ''');

@@ -1,0 +1,32 @@
+query GetEventInvitedStatistics($id: MongoID!) {
+  getEventInvitedStatistics(_id: $id) {
+    total
+    total_joined
+    top_inviter
+    top_inviter_expanded {
+      _id
+      name
+      username
+      image_avatar
+    }
+    guests {
+      invited_by
+      invited_by_expanded {
+        _id
+        name
+        username
+        image_avatar
+      }
+      joined
+      user
+      user_expanded {
+        _id
+        name
+        email
+        username
+        image_avatar
+      }
+      email
+    }
+  }
+}

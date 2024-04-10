@@ -1,14 +1,10 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/profile/edit_profile_bloc/edit_profile_bloc.dart';
-import 'package:app/core/domain/post/post_repository.dart';
-import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/presentation/pages/setting/enums/notification_type.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
-import 'package:app/core/service/post/post_service.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/injection/register_module.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -19,22 +15,23 @@ import 'package:slang/builder/utils/string_extensions.dart';
 
 @RoutePage()
 class NotificationSettingPage extends StatelessWidget {
-  const NotificationSettingPage({Key? key}) : super(key: key);
+  const NotificationSettingPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
-    final bloc = EditProfileBloc(
-      getIt<UserRepository>(),
-      PostService(getIt<PostRepository>()),
-    );
     final notificationFilterString = context.read<AuthBloc>().state.maybeWhen(
           authenticated: (authSession) => authSession.notificationFilterList!,
           orElse: () => <String>[],
         );
     return BlocProvider(
-      create: (context) => bloc..mapNotificationType(notificationFilterString),
+      create: (context) => EditProfileBloc()
+        ..add(
+          EditProfileEvent.mapNotificationType(
+            notificationFilterString: notificationFilterString,
+          ),
+        ),
       child: BlocConsumer<EditProfileBloc, EditProfileState>(
         listener: (context, state) {
           if (state.status == EditProfileStatus.success) {
@@ -61,10 +58,12 @@ class NotificationSettingPage extends StatelessWidget {
                             value: state.notificationMap![
                                 NotificationSettingType.values[index]],
                             onChanged: (value) {
-                              bloc.onNotificationCheck(
-                                NotificationSettingType.values[index],
-                                value!,
-                              );
+                              context.read<EditProfileBloc>().add(
+                                    EditProfileEventNotificationCheck(
+                                      type:
+                                          NotificationSettingType.values[index],
+                                    ),
+                                  );
                             },
                           ),
                           Text(
@@ -81,9 +80,13 @@ class NotificationSettingPage extends StatelessWidget {
                   Container(
                     margin: EdgeInsets.symmetric(vertical: Spacing.smMedium),
                     child: LinearGradientButton(
-                      onTap: bloc.state.status == EditProfileStatus.editing
-                          ? bloc.editProfile
-                          : null,
+                      onTap: () {
+                        if (state.status == EditProfileStatus.editing) {
+                          context
+                              .read<EditProfileBloc>()
+                              .add(EditProfileEvent.submitEditProfile());
+                        }
+                      },
                       label: t.profile.saveChanges,
                       textStyle: Typo.medium.copyWith(
                         fontFamily: FontFamily.nohemiVariable,
@@ -91,11 +94,10 @@ class NotificationSettingPage extends StatelessWidget {
                       ),
                       height: Sizing.large,
                       radius: BorderRadius.circular(LemonRadius.large),
-                      mode: bloc.state.status != EditProfileStatus.initial
+                      mode: state.status != EditProfileStatus.initial
                           ? GradientButtonMode.lavenderMode
                           : GradientButtonMode.defaultMode,
-                      loadingWhen:
-                          bloc.state.status == EditProfileStatus.loading,
+                      loadingWhen: state.status == EditProfileStatus.loading,
                     ),
                   ),
                   SizedBox(height: Spacing.smMedium),

@@ -1,14 +1,19 @@
+import 'package:app/core/data/event/dtos/event_application_answer_dto/event_application_answer_dto.dart';
 import 'package:app/core/data/event/dtos/event_cohost_request_dto/event_cohost_request_dto.dart';
 import 'package:app/core/data/event/dtos/event_dtos.dart';
 import 'package:app/core/data/event/dtos/event_join_request_dto/event_join_request_dto.dart';
 import 'package:app/core/data/event/dtos/event_rsvp_dto/event_rsvp_dto.dart';
+import 'package:app/core/data/event/dtos/event_story_dto/event_story_dto.dart';
 import 'package:app/core/data/event/gql/event_mutation.dart';
 import 'package:app/core/data/event/gql/event_query.dart';
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/entities/event_accepted_export.dart';
+import 'package:app/core/domain/event/entities/event_application_answer.dart';
 import 'package:app/core/domain/event/entities/event_checkin.dart';
 import 'package:app/core/domain/event/entities/event_cohost_request.dart';
 import 'package:app/core/domain/event/entities/event_join_request.dart';
 import 'package:app/core/domain/event/entities/event_rsvp.dart';
+import 'package:app/core/domain/event/entities/event_story.dart';
 import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/core/domain/event/input/accept_event_input/accept_event_input.dart';
 import 'package:app/core/domain/event/input/get_event_detail_input.dart';
@@ -16,9 +21,14 @@ import 'package:app/core/domain/event/input/get_events_listing_input.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/graphql/backend/event/mutation/create_event.graphql.dart';
+import 'package:app/graphql/backend/event/mutation/create_event_story.graphql.dart';
+import 'package:app/graphql/backend/event/mutation/submit_event_application_answers.graphql.dart';
+import 'package:app/graphql/backend/event/mutation/submit_event_application_questions.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/manage_event_cohost_requests.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/update_event_checkin.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/update_event.graphql.dart';
+import 'package:app/graphql/backend/event/mutation/update_event_story_image.graphql.dart';
+import 'package:app/graphql/backend/event/query/get_event_application_answers.graphql.dart';
 import 'package:app/graphql/backend/event/query/get_event_cohost_requests.graphql.dart';
 import 'package:app/graphql/backend/event/query/get_event_checkins.graphql.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
@@ -29,6 +39,8 @@ import 'package:injectable/injectable.dart';
 import 'package:app/graphql/backend/event/query/get_event_join_request.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/approve_user_join_requests.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/decline_user_join_requests.graphql.dart';
+import 'package:app/graphql/backend/event/query/export_event_accepted.graphql.dart';
+import 'package:app/graphql/backend/event/query/get_my_event_join_request.graphql.dart';
 
 @LazySingleton(as: EventRepository)
 class EventRepositoryImpl implements EventRepository {
@@ -312,6 +324,58 @@ class EventRepositoryImpl implements EventRepository {
   }
 
   @override
+  Future<Either<Failure, EventJoinRequest>> getEventJoinRequest({
+    required Variables$Query$GetEventJoinRequest input,
+    FetchPolicy? fetchPolicy,
+  }) async {
+    final result = await client.query$GetEventJoinRequest(
+      Options$Query$GetEventJoinRequest(
+        variables: input,
+        fetchPolicy: fetchPolicy,
+      ),
+    );
+
+    if (result.hasException || result.parsedData?.getEventJoinRequest == null) {
+      return Left(Failure.withGqlException(result.exception));
+    }
+    return Right(
+      EventJoinRequest.fromDto(
+        EventJoinRequestDto.fromJson(
+          result.parsedData!.getEventJoinRequest.toJson(),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Future<Either<Failure, EventJoinRequest?>> getMyEventJoinRequest({
+    required String eventId,
+  }) async {
+    final result = await client.query$GetMyEventJoinRequest(
+      Options$Query$GetMyEventJoinRequest(
+        variables: Variables$Query$GetMyEventJoinRequest(event: eventId),
+        fetchPolicy: FetchPolicy.networkOnly,
+      ),
+    );
+
+    if (result.hasException) {
+      return Left(Failure.withGqlException(result.exception));
+    }
+
+    if (result.parsedData?.getMyEventJoinRequest == null) {
+      return const Right(null);
+    }
+
+    return Right(
+      EventJoinRequest.fromDto(
+        EventJoinRequestDto.fromJson(
+          result.parsedData!.getMyEventJoinRequest!.toJson(),
+        ),
+      ),
+    );
+  }
+
+  @override
   Future<Either<Failure, bool>> approveUserJoinRequest({
     required Input$ApproveUserJoinRequestsInput input,
   }) async {
@@ -343,5 +407,138 @@ class EventRepositoryImpl implements EventRepository {
       return Left(Failure.withGqlException(result.exception));
     }
     return Right(result.parsedData?.declineUserJoinRequests ?? false);
+  }
+
+  @override
+  Future<Either<Failure, List<EventAcceptedExport>>> exportEventAccepted({
+    required String eventId,
+  }) async {
+    final result = await client.query$ExportEventAccepted(
+      Options$Query$ExportEventAccepted(
+        variables: Variables$Query$ExportEventAccepted(
+          id: eventId,
+        ),
+        fetchPolicy: FetchPolicy.networkOnly,
+      ),
+    );
+
+    if (result.hasException) {
+      return Left(Failure.withGqlException(result.exception));
+    }
+
+    return Right(
+      (result.parsedData?.exportEventAccepted ?? [])
+          .map(
+            (item) => EventAcceptedExport.fromJson(
+              item.toJson(),
+            ),
+          )
+          .toList(),
+    );
+  }
+
+  @override
+  Future<Either<Failure, bool>> submitEventApplicationQuestions({
+    required String eventId,
+    required List<Input$QuestionInput> questions,
+  }) async {
+    final result = await client.mutate$SubmitEventApplicationQuestions(
+      Options$Mutation$SubmitEventApplicationQuestions(
+        variables: Variables$Mutation$SubmitEventApplicationQuestions(
+          event: eventId,
+          questions: questions,
+        ),
+        fetchPolicy: FetchPolicy.networkOnly,
+      ),
+    );
+    if (result.hasException) {
+      return Left(Failure.withGqlException(result.exception));
+    }
+    return Right(result.parsedData?.submitEventApplicationQuestions ?? false);
+  }
+
+  @override
+  Future<Either<Failure, List<EventApplicationAnswer>>>
+      getEventApplicationAnswers({
+    required String eventId,
+    required String userId,
+  }) async {
+    final result = await client.query$GetEventApplicationAnswers(
+      Options$Query$GetEventApplicationAnswers(
+        variables: Variables$Query$GetEventApplicationAnswers(
+          event: eventId,
+          user: userId,
+        ),
+        fetchPolicy: FetchPolicy.networkOnly,
+      ),
+    );
+    if (result.hasException) {
+      return Left(Failure.withGqlException(result.exception));
+    }
+    return Right(
+      (result.parsedData?.getEventApplicationAnswers ?? [])
+          .map(
+            (item) => EventApplicationAnswer.fromDto(
+              EventApplicationAnswerDto.fromJson(item.toJson()),
+            ),
+          )
+          .toList(),
+    );
+  }
+
+  @override
+  Future<Either<Failure, bool>> submitEventApplicationAnswers({
+    required String eventId,
+    required List<Input$EventApplicationAnswerInput> answers,
+  }) async {
+    final result = await client.mutate$SubmitEventApplicationAnswers(
+      Options$Mutation$SubmitEventApplicationAnswers(
+        variables: Variables$Mutation$SubmitEventApplicationAnswers(
+          event: eventId,
+          answers: answers,
+        ),
+        fetchPolicy: FetchPolicy.networkOnly,
+      ),
+    );
+    if (result.hasException) {
+      return Left(Failure.withGqlException(result.exception));
+    }
+    return Right(result.parsedData?.submitEventApplicationAnswers ?? false);
+  }
+
+  @override
+  Future<Either<Failure, bool>> createEventStory({
+    required Input$EventStoryInput input,
+  }) async {
+    final result = await client.mutate$CreateEventStory(
+      Options$Mutation$CreateEventStory(
+        variables: Variables$Mutation$CreateEventStory(input: input),
+      ),
+    );
+    if (result.hasException || result.parsedData == null) {
+      return Left(Failure.withGqlException(result.exception));
+    }
+    return Right(result.parsedData!.createEventStory);
+  }
+
+  @override
+  Future<Either<Failure, EventStory>> updateEventStoryImage({
+    required Variables$Mutation$UpdateEventStoryImage input,
+  }) async {
+    final result = await client.mutate$UpdateEventStoryImage(
+      Options$Mutation$UpdateEventStoryImage(
+        variables: input,
+      ),
+    );
+    if (result.hasException || result.parsedData == null) {
+      return Left(Failure.withGqlException(result.exception));
+    }
+    return Right(
+      EventStory.fromDto(
+        EventStoryDto.fromJson(
+          result.parsedData!.story.toJson(),
+        ),
+      ),
+    );
   }
 }

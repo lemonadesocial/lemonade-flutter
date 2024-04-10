@@ -11,11 +11,11 @@ class SearchUserInput extends StatelessWidget {
   final Function(Profile) onUserTap;
 
   const SearchUserInput({
-    Key? key,
+    super.key,
     required this.onChanged,
     required this.selectedUsers,
     required this.onUserTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

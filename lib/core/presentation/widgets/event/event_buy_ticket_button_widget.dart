@@ -1,8 +1,9 @@
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
-import 'package:app/core/utils/number_utils.dart';
+import 'package:app/core/utils/event_tickets_utils.dart';
+import 'package:app/core/utils/list_utils.dart';
 import 'package:app/gen/assets.gen.dart';
-import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
@@ -19,7 +20,16 @@ class EventBuyTicketButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final t = Translations.of(context);
+
+    final defaultTicketType =
+        ListUtils.findWithConditionOrFirst<EventTicketType>(
+      items: event.eventTicketTypes ?? [],
+      condition: (ticketType) => ticketType.isDefault == true,
+    );
+    final defaultPrice = ListUtils.findWithConditionOrFirst<EventTicketPrice>(
+      items: defaultTicketType?.prices ?? [],
+      condition: (price) => price.isDefault == true,
+    );
     return GestureDetector(
       child: Container(
         padding: EdgeInsets.symmetric(
@@ -56,13 +66,10 @@ class EventBuyTicketButton extends StatelessWidget {
             ),
             SizedBox(width: Spacing.superExtraSmall),
             Text(
-              event.cost != null
-                  ? NumberUtils.formatCurrency(
-                      amount: event.cost!,
-                      currency: event.currency,
-                      freeText: t.event.free,
-                    )
-                  : t.event.free,
+              EventTicketUtils.getDisplayedTicketPrice(
+                decimals: defaultPrice?.decimals ?? 1,
+                price: defaultPrice,
+              ),
               style: Typo.small.copyWith(color: colorScheme.onPrimary),
             ),
           ],

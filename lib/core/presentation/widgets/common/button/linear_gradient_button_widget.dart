@@ -1,4 +1,5 @@
 import 'package:app/core/presentation/widgets/lemon_inner_shadow.dart';
+import 'package:app/gen/fonts.gen.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
@@ -131,5 +132,51 @@ class LinearGradientButton extends StatelessWidget {
                   ],
                 ],
         ),
+      );
+
+  factory LinearGradientButton.primaryButton({
+    required String label,
+    Function()? onTap,
+    bool? loadingWhen,
+    Color? textColor,
+    Widget? trailing,
+    TextStyle? textStyle,
+  }) =>
+      LinearGradientButton(
+        onTap: onTap,
+        label: label,
+        loadingWhen: loadingWhen ?? false,
+        textStyle: textStyle ??
+            Typo.medium.copyWith(
+              fontFamily: FontFamily.nohemiVariable,
+              fontWeight: FontWeight.w600,
+              color: textColor,
+            ),
+        mode: GradientButtonMode.lavenderMode,
+        height: Sizing.large,
+        radius: BorderRadius.circular(LemonRadius.small * 2),
+        trailing: trailing,
+      );
+
+  factory LinearGradientButton.secondaryButton({
+    required String label,
+    Function()? onTap,
+    bool? loadingWhen,
+    Color? textColor,
+    Widget? leading,
+  }) =>
+      LinearGradientButton(
+        onTap: onTap,
+        label: label,
+        loadingWhen: loadingWhen ?? false,
+        textStyle: Typo.medium.copyWith(
+          fontFamily: FontFamily.nohemiVariable,
+          fontWeight: FontWeight.w600,
+          color: textColor,
+        ),
+        mode: GradientButtonMode.defaultMode,
+        height: Sizing.large,
+        radius: BorderRadius.circular(LemonRadius.small * 2),
+        leading: leading,
       );
 }

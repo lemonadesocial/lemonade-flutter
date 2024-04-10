@@ -1,4 +1,7 @@
 import 'package:app/core/data/common/dtos/common_dtos.dart';
+import 'package:app/core/data/event/dtos/event_application_profile_field_dto/event_application_profile_field_dto.dart';
+import 'package:app/core/data/event/dtos/event_application_question_dto/event_application_question_dto.dart';
+import 'package:app/core/data/event/dtos/event_session/event_session_dto.dart';
 import 'package:app/core/data/event/dtos/event_ticket_types_dto/event_ticket_types_dto.dart';
 import 'package:app/core/data/event/dtos/reward_dto/reward_dto.dart';
 import 'package:app/core/data/payment/dtos/payment_account_dto/payment_account_dto.dart';
@@ -49,7 +52,22 @@ class EventDto with _$EventDto {
     bool? virtual,
     bool? private,
     List<RewardDto>? rewards,
-    @JsonKey(name: 'require_approval') bool? requireApproval,
+    @JsonKey(name: 'approval_required') bool? approvalRequired,
+    @JsonKey(name: 'required_profile_fields')
+    List<String>? requiredProfileFields,
+    @JsonKey(name: 'invited_count') double? invitedCount,
+    @JsonKey(name: 'checkin_count') double? checkInCount,
+    @JsonKey(name: 'attending_count') double? attendingCount,
+    @JsonKey(name: 'pending_request_count') double? pendingRequestCount,
+    List<EventSessionDto>? sessions,
+    @JsonKey(name: 'application_questions')
+    List<EventApplicationQuestionDto>? applicationQuestions,
+    @JsonKey(name: 'application_profile_fields')
+    List<EventApplicationProfileFieldDto>? applicationProfileFields,
+    @JsonKey(name: 'application_form_submission')
+    DateTime? applicationFormSubmission,
+    @JsonKey(name: 'guest_directory_enabled') bool? guestDirectoryEnabled,
+    String? timezone,
   }) = _EventDto;
 
   factory EventDto.fromJson(Map<String, dynamic> json) =>

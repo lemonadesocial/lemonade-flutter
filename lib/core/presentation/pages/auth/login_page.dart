@@ -14,7 +14,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 @RoutePage()
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  const LoginPage({super.key});
 
   @override
   LoginPageState createState() => LoginPageState();
@@ -109,12 +109,8 @@ class LoginPageState extends State<LoginPage> {
           child: Loading.defaultLoading(context),
         );
 
-        final loginButton = LinearGradientButton(
+        final loginButton = LinearGradientButton.primaryButton(
           label: t.auth.get_started,
-          mode: GradientButtonMode.lavenderMode,
-          height: 48.h,
-          radius: BorderRadius.circular(24),
-          textStyle: Typo.medium.copyWith(),
           onTap: () => context.read<AuthBloc>().add(
                 const AuthEvent.login(),
               ),

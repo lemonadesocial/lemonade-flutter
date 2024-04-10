@@ -28,13 +28,13 @@ Follow [Conventional Commit](https://www.conventionalcommits.org/en/v1.0.0/)
 
 ### Build and run the app with Flutter
 
-Recommend to use fvm [Flutter version management](https://fvm.app/) and use Flutter version 3.13.9 and Dart 3.1.5
+Recommend to use fvm [Flutter version management](https://fvm.app/) and use Flutter version 3.16.9 and Dart 3.2.6
 
 How to install & use
 
 ```
-fvm install 3.13.9
-fvm use 3.13.9
+fvm install 3.16.9
+fvm use 3.16.9
 ```
 
 How to run Staging & Production
@@ -71,5 +71,8 @@ Uncomment this one to force update app version
 - In order to test payment with Stripe properly, you can use one of the demo card provided by Stripe. The card list can be found [here](https://stripe.com/docs/testing#cards)
 
 ## How to fix when sign commit gpg stuck
+
+```
 rm -rf ~/.gnupg/*.lock
 rm -rf ~/.gnupg/public-keys.d/*.lock
+```
