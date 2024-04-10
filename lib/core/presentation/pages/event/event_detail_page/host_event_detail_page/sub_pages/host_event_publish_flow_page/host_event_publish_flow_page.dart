@@ -167,6 +167,7 @@ class HostEventPublishFlowPage extends StatelessWidget {
           fulfilled: fulfilled,
           widget: EventPublishRewardsChecklistItem(
             fulfilled: fulfilled,
+            event: event,
           ),
         );
       }

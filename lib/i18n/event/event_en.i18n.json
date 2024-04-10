@@ -322,7 +322,8 @@
         "selectAllTicketTiers": "Select all ticket tiers",
         "selectTicketTiers": "Select ticket tiers",
         "createRewardSuccessfully": "Create reward successfully",
-        "updateRewardSuccessfully": "Update reward successfully"
+        "updateRewardSuccessfully": "Update reward successfully",
+        "rewardsPerGuest": "$count per guest"
     },
     "eventApproval": {
         "waitingApproval": "Awaiting Approval",
