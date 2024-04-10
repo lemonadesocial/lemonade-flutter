@@ -177,6 +177,7 @@ class HostEventPublishFlowPage extends StatelessWidget {
           fulfilled: fulfilled,
           widget: EventPublishProgramsChecklistItem(
             fulfilled: fulfilled,
+            event: event,
           ),
         );
       }
