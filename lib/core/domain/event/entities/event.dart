@@ -1,6 +1,7 @@
 import 'package:app/core/data/event/dtos/event_dtos.dart';
 import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/event/entities/event_application_profile_field.dart';
+import 'package:app/core/domain/event/entities/event_payment_ticket_discount.dart';
 import 'package:app/core/domain/event/entities/event_session.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/entities/reward.dart';
@@ -60,6 +61,7 @@ class Event with _$Event {
     List<EventApplicationProfileField>? applicationProfileFields,
     DateTime? applicationFormSubmission,
     bool? guestDirectoryEnabled,
+    List<EventPaymentTicketDiscount>? paymentTicketDiscounts,
   }) = _Event;
 
   factory Event.fromDto(EventDto dto) {
@@ -136,6 +138,11 @@ class Event with _$Event {
           .toList(),
       applicationFormSubmission: dto.applicationFormSubmission,
       guestDirectoryEnabled: dto.guestDirectoryEnabled,
+      paymentTicketDiscounts: List.from(dto.paymentTicketDiscounts ?? [])
+          .map(
+            (item) => EventPaymentTicketDiscount.fromDto(item),
+          )
+          .toList(),
     );
   }
 }
