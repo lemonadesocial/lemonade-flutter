@@ -505,6 +505,8 @@
         "ticketLimitDescription": "Total tickets this code can be applied to",
         "ticketLimitPerGuest": "Ticket limit per guest",
         "ticketLimitPerGuestDescription": "Total tickets 1 guest can buy with this code",
-        "accessCode": "Access code"
+        "accessCode": "Access code",
+        "promotionDetailsTitle": "Promotion detail",
+        "promotionCreatedSuccess": "Promotion successfully created!"
     }
 }

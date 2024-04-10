@@ -1,3 +1,4 @@
+import 'package:app/core/application/event/create_event_discount_bloc/create_event_discount_bloc.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
@@ -5,11 +6,14 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DiscountLimitSettingForm extends StatelessWidget {
+  final bool? readOnly;
   const DiscountLimitSettingForm({
     super.key,
+    this.readOnly = false,
   });
 
   @override
@@ -28,22 +32,42 @@ class DiscountLimitSettingForm extends StatelessWidget {
           ),
         ),
         SizedBox(height: Spacing.xSmall),
-        _Field(
-          title: t.event.eventPromotions.ticketLimit,
-          description: t.event.eventPromotions.ticketLimitDescription,
-          hintText: '100',
-          onChange: (value) {
-            // final parsedValue = value.isNotEmpty == true ? double.parse(value) : 0;
-          },
+        BlocBuilder<CreateEventDiscountBloc, CreateEventDiscountState>(
+          builder: (context, state) => _Field(
+            readOnly: readOnly,
+            initalValue: (state.data.ticketLimit?.toInt() ?? 0).toString(),
+            title: t.event.eventPromotions.ticketLimit,
+            description: t.event.eventPromotions.ticketLimitDescription,
+            hintText: '100',
+            onChange: (value) {
+              final parsedValue =
+                  value.isNotEmpty == true ? double.parse(value) : 0;
+              context.read<CreateEventDiscountBloc>().add(
+                    CreateEventDiscountEvent.onTicketLimitChanged(
+                      ticketLimit: parsedValue.toDouble(),
+                    ),
+                  );
+            },
+          ),
         ),
         SizedBox(height: Spacing.xSmall),
-        _Field(
-          title: t.event.eventPromotions.ticketLimit,
-          description: t.event.eventPromotions.ticketLimitDescription,
-          hintText: '1',
-          onChange: (value) {
-            // final parsedValue = value.isNotEmpty == true ? double.parse(value) : 0;
-          },
+        BlocBuilder<CreateEventDiscountBloc, CreateEventDiscountState>(
+          builder: (context, state) => _Field(
+            readOnly: readOnly,
+            initalValue: (state.data.ticketLimitPer?.toInt() ?? 0).toString(),
+            title: t.event.eventPromotions.ticketLimitPerGuest,
+            description: t.event.eventPromotions.ticketLimitPerGuestDescription,
+            hintText: '1',
+            onChange: (value) {
+              final parsedValue =
+                  value.isNotEmpty == true ? double.parse(value) : 0;
+              context.read<CreateEventDiscountBloc>().add(
+                    CreateEventDiscountEvent.onTicketLimitPerChanged(
+                      ticketLimitPer: parsedValue.toDouble(),
+                    ),
+                  );
+            },
+          ),
         ),
       ],
     );
@@ -54,6 +78,8 @@ class _Field extends StatelessWidget {
   final String title;
   final String description;
   final String? hintText;
+  final String? initalValue;
+  final bool? readOnly;
 
   final Function(String value)? onChange;
 
@@ -62,6 +88,8 @@ class _Field extends StatelessWidget {
     required this.description,
     this.hintText,
     this.onChange,
+    this.initalValue,
+    this.readOnly = false,
   });
 
   @override
@@ -109,7 +137,8 @@ class _Field extends StatelessWidget {
             SizedBox(
               width: Sizing.medium * 2,
               height: Sizing.medium,
-              child: TextField(
+              child: TextFormField(
+                readOnly: readOnly ?? false,
                 enableSuggestions: false,
                 textAlign: TextAlign.center,
                 textAlignVertical: TextAlignVertical.center,
@@ -124,6 +153,7 @@ class _Field extends StatelessWidget {
                   enabledBorder: border,
                   focusedBorder: border,
                 ),
+                initialValue: initalValue,
                 inputFormatters: [
                   FilteringTextInputFormatter.digitsOnly,
                 ],

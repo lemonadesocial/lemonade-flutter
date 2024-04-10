@@ -1,3 +1,4 @@
+import 'package:app/core/application/event/create_event_discount_bloc/create_event_discount_bloc.dart';
 import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -7,12 +8,15 @@ import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-const prefixPercentages = [0.1, 0.2, 0.5, 0.7, 1];
+List<double> prefixPercentages = [0.1, 0.2, 0.5, 0.7, 1];
 
 class DiscountPercentagePicker extends StatelessWidget {
+  final bool? readOnly;
   const DiscountPercentagePicker({
     super.key,
+    this.readOnly = false,
   });
 
   @override
@@ -32,8 +36,20 @@ class DiscountPercentagePicker extends StatelessWidget {
           ),
         ),
         SizedBox(height: Spacing.xSmall),
-        const _Picker(
-          ratio: 0.5,
+        BlocBuilder<CreateEventDiscountBloc, CreateEventDiscountState>(
+          buildWhen: (previous, current) =>
+              current.data.ratio != previous.data.ratio,
+          builder: (context, state) => _Picker(
+            readOnly: readOnly,
+            ratio: state.data.ratio ?? 0,
+            onChangeRatio: (newRatio) {
+              context.read<CreateEventDiscountBloc>().add(
+                    CreateEventDiscountEvent.onRatioChanged(
+                      ratio: newRatio,
+                    ),
+                  );
+            },
+          ),
         ),
         SizedBox(height: Spacing.xSmall),
         SizedBox(
@@ -45,6 +61,16 @@ class DiscountPercentagePicker extends StatelessWidget {
                 (item) {
                   final displayPercentage = '${(item * 100).toInt()}%';
                   return LemonOutlineButton(
+                    onTap: () {
+                      if (readOnly == true) {
+                        return;
+                      }
+                      context.read<CreateEventDiscountBloc>().add(
+                            CreateEventDiscountEvent.onRatioChanged(
+                              ratio: item.toDouble(),
+                            ),
+                          );
+                    },
                     radius: BorderRadius.circular(LemonRadius.normal),
                     label: displayPercentage,
                   );
@@ -60,8 +86,13 @@ class DiscountPercentagePicker extends StatelessWidget {
 
 class _Picker extends StatelessWidget {
   final double ratio;
+  final bool? readOnly;
+  final Function(double ratio)? onChangeRatio;
+
   const _Picker({
     required this.ratio,
+    this.onChangeRatio,
+    this.readOnly = false,
   });
 
   @override
@@ -82,7 +113,14 @@ class _Picker extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             _Button(
-              onTap: () {},
+              onTap: () {
+                if (readOnly == true) {
+                  return;
+                }
+                if (ratio > 0) {
+                  onChangeRatio?.call(ratio - 0.01);
+                }
+              },
               icon: Icon(
                 Icons.remove,
                 color: colorScheme.onSecondary,
@@ -97,7 +135,14 @@ class _Picker extends StatelessWidget {
               ),
             ),
             _Button(
-              onTap: () {},
+              onTap: () {
+                if (readOnly == true) {
+                  return;
+                }
+                if (ratio < 1) {
+                  onChangeRatio?.call(ratio + 0.01);
+                }
+              },
               icon: ThemeSvgIcon(
                 color: colorScheme.onSecondary,
                 builder: (colorFilter) => Assets.icons.icAdd.svg(
@@ -123,15 +168,18 @@ class _Button extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    return Container(
-      width: Sizing.large,
-      height: Sizing.large,
-      decoration: BoxDecoration(
-        color: colorScheme.secondaryContainer,
-        borderRadius: BorderRadius.circular(LemonRadius.xSmall),
-      ),
-      child: Center(
-        child: icon,
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        width: Sizing.large,
+        height: Sizing.large,
+        decoration: BoxDecoration(
+          color: colorScheme.secondaryContainer,
+          borderRadius: BorderRadius.circular(LemonRadius.xSmall),
+        ),
+        child: Center(
+          child: icon,
+        ),
       ),
     );
   }
