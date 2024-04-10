@@ -227,9 +227,12 @@ class HostEventPublishFlowPage extends StatelessWidget {
     return Scaffold(
       appBar: LemonAppBar(
         actions: [
-          EventPublishChecklistRatingBadge(
-            rating: rating,
-            score: ratingScore,
+          Padding(
+            padding: EdgeInsets.only(right: Spacing.xSmall),
+            child: EventPublishChecklistRatingBadge(
+              rating: rating,
+              score: ratingScore,
+            ),
           ),
         ],
       ),
