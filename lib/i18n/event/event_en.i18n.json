@@ -498,6 +498,13 @@
             "other": "$count promotions"
         },
         "usedCount": "$count/$total used",
-        "emptyDiscounts": "No promotions yet! Create one to allow\nguests to buy tickets at a discounted price."
+        "emptyDiscounts": "No promotions yet! Create one to allow\nguests to buy tickets at a discounted price.",
+        "newPromotion": "New promotion",
+        "discountPercent": "Discount percent",
+        "ticketLimit": "Ticket limit",
+        "ticketLimitDescription": "Total tickets this code can be applied to",
+        "ticketLimitPerGuest": "Ticket limit per guest",
+        "ticketLimitPerGuestDescription": "Total tickets 1 guest can buy with this code",
+        "accessCode": "Access code"
     }
 }
