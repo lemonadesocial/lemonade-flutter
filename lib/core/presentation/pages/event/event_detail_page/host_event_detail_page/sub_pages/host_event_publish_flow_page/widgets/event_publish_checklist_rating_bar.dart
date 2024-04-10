@@ -123,7 +123,7 @@ class _Line extends StatelessWidget {
             final maxWidth = constraints.maxWidth;
             return AnimatedContainer(
               duration: const Duration(milliseconds: 300),
-              width: progress * maxWidth - 6.w,
+              width: progress * maxWidth - (progress == 1 ? 0 : 6.w),
               height: 3.w,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(3.r),

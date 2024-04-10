@@ -226,6 +226,8 @@ const eventFrequentQuestionsFragment = '''
   fragment eventFrequentQuestionsFragment on Event {
     frequent_questions {
       _id
+      question
+      answer
     }
   }
 ''';

@@ -157,6 +157,7 @@ class HostEventPublishFlowPage extends StatelessWidget {
           fulfilled: fulfilled,
           widget: EventPublishCollectiblesChecklistItem(
             fulfilled: fulfilled,
+            event: event,
           ),
         );
       }
@@ -210,6 +211,7 @@ class HostEventPublishFlowPage extends StatelessWidget {
         fulfilled: fulfilled,
         widget: EventPublishFAQChecklistItem(
           fulfilled: fulfilled,
+          event: event,
         ),
       );
     }).toList()
