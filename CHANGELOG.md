@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.14.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.13.0...v1.14.0) (2024-04-10)
+## [1.15.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.13.0...v1.15.0) (2024-04-10)
 
 
 ### Features
