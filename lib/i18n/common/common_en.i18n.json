@@ -180,5 +180,6 @@
     "goBackConfirmationDescription": "Going back will reset any information you have added. Still want to go back?",
     "saved": "Saved",
     "defaultText": "default",
-    "you": "you"
+    "you": "you",
+    "updatedSuccessfully": "Updated successfully"
 }

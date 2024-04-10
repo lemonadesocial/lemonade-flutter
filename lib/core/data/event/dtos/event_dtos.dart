@@ -71,6 +71,7 @@ class EventDto with _$EventDto {
     bool? published,
     @JsonKey(name: 'frequent_questions')
     List<EventFrequentQuestionDto>? frequentQuestions,
+    String? timezone,
   }) = _EventDto;
 
   factory EventDto.fromJson(Map<String, dynamic> json) =>

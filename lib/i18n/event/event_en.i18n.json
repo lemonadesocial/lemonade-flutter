@@ -130,6 +130,7 @@
     "eventCreation": {
         "createEvent": "Create event",
         "title": "Title",
+        "titleAndDescription": "Title & Description",
         "titleHint": "Enter title",
         "description": "Description",
         "descriptionPlaceholder": "What is this experience about ?",
@@ -161,7 +162,8 @@
         "starts": "Starts",
         "ends": "Ends",
         "chooseDateAndTime": "Choose date & time",
-        "dateTimeUpdated": "Date and Time has been updated"
+        "dateTimeUpdated": "Date and Time has been updated",
+        "timezoneUpdated": "Timezone has been updated"
     },
     "locationSetting": {
         "addLocation": "Add location",

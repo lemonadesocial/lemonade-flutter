@@ -63,6 +63,7 @@ class Event with _$Event {
     bool? guestDirectoryEnabled,
     bool? published,
     List<EventFrequentQuestion>? frequentQuestions,
+    String? timezone,
   }) = _Event;
 
   factory Event.fromDto(EventDto dto) {
@@ -143,6 +144,7 @@ class Event with _$Event {
       frequentQuestions: List.from(dto.frequentQuestions ?? [])
           .map((item) => EventFrequentQuestion.fromDto(item))
           .toList(),
+      timezone: dto.timezone,
     );
   }
 }
