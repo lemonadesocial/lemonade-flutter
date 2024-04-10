@@ -490,5 +490,14 @@
         "rsvpSentTitle": "RSVP confirmation sent!",
         "checkYourInbox": "Check your inbox at $email",
         "receiptNotAvailableError": "Only the user who made the purchase can access the receipt"
+    },
+    "eventPromotions": {
+        "eventPromotionsTitle": "Promotions",
+        "promotions(ordinal)": {
+            "one": "$count promotion",
+            "other": "$count promotions"
+        },
+        "usedCount": "$count/$total used",
+        "emptyDiscounts": "No promotions yet! Create one to allow\nguests to buy tickets at a discounted price."
     }
 }
