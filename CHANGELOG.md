@@ -1,5 +1,31 @@
 # Changelog
 
+## [1.14.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.13.0...v1.14.0) (2024-04-10)
+
+
+### Features
+
+* chat list ui refinement ([#507](https://github.com/lemonadesocial/lemonade-flutter/issues/507)) ([2f8b0b5](https://github.com/lemonadesocial/lemonade-flutter/commit/2f8b0b5e0802a5c8f563d28542552ea48e7172e1))
+* create lounge post ([#505](https://github.com/lemonadesocial/lemonade-flutter/issues/505)) ([f560f5e](https://github.com/lemonadesocial/lemonade-flutter/commit/f560f5e47f5d41fbc6bb7f924c11b1f4bd9e1773))
+* enhance create event ([#514](https://github.com/lemonadesocial/lemonade-flutter/issues/514)) ([1ea4cec](https://github.com/lemonadesocial/lemonade-flutter/commit/1ea4cecb21d191fce344ab871f278d3fa664a07a))
+* enhance edit event & description markdown edit ([#525](https://github.com/lemonadesocial/lemonade-flutter/issues/525)) ([b23afca](https://github.com/lemonadesocial/lemonade-flutter/commit/b23afca939d06ccd4a4d51cb34282ba640a65f0d))
+* guest triggers mail event tickets to guest's email ([#509](https://github.com/lemonadesocial/lemonade-flutter/issues/509)) ([92b86fc](https://github.com/lemonadesocial/lemonade-flutter/commit/92b86fcb6553a6e0f4ba59bd351c244598413ad3))
+* mail ticket payment receipt ([#519](https://github.com/lemonadesocial/lemonade-flutter/issues/519)) ([43c02c2](https://github.com/lemonadesocial/lemonade-flutter/commit/43c02c201e71c8a8b5376861c2301891faff0b8c))
+* update api declaration for ios ([#517](https://github.com/lemonadesocial/lemonade-flutter/issues/517)) ([7e6b0ed](https://github.com/lemonadesocial/lemonade-flutter/commit/7e6b0edaff14ab1bd1386d92eb83085688cb2f0c))
+
+
+### Bug Fixes
+
+* add follow function to event host list ([#521](https://github.com/lemonadesocial/lemonade-flutter/issues/521)) ([b92ba5c](https://github.com/lemonadesocial/lemonade-flutter/commit/b92ba5c3556a5d050e04b955677573810ef98e5b))
+* enhance sentry stack trace when calling gql ([#512](https://github.com/lemonadesocial/lemonade-flutter/issues/512)) ([d1967a7](https://github.com/lemonadesocial/lemonade-flutter/commit/d1967a7248f2de0ac2eda4ee112a2f26a2759871))
+* fix format invalid double when set guest limit for ticket type ([#522](https://github.com/lemonadesocial/lemonade-flutter/issues/522)) ([4e7fb0d](https://github.com/lemonadesocial/lemonade-flutter/commit/4e7fb0d0c40579ab6be8260b1293b7c5f1fd4db2))
+* increase appcast version ([#524](https://github.com/lemonadesocial/lemonade-flutter/issues/524)) ([88d62dd](https://github.com/lemonadesocial/lemonade-flutter/commit/88d62dd354f58c64390744940c6ed73fd426767c))
+* lounge bugs ([#520](https://github.com/lemonadesocial/lemonade-flutter/issues/520)) ([5027f0c](https://github.com/lemonadesocial/lemonade-flutter/commit/5027f0c00e81bfeba86ed1a5a7157975f7082caa))
+* move all logic check at event buy button to bloc ([#510](https://github.com/lemonadesocial/lemonade-flutter/issues/510)) ([eac5b74](https://github.com/lemonadesocial/lemonade-flutter/commit/eac5b740e261be6dc4fc45a90d56228f0850fc0e))
+* optimize get price decimals in event list ([#513](https://github.com/lemonadesocial/lemonade-flutter/issues/513)) ([073bf16](https://github.com/lemonadesocial/lemonade-flutter/commit/073bf16e6d6ce68616dcee2953efdbbf67923be7))
+* remove getting event join request if user not logged in in event detail ([#511](https://github.com/lemonadesocial/lemonade-flutter/issues/511)) ([251e584](https://github.com/lemonadesocial/lemonade-flutter/commit/251e584f3b13fb408f357c53e92ab01392c8ecba))
+* toast icon crazy big ([#523](https://github.com/lemonadesocial/lemonade-flutter/issues/523)) ([2d3b9a0](https://github.com/lemonadesocial/lemonade-flutter/commit/2d3b9a0bf8796009069cfd61d782590c53265e80))
+
 ## [1.13.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.12.1...v1.13.0) (2024-04-01)
 
 
