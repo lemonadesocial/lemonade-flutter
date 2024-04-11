@@ -4,6 +4,10 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'create_event_discount_bloc.freezed.dart';
 
+double defaultRatio = 0.25;
+double defaultTicketLimit = 25.0;
+double defaultTicketLimitPer = 2.0;
+
 class CreateEventDiscountBloc
     extends Bloc<CreateEventDiscountEvent, CreateEventDiscountState> {
   final EventPaymentTicketDiscount? discount;
@@ -14,9 +18,10 @@ class CreateEventDiscountBloc
             CreateEventDiscountState(
               data: CreateEventDiscountData(
                 code: discount?.code ?? '',
-                ratio: discount?.ratio ?? 0.25,
-                ticketLimit: discount?.ticketLimit ?? 25,
-                ticketLimitPer: discount?.ticketLimitPer ?? 2,
+                ratio: discount?.ratio ?? defaultRatio,
+                ticketLimit: discount?.ticketLimit ?? defaultTicketLimit,
+                ticketLimitPer:
+                    discount?.ticketLimitPer ?? defaultTicketLimitPer,
               ),
               isValid: false,
             ),

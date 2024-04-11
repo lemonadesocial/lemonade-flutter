@@ -10,6 +10,9 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+double ticketLeftSideSize = 75.w;
+double triangleWidth = 18.w;
+
 class EventDiscountItem extends StatelessWidget {
   final EventPaymentTicketDiscount discount;
   const EventDiscountItem({
@@ -38,7 +41,7 @@ class EventDiscountItem extends StatelessWidget {
               Stack(
                 children: [
                   CustomPaint(
-                    size: Size(75.w, 75.w),
+                    size: Size(ticketLeftSideSize, ticketLeftSideSize),
                     painter: DiscountLeftSidePainterWidget(
                       backgroundColor: highlighted
                           ? LemonColor.paleViolet18
@@ -114,9 +117,9 @@ class EventDiscountItem extends StatelessWidget {
           ),
           Positioned(
             top: 0,
-            left: 75.w - 9.w,
+            left: ticketLeftSideSize - triangleWidth / 2,
             child: CustomPaint(
-              size: Size(18.w, 9.w),
+              size: Size(triangleWidth, 9.w),
               painter: _TrianglePainterWidget(
                 backgroundColor: colorScheme.background,
               ),
@@ -128,7 +131,7 @@ class EventDiscountItem extends StatelessWidget {
             child: RotatedBox(
               quarterTurns: 2,
               child: CustomPaint(
-                size: Size(18.w, 9.w),
+                size: Size(triangleWidth, 9.w),
                 painter: _TrianglePainterWidget(
                   backgroundColor: colorScheme.background,
                 ),
