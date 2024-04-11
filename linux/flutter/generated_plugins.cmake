@@ -7,6 +7,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   emoji_picker_flutter
   file_selector_linux
   flutter_secure_storage_linux
+  rich_clipboard_linux
   sentry_flutter
   url_launcher_linux
   window_to_front

@@ -178,5 +178,6 @@
     "gotIt": "Got it",
     "goBackConfirmationDescription": "Going back will reset any information you have added. Still want to go back?",
     "saved": "Saved",
-    "settings": "Settings"
+    "settings": "Settings",
+    "updatedSuccessfully": "Updated successfully"
 }

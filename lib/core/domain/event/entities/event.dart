@@ -62,6 +62,7 @@ class Event with _$Event {
     DateTime? applicationFormSubmission,
     bool? guestDirectoryEnabled,
     List<EventPaymentTicketDiscount>? paymentTicketDiscounts,
+    String? timezone,
   }) = _Event;
 
   factory Event.fromDto(EventDto dto) {
@@ -143,6 +144,7 @@ class Event with _$Event {
             (item) => EventPaymentTicketDiscount.fromDto(item),
           )
           .toList(),
+      timezone: dto.timezone,
     );
   }
 }

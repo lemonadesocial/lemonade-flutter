@@ -70,6 +70,7 @@ class EventDto with _$EventDto {
     @JsonKey(name: 'guest_directory_enabled') bool? guestDirectoryEnabled,
     @JsonKey(name: 'payment_ticket_discounts')
     List<EventPaymentTicketDiscountDto>? paymentTicketDiscounts,
+    String? timezone,
   }) = _EventDto;
 
   factory EventDto.fromJson(Map<String, dynamic> json) =>

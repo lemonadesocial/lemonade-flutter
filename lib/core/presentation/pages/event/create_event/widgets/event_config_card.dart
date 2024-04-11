@@ -13,6 +13,8 @@ class EventConfigCard extends StatelessWidget {
   final Function() onTap;
   final bool? selected;
   final bool? loading;
+  final int? maxLinesDescription;
+  final double? paddingVertical;
 
   const EventConfigCard({
     super.key,
@@ -22,6 +24,8 @@ class EventConfigCard extends StatelessWidget {
     required this.onTap,
     this.selected,
     this.loading,
+    this.maxLinesDescription,
+    this.paddingVertical,
   });
 
   @override
@@ -30,7 +34,10 @@ class EventConfigCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
+        padding: EdgeInsets.symmetric(
+          horizontal: Spacing.xSmall,
+          vertical: paddingVertical ?? 0,
+        ),
         decoration: BoxDecoration(
           color: selected == true ? LemonColor.atomicBlack : Colors.transparent,
           border:
@@ -68,6 +75,7 @@ class EventConfigCard extends StatelessWidget {
                       padding: EdgeInsets.only(top: 2.h),
                       child: Text(
                         description!,
+                        maxLines: maxLinesDescription ?? 2,
                         style: Typo.small.copyWith(
                           color: colorScheme.onSecondary,
                           fontWeight: FontWeight.w400,
