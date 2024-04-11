@@ -29,6 +29,9 @@ class EventTicketsGridConfig extends StatelessWidget {
       case EventConfigurationType.rewards:
         AutoRouter.of(context).navigate(const EventRewardSettingRoute());
         break;
+      case EventConfigurationType.promotions:
+        AutoRouter.of(context).navigate(const EventDiscountSettingRoute());
+        break;
       default:
         SnackBarUtils.showComingSoon();
     }

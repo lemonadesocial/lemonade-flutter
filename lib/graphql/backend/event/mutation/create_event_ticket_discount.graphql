@@ -1,0 +1,8 @@
+mutation CreateEventTicketDiscounts(
+  $event: MongoID!
+  $inputs: [EventPaymentTicketDiscountInput!]!
+) {
+  createEventTicketDiscounts(event: $event, inputs: $inputs) {
+    _id
+  }
+}

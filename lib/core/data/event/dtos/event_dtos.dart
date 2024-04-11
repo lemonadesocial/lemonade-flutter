@@ -1,6 +1,7 @@
 import 'package:app/core/data/common/dtos/common_dtos.dart';
 import 'package:app/core/data/event/dtos/event_application_profile_field_dto/event_application_profile_field_dto.dart';
 import 'package:app/core/data/event/dtos/event_application_question_dto/event_application_question_dto.dart';
+import 'package:app/core/data/event/dtos/event_payment_ticket_discount_dto/event_payment_ticket_discount_dto.dart';
 import 'package:app/core/data/event/dtos/event_frequent_question_dto/event_frequent_question_dto.dart';
 import 'package:app/core/data/event/dtos/event_session/event_session_dto.dart';
 import 'package:app/core/data/event/dtos/event_ticket_types_dto/event_ticket_types_dto.dart';
@@ -68,6 +69,8 @@ class EventDto with _$EventDto {
     @JsonKey(name: 'application_form_submission')
     DateTime? applicationFormSubmission,
     @JsonKey(name: 'guest_directory_enabled') bool? guestDirectoryEnabled,
+    @JsonKey(name: 'payment_ticket_discounts')
+    List<EventPaymentTicketDiscountDto>? paymentTicketDiscounts,
     bool? published,
     @JsonKey(name: 'frequent_questions')
     List<EventFrequentQuestionDto>? frequentQuestions,
