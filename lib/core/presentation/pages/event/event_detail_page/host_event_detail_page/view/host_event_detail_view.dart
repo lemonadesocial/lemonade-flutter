@@ -6,10 +6,16 @@ import 'package:app/core/presentation/pages/event/event_detail_page/host_event_d
 import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/widgets/host_event_location.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/widgets/host_collectibles_section/host_collectibles_section.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/widgets/event_detail_navigation_bar.dart';
+import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
+import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/router/app_router.gr.dart';
+import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:app/theme/typo.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -43,6 +49,27 @@ class HostEventDetailView extends StatelessWidget {
                         pinned: true,
                         delegate: PostGuestEventAnimatedAppBar(
                           event: event,
+                          actions: event.published == false
+                              ? [
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                      right: Spacing.smMedium,
+                                    ),
+                                    child: LinearGradientButton.primaryButton(
+                                      onTap: () => AutoRouter.of(context).push(
+                                        const HostEventPublishFlowRoute(),
+                                      ),
+                                      height: Sizing.medium,
+                                      textStyle: Typo.small.copyWith(
+                                        color: colorScheme.onPrimary,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                      trailing: Assets.icons.icUpload.svg(),
+                                      label: t.common.actions.publish,
+                                    ),
+                                  ),
+                                ]
+                              : null,
                         ),
                       ),
                       SliverPadding(

@@ -94,6 +94,7 @@ class EventDetailNavigationBarHelper {
       FeatureItem(
         label: t.event.configuration.program,
         iconData: ThemeSvgIcon(
+          color: colorScheme.onSecondary,
           builder: (filter) => Assets.icons.icProgram.svg(
             colorFilter: filter,
             width: iconSize,
@@ -213,6 +214,7 @@ class EventDetailNavigationBarHelper {
       FeatureItem(
         label: t.event.configuration.program,
         iconData: ThemeSvgIcon(
+          color: colorScheme.onSecondary,
           builder: (filter) => Assets.icons.icProgram.svg(
             colorFilter: filter,
             width: iconSize,
