@@ -11,9 +11,10 @@ import 'package:flutter_vibrate/flutter_vibrate.dart';
 
 class PostGuestEventAnimatedAppBar extends LemonAnimatedAppBar {
   final Event event;
-
+  @override
   PostGuestEventAnimatedAppBar({
     required this.event,
+    super.actions,
   });
 
   @override
@@ -28,25 +29,26 @@ class PostGuestEventAnimatedAppBar extends LemonAnimatedAppBar {
       backgroundColor: backgroundColor ?? primary,
       automaticallyImplyLeading: hideLeading ?? true,
       leading: hideLeading ?? false ? null : leading ?? const LemonBackButton(),
-      actions: [
-        Padding(
-          padding: EdgeInsets.only(right: Spacing.smMedium),
-          child: InkWell(
-            onTap: () {
-              Vibrate.feedback(FeedbackType.light);
-              SnackBarUtils.showComingSoon();
-            },
-            child: ThemeSvgIcon(
-              color: colorScheme.onPrimary,
-              builder: (filter) => Assets.icons.icMoreHoriz.svg(
-                colorFilter: filter,
-                width: 25.w,
-                height: 25.w,
+      actions: actions ??
+          [
+            Padding(
+              padding: EdgeInsets.only(right: Spacing.smMedium),
+              child: InkWell(
+                onTap: () {
+                  Vibrate.feedback(FeedbackType.light);
+                  SnackBarUtils.showComingSoon();
+                },
+                child: ThemeSvgIcon(
+                  color: colorScheme.onPrimary,
+                  builder: (filter) => Assets.icons.icMoreHoriz.svg(
+                    colorFilter: filter,
+                    width: 25.w,
+                    height: 25.w,
+                  ),
+                ),
               ),
             ),
-          ),
-        ),
-      ],
+          ],
       centerTitle: true,
       elevation: 0,
       toolbarHeight: preferredSize.height,

@@ -60,7 +60,8 @@
         "continueNext": "Continue",
         "leave": "Leave",
         "post": "Post",
-        "receipt": "receipt"
+        "receipt": "receipt",
+        "publish": "Publish"
     },
     "followed": "Followed",
     "anonymous": "anonymous",
@@ -178,5 +179,7 @@
     "gotIt": "Got it",
     "goBackConfirmationDescription": "Going back will reset any information you have added. Still want to go back?",
     "saved": "Saved",
+    "defaultText": "default",
+    "you": "you",
     "updatedSuccessfully": "Updated successfully"
 }

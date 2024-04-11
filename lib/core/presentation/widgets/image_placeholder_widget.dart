@@ -44,6 +44,7 @@ class ImagePlaceholder {
   static Widget ticketThumbnail({
     Color? iconColor,
     Color? backgroundColor,
+    double? iconSize,
   }) {
     return Container(
       height: Sizing.medium,
@@ -55,8 +56,8 @@ class ImagePlaceholder {
         child: ThemeSvgIcon(
           color: iconColor,
           builder: (filter) => Assets.icons.icTicket.svg(
-            height: Sizing.xSmall,
-            width: Sizing.xSmall,
+            height: iconSize ?? Sizing.xSmall,
+            width: iconSize ?? Sizing.xSmall,
             colorFilter: filter,
           ),
         ),

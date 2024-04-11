@@ -183,6 +183,7 @@ const eventFragment = '''
   attending_count
   pending_request_count
   guest_directory_enabled
+  published
   rewards {
     _id
     active
@@ -222,6 +223,16 @@ const eventApplicationFormFragment = '''
   }
 ''';
 
+const eventFrequentQuestionsFragment = '''
+  fragment eventFrequentQuestionsFragment on Event {
+    frequent_questions {
+      _id
+      question
+      answer
+    }
+  }
+''';
+
 final getEventDetailQuery = gql('''
   $eventFragment
   $eventOfferFragment
@@ -229,6 +240,7 @@ final getEventDetailQuery = gql('''
   $eventTicketTypesFragment
   $eventProgramFragment
   $eventApplicationFormFragment
+  $eventFrequentQuestionsFragment
 
   query(\$id: MongoID!) {
     getEvent(_id: \$id) {
@@ -238,6 +250,7 @@ final getEventDetailQuery = gql('''
       ...eventTicketTypesFragment
       ...eventProgramFragment
       ...eventApplicationFormFragment
+      ...eventFrequentQuestionsFragment
     }
   }
 ''');
