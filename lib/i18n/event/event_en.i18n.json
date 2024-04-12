@@ -326,7 +326,8 @@
         "selectAllTicketTiers": "Select all ticket tiers",
         "selectTicketTiers": "Select ticket tiers",
         "createRewardSuccessfully": "Create reward successfully",
-        "updateRewardSuccessfully": "Update reward successfully"
+        "updateRewardSuccessfully": "Update reward successfully",
+        "rewardsPerGuest": "$count per guest"
     },
     "eventApproval": {
         "waitingApproval": "Awaiting Approval",
@@ -494,6 +495,43 @@
         "rsvpSentTitle": "RSVP confirmation sent!",
         "checkYourInbox": "Check your inbox at $email",
         "receiptNotAvailableError": "Only the user who made the purchase can access the receipt"
+    },
+    "eventPromotions": {
+        "eventPromotionsTitle": "Promotions",
+        "promotions(ordinal)": {
+            "one": "$count promotion",
+            "other": "$count promotions"
+        },
+        "usedCount": "$count/$total used",
+        "emptyDiscounts": "No promotions yet! Create one to allow\nguests to buy tickets at a discounted price.",
+        "newPromotion": "New promotion",
+        "discountPercent": "Discount percent",
+        "ticketLimit": "Ticket limit",
+        "ticketLimitDescription": "Total tickets this code can be applied to",
+        "ticketLimitPerGuest": "Ticket limit per guest",
+        "ticketLimitPerGuestDescription": "Total tickets 1 guest can buy with this code",
+        "accessCode": "Access code",
+        "promotionDetailsTitle": "Promotion detail",
+        "promotionCreatedSuccess": "Promotion successfully created!"
+    },
+    "eventPublish": {
+        "eventPublishTitle": "Publish your event",
+        "eventPublishDescription": "Your guide to crafting an unforgettable event!",
+        "eventPublishSuccess": "Your event is successfully published!",
+        "addTickets": "Add tickets",
+        "addCoverPhoto": "Add cover photo",
+        "addCollectible": "Add collectible",
+        "addRewards": "Add rewards",
+        "addProgram": "Add program",
+        "addCohosts": "Add co-hosts",
+        "addSpeakers": "Add speakers",
+        "addFAQ": "Add FAQs",
+        "ratingBar": {
+            "average": "Average",
+            "good": "Good",
+            "great": "Great",
+            "awesome": "Awesome"
+        }
     },
     "eventBuyAdditionalTickets": {
         "assignTickets": "Assign tickets"

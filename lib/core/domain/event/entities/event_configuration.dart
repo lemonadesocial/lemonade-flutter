@@ -22,6 +22,7 @@ enum EventConfigurationType {
   speakers,
   ticketTiers,
   rewards,
+  promotions,
   applicationForm
 }
 
@@ -176,6 +177,7 @@ class EventConfiguration {
   ) {
     final eventTicketTypesCount = event?.eventTicketTypes?.length ?? 0;
     final eventRewardsCount = event?.rewards?.length ?? 0;
+    final eventPromotionsCount = event?.paymentTicketDiscounts?.length ?? 0;
     final colorScheme = Theme.of(context).colorScheme;
     final List<EventConfiguration> eventConfigs = [
       EventConfiguration(
@@ -199,6 +201,19 @@ class EventConfiguration {
         icon: Center(
           child: Icon(
             Icons.star_border_outlined,
+            color: colorScheme.onSecondary,
+            size: 18.w,
+          ),
+        ),
+      ),
+      EventConfiguration(
+        type: EventConfigurationType.promotions,
+        title: t.event.configuration.promitions,
+        description:
+            '$eventPromotionsCount ${t.event.ticketTypesCount(n: eventTicketTypesCount)}',
+        icon: Center(
+          child: Icon(
+            Icons.discount_outlined,
             color: colorScheme.onSecondary,
             size: 18.w,
           ),

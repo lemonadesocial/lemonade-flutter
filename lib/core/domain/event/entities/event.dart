@@ -1,6 +1,8 @@
 import 'package:app/core/data/event/dtos/event_dtos.dart';
 import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/event/entities/event_application_profile_field.dart';
+import 'package:app/core/domain/event/entities/event_payment_ticket_discount.dart';
+import 'package:app/core/domain/event/entities/event_frequent_question.dart';
 import 'package:app/core/domain/event/entities/event_session.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/entities/reward.dart';
@@ -60,6 +62,9 @@ class Event with _$Event {
     List<EventApplicationProfileField>? applicationProfileFields,
     DateTime? applicationFormSubmission,
     bool? guestDirectoryEnabled,
+    List<EventPaymentTicketDiscount>? paymentTicketDiscounts,
+    bool? published,
+    List<EventFrequentQuestion>? frequentQuestions,
     String? timezone,
   }) = _Event;
 
@@ -137,6 +142,15 @@ class Event with _$Event {
           .toList(),
       applicationFormSubmission: dto.applicationFormSubmission,
       guestDirectoryEnabled: dto.guestDirectoryEnabled,
+      paymentTicketDiscounts: List.from(dto.paymentTicketDiscounts ?? [])
+          .map(
+            (item) => EventPaymentTicketDiscount.fromDto(item),
+          )
+          .toList(),
+      published: dto.published,
+      frequentQuestions: List.from(dto.frequentQuestions ?? [])
+          .map((item) => EventFrequentQuestion.fromDto(item))
+          .toList(),
       timezone: dto.timezone,
     );
   }

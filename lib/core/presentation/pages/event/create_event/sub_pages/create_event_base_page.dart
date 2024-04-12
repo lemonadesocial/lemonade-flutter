@@ -39,7 +39,16 @@ class CreateEventBasePage extends StatelessWidget {
           SnackBarUtils.showSuccess(
             message: t.event.eventCreation.createEventSuccessfully,
           );
-          AutoRouter.of(context).popTop();
+          AutoRouter.of(context).root.popUntilRoot();
+          AutoRouter.of(context).root.push(
+                EventDetailRoute(
+                  eventId: state.eventId ?? '',
+                  children: const [
+                    EventDetailBaseRoute(),
+                    HostEventPublishFlowRoute(),
+                  ],
+                ),
+              );
         }
       },
       child: GestureDetector(

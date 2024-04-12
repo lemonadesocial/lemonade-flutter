@@ -168,6 +168,9 @@ final eventDetailRoutes = AutoRoute(
       page: ClaimRewardsRoute.page,
     ),
     AutoRoute(
+      page: HostEventPublishFlowRoute.page,
+    ),
+    AutoRoute(
       page: GuestEventRewardUsesRoute.page,
     ),
     AutoRoute(
@@ -245,6 +248,18 @@ final eventDetailRoutes = AutoRoute(
         ),
         AutoRoute(
           page: EventApplicationFormProfileSettingRoute.page,
+        ),
+        AutoRoute(
+          page: EventDiscountSettingRoute.page,
+          children: [
+            AutoRoute(
+              initial: true,
+              page: EventDiscountListingSetttingRoute.page,
+            ),
+            AutoRoute(
+              page: EventDiscountFormSettingRoute.page,
+            ),
+          ],
         ),
       ],
     ),
