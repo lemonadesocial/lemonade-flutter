@@ -20,9 +20,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 @RoutePage()
 class MyEventTicketAssignmentPage extends StatelessWidget {
   final Event event;
+  final Function()? onAssignSuccess;
+
   const MyEventTicketAssignmentPage({
     super.key,
     required this.event,
+    this.onAssignSuccess,
   });
 
   @override
@@ -46,7 +49,10 @@ class MyEventTicketAssignmentPage extends StatelessWidget {
           )..add(GetMyTicketsEvent.fetch()),
         ),
       ],
-      child: MyEventTicketAssignmentView(event: event),
+      child: MyEventTicketAssignmentView(
+        event: event,
+        onAssignSuccess: onAssignSuccess,
+      ),
     );
   }
 }
@@ -55,9 +61,11 @@ class MyEventTicketAssignmentView extends StatelessWidget {
   const MyEventTicketAssignmentView({
     super.key,
     required this.event,
+    this.onAssignSuccess,
   });
 
   final Event event;
+  final Function()? onAssignSuccess;
 
   void showAssignPopup(
     BuildContext context, {
@@ -71,8 +79,11 @@ class MyEventTicketAssignmentView extends StatelessWidget {
         event: event,
         eventTicket: eventTicket,
         ticketType: ticketType,
-        onAssignSuccess: () => {
-          context.read<GetMyTicketsBloc>().add(GetMyTicketsEvent.fetch()),
+        onAssignSuccess: () {
+          context.read<GetMyTicketsBloc>().add(
+                GetMyTicketsEvent.fetch(),
+              );
+          onAssignSuccess?.call();
         },
       ),
     );

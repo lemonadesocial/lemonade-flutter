@@ -32,7 +32,6 @@ class GuestEventDetailDashboard extends StatelessWidget {
         EventDashboardItem(
           icon: Assets.icons.icChatBubbleGradient
               .svg(width: Sizing.small, height: Sizing.small),
-          child: const SizedBox.shrink(),
           onTap: () {
             Vibrate.feedback(FeedbackType.light);
             if (event.matrixEventRoomId == null ||
@@ -75,7 +74,6 @@ class GuestEventDetailDashboard extends StatelessWidget {
         EventDashboardItem(
           icon: Assets.icons.icUserAddGradient
               .svg(width: Sizing.small, height: Sizing.small),
-          child: EventTotalJoinWidget(event: event),
           onTap: () {
             Vibrate.feedback(FeedbackType.light);
             SnackBarUtils.showComingSoon();
@@ -83,9 +81,22 @@ class GuestEventDetailDashboard extends StatelessWidget {
         ),
         SizedBox(width: 10.w),
         EventDashboardItem(
+          icon: Assets.icons.icMoreTicketsGradient
+              .svg(width: Sizing.small, height: Sizing.small),
+          onTap: () {
+            Vibrate.feedback(FeedbackType.light);
+            AutoRouter.of(context).push(
+              EventBuyTicketsRoute(
+                event: event,
+                isBuyMore: true,
+              ),
+            );
+          },
+        ),
+        SizedBox(width: 10.w),
+        EventDashboardItem(
           icon: Assets.icons.icShareGradient
               .svg(width: Sizing.small, height: Sizing.small),
-          child: const SizedBox.shrink(),
           onTap: () {
             Vibrate.feedback(FeedbackType.light);
             Share.share(
