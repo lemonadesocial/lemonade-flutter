@@ -2,7 +2,9 @@ import 'package:app/core/presentation/pages/chat/chat_list/views/chat_list_page_
 import 'package:app/core/presentation/pages/chat/new_chat/new_chat_page.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -21,7 +23,7 @@ class CreateChatButton extends StatelessWidget {
             selectedTabIndex == ChatListTabs.channels.tabIndex) {
           const NewChatPageDialog().showAsBottomSheet(context);
         } else if (selectedTabIndex == ChatListTabs.guilds.tabIndex) {
-          print("?");
+          AutoRouter.of(context).navigate(const CreateGuildChannelRoute());
         }
       },
       child: Container(

@@ -53,5 +53,16 @@
     "leave": "Leave",
     "roomNotExistDesc": "Oops! It seems like the chat room you are trying to access does not exist.",
     "messages": "Messages",
-    "guilds": "Guilds"
+    "guilds": "Guilds",
+    "guild": {
+        "createChannel": "Create channel",
+        "createChannelDescription": "Where conversations happen around a topic. Use a name that is easy to find and understand.",
+        "communityGated": "Community-gated",
+        "communityGatedDescription": "You can fine-tune which community roles can join this channel on the next step",
+        "searchGuilds": "Search guilds",
+        "access": "Access",
+        "accessDescription": "Define who can enter this channel",
+        "allowAccessTo": "Allow access to",
+        "pleaseWaitCreateChannel": "Please wait while we create your channel. This should only take a few seconds."
+    }
 }
