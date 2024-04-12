@@ -41,7 +41,7 @@ class SettingTileWidget extends StatelessWidget {
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: color ?? colorScheme.onPrimary.withOpacity(0.06),
+          color: color ?? LemonColor.atomicBlack,
           borderRadius: BorderRadius.circular(radius ?? LemonRadius.normal),
           border: isError == true
               ? Border.all(
