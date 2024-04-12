@@ -20,8 +20,10 @@ import 'package:app/core/presentation/widgets/common/button/linear_gradient_butt
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/web3/chain/chain_query_widget.dart';
+import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/event_tickets_utils.dart';
+import 'package:app/core/utils/event_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -77,6 +79,11 @@ class _SelectTicketViewState extends State<SelectTicketView> {
   void initState() {
     super.initState();
     _updatePaymentMethod(context);
+  }
+
+  bool get isAttending {
+    final userId = AuthUtils.getUserId(context);
+    return EventUtils.isAttending(event: widget.event, userId: userId);
   }
 
   void _updatePaymentMethod(BuildContext context) {
@@ -186,11 +193,19 @@ class _SelectTicketViewState extends State<SelectTicketView> {
         );
   }
 
-  void _handleRedeemMultipleTicketsSuccess() {
+  void _handleRedeemMultipleTicketsSuccess({
+    int? ticketsCount,
+  }) {
     AutoRouter.of(context).replaceAll(
       [
         RSVPEventSuccessPopupRoute(
           event: widget.event,
+          primaryMessage:
+              isAttending ? t.event.eventBuyTickets.ticketsPurchased : null,
+          secondaryMessage: isAttending
+              ? t.event.eventBuyTickets
+                  .addictionalTicketsPurchasedSuccess(count: ticketsCount ?? 0)
+              : null,
           buttonBuilder: (newContext) => LinearGradientButton(
             onTap: () => AutoRouter.of(newContext).replace(
               const EventPickMyTicketRoute(),
@@ -250,6 +265,16 @@ class _SelectTicketViewState extends State<SelectTicketView> {
                   return _handleEventRequireApproval();
                 }
                 final tickets = redeemTicketsResponse.tickets ?? [];
+
+                // if guest already joined the event but
+                // buy additional tickets then go to pick tickets page
+                if (isAttending) {
+                  _handleRedeemMultipleTicketsSuccess(
+                    ticketsCount: tickets.length,
+                  );
+                  return;
+                }
+
                 if (tickets.length == 1) {
                   // then trigger assign ticket to the user
                   context.read<AssignTicketsBloc>().add(

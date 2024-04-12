@@ -53,7 +53,9 @@
         "onOtherChain": "on other chain",
         "viaOtherPaymentMethod": "via other payment method",
         "ticketLocked": "Ticket locked!",
-        "ticketLockedDescription": "You need to be on the whitelist to purchase it"
+        "ticketLockedDescription": "You need to be on the whitelist to purchase it",
+        "ticketsPurchased": "Tickets purchased!",
+        "addictionalTicketsPurchasedSuccess": "You have $count additional tickets to assign to your friends. You can do this later inside the event."
     },
     "eventOrder": {
         "itemTotal": "Item total",
@@ -492,5 +494,8 @@
         "rsvpSentTitle": "RSVP confirmation sent!",
         "checkYourInbox": "Check your inbox at $email",
         "receiptNotAvailableError": "Only the user who made the purchase can access the receipt"
+    },
+    "eventBuyAdditionalTickets": {
+        "assignTickets": "Assign tickets"
     }
 }

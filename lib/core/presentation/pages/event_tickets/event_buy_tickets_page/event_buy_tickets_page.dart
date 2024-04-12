@@ -1,3 +1,4 @@
+import 'package:app/core/application/event/event_buy_additional_tickets_bloc/event_buy_additonal_tickets_bloc.dart';
 import 'package:app/core/application/event/event_provider_bloc/event_provider_bloc.dart';
 import 'package:app/core/application/event_tickets/get_event_ticket_types_bloc/get_event_ticket_types_bloc.dart';
 import 'package:app/core/application/event_tickets/redeem_tickets_bloc/redeem_tickets_bloc.dart';
@@ -15,9 +16,11 @@ class EventBuyTicketsPage extends StatelessWidget implements AutoRouteWrapper {
   const EventBuyTicketsPage({
     super.key,
     required this.event,
+    this.isBuyMore = false,
   });
 
   final event_entity.Event event;
+  final bool isBuyMore;
 
   @override
   Widget wrappedRoute(BuildContext context) {
@@ -43,6 +46,11 @@ class EventBuyTicketsPage extends StatelessWidget implements AutoRouteWrapper {
         ),
         BlocProvider(
           create: (context) => SelectPaymentCardCubit(),
+        ),
+        BlocProvider(
+          create: (context) => EventBuyAdditionalTicketsBloc(
+            isBuyMore: isBuyMore,
+          ),
         ),
       ],
       child: this,
