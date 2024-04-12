@@ -8,7 +8,6 @@ import 'package:app/core/presentation/pages/setting/widgets/setting_tile_widget.
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
-import 'package:app/core/utils/bottomsheet_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
@@ -17,9 +16,11 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_switch/flutter_switch.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class CreateRewardBasicInfoForm extends StatefulWidget {
   final Reward? initialReward;
@@ -84,10 +85,13 @@ class _CreateRewardBasicInfoFormState extends State<CreateRewardBasicInfoForm> {
                   onChange: (value) {
                     modifyRewardBloc.add(
                       ModifyRewardEvent.onLimitPerChanged(
-                        limitPer: double.parse(value),
+                        limitPer: value.isNotEmpty ? double.parse(value) : 1,
                       ),
                     );
                   },
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
                 ),
               ),
             );
@@ -137,8 +141,10 @@ class _ChooseRewardIconButton extends StatelessWidget {
     return InkWell(
       onTap: () {
         FocusScope.of(context).unfocus();
-        BottomSheetUtils.showSnapBottomSheet(
-          context,
+        showCupertinoModalBottomSheet(
+          context: context,
+          backgroundColor: LemonColor.atomicBlack,
+          expand: true,
           builder: (innerContext) {
             return SelectRewardIconForm(
               initialReward: initialReward,
@@ -154,11 +160,11 @@ class _ChooseRewardIconButton extends StatelessWidget {
         );
       },
       child: Container(
-        height: 60.h,
-        padding: EdgeInsets.symmetric(horizontal: Spacing.medium),
+        height: 60.w,
+        padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(LemonRadius.small),
-          border: Border.all(color: colorScheme.outline),
+          border: Border.all(color: colorScheme.outlineVariant),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -172,8 +178,7 @@ class _ChooseRewardIconButton extends StatelessWidget {
                     width: Sizing.regular,
                     height: Sizing.regular,
                     decoration: BoxDecoration(
-                      borderRadius:
-                          BorderRadius.circular(LemonRadius.extraSmall),
+                      borderRadius: BorderRadius.circular(Sizing.regular),
                       border: Border.all(
                         color: LemonColor.chineseBlack,
                       ),
@@ -201,7 +206,7 @@ class _ChooseRewardIconButton extends StatelessWidget {
                 );
               },
             ),
-            SizedBox(width: Spacing.medium),
+            SizedBox(width: Spacing.extraSmall),
             Text(
               t.event.rewardSetting.chooseAnIcon,
               style: Typo.medium.copyWith(

@@ -15,7 +15,6 @@ import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:formz/formz.dart';
 
 @RoutePage()
@@ -72,7 +71,6 @@ class EventCreateRewardPageView extends StatelessWidget {
         body: BlocListener<ModifyRewardBloc, ModifyRewardState>(
           listener: (context, state) {
             if (state.status == FormzSubmissionStatus.success) {
-              AutoRouter.of(context).back();
               if (initialReward != null) {
                 SnackBarUtils.showSuccess(
                   message: t.event.rewardSetting.updateRewardSuccessfully,
@@ -87,6 +85,7 @@ class EventCreateRewardPageView extends StatelessWidget {
                   eventId: eventId,
                 ),
               );
+              AutoRouter.of(context).pop();
             }
           },
           child: Stack(
@@ -102,8 +101,9 @@ class EventCreateRewardPageView extends StatelessWidget {
                             ? t.event.rewardSetting.editReward
                             : t.event.rewardSetting.createNewReward,
                         style: Typo.extraLarge.copyWith(
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.w600,
                           fontFamily: FontFamily.nohemiVariable,
+                          color: colorScheme.onPrimary,
                         ),
                       ),
                     ),
@@ -125,7 +125,10 @@ class EventCreateRewardPageView extends StatelessWidget {
                     SliverToBoxAdapter(
                       child: Text(
                         t.event.rewardSetting.selectTicketTiers,
-                        style: Typo.extraMedium,
+                        style: Typo.mediumPlus.copyWith(
+                          color: colorScheme.onPrimary,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                     SliverToBoxAdapter(
@@ -160,34 +163,30 @@ class EventCreateRewardPageView extends StatelessWidget {
                     child: Container(
                       color: colorScheme.background,
                       padding: EdgeInsets.all(Spacing.smMedium),
-                      child: LinearGradientButton(
-                        onTap: () async {
-                          FocusScope.of(context).unfocus();
-                          if (initialReward != null) {
-                            modifyRewardBloc.add(
-                              ModifyRewardEvent.onEditSubmitted(
-                                eventId: eventId,
-                                existingRewards: existingRewards,
-                              ),
-                            );
-                          } else {
-                            modifyRewardBloc.add(
-                              ModifyRewardEvent.onCreateSubmitted(
-                                eventId: eventId,
-                                existingRewards: existingRewards,
-                              ),
-                            );
-                          }
-                        },
-                        height: 42.w,
-                        radius: BorderRadius.circular(LemonRadius.small * 2),
-                        mode: GradientButtonMode.lavenderMode,
-                        label: t.common.actions.saveChanges,
-                        textStyle: Typo.medium.copyWith(
-                          fontWeight: FontWeight.w600,
+                      child: SafeArea(
+                        child: LinearGradientButton.primaryButton(
+                          onTap: () async {
+                            FocusScope.of(context).unfocus();
+                            if (initialReward != null) {
+                              modifyRewardBloc.add(
+                                ModifyRewardEvent.onEditSubmitted(
+                                  eventId: eventId,
+                                  existingRewards: existingRewards,
+                                ),
+                              );
+                            } else {
+                              modifyRewardBloc.add(
+                                ModifyRewardEvent.onCreateSubmitted(
+                                  eventId: eventId,
+                                  existingRewards: existingRewards,
+                                ),
+                              );
+                            }
+                          },
+                          label: t.common.actions.saveChanges,
+                          loadingWhen:
+                              state.status == FormzSubmissionStatus.inProgress,
                         ),
-                        loadingWhen:
-                            state.status == FormzSubmissionStatus.inProgress,
                       ),
                     ),
                   );

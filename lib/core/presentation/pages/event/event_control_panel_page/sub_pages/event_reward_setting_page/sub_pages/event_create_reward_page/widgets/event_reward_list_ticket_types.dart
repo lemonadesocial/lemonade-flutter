@@ -2,11 +2,12 @@ import 'package:app/core/application/event/modify_reward_bloc/modify_reward_bloc
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/theme/sizing.dart';
+import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:formz/formz.dart';
 
 class EventRewardListTicketTypes extends StatelessWidget {
@@ -37,40 +38,25 @@ class EventRewardListTicketTypes extends StatelessWidget {
           onTap: () => onTapTicketType(item),
           child: Container(
             padding: EdgeInsets.symmetric(
-              vertical: Spacing.extraSmall,
+              horizontal: Spacing.small,
+              vertical: Spacing.small,
+            ),
+            decoration: BoxDecoration(
+              color: LemonColor.atomicBlack,
+              borderRadius: BorderRadius.circular(
+                LemonRadius.medium,
+              ),
             ),
             child: Row(
               children: [
-                BlocBuilder<ModifyRewardBloc, ModifyRewardState>(
-                  builder: (context, state) {
-                    if (state.selectedEventTicketTypeIds.contains(item.id)) {
-                      return Assets.icons.icChecked.svg(
-                        width: Sizing.regular,
-                        height: Sizing.regular,
-                      );
-                    }
-                    if (isErrorValidation) {
-                      return Assets.icons.icUncheck.svg(
-                        color: Colors.red,
-                        width: Sizing.regular,
-                        height: Sizing.regular,
-                      );
-                    }
-                    return Assets.icons.icUncheck.svg(
-                      width: Sizing.regular,
-                      height: Sizing.regular,
-                    );
-                  },
-                ),
-                SizedBox(
-                  width: Spacing.smMedium,
-                ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       item.title ?? '',
-                      style: Typo.medium,
+                      style: Typo.medium.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                     Text(
                       item.ticketLimit == null
@@ -83,15 +69,35 @@ class EventRewardListTicketTypes extends StatelessWidget {
                     ),
                   ],
                 ),
+                const Spacer(),
+                BlocBuilder<ModifyRewardBloc, ModifyRewardState>(
+                  builder: (context, state) {
+                    if (state.selectedEventTicketTypeIds.contains(item.id)) {
+                      return Assets.icons.icChecked.svg(
+                        width: 18.w,
+                        height: 18.w,
+                      );
+                    }
+                    if (isErrorValidation) {
+                      return Assets.icons.icUncheck.svg(
+                        color: LemonColor.coralReef,
+                        width: 18.w,
+                        height: 18.w,
+                      );
+                    }
+                    return Assets.icons.icUncheck.svg(
+                      width: 18.w,
+                      height: 18.w,
+                    );
+                  },
+                ),
               ],
             ),
           ),
         );
       },
       separatorBuilder: (BuildContext context, int index) {
-        return Divider(
-          color: Theme.of(context).colorScheme.outline,
-        );
+        return SizedBox(height: Spacing.extraSmall);
       },
     );
   }
