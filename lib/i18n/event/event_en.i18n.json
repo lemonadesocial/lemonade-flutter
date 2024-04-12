@@ -497,8 +497,8 @@
     "eventPromotions": {
         "eventPromotionsTitle": "Promotions",
         "promotions(ordinal)": {
-            "one": "$count promotion",
-            "other": "$count promotions"
+            "one": "$n promotion",
+            "other": "$n promotions"
         },
         "usedCount": "$count/$total used",
         "emptyDiscounts": "No promotions yet! Create one to allow\nguests to buy tickets at a discounted price.",
