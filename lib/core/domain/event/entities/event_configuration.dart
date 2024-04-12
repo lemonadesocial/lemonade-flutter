@@ -209,8 +209,9 @@ class EventConfiguration {
       EventConfiguration(
         type: EventConfigurationType.promotions,
         title: t.event.configuration.promitions,
-        description:
-            '$eventPromotionsCount ${t.event.ticketTypesCount(n: eventTicketTypesCount)}',
+        description: eventPromotionsCount > 0
+            ? t.event.eventPromotions.promotions(n: eventPromotionsCount)
+            : t.common.actions.add,
         icon: Center(
           child: Icon(
             Icons.discount_outlined,
