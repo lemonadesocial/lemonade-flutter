@@ -12,11 +12,9 @@ import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 
 @RoutePage()
@@ -61,15 +59,11 @@ class _EventCohostsSettingPageViewState
     final loadingEventCohostsRequests =
         context.watch<GetEventCohostRequestsBloc>().state.maybeWhen(
               loading: () => true,
-              fetched: (eventCohostsRequests) => false,
-              failure: () => false,
               orElse: () => false,
             );
     final loadingManageEventCohostRequests =
         context.watch<ManageEventCohostRequestsBloc>().state.maybeWhen(
               loading: () => true,
-              success: () => false,
-              failure: () => false,
               orElse: () => false,
             );
     return Scaffold(
@@ -101,13 +95,6 @@ class _EventCohostsSettingPageViewState
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                t.common.pending,
-                style: Typo.mediumPlus,
-              ),
-              SizedBox(
-                height: Spacing.smMedium,
-              ),
               Expanded(
                 child: loadingEventCohostsRequests ||
                         loadingManageEventCohostRequests
@@ -119,34 +106,28 @@ class _EventCohostsSettingPageViewState
                             event: widget.event,
                           ),
               ),
-              _buildAddCohostsButton(),
+              BlocBuilder<EditEventDetailBloc, EditEventDetailState>(
+                builder: (context, state) {
+                  return Align(
+                    alignment: Alignment.bottomCenter,
+                    child: SafeArea(
+                      child: LinearGradientButton.primaryButton(
+                        label: t.event.cohosts.addCohosts,
+                        onTap: () {
+                          AutoRouter.of(context)
+                              .navigate(const EventAddCohostsRoute());
+                        },
+                        loadingWhen:
+                            state.status == EditEventDetailBlocStatus.loading,
+                      ),
+                    ),
+                  );
+                },
+              ),
             ],
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildAddCohostsButton() {
-    return BlocBuilder<EditEventDetailBloc, EditEventDetailState>(
-      builder: (context, state) {
-        return Align(
-          alignment: Alignment.bottomCenter,
-          child: SafeArea(
-            child: LinearGradientButton(
-              label: t.event.cohosts.addCohosts,
-              height: 48.h,
-              radius: BorderRadius.circular(24),
-              textStyle: Typo.medium.copyWith(),
-              mode: GradientButtonMode.lavenderMode,
-              onTap: () {
-                AutoRouter.of(context).navigate(const EventAddCohostsRoute());
-              },
-              loadingWhen: state.status == EditEventDetailBlocStatus.loading,
-            ),
-          ),
-        );
-      },
     );
   }
 }
@@ -162,26 +143,30 @@ class CohostsList extends StatelessWidget {
   final Event? event;
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-      padding: EdgeInsets.only(bottom: Spacing.medium),
-      shrinkWrap: true,
-      itemBuilder: (context, index) => EventCohostItem(
-        user: eventCohostsRequests[index].toExpanded,
-        onTapRevoke: () {
-          Vibrate.feedback(FeedbackType.light);
-          context.read<ManageEventCohostRequestsBloc>().add(
-                ManageEventCohostRequestsEvent.saveChanged(
-                  eventId: event?.id ?? '',
-                  users: [eventCohostsRequests[index].toExpanded?.userId ?? ''],
-                  decision: false,
-                ),
-              );
-        },
-      ),
-      separatorBuilder: (context, index) => SizedBox(
-        height: Spacing.small,
-      ),
-      itemCount: eventCohostsRequests.length,
+    return CustomScrollView(
+      slivers: [
+        SliverList.separated(
+          itemBuilder: (context, index) => EventCohostItem(
+            user: eventCohostsRequests[index].toExpanded,
+            onTapRevoke: () {
+              Vibrate.feedback(FeedbackType.light);
+              context.read<ManageEventCohostRequestsBloc>().add(
+                    ManageEventCohostRequestsEvent.saveChanged(
+                      eventId: event?.id ?? '',
+                      users: [
+                        eventCohostsRequests[index].toExpanded?.userId ?? '',
+                      ],
+                      decision: false,
+                    ),
+                  );
+            },
+          ),
+          separatorBuilder: (context, index) => SizedBox(
+            height: Spacing.small,
+          ),
+          itemCount: eventCohostsRequests.length,
+        ),
+      ],
     );
   }
 }
