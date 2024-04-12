@@ -63,6 +63,8 @@
         "access": "Access",
         "accessDescription": "Define who can enter this channel",
         "allowAccessTo": "Allow access to",
-        "pleaseWaitCreateChannel": "Please wait while we create your channel. This should only take a few seconds."
+        "pleaseWaitCreateChannel": "Please wait while we create your channel. This should only take a few seconds.",
+        "channelName": "Channel name",
+        "topicOfDiscussion": "Topic of discussion"
     }
 }

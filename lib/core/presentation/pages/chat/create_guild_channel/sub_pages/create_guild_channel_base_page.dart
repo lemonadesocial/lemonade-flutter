@@ -1,10 +1,12 @@
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
+import 'package:app/core/presentation/widgets/lemon_text_field.dart';
+import 'package:app/gen/fonts.gen.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-
 import 'package:app/i18n/i18n.g.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 
@@ -35,8 +37,43 @@ class CreateGuildChannelBasePage extends StatelessWidget {
                     SliverToBoxAdapter(
                       child: Text(
                         t.chat.guild.createChannel,
+                        style: Typo.large.copyWith(
+                          fontSize: 26,
+                          color: colorScheme.onPrimary,
+                          fontFamily: FontFamily.nohemiVariable,
+                          fontWeight: FontWeight.w800,
+                        ),
                       ),
-                    )
+                    ),
+                    SliverPadding(
+                      padding: EdgeInsets.only(top: Spacing.superExtraSmall),
+                    ),
+                    SliverToBoxAdapter(
+                      child: Text(
+                        t.chat.guild.createChannelDescription,
+                        style: Typo.mediumPlus.copyWith(
+                          color: colorScheme.onSecondary,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ),
+                    const SliverPadding(
+                      padding: EdgeInsets.only(top: 30),
+                    ),
+                    SliverToBoxAdapter(
+                      child: LemonTextField(
+                        hintText: t.chat.guild.createChannel,
+                      ),
+                    ),
+                    SliverPadding(
+                      padding: EdgeInsets.only(top: Spacing.xSmall),
+                    ),
+                    SliverToBoxAdapter(
+                      child: LemonTextField(
+                        hintText: t.chat.guild.topicOfDiscussion,
+                        maxLines: 5,
+                      ),
+                    ),
                   ],
                 ),
               ),
