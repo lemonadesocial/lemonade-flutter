@@ -89,6 +89,8 @@ class _EventDiscountFormSettingPageView extends StatelessWidget {
           fetched: (event) => event,
         );
 
+    final createEventDiscountBloc = context.read<CreateEventDiscountBloc>();
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: LemonAppBar(
@@ -107,29 +109,24 @@ class _EventDiscountFormSettingPageView extends StatelessWidget {
               child: CustomScrollView(
                 slivers: [
                   SliverToBoxAdapter(
-                    child: BlocBuilder<CreateEventDiscountBloc,
-                        CreateEventDiscountState>(
-                      buildWhen: (previous, current) =>
-                          current.data.code != previous.data.code,
-                      builder: (context, state) => LemonTextField(
-                        readOnly: readOnly,
-                        initialText: state.data.code,
-                        onChange: (value) {
-                          context.read<CreateEventDiscountBloc>().add(
-                                CreateEventDiscountEvent.onCodeChanged(
-                                  code: value,
-                                ),
-                              );
-                        },
-                        inputFormatters: [
-                          // allow alphabet and numeric
-                          FilteringTextInputFormatter.deny(
-                            RegExp(r'[^a-zA-Z0-9]'),
-                          ),
-                          UpperCaseTextFormatter(),
-                        ],
-                        hintText: t.event.eventPromotions.accessCode,
-                      ),
+                    child: LemonTextField(
+                      readOnly: readOnly,
+                      initialText: createEventDiscountBloc.state.data.code,
+                      onChange: (value) {
+                        context.read<CreateEventDiscountBloc>().add(
+                              CreateEventDiscountEvent.onCodeChanged(
+                                code: value,
+                              ),
+                            );
+                      },
+                      inputFormatters: [
+                        // allow alphabet and numeric
+                        FilteringTextInputFormatter.deny(
+                          RegExp(r'[^a-zA-Z0-9]'),
+                        ),
+                        UpperCaseTextFormatter(),
+                      ],
+                      hintText: t.event.eventPromotions.accessCode,
                     ),
                   ),
                   SliverToBoxAdapter(

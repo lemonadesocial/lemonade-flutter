@@ -20,6 +20,8 @@ class DiscountLimitSettingForm extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+    final createEventDiscountBloc = context.read<CreateEventDiscountBloc>();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
@@ -32,42 +34,42 @@ class DiscountLimitSettingForm extends StatelessWidget {
           ),
         ),
         SizedBox(height: Spacing.xSmall),
-        BlocBuilder<CreateEventDiscountBloc, CreateEventDiscountState>(
-          builder: (context, state) => _Field(
-            readOnly: readOnly,
-            initalValue: (state.data.ticketLimit?.toInt() ?? 0).toString(),
-            title: t.event.eventPromotions.ticketLimit,
-            description: t.event.eventPromotions.ticketLimitDescription,
-            hintText: '100',
-            onChange: (value) {
-              final parsedValue =
-                  value.isNotEmpty == true ? double.parse(value) : 0;
-              context.read<CreateEventDiscountBloc>().add(
-                    CreateEventDiscountEvent.onTicketLimitChanged(
-                      ticketLimit: parsedValue.toDouble(),
-                    ),
-                  );
-            },
-          ),
+        _Field(
+          readOnly: readOnly,
+          initalValue:
+              (createEventDiscountBloc.state.data.ticketLimit?.toInt() ?? 0)
+                  .toString(),
+          title: t.event.eventPromotions.ticketLimit,
+          description: t.event.eventPromotions.ticketLimitDescription,
+          hintText: '100',
+          onChange: (value) {
+            final parsedValue =
+                value.isNotEmpty == true ? double.parse(value) : 0;
+            context.read<CreateEventDiscountBloc>().add(
+                  CreateEventDiscountEvent.onTicketLimitChanged(
+                    ticketLimit: parsedValue.toDouble(),
+                  ),
+                );
+          },
         ),
         SizedBox(height: Spacing.xSmall),
-        BlocBuilder<CreateEventDiscountBloc, CreateEventDiscountState>(
-          builder: (context, state) => _Field(
-            readOnly: readOnly,
-            initalValue: (state.data.ticketLimitPer?.toInt() ?? 0).toString(),
-            title: t.event.eventPromotions.ticketLimitPerGuest,
-            description: t.event.eventPromotions.ticketLimitPerGuestDescription,
-            hintText: '1',
-            onChange: (value) {
-              final parsedValue =
-                  value.isNotEmpty == true ? double.parse(value) : 0;
-              context.read<CreateEventDiscountBloc>().add(
-                    CreateEventDiscountEvent.onTicketLimitPerChanged(
-                      ticketLimitPer: parsedValue.toDouble(),
-                    ),
-                  );
-            },
-          ),
+        _Field(
+          readOnly: readOnly,
+          initalValue:
+              (createEventDiscountBloc.state.data.ticketLimitPer?.toInt() ?? 0)
+                  .toString(),
+          title: t.event.eventPromotions.ticketLimitPerGuest,
+          description: t.event.eventPromotions.ticketLimitPerGuestDescription,
+          hintText: '1',
+          onChange: (value) {
+            final parsedValue =
+                value.isNotEmpty == true ? double.parse(value) : 0;
+            context.read<CreateEventDiscountBloc>().add(
+                  CreateEventDiscountEvent.onTicketLimitPerChanged(
+                    ticketLimitPer: parsedValue.toDouble(),
+                  ),
+                );
+          },
         ),
       ],
     );
