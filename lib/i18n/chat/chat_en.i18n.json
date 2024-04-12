@@ -51,5 +51,7 @@
     "searchPeople": "Search people",
     "chatDetails": "Chat details",
     "leave": "Leave",
-    "roomNotExistDesc": "Oops! It seems like the chat room you are trying to access does not exist."
+    "roomNotExistDesc": "Oops! It seems like the chat room you are trying to access does not exist.",
+    "messages": "Messages",
+    "guilds": "Guilds"
 }

@@ -5,6 +5,7 @@ import 'package:app/core/presentation/widgets/chat/create_chat_button.dart';
 import 'package:app/core/presentation/widgets/chat/matrix_avatar.dart';
 import 'package:app/core/presentation/widgets/chat/spaces_drawer.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
+import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/service/matrix/matrix_service.dart';
 import 'package:app/core/utils/stream_extension.dart';
@@ -20,8 +21,22 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:matrix/matrix.dart';
 
+enum ChatListTabs {
+  messages(tabIndex: 0),
+  channels(tabIndex: 1),
+  guilds(tabIndex: 2);
+
+  const ChatListTabs({
+    required this.tabIndex,
+  });
+
+  final int tabIndex;
+}
+
 class ChatListPageView extends StatefulWidget {
-  const ChatListPageView({super.key});
+  const ChatListPageView({
+    super.key,
+  });
 
   @override
   State<ChatListPageView> createState() => _ChatListPageViewState();
@@ -30,11 +45,12 @@ class ChatListPageView extends StatefulWidget {
 class _ChatListPageViewState extends State<ChatListPageView>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  late int selectedTabIndex = ChatListTabs.messages.index;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
   }
 
   @override
@@ -104,6 +120,11 @@ class _ChatListPageViewState extends State<ChatListPageView>
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   TabBar(
+                    onTap: (index) {
+                      setState(() {
+                        selectedTabIndex = index;
+                      });
+                    },
                     controller: _tabController,
                     labelStyle: Typo.medium.copyWith(
                       color: colorScheme.onPrimary,
@@ -115,8 +136,9 @@ class _ChatListPageViewState extends State<ChatListPageView>
                     ),
                     indicatorColor: LemonColor.paleViolet,
                     tabs: [
-                      Tab(text: StringUtils.capitalize(t.chat.directMessages)),
+                      Tab(text: StringUtils.capitalize(t.chat.messages)),
                       Tab(text: StringUtils.capitalize(t.chat.channels)),
+                      Tab(text: StringUtils.capitalize(t.chat.guilds)),
                     ],
                   ),
                   SizedBox(height: Spacing.extraSmall),
@@ -143,6 +165,15 @@ class _ChatListPageViewState extends State<ChatListPageView>
                             ),
                           ],
                         ),
+                        CustomScrollView(
+                          slivers: [
+                            SliverToBoxAdapter(
+                              child: Center(
+                                child: Loading.defaultLoading(context),
+                              ),
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   ),
@@ -152,7 +183,8 @@ class _ChatListPageViewState extends State<ChatListPageView>
           ),
         ),
       ),
-      floatingActionButton: const CreateChatButton(),
+      floatingActionButton:
+          CreateChatButton(selectedTabIndex: selectedTabIndex),
     );
   }
 }
