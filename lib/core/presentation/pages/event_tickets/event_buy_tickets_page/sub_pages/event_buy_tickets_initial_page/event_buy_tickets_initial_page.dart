@@ -7,6 +7,7 @@ import 'package:app/core/domain/event/input/get_tickets_input/get_tickets_input.
 import 'package:app/core/domain/event/repository/event_ticket_repository.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/utils/auth_utils.dart';
+import 'package:app/core/utils/event_utils.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:auto_route/auto_route.dart';
@@ -50,6 +51,7 @@ class EventBuyTicketsInitialPageView extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final event = context.read<EventProviderBloc>().event;
     final isBuyMore = context.read<EventBuyAdditionalTicketsBloc>().isBuyMore;
+    final userId = AuthUtils.getUserId(context);
 
     return BlocListener<GetMyTicketsBloc, GetMyTicketsState>(
       listener: (context, state) {
@@ -63,7 +65,10 @@ class EventBuyTicketsInitialPageView extends StatelessWidget {
           success: (eventTickets) async {
             if (eventTickets.isNotEmpty && !isBuyMore) {
               AutoRouter.of(context).replace(
-                const EventPickMyTicketRoute(),
+                EventUtils.getAssignTicketsRouteForBuyFlow(
+                  event: event,
+                  userId: userId,
+                ),
               );
               return;
             }

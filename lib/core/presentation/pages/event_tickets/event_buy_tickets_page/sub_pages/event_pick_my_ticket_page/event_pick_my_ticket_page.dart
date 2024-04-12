@@ -13,9 +13,7 @@ import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
-import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/core/utils/event_tickets_utils.dart';
-import 'package:app/core/utils/event_utils.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -35,16 +33,6 @@ class EventPickMyTicketPage extends StatefulWidget {
 }
 
 class _EventPickMyTicketPageState extends State<EventPickMyTicketPage> {
-  @override
-  void initState() {
-    super.initState();
-    final event = context.read<EventProviderBloc>().event;
-    final userId = AuthUtils.getUserId(context);
-    if (EventUtils.isAttending(event: event, userId: userId)) {
-      AutoRouter.of(context).replaceAll([const EventTicketManagementRoute()]);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final event = context.read<EventProviderBloc>().event;

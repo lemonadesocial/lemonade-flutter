@@ -1,6 +1,8 @@
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/event_enums.dart';
 import 'package:app/core/utils/image_utils.dart';
+import 'package:app/router/app_router.gr.dart';
+import 'package:auto_route/auto_route.dart';
 
 class EventUtils {
   static bool isAttending({required Event event, required String userId}) {
@@ -56,5 +58,16 @@ class EventUtils {
     required String userId,
   }) {
     return (event.invited ?? []).contains(userId);
+  }
+
+  static PageRouteInfo getAssignTicketsRouteForBuyFlow({
+    required Event event,
+    required userId,
+  }) {
+    // this case is for when users buy additional tickets
+    if (isAttending(event: event, userId: userId)) {
+      return const EventTicketManagementRoute();
+    }
+    return const EventPickMyTicketRoute();
   }
 }

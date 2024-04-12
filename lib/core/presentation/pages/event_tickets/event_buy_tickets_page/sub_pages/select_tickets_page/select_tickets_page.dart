@@ -196,6 +196,7 @@ class _SelectTicketViewState extends State<SelectTicketView> {
   void _handleRedeemMultipleTicketsSuccess({
     int? ticketsCount,
   }) {
+    final userId = AuthUtils.getUserId(context);
     AutoRouter.of(context).replaceAll(
       [
         RSVPEventSuccessPopupRoute(
@@ -208,7 +209,10 @@ class _SelectTicketViewState extends State<SelectTicketView> {
               : null,
           buttonBuilder: (newContext) => LinearGradientButton(
             onTap: () => AutoRouter.of(newContext).replace(
-              const EventPickMyTicketRoute(),
+              EventUtils.getAssignTicketsRouteForBuyFlow(
+                event: widget.event,
+                userId: userId,
+              ),
             ),
             height: Sizing.large,
             textStyle: Typo.medium.copyWith(

@@ -133,7 +133,10 @@ class EventTicketsSummaryPageView extends StatelessWidget {
               : null,
           buttonBuilder: (newContext) => LinearGradientButton(
             onTap: () => AutoRouter.of(newContext).replace(
-              const EventPickMyTicketRoute(),
+              EventUtils.getAssignTicketsRouteForBuyFlow(
+                event: event,
+                userId: userId,
+              ),
             ),
             height: Sizing.large,
             textStyle: Typo.medium.copyWith(
