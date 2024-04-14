@@ -1,6 +1,7 @@
 import 'package:app/core/application/chat/chat_list_bloc/chat_list_bloc.dart';
 import 'package:app/core/application/chat/chat_space_bloc/chat_space_bloc.dart';
 import 'package:app/core/application/chat/get_guild_rooms_bloc/get_guild_rooms_bloc.dart';
+import 'package:app/core/presentation/pages/chat/chat_list/views/widgets/check_guild_room_roles_bottomsheet.dart';
 import 'package:app/core/presentation/pages/chat/chat_list/widgets/chat_list_item.dart';
 import 'package:app/core/presentation/pages/chat/chat_list/widgets/guild_room_item.dart';
 import 'package:app/core/presentation/widgets/chat/create_chat_button.dart';
@@ -23,6 +24,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:matrix/matrix.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 enum ChatListTabs {
   messages(tabIndex: 0),
@@ -190,6 +192,20 @@ class _ChatListPageViewState extends State<ChatListPageView>
                                       itemBuilder: (context, index) =>
                                           GuildRoomItem(
                                         guildRoom: guildRooms[index],
+                                        onTap: () {
+                                          showCupertinoModalBottomSheet(
+                                            barrierColor: LemonColor.black50,
+                                            bounce: true,
+                                            backgroundColor:
+                                                LemonColor.atomicBlack,
+                                            context: context,
+                                            builder: (newContext) {
+                                              return CheckGuildRoomRolesBottomSheet(
+                                                onEnterChannel: () {},
+                                              );
+                                            },
+                                          );
+                                        },
                                       ),
                                       separatorBuilder: (context, index) =>
                                           SizedBox(height: Spacing.extraSmall),

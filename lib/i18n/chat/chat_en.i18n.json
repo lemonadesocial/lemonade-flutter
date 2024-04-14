@@ -65,6 +65,8 @@
         "allowAccessTo": "Allow access to",
         "pleaseWaitCreateChannel": "Please wait while we create your channel. This should only take a few seconds.",
         "channelName": "Channel name",
-        "topicOfDiscussion": "Topic of discussion"
+        "topicOfDiscussion": "Topic of discussion",
+        "citizenOnlyAccess": "Citizen-only access",
+        "citizenOnlyAccessDescription": "This channel is locked. Complete steps below to enter!"
     }
 }
