@@ -50,18 +50,6 @@ class GuildRoomItem extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(
-              width: Spacing.xSmall,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  guildRoom.createdAt!.localizedTimeShort(context),
-                  style: Typo.small.copyWith(color: LemonColor.paleViolet),
-                ),
-              ],
-            ),
           ],
         ),
       ),

@@ -185,8 +185,6 @@ class _ChatListPageViewState extends State<ChatListPageView>
                                     ),
                                   ),
                                   success: (guildRooms) {
-                                    print("RENDER guildRooms");
-                                    print(guildRooms.length);
                                     return SliverList.separated(
                                       itemCount: guildRooms.length,
                                       itemBuilder: (context, index) =>
