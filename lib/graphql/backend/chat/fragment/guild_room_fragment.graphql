@@ -1,0 +1,11 @@
+fragment GuildRoom on GuildRoom {
+    id: _id
+    createdAt: created_at
+    createdBy: created_by
+    title
+    guildId: guild_id
+    guildRoleIds: guild_role_ids
+    guildRoleRequireAll: guild_role_require_all
+    joins
+    matrixRoomId: matrix_room_id
+}

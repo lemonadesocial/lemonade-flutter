@@ -1,10 +1,13 @@
 import 'package:app/core/application/chat/chat_list_bloc/chat_list_bloc.dart';
 import 'package:app/core/application/chat/chat_space_bloc/chat_space_bloc.dart';
+import 'package:app/core/application/chat/get_guild_rooms_bloc/get_guild_rooms_bloc.dart';
 import 'package:app/core/presentation/pages/chat/chat_list/widgets/chat_list_item.dart';
+import 'package:app/core/presentation/pages/chat/chat_list/widgets/guild_room_item.dart';
 import 'package:app/core/presentation/widgets/chat/create_chat_button.dart';
 import 'package:app/core/presentation/widgets/chat/matrix_avatar.dart';
 import 'package:app/core/presentation/widgets/chat/spaces_drawer.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
+import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/service/matrix/matrix_service.dart';
@@ -167,10 +170,37 @@ class _ChatListPageViewState extends State<ChatListPageView>
                         ),
                         CustomScrollView(
                           slivers: [
-                            SliverToBoxAdapter(
-                              child: Center(
-                                child: Loading.defaultLoading(context),
-                              ),
+                            BlocBuilder<GetGuildRoomsBloc, GetGuildRoomsState>(
+                              builder: (context, guildRoomsState) {
+                                print(">>>>> ");
+                                print(guildRoomsState);
+                                return guildRoomsState.maybeWhen(
+                                  orElse: () => const SliverToBoxAdapter(
+                                    child: SizedBox.shrink(),
+                                  ),
+                                  loading: () => SliverToBoxAdapter(
+                                    child: Loading.defaultLoading(context),
+                                  ),
+                                  failure: () => SliverToBoxAdapter(
+                                    child: EmptyList(
+                                      emptyText: t.common.somethingWrong,
+                                    ),
+                                  ),
+                                  success: (guildRooms) {
+                                    print("RENDER guildRooms");
+                                    print(guildRooms.length);
+                                    return SliverList.separated(
+                                      itemCount: guildRooms.length,
+                                      itemBuilder: (context, index) =>
+                                          GuildRoomItem(
+                                        guildRoom: guildRooms[index],
+                                      ),
+                                      separatorBuilder: (context, index) =>
+                                          SizedBox(height: Spacing.extraSmall),
+                                    );
+                                  },
+                                );
+                              },
                             ),
                           ],
                         ),

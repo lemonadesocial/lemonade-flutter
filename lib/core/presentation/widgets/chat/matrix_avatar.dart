@@ -51,9 +51,9 @@ class MatrixAvatar extends StatelessWidget {
       child: Text(
         fallbackLetters,
         style: TextStyle(
-          color: noPic ? Colors.white : null,
-          fontSize: fontSize,
-        ),
+            color: noPic ? Colors.white : null,
+            fontSize: fontSize,
+            fontWeight: FontWeight.w600),
       ),
     );
     final borderRadius = BorderRadius.circular(radius ?? LemonRadius.xSmall);
@@ -63,7 +63,7 @@ class MatrixAvatar extends StatelessWidget {
         Container(
           decoration: BoxDecoration(
             border: Border.all(
-              color: LemonColor.white15,
+              color: LemonColor.white09,
             ),
             borderRadius: borderRadius,
           ),
@@ -121,28 +121,6 @@ class MatrixAvatar extends StatelessWidget {
       );
     }
     // For chat group case
-    return Positioned(
-      bottom: -3.w,
-      right: -3.w,
-      child: Container(
-        width: 21.w,
-        height: 21.w,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
-          color: LemonColor.chineseBlack,
-          border: Border.all(
-            width: 3.w,
-          ),
-        ),
-        child: Center(
-          child: Text(
-            '#',
-            style: Typo.xSmall.copyWith(
-              color: colorScheme.onSecondary,
-            ),
-          ),
-        ),
-      ),
-    );
+    return const SizedBox.shrink();
   }
 }
