@@ -22,8 +22,6 @@ class ChatRepositoryImpl implements ChatRepository {
     if (result.hasException) {
       return Left(Failure.withGqlException(result.exception));
     }
-    print(">>>>>>>>>>> LOLLL");
-    print(result.parsedData?.getGuildRooms);
     try {
       return Right(
         (result.parsedData?.getGuildRooms ?? [])

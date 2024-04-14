@@ -172,8 +172,6 @@ class _ChatListPageViewState extends State<ChatListPageView>
                           slivers: [
                             BlocBuilder<GetGuildRoomsBloc, GetGuildRoomsState>(
                               builder: (context, guildRoomsState) {
-                                print(">>>>> ");
-                                print(guildRoomsState);
                                 return guildRoomsState.maybeWhen(
                                   orElse: () => const SliverToBoxAdapter(
                                     child: SizedBox.shrink(),
