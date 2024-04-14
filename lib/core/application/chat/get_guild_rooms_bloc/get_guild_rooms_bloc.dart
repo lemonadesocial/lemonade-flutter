@@ -18,11 +18,8 @@ class GetGuildRoomsBloc extends Bloc<GetGuildRoomsEvent, GetGuildRoomsState> {
     GetGuildRoomsEventFetch event,
     Emitter emit,
   ) async {
-    print("???? ON FECH");
     emit(GetGuildRoomsState.loading());
     final result = await _chatRepository.getGuildRooms();
-    print("> RESULT COMING");
-    print(result);
     result.fold(
       (failure) => emit(GetGuildRoomsState.failure()),
       (data) => emit(

@@ -10,10 +10,10 @@ class GuildRoom with _$GuildRoom {
     DateTime? createdAt,
     String? createdBy,
     String? title,
-    double? guildId,
-    List<double>? guildRoleIds,
+    num? guildId,
+    List<num>? guildRoleIds,
     bool? guildRoleRequireAll,
-    double? joins,
+    num? joins,
     String? matrixRoomId,
   }) = _GuildRoom;
 

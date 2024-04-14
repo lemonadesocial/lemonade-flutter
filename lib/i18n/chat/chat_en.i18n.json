@@ -67,6 +67,9 @@
         "channelName": "Channel name",
         "topicOfDiscussion": "Topic of discussion",
         "citizenOnlyAccess": "Citizen-only access",
-        "citizenOnlyAccessDescription": "This channel is locked. Complete steps below to enter!"
+        "citizenOnlyAccessDescription": "This channel is locked. Complete steps below to enter!",
+        "incomplete": "Incomplete",
+        "complete": "Complete",
+        "enterChannel": "Enter Channel"
     }
 }
