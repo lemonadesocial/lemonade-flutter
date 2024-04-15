@@ -1,10 +1,8 @@
 import 'package:app/core/application/event_tickets/get_my_tickets_bloc/get_my_tickets_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
-import 'package:app/core/domain/event/input/get_tickets_input/get_tickets_input.dart';
 import 'package:app/core/presentation/pages/event/my_event_ticket_page/widgets/ticket_qr_code_popup.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
-import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/core/utils/event_tickets_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -33,30 +31,16 @@ class GuestEventDetailBasicInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userId = AuthUtils.getUserId(context);
-
-    return BlocProvider(
-      create: (context) => GetMyTicketsBloc(
-        input: GetTicketsInput(
-          event: event.id,
-          user: userId,
-          skip: 0,
-          limit: 100,
+    return Column(
+      children: [
+        _EventCountDown(
+          event: event,
         ),
-      )..add(
-          GetMyTicketsEvent.fetch(),
-        ),
-      child: Column(
-        children: [
-          _EventCountDown(
-            event: event,
-          ),
-          SizedBox(height: Spacing.extraSmall),
-          const _CheckinButton(),
-          SizedBox(height: Spacing.extraSmall),
-          _AssignTicketsButton(event: event),
-        ],
-      ),
+        SizedBox(height: Spacing.extraSmall),
+        const _CheckinButton(),
+        SizedBox(height: Spacing.extraSmall),
+        _AssignTicketsButton(event: event),
+      ],
     );
   }
 }

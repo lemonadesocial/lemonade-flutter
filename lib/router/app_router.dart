@@ -367,6 +367,9 @@ final eventBuyTicketsRoutes = AutoRoute(
       page: RSVPEventSuccessPopupRoute.page,
       meta: const {'popBlocked': true},
     ),
+    AutoRoute(
+      page: MyEventTicketAssignmentRoute.page,
+    ),
   ],
 );
 
