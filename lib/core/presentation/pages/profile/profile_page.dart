@@ -43,8 +43,9 @@ class ProfilePage extends StatelessWidget {
             return state.maybeWhen(
               fetched: (userProfile) {
                 final loggedInUser = AuthUtils.getUser(context);
-                final blockedIdList =
-                    (loggedInUser?.blockedList ?? []).map((e) => e.userId).toList();
+                final blockedIdList = (loggedInUser?.blockedList ?? [])
+                    .map((e) => e.userId)
+                    .toList();
                 if (blockedIdList.contains(userProfile.userId)) {
                   return Scaffold(
                     appBar: const LemonAppBar(leading: LemonBackButton()),
