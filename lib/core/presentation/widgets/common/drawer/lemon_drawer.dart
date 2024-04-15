@@ -22,185 +22,188 @@ class LemonDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    return SafeArea(
-      child: Drawer(
-        width: MediaQuery.of(context).size.width,
-        backgroundColor: colorScheme.primary,
-        child: Scaffold(
-          backgroundColor: colorScheme.primary,
-          appBar: LemonAppBar(
-            title: '',
-            leading: const LemonBackButton(),
-            actions: [
-              Padding(
-                padding: EdgeInsets.only(right: Spacing.smMedium),
-                child: InkWell(
-                  onTap: () {
-                    Navigator.of(context, rootNavigator: true).pop();
-                    Vibrate.feedback(FeedbackType.light);
-                    AutoRouter.of(context).navigate(const SettingRoute());
-                  },
-                  child: ThemeSvgIcon(
-                    color: colorScheme.onSurface,
-                    builder: (filter) => Assets.icons.icSettings.svg(
-                      width: 24.h,
-                      height: 24.h,
+    return Container(
+      color: colorScheme.background,
+      child: SafeArea(
+        child: Drawer(
+          width: MediaQuery.of(context).size.width,
+          child: Scaffold(
+            appBar: LemonAppBar(
+              title: '',
+              leading: const LemonBackButton(),
+              actions: [
+                Padding(
+                  padding: EdgeInsets.only(right: Spacing.smMedium),
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context, rootNavigator: true).pop();
+                      Vibrate.feedback(FeedbackType.light);
+                      AutoRouter.of(context).navigate(const SettingRoute());
+                    },
+                    child: ThemeSvgIcon(
+                      color: colorScheme.onSurface,
+                      builder: (filter) => Assets.icons.icSettings.svg(
+                        width: 24.h,
+                        height: 24.h,
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          body: SingleChildScrollView(
-            child: SafeArea(
-              minimum: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const LemonDrawerProfileInfo(),
-                  SizedBox(
-                    height: 30.h,
-                  ),
-                  LemonDrawerTileWidget(
-                    title: t.common.vaults,
-                    leading: ThemeSvgIcon(
-                      color: colorScheme.onPrimary,
-                      builder: (filter) {
-                        return Assets.icons.icBank
-                            .svg(colorFilter: filter, width: 18, height: 18);
+              ],
+            ),
+            body: SingleChildScrollView(
+              child: SafeArea(
+                minimum: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const LemonDrawerProfileInfo(),
+                    SizedBox(
+                      height: 30.h,
+                    ),
+                    LemonDrawerTileWidget(
+                      title: t.common.vaults,
+                      leading: ThemeSvgIcon(
+                        color: colorScheme.onPrimary,
+                        builder: (filter) {
+                          return Assets.icons.icBank
+                              .svg(colorFilter: filter, width: 18, height: 18);
+                        },
+                      ),
+                      featureAvailable: true,
+                      trailing: Assets.icons.icArrowBack.svg(
+                        width: 18.w,
+                        height: 18.w,
+                      ),
+                      onTap: () {
+                        Vibrate.feedback(FeedbackType.light);
+                        context.read<AuthBloc>().state.maybeWhen(
+                              authenticated: (authSession) =>
+                                  context.router.push(
+                                const VaultsListingRoute(),
+                              ),
+                              orElse: () => context.router.navigate(
+                                const LoginRoute(),
+                              ),
+                            );
                       },
                     ),
-                    featureAvailable: true,
-                    trailing: Assets.icons.icArrowBack.svg(
-                      width: 18.w,
-                      height: 18.w,
+                    SizedBox(
+                      height: Spacing.xSmall,
                     ),
-                    onTap: () {
-                      Vibrate.feedback(FeedbackType.light);
-                      context.read<AuthBloc>().state.maybeWhen(
-                            authenticated: (authSession) => context.router.push(
-                              const VaultsListingRoute(),
-                            ),
-                            orElse: () => context.router.navigate(
-                              const LoginRoute(),
-                            ),
+                    LemonDrawerTileWidget(
+                      title: t.common.community.capitalize(),
+                      leading: ThemeSvgIcon(
+                        color: colorScheme.onPrimary,
+                        builder: (filter) {
+                          return Assets.icons.icPeopleAlt.svg(
+                            colorFilter: filter,
+                            width: 18.w,
+                            height: 18.w,
                           );
-                    },
-                  ),
-                  SizedBox(
-                    height: Spacing.xSmall,
-                  ),
-                  LemonDrawerTileWidget(
-                    title: t.common.community.capitalize(),
-                    leading: ThemeSvgIcon(
-                      color: colorScheme.onPrimary,
-                      builder: (filter) {
-                        return Assets.icons.icPeopleAlt.svg(
-                          colorFilter: filter,
-                          width: 18.w,
-                          height: 18.w,
-                        );
+                        },
+                      ),
+                      featureAvailable: true,
+                      trailing: Assets.icons.icArrowBack.svg(
+                        width: 18.w,
+                        height: 18.w,
+                      ),
+                      onTap: () {
+                        Vibrate.feedback(FeedbackType.light);
+                        context.read<AuthBloc>().state.maybeWhen(
+                              authenticated: (authSession) =>
+                                  context.router.push(const CommunityRoute()),
+                              orElse: () => context.router.navigate(
+                                const LoginRoute(),
+                              ),
+                            );
                       },
                     ),
-                    featureAvailable: true,
-                    trailing: Assets.icons.icArrowBack.svg(
-                      width: 18.w,
-                      height: 18.w,
+                    SizedBox(
+                      height: Spacing.xSmall,
                     ),
-                    onTap: () {
-                      Vibrate.feedback(FeedbackType.light);
-                      context.read<AuthBloc>().state.maybeWhen(
-                            authenticated: (authSession) =>
-                                context.router.push(const CommunityRoute()),
-                            orElse: () => context.router.navigate(
-                              const LoginRoute(),
-                            ),
+                    LemonDrawerTileWidget(
+                      title: t.event.events.capitalize(),
+                      leading: ThemeSvgIcon(
+                        color: colorScheme.onPrimary,
+                        builder: (filter) {
+                          return Assets.icons.icHouseParty.svg(
+                            colorFilter: filter,
+                            width: 18.w,
+                            height: 18.w,
                           );
-                    },
-                  ),
-                  SizedBox(
-                    height: Spacing.xSmall,
-                  ),
-                  LemonDrawerTileWidget(
-                    title: t.event.events.capitalize(),
-                    leading: ThemeSvgIcon(
-                      color: colorScheme.onPrimary,
-                      builder: (filter) {
-                        return Assets.icons.icHouseParty.svg(
-                          colorFilter: filter,
-                          width: 18.w,
-                          height: 18.w,
-                        );
+                        },
+                      ),
+                      featureAvailable: true,
+                      trailing: Assets.icons.icArrowBack.svg(
+                        width: 18.w,
+                        height: 18.w,
+                      ),
+                      onTap: () {
+                        Vibrate.feedback(FeedbackType.light);
+                        context.read<AuthBloc>().state.maybeWhen(
+                              authenticated: (authSession) =>
+                                  AutoRouter.of(context)
+                                      .navigate(const MyEventsRoute()),
+                              orElse: () => context.router.navigate(
+                                const LoginRoute(),
+                              ),
+                            );
                       },
                     ),
-                    featureAvailable: true,
-                    trailing: Assets.icons.icArrowBack.svg(
-                      width: 18.w,
-                      height: 18.w,
+                    SizedBox(
+                      height: Spacing.xSmall,
                     ),
-                    onTap: () {
-                      Vibrate.feedback(FeedbackType.light);
-                      context.read<AuthBloc>().state.maybeWhen(
-                            authenticated: (authSession) =>
-                                AutoRouter.of(context)
-                                    .navigate(const MyEventsRoute()),
-                            orElse: () => context.router.navigate(
-                              const LoginRoute(),
-                            ),
+                    LemonDrawerTileWidget(
+                      title: t.common.ticket(n: 2).capitalize(),
+                      leading: ThemeSvgIcon(
+                        color: colorScheme.onPrimary,
+                        builder: (filter) {
+                          return Assets.icons.icTicket.svg(
+                            colorFilter: filter,
+                            width: 18.h,
+                            height: 18.w,
                           );
-                    },
-                  ),
-                  SizedBox(
-                    height: Spacing.xSmall,
-                  ),
-                  LemonDrawerTileWidget(
-                    title: t.common.ticket(n: 2).capitalize(),
-                    leading: ThemeSvgIcon(
-                      color: colorScheme.onPrimary,
-                      builder: (filter) {
-                        return Assets.icons.icTicket.svg(
-                          colorFilter: filter,
-                          width: 18.h,
-                          height: 18.w,
-                        );
+                        },
+                      ),
+                      trailing: Assets.icons.icArrowBack.svg(
+                        width: 18.w,
+                        height: 18.w,
+                      ),
+                      featureAvailable: true,
+                      onTap: () {
+                        Vibrate.feedback(FeedbackType.light);
+                        context.read<AuthBloc>().state.maybeWhen(
+                              authenticated: (authSession) =>
+                                  context.router.push(
+                                MyEventTicketsListRoute(),
+                              ),
+                              orElse: () => context.router.navigate(
+                                const LoginRoute(),
+                              ),
+                            );
                       },
                     ),
-                    trailing: Assets.icons.icArrowBack.svg(
-                      width: 18.w,
-                      height: 18.w,
+                    SizedBox(
+                      height: Spacing.xSmall,
                     ),
-                    featureAvailable: true,
-                    onTap: () {
-                      Vibrate.feedback(FeedbackType.light);
-                      context.read<AuthBloc>().state.maybeWhen(
-                            authenticated: (authSession) => context.router.push(
-                              MyEventTicketsListRoute(),
-                            ),
-                            orElse: () => context.router.navigate(
-                              const LoginRoute(),
-                            ),
-                          );
-                    },
-                  ),
-                  SizedBox(
-                    height: Spacing.xSmall,
-                  ),
-                  LemonDrawerTileWidget(
-                    title: t.common.dashboard.capitalize(),
-                    leading: ThemeSvgIcon(
-                      color: colorScheme.onPrimary,
-                      builder: (filter) {
-                        return Assets.icons.icInsights
-                            .svg(colorFilter: filter, width: 18, height: 18);
+                    LemonDrawerTileWidget(
+                      title: t.common.dashboard.capitalize(),
+                      leading: ThemeSvgIcon(
+                        color: colorScheme.onPrimary,
+                        builder: (filter) {
+                          return Assets.icons.icInsights
+                              .svg(colorFilter: filter, width: 18, height: 18);
+                        },
+                      ),
+                      featureAvailable: false,
+                      onTap: () {
+                        Vibrate.feedback(FeedbackType.light);
+                        SnackBarUtils.showComingSoon();
                       },
                     ),
-                    featureAvailable: false,
-                    onTap: () {
-                      Vibrate.feedback(FeedbackType.light);
-                      SnackBarUtils.showComingSoon();
-                    },
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
