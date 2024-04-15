@@ -1,5 +1,7 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
+import 'package:app/core/application/event_tickets/get_my_tickets_bloc/get_my_tickets_bloc.dart';
+import 'package:app/core/domain/event/input/get_tickets_input/get_tickets_input.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/views/post_guest_event_detail_view.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/views/pre_guest_event_detail_view.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/view/host_event_detail_view.dart';
@@ -62,7 +64,19 @@ class _EventDetailBasePageView extends StatelessWidget {
             return const HostEventDetailView();
           }
           return isAttending
-              ? const PostGuestEventDetailView()
+              ? BlocProvider(
+                  create: (context) => GetMyTicketsBloc(
+                    input: GetTicketsInput(
+                      event: event.id,
+                      user: userId,
+                      skip: 0,
+                      limit: 100,
+                    ),
+                  )..add(
+                      GetMyTicketsEvent.fetch(),
+                    ),
+                  child: const PostGuestEventDetailView(),
+                )
               : const PreGuestEventDetailView();
         },
       ),

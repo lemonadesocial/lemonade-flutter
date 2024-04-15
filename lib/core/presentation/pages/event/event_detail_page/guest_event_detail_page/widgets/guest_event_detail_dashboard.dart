@@ -1,3 +1,4 @@
+import 'package:app/core/application/event_tickets/get_my_tickets_bloc/get_my_tickets_bloc.dart';
 import 'package:app/core/config.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/widgets/event/event_dashboard_item.dart';
@@ -10,6 +11,7 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:intl/intl.dart';
@@ -83,14 +85,17 @@ class GuestEventDetailDashboard extends StatelessWidget {
         EventDashboardItem(
           icon: Assets.icons.icMoreTicketsGradient
               .svg(width: Sizing.small, height: Sizing.small),
-          onTap: () {
+          onTap: () async {
             Vibrate.feedback(FeedbackType.light);
-            AutoRouter.of(context).push(
+            await AutoRouter.of(context).push(
               EventBuyTicketsRoute(
                 event: event,
                 isBuyMore: true,
               ),
             );
+            context.read<GetMyTicketsBloc>().add(
+                  GetMyTicketsEvent.fetch(),
+                );
           },
         ),
         SizedBox(width: 10.w),

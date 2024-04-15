@@ -66,7 +66,9 @@ class EventUtils {
   }) {
     // this case is for when users buy additional tickets
     if (isAttending(event: event, userId: userId)) {
-      return const EventTicketManagementRoute();
+      return MyEventTicketAssignmentRoute(
+        event: event,
+      );
     }
     return const EventPickMyTicketRoute();
   }
