@@ -5,6 +5,7 @@ import 'package:app/core/presentation/widgets/chat/create_chat_button.dart';
 import 'package:app/core/presentation/widgets/chat/matrix_avatar.dart';
 import 'package:app/core/presentation/widgets/chat/spaces_drawer.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
+import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/service/matrix/matrix_service.dart';
 import 'package:app/core/utils/stream_extension.dart';
@@ -131,6 +132,7 @@ class _ChatListPageViewState extends State<ChatListPageView>
                                   StringUtils.capitalize(t.chat.directMessages),
                               rooms: chatListState.dmRooms,
                               itemBuilder: (room) => ChatListItem(room: room),
+                              emptyText: t.chat.emptyDirectMessages,
                             ),
                           ],
                         ),
@@ -140,6 +142,7 @@ class _ChatListPageViewState extends State<ChatListPageView>
                               title: StringUtils.capitalize(t.chat.channels),
                               rooms: chatListState.channelRooms,
                               itemBuilder: (room) => ChatListItem(room: room),
+                              emptyText: t.chat.emptyChannels,
                             ),
                           ],
                         ),
@@ -162,14 +165,22 @@ class _ChatListSection extends StatelessWidget {
     required this.title,
     required this.rooms,
     required this.itemBuilder,
+    this.emptyText,
   });
 
   final String title;
   final List<Room> rooms;
   final Widget Function(Room room) itemBuilder;
+  final String? emptyText;
 
   @override
   Widget build(BuildContext context) {
+    if (rooms.isEmpty) {
+      return SliverToBoxAdapter(
+        child: EmptyList(emptyText: emptyText),
+      );
+    }
+
     return SliverList.separated(
       itemCount: rooms.length,
       itemBuilder: (context, index) => itemBuilder(rooms[index]),
