@@ -38,12 +38,19 @@ class EventProgramPageState extends State<EventProgramPage> {
       orElse: () => Event(),
     );
 
-    final eventSessions = (event.sessions ?? []).map(
-      (session) => session.copyWith(
-        start: session.start?.toLocal(),
-        end: session.end?.toLocal(),
-      ),
-    );
+    final eventSessions = (event.sessions ?? [])
+        .map(
+          (session) => session.copyWith(
+            start: session.start?.toLocal(),
+            end: session.end?.toLocal(),
+          ),
+        )
+        .toList()
+      ..sort(
+        (a, b) => (a.start ?? DateTime.now()).compareTo(
+          b.start ?? DateTime.now(),
+        ),
+      );
 
     List<String> sessionDays = eventSessions
         .map(
