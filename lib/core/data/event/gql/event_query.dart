@@ -200,7 +200,6 @@ const eventFragment = '''
       currency
       network
       cost
-      decimals
     }
   }
   ...eventPeopleFragment
