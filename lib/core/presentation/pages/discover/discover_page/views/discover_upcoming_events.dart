@@ -25,6 +25,7 @@ class DiscoverUpcomingEvents extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
+    final colorScheme = Theme.of(context).colorScheme;
     return MultiSliver(
       children: [
         SliverPadding(
@@ -36,6 +37,7 @@ class DiscoverUpcomingEvents extends StatelessWidget {
             child: Text(
               t.discover.upcomingEvents,
               style: Typo.medium.copyWith(
+                color: colorScheme.onPrimary,
                 fontWeight: FontWeight.w600,
               ),
             ),

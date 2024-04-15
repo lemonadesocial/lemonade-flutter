@@ -1,6 +1,7 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/config.dart';
 import 'package:app/core/domain/user/entities/user.dart';
+import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -66,9 +67,10 @@ class LemonDrawerProfileInfo extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            OutlinedButton.icon(
-              onPressed: () => _onPressEditProfile(context, authSession),
-              icon: ThemeSvgIcon(
+            LemonOutlineButton(
+              onTap: () => _onPressEditProfile(context, authSession),
+              padding: EdgeInsets.symmetric(horizontal: Spacing.small),
+              leading: ThemeSvgIcon(
                 color: colorScheme.onPrimary,
                 builder: (filter) => Assets.icons.icEdit.svg(
                   colorFilter: filter,
@@ -76,24 +78,17 @@ class LemonDrawerProfileInfo extends StatelessWidget {
                   height: 15.w,
                 ),
               ),
-              label: Text(
-                t.common.actions.edit.capitalize(),
-                style: Typo.small.copyWith(color: colorScheme.onPrimary),
-              ),
-              style: ButtonStyle(
-                shape: MaterialStateProperty.all(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18.r),
-                  ),
-                ),
-              ),
+              label: t.common.actions.edit.capitalize(),
+              textStyle: Typo.small.copyWith(color: colorScheme.onPrimary),
+              radius: BorderRadius.circular(LemonRadius.button),
             ),
             SizedBox(
               width: 9.w,
             ),
-            OutlinedButton.icon(
-              onPressed: () => _onPressQRCode(context),
-              icon: ThemeSvgIcon(
+            LemonOutlineButton(
+              onTap: () => _onPressQRCode(context),
+              padding: EdgeInsets.symmetric(horizontal: Spacing.small),
+              leading: ThemeSvgIcon(
                 color: colorScheme.onPrimary,
                 builder: (filter) => Assets.icons.icQr.svg(
                   colorFilter: filter,
@@ -101,24 +96,17 @@ class LemonDrawerProfileInfo extends StatelessWidget {
                   height: 15.w,
                 ),
               ),
-              label: Text(
-                t.common.qrCode,
-                style: Typo.small.copyWith(color: colorScheme.onPrimary),
-              ),
-              style: ButtonStyle(
-                shape: MaterialStateProperty.all(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18.r),
-                  ),
-                ),
-              ),
+              label: t.common.qrCode,
+              textStyle: Typo.small.copyWith(color: colorScheme.onPrimary),
+              radius: BorderRadius.circular(LemonRadius.button),
             ),
             SizedBox(
               width: 9.w,
             ),
-            OutlinedButton.icon(
-              onPressed: () => _onPressShare(context, authSession),
-              icon: ThemeSvgIcon(
+            LemonOutlineButton(
+              onTap: () => _onPressShare(context, authSession),
+              padding: EdgeInsets.symmetric(horizontal: Spacing.small),
+              leading: ThemeSvgIcon(
                 color: colorScheme.onPrimary,
                 builder: (filter) => Assets.icons.icShare.svg(
                   colorFilter: filter,
@@ -126,17 +114,9 @@ class LemonDrawerProfileInfo extends StatelessWidget {
                   height: 15.w,
                 ),
               ),
-              label: Text(
-                t.common.actions.share.capitalize(),
-                style: Typo.small.copyWith(color: colorScheme.onPrimary),
-              ),
-              style: ButtonStyle(
-                shape: MaterialStateProperty.all(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18.r),
-                  ),
-                ),
-              ),
+              label: t.common.actions.share.capitalize(),
+              textStyle: Typo.small.copyWith(color: colorScheme.onPrimary),
+              radius: BorderRadius.circular(LemonRadius.button),
             ),
           ],
         ),
