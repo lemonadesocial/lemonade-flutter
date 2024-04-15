@@ -55,3 +55,13 @@ class GuildRequirement with _$GuildRequirement {
   factory GuildRequirement.fromJson(Map<String, dynamic> json) =>
       _$GuildRequirementFromJson(json);
 }
+
+@freezed
+class GuildRolePermission with _$GuildRolePermission {
+  @JsonSerializable(explicitToJson: true)
+  const factory GuildRolePermission({int? roleId, bool? access}) =
+      _GuildRolePermission;
+
+  factory GuildRolePermission.fromJson(Map<String, dynamic> json) =>
+      _$GuildRolePermissionFromJson(json);
+}

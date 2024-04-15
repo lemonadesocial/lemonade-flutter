@@ -13,115 +13,117 @@ import 'package:flutter_svg/svg.dart';
 
 class GuildRoleItem extends StatelessWidget {
   final GuildRole guildRole;
-  const GuildRoleItem({super.key, required this.guildRole});
+  final Function() onTap;
+  const GuildRoleItem({
+    super.key,
+    required this.guildRole,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
     final requirements = guildRole.requirements;
-    return Container(
-      decoration: ShapeDecoration(
-        color: LemonColor.white06,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(LemonRadius.medium),
-        ),
-      ),
+    return InkWell(
+      onTap: () {
+        onTap();
+      },
       child: Container(
-        padding: EdgeInsets.all(15.w),
-        child: Row(
-          children: [
-            guildRole.imageUrl != null
-                ? Container(
-                    width: Sizing.medium,
-                    height: Sizing.medium,
-                    clipBehavior: Clip.antiAlias,
-                    decoration: ShapeDecoration(
-                      color: LemonColor.white09,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(LemonRadius.normal),
+        decoration: ShapeDecoration(
+          color: LemonColor.white06,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(LemonRadius.medium),
+          ),
+        ),
+        child: Container(
+          padding: EdgeInsets.all(15.w),
+          child: Row(
+            children: [
+              guildRole.imageUrl != null
+                  ? Container(
+                      width: Sizing.medium,
+                      height: Sizing.medium,
+                      clipBehavior: Clip.antiAlias,
+                      decoration: ShapeDecoration(
+                        color: LemonColor.white09,
+                        shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.circular(LemonRadius.normal),
+                        ),
                       ),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        guildRole.imageUrl!.startsWith('https://')
-                            ? Image.network(guildRole.imageUrl ?? '')
-                            : SvgPicture.network(
-                                GuildUtils.getFullImageUrl(
-                                  guildRole.imageUrl ?? '',
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          guildRole.imageUrl!.startsWith('https://')
+                              ? Image.network(guildRole.imageUrl ?? '')
+                              : SvgPicture.network(
+                                  GuildUtils.getFullImageUrl(
+                                    guildRole.imageUrl ?? '',
+                                  ),
+                                  fit: BoxFit.contain,
+                                  width: Sizing.xSmall,
+                                  height: Sizing.xSmall,
                                 ),
-                                fit: BoxFit.contain,
-                                width: Sizing.xSmall,
-                                height: Sizing.xSmall,
-                              ),
-                      ],
+                        ],
+                      ),
+                    )
+                  : const SizedBox.expand(),
+              SizedBox(
+                width: Spacing.xSmall,
+              ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      guildRole.name ?? '',
+                      style: Typo.small.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: colorScheme.onPrimary,
+                          height: 0),
                     ),
-                  )
-                : const SizedBox.expand(),
-            SizedBox(
-              width: Spacing.xSmall,
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    guildRole.name ?? '',
-                    style: Typo.small.copyWith(
-                        fontWeight: FontWeight.w600,
-                        color: colorScheme.onPrimary,
-                        height: 0),
-                  ),
-                  SizedBox(
-                    height: 2.h,
-                  ),
-                  Row(
-                    children: [
-                      Container(
-                        width: 2.w,
-                        height: 8.w,
-                        decoration: ShapeDecoration(
-                          color: LemonColor.coralReef,
-                          shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.circular(LemonRadius.extraSmall),
+                    SizedBox(
+                      height: 2.h,
+                    ),
+                    Row(
+                      children: [
+                        Container(
+                          width: 2.w,
+                          height: 8.w,
+                          decoration: ShapeDecoration(
+                            color: LemonColor.coralReef,
+                            shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.circular(LemonRadius.extraSmall),
+                            ),
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        width: Spacing.superExtraSmall,
-                      ),
-                      Text(
-                        t.chat.guild.incomplete,
-                        style: Typo.small.copyWith(
-                          color: colorScheme.onSecondary,
-                          height: 0,
+                        SizedBox(
+                          width: Spacing.superExtraSmall,
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                        Text(
+                          t.chat.guild.incomplete,
+                          style: Typo.small.copyWith(
+                            color: colorScheme.onSecondary,
+                            height: 0,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Assets.icons.icArrowBack.svg(
-              width: 18.w,
-              height: 18.w,
-            ),
-          ],
+              Assets.icons.icArrowBack.svg(
+                width: 18.w,
+                height: 18.w,
+              ),
+            ],
+          ),
         ),
       ),
-
-      // child: Column(
-      //   crossAxisAlignment: CrossAxisAlignment.start,
-      //   children: List.generate(
-      //     requirements?.length ?? 0,
-      //     (index) =>
-      //         GuildRequirementItem(guildRequirement: requirements![index]),
-      //   ),
-      // ),
     );
   }
 }

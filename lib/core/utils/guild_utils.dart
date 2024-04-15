@@ -18,15 +18,23 @@ class GuildUtils {
     }
   }
 
-  static Future<GuildRole> getRoleDetail(num roleId) async {
-    final endpoint = '$guildApiEndpoint/v1/guild/${roleId.toInt()}';
+  static Future<List<GuildRolePermission>> checkUserAccessToAGuild(
+    num guildId,
+    String walletAddress,
+  ) async {
+    final endpoint =
+        '$guildApiEndpoint/v1/guild/access/${guildId.toInt()}/$walletAddress';
     final response = await http.get(Uri.parse(endpoint));
-    if (response.statusCode == 200) {
-      return GuildRole.fromJson(
-        jsonDecode(response.body),
-      );
-    } else {
-      throw Exception('Failed to load data');
+    try {
+      final result = jsonDecode(response.body)
+          .map((json) => GuildRolePermission.fromJson(json))
+          .toList();
+      return result;
+    } catch (e) {
+      print("FUCKing error");
+      print(e);
+    } finally {
+      return [];
     }
   }
 
