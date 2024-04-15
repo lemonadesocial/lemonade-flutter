@@ -80,3 +80,12 @@ enum OfferProvider {
 }
 
 enum EventPrivacy { public, private }
+
+enum EventCohostRequestState {
+  @JsonValue('DECLINED')
+  declined,
+  @JsonValue('ACCEPTED')
+  accepted,
+  @JsonValue('PENDING')
+  pending,
+}

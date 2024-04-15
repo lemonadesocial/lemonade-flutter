@@ -182,5 +182,9 @@
     "settings": "Settings",
     "defaultText": "default",
     "you": "you",
-    "updatedSuccessfully": "Updated successfully"
+    "updatedSuccessfully": "Updated successfully",
+    "status": {
+        "accepted": "Accepted",
+        "declined": "Declined"        
+    }
 }

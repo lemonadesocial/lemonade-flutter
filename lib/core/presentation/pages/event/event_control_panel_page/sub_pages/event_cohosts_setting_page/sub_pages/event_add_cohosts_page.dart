@@ -12,7 +12,6 @@ import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -97,13 +96,21 @@ class _EventAddCohostsViewState extends State<EventAddCohostsView> {
                 ),
                 hintText: t.common.search.capitalize(),
                 contentPadding: EdgeInsets.all(Spacing.small),
-                onChange: (value) => context.read<GetUsersBloc>().add(
-                      GetUsersEvent.fetch(
-                        limit: 5,
-                        skip: 0,
-                        search: value,
-                      ),
-                    ),
+                onChange: (value) {
+                  if (value.isEmpty) {
+                    context.read<GetUsersBloc>().add(
+                          GetUsersEvent.reset(),
+                        );
+                    return;
+                  }
+                  context.read<GetUsersBloc>().add(
+                        GetUsersEvent.fetch(
+                          limit: 5,
+                          skip: 0,
+                          search: value,
+                        ),
+                      );
+                },
               ),
               SizedBox(
                 height: Spacing.medium,
@@ -172,12 +179,8 @@ class _EventAddCohostsViewState extends State<EventAddCohostsView> {
         return Align(
           alignment: Alignment.bottomCenter,
           child: SafeArea(
-            child: LinearGradientButton(
+            child: LinearGradientButton.primaryButton(
               label: t.common.actions.saveChanges,
-              height: 48.h,
-              radius: BorderRadius.circular(24),
-              textStyle: Typo.medium.copyWith(),
-              mode: GradientButtonMode.lavenderMode,
               onTap: () {
                 FocusScope.of(context).requestFocus(FocusNode());
                 Vibrate.feedback(FeedbackType.light);
