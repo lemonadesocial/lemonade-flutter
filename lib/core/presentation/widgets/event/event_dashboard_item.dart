@@ -7,12 +7,10 @@ class EventDashboardItem extends StatelessWidget {
   const EventDashboardItem({
     super.key,
     required this.icon,
-    required this.child,
     required this.onTap,
   });
 
   final Widget icon;
-  final Widget child;
   final Function() onTap;
 
   @override

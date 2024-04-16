@@ -160,6 +160,7 @@ class _ChatListPageViewState extends State<ChatListPageView>
                                   StringUtils.capitalize(t.chat.directMessages),
                               rooms: chatListState.dmRooms,
                               itemBuilder: (room) => ChatListItem(room: room),
+                              emptyText: t.chat.emptyDirectMessages,
                             ),
                           ],
                         ),
@@ -169,6 +170,7 @@ class _ChatListPageViewState extends State<ChatListPageView>
                               title: StringUtils.capitalize(t.chat.channels),
                               rooms: chatListState.channelRooms,
                               itemBuilder: (room) => ChatListItem(room: room),
+                              emptyText: t.chat.emptyChannels,
                             ),
                           ],
                         ),
@@ -248,14 +250,22 @@ class _ChatListSection extends StatelessWidget {
     required this.title,
     required this.rooms,
     required this.itemBuilder,
+    this.emptyText,
   });
 
   final String title;
   final List<Room> rooms;
   final Widget Function(Room room) itemBuilder;
+  final String? emptyText;
 
   @override
   Widget build(BuildContext context) {
+    if (rooms.isEmpty) {
+      return SliverToBoxAdapter(
+        child: EmptyList(emptyText: emptyText),
+      );
+    }
+
     return SliverList.separated(
       itemCount: rooms.length,
       itemBuilder: (context, index) => itemBuilder(rooms[index]),

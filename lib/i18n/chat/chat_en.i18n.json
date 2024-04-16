@@ -54,6 +54,8 @@
     "roomNotExistDesc": "Oops! It seems like the chat room you are trying to access does not exist.",
     "messages": "Messages",
     "guilds": "Guilds",
+    "emptyChannels": "No channels found",
+    "emptyDirectMessages": "No direct messages found",
     "guild": {
         "createChannel": "Create channel",
         "createChannelDescription": "Where conversations happen around a topic. Use a name that is easy to find and understand.",

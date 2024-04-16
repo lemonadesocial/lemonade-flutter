@@ -7,6 +7,9 @@ class Sizing {
   /// represent size of 16.0
   static double xSmall = 16.w;
 
+  /// represent size of 16.0
+  static double mSmall = 18.w;
+
   /// represent size of 24.0
   static double small = 24.w;
 

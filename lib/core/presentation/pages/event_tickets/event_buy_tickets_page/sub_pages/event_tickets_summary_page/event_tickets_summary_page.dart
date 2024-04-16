@@ -25,7 +25,9 @@ import 'package:app/core/presentation/widgets/common/button/linear_gradient_butt
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/common/slide_to_act/slide_to_act.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
+import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/core/utils/date_format_utils.dart';
+import 'package:app/core/utils/event_utils.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -109,13 +111,32 @@ class EventTicketsSummaryPageView extends StatelessWidget {
     BuildContext context,
     Event event,
   ) {
+    final selectedTicketTypes =
+        context.read<SelectEventTicketsBloc>().state.selectedTickets;
+    final totalTicketsCount = selectedTicketTypes.fold(
+      0,
+      (previousValue, element) => previousValue + element.count,
+    );
+    final userId = AuthUtils.getUserId(context);
+    final isAttending = EventUtils.isAttending(event: event, userId: userId);
+
     return AutoRouter.of(context).replaceAll(
       [
         RSVPEventSuccessPopupRoute(
           event: event,
+          primaryMessage:
+              isAttending ? t.event.eventBuyTickets.ticketsPurchased : null,
+          secondaryMessage: isAttending
+              ? t.event.eventBuyTickets.addictionalTicketsPurchasedSuccess(
+                  count: totalTicketsCount,
+                )
+              : null,
           buttonBuilder: (newContext) => LinearGradientButton(
             onTap: () => AutoRouter.of(newContext).replace(
-              const EventPickMyTicketRoute(),
+              EventUtils.getAssignTicketsRouteForBuyFlow(
+                event: event,
+                userId: userId,
+              ),
             ),
             height: Sizing.large,
             textStyle: Typo.medium.copyWith(

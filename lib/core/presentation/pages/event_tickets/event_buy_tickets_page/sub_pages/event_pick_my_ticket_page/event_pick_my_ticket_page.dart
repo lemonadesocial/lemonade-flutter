@@ -25,9 +25,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 @RoutePage()
-class EventPickMyTicketPage extends StatelessWidget {
+class EventPickMyTicketPage extends StatefulWidget {
   const EventPickMyTicketPage({super.key});
 
+  @override
+  State<EventPickMyTicketPage> createState() => _EventPickMyTicketPageState();
+}
+
+class _EventPickMyTicketPageState extends State<EventPickMyTicketPage> {
   @override
   Widget build(BuildContext context) {
     final event = context.read<EventProviderBloc>().event;

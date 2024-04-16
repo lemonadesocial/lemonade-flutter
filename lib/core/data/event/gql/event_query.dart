@@ -200,7 +200,6 @@ const eventFragment = '''
       currency
       network
       cost
-      decimals
     }
   }
   ...eventPeopleFragment
@@ -223,6 +222,26 @@ const eventApplicationFormFragment = '''
   }
 ''';
 
+const eventPaymentTicketsDiscountFragment = '''
+  fragment eventPaymentTicketsDiscountFragment on Event {
+    payment_ticket_discounts {
+      active
+      code
+      ratio
+      stamp
+      ticket_count
+      ticket_count_map
+      ticket_limit_per
+      ticket_limit
+      ticket_types
+      use_count
+      use_count_map
+      use_limit
+      use_limit_per
+    }
+  }
+''';
+
 const eventFrequentQuestionsFragment = '''
   fragment eventFrequentQuestionsFragment on Event {
     frequent_questions {
@@ -240,6 +259,7 @@ final getEventDetailQuery = gql('''
   $eventTicketTypesFragment
   $eventProgramFragment
   $eventApplicationFormFragment
+  $eventPaymentTicketsDiscountFragment
   $eventFrequentQuestionsFragment
 
   query(\$id: MongoID!) {
@@ -250,6 +270,7 @@ final getEventDetailQuery = gql('''
       ...eventTicketTypesFragment
       ...eventProgramFragment
       ...eventApplicationFormFragment
+      ...eventPaymentTicketsDiscountFragment
       ...eventFrequentQuestionsFragment
     }
   }

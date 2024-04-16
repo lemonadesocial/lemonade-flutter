@@ -20,6 +20,8 @@ class DiscoverCommunities extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
+    final colorScheme = Theme.of(context).colorScheme;
+
     return MultiSliver(
       children: [
         SliverPadding(
@@ -31,6 +33,7 @@ class DiscoverCommunities extends StatelessWidget {
             child: Text(
               t.discover.communities,
               style: Typo.medium.copyWith(
+                color: colorScheme.onPrimary,
                 fontWeight: FontWeight.w600,
               ),
             ),

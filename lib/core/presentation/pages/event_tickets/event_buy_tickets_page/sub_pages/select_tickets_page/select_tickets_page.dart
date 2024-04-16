@@ -20,8 +20,10 @@ import 'package:app/core/presentation/widgets/common/button/linear_gradient_butt
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/web3/chain/chain_query_widget.dart';
+import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/event_tickets_utils.dart';
+import 'package:app/core/utils/event_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -76,10 +78,16 @@ class _SelectTicketViewState extends State<SelectTicketView> {
   @override
   void initState() {
     super.initState();
-    _updatePaymentMethod(context);
+    _updatePaymentMethod();
+    _handleAutoSelect();
   }
 
-  void _updatePaymentMethod(BuildContext context) {
+  bool get isAttending {
+    final userId = AuthUtils.getUserId(context);
+    return EventUtils.isAttending(event: widget.event, userId: userId);
+  }
+
+  void _updatePaymentMethod() {
     final getEventTicketTypesBloc = context.read<GetEventTicketTypesBloc>();
     if (getEventTicketTypesBloc.state is! GetEventTicketTypesStateSuccess) {
       return;
@@ -88,6 +96,7 @@ class _SelectTicketViewState extends State<SelectTicketView> {
         (getEventTicketTypesBloc.state as GetEventTicketTypesStateSuccess)
             .eventTicketTypesResponse;
     final selectTicketBloc = context.read<SelectEventTicketsBloc>();
+    final selectedTickets = selectTicketBloc.state.selectedTickets;
     final selectedTicketCategory =
         selectTicketBloc.state.selectedTicketCategory;
     context.read<SelectEventTicketsBloc>().add(
@@ -99,6 +108,11 @@ class _SelectTicketViewState extends State<SelectTicketView> {
       response.ticketTypes ?? [],
       category: selectedTicketCategory?.id,
     );
+
+    // if user already selected tickets (maybe in other category) then no need to init payment method
+    if (selectedTickets.isNotEmpty) {
+      return;
+    }
 
     if (ticketTypesByCategory.isEmpty) {
       return;
@@ -126,24 +140,58 @@ class _SelectTicketViewState extends State<SelectTicketView> {
             ),
           );
     }
+  }
+
+  void _handleAutoSelect() {
+    final getEventTicketTypesBloc = context.read<GetEventTicketTypesBloc>();
+    if (getEventTicketTypesBloc.state is! GetEventTicketTypesStateSuccess) {
+      return;
+    }
+    final response =
+        (getEventTicketTypesBloc.state as GetEventTicketTypesStateSuccess)
+            .eventTicketTypesResponse;
+    final selectTicketBloc = context.read<SelectEventTicketsBloc>();
+    final selectedTickets = selectTicketBloc.state.selectedTickets;
+
+    // if user already selected tickets (maybe in other category) then no need to init payment method
+    if (selectedTickets.isNotEmpty) {
+      return;
+    }
+
+    final selectedTicketCategory =
+        selectTicketBloc.state.selectedTicketCategory;
+    context.read<SelectEventTicketsBloc>().add(
+          SelectEventTicketsEvent.onEventTicketTypesResponseLoaded(
+            eventTicketTypesResponse: response,
+          ),
+        );
+    final ticketTypesByCategory = EventTicketUtils.filterTicketTypeByCategory(
+      response.ticketTypes ?? [],
+      category: selectedTicketCategory?.id,
+    );
 
     // auto select if only 1 ticket tier and only 1 price option in that tier
     if (ticketTypesByCategory.length == 1 &&
         ticketTypesByCategory.first.prices?.isNotEmpty == true &&
-        ticketTypesByCategory.first.prices?.length == 1 &&
-        ticketTypesByCategory.first.limited == true &&
-        ticketTypesByCategory.first.whitelisted == true) {
-      final price = ticketTypesByCategory.first.prices!.first;
-      context.read<SelectEventTicketsBloc>().add(
-            SelectEventTicketsEvent.select(
-              ticket: PurchasableItem(
-                count: 1,
-                id: ticketTypesByCategory.first.id!,
+        ticketTypesByCategory.first.prices?.length == 1) {
+      final isPublic = ticketTypesByCategory.first.limited == null ||
+          ticketTypesByCategory.first.limited == false;
+      final isWhitelisted = ticketTypesByCategory.first.limited == true &&
+          ticketTypesByCategory.first.whitelisted == true;
+
+      if (isPublic || isWhitelisted) {
+        final price = ticketTypesByCategory.first.prices!.first;
+        context.read<SelectEventTicketsBloc>().add(
+              SelectEventTicketsEvent.select(
+                ticket: PurchasableItem(
+                  count: 1,
+                  id: ticketTypesByCategory.first.id!,
+                ),
+                currency: price.currency ?? '',
+                network: price.network,
               ),
-              currency: price.currency ?? '',
-              network: price.network,
-            ),
-          );
+            );
+      }
     }
   }
 
@@ -186,14 +234,26 @@ class _SelectTicketViewState extends State<SelectTicketView> {
         );
   }
 
-  void _handleRedeemMultipleTicketsSuccess() {
+  void _handleRedeemMultipleTicketsSuccess({
+    int? ticketsCount,
+  }) {
+    final userId = AuthUtils.getUserId(context);
     AutoRouter.of(context).replaceAll(
       [
         RSVPEventSuccessPopupRoute(
           event: widget.event,
+          primaryMessage:
+              isAttending ? t.event.eventBuyTickets.ticketsPurchased : null,
+          secondaryMessage: isAttending
+              ? t.event.eventBuyTickets
+                  .addictionalTicketsPurchasedSuccess(count: ticketsCount ?? 0)
+              : null,
           buttonBuilder: (newContext) => LinearGradientButton(
             onTap: () => AutoRouter.of(newContext).replace(
-              const EventPickMyTicketRoute(),
+              EventUtils.getAssignTicketsRouteForBuyFlow(
+                event: widget.event,
+                userId: userId,
+              ),
             ),
             height: Sizing.large,
             textStyle: Typo.medium.copyWith(
@@ -233,7 +293,8 @@ class _SelectTicketViewState extends State<SelectTicketView> {
             state.maybeWhen(
               orElse: () => null,
               success: (response, supportedCurrencies) {
-                _updatePaymentMethod(context);
+                _updatePaymentMethod();
+                _handleAutoSelect();
               },
             );
           },
@@ -250,6 +311,16 @@ class _SelectTicketViewState extends State<SelectTicketView> {
                   return _handleEventRequireApproval();
                 }
                 final tickets = redeemTicketsResponse.tickets ?? [];
+
+                // if guest already joined the event but
+                // buy additional tickets then go to pick tickets page
+                if (isAttending) {
+                  _handleRedeemMultipleTicketsSuccess(
+                    ticketsCount: tickets.length,
+                  );
+                  return;
+                }
+
                 if (tickets.length == 1) {
                   // then trigger assign ticket to the user
                   context.read<AssignTicketsBloc>().add(

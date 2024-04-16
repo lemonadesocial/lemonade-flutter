@@ -96,17 +96,10 @@ class SelectEventTicketsBloc
     Emitter emit,
   ) {
     selectedTicketCategory = event.category;
-    emit(
-      state.copyWith(
-        selectedTickets: [],
-        isSelectionValid: false,
-        selectedTicketCategory: selectedTicketCategory,
-        isPaymentRequired: false,
-        selectedCurrency: null,
-        selectedNetwork: null,
-        totalAmount: null,
-      ),
+    final newState = state.copyWith(
+      selectedTicketCategory: selectedTicketCategory,
     );
+    emit(newState);
   }
 
   Future<void> _onSelectTicketType(

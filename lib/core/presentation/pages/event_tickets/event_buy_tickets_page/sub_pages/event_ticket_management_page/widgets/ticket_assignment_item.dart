@@ -101,6 +101,7 @@ class TicketAssignmentItem extends StatelessWidget {
                           user?.email ??
                           user?.username ??
                           user?.displayName ??
+                          user?.name ??
                           '',
                       style: Typo.small.copyWith(
                         color: colorScheme.onSecondary,

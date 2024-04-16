@@ -133,6 +133,8 @@ fragment EventFields on Event {
 
 fragment EventCohostRequestFragment on EventCohostRequest {
     _id
+    event
+    state
     to_expanded {
         _id
         name

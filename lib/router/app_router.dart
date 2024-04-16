@@ -264,6 +264,18 @@ final eventDetailRoutes = AutoRoute(
         AutoRoute(
           page: EventApplicationFormProfileSettingRoute.page,
         ),
+        AutoRoute(
+          page: EventDiscountSettingRoute.page,
+          children: [
+            AutoRoute(
+              initial: true,
+              page: EventDiscountListingSetttingRoute.page,
+            ),
+            AutoRoute(
+              page: EventDiscountFormSettingRoute.page,
+            ),
+          ],
+        ),
       ],
     ),
     AutoRoute(
@@ -369,6 +381,9 @@ final eventBuyTicketsRoutes = AutoRoute(
     AutoRoute(
       page: RSVPEventSuccessPopupRoute.page,
       meta: const {'popBlocked': true},
+    ),
+    AutoRoute(
+      page: MyEventTicketAssignmentRoute.page,
     ),
   ],
 );

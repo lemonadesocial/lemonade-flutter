@@ -58,32 +58,34 @@ class BottomBarState extends State<BottomBar>
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    return BottomAppBar(
-      padding: EdgeInsets.zero,
-      elevation: 0.0,
-      height: BottomBar.bottomBarHeight,
-      color: colorScheme.surfaceVariant,
-      child: ClipRect(
-        child: Container(
-          decoration: BoxDecoration(
-            shape: BoxShape.rectangle,
-            border: Border(
-              top: BorderSide(color: LemonColor.white09),
-            ),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _buildTabItem(context, 0),
-              _buildTabItem(context, 1),
-              const Expanded(
-                child: Center(
-                  child: BottomBarCreateButton(),
-                ),
+    return InkWell(
+      child: BottomAppBar(
+        padding: EdgeInsets.zero,
+        elevation: 0.0,
+        height: BottomBar.bottomBarHeight,
+        color: colorScheme.background,
+        child: ClipRect(
+          child: Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.rectangle,
+              border: Border(
+                top: BorderSide(color: LemonColor.white09),
               ),
-              _buildTabItem(context, 2),
-              _buildTabItem(context, 3),
-            ],
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _buildTabItem(context, 0),
+                _buildTabItem(context, 1),
+                const Expanded(
+                  child: Center(
+                    child: BottomBarCreateButton(),
+                  ),
+                ),
+                _buildTabItem(context, 2),
+                _buildTabItem(context, 3),
+              ],
+            ),
           ),
         ),
       ),

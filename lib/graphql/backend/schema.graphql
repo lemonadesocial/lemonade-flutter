@@ -677,7 +677,6 @@ type EventTicketPrice {
   currency: String!
   network: String
   cost: String!
-  decimals: Int
 }
 
 type WhitelistUserInfo {

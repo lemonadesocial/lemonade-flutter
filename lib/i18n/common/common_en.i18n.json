@@ -179,7 +179,12 @@
     "gotIt": "Got it",
     "goBackConfirmationDescription": "Going back will reset any information you have added. Still want to go back?",
     "saved": "Saved",
+    "settings": "Settings",
     "defaultText": "default",
     "you": "you",
-    "updatedSuccessfully": "Updated successfully"
+    "updatedSuccessfully": "Updated successfully",
+    "status": {
+        "accepted": "Accepted",
+        "declined": "Declined"        
+    }
 }
