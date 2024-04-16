@@ -1,7 +1,6 @@
 import 'package:app/core/application/chat/chat_list_bloc/chat_list_bloc.dart';
 import 'package:app/core/application/chat/chat_space_bloc/chat_space_bloc.dart';
 import 'package:app/core/application/chat/get_guild_rooms_bloc/get_guild_rooms_bloc.dart';
-import 'package:app/core/mock_model/chat_room.dart';
 import 'package:app/core/presentation/pages/chat/chat_list/views/check_guild_room_roles_bottomsheet.dart';
 import 'package:app/core/presentation/pages/chat/chat_list/widgets/chat_list_item.dart';
 import 'package:app/core/presentation/pages/chat/chat_list/widgets/guild_room_item.dart';

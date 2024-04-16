@@ -2,7 +2,6 @@ import 'package:app/core/presentation/widgets/chat/mxc_image.dart';
 import 'package:app/core/utils/chat/matrix_string_color_extension.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:matrix/matrix.dart';
@@ -51,9 +50,10 @@ class MatrixAvatar extends StatelessWidget {
       child: Text(
         fallbackLetters,
         style: TextStyle(
-            color: noPic ? Colors.white : null,
-            fontSize: fontSize,
-            fontWeight: FontWeight.w600),
+          color: noPic ? Colors.white : null,
+          fontSize: fontSize,
+          fontWeight: FontWeight.w600,
+        ),
       ),
     );
     final borderRadius = BorderRadius.circular(radius ?? LemonRadius.xSmall);

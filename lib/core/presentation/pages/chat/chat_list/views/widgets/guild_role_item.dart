@@ -81,9 +81,10 @@ class GuildRoleItem extends StatelessWidget {
                     Text(
                       guildRole.name ?? '',
                       style: Typo.small.copyWith(
-                          fontWeight: FontWeight.w600,
-                          color: colorScheme.onPrimary,
-                          height: 0),
+                        fontWeight: FontWeight.w600,
+                        color: colorScheme.onPrimary,
+                        height: 0,
+                      ),
                     ),
                     SizedBox(
                       height: 2.h,

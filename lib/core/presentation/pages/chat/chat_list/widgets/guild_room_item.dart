@@ -1,9 +1,7 @@
 import 'package:app/core/domain/chat/entities/guild_room.dart';
-import 'package:app/core/presentation/pages/chat/chat_list/widgets/unseen_message_count_widget.dart';
 import 'package:app/core/presentation/widgets/chat/matrix_avatar.dart';
 import 'package:app/core/service/matrix/matrix_service.dart';
 import 'package:app/injection/register_module.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
