@@ -50,8 +50,10 @@ class ChatRepositoryImpl implements ChatRepository {
   }
 
   @override
-  Future<Either<Failure, List<GuildRolePermission>>> getGuildRolePermissions(
-      {required num guildId, required String walletAddress}) async {
+  Future<Either<Failure, List<GuildRolePermission>>> getGuildRolePermissions({
+    required num guildId,
+    required String walletAddress,
+  }) async {
     final result =
         await GuildUtils.checkUserAccessToAGuild(guildId, walletAddress);
     try {

@@ -24,12 +24,13 @@ class CheckGuildRoomRolesBloc
   ) async {
     emit(CheckGuildRoomRolesState.loading());
     final guild = await _getGuildDetail();
-    final guildRolePermissions = await _getGuildRolePermissions();
+    final guildRolePermissions =
+        await _getGuildRolePermissions(event.walletAddress);
     final guildRoleIds = guildRoom.guildRoleIds;
     List<GuildRole> filteredRoles = [];
     if (guild != null) {
       if (guildRoleIds != null) {
-        filteredRoles = guild!.roles!
+        filteredRoles = guild.roles!
             .where(
               (role) => guildRoleIds.contains(role.id),
             )
@@ -38,7 +39,10 @@ class CheckGuildRoomRolesBloc
         filteredRoles = guild.roles!;
       }
     }
-    emit(CheckGuildRoomRolesState.success(guildRoles: filteredRoles));
+    emit(CheckGuildRoomRolesState.success(
+      guildRoles: filteredRoles,
+      guildRolePermissions: guildRolePermissions,
+    ));
   }
 
   Future<Guild?> _getGuildDetail() async {
@@ -49,13 +53,15 @@ class CheckGuildRoomRolesBloc
     return result.getOrElse(() => const Guild());
   }
 
-  Future<List<GuildRolePermission>?> _getGuildRolePermissions() async {
+  Future<List<GuildRolePermission>?> _getGuildRolePermissions(
+    String? walletAddress,
+  ) async {
     final result = await _chatRepository.getGuildRolePermissions(
       guildId: guildRoom.guildId ?? 0,
-      walletAddress: '',
+      walletAddress: walletAddress ?? '',
     );
     if (result.isLeft()) {
-      return null;
+      return [];
     }
     return result.getOrElse(() => []);
   }
@@ -63,7 +69,9 @@ class CheckGuildRoomRolesBloc
 
 @freezed
 class CheckGuildRoomRolesEvent with _$CheckGuildRoomRolesEvent {
-  factory CheckGuildRoomRolesEvent.fetch() = CheckGuildRoomRolesEventFetch;
+  factory CheckGuildRoomRolesEvent.fetch({
+    String? walletAddress,
+  }) = CheckGuildRoomRolesEventFetch;
 }
 
 @freezed
@@ -71,6 +79,7 @@ class CheckGuildRoomRolesState with _$CheckGuildRoomRolesState {
   factory CheckGuildRoomRolesState.loading() = CheckGuildRoomRolesStateLoading;
   factory CheckGuildRoomRolesState.success({
     required List<GuildRole> guildRoles,
+    List<GuildRolePermission>? guildRolePermissions,
   }) = CheckGuildRoomRolesStateSuccess;
   factory CheckGuildRoomRolesState.failure() = CheckGuildRoomRolesStateFailure;
 }

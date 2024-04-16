@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:app/core/domain/chat/entities/guild.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class GuildUtils {
@@ -27,12 +26,11 @@ class GuildUtils {
         '$guildApiEndpoint/v1/guild/access/${guildId.toInt()}/$walletAddress';
     final response = await http.get(Uri.parse(endpoint));
     try {
-      final result = jsonDecode(response.body)
-          .map((json) => GuildRolePermission.fromJson(json))
-          .toList();
+      final List<dynamic> jsonList = jsonDecode(response.body);
+      final List<GuildRolePermission> result =
+          jsonList.map((json) => GuildRolePermission.fromJson(json)).toList();
       return result;
     } catch (e) {
-      debugPrint("Error : $e");
       return [];
     }
   }

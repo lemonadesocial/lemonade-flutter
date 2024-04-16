@@ -14,17 +14,18 @@ import 'package:flutter_svg/svg.dart';
 class GuildRoleItem extends StatelessWidget {
   final GuildRole guildRole;
   final Function() onTap;
+  final bool? completed;
   const GuildRoleItem({
     super.key,
     required this.guildRole,
     required this.onTap,
+    this.completed,
   });
 
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-    final requirements = guildRole.requirements;
     return InkWell(
       onTap: () {
         onTap();
@@ -94,7 +95,9 @@ class GuildRoleItem extends StatelessWidget {
                           width: 2.w,
                           height: 8.w,
                           decoration: ShapeDecoration(
-                            color: LemonColor.coralReef,
+                            color: completed == true
+                                ? LemonColor.paleViolet
+                                : LemonColor.coralReef,
                             shape: RoundedRectangleBorder(
                               borderRadius:
                                   BorderRadius.circular(LemonRadius.extraSmall),
@@ -105,7 +108,9 @@ class GuildRoleItem extends StatelessWidget {
                           width: Spacing.superExtraSmall,
                         ),
                         Text(
-                          t.chat.guild.incomplete,
+                          completed == true
+                              ? t.chat.guild.complete
+                              : t.chat.guild.incomplete,
                           style: Typo.small.copyWith(
                             color: colorScheme.onSecondary,
                             height: 0,

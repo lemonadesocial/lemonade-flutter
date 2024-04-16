@@ -25,10 +25,12 @@ class CheckGuildRoomRolesBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userWalletAddress =
+        getIt<WalletConnectService>().w3mService.address ?? '';
     return BlocProvider(
       create: (context) => CheckGuildRoomRolesBloc(guildRoom: guildRoom)
         ..add(
-          CheckGuildRoomRolesEventFetch(),
+          CheckGuildRoomRolesEventFetch(walletAddress: userWalletAddress),
         ),
       child: const CheckGuildRoomRolesBottomSheetView(),
     );
@@ -42,7 +44,6 @@ class CheckGuildRoomRolesBottomSheetView extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-
     return Container(
       decoration: BoxDecoration(
         color: LemonColor.chineseBlack,
@@ -85,30 +86,42 @@ class CheckGuildRoomRolesBottomSheetView extends StatelessWidget {
                           CheckGuildRoomRolesState>(
                         builder: (context, state) {
                           return state.maybeWhen(
-                            success: (roles) => ConstrainedBox(
-                              constraints: const BoxConstraints(maxHeight: 300),
-                              child: ListView.separated(
-                                shrinkWrap: true,
-                                itemCount: roles.length,
-                                itemBuilder: (context, index) {
-                                  return GuildRoleItem(
-                                    guildRole: roles[index],
-                                    onTap: () {
-                                      final w3mService =
-                                          getIt<WalletConnectService>()
-                                              .w3mService;
-                                      w3mService.openModal(context);
-                                    },
-                                  );
-                                },
-                                separatorBuilder:
-                                    (BuildContext context, int index) {
-                                  return SizedBox(
-                                    height: Spacing.xSmall,
-                                  );
-                                },
-                              ),
-                            ),
+                            success: (guildRoles, guildRolePermissions) {
+                              print(">>>>");
+                              print(guildRolePermissions);
+                              return ConstrainedBox(
+                                constraints:
+                                    const BoxConstraints(maxHeight: 300),
+                                child: ListView.separated(
+                                  shrinkWrap: true,
+                                  itemCount: guildRoles.length,
+                                  itemBuilder: (context, index) {
+                                    bool completed = guildRolePermissions
+                                            ?.firstWhere((element) =>
+                                                element.roleId ==
+                                                guildRoles[index].id)
+                                            .access ==
+                                        true;
+                                    return GuildRoleItem(
+                                      guildRole: guildRoles[index],
+                                      onTap: () {
+                                        final w3mService =
+                                            getIt<WalletConnectService>()
+                                                .w3mService;
+                                        w3mService.openModal(context);
+                                      },
+                                      completed: completed,
+                                    );
+                                  },
+                                  separatorBuilder:
+                                      (BuildContext context, int index) {
+                                    return SizedBox(
+                                      height: Spacing.xSmall,
+                                    );
+                                  },
+                                ),
+                              );
+                            },
                             loading: () => Center(
                               child: Loading.defaultLoading(context),
                             ),
