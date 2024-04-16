@@ -56,6 +56,8 @@ class CreateEventConfigGrid extends StatelessWidget {
       case EventConfigurationType.applicationForm:
         return AutoRouter.of(context)
             .navigate(EventApplicationFormSettingRoute());
+      case EventConfigurationType.photos:
+        return AutoRouter.of(context).push(const EventPhotosSettingRoute());
       default:
         page = null;
         break;
@@ -99,8 +101,10 @@ class CreateEventConfigGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (event != null) {
-      final eventConfigs =
-          EventConfiguration.createEventConfigurations(event: event);
+      final eventConfigs = [
+        ...EventConfiguration.createEventConfigurations(event: event),
+        ...EventConfiguration.photosConfigurations(context, event: event),
+      ];
       return SliverGrid(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
