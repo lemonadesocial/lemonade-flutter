@@ -1,6 +1,7 @@
 import 'package:app/core/application/chat/chat_list_bloc/chat_list_bloc.dart';
 import 'package:app/core/application/chat/chat_space_bloc/chat_space_bloc.dart';
 import 'package:app/core/application/chat/get_guild_rooms_bloc/get_guild_rooms_bloc.dart';
+import 'package:app/core/mock_model/chat_room.dart';
 import 'package:app/core/presentation/pages/chat/chat_list/views/check_guild_room_roles_bottomsheet.dart';
 import 'package:app/core/presentation/pages/chat/chat_list/widgets/chat_list_item.dart';
 import 'package:app/core/presentation/pages/chat/chat_list/widgets/guild_room_item.dart';
@@ -17,9 +18,11 @@ import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -202,7 +205,16 @@ class _ChatListPageViewState extends State<ChatListPageView>
                                             builder: (newContext) {
                                               return CheckGuildRoomRolesBottomSheet(
                                                 guildRoom: guildRooms[index],
-                                                onEnterChannel: () {},
+                                                onEnterChannel: () {
+                                                  AutoRouter.of(context)
+                                                      .navigate(
+                                                    ChatRoute(
+                                                      roomId: guildRooms[index]
+                                                              .matrixRoomId ??
+                                                          '',
+                                                    ),
+                                                  );
+                                                },
                                               );
                                             },
                                           );

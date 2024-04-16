@@ -1,8 +1,7 @@
 import 'package:app/core/application/chat/check_guild_room_roles_bloc/check_guild_room_roles_bloc.dart';
 import 'package:app/core/domain/chat/entities/guild_room.dart';
-import 'package:app/core/presentation/pages/chat/chat_list/views/widgets/guild_role_item.dart';
+import 'package:app/core/presentation/pages/chat/chat_list/views/widgets/guild_roles_list.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
-import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/service/wallet/wallet_connect_service.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -32,13 +31,22 @@ class CheckGuildRoomRolesBottomSheet extends StatelessWidget {
         ..add(
           CheckGuildRoomRolesEventFetch(walletAddress: userWalletAddress),
         ),
-      child: const CheckGuildRoomRolesBottomSheetView(),
+      child: CheckGuildRoomRolesBottomSheetView(
+        guildRoom: guildRoom,
+        onEnterChannel: onEnterChannel,
+      ),
     );
   }
 }
 
 class CheckGuildRoomRolesBottomSheetView extends StatelessWidget {
-  const CheckGuildRoomRolesBottomSheetView({super.key});
+  const CheckGuildRoomRolesBottomSheetView({
+    super.key,
+    required this.guildRoom,
+    required this.onEnterChannel,
+  });
+  final GuildRoom guildRoom;
+  final Function() onEnterChannel;
 
   @override
   Widget build(BuildContext context) {
@@ -77,85 +85,48 @@ class CheckGuildRoomRolesBottomSheetView extends StatelessWidget {
                       color: colorScheme.onSecondary,
                     ),
                   ),
-                  Column(
-                    children: [
-                      SizedBox(
-                        height: Spacing.medium,
-                      ),
-                      BlocBuilder<CheckGuildRoomRolesBloc,
-                          CheckGuildRoomRolesState>(
-                        builder: (context, state) {
-                          return state.maybeWhen(
-                            success: (guildRoles, guildRolePermissions) {
-                              print(">>>>");
-                              print(guildRolePermissions);
-                              return ConstrainedBox(
-                                constraints:
-                                    const BoxConstraints(maxHeight: 300),
-                                child: ListView.separated(
-                                  shrinkWrap: true,
-                                  itemCount: guildRoles.length,
-                                  itemBuilder: (context, index) {
-                                    bool completed = guildRolePermissions
-                                            ?.firstWhere((element) =>
-                                                element.roleId ==
-                                                guildRoles[index].id)
-                                            .access ==
-                                        true;
-                                    return GuildRoleItem(
-                                      guildRole: guildRoles[index],
-                                      onTap: () {
-                                        final w3mService =
-                                            getIt<WalletConnectService>()
-                                                .w3mService;
-                                        w3mService.openModal(context);
-                                      },
-                                      completed: completed,
-                                    );
-                                  },
-                                  separatorBuilder:
-                                      (BuildContext context, int index) {
-                                    return SizedBox(
-                                      height: Spacing.xSmall,
-                                    );
-                                  },
-                                ),
-                              );
-                            },
-                            loading: () => Center(
-                              child: Loading.defaultLoading(context),
-                            ),
-                            orElse: () => Center(
-                              child: Text(t.common.somethingWrong),
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
+                  GuildRolesList(guildRoom: guildRoom),
                 ],
               ),
             ),
             SizedBox(height: Spacing.smMedium),
-            Container(
-              decoration: BoxDecoration(
-                border: Border(
-                  top: BorderSide(
-                    color: colorScheme.outline,
-                  ),
-                ),
-              ),
-              padding: EdgeInsets.symmetric(
-                vertical: Spacing.smMedium,
-                horizontal: Spacing.xSmall,
-              ),
-              child: Opacity(
-                opacity: 1,
-                child: LinearGradientButton.primaryButton(
-                  onTap: () {},
-                  label: t.chat.guild.enterChannel,
-                ),
-              ),
+            BlocBuilder<CheckGuildRoomRolesBloc, CheckGuildRoomRolesState>(
+              builder: (context, state) {
+                return state.maybeWhen(
+                  success: (guild, guildRoles, guildRolePermissions) {
+                    var shouldShowEnterChannel = false;
+                    if (guildRoom.guildRoleIds == null) {
+                      shouldShowEnterChannel = true;
+                    }
+                    if (shouldShowEnterChannel == true) {
+                      return Container(
+                        decoration: BoxDecoration(
+                          border: Border(
+                            top: BorderSide(
+                              color: colorScheme.outline,
+                            ),
+                          ),
+                        ),
+                        padding: EdgeInsets.symmetric(
+                          vertical: Spacing.smMedium,
+                          horizontal: Spacing.xSmall,
+                        ),
+                        child: Opacity(
+                          opacity: 1,
+                          child: LinearGradientButton.primaryButton(
+                            onTap: () {
+                              onEnterChannel();
+                            },
+                            label: t.chat.guild.enterChannel,
+                          ),
+                        ),
+                      );
+                    }
+                    return const SizedBox();
+                  },
+                  orElse: () => const SizedBox.shrink(),
+                );
+              },
             ),
           ],
         ),

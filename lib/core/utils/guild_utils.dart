@@ -50,4 +50,8 @@ class GuildUtils {
 
     return input;
   }
+
+  static String getFullGuildUrl(String name) {
+    return 'https://guild.xyz/$name';
+  }
 }

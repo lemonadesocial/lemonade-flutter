@@ -70,6 +70,7 @@
         "citizenOnlyAccessDescription": "This channel is locked. Complete steps below to enter!",
         "incomplete": "Incomplete",
         "complete": "Complete",
-        "enterChannel": "Enter Channel"
+        "enterChannel": "Enter Channel",
+        "joinGuildRoom": "Join ${guildName}"
     }
 }

@@ -10,15 +10,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
-class GuildRoleItem extends StatelessWidget {
-  final GuildRole guildRole;
+class GuildDetailItem extends StatelessWidget {
+  final Guild? guild;
   final Function() onTap;
-  final bool? completed;
-  const GuildRoleItem({
+  const GuildDetailItem({
     super.key,
-    required this.guildRole,
+    this.guild,
     required this.onTap,
-    this.completed,
   });
 
   @override
@@ -40,7 +38,7 @@ class GuildRoleItem extends StatelessWidget {
           padding: EdgeInsets.all(15.w),
           child: Row(
             children: [
-              guildRole.imageUrl != null
+              guild?.imageUrl != null
                   ? Container(
                       width: Sizing.medium,
                       height: Sizing.medium,
@@ -57,11 +55,11 @@ class GuildRoleItem extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          guildRole.imageUrl!.startsWith('https://')
-                              ? Image.network(guildRole.imageUrl ?? '')
+                          guild!.imageUrl!.startsWith('https://')
+                              ? Image.network(guild?.imageUrl ?? '')
                               : SvgPicture.network(
                                   GuildUtils.getFullImageUrl(
-                                    guildRole.imageUrl ?? '',
+                                    guild?.imageUrl ?? '',
                                   ),
                                   fit: BoxFit.contain,
                                   width: Sizing.xSmall,
@@ -79,43 +77,12 @@ class GuildRoleItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      guildRole.name ?? '',
+                      t.chat.guild.joinGuildRoom(guildName: guild?.name ?? ''),
                       style: Typo.small.copyWith(
-                          fontWeight: FontWeight.w600,
-                          color: colorScheme.onPrimary,
-                          height: 0),
-                    ),
-                    SizedBox(
-                      height: 2.h,
-                    ),
-                    Row(
-                      children: [
-                        Container(
-                          width: 2.w,
-                          height: 8.w,
-                          decoration: ShapeDecoration(
-                            color: completed == true
-                                ? LemonColor.paleViolet
-                                : LemonColor.coralReef,
-                            shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.circular(LemonRadius.extraSmall),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: Spacing.superExtraSmall,
-                        ),
-                        Text(
-                          completed == true
-                              ? t.chat.guild.complete
-                              : t.chat.guild.incomplete,
-                          style: Typo.small.copyWith(
-                            color: colorScheme.onSecondary,
-                            height: 0,
-                          ),
-                        ),
-                      ],
+                        fontWeight: FontWeight.w600,
+                        color: colorScheme.onPrimary,
+                        height: 0,
+                      ),
                     ),
                   ],
                 ),

@@ -39,10 +39,13 @@ class CheckGuildRoomRolesBloc
         filteredRoles = guild.roles!;
       }
     }
-    emit(CheckGuildRoomRolesState.success(
-      guildRoles: filteredRoles,
-      guildRolePermissions: guildRolePermissions,
-    ));
+    emit(
+      CheckGuildRoomRolesState.success(
+        guild: guild,
+        guildRoles: filteredRoles,
+        guildRolePermissions: guildRolePermissions,
+      ),
+    );
   }
 
   Future<Guild?> _getGuildDetail() async {
@@ -78,7 +81,8 @@ class CheckGuildRoomRolesEvent with _$CheckGuildRoomRolesEvent {
 class CheckGuildRoomRolesState with _$CheckGuildRoomRolesState {
   factory CheckGuildRoomRolesState.loading() = CheckGuildRoomRolesStateLoading;
   factory CheckGuildRoomRolesState.success({
-    required List<GuildRole> guildRoles,
+    Guild? guild,
+    List<GuildRole>? guildRoles,
     List<GuildRolePermission>? guildRolePermissions,
   }) = CheckGuildRoomRolesStateSuccess;
   factory CheckGuildRoomRolesState.failure() = CheckGuildRoomRolesStateFailure;

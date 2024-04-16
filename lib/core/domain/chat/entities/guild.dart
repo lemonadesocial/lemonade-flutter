@@ -14,6 +14,7 @@ class Guild with _$Guild {
     bool? showMembers,
     int? memberCount,
     List<GuildRole>? roles,
+    String? urlName,
   }) = _Guild;
 
   factory Guild.fromJson(Map<String, dynamic> json) => _$GuildFromJson(json);
