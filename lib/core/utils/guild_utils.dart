@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:app/core/domain/chat/entities/guild.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class GuildUtils {
@@ -31,9 +32,7 @@ class GuildUtils {
           .toList();
       return result;
     } catch (e) {
-      print("FUCKing error");
-      print(e);
-    } finally {
+      debugPrint("Error : $e");
       return [];
     }
   }

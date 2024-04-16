@@ -1,6 +1,5 @@
 import 'package:app/core/domain/chat/chat_repository.dart';
 import 'package:app/core/domain/chat/entities/guild_room.dart';
-import 'package:app/core/domain/event/input/get_tickets_input/get_tickets_input.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';

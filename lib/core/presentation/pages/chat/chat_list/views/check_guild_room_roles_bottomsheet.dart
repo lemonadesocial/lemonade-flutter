@@ -1,10 +1,9 @@
-import 'package:app/core/domain/chat/entities/guild.dart';
+import 'package:app/core/application/chat/check_guild_room_roles_bloc/check_guild_room_roles_bloc.dart';
 import 'package:app/core/domain/chat/entities/guild_room.dart';
 import 'package:app/core/presentation/pages/chat/chat_list/views/widgets/guild_role_item.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/service/wallet/wallet_connect_service.dart';
-import 'package:app/core/utils/guild_utils.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
@@ -12,57 +11,37 @@ import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class CheckGuildRoomRolesBottomSheet extends StatefulWidget {
+class CheckGuildRoomRolesBottomSheet extends StatelessWidget {
   final Function() onEnterChannel;
   final GuildRoom guildRoom;
 
   const CheckGuildRoomRolesBottomSheet({
     super.key,
-    required this.onEnterChannel,
     required this.guildRoom,
+    required this.onEnterChannel,
   });
 
   @override
-  State<CheckGuildRoomRolesBottomSheet> createState() =>
-      _CheckGuildRoomRolesBottomSheetState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => CheckGuildRoomRolesBloc(guildRoom: guildRoom)
+        ..add(
+          CheckGuildRoomRolesEventFetch(),
+        ),
+      child: const CheckGuildRoomRolesBottomSheetView(),
+    );
+  }
 }
 
-class _CheckGuildRoomRolesBottomSheetState
-    extends State<CheckGuildRoomRolesBottomSheet> {
-  Guild? guild;
-
-  @override
-  void initState() {
-    super.initState();
-    () async {
-      final guildResponse = await GuildUtils.getGuildDetail(
-        widget.guildRoom.guildId ?? 0,
-      );
-      setState(() {
-        guild = guildResponse;
-      });
-    }();
-  }
+class CheckGuildRoomRolesBottomSheetView extends StatelessWidget {
+  const CheckGuildRoomRolesBottomSheetView({super.key});
 
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-    final guildRoleIds = widget.guildRoom.guildRoleIds;
-    List<GuildRole> filteredRoles = [];
-    if (guild != null) {
-      if (guildRoleIds != null) {
-        filteredRoles = guild!.roles!
-            .where(
-              (role) => guildRoleIds.contains(role.id),
-            )
-            .toList();
-      } else {
-        filteredRoles = guild!.roles!;
-      }
-    }
 
     return Container(
       decoration: BoxDecoration(
@@ -102,50 +81,45 @@ class _CheckGuildRoomRolesBottomSheetState
                       SizedBox(
                         height: Spacing.medium,
                       ),
-                      ConstrainedBox(
-                        constraints: const BoxConstraints(maxHeight: 300),
-                        child: ListView.separated(
-                          shrinkWrap: true,
-                          itemCount: filteredRoles.length,
-                          itemBuilder: (context, index) {
-                            return GuildRoleItem(
-                              guildRole: filteredRoles[index],
-                              onTap: () {
-                                final w3mService =
-                                    getIt<WalletConnectService>().w3mService;
-                                w3mService.openModal(context);
-                              },
-                            );
-                          },
-                          separatorBuilder: (BuildContext context, int index) {
-                            return SizedBox(
-                              height: Spacing.xSmall,
-                            );
-                          },
-                        ),
+                      BlocBuilder<CheckGuildRoomRolesBloc,
+                          CheckGuildRoomRolesState>(
+                        builder: (context, state) {
+                          return state.maybeWhen(
+                            success: (roles) => ConstrainedBox(
+                              constraints: const BoxConstraints(maxHeight: 300),
+                              child: ListView.separated(
+                                shrinkWrap: true,
+                                itemCount: roles.length,
+                                itemBuilder: (context, index) {
+                                  return GuildRoleItem(
+                                    guildRole: roles[index],
+                                    onTap: () {
+                                      final w3mService =
+                                          getIt<WalletConnectService>()
+                                              .w3mService;
+                                      w3mService.openModal(context);
+                                    },
+                                  );
+                                },
+                                separatorBuilder:
+                                    (BuildContext context, int index) {
+                                  return SizedBox(
+                                    height: Spacing.xSmall,
+                                  );
+                                },
+                              ),
+                            ),
+                            loading: () => Center(
+                              child: Loading.defaultLoading(context),
+                            ),
+                            orElse: () => Center(
+                              child: Text(t.common.somethingWrong),
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),
-                  // FutureBuilder<List<GuildRolePermission>>(
-                  //   future: GuildUtils.checkUserAccessToAGuild(
-                  //     widget.guildRoom.guildId ?? 0,
-                  //     getIt<WalletConnectService>().w3mService.address ?? '',
-                  //   ),
-                  //   builder: (context, snapshot) {
-                  //     final guildRolePermissions = snapshot.data;
-                  //     List<GuildRole> filteredRoles = guild.roles != null
-                  //         ? guildRoleIds != null
-                  //             ? guild.roles!
-                  //                 .where(
-                  //                   (role) => guildRoleIds.contains(role.id),
-                  //                 )
-                  //                 .toList()
-                  //             : guild.roles!
-                  //         : [];
-                  //       ],
-                  // );
-                  // },
-                  // ),
                 ],
               ),
             ),
@@ -165,9 +139,7 @@ class _CheckGuildRoomRolesBottomSheetState
               child: Opacity(
                 opacity: 1,
                 child: LinearGradientButton.primaryButton(
-                  onTap: () {
-                    widget.onEnterChannel();
-                  },
+                  onTap: () {},
                   label: t.chat.guild.enterChannel,
                 ),
               ),
