@@ -22,10 +22,15 @@ enum _PhotoActions {
 class UploadPhotoItem extends StatefulWidget {
   final DbFile photo;
   final int index;
+  final Function(String imageId)? onSetAsCover;
+  final Function(String imageId)? onDelete;
+
   const UploadPhotoItem({
     super.key,
     required this.photo,
     required this.index,
+    this.onSetAsCover,
+    this.onDelete,
   });
 
   @override
@@ -87,6 +92,15 @@ class _UploadPhotoItemState extends State<UploadPhotoItem> {
             top: Spacing.xSmall,
             right: Spacing.xSmall,
             child: FloatingFrostedGlassDropdown<_PhotoActions>(
+              onItemPressed: (item) {
+                if (item?.value == _PhotoActions.setCover) {
+                  widget.onSetAsCover?.call(widget.photo.id ?? '');
+                }
+
+                if (item?.value == _PhotoActions.delete) {
+                  widget.onDelete?.call(widget.photo.id ?? '');
+                }
+              },
               containerWidth: 170.w,
               items: [
                 DropdownItemDpo(
