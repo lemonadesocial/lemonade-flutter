@@ -27,7 +27,6 @@ class GuildRolesList extends StatelessWidget {
 
     return Column(
       children: [
-        SizedBox(height: Spacing.medium),
         BlocBuilder<CheckGuildRoomRolesBloc, CheckGuildRoomRolesState>(
           builder: (context, state) {
             return state.maybeWhen(
@@ -40,6 +39,7 @@ class GuildRolesList extends StatelessWidget {
                       context: context,
                     );
                   }
+                  return const SizedBox();
                 } else {
                   return _buildGuildRolesList(
                     guildRoles,
@@ -51,7 +51,10 @@ class GuildRolesList extends StatelessWidget {
                 }
               },
               loading: () => Center(
-                child: Loading.defaultLoading(context),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: Spacing.medium),
+                  child: Loading.defaultLoading(context),
+                ),
               ),
               orElse: () => Center(
                 child: Text(t.common.somethingWrong),
@@ -67,17 +70,22 @@ class GuildRolesList extends StatelessWidget {
     required BuildContext context,
     required Guild guild,
   }) {
-    return GuildDetailItem(
-      guild: guild,
-      onTap: () {
-        AutoRouter.of(context).navigate(
-          WebviewRoute(
-            uri: Uri.parse(
-              GuildUtils.getFullGuildUrl(guild.urlName ?? ''),
-            ),
-          ),
-        );
-      },
+    return Column(
+      children: [
+        SizedBox(height: Spacing.medium),
+        GuildDetailItem(
+          guild: guild,
+          onTap: () {
+            AutoRouter.of(context).navigate(
+              WebviewRoute(
+                uri: Uri.parse(
+                  GuildUtils.getFullGuildUrl(guild.urlName ?? ''),
+                ),
+              ),
+            );
+          },
+        ),
+      ],
     );
   }
 
@@ -92,6 +100,7 @@ class GuildRolesList extends StatelessWidget {
         _calculatePercentageProgress(guildRolePermissions);
     return Column(
       children: [
+        SizedBox(height: Spacing.medium),
         LinearProgressIndicator(
           value: percentageProgress,
           color: LemonColor.paleViolet,
