@@ -45,7 +45,8 @@ class GuildRolesList extends StatelessWidget {
                               WebviewRoute(
                                 uri: Uri.parse(
                                   GuildUtils.getFullGuildUrl(
-                                      guild.urlName ?? ''),
+                                    guild.urlName ?? '',
+                                  ),
                                 ),
                               ),
                             );
