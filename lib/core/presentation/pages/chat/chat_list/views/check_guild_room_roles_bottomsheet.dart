@@ -1,16 +1,16 @@
 import 'package:app/core/application/chat/check_guild_room_roles_bloc/check_guild_room_roles_bloc.dart';
+import 'package:app/core/application/wallet/wallet_bloc/wallet_bloc.dart';
 import 'package:app/core/domain/chat/entities/guild_room.dart';
 import 'package:app/core/presentation/pages/chat/chat_list/views/widgets/guild_roles_list.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
-import 'package:app/core/service/wallet/wallet_connect_service.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/injection/register_module.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:web3modal_flutter/widgets/buttons/connect_button.dart';
 
 class CheckGuildRoomRolesBottomSheet extends StatelessWidget {
   final Function() onEnterChannel;
@@ -97,27 +97,37 @@ class CheckGuildRoomRolesBottomSheetView extends StatelessWidget {
                       shouldShowEnterChannel = true;
                     }
                     if (shouldShowEnterChannel) {
-                      return Container(
-                        decoration: BoxDecoration(
-                          border: Border(
-                            top: BorderSide(
-                              color: colorScheme.outline,
-                            ),
-                          ),
-                        ),
-                        padding: EdgeInsets.symmetric(
-                          vertical: Spacing.smMedium,
-                          horizontal: Spacing.xSmall,
-                        ),
-                        child: Opacity(
-                          opacity: 1,
-                          child: LinearGradientButton.primaryButton(
-                            onTap: () {
-                              onEnterChannel();
-                            },
-                            label: t.chat.guild.enterChannel,
-                          ),
-                        ),
+                      return BlocBuilder<WalletBloc, WalletState>(
+                        builder: (context, walletState) {
+                          final connectButtonState = walletState.state;
+                          final isConnected = connectButtonState ==
+                              ConnectButtonState.connected;
+                          if (isConnected) {
+                            return Container(
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  top: BorderSide(
+                                    color: colorScheme.outline,
+                                  ),
+                                ),
+                              ),
+                              padding: EdgeInsets.symmetric(
+                                vertical: Spacing.smMedium,
+                                horizontal: Spacing.xSmall,
+                              ),
+                              child: Opacity(
+                                opacity: 1,
+                                child: LinearGradientButton.primaryButton(
+                                  onTap: () {
+                                    onEnterChannel();
+                                  },
+                                  label: t.chat.guild.enterChannel,
+                                ),
+                              ),
+                            );
+                          }
+                          return const SizedBox();
+                        },
                       );
                     }
                     return const SizedBox();

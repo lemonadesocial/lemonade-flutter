@@ -1,4 +1,5 @@
 import 'package:app/core/application/chat/check_guild_room_roles_bloc/check_guild_room_roles_bloc.dart';
+import 'package:app/core/application/wallet/wallet_bloc/wallet_bloc.dart';
 import 'package:app/core/domain/chat/entities/guild.dart';
 import 'package:app/core/domain/chat/entities/guild_room.dart';
 import 'package:app/core/presentation/pages/chat/chat_list/views/widgets/guild_detail_item.dart';
@@ -6,6 +7,7 @@ import 'package:app/core/presentation/pages/chat/chat_list/views/widgets/guild_r
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/service/wallet/wallet_connect_service.dart';
 import 'package:app/core/utils/guild_utils.dart';
+import 'package:app/core/utils/string_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -15,6 +17,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:web3modal_flutter/widgets/buttons/connect_button.dart';
 
 class GuildRolesList extends StatelessWidget {
   const GuildRolesList({super.key, required this.guildRoom});
@@ -38,17 +41,21 @@ class GuildRolesList extends StatelessWidget {
                     return Column(
                       children: [
                         SizedBox(height: Spacing.medium),
-                        GuildDetailItem(
-                          guild: guild,
-                          onTap: () {
-                            AutoRouter.of(context).navigate(
-                              WebviewRoute(
-                                uri: Uri.parse(
-                                  GuildUtils.getFullGuildUrl(
-                                    guild.urlName ?? '',
-                                  ),
-                                ),
-                              ),
+                        BlocBuilder<WalletBloc, WalletState>(
+                          builder: (context, walletState) {
+                            final connectButtonState = walletState.state;
+                            final isConnected = connectButtonState ==
+                                ConnectButtonState.connected;
+                            return GuildDetailItem(
+                              guild: guild,
+                              onTap: () {
+                                _handleGuildRoleTap(context, guild);
+                              },
+                              actionLabel: isConnected
+                                  ? t.common.actions.join
+                                  : StringUtils.capitalize(
+                                      t.common.actions.connect,
+                                    ),
                             );
                           },
                         ),
@@ -80,7 +87,8 @@ class GuildRolesList extends StatelessWidget {
                       ConstrainedBox(
                         constraints: BoxConstraints(maxHeight: 300.w),
                         child: ListView.separated(
-                          shrinkWrap: true,
+                          shrinkWrap:
+                              guildRoles != null && guildRoles.length < 6,
                           itemCount: guildRoles?.length ?? 0,
                           itemBuilder: (context, index) {
                             final completed = guildRolePermissions?.any(
@@ -89,11 +97,24 @@ class GuildRolesList extends StatelessWidget {
                                   item.access == true,
                             );
                             return guildRoles != null
-                                ? GuildRoleItem(
-                                    guildRole: guildRoles[index],
-                                    onTap: () =>
-                                        _handleGuildRoleTap(context, guild),
-                                    completed: completed,
+                                ? BlocBuilder<WalletBloc, WalletState>(
+                                    builder: (context, walletState) {
+                                      final connectButtonState =
+                                          walletState.state;
+                                      final isConnected = connectButtonState ==
+                                          ConnectButtonState.connected;
+                                      return GuildRoleItem(
+                                        guildRole: guildRoles[index],
+                                        onTap: () =>
+                                            _handleGuildRoleTap(context, guild),
+                                        completed: completed,
+                                        actionLabel: isConnected
+                                            ? t.common.actions.join
+                                            : StringUtils.capitalize(
+                                                t.common.actions.connect,
+                                              ),
+                                      );
+                                    },
                                   )
                                 : const SizedBox();
                           },

@@ -198,6 +198,7 @@ class _ChatListPageViewState extends State<ChatListPageView>
                                         guildRoom: guildRooms[index],
                                         onTap: () {
                                           showCupertinoModalBottomSheet(
+                                            enableDrag: false,
                                             barrierColor: LemonColor.black50,
                                             bounce: true,
                                             backgroundColor:

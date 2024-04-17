@@ -14,11 +14,13 @@ class GuildRoleItem extends StatelessWidget {
   final GuildRole guildRole;
   final Function() onTap;
   final bool? completed;
+  final String? actionLabel;
   const GuildRoleItem({
     super.key,
     required this.guildRole,
     required this.onTap,
     this.completed,
+    this.actionLabel,
   });
 
   @override
@@ -119,6 +121,14 @@ class GuildRoleItem extends StatelessWidget {
                       ],
                     ),
                   ],
+                ),
+              ),
+              Padding(
+                padding:
+                    EdgeInsets.symmetric(horizontal: Spacing.superExtraSmall),
+                child: Text(
+                  actionLabel ?? '',
+                  style: Typo.small.copyWith(color: colorScheme.onSecondary),
                 ),
               ),
               Assets.icons.icArrowBack.svg(

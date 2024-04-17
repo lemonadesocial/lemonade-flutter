@@ -13,10 +13,12 @@ import 'package:flutter_svg/svg.dart';
 class GuildDetailItem extends StatelessWidget {
   final Guild? guild;
   final Function() onTap;
+  final String? actionLabel;
   const GuildDetailItem({
     super.key,
     this.guild,
     required this.onTap,
+    this.actionLabel,
   });
 
   @override
@@ -84,7 +86,43 @@ class GuildDetailItem extends StatelessWidget {
                         height: 0,
                       ),
                     ),
+                    const SizedBox(
+                      height: 2,
+                    ),
+                    Row(
+                      children: [
+                        Container(
+                          width: 2.w,
+                          height: 8.w,
+                          decoration: ShapeDecoration(
+                            color: LemonColor.paleViolet,
+                            shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.circular(LemonRadius.extraSmall),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: Spacing.superExtraSmall,
+                        ),
+                        Text(
+                          t.chat.guild.complete,
+                          style: Typo.small.copyWith(
+                            color: colorScheme.onSecondary,
+                            height: 0,
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
+                ),
+              ),
+              Padding(
+                padding:
+                    EdgeInsets.symmetric(horizontal: Spacing.superExtraSmall),
+                child: Text(
+                  actionLabel ?? '',
+                  style: Typo.small.copyWith(color: colorScheme.onSecondary),
                 ),
               ),
               Assets.icons.icArrowBack.svg(
