@@ -17,6 +17,10 @@ class CreateChatButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // TODO: Temporary hide create guild button
+    if (ChatListTabs.messages.tabIndex == ChatListTabs.guilds.index) {
+      return const SizedBox();
+    }
     return InkWell(
       onTap: () {
         if (selectedTabIndex == ChatListTabs.messages.tabIndex ||
