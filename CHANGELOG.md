@@ -1,5 +1,30 @@
 # Changelog
 
+## [1.16.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.15.0...v1.16.0) (2024-04-17)
+
+
+### Features
+
+* event discount setting ([#527](https://github.com/lemonadesocial/lemonade-flutter/issues/527)) ([1a9bfde](https://github.com/lemonadesocial/lemonade-flutter/commit/1a9bfdeea2aa1f34091ff542e3215df1b6930aee))
+* event publish flow ([#526](https://github.com/lemonadesocial/lemonade-flutter/issues/526)) ([7c0d39d](https://github.com/lemonadesocial/lemonade-flutter/commit/7c0d39d22e313b230877f55551cf7ef4736c9047))
+* handle buy additional tickets ([#530](https://github.com/lemonadesocial/lemonade-flutter/issues/530)) ([2b784df](https://github.com/lemonadesocial/lemonade-flutter/commit/2b784dfe526a0be58b573fa20371b5a26a44e128))
+
+
+### Bug Fixes
+
+* can't buy multiple category tickets & not auto select ticket type if only once item ([ced341a](https://github.com/lemonadesocial/lemonade-flutter/commit/ced341aec07b1367c28381d65e31cd7edd28f777))
+* crash user profile due to using ! on null value ([1678192](https://github.com/lemonadesocial/lemonade-flutter/commit/16781921250e8be9b4309470553429e99c9a0bac))
+* crash when try open another user profile before login ([#537](https://github.com/lemonadesocial/lemonade-flutter/issues/537)) ([1678192](https://github.com/lemonadesocial/lemonade-flutter/commit/16781921250e8be9b4309470553429e99c9a0bac))
+* display empty state for chat list ([#542](https://github.com/lemonadesocial/lemonade-flutter/issues/542)) ([5742d10](https://github.com/lemonadesocial/lemonade-flutter/commit/5742d1048ac373ea66b2d3e7b4fd88d1a46e88fd))
+* event drawer outline button polishment ([#544](https://github.com/lemonadesocial/lemonade-flutter/issues/544)) ([73ac16c](https://github.com/lemonadesocial/lemonade-flutter/commit/73ac16c2d41a8dd9f94ba894d8b3fec8019f8529))
+* fix create reward blocked, and ui refinement for create reward page ([#532](https://github.com/lemonadesocial/lemonade-flutter/issues/532)) ([eeb251c](https://github.com/lemonadesocial/lemonade-flutter/commit/eeb251c196362854d20affdd81ff8d497bb6b516))
+* fix display and search function in event cohost settings ([#543](https://github.com/lemonadesocial/lemonade-flutter/issues/543)) ([a1aa9dc](https://github.com/lemonadesocial/lemonade-flutter/commit/a1aa9dc559b10ddb3cc8925aa834df2e04369e82))
+* fix navigate to assign page when buy additional tickets ([#540](https://github.com/lemonadesocial/lemonade-flutter/issues/540)) ([bce35c8](https://github.com/lemonadesocial/lemonade-flutter/commit/bce35c87e536055d11ef7ef03c87a3b14d327739))
+* minor ui bug of cohost setting ([#533](https://github.com/lemonadesocial/lemonade-flutter/issues/533)) ([ce5d5b6](https://github.com/lemonadesocial/lemonade-flutter/commit/ce5d5b6a3195e3ce897d9b45cdc753492c9f5715))
+* promotion description in control panel ([#536](https://github.com/lemonadesocial/lemonade-flutter/issues/536)) ([a01c406](https://github.com/lemonadesocial/lemonade-flutter/commit/a01c406b2542c04b5924f7ef6b75604a0009ddcf))
+* revert decimals issue ([#538](https://github.com/lemonadesocial/lemonade-flutter/issues/538)) ([e8a4999](https://github.com/lemonadesocial/lemonade-flutter/commit/e8a49995e930ce8b8a8269f9578642d4db45484f))
+* sort program date chronologically ([#541](https://github.com/lemonadesocial/lemonade-flutter/issues/541)) ([cf5ed14](https://github.com/lemonadesocial/lemonade-flutter/commit/cf5ed147bd9a352505e3d5f0e1e4cd6976d39912))
+
 ## [1.15.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.13.0...v1.15.0) (2024-04-10)
 
 
