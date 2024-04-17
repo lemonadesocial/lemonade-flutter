@@ -154,6 +154,7 @@ dependencies:
   appflowy_editor: 2.3.1
   google_fonts: 6.1.0
   flutter_markdown: ^0.6.20
+  fl_chart: ^0.67.0
 
 dependency_overrides:
   matrix_api_lite:
