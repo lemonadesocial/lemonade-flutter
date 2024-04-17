@@ -30,13 +30,14 @@ class CheckGuildRoomRolesBloc
     List<GuildRole> filteredRoles = [];
     if (guild != null) {
       if (guildRoleIds != null) {
-        filteredRoles = guild.roles!
-            .where(
-              (role) => guildRoleIds.contains(role.id),
-            )
-            .toList();
+        filteredRoles = guild.roles
+                ?.where(
+                  (role) => guildRoleIds.contains(role.id),
+                )
+                .toList() ??
+            [];
       } else {
-        filteredRoles = guild.roles!;
+        filteredRoles = guild.roles ?? [];
       }
     }
     emit(
