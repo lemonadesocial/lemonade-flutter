@@ -1,6 +1,7 @@
 import 'package:app/core/domain/chat/chat_repository.dart';
 import 'package:app/core/domain/chat/entities/guild.dart';
 import 'package:app/core/domain/chat/entities/guild_room.dart';
+import 'package:app/core/service/wallet/wallet_connect_service.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -22,14 +23,13 @@ class CheckGuildRoomRolesBloc
     CheckGuildRoomRolesEventFetch event,
     Emitter emit,
   ) async {
+    final userWalletAddress =
+        getIt<WalletConnectService>().w3mService.address ?? '';
     emit(CheckGuildRoomRolesState.loading());
     final guild = await _getGuildDetail();
     List<GuildRolePermission> guildRolePermissions = [];
-    if (event.walletAddress != null) {
-      if (event.walletAddress!.isNotEmpty) {
-        guildRolePermissions =
-            await _getGuildRolePermissions(event.walletAddress ?? '');
-      }
+    if (userWalletAddress.isNotEmpty) {
+      guildRolePermissions = await _getGuildRolePermissions(userWalletAddress);
     }
     final guildRoleIds = guildRoom.guildRoleIds;
     List<GuildRole> filteredRoles = [];
@@ -78,9 +78,7 @@ class CheckGuildRoomRolesBloc
 
 @freezed
 class CheckGuildRoomRolesEvent with _$CheckGuildRoomRolesEvent {
-  factory CheckGuildRoomRolesEvent.fetch({
-    String? walletAddress,
-  }) = CheckGuildRoomRolesEventFetch;
+  factory CheckGuildRoomRolesEvent.fetch() = CheckGuildRoomRolesEventFetch;
 }
 
 @freezed

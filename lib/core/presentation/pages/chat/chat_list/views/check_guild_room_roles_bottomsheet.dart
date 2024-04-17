@@ -24,12 +24,10 @@ class CheckGuildRoomRolesBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userWalletAddress =
-        getIt<WalletConnectService>().w3mService.address ?? '';
     return BlocProvider(
       create: (context) => CheckGuildRoomRolesBloc(guildRoom: guildRoom)
         ..add(
-          CheckGuildRoomRolesEventFetch(walletAddress: userWalletAddress),
+          CheckGuildRoomRolesEventFetch(),
         ),
       child: CheckGuildRoomRolesBottomSheetView(
         guildRoom: guildRoom,

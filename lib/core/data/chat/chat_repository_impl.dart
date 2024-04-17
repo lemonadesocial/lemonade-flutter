@@ -2,8 +2,8 @@ import 'package:app/core/domain/chat/chat_repository.dart';
 import 'package:app/core/domain/chat/entities/guild.dart';
 import 'package:app/core/domain/chat/entities/guild_room.dart';
 import 'package:app/core/failure.dart';
+import 'package:app/core/service/guild/guild_service.dart';
 import 'package:app/core/utils/gql/gql.dart';
-import 'package:app/core/utils/guild_utils.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:dartz/dartz.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -41,7 +41,7 @@ class ChatRepositoryImpl implements ChatRepository {
 
   @override
   Future<Either<Failure, Guild?>> getGuildDetail(num guildId) async {
-    final result = await GuildUtils.getGuildDetail(guildId);
+    final result = await GuildService.getGuildDetail(guildId);
     try {
       return Right(result);
     } catch (e) {
@@ -55,7 +55,7 @@ class ChatRepositoryImpl implements ChatRepository {
     required String walletAddress,
   }) async {
     final result =
-        await GuildUtils.checkUserAccessToAGuild(guildId, walletAddress);
+        await GuildService.checkUserAccessToAGuild(guildId, walletAddress);
     try {
       return Right(result);
     } catch (e) {
