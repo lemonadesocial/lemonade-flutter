@@ -61,7 +61,8 @@
         "leave": "Leave",
         "post": "Post",
         "receipt": "receipt",
-        "publish": "Publish"
+        "publish": "Publish",
+        "join": "Join"
     },
     "followed": "Followed",
     "anonymous": "anonymous",
