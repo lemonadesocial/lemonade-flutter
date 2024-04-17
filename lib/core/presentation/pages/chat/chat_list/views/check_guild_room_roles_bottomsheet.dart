@@ -98,7 +98,7 @@ class CheckGuildRoomRolesBottomSheetView extends StatelessWidget {
                     if (guildRoom.guildRoleIds == null) {
                       shouldShowEnterChannel = true;
                     }
-                    if (shouldShowEnterChannel == true) {
+                    if (shouldShowEnterChannel) {
                       return Container(
                         decoration: BoxDecoration(
                           border: Border(

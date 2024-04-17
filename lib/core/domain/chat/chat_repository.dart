@@ -6,7 +6,7 @@ import 'package:dartz/dartz.dart';
 abstract class ChatRepository {
   Future<Either<Failure, List<GuildRoom>>> getGuildRooms();
 
-  Future<Either<Failure, Guild>> getGuildDetail(num guildId);
+  Future<Either<Failure, Guild?>> getGuildDetail(num guildId);
 
   Future<Either<Failure, List<GuildRolePermission>>> getGuildRolePermissions({
     required num guildId,

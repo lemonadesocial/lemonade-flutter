@@ -16,16 +16,6 @@ class GuildRoomItem extends StatelessWidget {
   final GuildRoom guildRoom;
   final Function()? onTap;
 
-  Widget _buildAvatar() {
-    return MatrixAvatar(
-      client: getIt<MatrixService>().client,
-      mxContent: null,
-      size: 42.w,
-      name: guildRoom.title ?? '',
-      fontSize: Typo.medium.fontSize!,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -41,7 +31,13 @@ class GuildRoomItem extends StatelessWidget {
         ),
         child: Row(
           children: [
-            _buildAvatar(),
+            MatrixAvatar(
+              client: getIt<MatrixService>().client,
+              mxContent: null,
+              size: 42.w,
+              name: guildRoom.title ?? '',
+              fontSize: Typo.medium.fontSize!,
+            ),
             SizedBox(
               width: Spacing.xSmall,
             ),

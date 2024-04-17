@@ -40,7 +40,7 @@ class ChatRepositoryImpl implements ChatRepository {
   }
 
   @override
-  Future<Either<Failure, Guild>> getGuildDetail(num guildId) async {
+  Future<Either<Failure, Guild?>> getGuildDetail(num guildId) async {
     final result = await GuildUtils.getGuildDetail(guildId);
     try {
       return Right(result);

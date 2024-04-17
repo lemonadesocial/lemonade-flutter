@@ -24,8 +24,13 @@ class CheckGuildRoomRolesBloc
   ) async {
     emit(CheckGuildRoomRolesState.loading());
     final guild = await _getGuildDetail();
-    final guildRolePermissions =
-        await _getGuildRolePermissions(event.walletAddress);
+    List<GuildRolePermission> guildRolePermissions = [];
+    if (event.walletAddress != null) {
+      if (event.walletAddress!.isNotEmpty) {
+        guildRolePermissions =
+            await _getGuildRolePermissions(event.walletAddress ?? '');
+      }
+    }
     final guildRoleIds = guildRoom.guildRoleIds;
     List<GuildRole> filteredRoles = [];
     if (guild != null) {
@@ -54,10 +59,10 @@ class CheckGuildRoomRolesBloc
     if (result.isLeft()) {
       return null;
     }
-    return result.getOrElse(() => const Guild());
+    return result.getOrElse(() => null);
   }
 
-  Future<List<GuildRolePermission>?> _getGuildRolePermissions(
+  Future<List<GuildRolePermission>> _getGuildRolePermissions(
     String? walletAddress,
   ) async {
     final result = await _chatRepository.getGuildRolePermissions(
