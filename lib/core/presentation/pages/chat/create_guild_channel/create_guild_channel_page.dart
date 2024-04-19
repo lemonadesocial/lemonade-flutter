@@ -1,5 +1,7 @@
+import 'package:app/core/application/chat/create_guild_channel_bloc/create_guild_channel_bloc.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 @RoutePage()
 class CreateGuildChannelPage extends StatelessWidget
@@ -8,7 +10,10 @@ class CreateGuildChannelPage extends StatelessWidget
 
   @override
   Widget wrappedRoute(BuildContext context) {
-    return this;
+    return BlocProvider(
+      create: (context) => CreateGuildChannelBloc(),
+      child: this,
+    );
   }
 
   @override
