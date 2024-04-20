@@ -12,4 +12,6 @@ abstract class ChatRepository {
     required num guildId,
     required String walletAddress,
   });
+
+  Future<Either<Failure, List<GuildBasic>?>> getAllGuilds();
 }

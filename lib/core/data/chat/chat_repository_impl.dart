@@ -62,4 +62,14 @@ class ChatRepositoryImpl implements ChatRepository {
       return Left(Failure());
     }
   }
+
+  @override
+  Future<Either<Failure, List<GuildBasic>?>> getAllGuilds() async {
+    final result = await GuildService.getAllGuilds();
+    try {
+      return Right(result);
+    } catch (e) {
+      return Left(Failure());
+    }
+  }
 }

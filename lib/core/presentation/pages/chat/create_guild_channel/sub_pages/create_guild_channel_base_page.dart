@@ -110,7 +110,7 @@ class CreateGuildChannelBasePage extends StatelessWidget {
                     builder: (context, state) => Opacity(
                       opacity: state.isValid ? 1 : 0.5,
                       child: LinearGradientButton.primaryButton(
-                        onTap: () {
+                        onTap: () async {
                           if (!state.isValid) return;
                           Vibrate.feedback(FeedbackType.light);
                           FocusManager.instance.primaryFocus?.unfocus();
