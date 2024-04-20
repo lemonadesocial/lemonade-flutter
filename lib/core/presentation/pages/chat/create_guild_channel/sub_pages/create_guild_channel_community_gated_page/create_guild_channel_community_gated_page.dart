@@ -1,5 +1,5 @@
 import 'package:app/core/application/chat/create_guild_channel_bloc/create_guild_channel_bloc.dart';
-import 'package:app/core/presentation/pages/chat/create_guild_channel/sub_pages/widgets/guild_list_item.dart';
+import 'package:app/core/presentation/pages/chat/create_guild_channel/sub_pages/create_guild_channel_community_gated_page/widgets/guild_list_item.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
@@ -28,7 +28,16 @@ class CreateGuildChannelCommunityGatedPage extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: colorScheme.primary,
-      appBar: const LemonAppBar(),
+      appBar: LemonAppBar(
+        onPressBack: () {
+          AutoRouter.of(context).pop();
+          context.read<CreateGuildChannelBloc>().add(
+                const CreateGuildChannelEventSearchGuilds(
+                  searchTerm: '',
+                ),
+              );
+        },
+      ),
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: Column(
@@ -123,6 +132,11 @@ class CreateGuildChannelCommunityGatedPage extends StatelessWidget {
                               onTap: () {
                                 Vibrate.feedback(FeedbackType.light);
                                 FocusManager.instance.primaryFocus?.unfocus();
+                                context.read<CreateGuildChannelBloc>().add(
+                                      CreateGuildChannelEventSelectGuild(
+                                        guildId: guild.id,
+                                      ),
+                                    );
                                 AutoRouter.of(context).navigate(
                                   const CreateGuildChannelAccessRoute(),
                                 );

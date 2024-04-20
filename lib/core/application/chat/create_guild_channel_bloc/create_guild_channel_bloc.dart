@@ -15,6 +15,7 @@ class CreateGuildChannelBloc
     on<CreateGuildChannelEventTopicChanged>(_onTopicChanged);
     on<CreateGuildChannelEventGetAllGuilds>(_onGetAllGuilds);
     on<CreateGuildChannelEventSearchGuilds>(_onSearchGuilds);
+    on<CreateGuildChannelEventSelectGuild>(_onSelectGuild);
   }
 
   Future<void> _onChannelNameChanged(
@@ -68,26 +69,17 @@ class CreateGuildChannelBloc
     emit(
       state.copyWith(searchTerm: event.searchTerm),
     );
-    // emit(state.copyWith(statusFetchGuilds: CreateGuildChannelStatus.loading));
+  }
 
-    // List<GuildBasic> filteredGuilds;
-    // if (event.searchTerm!.isEmpty) {
-    //   filteredGuilds = state.guilds ?? [];
-    // } else {
-    //   filteredGuilds = (state.guilds ?? [])
-    //       .where(
-    //         (guild) => (guild.name ?? '').toLowerCase().contains(
-    //               (event.searchTerm ?? '').toLowerCase(),
-    //             ),
-    //       )
-    //       .toList();
-    // }
-    // emit(
-    //   state.copyWith(
-    //     guilds: filteredGuilds,
-    //     statusFetchGuilds: CreateGuildChannelStatus.success,
-    //   ),
-    // );
+  Future<void> _onSelectGuild(
+    CreateGuildChannelEventSelectGuild event,
+    Emitter emit,
+  ) async {
+    final result = await _chatRepository.getGuildDetail(event.guildId ?? 0);
+    final guildDetail = result.getOrElse(() => null);
+    emit(
+      state.copyWith(guildDetail: guildDetail),
+    );
   }
 }
 
@@ -101,10 +93,12 @@ class CreateGuildChannelEvent with _$CreateGuildChannelEvent {
   }) = CreateGuildChannelEventTopicChanged;
   const factory CreateGuildChannelEvent.getAllGuilds() =
       CreateGuildChannelEventGetAllGuilds;
-
   const factory CreateGuildChannelEvent.searchGuilds({
     String? searchTerm,
   }) = CreateGuildChannelEventSearchGuilds;
+  const factory CreateGuildChannelEvent.selectGuild({
+    int? guildId,
+  }) = CreateGuildChannelEventSelectGuild;
 }
 
 @freezed
@@ -117,6 +111,7 @@ class CreateGuildChannelState with _$CreateGuildChannelState {
     @Default(CreateGuildChannelStatus.initial)
     CreateGuildChannelStatus statusFetchGuilds,
     String? searchTerm,
+    Guild? guildDetail,
   }) = _IssueTicketsBlocState;
 }
 
