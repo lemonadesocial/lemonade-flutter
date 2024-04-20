@@ -6,6 +6,7 @@ targets:
           scopes:
             - lib/graphql/ai/**
             - lib/graphql/backend/**
+            - lib/graphql/cubejs/**
           scalars:
             DateTimeISO:
               type: DateTime

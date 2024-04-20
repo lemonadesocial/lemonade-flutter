@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:app/core/config.dart';
 import 'package:app/core/domain/common/entities/common.dart';
+import 'package:app/core/domain/cubejs/cubejs_repository.dart';
 import 'package:app/core/oauth/oauth.dart';
 import 'package:app/core/utils/gql/custom_error_handler.dart';
 import 'package:app/injection/register_module.dart';
@@ -151,4 +152,52 @@ class AIGQL extends BaseGQL {
           httpUrl: AppConfig.aiUrl,
           wssUrl: AppConfig.wssAIUrl,
         );
+}
+
+class CubeGQL {
+  final String eventId;
+  CubeGQL({
+    required this.eventId,
+  }) {
+    _errorLink = ErrorLink(
+      onException: (request, forward, exception) =>
+          CustomErrorHandler.handleExceptionError(request, forward, exception),
+      onGraphQLError: (request, forward, response) =>
+          CustomErrorHandler.handleGraphQLError(request, forward, response),
+    );
+
+    _client = GraphQLClient(
+      defaultPolicies: DefaultPolicies(
+        query: Policies(
+          fetch: FetchPolicy.cacheAndNetwork,
+        ),
+      ),
+      link: Link.from([
+        _errorLink,
+        AuthLink(
+          getToken: () async {
+            final result = await getIt<CubeJsRepository>()
+                .generateCubejsToken(eventId: eventId);
+            final cubeToken = result.getOrElse(() => '');
+            return cubeToken;
+          },
+        ),
+        HttpLink(
+          AppConfig.cubeJsUrl,
+          defaultHeaders: {
+            'Content-Type': 'application/json',
+          },
+        ),
+      ]),
+      cache: GraphQLCache(
+        partialDataPolicy: PartialDataCachePolicy.accept,
+        store: HiveStore(),
+      ),
+    );
+  }
+
+  final appOauth = getIt<AppOauth>();
+  late final GraphQLClient _client;
+  late final ErrorLink _errorLink;
+  GraphQLClient get client => _client;
 }

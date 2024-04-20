@@ -1,0 +1,7 @@
+mutation GenerateCubejsToken(
+  $events: [MongoID!]
+  $site: MongoID
+  $user: MongoID
+) {
+  generateCubejsToken(events: $events, site: $site, user: $user)
+}

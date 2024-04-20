@@ -1,0 +1,8 @@
+query GetTrackViews($where: TrackViewsWhereInput) {
+  cube {
+    trackViews(where:$where) {
+      count
+      countDistinctUsers
+    }
+  }
+}

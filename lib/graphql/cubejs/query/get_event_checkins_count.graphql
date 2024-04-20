@@ -1,0 +1,7 @@
+query GetEventCheckinsCount {
+  cube {
+    eventCheckins {
+      count
+    }
+  }
+}

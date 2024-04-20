@@ -155,6 +155,7 @@ dependencies:
   google_fonts: 6.1.0
   flutter_markdown: ^0.6.20
   fl_chart: ^0.67.0
+  country_picker: ^2.0.25
 
 dependency_overrides:
   matrix_api_lite:

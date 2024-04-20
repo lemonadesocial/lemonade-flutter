@@ -1,0 +1,57 @@
+query GetEventCountDistinctUserByCountry(
+  $where: TracksWhereInput
+  $limit: Int
+) {
+  cube(limit: $limit) {
+    tracks(where: $where, orderBy: { countDistinctUsers: desc }) {
+      countDistinctUsers
+      geoipCountry
+    }
+  }
+}
+
+query GetEventCountDistinctUserByCity($where: TracksWhereInput, $limit: Int) {
+  cube(limit: $limit) {
+    tracks(where: $where, orderBy: { countDistinctUsers: desc }) {
+      countDistinctUsers
+      geoipCity
+      geoipCountry
+    }
+  }
+}
+
+query GetAllEventAccepted {
+  cube {
+    eventsAccepted {
+      count
+    }
+  }
+}
+
+query GetEventAcceptedByAgeGroup(
+  $where: EventsAcceptedWhereInput
+  $limit: Int
+) {
+  cube(limit: $limit) {
+    eventsAccepted(orderBy: { count: desc }, where: $where) {
+      count
+    }
+    users {
+      ageGroup
+    }
+  }
+}
+
+query GetEventAcceptedByPronouns(
+  $where: EventsAcceptedWhereInput
+  $limit: Int
+) {
+  cube(limit: $limit) {
+    eventsAccepted(orderBy: { count: desc }, where: $where) {
+      count
+    }
+    users {
+      pronoun
+    }
+  }
+}
