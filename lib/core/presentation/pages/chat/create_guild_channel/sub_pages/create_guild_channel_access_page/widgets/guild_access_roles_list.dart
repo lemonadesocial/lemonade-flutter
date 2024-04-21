@@ -21,11 +21,7 @@ class GuildAccessRolesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
     final guildRoles = guildDetail?.roles ?? [];
-    print("> guildRoles.length");
-    print(guildRoles.length);
     return SliverList.separated(
       itemCount: guildRoles.length,
       itemBuilder: (context, index) {
