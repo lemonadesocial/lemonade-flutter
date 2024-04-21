@@ -75,10 +75,15 @@ class CreateGuildChannelBloc
     CreateGuildChannelEventSelectGuild event,
     Emitter emit,
   ) async {
+    emit(state.copyWith(
+        statusFetchGuildDetail: CreateGuildChannelStatus.loading));
     final result = await _chatRepository.getGuildDetail(event.guildId ?? 0);
     final guildDetail = result.getOrElse(() => null);
     emit(
-      state.copyWith(guildDetail: guildDetail),
+      state.copyWith(
+        guildDetail: guildDetail,
+        statusFetchGuildDetail: CreateGuildChannelStatus.success,
+      ),
     );
   }
 }
@@ -106,12 +111,12 @@ class CreateGuildChannelState with _$CreateGuildChannelState {
   factory CreateGuildChannelState({
     String? channelname,
     String? topic,
-    // List<GuildBasic>? guilds,
+    List<GuildBasic>? guilds,
     required bool isValid,
-    @Default(CreateGuildChannelStatus.initial)
-    CreateGuildChannelStatus statusFetchGuilds,
     String? searchTerm,
     Guild? guildDetail,
+    @Default(CreateGuildChannelStatus.initial) CreateGuildChannelStatus statusFetchGuilds,
+    @Default(CreateGuildChannelStatus.initial) CreateGuildChannelStatus statusFetchGuildDetail,
   }) = _IssueTicketsBlocState;
 }
 

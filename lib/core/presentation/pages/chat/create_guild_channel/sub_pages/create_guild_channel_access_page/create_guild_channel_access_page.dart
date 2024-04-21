@@ -3,6 +3,7 @@ import 'package:app/core/presentation/pages/chat/create_guild_channel/sub_pages/
 import 'package:app/core/presentation/pages/chat/create_guild_channel/sub_pages/create_guild_channel_access_page/widgets/guild_access_roles_list.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
+import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -33,7 +34,6 @@ class CreateGuildChannelAccessPage extends StatelessWidget {
             Padding(
               padding: EdgeInsets.symmetric(
                 horizontal: Spacing.xSmall,
-                vertical: Spacing.superExtraSmall,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,18 +60,28 @@ class CreateGuildChannelAccessPage extends StatelessWidget {
                   SizedBox(
                     height: 30.w,
                   ),
-                  BlocBuilder<CreateGuildChannelBloc, CreateGuildChannelState>(
-                    builder: (context, state) {
-                      return GuildAccessInfoSection(
-                        guildDetail: state.guildDetail,
-                      );
-                    },
-                  ),
-                  SizedBox(
-                    height: 30.w,
-                  ),
                 ],
               ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: Spacing.xSmall,
+              ),
+              child:
+                  BlocBuilder<CreateGuildChannelBloc, CreateGuildChannelState>(
+                builder: (context, state) {
+                  if (state.statusFetchGuildDetail ==
+                      CreateGuildChannelStatus.loading) {
+                    return Center(child: Loading.defaultLoading(context));
+                  }
+                  return GuildAccessInfoSection(
+                    guildDetail: state.guildDetail,
+                  );
+                },
+              ),
+            ),
+            SizedBox(
+              height: 30.w,
             ),
             Expanded(
               child: Padding(
@@ -83,6 +93,12 @@ class CreateGuildChannelAccessPage extends StatelessWidget {
                     BlocBuilder<CreateGuildChannelBloc,
                         CreateGuildChannelState>(
                       builder: (context, state) {
+                        if (state.statusFetchGuildDetail ==
+                            CreateGuildChannelStatus.loading) {
+                          return const SliverToBoxAdapter(
+                            child: SizedBox.shrink(),
+                          );
+                        }
                         return GuildAccessRolesList(
                           guildDetail: state.guildDetail,
                         );

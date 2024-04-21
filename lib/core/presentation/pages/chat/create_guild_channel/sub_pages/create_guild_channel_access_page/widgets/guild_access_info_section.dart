@@ -8,9 +8,11 @@ import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 
 class GuildAccessInfoSection extends StatelessWidget {
   const GuildAccessInfoSection({super.key, this.guildDetail});
@@ -97,9 +99,15 @@ class GuildAccessInfoSection extends StatelessWidget {
                 ),
               ),
               SizedBox(width: Spacing.xSmall),
-              ThemeSvgIcon(
-                builder: (colorFilter) => Assets.icons.icReload.svg(
-                  colorFilter: colorFilter,
+              InkWell(
+                onTap: () {
+                  Vibrate.feedback(FeedbackType.light);
+                  AutoRouter.of(context).pop();
+                },
+                child: ThemeSvgIcon(
+                  builder: (colorFilter) => Assets.icons.icReload.svg(
+                    colorFilter: colorFilter,
+                  ),
                 ),
               ),
             ],
