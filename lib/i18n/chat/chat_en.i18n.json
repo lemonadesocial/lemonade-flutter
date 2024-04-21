@@ -73,6 +73,8 @@
         "incomplete": "Incomplete",
         "complete": "Complete",
         "enterChannel": "Enter Channel",
-        "joinGuildRoom": "Join ${guildName}"
+        "joinGuildRoom": "Join ${guildName}",
+        "allMembers": "All members",
+        "selectRole": "Select role"
     }
 }

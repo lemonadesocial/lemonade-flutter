@@ -11,10 +11,7 @@ class CreateGuildChannelPage extends StatelessWidget
   @override
   Widget wrappedRoute(BuildContext context) {
     return BlocProvider(
-      create: (context) => CreateGuildChannelBloc()
-        ..add(
-          const CreateGuildChannelEvent.getAllGuilds(),
-        ),
+      create: (context) => CreateGuildChannelBloc(),
       child: this,
     );
   }

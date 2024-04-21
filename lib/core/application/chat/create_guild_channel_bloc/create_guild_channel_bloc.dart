@@ -13,7 +13,7 @@ class CreateGuildChannelBloc
   CreateGuildChannelBloc() : super(CreateGuildChannelState(isValid: false)) {
     on<CreateGuildChannelEventChannelNameChanged>(_onChannelNameChanged);
     on<CreateGuildChannelEventTopicChanged>(_onTopicChanged);
-    on<CreateGuildChannelEventGetAllGuilds>(_onGetAllGuilds);
+    // on<CreateGuildChannelEventGetAllGuilds>(_onGetAllGuilds);
     on<CreateGuildChannelEventSearchGuilds>(_onSearchGuilds);
     on<CreateGuildChannelEventSelectGuild>(_onSelectGuild);
   }
@@ -47,20 +47,20 @@ class CreateGuildChannelBloc
     return state.copyWith(isValid: hasChannelName);
   }
 
-  Future<void> _onGetAllGuilds(
-    CreateGuildChannelEventGetAllGuilds event,
-    Emitter emit,
-  ) async {
-    emit(state.copyWith(statusFetchGuilds: CreateGuildChannelStatus.loading));
-    final result = await _chatRepository.getAllGuilds();
-    final allGuilds = result.getOrElse(() => []);
-    emit(
-      state.copyWith(
-        guilds: allGuilds,
-        statusFetchGuilds: CreateGuildChannelStatus.success,
-      ),
-    );
-  }
+  // Future<void> _onGetAllGuilds(
+  //   CreateGuildChannelEventGetAllGuilds event,
+  //   Emitter emit,
+  // ) async {
+  //   emit(state.copyWith(statusFetchGuilds: CreateGuildChannelStatus.loading));
+  //   final result = await _chatRepository.getAllGuilds();
+  //   final allGuilds = result.getOrElse(() => []);
+  //   emit(
+  //     state.copyWith(
+  //       guilds: allGuilds,
+  //       statusFetchGuilds: CreateGuildChannelStatus.success,
+  //     ),
+  //   );
+  // }
 
   Future<void> _onSearchGuilds(
     CreateGuildChannelEventSearchGuilds event,
@@ -91,8 +91,8 @@ class CreateGuildChannelEvent with _$CreateGuildChannelEvent {
   factory CreateGuildChannelEvent.topicChanged({
     String? topic,
   }) = CreateGuildChannelEventTopicChanged;
-  const factory CreateGuildChannelEvent.getAllGuilds() =
-      CreateGuildChannelEventGetAllGuilds;
+  // const factory CreateGuildChannelEvent.getAllGuilds() =
+  //     CreateGuildChannelEventGetAllGuilds;
   const factory CreateGuildChannelEvent.searchGuilds({
     String? searchTerm,
   }) = CreateGuildChannelEventSearchGuilds;
@@ -106,7 +106,7 @@ class CreateGuildChannelState with _$CreateGuildChannelState {
   factory CreateGuildChannelState({
     String? channelname,
     String? topic,
-    List<GuildBasic>? guilds,
+    // List<GuildBasic>? guilds,
     required bool isValid,
     @Default(CreateGuildChannelStatus.initial)
     CreateGuildChannelStatus statusFetchGuilds,
