@@ -1,26 +1,30 @@
+import 'package:app/theme/color.dart';
+import 'package:app/theme/spacing.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LemonLineChart extends StatefulWidget {
-  final Color? lineColor;
+  final List<FlSpot> data;
   final Widget Function(double value, TitleMeta meta) xTitlesWidget;
   final Widget Function(double value, TitleMeta meta) yTitlesWidget;
   final double? minX;
   final double? maxX;
   final double? minY;
   final double? maxY;
-  final List<FlSpot> data;
+  final Color? lineColor;
+  final LineTouchData? lineTouchData;
   const LemonLineChart({
     super.key,
     required this.data,
     required this.xTitlesWidget,
     required this.yTitlesWidget,
-    this.lineColor,
     this.minX,
     this.maxX,
     this.minY,
     this.maxY,
+    this.lineColor,
+    this.lineTouchData,
   });
 
   @override
@@ -30,6 +34,7 @@ class LemonLineChart extends StatefulWidget {
 class _LemonLineChartState extends State<LemonLineChart> {
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     final lineChartBarData = [
       LineChartBarData(
         spots: widget.data,
@@ -67,68 +72,76 @@ class _LemonLineChartState extends State<LemonLineChart> {
         ),
       ),
     ];
-    return Stack(
-      children: <Widget>[
-        AspectRatio(
-          aspectRatio: 1.5,
-          child: LineChart(
-            LineChartData(
-              gridData: FlGridData(
-                show: true,
-                drawVerticalLine: true,
-                getDrawingHorizontalLine: (value) {
-                  return FlLine(
-                    color: Theme.of(context).colorScheme.outline,
-                    strokeWidth: 0.2,
-                  );
-                },
-                getDrawingVerticalLine: (value) {
-                  return FlLine(
-                    color: Theme.of(context).colorScheme.outline,
-                    strokeWidth: 0.2,
-                  );
-                },
-              ),
-              titlesData: FlTitlesData(
-                show: true,
-                rightTitles: const AxisTitles(
-                  sideTitles: SideTitles(showTitles: false),
+    return Container(
+      padding: EdgeInsets.only(
+        top: Spacing.xSmall,
+        bottom: Spacing.xSmall,
+        left: Spacing.xSmall,
+        right: Spacing.medium,
+      ),
+      decoration: BoxDecoration(
+        border: Border.all(color: colorScheme.outline),
+        borderRadius: BorderRadius.circular(LemonRadius.button),
+      ),
+      child: Stack(
+        children: <Widget>[
+          AspectRatio(
+            aspectRatio: 1.5,
+            child: LineChart(
+              LineChartData(
+                gridData: FlGridData(
+                  show: true,
+                  getDrawingHorizontalLine: (value) {
+                    return FlLine(
+                      color: Theme.of(context).colorScheme.outline,
+                      strokeWidth: 0.2,
+                    );
+                  },
+                  getDrawingVerticalLine: (value) {
+                    return FlLine(
+                      color: Theme.of(context).colorScheme.outline,
+                      strokeWidth: 0.2,
+                    );
+                  },
                 ),
-                topTitles: const AxisTitles(
-                  sideTitles: SideTitles(showTitles: false),
-                ),
-                bottomTitles: AxisTitles(
-                  sideTitles: SideTitles(
-                    showTitles: true,
-                    reservedSize: 30,
-                    interval: 1,
-                    getTitlesWidget: widget.xTitlesWidget,
+                titlesData: FlTitlesData(
+                  show: true,
+                  rightTitles: const AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
+                  topTitles: const AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
+                  bottomTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      getTitlesWidget: widget.xTitlesWidget,
+                      interval: widget.data.length / 3,
+                    ),
+                  ),
+                  leftTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      getTitlesWidget: widget.yTitlesWidget,
+                    ),
                   ),
                 ),
-                leftTitles: AxisTitles(
-                  sideTitles: SideTitles(
-                    showTitles: true,
-                    interval: 1,
-                    getTitlesWidget: widget.yTitlesWidget,
-                    reservedSize: 42,
-                  ),
-                ),
+                minX: widget.minX,
+                maxX: widget.maxX,
+                minY: widget.minY,
+                maxY: widget.maxY,
+                lineBarsData: lineChartBarData,
+                lineTouchData: widget.lineTouchData ??
+                    LineTouchData(
+                      touchTooltipData: LineTouchTooltipData(
+                        getTooltipColor: (_) => LemonColor.atomicBlack,
+                      ),
+                    ),
               ),
-              borderData: FlBorderData(
-                show: true,
-                border: Border.all(
-                  color: Theme.of(context).colorScheme.outline,
-                ),
-              ),
-              // minX: 0,
-              // maxX: 8,
-              // minY: 0,
-              // maxY: 50,
-              lineBarsData: lineChartBarData,
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

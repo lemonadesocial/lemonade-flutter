@@ -20,8 +20,10 @@ class AppConfig {
 
   static get aiUrl => dotenv.env['AI_URL'];
   static get wssAIUrl => dotenv.env['WSS_AI_URL'];
+  
   // Cubejs
   static get cubeJsUrl => dotenv.env['CUBEJS_URL'];
+  static get cubeJsRestUrl => dotenv.env['CUBEJS_REST_URL'];
 
   static bool get isProduction => dotenv.env['ENV'] == 'production';
 

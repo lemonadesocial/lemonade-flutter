@@ -199,4 +199,17 @@ class DateUtils {
     );
     return combinedDateTime;
   }
+
+  static List<DateTime> generateDatesInRange(
+    DateTime startDate,
+    DateTime endDate,
+  ) {
+    final List<DateTime> dateList = [];
+    for (var date = startDate;
+        date.isBefore(endDate);
+        date = date.add(const Duration(days: 1))) {
+      dateList.add(date);
+    }
+    return dateList;
+  }
 }
