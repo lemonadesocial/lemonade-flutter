@@ -30,7 +30,7 @@ class CreateGuildChannelBloc
     Emitter emit,
   ) async {
     final newState = state.copyWith(
-      channelname: event.channelName,
+      channelName: event.channelName,
     );
     emit(
       _validate(newState),
@@ -50,7 +50,7 @@ class CreateGuildChannelBloc
   }
 
   CreateGuildChannelState _validate(CreateGuildChannelState state) {
-    final hasChannelName = state.channelname?.isNotEmpty ?? false;
+    final hasChannelName = state.channelName?.isNotEmpty ?? false;
     return state.copyWith(isValid: hasChannelName);
   }
 
@@ -164,7 +164,7 @@ class CreateGuildChannelEvent with _$CreateGuildChannelEvent {
 @freezed
 class CreateGuildChannelState with _$CreateGuildChannelState {
   factory CreateGuildChannelState({
-    String? channelname,
+    String? channelName,
     String? topic,
     List<GuildBasic>? guilds,
     required bool isValid,

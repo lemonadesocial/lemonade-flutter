@@ -48,4 +48,34 @@ class GuildService {
       return [];
     }
   }
+
+  static Future<GuildBasic> createGuild({
+    required String name,
+    required List<GuildRole> roles,
+  }) async {
+    final endpoint = '$guildApiEndpoint/v1/guild';
+    final response = await http.post(
+      Uri.parse(endpoint),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(
+        {
+          "payload": {
+            "name": name,
+            "roles": jsonEncode(jsonDecode(roles.toString())),
+          },
+          "validation": {
+            "address": "0x94228f99a09a30c9f7abfd8b1a629448bf6b0625"
+          }
+        },
+      ),
+    );
+    print(">>>>>>>>>>>>>>> FK");
+    print(response);
+    print(response.body);
+    return GuildBasic.fromJson(
+      jsonDecode(response.body),
+    );
+  }
 }

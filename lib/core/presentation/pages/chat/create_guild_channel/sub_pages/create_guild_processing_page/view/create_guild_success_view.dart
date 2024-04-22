@@ -24,32 +24,27 @@ class CreateGuildSuccessView extends StatelessWidget {
           successWidget: Assets.icons.icSuccessGrey.svg(),
         ),
         const Spacer(),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    '${t.chat.guild.channelCreated}!',
-                    style: Typo.extraLarge.copyWith(
-                      color: colorScheme.onPrimary,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: FontFamily.nohemiVariable,
-                    ),
-                  ),
-                  SizedBox(height: Spacing.superExtraSmall),
-                  Text(
-                    t.chat.guild.channelCreatedDescription,
-                    textAlign: TextAlign.center,
-                  ),
-                ],
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                '${t.chat.guild.channelCreated}!',
+                style: Typo.extraLarge.copyWith(
+                  color: colorScheme.onPrimary,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: FontFamily.nohemiVariable,
+                ),
               ),
-            ),
-          ],
+              SizedBox(height: Spacing.superExtraSmall),
+              Text(
+                t.chat.guild.channelCreatedDescription,
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
         ),
         SizedBox(height: Spacing.medium),
         Container(

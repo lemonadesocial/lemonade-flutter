@@ -14,4 +14,11 @@ abstract class ChatRepository {
   });
 
   Future<Either<Failure, List<GuildBasic>?>> getAllGuilds();
+
+  Future<Either<Failure, GuildRoom>> createGuildRoom({
+    required String title,
+    required double guildId,
+    required String matrixRoomId,
+    required List<int> guildRoleIds,
+  });
 }
