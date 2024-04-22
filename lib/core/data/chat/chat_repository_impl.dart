@@ -94,9 +94,6 @@ class ChatRepositoryImpl implements ChatRepository {
         ),
       ),
     );
-    print(">>>>>>>> FKING ");
-    print(result);
-    print(result.parsedData!.createGuildRoom);
     if (result.hasException || result.parsedData == null) {
       return Left(Failure.withGqlException(result.exception));
     }

@@ -77,7 +77,6 @@ class _FloatingFrostedGlassDropdown<T>
   }
 
   Widget _buildDropdown(BuildContext context) {
-    final width = widget.containerWidth ?? 210;
     return Stack(
       children: [
         _buildBackDrop(),

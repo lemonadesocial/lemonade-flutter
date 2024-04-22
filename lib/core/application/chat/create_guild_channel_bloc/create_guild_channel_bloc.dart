@@ -82,8 +82,11 @@ class CreateGuildChannelBloc
     CreateGuildChannelEventSelectGuild event,
     Emitter emit,
   ) async {
-    emit(state.copyWith(
-        statusFetchGuildDetail: CreateGuildChannelStatus.loading));
+    emit(
+      state.copyWith(
+        statusFetchGuildDetail: CreateGuildChannelStatus.loading,
+      ),
+    );
     final result = await _chatRepository.getGuildDetail(event.guildId ?? 0);
     final guildDetail = result.getOrElse(() => null);
     emit(

@@ -66,14 +66,11 @@ class GuildService {
             "roles": jsonEncode(jsonDecode(roles.toString())),
           },
           "validation": {
-            "address": "0x94228f99a09a30c9f7abfd8b1a629448bf6b0625"
-          }
+            "address": "0x94228f99a09a30c9f7abfd8b1a629448bf6b0625",
+          },
         },
       ),
     );
-    print(">>>>>>>>>>>>>>> FK");
-    print(response);
-    print(response.body);
     return GuildBasic.fromJson(
       jsonDecode(response.body),
     );

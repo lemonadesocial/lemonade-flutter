@@ -3,7 +3,6 @@ import 'package:app/core/domain/chat/chat_repository.dart';
 import 'package:app/core/presentation/pages/chat/create_guild_channel/sub_pages/create_guild_processing_page/view/create_guild_loading_view.dart';
 import 'package:app/core/presentation/pages/chat/create_guild_channel/sub_pages/create_guild_processing_page/view/create_guild_success_view.dart';
 import 'package:app/core/service/matrix/matrix_service.dart';
-import 'package:app/core/service/wallet/wallet_connect_service.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
