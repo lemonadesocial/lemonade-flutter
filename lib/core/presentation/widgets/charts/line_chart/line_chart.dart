@@ -14,6 +14,7 @@ class LemonLineChart extends StatefulWidget {
   final double? maxY;
   final Color? lineColor;
   final LineTouchData? lineTouchData;
+  final bool lineVisible;
   const LemonLineChart({
     super.key,
     required this.data,
@@ -25,6 +26,7 @@ class LemonLineChart extends StatefulWidget {
     this.maxY,
     this.lineColor,
     this.lineTouchData,
+    this.lineVisible = true,
   });
 
   @override
@@ -130,7 +132,7 @@ class _LemonLineChartState extends State<LemonLineChart> {
                 maxX: widget.maxX,
                 minY: widget.minY,
                 maxY: widget.maxY,
-                lineBarsData: lineChartBarData,
+                lineBarsData: widget.lineVisible ? lineChartBarData : [],
                 lineTouchData: widget.lineTouchData ??
                     LineTouchData(
                       touchTooltipData: LineTouchTooltipData(

@@ -64,7 +64,7 @@ class InsightTrackViewsWidget extends StatelessWidget {
                         colorFilter: filter,
                       ),
                     ),
-                    label: t.event.eventDashboard.insights.totalViews,
+                    label: t.event.eventDashboard.insights.uniqueViews,
                     count: uniqeViews.toString(),
                   ),
                 ),

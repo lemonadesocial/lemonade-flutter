@@ -178,8 +178,9 @@ class _VerticalProgressBar extends StatelessWidget {
                     bottomLeft: Radius.circular(LemonRadius.button),
                     bottomRight: Radius.circular(LemonRadius.button),
                   ),
-                  color:
-                      ratio > 0.5 ? LemonColor.paleViolet : colorScheme.outline,
+                  color: ratio >= 0.5
+                      ? LemonColor.paleViolet
+                      : colorScheme.outline,
                 ),
               ),
             ),

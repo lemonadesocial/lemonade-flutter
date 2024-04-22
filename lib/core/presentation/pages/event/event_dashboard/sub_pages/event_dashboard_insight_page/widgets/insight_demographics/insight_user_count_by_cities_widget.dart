@@ -191,7 +191,7 @@ class _HorizontalProgressBar extends StatelessWidget {
                   bottomLeft: Radius.circular(LemonRadius.button),
                 ),
                 color:
-                    ratio > 0.5 ? LemonColor.paleViolet : colorScheme.outline,
+                    ratio >= 0.5 ? LemonColor.paleViolet : colorScheme.outline,
               ),
             ),
           ],

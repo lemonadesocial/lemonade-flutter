@@ -95,7 +95,7 @@ class InsightCheckinsChart extends StatelessWidget {
           ),
           builder: (context, snapshot) {
             final tracks = snapshot.data?.fold(
-                  (l) => [] as List<CubeTrackMember>,
+                  (l) => [].cast<CubeTrackMember>(),
                   (result) => result
                       .map((json) => CubeTrackMember.fromJson(json))
                       .toList(),
@@ -137,6 +137,7 @@ class InsightCheckinsChart extends StatelessWidget {
             return Stack(
               children: [
                 LemonLineChart(
+                  lineVisible: tracks.isNotEmpty,
                   lineColor: LemonColor.paleViolet,
                   data: spots,
                   minY: -0.5,
