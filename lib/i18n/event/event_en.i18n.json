@@ -538,6 +538,7 @@
     },
     "eventDashboard": {
         "insights": {
+            "insightsTitle": "Insights",
             "totalViews": "Total views",
             "uniqueViews": "Uniqe views",
             "avarageSession": "Avg.Session",
@@ -566,6 +567,12 @@
             "noTotalRedeemedDescription": "Redemption trends will show up here",
             "allRewards": "All rewards",
             "paymentKind": "Kind"
+        },
+        "revenue": {
+            "revenueTitle": "Revenue"
+        },
+        "reward": {
+            "rewardTitle": "Rewards"
         }
     }
 }

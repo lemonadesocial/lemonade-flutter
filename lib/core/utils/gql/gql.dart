@@ -6,6 +6,7 @@ import 'package:app/core/domain/cubejs/cubejs_repository.dart';
 import 'package:app/core/oauth/oauth.dart';
 import 'package:app/core/utils/gql/custom_error_handler.dart';
 import 'package:app/injection/register_module.dart';
+import 'package:flutter/foundation.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:injectable/injectable.dart';
 
@@ -160,10 +161,18 @@ class CubeGQL {
     required this.eventId,
   }) {
     _errorLink = ErrorLink(
-      onException: (request, forward, exception) =>
-          CustomErrorHandler.handleExceptionError(request, forward, exception),
-      onGraphQLError: (request, forward, response) =>
-          CustomErrorHandler.handleGraphQLError(request, forward, response),
+      onException: (request, forward, exception) {
+        if (kDebugMode) {
+          CustomErrorHandler.handleExceptionError(request, forward, exception);
+        }
+        return null;
+      },
+      onGraphQLError: (request, forward, response) {
+        if (kDebugMode) {
+          CustomErrorHandler.handleGraphQLError(request, forward, response);
+        }
+        return null;
+      },
     );
 
     _client = GraphQLClient(

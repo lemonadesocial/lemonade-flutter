@@ -61,6 +61,9 @@ class EventDashboardInsightPage extends StatelessWidget {
             child: InsightSamplingChart(eventId: event.id ?? ''),
           ),
         ),
+        SliverToBoxAdapter(
+          child: SizedBox(height: Spacing.smMedium * 2),
+        ),
       ],
     );
   }

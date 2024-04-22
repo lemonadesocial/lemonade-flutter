@@ -38,6 +38,7 @@ class InsightUserCountByCountries extends StatelessWidget {
           variables: Variables$Query$GetEventCountDistinctUserByCountry(
             limit: 3,
             where: Input$TracksWhereInput(
+              metaEventId: Input$StringFilter(equals: eventId),
               countDistinctUsers: Input$FloatFilter(gt: 0),
             ),
           ),
@@ -73,7 +74,6 @@ class InsightUserCountByCountries extends StatelessWidget {
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       if (allItems.isEmpty || isLoading)
                         ...[1, 2, 3].map((item) {
@@ -94,6 +94,7 @@ class InsightUserCountByCountries extends StatelessWidget {
                                           ?.toInt() ??
                                       0)
                                   .toString(),
+                              isLast: entry.key == allItems.length - 1,
                             );
                           },
                         ),
@@ -110,6 +111,7 @@ class InsightUserCountByCountries extends StatelessWidget {
 }
 
 class _UserByCountryItem extends StatelessWidget {
+  final bool isLast;
   final String countryCode;
   final String count;
   final double ratio;
@@ -118,6 +120,7 @@ class _UserByCountryItem extends StatelessWidget {
     required this.countryCode,
     required this.count,
     required this.ratio,
+    this.isLast = false,
   });
 
   @override
@@ -125,6 +128,7 @@ class _UserByCountryItem extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
+      margin: EdgeInsets.only(bottom: isLast ? 0 : Spacing.extraSmall),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [

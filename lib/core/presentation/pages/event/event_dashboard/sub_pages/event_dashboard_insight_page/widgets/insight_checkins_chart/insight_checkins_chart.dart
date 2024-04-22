@@ -163,7 +163,7 @@ class InsightCheckinsChart extends StatelessWidget {
                     lineVisible: tracks.isNotEmpty,
                     lineColor: LemonColor.paleViolet,
                     data: spots,
-                    minY: -0.5,
+                    minY: -0.1,
                     maxY: maxYInSpots * 1.5,
                     xTitlesWidget: (value, meta) => allDatesInRange.isNotEmpty
                         ? Text(
@@ -177,7 +177,7 @@ class InsightCheckinsChart extends StatelessWidget {
                     yTitlesWidget: (value, meta) {
                       if (value < 0) return const SizedBox.shrink();
                       return Text(
-                        value.toInt().toString(),
+                        value.toStringAsFixed(1).toString(),
                         style:
                             Typo.small.copyWith(color: colorScheme.onSecondary),
                       );

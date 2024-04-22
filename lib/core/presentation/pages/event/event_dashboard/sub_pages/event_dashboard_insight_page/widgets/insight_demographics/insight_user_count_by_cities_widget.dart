@@ -38,6 +38,7 @@ class InsightUserCountByCities extends StatelessWidget {
             variables: Variables$Query$GetEventCountDistinctUserByCity(
               limit: 3,
               where: Input$TracksWhereInput(
+                metaEventId: Input$StringFilter(equals: eventId),
                 countDistinctUsers: Input$FloatFilter(
                   gt: 0,
                 ),
