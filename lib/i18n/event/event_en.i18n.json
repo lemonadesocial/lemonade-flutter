@@ -574,5 +574,12 @@
         "reward": {
             "rewardTitle": "Rewards"
         }
+    },
+    "eventPhotos": {
+        "uploadHint": "1920x1080 or 16:9",
+        "addPhoto": "Add photo",
+        "setAsCover": "Set as cover",
+        "deletePhoto": "Delete photo",
+        "editCover": "Edit cover"
     }
 }

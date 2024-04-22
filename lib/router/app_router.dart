@@ -127,6 +127,21 @@ final chatRoutes = AutoRoute(
       path: 'setting/:id',
       page: ChatSettingRoute.page,
     ),
+    AutoRoute(
+      page: CreateGuildChannelRoute.page,
+      children: [
+        AutoRoute(
+          initial: true,
+          page: CreateGuildChannelBaseRoute.page,
+        ),
+        AutoRoute(
+          page: CreateGuildChannelCommunityGatedRoute.page,
+        ),
+        AutoRoute(
+          page: CreateGuildChannelAccessRoute.page,
+        ),
+      ],
+    ),
   ],
 );
 
@@ -260,6 +275,9 @@ final eventDetailRoutes = AutoRoute(
               page: EventDiscountFormSettingRoute.page,
             ),
           ],
+        ),
+        AutoRoute(
+          page: EventPhotosSettingRoute.page,
         ),
       ],
     ),

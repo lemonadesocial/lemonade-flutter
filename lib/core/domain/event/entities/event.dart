@@ -23,6 +23,7 @@ class Event with _$Event {
     User? hostExpanded,
     List<User?>? cohostsExpanded,
     List<DbFile?>? newNewPhotosExpanded,
+    List<String>? newNewPhotos,
     String? title,
     String? slug,
     List<String>? speakerUsers,
@@ -79,6 +80,7 @@ class Event with _$Event {
       newNewPhotosExpanded: (dto.newNewPhotosExpanded ?? [])
           .map((i) => i == null ? null : DbFile.fromDto(i))
           .toList(),
+      newNewPhotos: (dto.newNewPhotos ?? []),
       title: dto.title,
       slug: dto.slug,
       speakerUsers: List<String>.from(dto.speakerUsers ?? [])

@@ -34,6 +34,7 @@ class _FloatingFrostedGlassDropdown<T>
   final GlobalKey _btnKey = GlobalKey();
   bool isVisible = false;
   double y = 0;
+  double x = 0;
 
   late final AnimationController _animationController = AnimationController(
     vsync: this,
@@ -76,11 +77,13 @@ class _FloatingFrostedGlassDropdown<T>
   }
 
   Widget _buildDropdown(BuildContext context) {
+    final width = widget.containerWidth ?? 210;
     return Stack(
       children: [
         _buildBackDrop(),
         Positioned(
-          right: Spacing.small,
+          left:
+              x > width ? x - (width - 2 * Spacing.xSmall) : Spacing.xSmall / 2,
           top: y + Sizing.medium + (widget.offset?.dy ?? 0),
           child: ScaleTransition(
             alignment: Alignment.topRight,
@@ -126,6 +129,7 @@ class _FloatingFrostedGlassDropdown<T>
           _btnKey.currentContext?.findRenderObject() as RenderBox?;
       Offset? position = renderObj?.localToGlobal(Offset.zero);
       setState(() {
+        x = position?.dx ?? 0;
         y = position?.dy ?? 150;
       });
     });

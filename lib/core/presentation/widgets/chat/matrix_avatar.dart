@@ -2,7 +2,6 @@ import 'package:app/core/presentation/widgets/chat/mxc_image.dart';
 import 'package:app/core/utils/chat/matrix_string_color_extension.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:matrix/matrix.dart';
@@ -53,6 +52,7 @@ class MatrixAvatar extends StatelessWidget {
         style: TextStyle(
           color: noPic ? Colors.white : null,
           fontSize: fontSize,
+          fontWeight: FontWeight.w600,
         ),
       ),
     );
@@ -63,7 +63,7 @@ class MatrixAvatar extends StatelessWidget {
         Container(
           decoration: BoxDecoration(
             border: Border.all(
-              color: LemonColor.white15,
+              color: LemonColor.white09,
             ),
             borderRadius: borderRadius,
           ),
@@ -121,28 +121,6 @@ class MatrixAvatar extends StatelessWidget {
       );
     }
     // For chat group case
-    return Positioned(
-      bottom: -3.w,
-      right: -3.w,
-      child: Container(
-        width: 21.w,
-        height: 21.w,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
-          color: LemonColor.chineseBlack,
-          border: Border.all(
-            width: 3.w,
-          ),
-        ),
-        child: Center(
-          child: Text(
-            '#',
-            style: Typo.xSmall.copyWith(
-              color: colorScheme.onSecondary,
-            ),
-          ),
-        ),
-      ),
-    );
+    return const SizedBox.shrink();
   }
 }

@@ -1,7 +1,9 @@
 import 'package:app/core/application/event/get_event_cohost_requests_bloc/get_event_cohost_requests_bloc.dart';
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/date_format_utils.dart';
+import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
@@ -23,7 +25,8 @@ enum EventConfigurationType {
   ticketTiers,
   rewards,
   promotions,
-  applicationForm
+  applicationForm,
+  photos,
 }
 
 class EventConfiguration {
@@ -222,5 +225,36 @@ class EventConfiguration {
       ),
     ];
     return eventConfigs;
+  }
+
+  static List<EventConfiguration> photosConfigurations(
+    BuildContext context, {
+    Event? event,
+  }) {
+    final t = Translations.of(context);
+    final colorScheme = Theme.of(context).colorScheme;
+    final eventPhotos = (event?.newNewPhotosExpanded ?? []);
+    final configs = [
+      EventConfiguration(
+        type: EventConfigurationType.photos,
+        title: StringUtils.capitalize(
+          t.common.photo(n: 2),
+        ),
+        description: eventPhotos.isEmpty
+            ? t.common.actions.add
+            : '${eventPhotos.length} ${t.common.photo(n: eventPhotos.length)}',
+        icon: Center(
+          child: ThemeSvgIcon(
+            color: colorScheme.onSecondary,
+            builder: (colorFilter) => Assets.icons.icAddPhoto.svg(
+              colorFilter: colorFilter,
+              width: 18.w,
+              height: 18.w,
+            ),
+          ),
+        ),
+      ),
+    ];
+    return configs;
   }
 }

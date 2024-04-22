@@ -1,11 +1,15 @@
 import 'package:app/core/application/chat/chat_list_bloc/chat_list_bloc.dart';
 import 'package:app/core/application/chat/chat_space_bloc/chat_space_bloc.dart';
+import 'package:app/core/application/chat/get_guild_rooms_bloc/get_guild_rooms_bloc.dart';
+import 'package:app/core/presentation/pages/chat/chat_list/views/check_guild_room_roles_bottomsheet.dart';
 import 'package:app/core/presentation/pages/chat/chat_list/widgets/chat_list_item.dart';
+import 'package:app/core/presentation/pages/chat/chat_list/widgets/guild_room_item.dart';
 import 'package:app/core/presentation/widgets/chat/create_chat_button.dart';
 import 'package:app/core/presentation/widgets/chat/matrix_avatar.dart';
 import 'package:app/core/presentation/widgets/chat/spaces_drawer.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
+import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/service/matrix/matrix_service.dart';
 import 'package:app/core/utils/stream_extension.dart';
@@ -13,16 +17,33 @@ import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:matrix/matrix.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+
+enum ChatListTabs {
+  messages(tabIndex: 0),
+  channels(tabIndex: 1),
+  guilds(tabIndex: 2);
+
+  const ChatListTabs({
+    required this.tabIndex,
+  });
+
+  final int tabIndex;
+}
 
 class ChatListPageView extends StatefulWidget {
-  const ChatListPageView({super.key});
+  const ChatListPageView({
+    super.key,
+  });
 
   @override
   State<ChatListPageView> createState() => _ChatListPageViewState();
@@ -31,11 +52,12 @@ class ChatListPageView extends StatefulWidget {
 class _ChatListPageViewState extends State<ChatListPageView>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  late int selectedTabIndex = ChatListTabs.messages.index;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
   }
 
   @override
@@ -105,6 +127,11 @@ class _ChatListPageViewState extends State<ChatListPageView>
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   TabBar(
+                    onTap: (index) {
+                      setState(() {
+                        selectedTabIndex = index;
+                      });
+                    },
                     controller: _tabController,
                     labelStyle: Typo.medium.copyWith(
                       color: colorScheme.onPrimary,
@@ -116,8 +143,9 @@ class _ChatListPageViewState extends State<ChatListPageView>
                     ),
                     indicatorColor: LemonColor.paleViolet,
                     tabs: [
-                      Tab(text: StringUtils.capitalize(t.chat.directMessages)),
+                      Tab(text: StringUtils.capitalize(t.chat.messages)),
                       Tab(text: StringUtils.capitalize(t.chat.channels)),
+                      Tab(text: StringUtils.capitalize(t.chat.guilds)),
                     ],
                   ),
                   SizedBox(height: Spacing.extraSmall),
@@ -146,6 +174,63 @@ class _ChatListPageViewState extends State<ChatListPageView>
                             ),
                           ],
                         ),
+                        CustomScrollView(
+                          slivers: [
+                            BlocBuilder<GetGuildRoomsBloc, GetGuildRoomsState>(
+                              builder: (context, guildRoomsState) {
+                                return guildRoomsState.maybeWhen(
+                                  orElse: () => const SliverToBoxAdapter(
+                                    child: SizedBox.shrink(),
+                                  ),
+                                  loading: () => SliverToBoxAdapter(
+                                    child: Loading.defaultLoading(context),
+                                  ),
+                                  failure: () => SliverToBoxAdapter(
+                                    child: EmptyList(
+                                      emptyText: t.common.somethingWrong,
+                                    ),
+                                  ),
+                                  success: (guildRooms) {
+                                    return SliverList.separated(
+                                      itemCount: guildRooms.length,
+                                      itemBuilder: (context, index) =>
+                                          GuildRoomItem(
+                                        guildRoom: guildRooms[index],
+                                        onTap: () {
+                                          showCupertinoModalBottomSheet(
+                                            enableDrag: false,
+                                            barrierColor: LemonColor.black50,
+                                            bounce: true,
+                                            backgroundColor:
+                                                LemonColor.atomicBlack,
+                                            context: context,
+                                            builder: (newContext) {
+                                              return CheckGuildRoomRolesBottomSheet(
+                                                guildRoom: guildRooms[index],
+                                                onEnterChannel: () {
+                                                  AutoRouter.of(context)
+                                                      .navigate(
+                                                    ChatRoute(
+                                                      roomId: guildRooms[index]
+                                                              .matrixRoomId ??
+                                                          '',
+                                                    ),
+                                                  );
+                                                },
+                                              );
+                                            },
+                                          );
+                                        },
+                                      ),
+                                      separatorBuilder: (context, index) =>
+                                          SizedBox(height: Spacing.extraSmall),
+                                    );
+                                  },
+                                );
+                              },
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   ),
@@ -155,7 +240,8 @@ class _ChatListPageViewState extends State<ChatListPageView>
           ),
         ),
       ),
-      floatingActionButton: const CreateChatButton(),
+      floatingActionButton:
+          CreateChatButton(selectedTabIndex: selectedTabIndex),
     );
   }
 }

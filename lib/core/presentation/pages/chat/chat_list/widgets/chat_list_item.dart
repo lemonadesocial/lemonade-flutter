@@ -33,7 +33,7 @@ class ChatListItem extends StatelessWidget {
       mxContent: avatarUrl,
       size: 42.w,
       name: roomName,
-      fontSize: Typo.small.fontSize!,
+      fontSize: Typo.medium.fontSize!,
       radius: radius,
       presence: presence,
       isDirectChat: isDirectChat,
