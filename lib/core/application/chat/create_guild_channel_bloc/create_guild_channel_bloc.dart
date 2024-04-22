@@ -100,6 +100,7 @@ class CreateGuildChannelBloc
   ) async {
     emit(
       state.copyWith(
+        selectedGuildRoles: null,
         selectedGuildAccessOption:
             event.option ?? GuildAccessOptions.allMembers,
       ),
