@@ -1,4 +1,7 @@
+import 'package:app/core/application/chat/create_guild_channel_bloc/create_guild_channel_bloc.dart';
 import 'package:app/core/domain/chat/entities/guild.dart';
+import 'package:app/core/presentation/dpos/common/dropdown_item_dpo.dart';
+import 'package:app/core/presentation/widgets/floating_frosted_glass_dropdown_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/guild_utils.dart';
@@ -10,9 +13,12 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+
+enum GuildAccessOptions { allMembers, selectRole }
 
 class GuildAccessInfoSection extends StatelessWidget {
   const GuildAccessInfoSection({super.key, this.guildDetail});
@@ -161,6 +167,69 @@ class GuildAccessInfoSection extends StatelessWidget {
                 ),
               ),
               SizedBox(width: Spacing.xSmall),
+              FloatingFrostedGlassDropdown(
+                containerWidth: 150.w,
+                offset: Offset(Spacing.xSmall, -Spacing.superExtraSmall),
+                items: [
+                  DropdownItemDpo(
+                    label: t.chat.guild.allMembers,
+                    value: GuildAccessOptions.allMembers,
+                  ),
+                  DropdownItemDpo(
+                    label: t.chat.guild.selectRole,
+                    value: GuildAccessOptions.selectRole,
+                  ),
+                ],
+                onItemPressed: (item) {
+                  context.read<CreateGuildChannelBloc>().add(
+                        CreateGuildChannelEventSelectGuildAccessOption(
+                          option: item?.value,
+                        ),
+                      );
+                },
+                child: Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: Spacing.xSmall,
+                    vertical: Spacing.superExtraSmall,
+                  ),
+                  decoration: ShapeDecoration(
+                    color: LemonColor.white06,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(LemonRadius.normal),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      BlocBuilder<CreateGuildChannelBloc,
+                          CreateGuildChannelState>(
+                        builder: (context, state) {
+                          return Text(
+                            state.selectedGuildAccessOption ==
+                                    GuildAccessOptions.selectRole
+                                ? t.chat.guild.selectRole
+                                : t.chat.guild.allMembers,
+                            style: Typo.small.copyWith(
+                              color: colorScheme.onPrimary,
+                            ),
+                          );
+                        },
+                      ),
+                      SizedBox(width: Spacing.superExtraSmall),
+                      ThemeSvgIcon(
+                        color: Theme.of(context).colorScheme.onSecondary,
+                        builder: (filter) => Assets.icons.icArrowDown.svg(
+                          width: Sizing.xSmall,
+                          height: Sizing.xSmall,
+                          colorFilter: filter,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
         ),

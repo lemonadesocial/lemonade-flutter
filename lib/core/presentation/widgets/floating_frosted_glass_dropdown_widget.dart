@@ -82,8 +82,7 @@ class _FloatingFrostedGlassDropdown<T>
       children: [
         _buildBackDrop(),
         Positioned(
-          left:
-              x > width ? x - (width - 2 * Spacing.xSmall) : Spacing.xSmall / 2,
+          right: (widget.offset?.dx ?? 0),
           top: y + Sizing.medium + (widget.offset?.dy ?? 0),
           child: ScaleTransition(
             alignment: Alignment.topRight,

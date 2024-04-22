@@ -1,5 +1,6 @@
 import 'package:app/core/domain/chat/chat_repository.dart';
 import 'package:app/core/domain/chat/entities/guild.dart';
+import 'package:app/core/presentation/pages/chat/create_guild_channel/sub_pages/create_guild_channel_access_page/widgets/guild_access_info_section.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -16,6 +17,12 @@ class CreateGuildChannelBloc
     on<CreateGuildChannelEventGetAllGuilds>(_onGetAllGuilds);
     on<CreateGuildChannelEventSearchGuilds>(_onSearchGuilds);
     on<CreateGuildChannelEventSelectGuild>(_onSelectGuild);
+    on<CreateGuildChannelEventSelectGuildAccessOption>(
+      _onSelectGuildAccessOption,
+    );
+    on<CreateGuildChannelEventSelectGuildRole>(
+      _onSelectGuildRole,
+    );
   }
 
   Future<void> _onChannelNameChanged(
@@ -86,6 +93,48 @@ class CreateGuildChannelBloc
       ),
     );
   }
+
+  Future<void> _onSelectGuildAccessOption(
+    CreateGuildChannelEventSelectGuildAccessOption event,
+    Emitter emit,
+  ) async {
+    emit(
+      state.copyWith(
+        selectedGuildAccessOption:
+            event.option ?? GuildAccessOptions.allMembers,
+      ),
+    );
+  }
+
+  Future<void> _onSelectGuildRole(
+    CreateGuildChannelEventSelectGuildRole event,
+    Emitter emit,
+  ) async {
+    if (event.guildRole == null) {
+      return;
+    }
+    // Check if the selected guildRole id is already in the selectedGuildRole ids
+    bool isSelected = (state.selectedGuildRoles ?? [])
+        .any((role) => role.id == event.guildRole?.id);
+
+    // If already selected, remove it; otherwise, append it
+    List<GuildRole> updatedSelectedRoles =
+        List.from(state.selectedGuildRoles ?? []);
+    if (isSelected) {
+      updatedSelectedRoles
+          .removeWhere((role) => role.id == event.guildRole?.id);
+    } else {
+      if (event.guildRole != null) {
+        updatedSelectedRoles.add(event.guildRole!);
+      }
+    }
+
+    emit(
+      state.copyWith(
+        selectedGuildRoles: updatedSelectedRoles,
+      ),
+    );
+  }
 }
 
 @freezed
@@ -104,6 +153,11 @@ class CreateGuildChannelEvent with _$CreateGuildChannelEvent {
   const factory CreateGuildChannelEvent.selectGuild({
     int? guildId,
   }) = CreateGuildChannelEventSelectGuild;
+  const factory CreateGuildChannelEvent.selectGuildAccessOption({
+    GuildAccessOptions? option,
+  }) = CreateGuildChannelEventSelectGuildAccessOption;
+  const factory CreateGuildChannelEvent.selectGuildRole(
+      {GuildRole? guildRole}) = CreateGuildChannelEventSelectGuildRole;
 }
 
 @freezed
@@ -115,8 +169,13 @@ class CreateGuildChannelState with _$CreateGuildChannelState {
     required bool isValid,
     String? searchTerm,
     Guild? guildDetail,
-    @Default(CreateGuildChannelStatus.initial) CreateGuildChannelStatus statusFetchGuilds,
-    @Default(CreateGuildChannelStatus.initial) CreateGuildChannelStatus statusFetchGuildDetail,
+    @Default(CreateGuildChannelStatus.initial)
+    CreateGuildChannelStatus statusFetchGuilds,
+    @Default(CreateGuildChannelStatus.initial)
+    CreateGuildChannelStatus statusFetchGuildDetail,
+    @Default(GuildAccessOptions.allMembers)
+    GuildAccessOptions? selectedGuildAccessOption,
+    List<GuildRole>? selectedGuildRoles,
   }) = _IssueTicketsBlocState;
 }
 
