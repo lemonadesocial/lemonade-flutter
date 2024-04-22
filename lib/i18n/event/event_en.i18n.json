@@ -563,7 +563,9 @@
             "noTotalCheckInsDescription": "Check in trends will show up here",
             "sampling": "Sampling",
             "totalRedeemed": "Total redeemed",
-            "noTotalRedeemedDescription": "Redemption trends will show up here"
+            "noTotalRedeemedDescription": "Redemption trends will show up here",
+            "allRewards": "All rewards",
+            "paymentKind": "Kind"
         }
     }
 }

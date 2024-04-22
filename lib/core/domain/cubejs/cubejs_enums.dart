@@ -1,0 +1,4 @@
+enum CubePaymentKind {
+  Crypto,
+  Fiat,
+}

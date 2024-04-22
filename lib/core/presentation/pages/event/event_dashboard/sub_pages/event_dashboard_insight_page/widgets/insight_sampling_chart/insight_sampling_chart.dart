@@ -6,6 +6,7 @@ import 'package:app/core/domain/event/entities/reward.dart';
 import 'package:app/core/presentation/pages/event/event_dashboard/sub_pages/event_dashboard_insight_page/widgets/chart_date_range_builder/chart_date_range_builder.dart';
 import 'package:app/core/presentation/pages/event/event_dashboard/sub_pages/event_dashboard_insight_page/widgets/chart_date_range_builder/chart_date_range_picker.dart';
 import 'package:app/core/presentation/pages/event/event_dashboard/sub_pages/event_dashboard_insight_page/widgets/chart_empty_message/chart_empty_message.dart';
+import 'package:app/core/presentation/pages/event/event_dashboard/sub_pages/event_dashboard_insight_page/widgets/chart_reward_filter/chart_reward_filter.dart';
 import 'package:app/core/presentation/widgets/charts/line_chart/line_chart.dart';
 import 'package:app/core/service/cubejs_service/cubejs_service.dart';
 import 'package:app/core/utils/date_utils.dart' as date_utils;
@@ -51,12 +52,33 @@ Map<String, dynamic> getRewardUsesQuery({
   };
 }
 
-class InsightSamplingChart extends StatelessWidget {
+class InsightSamplingChart extends StatefulWidget {
   final String eventId;
   const InsightSamplingChart({
     super.key,
     required this.eventId,
   });
+
+  @override
+  State<InsightSamplingChart> createState() => _InsightSamplingChartState();
+}
+
+class _InsightSamplingChartState extends State<InsightSamplingChart> {
+  List<String> selectedRewards = [];
+  String? selectedRewardId;
+
+  @override
+  void initState() {
+    super.initState();
+    final event = context.read<GetEventDetailBloc>().state.maybeWhen(
+          orElse: () => null,
+          fetched: (event) => event,
+        );
+    setState(() {
+      selectedRewards =
+          (event?.rewards ?? []).map((item) => item.id ?? '').toList();
+    });
+  }
 
   int _calculateTotalRewardUses({required List<CubeRewardUse> rewardUses}) {
     final total = rewardUses.fold(0, (previousValue, element) {
@@ -84,7 +106,7 @@ class InsightSamplingChart extends StatelessWidget {
           orElse: () => null,
           fetched: (event) => event,
         );
-    final rewardIds =
+    final allRewardIds =
         (event?.rewards ?? []).map((item) => item.id ?? '').toList();
 
     return ChartDateRangeBuilder(
@@ -110,6 +132,22 @@ class InsightSamplingChart extends StatelessWidget {
           SizedBox(height: Spacing.smMedium),
           Row(
             children: [
+              if (event != null) ...[
+                ChartRewardFilter(
+                  event: event,
+                  selectedRewardId: selectedRewardId,
+                  onSelect: (rewardId) {
+                    setState(() {
+                      selectedRewards =
+                          rewardId != null ? [rewardId] : allRewardIds;
+                      selectedRewardId = rewardId;
+                    });
+                  },
+                ),
+                SizedBox(
+                  width: Spacing.extraSmall,
+                ),
+              ],
               ChartDateRangePicker(
                 timeRange: timeRange,
                 onSelectEndDate: selectEndDate,
@@ -119,10 +157,9 @@ class InsightSamplingChart extends StatelessWidget {
           ),
           SizedBox(height: Spacing.smMedium),
           FutureBuilder(
-            future: CubeJsService(eventId: eventId).query(
+            future: CubeJsService(eventId: widget.eventId).query(
               body: getRewardUsesQuery(
-                // TODO: filter by reward Id
-                rewardIds: rewardIds,
+                rewardIds: selectedRewards,
                 startDate: timeRange.start,
                 endDate: timeRange.end,
               ),
@@ -178,7 +215,7 @@ class InsightSamplingChart extends StatelessWidget {
                     lineVisible: rewardUses.isNotEmpty,
                     lineColor: LemonColor.coralReef,
                     data: spots,
-                    minY: -0.5,
+                    minY: -0.1,
                     maxY: maxYInSpots * 1.5,
                     xTitlesWidget: (value, meta) => allDatesInRange.isNotEmpty
                         ? Text(
@@ -192,7 +229,7 @@ class InsightSamplingChart extends StatelessWidget {
                     yTitlesWidget: (value, meta) {
                       if (value < 0) return const SizedBox.shrink();
                       return Text(
-                        value.toInt().toString(),
+                        value.toStringAsFixed(1),
                         style:
                             Typo.small.copyWith(color: colorScheme.onSecondary),
                       );

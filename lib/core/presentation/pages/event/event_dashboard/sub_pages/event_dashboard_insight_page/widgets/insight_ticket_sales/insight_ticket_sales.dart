@@ -1,10 +1,12 @@
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
+import 'package:app/core/domain/cubejs/cubejs_enums.dart';
 import 'package:app/core/domain/cubejs/entities/cube_payment/cube_payment.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
 import 'package:app/core/presentation/pages/event/event_dashboard/sub_pages/event_dashboard_insight_page/widgets/chart_date_range_builder/chart_date_range_builder.dart';
 import 'package:app/core/presentation/pages/event/event_dashboard/sub_pages/event_dashboard_insight_page/widgets/chart_date_range_builder/chart_date_range_picker.dart';
 import 'package:app/core/presentation/pages/event/event_dashboard/sub_pages/event_dashboard_insight_page/widgets/chart_empty_message/chart_empty_message.dart';
+import 'package:app/core/presentation/pages/event/event_dashboard/sub_pages/event_dashboard_insight_page/widgets/chart_payment_kind_filter/chart_payment_kind_filter.dart';
 import 'package:app/core/presentation/widgets/charts/line_chart/line_chart.dart';
 import 'package:app/core/service/cubejs_service/cubejs_service.dart';
 import 'package:app/core/utils/date_utils.dart' as date_utils;
@@ -26,6 +28,7 @@ const displayDateFormat = 'dd-MMM';
 
 Map<String, dynamic> getPaymentQuery(
   String eventId, {
+  CubePaymentKind? paymentKind,
   DateTime? startDate,
   DateTime? endDate,
 }) {
@@ -33,6 +36,20 @@ Map<String, dynamic> getPaymentQuery(
   final startDateFormatted = dateFormat.format(startDate ?? DateTime.now());
   final endDateFormatted = dateFormat.format(endDate ?? DateTime.now());
   final dateRange = [startDateFormatted, endDateFormatted];
+  final filter = [
+    {
+      "member": 'Tickets.event',
+      "operator": 'equals',
+      "values": [eventId],
+    },
+    if (paymentKind != null) ...[
+      {
+        "member": 'Payments.kind',
+        "operator": 'equals',
+        "values": [paymentKind.name],
+      }
+    ],
+  ];
   return {
     "measures": ["Payments.totalAmount", "Payments.count"],
     "dimensions": ["Payments.currency", "Payments.kind"],
@@ -43,22 +60,23 @@ Map<String, dynamic> getPaymentQuery(
         "dateRange": dateRange,
       },
     ],
-    "filters": [
-      {
-        "member": 'Tickets.event',
-        "operator": 'equals',
-        "values": [eventId],
-      }
-    ],
+    "filters": filter,
   };
 }
 
-class InsightTicketSales extends StatelessWidget {
+class InsightTicketSales extends StatefulWidget {
   final String eventId;
   const InsightTicketSales({
     super.key,
     required this.eventId,
   });
+
+  @override
+  State<InsightTicketSales> createState() => _InsightTicketSalesState();
+}
+
+class _InsightTicketSalesState extends State<InsightTicketSales> {
+  CubePaymentKind? selectedPaymentKind;
 
   int _calculateTotalTicketsSold({required List<CubePaymentMember> payments}) {
     return payments.fold(0, (previousValue, element) {
@@ -140,7 +158,22 @@ class InsightTicketSales extends StatelessWidget {
           ),
           SizedBox(height: Spacing.smMedium),
           Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
+              if (event != null) ...[
+                ChartPaymentKindFilter(
+                  selectedKind: selectedPaymentKind,
+                  key: Key(selectedPaymentKind?.name ?? ''),
+                  onSelect: (kind) {
+                    setState(() {
+                      selectedPaymentKind = kind;
+                    });
+                  },
+                ),
+                SizedBox(
+                  width: Spacing.extraSmall,
+                ),
+              ],
               ChartDateRangePicker(
                 timeRange: timeRange,
                 onSelectEndDate: selectEndDate,
@@ -150,9 +183,10 @@ class InsightTicketSales extends StatelessWidget {
           ),
           SizedBox(height: Spacing.smMedium),
           FutureBuilder(
-            future: CubeJsService(eventId: eventId).query(
+            future: CubeJsService(eventId: widget.eventId).query(
               body: getPaymentQuery(
-                eventId,
+                widget.eventId,
+                paymentKind: selectedPaymentKind,
                 startDate: timeRange.start,
                 endDate: timeRange.end,
               ),

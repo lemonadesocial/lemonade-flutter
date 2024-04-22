@@ -1,5 +1,6 @@
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
+import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,7 @@ class ChartDateRangePicker extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return Container(
+      height: Sizing.medium,
       padding: EdgeInsets.symmetric(
         vertical: Spacing.extraSmall,
         horizontal: Spacing.small,

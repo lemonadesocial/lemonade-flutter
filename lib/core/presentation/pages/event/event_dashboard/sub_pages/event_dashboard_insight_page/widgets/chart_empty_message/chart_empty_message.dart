@@ -18,8 +18,11 @@ class ChartEmptyMessage extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     return Positioned.fill(
       child: isLoading
-          ? Center(
-              child: Loading.defaultLoading(context),
+          ? Container(
+              color: Colors.black.withOpacity(0.5),
+              child: Center(
+                child: Loading.defaultLoading(context),
+              ),
             )
           : Column(
               mainAxisAlignment: MainAxisAlignment.center,
