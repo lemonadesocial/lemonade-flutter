@@ -69,7 +69,8 @@ class _GuildAccessRoleItem extends StatelessWidget {
                 : (state.selectedGuildRoles ?? [])
                     .any((role) => role.id == guildRole?.id);
         final tintColor =
-            state.selectedGuildAccessOption == GuildAccessOptions.selectRole
+            (state.selectedGuildAccessOption == GuildAccessOptions.selectRole &&
+                    isSelected == true)
                 ? colorScheme.onPrimary
                 : colorScheme.onSurfaceVariant;
         return Container(

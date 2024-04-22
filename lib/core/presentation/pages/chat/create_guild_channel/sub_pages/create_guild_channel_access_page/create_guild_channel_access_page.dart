@@ -5,6 +5,7 @@ import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/gen/fonts.gen.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
@@ -127,6 +128,8 @@ class CreateGuildChannelAccessPage extends StatelessWidget {
                       onTap: () {
                         Vibrate.feedback(FeedbackType.light);
                         FocusManager.instance.primaryFocus?.unfocus();
+                        AutoRouter.of(context)
+                            .navigate(const CreateGuildProcessingRoute());
                       },
                       label: t.chat.guild.createChannel,
                       textColor: colorScheme.onPrimary,
