@@ -572,7 +572,10 @@
             "revenueTitle": "Revenue"
         },
         "reward": {
-            "rewardTitle": "Rewards"
+            "rewardTitle": "Rewards",
+            "totalClaims": "Total claims",
+            "created": "Created",
+            "redeems": "Redeems"
         }
     },
     "eventPhotos": {

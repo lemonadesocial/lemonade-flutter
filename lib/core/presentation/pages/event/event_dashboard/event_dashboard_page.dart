@@ -1,5 +1,6 @@
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/presentation/pages/event/event_dashboard/sub_pages/event_dashboard_insight_page/event_dashboard_insight_page.dart';
+import 'package:app/core/presentation/pages/event/event_dashboard/sub_pages/event_dashboard_rewards_page/event_dashboard_rewards_page.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/gql/gql.dart';
@@ -121,7 +122,7 @@ class _EventDashboardPageState extends State<EventDashboardPage>
                     ),
                     // TODO:
                     const SizedBox.shrink(),
-                    const SizedBox.shrink(),
+                    EventDashboardRewardsPage(event: event),
                   ],
                 ),
               ),
