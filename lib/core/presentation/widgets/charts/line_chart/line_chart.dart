@@ -118,7 +118,8 @@ class _LemonLineChartState extends State<LemonLineChart> {
                     sideTitles: SideTitles(
                       showTitles: true,
                       getTitlesWidget: widget.xTitlesWidget,
-                      interval: widget.data.length / 3,
+                      interval:
+                          widget.data.length >= 3 ? widget.data.length / 3 : 1,
                     ),
                   ),
                   leftTitles: AxisTitles(

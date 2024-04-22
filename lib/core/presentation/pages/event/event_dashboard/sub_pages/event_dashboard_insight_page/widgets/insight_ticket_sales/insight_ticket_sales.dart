@@ -2,6 +2,9 @@ import 'package:app/core/application/event/get_event_detail_bloc/get_event_detai
 import 'package:app/core/domain/cubejs/entities/cube_payment/cube_payment.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
+import 'package:app/core/presentation/pages/event/event_dashboard/sub_pages/event_dashboard_insight_page/widgets/chart_date_range_builder/chart_date_range_builder.dart';
+import 'package:app/core/presentation/pages/event/event_dashboard/sub_pages/event_dashboard_insight_page/widgets/chart_date_range_builder/chart_date_range_picker.dart';
+import 'package:app/core/presentation/pages/event/event_dashboard/sub_pages/event_dashboard_insight_page/widgets/chart_empty_message/chart_empty_message.dart';
 import 'package:app/core/presentation/widgets/charts/line_chart/line_chart.dart';
 import 'package:app/core/service/cubejs_service/cubejs_service.dart';
 import 'package:app/core/utils/date_utils.dart' as date_utils;
@@ -114,175 +117,207 @@ class InsightTicketSales extends StatelessWidget {
           orElse: () => null,
           fetched: (event) => event,
         );
-    // TODO: build date time range builder with default start end date of event
-    final startDate = DateTime.parse('2024-02-01');
-    final endDate = DateTime.parse('2024-04-17');
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          t.event.eventDashboard.insights.ticketSales,
-          style: Typo.mediumPlus.copyWith(
-            color: colorScheme.onPrimary,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        SizedBox(height: Spacing.smMedium),
-        FutureBuilder(
-          future: CubeJsService(eventId: eventId).query(
-            body: getPaymentQuery(
-              eventId,
-              startDate: startDate,
-              endDate: endDate,
+    return ChartDateRangeBuilder(
+      startDate: event?.start,
+      endDate: event?.start?.add(
+        const Duration(days: 30),
+      ),
+      builder: (
+        timeRange, {
+        required selectStartDate,
+        required selectEndDate,
+      }) =>
+          Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            t.event.eventDashboard.insights.ticketSales,
+            style: Typo.mediumPlus.copyWith(
+              color: colorScheme.onPrimary,
+              fontWeight: FontWeight.w600,
             ),
           ),
-          builder: (context, snapshot) {
-            final payments = snapshot.data?.fold(
-                  (l) => [].cast<CubePaymentMember>(),
-                  (result) => result
-                      .map((json) => CubePaymentMember.fromJson(json))
-                      .toList(),
-                ) ??
-                [];
-            final paymentsByDate = groupBy(
-              payments,
-              (p) => DateFormat(defaultDateFormat).format(
-                p.stampsSucceeded?.toLocal() ?? DateTime.now(),
+          SizedBox(height: Spacing.smMedium),
+          Row(
+            children: [
+              ChartDateRangePicker(
+                timeRange: timeRange,
+                onSelectEndDate: selectEndDate,
+                onSelectStartDate: selectStartDate,
               ),
-            );
-            final allDatesInRange = date_utils.DateUtils.generateDatesInRange(
-              startDate,
-              endDate,
-            ).map((item) {
-              return DateFormat(defaultDateFormat).format(item.toLocal());
-            }).toList();
+            ],
+          ),
+          SizedBox(height: Spacing.smMedium),
+          FutureBuilder(
+            future: CubeJsService(eventId: eventId).query(
+              body: getPaymentQuery(
+                eventId,
+                startDate: timeRange.start,
+                endDate: timeRange.end,
+              ),
+            ),
+            builder: (context, snapshot) {
+              final isLoading =
+                  snapshot.connectionState == ConnectionState.waiting;
+              final payments = snapshot.data?.fold(
+                    (l) => [].cast<CubePaymentMember>(),
+                    (result) => result
+                        .map((json) => CubePaymentMember.fromJson(json))
+                        .toList(),
+                  ) ??
+                  [];
+              final paymentsByDate = groupBy(
+                payments,
+                (p) => DateFormat(defaultDateFormat).format(
+                  p.stampsSucceeded?.toLocal() ?? DateTime.now(),
+                ),
+              );
+              final allDatesInRange = date_utils.DateUtils.generateDatesInRange(
+                timeRange.start,
+                timeRange.end,
+              ).map((item) {
+                return DateFormat(defaultDateFormat).format(item.toLocal());
+              }).toList();
 
-            final allPaymentsByDateInRange =
-                allDatesInRange.fold<Map<String, List<CubePaymentMember>>>(
-              {},
-              (data, element) => data
-                ..putIfAbsent(element, () => paymentsByDate[element] ?? []),
-            );
+              final allPaymentsByDateInRange =
+                  allDatesInRange.fold<Map<String, List<CubePaymentMember>>>(
+                {},
+                (data, element) => data
+                  ..putIfAbsent(element, () => paymentsByDate[element] ?? []),
+              );
 
-            final allDateKeys = allPaymentsByDateInRange.keys.toList();
+              final allDateKeys = allPaymentsByDateInRange.keys.toList();
 
-            final spots = allPaymentsByDateInRange.entries
-                .map(
-                  (entry) => FlSpot(
-                    allDateKeys
-                        .indexWhere((element) => element == entry.key)
-                        .toDouble(),
-                    entry.value.isNotEmpty ? 1 : 0,
-                  ),
-                )
-                .toList();
-            return Stack(
-              children: [
-                LemonLineChart(
-                  lineVisible: payments.isNotEmpty,
-                  lineColor: LemonColor.malachiteGreen,
-                  data: spots,
-                  minY: -0.05,
-                  maxY: 1.5,
-                  minX: 0,
-                  xTitlesWidget: (value, meta) => Text(
-                    DateFormat(displayDateFormat).format(
-                      DateTime.parse(allDatesInRange[value.toInt()]),
+              final spots = allPaymentsByDateInRange.entries
+                  .map(
+                    (entry) => FlSpot(
+                      allDateKeys
+                          .indexWhere((element) => element == entry.key)
+                          .toDouble(),
+                      entry.value.isNotEmpty ? 1 : 0,
                     ),
-                    style: Typo.small.copyWith(color: colorScheme.onSecondary),
-                  ),
-                  yTitlesWidget: (value, meta) => const SizedBox.shrink(),
-                  lineTouchData: LineTouchData(
-                    touchTooltipData: LineTouchTooltipData(
-                      getTooltipColor: (_) => LemonColor.atomicBlack,
-                      getTooltipItems: (touchedSpots) {
-                        return touchedSpots.map((item) {
-                          final dateKey = allDateKeys[item.x.toInt()];
-                          final allPaymentsInDate =
-                              allPaymentsByDateInRange[dateKey] ?? [];
-                          final displayAmountForEachCurrency =
-                              groupByCurrency(payments: allPaymentsInDate)
-                                  .entries
-                                  .fold<Map<String, String>>(
-                            {},
-                            (value, entry) => value
-                              ..putIfAbsent(
-                                entry.key,
-                                () => _calculateAmountByCurrency(
-                                  event: event,
-                                  payments: entry.value,
-                                ),
-                              ),
-                          );
-                          final amountTexts =
-                              displayAmountForEachCurrency.entries.map((entry) {
-                            return '${entry.key}: ${entry.value}';
-                          }).join('\n');
-
-                          return LineTooltipItem(
-                            '$dateKey \n',
-                            Typo.xSmall.copyWith(
-                              color: colorScheme.onPrimary,
+                  )
+                  .toList();
+              return Stack(
+                children: [
+                  LemonLineChart(
+                    lineVisible: payments.isNotEmpty,
+                    lineColor: LemonColor.malachiteGreen,
+                    data: spots,
+                    minY: -0.05,
+                    maxY: 1.5,
+                    minX: 0,
+                    xTitlesWidget: (value, meta) => allDatesInRange.isNotEmpty
+                        ? Text(
+                            DateFormat(displayDateFormat).format(
+                              DateTime.parse(allDatesInRange[value.toInt()]),
                             ),
-                            children: [
-                              TextSpan(
-                                text:
-                                    '${t.event.eventDashboard.insights.ticketsSold}: ',
-                                children: [
-                                  TextSpan(
-                                    text: _calculateTotalTicketsSold(
-                                      payments:
-                                          allPaymentsByDateInRange[dateKey] ??
-                                              [],
-                                    ).toString(),
+                            style: Typo.small
+                                .copyWith(color: colorScheme.onSecondary),
+                          )
+                        : const SizedBox.shrink(),
+                    yTitlesWidget: (value, meta) => const SizedBox.shrink(),
+                    lineTouchData: LineTouchData(
+                      touchTooltipData: LineTouchTooltipData(
+                        getTooltipColor: (_) => LemonColor.atomicBlack,
+                        getTooltipItems: (touchedSpots) {
+                          return touchedSpots.map((item) {
+                            final dateKey = allDateKeys[item.x.toInt()];
+                            final allPaymentsInDate =
+                                allPaymentsByDateInRange[dateKey] ?? [];
+                            final displayAmountForEachCurrency =
+                                groupByCurrency(payments: allPaymentsInDate)
+                                    .entries
+                                    .fold<Map<String, String>>(
+                              {},
+                              (value, entry) => value
+                                ..putIfAbsent(
+                                  entry.key,
+                                  () => _calculateAmountByCurrency(
+                                    event: event,
+                                    payments: entry.value,
                                   ),
-                                ],
-                              ),
-                              if (allPaymentsInDate.isNotEmpty)
-                                TextSpan(
-                                  text: '\n$amountTexts',
                                 ),
-                            ],
-                          );
-                        }).toList();
-                      },
+                            );
+                            final amountTexts = displayAmountForEachCurrency
+                                .entries
+                                .map((entry) {
+                              return '${entry.key}: ${entry.value}';
+                            }).join('\n');
+
+                            return LineTooltipItem(
+                              '$dateKey \n',
+                              Typo.xSmall.copyWith(
+                                color: colorScheme.onPrimary,
+                              ),
+                              children: [
+                                TextSpan(
+                                  text:
+                                      '${t.event.eventDashboard.insights.ticketsSold}: ',
+                                  children: [
+                                    TextSpan(
+                                      text: _calculateTotalTicketsSold(
+                                        payments:
+                                            allPaymentsByDateInRange[dateKey] ??
+                                                [],
+                                      ).toString(),
+                                    ),
+                                  ],
+                                ),
+                                if (allPaymentsInDate.isNotEmpty)
+                                  TextSpan(
+                                    text: '\n$amountTexts',
+                                  ),
+                              ],
+                            );
+                          }).toList();
+                        },
+                      ),
                     ),
                   ),
-                ),
-                Positioned.fill(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                      vertical: Spacing.smMedium,
-                      horizontal: Spacing.smMedium,
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Text(
-                          t.event.eventDashboard.insights.totalTicketsSold,
-                          style: Typo.mediumPlus.copyWith(
-                            color: colorScheme.onPrimary,
-                          ),
+                  if (payments.isNotEmpty)
+                    Positioned.fill(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: Spacing.smMedium,
+                          horizontal: Spacing.smMedium,
                         ),
-                        Text(
-                          _calculateTotalTicketsSold(payments: payments)
-                              .toString(),
-                          style: Typo.mediumPlus.copyWith(
-                            color: colorScheme.onPrimary,
-                          ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Text(
+                              t.event.eventDashboard.insights.totalTicketsSold,
+                              style: Typo.mediumPlus.copyWith(
+                                color: colorScheme.onPrimary,
+                              ),
+                            ),
+                            Text(
+                              _calculateTotalTicketsSold(payments: payments)
+                                  .toString(),
+                              style: Typo.mediumPlus.copyWith(
+                                color: colorScheme.onPrimary,
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
-                  ),
-                ),
-              ],
-            );
-          },
-        ),
-      ],
+                  if (payments.isEmpty || isLoading)
+                    ChartEmptyMessage(
+                      isLoading: isLoading,
+                      title: t.event.eventDashboard.insights.totalCardSales,
+                      description: t.event.eventDashboard.insights
+                          .noTotalCardSalesDescription,
+                    ),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 }

@@ -2,6 +2,9 @@ import 'dart:math';
 
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/domain/cubejs/entities/cube_track/cube_track.dart';
+import 'package:app/core/presentation/pages/event/event_dashboard/sub_pages/event_dashboard_insight_page/widgets/chart_date_range_builder/chart_date_range_builder.dart';
+import 'package:app/core/presentation/pages/event/event_dashboard/sub_pages/event_dashboard_insight_page/widgets/chart_date_range_builder/chart_date_range_picker.dart';
+import 'package:app/core/presentation/pages/event/event_dashboard/sub_pages/event_dashboard_insight_page/widgets/chart_empty_message/chart_empty_message.dart';
 import 'package:app/core/presentation/widgets/charts/line_chart/line_chart.dart';
 import 'package:app/core/service/cubejs_service/cubejs_service.dart';
 import 'package:app/core/utils/date_utils.dart' as date_utils;
@@ -70,148 +73,183 @@ class InsightCheckinsChart extends StatelessWidget {
           orElse: () => null,
           fetched: (event) => event,
         );
-    // TODO: build date time range builder with default start end date of event
-    final startDate = DateTime.parse('2024-02-01');
-    final endDate = DateTime.parse('2024-04-17');
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          t.event.eventDashboard.insights.checkIns,
-          style: Typo.mediumPlus.copyWith(
-            color: colorScheme.onPrimary,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        SizedBox(height: Spacing.smMedium),
-        FutureBuilder(
-          future: CubeJsService(eventId: eventId).query(
-            body: getCheckinsQuery(
-              eventStartDate: event?.start ?? DateTime.now(),
-              startDate: startDate,
-              endDate: endDate,
+    return ChartDateRangeBuilder(
+      startDate: event?.start,
+      endDate: event?.start?.add(
+        const Duration(days: 30),
+      ),
+      builder: (
+        timeRange, {
+        required selectStartDate,
+        required selectEndDate,
+      }) =>
+          Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            t.event.eventDashboard.insights.checkIns,
+            style: Typo.mediumPlus.copyWith(
+              color: colorScheme.onPrimary,
+              fontWeight: FontWeight.w600,
             ),
           ),
-          builder: (context, snapshot) {
-            final tracks = snapshot.data?.fold(
-                  (l) => [].cast<CubeTrackMember>(),
-                  (result) => result
-                      .map((json) => CubeTrackMember.fromJson(json))
-                      .toList(),
-                ) ??
-                [];
-            final tracksByDate = groupBy(
-              tracks,
-              (p) => DateFormat(defaultDateFormat).format(
-                p.date?.toLocal() ?? DateTime.now(),
+          SizedBox(height: Spacing.smMedium),
+          Row(
+            children: [
+              ChartDateRangePicker(
+                timeRange: timeRange,
+                onSelectEndDate: selectEndDate,
+                onSelectStartDate: selectStartDate,
               ),
-            );
-            final allDatesInRange = date_utils.DateUtils.generateDatesInRange(
-              startDate,
-              endDate,
-            ).map((item) {
-              return DateFormat(defaultDateFormat).format(item.toLocal());
-            }).toList();
+            ],
+          ),
+          SizedBox(height: Spacing.smMedium),
+          FutureBuilder(
+            future: CubeJsService(eventId: eventId).query(
+              body: getCheckinsQuery(
+                eventStartDate: event?.start ?? DateTime.now(),
+                startDate: timeRange.start,
+                endDate: timeRange.end,
+              ),
+            ),
+            builder: (context, snapshot) {
+              final isLoading =
+                  snapshot.connectionState == ConnectionState.waiting;
+              final tracks = snapshot.data?.fold(
+                    (l) => [].cast<CubeTrackMember>(),
+                    (result) => result
+                        .map((json) => CubeTrackMember.fromJson(json))
+                        .toList(),
+                  ) ??
+                  [];
+              final tracksByDate = groupBy(
+                tracks,
+                (p) => DateFormat(defaultDateFormat).format(
+                  p.date?.toLocal() ?? DateTime.now(),
+                ),
+              );
+              final allDatesInRange = date_utils.DateUtils.generateDatesInRange(
+                timeRange.start,
+                timeRange.end,
+              ).map((item) {
+                return DateFormat(defaultDateFormat).format(item.toLocal());
+              }).toList();
 
-            final allTracksByDateInRange =
-                allDatesInRange.fold<Map<String, List<CubeTrackMember>>>(
-              {},
-              (data, element) =>
-                  data..putIfAbsent(element, () => tracksByDate[element] ?? []),
-            );
+              final allTracksByDateInRange =
+                  allDatesInRange.fold<Map<String, List<CubeTrackMember>>>(
+                {},
+                (data, element) => data
+                  ..putIfAbsent(element, () => tracksByDate[element] ?? []),
+              );
 
-            final allDateKeys = allTracksByDateInRange.keys.toList();
+              final allDateKeys = allTracksByDateInRange.keys.toList();
 
-            final spots = allTracksByDateInRange.entries
-                .map(
-                  (entry) => FlSpot(
-                    allDateKeys
-                        .indexWhere((element) => element == entry.key)
-                        .toDouble(),
-                    _calculateTotalCheckins(tracks: entry.value).toDouble(),
-                  ),
-                )
-                .toList();
-            final maxYInSpots = spots.map((e) => e.y).reduce(max);
-            return Stack(
-              children: [
-                LemonLineChart(
-                  lineVisible: tracks.isNotEmpty,
-                  lineColor: LemonColor.paleViolet,
-                  data: spots,
-                  minY: -0.5,
-                  maxY: maxYInSpots * 1.5,
-                  xTitlesWidget: (value, meta) => Text(
-                    DateFormat(displayDateFormat).format(
-                      DateTime.parse(allDatesInRange[value.toInt()]),
+              final spots = allTracksByDateInRange.entries
+                  .map(
+                    (entry) => FlSpot(
+                      allDateKeys
+                          .indexWhere((element) => element == entry.key)
+                          .toDouble(),
+                      _calculateTotalCheckins(tracks: entry.value).toDouble(),
                     ),
-                    style: Typo.small.copyWith(color: colorScheme.onSecondary),
+                  )
+                  .toList();
+              final maxYInSpots =
+                  spots.isEmpty ? 1 : spots.map((e) => e.y).reduce(max);
+              return Stack(
+                children: [
+                  LemonLineChart(
+                    lineVisible: tracks.isNotEmpty,
+                    lineColor: LemonColor.paleViolet,
+                    data: spots,
+                    minY: -0.5,
+                    maxY: maxYInSpots * 1.5,
+                    xTitlesWidget: (value, meta) => allDatesInRange.isNotEmpty
+                        ? Text(
+                            DateFormat(displayDateFormat).format(
+                              DateTime.parse(allDatesInRange[value.toInt()]),
+                            ),
+                            style: Typo.small
+                                .copyWith(color: colorScheme.onSecondary),
+                          )
+                        : const SizedBox.shrink(),
+                    yTitlesWidget: (value, meta) {
+                      if (value < 0) return const SizedBox.shrink();
+                      return Text(
+                        value.toInt().toString(),
+                        style:
+                            Typo.small.copyWith(color: colorScheme.onSecondary),
+                      );
+                    },
+                    lineTouchData: LineTouchData(
+                      touchTooltipData: LineTouchTooltipData(
+                        getTooltipColor: (_) => LemonColor.atomicBlack,
+                        getTooltipItems: (touchedSpots) {
+                          return touchedSpots.map((item) {
+                            final dateKey = allDateKeys[item.x.toInt()];
+                            final allTracksInDate =
+                                allTracksByDateInRange[dateKey] ?? [];
+                            final totalTrackCountInDate =
+                                _calculateTotalCheckins(
+                              tracks: allTracksInDate,
+                            );
+                            return LineTooltipItem(
+                              '$dateKey \n',
+                              Typo.xSmall.copyWith(
+                                color: colorScheme.onPrimary,
+                              ),
+                              children: [
+                                TextSpan(
+                                  text: totalTrackCountInDate.toString(),
+                                ),
+                              ],
+                            );
+                          }).toList();
+                        },
+                      ),
+                    ),
                   ),
-                  yTitlesWidget: (value, meta) {
-                    if (value < 0) return const SizedBox.shrink();
-                    return Text(
-                      value.toInt().toString(),
-                      style:
-                          Typo.small.copyWith(color: colorScheme.onSecondary),
-                    );
-                  },
-                  lineTouchData: LineTouchData(
-                    touchTooltipData: LineTouchTooltipData(
-                      getTooltipColor: (_) => LemonColor.atomicBlack,
-                      getTooltipItems: (touchedSpots) {
-                        return touchedSpots.map((item) {
-                          final dateKey = allDateKeys[item.x.toInt()];
-                          final allTracksInDate =
-                              allTracksByDateInRange[dateKey] ?? [];
-                          final totalTrackCountInDate =
-                              _calculateTotalCheckins(tracks: allTracksInDate);
-                          return LineTooltipItem(
-                            '$dateKey \n',
-                            Typo.xSmall.copyWith(
+                  Positioned.fill(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        vertical: Spacing.smMedium,
+                        horizontal: Spacing.smMedium,
+                      ),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Text(
+                            t.event.eventDashboard.insights.totalCheckIns,
+                            style: Typo.mediumPlus.copyWith(
                               color: colorScheme.onPrimary,
                             ),
-                            children: [
-                              TextSpan(text: totalTrackCountInDate.toString()),
-                            ],
-                          );
-                        }).toList();
-                      },
+                          ),
+                          Text(
+                            _calculateTotalCheckins(tracks: tracks).toString(),
+                            style: Typo.mediumPlus.copyWith(
+                              color: colorScheme.onPrimary,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                Positioned.fill(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                      vertical: Spacing.smMedium,
-                      horizontal: Spacing.smMedium,
+                  if (tracks.isEmpty || isLoading)
+                    ChartEmptyMessage(
+                      isLoading: isLoading,
+                      title: t.event.eventDashboard.insights.totalCheckIns,
+                      description: t.event.eventDashboard.insights
+                          .noTotalCheckInsDescription,
                     ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Text(
-                          t.event.eventDashboard.insights.totalCheckIns,
-                          style: Typo.mediumPlus.copyWith(
-                            color: colorScheme.onPrimary,
-                          ),
-                        ),
-                        Text(
-                          _calculateTotalCheckins(tracks: tracks).toString(),
-                          style: Typo.mediumPlus.copyWith(
-                            color: colorScheme.onPrimary,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            );
-          },
-        ),
-      ],
+                ],
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 }
