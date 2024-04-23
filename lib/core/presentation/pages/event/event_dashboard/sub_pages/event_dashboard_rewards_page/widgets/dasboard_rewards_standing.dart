@@ -1,6 +1,7 @@
 import 'package:app/core/config.dart';
 import 'package:app/core/domain/cubejs/entities/cube_reward_use/cube_reward_use.dart';
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/shimmer/shimmer.dart';
 import 'package:app/core/service/cubejs_service/cubejs_service.dart';
@@ -73,7 +74,7 @@ class _DashboardRewardsStandingState extends State<DashboardRewardsStanding> {
           (reward) => reward.rewardId,
         );
 
-        if (isLoading || rewardUses.isEmpty) {
+        if (isLoading) {
           return SliverList.separated(
             itemCount: 3,
             itemBuilder: (context, index) {
@@ -91,6 +92,12 @@ class _DashboardRewardsStandingState extends State<DashboardRewardsStanding> {
             separatorBuilder: (context, index) => SizedBox(
               height: Spacing.superExtraSmall,
             ),
+          );
+        }
+
+        if (rewardUses.isEmpty) {
+          return const SliverToBoxAdapter(
+            child: EmptyList(),
           );
         }
 
