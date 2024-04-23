@@ -1,5 +1,6 @@
 import 'package:app/core/presentation/pages/event/event_dashboard/sub_pages/event_dashboard_insight_page/widgets/insight_demographics/demographics_placeholder.dart';
 import 'package:app/core/presentation/widgets/common/dotted_line/dotted_line.dart';
+import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/graphql/cubejs/query/get_user_count_by_dimensions.graphql.dart';
 import 'package:app/graphql/cubejs/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -85,7 +86,7 @@ class InsightUserCountByPronounWidget extends StatelessWidget {
                     SizedBox(
                       height: Spacing.smMedium,
                     ),
-                    if (isLoading || allItems.isEmpty)
+                    if (isLoading)
                       Expanded(
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
@@ -97,6 +98,13 @@ class InsightUserCountByPronounWidget extends StatelessWidget {
                               ),
                             ),
                           ],
+                        ),
+                      ),
+                    if (allItems.isEmpty && !isLoading)
+                      EmptyList(
+                        iconSize: Size(84.w, 84.w),
+                        textStyle: Typo.xSmall.copyWith(
+                          color: colorScheme.onSecondary,
                         ),
                       ),
                     if (allItems.isNotEmpty) ...[

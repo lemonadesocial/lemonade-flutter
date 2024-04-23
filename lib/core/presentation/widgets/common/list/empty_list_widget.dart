@@ -6,9 +6,13 @@ import 'package:flutter/material.dart';
 
 class EmptyList extends StatelessWidget {
   final String? emptyText;
+  final Size? iconSize;
+  final TextStyle? textStyle;
   const EmptyList({
     super.key,
     this.emptyText,
+    this.iconSize,
+    this.textStyle,
   });
 
   @override
@@ -18,11 +22,15 @@ class EmptyList extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Assets.icons.icEmptyList.svg(),
+          Assets.icons.icEmptyList.svg(
+            width: iconSize?.width,
+            height: iconSize?.height,
+          ),
           SizedBox(height: Spacing.smMedium),
           Text(
             emptyText ?? t.common.defaultEmptyList,
-            style: Typo.small.copyWith(color: colorScheme.onSurfaceVariant),
+            style: textStyle ??
+                Typo.small.copyWith(color: colorScheme.onSurfaceVariant),
             textAlign: TextAlign.center,
           ),
         ],
