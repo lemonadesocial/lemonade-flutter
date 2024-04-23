@@ -572,7 +572,12 @@
             "revenueTitle": "Revenue"
         },
         "reward": {
-            "rewardTitle": "Rewards"
+            "rewardTitle": "Rewards",
+            "totalClaims": "Total claims",
+            "created": "Created",
+            "redeems": "Redeems",
+            "emptyRewards": "Enhance you guests’ experience with unique rewards and make this event stand out!",
+            "addReward": "Add reward"
         }
     },
     "eventPhotos": {
