@@ -91,7 +91,7 @@ class CreateGuildChannelBloc
     final guildDetail = result.getOrElse(() => null);
     emit(
       state.copyWith(
-        guildDetail: guildDetail,
+        selectedGuild: guildDetail,
         statusFetchGuildDetail: CreateGuildChannelStatus.success,
       ),
     );
@@ -160,8 +160,9 @@ class CreateGuildChannelEvent with _$CreateGuildChannelEvent {
   const factory CreateGuildChannelEvent.selectGuildAccessOption({
     GuildAccessOptions? option,
   }) = CreateGuildChannelEventSelectGuildAccessOption;
-  const factory CreateGuildChannelEvent.selectGuildRole(
-      {GuildRole? guildRole}) = CreateGuildChannelEventSelectGuildRole;
+  const factory CreateGuildChannelEvent.selectGuildRole({
+    GuildRole? guildRole,
+  }) = CreateGuildChannelEventSelectGuildRole;
 }
 
 @freezed
@@ -172,7 +173,7 @@ class CreateGuildChannelState with _$CreateGuildChannelState {
     List<GuildBasic>? guilds,
     required bool isValid,
     String? searchTerm,
-    Guild? guildDetail,
+    Guild? selectedGuild,
     @Default(CreateGuildChannelStatus.initial)
     CreateGuildChannelStatus statusFetchGuilds,
     @Default(CreateGuildChannelStatus.initial)
