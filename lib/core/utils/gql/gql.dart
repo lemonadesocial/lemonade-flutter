@@ -2,9 +2,11 @@ import 'dart:async';
 
 import 'package:app/core/config.dart';
 import 'package:app/core/domain/common/entities/common.dart';
+import 'package:app/core/domain/cubejs/cubejs_repository.dart';
 import 'package:app/core/oauth/oauth.dart';
 import 'package:app/core/utils/gql/custom_error_handler.dart';
 import 'package:app/injection/register_module.dart';
+import 'package:flutter/foundation.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:injectable/injectable.dart';
 
@@ -151,4 +153,60 @@ class AIGQL extends BaseGQL {
           httpUrl: AppConfig.aiUrl,
           wssUrl: AppConfig.wssAIUrl,
         );
+}
+
+class CubeGQL {
+  final String eventId;
+  CubeGQL({
+    required this.eventId,
+  }) {
+    _errorLink = ErrorLink(
+      onException: (request, forward, exception) {
+        if (kDebugMode) {
+          CustomErrorHandler.handleExceptionError(request, forward, exception);
+        }
+        return null;
+      },
+      onGraphQLError: (request, forward, response) {
+        if (kDebugMode) {
+          CustomErrorHandler.handleGraphQLError(request, forward, response);
+        }
+        return null;
+      },
+    );
+
+    _client = GraphQLClient(
+      defaultPolicies: DefaultPolicies(
+        query: Policies(
+          fetch: FetchPolicy.cacheAndNetwork,
+        ),
+      ),
+      link: Link.from([
+        _errorLink,
+        AuthLink(
+          getToken: () async {
+            final result = await getIt<CubeJsRepository>()
+                .generateCubejsToken(eventId: eventId);
+            final cubeToken = result.getOrElse(() => '');
+            return cubeToken;
+          },
+        ),
+        HttpLink(
+          AppConfig.cubeJsUrl,
+          defaultHeaders: {
+            'Content-Type': 'application/json',
+          },
+        ),
+      ]),
+      cache: GraphQLCache(
+        partialDataPolicy: PartialDataCachePolicy.accept,
+        store: HiveStore(),
+      ),
+    );
+  }
+
+  final appOauth = getIt<AppOauth>();
+  late final GraphQLClient _client;
+  late final ErrorLink _errorLink;
+  GraphQLClient get client => _client;
 }

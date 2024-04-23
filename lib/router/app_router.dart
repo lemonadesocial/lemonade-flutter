@@ -348,6 +348,9 @@ final eventDetailRoutes = AutoRoute(
     AutoRoute(
       page: GuestEventPrivateAlertRoute.page,
     ),
+    AutoRoute(
+      page: EventDashboardRoute.page,
+    ),
   ],
 );
 

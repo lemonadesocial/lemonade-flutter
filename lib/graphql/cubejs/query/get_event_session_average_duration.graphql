@@ -1,0 +1,7 @@
+query GetEventSessionAverageDuration {
+  cube {
+    sessions {
+      averageDurationMinutes
+    }
+  }
+}

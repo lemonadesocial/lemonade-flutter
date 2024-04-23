@@ -1,0 +1,856 @@
+"""Exposes a URL that specifies the behaviour of this scalar."""
+directive @specifiedBy(
+  """The URL that specifies the behaviour of this scalar."""
+  url: String!
+) on SCALAR
+
+"""
+A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the
+`date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO
+8601 standard for representation of dates and times using the Gregorian calendar.
+"""
+scalar DateTime
+
+input DateTimeFilter {
+  equals: [String]
+  notEquals: [String]
+  in: [String]
+  notIn: [String]
+  inDateRange: [String]
+  notInDateRange: [String]
+  beforeDate: String
+  beforeOrOnDate: String
+  afterDate: String
+  afterOrOnDate: String
+  set: Boolean
+}
+
+type EventCheckinsMembers {
+  count: Float
+  event: String
+}
+
+input EventCheckinsOrderByInput {
+  count: OrderBy
+  event: OrderBy
+}
+
+input EventCheckinsWhereInput {
+  AND: [EventCheckinsWhereInput!]
+  OR: [EventCheckinsWhereInput!]
+  count: FloatFilter
+  event: StringFilter
+}
+
+type EventRewardUsesMembers {
+  count: Float
+  event: String
+  rewardId: String
+  updatedAt: TimeDimension
+}
+
+input EventRewardUsesOrderByInput {
+  count: OrderBy
+  event: OrderBy
+  rewardId: OrderBy
+  updatedAt: OrderBy
+}
+
+input EventRewardUsesWhereInput {
+  AND: [EventRewardUsesWhereInput!]
+  OR: [EventRewardUsesWhereInput!]
+  count: FloatFilter
+  event: StringFilter
+  rewardId: StringFilter
+  updatedAt: DateTimeFilter
+}
+
+type EventsAcceptedMembers {
+  count: Float
+  _id: String
+}
+
+input EventsAcceptedOrderByInput {
+  count: OrderBy
+  _id: OrderBy
+}
+
+input EventsAcceptedWhereInput {
+  AND: [EventsAcceptedWhereInput!]
+  OR: [EventsAcceptedWhereInput!]
+  count: FloatFilter
+  _id: StringFilter
+}
+
+type EventsBroadcastRoomsMembers {
+  _id: String
+  broadcastRoomsTitle: String
+}
+
+input EventsBroadcastRoomsOrderByInput {
+  _id: OrderBy
+  broadcastRoomsTitle: OrderBy
+}
+
+input EventsBroadcastRoomsWhereInput {
+  AND: [EventsBroadcastRoomsWhereInput!]
+  OR: [EventsBroadcastRoomsWhereInput!]
+  _id: StringFilter
+  broadcastRoomsTitle: StringFilter
+}
+
+type EventsCreatorsMembers {
+  countDistinctCreators: Float
+}
+
+input EventsCreatorsOrderByInput {
+  countDistinctCreators: OrderBy
+}
+
+input EventsCreatorsWhereInput {
+  AND: [EventsCreatorsWhereInput!]
+  OR: [EventsCreatorsWhereInput!]
+  countDistinctCreators: FloatFilter
+}
+
+type EventSessionReservationsMembers {
+  count: Float
+  countDistinctUsers: Float
+  event: String
+}
+
+input EventSessionReservationsOrderByInput {
+  count: OrderBy
+  countDistinctUsers: OrderBy
+  event: OrderBy
+}
+
+input EventSessionReservationsWhereInput {
+  AND: [EventSessionReservationsWhereInput!]
+  OR: [EventSessionReservationsWhereInput!]
+  count: FloatFilter
+  countDistinctUsers: FloatFilter
+  event: StringFilter
+}
+
+type EventsMembers {
+  count: Float
+  start: TimeDimension
+}
+
+input EventsOrderByInput {
+  count: OrderBy
+  start: OrderBy
+}
+
+type EventsRewardsMembers {
+  count: Float
+  _id: String
+  rewardsId: String
+  rewardsIconUrl: String
+  rewardsTitle: String
+}
+
+input EventsRewardsOrderByInput {
+  count: OrderBy
+  _id: OrderBy
+  rewardsId: OrderBy
+  rewardsIconUrl: OrderBy
+  rewardsTitle: OrderBy
+}
+
+input EventsRewardsWhereInput {
+  AND: [EventsRewardsWhereInput!]
+  OR: [EventsRewardsWhereInput!]
+  count: FloatFilter
+  _id: StringFilter
+  rewardsId: StringFilter
+  rewardsIconUrl: StringFilter
+  rewardsTitle: StringFilter
+}
+
+type EventsSessionsMembers {
+  _id: String
+  sessionsId: String
+  sessionsTitle: String
+}
+
+input EventsSessionsOrderByInput {
+  _id: OrderBy
+  sessionsId: OrderBy
+  sessionsTitle: OrderBy
+}
+
+input EventsSessionsWhereInput {
+  AND: [EventsSessionsWhereInput!]
+  OR: [EventsSessionsWhereInput!]
+  _id: StringFilter
+  sessionsId: StringFilter
+  sessionsTitle: StringFilter
+}
+
+type EventsStoriesMembers {
+  count: Float
+  _id: String
+}
+
+input EventsStoriesOrderByInput {
+  count: OrderBy
+  _id: OrderBy
+}
+
+input EventsStoriesWhereInput {
+  AND: [EventsStoriesWhereInput!]
+  OR: [EventsStoriesWhereInput!]
+  count: FloatFilter
+  _id: StringFilter
+}
+
+input EventsWhereInput {
+  AND: [EventsWhereInput!]
+  OR: [EventsWhereInput!]
+  count: FloatFilter
+  start: DateTimeFilter
+}
+
+type EventTicketTypesMembers {
+  active: String
+  title: String
+  ticketCount: Float
+  ticketLimit: Float
+}
+
+input EventTicketTypesOrderByInput {
+  active: OrderBy
+  title: OrderBy
+  ticketCount: OrderBy
+  ticketLimit: OrderBy
+}
+
+type EventTicketTypesPricesMembers {
+  count: Float
+  pricesCurrency: String
+  pricesNetwork: String
+  pricesCost: Float
+}
+
+input EventTicketTypesPricesOrderByInput {
+  count: OrderBy
+  pricesCurrency: OrderBy
+  pricesNetwork: OrderBy
+  pricesCost: OrderBy
+}
+
+input EventTicketTypesPricesWhereInput {
+  AND: [EventTicketTypesPricesWhereInput!]
+  OR: [EventTicketTypesPricesWhereInput!]
+  count: FloatFilter
+  pricesCurrency: StringFilter
+  pricesNetwork: StringFilter
+  pricesCost: FloatFilter
+}
+
+input EventTicketTypesWhereInput {
+  AND: [EventTicketTypesWhereInput!]
+  OR: [EventTicketTypesWhereInput!]
+  active: StringFilter
+  title: StringFilter
+  ticketCount: FloatFilter
+  ticketLimit: FloatFilter
+}
+
+input FloatFilter {
+  equals: Float
+  notEquals: Float
+  in: [Float]
+  notIn: [Float]
+  set: Boolean
+  gt: Float
+  lt: Float
+  gte: Float
+  lte: Float
+}
+
+enum OrderBy {
+  asc
+  desc
+}
+
+type PaymentsMembers {
+  count: Float
+  totalAmount: Float
+  minimumAmount: Float
+  averageAmount: Float
+  maximumAmount: Float
+  stampsCreated: TimeDimension
+  stampsFailed: TimeDimension
+  stampsInitialized: TimeDimension
+  stampsSucceeded: TimeDimension
+  amount: Float
+  currency: String
+  state: String
+  kind: String
+}
+
+input PaymentsOrderByInput {
+  count: OrderBy
+  totalAmount: OrderBy
+  minimumAmount: OrderBy
+  averageAmount: OrderBy
+  maximumAmount: OrderBy
+  stampsCreated: OrderBy
+  stampsFailed: OrderBy
+  stampsInitialized: OrderBy
+  stampsSucceeded: OrderBy
+  amount: OrderBy
+  currency: OrderBy
+  state: OrderBy
+  kind: OrderBy
+}
+
+type PaymentsTicketAssigneesMembers {
+  ticketAssignees: String
+}
+
+input PaymentsTicketAssigneesOrderByInput {
+  ticketAssignees: OrderBy
+}
+
+input PaymentsTicketAssigneesWhereInput {
+  AND: [PaymentsTicketAssigneesWhereInput!]
+  OR: [PaymentsTicketAssigneesWhereInput!]
+  ticketAssignees: StringFilter
+}
+
+input PaymentsWhereInput {
+  AND: [PaymentsWhereInput!]
+  OR: [PaymentsWhereInput!]
+  count: FloatFilter
+  totalAmount: FloatFilter
+  minimumAmount: FloatFilter
+  averageAmount: FloatFilter
+  maximumAmount: FloatFilter
+  stampsCreated: DateTimeFilter
+  stampsFailed: DateTimeFilter
+  stampsInitialized: DateTimeFilter
+  stampsSucceeded: DateTimeFilter
+  amount: FloatFilter
+  currency: StringFilter
+  state: StringFilter
+  kind: StringFilter
+}
+
+type Query {
+  cube(where: RootWhereInput, limit: Int, offset: Int, timezone: String, renewQuery: Boolean, ungrouped: Boolean, orderBy: RootOrderByInput): [Result!]!
+}
+
+type Result {
+  eventCheckins(where: EventCheckinsWhereInput, orderBy: EventCheckinsOrderByInput): EventCheckinsMembers!
+  eventRewardUses(where: EventRewardUsesWhereInput, orderBy: EventRewardUsesOrderByInput): EventRewardUsesMembers!
+  eventSessionReservations(where: EventSessionReservationsWhereInput, orderBy: EventSessionReservationsOrderByInput): EventSessionReservationsMembers!
+  eventTicketTypes(where: EventTicketTypesWhereInput, orderBy: EventTicketTypesOrderByInput): EventTicketTypesMembers!
+  eventTicketTypesPrices(where: EventTicketTypesPricesWhereInput, orderBy: EventTicketTypesPricesOrderByInput): EventTicketTypesPricesMembers!
+  events(where: EventsWhereInput, orderBy: EventsOrderByInput): EventsMembers!
+  eventsAccepted(where: EventsAcceptedWhereInput, orderBy: EventsAcceptedOrderByInput): EventsAcceptedMembers!
+  eventsBroadcastRooms(where: EventsBroadcastRoomsWhereInput, orderBy: EventsBroadcastRoomsOrderByInput): EventsBroadcastRoomsMembers!
+  eventsCreators(where: EventsCreatorsWhereInput, orderBy: EventsCreatorsOrderByInput): EventsCreatorsMembers!
+  eventsRewards(where: EventsRewardsWhereInput, orderBy: EventsRewardsOrderByInput): EventsRewardsMembers!
+  eventsSessions(where: EventsSessionsWhereInput, orderBy: EventsSessionsOrderByInput): EventsSessionsMembers!
+  eventsStories(where: EventsStoriesWhereInput, orderBy: EventsStoriesOrderByInput): EventsStoriesMembers!
+  payments(where: PaymentsWhereInput, orderBy: PaymentsOrderByInput): PaymentsMembers!
+  paymentsTicketAssignees(where: PaymentsTicketAssigneesWhereInput, orderBy: PaymentsTicketAssigneesOrderByInput): PaymentsTicketAssigneesMembers!
+  sessions(where: SessionsWhereInput, orderBy: SessionsOrderByInput): SessionsMembers!
+  tickets(where: TicketsWhereInput, orderBy: TicketsOrderByInput): TicketsMembers!
+  trackViews(where: TrackViewsWhereInput, orderBy: TrackViewsOrderByInput): TrackViewsMembers!
+  tracks(where: TracksWhereInput, orderBy: TracksOrderByInput): TracksMembers!
+  users(where: UsersWhereInput, orderBy: UsersOrderByInput): UsersMembers!
+  walletClaims(where: WalletClaimsWhereInput, orderBy: WalletClaimsOrderByInput): WalletClaimsMembers!
+  walletPoaps(where: WalletPoapsWhereInput, orderBy: WalletPoapsOrderByInput): WalletPoapsMembers!
+  walletTransfers(where: WalletTransfersWhereInput, orderBy: WalletTransfersOrderByInput): WalletTransfersMembers!
+}
+
+input RootOrderByInput {
+  eventCheckins: EventCheckinsOrderByInput
+  eventRewardUses: EventRewardUsesOrderByInput
+  eventSessionReservations: EventSessionReservationsOrderByInput
+  eventTicketTypes: EventTicketTypesOrderByInput
+  eventTicketTypesPrices: EventTicketTypesPricesOrderByInput
+  events: EventsOrderByInput
+  eventsAccepted: EventsAcceptedOrderByInput
+  eventsBroadcastRooms: EventsBroadcastRoomsOrderByInput
+  eventsCreators: EventsCreatorsOrderByInput
+  eventsRewards: EventsRewardsOrderByInput
+  eventsSessions: EventsSessionsOrderByInput
+  eventsStories: EventsStoriesOrderByInput
+  payments: PaymentsOrderByInput
+  paymentsTicketAssignees: PaymentsTicketAssigneesOrderByInput
+  sessions: SessionsOrderByInput
+  tickets: TicketsOrderByInput
+  trackViews: TrackViewsOrderByInput
+  tracks: TracksOrderByInput
+  users: UsersOrderByInput
+  walletClaims: WalletClaimsOrderByInput
+  walletPoaps: WalletPoapsOrderByInput
+  walletTransfers: WalletTransfersOrderByInput
+}
+
+input RootWhereInput {
+  AND: [RootWhereInput!]
+  OR: [RootWhereInput!]
+  eventCheckins: EventCheckinsWhereInput
+  eventRewardUses: EventRewardUsesWhereInput
+  eventSessionReservations: EventSessionReservationsWhereInput
+  eventTicketTypes: EventTicketTypesWhereInput
+  eventTicketTypesPrices: EventTicketTypesPricesWhereInput
+  events: EventsWhereInput
+  eventsAccepted: EventsAcceptedWhereInput
+  eventsBroadcastRooms: EventsBroadcastRoomsWhereInput
+  eventsCreators: EventsCreatorsWhereInput
+  eventsRewards: EventsRewardsWhereInput
+  eventsSessions: EventsSessionsWhereInput
+  eventsStories: EventsStoriesWhereInput
+  payments: PaymentsWhereInput
+  paymentsTicketAssignees: PaymentsTicketAssigneesWhereInput
+  sessions: SessionsWhereInput
+  tickets: TicketsWhereInput
+  trackViews: TrackViewsWhereInput
+  tracks: TracksWhereInput
+  users: UsersWhereInput
+  walletClaims: WalletClaimsWhereInput
+  walletPoaps: WalletPoapsWhereInput
+  walletTransfers: WalletTransfersWhereInput
+}
+
+type SessionsMembers {
+  count: Float
+  averageDurationMinutes: Float
+  totalDurationMinutes: Float
+
+  """Repeat Sessions Count"""
+  countRepeat: Float
+
+  """Percent of Repeat Sessions"""
+  percentRepeat: Float
+  anonymousId: String
+  startAt: TimeDimension
+  nextStartAt: TimeDimension
+  endAt: TimeDimension
+  durationMinutes: Float
+  isFirst: String
+  metaEventId: String
+}
+
+input SessionsOrderByInput {
+  count: OrderBy
+  averageDurationMinutes: OrderBy
+  totalDurationMinutes: OrderBy
+  countRepeat: OrderBy
+  percentRepeat: OrderBy
+  anonymousId: OrderBy
+  startAt: OrderBy
+  nextStartAt: OrderBy
+  endAt: OrderBy
+  durationMinutes: OrderBy
+  isFirst: OrderBy
+  metaEventId: OrderBy
+}
+
+input SessionsWhereInput {
+  AND: [SessionsWhereInput!]
+  OR: [SessionsWhereInput!]
+  count: FloatFilter
+  averageDurationMinutes: FloatFilter
+  totalDurationMinutes: FloatFilter
+  countRepeat: FloatFilter
+  percentRepeat: FloatFilter
+  anonymousId: StringFilter
+  startAt: DateTimeFilter
+  nextStartAt: DateTimeFilter
+  endAt: DateTimeFilter
+  durationMinutes: FloatFilter
+  isFirst: StringFilter
+  metaEventId: StringFilter
+}
+
+input StringFilter {
+  equals: String
+  notEquals: String
+  in: [String]
+  notIn: [String]
+  contains: [String]
+  notContains: [String]
+  startsWith: [String]
+  notStartsWith: [String]
+  endsWith: [String]
+  notEndsWith: [String]
+  set: Boolean
+}
+
+type TicketsMembers {
+  count: Float
+  createdAt: TimeDimension
+  event: String
+  type: String
+  paymentId: String
+}
+
+input TicketsOrderByInput {
+  count: OrderBy
+  createdAt: OrderBy
+  event: OrderBy
+  type: OrderBy
+  paymentId: OrderBy
+}
+
+input TicketsWhereInput {
+  AND: [TicketsWhereInput!]
+  OR: [TicketsWhereInput!]
+  count: FloatFilter
+  createdAt: DateTimeFilter
+  event: StringFilter
+  type: StringFilter
+  paymentId: StringFilter
+}
+
+type TimeDimension {
+  value: DateTime!
+  second: DateTime!
+  minute: DateTime!
+  hour: DateTime!
+  day: DateTime!
+  week: DateTime!
+  month: DateTime!
+  quarter: DateTime!
+  year: DateTime!
+}
+
+type TracksMembers {
+  count: Float
+  countDistinctUsers: Float
+  date: TimeDimension
+  client: String
+  geoipCountry: String
+  geoipRegion: String
+  geoipEu: String
+  geoipTimezone: String
+  geoipCity: String
+  geoipMetro: Float
+  geoipArea: Float
+  urlHostname: String
+  urlPathname: String
+  isView: String
+  metaEventId: String
+  isUser: String
+  system: String
+}
+
+input TracksOrderByInput {
+  count: OrderBy
+  countDistinctUsers: OrderBy
+  date: OrderBy
+  client: OrderBy
+  geoipCountry: OrderBy
+  geoipRegion: OrderBy
+  geoipEu: OrderBy
+  geoipTimezone: OrderBy
+  geoipCity: OrderBy
+  geoipMetro: OrderBy
+  geoipArea: OrderBy
+  urlHostname: OrderBy
+  urlPathname: OrderBy
+  isView: OrderBy
+  metaEventId: OrderBy
+  isUser: OrderBy
+  system: OrderBy
+}
+
+input TracksWhereInput {
+  AND: [TracksWhereInput!]
+  OR: [TracksWhereInput!]
+  count: FloatFilter
+  countDistinctUsers: FloatFilter
+  date: DateTimeFilter
+  client: StringFilter
+  geoipCountry: StringFilter
+  geoipRegion: StringFilter
+  geoipEu: StringFilter
+  geoipTimezone: StringFilter
+  geoipCity: StringFilter
+  geoipMetro: FloatFilter
+  geoipArea: FloatFilter
+  urlHostname: StringFilter
+  urlPathname: StringFilter
+  isView: StringFilter
+  metaEventId: StringFilter
+  isUser: StringFilter
+  system: StringFilter
+}
+
+type TrackViewsMembers {
+  count: Float
+  countDistinctUsers: Float
+  averageDurationMinutes: Float
+  date: TimeDimension
+  client: String
+  geoipCountry: String
+  geoipRegion: String
+  geoipEu: String
+  geoipTimezone: String
+  geoipCity: String
+  geoipMetro: Float
+  geoipArea: Float
+  urlHostname: String
+  urlPathname: String
+  isView: String
+  metaEventId: String
+  isUser: String
+  system: String
+  nextDate: TimeDimension
+  durationMinutes: Float
+}
+
+input TrackViewsOrderByInput {
+  count: OrderBy
+  countDistinctUsers: OrderBy
+  averageDurationMinutes: OrderBy
+  date: OrderBy
+  client: OrderBy
+  geoipCountry: OrderBy
+  geoipRegion: OrderBy
+  geoipEu: OrderBy
+  geoipTimezone: OrderBy
+  geoipCity: OrderBy
+  geoipMetro: OrderBy
+  geoipArea: OrderBy
+  urlHostname: OrderBy
+  urlPathname: OrderBy
+  isView: OrderBy
+  metaEventId: OrderBy
+  isUser: OrderBy
+  system: OrderBy
+  nextDate: OrderBy
+  durationMinutes: OrderBy
+}
+
+input TrackViewsWhereInput {
+  AND: [TrackViewsWhereInput!]
+  OR: [TrackViewsWhereInput!]
+  count: FloatFilter
+  countDistinctUsers: FloatFilter
+  averageDurationMinutes: FloatFilter
+  date: DateTimeFilter
+  client: StringFilter
+  geoipCountry: StringFilter
+  geoipRegion: StringFilter
+  geoipEu: StringFilter
+  geoipTimezone: StringFilter
+  geoipCity: StringFilter
+  geoipMetro: FloatFilter
+  geoipArea: FloatFilter
+  urlHostname: StringFilter
+  urlPathname: StringFilter
+  isView: StringFilter
+  metaEventId: StringFilter
+  isUser: StringFilter
+  system: StringFilter
+  nextDate: DateTimeFilter
+  durationMinutes: FloatFilter
+}
+
+type UsersMembers {
+  count: Float
+  _id: String
+  createdAt: TimeDimension
+  createdContextClient: String
+  name: String
+  imageAvatar: String
+  pronoun: String
+  username: String
+  walletCustodial: String
+  ageGroup: String
+  geoipLookupCountry: String
+  geoipLookupRegion: String
+  updatedAt: TimeDimension
+  randomNumber: Float
+}
+
+input UsersOrderByInput {
+  count: OrderBy
+  _id: OrderBy
+  createdAt: OrderBy
+  createdContextClient: OrderBy
+  name: OrderBy
+  imageAvatar: OrderBy
+  pronoun: OrderBy
+  username: OrderBy
+  walletCustodial: OrderBy
+  ageGroup: OrderBy
+  geoipLookupCountry: OrderBy
+  geoipLookupRegion: OrderBy
+  updatedAt: OrderBy
+  randomNumber: OrderBy
+}
+
+input UsersWhereInput {
+  AND: [UsersWhereInput!]
+  OR: [UsersWhereInput!]
+  count: FloatFilter
+  _id: StringFilter
+  createdAt: DateTimeFilter
+  createdContextClient: StringFilter
+  name: StringFilter
+  imageAvatar: StringFilter
+  pronoun: StringFilter
+  username: StringFilter
+  walletCustodial: StringFilter
+  ageGroup: StringFilter
+  geoipLookupCountry: StringFilter
+  geoipLookupRegion: StringFilter
+  updatedAt: DateTimeFilter
+  randomNumber: FloatFilter
+}
+
+type WalletClaimsMembers {
+  count: Float
+  gasPrice: Float
+  effectiveGasPrice: Float
+  gasUsed: Float
+  cost: Float
+  countDistinctArgsClaimer: Float
+  createdAt: TimeDimension
+  updatedAt: TimeDimension
+  network: String
+  client: String
+  to: String
+  argsClaimer: String
+  address: String
+}
+
+input WalletClaimsOrderByInput {
+  count: OrderBy
+  gasPrice: OrderBy
+  effectiveGasPrice: OrderBy
+  gasUsed: OrderBy
+  cost: OrderBy
+  countDistinctArgsClaimer: OrderBy
+  createdAt: OrderBy
+  updatedAt: OrderBy
+  network: OrderBy
+  client: OrderBy
+  to: OrderBy
+  argsClaimer: OrderBy
+  address: OrderBy
+}
+
+input WalletClaimsWhereInput {
+  AND: [WalletClaimsWhereInput!]
+  OR: [WalletClaimsWhereInput!]
+  count: FloatFilter
+  gasPrice: FloatFilter
+  effectiveGasPrice: FloatFilter
+  gasUsed: FloatFilter
+  cost: FloatFilter
+  countDistinctArgsClaimer: FloatFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+  network: StringFilter
+  client: StringFilter
+  to: StringFilter
+  argsClaimer: StringFilter
+  address: StringFilter
+}
+
+type WalletPoapsMembers {
+  count: Float
+  gasPrice: Float
+  effectiveGasPrice: Float
+  gasUsed: Float
+  cost: Float
+  argsMaxSupply: Float
+  countDistinctArgsCreator: Float
+  createdAt: TimeDimension
+  updatedAt: TimeDimension
+  network: String
+  client: String
+  to: String
+  argsCreator: String
+  address: String
+}
+
+input WalletPoapsOrderByInput {
+  count: OrderBy
+  gasPrice: OrderBy
+  effectiveGasPrice: OrderBy
+  gasUsed: OrderBy
+  cost: OrderBy
+  argsMaxSupply: OrderBy
+  countDistinctArgsCreator: OrderBy
+  createdAt: OrderBy
+  updatedAt: OrderBy
+  network: OrderBy
+  client: OrderBy
+  to: OrderBy
+  argsCreator: OrderBy
+  address: OrderBy
+}
+
+input WalletPoapsWhereInput {
+  AND: [WalletPoapsWhereInput!]
+  OR: [WalletPoapsWhereInput!]
+  count: FloatFilter
+  gasPrice: FloatFilter
+  effectiveGasPrice: FloatFilter
+  gasUsed: FloatFilter
+  cost: FloatFilter
+  argsMaxSupply: FloatFilter
+  countDistinctArgsCreator: FloatFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+  network: StringFilter
+  client: StringFilter
+  to: StringFilter
+  argsCreator: StringFilter
+  address: StringFilter
+}
+
+type WalletTransfersMembers {
+  count: Float
+  gasPrice: Float
+  effectiveGasPrice: Float
+  gasUsed: Float
+  cost: Float
+  createdAt: TimeDimension
+  updatedAt: TimeDimension
+  network: String
+  client: String
+  to: String
+}
+
+input WalletTransfersOrderByInput {
+  count: OrderBy
+  gasPrice: OrderBy
+  effectiveGasPrice: OrderBy
+  gasUsed: OrderBy
+  cost: OrderBy
+  createdAt: OrderBy
+  updatedAt: OrderBy
+  network: OrderBy
+  client: OrderBy
+  to: OrderBy
+}
+
+input WalletTransfersWhereInput {
+  AND: [WalletTransfersWhereInput!]
+  OR: [WalletTransfersWhereInput!]
+  count: FloatFilter
+  gasPrice: FloatFilter
+  effectiveGasPrice: FloatFilter
+  gasUsed: FloatFilter
+  cost: FloatFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+  network: StringFilter
+  client: StringFilter
+  to: StringFilter
+}
+

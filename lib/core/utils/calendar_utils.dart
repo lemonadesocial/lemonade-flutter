@@ -21,18 +21,7 @@ void showCalendar(
             ), // this is the border radius of the picker
           ),
         ),
-        dialogBackgroundColor: LemonColor.chineseBlack,
-        colorScheme: ColorScheme.dark(
-          primary: LemonColor.paleViolet, // header background color
-          onPrimary: LemonColor.white, // header text color
-          onSurface: LemonColor.white, // body text color
-          surface: LemonColor.black33,
-        ),
-        textButtonTheme: TextButtonThemeData(
-          style: TextButton.styleFrom(
-            foregroundColor: LemonColor.paleViolet, // button text color
-          ),
-        ),
+        dialogBackgroundColor: LemonColor.atomicBlack,
       ),
       child: dialogWidget!,
     ),

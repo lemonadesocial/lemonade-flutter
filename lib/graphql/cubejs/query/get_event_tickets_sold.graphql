@@ -1,0 +1,7 @@
+query GetTicketsSold($where: TicketsWhereInput) {
+  cube {
+    tickets(where: $where) {
+      count
+    }
+  }
+}
