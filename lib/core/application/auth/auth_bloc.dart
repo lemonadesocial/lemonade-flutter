@@ -8,7 +8,6 @@ import 'package:app/core/service/firebase/firebase_service.dart';
 import 'package:app/core/utils/onboarding_utils.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -61,9 +60,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       }
       if (!kDebugMode) {
         await FirebaseAnalytics.instance.setUserId(id: currentUser.userId);
-        await FirebaseCrashlytics.instance
-            .setUserIdentifier(currentUser.userId);
-        CrashAnalyticsManager().crashAnalyticsService?.setUser(currentUser);
       }
       emit(AuthState.authenticated(authSession: currentUser));
       return;
@@ -81,8 +77,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     final currentUser = await _createSession();
     if (!kDebugMode) {
       await FirebaseAnalytics.instance.setUserId(id: currentUser?.userId);
-      await FirebaseCrashlytics.instance.setUserIdentifier(currentUser!.userId);
-      CrashAnalyticsManager().crashAnalyticsService?.setUser(currentUser);
     }
     emit(AuthState.authenticated(authSession: currentUser!));
   }
@@ -92,17 +86,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   Future<void> _onLogout(AuthEventLogout event, Emitter emit) async {
+    await firebaseService.removeFcmToken();
     // This will trigger token state listener to call _onUnAuthenticated
     final result = await appOauth.logout();
     result.fold((l) => null, (success) async {
       if (success) {
         if (!kDebugMode) {
-          // Reset crashlytics
-          FirebaseCrashlytics.instance.setUserIdentifier('');
           FirebaseAnalytics.instance.setUserId(id: null);
         }
         CrashAnalyticsManager().crashAnalyticsService?.clearSetUser();
-        await firebaseService.removeFcmToken();
       }
     });
   }
@@ -110,8 +102,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   Future<void> _onForceLogout(AuthEventForceLogout event, Emitter emit) async {
     // This will trigger token state listener to call _onUnAuthenticated
     if (!kDebugMode) {
-      // Reset crashlytics
-      FirebaseCrashlytics.instance.setUserIdentifier('');
       FirebaseAnalytics.instance.setUserId(id: null);
     }
     CrashAnalyticsManager().crashAnalyticsService?.clearSetUser();
