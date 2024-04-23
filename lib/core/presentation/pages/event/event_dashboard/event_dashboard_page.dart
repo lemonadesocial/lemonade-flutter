@@ -39,7 +39,8 @@ class _EventDashboardPageState extends State<EventDashboardPage>
   initState() {
     super.initState();
     cubeClient = ValueNotifier(CubeGQL(eventId: widget.eventId).client);
-    _tabController = TabController(length: 3, vsync: this);
+    // TODO: hide revenue so only 2
+    _tabController = TabController(length: 2, vsync: this);
     _tabController.addListener(() {
       if (activeIndex != _tabController.index) {
         _listController.scrollToIndex(
@@ -67,12 +68,13 @@ class _EventDashboardPageState extends State<EventDashboardPage>
         activeColor: LemonColor.paleViolet,
         inactiveColor: LemonColor.white54,
       ),
-      _TabItem(
-        title: t.event.eventDashboard.revenue.revenueTitle,
-        icon: Assets.icons.icCashVariant,
-        activeColor: LemonColor.paleViolet,
-        inactiveColor: LemonColor.white54,
-      ),
+      // TODO: hide revenue
+      // _TabItem(
+      //   title: t.event.eventDashboard.revenue.revenueTitle,
+      //   icon: Assets.icons.icCashVariant,
+      //   activeColor: LemonColor.paleViolet,
+      //   inactiveColor: LemonColor.white54,
+      // ),
       _TabItem(
         title: t.event.eventDashboard.reward.rewardTitle,
         icon: Assets.icons.icReward,
@@ -120,8 +122,6 @@ class _EventDashboardPageState extends State<EventDashboardPage>
                     EventDashboardInsightPage(
                       event: event,
                     ),
-                    // TODO:
-                    const SizedBox.shrink(),
                     EventDashboardRewardsPage(event: event),
                   ],
                 ),
