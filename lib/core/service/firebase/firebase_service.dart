@@ -8,7 +8,6 @@ import 'package:app/core/oauth/oauth.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -48,8 +47,6 @@ class FirebaseService {
             ? firebase_options_production.DefaultFirebaseOptions.currentPlatform
             : firebase_options_staging.DefaultFirebaseOptions.currentPlatform,
       );
-      FirebaseCrashlytics.instance
-          .setCrashlyticsCollectionEnabled(kDebugMode == false);
       FirebaseService._firebaseMessaging = FirebaseMessaging.instance;
       channel = const AndroidNotificationChannel(
         'high_importance_channel',
@@ -100,21 +97,9 @@ class FirebaseService {
         },
       );
       FlutterError.onError = (flutterErrorDetails) async {
-        // Prevent flush crash analytics error
-        // https://github.com/Baseflow/flutter_cached_network_image/issues/336
-        if (flutterErrorDetails.library == "image resource service" &&
-            flutterErrorDetails.exception
-                .toString()
-                .startsWith("HttpException: Invalid statusCode: 413, uri")) {
-          return;
-        }
-        await FirebaseCrashlytics.instance
-            .recordFlutterFatalError(flutterErrorDetails);
         return;
       };
       PlatformDispatcher.instance.onError = (error, stack) {
-        // If you wish to record a "non-fatal" exception, please remove the "fatal" parameter
-        FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
         return true;
       };
 

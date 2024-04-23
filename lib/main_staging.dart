@@ -31,18 +31,22 @@ void main() async {
   CrashAnalyticsManager().initialize(CrashAnalyticsProvider.sentry);
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) async {
-    await setupSentry(
-      () => runApp(
-        SentryScreenshotWidget(
-          child: SentryUserInteractionWidget(
-            child: DefaultAssetBundle(
-              bundle: SentryAssetBundle(),
-              child: const LemonadeApp(),
+    if (kDebugMode) {
+      runApp(const LemonadeApp());
+    } else {
+      await setupSentry(
+        () => runApp(
+          SentryScreenshotWidget(
+            child: SentryUserInteractionWidget(
+              child: DefaultAssetBundle(
+                bundle: SentryAssetBundle(),
+                child: const LemonadeApp(),
+              ),
             ),
           ),
         ),
-      ),
-    );
+      );
+    }
   });
   debugPrint('App is ready!!! ✅');
 }
