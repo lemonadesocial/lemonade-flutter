@@ -76,7 +76,7 @@ class CreateGuildChannelAccessPage extends StatelessWidget {
                     return Center(child: Loading.defaultLoading(context));
                   }
                   return GuildAccessInfoSection(
-                    guildDetail: state.guildDetail,
+                    guildDetail: state.selectedGuild,
                   );
                 },
               ),
@@ -101,7 +101,7 @@ class CreateGuildChannelAccessPage extends StatelessWidget {
                           );
                         }
                         return GuildAccessRolesList(
-                          guildDetail: state.guildDetail,
+                          guildDetail: state.selectedGuild,
                         );
                       },
                     ),

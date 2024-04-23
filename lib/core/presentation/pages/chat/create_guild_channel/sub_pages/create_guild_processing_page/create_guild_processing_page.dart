@@ -31,7 +31,7 @@ class _CreateGuildProcessingPageState extends State<CreateGuildProcessingPage> {
     final matrixClient = getIt<MatrixService>().client;
     final createdRoom = await matrixClient.createRoom();
     final guildId =
-        context.read<CreateGuildChannelBloc>().state.guildDetail?.id;
+        context.read<CreateGuildChannelBloc>().state.selectedGuild?.id;
     final channelName =
         context.read<CreateGuildChannelBloc>().state.channelName;
     final roles =
