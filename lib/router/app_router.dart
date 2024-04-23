@@ -140,6 +140,9 @@ final chatRoutes = AutoRoute(
         AutoRoute(
           page: CreateGuildChannelAccessRoute.page,
         ),
+        AutoRoute(
+          page: CreateGuildProcessingRoute.page,
+        ),
       ],
     ),
   ],

@@ -92,6 +92,7 @@ class _UploadPhotoItemState extends State<UploadPhotoItem> {
             top: Spacing.xSmall,
             right: Spacing.xSmall,
             child: FloatingFrostedGlassDropdown<_PhotoActions>(
+              offset: Offset(widget.index % 2 == 0 ? 170.w : 0.w, 0),
               onItemPressed: (item) {
                 if (item?.value == _PhotoActions.setCover) {
                   widget.onSetAsCover?.call(widget.photo.id ?? '');

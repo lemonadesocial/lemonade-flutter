@@ -4,6 +4,22 @@ part 'guild.g.dart';
 part 'guild.freezed.dart';
 
 @freezed
+class GuildBasic with _$GuildBasic {
+  @JsonSerializable(explicitToJson: true)
+  const factory GuildBasic({
+    int? id,
+    String? name,
+    String? imageUrl,
+    int? memberCount,
+    List<String>? roles,
+    String? urlName,
+  }) = _GuildBasic;
+
+  factory GuildBasic.fromJson(Map<String, dynamic> json) =>
+      _$GuildBasicFromJson(json);
+}
+
+@freezed
 class Guild with _$Guild {
   @JsonSerializable(explicitToJson: true)
   const factory Guild({

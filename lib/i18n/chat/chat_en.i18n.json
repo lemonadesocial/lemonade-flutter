@@ -73,6 +73,13 @@
         "incomplete": "Incomplete",
         "complete": "Complete",
         "enterChannel": "Enter Channel",
-        "joinGuildRoom": "Join ${guildName}"
+        "joinGuildRoom": "Join ${guildName}",
+        "allMembers": "All members",
+        "selectRole": "Select role",
+        "creatingChannel": "Creating channel",
+        "creatingChannelDescription": "Please wait while we create your channel. This should only take a few seconds.",
+        "channelCreated": "Channel created!",
+        "channelCreatedDescription": "You channel has been successfully created. You can start engaging with your community!",
+        "viewChannel": " View channel"
     }
 }

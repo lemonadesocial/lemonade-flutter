@@ -1,3 +1,4 @@
+import 'package:app/core/application/chat/create_guild_channel_bloc/create_guild_channel_bloc.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
@@ -8,6 +9,7 @@ import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 
 @RoutePage()
@@ -63,6 +65,12 @@ class CreateGuildChannelBasePage extends StatelessWidget {
                     SliverToBoxAdapter(
                       child: LemonTextField(
                         hintText: t.chat.guild.createChannel,
+                        onChange: (value) =>
+                            context.read<CreateGuildChannelBloc>().add(
+                                  CreateGuildChannelEventChannelNameChanged(
+                                    channelName: value,
+                                  ),
+                                ),
                       ),
                     ),
                     SliverPadding(
@@ -72,6 +80,12 @@ class CreateGuildChannelBasePage extends StatelessWidget {
                       child: LemonTextField(
                         hintText: t.chat.guild.topicOfDiscussion,
                         maxLines: 5,
+                        onChange: (value) =>
+                            context.read<CreateGuildChannelBloc>().add(
+                                  CreateGuildChannelEventTopicChanged(
+                                    topic: value,
+                                  ),
+                                ),
                       ),
                     ),
                   ],
@@ -91,18 +105,22 @@ class CreateGuildChannelBasePage extends StatelessWidget {
                 ),
                 padding: EdgeInsets.all(Spacing.smMedium),
                 child: SafeArea(
-                  child: Opacity(
-                    opacity: 1,
-                    child: LinearGradientButton.primaryButton(
-                      onTap: () {
-                        Vibrate.feedback(FeedbackType.light);
-                        FocusManager.instance.primaryFocus?.unfocus();
-                        AutoRouter.of(context).navigate(
-                          const CreateGuildChannelCommunityGatedRoute(),
-                        );
-                      },
-                      label: t.common.next,
-                      textColor: colorScheme.onPrimary,
+                  child: BlocBuilder<CreateGuildChannelBloc,
+                      CreateGuildChannelState>(
+                    builder: (context, state) => Opacity(
+                      opacity: state.isValid ? 1 : 0.5,
+                      child: LinearGradientButton.primaryButton(
+                        onTap: () async {
+                          if (!state.isValid) return;
+                          Vibrate.feedback(FeedbackType.light);
+                          FocusManager.instance.primaryFocus?.unfocus();
+                          AutoRouter.of(context).navigate(
+                            const CreateGuildChannelCommunityGatedRoute(),
+                          );
+                        },
+                        label: t.common.next,
+                        textColor: colorScheme.onPrimary,
+                      ),
                     ),
                   ),
                 ),
