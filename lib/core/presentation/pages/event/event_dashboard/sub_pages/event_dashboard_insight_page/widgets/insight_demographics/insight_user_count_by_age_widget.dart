@@ -67,12 +67,7 @@ class InsightUserCountByAgeWidget extends StatelessWidget {
                       height: Spacing.smMedium,
                     ),
                     if (allItems.isEmpty && !isLoading)
-                      EmptyList(
-                        iconSize: Size(84.w, 84.w),
-                        textStyle: Typo.xSmall.copyWith(
-                          color: colorScheme.onSecondary,
-                        ),
-                      ),
+                      const EmptyList(size: EmptyListSize.small),
                     if (isLoading)
                       Expanded(
                         child: Column(

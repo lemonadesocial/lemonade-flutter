@@ -101,12 +101,7 @@ class InsightUserCountByPronounWidget extends StatelessWidget {
                         ),
                       ),
                     if (allItems.isEmpty && !isLoading)
-                      EmptyList(
-                        iconSize: Size(84.w, 84.w),
-                        textStyle: Typo.xSmall.copyWith(
-                          color: colorScheme.onSecondary,
-                        ),
-                      ),
+                      const EmptyList(size: EmptyListSize.small),
                     if (allItems.isNotEmpty) ...[
                       PronounsRatioMeter(
                         ratios: allItems

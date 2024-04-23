@@ -3,17 +3,29 @@ import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+enum EmptyListSize {
+  small,
+  large,
+}
 
 class EmptyList extends StatelessWidget {
   final String? emptyText;
-  final Size? iconSize;
-  final TextStyle? textStyle;
+  final EmptyListSize size;
+
   const EmptyList({
     super.key,
     this.emptyText,
-    this.iconSize,
-    this.textStyle,
+    this.size = EmptyListSize.large,
   });
+
+  Size? get iconSize {
+    if (size == EmptyListSize.small) {
+      return Size(84.w, 84.w);
+    }
+    return null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +41,7 @@ class EmptyList extends StatelessWidget {
           SizedBox(height: Spacing.smMedium),
           Text(
             emptyText ?? t.common.defaultEmptyList,
-            style: textStyle ??
-                Typo.small.copyWith(color: colorScheme.onSurfaceVariant),
+            style: Typo.small.copyWith(color: colorScheme.onSurfaceVariant),
             textAlign: TextAlign.center,
           ),
         ],
