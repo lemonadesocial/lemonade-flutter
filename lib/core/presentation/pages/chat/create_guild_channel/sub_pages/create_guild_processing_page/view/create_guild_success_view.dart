@@ -21,9 +21,7 @@ class CreateGuildSuccessView extends StatelessWidget {
       mainAxisSize: MainAxisSize.max,
       children: [
         const Spacer(),
-        SuccessCircleAnimationWidget(
-          successWidget: Assets.icons.icSuccessGrey.svg(),
-        ),
+        const SuccessCircleAnimationWidget(),
         const Spacer(),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
