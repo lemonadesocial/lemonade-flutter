@@ -1,0 +1,7 @@
+# import '../fragment/guild_room_fragment.graphql'
+
+mutation CreateGuildRoom($input: GuildRoomInput!) {
+  createGuildRoom(input: $input) {
+    ...GuildRoom   
+  }
+}

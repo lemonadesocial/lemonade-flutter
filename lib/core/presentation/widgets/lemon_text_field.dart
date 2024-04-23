@@ -3,7 +3,6 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LemonTextField extends StatelessWidget {
   const LemonTextField({
@@ -30,6 +29,7 @@ class LemonTextField extends StatelessWidget {
     this.showRequired,
     this.filled,
     this.fillColor,
+    this.radius = 12.0,
   });
 
   final ValueChanged<String>? onChange;
@@ -54,6 +54,7 @@ class LemonTextField extends StatelessWidget {
   final bool? showRequired;
   final bool? filled;
   final Color? fillColor;
+  final double radius;
 
   @override
   Widget build(BuildContext context) {
@@ -61,11 +62,11 @@ class LemonTextField extends StatelessWidget {
     final border = OutlineInputBorder(
       borderSide:
           BorderSide(color: borderColor ?? theme.colorScheme.outlineVariant),
-      borderRadius: BorderRadius.circular(12.r),
+      borderRadius: BorderRadius.circular(radius),
     );
     final errorBorder = OutlineInputBorder(
       borderSide: const BorderSide(color: LemonColor.errorRedBg),
-      borderRadius: BorderRadius.circular(12.r),
+      borderRadius: BorderRadius.circular(radius),
     );
     return Column(
       mainAxisSize: MainAxisSize.min,

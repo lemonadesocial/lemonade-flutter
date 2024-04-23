@@ -34,4 +34,18 @@ class GuildService {
       return [];
     }
   }
+
+  static Future<List<GuildBasic>> getAllGuilds() async {
+    final endpoint = '$guildApiEndpoint/v1/guild';
+    final response = await http.get(Uri.parse(endpoint));
+    try {
+      final List jsonList = jsonDecode(response.body);
+      final List<GuildBasic> result = jsonList.map((json) {
+        return GuildBasic.fromJson(json);
+      }).toList();
+      return result;
+    } catch (e) {
+      return [];
+    }
+  }
 }
