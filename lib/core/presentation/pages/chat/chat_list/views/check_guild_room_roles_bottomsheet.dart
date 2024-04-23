@@ -1,5 +1,6 @@
 import 'package:app/core/application/chat/check_guild_room_roles_bloc/check_guild_room_roles_bloc.dart';
 import 'package:app/core/application/wallet/wallet_bloc/wallet_bloc.dart';
+import 'package:app/core/domain/chat/entities/guild.dart';
 import 'package:app/core/domain/chat/entities/guild_room.dart';
 import 'package:app/core/presentation/pages/chat/chat_list/views/widgets/guild_roles_list.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
@@ -88,17 +89,24 @@ class CheckGuildRoomRolesBottomSheetView extends StatelessWidget {
               ),
             ),
             SizedBox(height: Spacing.smMedium),
-            BlocBuilder<CheckGuildRoomRolesBloc, CheckGuildRoomRolesState>(
-              builder: (context, state) {
-                return state.maybeWhen(
-                  success: (guild, guildRoles, guildRolePermissions) {
-                    var shouldShowEnterChannel = false;
-                    if (guildRoom.guildRoleIds == null) {
-                      shouldShowEnterChannel = true;
-                    }
-                    if (shouldShowEnterChannel) {
-                      return BlocBuilder<WalletBloc, WalletState>(
-                        builder: (context, walletState) {
+            BlocBuilder<WalletBloc, WalletState>(
+              builder: (context, walletState) {
+                return BlocBuilder<CheckGuildRoomRolesBloc,
+                    CheckGuildRoomRolesState>(
+                  builder: (context, state) {
+                    return state.maybeWhen(
+                      success: (guild, guildRoles, guildRolePermissions) {
+                        var shouldShowEnterChannel = false;
+                        // If set to all members then show enter channel
+                        if (guildRoom.guildRoleIds == null) {
+                          shouldShowEnterChannel = true;
+                        }
+                        // Check valid roles then allow enter
+                        shouldShowEnterChannel = checkGuildRolesPermission(
+                          guildRoom,
+                          guildRolePermissions ?? [],
+                        );
+                        if (shouldShowEnterChannel) {
                           final connectButtonState = walletState.state;
                           final isConnected = connectButtonState ==
                               ConnectButtonState.connected;
@@ -127,12 +135,12 @@ class CheckGuildRoomRolesBottomSheetView extends StatelessWidget {
                             );
                           }
                           return const SizedBox();
-                        },
-                      );
-                    }
-                    return const SizedBox();
+                        }
+                        return const SizedBox();
+                      },
+                      orElse: () => const SizedBox.shrink(),
+                    );
                   },
-                  orElse: () => const SizedBox.shrink(),
                 );
               },
             ),
@@ -140,5 +148,19 @@ class CheckGuildRoomRolesBottomSheetView extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  bool checkGuildRolesPermission(
+    GuildRoom guild,
+    List<GuildRolePermission> guildRolePermissions,
+  ) {
+    Set<int?> validRoleIds = guildRolePermissions
+        .where((permission) => permission.access == true)
+        .map((permission) => permission.roleId)
+        .toSet();
+
+    // Check if all role IDs in guildRoleIds are present in validRoleIds
+    return (guild.guildRoleIds ?? [])
+        .every((roleId) => validRoleIds.contains(roleId));
   }
 }
