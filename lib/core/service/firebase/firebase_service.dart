@@ -96,13 +96,6 @@ class FirebaseService {
           }
         },
       );
-      FlutterError.onError = (flutterErrorDetails) async {
-        return;
-      };
-      PlatformDispatcher.instance.onError = (error, stack) {
-        return true;
-      };
-
       _setUpMessageHandlers();
       getIt<AppOauth>().tokenStateStream.listen(_onTokenStateChange);
       getToken();
