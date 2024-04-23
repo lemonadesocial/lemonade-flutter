@@ -42,8 +42,6 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
-	<key>FirebaseCrashlyticsCollectionEnabled</key>
-	<string>$(CRASHLYTICS_COLLECTION_ENABLED)</string>
 	<key>FlutterDeepLinkingEnabled</key>
 	<true/>
 	<key>ITSAppUsesNonExemptEncryption</key>

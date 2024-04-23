@@ -5,7 +5,6 @@ import 'package:app/core/oauth/oauth.dart';
 import 'package:app/core/service/matrix/matrix_chat_space_extension.dart';
 import 'package:app/core/utils/chat_notification/background_push.dart';
 import 'package:app/injection/register_module.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:injectable/injectable.dart';
@@ -63,7 +62,7 @@ class MatrixService {
           )
           .then((value) async => {await backgroundPush.setupPush()});
     } catch (e) {
-      FirebaseCrashlytics.instance.log(e.toString());
+      debugPrint("error : $e");
     }
   }
 

@@ -9,8 +9,8 @@ class SentryCrashAnalyticsService implements CrashAnalyticsService {
   FutureOr<SentryEvent?> beforeSend(SentryEvent event, {Hint? hint}) async {
     // Don't send server name
     event = event.copyWith(serverName: null);
-
-    if (event.throwable == 'Invalid argument(s): No host specified in URI') {
+    if (event.throwable.toString() ==
+        'Invalid argument(s): No host specified in URI') {
       return null;
     }
     if (event.throwable.toString() ==

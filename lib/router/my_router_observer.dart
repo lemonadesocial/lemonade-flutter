@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -36,7 +35,6 @@ class MyRouterObserver extends AutoRouterObserver {
       if (screenName == null || screenName == '') {
         return;
       }
-      FirebaseCrashlytics.instance.log(screenName);
       FirebaseAnalytics.instance.setCurrentScreen(screenName: screenName);
       // ignore: empty_catches
     } catch (e) {}
