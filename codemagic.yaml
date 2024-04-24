@@ -647,7 +647,6 @@ workflows:
       <<: *ios_app_store_publish
       <<: *email_staging
       scripts:
-        - *upload_staging_dsym_to_firebase
         - *notify_ios_staging_to_slack
 
   # Build iOS Production 
@@ -677,7 +676,6 @@ workflows:
       <<: *ios_app_store_publish
       <<: *email_production
       scripts:
-        - *upload_production_dsym_to_firebase
         - *notify_ios_production_to_slack
 
   # Build Android Staging
@@ -770,7 +768,6 @@ workflows:
   #     <<: *production_android_publish
   #     <<: *email_production
   #     scripts:
-  #       - *upload_production_dsym_to_firebase
   #       - *github_create_prerelease
   #       - *notify_ios_production_to_slack
   #       - *notify_android_production_to_slack
@@ -818,9 +815,7 @@ workflows:
     publishing:
       <<: *ios_app_store_publish
       <<: *staging_android_publish
-      scripts:
-        - *upload_staging_dsym_to_firebase
-
+      
   shorebird-release-production:
     name: Shorebird Release Production
     <<: *instance_mac_mini
@@ -862,7 +857,6 @@ workflows:
       <<: *ios_app_store_publish
       <<: *production_android_publish
       scripts:
-        - *upload_production_dsym_to_firebase
         # - *github_create_prerelease
         - *notify_ios_production_to_slack
         - *notify_android_production_to_slack
