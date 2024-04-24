@@ -42,6 +42,7 @@ class EventDetailNavigationBarHelper {
   }) {
     final colorScheme = Theme.of(context).colorScheme;
     final iconSize = isSmallIcon == true ? 18.w : 24.w;
+    final shouldShowProgram = (event.sessions ?? []).isNotEmpty;
     final List<FeatureItem> features = [
       FeatureItem(
         label: t.event.configuration.checkIn,
@@ -91,47 +92,48 @@ class EventDetailNavigationBarHelper {
           AutoRouter.of(context).navigate(const GuestEventStoriesRoute());
         },
       ),
-      FeatureItem(
-        label: t.event.configuration.program,
-        iconData: ThemeSvgIcon(
-          color: colorScheme.onSecondary,
-          builder: (filter) => Assets.icons.icProgram.svg(
-            colorFilter: filter,
-            width: iconSize,
-            height: iconSize,
+      if (shouldShowProgram)
+        FeatureItem(
+          label: t.event.configuration.program,
+          iconData: ThemeSvgIcon(
+            color: colorScheme.onSecondary,
+            builder: (filter) => Assets.icons.icProgram.svg(
+              colorFilter: filter,
+              width: iconSize,
+              height: iconSize,
+            ),
           ),
+          onTap: () {
+            Vibrate.feedback(FeedbackType.light);
+            AutoRouter.of(context).navigate(const EventProgramRoute());
+          },
         ),
-        onTap: () {
-          Vibrate.feedback(FeedbackType.light);
-          AutoRouter.of(context).navigate(const EventProgramRoute());
-        },
-      ),
-      FeatureItem(
-        label: t.event.configuration.faq,
-        iconData: ThemeSvgIcon(
-          builder: (filter) => Assets.icons.icFaq.svg(
-            colorFilter: filter,
-            width: iconSize,
-            height: iconSize,
-          ),
-        ),
-        onTap: () {
-          Vibrate.feedback(FeedbackType.light);
-          SnackBarUtils.showComingSoon();
-        },
-      ),
-      FeatureItem(
-        label: t.event.configuration.info,
-        iconData: ThemeSvgIcon(
-          color: colorScheme.onSecondary,
-          builder: (filter) => Assets.icons.icInfo
-              .svg(colorFilter: filter, width: iconSize, height: iconSize),
-        ),
-        onTap: () {
-          Vibrate.feedback(FeedbackType.light);
-          SnackBarUtils.showComingSoon();
-        },
-      ),
+      // FeatureItem(
+      //   label: t.event.configuration.faq,
+      //   iconData: ThemeSvgIcon(
+      //     builder: (filter) => Assets.icons.icFaq.svg(
+      //       colorFilter: filter,
+      //       width: iconSize,
+      //       height: iconSize,
+      //     ),
+      //   ),
+      //   onTap: () {
+      //     Vibrate.feedback(FeedbackType.light);
+      //     SnackBarUtils.showComingSoon();
+      //   },
+      // ),
+      // FeatureItem(
+      //   label: t.event.configuration.info,
+      //   iconData: ThemeSvgIcon(
+      //     color: colorScheme.onSecondary,
+      //     builder: (filter) => Assets.icons.icInfo
+      //         .svg(colorFilter: filter, width: iconSize, height: iconSize),
+      //   ),
+      //   onTap: () {
+      //     Vibrate.feedback(FeedbackType.light);
+      //     SnackBarUtils.showComingSoon();
+      //   },
+      // ),
     ];
     return features;
   }
@@ -143,6 +145,7 @@ class EventDetailNavigationBarHelper {
   }) {
     final colorScheme = Theme.of(context).colorScheme;
     final iconSize = isSmallIcon == true ? 18.w : 24.w;
+    final shouldShowProgram = (event.sessions ?? []).isNotEmpty;
     final List<FeatureItem> features = [
       FeatureItem(
         label: t.event.configuration.checkIn,
@@ -211,50 +214,51 @@ class EventDetailNavigationBarHelper {
           );
         },
       ),
-      FeatureItem(
-        label: t.event.configuration.program,
-        iconData: ThemeSvgIcon(
-          color: colorScheme.onSecondary,
-          builder: (filter) => Assets.icons.icProgram.svg(
-            colorFilter: filter,
-            width: iconSize,
-            height: iconSize,
+      if (shouldShowProgram)
+        FeatureItem(
+          label: t.event.configuration.program,
+          iconData: ThemeSvgIcon(
+            color: colorScheme.onSecondary,
+            builder: (filter) => Assets.icons.icProgram.svg(
+              colorFilter: filter,
+              width: iconSize,
+              height: iconSize,
+            ),
           ),
+          onTap: () {
+            Vibrate.feedback(FeedbackType.light);
+            AutoRouter.of(context).navigate(const EventProgramRoute());
+          },
         ),
-        onTap: () {
-          Vibrate.feedback(FeedbackType.light);
-          AutoRouter.of(context).navigate(const EventProgramRoute());
-        },
-      ),
-      FeatureItem(
-        label: t.event.configuration.faq,
-        iconData: ThemeSvgIcon(
-          builder: (filter) => Assets.icons.icFaq.svg(
-            colorFilter: filter,
-            width: iconSize,
-            height: iconSize,
-          ),
-        ),
-        onTap: () {
-          Vibrate.feedback(FeedbackType.light);
-          SnackBarUtils.showComingSoon();
-        },
-      ),
-      FeatureItem(
-        label: t.event.configuration.info,
-        iconData: ThemeSvgIcon(
-          color: colorScheme.onSecondary,
-          builder: (filter) => Assets.icons.icInfo.svg(
-            colorFilter: filter,
-            width: iconSize,
-            height: iconSize,
-          ),
-        ),
-        onTap: () {
-          Vibrate.feedback(FeedbackType.light);
-          SnackBarUtils.showComingSoon();
-        },
-      ),
+      // FeatureItem(
+      //   label: t.event.configuration.faq,
+      //   iconData: ThemeSvgIcon(
+      //     builder: (filter) => Assets.icons.icFaq.svg(
+      //       colorFilter: filter,
+      //       width: iconSize,
+      //       height: iconSize,
+      //     ),
+      //   ),
+      //   onTap: () {
+      //     Vibrate.feedback(FeedbackType.light);
+      //     SnackBarUtils.showComingSoon();
+      //   },
+      // ),
+      // FeatureItem(
+      //   label: t.event.configuration.info,
+      //   iconData: ThemeSvgIcon(
+      //     color: colorScheme.onSecondary,
+      //     builder: (filter) => Assets.icons.icInfo.svg(
+      //       colorFilter: filter,
+      //       width: iconSize,
+      //       height: iconSize,
+      //     ),
+      //   ),
+      //   onTap: () {
+      //     Vibrate.feedback(FeedbackType.light);
+      //     SnackBarUtils.showComingSoon();
+      //   },
+      // ),
       FeatureItem(
         label: t.event.configuration.controlPanel,
         iconData: ThemeSvgIcon(
@@ -283,7 +287,11 @@ class EventDetailNavigationBarHelper {
         ),
         onTap: () {
           Vibrate.feedback(FeedbackType.light);
-          SnackBarUtils.showComingSoon();
+          AutoRouter.of(context).push(
+            EventDashboardRoute(
+              eventId: event.id ?? '',
+            ),
+          );
         },
       ),
     ];
