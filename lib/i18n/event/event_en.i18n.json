@@ -569,7 +569,13 @@
             "paymentKind": "Kind"
         },
         "revenue": {
-            "revenueTitle": "Revenue"
+            "revenueTitle": "Revenue",
+            "sold": "sold",
+            "totalTicketsSold": "Total tickets sold",
+            "cardSales": "Card sales",
+            "cryptoSales": "Crypto sales",
+            "requirePaidTicketDescription": "To unlock valuable revenue insights, consider offering paid tickets today.",
+            "addTicket": "Add ticket"
         },
         "reward": {
             "rewardTitle": "Rewards",

@@ -1,5 +1,6 @@
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/presentation/pages/event/event_dashboard/sub_pages/event_dashboard_insight_page/event_dashboard_insight_page.dart';
+import 'package:app/core/presentation/pages/event/event_dashboard/sub_pages/event_dashboard_revenue_page/event_dashboard_revenue_page.dart';
 import 'package:app/core/presentation/pages/event/event_dashboard/sub_pages/event_dashboard_rewards_page/event_dashboard_rewards_page.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
@@ -120,8 +121,7 @@ class _EventDashboardPageState extends State<EventDashboardPage>
                     EventDashboardInsightPage(
                       event: event,
                     ),
-                    // TODO:
-                    const SizedBox.shrink(),
+                    EventDashboardRevenuePage(event: event),
                     EventDashboardRewardsPage(event: event),
                   ],
                 ),
