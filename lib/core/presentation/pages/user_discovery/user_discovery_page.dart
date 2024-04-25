@@ -1,5 +1,5 @@
 import 'package:app/core/presentation/pages/user_discovery/widgets/user_discovery_basic_info_section.dart';
-import 'package:app/core/presentation/pages/user_discovery/widgets/user_discovery_photo_gallery.dart';
+import 'package:app/core/presentation/pages/user_discovery/widgets/user_discovery_photos_card.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
