@@ -1,6 +1,7 @@
 import 'package:app/core/presentation/pages/user_discovery/widgets/user_discovery_basic_info_section.dart';
 import 'package:app/core/presentation/pages/user_discovery/widgets/user_discovery_expertise_offering_card.dart';
 import 'package:app/core/presentation/pages/user_discovery/widgets/user_discovery_photos_card.dart';
+import 'package:app/core/presentation/pages/user_discovery/widgets/user_discovery_social_grid_section.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -93,9 +94,15 @@ class UserDiscoveryPage extends StatelessWidget {
                 height: 30.w,
               ),
             ),
-            SliverToBoxAdapter(
+            const SliverToBoxAdapter(
               child: UserDiscoveryExpertiseOfferingCard(),
-            )
+            ),
+            SliverToBoxAdapter(
+              child: SizedBox(
+                height: 30.w,
+              ),
+            ),
+            const UserDiscoverySocialGridSection(),
           ],
         ),
       ),
