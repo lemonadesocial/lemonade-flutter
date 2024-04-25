@@ -75,10 +75,10 @@ class InsightCheckinsChart extends StatelessWidget {
         );
 
     return ChartDateRangeBuilder(
-      startDate: event?.start,
-      endDate: event?.start?.add(
+      startDate: event?.start?.subtract(
         const Duration(days: 30),
       ),
+      endDate: event?.end,
       builder: (
         timeRange, {
         required selectStartDate,
@@ -159,13 +159,42 @@ class InsightCheckinsChart extends StatelessWidget {
                   spots.isEmpty ? 1 : spots.map((e) => e.y).reduce(max);
               return Stack(
                 children: [
+                  if (tracks.isNotEmpty)
+                    Positioned.fill(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: Spacing.smMedium,
+                          horizontal: Spacing.smMedium,
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Text(
+                              t.event.eventDashboard.insights.totalCheckIns,
+                              style: Typo.mediumPlus.copyWith(
+                                color: colorScheme.onPrimary,
+                              ),
+                            ),
+                            Text(
+                              _calculateTotalCheckins(tracks: tracks)
+                                  .toString(),
+                              style: Typo.mediumPlus.copyWith(
+                                color: colorScheme.onPrimary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   LemonLineChart(
                     lineVisible: tracks.isNotEmpty,
                     lineColor: LemonColor.paleViolet,
                     data: spots,
-                    minY: -0.1,
+                    minY: -0.2,
                     maxY: maxYInSpots * 1.5,
-                    xTitlesWidget: (value, meta) => allDatesInRange.isNotEmpty
+                    xTitlesWidget: (value, meta) => tracks.isNotEmpty
                         ? Text(
                             DateFormat(displayDateFormat).format(
                               DateTime.parse(allDatesInRange[value.toInt()]),
@@ -175,7 +204,9 @@ class InsightCheckinsChart extends StatelessWidget {
                           )
                         : const SizedBox.shrink(),
                     yTitlesWidget: (value, meta) {
-                      if (value < 0) return const SizedBox.shrink();
+                      if (value < 0 || value > maxYInSpots) {
+                        return const SizedBox.shrink();
+                      }
                       return Text(
                         value.toStringAsFixed(1).toString(),
                         style:
@@ -207,33 +238,6 @@ class InsightCheckinsChart extends StatelessWidget {
                             );
                           }).toList();
                         },
-                      ),
-                    ),
-                  ),
-                  Positioned.fill(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        vertical: Spacing.smMedium,
-                        horizontal: Spacing.smMedium,
-                      ),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Text(
-                            t.event.eventDashboard.insights.totalCheckIns,
-                            style: Typo.mediumPlus.copyWith(
-                              color: colorScheme.onPrimary,
-                            ),
-                          ),
-                          Text(
-                            _calculateTotalCheckins(tracks: tracks).toString(),
-                            style: Typo.mediumPlus.copyWith(
-                              color: colorScheme.onPrimary,
-                            ),
-                          ),
-                        ],
                       ),
                     ),
                   ),

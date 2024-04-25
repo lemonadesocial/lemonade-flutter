@@ -137,10 +137,8 @@ class _InsightTicketSalesState extends State<InsightTicketSales> {
         );
 
     return ChartDateRangeBuilder(
-      startDate: event?.start,
-      endDate: event?.start?.add(
-        const Duration(days: 30),
-      ),
+      startDate: event?.start?.subtract(const Duration(days: 30)),
+      endDate: event?.end,
       builder: (
         timeRange, {
         required selectStartDate,
@@ -235,6 +233,35 @@ class _InsightTicketSalesState extends State<InsightTicketSales> {
                   .toList();
               return Stack(
                 children: [
+                  if (payments.isNotEmpty)
+                    Positioned.fill(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: Spacing.smMedium,
+                          horizontal: Spacing.smMedium,
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Text(
+                              t.event.eventDashboard.insights.totalTicketsSold,
+                              style: Typo.mediumPlus.copyWith(
+                                color: colorScheme.onPrimary,
+                              ),
+                            ),
+                            Text(
+                              _calculateTotalTicketsSold(payments: payments)
+                                  .toString(),
+                              style: Typo.mediumPlus.copyWith(
+                                color: colorScheme.onPrimary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   LemonLineChart(
                     lineVisible: payments.isNotEmpty,
                     lineColor: LemonColor.malachiteGreen,
@@ -310,35 +337,6 @@ class _InsightTicketSalesState extends State<InsightTicketSales> {
                       ),
                     ),
                   ),
-                  if (payments.isNotEmpty)
-                    Positioned.fill(
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                          vertical: Spacing.smMedium,
-                          horizontal: Spacing.smMedium,
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Text(
-                              t.event.eventDashboard.insights.totalTicketsSold,
-                              style: Typo.mediumPlus.copyWith(
-                                color: colorScheme.onPrimary,
-                              ),
-                            ),
-                            Text(
-                              _calculateTotalTicketsSold(payments: payments)
-                                  .toString(),
-                              style: Typo.mediumPlus.copyWith(
-                                color: colorScheme.onPrimary,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
                   if (payments.isEmpty || isLoading)
                     ChartEmptyMessage(
                       isLoading: isLoading,

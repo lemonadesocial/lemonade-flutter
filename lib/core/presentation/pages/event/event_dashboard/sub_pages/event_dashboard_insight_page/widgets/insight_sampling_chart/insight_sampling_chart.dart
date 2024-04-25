@@ -110,10 +110,10 @@ class _InsightSamplingChartState extends State<InsightSamplingChart> {
         (event?.rewards ?? []).map((item) => item.id ?? '').toList();
 
     return ChartDateRangeBuilder(
-      startDate: event?.start,
-      endDate: event?.start?.add(
+      startDate: event?.start?.subtract(
         const Duration(days: 30),
       ),
+      endDate: event?.end,
       builder: (
         timeRange, {
         required selectStartDate,
@@ -211,6 +211,35 @@ class _InsightSamplingChartState extends State<InsightSamplingChart> {
                   spots.isEmpty ? 1 : spots.map((e) => e.y).reduce(max);
               return Stack(
                 children: [
+                  if (rewardUses.isNotEmpty)
+                    Positioned.fill(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: Spacing.smMedium,
+                          horizontal: Spacing.smMedium,
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Text(
+                              t.event.eventDashboard.insights.totalRedeemed,
+                              style: Typo.mediumPlus.copyWith(
+                                color: colorScheme.onPrimary,
+                              ),
+                            ),
+                            Text(
+                              _calculateTotalRewardUses(rewardUses: rewardUses)
+                                  .toString(),
+                              style: Typo.mediumPlus.copyWith(
+                                color: colorScheme.onPrimary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   LemonLineChart(
                     lineVisible: rewardUses.isNotEmpty,
                     lineColor: LemonColor.coralReef,
@@ -227,7 +256,9 @@ class _InsightSamplingChartState extends State<InsightSamplingChart> {
                           )
                         : const SizedBox.shrink(),
                     yTitlesWidget: (value, meta) {
-                      if (value < 0) return const SizedBox.shrink();
+                      if (value < 0 || value > maxYInSpots) {
+                        return const SizedBox.shrink();
+                      }
                       return Text(
                         value.toStringAsFixed(1),
                         style:
@@ -272,35 +303,6 @@ class _InsightSamplingChartState extends State<InsightSamplingChart> {
                       ),
                     ),
                   ),
-                  if (rewardUses.isNotEmpty)
-                    Positioned.fill(
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                          vertical: Spacing.smMedium,
-                          horizontal: Spacing.smMedium,
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Text(
-                              t.event.eventDashboard.insights.totalRedeemed,
-                              style: Typo.mediumPlus.copyWith(
-                                color: colorScheme.onPrimary,
-                              ),
-                            ),
-                            Text(
-                              _calculateTotalRewardUses(rewardUses: rewardUses)
-                                  .toString(),
-                              style: Typo.mediumPlus.copyWith(
-                                color: colorScheme.onPrimary,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
                   if (rewardUses.isEmpty || isLoading)
                     ChartEmptyMessage(
                       isLoading: isLoading,
