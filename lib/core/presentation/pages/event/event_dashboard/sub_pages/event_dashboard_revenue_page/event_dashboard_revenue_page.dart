@@ -1,15 +1,18 @@
+import 'package:app/core/domain/cubejs/cubejs_enums.dart';
 import 'package:app/core/domain/cubejs/entities/cube_payment/cube_payment.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_discount_setting_page/widgets/discount_item/discount_item.dart';
 import 'package:app/core/presentation/pages/event/event_dashboard/sub_pages/event_dashboard_insight_page/widgets/insight_ticket_sales/insight_ticket_sales.dart';
+import 'package:app/core/presentation/pages/event/event_dashboard/sub_pages/event_dashboard_revenue_page/widgets/dashboard_revenue_by_payment_kind.dart';
 import 'package:app/core/presentation/pages/event/event_dashboard/sub_pages/event_dashboard_revenue_page/widgets/dashboard_revenue_by_ticket_type.dart';
-import 'package:app/core/presentation/pages/event/event_dashboard/sub_pages/event_dashboard_revenue_page/widgets/dashboard_revenue_total_tickets_sold.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/empty_dotted_border_card_widget/empty_dotted_border_card_widget.dart';
 import 'package:app/core/presentation/widgets/shimmer/shimmer.dart';
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/service/cubejs_service/cubejs_service.dart';
 import 'package:app/core/utils/cubejs_utils.dart';
+import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
@@ -102,6 +105,10 @@ class _EventDashboardRevenuePageState extends State<EventDashboardRevenuePage> {
             CubeJsUtils.groupPaymentsByTicketTypeAndCurrency(payments)
                 .entries
                 .toList();
+        final paymentsByPaymentKindTypeAndCurrency =
+            CubeJsUtils.groupPaymentsByPaymentKindAndCurrency(payments)
+                .entries
+                .toList();
         if (isLoading) {
           return Padding(
             padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
@@ -175,7 +182,63 @@ class _EventDashboardRevenuePageState extends State<EventDashboardRevenuePage> {
               SliverToBoxAdapter(
                 child: SizedBox(height: Spacing.large),
               ),
-              DashboardRevenueTotalTicketsSold(payments: payments),
+              // DashboardRevenueTotalTicketsSold(payments: payments),
+              SliverList.separated(
+                itemBuilder: (context, index) {
+                  final paymentKind =
+                      paymentsByPaymentKindTypeAndCurrency[index].key;
+                  final isFirst = index == 0;
+                  final isLast =
+                      index == paymentsByPaymentKindTypeAndCurrency.length - 1;
+                  String label =
+                      t.event.eventDashboard.revenue.unknowPaymentKind;
+                  Widget icon = ThemeSvgIcon(
+                    color: colorScheme.onSecondary,
+                    builder: (filter) => Assets.icons.icCash.svg(
+                      colorFilter: filter,
+                    ),
+                  );
+                  if (paymentKind == CubePaymentKind.Fiat.name) {
+                    label = t.event.eventDashboard.revenue.cardSales;
+                  }
+                  if (paymentKind == CubePaymentKind.Crypto.name) {
+                    label = t.event.eventDashboard.revenue.cryptoSales;
+                    icon = ThemeSvgIcon(
+                      color: colorScheme.onSecondary,
+                      builder: (filter) => Assets.icons.icWallet.svg(
+                        colorFilter: filter,
+                      ),
+                    );
+                  }
+                  return ClipRRect(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(
+                        isFirst ? LemonRadius.medium : LemonRadius.extraSmall,
+                      ),
+                      topRight: Radius.circular(
+                        isFirst ? LemonRadius.medium : LemonRadius.extraSmall,
+                      ),
+                      bottomRight: Radius.circular(
+                        isLast ? LemonRadius.medium : LemonRadius.extraSmall,
+                      ),
+                      bottomLeft: Radius.circular(
+                        isLast ? LemonRadius.medium : LemonRadius.extraSmall,
+                      ),
+                    ),
+                    child: EventDashboardRevenueByPaymentKind(
+                      event: widget.event,
+                      paymentsByCurrency:
+                          paymentsByPaymentKindTypeAndCurrency[index].value,
+                      icon: icon,
+                      paymentKindLabel: label,
+                    ),
+                  );
+                },
+                separatorBuilder: (context, index) => SizedBox(
+                  height: Spacing.extraSmall,
+                ),
+                itemCount: paymentsByPaymentKindTypeAndCurrency.length,
+              ),
               SliverToBoxAdapter(
                 child: SizedBox(height: Spacing.large),
               ),

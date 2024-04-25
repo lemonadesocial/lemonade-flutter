@@ -574,6 +574,7 @@
             "totalTicketsSold": "Total tickets sold",
             "cardSales": "Card sales",
             "cryptoSales": "Crypto sales",
+            "unknowPaymentKind": "Unknown",
             "requirePaidTicketDescription": "To unlock valuable revenue insights, consider offering paid tickets today.",
             "addTicket": "Add ticket"
         },

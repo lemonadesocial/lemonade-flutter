@@ -37,4 +37,25 @@ class CubeJsUtils {
 
     return result;
   }
+
+  static Map<String, Map<String, List<CubePaymentMember>>>
+      groupPaymentsByPaymentKindAndCurrency(List<CubePaymentMember> payments) {
+    Map<String, Map<String, List<CubePaymentMember>>> result = {};
+
+    for (var payment in payments) {
+      final paymentKind = payment.kind;
+      final currency = payment.currency as String;
+
+      // Initialize the outer map if not exists
+      result[paymentKind ?? ''] ??= {};
+
+      // Initialize the inner map if not exists
+      result[paymentKind]?[currency] ??= [];
+
+      // Add the payment to the inner list
+      result[paymentKind]?[currency]?.add(payment);
+    }
+
+    return result;
+  }
 }
