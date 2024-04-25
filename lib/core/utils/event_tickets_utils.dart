@@ -209,4 +209,16 @@ class EventTicketUtils {
         .where((element) => element.category == category)
         .toList();
   }
+
+  static int getCurrencyDecimalsWithPaymentAccounts({
+    required String currency,
+    required List<PaymentAccount> paymentAccounts,
+  }) {
+    final targetPaymentAccount = paymentAccounts.firstWhereOrNull(
+      (element) => element.accountInfo?.currencies?.contains(currency) == true,
+    );
+    return targetPaymentAccount
+            ?.accountInfo?.currencyMap?[currency]?.decimals ??
+        0;
+  }
 }

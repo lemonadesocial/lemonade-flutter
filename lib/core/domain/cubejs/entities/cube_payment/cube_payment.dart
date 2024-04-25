@@ -6,6 +6,7 @@ part 'cube_payment.g.dart';
 @freezed
 class CubePaymentMember with _$CubePaymentMember {
   factory CubePaymentMember({
+    @JsonKey(name: "Tickets.type") String? ticketType,
     @JsonKey(name: 'Payments.count') int? count,
     @JsonKey(name: 'Payments.totalAmount') String? totalAmount,
     @JsonKey(name: 'Payments.stampsSucceeded') DateTime? stampsSucceeded,

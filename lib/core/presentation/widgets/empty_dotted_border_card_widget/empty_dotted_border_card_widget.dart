@@ -71,25 +71,26 @@ class EmptyDottedBorderCardWidget extends StatelessWidget {
                     height: Spacing.xSmall,
                   ),
                 ],
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        Vibrate.feedback(FeedbackType.light);
-                        onTap?.call();
-                      },
-                      child: LinearGradientButton.primaryButton(
-                        height: Sizing.medium,
-                        label: buttonLabel ?? '',
-                        trailing: ThemeSvgIcon(
-                          builder: (filter) => Assets.icons.icSendMessage
-                              .svg(colorFilter: filter),
+                if (buttonLabel != null)
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          Vibrate.feedback(FeedbackType.light);
+                          onTap?.call();
+                        },
+                        child: LinearGradientButton.primaryButton(
+                          height: Sizing.medium,
+                          label: buttonLabel ?? '',
+                          trailing: ThemeSvgIcon(
+                            builder: (filter) => Assets.icons.icSendMessage
+                                .svg(colorFilter: filter),
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
+                    ],
+                  ),
               ],
             ),
           ),
