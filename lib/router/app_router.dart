@@ -95,6 +95,7 @@ class AppRouter extends $AppRouter {
         AutoRoute(page: LocationRequestRoute.page),
         AutoRoute(page: AIRoute.page),
         AutoRoute(page: MyEventsRoute.page),
+        AutoRoute(page: UserDiscoveryRoute.page),
         chatRoutes,
         eventBuyTicketsRoutes,
         createEventRoutes,
