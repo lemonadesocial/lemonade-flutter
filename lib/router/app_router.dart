@@ -481,5 +481,8 @@ final collaboratorRoutes = AutoRoute(
       initial: true,
       page: CollaboratorDiscoverRoute.page,
     ),
+    AutoRoute(
+      page: CollaboratorChatRoute.page,
+    ),
   ],
 );
