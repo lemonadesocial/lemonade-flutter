@@ -1,23 +1,20 @@
-import 'package:app/core/presentation/pages/user_discovery/widgets/user_discovery_basic_info_section.dart';
-import 'package:app/core/presentation/pages/user_discovery/widgets/user_discovery_expertise_offering_card.dart';
-import 'package:app/core/presentation/pages/user_discovery/widgets/user_discovery_photos_card.dart';
-import 'package:app/core/presentation/pages/user_discovery/widgets/user_discovery_social_grid_section.dart';
+import 'package:app/core/presentation/pages/collaborator/collaborator_discover/widgets/collaborator_discover_basic_info_section.dart';
+import 'package:app/core/presentation/pages/collaborator/collaborator_discover/widgets/collaborator_discover_expertise_offering_card.dart';
+import 'package:app/core/presentation/pages/collaborator/collaborator_discover/widgets/collaborator_discover_photos_card.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
-import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 @RoutePage()
-class UserDiscoveryPage extends StatelessWidget {
-  const UserDiscoveryPage({super.key});
+class CollaboratorDiscoverPage extends StatelessWidget {
+  const CollaboratorDiscoverPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       backgroundColor: colorScheme.primary,
@@ -72,7 +69,7 @@ class UserDiscoveryPage extends StatelessWidget {
         child: CustomScrollView(
           slivers: [
             const SliverToBoxAdapter(
-              child: UserDiscoveryBasicInfoSection(),
+              child: CollaboratorDiscoverBasicInfoSection(),
             ),
             SliverToBoxAdapter(
               child: SizedBox(
@@ -80,7 +77,7 @@ class UserDiscoveryPage extends StatelessWidget {
               ),
             ),
             const SliverToBoxAdapter(
-              child: UserDiscoveryPhotosCard(
+              child: CollaboratorDiscoverPhotosCard(
                 photos: [
                   "https://i.pravatar.cc/1000?img=5",
                   "https://i.pravatar.cc/1000?img=9",
@@ -95,7 +92,7 @@ class UserDiscoveryPage extends StatelessWidget {
               ),
             ),
             const SliverToBoxAdapter(
-              child: UserDiscoveryExpertiseOfferingCard(),
+              child: CollaboratorDiscoverExpertiseOfferingCard(),
             ),
             SliverToBoxAdapter(
               child: SizedBox(

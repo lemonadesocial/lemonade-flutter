@@ -4,8 +4,8 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 
-class UserDiscoveryPhotosCard extends StatelessWidget {
-  const UserDiscoveryPhotosCard({
+class CollaboratorDiscoverPhotosCard extends StatelessWidget {
+  const CollaboratorDiscoverPhotosCard({
     super.key,
     required this.photos,
   });

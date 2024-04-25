@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class UserDiscoverySocialGridSection extends StatelessWidget {
-  const UserDiscoverySocialGridSection({
+class CollaboratorDiscoverSocialGridSection extends StatelessWidget {
+  const CollaboratorDiscoverSocialGridSection({
     super.key,
   });
   @override

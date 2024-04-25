@@ -19,8 +19,7 @@ class PhotoGalleryView extends StatefulWidget {
       viewportFraction: 1, keepPage: true, initialPage: initialIndex);
 
   @override
-  PhotoGalleryViewState createState() =>
-      PhotoGalleryViewState();
+  PhotoGalleryViewState createState() => PhotoGalleryViewState();
 }
 
 class PhotoGalleryViewState extends State<PhotoGalleryView> {

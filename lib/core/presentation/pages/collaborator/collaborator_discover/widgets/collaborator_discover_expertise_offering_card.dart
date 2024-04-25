@@ -4,10 +4,9 @@ import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class UserDiscoveryExpertiseOfferingCard extends StatelessWidget {
-  const UserDiscoveryExpertiseOfferingCard({super.key});
+class CollaboratorDiscoverExpertiseOfferingCard extends StatelessWidget {
+  const CollaboratorDiscoverExpertiseOfferingCard({super.key});
 
   @override
   Widget build(BuildContext context) {

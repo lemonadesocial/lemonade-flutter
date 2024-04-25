@@ -95,7 +95,6 @@ class AppRouter extends $AppRouter {
         AutoRoute(page: LocationRequestRoute.page),
         AutoRoute(page: AIRoute.page),
         AutoRoute(page: MyEventsRoute.page),
-        AutoRoute(page: UserDiscoveryRoute.page),
         chatRoutes,
         eventBuyTicketsRoutes,
         createEventRoutes,
@@ -104,6 +103,7 @@ class AppRouter extends $AppRouter {
         ...eventRoutes,
         ...commonRoutes,
         vaultRoutes,
+        collaboratorRoutes,
       ];
 }
 
@@ -469,6 +469,17 @@ final vaultRoutes = AutoRoute(
           page: CreateVaultSuccessRoute.page,
         ),
       ],
+    ),
+  ],
+);
+
+final collaboratorRoute = AutoRoute(
+  path: '/collaborator',
+  page: CollaboratorRoute.page,
+  children: [
+    AutoRoute(
+      initial: true,
+      page: CollaboratorDiscoverRoute.page,
     ),
   ],
 );
