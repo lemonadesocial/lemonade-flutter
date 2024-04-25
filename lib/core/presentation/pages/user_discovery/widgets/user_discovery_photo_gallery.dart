@@ -1,4 +1,6 @@
-import 'package:app/theme/sizing.dart';
+import 'package:app/theme/color.dart';
+import 'package:app/theme/spacing.dart';
+import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -6,7 +8,15 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 final IMAGE_SIZE = 351.w;
 
 class UserDiscoveryPhotoGallery extends StatefulWidget {
-  const UserDiscoveryPhotoGallery({super.key});
+  UserDiscoveryPhotoGallery({
+    super.key,
+    required this.photos,
+    this.initialIndex = 0,
+  });
+  final List<String> photos;
+  final int initialIndex;
+  late final controller = PageController(
+      viewportFraction: 1, keepPage: true, initialPage: initialIndex);
 
   @override
   UserDiscoveryPhotoGalleryState createState() =>
@@ -14,52 +24,94 @@ class UserDiscoveryPhotoGallery extends StatefulWidget {
 }
 
 class UserDiscoveryPhotoGalleryState extends State<UserDiscoveryPhotoGallery> {
-  final controller = PageController(viewportFraction: 0.8, keepPage: true);
+  int currentIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      currentIndex = widget.initialIndex;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final pages = List.generate(
-      6,
-      (index) => Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          color: Colors.grey.shade300,
-        ),
-        margin: EdgeInsets.symmetric(horizontal: 10.w),
-        child: SizedBox(
-          height: IMAGE_SIZE,
-          child: Center(
-            child: Text(
-              "Page $index",
-              style: const TextStyle(color: Colors.indigo),
-            ),
-          ),
-        ),
-      ),
-    );
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
+    final colorScheme = Theme.of(context).colorScheme;
+    return Stack(
       children: [
         SizedBox(
           height: IMAGE_SIZE,
           child: PageView.builder(
-            controller: controller,
-            itemCount: pages.length,
+            controller: widget.controller,
+            onPageChanged: (pageIndex) {
+              setState(() {
+                currentIndex = pageIndex;
+              });
+            },
+            itemCount: widget.photos.length ?? 0,
+            padEnds: false,
+            pageSnapping: true,
             itemBuilder: (_, index) {
-              return pages[index % pages.length];
+              return Center(
+                child: Image.network(
+                  widget.photos[index],
+                  width: IMAGE_SIZE,
+                  height: IMAGE_SIZE,
+                  fit: BoxFit.cover,
+                ),
+              );
             },
           ),
         ),
-        const SizedBox(
-          height: 20,
+        Positioned(
+          top: 15,
+          right: 15,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
+            decoration: ShapeDecoration(
+              color: LemonColor.chineseBlack,
+              shape: RoundedRectangleBorder(
+                side: BorderSide(
+                  width: 1,
+                  color: colorScheme.outline,
+                ),
+                borderRadius: BorderRadius.circular(LemonRadius.medium),
+              ),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  '${currentIndex + 1}/${widget.photos.length}',
+                  textAlign: TextAlign.center,
+                  style: Typo.small.copyWith(
+                    color: colorScheme.onSecondary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
-        SmoothPageIndicator(
-          controller: controller,
-          count: pages.length,
-          effect: ExpandingDotsEffect(
-            dotHeight: 3,
-            dotWidth: Sizing.small,
-            // type: WormType.thinUnderground,
+        Positioned(
+          left: 0,
+          right: 0,
+          bottom: 15,
+          child: Center(
+            child: SmoothPageIndicator(
+              controller: widget.controller,
+              count: widget.photos.length,
+              effect: ExpandingDotsEffect(
+                activeDotColor: colorScheme.onPrimary,
+                dotColor: colorScheme.onPrimary,
+                expansionFactor: 3,
+                dotWidth: 6.w,
+                dotHeight: 3.w,
+                spacing: 6.w,
+              ),
+            ),
           ),
         ),
       ],

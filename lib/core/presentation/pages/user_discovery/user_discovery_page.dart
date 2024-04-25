@@ -83,8 +83,15 @@ class UserDiscoveryPage extends StatelessWidget {
                 height: 30.w,
               ),
             ),
-            const SliverToBoxAdapter(
-              child: UserDiscoveryPhotoGallery(),
+            SliverToBoxAdapter(
+              child: UserDiscoveryPhotoGallery(
+                photos: const [
+                  "https://i.pravatar.cc/1000?img=5",
+                  "https://i.pravatar.cc/1000?img=9",
+                  "https://i.pravatar.cc/1000?img=10",
+                  "https://i.pravatar.cc/1000?img=11",
+                ],
+              ),
             ),
           ],
         ),
