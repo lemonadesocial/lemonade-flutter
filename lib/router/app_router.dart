@@ -473,7 +473,7 @@ final vaultRoutes = AutoRoute(
   ],
 );
 
-final collaboratorRoute = AutoRoute(
+final collaboratorRoutes = AutoRoute(
   path: '/collaborator',
   page: CollaboratorRoute.page,
   children: [

@@ -54,7 +54,7 @@ class CustomGridItem extends StatelessWidget {
             blurRadius: 6,
             offset: Offset(0, 2),
             spreadRadius: 0,
-          )
+          ),
         ],
       ),
       child: Row(

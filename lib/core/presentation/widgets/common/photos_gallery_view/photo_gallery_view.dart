@@ -16,7 +16,10 @@ class PhotoGalleryView extends StatefulWidget {
   final List<String> photos;
   final int initialIndex;
   late final controller = PageController(
-      viewportFraction: 1, keepPage: true, initialPage: initialIndex);
+    viewportFraction: 1,
+    keepPage: true,
+    initialPage: initialIndex,
+  );
 
   @override
   PhotoGalleryViewState createState() => PhotoGalleryViewState();
@@ -47,7 +50,7 @@ class PhotoGalleryViewState extends State<PhotoGalleryView> {
                 currentIndex = pageIndex;
               });
             },
-            itemCount: widget.photos.length ?? 0,
+            itemCount: widget.photos.length,
             padEnds: false,
             pageSnapping: true,
             itemBuilder: (_, index) {
