@@ -1,8 +1,13 @@
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
+import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/theme/color.dart';
+import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class UserDiscoveryBasicInfoSection extends StatelessWidget {
@@ -21,13 +26,13 @@ class UserDiscoveryBasicInfoSection extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Text(
+              Text(
                 'Madelyn Franci',
-                style: TextStyle(
-                  color: Colors.white,
+                style: Typo.extraLarge.copyWith(
                   fontSize: 24,
-                  fontFamily: 'Nohemi',
                   fontWeight: FontWeight.w800,
+                  color: colorScheme.onPrimary,
+                  fontFamily: FontFamily.nohemiVariable,
                 ),
               ),
               const SizedBox(width: 9),
@@ -38,19 +43,15 @@ class UserDiscoveryBasicInfoSection extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(6)),
                 ),
-                child: const Row(
+                child: Row(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
                       '@madfranci',
-                      style: TextStyle(
-                        color: Color(0xFFC69DF7),
-                        fontSize: 12,
-                        fontFamily: 'Switzer Variable',
-                        fontWeight: FontWeight.w400,
-                        height: 0,
+                      style: Typo.small.copyWith(
+                        color: LemonColor.paleViolet,
                       ),
                     ),
                   ],
@@ -64,11 +65,9 @@ class UserDiscoveryBasicInfoSection extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
-                width: 18,
-                height: 18,
-                clipBehavior: Clip.antiAlias,
-                decoration: BoxDecoration(),
+              SizedBox(
+                width: Sizing.medium / 2,
+                height: Sizing.medium / 2,
                 child: ThemeSvgIcon(
                   color: colorScheme.onSecondary,
                   builder: (colorFilter) => Assets.icons.icBriefcase.svg(
@@ -76,17 +75,13 @@ class UserDiscoveryBasicInfoSection extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(width: 6),
+              SizedBox(width: Spacing.superExtraSmall),
               Expanded(
                 child: SizedBox(
                   child: Text(
                     'Systems analyst at Mitsubishi',
-                    style: TextStyle(
-                      color: Colors.white.withOpacity(0.5400000214576721),
-                      fontSize: 16,
-                      fontFamily: 'Switzer Variable',
-                      fontWeight: FontWeight.w400,
-                      height: 0,
+                    style: Typo.mediumPlus.copyWith(
+                      color: colorScheme.onSecondary,
                     ),
                   ),
                 ),

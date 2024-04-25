@@ -1,4 +1,5 @@
 import 'package:app/core/presentation/pages/user_discovery/widgets/user_discovery_basic_info_section.dart';
+import 'package:app/core/presentation/pages/user_discovery/widgets/user_discovery_expertise_offering_card.dart';
 import 'package:app/core/presentation/pages/user_discovery/widgets/user_discovery_photos_card.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
@@ -22,7 +23,27 @@ class UserDiscoveryPage extends StatelessWidget {
       appBar: LemonAppBar(
         actions: [
           Padding(
-            padding: EdgeInsets.only(right: Spacing.xSmall),
+            padding: EdgeInsets.only(right: Spacing.medium),
+            child: InkWell(
+              onTap: () {},
+              child: Icon(
+                Icons.filter_alt_outlined,
+                color: colorScheme.onPrimary,
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(right: Spacing.medium),
+            child: InkWell(
+              onTap: () {},
+              child: Icon(
+                Icons.favorite_border,
+                color: colorScheme.onPrimary,
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(right: Spacing.smMedium),
             child: InkWell(
               onTap: () {},
               child: ThemeSvgIcon(
@@ -37,35 +58,9 @@ class UserDiscoveryPage extends StatelessWidget {
             padding: EdgeInsets.only(right: Spacing.xSmall),
             child: InkWell(
               onTap: () {},
-              child: ThemeSvgIcon(
+              child: Icon(
+                Icons.more_vert,
                 color: colorScheme.onPrimary,
-                builder: (filter) => Assets.icons.icChatBubble.svg(
-                  colorFilter: filter,
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(right: Spacing.xSmall),
-            child: InkWell(
-              onTap: () {},
-              child: ThemeSvgIcon(
-                color: colorScheme.onPrimary,
-                builder: (filter) => Assets.icons.icChatBubble.svg(
-                  colorFilter: filter,
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(right: Spacing.xSmall),
-            child: InkWell(
-              onTap: () {},
-              child: ThemeSvgIcon(
-                color: colorScheme.onPrimary,
-                builder: (filter) => Assets.icons.icChatBubble.svg(
-                  colorFilter: filter,
-                ),
               ),
             ),
           ),
@@ -83,9 +78,9 @@ class UserDiscoveryPage extends StatelessWidget {
                 height: 30.w,
               ),
             ),
-            SliverToBoxAdapter(
-              child: UserDiscoveryPhotoGallery(
-                photos: const [
+            const SliverToBoxAdapter(
+              child: UserDiscoveryPhotosCard(
+                photos: [
                   "https://i.pravatar.cc/1000?img=5",
                   "https://i.pravatar.cc/1000?img=9",
                   "https://i.pravatar.cc/1000?img=10",
@@ -93,6 +88,14 @@ class UserDiscoveryPage extends StatelessWidget {
                 ],
               ),
             ),
+            SliverToBoxAdapter(
+              child: SizedBox(
+                height: 30.w,
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: UserDiscoveryExpertiseOfferingCard(),
+            )
           ],
         ),
       ),
