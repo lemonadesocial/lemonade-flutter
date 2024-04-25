@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.17.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.16.0...v1.17.0) (2024-04-24)
+
+
+### Features
+
+* create guild channel flow ([#552](https://github.com/lemonadesocial/lemonade-flutter/issues/552)) ([1114311](https://github.com/lemonadesocial/lemonade-flutter/commit/11143116f4999642e3435c4914ccfe229df2af03))
+* display & join guild chat flow ([#547](https://github.com/lemonadesocial/lemonade-flutter/issues/547)) ([7f10768](https://github.com/lemonadesocial/lemonade-flutter/commit/7f107683dade4a582c271f5c9949340c9d49c75d))
+* event dashboard insight ([#551](https://github.com/lemonadesocial/lemonade-flutter/issues/551)) ([5f1196b](https://github.com/lemonadesocial/lemonade-flutter/commit/5f1196b8e4111da884e4a5340ccca445426316ee))
+* event dashboard rewards ([#553](https://github.com/lemonadesocial/lemonade-flutter/issues/553)) ([df942ca](https://github.com/lemonadesocial/lemonade-flutter/commit/df942ca1396e042c070aa863b2cf7c6bf389b71f))
+* event photo settings ui ([#545](https://github.com/lemonadesocial/lemonade-flutter/issues/545)) ([772aaf7](https://github.com/lemonadesocial/lemonade-flutter/commit/772aaf7c04420a405e6d763d484901fc082a571c))
+* hide some items in event detail navigation bar ([#558](https://github.com/lemonadesocial/lemonade-flutter/issues/558)) ([1535f6e](https://github.com/lemonadesocial/lemonade-flutter/commit/1535f6e87207c89a2099197d3f4514d2b01a4638))
+* improve crashlytics tracking ([#554](https://github.com/lemonadesocial/lemonade-flutter/issues/554)) ([c488872](https://github.com/lemonadesocial/lemonade-flutter/commit/c4888720160372fb0e443a2bcab7acc6f507f458))
+
+
+### Bug Fixes
+
+* add more actions for event detail app bar dot ([#546](https://github.com/lemonadesocial/lemonade-flutter/issues/546)) ([5ef9b16](https://github.com/lemonadesocial/lemonade-flutter/commit/5ef9b1676c84a9e9dc06f9a094914417e5fcf160))
+* hide dashboard revenue ([#556](https://github.com/lemonadesocial/lemonade-flutter/issues/556)) ([6f6c5e2](https://github.com/lemonadesocial/lemonade-flutter/commit/6f6c5e2a5f8cb26021d3a8a842c69ab3c4d4c7a9))
+* update codemagic script ([#557](https://github.com/lemonadesocial/lemonade-flutter/issues/557)) ([192510f](https://github.com/lemonadesocial/lemonade-flutter/commit/192510f749f350f3f65b1877315ebab1ac1e1592))
+
 ## [1.16.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.15.0...v1.16.0) (2024-04-15)
 
 
