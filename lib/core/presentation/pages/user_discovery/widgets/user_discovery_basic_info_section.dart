@@ -35,13 +35,14 @@ class UserDiscoveryBasicInfoSection extends StatelessWidget {
                   fontFamily: FontFamily.nohemiVariable,
                 ),
               ),
-              const SizedBox(width: 9),
+              SizedBox(width: Spacing.smMedium / 2),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 4.w),
                 decoration: ShapeDecoration(
-                  color: const Color(0x2DC69DF7),
+                  color: LemonColor.acidGreen,
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(6)),
+                    borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
+                  ),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
