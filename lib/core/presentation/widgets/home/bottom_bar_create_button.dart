@@ -16,11 +16,10 @@ class BottomBarCreateButton extends StatelessWidget {
     final authState = context.watch<AuthBloc>().state;
     return InkWell(
       onTap: () {
-        // authState.maybeWhen(
-        //   authenticated: (session) => context.router.push(const AIRoute()),
-        //   orElse: () => context.router.navigate(const LoginRoute()),
-        // );
-        AutoRouter.of(context).push(CollaboratorChatRoute());
+        authState.maybeWhen(
+          authenticated: (session) => context.router.push(const AIRoute()),
+          orElse: () => context.router.navigate(const LoginRoute()),
+        );
       },
       child: Container(
         width: 48.h,
