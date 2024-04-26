@@ -73,6 +73,7 @@ class CustomErrorHandler {
     NextLink forward,
     Response response,
   ) {
+    print(request.toString());
     if (kDebugMode) {
       print('handleGraphQLError : ${response.errors.toString()}');
     }
