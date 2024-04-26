@@ -19,7 +19,7 @@ class CollaboratorSendLikeBottomSheet extends StatelessWidget {
     return Container(
       padding:
           EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-      color: LemonColor.atomicBlack,
+      color: colorScheme.surface,
       child: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -39,7 +39,9 @@ class CollaboratorSendLikeBottomSheet extends StatelessWidget {
                     icon: Assets.icons.icShiningLove.svg(),
                   ),
                   SizedBox(height: Spacing.smMedium),
-                  const CollaboratorUserExpertiseOfferingCard(),
+                  CollaboratorUserExpertiseOfferingCard(
+                    color: LemonColor.charlestonGreen,
+                  ),
                   SizedBox(height: Spacing.smMedium),
                   LemonTextField(
                     hintText: t.collaborator.sendMessage,

@@ -25,10 +25,7 @@ class PostCardActions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final isLoggedIn = context
-        .watch<AuthBloc>()
-        .state
-        .maybeWhen(authenticated: (_) => true, orElse: () => false);
+    final isLoggedIn = context.watch<AuthBloc>().state.maybeWhen(authenticated: (_) => true, orElse: () => false);
     return Padding(
       padding: EdgeInsets.only(top: Spacing.xSmall),
       child: Row(
@@ -36,8 +33,18 @@ class PostCardActions extends StatelessWidget {
           BlocBuilder<TogglePostReactionBloc, TogglePostReactionState>(
             builder: (context, state) {
               final svgIcon = state.hasReaction
-                  ? Assets.icons.icHeartFillled
-                  : Assets.icons.icHeart;
+                  ? Assets.icons.icHeartFillled.svg(
+                      width: 18.w,
+                      height: 18.w,
+                    )
+                  : ThemeSvgIcon(
+                      color: colorScheme.onSecondary,
+                      builder: (filter) => Assets.icons.icHeart.svg(
+                        colorFilter: filter,
+                        width: 18.w,
+                        height: 18.w,
+                      ),
+                    );
               return GestureDetector(
                 behavior: HitTestBehavior.translucent,
                 onTap: () {
@@ -56,12 +63,7 @@ class PostCardActions extends StatelessWidget {
                 },
                 child: Row(
                   children: [
-                    ThemeSvgIcon(
-                      builder: (filter) => svgIcon.svg(
-                        width: 18.w,
-                        height: 18.w,
-                      ),
-                    ),
+                    svgIcon,
                     const SizedBox(width: 3),
                     Text(
                       '${state.reactions}',
@@ -80,7 +82,6 @@ class PostCardActions extends StatelessWidget {
           Row(
             children: [
               ThemeSvgIcon(
-                color: colorScheme.onSecondary,
                 builder: (filter) => Assets.icons.icMessage.svg(
                   colorFilter: filter,
                   width: 18.w,

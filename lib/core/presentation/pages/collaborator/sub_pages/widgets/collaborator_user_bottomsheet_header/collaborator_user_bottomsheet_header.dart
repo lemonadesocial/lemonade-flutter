@@ -2,6 +2,7 @@ import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
+import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -21,7 +22,7 @@ class CollaboratorUserBottomsheetHeader extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(Spacing.small),
       decoration: BoxDecoration(
-        color: colorScheme.background,
+        color: LemonColor.atomicBlack,
         borderRadius: BorderRadius.circular(60.r),
       ),
       child: Row(
