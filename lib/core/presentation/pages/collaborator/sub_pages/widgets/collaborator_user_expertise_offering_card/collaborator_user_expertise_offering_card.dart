@@ -1,4 +1,5 @@
 import 'package:app/core/presentation/widgets/shapes/shape_triangle.dart';
+import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
@@ -42,7 +43,7 @@ class CollaboratorUserExpertiseOfferingCard extends StatelessWidget {
             ),
           ),
           SizedBox(height: Spacing.smMedium),
-          const DividerWithTriangle(),
+          Assets.icons.icArrowDivider.svg(),
           SizedBox(height: Spacing.smMedium),
           Text(
             t.collaborator.offering,

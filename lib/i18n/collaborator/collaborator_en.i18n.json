@@ -5,5 +5,7 @@
     "expertise": "Expertise",
     "offering": "Offering",
     "sendMessage": "Send a message",
-    "sendLike": "Send like"
+    "sendLike": "Send like",
+    "likedYourProfile": "Liked your profile",
+    "needHelpWith": "Needs help with"
 }

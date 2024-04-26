@@ -14,17 +14,20 @@ class CollaboratorLikesPage extends StatelessWidget {
     final t = Translations.of(context);
     return Scaffold(
       appBar: LemonAppBar(title: t.collaborator.likes),
-      body: CustomScrollView(
-        slivers: [
-          SliverList.separated(
-            itemCount: 5,
-            itemBuilder: (context, index) {
-              return const CollboratorLikeItem();
-            },
-            separatorBuilder: (context, index) =>
-                SizedBox(height: Spacing.xSmall),
-          ),
-        ],
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
+        child: CustomScrollView(
+          slivers: [
+            SliverList.separated(
+              itemCount: 5,
+              itemBuilder: (context, index) {
+                return const CollboratorLikeItem();
+              },
+              separatorBuilder: (context, index) =>
+                  SizedBox(height: Spacing.xSmall),
+            ),
+          ],
+        ),
       ),
     );
   }

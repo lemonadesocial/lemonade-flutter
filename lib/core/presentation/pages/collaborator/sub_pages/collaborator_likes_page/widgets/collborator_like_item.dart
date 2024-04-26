@@ -1,10 +1,12 @@
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,72 +17,78 @@ class CollboratorLikeItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    return Container(
-      padding: EdgeInsets.all(Spacing.small),
-      decoration: BoxDecoration(
-        color: LemonColor.atomicBlack,
-        borderRadius: BorderRadius.circular(LemonRadius.medium),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const _Avatar(),
-          SizedBox(width: Spacing.xSmall),
-          Expanded(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Kierra Donin',
-                          style: Typo.medium.copyWith(
-                            color: colorScheme.onPrimary,
-                            fontWeight: FontWeight.w500,
+    return InkWell(
+      onTap: () {
+        AutoRouter.of(context).push(const CollaboratorLikePreviewRoute());
+      },
+      child: Container(
+        padding: EdgeInsets.all(Spacing.small),
+        decoration: BoxDecoration(
+          color: LemonColor.atomicBlack,
+          borderRadius: BorderRadius.circular(LemonRadius.medium),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const _Avatar(),
+            SizedBox(width: Spacing.xSmall),
+            Expanded(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Kierra Donin',
+                            style: Typo.medium.copyWith(
+                              color: colorScheme.onPrimary,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 2),
-                        Row(
-                          children: [
-                            ThemeSvgIcon(
-                              color: colorScheme.onSecondary,
-                              builder: (filter) => Assets.icons.icBriefcase.svg(
-                                colorFilter: filter,
-                              ),
-                            ),
-                            SizedBox(width: Spacing.superExtraSmall),
-                            Text(
-                              'Head Chef at Marriot',
-                              style: Typo.medium.copyWith(
+                          const SizedBox(height: 2),
+                          Row(
+                            children: [
+                              ThemeSvgIcon(
                                 color: colorScheme.onSecondary,
+                                builder: (filter) =>
+                                    Assets.icons.icBriefcase.svg(
+                                  colorFilter: filter,
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    ThemeSvgIcon(
-                      color: colorScheme.onSecondary,
-                      builder: (filter) => Assets.icons.icArrowRight.svg(
-                        colorFilter: filter,
+                              SizedBox(width: Spacing.superExtraSmall),
+                              Text(
+                                'Head Chef at Marriot',
+                                style: Typo.medium.copyWith(
+                                  color: colorScheme.onSecondary,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: Spacing.superExtraSmall),
-                const _InitialMessage(),
-              ],
+                      ThemeSvgIcon(
+                        color: colorScheme.onSecondary,
+                        builder: (filter) => Assets.icons.icArrowRight.svg(
+                          colorFilter: filter,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: Spacing.superExtraSmall),
+                  const _InitialMessage(),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

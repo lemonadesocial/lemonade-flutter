@@ -5,6 +5,7 @@ import 'package:app/core/presentation/pages/collaborator/collaborator_discover/w
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +35,9 @@ class CollaboratorDiscoverPage extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(right: Spacing.medium),
             child: InkWell(
-              onTap: () {},
+              onTap: () {
+                AutoRouter.of(context).push(const CollaboratorLikesRoute());
+              },
               child: Icon(
                 Icons.favorite_border,
                 color: colorScheme.onPrimary,
@@ -44,7 +47,9 @@ class CollaboratorDiscoverPage extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(right: Spacing.smMedium),
             child: InkWell(
-              onTap: () {},
+              onTap: () {
+                AutoRouter.of(context).push(const CollaboratorChatRoute());
+              },
               child: ThemeSvgIcon(
                 color: colorScheme.onPrimary,
                 builder: (filter) => Assets.icons.icChatBubble.svg(
