@@ -1,5 +1,9 @@
 {   
     "chat": "Chat",
     "likes": "Likes",
-    "matches": "Matches"
+    "matches": "Matches",
+    "expertise": "Expertise",
+    "offering": "Offering",
+    "sendMessage": "Send a message",
+    "sendLike": "Send like"
 }

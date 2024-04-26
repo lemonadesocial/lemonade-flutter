@@ -151,7 +151,7 @@ class _InitialMessage extends StatelessWidget {
         vertical: Spacing.extraSmall,
       ),
       decoration: ShapeDecoration(
-        color: colorScheme.secondaryContainer,
+        color: colorScheme.surface,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             topRight: Radius.circular(LemonRadius.small),
