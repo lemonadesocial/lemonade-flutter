@@ -41,8 +41,10 @@ class _LemonLineChartState extends State<LemonLineChart> {
       LineChartBarData(
         spots: widget.data,
         isCurved: true,
+        preventCurveOverShooting: true,
+        preventCurveOvershootingThreshold: 0,
         color: widget.lineColor,
-        barWidth: 5.w,
+        barWidth: 2.w,
         isStrokeCapRound: true,
         dotData: FlDotData(
           show: true,
@@ -76,7 +78,7 @@ class _LemonLineChartState extends State<LemonLineChart> {
     ];
     return Container(
       padding: EdgeInsets.only(
-        top: Spacing.xSmall,
+        top: Spacing.xLarge,
         bottom: Spacing.xSmall,
         left: Spacing.xSmall,
         right: Spacing.medium,
@@ -134,7 +136,15 @@ class _LemonLineChartState extends State<LemonLineChart> {
                 minY: widget.minY,
                 maxY: widget.maxY,
                 lineBarsData: widget.lineVisible ? lineChartBarData : [],
-                lineTouchData: widget.lineTouchData ??
+                lineTouchData: widget.lineTouchData?.copyWith(
+                      getTouchedSpotIndicator: (barData, indexes) =>
+                          indexes.map((item) {
+                        return TouchedSpotIndicatorData(
+                          FlLine(strokeWidth: 0.w),
+                          const FlDotData(),
+                        );
+                      }).toList(),
+                    ) ??
                     LineTouchData(
                       touchTooltipData: LineTouchTooltipData(
                         getTooltipColor: (_) => LemonColor.atomicBlack,
