@@ -4,7 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CollaboratorDiscoverActionsBar extends StatelessWidget {
-  const CollaboratorDiscoverActionsBar({super.key});
+  final Function()? onDecline;
+  final Function()? onLike;
+  const CollaboratorDiscoverActionsBar({
+    super.key,
+    this.onLike,
+    this.onDecline,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -13,21 +19,31 @@ class CollaboratorDiscoverActionsBar extends StatelessWidget {
       children: [
         Align(
           alignment: Alignment.bottomLeft,
-          child: ThemeSvgIcon(
-            color: colorScheme.onSecondary,
-            builder: (filter) => Assets.icons.icDeclineCollaborator.svg(
-              width: 60.w,
-              height: 60.w,
+          child: InkWell(
+            onTap: () {
+              onDecline?.call();
+            },
+            child: ThemeSvgIcon(
+              color: colorScheme.onSecondary,
+              builder: (filter) => Assets.icons.icDeclineCollaborator.svg(
+                width: 60.w,
+                height: 60.w,
+              ),
             ),
           ),
         ),
         Align(
           alignment: Alignment.bottomRight,
-          child: ThemeSvgIcon(
-            color: colorScheme.onSecondary,
-            builder: (filter) => Assets.icons.icLikeCollaborator.svg(
-              width: 60.w,
-              height: 60.w,
+          child: InkWell(
+            onTap: () {
+              onLike?.call();
+            },
+            child: ThemeSvgIcon(
+              color: colorScheme.onSecondary,
+              builder: (filter) => Assets.icons.icLikeCollaborator.svg(
+                width: 60.w,
+                height: 60.w,
+              ),
             ),
           ),
         ),
