@@ -92,6 +92,7 @@ class _CollaboratorDiscoverPageState extends State<CollaboratorDiscoverPage> {
                 : const SizedBox.shrink(),
             CollaboratorDiscoverActionsBar(
               onDecline: () async {
+                // TODO: Add decline logic
                 setState(() {
                   isVisibleDeclinedOverlay = true;
                 });
@@ -103,6 +104,7 @@ class _CollaboratorDiscoverPageState extends State<CollaboratorDiscoverPage> {
                 });
               },
               onLike: () {
+                // TODO: Add like logic
                 debugPrint("On like");
               },
             ),
