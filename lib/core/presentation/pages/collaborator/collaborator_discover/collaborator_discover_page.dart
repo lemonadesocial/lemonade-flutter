@@ -1,3 +1,4 @@
+import 'package:app/core/presentation/pages/collaborator/collaborator_discover/widgets/collaborator_discover_actions_bar.dart';
 import 'package:app/core/presentation/pages/collaborator/collaborator_discover/widgets/collaborator_discover_activity_section.dart';
 import 'package:app/core/presentation/pages/collaborator/collaborator_discover/widgets/collaborator_discover_basic_info_section.dart';
 import 'package:app/core/presentation/pages/collaborator/collaborator_discover/widgets/collaborator_discover_expertise_offering_card.dart';
@@ -7,6 +8,8 @@ import 'package:app/core/presentation/pages/collaborator/collaborator_discover/w
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
+import 'package:app/theme/color.dart';
+import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -69,9 +72,37 @@ class CollaboratorDiscoverPage extends StatelessWidget {
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w),
-        child: CustomScrollView(
-          slivers: [
-            CollaboratorDiscoverView(),
+        child: Stack(
+          children: [
+            const CustomScrollView(
+              slivers: [
+                CollaboratorDiscoverView(),
+              ],
+            ),
+            Stack(
+              children: [
+                Align(
+                  alignment: Alignment.bottomLeft,
+                  child: ThemeSvgIcon(
+                    color: colorScheme.onSecondary,
+                    builder: (filter) => Assets.icons.icDeclineCollaborator.svg(
+                      width: 60.w,
+                      height: 60.w,
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: ThemeSvgIcon(
+                    color: colorScheme.onSecondary,
+                    builder: (filter) => Assets.icons.icLikeCollaborator.svg(
+                      width: 60.w,
+                      height: 60.w,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       ),

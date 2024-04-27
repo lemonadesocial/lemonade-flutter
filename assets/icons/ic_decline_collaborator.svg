@@ -1,0 +1,34 @@
+<svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g filter="url(#filter0_di_10728_115560)">
+<rect x="6" y="3" width="60" height="60" rx="30" fill="url(#paint0_linear_10728_115560)" shape-rendering="crispEdges"/>
+<rect x="6.5" y="3.5" width="59" height="59" rx="29.5" stroke="black" stroke-opacity="0.12" shape-rendering="crispEdges"/>
+<g clip-path="url(#clip0_10728_115560)">
+<path d="M42.295 28.115C42.6844 27.7256 42.6844 27.0944 42.295 26.705C41.9056 26.3156 41.2744 26.3156 40.885 26.705L36 31.59L31.115 26.705C30.7256 26.3156 30.0944 26.3156 29.705 26.705C29.3156 27.0944 29.3156 27.7256 29.705 28.115L34.59 33L29.705 37.885C29.3156 38.2744 29.3156 38.9056 29.705 39.295C30.0944 39.6844 30.7256 39.6844 31.115 39.295L36 34.41L40.885 39.295C41.2744 39.6844 41.9056 39.6844 42.295 39.295C42.6844 38.9056 42.6844 38.2744 42.295 37.885L37.41 33L42.295 28.115Z" fill="white" fill-opacity="0.54"/>
+</g>
+</g>
+<defs>
+<filter id="filter0_di_10728_115560" x="0" y="0" width="72" height="72" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dy="3"/>
+<feGaussianBlur stdDeviation="3"/>
+<feComposite in2="hardAlpha" operator="out"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0.0352941 0 0 0 0 0.0352941 0 0 0 0 0.0352941 0 0 0 0.18 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_10728_115560"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_10728_115560" result="shape"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dy="2"/>
+<feGaussianBlur stdDeviation="2"/>
+<feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"/>
+<feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.12 0"/>
+<feBlend mode="normal" in2="shape" result="effect2_innerShadow_10728_115560"/>
+</filter>
+<linearGradient id="paint0_linear_10728_115560" x1="36" y1="3" x2="36" y2="63" gradientUnits="userSpaceOnUse">
+<stop stop-color="#424242"/>
+<stop offset="1" stop-color="#2D2D2D"/>
+</linearGradient>
+<clipPath id="clip0_10728_115560">
+<rect width="24" height="24" fill="white" transform="translate(24 21)"/>
+</clipPath>
+</defs>
+</svg>
