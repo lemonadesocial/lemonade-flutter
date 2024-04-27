@@ -5,7 +5,6 @@ class CollaboratorDiscoverSpotlineEventsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     return SliverToBoxAdapter(
       child: Container(
         width: 351,

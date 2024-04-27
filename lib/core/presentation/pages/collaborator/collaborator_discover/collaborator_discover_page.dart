@@ -72,7 +72,7 @@ class CollaboratorDiscoverPage extends StatelessWidget {
                 CollaboratorDiscoverView(),
               ],
             ),
-            CollaboratorDiscoverActionsBar()
+            CollaboratorDiscoverActionsBar(),
           ],
         ),
       ),

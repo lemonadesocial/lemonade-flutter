@@ -20,7 +20,6 @@ class CollaboratorDiscoverActivitySection extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
     final List<_ItemData> items = [
       _ItemData(
