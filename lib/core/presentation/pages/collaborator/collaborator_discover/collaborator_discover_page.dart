@@ -82,7 +82,7 @@ class _CollaboratorDiscoverPageState extends State<CollaboratorDiscoverPage> {
                 const CollaboratorDiscoverView(),
                 SliverToBoxAdapter(
                   child: SizedBox(
-                    height: Sizing.large,
+                    height: Sizing.large * 2,
                   ),
                 ),
               ],
