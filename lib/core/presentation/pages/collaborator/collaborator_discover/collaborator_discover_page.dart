@@ -1,4 +1,5 @@
 import 'package:app/core/presentation/pages/collaborator/collaborator_discover/widgets/collaborator_discover_actions_bar.dart';
+import 'package:app/core/presentation/pages/collaborator/collaborator_discover/widgets/collaborator_discover_declined_overlay.dart';
 import 'package:app/core/presentation/pages/collaborator/collaborator_discover/widgets/collaborator_discover_view.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
@@ -72,6 +73,7 @@ class CollaboratorDiscoverPage extends StatelessWidget {
                 CollaboratorDiscoverView(),
               ],
             ),
+            CollaboratorDiscoverDeclinedOverlay(),
             CollaboratorDiscoverActionsBar(),
           ],
         ),
