@@ -1,5 +1,3 @@
-import 'package:app/core/domain/event/entities/event.dart';
-import 'package:app/core/presentation/widgets/collaborator/spotline_event_item.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
@@ -98,9 +96,10 @@ class CollaboratorDiscoverIcebreakersSection extends StatelessWidget {
             Text(
               'Dad jokes, eye color mismatch, constant fidgeting when happy',
               style: Typo.extraMedium.copyWith(
-                  color: colorScheme.onPrimary,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: FontFamily.nohemiVariable),
+                color: colorScheme.onPrimary,
+                fontWeight: FontWeight.w600,
+                fontFamily: FontFamily.nohemiVariable,
+              ),
             ),
           ],
         ),
