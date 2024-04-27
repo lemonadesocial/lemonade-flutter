@@ -1,3 +1,4 @@
+import 'package:app/core/presentation/pages/collaborator/collaborator_discover/widgets/collaborator_discover_actions_bar.dart';
 import 'package:app/core/presentation/pages/collaborator/collaborator_discover/widgets/collaborator_discover_view.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
@@ -64,37 +65,14 @@ class CollaboratorDiscoverPage extends StatelessWidget {
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w),
-        child: Stack(
+        child: const Stack(
           children: [
-            const CustomScrollView(
+            CustomScrollView(
               slivers: [
                 CollaboratorDiscoverView(),
               ],
             ),
-            Stack(
-              children: [
-                Align(
-                  alignment: Alignment.bottomLeft,
-                  child: ThemeSvgIcon(
-                    color: colorScheme.onSecondary,
-                    builder: (filter) => Assets.icons.icDeclineCollaborator.svg(
-                      width: 60.w,
-                      height: 60.w,
-                    ),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: ThemeSvgIcon(
-                    color: colorScheme.onSecondary,
-                    builder: (filter) => Assets.icons.icLikeCollaborator.svg(
-                      width: 60.w,
-                      height: 60.w,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            CollaboratorDiscoverActionsBar()
           ],
         ),
       ),
