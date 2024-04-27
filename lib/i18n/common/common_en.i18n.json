@@ -186,6 +186,8 @@
     "updatedSuccessfully": "Updated successfully",
     "status": {
         "accepted": "Accepted",
-        "declined": "Declined"        
+        "declined": "Declined",
+        "notConnected": "Not connected",
+        "connected": "Connected"
     }
 }

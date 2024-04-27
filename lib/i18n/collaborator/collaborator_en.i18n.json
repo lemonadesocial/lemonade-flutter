@@ -1,4 +1,4 @@
-{   
+{
     "chat": "Chat",
     "likes": "Likes",
     "matches": "Matches",
@@ -7,5 +7,22 @@
     "sendMessage": "Send a message",
     "sendLike": "Send like",
     "likedYourProfile": "Liked your profile",
-    "needHelpWith": "Needs help with"
+    "needHelpWith": "Needs help with",
+    "editProfile": {
+        "aboutYou": {
+            "aboutYouTitle": "About you",
+            "displayName": "Display name",
+            "shortBio": "Short bio",
+            "jobTitle": "Job title",
+            "organization": "Organization",
+            "basedIn": "Based in",
+            "languagesSpoken": "Languages spoken",
+            "age": "Age",
+            "ethnicity": "Ethnicity",
+            "empty": "N/A"
+        },
+        "spotlightEvents": "Spotlight events",
+        "icebreakers": "Icebreakers",
+        "addIcebreaker": "Add icebreaker"
+    }
 }

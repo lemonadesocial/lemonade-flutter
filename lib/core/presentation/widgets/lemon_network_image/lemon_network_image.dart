@@ -33,6 +33,7 @@ class LemonNetworkImage extends StatelessWidget {
       child: ClipRRect(
         borderRadius: borderRadius ?? BorderRadius.zero,
         child: CachedNetworkImage(
+          fit: fit ?? BoxFit.cover,
           imageUrl: imageUrl,
           errorWidget: (_, __, ___) => placeholder ?? const SizedBox.shrink(),
           placeholder: (_, __) => placeholder ?? const SizedBox.shrink(),

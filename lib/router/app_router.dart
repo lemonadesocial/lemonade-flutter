@@ -490,5 +490,8 @@ final collaboratorRoutes = AutoRoute(
     AutoRoute(
       page: CollaboratorLikePreviewRoute.page,
     ),
+    AutoRoute(
+      page: CollaboratorEditProfileRoute.page,
+    ),
   ],
 );
