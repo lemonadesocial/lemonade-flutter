@@ -3,6 +3,7 @@ import 'package:app/core/presentation/pages/collaborator/collaborator_discover/w
 import 'package:app/core/presentation/pages/collaborator/collaborator_discover/widgets/collaborator_discover_expertise_offering_card.dart';
 import 'package:app/core/presentation/pages/collaborator/collaborator_discover/widgets/collaborator_discover_photos_card.dart';
 import 'package:app/core/presentation/pages/collaborator/collaborator_discover/widgets/collaborator_discover_social_grid_section.dart';
+import 'package:app/core/presentation/pages/collaborator/collaborator_discover/widgets/collaborator_discover_spotline_events_section.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -51,6 +52,12 @@ class CollaboratorDiscoverView extends StatelessWidget {
           ),
         ),
         const CollaboratorDiscoverActivitySection(),
+        SliverToBoxAdapter(
+          child: SizedBox(
+            height: 30.w,
+          ),
+        ),
+        const CollaboratorDiscoverSpotlineEventsSection(),
         SliverToBoxAdapter(
           child: SizedBox(
             height: 30.w,

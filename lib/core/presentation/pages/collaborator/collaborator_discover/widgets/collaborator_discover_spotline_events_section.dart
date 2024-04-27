@@ -1,20 +1,50 @@
+import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/presentation/widgets/collaborator/spotline_event_item.dart';
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/gen/assets.gen.dart';
+import 'package:app/i18n/i18n.g.dart';
+import 'package:app/theme/color.dart';
+import 'package:app/theme/spacing.dart';
+import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CollaboratorDiscoverSpotlineEventsSection extends StatelessWidget {
   const CollaboratorDiscoverSpotlineEventsSection({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final t = Translations.of(context);
+    final colorScheme = Theme.of(context).colorScheme;
+    final events = [
+      Event(
+        title: "Living room gig gigachad nomad",
+        start: DateTime.now(),
+      ),
+      Event(
+        title: "Early morning yoga",
+        start: DateTime.now(),
+      ),
+      Event(
+        title: "Secret room",
+        start: DateTime.now(),
+      ),
+    ];
+    if (events.isEmpty) {
+      return const SliverToBoxAdapter(child: SizedBox.shrink());
+    }
     return SliverToBoxAdapter(
       child: Container(
-        width: 351,
-        height: 200,
-        padding: const EdgeInsets.all(18),
+        padding: EdgeInsets.only(
+          left: Spacing.smMedium,
+          top: Spacing.smMedium,
+          bottom: Spacing.smMedium,
+        ),
         clipBehavior: Clip.antiAlias,
         decoration: ShapeDecoration(
-          color: Colors.white.withOpacity(0.05999999865889549),
+          color: LemonColor.white06,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(18),
+            borderRadius: BorderRadius.circular(LemonRadius.normal),
           ),
         ),
         child: Column(
@@ -34,18 +64,21 @@ class CollaboratorDiscoverSpotlineEventsSection extends StatelessWidget {
                     height: 18,
                     clipBehavior: Clip.antiAlias,
                     decoration: const BoxDecoration(),
+                    child: ThemeSvgIcon(
+                      color: LemonColor.paleViolet,
+                      builder: (colorFilter) => Assets.icons.icHouseParty.svg(
+                        colorFilter: colorFilter,
+                      ),
+                    ),
                   ),
-                  const SizedBox(width: 9),
-                  const Expanded(
+                  SizedBox(width: Spacing.smMedium / 2),
+                  Expanded(
                     child: SizedBox(
                       child: Text(
-                        'Spotlight events',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                          fontFamily: 'Switzer Variable',
+                        t.collaborator.spotlightEvents,
+                        style: Typo.medium.copyWith(
+                          color: colorScheme.onPrimary,
                           fontWeight: FontWeight.w600,
-                          height: 0,
                         ),
                       ),
                     ),
@@ -53,20 +86,20 @@ class CollaboratorDiscoverSpotlineEventsSection extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 18),
+            SizedBox(height: Spacing.smMedium),
             SizedBox(
-              height: 150.0,
-              child: ListView.builder(
+              height: 128.w,
+              child: ListView.separated(
+                separatorBuilder: (context, index) {
+                  return SizedBox(
+                    width: Spacing.smMedium / 2,
+                  );
+                },
                 scrollDirection: Axis.horizontal,
-                itemCount: 20,
+                itemCount: events.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return Container(
-                    width: 150.0,
-                    margin: const EdgeInsets.symmetric(horizontal: 10.0),
-                    color: Colors.blueGrey[100 * (index % 9)],
-                    child: Center(
-                      child: Text('Item $index'),
-                    ),
+                  return SpotlineEventItem(
+                    event: events[index],
                   );
                 },
               ),
