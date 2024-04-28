@@ -1,3 +1,4 @@
+import 'package:app/core/presentation/pages/collaborator/sub_pages/collaborator_edit_profile_page/widgets/collaborator_edit_spotlight_events/widgets/collaborator_add_sppotlight_events_bottomsheet/collaborator_add_sppotlight_events_bottomsheet.dart';
 import 'package:app/core/presentation/pages/collaborator/sub_pages/collaborator_edit_profile_page/widgets/remove_icon_wrapper.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
@@ -6,11 +7,13 @@ import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
 class CollaboratorEditSpotlightEvents extends StatelessWidget {
@@ -49,6 +52,13 @@ class CollaboratorEditSpotlightEvents extends StatelessWidget {
             itemBuilder: (context, index) {
               if (index == 0) {
                 return InkWell(
+                  onTap: () => showCupertinoModalBottomSheet(
+                    context: context,
+                    expand: true,
+                    backgroundColor: LemonColor.atomicBlack,
+                    builder: (mContext) =>
+                        const CollaboratorAddSpotlightEventBottomSheet(),
+                  ),
                   child: DottedBorder(
                     color: colorScheme.outline,
                     borderType: BorderType.RRect,

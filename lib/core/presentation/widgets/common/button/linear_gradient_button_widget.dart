@@ -177,7 +177,7 @@ class LinearGradientButton extends StatelessWidget {
             Typo.medium.copyWith(
               fontFamily: FontFamily.nohemiVariable,
               fontWeight: FontWeight.w600,
-              color: textColor,
+              color: textColor ?? LemonColor.white,
             ),
         mode: GradientButtonMode.defaultMode,
         height: height ?? Sizing.large,
