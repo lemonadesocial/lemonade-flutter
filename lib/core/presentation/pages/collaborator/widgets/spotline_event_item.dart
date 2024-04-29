@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:app/core/config.dart';
 import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/event/entities/event.dart';

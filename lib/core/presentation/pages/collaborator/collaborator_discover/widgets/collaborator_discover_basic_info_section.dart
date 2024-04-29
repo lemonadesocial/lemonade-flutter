@@ -6,7 +6,6 @@ import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CollaboratorDiscoverBasicInfoSection extends StatelessWidget {
   const CollaboratorDiscoverBasicInfoSection({super.key});
