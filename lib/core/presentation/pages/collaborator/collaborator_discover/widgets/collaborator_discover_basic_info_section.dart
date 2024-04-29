@@ -34,7 +34,10 @@ class CollaboratorDiscoverBasicInfoSection extends StatelessWidget {
               ),
               SizedBox(width: Spacing.smMedium / 2),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 4.w),
+                padding: EdgeInsets.symmetric(
+                  horizontal: Spacing.superExtraSmall,
+                  vertical: Spacing.extraSmall / 2,
+                ),
                 decoration: ShapeDecoration(
                   color: LemonColor.acidGreen,
                   shape: RoundedRectangleBorder(
@@ -75,12 +78,10 @@ class CollaboratorDiscoverBasicInfoSection extends StatelessWidget {
               ),
               SizedBox(width: Spacing.superExtraSmall),
               Expanded(
-                child: SizedBox(
-                  child: Text(
-                    'Systems analyst at Mitsubishi',
-                    style: Typo.mediumPlus.copyWith(
-                      color: colorScheme.onSecondary,
-                    ),
+                child: Text(
+                  'Systems analyst at Mitsubishi',
+                  style: Typo.mediumPlus.copyWith(
+                    color: colorScheme.onSecondary,
                   ),
                 ),
               ),

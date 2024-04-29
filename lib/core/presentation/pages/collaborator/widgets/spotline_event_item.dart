@@ -152,28 +152,23 @@ class _EventJoinCount extends StatelessWidget {
           ),
         ),
       ),
-      child: ClipRRect(
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ThemeSvgIcon(
-                color: colorScheme.onPrimary,
-                builder: (filter) =>
-                    Assets.icons.icProfile.svg(colorFilter: filter),
-              ),
-              SizedBox(width: Spacing.superExtraSmall / 2),
-              Text(
-                count.toString(),
-                style: Typo.xSmall.copyWith(
-                  color: colorScheme.onPrimary,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ThemeSvgIcon(
+            color: colorScheme.onPrimary,
+            builder: (filter) =>
+                Assets.icons.icProfile.svg(colorFilter: filter),
           ),
-        ),
+          SizedBox(width: Spacing.superExtraSmall / 2),
+          Text(
+            count.toString(),
+            style: Typo.xSmall.copyWith(
+              color: colorScheme.onPrimary,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
       ),
     );
   }

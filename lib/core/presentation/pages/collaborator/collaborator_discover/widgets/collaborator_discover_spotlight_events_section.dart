@@ -1,5 +1,5 @@
 import 'package:app/core/domain/event/entities/event.dart';
-import 'package:app/core/presentation/widgets/collaborator/spotline_event_item.dart';
+import 'package:app/core/presentation/pages/collaborator/widgets/spotline_event_item.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -9,8 +9,8 @@ import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class CollaboratorDiscoverSpotlineEventsSection extends StatelessWidget {
-  const CollaboratorDiscoverSpotlineEventsSection({super.key});
+class CollaboratorDiscoverSpotlightEventsSection extends StatelessWidget {
+  const CollaboratorDiscoverSpotlightEventsSection({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -35,11 +35,7 @@ class CollaboratorDiscoverSpotlineEventsSection extends StatelessWidget {
     }
     return SliverToBoxAdapter(
       child: Container(
-        padding: EdgeInsets.only(
-          left: Spacing.smMedium,
-          top: Spacing.smMedium,
-          bottom: Spacing.smMedium,
-        ),
+        padding: EdgeInsets.symmetric(vertical: Spacing.smMedium),
         clipBehavior: Clip.antiAlias,
         decoration: ShapeDecoration(
           color: LemonColor.white06,
@@ -52,18 +48,16 @@ class CollaboratorDiscoverSpotlineEventsSection extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            SizedBox(
-              width: double.infinity,
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Container(
+                  SizedBox(
                     width: 18,
                     height: 18,
-                    clipBehavior: Clip.antiAlias,
-                    decoration: const BoxDecoration(),
                     child: ThemeSvgIcon(
                       color: LemonColor.paleViolet,
                       builder: (colorFilter) => Assets.icons.icHouseParty.svg(
@@ -90,6 +84,7 @@ class CollaboratorDiscoverSpotlineEventsSection extends StatelessWidget {
             SizedBox(
               height: 128.w,
               child: ListView.separated(
+                padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
                 separatorBuilder: (context, index) {
                   return SizedBox(
                     width: Spacing.smMedium / 2,

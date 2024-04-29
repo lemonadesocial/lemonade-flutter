@@ -67,10 +67,10 @@ class CollaboratorDiscoverActivitySection extends StatelessWidget {
     ];
 
     return SliverGrid(
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        crossAxisSpacing: 8.0,
-        mainAxisSpacing: 8.0,
+        crossAxisSpacing: Spacing.extraSmall,
+        mainAxisSpacing: Spacing.extraSmall,
         childAspectRatio: 3,
       ),
       delegate: SliverChildBuilderDelegate(
@@ -116,13 +116,11 @@ class _Item extends StatelessWidget {
           icon,
           SizedBox(width: Spacing.extraSmall),
           Expanded(
-            child: SizedBox(
-              child: Text(
-                title,
-                style: Typo.medium.copyWith(
-                  color: colorScheme.onPrimary,
-                  fontWeight: FontWeight.w600,
-                ),
+            child: Text(
+              title,
+              style: Typo.medium.copyWith(
+                color: colorScheme.onPrimary,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ),

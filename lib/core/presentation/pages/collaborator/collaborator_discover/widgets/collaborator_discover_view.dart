@@ -4,7 +4,7 @@ import 'package:app/core/presentation/pages/collaborator/collaborator_discover/w
 import 'package:app/core/presentation/pages/collaborator/collaborator_discover/widgets/collaborator_discover_icebreakers_section.dart';
 import 'package:app/core/presentation/pages/collaborator/collaborator_discover/widgets/collaborator_discover_photos_card.dart';
 import 'package:app/core/presentation/pages/collaborator/collaborator_discover/widgets/collaborator_discover_social_grid_section.dart';
-import 'package:app/core/presentation/pages/collaborator/collaborator_discover/widgets/collaborator_discover_spotline_events_section.dart';
+import 'package:app/core/presentation/pages/collaborator/collaborator_discover/widgets/collaborator_discover_spotlight_events_section.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -58,13 +58,13 @@ class CollaboratorDiscoverView extends StatelessWidget {
             height: 30.w,
           ),
         ),
-        const CollaboratorDiscoverSpotlineEventsSection(),
-        SliverToBoxAdapter(
-          child: SizedBox(
-            height: 30.w,
-          ),
-        ),
-        const CollaboratorDiscoverIcebreakersSection(),
+        const CollaboratorDiscoverSpotlightEventsSection(),
+        // SliverToBoxAdapter(
+        //   child: SizedBox(
+        //     height: 30.w,
+        //   ),
+        // ),
+        // const CollaboratorDiscoverIcebreakersSection(),
       ],
     );
   }

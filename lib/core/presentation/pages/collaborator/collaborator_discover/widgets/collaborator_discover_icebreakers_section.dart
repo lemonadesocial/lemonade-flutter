@@ -42,14 +42,12 @@ class CollaboratorDiscoverIcebreakersSection extends StatelessWidget {
                 ),
                 SizedBox(width: Spacing.smMedium / 2),
                 Expanded(
-                  child: SizedBox(
-                    child: Text(
-                      t.collaborator.iceBreakers,
-                      style: Typo.medium.copyWith(
-                        color: colorScheme.onPrimary,
-                        fontWeight: FontWeight.w600,
-                        height: 0,
-                      ),
+                  child: Text(
+                    t.collaborator.iceBreakers,
+                    style: Typo.medium.copyWith(
+                      color: colorScheme.onPrimary,
+                      fontWeight: FontWeight.w600,
+                      height: 0,
                     ),
                   ),
                 ),
@@ -84,12 +82,9 @@ class CollaboratorDiscoverIcebreakersSection extends StatelessWidget {
             SizedBox(height: Spacing.smMedium),
             Text(
               'My most unusual traits are...',
-              style: TextStyle(
-                color: Colors.white.withOpacity(0.5400000214576721),
-                fontSize: 14,
-                fontFamily: 'Switzer Variable',
+              style: Typo.medium.copyWith(
+                color: colorScheme.onSecondary,
                 fontWeight: FontWeight.w400,
-                height: 0,
               ),
             ),
             SizedBox(height: Spacing.smMedium / 2),

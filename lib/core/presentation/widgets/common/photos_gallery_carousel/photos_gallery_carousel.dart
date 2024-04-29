@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-final IMAGE_SIZE = 351.w;
+final IMAGE_HEIGHT = 351.w;
 
-class PhotoGalleryView extends StatefulWidget {
-  PhotoGalleryView({
+class PhotoGalleryCarousel extends StatefulWidget {
+  PhotoGalleryCarousel({
     super.key,
     required this.photos,
     this.initialIndex = 0,
@@ -22,10 +22,10 @@ class PhotoGalleryView extends StatefulWidget {
   );
 
   @override
-  PhotoGalleryViewState createState() => PhotoGalleryViewState();
+  PhotoGalleryCarouselState createState() => PhotoGalleryCarouselState();
 }
 
-class PhotoGalleryViewState extends State<PhotoGalleryView> {
+class PhotoGalleryCarouselState extends State<PhotoGalleryCarousel> {
   int currentIndex = 0;
 
   @override
@@ -42,7 +42,7 @@ class PhotoGalleryViewState extends State<PhotoGalleryView> {
     return Stack(
       children: [
         SizedBox(
-          height: IMAGE_SIZE,
+          height: IMAGE_HEIGHT,
           child: PageView.builder(
             controller: widget.controller,
             onPageChanged: (pageIndex) {
@@ -57,8 +57,6 @@ class PhotoGalleryViewState extends State<PhotoGalleryView> {
               return Center(
                 child: Image.network(
                   widget.photos[index],
-                  width: IMAGE_SIZE,
-                  height: IMAGE_SIZE,
                   fit: BoxFit.cover,
                 ),
               );
@@ -66,10 +64,13 @@ class PhotoGalleryViewState extends State<PhotoGalleryView> {
           ),
         ),
         Positioned(
-          top: 15,
-          right: 15,
+          top: Spacing.small,
+          right: Spacing.small,
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
+            padding: EdgeInsets.symmetric(
+              horizontal: Spacing.extraSmall,
+              vertical: Spacing.superExtraSmall / 2,
+            ),
             decoration: ShapeDecoration(
               color: LemonColor.chineseBlack,
               shape: RoundedRectangleBorder(
@@ -100,7 +101,7 @@ class PhotoGalleryViewState extends State<PhotoGalleryView> {
         Positioned(
           left: 0,
           right: 0,
-          bottom: 15,
+          bottom: Spacing.small,
           child: Center(
             child: SmoothPageIndicator(
               controller: widget.controller,

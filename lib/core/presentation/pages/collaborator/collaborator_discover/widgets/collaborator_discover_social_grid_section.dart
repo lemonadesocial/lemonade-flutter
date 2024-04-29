@@ -49,10 +49,10 @@ class CollaboratorDiscoverSocialGridSection extends StatelessWidget {
     ];
 
     return SliverGrid(
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        crossAxisSpacing: 8.0,
-        mainAxisSpacing: 8.0,
+        crossAxisSpacing: Spacing.extraSmall,
+        mainAxisSpacing: Spacing.extraSmall,
         childAspectRatio: 3,
       ),
       delegate: SliverChildBuilderDelegate(
