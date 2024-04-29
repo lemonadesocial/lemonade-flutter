@@ -129,6 +129,8 @@ class LemonColor {
 
   static const acidGreen = Color(0x2DC69DF7);
   static const cloudyGrey = Color(0xFF6A6A6A);
+  static const jordyBlue = Color(0xFF86B4F8);
+  static const venetianRed = Color(0xFFF19884);
 }
 
 final ColorScheme lemonadeLightThemeColorScheme = ColorScheme.light(
