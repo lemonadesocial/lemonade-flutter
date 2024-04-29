@@ -1,6 +1,7 @@
 import 'package:app/core/presentation/pages/collaborator/collaborator_discover/widgets/collaborator_discover_activity_section.dart';
 import 'package:app/core/presentation/pages/collaborator/collaborator_discover/widgets/collaborator_discover_basic_info_section.dart';
 import 'package:app/core/presentation/pages/collaborator/collaborator_discover/widgets/collaborator_discover_expertise_offering_card.dart';
+import 'package:app/core/presentation/pages/collaborator/collaborator_discover/widgets/collaborator_discover_icebreakers_section.dart';
 import 'package:app/core/presentation/pages/collaborator/collaborator_discover/widgets/collaborator_discover_photos_card.dart';
 import 'package:app/core/presentation/pages/collaborator/collaborator_discover/widgets/collaborator_discover_social_grid_section.dart';
 import 'package:app/core/presentation/pages/collaborator/collaborator_discover/widgets/collaborator_discover_spotlight_events_section.dart';
@@ -58,12 +59,12 @@ class CollaboratorDiscoverView extends StatelessWidget {
           ),
         ),
         const CollaboratorDiscoverSpotlightEventsSection(),
-        // SliverToBoxAdapter(
-        //   child: SizedBox(
-        //     height: 30.w,
-        //   ),
-        // ),
-        // const CollaboratorDiscoverIcebreakersSection(),
+        SliverToBoxAdapter(
+          child: SizedBox(
+            height: 30.w,
+          ),
+        ),
+        const CollaboratorDiscoverIcebreakersSection(),
       ],
     );
   }
