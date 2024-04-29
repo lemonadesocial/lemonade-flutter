@@ -1,3 +1,4 @@
+import 'package:app/core/presentation/pages/collaborator/sub_pages/collaborator_edit_profile_page/widgets/collaborator_edit_icebreaker/widgets/collaborator_select_icebreaker_prompt_bottomsheet.dart';
 import 'package:app/core/presentation/pages/collaborator/sub_pages/collaborator_edit_profile_page/widgets/remove_icon_wrapper.dart';
 import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
@@ -9,6 +10,7 @@ import 'package:app/theme/typo.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
 class CollaboratorEditIcebreakers extends StatelessWidget {
@@ -41,6 +43,12 @@ class CollaboratorEditIcebreakers extends StatelessWidget {
             strokeWidth: 2.w,
             radius: Radius.circular(LemonRadius.small),
             child: LemonOutlineButton(
+              onTap: () => showCupertinoModalBottomSheet(
+                context: context,
+                backgroundColor: LemonColor.atomicBlack,
+                builder: (mContext) =>
+                    const CollaboratorSelectIcebreakerPromptBottomsheet(),
+              ),
               borderColor: Colors.transparent,
               leading: ThemeSvgIcon(
                 color: colorScheme.onSecondary,

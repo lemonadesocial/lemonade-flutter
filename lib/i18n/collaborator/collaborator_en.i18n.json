@@ -24,6 +24,8 @@
         "spotlightEvents": "Spotlight events",
         "addToSpotlight": "Add to Spotlight",
         "icebreakers": "Icebreakers",
-        "addIcebreaker": "Add icebreaker"
+        "addIcebreaker": "Add icebreaker",
+        "selectPromptDescription": "Select a fun prompt to answer & add to your profile to instantly break the ice!",
+        "addPromptAnswerPlaceholder": "Enter your answer here"
     }
 }
