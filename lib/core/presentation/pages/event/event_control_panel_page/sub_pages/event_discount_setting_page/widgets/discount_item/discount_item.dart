@@ -93,7 +93,7 @@ class EventDiscountItem extends StatelessWidget {
                             SizedBox(height: 2.w),
                             Text(
                               t.event.eventPromotions.usedCount(
-                                count: discount.useCount ?? 0,
+                                count: discount.useCount?.toInt() ?? 0,
                                 total: discount.ticketLimit?.toInt() ?? 0,
                               ),
                               style: Typo.medium.copyWith(

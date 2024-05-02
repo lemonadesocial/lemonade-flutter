@@ -1,5 +1,6 @@
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/presentation/pages/event/event_dashboard/sub_pages/event_dashboard_insight_page/event_dashboard_insight_page.dart';
+import 'package:app/core/presentation/pages/event/event_dashboard/sub_pages/event_dashboard_revenue_page/event_dashboard_revenue_page.dart';
 import 'package:app/core/presentation/pages/event/event_dashboard/sub_pages/event_dashboard_rewards_page/event_dashboard_rewards_page.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
@@ -39,8 +40,7 @@ class _EventDashboardPageState extends State<EventDashboardPage>
   initState() {
     super.initState();
     cubeClient = ValueNotifier(CubeGQL(eventId: widget.eventId).client);
-    // TODO: hide revenue so only 2
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
     _tabController.addListener(() {
       if (activeIndex != _tabController.index) {
         _listController.scrollToIndex(
@@ -68,13 +68,12 @@ class _EventDashboardPageState extends State<EventDashboardPage>
         activeColor: LemonColor.paleViolet,
         inactiveColor: LemonColor.white54,
       ),
-      // TODO: hide revenue
-      // _TabItem(
-      //   title: t.event.eventDashboard.revenue.revenueTitle,
-      //   icon: Assets.icons.icCashVariant,
-      //   activeColor: LemonColor.paleViolet,
-      //   inactiveColor: LemonColor.white54,
-      // ),
+      _TabItem(
+        title: t.event.eventDashboard.revenue.revenueTitle,
+        icon: Assets.icons.icCashVariant,
+        activeColor: LemonColor.paleViolet,
+        inactiveColor: LemonColor.white54,
+      ),
       _TabItem(
         title: t.event.eventDashboard.reward.rewardTitle,
         icon: Assets.icons.icReward,
@@ -122,6 +121,7 @@ class _EventDashboardPageState extends State<EventDashboardPage>
                     EventDashboardInsightPage(
                       event: event,
                     ),
+                    EventDashboardRevenuePage(event: event),
                     EventDashboardRewardsPage(event: event),
                   ],
                 ),

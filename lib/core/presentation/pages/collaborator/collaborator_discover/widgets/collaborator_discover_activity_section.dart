@@ -14,20 +14,19 @@ class _ItemData {
   _ItemData({required this.title, required this.themeSvgIcon});
 }
 
-class CollaboratorDiscoverSocialGridSection extends StatelessWidget {
-  const CollaboratorDiscoverSocialGridSection({
+class CollaboratorDiscoverActivitySection extends StatelessWidget {
+  const CollaboratorDiscoverActivitySection({
     super.key,
   });
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
     final List<_ItemData> items = [
       _ItemData(
-        title: t.profile.socials.farcaster,
+        title: t.collaborator.eventHosted,
         themeSvgIcon: ThemeSvgIcon(
-          color: colorScheme.onPrimary,
-          builder: (colorFilter) => Assets.icons.icFarcaster.svg(
+          color: LemonColor.paleViolet,
+          builder: (colorFilter) => Assets.icons.icHostOutline.svg(
             colorFilter: colorFilter,
             width: 18.w,
             height: 18.w,
@@ -35,17 +34,36 @@ class CollaboratorDiscoverSocialGridSection extends StatelessWidget {
         ),
       ),
       _ItemData(
-        title: t.profile.socials.twitter,
+        title: t.collaborator.eventAttended,
         themeSvgIcon: ThemeSvgIcon(
-          color: colorScheme.onPrimary,
-          builder: (colorFilter) => Assets.icons.icTwitter.svg(
+          color: LemonColor.jordyBlue,
+          builder: (colorFilter) => Assets.icons.icHouseParty.svg(
             colorFilter: colorFilter,
             width: 18.w,
             height: 18.w,
           ),
         ),
       ),
-      // Add more items here as needed
+      _ItemData(
+        title: t.collaborator.nftCreated,
+        themeSvgIcon: ThemeSvgIcon(
+          color: LemonColor.venetianRed,
+          builder: (colorFilter) => Assets.icons.icCrystal.svg(
+            colorFilter: colorFilter,
+            width: 18.w,
+            height: 18.w,
+          ),
+        ),
+      ),
+      _ItemData(
+        title: t.collaborator.nftCollected,
+        themeSvgIcon: ThemeSvgIcon(
+          builder: (colorFilter) => Assets.icons.icStarCircle.svg(
+            width: 18.w,
+            height: 18.w,
+          ),
+        ),
+      ),
     ];
 
     return SliverGrid(
@@ -62,7 +80,7 @@ class CollaboratorDiscoverSocialGridSection extends StatelessWidget {
             icon: items[index].themeSvgIcon,
           );
         },
-        childCount: 2,
+        childCount: items.length,
       ),
     );
   }
@@ -98,13 +116,11 @@ class _Item extends StatelessWidget {
           icon,
           SizedBox(width: Spacing.extraSmall),
           Expanded(
-            child: SizedBox(
-              child: Text(
-                title,
-                style: Typo.medium.copyWith(
-                  color: colorScheme.onPrimary,
-                  fontWeight: FontWeight.w600,
-                ),
+            child: Text(
+              title,
+              style: Typo.medium.copyWith(
+                color: colorScheme.onPrimary,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ),

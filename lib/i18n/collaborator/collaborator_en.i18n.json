@@ -1,4 +1,11 @@
 {
+    "eventHosted": "Event hosted",
+    "eventAttended": "Event attended",
+    "nftCreated": "NFTs created",
+    "nftCollected": "NFTs collected",
+    "iceBreakers": "Icebreakers",
+    "countMore": "$count more",
+    "spotlightEvents": "Spotlight events",
     "chat": "Chat",
     "likes": "Likes",
     "matches": "Matches",

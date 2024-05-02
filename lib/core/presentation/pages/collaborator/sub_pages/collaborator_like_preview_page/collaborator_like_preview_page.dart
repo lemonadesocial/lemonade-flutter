@@ -1,4 +1,4 @@
-import 'package:app/core/presentation/pages/collaborator/collaborator_discover/views/collaborator_user_discover_view.dart';
+import 'package:app/core/presentation/pages/collaborator/collaborator_discover/widgets/collaborator_discover_view.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_icon_button_widget.dart';
@@ -51,9 +51,7 @@ class CollaboratorLikePreviewPage extends StatelessWidget {
               ),
               SliverPadding(
                 padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
-                sliver: const SliverToBoxAdapter(
-                  child: CollaboratorUserDiscoverView(),
-                ),
+                sliver: const CollaboratorDiscoverView(),
               ),
             ],
           ),

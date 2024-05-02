@@ -1,4 +1,4 @@
-import 'package:app/core/utils/calendar_utils.dart';
+import 'package:app/theme/color.dart';
 import 'package:flutter/material.dart';
 
 class ChartDateRangeBuilder extends StatefulWidget {
@@ -36,43 +36,44 @@ class _ChartDateRangeBuilderState extends State<ChartDateRangeBuilder> {
     );
   }
 
-  void _selectStartDate() {
-    showCalendar(
-      context,
-      initialDay: _timeRange.start,
-      onDateSelect: (selectedDate) {
-        if (selectedDate.isAfter(_timeRange.end)) {
-          return;
-        }
-        setState(() {
-          _timeRange = DateTimeRange(start: selectedDate, end: _timeRange.end);
-        });
+  void _selectTimeRange() async {
+    final newTimeRange = await showDateRangePicker(
+      context: context,
+      firstDate: DateTime(1900),
+      lastDate: DateTime(3000),
+      initialDateRange: _timeRange,
+      initialEntryMode: DatePickerEntryMode.calendarOnly,
+      useRootNavigator: true,
+      builder: (context, child) {
+        return Theme(
+          data: ThemeData.dark().copyWith(
+            datePickerTheme: DatePickerThemeData(
+              rangePickerBackgroundColor: LemonColor.atomicBlack,
+              rangeSelectionBackgroundColor: LemonColor.paleViolet12,
+            ),
+            colorScheme: ThemeData.dark().colorScheme.copyWith(
+                  primary: LemonColor.paleViolet,
+                  onPrimary: LemonColor.white,
+                ),
+          ),
+          child: child!,
+        );
       },
     );
-  }
-
-  void _selectEndDate() {
-    showCalendar(
-      context,
-      initialDay: _timeRange.end,
-      onDateSelect: (selectedDate) {
-        if (selectedDate.isBefore(_timeRange.start)) {
-          return;
-        }
-        setState(() {
-          _timeRange =
-              DateTimeRange(start: _timeRange.start, end: selectedDate);
-        });
-      },
-    );
+    if (newTimeRange == null) {
+      return;
+    }
+    setState(() {
+      _timeRange = newTimeRange;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return widget.builder(
       _timeRange,
-      selectEndDate: _selectEndDate,
-      selectStartDate: _selectStartDate,
+      selectEndDate: _selectTimeRange,
+      selectStartDate: _selectTimeRange,
     );
   }
 }

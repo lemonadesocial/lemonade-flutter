@@ -1,4 +1,4 @@
-import 'package:app/core/presentation/widgets/common/photos_gallery_view/photo_gallery_view.dart';
+import 'package:app/core/presentation/widgets/common/photos_gallery_carousel/photos_gallery_carousel.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -19,7 +19,7 @@ class CollaboratorDiscoverPhotosCard extends StatelessWidget {
       decoration: ShapeDecoration(
         color: LemonColor.white06,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(18),
+          borderRadius: BorderRadius.circular(LemonRadius.normal),
         ),
       ),
       child: ClipRRect(
@@ -29,23 +29,21 @@ class CollaboratorDiscoverPhotosCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            PhotoGalleryView(
+            PhotoGalleryCarousel(
               photos: photos,
             ),
             Container(
-              padding: const EdgeInsets.all(18),
+              padding: EdgeInsets.all(Spacing.smMedium),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
-                    child: SizedBox(
-                      child: Text(
-                        'Turning stress into art. Metaverse much? Learning something new everyday!',
-                        style: Typo.medium.copyWith(
-                          color: colorScheme.onSecondary,
-                        ),
+                    child: Text(
+                      'Turning stress into art. Metaverse much? Learning something new everyday!',
+                      style: Typo.medium.copyWith(
+                        color: colorScheme.onSecondary,
                       ),
                     ),
                   ),
