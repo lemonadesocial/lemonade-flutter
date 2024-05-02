@@ -481,5 +481,17 @@ final collaboratorRoutes = AutoRoute(
       initial: true,
       page: CollaboratorDiscoverRoute.page,
     ),
+    AutoRoute(
+      page: CollaboratorChatRoute.page,
+    ),
+    AutoRoute(
+      page: CollaboratorLikesRoute.page,
+    ),
+    AutoRoute(
+      page: CollaboratorLikePreviewRoute.page,
+    ),
+    AutoRoute(
+      page: CollaboratorEditProfileRoute.page,
+    ),
   ],
 );

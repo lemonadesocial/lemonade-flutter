@@ -3,7 +3,36 @@
     "eventAttended": "Event attended",
     "nftCreated": "NFTs created",
     "nftCollected": "NFTs collected",
-    "spotlightEvents": "Spotlight events",
     "iceBreakers": "Icebreakers",
-    "countMore": "$count more"
+    "countMore": "$count more",
+    "spotlightEvents": "Spotlight events",
+    "chat": "Chat",
+    "likes": "Likes",
+    "matches": "Matches",
+    "expertise": "Expertise",
+    "offering": "Offering",
+    "sendMessage": "Send a message",
+    "sendLike": "Send like",
+    "likedYourProfile": "Liked your profile",
+    "needHelpWith": "Needs help with",
+    "editProfile": {
+        "aboutYou": {
+            "aboutYouTitle": "About you",
+            "displayName": "Display name",
+            "shortBio": "Short bio",
+            "jobTitle": "Job title",
+            "organization": "Organization",
+            "basedIn": "Based in",
+            "languagesSpoken": "Languages spoken",
+            "age": "Age",
+            "ethnicity": "Ethnicity",
+            "empty": "N/A"
+        },
+        "spotlightEvents": "Spotlight events",
+        "addToSpotlight": "Add to Spotlight",
+        "icebreakers": "Icebreakers",
+        "addIcebreaker": "Add icebreaker",
+        "selectPromptDescription": "Select a fun prompt to answer & add to your profile to instantly break the ice!",
+        "addPromptAnswerPlaceholder": "Enter your answer here"
+    }
 }

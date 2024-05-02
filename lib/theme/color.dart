@@ -17,6 +17,7 @@ class LemonColor {
   static Color white6 = const Color(0xffFFFFFF).withOpacity(0.6);
   static Color white10 = const Color(0xffFFFFFF).withOpacity(0.10);
   static Color white12 = const Color(0xffFFFFFF).withOpacity(0.12);
+  static Color white12Solid = const Color.fromRGBO(75, 75, 75, 1);
   static Color white15 = const Color(0xffFFFFFF).withOpacity(0.15);
   static Color white18 = const Color(0xffFFFFFF).withOpacity(0.18);
   static Color white36 = const Color(0xffFFFFFF).withOpacity(0.36);
