@@ -25,7 +25,10 @@ class PostCardActions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final isLoggedIn = context.watch<AuthBloc>().state.maybeWhen(authenticated: (_) => true, orElse: () => false);
+    final isLoggedIn = context
+        .watch<AuthBloc>()
+        .state
+        .maybeWhen(authenticated: (_) => true, orElse: () => false);
     return Padding(
       padding: EdgeInsets.only(top: Spacing.xSmall),
       child: Row(
