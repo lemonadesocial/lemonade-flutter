@@ -28,15 +28,6 @@ class EventDiscoverItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final imageWidget = CachedNetworkImage(
-      imageUrl: ImageUtils.generateUrl(
-        file: eventPhoto,
-        imageConfig: ImageConfig.eventPhoto,
-      ),
-      errorWidget: (_, __, ___) => ImagePlaceholder.eventCard(),
-      placeholder: (_, __) => ImagePlaceholder.eventCard(),
-      fit: BoxFit.cover,
-    );
     final colorScheme = Theme.of(context).colorScheme;
     final isIpad = DeviceUtils.isIpad();
     return Container(
@@ -59,7 +50,15 @@ class EventDiscoverItem extends StatelessWidget {
               borderRadius: BorderRadius.circular(
                 LemonRadius.small,
               ),
-              child: imageWidget,
+              child: CachedNetworkImage(
+                imageUrl: ImageUtils.generateUrl(
+                  file: eventPhoto,
+                  imageConfig: ImageConfig.eventPhoto,
+                ),
+                errorWidget: (_, __, ___) => ImagePlaceholder.eventCard(),
+                placeholder: (_, __) => ImagePlaceholder.eventCard(),
+                fit: BoxFit.cover,
+              ),
             ),
           ),
           Positioned.fill(

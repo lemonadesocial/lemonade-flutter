@@ -204,19 +204,6 @@ class EventPostCard extends StatelessWidget {
   }
 
   SizedBox _buildEventPhoto() {
-    final imageWidget = CachedNetworkImage(
-      imageUrl: ImageUtils.generateUrl(
-        file: eventPhoto,
-        imageConfig: ImageConfig.eventPhoto,
-      ),
-      errorWidget: (_, __, ___) => ImagePlaceholder.eventCard(),
-      placeholder: (_, __) => ImagePlaceholder.eventCard(),
-      fit: BoxFit.cover,
-    );
-    // : Image(
-    //     image: Assets.images.bgNoPhotoEvent.provider(),
-    //     fit: BoxFit.cover,
-    //   );
     return SizedBox(
       height: DeviceUtils.isIpad() ? 340.h : 170.h,
       width: double.infinity,
@@ -225,7 +212,15 @@ class EventPostCard extends StatelessWidget {
           topRight: Radius.circular(LemonRadius.xSmall),
           topLeft: Radius.circular(LemonRadius.xSmall),
         ),
-        child: imageWidget,
+        child: CachedNetworkImage(
+          imageUrl: ImageUtils.generateUrl(
+            file: eventPhoto,
+            imageConfig: ImageConfig.eventPhoto,
+          ),
+          errorWidget: (_, __, ___) => ImagePlaceholder.eventCard(),
+          placeholder: (_, __) => ImagePlaceholder.eventCard(),
+          fit: BoxFit.cover,
+        ),
       ),
     );
   }
