@@ -49,7 +49,6 @@ class CommunityPage extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                 ),
                 indicator: CustomTabIndicator(color: LemonColor.paleViolet),
-                indicatorPadding: EdgeInsets.symmetric(horizontal: 32.w),
                 tabs: <Widget>[
                   Tab(text: t.setting.friend),
                   Tab(text: t.setting.follower),
