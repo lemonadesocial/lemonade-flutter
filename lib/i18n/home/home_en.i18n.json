@@ -13,5 +13,15 @@
     "poapDesc": "turn tickets into digital collectibles",
     "collectible": "Collectible",
     "collectibleDesc": "virtual or IRL collectibles",
-    "emptyPosts": "No posts yet"
+    "emptyPosts": "No posts yet",
+    "appBar": {
+        "moreActions": {
+            "myProfile": "My profile",
+            "setting": "Settings",
+            "reportIssue": "Report an issue",
+            "rateApp": "Rate app",
+            "followLemonade": "Follow Lemonade",
+            "signOut": "Sign out"
+        }
+    }
 }

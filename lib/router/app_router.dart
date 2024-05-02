@@ -33,14 +33,25 @@ class AppRouter extends $AppRouter {
               page: NotificationRoute.page,
             ),
             AutoRoute(
-              path: 'me',
-              page: MyProfileRoute.page,
+              page: ChatStackRoute.page,
+              path: 'chat',
+              children: [
+                AutoRoute(
+                  initial: true,
+                  path: 'list',
+                  page: ChatListRoute.page,
+                ),
+              ],
             ),
             AutoRoute(
               path: '404',
               page: EmptyRoute.page,
             ),
           ],
+        ),
+        AutoRoute(
+          path: '/me',
+          page: MyProfileRoute.page,
         ),
         AutoRoute(
           path: '/wallet',
@@ -95,7 +106,8 @@ class AppRouter extends $AppRouter {
         AutoRoute(page: LocationRequestRoute.page),
         AutoRoute(page: AIRoute.page),
         AutoRoute(page: MyEventsRoute.page),
-        chatRoutes,
+        AutoRoute(path: '/chat/detail/:id', page: ChatRoute.page),
+        ...chatRoutes,
         eventBuyTicketsRoutes,
         createEventRoutes,
         eventDetailRoutes,
@@ -114,40 +126,32 @@ final postRoutes = [
   AutoRoute(page: PostDetailRoute.page),
 ];
 
-final chatRoutes = AutoRoute(
-  page: ChatStackRoute.page,
-  path: '/chat',
-  children: [
-    AutoRoute(
-      initial: true,
-      path: '',
-      page: ChatListRoute.page,
-    ),
-    AutoRoute(path: 'detail/:id', page: ChatRoute.page),
-    AutoRoute(
-      path: 'setting/:id',
-      page: ChatSettingRoute.page,
-    ),
-    AutoRoute(
-      page: CreateGuildChannelRoute.page,
-      children: [
-        AutoRoute(
-          initial: true,
-          page: CreateGuildChannelBaseRoute.page,
-        ),
-        AutoRoute(
-          page: CreateGuildChannelCommunityGatedRoute.page,
-        ),
-        AutoRoute(
-          page: CreateGuildChannelAccessRoute.page,
-        ),
-        AutoRoute(
-          page: CreateGuildProcessingRoute.page,
-        ),
-      ],
-    ),
-  ],
-);
+final chatRoutes = [
+  AutoRoute(path: '/chat/detail/:id', page: ChatRoute.page),
+  AutoRoute(
+    path: '/chat/setting/:id',
+    page: ChatSettingRoute.page,
+  ),
+  AutoRoute(
+    path: '/chat/create_guild',
+    page: CreateGuildChannelRoute.page,
+    children: [
+      AutoRoute(
+        initial: true,
+        page: CreateGuildChannelBaseRoute.page,
+      ),
+      AutoRoute(
+        page: CreateGuildChannelCommunityGatedRoute.page,
+      ),
+      AutoRoute(
+        page: CreateGuildChannelAccessRoute.page,
+      ),
+      AutoRoute(
+        page: CreateGuildProcessingRoute.page,
+      ),
+    ],
+  ),
+];
 
 final eventRoutes = [
   AutoRoute(

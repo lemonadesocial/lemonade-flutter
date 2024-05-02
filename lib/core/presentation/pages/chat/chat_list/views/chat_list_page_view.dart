@@ -7,8 +7,8 @@ import 'package:app/core/presentation/pages/chat/chat_list/widgets/guild_room_it
 import 'package:app/core/presentation/widgets/chat/create_chat_button.dart';
 import 'package:app/core/presentation/widgets/chat/matrix_avatar.dart';
 import 'package:app/core/presentation/widgets/chat/spaces_drawer.dart';
-import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
+import 'package:app/core/presentation/widgets/home_appbar_v2/home_appbar_v2.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/service/matrix/matrix_service.dart';
@@ -64,12 +64,9 @@ class _ChatListPageViewState extends State<ChatListPageView>
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-    final activeSpace = context.read<ChatSpaceBloc>().state.activeSpace;
     return Scaffold(
-      appBar: LemonAppBar(
-        title: activeSpace != null
-            ? activeSpace.getLocalizedDisplayname()
-            : t.common.lemonade,
+      appBar: HomeAppBarV2(
+        title: t.chat.chat,
         actions: [
           BlocBuilder<ChatSpaceBloc, ChatSpaceState>(
             builder: (context, chatSpaceState) => Builder(
@@ -240,8 +237,12 @@ class _ChatListPageViewState extends State<ChatListPageView>
           ),
         ),
       ),
-      floatingActionButton:
-          CreateChatButton(selectedTabIndex: selectedTabIndex),
+      floatingActionButton: Container(
+        margin: EdgeInsets.only(bottom: 100.w),
+        child: CreateChatButton(
+          selectedTabIndex: selectedTabIndex,
+        ),
+      ),
     );
   }
 }

@@ -38,6 +38,12 @@ class AppConfig {
   static get lensUrl => 'https://www.lens.xyz';
   static get calendlyUrl => 'https://calendly.com';
 
+  static get lemonadeTwitterUrl => 'https://twitter.com/_lemonadesocial';
+  static get lemonadeIosDownloadUrl =>
+      'https://apps.apple.com/us/app/lemonade-social/id6450694884';
+  static get lemonadeAndroidDownloadUrl =>
+      'https://play.google.com/store/apps/details?id=social.lemonade.app';
+
   // Wallet connect
   static get walletConnectProjectId => dotenv.env['WALLET_CONNECT_PROJECT_ID'];
 
