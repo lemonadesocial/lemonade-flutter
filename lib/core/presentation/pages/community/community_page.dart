@@ -13,7 +13,6 @@ import 'package:app/theme/typo.dart';
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 @RoutePage()
 class CommunityPage extends StatelessWidget {
@@ -49,7 +48,6 @@ class CommunityPage extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                 ),
                 indicator: CustomTabIndicator(color: LemonColor.paleViolet),
-                indicatorPadding: EdgeInsets.symmetric(horizontal: 32.w),
                 tabs: <Widget>[
                   Tab(text: t.setting.friend),
                   Tab(text: t.setting.follower),
