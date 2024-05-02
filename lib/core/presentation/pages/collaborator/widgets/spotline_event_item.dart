@@ -1,4 +1,3 @@
-import 'package:app/core/config.dart';
 import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
@@ -26,12 +25,6 @@ class SpotlineEventItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final imageUrl = eventPhoto != null
-        ? ImageUtils.generateUrl(
-            file: eventPhoto,
-            imageConfig: ImageConfig.eventPhoto,
-          )
-        : '${AppConfig.assetPrefix}/assets/images/no_photo_event.png';
     final colorScheme = Theme.of(context).colorScheme;
     return Container(
       width: 128.w,
@@ -54,11 +47,13 @@ class SpotlineEventItem extends StatelessWidget {
                 LemonRadius.small,
               ),
               child: CachedNetworkImage(
+                imageUrl: ImageUtils.generateUrl(
+                  file: eventPhoto,
+                  imageConfig: ImageConfig.eventPhoto,
+                ),
+                errorWidget: (_, __, ___) => ImagePlaceholder.eventCard(),
+                placeholder: (_, __) => ImagePlaceholder.eventCard(),
                 fit: BoxFit.cover,
-                imageUrl: imageUrl,
-                placeholder: (_, __) => ImagePlaceholder.defaultPlaceholder(),
-                errorWidget: (_, __, ___) =>
-                    ImagePlaceholder.defaultPlaceholder(),
               ),
             ),
           ),

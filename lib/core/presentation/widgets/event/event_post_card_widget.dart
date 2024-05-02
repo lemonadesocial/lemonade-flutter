@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:app/core/config.dart';
 import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/widgets/event/event_buy_ticket_button_widget.dart';
@@ -205,12 +204,6 @@ class EventPostCard extends StatelessWidget {
   }
 
   SizedBox _buildEventPhoto() {
-    final imageUrl = eventPhoto != null
-        ? ImageUtils.generateUrl(
-            file: eventPhoto,
-            imageConfig: ImageConfig.eventPhoto,
-          )
-        : '${AppConfig.assetPrefix}/assets/images/no_photo_event.png';
     return SizedBox(
       height: DeviceUtils.isIpad() ? 340.h : 170.h,
       width: double.infinity,
@@ -220,9 +213,12 @@ class EventPostCard extends StatelessWidget {
           topLeft: Radius.circular(LemonRadius.xSmall),
         ),
         child: CachedNetworkImage(
-          imageUrl: imageUrl,
-          errorWidget: (_, __, ___) => ImagePlaceholder.defaultPlaceholder(),
-          placeholder: (_, __) => ImagePlaceholder.defaultPlaceholder(),
+          imageUrl: ImageUtils.generateUrl(
+            file: eventPhoto,
+            imageConfig: ImageConfig.eventPhoto,
+          ),
+          errorWidget: (_, __, ___) => ImagePlaceholder.eventCard(),
+          placeholder: (_, __) => ImagePlaceholder.eventCard(),
           fit: BoxFit.cover,
         ),
       ),
