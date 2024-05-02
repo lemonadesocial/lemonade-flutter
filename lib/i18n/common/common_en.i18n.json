@@ -62,7 +62,10 @@
         "post": "Post",
         "receipt": "receipt",
         "publish": "Publish",
-        "join": "Join"
+        "join": "Join",
+        "shareUser": "Share user",
+        "reportUser": "Report user",
+        "editMyProfile": "Edit my profile"  
     },
     "followed": "Followed",
     "anonymous": "anonymous",
