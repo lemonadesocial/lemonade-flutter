@@ -1,8 +1,8 @@
 import 'package:app/core/presentation/pages/home/views/list/home_newsfeed_list.dart';
-import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
+import 'package:app/core/presentation/widgets/home_appbar/home_appbar_default_more_actions_widget.dart';
+import 'package:app/core/presentation/widgets/home_appbar/home_appbar_v2.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/service/shake/shake_service.dart';
-import 'package:app/core/utils/drawer_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
@@ -40,36 +40,29 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      appBar: LemonAppBar(
+      appBar: HomeAppBar(
         title: t.home.newsfeed,
-        leading: InkWell(
-          onTap: () => DrawerUtils.openDrawer(context),
-          child: Icon(
-            Icons.menu_outlined,
-            color: colorScheme.onPrimary,
-          ),
-        ),
         actions: [
-          Padding(
-            padding: EdgeInsets.only(right: Spacing.xSmall),
-            child: InkWell(
-              onTap: () {
-                context.read<AuthBloc>().state.maybeWhen(
-                      authenticated: (session) => AutoRouter.of(context)
-                          .navigate(const ChatListRoute()),
-                      orElse: () =>
-                          AutoRouter.of(context).navigate(const LoginRoute()),
-                    );
-              },
-              child: ThemeSvgIcon(
-                color: colorScheme.onPrimary,
-                builder: (filter) => Assets.icons.icChatBubble.svg(
-                  colorFilter: filter,
-                ),
+          InkWell(
+            onTap: () {
+              context.read<AuthBloc>().state.maybeWhen(
+                    authenticated: (session) => AutoRouter.of(context)
+                        .navigate(MyEventTicketsListRoute()),
+                    orElse: () =>
+                        AutoRouter.of(context).navigate(const LoginRoute()),
+                  );
+            },
+            child: ThemeSvgIcon(
+              builder: (filter) => Assets.icons.icTicket.svg(
+                colorFilter: filter,
               ),
             ),
+          ),
+          SizedBox(width: Spacing.medium),
+          Padding(
+            padding: EdgeInsets.only(right: Spacing.xSmall),
+            child: const HomeAppBarDefaultMoreActionsWidget(),
           ),
         ],
       ),

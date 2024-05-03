@@ -3,9 +3,6 @@ import 'dart:io';
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/presentation/widgets/bottom_bar/app_tabs.dart';
 import 'package:app/core/presentation/widgets/home/bottom_bar_create_button.dart';
-import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
-import 'package:app/core/presentation/widgets/loading_widget.dart';
-import 'package:app/core/utils/avatar_utils.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
@@ -123,30 +120,7 @@ class BottomBarState extends State<BottomBar>
   Widget _buildIcon(BuildContext context, TabData tabData, bool isSelected) {
     final icon = tabData.icon;
     final selectedIcon = tabData.selectedIcon;
-    // Handle display user avatar for tab profile
-    if (tabData.tab == AppTab.profile) {
-      return BlocBuilder<AuthBloc, AuthState>(
-        builder: (context, authState) {
-          if (authState is AuthStateAuthenticated) {
-            return Center(
-              child: LemonCircleAvatar(
-                size: 24.w,
-                url: AvatarUtils.getProfileAvatar(
-                  userAvatar: authState.authSession.imageAvatar,
-                  userId: authState.authSession.userId,
-                ),
-              ),
-            );
-          } else if (authState is AuthStateProcessing) {
-            return Loading.defaultLoading(context);
-          } else {
-            return isSelected ? selectedIcon : icon;
-          }
-        },
-      );
-    } else {
-      return isSelected ? selectedIcon : icon;
-    }
+    return isSelected ? selectedIcon : icon;
   }
 
   void _handleTabTap(BuildContext context, TabData tabData) {
@@ -162,9 +136,8 @@ class BottomBarState extends State<BottomBar>
 
     /// Handle navigation
     final authState = BlocProvider.of<AuthBloc>(context).state;
-    if (tabData.tab == AppTab.profile ||
+    if (tabData.tab == AppTab.chat ||
         tabData.tab == AppTab.notification ||
-        // tabData.tab == AppTab.wallet ||
         tabData.tab == AppTab.discover) {
       if (authState is AuthStateAuthenticated) {
         _triggerAnimation(tabData);

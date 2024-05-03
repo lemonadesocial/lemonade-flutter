@@ -82,7 +82,7 @@ class _RootPageViewState extends State<RootPage> {
                       orElse: EmptyRoute.new,
                     ),
                     authState.maybeWhen(
-                      authenticated: (session) => const MyProfileRoute(),
+                      authenticated: (session) => const ChatStackRoute(),
                       orElse: EmptyRoute.new,
                     ),
                   ],

@@ -1,5 +1,6 @@
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
+import 'package:app/theme/color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -7,7 +8,7 @@ enum AppTab {
   home,
   discover,
   notification,
-  profile,
+  chat,
 }
 
 class TabData {
@@ -74,17 +75,19 @@ final List<TabData> tabs = [
     ),
   ),
   TabData(
-    AppTab.profile,
-    '/me',
+    AppTab.chat,
+    '/chat',
     ThemeSvgIcon(
-      builder: (filter) => Assets.icons.icPerson.svg(
+      color: LemonColor.white54,
+      builder: (filter) => Assets.icons.icChatBubble.svg(
         colorFilter: filter,
         width: 24.w,
         height: 24.w,
       ),
     ),
     ThemeSvgIcon(
-      builder: (filter) => Assets.icons.icPerson.svg(
+      color: LemonColor.white87,
+      builder: (filter) => Assets.icons.icChatBubbleFilled.svg(
         colorFilter: filter,
         width: 24.w,
         height: 24.w,

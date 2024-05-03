@@ -7,6 +7,7 @@ import 'package:app/theme/color.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class CreateChatButton extends StatelessWidget {
   final int selectedTabIndex;
@@ -21,7 +22,11 @@ class CreateChatButton extends StatelessWidget {
       onTap: () {
         if (selectedTabIndex == ChatListTabs.messages.tabIndex ||
             selectedTabIndex == ChatListTabs.channels.tabIndex) {
-          const NewChatPageDialog().showAsBottomSheet(context);
+          showCupertinoModalBottomSheet(
+            context: context,
+            builder: (mContext) => const NewChatPageDialog(),
+            useRootNavigator: true,
+          );
         } else if (selectedTabIndex == ChatListTabs.guilds.tabIndex) {
           AutoRouter.of(context).navigate(const CreateGuildChannelRoute());
         }

@@ -174,7 +174,9 @@ class SettingPageView extends StatelessWidget {
                     SettingTileWidget(
                       title: t.auth.logout,
                       subTitle: t.setting.logoutDesc,
-                      leading: Assets.icons.icLogout.svg(),
+                      leading: ThemeSvgIcon(
+                        builder: (filter) => Assets.icons.icLogout.svg(),
+                      ),
                       trailing: Assets.icons.icArrowBack.svg(
                         width: 18.w,
                         height: 18.w,

@@ -1,4 +1,3 @@
-import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/profile/block_user_bloc/block_user_bloc.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/dpos/common/dropdown_item_dpo.dart';
@@ -17,11 +16,9 @@ import 'package:app/core/presentation/widgets/floating_frosted_glass_dropdown_wi
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/core/utils/dialog_utils.dart';
-import 'package:app/core/utils/drawer_utils.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
@@ -91,41 +88,9 @@ class _ProfilePageViewState extends State<ProfilePageView>
                       delegate: ProfileAnimatedAppBar(
                         title:
                             '@${widget.userProfile.username ?? t.common.anonymous}',
-                        leading: isMe
-                            ? InkWell(
-                                onTap: () => DrawerUtils.openDrawer(context),
-                                child: Icon(
-                                  Icons.menu_outlined,
-                                  color: colorScheme.onPrimary,
-                                ),
-                              )
-                            : const LemonBackButton(),
+                        leading: const LemonBackButton(),
                         actions: [
-                          if (isMe)
-                            Padding(
-                              padding: EdgeInsets.only(right: Spacing.xSmall),
-                              child: InkWell(
-                                onTap: () {
-                                  context.read<AuthBloc>().state.maybeWhen(
-                                        authenticated: (session) =>
-                                            AutoRouter.of(context).navigate(
-                                          const ChatListRoute(),
-                                        ),
-                                        orElse: () => AutoRouter.of(
-                                          context,
-                                        ).navigate(const LoginRoute()),
-                                      );
-                                },
-                                child: ThemeSvgIcon(
-                                  color: colorScheme.onPrimary,
-                                  builder: (filter) =>
-                                      Assets.icons.icChatBubble.svg(
-                                    colorFilter: filter,
-                                  ),
-                                ),
-                              ),
-                            )
-                          else
+                          if (!isMe)
                             Padding(
                               padding: EdgeInsets.only(right: Spacing.xSmall),
                               child: FloatingFrostedGlassDropdown(
@@ -209,7 +174,6 @@ class _ProfilePageViewState extends State<ProfilePageView>
                 ProfileCollectibleTabView(user: widget.userProfile),
                 ProfileEventTabView(user: widget.userProfile),
                 ProfilePhotosTabView(user: widget.userProfile),
-                // EmptyTabView(),
                 ProfileInfoTabView(user: widget.userProfile),
               ],
             ),

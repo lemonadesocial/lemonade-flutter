@@ -37,10 +37,10 @@ class NewChatView extends StatelessWidget {
       child: BlocListener<NewChatBloc, NewChatState>(
         listener: (context, state) async {
           if (state.createdRoomId != null) {
+            Navigator.of(context, rootNavigator: true).pop();
+            await Future.delayed(const Duration(milliseconds: 400));
             AutoRouter.of(context)
                 .navigateNamed('/chat/detail/${state.createdRoomId}');
-            await Future.delayed(const Duration(milliseconds: 400));
-            Navigator.of(context).pop();
           }
         },
         child: BlocBuilder<NewChatBloc, NewChatState>(
