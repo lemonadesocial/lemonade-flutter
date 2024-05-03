@@ -37,7 +37,7 @@ class HomeAppBarDefaultMoreActionsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-    final isLoggedIn = context.read<AuthBloc>().state.maybeWhen(
+    final isLoggedIn = context.watch<AuthBloc>().state.maybeWhen(
           orElse: () => false,
           authenticated: (_) => true,
         );
@@ -87,6 +87,24 @@ class HomeAppBarDefaultMoreActionsWidget extends StatelessWidget {
           ),
       ],
       onItemPressed: (item) {
+        if (item?.value == CommonMoreActions.rateApp) {
+          launchUrl(
+            Uri.parse(
+              Platform.isIOS
+                  ? AppConfig.lemonadeIosDownloadUrl
+                  : AppConfig.lemonadeAndroidDownloadUrl,
+            ),
+          );
+          return;
+        }
+
+        if (item?.value == CommonMoreActions.followLemonde) {
+          launchUrl(
+            Uri.parse(AppConfig.lemonadeTwitterUrl),
+          );
+          return;
+        }
+
         if (!isLoggedIn) {
           AutoRouter.of(context).push(const LoginRoute());
           return;
@@ -106,24 +124,6 @@ class HomeAppBarDefaultMoreActionsWidget extends StatelessWidget {
           showCupertinoModalBottomSheet(
             context: context,
             builder: (mContext) => const ReportIssueBottomSheet(),
-          );
-          return;
-        }
-
-        if (item?.value == CommonMoreActions.rateApp) {
-          launchUrl(
-            Uri.parse(
-              Platform.isIOS
-                  ? AppConfig.lemonadeIosDownloadUrl
-                  : AppConfig.lemonadeAndroidDownloadUrl,
-            ),
-          );
-          return;
-        }
-
-        if (item?.value == CommonMoreActions.followLemonde) {
-          launchUrl(
-            Uri.parse(AppConfig.lemonadeTwitterUrl),
           );
           return;
         }

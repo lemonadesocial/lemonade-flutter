@@ -8,7 +8,7 @@ import 'package:app/core/presentation/widgets/chat/create_chat_button.dart';
 import 'package:app/core/presentation/widgets/chat/matrix_avatar.dart';
 import 'package:app/core/presentation/widgets/chat/spaces_drawer.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
-import 'package:app/core/presentation/widgets/home_appbar_v2/home_appbar_v2.dart';
+import 'package:app/core/presentation/widgets/home_appbar/home_appbar_v2.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/service/matrix/matrix_service.dart';
@@ -65,7 +65,7 @@ class _ChatListPageViewState extends State<ChatListPageView>
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      appBar: HomeAppBarV2(
+      appBar: HomeAppBar(
         title: t.chat.chat,
         actions: [
           BlocBuilder<ChatSpaceBloc, ChatSpaceState>(

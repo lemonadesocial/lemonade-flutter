@@ -1,7 +1,6 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
-import 'package:app/core/presentation/widgets/home_appbar_v2/home_appbar_default_more_actions_widget.dart';
+import 'package:app/core/presentation/widgets/home_appbar/home_appbar_default_more_actions_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
-import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/core/utils/drawer_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -13,10 +12,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class HomeAppBarV2 extends StatefulWidget implements PreferredSizeWidget {
+class HomeAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String title;
   final List<Widget>? actions;
-  const HomeAppBarV2({
+  const HomeAppBar({
     super.key,
     required this.title,
     this.actions,
@@ -26,10 +25,10 @@ class HomeAppBarV2 extends StatefulWidget implements PreferredSizeWidget {
   Size get preferredSize => Size.fromHeight(60.w);
 
   @override
-  State<HomeAppBarV2> createState() => _HomeAppBarV2State();
+  State<HomeAppBar> createState() => _HomeAppBarState();
 }
 
-class _HomeAppBarV2State extends State<HomeAppBarV2> {
+class _HomeAppBarState extends State<HomeAppBar> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -61,7 +60,10 @@ class _Leading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final loggedInUser = AuthUtils.getUser(context);
+    final loggedInUser = context.watch<AuthBloc>().state.maybeWhen(
+          orElse: () => null,
+          authenticated: (authSession) => authSession,
+        );
     return InkWell(
       onTap: () {
         context.read<AuthBloc>().state.maybeWhen(

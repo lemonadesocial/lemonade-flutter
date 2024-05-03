@@ -3,7 +3,7 @@ import 'package:app/core/domain/notification/entities/notification.dart'
     as entities;
 import 'package:app/core/presentation/pages/notification/widgets/notification_card_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
-import 'package:app/core/presentation/widgets/home_appbar_v2/home_appbar_v2.dart';
+import 'package:app/core/presentation/widgets/home_appbar/home_appbar_v2.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/utils/navigation_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -78,7 +78,7 @@ class _NotificationsListingViewState extends State<_NotificationsListingView> {
     final t = Translations.of(context);
     final themeColor = Theme.of(context).colorScheme;
     return Scaffold(
-      appBar: HomeAppBarV2(
+      appBar: HomeAppBar(
         title: t.notification.notifications,
       ),
       backgroundColor: themeColor.primary,

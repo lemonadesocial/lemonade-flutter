@@ -1,6 +1,6 @@
 import 'package:app/core/presentation/pages/home/views/list/home_newsfeed_list.dart';
-import 'package:app/core/presentation/widgets/home_appbar_v2/home_appbar_default_more_actions_widget.dart';
-import 'package:app/core/presentation/widgets/home_appbar_v2/home_appbar_v2.dart';
+import 'package:app/core/presentation/widgets/home_appbar/home_appbar_default_more_actions_widget.dart';
+import 'package:app/core/presentation/widgets/home_appbar/home_appbar_v2.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/service/shake/shake_service.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -41,7 +41,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     return Scaffold(
-      appBar: HomeAppBarV2(
+      appBar: HomeAppBar(
         title: t.home.newsfeed,
         actions: [
           InkWell(
