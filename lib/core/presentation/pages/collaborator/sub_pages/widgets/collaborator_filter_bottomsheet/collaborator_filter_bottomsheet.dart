@@ -105,7 +105,7 @@ class CollaboratorFilterBottomSheet extends StatelessWidget {
                               Icons.circle_outlined,
                               size: Spacing.smMedium,
                               color: colorScheme.onSurfaceVariant,
-                            )
+                            ),
                           ],
                         ),
                       );
