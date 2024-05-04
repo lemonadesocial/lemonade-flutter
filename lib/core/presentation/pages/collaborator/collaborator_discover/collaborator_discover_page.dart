@@ -137,7 +137,6 @@ class _CollaboratorDiscoverPageState extends State<CollaboratorDiscoverPage> {
                   ),
                 );
               }
-
               final currentUser = state.users.firstOrNull;
 
               return Padding(

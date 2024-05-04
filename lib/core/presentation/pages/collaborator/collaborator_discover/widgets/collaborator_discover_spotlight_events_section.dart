@@ -3,9 +3,11 @@ import 'package:app/core/presentation/pages/collaborator/widgets/spotlight_event
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -85,8 +87,15 @@ class CollaboratorDiscoverSpotlightEventsSection extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 itemCount: events.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return SpotlightEventItem(
-                    event: events[index],
+                  return InkWell(
+                    onTap: () {
+                      AutoRouter.of(context).push(
+                        EventDetailRoute(eventId: events[index].id ?? ''),
+                      );
+                    },
+                    child: SpotlightEventItem(
+                      event: events[index],
+                    ),
                   );
                 },
               ),

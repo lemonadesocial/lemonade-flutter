@@ -68,7 +68,9 @@ class CollaboratorDiscoverIcebreakersSection extends StatelessWidget {
                         backgroundColor: colorScheme.secondaryContainer,
                         topRadius: Radius.circular(30.r),
                         builder: (mContext) {
-                          return const CollaboratorIceBreakersBottomSheet();
+                          return CollaboratorIceBreakersBottomSheet(
+                            icebreakers: user?.icebreakers ?? [],
+                          );
                         },
                       );
                     },

@@ -49,7 +49,7 @@ class CollaboratorDiscoverView extends StatelessWidget {
         ),
       ),
       if (user?.expertise?.isNotEmpty == true ||
-          user?.serviceOffers?.isNotEmpty == true)
+          user?.serviceOffersExpanded?.isNotEmpty == true)
         SliverPadding(
           padding: EdgeInsets.only(
             bottom: 30.w,
@@ -60,19 +60,23 @@ class CollaboratorDiscoverView extends StatelessWidget {
             ),
           ),
         ),
-      if (user?.handleFarcaster?.isNotEmpty == true &&
+      if (user?.handleFarcaster?.isNotEmpty == true ||
           user?.handleTwitter?.isNotEmpty == true)
         SliverPadding(
           padding: EdgeInsets.only(
             bottom: 30.w,
           ),
-          sliver: const CollaboratorDiscoverSocialGridSection(),
+          sliver: CollaboratorDiscoverSocialGridSection(
+            user: user,
+          ),
         ),
       SliverPadding(
         padding: EdgeInsets.only(
           bottom: 30.w,
         ),
-        sliver: const CollaboratorDiscoverActivitySection(),
+        sliver: CollaboratorDiscoverActivitySection(
+          user: user,
+        ),
       ),
       if (user?.eventsExpanded?.isNotEmpty == true)
         SliverPadding(

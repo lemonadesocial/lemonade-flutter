@@ -1,4 +1,5 @@
 import 'package:app/core/domain/user/entities/user.dart';
+import 'package:app/core/domain/user/entities/user_service_offer.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -21,7 +22,10 @@ class CollaboratorDiscoverExpertiseOfferingCard extends StatelessWidget {
         _Expertise(
           expertise: user?.expertise ?? [],
         ),
-      if (user?.serviceOffers?.isNotEmpty == true) const _Offering(),
+      if (user?.serviceOffersExpanded?.isNotEmpty == true)
+        _Offering(
+          serviceOffers: user?.serviceOffersExpanded ?? [],
+        ),
     ];
     return Container(
       padding: EdgeInsets.all(Spacing.smMedium),
@@ -55,7 +59,10 @@ class CollaboratorDiscoverExpertiseOfferingCard extends StatelessWidget {
 }
 
 class _Offering extends StatelessWidget {
-  const _Offering();
+  final List<UserServiceOffer> serviceOffers;
+  const _Offering({
+    required this.serviceOffers,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +82,7 @@ class _Offering extends StatelessWidget {
         ),
         SizedBox(height: Spacing.superExtraSmall),
         Text(
-          'Advise companies, find customers',
+          serviceOffers.map((item) => item.title).join(' , '),
           style: Typo.medium.copyWith(
             color: colorScheme.onSecondary,
             fontWeight: FontWeight.w400,
