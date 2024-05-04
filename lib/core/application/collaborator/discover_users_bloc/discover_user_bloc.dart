@@ -20,6 +20,7 @@ class DiscoverUserBloc extends Bloc<DiscoverUserEvent, DiscoverUserState> {
         ) {
     on<_DiscoverUserEventFetchUser>(_onFetch);
     on<_DiscoverUserEventOnUserSwiped>(_onUserSwiped);
+    on<_DiscoverUserEventOnUpdateFilter>(_onUpdateFilter);
   }
 
   void _onFetch(_DiscoverUserEventFetchUser event, Emitter emit) async {
@@ -80,6 +81,13 @@ class DiscoverUserBloc extends Bloc<DiscoverUserEvent, DiscoverUserState> {
       ),
     );
   }
+
+  void _onUpdateFilter(_DiscoverUserEventOnUpdateFilter event, Emitter emit) {
+    emit(
+      state.copyWith(filteredOfferings: event.filteredOfferings),
+    );
+    add(DiscoverUserEvent.fetch());
+  }
 }
 
 @freezed
@@ -88,6 +96,9 @@ class DiscoverUserEvent with _$DiscoverUserEvent {
   factory DiscoverUserEvent.onUserSwiped({
     required String userId,
   }) = _DiscoverUserEventOnUserSwiped;
+  factory DiscoverUserEvent.onUpdateFilter({
+    required List<String> filteredOfferings,
+  }) = _DiscoverUserEventOnUpdateFilter;
 }
 
 @freezed

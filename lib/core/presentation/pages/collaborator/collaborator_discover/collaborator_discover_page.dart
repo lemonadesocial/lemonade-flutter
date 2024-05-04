@@ -1,4 +1,5 @@
 import 'package:app/core/application/collaborator/discover_users_bloc/discover_user_bloc.dart';
+import 'package:app/core/application/profile/user_profile_bloc/user_profile_bloc.dart';
 import 'package:app/core/presentation/dpos/common/dropdown_item_dpo.dart';
 import 'package:app/core/presentation/pages/collaborator/collaborator_discover/widgets/collaborator_discover_actions_bar.dart';
 import 'package:app/core/presentation/pages/collaborator/collaborator_discover/widgets/collaborator_discover_declined_overlay.dart';
@@ -52,8 +53,19 @@ class _CollaboratorDiscoverPageState extends State<CollaboratorDiscoverPage> {
                       context: context,
                       backgroundColor: colorScheme.secondaryContainer,
                       topRadius: Radius.circular(30.r),
+                      useRootNavigator: true,
                       builder: (mContext) {
-                        return const CollaboratorFilterBottomSheet();
+                        return MultiBlocProvider(
+                          providers: [
+                            BlocProvider.value(
+                              value: context.read<DiscoverUserBloc>(),
+                            ),
+                            BlocProvider.value(
+                              value: context.read<UserProfileBloc>(),
+                            ),
+                          ],
+                          child: const CollaboratorFilterBottomSheet(),
+                        );
                       },
                     );
                   },

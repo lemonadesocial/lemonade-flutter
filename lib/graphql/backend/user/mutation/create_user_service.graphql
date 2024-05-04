@@ -1,0 +1,6 @@
+mutation CreateUserService ($title: String!) {
+  createUserService(title: $title) {
+    _id
+    title
+  }
+}
