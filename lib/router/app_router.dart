@@ -497,5 +497,8 @@ final collaboratorRoutes = AutoRoute(
     AutoRoute(
       page: CollaboratorEditProfileRoute.page,
     ),
+    AutoRoute(
+      page: CollaboratorPreviewProfileRoute.page,
+    ),
   ],
 );

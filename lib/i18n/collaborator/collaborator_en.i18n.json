@@ -38,5 +38,6 @@
     "filter": {
         "whatAreYouLookingFor": "What are you looking for?",
         "startTypingSomething": "Start typing something"
-    }
+    },
+    "preview": "Preview"
 }

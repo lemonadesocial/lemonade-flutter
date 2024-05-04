@@ -65,6 +65,11 @@ class CollaboratorDiscoverView extends StatelessWidget {
           ),
         ),
         const CollaboratorDiscoverIcebreakersSection(),
+        SliverToBoxAdapter(
+          child: SizedBox(
+            height: 30.w,
+          ),
+        ),
       ],
     );
   }
