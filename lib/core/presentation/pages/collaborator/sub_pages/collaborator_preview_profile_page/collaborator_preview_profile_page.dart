@@ -64,6 +64,9 @@ class CollaboratorPreviewProfilePage extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
                 sliver: const CollaboratorDiscoverView(),
               ),
+              SliverToBoxAdapter(
+                child: SizedBox(height: Spacing.smMedium),
+              ),
             ],
           ),
         ],
