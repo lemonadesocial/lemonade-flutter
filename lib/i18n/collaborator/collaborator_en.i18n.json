@@ -34,5 +34,9 @@
         "addIcebreaker": "Add icebreaker",
         "selectPromptDescription": "Select a fun prompt to answer & add to your profile to instantly break the ice!",
         "addPromptAnswerPlaceholder": "Enter your answer here"
+    },
+    "filter": {
+        "whatAreYouLookingFor": "What are you looking for?",
+        "startTypingSomething": "Start typing something"
     }
 }

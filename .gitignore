@@ -71,4 +71,5 @@ lib/**/*serializers.gql.dart
 # Ignore shorebird config file
 shorebird.yaml
 
-.fvm/flutter_sdk
+# FVM Version Cache
+.fvm/
