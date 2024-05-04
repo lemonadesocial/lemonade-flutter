@@ -1,4 +1,5 @@
 import 'package:app/core/domain/user/entities/user.dart';
+import 'package:app/core/presentation/pages/collaborator/sub_pages/widgets/collaborator_icebreakers_bottomsheet/collaborator_icebreakers_bottomsheet.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
@@ -8,6 +9,7 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class CollaboratorDiscoverIcebreakersSection extends StatelessWidget {
   final User? user;
@@ -59,21 +61,33 @@ class CollaboratorDiscoverIcebreakersSection extends StatelessWidget {
                   ),
                 ),
                 if (icebreakersCount > 1)
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
-                    decoration: ShapeDecoration(
-                      color: colorScheme.secondary,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(LemonRadius.medium),
+                  InkWell(
+                    onTap: () {
+                      showCupertinoModalBottomSheet(
+                        context: context,
+                        backgroundColor: colorScheme.secondaryContainer,
+                        topRadius: Radius.circular(30.r),
+                        builder: (mContext) {
+                          return const CollaboratorIceBreakersBottomSheet();
+                        },
+                      );
+                    },
+                    child: Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 9.r, vertical: 3.r),
+                      decoration: ShapeDecoration(
+                        color: colorScheme.secondary,
+                        shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.circular(LemonRadius.medium),
+                        ),
                       ),
-                    ),
-                    child: Text(
-                      t.common.more(count: icebreakersCount - 1),
-                      style: Typo.small.copyWith(
-                        color: colorScheme.onSecondary,
-                        height: 0,
-                        fontWeight: FontWeight.w500,
+                      child: Text(
+                        t.common.more(count: icebreakersCount - 1),
+                        style: Typo.small.copyWith(
+                          color: colorScheme.onSecondary,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
                   ),

@@ -3,6 +3,7 @@ import 'package:app/core/presentation/dpos/common/dropdown_item_dpo.dart';
 import 'package:app/core/presentation/pages/collaborator/collaborator_discover/widgets/collaborator_discover_actions_bar.dart';
 import 'package:app/core/presentation/pages/collaborator/collaborator_discover/widgets/collaborator_discover_declined_overlay.dart';
 import 'package:app/core/presentation/pages/collaborator/collaborator_discover/widgets/collaborator_discover_view.dart';
+import 'package:app/core/presentation/pages/collaborator/sub_pages/widgets/collaborator_filter_bottomsheet/collaborator_filter_bottomsheet.dart';
 import 'package:app/core/presentation/pages/collaborator/sub_pages/widgets/collaborator_send_like_bottomsheet/collaborator_send_like_bottomsheet.dart';
 import 'package:app/core/presentation/widgets/animation/circular_animation_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
@@ -45,7 +46,17 @@ class _CollaboratorDiscoverPageState extends State<CollaboratorDiscoverPage> {
               Padding(
                 padding: EdgeInsets.only(right: Spacing.medium),
                 child: InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    showCupertinoModalBottomSheet(
+                      expand: true,
+                      context: context,
+                      backgroundColor: colorScheme.secondaryContainer,
+                      topRadius: Radius.circular(30.r),
+                      builder: (mContext) {
+                        return const CollaboratorFilterBottomSheet();
+                      },
+                    );
+                  },
                   child: Icon(
                     Icons.filter_alt_outlined,
                     color: colorScheme.onPrimary,
