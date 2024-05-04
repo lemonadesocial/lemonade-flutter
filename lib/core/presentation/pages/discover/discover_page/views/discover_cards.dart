@@ -37,7 +37,7 @@ class DiscoverCards extends StatelessWidget {
           icon: Assets.icons.icDiscoverPeople.svg(),
           colors: DiscoverCardGradient.collaborators.colors,
           onTap: () {
-            AutoRouter.of(context).navigate(const CollaboratorRoute());
+            AutoRouter.of(context).navigate(CollaboratorRoute());
           },
         ),
         DiscoverCard(

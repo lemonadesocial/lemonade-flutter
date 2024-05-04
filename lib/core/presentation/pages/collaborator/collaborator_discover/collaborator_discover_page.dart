@@ -115,7 +115,7 @@ class _CollaboratorDiscoverPageState extends State<CollaboratorDiscoverPage> {
                 );
               }
 
-              final currentUser = state.users.lastOrNull;
+              final currentUser = state.users.firstOrNull;
 
               return Padding(
                 padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
@@ -139,17 +139,17 @@ class _CollaboratorDiscoverPageState extends State<CollaboratorDiscoverPage> {
                         setState(() {
                           isVisibleDeclinedOverlay = true;
                         });
+                        context.read<DiscoverUserBloc>().add(
+                              DiscoverUserEvent.onUserSwiped(
+                                userId: currentUser?.userId ?? '',
+                              ),
+                            );
                         await Future.delayed(
                           const Duration(milliseconds: 500),
                         );
                         setState(() {
                           isVisibleDeclinedOverlay = false;
                         });
-                        context.read<DiscoverUserBloc>().add(
-                              DiscoverUserEvent.onUserSwiped(
-                                userId: currentUser?.userId ?? '',
-                              ),
-                            );
                       },
                       onLike: () {
                         showCupertinoModalBottomSheet(

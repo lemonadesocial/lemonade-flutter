@@ -1,5 +1,6 @@
 import 'package:app/core/domain/collaborator/collaborator_repository.dart';
 import 'package:app/core/domain/user/entities/user.dart';
+import 'package:app/core/utils/location_utils.dart';
 import 'package:app/graphql/backend/collaborator/query/get_user_discovery.graphql.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,13 +23,26 @@ class DiscoverUserBloc extends Bloc<DiscoverUserEvent, DiscoverUserState> {
   }
 
   void _onFetch(_DiscoverUserEventFetchUser event, Emitter emit) async {
+    final hasPermission = await getIt<LocationUtils>().checkPermission();
+    double lat = 0;
+    double lng = 0;
+    if (!hasPermission) {
+      return;
+    }
+
+    if (hasPermission) {
+      final currentLocation = await getIt<LocationUtils>().getCurrentLocation();
+      lat = currentLocation.latitude;
+      lng = currentLocation.longitude;
+    }
+
     emit(
       state.copyWith(fetching: true),
     );
     final result = await _collaboratorRepository.getUserDiscovery(
       input: Variables$Query$GetUserDiscovery(
-        latitude: 21.033333,
-        longitude: 105.849998,
+        latitude: lat,
+        longitude: lng,
         offerings:
             state.filteredOfferings.isEmpty ? null : state.filteredOfferings,
       ),
@@ -61,6 +75,7 @@ class DiscoverUserBloc extends Bloc<DiscoverUserEvent, DiscoverUserState> {
     }
     emit(
       state.copyWith(
+        fetching: newUsers.isEmpty,
         users: newUsers,
       ),
     );
