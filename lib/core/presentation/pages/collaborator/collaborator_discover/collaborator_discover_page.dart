@@ -41,14 +41,12 @@ class _CollaboratorDiscoverPageState extends State<CollaboratorDiscoverPage> {
             child: InkWell(
               onTap: () {
                 showCupertinoModalBottomSheet(
+                  expand: true,
                   context: context,
                   backgroundColor: colorScheme.surface,
                   topRadius: Radius.circular(30.r),
                   builder: (mContext) {
-                    return const FractionallySizedBox(
-                      heightFactor: 1,
-                      child: CollaboratorFilterBottomSheet(),
-                    );
+                    return const CollaboratorFilterBottomSheet();
                   },
                 );
               },
