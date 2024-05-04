@@ -39,7 +39,7 @@ class DiscoverCards extends StatelessWidget {
           onTap: () {
             SnackBarUtils.showComingSoon();
 
-            // TODO: Temporary close for release
+            // TODO: Temporary show coming soon collaborator for release
             // AutoRouter.of(context).navigate(const CollaboratorRoute());
           },
         ),
