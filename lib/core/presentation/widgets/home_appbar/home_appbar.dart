@@ -1,8 +1,8 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/presentation/widgets/home_appbar/home_appbar_default_more_actions_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
+import 'package:app/core/utils/avatar_utils.dart';
 import 'package:app/core/utils/drawer_utils.dart';
-import 'package:app/core/utils/image_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
@@ -81,9 +81,7 @@ class _Leading extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             LemonNetworkImage(
-              imageUrl: ImageUtils.generateUrl(
-                file: loggedInUser?.newPhotosExpanded?.firstOrNull,
-              ),
+              imageUrl: AvatarUtils.getAvatarUrl(user: loggedInUser),
               placeholder: Assets.icons.icPerson.svg(
                 width: 30.w,
                 height: 30.w,

@@ -19,6 +19,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 @RoutePage()
@@ -97,18 +98,19 @@ class SettingPageView extends StatelessWidget {
                     const SettingProfileTile(),
                     SizedBox(height: 24.h),
                     SettingTileWidget(
-                      title: t.common.vaults,
-                      subTitle: t.setting.vaultDesc,
-                      leading: ThemeSvgIcon(
-                        color: colorScheme.onPrimary.withOpacity(0.54),
-                        builder: (filter) {
-                          return Assets.icons.icBank.svg(colorFilter: filter);
-                        },
-                      ),
-                      featureAvailable: true,
-                      onTap: () =>
-                          AutoRouter.of(context).push(const VaultRootRoute()),
-                    ),
+                        title: t.common.vaults,
+                        subTitle: t.setting.vaultDesc,
+                        leading: ThemeSvgIcon(
+                          color: colorScheme.onPrimary.withOpacity(0.54),
+                          builder: (filter) {
+                            return Assets.icons.icBank.svg(colorFilter: filter);
+                          },
+                        ),
+                        featureAvailable: true,
+                        onTap: () {
+                          Vibrate.feedback(FeedbackType.light);
+                          AutoRouter.of(context).push(const VaultRootRoute());
+                        }),
                     SizedBox(height: Spacing.xSmall),
                     SettingTileWidget(
                       title: t.setting.notification,
@@ -118,8 +120,10 @@ class SettingPageView extends StatelessWidget {
                         width: 18.w,
                         height: 18.w,
                       ),
-                      onTap: () =>
-                          context.router.push(const NotificationSettingRoute()),
+                      onTap: () {
+                        Vibrate.feedback(FeedbackType.light);
+                        context.router.push(const NotificationSettingRoute());
+                      },
                     ),
                     SizedBox(height: Spacing.xSmall),
                     SettingTileWidget(
@@ -130,8 +134,10 @@ class SettingPageView extends StatelessWidget {
                         width: 18.w,
                         height: 18.w,
                       ),
-                      onTap: () =>
-                          context.router.push(const SettingBlockRoute()),
+                      onTap: () {
+                        Vibrate.feedback(FeedbackType.light);
+                        context.router.push(const SettingBlockRoute());
+                      },
                     ),
                     SizedBox(height: 24.h),
                     Padding(
@@ -154,9 +160,12 @@ class SettingPageView extends StatelessWidget {
                         width: 18.w,
                         height: 18.w,
                       ),
-                      onTap: () => ChromeSafariBrowser().open(
-                        url: Uri.parse('https://lemonade.social/privacy'),
-                      ),
+                      onTap: () {
+                        Vibrate.feedback(FeedbackType.light);
+                        ChromeSafariBrowser().open(
+                          url: Uri.parse('https://lemonade.social/privacy'),
+                        );
+                      },
                     ),
                     SizedBox(height: Spacing.xSmall),
                     SettingTileWidget(
@@ -166,9 +175,12 @@ class SettingPageView extends StatelessWidget {
                         width: 18.w,
                         height: 18.w,
                       ),
-                      onTap: () => ChromeSafariBrowser().open(
-                        url: Uri.parse('https://lemonade.social/terms'),
-                      ),
+                      onTap: () {
+                        Vibrate.feedback(FeedbackType.light);
+                        ChromeSafariBrowser().open(
+                          url: Uri.parse('https://lemonade.social/terms'),
+                        );
+                      },
                     ),
                     SizedBox(height: Spacing.xSmall),
                     SettingTileWidget(
@@ -181,9 +193,12 @@ class SettingPageView extends StatelessWidget {
                         width: 18.w,
                         height: 18.w,
                       ),
-                      onTap: () => context.read<AuthBloc>().add(
-                            const AuthEvent.logout(),
-                          ),
+                      onTap: () {
+                        Vibrate.feedback(FeedbackType.light);
+                        context.read<AuthBloc>().add(
+                              const AuthEvent.logout(),
+                            );
+                      },
                     ),
                     SizedBox(height: Spacing.xSmall),
                     SettingTileWidget(
@@ -204,6 +219,7 @@ class SettingPageView extends StatelessWidget {
                         height: 18.w,
                       ),
                       onTap: () async {
+                        Vibrate.feedback(FeedbackType.light);
                         final confirmDeleteAccount = await showDialog(
                           context: context,
                           barrierDismissible: true,
