@@ -98,19 +98,20 @@ class SettingPageView extends StatelessWidget {
                     const SettingProfileTile(),
                     SizedBox(height: 24.h),
                     SettingTileWidget(
-                        title: t.common.vaults,
-                        subTitle: t.setting.vaultDesc,
-                        leading: ThemeSvgIcon(
-                          color: colorScheme.onPrimary.withOpacity(0.54),
-                          builder: (filter) {
-                            return Assets.icons.icBank.svg(colorFilter: filter);
-                          },
-                        ),
-                        featureAvailable: true,
-                        onTap: () {
-                          Vibrate.feedback(FeedbackType.light);
-                          AutoRouter.of(context).push(const VaultRootRoute());
-                        }),
+                      title: t.common.vaults,
+                      subTitle: t.setting.vaultDesc,
+                      leading: ThemeSvgIcon(
+                        color: colorScheme.onPrimary.withOpacity(0.54),
+                        builder: (filter) {
+                          return Assets.icons.icBank.svg(colorFilter: filter);
+                        },
+                      ),
+                      featureAvailable: true,
+                      onTap: () {
+                        Vibrate.feedback(FeedbackType.light);
+                        AutoRouter.of(context).push(const VaultRootRoute());
+                      },
+                    ),
                     SizedBox(height: Spacing.xSmall),
                     SettingTileWidget(
                       title: t.setting.notification,
