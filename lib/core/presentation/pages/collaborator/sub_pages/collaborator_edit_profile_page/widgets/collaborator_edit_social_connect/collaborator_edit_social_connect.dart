@@ -1,5 +1,7 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
+import 'package:app/core/application/profile/edit_profile_bloc/edit_profile_bloc.dart';
 import 'package:app/core/domain/user/entities/user.dart';
+import 'package:app/core/presentation/pages/edit_profile/sub_pages/edit_profile_social_page.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -8,9 +10,11 @@ import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:slang/builder/utils/string_extensions.dart';
 
 class CollaboratorEditSocialConnect extends StatelessWidget {
@@ -41,6 +45,7 @@ class CollaboratorEditSocialConnect extends StatelessWidget {
             isConnected: isConnectedFarCaster,
             isSpecialRadiusTop: true,
             isSpecialRadiusBottom: false,
+            user: user,
           ),
           SizedBox(height: Spacing.superExtraSmall),
           _SocialItem(
@@ -55,6 +60,7 @@ class CollaboratorEditSocialConnect extends StatelessWidget {
             isConnected: isConnectedTwitter,
             isSpecialRadiusTop: false,
             isSpecialRadiusBottom: true,
+            user: user,
           ),
         ],
       ),
@@ -69,6 +75,7 @@ class _SocialItem extends StatelessWidget {
   final bool isConnected;
   final bool? isSpecialRadiusTop;
   final bool? isSpecialRadiusBottom;
+  final User? user;
   const _SocialItem({
     required this.socialTitle,
     required this.socialValue,
@@ -76,6 +83,7 @@ class _SocialItem extends StatelessWidget {
     required this.isConnected,
     this.isSpecialRadiusBottom,
     this.isSpecialRadiusTop,
+    required this.user,
   });
 
   @override
@@ -95,6 +103,7 @@ class _SocialItem extends StatelessWidget {
         ? LemonRadius.medium
         : LemonRadius.extraSmall;
 
+    final editProfileBloc = context.watch<EditProfileBloc>();
     return Container(
       padding: EdgeInsets.all(Spacing.small),
       decoration: BoxDecoration(
@@ -165,6 +174,25 @@ class _SocialItem extends StatelessWidget {
                   textStyle: Typo.small.copyWith(
                     color: colorScheme.onPrimary,
                   ),
+                  onTap: () {
+                    if (user == null) {
+                      return;
+                    }
+                    showCupertinoModalBottomSheet(
+                      backgroundColor: LemonColor.atomicBlack,
+                      context: context,
+                      builder: (innerContext) => MultiBlocProvider(
+                        providers: [
+                          BlocProvider.value(
+                            value: editProfileBloc,
+                          ),
+                        ],
+                        child: EditProfileSocialDialog(
+                          userProfile: user!,
+                        ),
+                      ),
+                    );
+                  },
                 )
               : const SizedBox(),
         ],
