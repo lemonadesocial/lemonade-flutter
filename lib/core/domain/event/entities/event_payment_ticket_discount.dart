@@ -2,9 +2,13 @@ import 'package:app/core/data/event/dtos/event_payment_ticket_discount_dto/event
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'event_payment_ticket_discount.freezed.dart';
+part 'event_payment_ticket_discount.g.dart';
 
 @freezed
 class EventPaymentTicketDiscount with _$EventPaymentTicketDiscount {
+  const EventPaymentTicketDiscount._();
+
+  @JsonSerializable(explicitToJson: true)
   factory EventPaymentTicketDiscount({
     bool? active,
     String? code,
@@ -39,4 +43,7 @@ class EventPaymentTicketDiscount with _$EventPaymentTicketDiscount {
         useLimit: dto.useLimit,
         useLimitPer: dto.useLimitPer,
       );
+
+  factory EventPaymentTicketDiscount.fromJson(Map<String, dynamic> json) =>
+      _$EventPaymentTicketDiscountFromJson(json);
 }

@@ -1,9 +1,11 @@
 import 'package:app/core/data/common/dtos/common_dtos.dart';
+import 'package:app/core/data/event/dtos/event_dtos.dart';
+import 'package:app/core/data/user/dtos/user_service_offer_dto/user_service_offer_dto.dart';
+import 'package:app/core/data/user/dtos/user_icebreaker_dto/user_icebreaker_dto.dart';
 import 'package:app/core/data/user/user_enums.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'user_dtos.freezed.dart';
-
 part 'user_dtos.g.dart';
 
 @freezed
@@ -53,8 +55,8 @@ class UserDto with _$UserDto {
     UserType? type,
     String? industry,
     List<AddressDto>? addresses,
-    int? hosted,
-    int? attended,
+    double? hosted,
+    double? attended,
     int? friends,
     int? following,
     int? followers,
@@ -75,6 +77,12 @@ class UserDto with _$UserDto {
     @JsonKey(name: 'terms_accepted_adult') bool? termsAcceptedAdult,
     @JsonKey(name: 'terms_accepted_conditions') bool? termsAcceptedConditions,
     @JsonKey(name: 'matrix_localpart') String? matrixLocalpart,
+    @JsonKey(name: 'service_offers') List<String>? serviceOffers,
+    @JsonKey(name: 'expertise') List<String>? expertise,
+    @JsonKey(name: 'events_expanded') List<EventDto>? eventsExpanded,
+    @JsonKey(name: 'service_offers_expanded')
+    List<UserServiceOfferDto>? serviceOffersExpanded,
+    List<UserIcebreakerDto>? icebreakers,
   }) = _UserDto;
 
   factory UserDto.fromJson(Map<String, dynamic> json) =>

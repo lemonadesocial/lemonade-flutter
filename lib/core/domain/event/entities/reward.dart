@@ -2,6 +2,7 @@ import 'package:app/core/data/event/dtos/reward_dto/reward_dto.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'reward.freezed.dart';
+part 'reward.g.dart';
 
 @freezed
 class Reward with _$Reward {
@@ -26,4 +27,5 @@ class Reward with _$Reward {
         limitPer: dto.limitPer,
         paymentTicketTypes: dto.paymentTicketTypes,
       );
+  factory Reward.fromJson(Map<String, dynamic> json) => _$RewardFromJson(json);
 }

@@ -2,9 +2,12 @@ import 'package:app/core/data/event/dtos/event_frequent_question_dto/event_frequ
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'event_frequent_question.freezed.dart';
+part 'event_frequent_question.g.dart';
 
 @freezed
 class EventFrequentQuestion with _$EventFrequentQuestion {
+  const EventFrequentQuestion._();
+
   factory EventFrequentQuestion({
     String? id,
     String? question,
@@ -17,4 +20,6 @@ class EventFrequentQuestion with _$EventFrequentQuestion {
         question: dto.question,
         answer: dto.answer,
       );
+  factory EventFrequentQuestion.fromJson(Map<String, dynamic> json) =>
+      _$EventFrequentQuestionFromJson(json);
 }
