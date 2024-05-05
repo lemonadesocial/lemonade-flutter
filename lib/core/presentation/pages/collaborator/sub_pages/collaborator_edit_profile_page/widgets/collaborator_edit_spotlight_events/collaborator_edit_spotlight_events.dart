@@ -1,4 +1,5 @@
 import 'package:app/core/presentation/pages/collaborator/sub_pages/collaborator_edit_profile_page/widgets/collaborator_edit_spotlight_events/widgets/collaborator_add_sppotlight_events_bottomsheet/collaborator_add_sppotlight_events_bottomsheet.dart';
+import 'package:app/core/presentation/pages/collaborator/sub_pages/collaborator_edit_profile_page/widgets/remove_icon_widget.dart';
 import 'package:app/core/presentation/pages/collaborator/sub_pages/collaborator_edit_profile_page/widgets/remove_icon_wrapper.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
@@ -76,54 +77,75 @@ class CollaboratorEditSpotlightEvents extends StatelessWidget {
                   ),
                 );
               }
-              return RemoveIconWrapper(
-                child: Stack(
-                  children: [
-                    LemonNetworkImage(
-                      imageUrl: "",
-                      border: Border.all(color: colorScheme.outline),
-                      borderRadius: BorderRadius.circular(LemonRadius.medium),
-                      placeholder: ImagePlaceholder.defaultPlaceholder(),
-                      fit: BoxFit.cover,
-                    ),
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: Spacing.xSmall,
-                          vertical: Spacing.xSmall,
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Living rooom gig",
-                              style: Typo.small.copyWith(
-                                color: colorScheme.onPrimary,
-                                fontWeight: FontWeight.w500,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            SizedBox(height: 2.w),
-                            Text(
-                              DateFormatUtils.dateOnly(DateTime.now()),
-                              style: Typo.xSmall.copyWith(
-                                color: colorScheme.onSecondary,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              );
+              return _SpotlightItem(index);
             },
           ),
         ),
       ],
+    );
+  }
+}
+
+class _SpotlightItem extends StatelessWidget {
+  final int index;
+  const _SpotlightItem(this.index);
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Container(
+      decoration: ShapeDecoration(
+        shape: RoundedRectangleBorder(
+          side: BorderSide(
+            width: 1,
+            color: LemonColor.white09,
+          ),
+          borderRadius: BorderRadius.circular(LemonRadius.medium),
+        ),
+      ),
+      child: RemoveIconWrapper(
+        child: Stack(
+          children: [
+            LemonNetworkImage(
+              imageUrl: "https://picsum.photos/50$index",
+              border: Border.all(color: colorScheme.outline),
+              borderRadius: BorderRadius.circular(LemonRadius.medium),
+              placeholder: ImagePlaceholder.eventCard(),
+              fit: BoxFit.cover,
+            ),
+            Positioned(
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: Spacing.xSmall,
+                  vertical: Spacing.xSmall,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Living rooom gig",
+                      style: Typo.small.copyWith(
+                        color: colorScheme.onPrimary,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    SizedBox(height: 2.w),
+                    Text(
+                      DateFormatUtils.dateOnly(DateTime.now()),
+                      style: Typo.xSmall.copyWith(
+                        color: colorScheme.onSecondary,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

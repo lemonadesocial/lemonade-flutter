@@ -64,13 +64,13 @@ class CollaboratorEditProfilePage extends StatelessWidget {
               child: SizedBox(height: Spacing.large),
             ),
             const CollaboratorEditPhotos(),
-            SliverToBoxAdapter(
-              child: SizedBox(height: Spacing.large),
-            ),
-            const CollaboratorEditProfileAboutYou(),
-            SliverToBoxAdapter(
-              child: SizedBox(height: Spacing.large),
-            ),
+            // SliverToBoxAdapter(
+            //   child: SizedBox(height: Spacing.large),
+            // ),
+            // const CollaboratorEditProfileAboutYou(),
+            // SliverToBoxAdapter(
+            //   child: SizedBox(height: Spacing.large),
+            // ),
           ],
         ),
       ),
