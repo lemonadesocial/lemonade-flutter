@@ -1,8 +1,11 @@
+import 'package:app/core/application/auth/auth_bloc.dart';
+import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/pages/collaborator/sub_pages/collaborator_edit_profile_page/widgets/collaborator_edit_profile_field_card.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
 enum CollaboratorAboutYouField {
@@ -25,25 +28,47 @@ class CollaboratorEditProfileAboutYou extends StatelessWidget {
     BuildContext context, {
     required CollaboratorAboutYouField field,
   }) {
+    User? user = context.watch<AuthBloc>().state.maybeWhen(
+          authenticated: (authSession) => authSession,
+          orElse: () => null,
+        );
     final t = Translations.of(context);
-    String value = t.collaborator.editProfile.aboutYou.empty;
+    String emptyValue = t.collaborator.editProfile.aboutYou.empty;
     switch (field) {
       case CollaboratorAboutYouField.displayName:
-        return (t.collaborator.editProfile.aboutYou.displayName, value);
+        return (
+          t.collaborator.editProfile.aboutYou.displayName,
+          user?.displayName ?? emptyValue
+        );
       case CollaboratorAboutYouField.shortBio:
-        return (t.collaborator.editProfile.aboutYou.shortBio, value);
+        return (
+          t.collaborator.editProfile.aboutYou.shortBio,
+          user?.description ?? emptyValue
+        );
       case CollaboratorAboutYouField.jobTitle:
-        return (t.collaborator.editProfile.aboutYou.jobTitle, value);
+        return (
+          t.collaborator.editProfile.aboutYou.jobTitle,
+          user?.jobTitle ?? emptyValue
+        );
       case CollaboratorAboutYouField.organization:
-        return (t.collaborator.editProfile.aboutYou.displayName, value);
+        return (
+          t.collaborator.editProfile.aboutYou.displayName,
+          user?.companyName ?? emptyValue
+        );
       case CollaboratorAboutYouField.basedIn:
-        return (t.collaborator.editProfile.aboutYou.basedIn, value);
+        return (t.collaborator.editProfile.aboutYou.basedIn, emptyValue);
       case CollaboratorAboutYouField.languagesSpoken:
-        return (t.collaborator.editProfile.aboutYou.languagesSpoken, value);
+        return (
+          t.collaborator.editProfile.aboutYou.languagesSpoken,
+          emptyValue
+        );
       case CollaboratorAboutYouField.age:
-        return (t.collaborator.editProfile.aboutYou.age, value);
+        return (t.collaborator.editProfile.aboutYou.age, emptyValue);
       case CollaboratorAboutYouField.ethnicity:
-        return (t.collaborator.editProfile.aboutYou.ethnicity, value);
+        return (
+          t.collaborator.editProfile.aboutYou.ethnicity,
+          user?.ethnicity ?? emptyValue
+        );
       default:
         return ('', '');
     }
