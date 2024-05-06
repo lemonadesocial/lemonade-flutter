@@ -1,4 +1,5 @@
 import 'package:app/core/application/collaborator/discover_users_bloc/discover_user_bloc.dart';
+import 'package:app/core/application/collaborator/get_user_discovery_matched_swipes_bloc/get_user_discovery_matched_swipes_bloc.dart';
 import 'package:app/core/application/profile/user_profile_bloc/user_profile_bloc.dart';
 import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/utils/auth_utils.dart';
@@ -33,6 +34,12 @@ class CollaboratorPage extends StatefulWidget implements AutoRouteWrapper {
               UserProfileEvent.fetch(
                 userId: loggedInUserId,
               ),
+            ),
+        ),
+        BlocProvider(
+          create: (context) => GetUserDiscoveryMatchedSwipesBloc()
+            ..add(
+              GetUserDiscoveryMatchedSwipesEvent.fetch(),
             ),
         ),
       ],
