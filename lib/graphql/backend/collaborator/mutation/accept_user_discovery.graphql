@@ -1,0 +1,13 @@
+mutation AcceptUserDiscovery(
+  $swipee: MongoID!
+  $message: String
+  $event: MongoID
+) {
+  acceptUserDiscovery(swipee: $swipee, message: $message, event: $event) {
+    state
+    user {
+      _id
+      name
+    }
+  }
+}

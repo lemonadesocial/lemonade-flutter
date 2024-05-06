@@ -1,0 +1,7 @@
+mutation DeclineUserDiscovery(
+  $swipee: MongoID!
+  $message: String
+  $event: MongoID
+) {
+  declineUserDiscovery(swipee: $swipee, message: $message, event: $event)
+}

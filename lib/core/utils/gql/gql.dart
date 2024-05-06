@@ -39,11 +39,9 @@ class BaseGQL {
     this.customLinks = const [],
   }) {
     _authLink = AuthLink(
-      headerKey: 'x-ory-kratos-session',
       getToken: () async {
-        return 'MTcxMzY4MTE4MHxHbWxfTHBhTklNSTBqSDNUZzFCcUNxSkZaX0pfNmhCM18wTVpTV0pzVl9XZFZTY1l6RWgzYXZYMUJhREVEaVJtdjRFc2VQdnJ6UE85N1lMWnp1T3JaOUNJZ2VLdkU5cUFhUGlaN092NzVDdHhvbzhKb1h4WFY5RHBNSEY3R0VlNEhNLThQaXV4a2FxV2NyQjdlb3RkODY0NFR1c2ZjR3VtMDQyTHFJMUFJTG44S1ZfMWZRUkxhdUhjZGtLRGxPTTlPLU16WkxDYk4tOTZlNWFQWG00UkxhcVlNd0ZsY09wOE9DOUdaZGowWE1WUmVKNzZ5Vi1FNFQ1QTdmdkF2cWI2ZXNab3NTSTlrS1hCM1plRTltRUR8cr76NdDpmZma-oGmIEJorrh-gxAVwJes8y0nOe7YEPI=';
-        // var token = await appOauth.getTokenForGql();
-        // return 'Bearer $token';
+        var token = await appOauth.getTokenForGql();
+        return 'Bearer $token';
       },
     );
     _errorLink = ErrorLink(

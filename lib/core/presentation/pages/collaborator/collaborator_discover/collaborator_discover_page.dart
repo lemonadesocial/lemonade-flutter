@@ -1,5 +1,6 @@
 import 'package:app/core/application/collaborator/discover_users_bloc/discover_user_bloc.dart';
 import 'package:app/core/application/profile/user_profile_bloc/user_profile_bloc.dart';
+import 'package:app/core/domain/collaborator/collaborator_repository.dart';
 import 'package:app/core/presentation/dpos/common/dropdown_item_dpo.dart';
 import 'package:app/core/presentation/pages/collaborator/collaborator_discover/widgets/collaborator_discover_actions_bar.dart';
 import 'package:app/core/presentation/pages/collaborator/collaborator_discover/widgets/collaborator_discover_declined_overlay.dart';
@@ -13,7 +14,10 @@ import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart
 import 'package:app/core/presentation/widgets/floating_frosted_glass_dropdown_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
+import 'package:app/graphql/backend/collaborator/mutation/accept_user_discovery.graphql.dart';
+import 'package:app/graphql/backend/collaborator/mutation/decline_user_discovery.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
@@ -161,6 +165,11 @@ class _CollaboratorDiscoverPageState extends State<CollaboratorDiscoverPage> {
                         setState(() {
                           isVisibleDeclinedOverlay = true;
                         });
+                        getIt<CollaboratorRepository>().declineUserDiscovery(
+                          input: Variables$Mutation$DeclineUserDiscovery(
+                            swipee: currentUser?.userId ?? '',
+                          ),
+                        );
                         context.read<DiscoverUserBloc>().add(
                               DiscoverUserEvent.onUserSwiped(
                                 userId: currentUser?.userId ?? '',
@@ -178,8 +187,27 @@ class _CollaboratorDiscoverPageState extends State<CollaboratorDiscoverPage> {
                           context: context,
                           backgroundColor: colorScheme.surface,
                           topRadius: Radius.circular(30.r),
+                          useRootNavigator: true,
                           builder: (mContext) {
-                            return const CollaboratorSendLikeBottomSheet();
+                            return CollaboratorSendLikeBottomSheet(
+                              user: currentUser,
+                              onPressSendLike: (message) async {
+                                Navigator.of(context, rootNavigator: true)
+                                    .pop();
+                                getIt<CollaboratorRepository>()
+                                    .acceptUserDiscovery(
+                                  input: Variables$Mutation$AcceptUserDiscovery(
+                                    swipee: currentUser?.userId ?? '',
+                                    message: message,
+                                  ),
+                                );
+                                context.read<DiscoverUserBloc>().add(
+                                      DiscoverUserEvent.onUserSwiped(
+                                        userId: currentUser?.userId ?? '',
+                                      ),
+                                    );
+                              },
+                            );
                           },
                         );
                       },

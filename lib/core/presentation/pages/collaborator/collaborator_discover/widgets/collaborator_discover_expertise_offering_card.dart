@@ -10,9 +10,12 @@ import 'package:flutter/material.dart';
 
 class CollaboratorDiscoverExpertiseOfferingCard extends StatelessWidget {
   final User? user;
+  final Color? backgroundColor;
+
   const CollaboratorDiscoverExpertiseOfferingCard({
     super.key,
     this.user,
+    this.backgroundColor,
   });
 
   @override
@@ -30,7 +33,7 @@ class CollaboratorDiscoverExpertiseOfferingCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(Spacing.smMedium),
       decoration: ShapeDecoration(
-        color: LemonColor.white06,
+        color: backgroundColor ?? LemonColor.white06,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(LemonRadius.normal),
         ),
