@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.18.1](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.18.0...v1.18.1) (2024-05-06)
+
+
+### Bug Fixes
+
+* crash problem in notifications screen ([#573](https://github.com/lemonadesocial/lemonade-flutter/issues/573)) ([6e694d7](https://github.com/lemonadesocial/lemonade-flutter/commit/6e694d76953da18149b907a95aba8cd41781731d))
+
 ## [1.18.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.17.0...v1.18.0) (2024-05-06)
 
 
