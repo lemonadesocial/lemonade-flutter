@@ -86,7 +86,7 @@ class _CohostItem extends StatelessWidget {
                   height: Sizing.xSmall,
                   imageUrl: host.newPhotosExpanded?.isNotEmpty == true
                       ? ImageUtils.generateUrl(
-                          file: host.newPhotosExpanded?.first,
+                          file: host.newPhotosExpanded?.firstOrNull,
                         )
                       : '',
                   placeholder: (_, __) => ImagePlaceholder.defaultPlaceholder(),
