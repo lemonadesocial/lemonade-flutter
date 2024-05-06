@@ -1,35 +1,29 @@
-import 'package:app/core/domain/event/entities/event.dart';
-import 'package:app/core/presentation/pages/collaborator/widgets/spotline_event_item.dart';
+import 'package:app/core/domain/user/entities/user.dart';
+import 'package:app/core/presentation/pages/collaborator/widgets/spotlight_event_item.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CollaboratorDiscoverSpotlightEventsSection extends StatelessWidget {
-  const CollaboratorDiscoverSpotlightEventsSection({super.key});
+  final User? user;
+  const CollaboratorDiscoverSpotlightEventsSection({
+    super.key,
+    this.user,
+  });
 
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-    final events = [
-      Event(
-        title: "Living room gig gigachad nomad",
-        start: DateTime.now(),
-      ),
-      Event(
-        title: "Early morning yoga",
-        start: DateTime.now(),
-      ),
-      Event(
-        title: "Secret room",
-        start: DateTime.now(),
-      ),
-    ];
+    final events = user?.eventsExpanded ?? [];
+
     if (events.isEmpty) {
       return const SliverToBoxAdapter(child: SizedBox.shrink());
     }
@@ -93,8 +87,15 @@ class CollaboratorDiscoverSpotlightEventsSection extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 itemCount: events.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return SpotlineEventItem(
-                    event: events[index],
+                  return InkWell(
+                    onTap: () {
+                      AutoRouter.of(context).push(
+                        EventDetailRoute(eventId: events[index].id ?? ''),
+                      );
+                    },
+                    child: SpotlightEventItem(
+                      event: events[index],
+                    ),
                   );
                 },
               ),

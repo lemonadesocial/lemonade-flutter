@@ -192,5 +192,6 @@
         "declined": "Declined",
         "notConnected": "Not connected",
         "connected": "Connected"
-    }
+    },
+    "more": "$count more"
 }

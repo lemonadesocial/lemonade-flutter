@@ -1,3 +1,4 @@
+import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
@@ -8,7 +9,11 @@ import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 
 class CollaboratorDiscoverBasicInfoSection extends StatelessWidget {
-  const CollaboratorDiscoverBasicInfoSection({super.key});
+  final User? user;
+  const CollaboratorDiscoverBasicInfoSection({
+    super.key,
+    this.user,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,11 +24,11 @@ class CollaboratorDiscoverBasicInfoSection extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
+          Wrap(
+            crossAxisAlignment: WrapCrossAlignment.center,
             children: [
               Text(
-                'Madelyn Franci',
+                user?.name ?? '',
                 style: Typo.extraLarge.copyWith(
                   fontSize: 24,
                   fontWeight: FontWeight.w800,
@@ -32,60 +37,64 @@ class CollaboratorDiscoverBasicInfoSection extends StatelessWidget {
                 ),
               ),
               SizedBox(width: Spacing.smMedium / 2),
-              Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: Spacing.superExtraSmall,
-                  vertical: Spacing.extraSmall / 2,
-                ),
-                decoration: ShapeDecoration(
-                  color: LemonColor.acidGreen,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
+              if (user?.username != null)
+                Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: Spacing.superExtraSmall,
+                    vertical: Spacing.extraSmall / 2,
                   ),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      '@madfranci',
-                      style: Typo.small.copyWith(
-                        color: LemonColor.paleViolet,
-                      ),
+                  decoration: ShapeDecoration(
+                    color: LemonColor.acidGreen,
+                    shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(LemonRadius.extraSmall),
                     ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: Spacing.extraSmall),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: Sizing.medium / 2,
-                height: Sizing.medium / 2,
-                child: ThemeSvgIcon(
-                  color: colorScheme.onSecondary,
-                  builder: (colorFilter) => Assets.icons.icBriefcase.svg(
-                    colorFilter: colorFilter,
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        '@${user?.username ?? ''}',
+                        style: Typo.small.copyWith(
+                          color: LemonColor.paleViolet,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ),
-              SizedBox(width: Spacing.superExtraSmall),
-              Expanded(
-                child: Text(
-                  'Systems analyst at Mitsubishi',
-                  style: Typo.mediumPlus.copyWith(
+            ],
+          ),
+          if (user?.jobTitle?.isNotEmpty == true) ...[
+            SizedBox(height: Spacing.extraSmall),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: Sizing.medium / 2,
+                  height: Sizing.medium / 2,
+                  child: ThemeSvgIcon(
                     color: colorScheme.onSecondary,
+                    builder: (colorFilter) => Assets.icons.icBriefcase.svg(
+                      colorFilter: colorFilter,
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
+                SizedBox(width: Spacing.superExtraSmall),
+                Expanded(
+                  child: Text(
+                    '${user?.jobTitle} ${user?.companyName?.isNotEmpty == true ? 'at ${user?.companyName}' : ''}',
+                    style: Typo.mediumPlus.copyWith(
+                      color: colorScheme.onSecondary,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
         ],
       ),
     );

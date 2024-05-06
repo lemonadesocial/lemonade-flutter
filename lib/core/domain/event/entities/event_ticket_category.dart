@@ -2,6 +2,7 @@ import 'package:app/core/data/event/dtos/event_ticket_category_dto/event_ticket_
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'event_ticket_category.freezed.dart';
+part 'event_ticket_category.g.dart';
 
 @freezed
 class EventTicketCategory with _$EventTicketCategory {
@@ -21,4 +22,6 @@ class EventTicketCategory with _$EventTicketCategory {
         event: dto.event,
         description: dto.description,
       );
+  factory EventTicketCategory.fromJson(Map<String, dynamic> json) =>
+      _$EventTicketCategoryFromJson(json);
 }

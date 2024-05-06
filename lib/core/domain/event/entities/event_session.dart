@@ -4,9 +4,13 @@ import 'package:app/core/domain/user/entities/user.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'event_session.freezed.dart';
+part 'event_session.g.dart';
 
 @freezed
 class EventSession with _$EventSession {
+  const EventSession._();
+
+  @JsonSerializable(explicitToJson: true)
   factory EventSession({
     String? id,
     String? title,
@@ -30,4 +34,7 @@ class EventSession with _$EventSession {
             .map((i) => i == null ? null : User.fromDto(i))
             .toList(),
       );
+
+  factory EventSession.fromJson(Map<String, dynamic> json) =>
+      _$EventSessionFromJson(json);
 }

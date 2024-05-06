@@ -454,7 +454,7 @@ class EventRepositoryImpl implements EventRepository {
     if (result.hasException) {
       return Left(Failure.withGqlException(result.exception));
     }
-    return Right(result.parsedData?.submitEventApplicationQuestions ?? false);
+    return Right(result.parsedData?.submitEventApplicationQuestions != null);
   }
 
   @override

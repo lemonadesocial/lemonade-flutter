@@ -1,3 +1,4 @@
+import 'package:app/core/domain/user/entities/user_icebreaker.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/theme/color.dart';
@@ -7,7 +8,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CollaboratorIceBreakerCard extends StatelessWidget {
-  const CollaboratorIceBreakerCard({super.key});
+  final UserIcebreaker icebreaker;
+  const CollaboratorIceBreakerCard({
+    super.key,
+    required this.icebreaker,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +45,7 @@ class CollaboratorIceBreakerCard extends StatelessWidget {
               SizedBox(width: Spacing.smMedium / 2),
               Expanded(
                 child: Text(
-                  'My most unusual traits are...',
+                  icebreaker.questionExpanded?.title ?? '',
                   style: Typo.medium.copyWith(
                     color: colorScheme.onSecondary,
                     fontWeight: FontWeight.w400,
@@ -51,7 +56,7 @@ class CollaboratorIceBreakerCard extends StatelessWidget {
           ),
           SizedBox(height: Spacing.smMedium / 2),
           Text(
-            'Dad jokes, eye color mismatch, constant fidgeting when happy',
+            icebreaker.value ?? '',
             style: Typo.mediumPlus.copyWith(
               color: colorScheme.onPrimary,
               fontWeight: FontWeight.w500,

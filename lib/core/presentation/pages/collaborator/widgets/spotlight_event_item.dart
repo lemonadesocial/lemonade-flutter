@@ -11,9 +11,10 @@ import 'package:app/theme/typo.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 
-class SpotlineEventItem extends StatelessWidget {
-  const SpotlineEventItem({
+class SpotlightEventItem extends StatelessWidget {
+  const SpotlightEventItem({
     super.key,
     required this.event,
   });
@@ -155,7 +156,7 @@ class _EventJoinCount extends StatelessWidget {
           ),
           SizedBox(width: Spacing.superExtraSmall / 2),
           Text(
-            count.toString(),
+            NumberFormat.compact().format(count),
             style: Typo.xSmall.copyWith(
               color: colorScheme.onPrimary,
               fontWeight: FontWeight.w600,

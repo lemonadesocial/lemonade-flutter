@@ -1,3 +1,4 @@
+import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/pages/collaborator/sub_pages/widgets/collaborator_icebreakers_bottomsheet/collaborator_icebreakers_bottomsheet.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -11,17 +12,23 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class CollaboratorDiscoverIcebreakersSection extends StatelessWidget {
-  const CollaboratorDiscoverIcebreakersSection({super.key});
+  final User? user;
+  const CollaboratorDiscoverIcebreakersSection({
+    super.key,
+    this.user,
+  });
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final icebreakersCount = user?.icebreakers?.length ?? 0;
+    final firstIcebreaker = user?.icebreakers?.firstOrNull;
+
     return SliverToBoxAdapter(
       child: Container(
         padding: EdgeInsets.all(Spacing.smMedium),
-        clipBehavior: Clip.antiAlias,
         decoration: ShapeDecoration(
-          color: LemonColor.white06,
+          color: LemonColor.atomicBlack,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(LemonRadius.normal),
           ),
@@ -53,49 +60,44 @@ class CollaboratorDiscoverIcebreakersSection extends StatelessWidget {
                     ),
                   ),
                 ),
-                InkWell(
-                  onTap: () {
-                    showCupertinoModalBottomSheet(
-                      context: context,
-                      backgroundColor: colorScheme.surface,
-                      topRadius: Radius.circular(30.r),
-                      builder: (mContext) {
-                        return const CollaboratorIceBreakersBottomSheet();
-                      },
-                    );
-                  },
-                  child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
-                    clipBehavior: Clip.antiAlias,
-                    decoration: ShapeDecoration(
-                      color: colorScheme.secondary,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(LemonRadius.medium),
+                if (icebreakersCount > 1)
+                  InkWell(
+                    onTap: () {
+                      showCupertinoModalBottomSheet(
+                        context: context,
+                        backgroundColor: colorScheme.secondaryContainer,
+                        topRadius: Radius.circular(30.r),
+                        builder: (mContext) {
+                          return CollaboratorIceBreakersBottomSheet(
+                            icebreakers: user?.icebreakers ?? [],
+                          );
+                        },
+                      );
+                    },
+                    child: Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 9.r, vertical: 3.r),
+                      decoration: ShapeDecoration(
+                        color: colorScheme.secondary,
+                        shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.circular(LemonRadius.medium),
+                        ),
+                      ),
+                      child: Text(
+                        t.common.more(count: icebreakersCount - 1),
+                        style: Typo.small.copyWith(
+                          color: colorScheme.onSecondary,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          '5 more',
-                          style: Typo.small.copyWith(
-                            color: colorScheme.onSecondary,
-                            height: 0,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
                   ),
-                ),
               ],
             ),
             SizedBox(height: Spacing.smMedium),
             Text(
-              'My most unusual traits are...',
+              firstIcebreaker?.questionExpanded?.title ?? '',
               style: Typo.medium.copyWith(
                 color: colorScheme.onSecondary,
                 fontWeight: FontWeight.w400,
@@ -103,7 +105,7 @@ class CollaboratorDiscoverIcebreakersSection extends StatelessWidget {
             ),
             SizedBox(height: Spacing.smMedium / 2),
             Text(
-              'Dad jokes, eye color mismatch, constant fidgeting when happy',
+              firstIcebreaker?.value ?? '',
               style: Typo.extraMedium.copyWith(
                 color: colorScheme.onPrimary,
                 fontWeight: FontWeight.w600,

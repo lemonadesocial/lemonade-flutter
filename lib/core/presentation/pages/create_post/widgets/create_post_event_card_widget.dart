@@ -45,7 +45,7 @@ class CreatePostEventCardWidget extends StatelessWidget {
                     placeholder: (_, __) => ImagePlaceholder.eventCard(),
                     errorWidget: (_, __, ___) => ImagePlaceholder.eventCard(),
                     imageUrl: ImageUtils.generateUrl(
-                      file: event.newNewPhotosExpanded?.first,
+                      file: event.newNewPhotosExpanded?.firstOrNull,
                       imageConfig: ImageConfig.eventPhoto,
                     ),
                   ),

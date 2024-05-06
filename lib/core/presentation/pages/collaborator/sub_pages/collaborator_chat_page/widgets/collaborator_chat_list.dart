@@ -1,22 +1,69 @@
+import 'package:app/core/domain/collaborator/entities/user_discovery_swipe/user_discovery_swipe.dart';
+import 'package:app/core/presentation/pages/collaborator/sub_pages/collaborator_chat_page/widgets/collaborator_chat_item.dart';
 import 'package:app/core/presentation/pages/collaborator/sub_pages/widgets/collaborator_counter_widget.dart';
-import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
+import 'package:app/core/service/matrix/matrix_service.dart';
+import 'package:app/core/utils/matrix_utils.dart';
+import 'package:app/core/utils/stream_extension.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/theme/color.dart';
-import 'package:app/theme/sizing.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:matrix/matrix.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
+class MatchedSwipeRoom {
+  final UserDiscoverySwipe swipe;
+  final Room room;
+
+  MatchedSwipeRoom({
+    required this.room,
+    required this.swipe,
+  });
+}
+
 class CollaboratorChatList extends StatelessWidget {
-  const CollaboratorChatList({super.key});
+  final List<UserDiscoverySwipe> matchedSwipes;
+  const CollaboratorChatList({
+    super.key,
+    required this.matchedSwipes,
+  });
+
+  Future<Room?> getSingleRoomInfo(UserDiscoverySwipe swipe) async {
+    final matrixClient = getIt<MatrixService>().client;
+    final roomId = await matrixClient.startDirectChat(
+      LemonadeMatrixUtils.generateMatrixUserId(
+        lemonadeMatrixLocalpart: swipe.otherExpanded?.matrixLocalpart ?? '',
+      ),
+    );
+    return matrixClient.getRoomById(roomId);
+  }
+
+  Future<List<MatchedSwipeRoom>> getChatRooms(
+    List<UserDiscoverySwipe> matchedSwipes,
+  ) async {
+    List<MatchedSwipeRoom> rooms = [];
+    for (var swipeItem in matchedSwipes) {
+      final swipeRoom = await getSingleRoomInfo(swipeItem);
+      if (swipeRoom != null) {
+        rooms.add(
+          MatchedSwipeRoom(room: swipeRoom, swipe: swipeItem),
+        );
+      }
+    }
+    return rooms
+      ..sort(
+        (a, b) => b.room.timeCreated.compareTo(
+          a.room.timeCreated,
+        ),
+      );
+  }
 
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+
     return MultiSliver(
       children: [
         SliverPadding(
@@ -33,21 +80,41 @@ class CollaboratorChatList extends StatelessWidget {
                 SizedBox(
                   width: Spacing.extraSmall,
                 ),
-                const CollaboratorCounter(),
+                CollaboratorCounter(
+                  count: matchedSwipes.length,
+                ),
               ],
             ),
           ),
         ),
         SliverToBoxAdapter(child: SizedBox(height: Spacing.xSmall)),
-        SliverPadding(
-          padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
-          sliver: SliverList.separated(
-            itemCount: 6,
-            itemBuilder: (context, index) => const _ChatItem(),
-            separatorBuilder: (context, index) => SizedBox(
-              height: Spacing.xSmall,
-            ),
-          ),
+        StreamBuilder(
+          stream: getIt<MatrixService>()
+              .client
+              .onSync
+              .stream
+              .where((event) => event.hasRoomUpdate)
+              .rateLimit(const Duration(seconds: 1)),
+          builder: (context, snapshot) {
+            return FutureBuilder(
+              future: getChatRooms(matchedSwipes),
+              builder: (context, snapshot) {
+                final chatRooms = snapshot.data ?? [];
+                return SliverPadding(
+                  padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
+                  sliver: SliverList.separated(
+                    itemCount: chatRooms.length,
+                    itemBuilder: (context, index) => _ChatItem(
+                      swipeRoom: chatRooms[index],
+                    ),
+                    separatorBuilder: (context, index) => SizedBox(
+                      height: Spacing.small,
+                    ),
+                  ),
+                );
+              },
+            );
+          },
         ),
       ],
     );
@@ -55,138 +122,15 @@ class CollaboratorChatList extends StatelessWidget {
 }
 
 class _ChatItem extends StatelessWidget {
-  const _ChatItem();
+  final MatchedSwipeRoom swipeRoom;
+  const _ChatItem({
+    required this.swipeRoom,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return SizedBox(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Stack(
-            children: [
-              Container(
-                width: 42.w,
-                height: 42.w,
-                decoration: BoxDecoration(
-                  border: Border.all(color: colorScheme.outline),
-                  borderRadius: BorderRadius.circular(42.w),
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(42.w),
-                  child: CachedNetworkImage(
-                    imageUrl: "https://via.placeholder.com/60x60",
-                    width: 42.w,
-                    height: 42.w,
-                    errorWidget: (_, __, ___) =>
-                        ImagePlaceholder.defaultPlaceholder(
-                      radius: BorderRadius.circular(42.w),
-                    ),
-                    placeholder: (_, __) => ImagePlaceholder.defaultPlaceholder(
-                      radius: BorderRadius.circular(42.w),
-                    ),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-              Positioned(
-                bottom: 0,
-                right: 3.w,
-                child: Container(
-                  width: Sizing.xxSmall,
-                  height: Sizing.xxSmall,
-                  decoration: ShapeDecoration(
-                    color: LemonColor.malachiteGreen,
-                    shape: OvalBorder(
-                      side: BorderSide(
-                        width: 3.w,
-                        strokeAlign: BorderSide.strokeAlignOutside,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          SizedBox(width: Spacing.xSmall),
-          Expanded(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(
-                  width: double.infinity,
-                  child: Text(
-                    'Kierra Donin',
-                    style: Typo.medium.copyWith(
-                      color: colorScheme.onPrimary,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-                SizedBox(height: 2.w),
-                SizedBox(
-                  width: double.infinity,
-                  child: Text(
-                    "That's great news! What's next on our to-do list for that account?",
-                    style: Typo.medium.copyWith(
-                      color: colorScheme.onSecondary,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 12),
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                '8:12pm',
-                style: Typo.small.copyWith(
-                  color: colorScheme.onSurfaceVariant,
-                ),
-              ),
-              SizedBox(height: 4.w),
-              const _UnreadCounter(),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _UnreadCounter extends StatelessWidget {
-  const _UnreadCounter();
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return Container(
-      padding:
-          EdgeInsets.symmetric(horizontal: Spacing.extraSmall, vertical: 2.w),
-      decoration: ShapeDecoration(
-        color: colorScheme.secondaryContainer,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(100),
-        ),
-      ),
-      child: Center(
-        child: Text(
-          '2',
-          style: Typo.xSmall.copyWith(
-            color: colorScheme.onPrimary,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ),
+    return CollaboratorChatItem(
+      room: swipeRoom.room,
     );
   }
 }

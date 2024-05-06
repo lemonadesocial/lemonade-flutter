@@ -123,7 +123,7 @@ class NotificationCardView extends StatelessWidget {
         padding: EdgeInsets.only(right: Spacing.small),
         child: LemonCircleAvatar(
           url: ImageUtils.generateUrl(
-            file: notification.fromExpanded?.newPhotosExpanded?.first,
+            file: notification.fromExpanded?.newPhotosExpanded?.firstOrNull,
             imageConfig: ImageConfig.profile,
           ),
           size: 42,

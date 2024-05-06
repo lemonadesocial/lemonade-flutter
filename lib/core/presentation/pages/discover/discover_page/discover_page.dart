@@ -3,7 +3,7 @@ import 'package:app/core/presentation/pages/discover/discover_page/views/discove
 import 'package:app/core/presentation/pages/discover/discover_page/views/discover_communities.dart';
 import 'package:app/core/presentation/pages/discover/discover_page/views/discover_upcoming_events.dart';
 import 'package:app/core/presentation/widgets/bottom_bar/bottom_bar_widget.dart';
-import 'package:app/core/presentation/widgets/home_appbar/home_appbar_v2.dart';
+import 'package:app/core/presentation/widgets/home_appbar/home_appbar.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';

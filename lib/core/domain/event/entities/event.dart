@@ -13,11 +13,13 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:app/core/domain/event/entities/event_application_question.dart';
 
 part 'event.freezed.dart';
+part 'event.g.dart';
 
 @freezed
 class Event with _$Event {
-  Event._();
+  const Event._();
 
+  @JsonSerializable(explicitToJson: true)
   factory Event({
     String? id,
     User? hostExpanded,
@@ -156,26 +158,23 @@ class Event with _$Event {
       timezone: dto.timezone,
     );
   }
+
+  factory Event.fromJson(Map<String, dynamic> json) => _$EventFromJson(json);
 }
 
-class EventOffer {
-  const EventOffer({
-    this.id,
-    this.auto,
-    this.broadcastRooms,
-    this.position,
-    this.provider,
-    this.providerId,
-    this.providerNetwork,
-  });
+@freezed
+class EventOffer with _$EventOffer {
+  const EventOffer._();
 
-  final String? id;
-  final bool? auto;
-  final List<String>? broadcastRooms;
-  final double? position;
-  final OfferProvider? provider;
-  final String? providerId;
-  final String? providerNetwork;
+  factory EventOffer({
+    String? id,
+    bool? auto,
+    List<String>? broadcastRooms,
+    double? position,
+    OfferProvider? provider,
+    String? providerId,
+    String? providerNetwork,
+  }) = _EventOffer;
 
   factory EventOffer.fromDto(EventOfferDto dto) => EventOffer(
         id: dto.id,
@@ -186,15 +185,25 @@ class EventOffer {
         providerId: dto.providerId,
         providerNetwork: dto.providerNetwork,
       );
+
+  factory EventOffer.fromJson(Map<String, dynamic> json) =>
+      _$EventOfferFromJson(json);
 }
 
-class Broadcast {
-  Broadcast({this.providerId});
+@freezed
+class Broadcast with _$Broadcast {
+  const Broadcast._();
+
+  factory Broadcast({
+    String? providerId,
+  }) = _Broadcast;
 
   factory Broadcast.fromDto(BroadcastDto dto) {
     return Broadcast(
       providerId: dto.providerId,
     );
   }
-  String? providerId;
+
+  factory Broadcast.fromJson(Map<String, dynamic> json) =>
+      _$BroadcastFromJson(json);
 }

@@ -500,5 +500,6 @@ final collaboratorRoutes = AutoRoute(
     AutoRoute(
       page: CollaboratorPreviewProfileRoute.page,
     ),
+    AutoRoute(page: ChatRoute.page),
   ],
 );

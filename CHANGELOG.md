@@ -1,5 +1,33 @@
 # Changelog
 
+## [1.18.1](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.18.0...v1.18.1) (2024-05-06)
+
+
+### Bug Fixes
+
+* crash problem in notifications screen ([#573](https://github.com/lemonadesocial/lemonade-flutter/issues/573)) ([6e694d7](https://github.com/lemonadesocial/lemonade-flutter/commit/6e694d76953da18149b907a95aba8cd41781731d))
+
+## [1.18.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.17.0...v1.18.0) (2024-05-06)
+
+
+### Features
+
+* collaborators likes chat and edit collaborator profile UI ([#564](https://github.com/lemonadesocial/lemonade-flutter/issues/564)) ([ee932a4](https://github.com/lemonadesocial/lemonade-flutter/commit/ee932a46f7386398848c6b04ddd07386002acbb2))
+* collaborators UI flow ([#562](https://github.com/lemonadesocial/lemonade-flutter/issues/562)) ([901c6fe](https://github.com/lemonadesocial/lemonade-flutter/commit/901c6fec84449fdc6caf733e665c5821434c59c4))
+* enhance dashboard chart and date time range picker ([#563](https://github.com/lemonadesocial/lemonade-flutter/issues/563)) ([a6bab0c](https://github.com/lemonadesocial/lemonade-flutter/commit/a6bab0c4c3fc5f8cabae1a82a608eb0597a5a295))
+* event dashboard revenue ([#559](https://github.com/lemonadesocial/lemonade-flutter/issues/559)) ([adf24fe](https://github.com/lemonadesocial/lemonade-flutter/commit/adf24fee16d2b74784ec56da325bb15b1b3e9bf8))
+* filter & icebreakers UI of collaborator ([#568](https://github.com/lemonadesocial/lemonade-flutter/issues/568)) ([b13209b](https://github.com/lemonadesocial/lemonade-flutter/commit/b13209b3abd6b00b1db22d11c3ea0c5654852af6))
+* new home appbar, update bottom bar ([#567](https://github.com/lemonadesocial/lemonade-flutter/issues/567)) ([c6c5d13](https://github.com/lemonadesocial/lemonade-flutter/commit/c6c5d13e1690a33b6532ae397146c1bb46ac471a))
+* update placeholder event cover photo ([#566](https://github.com/lemonadesocial/lemonade-flutter/issues/566)) ([08a808e](https://github.com/lemonadesocial/lemonade-flutter/commit/08a808e2d0010054717a86ca43736531c59fe944))
+
+
+### Bug Fixes
+
+* crash in community page ([#565](https://github.com/lemonadesocial/lemonade-flutter/issues/565)) ([a7a91fa](https://github.com/lemonadesocial/lemonade-flutter/commit/a7a91fada6ff8558dfcbd2b32d093702b2aa089f))
+* minor bugs ([#571](https://github.com/lemonadesocial/lemonade-flutter/issues/571)) ([1045bdc](https://github.com/lemonadesocial/lemonade-flutter/commit/1045bdc34ee343991a598119d4b5b88ab5720cb0))
+* remove weird signin popup when logout ([#569](https://github.com/lemonadesocial/lemonade-flutter/issues/569)) ([fdac48e](https://github.com/lemonadesocial/lemonade-flutter/commit/fdac48ea41d52ec12f4cd734c1451d9fe89664ce))
+* temporary show coming soon collaborator ([#570](https://github.com/lemonadesocial/lemonade-flutter/issues/570)) ([ce38375](https://github.com/lemonadesocial/lemonade-flutter/commit/ce38375cb1f1e8102950a5ea9071d90940ee92d0))
+
 ## [1.17.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.16.0...v1.17.0) (2024-04-24)
 
 

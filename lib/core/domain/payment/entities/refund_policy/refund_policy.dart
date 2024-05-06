@@ -2,6 +2,7 @@ import 'package:app/core/data/payment/dtos/refund_policy_dto/refund_policy_dto.d
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'refund_policy.freezed.dart';
+part 'refund_policy.g.dart';
 
 @freezed
 class RefundPolicy with _$RefundPolicy {
@@ -16,4 +17,6 @@ class RefundPolicy with _$RefundPolicy {
         timestamp: dto.timestamp,
         percent: dto.percent,
       );
+  factory RefundPolicy.fromJson(Map<String, dynamic> json) =>
+      _$RefundPolicyFromJson(json);
 }

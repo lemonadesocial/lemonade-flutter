@@ -4,11 +4,13 @@ import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'payment_account.freezed.dart';
+part 'payment_account.g.dart';
 
 @freezed
 class PaymentAccount with _$PaymentAccount {
   PaymentAccount._();
 
+  @JsonSerializable(explicitToJson: true)
   factory PaymentAccount({
     String? id,
     bool? active,
@@ -31,12 +33,16 @@ class PaymentAccount with _$PaymentAccount {
             ? AccountInfo.fromDto(dto.accountInfo!)
             : null,
       );
+
+  factory PaymentAccount.fromJson(Map<String, dynamic> json) =>
+      _$PaymentAccountFromJson(json);
 }
 
 @freezed
 class AccountInfo with _$AccountInfo {
   AccountInfo._();
 
+  @JsonSerializable(explicitToJson: true)
   factory AccountInfo({
     List<String>? currencies,
     Map<String, CurrencyInfo>? currencyMap,
@@ -85,6 +91,9 @@ class AccountInfo with _$AccountInfo {
             .map((item) => RefundPolicy.fromDto(item))
             .toList(),
       );
+
+  factory AccountInfo.fromJson(Map<String, dynamic> json) =>
+      _$AccountInfoFromJson(json);
 }
 
 @freezed
@@ -100,4 +109,6 @@ class CurrencyInfo with _$CurrencyInfo {
         decimals: dto.decimals,
         contracts: dto.contracts,
       );
+  factory CurrencyInfo.fromJson(Map<String, dynamic> json) =>
+      _$CurrencyInfoFromJson(json);
 }

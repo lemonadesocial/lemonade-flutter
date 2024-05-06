@@ -15,6 +15,11 @@
     "sendLike": "Send like",
     "likedYourProfile": "Liked your profile",
     "needHelpWith": "Needs help with",
+    "discover": {
+        "emptyTitle": "What's a a few more miles ?",
+        "emptyDescription": "You've seen everyone nearby. But\nsomeone greate could be just a tiny bit further away",
+        "adjustFilter": "Adjust your filters"
+    },
     "editProfile": {
         "aboutYou": {
             "aboutYouTitle": "About you",
