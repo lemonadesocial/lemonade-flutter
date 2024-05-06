@@ -1,59 +1,65 @@
+import 'package:app/core/domain/collaborator/entities/user_discovery_swipe/user_discovery_swipe.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
+import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
-import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
-import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
-import 'package:auto_route/auto_route.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CollboratorLikeItem extends StatelessWidget {
-  const CollboratorLikeItem({super.key});
+  final UserDiscoverySwipe swipe;
+  const CollboratorLikeItem({
+    super.key,
+    required this.swipe,
+  });
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    return InkWell(
-      onTap: () {
-        AutoRouter.of(context).push(const CollaboratorLikePreviewRoute());
-      },
-      child: Container(
-        padding: EdgeInsets.all(Spacing.small),
-        decoration: BoxDecoration(
-          color: LemonColor.atomicBlack,
-          borderRadius: BorderRadius.circular(LemonRadius.medium),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const _Avatar(),
-            SizedBox(width: Spacing.xSmall),
-            Expanded(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Kierra Donin',
-                            style: Typo.medium.copyWith(
-                              color: colorScheme.onPrimary,
-                              fontWeight: FontWeight.w500,
-                            ),
+    final companyName = swipe.otherExpanded?.companyName;
+    final jobTitle = swipe.otherExpanded?.jobTitle;
+
+    return Container(
+      padding: EdgeInsets.all(Spacing.small),
+      decoration: BoxDecoration(
+        color: LemonColor.atomicBlack,
+        borderRadius: BorderRadius.circular(LemonRadius.medium),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: swipe.message?.isNotEmpty == true
+            ? CrossAxisAlignment.start
+            : CrossAxisAlignment.center,
+        children: [
+          _Avatar(imageUrl: swipe.otherExpanded?.imageAvatar ?? ''),
+          SizedBox(width: Spacing.xSmall),
+          Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          swipe.otherExpanded?.name ?? '',
+                          style: Typo.medium.copyWith(
+                            color: colorScheme.onPrimary,
+                            fontWeight: FontWeight.w500,
                           ),
-                          const SizedBox(height: 2),
+                        ),
+                        if (jobTitle?.isNotEmpty == true) ...[
+                          SizedBox(height: 2.w),
                           Row(
                             children: [
                               ThemeSvgIcon(
@@ -65,7 +71,7 @@ class CollboratorLikeItem extends StatelessWidget {
                               ),
                               SizedBox(width: Spacing.superExtraSmall),
                               Text(
-                                'Head Chef at Marriot',
+                                '$jobTitle ${companyName?.isNotEmpty == true ? 'at $companyName' : ''}',
                                 style: Typo.medium.copyWith(
                                   color: colorScheme.onSecondary,
                                 ),
@@ -73,82 +79,83 @@ class CollboratorLikeItem extends StatelessWidget {
                             ],
                           ),
                         ],
+                      ],
+                    ),
+                    ThemeSvgIcon(
+                      color: colorScheme.onSecondary,
+                      builder: (filter) => Assets.icons.icArrowRight.svg(
+                        colorFilter: filter,
                       ),
-                      ThemeSvgIcon(
-                        color: colorScheme.onSecondary,
-                        builder: (filter) => Assets.icons.icArrowRight.svg(
-                          colorFilter: filter,
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
+                ),
+                if (swipe.message?.isNotEmpty == true) ...[
                   SizedBox(height: Spacing.superExtraSmall),
-                  const _InitialMessage(),
+                  _InitialMessage(
+                    message: swipe.message ?? '',
+                  ),
                 ],
-              ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 }
 
 class _Avatar extends StatelessWidget {
-  const _Avatar();
+  final String? imageUrl;
+  const _Avatar({
+    this.imageUrl,
+  });
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return Stack(
       children: [
-        Container(
+        LemonNetworkImage(
+          border: Border.all(
+            color: colorScheme.outline,
+          ),
+          borderRadius: BorderRadius.circular(42.w),
+          imageUrl: imageUrl ?? '',
           width: 42.w,
           height: 42.w,
-          decoration: BoxDecoration(
-            border: Border.all(color: colorScheme.outline),
-            borderRadius: BorderRadius.circular(42.w),
+          placeholder: ImagePlaceholder.defaultPlaceholder(
+            radius: BorderRadius.circular(42.w),
           ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(42.w),
-            child: CachedNetworkImage(
-              imageUrl: "https://via.placeholder.com/60x60",
-              width: 42.w,
-              height: 42.w,
-              errorWidget: (_, __, ___) => ImagePlaceholder.defaultPlaceholder(
-                radius: BorderRadius.circular(42.w),
-              ),
-              placeholder: (_, __) => ImagePlaceholder.defaultPlaceholder(
-                radius: BorderRadius.circular(42.w),
-              ),
-              fit: BoxFit.cover,
-            ),
-          ),
+          fit: BoxFit.cover,
         ),
-        Positioned(
-          bottom: 0,
-          right: 3.w,
-          child: Container(
-            width: Sizing.xxSmall,
-            height: Sizing.xxSmall,
-            decoration: ShapeDecoration(
-              color: LemonColor.malachiteGreen,
-              shape: OvalBorder(
-                side: BorderSide(
-                  width: 3.w,
-                  strokeAlign: BorderSide.strokeAlignOutside,
-                ),
-              ),
-            ),
-          ),
-        ),
+        // TODO: check online status using matrix
+        // Positioned(
+        //   bottom: 0,
+        //   right: 3.w,
+        //   child: Container(
+        //     width: Sizing.xxSmall,
+        //     height: Sizing.xxSmall,
+        //     decoration: ShapeDecoration(
+        //       color: LemonColor.malachiteGreen,
+        //       shape: OvalBorder(
+        //         side: BorderSide(
+        //           width: 3.w,
+        //           strokeAlign: BorderSide.strokeAlignOutside,
+        //         ),
+        //       ),
+        //     ),
+        //   ),
+        // ),
       ],
     );
   }
 }
 
 class _InitialMessage extends StatelessWidget {
-  const _InitialMessage();
+  final String message;
+  const _InitialMessage({
+    required this.message,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -169,7 +176,7 @@ class _InitialMessage extends StatelessWidget {
         ),
       ),
       child: Text(
-        'Hey! We are build the worlds biggest automobile brand in the world! Would you like to join us? We have an amazing working environment that would suit your needs as well!',
+        message,
         style: Typo.small.copyWith(
           color: colorScheme.onSecondary,
         ),

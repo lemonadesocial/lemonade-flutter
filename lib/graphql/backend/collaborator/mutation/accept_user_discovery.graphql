@@ -5,9 +5,5 @@ mutation AcceptUserDiscovery(
 ) {
   acceptUserDiscovery(swipee: $swipee, message: $message, event: $event) {
     state
-    user {
-      _id
-      name
-    }
   }
 }

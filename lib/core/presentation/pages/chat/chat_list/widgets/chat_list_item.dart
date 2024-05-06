@@ -15,15 +15,20 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:matrix/matrix.dart';
 
 class ChatListItem extends StatelessWidget {
-  const ChatListItem({super.key, required this.room});
   final Room room;
+  final EdgeInsets? padding;
+  const ChatListItem({
+    super.key,
+    required this.room,
+    this.padding,
+  });
 
   bool get isMuted => room.pushRuleState != PushRuleState.notify;
   bool get isPrivateChannel => room.joinRules == JoinRules.private;
   bool get isChannel => room.directChatMatrixID == null;
   String get roomName => room.getLocalizedDisplayname();
 
-  Widget _buildAvatar() {
+  Widget buildAvatar() {
     final avatarUrl = room.avatar;
     final isDirectChat = room.isDirectChat;
     final presence = room.directChatPresence?.presence;
@@ -58,7 +63,7 @@ class ChatListItem extends StatelessWidget {
     AutoRouter.of(context).navigateNamed('/chat/detail/${room.id}');
   }
 
-  Widget _buildSubtitle(BuildContext context) {
+  Widget buildSubtitle(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
     final typingText = room.getLocalizedTypingText(context);
@@ -133,13 +138,14 @@ class ChatListItem extends StatelessWidget {
     return InkWell(
       onTap: () => clickAction(context),
       child: Padding(
-        padding: EdgeInsets.symmetric(
-          vertical: Spacing.extraSmall,
-          horizontal: Spacing.small,
-        ),
+        padding: padding ??
+            EdgeInsets.symmetric(
+              vertical: Spacing.extraSmall,
+              horizontal: Spacing.small,
+            ),
         child: Row(
           children: [
-            _buildAvatar(),
+            buildAvatar(),
             SizedBox(
               width: Spacing.xSmall,
             ),
@@ -155,7 +161,7 @@ class ChatListItem extends StatelessWidget {
                           room.isUnread ? FontWeight.w600 : FontWeight.w400,
                     ),
                   ),
-                  _buildSubtitle(context),
+                  buildSubtitle(context),
                 ],
               ),
             ),
