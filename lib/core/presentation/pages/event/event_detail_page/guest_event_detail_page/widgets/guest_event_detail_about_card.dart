@@ -29,7 +29,7 @@ class GuestEventDetailAboutCard extends StatelessWidget {
     }
 
     return ImageUtils.generateUrl(
-      file: event.newNewPhotosExpanded?.first,
+      file: event.newNewPhotosExpanded?.firstOrNull,
       imageConfig: ImageConfig.eventPhoto,
     );
   }

@@ -118,14 +118,14 @@ class _EventCountDown extends StatelessWidget {
                                 ),
                                 child: CachedNetworkImage(
                                   fit: BoxFit.cover,
-                                  imageUrl: event.newNewPhotosExpanded
-                                              ?.isNotEmpty ==
-                                          true
-                                      ? ImageUtils.generateUrl(
-                                          file:
-                                              event.newNewPhotosExpanded?.first,
-                                        )
-                                      : '',
+                                  imageUrl:
+                                      event.newNewPhotosExpanded?.isNotEmpty ==
+                                              true
+                                          ? ImageUtils.generateUrl(
+                                              file: event.newNewPhotosExpanded
+                                                  ?.firstOrNull,
+                                            )
+                                          : '',
                                   errorWidget: (context, url, error) =>
                                       ImagePlaceholder.defaultPlaceholder(),
                                   placeholder: (context, url) =>

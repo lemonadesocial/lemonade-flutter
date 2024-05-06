@@ -108,7 +108,7 @@ class _SpeakerItem extends StatelessWidget {
                   height: Sizing.xSmall,
                   imageUrl: speaker.newPhotosExpanded?.isNotEmpty == true
                       ? ImageUtils.generateUrl(
-                          file: speaker.newPhotosExpanded?.first,
+                          file: speaker.newPhotosExpanded?.firstOrNull,
                         )
                       : '',
                   placeholder: (_, __) => ImagePlaceholder.defaultPlaceholder(),
