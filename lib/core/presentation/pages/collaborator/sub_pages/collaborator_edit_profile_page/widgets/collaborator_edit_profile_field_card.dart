@@ -1,10 +1,8 @@
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
-import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
@@ -27,7 +25,7 @@ class CollaboratorProfileFieldCard extends StatelessWidget {
     return InkWell(
       onTap: () {
         Vibrate.feedback(FeedbackType.light);
-        AutoRouter.of(context).navigate(const EditProfileRoute());
+        onTap?.call();
       },
       child: Container(
         padding: EdgeInsets.all(Spacing.small),
