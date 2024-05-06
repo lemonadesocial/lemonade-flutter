@@ -5,17 +5,17 @@ import 'package:app/core/domain/event/entities/event_ticket_category.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'event_ticket_types.freezed.dart';
+part 'event_ticket_types.g.dart';
 
-class EventTicketTypesResponse {
-  final TicketDiscount? discount;
-  final int? limit;
-  final List<PurchasableTicketType>? ticketTypes;
+@freezed
+class EventTicketTypesResponse with _$EventTicketTypesResponse {
+  const EventTicketTypesResponse._();
 
-  const EventTicketTypesResponse({
-    this.discount,
-    this.limit,
-    this.ticketTypes,
-  });
+  factory EventTicketTypesResponse({
+    TicketDiscount? discount,
+    int? limit,
+    List<PurchasableTicketType>? ticketTypes,
+  }) = _EventTicketTypesResponse;
 
   factory EventTicketTypesResponse.fromDto(
     EventTicketTypesResponseDto dto,
@@ -32,27 +32,32 @@ class EventTicketTypesResponse {
       );
 }
 
-class TicketDiscount {
-  final String? discount;
-  final int? limit;
-  final double? ratio;
+@freezed
+class TicketDiscount with _$TicketDiscount {
+  const TicketDiscount._();
 
-  const TicketDiscount({
-    this.discount,
-    this.limit,
-    this.ratio,
-  });
+  factory TicketDiscount({
+    String? discount,
+    int? limit,
+    double? ratio,
+  }) = _TicketDiscount;
 
   factory TicketDiscount.fromDto(TicketDiscountDto dto) => TicketDiscount(
         discount: dto.discount,
         limit: dto.limit,
         ratio: dto.ratio,
       );
+
+  factory TicketDiscount.fromJson(Map<String, dynamic> json) =>
+      _$TicketDiscountFromJson(json);
 }
 
 // Used for Guest
 @freezed
 class PurchasableTicketType with _$PurchasableTicketType {
+  const PurchasableTicketType._();
+
+  @JsonSerializable(explicitToJson: true)
   factory PurchasableTicketType({
     String? id,
     bool? active,
@@ -109,11 +114,17 @@ class PurchasableTicketType with _$PurchasableTicketType {
             ? EventTicketCategory.fromDto(dto.categoryExpanded!)
             : null,
       );
+
+  factory PurchasableTicketType.fromJson(Map<String, dynamic> json) =>
+      _$PurchasableTicketTypeFromJson(json);
 }
 
 // Used for Host
 @freezed
 class EventTicketType with _$EventTicketType {
+  const EventTicketType._();
+
+  @JsonSerializable(explicitToJson: true)
   factory EventTicketType({
     String? id,
     bool? active,
@@ -175,24 +186,23 @@ class EventTicketType with _$EventTicketType {
             ? EventTicketCategory.fromDto(dto.categoryExpanded!)
             : null,
       );
+
+  factory EventTicketType.fromJson(Map<String, dynamic> json) =>
+      _$EventTicketTypeFromJson(json);
 }
 
-class EventTicketPrice {
-  final String? cost;
-  final BigInt? cryptoCost;
-  final double? fiatCost;
-  final String? network;
-  final String? currency;
-  final bool? isDefault;
+@freezed
+class EventTicketPrice with _$EventTicketPrice {
+  const EventTicketPrice._();
 
-  EventTicketPrice({
-    this.cost,
-    this.cryptoCost,
-    this.fiatCost,
-    this.network,
-    this.currency,
-    this.isDefault,
-  });
+  factory EventTicketPrice({
+    String? cost,
+    BigInt? cryptoCost,
+    double? fiatCost,
+    String? network,
+    String? currency,
+    bool? isDefault,
+  }) = _EventTicketPrice;
 
   factory EventTicketPrice.fromDto(EventTicketPriceDto dto) => EventTicketPrice(
         cost: dto.cost,
@@ -202,6 +212,9 @@ class EventTicketPrice {
         currency: dto.currency,
         isDefault: dto.isDefault,
       );
+
+  factory EventTicketPrice.fromJson(Map<String, dynamic> json) =>
+      _$EventTicketPriceFromJson(json);
 }
 
 @freezed
@@ -218,4 +231,7 @@ class WhitelistUserInfo with _$WhitelistUserInfo {
         id: dto.id,
         email: dto.email,
       );
+
+  factory WhitelistUserInfo.fromJson(Map<String, dynamic> json) =>
+      _$WhitelistUserInfoFromJson(json);
 }

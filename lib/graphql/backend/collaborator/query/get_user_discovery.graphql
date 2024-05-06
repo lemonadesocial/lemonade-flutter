@@ -1,0 +1,63 @@
+query GetUserDiscovery(
+  $longitude: Float!
+  $latitude: Float!
+  $offerings: [MongoID!]
+  $searchRange: Float
+  $event: MongoID
+) {
+  getUserDiscovery(
+    longitude: $longitude
+    latitude: $latitude
+    offerings: $offerings
+    search_range: $searchRange
+    event: $event
+  ) {
+    selected_expanded {
+      _id
+      name
+      username
+      job_title
+      company_name
+      attended
+      languages
+      handle_farcaster
+      handle_twitter
+      expertise
+      tagline
+      age
+      new_photos_expanded {
+        _id
+        key
+        bucket
+      }
+      addresses {
+        city
+        country
+      }
+      service_offers_expanded {
+        _id
+        title
+      }
+      icebreakers {
+        _id
+        question_expanded {
+          title
+        }
+        value
+      }
+      events_expanded(limit: 5) {
+        title
+        start
+        guests
+        accepted
+        cover
+        new_new_photos_expanded {
+          _id
+          bucket
+          key
+          url
+        }
+      }
+    }
+  }
+}

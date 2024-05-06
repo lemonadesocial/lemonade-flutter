@@ -1,6 +1,9 @@
 import 'package:app/core/data/user/dtos/user_dtos.dart';
+import 'package:app/core/domain/user/entities/user_service_offer.dart';
+import 'package:app/core/domain/user/entities/user_icebreaker.dart';
 import 'package:app/core/data/user/user_enums.dart';
 import 'package:app/core/domain/common/entities/common.dart';
+import 'package:app/core/domain/event/entities/event.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'user.freezed.dart';
@@ -65,8 +68,8 @@ class User with _$User {
     String? cover,
     UserType? type,
     List<Address>? addresses,
-    int? hosted,
-    int? attended,
+    double? hosted,
+    double? attended,
     int? friends,
     int? following,
     int? followers,
@@ -94,6 +97,11 @@ class User with _$User {
     bool? termsAcceptedAdult,
     bool? termsAcceptedConditions,
     String? matrixLocalpart,
+    List<String>? serviceOffers,
+    List<String>? expertise,
+    List<Event>? eventsExpanded,
+    List<UserServiceOffer>? serviceOffersExpanded,
+    List<UserIcebreaker>? icebreakers,
   }) = _User;
 
   factory User.fromDto(UserDto dto) {
@@ -167,6 +175,23 @@ class User with _$User {
       termsAcceptedAdult: dto.termsAcceptedAdult,
       termsAcceptedConditions: dto.termsAcceptedConditions,
       matrixLocalpart: dto.matrixLocalpart,
+      serviceOffers: dto.serviceOffers,
+      expertise: dto.expertise,
+      eventsExpanded: List.from(dto.eventsExpanded ?? [])
+          .map(
+            (item) => Event.fromDto(item),
+          )
+          .toList(),
+      serviceOffersExpanded: List.from(dto.serviceOffersExpanded ?? [])
+          .map(
+            (item) => UserServiceOffer.fromDto(item),
+          )
+          .toList(),
+      icebreakers: List.from(dto.icebreakers ?? [])
+          .map(
+            (item) => UserIcebreaker.fromDto(item),
+          )
+          .toList(),
     );
   }
 

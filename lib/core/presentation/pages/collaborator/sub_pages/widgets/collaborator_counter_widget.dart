@@ -4,7 +4,11 @@ import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 
 class CollaboratorCounter extends StatelessWidget {
-  const CollaboratorCounter({super.key});
+  final int count;
+  const CollaboratorCounter({
+    super.key,
+    required this.count,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +24,7 @@ class CollaboratorCounter extends StatelessWidget {
       ),
       child: Center(
         child: Text(
-          '8',
+          count.toString(),
           style: Typo.xSmall.copyWith(
             color: colorScheme.onSecondary,
             fontWeight: FontWeight.w500,

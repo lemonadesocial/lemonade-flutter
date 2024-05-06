@@ -1,0 +1,26 @@
+query GetUserDiscoverySwipes(
+  $skip: Int!
+  $limit: Int!
+  $state: UserDiscoverySwipeState
+) {
+  getUserDiscoverySwipes(skip: $skip, limit: $limit, state: $state) {
+    _id
+    decision1
+    decision2
+    message
+    other
+    other_expanded {
+      _id
+      name
+      image_avatar
+      matrix_localpart
+      job_title
+      company_name
+    }
+    source
+    stamp
+    state
+    user1
+    user2
+  }
+}

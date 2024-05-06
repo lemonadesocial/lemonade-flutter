@@ -1,3 +1,5 @@
+import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
+import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -55,9 +57,11 @@ class PhotoGalleryCarouselState extends State<PhotoGalleryCarousel> {
             pageSnapping: true,
             itemBuilder: (_, index) {
               return Center(
-                child: Image.network(
-                  widget.photos[index],
+                child: LemonNetworkImage(
+                  imageUrl: widget.photos[index],
                   fit: BoxFit.cover,
+                  height: IMAGE_HEIGHT,
+                  placeholder: ImagePlaceholder.eventCard(),
                 ),
               );
             },

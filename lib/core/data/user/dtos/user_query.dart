@@ -124,6 +124,11 @@ const userProfileFragment = '''
     tag
     position
   }
+  expertise
+  service_offers_expanded {
+    _id
+    title
+  }
 }
 ''';
 
