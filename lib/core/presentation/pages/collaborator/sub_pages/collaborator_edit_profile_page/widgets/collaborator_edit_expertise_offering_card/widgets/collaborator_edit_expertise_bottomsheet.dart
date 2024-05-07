@@ -16,6 +16,7 @@ import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:slang/builder/utils/string_extensions.dart';
 
@@ -80,7 +81,8 @@ class CollaboratorEditExpertiseBottomSheetState
                       final expertise = expertisesList?[index];
                       final expertiseLower =
                           expertise?.title?.toLowerCase() ?? '';
-                      if (expertiseLower.contains(searchValue)) {
+                      if (expertise?.title != '' &&
+                          expertiseLower.contains(searchValue)) {
                         final isChecked =
                             selectedExpertises.contains(expertise?.id);
                         return _ExpertiseItem(
@@ -118,9 +120,6 @@ class CollaboratorEditExpertiseBottomSheetState
                   opacity: selectedExpertises.isNotEmpty ? 1 : 0.5,
                   child: LinearGradientButton.primaryButton(
                     onTap: () async {
-                      if (kDebugMode) {
-                        print('selectedExpertises : $selectedExpertises');
-                      }
                       Vibrate.feedback(FeedbackType.light);
                       FocusManager.instance.primaryFocus?.unfocus();
                       await getIt<UserRepository>().updateUser(
@@ -128,13 +127,11 @@ class CollaboratorEditExpertiseBottomSheetState
                           "expertise": selectedExpertises,
                         }),
                       );
-                      UserProfileBloc(
-                        getIt<UserRepository>(),
-                      ).add(
-                        UserProfileEventFetch(
-                          userId: AuthUtils.getUserId(context),
-                        ),
-                      );
+                      context.read<UserProfileBloc>().add(
+                            UserProfileEventFetch(
+                              userId: AuthUtils.getUserId(context),
+                            ),
+                          );
                       AutoRouter.of(context).pop();
                     },
                     label: t.common.apply,

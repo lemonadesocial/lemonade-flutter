@@ -18,7 +18,7 @@ class CollaboratorEditExpertiseOfferingCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final loggedInUser = context.watch()<UserProfileBloc>().state.maybeWhen(
+    final loggedInUser = context.watch<UserProfileBloc>().state.maybeWhen(
           orElse: () => null,
           fetched: (profile) => profile,
         );
