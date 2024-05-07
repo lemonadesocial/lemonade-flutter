@@ -2,8 +2,10 @@ import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/pages/collaborator/sub_pages/collaborator_edit_profile_page/widgets/collaborator_edit_profile_field_card.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sliver_tools/sliver_tools.dart';
@@ -104,6 +106,9 @@ class CollaboratorEditProfileAboutYou extends StatelessWidget {
             return CollaboratorProfileFieldCard(
               title: displayName,
               description: value,
+              onTap: () {
+                AutoRouter.of(context).navigate(const EditProfileRoute());
+              },
             );
           },
           separatorBuilder: (context, index) => SizedBox(
