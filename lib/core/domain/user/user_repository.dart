@@ -1,6 +1,7 @@
 import 'package:app/core/domain/onboarding/onboarding_inputs.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/domain/user/entities/user_follow.dart';
+import 'package:app/core/domain/user/entities/user_icebreaker.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/graphql/backend/user/mutation/update_user.graphql.dart';
@@ -52,4 +53,7 @@ abstract class UserRepository {
   });
 
   Future<Either<Failure, bool>> updateUser({required Input$UserInput input});
+
+  Future<Either<Failure, List<UserIcebreakerQuestion>>>
+      getUserIcebreakerQuestions();
 }
