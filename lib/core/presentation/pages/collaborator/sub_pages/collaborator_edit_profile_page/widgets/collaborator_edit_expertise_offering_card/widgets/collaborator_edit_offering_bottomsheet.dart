@@ -5,6 +5,7 @@ import 'package:app/core/presentation/widgets/bottomsheet_grabber/bottomsheet_gr
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
+import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
@@ -31,6 +32,20 @@ class CollaboratorEditOfferingBottomSheetState
     extends State<CollaboratorEditOfferingBottomSheet> {
   List<String> selectedOffering = [];
   String searchValue = '';
+
+  @override
+  void initState() {
+    super.initState();
+    final loggedInUser = context.read<UserProfileBloc>().state.maybeWhen(
+          orElse: () => null,
+          fetched: (profile) => profile,
+        );
+    setState(() {
+      selectedOffering = loggedInUser!.serviceOffersExpanded!
+          .map<String>((item) => item.id!)
+          .toList();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,6 +85,11 @@ class CollaboratorEditOfferingBottomSheetState
             builder: (context, snapshot) {
               final offeringList =
                   snapshot.data?.fold((l) => null, (offering) => offering);
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(
+                  child: Loading.defaultLoading(context),
+                );
+              }
               return Expanded(
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
