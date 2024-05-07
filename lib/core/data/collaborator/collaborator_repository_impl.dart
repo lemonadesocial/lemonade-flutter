@@ -1,5 +1,7 @@
 import 'package:app/core/data/collaborator/dtos/user_discovery_dto/user_discovery_dto.dart';
 import 'package:app/core/data/collaborator/dtos/user_discovery_swipe_dto/user_discovery_swipe_dto.dart';
+import 'package:app/core/data/user/dtos/user_expertise_dto/user_expertise_dto.dart';
+import 'package:app/core/data/user/dtos/user_service_offer_dto/user_service_offer_dto.dart';
 import 'package:app/core/domain/collaborator/collaborator_repository.dart';
 import 'package:app/core/domain/collaborator/entities/user_discovery/user_discovery.dart';
 import 'package:app/core/domain/collaborator/entities/user_discovery_swipe/user_discovery_swipe.dart';
@@ -107,8 +109,8 @@ class CollaboratorRepositoryImpl implements CollaboratorRepository {
     return Right(
       (result.parsedData?.listUserExpertises ?? [])
           .map(
-            (item) => UserExpertise.fromJson(
-              item.toJson(),
+            (item) => UserExpertise.fromDto(
+              UserExpertiseDto.fromJson(item.toJson()),
             ),
           )
           .toList(),
@@ -126,8 +128,8 @@ class CollaboratorRepositoryImpl implements CollaboratorRepository {
     return Right(
       (result.parsedData?.listUserServices ?? [])
           .map(
-            (item) => UserServiceOffer.fromJson(
-              item.toJson(),
+            (item) => UserServiceOffer.fromDto(
+              UserServiceOfferDto.fromJson(item.toJson()),
             ),
           )
           .toList(),

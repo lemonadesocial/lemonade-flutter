@@ -1,4 +1,0 @@
-fragment UserExpertise on UserExpertise {
-    id: _id
-    title
-}

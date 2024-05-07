@@ -1,7 +1,6 @@
-# import '../fragment/user_expertise.graphql'
-
 query ListUserExpertises {
   listUserExpertises {
-    ...UserExpertise
+    _id
+    title
   }
 }
