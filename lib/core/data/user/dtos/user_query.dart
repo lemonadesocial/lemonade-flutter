@@ -117,7 +117,18 @@ const userProfileFragment = '''
     _id
   }
   tagline
-  
+  frequent_questions {
+    _id
+    question
+    answer
+    tag
+    position
+  }
+  expertise
+  service_offers_expanded {
+    _id
+    title
+  }
 }
 ''';
 
