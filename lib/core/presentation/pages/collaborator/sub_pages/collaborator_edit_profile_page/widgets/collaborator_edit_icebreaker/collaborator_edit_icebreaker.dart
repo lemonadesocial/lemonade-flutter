@@ -1,3 +1,4 @@
+import 'package:app/core/application/profile/user_profile_bloc/user_profile_bloc.dart';
 import 'package:app/core/presentation/pages/collaborator/sub_pages/collaborator_edit_profile_page/widgets/collaborator_edit_icebreaker/widgets/collaborator_select_icebreaker_prompt_bottomsheet.dart';
 import 'package:app/core/presentation/pages/collaborator/sub_pages/collaborator_edit_profile_page/widgets/remove_icon_wrapper.dart';
 import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
@@ -9,6 +10,7 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:sliver_tools/sliver_tools.dart';
@@ -20,7 +22,11 @@ class CollaboratorEditIcebreakers extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-
+    final loggedInUser = context.watch<UserProfileBloc>().state.maybeWhen(
+          orElse: () => null,
+          fetched: (profile) => profile,
+        );
+    final iceBreakers = loggedInUser?.icebreakers ?? [];
     return MultiSliver(
       children: [
         SliverToBoxAdapter(
@@ -66,15 +72,15 @@ class CollaboratorEditIcebreakers extends StatelessWidget {
         SliverPadding(
           padding: EdgeInsets.only(right: Spacing.superExtraSmall),
           sliver: SliverList.separated(
-            itemCount: 2,
+            itemCount: iceBreakers.length,
             separatorBuilder: (context, index) =>
                 SizedBox(height: Spacing.xSmall),
             itemBuilder: (context, index) {
-              return const RemoveIconWrapper(
+              final iceBreaker = iceBreakers[index];
+              return RemoveIconWrapper(
                 child: _IcebreakerItem(
-                  question: "My most unusual traits are",
-                  answer:
-                      "Dad jokes, eye color mismatch, constant fidgeting when happy",
+                  question: iceBreaker.questionExpanded?.title ?? '',
+                  answer: iceBreaker.value ?? '',
                 ),
               );
             },
