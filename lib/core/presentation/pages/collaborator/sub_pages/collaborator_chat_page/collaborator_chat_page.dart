@@ -1,3 +1,4 @@
+import 'package:app/core/application/collaborator/get_user_discovery_matched_swipes_bloc/get_user_discovery_matched_swipes_bloc.dart';
 import 'package:app/core/data/collaborator/dtos/user_discovery_swipe_dto/user_discovery_swipe_dto.dart';
 import 'package:app/core/domain/collaborator/entities/user_discovery_swipe/user_discovery_swipe.dart';
 import 'package:app/core/presentation/pages/collaborator/sub_pages/collaborator_chat_page/widgets/collaborator_chat_list.dart';
@@ -9,6 +10,7 @@ import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 @RoutePage()
@@ -16,6 +18,15 @@ class CollaboratorChatPage extends StatelessWidget {
   const CollaboratorChatPage({
     super.key,
   });
+
+  @override
+  Widget build(BuildContext context) {
+    return const _CollaboratorChatPageView();
+  }
+}
+
+class _CollaboratorChatPageView extends StatelessWidget {
+  const _CollaboratorChatPageView();
 
   @override
   Widget build(BuildContext context) {
@@ -64,25 +75,13 @@ class CollaboratorChatPage extends StatelessWidget {
               height: Spacing.large,
             ),
           ),
-          Query$GetUserDiscoverySwipes$Widget(
-            options: Options$Query$GetUserDiscoverySwipes(
-              variables: Variables$Query$GetUserDiscoverySwipes(
-                skip: 0,
-                limit: 100,
-                state: Enum$UserDiscoverySwipeState.matched,
-              ),
-            ),
-            builder: (
-              result, {
-              refetch,
-              fetchMore,
-            }) {
-              final matchedSwipes =
-                  (result.parsedData?.getUserDiscoverySwipes ?? []).map((item) {
-                return UserDiscoverySwipe.fromDto(
-                  UserDiscoverySwipeDto.fromJson(item.toJson()),
-                );
-              }).toList();
+          BlocBuilder<GetUserDiscoveryMatchedSwipesBloc,
+              GetUserDiscoveryMatchedSwipesState>(
+            builder: (context, state) {
+              List<UserDiscoverySwipe> matchedSwipes = state.maybeWhen(
+                orElse: () => [],
+                fetched: (matchedSwipes) => matchedSwipes,
+              );
               return CollaboratorChatList(
                 matchedSwipes: matchedSwipes,
               );
