@@ -48,14 +48,16 @@ class CollaboratorProfileFieldCard extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 2.w),
-                  Text(
-                    description,
-                    style: Typo.small.copyWith(
-                      color: colorScheme.onSecondary,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
+                  description != ''
+                      ? Text(
+                          description,
+                          style: Typo.small.copyWith(
+                            color: colorScheme.onSecondary,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        )
+                      : const SizedBox(),
                 ],
               ),
             ),

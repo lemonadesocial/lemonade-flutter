@@ -78,7 +78,7 @@ class CollaboratorFilterBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Query$listUserServices$Widget(
+    return Query$ListUserServices$Widget(
       builder: (
         result, {
         refetch,

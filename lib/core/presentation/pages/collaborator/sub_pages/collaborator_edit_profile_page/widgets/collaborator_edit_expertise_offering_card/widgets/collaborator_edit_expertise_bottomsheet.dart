@@ -1,9 +1,15 @@
+import 'package:app/core/application/profile/user_profile_bloc/user_profile_bloc.dart';
+import 'package:app/core/domain/collaborator/collaborator_repository.dart';
+import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/presentation/widgets/bottomsheet_grabber/bottomsheet_grabber.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
+import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/gen/assets.gen.dart';
+import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -12,19 +18,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:slang/builder/utils/string_extensions.dart';
-
-List<String> expertiseList = [
-  "Artist",
-  "Copy Writer",
-  "Data Analyst",
-  "Designer",
-  "Digital Marketing",
-  "Product Management",
-  "Product Development",
-  "Rapper",
-  "Researcher",
-  "Sales Consultant",
-];
 
 class CollaboratorEditExpertiseBottomSheet extends StatefulWidget {
   const CollaboratorEditExpertiseBottomSheet({super.key});
@@ -72,36 +65,45 @@ class CollaboratorEditExpertiseBottomSheetState
               },
             ),
           ),
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-              child: ListView.builder(
-                itemCount: expertiseList.length,
-                padding: EdgeInsets.only(bottom: Spacing.large),
-                itemBuilder: (BuildContext context, int index) {
-                  final expertise = expertiseList[index];
-                  final expertiseLower = expertise.toLowerCase();
-                  if (expertiseLower.contains(searchValue)) {
-                    final isChecked = selectedExpertises.contains(expertise);
-                    return _ExpertiseItem(
-                      expertise: expertise,
-                      isChecked: isChecked,
-                      onChecked: (isChecked) {
-                        setState(() {
-                          if (isChecked) {
-                            selectedExpertises.add(expertise);
-                          } else {
-                            selectedExpertises.remove(expertise);
-                          }
-                        });
-                      },
-                    );
-                  } else {
-                    return const SizedBox();
-                  }
-                },
-              ),
-            ),
+          FutureBuilder(
+            future: getIt<CollaboratorRepository>().getListUserExpertises(),
+            builder: (context, snapshot) {
+              final expertisesList =
+                  snapshot.data?.fold((l) => null, (expertise) => expertise);
+              return Expanded(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+                  child: ListView.builder(
+                    itemCount: expertisesList?.length,
+                    padding: EdgeInsets.only(bottom: Spacing.large),
+                    itemBuilder: (BuildContext context, int index) {
+                      final expertise = expertisesList?[index];
+                      final expertiseLower =
+                          expertise?.title?.toLowerCase() ?? '';
+                      if (expertiseLower.contains(searchValue)) {
+                        final isChecked =
+                            selectedExpertises.contains(expertise?.id);
+                        return _ExpertiseItem(
+                          title: expertise?.title ?? '',
+                          isChecked: isChecked,
+                          onChecked: (isChecked) {
+                            setState(() {
+                              if (isChecked) {
+                                selectedExpertises.add(expertise?.id ?? '');
+                              } else {
+                                selectedExpertises.remove(expertise?.id ?? '');
+                              }
+                            });
+                          },
+                        );
+                      } else {
+                        return const SizedBox();
+                      }
+                    },
+                  ),
+                ),
+              );
+            },
           ),
           Align(
             alignment: Alignment.bottomCenter,
@@ -115,12 +117,24 @@ class CollaboratorEditExpertiseBottomSheetState
                 child: Opacity(
                   opacity: selectedExpertises.isNotEmpty ? 1 : 0.5,
                   child: LinearGradientButton.primaryButton(
-                    onTap: () {
+                    onTap: () async {
                       if (kDebugMode) {
                         print('selectedExpertises : $selectedExpertises');
                       }
                       Vibrate.feedback(FeedbackType.light);
                       FocusManager.instance.primaryFocus?.unfocus();
+                      await getIt<UserRepository>().updateUser(
+                        input: Input$UserInput.fromJson({
+                          "expertise": selectedExpertises,
+                        }),
+                      );
+                      UserProfileBloc(
+                        getIt<UserRepository>(),
+                      ).add(
+                        UserProfileEventFetch(
+                          userId: AuthUtils.getUserId(context),
+                        ),
+                      );
                       AutoRouter.of(context).pop();
                     },
                     label: t.common.apply,
@@ -137,12 +151,12 @@ class CollaboratorEditExpertiseBottomSheetState
 }
 
 class _ExpertiseItem extends StatelessWidget {
-  final String expertise;
+  final String title;
   final bool isChecked;
   final Function(bool) onChecked;
 
   const _ExpertiseItem({
-    required this.expertise,
+    required this.title,
     required this.isChecked,
     required this.onChecked,
   });
@@ -163,7 +177,7 @@ class _ExpertiseItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    expertise,
+                    title,
                     style: Typo.mediumPlus.copyWith(
                       color: colorScheme.onPrimary,
                       fontWeight: FontWeight.w400,
