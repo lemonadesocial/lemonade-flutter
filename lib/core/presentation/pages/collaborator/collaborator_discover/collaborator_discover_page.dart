@@ -38,6 +38,28 @@ class CollaboratorDiscoverPage extends StatefulWidget {
 
 class _CollaboratorDiscoverPageState extends State<CollaboratorDiscoverPage> {
   bool? isVisibleDeclinedOverlay = false;
+  void openFilterBottomSheet() {
+    showCupertinoModalBottomSheet(
+      expand: true,
+      context: context,
+      backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+      topRadius: Radius.circular(30.r),
+      useRootNavigator: true,
+      builder: (mContext) {
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider.value(
+              value: context.read<DiscoverUserBloc>(),
+            ),
+            BlocProvider.value(
+              value: context.read<UserProfileBloc>(),
+            ),
+          ],
+          child: const CollaboratorFilterBottomSheet(),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,34 +70,17 @@ class _CollaboratorDiscoverPageState extends State<CollaboratorDiscoverPage> {
           backgroundColor: colorScheme.primary,
           appBar: LemonAppBar(
             actions: [
-              Padding(
-                padding: EdgeInsets.only(right: Spacing.medium),
-                child: InkWell(
-                  onTap: () {
-                    showCupertinoModalBottomSheet(
-                      expand: true,
-                      context: context,
-                      backgroundColor: colorScheme.secondaryContainer,
-                      topRadius: Radius.circular(30.r),
-                      useRootNavigator: true,
-                      builder: (mContext) {
-                        return MultiBlocProvider(
-                          providers: [
-                            BlocProvider.value(
-                              value: context.read<DiscoverUserBloc>(),
-                            ),
-                            BlocProvider.value(
-                              value: context.read<UserProfileBloc>(),
-                            ),
-                          ],
-                          child: const CollaboratorFilterBottomSheet(),
-                        );
-                      },
-                    );
-                  },
-                  child: Icon(
-                    Icons.filter_alt_outlined,
-                    color: colorScheme.onPrimary,
+              BlocBuilder<UserProfileBloc, UserProfileState>(
+                builder: (context, state) => Padding(
+                  padding: EdgeInsets.only(right: Spacing.medium),
+                  child: InkWell(
+                    onTap: () {
+                      openFilterBottomSheet();
+                    },
+                    child: Icon(
+                      Icons.filter_alt_outlined,
+                      color: colorScheme.onPrimary,
+                    ),
                   ),
                 ),
               ),
@@ -134,6 +139,7 @@ class _CollaboratorDiscoverPageState extends State<CollaboratorDiscoverPage> {
                         ),
                         SizedBox(height: Spacing.medium),
                         LinearGradientButton.secondaryButton(
+                          onTap: () => openFilterBottomSheet(),
                           label: t.collaborator.discover.adjustFilter,
                         ),
                       ],

@@ -1,14 +1,20 @@
 import 'package:app/core/domain/collaborator/entities/user_discovery_swipe/user_discovery_swipe.dart';
-import 'package:app/core/presentation/pages/collaborator/sub_pages/collaborator_chat_page/widgets/collaborator_chat_item.dart';
 import 'package:app/core/presentation/pages/collaborator/sub_pages/widgets/collaborator_counter_widget.dart';
+import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
+import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
+import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
+import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/service/matrix/matrix_service.dart';
+import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/matrix_utils.dart';
-import 'package:app/core/utils/stream_extension.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:matrix/matrix.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
@@ -28,36 +34,6 @@ class CollaboratorChatList extends StatelessWidget {
     super.key,
     required this.matchedSwipes,
   });
-
-  Future<Room?> getSingleRoomInfo(UserDiscoverySwipe swipe) async {
-    final matrixClient = getIt<MatrixService>().client;
-    final roomId = await matrixClient.startDirectChat(
-      LemonadeMatrixUtils.generateMatrixUserId(
-        lemonadeMatrixLocalpart: swipe.otherExpanded?.matrixLocalpart ?? '',
-      ),
-    );
-    return matrixClient.getRoomById(roomId);
-  }
-
-  Future<List<MatchedSwipeRoom>> getChatRooms(
-    List<UserDiscoverySwipe> matchedSwipes,
-  ) async {
-    List<MatchedSwipeRoom> rooms = [];
-    for (var swipeItem in matchedSwipes) {
-      final swipeRoom = await getSingleRoomInfo(swipeItem);
-      if (swipeRoom != null) {
-        rooms.add(
-          MatchedSwipeRoom(room: swipeRoom, swipe: swipeItem),
-        );
-      }
-    }
-    return rooms
-      ..sort(
-        (a, b) => b.room.timeCreated.compareTo(
-          a.room.timeCreated,
-        ),
-      );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,49 +64,115 @@ class CollaboratorChatList extends StatelessWidget {
           ),
         ),
         SliverToBoxAdapter(child: SizedBox(height: Spacing.xSmall)),
-        StreamBuilder(
-          stream: getIt<MatrixService>()
-              .client
-              .onSync
-              .stream
-              .where((event) => event.hasRoomUpdate)
-              .rateLimit(const Duration(seconds: 1)),
-          builder: (context, snapshot) {
-            return FutureBuilder(
-              future: getChatRooms(matchedSwipes),
-              builder: (context, snapshot) {
-                final chatRooms = snapshot.data ?? [];
-                return SliverPadding(
-                  padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
-                  sliver: SliverList.separated(
-                    itemCount: chatRooms.length,
-                    itemBuilder: (context, index) => _ChatItem(
-                      swipeRoom: chatRooms[index],
-                    ),
-                    separatorBuilder: (context, index) => SizedBox(
-                      height: Spacing.small,
-                    ),
-                  ),
-                );
-              },
-            );
-          },
-        ),
+        if (matchedSwipes.isEmpty)
+          SliverToBoxAdapter(
+            child: EmptyList(
+              emptyText: t.collaborator.emptyMatches,
+            ),
+          ),
+        if (matchedSwipes.isNotEmpty)
+          SliverPadding(
+            padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
+            sliver: SliverList.separated(
+              itemCount: matchedSwipes.length,
+              itemBuilder: (context, index) => _ChatItem(
+                swipe: matchedSwipes[index],
+              ),
+              separatorBuilder: (context, index) => SizedBox(
+                height: Spacing.small,
+              ),
+            ),
+          ),
       ],
     );
   }
 }
 
 class _ChatItem extends StatelessWidget {
-  final MatchedSwipeRoom swipeRoom;
+  final UserDiscoverySwipe swipe;
   const _ChatItem({
-    required this.swipeRoom,
+    required this.swipe,
   });
+
+  Future<String> getRoomId() async {
+    final matrixClient = getIt<MatrixService>().client;
+    return await matrixClient.startDirectChat(
+      LemonadeMatrixUtils.generateMatrixUserId(
+        lemonadeMatrixLocalpart: swipe.otherExpanded?.matrixLocalpart ?? '',
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return CollaboratorChatItem(
-      room: swipeRoom.room,
+    final colorScheme = Theme.of(context).colorScheme;
+    return InkWell(
+      onTap: () async {
+        final result = await showFutureLoadingDialog(
+          context: context,
+          future: () => getRoomId(),
+        );
+        if (result.result != null) {
+          AutoRouter.of(context).push(
+            ChatRoute(
+              roomId: result.result!,
+            ),
+          );
+        }
+      },
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Stack(
+            children: [
+              LemonNetworkImage(
+                borderRadius: BorderRadius.circular(42.w),
+                imageUrl: swipe.otherExpanded?.imageAvatar ?? '',
+                width: 42.w,
+                height: 42.w,
+                placeholder: ImagePlaceholder.defaultPlaceholder(
+                  radius: BorderRadius.circular(42.w),
+                ),
+                fit: BoxFit.cover,
+              ),
+            ],
+          ),
+          SizedBox(width: Spacing.xSmall),
+          Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: double.infinity,
+                  child: Text(
+                    swipe.otherExpanded?.name ?? '',
+                    style: Typo.medium.copyWith(
+                      color: colorScheme.onPrimary,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(width: Spacing.xSmall),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                DateFormatUtils.timeOnly(swipe.stamp),
+                style: Typo.small.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

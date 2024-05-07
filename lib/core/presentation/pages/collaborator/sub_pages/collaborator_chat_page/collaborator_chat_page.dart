@@ -4,6 +4,7 @@ import 'package:app/core/domain/collaborator/entities/user_discovery_swipe/user_
 import 'package:app/core/presentation/pages/collaborator/sub_pages/collaborator_chat_page/widgets/collaborator_chat_list.dart';
 import 'package:app/core/presentation/pages/collaborator/sub_pages/collaborator_chat_page/widgets/horizontal_collaborator_likes_list.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
+import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/graphql/backend/collaborator/query/get_user_discovery_swipes.graphql.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -31,6 +32,7 @@ class _CollaboratorChatPageView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
+    final loggedInUserId = AuthUtils.getUserId(context);
     return Scaffold(
       appBar: LemonAppBar(
         title: t.collaborator.chat,
@@ -52,28 +54,29 @@ class _CollaboratorChatPageView extends StatelessWidget {
               fetchMore,
             }) {
               final pendingSwipes =
-                  (result.parsedData?.getUserDiscoverySwipes ?? []).map((item) {
-                return UserDiscoverySwipe.fromDto(
-                  UserDiscoverySwipeDto.fromJson(item.toJson()),
-                );
-              }).toList();
+                  (result.parsedData?.getUserDiscoverySwipes ?? [])
+                      .map((item) {
+                        return UserDiscoverySwipe.fromDto(
+                          UserDiscoverySwipeDto.fromJson(item.toJson()),
+                        );
+                      })
+                      .where((element) => element.user1 != loggedInUserId)
+                      .toList();
               if (pendingSwipes.isEmpty) {
                 return const SliverToBoxAdapter(
                   child: SizedBox.shrink(),
                 );
               }
-              return SliverToBoxAdapter(
-                child: HorizontalCollaboratorLikesList(
-                  pendingSwipes: pendingSwipes,
-                  refetch: refetch,
+              return SliverPadding(
+                padding: EdgeInsets.only(bottom: Spacing.large),
+                sliver: SliverToBoxAdapter(
+                  child: HorizontalCollaboratorLikesList(
+                    pendingSwipes: pendingSwipes,
+                    refetch: refetch,
+                  ),
                 ),
               );
             },
-          ),
-          SliverToBoxAdapter(
-            child: SizedBox(
-              height: Spacing.large,
-            ),
           ),
           BlocBuilder<GetUserDiscoveryMatchedSwipesBloc,
               GetUserDiscoveryMatchedSwipesState>(
@@ -82,6 +85,7 @@ class _CollaboratorChatPageView extends StatelessWidget {
                 orElse: () => [],
                 fetched: (matchedSwipes) => matchedSwipes,
               );
+
               return CollaboratorChatList(
                 matchedSwipes: matchedSwipes,
               );
