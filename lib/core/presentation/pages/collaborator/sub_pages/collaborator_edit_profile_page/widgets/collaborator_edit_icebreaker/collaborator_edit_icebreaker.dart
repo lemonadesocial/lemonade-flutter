@@ -31,8 +31,7 @@ class CollaboratorEditIcebreakers extends StatelessWidget {
           orElse: () => null,
           fetched: (profile) => profile,
         );
-    final iceBreakers = loggedInUser?.icebreakers ?? [];
-    final existingIceBreakers = loggedInUser?.icebreakers ?? [];
+    final userIceBreakers = loggedInUser?.icebreakers ?? [];
     return MultiSliver(
       children: [
         SliverToBoxAdapter(
@@ -78,15 +77,15 @@ class CollaboratorEditIcebreakers extends StatelessWidget {
         SliverPadding(
           padding: EdgeInsets.only(right: Spacing.superExtraSmall),
           sliver: SliverList.separated(
-            itemCount: iceBreakers.length,
+            itemCount: userIceBreakers.length,
             separatorBuilder: (context, index) =>
                 SizedBox(height: Spacing.xSmall),
             itemBuilder: (context, index) {
-              final iceBreaker = iceBreakers[index];
+              final iceBreaker = userIceBreakers[index];
               return RemoveIconWrapper(
                 onTap: () async {
                   List<Input$UserIcebreakerInput> inputIceBreakers =
-                      existingIceBreakers
+                      userIceBreakers
                           .map(
                             (existingIceBreaker) => Input$UserIcebreakerInput(
                               question:

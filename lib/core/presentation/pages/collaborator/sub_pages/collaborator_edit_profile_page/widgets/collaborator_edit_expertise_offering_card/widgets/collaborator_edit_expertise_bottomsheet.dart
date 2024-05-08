@@ -1,5 +1,4 @@
 import 'package:app/core/application/profile/user_profile_bloc/user_profile_bloc.dart';
-import 'package:app/core/domain/collaborator/collaborator_repository.dart';
 import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/presentation/widgets/bottomsheet_grabber/bottomsheet_grabber.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
@@ -79,7 +78,7 @@ class CollaboratorEditExpertiseBottomSheetState
             ),
           ),
           FutureBuilder(
-            future: getIt<CollaboratorRepository>().getListUserExpertises(),
+            future: getIt<UserRepository>().getListUserExpertises(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.none) {
                 return Center(

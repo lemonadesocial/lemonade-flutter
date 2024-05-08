@@ -1,12 +1,16 @@
 import 'package:app/core/data/user/dtos/user_dtos.dart';
+import 'package:app/core/data/user/dtos/user_expertise_dto/user_expertise_dto.dart';
 import 'package:app/core/data/user/dtos/user_follows/user_follow_dtos.dart';
 import 'package:app/core/data/user/dtos/user_icebreaker_dto/user_icebreaker_dto.dart';
 import 'package:app/core/data/user/dtos/user_query.dart';
+import 'package:app/core/data/user/dtos/user_service_offer_dto/user_service_offer_dto.dart';
 import 'package:app/core/data/user/gql/user_mutation.dart';
 import 'package:app/core/domain/onboarding/onboarding_inputs.dart';
 import 'package:app/core/domain/user/entities/user.dart';
+import 'package:app/core/domain/user/entities/user_expertise.dart';
 import 'package:app/core/domain/user/entities/user_follow.dart';
 import 'package:app/core/domain/user/entities/user_icebreaker.dart';
+import 'package:app/core/domain/user/entities/user_service_offer.dart';
 import 'package:app/core/domain/user/input/user_follows_input.dart';
 import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/failure.dart';
@@ -16,6 +20,8 @@ import 'package:app/graphql/backend/user/mutation/update_user.graphql.dart';
 import 'package:app/graphql/backend/user/query/get_user.graphql.dart';
 import 'package:app/graphql/backend/user/query/get_users.graphql.dart';
 import 'package:app/graphql/backend/user/query/get_user_icebreaker_questions.graphql.dart';
+import 'package:app/graphql/backend/user/query/list_user_expertises.graphql.dart';
+import 'package:app/graphql/backend/user/query/list_user_services.graphql.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:dartz/dartz.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -325,6 +331,44 @@ class UserRepositoryImpl implements UserRepository {
             )
             .toList(),
       ),
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<UserExpertise>>> getListUserExpertises() async {
+    final result = await _gqlClient.query$ListUserExpertises(
+      Options$Query$ListUserExpertises(),
+    );
+    if (result.hasException || result.parsedData?.listUserExpertises == null) {
+      return Left(Failure());
+    }
+    return Right(
+      (result.parsedData?.listUserExpertises ?? [])
+          .map(
+            (item) => UserExpertise.fromDto(
+              UserExpertiseDto.fromJson(item.toJson()),
+            ),
+          )
+          .toList(),
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<UserServiceOffer>>> getListUserServices() async {
+    final result = await _gqlClient.query$ListUserServices(
+      Options$Query$ListUserServices(),
+    );
+    if (result.hasException || result.parsedData?.listUserServices == null) {
+      return Left(Failure());
+    }
+    return Right(
+      (result.parsedData?.listUserServices ?? [])
+          .map(
+            (item) => UserServiceOffer.fromDto(
+              UserServiceOfferDto.fromJson(item.toJson()),
+            ),
+          )
+          .toList(),
     );
   }
 }
