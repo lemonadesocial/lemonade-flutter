@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:app/core/application/profile/user_profile_bloc/user_profile_bloc.dart';
 import 'package:app/core/domain/user/entities/user_icebreaker.dart';
 import 'package:app/core/domain/user/user_repository.dart';
