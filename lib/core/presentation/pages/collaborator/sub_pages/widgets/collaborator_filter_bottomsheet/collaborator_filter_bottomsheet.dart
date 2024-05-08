@@ -9,6 +9,7 @@ import 'package:app/core/presentation/widgets/bottomsheet_grabber/bottomsheet_gr
 import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
+import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/user/query/list_user_services.graphql.dart';
@@ -22,54 +23,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:collection/collection.dart';
-
-// TODO: will remove
-final mockData = [
-  UserServiceOffer(
-    id: '1',
-    title: "Create new concept",
-  ),
-  UserServiceOffer(
-    id: '2',
-    title: "Design advice",
-  ),
-  UserServiceOffer(
-    id: '3',
-    title: "Perform video editing",
-  ),
-  UserServiceOffer(
-    id: '4',
-    title: "Financial advice",
-  ),
-  UserServiceOffer(
-    id: '5',
-    title: "Execute email marketing",
-  ),
-  UserServiceOffer(
-    id: '6',
-    title: "Manage budget",
-  ),
-  UserServiceOffer(
-    id: '7',
-    title: "Develop marketing strategy",
-  ),
-  UserServiceOffer(
-    id: '8',
-    title: "Write blog posts",
-  ),
-  UserServiceOffer(
-    id: '9',
-    title: "Optimize website performance",
-  ),
-  UserServiceOffer(
-    id: '10',
-    title: "Provide customer support",
-  ),
-  UserServiceOffer(
-    id: '11',
-    title: "Conduct market research",
-  ),
-];
 
 class CollaboratorFilterBottomSheet extends StatelessWidget {
   const CollaboratorFilterBottomSheet({
@@ -95,6 +48,7 @@ class CollaboratorFilterBottomSheet extends StatelessWidget {
           builder: (context, state) => _FilterView(
             userServicesOffers: userServiceOffers,
             initialFilteredOfferings: state.filteredOfferings,
+            isLoading: result.isLoading,
           ),
         );
       },
@@ -105,9 +59,11 @@ class CollaboratorFilterBottomSheet extends StatelessWidget {
 class _FilterView extends StatefulWidget {
   final List<UserServiceOffer> userServicesOffers;
   final List<String> initialFilteredOfferings;
+  final bool isLoading;
   const _FilterView({
     required this.userServicesOffers,
     this.initialFilteredOfferings = const [],
+    this.isLoading = false,
   });
 
   @override
@@ -119,10 +75,21 @@ class _FilterViewState extends State<_FilterView> {
   List<String> selectedOfferings = [];
 
   @override
+  void didUpdateWidget(covariant _FilterView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    setState(() {
+      searchList = widget.userServicesOffers;
+      selectedOfferings = widget.initialFilteredOfferings;
+    });
+  }
+
+  @override
   void initState() {
     super.initState();
-    searchList = widget.userServicesOffers;
-    selectedOfferings = widget.initialFilteredOfferings;
+    setState(() {
+      searchList = widget.userServicesOffers;
+      selectedOfferings = widget.initialFilteredOfferings;
+    });
   }
 
   void _onSearchServiceOffer(String query) {
@@ -262,57 +229,62 @@ class _FilterViewState extends State<_FilterView> {
                 ),
                 SizedBox(height: Spacing.smMedium),
               ],
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-                  child: ListView.builder(
-                    itemCount: searchList.length,
-                    padding: EdgeInsets.only(bottom: Spacing.large * 4),
-                    itemBuilder: (BuildContext context, int index) {
-                      final item = searchList[index];
-                      final selected = selectedOfferings.contains(item.id);
+              if (widget.isLoading)
+                Center(
+                  child: Loading.defaultLoading(context),
+                ),
+              if (searchList.isNotEmpty)
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+                    child: ListView.builder(
+                      itemCount: searchList.length,
+                      padding: EdgeInsets.only(bottom: Spacing.large * 4),
+                      itemBuilder: (BuildContext context, int index) {
+                        final item = searchList[index];
+                        final selected = selectedOfferings.contains(item.id);
 
-                      return InkWell(
-                        onTap: () {
-                          if (selected) {
-                            _removeOffering(item.id ?? '');
-                          } else {
-                            _selectOffering(item.id ?? '');
-                          }
-                        },
-                        child: Container(
-                          padding:
-                              EdgeInsets.symmetric(vertical: Spacing.small),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                item.title ?? '',
-                                style: Typo.mediumPlus.copyWith(
-                                  color: colorScheme.onPrimary,
-                                  fontWeight: FontWeight.w400,
+                        return InkWell(
+                          onTap: () {
+                            if (selected) {
+                              _removeOffering(item.id ?? '');
+                            } else {
+                              _selectOffering(item.id ?? '');
+                            }
+                          },
+                          child: Container(
+                            padding:
+                                EdgeInsets.symmetric(vertical: Spacing.small),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  item.title ?? '',
+                                  style: Typo.mediumPlus.copyWith(
+                                    color: colorScheme.onPrimary,
+                                    fontWeight: FontWeight.w400,
+                                  ),
                                 ),
-                              ),
-                              if (selected)
-                                Assets.icons.icChecked.svg(
-                                  width: 18.w,
-                                  height: 18.w,
-                                )
-                              else
-                                Assets.icons.icUncheck.svg(
-                                  width: 18.w,
-                                  height: 18.w,
-                                ),
-                            ],
+                                if (selected)
+                                  Assets.icons.icChecked.svg(
+                                    width: 18.w,
+                                    height: 18.w,
+                                  )
+                                else
+                                  Assets.icons.icUncheck.svg(
+                                    width: 18.w,
+                                    height: 18.w,
+                                  ),
+                              ],
+                            ),
                           ),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   ),
                 ),
-              ),
             ],
           ),
           Align(

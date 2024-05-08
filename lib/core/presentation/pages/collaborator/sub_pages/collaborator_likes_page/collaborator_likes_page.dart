@@ -4,6 +4,7 @@ import 'package:app/core/presentation/pages/collaborator/sub_pages/collaborator_
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
+import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/graphql/backend/collaborator/query/get_user_discovery_swipes.graphql.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -20,6 +21,7 @@ class CollaboratorLikesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
+    final loggedInUserId = AuthUtils.getUserId(context);
     return Query$GetUserDiscoverySwipes$Widget(
       options: Options$Query$GetUserDiscoverySwipes(
         fetchPolicy: FetchPolicy.networkOnly,
@@ -34,12 +36,14 @@ class CollaboratorLikesPage extends StatelessWidget {
         refetch,
         fetchMore,
       }) {
-        final pendingSwipes =
-            (result.parsedData?.getUserDiscoverySwipes ?? []).map((item) {
-          return UserDiscoverySwipe.fromDto(
-            UserDiscoverySwipeDto.fromJson(item.toJson()),
-          );
-        }).toList();
+        final pendingSwipes = (result.parsedData?.getUserDiscoverySwipes ?? [])
+            .map((item) {
+              return UserDiscoverySwipe.fromDto(
+                UserDiscoverySwipeDto.fromJson(item.toJson()),
+              );
+            })
+            .where((element) => element.user1 != loggedInUserId)
+            .toList();
 
         if (result.isLoading || result.hasException) {
           return Scaffold(
@@ -49,6 +53,17 @@ class CollaboratorLikesPage extends StatelessWidget {
                   : EmptyList(
                       emptyText: t.common.somethingWrong,
                     ),
+            ),
+          );
+        }
+
+        if (pendingSwipes.isEmpty) {
+          return Scaffold(
+            appBar: LemonAppBar(title: t.collaborator.likes),
+            body: Center(
+              child: EmptyList(
+                emptyText: t.collaborator.emptyLikes,
+              ),
             ),
           );
         }
