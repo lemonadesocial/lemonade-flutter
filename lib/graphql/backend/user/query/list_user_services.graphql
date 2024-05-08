@@ -1,4 +1,4 @@
-query listUserServices {
+query ListUserServices {
   listUserServices {
     _id
     title

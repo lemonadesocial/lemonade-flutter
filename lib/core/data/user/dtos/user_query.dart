@@ -125,6 +125,10 @@ const userProfileFragment = '''
     position
   }
   expertise
+  expertise_expanded {
+    _id
+    title
+  }
   service_offers_expanded {
     _id
     title

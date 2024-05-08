@@ -5,6 +5,7 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 
 class CollaboratorProfileFieldCard extends StatelessWidget {
   final String title;
@@ -21,46 +22,54 @@ class CollaboratorProfileFieldCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    return Container(
-      padding: EdgeInsets.all(Spacing.small),
-      decoration: BoxDecoration(
-        color: LemonColor.atomicBlack,
-        borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 1,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: Typo.medium.copyWith(
-                    color: colorScheme.onPrimary,
-                    fontWeight: FontWeight.w500,
+    return InkWell(
+      onTap: () {
+        Vibrate.feedback(FeedbackType.light);
+        onTap?.call();
+      },
+      child: Container(
+        padding: EdgeInsets.all(Spacing.small),
+        decoration: BoxDecoration(
+          color: LemonColor.atomicBlack,
+          borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              flex: 1,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: Typo.medium.copyWith(
+                      color: colorScheme.onPrimary,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
-                ),
-                SizedBox(height: 2.w),
-                Text(
-                  description,
-                  style: Typo.small.copyWith(
-                    color: colorScheme.onSecondary,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
+                  SizedBox(height: 2.w),
+                  description != ''
+                      ? Text(
+                          description,
+                          style: Typo.small.copyWith(
+                            color: colorScheme.onSecondary,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        )
+                      : const SizedBox(),
+                ],
+              ),
             ),
-          ),
-          SizedBox(width: Spacing.xSmall),
-          ThemeSvgIcon(
-            color: colorScheme.onSecondary,
-            builder: (filter) => Assets.icons.icArrowRight.svg(
-              colorFilter: filter,
+            SizedBox(width: Spacing.xSmall),
+            ThemeSvgIcon(
+              color: colorScheme.onSecondary,
+              builder: (filter) => Assets.icons.icArrowRight.svg(
+                colorFilter: filter,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

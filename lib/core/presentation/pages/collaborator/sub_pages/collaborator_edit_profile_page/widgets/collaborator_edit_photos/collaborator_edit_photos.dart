@@ -64,7 +64,7 @@ class CollaboratorEditPhotos extends StatelessWidget {
               }
               return RemoveIconWrapper(
                 child: LemonNetworkImage(
-                  imageUrl: "",
+                  imageUrl: "https://i.pravatar.cc/50$index",
                   border: Border.all(color: colorScheme.outline),
                   borderRadius: BorderRadius.circular(LemonRadius.medium),
                   placeholder: ImagePlaceholder.defaultPlaceholder(),

@@ -1,4 +1,5 @@
 import 'package:app/core/data/user/dtos/user_dtos.dart';
+import 'package:app/core/domain/collaborator/entities/user_expertise/user_expertise.dart';
 import 'package:app/core/domain/user/entities/user_service_offer.dart';
 import 'package:app/core/domain/user/entities/user_icebreaker.dart';
 import 'package:app/core/data/user/user_enums.dart';
@@ -101,6 +102,7 @@ class User with _$User {
     List<String>? expertise,
     List<Event>? eventsExpanded,
     List<UserServiceOffer>? serviceOffersExpanded,
+    List<UserExpertise>? expertiseExpanded,
     List<UserIcebreaker>? icebreakers,
   }) = _User;
 
@@ -180,6 +182,11 @@ class User with _$User {
       eventsExpanded: List.from(dto.eventsExpanded ?? [])
           .map(
             (item) => Event.fromDto(item),
+          )
+          .toList(),
+      expertiseExpanded: List.from(dto.expertiseExpanded ?? [])
+          .map(
+            (item) => UserExpertise.fromDto(item),
           )
           .toList(),
       serviceOffersExpanded: List.from(dto.serviceOffersExpanded ?? [])

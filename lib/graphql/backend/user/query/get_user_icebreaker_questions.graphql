@@ -1,0 +1,7 @@
+query GetUserIcebreakerQuestions {
+  getUserIcebreakerQuestions {
+    _id
+    title
+    description
+  }
+}
