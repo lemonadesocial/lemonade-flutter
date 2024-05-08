@@ -83,13 +83,13 @@ class CollaboratorEditOfferingBottomSheetState
           FutureBuilder(
             future: getIt<CollaboratorRepository>().getListUserServices(),
             builder: (context, snapshot) {
-              final offeringList =
-                  snapshot.data?.fold((l) => null, (offering) => offering);
-              if (snapshot.connectionState == ConnectionState.waiting) {
+              if (snapshot.connectionState == ConnectionState.none) {
                 return Center(
                   child: Loading.defaultLoading(context),
                 );
               }
+              final offeringList =
+                  snapshot.data?.fold((l) => null, (offering) => offering);
               return Expanded(
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),

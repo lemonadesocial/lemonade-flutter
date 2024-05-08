@@ -81,7 +81,10 @@ class CollaboratorRepositoryImpl implements CollaboratorRepository {
     required Variables$Query$GetUserDiscoverySwipes input,
   }) async {
     final result = await _client.query$GetUserDiscoverySwipes(
-      Options$Query$GetUserDiscoverySwipes(variables: input),
+      Options$Query$GetUserDiscoverySwipes(
+        fetchPolicy: FetchPolicy.networkOnly,
+        variables: input,
+      ),
     );
     if (result.hasException ||
         result.parsedData?.getUserDiscoverySwipes == null) {

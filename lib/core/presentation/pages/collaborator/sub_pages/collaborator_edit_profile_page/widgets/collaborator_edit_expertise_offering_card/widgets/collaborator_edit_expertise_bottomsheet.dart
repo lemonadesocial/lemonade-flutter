@@ -81,13 +81,13 @@ class CollaboratorEditExpertiseBottomSheetState
           FutureBuilder(
             future: getIt<CollaboratorRepository>().getListUserExpertises(),
             builder: (context, snapshot) {
-              final expertisesList =
-                  snapshot.data?.fold((l) => null, (expertise) => expertise);
-              if (snapshot.connectionState == ConnectionState.waiting) {
+              if (snapshot.connectionState == ConnectionState.none) {
                 return Center(
                   child: Loading.defaultLoading(context),
                 );
               }
+              final expertisesList =
+                  snapshot.data?.fold((l) => null, (expertise) => expertise);
               return Expanded(
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
@@ -108,9 +108,13 @@ class CollaboratorEditExpertiseBottomSheetState
                           onChecked: (isChecked) {
                             setState(() {
                               if (isChecked) {
-                                selectedExpertises.add(expertise?.id ?? '');
+                                selectedExpertises =
+                                    List.from(selectedExpertises)
+                                      ..add(expertise?.id ?? '');
                               } else {
-                                selectedExpertises.remove(expertise?.id ?? '');
+                                selectedExpertises =
+                                    List.from(selectedExpertises)
+                                      ..remove(expertise?.id ?? '');
                               }
                             });
                           },
