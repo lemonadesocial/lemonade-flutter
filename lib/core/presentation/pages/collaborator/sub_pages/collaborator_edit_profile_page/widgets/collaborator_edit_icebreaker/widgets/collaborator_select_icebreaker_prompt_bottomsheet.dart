@@ -69,7 +69,7 @@ class CollaboratorSelectIcebreakerPromptBottomsheet extends StatelessWidget {
                           future: getIt<UserRepository>()
                               .getUserIcebreakerQuestions(),
                           builder: (context, snapshot) {
-                            final iceBreakerQuestions = snapshot.data
+                            final userIcebreakerQuestions = snapshot.data
                                 ?.fold((l) => null, (item) => item);
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
@@ -78,16 +78,24 @@ class CollaboratorSelectIcebreakerPromptBottomsheet extends StatelessWidget {
                               );
                             }
                             return SliverList.separated(
-                              itemCount: iceBreakerQuestions?.length ?? 0,
+                              itemCount: userIcebreakerQuestions?.length ?? 0,
                               itemBuilder: (context, index) {
+                                final userIceBreakerQuestion =
+                                    userIcebreakerQuestions?[index];
                                 return InkWell(
-                                  onTap: () => showCupertinoModalBottomSheet(
-                                    context: context,
-                                    barrierColor: Colors.black.withOpacity(0.8),
-                                    backgroundColor: LemonColor.atomicBlack,
-                                    builder: (mContext) =>
-                                        const CollaboratorAddIcebreakerAnswerBottomsheet(),
-                                  ),
+                                  onTap: () {
+                                    showCupertinoModalBottomSheet(
+                                      context: context,
+                                      barrierColor:
+                                          Colors.black.withOpacity(0.8),
+                                      backgroundColor: LemonColor.atomicBlack,
+                                      builder: (mContext) =>
+                                          CollaboratorAddIcebreakerAnswerBottomsheet(
+                                        userIceBreakerQuestion:
+                                            userIceBreakerQuestion,
+                                      ),
+                                    );
+                                  },
                                   child: Container(
                                     padding: EdgeInsets.all(Spacing.small),
                                     decoration: BoxDecoration(
@@ -97,7 +105,7 @@ class CollaboratorSelectIcebreakerPromptBottomsheet extends StatelessWidget {
                                       color: colorScheme.secondaryContainer,
                                     ),
                                     child: Text(
-                                      iceBreakerQuestions?[index].title ?? '',
+                                      userIceBreakerQuestion?.title ?? '',
                                       style: Typo.medium.copyWith(
                                         color: colorScheme.onPrimary,
                                       ),
