@@ -1,15 +1,20 @@
 import 'package:app/core/application/profile/user_profile_bloc/user_profile_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/presentation/pages/collaborator/sub_pages/collaborator_edit_profile_page/widgets/collaborator_edit_spotlight_events/widgets/collaborator_add_sppotlight_events_bottomsheet/collaborator_add_sppotlight_events_bottomsheet.dart';
 import 'package:app/core/presentation/pages/collaborator/sub_pages/collaborator_edit_profile_page/widgets/remove_icon_wrapper.dart';
+import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
+import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -86,7 +91,32 @@ class CollaboratorEditSpotlightEvents extends StatelessWidget {
                 );
               }
               final event = spotlightEvents[index - 1];
-              return _SpotlightItem(event: event);
+              return _SpotlightItem(
+                event: event,
+                onTapRemove: () async {
+                  List<Event> newSpotlightEvents = List.from(spotlightEvents);
+                  newSpotlightEvents
+                      .removeWhere((element) => element.id == event.id);
+
+                  await showFutureLoadingDialog(
+                    context: context,
+                    future: () {
+                      return getIt<UserRepository>().updateUser(
+                        input: Input$UserInput(
+                          events: newSpotlightEvents
+                              .map((e) => e.id ?? '')
+                              .toList(),
+                        ),
+                      );
+                    },
+                  );
+                  context.read<UserProfileBloc>().add(
+                        UserProfileEventFetch(
+                          userId: AuthUtils.getUserId(context),
+                        ),
+                      );
+                },
+              );
             },
           ),
         ),
@@ -97,7 +127,8 @@ class CollaboratorEditSpotlightEvents extends StatelessWidget {
 
 class _SpotlightItem extends StatelessWidget {
   final Event? event;
-  const _SpotlightItem({required this.event});
+  final Function()? onTapRemove;
+  const _SpotlightItem({required this.event, required this.onTapRemove});
 
   @override
   Widget build(BuildContext context) {
@@ -113,6 +144,9 @@ class _SpotlightItem extends StatelessWidget {
         ),
       ),
       child: RemoveIconWrapper(
+        onTap: () async {
+          onTapRemove?.call();
+        },
         child: Stack(
           children: [
             LemonNetworkImage(
