@@ -1,9 +1,12 @@
+import 'package:app/core/application/profile/user_profile_bloc/user_profile_bloc.dart';
+import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/collaborator/sub_pages/collaborator_edit_profile_page/widgets/collaborator_edit_spotlight_events/widgets/collaborator_add_sppotlight_events_bottomsheet/collaborator_add_sppotlight_events_bottomsheet.dart';
 import 'package:app/core/presentation/pages/collaborator/sub_pages/collaborator_edit_profile_page/widgets/remove_icon_wrapper.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/date_format_utils.dart';
+import 'package:app/core/utils/image_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -12,6 +15,7 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:sliver_tools/sliver_tools.dart';
@@ -25,6 +29,11 @@ class CollaboratorEditSpotlightEvents extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
+    final loggedInUser = context.watch<UserProfileBloc>().state.maybeWhen(
+          orElse: () => null,
+          fetched: (profile) => profile,
+        );
+    final spotlightEvents = loggedInUser?.eventsExpanded ?? [];
     return MultiSliver(
       children: [
         SliverToBoxAdapter(
@@ -42,7 +51,7 @@ class CollaboratorEditSpotlightEvents extends StatelessWidget {
         SliverPadding(
           padding: EdgeInsets.only(right: Spacing.superExtraSmall),
           sliver: SliverGrid.builder(
-            itemCount: 5,
+            itemCount: spotlightEvents.length + 1,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 3,
               mainAxisSpacing: Spacing.xSmall,
@@ -76,7 +85,8 @@ class CollaboratorEditSpotlightEvents extends StatelessWidget {
                   ),
                 );
               }
-              return _SpotlightItem(index);
+              final event = spotlightEvents[index - 1];
+              return _SpotlightItem(event: event);
             },
           ),
         ),
@@ -86,8 +96,8 @@ class CollaboratorEditSpotlightEvents extends StatelessWidget {
 }
 
 class _SpotlightItem extends StatelessWidget {
-  final int index;
-  const _SpotlightItem(this.index);
+  final Event? event;
+  const _SpotlightItem({required this.event});
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +116,10 @@ class _SpotlightItem extends StatelessWidget {
         child: Stack(
           children: [
             LemonNetworkImage(
-              imageUrl: "https://picsum.photos/50$index",
+              imageUrl: ImageUtils.generateUrl(
+                file: event?.newNewPhotosExpanded?.firstOrNull,
+                imageConfig: ImageConfig.eventPhoto,
+              ),
               border: Border.all(color: colorScheme.outline),
               borderRadius: BorderRadius.circular(LemonRadius.medium),
               placeholder: ImagePlaceholder.eventCard(),
@@ -123,7 +136,7 @@ class _SpotlightItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Living rooom gig",
+                      event?.title ?? '',
                       style: Typo.small.copyWith(
                         color: colorScheme.onPrimary,
                         fontWeight: FontWeight.w600,

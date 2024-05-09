@@ -40,6 +40,16 @@ class _CollaboratorAddSpotlightEventBottomSheetState
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
+    final loggedInUser = context.read<UserProfileBloc>().state.maybeWhen(
+          orElse: () => null,
+          fetched: (profile) => profile,
+        );
+    if (loggedInUser != null && loggedInUser.eventsExpanded != null) {
+      setState(() {
+        selectedEventIds =
+            loggedInUser.eventsExpanded!.map((item) => item.id ?? '').toList();
+      });
+    }
   }
 
   @override
