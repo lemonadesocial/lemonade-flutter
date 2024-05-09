@@ -97,15 +97,14 @@ class CollaboratorEditSpotlightEvents extends StatelessWidget {
                   List<Event> newSpotlightEvents = List.from(spotlightEvents);
                   newSpotlightEvents
                       .removeWhere((element) => element.id == event.id);
-
+                  List<String> newSpotlightEventsIds =
+                      newSpotlightEvents.map((e) => e.id ?? '').toList();
                   await showFutureLoadingDialog(
                     context: context,
                     future: () {
                       return getIt<UserRepository>().updateUser(
                         input: Input$UserInput(
-                          events: newSpotlightEvents
-                              .map((e) => e.id ?? '')
-                              .toList(),
+                          events: newSpotlightEventsIds,
                         ),
                       );
                     },
