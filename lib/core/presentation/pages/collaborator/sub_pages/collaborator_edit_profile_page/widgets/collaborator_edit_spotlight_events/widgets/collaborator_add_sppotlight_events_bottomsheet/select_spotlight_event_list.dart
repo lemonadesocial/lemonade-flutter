@@ -1,7 +1,14 @@
+import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/event_repository.dart';
+import 'package:app/core/domain/event/input/get_events_listing_input.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
+import 'package:app/core/presentation/widgets/loading_widget.dart';
+import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/core/utils/date_format_utils.dart';
+import 'package:app/core/utils/image_utils.dart';
 import 'package:app/gen/assets.gen.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -9,7 +16,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SelectSpotlightEventList extends StatefulWidget {
-  const SelectSpotlightEventList({super.key});
+  final Future? futureRequest;
+
+  const SelectSpotlightEventList({super.key, this.futureRequest});
 
   @override
   State<SelectSpotlightEventList> createState() =>
@@ -29,14 +38,23 @@ class _SelectSpotlightEventListState extends State<SelectSpotlightEventList>
         SliverToBoxAdapter(
           child: SizedBox(height: Spacing.smMedium),
         ),
-        SliverPadding(
-          padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-          sliver: SliverList.separated(
-            itemBuilder: (context, index) => const _EventItem(),
-            separatorBuilder: (context, index) =>
-                SizedBox(height: Spacing.xSmall),
-            itemCount: 10,
-          ),
+        FutureBuilder(
+          future: widget.futureRequest,
+          builder: (context, snapshot) {
+            final events = snapshot.data?.fold((l) => null, (event) => event);
+            return SliverPadding(
+              padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+              sliver: SliverList.separated(
+                itemBuilder: (context, index) {
+                  final event = events?[index];
+                  return _EventItem(event: event);
+                },
+                separatorBuilder: (context, index) =>
+                    SizedBox(height: Spacing.xSmall),
+                itemCount: events?.length ?? 0,
+              ),
+            );
+          },
         ),
         SliverToBoxAdapter(
           child: SizedBox(height: Spacing.xLarge * 4),
@@ -47,7 +65,8 @@ class _SelectSpotlightEventListState extends State<SelectSpotlightEventList>
 }
 
 class _EventItem extends StatelessWidget {
-  const _EventItem();
+  final Event? event;
+  const _EventItem({this.event});
 
   @override
   Widget build(BuildContext context) {
@@ -63,12 +82,13 @@ class _EventItem extends StatelessWidget {
           LemonNetworkImage(
             width: Sizing.medium,
             height: Sizing.medium,
-            imageUrl: "",
+            imageUrl: ImageUtils.generateUrl(
+              file: event?.newNewPhotosExpanded?.firstOrNull,
+              imageConfig: ImageConfig.eventPhoto,
+            ),
             borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
             border: Border.all(color: colorScheme.outline),
-            placeholder: ImagePlaceholder.defaultPlaceholder(
-              radius: BorderRadius.circular(LemonRadius.extraSmall),
-            ),
+            placeholder: ImagePlaceholder.eventCard(),
           ),
           SizedBox(width: Spacing.xSmall),
           Expanded(
@@ -76,7 +96,7 @@ class _EventItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Secret warehouse party",
+                  event?.title ?? '',
                   style: Typo.medium.copyWith(
                     color: colorScheme.onPrimary,
                     fontWeight: FontWeight.w600,
@@ -93,6 +113,9 @@ class _EventItem extends StatelessWidget {
                 ),
               ],
             ),
+          ),
+          SizedBox(
+            width: Spacing.smMedium,
           ),
           Assets.icons.icChecked.svg(),
         ],

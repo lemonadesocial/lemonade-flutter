@@ -1,9 +1,13 @@
+import 'package:app/core/domain/event/event_repository.dart';
+import 'package:app/core/domain/event/input/get_events_listing_input.dart';
 import 'package:app/core/presentation/pages/collaborator/sub_pages/collaborator_edit_profile_page/widgets/collaborator_edit_spotlight_events/widgets/collaborator_add_sppotlight_events_bottomsheet/select_spotlight_event_list.dart';
 import 'package:app/core/presentation/widgets/bottomsheet_grabber/bottomsheet_grabber.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
+import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -80,10 +84,30 @@ class _CollaboratorAddSpotlightEventBottomSheetState
               Expanded(
                 child: TabBarView(
                   controller: _tabController,
-                  children: const [
-                    SelectSpotlightEventList(),
-                    SelectSpotlightEventList(),
-                    SelectSpotlightEventList(),
+                  children: [
+                    SelectSpotlightEventList(
+                      futureRequest: getIt<EventRepository>().getHostingEvents(
+                        input: GetHostingEventsInput(
+                          id: AuthUtils.getUserId(context),
+                          limit: 100,
+                        ),
+                      ),
+                    ),
+                    SelectSpotlightEventList(
+                      futureRequest: getIt<EventRepository>().getEvents(
+                        input: GetEventsInput(
+                          accepted: AuthUtils.getUserId(context),
+                          limit: 100,
+                        ),
+                      ),
+                    ),
+                    SelectSpotlightEventList(
+                      futureRequest: getIt<EventRepository>().getEvents(
+                        input: const GetEventsInput(
+                          limit: 100,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
