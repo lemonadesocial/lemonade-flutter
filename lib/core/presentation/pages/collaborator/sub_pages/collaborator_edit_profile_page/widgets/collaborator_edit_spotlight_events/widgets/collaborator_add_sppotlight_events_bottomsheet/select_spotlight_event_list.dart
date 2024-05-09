@@ -1,14 +1,10 @@
 import 'package:app/core/domain/event/entities/event.dart';
-import 'package:app/core/domain/event/event_repository.dart';
-import 'package:app/core/domain/event/input/get_events_listing_input.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
-import 'package:app/core/presentation/widgets/loading_widget.dart';
-import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
 import 'package:app/gen/assets.gen.dart';
-import 'package:app/injection/register_module.dart';
+import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -17,8 +13,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SelectSpotlightEventList extends StatefulWidget {
   final Future? futureRequest;
+  final Function(Event event)? onToggleEvent;
+  final List<String>? selectedEventIds;
 
-  const SelectSpotlightEventList({super.key, this.futureRequest});
+  const SelectSpotlightEventList({
+    super.key,
+    this.futureRequest,
+    this.onToggleEvent,
+    this.selectedEventIds,
+  });
 
   @override
   State<SelectSpotlightEventList> createState() =>
@@ -47,7 +50,15 @@ class _SelectSpotlightEventListState extends State<SelectSpotlightEventList>
               sliver: SliverList.separated(
                 itemBuilder: (context, index) {
                   final event = events?[index];
-                  return _EventItem(event: event);
+                  final isChecked =
+                      widget.selectedEventIds?.contains(event?.id);
+                  return _EventItem(
+                    event: event,
+                    onTap: () {
+                      widget.onToggleEvent!(events[index]);
+                    },
+                    isChecked: isChecked,
+                  );
                 },
                 separatorBuilder: (context, index) =>
                     SizedBox(height: Spacing.xSmall),
@@ -66,7 +77,13 @@ class _SelectSpotlightEventListState extends State<SelectSpotlightEventList>
 
 class _EventItem extends StatelessWidget {
   final Event? event;
-  const _EventItem({this.event});
+  final Function()? onTap;
+  final bool? isChecked;
+  const _EventItem({
+    this.event,
+    this.onTap,
+    this.isChecked,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +91,7 @@ class _EventItem extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(Spacing.small),
       decoration: BoxDecoration(
-        color: colorScheme.secondaryContainer,
+        color: LemonColor.white06,
         borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
       ),
       child: Row(
@@ -106,8 +123,8 @@ class _EventItem extends StatelessWidget {
                 ),
                 SizedBox(height: 2.w),
                 Text(
-                  DateFormatUtils.fullDateWithTime(DateTime.now()),
-                  style: Typo.xSmall.copyWith(
+                  DateFormatUtils.fullDateWithTime(event?.start),
+                  style: Typo.small.copyWith(
                     color: colorScheme.onSecondary,
                   ),
                 ),
@@ -117,7 +134,14 @@ class _EventItem extends StatelessWidget {
           SizedBox(
             width: Spacing.smMedium,
           ),
-          Assets.icons.icChecked.svg(),
+          InkWell(
+            onTap: () {
+              onTap?.call();
+            },
+            child: isChecked == true
+                ? Assets.icons.icChecked.svg()
+                : Assets.icons.icUncheck.svg(),
+          ),
         ],
       ),
     );
