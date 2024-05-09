@@ -150,6 +150,8 @@ class _SpotlightItem extends StatelessWidget {
         child: Stack(
           children: [
             LemonNetworkImage(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
               imageUrl: ImageUtils.generateUrl(
                 file: event?.newNewPhotosExpanded?.firstOrNull,
                 imageConfig: ImageConfig.eventPhoto,
