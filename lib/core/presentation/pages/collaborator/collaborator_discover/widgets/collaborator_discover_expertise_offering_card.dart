@@ -1,3 +1,4 @@
+import 'package:app/core/domain/collaborator/entities/user_expertise/user_expertise.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/domain/user/entities/user_service_offer.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
@@ -21,9 +22,9 @@ class CollaboratorDiscoverExpertiseOfferingCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final sections = [
-      if (user?.expertise?.isNotEmpty == true)
+      if (user?.expertiseExpanded?.isNotEmpty == true)
         _Expertise(
-          expertise: user?.expertise ?? [],
+          expertise: user?.expertiseExpanded ?? [],
         ),
       if (user?.serviceOffersExpanded?.isNotEmpty == true)
         _Offering(
@@ -97,7 +98,7 @@ class _Offering extends StatelessWidget {
 }
 
 class _Expertise extends StatelessWidget {
-  final List<String> expertise;
+  final List<UserExpertise> expertise;
   const _Expertise({
     required this.expertise,
   });
@@ -120,7 +121,7 @@ class _Expertise extends StatelessWidget {
         ),
         SizedBox(height: Spacing.superExtraSmall),
         Text(
-          expertise.join(' , '),
+          expertise.map((item) => item.title ?? '').join(', '),
           style: Typo.medium.copyWith(
             color: colorScheme.onSecondary,
             fontWeight: FontWeight.w400,
