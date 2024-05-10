@@ -1,3 +1,4 @@
+import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/pages/collaborator/collaborator_discover/widgets/collaborator_discover_view.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -9,7 +10,8 @@ import 'package:flutter/material.dart';
 
 @RoutePage()
 class CollaboratorPreviewProfilePage extends StatelessWidget {
-  const CollaboratorPreviewProfilePage({super.key});
+  final User? user;
+  const CollaboratorPreviewProfilePage({super.key, this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -60,10 +62,10 @@ class CollaboratorPreviewProfilePage extends StatelessWidget {
             slivers: [
               SliverPadding(
                 padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
-                sliver: const CollaboratorDiscoverView(),
+                sliver: CollaboratorDiscoverView(user: user),
               ),
               SliverToBoxAdapter(
-                child: SizedBox(height: Spacing.smMedium),
+                child: SizedBox(height: Spacing.xLarge * 2),
               ),
             ],
           ),
