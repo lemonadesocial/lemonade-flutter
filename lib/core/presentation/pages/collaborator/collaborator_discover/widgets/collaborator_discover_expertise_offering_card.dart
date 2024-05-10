@@ -121,7 +121,7 @@ class _Expertise extends StatelessWidget {
         ),
         SizedBox(height: Spacing.superExtraSmall),
         Text(
-          expertises.map((item) => item.title).join(' , '),
+          expertises.map((item) => item.title ?? '').join(', '),
           style: Typo.medium.copyWith(
             color: colorScheme.onSecondary,
             fontWeight: FontWeight.w400,

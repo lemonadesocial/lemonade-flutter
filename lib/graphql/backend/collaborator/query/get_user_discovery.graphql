@@ -38,6 +38,10 @@ query GetUserDiscovery(
         _id
         title
       }
+      expertise_expanded {
+        _id
+        title
+      }
       icebreakers {
         _id
         question_expanded {
@@ -46,6 +50,7 @@ query GetUserDiscovery(
         value
       }
       events_expanded(limit: 5) {
+        _id
         title
         start
         guests
