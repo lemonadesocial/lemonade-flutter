@@ -37,7 +37,8 @@ class CollaboratorEditProfilePage extends StatelessWidget {
                           fetched: (profile) => profile,
                         );
                 AutoRouter.of(context).navigate(
-                    CollaboratorPreviewProfileRoute(user: loggedInUser));
+                  CollaboratorPreviewProfileRoute(user: loggedInUser),
+                );
               },
               child: ThemeSvgIcon(
                 builder: (filter) => Assets.icons.icPreviewProfile.svg(
@@ -76,7 +77,7 @@ class CollaboratorEditProfilePage extends StatelessWidget {
             ),
             const CollaboratorEditProfileAboutYou(),
             SliverToBoxAdapter(
-              child: SizedBox(height: Spacing.large),
+              child: SizedBox(height: Spacing.large * 2),
             ),
           ],
         ),
