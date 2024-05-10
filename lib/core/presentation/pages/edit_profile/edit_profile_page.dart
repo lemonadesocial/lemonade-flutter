@@ -10,7 +10,6 @@ import 'package:app/core/presentation/pages/edit_profile/widgets/edit_profile_av
 import 'package:app/core/presentation/pages/edit_profile/widgets/edit_profile_field_item.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
-import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
@@ -120,7 +119,7 @@ class EditProfileView extends StatelessWidget {
                                   children: [
                                     EditProfileAvatar(
                                       imageFile: state.profilePhoto,
-                                      imageUrl: userProfile?.imageAvatar,
+                                      imageUrl: userProfile.imageAvatar,
                                     ),
                                     SizedBox(width: 15.w),
                                     Expanded(
