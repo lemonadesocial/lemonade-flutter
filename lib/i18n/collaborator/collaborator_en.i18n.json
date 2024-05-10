@@ -46,5 +46,9 @@
     },
     "preview": "Preview",
     "emptyMatches": "You't dont have any matches yet",
-    "emptyLikes": "You't dont have any likes yet"
+    "emptyLikes": "You't dont have any likes yet",
+    "addPhotos": {
+        "addPhotosTitle": "Add photos",
+        "addPhotosDescription": "Select photos you want to showcase on your collaborators profile!"
+    }
 }
