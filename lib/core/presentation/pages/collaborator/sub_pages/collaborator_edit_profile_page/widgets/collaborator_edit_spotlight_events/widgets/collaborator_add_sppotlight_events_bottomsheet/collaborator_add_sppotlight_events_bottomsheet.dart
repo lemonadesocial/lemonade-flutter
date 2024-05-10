@@ -59,9 +59,9 @@ class _CollaboratorAddSpotlightEventBottomSheetState
   }
 
   void onToggleEvent(Event event) {
-    final isChecked = selectedEventIds.contains(event.id);
+    final isSelected = selectedEventIds.contains(event.id);
     setState(() {
-      if (isChecked == false) {
+      if (isSelected == false) {
         selectedEventIds = List.from(selectedEventIds)..add(event.id ?? '');
       } else {
         selectedEventIds = List.from(selectedEventIds)..remove(event.id ?? '');

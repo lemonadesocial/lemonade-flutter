@@ -50,14 +50,14 @@ class _SelectSpotlightEventListState extends State<SelectSpotlightEventList>
               sliver: SliverList.separated(
                 itemBuilder: (context, index) {
                   final event = events?[index];
-                  final isChecked =
+                  final isSelected =
                       widget.selectedEventIds?.contains(event?.id);
                   return _EventItem(
                     event: event,
                     onTap: () {
                       widget.onToggleEvent!(events[index]);
                     },
-                    isChecked: isChecked,
+                    isSelected: isSelected,
                   );
                 },
                 separatorBuilder: (context, index) =>
@@ -78,11 +78,11 @@ class _SelectSpotlightEventListState extends State<SelectSpotlightEventList>
 class _EventItem extends StatelessWidget {
   final Event? event;
   final Function()? onTap;
-  final bool? isChecked;
+  final bool? isSelected;
   const _EventItem({
     this.event,
     this.onTap,
-    this.isChecked,
+    this.isSelected,
   });
 
   @override
@@ -138,7 +138,7 @@ class _EventItem extends StatelessWidget {
             onTap: () {
               onTap?.call();
             },
-            child: isChecked == true
+            child: isSelected == true
                 ? Assets.icons.icChecked.svg()
                 : Assets.icons.icUncheck.svg(),
           ),
