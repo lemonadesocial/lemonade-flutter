@@ -158,8 +158,8 @@ class _CollaboratorEditPhotosState extends State<CollaboratorEditPhotos> {
                       imageId: photoFile.id ?? '',
                     ),
                     child: LemonNetworkImage(
-                      width: 110.w,
-                      height: 110.w,
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height,
                       imageUrl: photoUrl,
                       border: Border.all(color: colorScheme.outline),
                       borderRadius: BorderRadius.circular(LemonRadius.medium),
