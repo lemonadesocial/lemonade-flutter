@@ -113,8 +113,8 @@ class _CollaboratorEditPhotosState extends State<CollaboratorEditPhotos> {
                 (loggedInUserProfile?.newPhotosExpanded ?? [])
                     .map((item) => item.id)
                     .where((item) => item != null)
-                    .toList()
-                    .cast<String>();
+                    .whereType<String>()
+                    .toList();
             return SliverPadding(
               padding: EdgeInsets.only(right: Spacing.superExtraSmall),
               sliver: SliverGrid.builder(
