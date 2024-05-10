@@ -1,5 +1,6 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/profile/edit_profile_bloc/edit_profile_bloc.dart';
+import 'package:app/core/application/profile/user_profile_bloc/user_profile_bloc.dart';
 import 'package:app/core/domain/common/common_enums.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/domain/user/user_repository.dart';
@@ -9,8 +10,8 @@ import 'package:app/core/presentation/pages/edit_profile/widgets/edit_profile_av
 import 'package:app/core/presentation/pages/edit_profile/widgets/edit_profile_field_item.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
-import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
+import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
@@ -34,8 +35,22 @@ class EditProfilePage extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => EditProfileBloc(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => EditProfileBloc(),
+          child: const EditProfileView(),
+        ),
+        BlocProvider(
+          create: (context) => UserProfileBloc(
+            getIt<UserRepository>(),
+          )..add(
+              UserProfileEvent.fetch(
+                userId: AuthUtils.getUserId(context),
+              ),
+            ),
+        ),
+      ],
       child: const EditProfileView(),
     );
   }
@@ -51,30 +66,30 @@ class EditProfileView extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
     final editProfileBloc = context.watch<EditProfileBloc>();
-    return FutureBuilder(
-      future: getIt<UserRepository>().getMe(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return SizedBox(
-            height: 120.w,
+    return BlocBuilder<UserProfileBloc, UserProfileState>(
+      builder: (context, state) {
+        if (state is UserProfileStateLoading ||
+            state is UserProfileStateFailure) {
+          return Center(
             child: Loading.defaultLoading(context),
           );
         }
-        User? userProfile = snapshot.data!.fold(
-          (l) => null,
-          (user) => user,
+        final userProfile = state.maybeWhen(
+          orElse: () => null,
+          fetched: (profile) => profile,
         );
         if (userProfile == null) {
-          return Center(
-            child: EmptyList(
-              emptyText: t.common.somethingWrong,
-            ),
-          );
+          return const SizedBox();
         }
         return BlocListener<EditProfileBloc, EditProfileState>(
           listener: (context, state) {
             if (state.status == EditProfileStatus.success) {
               context.read<AuthBloc>().add(const AuthEvent.refreshData());
+              context.read<UserProfileBloc>().add(
+                    UserProfileEventFetch(
+                      userId: AuthUtils.getUserId(context),
+                    ),
+                  );
               SnackBarUtils.showSuccess(
                 message: t.profile.editProfileSuccess,
               );

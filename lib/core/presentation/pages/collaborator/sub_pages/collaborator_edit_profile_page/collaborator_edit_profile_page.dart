@@ -1,3 +1,4 @@
+import 'package:app/core/application/profile/user_profile_bloc/user_profile_bloc.dart';
 import 'package:app/core/presentation/pages/collaborator/sub_pages/collaborator_edit_profile_page/widgets/collaborator_edit_expertise_offering_card/collaborator_edit_expertise_offering_card.dart';
 import 'package:app/core/presentation/pages/collaborator/sub_pages/collaborator_edit_profile_page/widgets/collaborator_edit_icebreaker/collaborator_edit_icebreaker.dart';
 import 'package:app/core/presentation/pages/collaborator/sub_pages/collaborator_edit_profile_page/widgets/collaborator_edit_photos/collaborator_edit_photos.dart';
@@ -13,6 +14,7 @@ import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 @RoutePage()
 class CollaboratorEditProfilePage extends StatelessWidget {
@@ -29,8 +31,14 @@ class CollaboratorEditProfilePage extends StatelessWidget {
             padding: EdgeInsets.only(right: Spacing.small),
             child: InkWell(
               onTap: () {
-                AutoRouter.of(context)
-                    .navigate(const CollaboratorPreviewProfileRoute());
+                final loggedInUser =
+                    context.read<UserProfileBloc>().state.maybeWhen(
+                          orElse: () => null,
+                          fetched: (profile) => profile,
+                        );
+                AutoRouter.of(context).navigate(
+                  CollaboratorPreviewProfileRoute(user: loggedInUser),
+                );
               },
               child: ThemeSvgIcon(
                 builder: (filter) => Assets.icons.icPreviewProfile.svg(
@@ -69,7 +77,7 @@ class CollaboratorEditProfilePage extends StatelessWidget {
             ),
             const CollaboratorEditProfileAboutYou(),
             SliverToBoxAdapter(
-              child: SizedBox(height: Spacing.large),
+              child: SizedBox(height: Spacing.large * 2),
             ),
           ],
         ),

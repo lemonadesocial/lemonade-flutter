@@ -24,7 +24,7 @@ class CollaboratorDiscoverExpertiseOfferingCard extends StatelessWidget {
     final sections = [
       if (user?.expertiseExpanded?.isNotEmpty == true)
         _Expertise(
-          expertise: user?.expertiseExpanded ?? [],
+          expertises: user?.expertiseExpanded ?? [],
         ),
       if (user?.serviceOffersExpanded?.isNotEmpty == true)
         _Offering(
@@ -98,9 +98,9 @@ class _Offering extends StatelessWidget {
 }
 
 class _Expertise extends StatelessWidget {
-  final List<UserExpertise> expertise;
+  final List<UserExpertise> expertises;
   const _Expertise({
-    required this.expertise,
+    required this.expertises,
   });
 
   @override
@@ -121,7 +121,7 @@ class _Expertise extends StatelessWidget {
         ),
         SizedBox(height: Spacing.superExtraSmall),
         Text(
-          expertise.map((item) => item.title ?? '').join(', '),
+          expertises.map((item) => item.title ?? '').join(', '),
           style: Typo.medium.copyWith(
             color: colorScheme.onSecondary,
             fontWeight: FontWeight.w400,
