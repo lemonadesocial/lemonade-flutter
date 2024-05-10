@@ -1,18 +1,22 @@
 fragment EventAcceptedExport on EventAcceptedExport {
   id: _id
-  name
-  firstName: first_name
-  lastName: last_name
-  imageAvatar: image_avatar
-  username
-  email
-  phone
-  amount
-  currency
-  ticketCount: ticket_count
   ticketType: ticket_type
-  ticketTypeId: ticket_type_id
-  ticketDiscount: ticket_discount
-  ticketDiscountAmount: ticket_discount_amount
   checkinDate: checkin_date
+  buyerId: buyer_id
+  buyerEmail: buyer_email
+  buyerWallets: buyer_wallets
+  assigneeName: assignee_name
+  assigneeFirstName: assignee_first_name
+  assigneeLastName: assignee_last_name
+  assigneeUsername: assignee_username
+  assigneeEmail: assignee_email
+  assigneePhone: assignee_phone
+  assigneeWallets: assignee_wallets
+  paymentId: payment_id
+  ticketPrice: ticket_price
+  currency: currency
+  paymentAmount: payment_amount
+  discountAmount: discount_amount
+  discount: discount
+  ticketCount: ticket_count
 }

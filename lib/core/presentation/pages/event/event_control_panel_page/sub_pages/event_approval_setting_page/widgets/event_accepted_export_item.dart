@@ -35,7 +35,10 @@ class EventAcceptedExportItem extends StatelessWidget {
             children: [
               _GuestInfo(eventAccepted: eventAccepted),
               const Spacer(),
-              _TicketCount(eventAccepted: eventAccepted),
+              if ((eventAccepted.ticketCount ?? 0) > 0)
+                _TicketCount(
+                  eventAccepted: eventAccepted,
+                ),
             ],
           ),
         ),
@@ -103,7 +106,9 @@ class _GuestInfo extends StatelessWidget {
           child: CachedNetworkImage(
             width: Sizing.medium,
             height: Sizing.medium,
-            imageUrl: eventAccepted.imageAvatar ?? '',
+            // TODO: wait for BE to support
+            // imageUrl: eventAccepted.assigneeImageAvatar ?? '',
+            imageUrl: '',
             placeholder: (_, __) => ImagePlaceholder.defaultPlaceholder(),
             errorWidget: (_, __, ___) => ImagePlaceholder.defaultPlaceholder(),
           ),
@@ -115,7 +120,9 @@ class _GuestInfo extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                eventAccepted.name ?? eventAccepted.email ?? t.common.anonymous,
+                eventAccepted.assigneeName ??
+                    eventAccepted.assigneeEmail ??
+                    t.common.anonymous,
                 style: Typo.medium.copyWith(
                   color: colorScheme.onPrimary,
                 ),
@@ -123,9 +130,9 @@ class _GuestInfo extends StatelessWidget {
               ),
               SizedBox(height: 2.w),
               Text(
-                eventAccepted.username != null
-                    ? '@${eventAccepted.username}'
-                    : eventAccepted.email ?? '',
+                eventAccepted.assigneeUsername != null
+                    ? '@${eventAccepted.assigneeUsername}'
+                    : eventAccepted.assigneeEmail ?? '',
                 style: Typo.small.copyWith(
                   color: colorScheme.onSecondary,
                 ),
