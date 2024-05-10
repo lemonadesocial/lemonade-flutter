@@ -1,7 +1,7 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/pages/collaborator/sub_pages/collaborator_edit_profile_page/widgets/collaborator_edit_profile_field_card.dart';
-import 'package:app/core/utils/collaborator_utils.dart';
+import 'package:app/core/utils/user_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
@@ -61,7 +61,7 @@ class CollaboratorEditProfileAboutYou extends StatelessWidget {
       case CollaboratorAboutYouField.basedIn:
         return (
           t.collaborator.editProfile.aboutYou.basedIn,
-          CollaboratorUtils.getBasedInLocation(
+          UserUtils.getBasedInLocation(
             user: user,
             emptyText: emptyValue,
           )
@@ -74,7 +74,7 @@ class CollaboratorEditProfileAboutYou extends StatelessWidget {
       case CollaboratorAboutYouField.age:
         return (
           t.collaborator.editProfile.aboutYou.age,
-          CollaboratorUtils.getUserAge(
+          UserUtils.getUserAge(
             user: user,
             emptyText: emptyValue,
           )

@@ -1,6 +1,6 @@
 import 'package:app/core/domain/user/entities/user.dart';
 
-class CollaboratorUtils {
+class UserUtils {
   static String getBasedInLocation({User? user, String emptyText = ''}) {
     String city = user?.addresses?.first.city ?? '';
     String country = user?.addresses?.first.country ?? '';
