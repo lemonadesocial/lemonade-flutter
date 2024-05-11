@@ -105,7 +105,7 @@ type Query {
   getEventJoinRequest(event: MongoID!, _id: MongoID!): EventJoinRequest!
   getUserContacts(skip: Int! = 0, limit: Int! = 25, input: GetUserContactsInput): GetUserContactsResponse!
   getUserDiscovery(longitude: Float!, latitude: Float!, search_range: Float, event: MongoID, offerings: [MongoID!]): UserDiscovery!
-  getUserDiscoverySwipes(skip: Int! = 0, limit: Int! = 25, state: UserDiscoverySwipeState, other_wallets: Boolean): [UserDiscoverySwipe!]!
+  getUserDiscoverySwipes(skip: Int! = 0, limit: Int! = 25, incoming: Boolean, state: UserDiscoverySwipeState, other_wallets: Boolean): [UserDiscoverySwipe!]!
   getUserFollows(skip: Int! = 0, limit: Int! = 25, input: GetUserFollowsInput!): [UserFollow!]!
   getUserFriendships(skip: Int! = 0, limit: Int! = 25, input: GetUserFriendshipsInput): GetUserFriendshipsResponse!
   getUserIcebreakerQuestions: [UserIcebreakerQuestion!]!
@@ -187,6 +187,7 @@ type User {
   pronoun: String
   new_gender: String
   new_photos: [MongoID!]
+  service_offers: [MongoID!]
   tag_recommended: Boolean
   tag_site: Boolean
   tag_timeline: Boolean
@@ -1050,21 +1051,25 @@ input GetCommentsArgs {
 
 type EventAcceptedExport {
   _id: MongoID!
-  name: String
-  image_avatar: String
-  first_name: String
-  last_name: String
-  username: String
-  email: String
-  phone: String
-  amount: String
-  currency: String
-  ticket_type_id: MongoID
   ticket_type: String
-  ticket_count: Float
-  ticket_discount: String
-  ticket_discount_amount: String
   checkin_date: DateTimeISO
+  buyer_id: String
+  buyer_email: String
+  buyer_wallets: [String!]
+  assignee_name: String
+  assignee_first_name: String
+  assignee_last_name: String
+  assignee_username: String
+  assignee_email: String
+  assignee_phone: String
+  assignee_wallets: [String!]
+  payment_id: MongoID
+  ticket_price: String
+  currency: String
+  payment_amount: String
+  discount_amount: String
+  discount: String
+  ticket_count: Float
 }
 
 type EventApplicationAnswer {
@@ -2108,6 +2113,7 @@ type UserWithEmail {
   pronoun: String
   new_gender: String
   new_photos: [MongoID!]
+  service_offers: [MongoID!]
   tag_recommended: Boolean
   tag_site: Boolean
   tag_timeline: Boolean

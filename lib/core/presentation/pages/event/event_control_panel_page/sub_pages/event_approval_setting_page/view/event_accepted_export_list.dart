@@ -43,12 +43,16 @@ class EventAcceptedExportList extends StatelessWidget {
           );
         }
 
-        final eventAcceptedList =
-            (result.parsedData?.exportEventAccepted ?? []).map((item) {
-          return EventAcceptedExport.fromJson(
-            item.toJson(),
-          );
-        }).toList();
+        final eventAcceptedList = (result.parsedData?.exportEventAccepted ?? [])
+            .map((item) {
+              return EventAcceptedExport.fromJson(
+                item.toJson(),
+              );
+            })
+            .where(
+              (element) => element.assigneeEmail != null,
+            )
+            .toList();
 
         if (eventAcceptedList.isEmpty) {
           return Center(
