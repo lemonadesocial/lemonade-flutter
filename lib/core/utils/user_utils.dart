@@ -1,21 +1,13 @@
 import 'package:app/core/domain/user/entities/user.dart';
+import 'package:collection/collection.dart';
 
 class UserUtils {
   static String getBasedInLocation({User? user, String emptyText = ''}) {
-    String city = user?.addresses?.first.city ?? '';
-    String country = user?.addresses?.first.country ?? '';
-    String basedInValue = '';
-    if (city.isNotEmpty) {
-      basedInValue = city;
-      if (country.isNotEmpty) {
-        basedInValue += ', $country';
-      }
-    } else if (country.isNotEmpty) {
-      basedInValue = country;
-    } else {
-      basedInValue = emptyText;
-    }
-    return basedInValue;
+    String city = user?.addresses?.firstOrNull?.city ?? '';
+    String country = user?.addresses?.firstOrNull?.country ?? '';
+    String basedInValue =
+        [city, country].where((element) => element.isNotEmpty).join(', ');
+    return basedInValue.isNotEmpty ? basedInValue : emptyText;
   }
 
   static String getUserAge({User? user, String emptyText = ''}) {
