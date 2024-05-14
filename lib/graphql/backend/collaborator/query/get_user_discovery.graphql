@@ -18,6 +18,8 @@ query GetUserDiscovery(
       username
       job_title
       company_name
+      description
+      hosted
       attended
       languages
       handle_farcaster
