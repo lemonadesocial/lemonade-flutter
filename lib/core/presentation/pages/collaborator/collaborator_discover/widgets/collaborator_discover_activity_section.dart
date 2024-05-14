@@ -32,7 +32,7 @@ class CollaboratorDiscoverActivitySection extends StatelessWidget {
     final t = Translations.of(context);
     final List<_ItemData> items = [
       _ItemData(
-        count: user?.attended ?? 0,
+        count: user?.hosted ?? 0,
         title: t.collaborator.eventHosted,
         themeSvgIcon: ThemeSvgIcon(
           color: LemonColor.paleViolet,
@@ -44,7 +44,7 @@ class CollaboratorDiscoverActivitySection extends StatelessWidget {
         ),
       ),
       _ItemData(
-        count: user?.hosted ?? 0,
+        count: user?.attended ?? 0,
         title: t.collaborator.eventAttended,
         themeSvgIcon: ThemeSvgIcon(
           color: LemonColor.jordyBlue,

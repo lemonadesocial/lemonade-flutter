@@ -42,6 +42,7 @@ const userProfileFragment = '''
     _id
     title
     host
+    accepted
     new_new_photos_expanded(limit: 1) {
       key
       bucket
