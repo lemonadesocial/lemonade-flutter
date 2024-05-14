@@ -35,21 +35,22 @@ const postFragment = '''
     event_ticket_types {
       _id
       prices {
-        currency
-        network
-        cost
+          currency
+          network
+          cost
+          default
+        }
       }
-    }
-    start
-    end
-    cost
-    currency
-    host
-    host_expanded {
-      ...eventHostExpandedFragment
-    }
-    cohosts_expanded(limit: 3) {
-      ...eventHostExpandedFragment
+      start
+      end
+      cost
+      currency
+      host
+      host_expanded {
+        ...eventHostExpandedFragment
+      }
+      cohosts_expanded(limit: 3) {
+        ...eventHostExpandedFragment
     }
     slug
     latitude

@@ -202,6 +202,7 @@ const eventFragment = '''
       currency
       network
       cost
+      default
     }
   }
   ...eventPeopleFragment

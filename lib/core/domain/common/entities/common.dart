@@ -87,3 +87,14 @@ class GeoPoint {
   final double lat;
   final double lng;
 }
+
+@freezed
+class Currency with _$Currency {
+  factory Currency({
+    String? code,
+    double? decimals,
+  }) = _Currency;
+
+  factory Currency.fromJson(Map<String, dynamic> json) =>
+      _$CurrencyFromJson(json);
+}

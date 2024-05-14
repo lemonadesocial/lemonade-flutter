@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/event/entities/event.dart';
-import 'package:app/core/presentation/widgets/event/event_buy_ticket_button_widget.dart';
+import 'package:app/core/presentation/widgets/event/event_default_price_badge.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
@@ -198,7 +198,7 @@ class EventPostCard extends StatelessWidget {
         SizedBox(
           width: Spacing.xSmall,
         ),
-        EventBuyTicketButton(event: event),
+        EventDefaultPriceBadge(event: event),
       ],
     );
   }
