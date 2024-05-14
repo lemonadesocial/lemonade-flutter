@@ -10,16 +10,24 @@ import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 
-class CollaboratorSendLikeBottomSheet extends StatelessWidget {
-  final _textController = TextEditingController();
+class CollaboratorSendLikeBottomSheet extends StatefulWidget {
   final User? user;
   final Function(String? message)? onPressSendLike;
 
-  CollaboratorSendLikeBottomSheet({
+  const CollaboratorSendLikeBottomSheet({
     super.key,
     required this.user,
     this.onPressSendLike,
   });
+
+  @override
+  State<CollaboratorSendLikeBottomSheet> createState() =>
+      _CollaboratorSendLikeBottomSheetState();
+}
+
+class _CollaboratorSendLikeBottomSheetState
+    extends State<CollaboratorSendLikeBottomSheet> {
+  final _textController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -46,13 +54,14 @@ class CollaboratorSendLikeBottomSheet extends StatelessWidget {
                 children: [
                   CollaboratorUserBottomsheetHeader(
                     icon: Assets.icons.icShiningLove.svg(),
-                    user: user,
+                    user: widget.user,
                   ),
                   SizedBox(height: Spacing.smMedium),
-                  if (user?.expertise?.isNotEmpty == true ||
-                      user?.serviceOffersExpanded?.isNotEmpty == true) ...[
+                  if (widget.user?.expertise?.isNotEmpty == true ||
+                      widget.user?.serviceOffersExpanded?.isNotEmpty ==
+                          true) ...[
                     CollaboratorDiscoverExpertiseOfferingCard(
-                      user: user,
+                      user: widget.user,
                       backgroundColor: LemonColor.charlestonGreen,
                     ),
                     SizedBox(height: Spacing.smMedium),
@@ -60,6 +69,10 @@ class CollaboratorSendLikeBottomSheet extends StatelessWidget {
                   LemonTextField(
                     controller: _textController,
                     hintText: t.collaborator.sendMessage,
+                    onChange: (value) {
+                      _textController.text = value;
+                      // _message = value;
+                    },
                   ),
                 ],
               ),
@@ -76,7 +89,7 @@ class CollaboratorSendLikeBottomSheet extends StatelessWidget {
                 ),
                 child: LinearGradientButton.primaryButton(
                   onTap: () {
-                    onPressSendLike?.call(_textController.text);
+                    widget.onPressSendLike?.call(_textController.text);
                   },
                   label: t.collaborator.sendLike,
                 ),
