@@ -2,8 +2,9 @@ part of 'edit_profile_bloc.dart';
 
 @freezed
 class EditProfileEvent with _$EditProfileEvent {
-  factory EditProfileEvent.selectProfileImage() =
-      EditProfileEventSelectProfileImage;
+  factory EditProfileEvent.selectProfileImage({
+    required List<String> profilePhotos,
+  }) = EditProfileEventSelectProfileImage;
   factory EditProfileEvent.shortBioChange({required String input}) =
       EditProfileEventShortBioChange;
   factory EditProfileEvent.displayNameChange({required String input}) =

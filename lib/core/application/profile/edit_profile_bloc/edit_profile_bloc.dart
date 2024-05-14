@@ -48,11 +48,13 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
   final notificationMap = <NotificationSettingType, bool>{};
 
   String? mImageId;
+  List<String> _profilePhotos = [];
 
   Future<void> selectProfileImage(
     EditProfileEventSelectProfileImage event,
     Emitter<EditProfileState> emit,
   ) async {
+    _profilePhotos = event.profilePhotos;
     final pickImage = await getImageFromGallery(cropRequired: true);
     if (pickImage != null) {
       emit(
@@ -376,7 +378,7 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
         new_gender: state.gender,
         ethnicity: state.ethnicity,
         company_name: state.companyName,
-        new_photos: mImageId != null ? [mImageId!] : null,
+        new_photos: mImageId != null ? [mImageId!, ..._profilePhotos] : null,
         // notification_filters:
         //     notificationFilterInput.isEmpty ? null : notificationFilterInput,
         date_of_birth: state.dob,

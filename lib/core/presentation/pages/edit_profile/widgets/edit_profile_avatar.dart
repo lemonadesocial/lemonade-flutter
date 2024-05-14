@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:app/core/application/profile/edit_profile_bloc/edit_profile_bloc.dart';
+import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -12,8 +13,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 
 class EditProfileAvatar extends StatelessWidget {
+  final User? user;
   const EditProfileAvatar({
     super.key,
+    this.user,
     this.imageUrl,
     this.imageFile,
   });
@@ -24,6 +27,13 @@ class EditProfileAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final profilePhotos = (user?.newPhotosExpanded ?? [])
+        .map(
+          (item) => item.id,
+        )
+        .whereType<String>()
+        .toList();
+
     return SizedBox(
       width: 80.w,
       height: 80.w,
@@ -54,7 +64,9 @@ class EditProfileAvatar extends StatelessWidget {
                   child: InkWell(
                     onTap: () {
                       context.read<EditProfileBloc>().add(
-                            EditProfileEvent.selectProfileImage(),
+                            EditProfileEvent.selectProfileImage(
+                              profilePhotos: profilePhotos,
+                            ),
                           );
                     },
                     child: Container(
@@ -75,7 +87,9 @@ class EditProfileAvatar extends StatelessWidget {
           : InkWell(
               onTap: () {
                 context.read<EditProfileBloc>().add(
-                      EditProfileEvent.selectProfileImage(),
+                      EditProfileEvent.selectProfileImage(
+                        profilePhotos: profilePhotos,
+                      ),
                     );
               },
               child: Container(
