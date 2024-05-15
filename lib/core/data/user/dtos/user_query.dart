@@ -193,11 +193,25 @@ const userTermFragment = '''
   }
 ''';
 
+const userFarcasterInfoFragment = '''
+  fragment userFarcasterInfoFragment on User {
+    farcaster_user_info {
+      account_key_request {
+        accepted
+        deeplink_url
+        token
+      }
+      fid
+    }
+  }
+''';
+
 final getMeQuery = gql('''
   $baseUserFragment
   $userProfileFragment
   $privateFragment
   $userTermFragment
+  $userFarcasterInfoFragment
 
   query() {
     getMe() {
@@ -205,6 +219,7 @@ final getMeQuery = gql('''
       ...userProfileFragment
       ...privateFragment
       ...userTermFragment
+      ...userFarcasterInfoFragment
     }
 }
 ''');

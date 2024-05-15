@@ -1,0 +1,6 @@
+{
+    "connectFarcaster": "Connect Farcaster",
+    "connectFarcasterDescription": "Press Connect & follow Warpcast instructions. This dialog will auto-close after connecting.",
+    "farcasterConnectedSuccess": "Farcaster successfully connected!",
+    "shareOnFarcaster": "Share on Farcaster"
+}

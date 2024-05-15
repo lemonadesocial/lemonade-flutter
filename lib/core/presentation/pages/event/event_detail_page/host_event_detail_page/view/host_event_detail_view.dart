@@ -6,6 +6,7 @@ import 'package:app/core/presentation/pages/event/event_detail_page/host_event_d
 import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/widgets/host_event_location.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/widgets/host_collectibles_section/host_collectibles_section.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/widgets/event_detail_navigation_bar.dart';
+import 'package:app/core/presentation/pages/farcaster/widgets/cast_on_farcaster_button/cast_on_farcaster_button.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
@@ -99,8 +100,17 @@ class HostEventDetailView extends StatelessWidget {
                         padding:
                             EdgeInsets.symmetric(horizontal: Spacing.smMedium),
                         sliver: SliverToBoxAdapter(
-                          child: HostCheckinGuestsAction(
-                            event: event,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              HostCheckinGuestsAction(
+                                event: event,
+                              ),
+                              SizedBox(
+                                height: Spacing.extraSmall,
+                              ),
+                              const CastOnFarcasterButton(),
+                            ],
                           ),
                         ),
                       ),
