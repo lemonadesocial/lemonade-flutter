@@ -48,7 +48,7 @@ class GuestEventDetailGeneralInfo extends StatelessWidget {
         SizedBox(
           height: Spacing.smMedium,
         ),
-        const CastOnFarcasterButton(),
+        CastOnFarcasterButton(event: event),
       ],
     );
   }

@@ -52,7 +52,9 @@ class PostGuestEventDetailView extends StatelessWidget {
                   children: [
                     GuestEventDetailDashboard(event: event),
                     SizedBox(height: Spacing.xSmall),
-                    const CastOnFarcasterButton(),
+                    CastOnFarcasterButton(
+                      event: event,
+                    ),
                   ],
                 ),
               ),

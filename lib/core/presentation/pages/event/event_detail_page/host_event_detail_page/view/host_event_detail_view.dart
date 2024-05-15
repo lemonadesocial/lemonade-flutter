@@ -109,7 +109,9 @@ class HostEventDetailView extends StatelessWidget {
                               SizedBox(
                                 height: Spacing.extraSmall,
                               ),
-                              const CastOnFarcasterButton(),
+                              CastOnFarcasterButton(
+                                event: event,
+                              ),
                             ],
                           ),
                         ),

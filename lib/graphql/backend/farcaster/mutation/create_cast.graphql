@@ -1,0 +1,17 @@
+mutation CreateCast(
+  $text: String!
+  $mentions: [Int!]
+  $mentionsPositions: [Int!]
+  $embeds: [String!]
+  $parentCast: ParentCastInput
+  $parentUrl: String
+) {
+  createCast(
+    text: $text
+    mentions: $mentions
+    mentionsPositions: $mentionsPositions
+    embeds: $embeds
+    parent_cast: $parentCast
+    parent_url: $parentUrl
+  )
+}

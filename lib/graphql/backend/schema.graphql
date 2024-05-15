@@ -27,6 +27,8 @@ type Query {
   getEventCohostRequests(input: GetEventCohostRequestsInput!): [EventCohostRequest!]!
   getEventAttestation(chain_id: String!, event: MongoID!): EventAttestation
   getEventAttestationDiff(chain_id: String!, event: MongoID!): EventAttestationDiff
+  getEventEmailSetting(_id: MongoID!): EmailSetting!
+  listEventEmailSettings(event: MongoID!, system: Boolean, scheduled: Boolean, sent: Boolean): [EmailSetting!]!
 
   """For guests, return attending guests basic information of an event"""
   getEventGuestDirectory(_id: MongoID!): [BasicUserInfo!]!
@@ -1053,9 +1055,11 @@ type EventAcceptedExport {
   _id: MongoID!
   ticket_type: String
   checkin_date: DateTimeISO
+  purchase_date: DateTimeISO
   buyer_id: String
   buyer_email: String
   buyer_wallets: [String!]
+  assignee_avatar: String
   assignee_name: String
   assignee_first_name: String
   assignee_last_name: String
@@ -1070,6 +1074,7 @@ type EventAcceptedExport {
   discount_amount: String
   discount: String
   ticket_count: Float
+  ticket_type_id: MongoID
 }
 
 type EventApplicationAnswer {
@@ -1209,6 +1214,73 @@ type EASTicketType {
 type EASTicket {
   _id: MongoID!
   wallet_address: String!
+}
+
+type EmailSetting {
+  _id: MongoID!
+  template: MongoID!
+  owner: MongoID!
+  context: JSON
+  sendgrid_template_id: String
+  custom_subject_html: String
+  custom_body_html: String
+  cc: [String!]
+  disabled: Boolean
+  scheduled_at: DateTimeISO
+  recipient_types: [EmailRecipientType!]
+  sent_at: DateTimeISO
+  recipients: [String!]
+  opened: [EmailTracking!]
+  type: EmailTemplateType!
+  is_system_email: Boolean!
+  subject_preview: String
+  body_preview: String
+  template_subject_html: String
+  template_body_html: String
+  recipients_details: [RecipientDetail!]
+}
+
+enum EmailRecipientType {
+  assigned
+  attending
+  invited
+  ticket_type_whitelisted
+  join_requester
+  event_hosts
+}
+
+type EmailTracking {
+  email: String!
+  stamp: DateTimeISO!
+}
+
+enum EmailTemplateType {
+  invitation
+  join_request_approved
+  join_request_declined
+  join_requested
+  post_rsvp
+  ticket_received
+  ticket_type_whitelisted
+  crypto_payment_receipt
+  updated
+  feedback
+  custom
+  reminder
+  user_contact_invite
+  seller_store_order_pending
+  buyer_store_order_pending
+  buyer_store_order_declined
+  buyer_store_order_accepted
+  buyer_store_order_preparing
+  buyer_store_order_delivered
+  buyer_store_order_cancelled
+  buyer_store_order_tracking
+}
+
+type RecipientDetail {
+  email: String
+  image_avatar: String
 }
 
 type BasicUserInfo {
@@ -1849,6 +1921,7 @@ type Site {
   footer_scripts: [SiteFooterScript!]
   ai_config: MongoID
   event: MongoID
+  farcaster_channel_url: String
   onboarding_steps: [SiteOnboardingStep!]
   owners: [MongoID!]
   partners: [MongoID!]
@@ -2333,6 +2406,9 @@ type Mutation {
   manageEventCohostRequests(input: ManageEventCohostRequestsInput!): Boolean!
   decideEventCohostRequest(input: DecideEventCohostRequestInput!): Boolean!
   syncEventAttestation(chain_id: String!, event: MongoID!): Boolean!
+  createEventEmailSetting(input: CreateEventEmailSettingInput!): EmailSetting
+  updateEventEmailSetting(input: UpdateEventEmailSettingInput!): EmailSetting!
+  deleteEventEmailSetting(_id: MongoID!): Boolean!
   createEvent(input: EventInput!): Event!
   updateEvent(input: EventInput!, _id: MongoID!): Event!
   cancelEvent(_id: MongoID!): Event!
@@ -2526,6 +2602,29 @@ input ManageEventCohostRequestsInput {
 input DecideEventCohostRequestInput {
   event: MongoID!
   decision: Boolean!
+}
+
+input CreateEventEmailSettingInput {
+  custom_subject_html: String
+  custom_body_html: String
+  cc: [String!]
+  disabled: Boolean
+  scheduled_at: DateTimeISO
+  recipient_types: [EmailRecipientType!]
+  event: MongoID!
+  type: EmailTemplateType!
+  test_recipients: [String!]
+}
+
+input UpdateEventEmailSettingInput {
+  custom_subject_html: String
+  custom_body_html: String
+  cc: [String!]
+  disabled: Boolean
+  scheduled_at: DateTimeISO
+  recipient_types: [EmailRecipientType!]
+  test_recipients: [String!]
+  _id: MongoID!
 }
 
 input EventInput {

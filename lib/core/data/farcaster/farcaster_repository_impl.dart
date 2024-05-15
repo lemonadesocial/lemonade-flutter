@@ -4,6 +4,7 @@ import 'package:app/core/domain/farcaster/entities/farcaster_signed_key_request.
 import 'package:app/core/domain/farcaster/farcaster_repository.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/core/utils/gql/gql.dart';
+import 'package:app/graphql/backend/farcaster/mutation/create_cast.graphql.dart';
 import 'package:app/graphql/backend/farcaster/mutation/create_farcaster_account_key.graphql.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:dartz/dartz.dart';
@@ -48,5 +49,18 @@ class FarcasterRepositoryImpl implements FarcasterRepository {
     }
 
     return Left(Failure());
+  }
+
+  @override
+  Future<Either<Failure, bool>> createCast({
+    required Variables$Mutation$CreateCast input,
+  }) async {
+    final result = await _client.mutate$CreateCast(
+      Options$Mutation$CreateCast(variables: input),
+    );
+    if (result.hasException || result.parsedData?.createCast == null) {
+      return Left(Failure());
+    }
+    return Right(result.parsedData!.createCast);
   }
 }
