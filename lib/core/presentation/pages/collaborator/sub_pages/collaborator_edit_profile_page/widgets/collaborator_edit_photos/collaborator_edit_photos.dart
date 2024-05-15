@@ -72,18 +72,18 @@ class _CollaboratorEditPhotosState extends State<CollaboratorEditPhotos> {
         if (imageId == null) {
           return;
         }
-        getIt<UserRepository>().updateUser(
+        await getIt<UserRepository>().updateUser(
           input: Input$UserInput(
             new_photos: [...currentPhotoIds, imageId],
           ),
         );
+        context.read<UserProfileBloc>().add(
+              UserProfileEvent.fetch(
+                userId: AuthUtils.getUserId(context),
+              ),
+            );
       },
     );
-    context.read<UserProfileBloc>().add(
-          UserProfileEvent.fetch(
-            userId: AuthUtils.getUserId(context),
-          ),
-        );
   }
 
   @override

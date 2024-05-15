@@ -118,6 +118,7 @@ class EditProfileView extends StatelessWidget {
                                 Row(
                                   children: [
                                     EditProfileAvatar(
+                                      user: userProfile,
                                       imageFile: state.profilePhoto,
                                       imageUrl: userProfile.imageAvatar,
                                     ),
