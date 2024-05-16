@@ -1,15 +1,10 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
-import 'package:app/core/config.dart';
 import 'package:app/core/domain/event/entities/event.dart';
-import 'package:app/core/domain/farcaster/farcaster_repository.dart';
 import 'package:app/core/presentation/pages/farcaster/widgets/connect_farcaster_bottomsheet/connect_farcaster_bottomsheet.dart';
-import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/gen/assets.gen.dart';
-import 'package:app/graphql/backend/farcaster/mutation/create_cast.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
@@ -44,27 +39,11 @@ class CastOnFarcasterButton extends StatelessWidget {
           return;
         }
         if (farcasterConnected) {
-          // TODO: go to cast page
-          final response = await showFutureLoadingDialog(
-            context: context,
-            future: () async {
-              return await getIt<FarcasterRepository>().createCast(
-                input: Variables$Mutation$CreateCast(
-                  text: "This event is so great!! 🫶",
-                  embeds: [
-                    '${AppConfig.webUrl}/event/${event.id}',
-                  ],
-                ),
-              );
-            },
+          AutoRouter.of(context).push(
+            CreateFarcasterCastRoute(
+              event: event,
+            ),
           );
-          response.result?.fold((l) => null, (success) {
-            if (success) {
-              SnackBarUtils.showSuccess(
-                message: t.farcaster.castCreatedSuccess,
-              );
-            }
-          });
         } else {
           showCupertinoModalBottomSheet(
             backgroundColor: LemonColor.atomicBlack,
@@ -77,7 +56,11 @@ class CastOnFarcasterButton extends StatelessWidget {
                 SnackBarUtils.showSuccess(
                   message: t.farcaster.farcasterConnectedSuccess,
                 );
-                // TODO: navigate to cast page
+                AutoRouter.of(context).push(
+                  CreateFarcasterCastRoute(
+                    event: event,
+                  ),
+                );
               },
             ),
           );

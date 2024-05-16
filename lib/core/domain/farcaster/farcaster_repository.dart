@@ -1,4 +1,5 @@
 import 'package:app/core/domain/farcaster/entities/farcaster_account_key_request.dart';
+import 'package:app/core/domain/farcaster/entities/farcaster_channel.dart';
 import 'package:app/core/domain/farcaster/entities/farcaster_signed_key_request.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/graphql/backend/farcaster/mutation/create_cast.graphql.dart';
@@ -14,5 +15,9 @@ abstract class FarcasterRepository {
 
   Future<Either<Failure, bool>> createCast({
     required Variables$Mutation$CreateCast input,
+  });
+
+  Future<Either<Failure, List<FarcasterChannel>>> getChannels({
+    required int fid,
   });
 }
