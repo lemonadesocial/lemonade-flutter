@@ -106,12 +106,12 @@ class _DiscoverCardsState extends State<DiscoverCards> {
             onAuthenticatedTap(
               isLoggedIn: isLoggedIn,
               tapFunc: () {
+                // Check valid age
                 if (user != null) {
                   if ((user.age ?? 0) < 18) {
                     return showCollaboratorAgeValidationPopup();
                   }
                 }
-                // Check valid age
                 AutoRouter.of(context).navigate(CollaboratorRoute());
               },
             );
