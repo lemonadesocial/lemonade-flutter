@@ -61,10 +61,7 @@ class CollaboratorEditProfileAboutYou extends StatelessWidget {
       case CollaboratorAboutYouField.basedIn:
         return (
           t.collaborator.editProfile.aboutYou.basedIn,
-          UserUtils.getBasedInLocation(
-            user: user,
-            emptyText: emptyValue,
-          )
+          user?.locationLine ?? emptyValue
         );
       case CollaboratorAboutYouField.languagesSpoken:
         return (
@@ -112,16 +109,19 @@ class CollaboratorEditProfileAboutYou extends StatelessWidget {
         SliverList.separated(
           itemCount: CollaboratorAboutYouField.values.length,
           itemBuilder: (context, index) {
+            final field = CollaboratorAboutYouField.values[index];
             final (displayName, value) = getNameAndValue(
               context,
-              field: CollaboratorAboutYouField.values[index],
+              field: field,
             );
             return CollaboratorProfileFieldCard(
               title: displayName,
               description: value,
               onTap: () {
+                if (field == CollaboratorAboutYouField.basedIn) return;
                 AutoRouter.of(context).navigate(const EditProfileRoute());
               },
+              hideArrowButton: field == CollaboratorAboutYouField.basedIn,
             );
           },
           separatorBuilder: (context, index) => SizedBox(
