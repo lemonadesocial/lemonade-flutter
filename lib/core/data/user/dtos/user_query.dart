@@ -217,6 +217,7 @@ final getUserQuery = gql('''
     getUser(_id: \$id, username: \$username, matrix_localpart: \$matrix_localpart) {
       ...baseUserFragment,
       ...userProfileFragment
+      date_of_birth
     }
   }
 ''');
