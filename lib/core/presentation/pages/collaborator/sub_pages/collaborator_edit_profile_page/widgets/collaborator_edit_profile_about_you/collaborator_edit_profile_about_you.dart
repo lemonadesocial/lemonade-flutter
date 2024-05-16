@@ -17,7 +17,7 @@ enum CollaboratorAboutYouField {
   jobTitle,
   organization,
   basedIn,
-  languagesSpoken,
+  // languagesSpoken,
   age,
   ethnicity,
 }
@@ -63,11 +63,12 @@ class CollaboratorEditProfileAboutYou extends StatelessWidget {
           t.collaborator.editProfile.aboutYou.basedIn,
           user?.locationLine ?? emptyValue
         );
-      case CollaboratorAboutYouField.languagesSpoken:
-        return (
-          t.collaborator.editProfile.aboutYou.languagesSpoken,
-          emptyValue
-        );
+      // TODO: Tempororary hide languages spoken due to backend not fully support yet
+      // case CollaboratorAboutYouField.languagesSpoken:
+      //   return (
+      //     t.collaborator.editProfile.aboutYou.languagesSpoken,
+      //     emptyValue
+      //   );
       case CollaboratorAboutYouField.age:
         return (
           t.collaborator.editProfile.aboutYou.age,
