@@ -1,11 +1,14 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
+import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/widgets/discover/discover_card.dart';
 import 'package:app/core/utils/device_utils.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
+import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -33,14 +36,48 @@ class _DiscoverCardsState extends State<DiscoverCards> {
     }
   }
 
+  void showCollaboratorAgeValidationPopup() {
+    final t = Translations.of(context);
+    final colorScheme = Theme.of(context).colorScheme;
+    showCupertinoModalPopup<void>(
+      context: context,
+      builder: (BuildContext context) => CupertinoAlertDialog(
+        title: Text(t.collaborator.ageVerificationRequired),
+        content: Text(t.collaborator.ageVerificationRequiredDescription),
+        actions: <CupertinoDialogAction>[
+          CupertinoDialogAction(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text(
+              t.common.actions.cancel,
+              style: Typo.medium.copyWith(color: colorScheme.onPrimary),
+            ),
+          ),
+          CupertinoDialogAction(
+            onPressed: () {
+              Navigator.pop(context);
+              AutoRouter.of(context).navigate(const EditProfileRoute());
+            },
+            child: Text(
+              t.common.confirm,
+              style: Typo.medium.copyWith(color: colorScheme.onPrimary),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final router = AutoRouter.of(context);
     final t = Translations.of(context);
-    final isLoggedIn = context.watch<AuthBloc>().state.maybeWhen(
-          orElse: () => false,
-          authenticated: (_) => true,
+    User? user = context.watch<AuthBloc>().state.maybeWhen(
+          orElse: () => null,
+          authenticated: (user) => user,
         );
+    final isLoggedIn = user != null;
     return SliverGrid.count(
       crossAxisCount: 3,
       crossAxisSpacing: 9.w,
@@ -69,6 +106,12 @@ class _DiscoverCardsState extends State<DiscoverCards> {
             onAuthenticatedTap(
               isLoggedIn: isLoggedIn,
               tapFunc: () {
+                // Check valid age
+                if (user != null) {
+                  if ((user.age ?? 0) < 18) {
+                    return showCollaboratorAgeValidationPopup();
+                  }
+                }
                 AutoRouter.of(context).navigate(CollaboratorRoute());
               },
             );
