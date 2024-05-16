@@ -107,9 +107,8 @@ class CollaboratorDiscoverView extends StatelessWidget {
         child: Container(
           height: Spacing.xLarge,
         ),
-      )
+      ),
     ];
-
     return MultiSliver(
       children: sections,
     );
