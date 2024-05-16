@@ -114,8 +114,8 @@ class _TagChip extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          icon ?? const SizedBox(),
-          const SizedBox(width: 6),
+          if (icon != null) icon!,
+          SizedBox(width: Spacing.superExtraSmall),
           Text(
             label ?? '',
             style: Typo.medium.copyWith(
