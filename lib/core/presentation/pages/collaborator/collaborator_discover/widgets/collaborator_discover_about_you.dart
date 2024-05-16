@@ -10,6 +10,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 enum CollaboratorAboutYouField {
   age,
+  ethnicity,
   basedIn,
 }
 
@@ -37,6 +38,19 @@ class CollaboratorDiscoverAboutYou extends StatelessWidget {
             ),
           ),
           user?.age?.toInt().toString() ?? '',
+        );
+
+      case CollaboratorAboutYouField.ethnicity:
+        return (
+          ThemeSvgIcon(
+            color: colorScheme.onPrimary,
+            builder: (filter) => Assets.icons.icEthnicity.svg(
+              width: 15.w,
+              height: 15.w,
+              colorFilter: filter,
+            ),
+          ),
+          user?.ethnicity ?? '',
         );
       case CollaboratorAboutYouField.basedIn:
         return (
