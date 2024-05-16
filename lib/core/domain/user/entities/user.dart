@@ -104,6 +104,8 @@ class User with _$User {
     List<UserServiceOffer>? serviceOffersExpanded,
     List<UserExpertise>? expertiseExpanded,
     List<UserIcebreaker>? icebreakers,
+    String? locationLine,
+    double? age,
   }) = _User;
 
   factory User.fromDto(UserDto dto) {
@@ -199,6 +201,8 @@ class User with _$User {
             (item) => UserIcebreaker.fromDto(item),
           )
           .toList(),
+      age: dto.age,
+      locationLine: dto.locationLine,
     );
   }
 

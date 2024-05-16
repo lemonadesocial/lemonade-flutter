@@ -27,6 +27,7 @@ query GetUserDiscovery(
       expertise
       tagline
       age
+      location_line
       new_photos_expanded {
         _id
         key
