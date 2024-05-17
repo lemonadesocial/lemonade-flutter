@@ -58,10 +58,7 @@ class DiscoverUserBloc extends Bloc<DiscoverUserEvent, DiscoverUserState> {
         emit(
           state.copyWith(
             fetching: false,
-            users: [
-              ...state.users,
-              ...(userDisocvery.selectedExpanded ?? []),
-            ],
+            users: userDisocvery.selectedExpanded ?? [],
           ),
         );
       },
