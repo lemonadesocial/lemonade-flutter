@@ -17,7 +17,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EditProfileSocialDialog extends StatelessWidget with LemonBottomSheet {
-  final User userProfile;
+  final User? userProfile;
   const EditProfileSocialDialog({super.key, required this.userProfile});
 
   @override
@@ -67,7 +67,7 @@ class EditProfileSocialDialog extends StatelessWidget with LemonBottomSheet {
                                 ),
                               );
                         },
-                        value: userProfile.handleTwitter,
+                        value: userProfile?.handleTwitter,
                       ),
                       SizedBox(height: Spacing.medium),
                       EditProfileFieldItem(
@@ -79,7 +79,7 @@ class EditProfileSocialDialog extends StatelessWidget with LemonBottomSheet {
                                 ),
                               );
                         },
-                        value: userProfile.handleLinkedin,
+                        value: userProfile?.handleLinkedin,
                       ),
                       SizedBox(height: Spacing.medium),
                       EditProfileFieldItem(
@@ -91,7 +91,7 @@ class EditProfileSocialDialog extends StatelessWidget with LemonBottomSheet {
                                 ),
                               );
                         },
-                        value: userProfile.handleInstagram,
+                        value: userProfile?.handleInstagram,
                       ),
                       SizedBox(height: Spacing.medium),
                       EditProfileFieldItem(
@@ -103,7 +103,7 @@ class EditProfileSocialDialog extends StatelessWidget with LemonBottomSheet {
                                 ),
                               );
                         },
-                        value: userProfile.handleFarcaster,
+                        value: userProfile?.handleFarcaster,
                       ),
                       SizedBox(height: Spacing.medium),
                       EditProfileFieldItem(
@@ -115,7 +115,7 @@ class EditProfileSocialDialog extends StatelessWidget with LemonBottomSheet {
                                 ),
                               );
                         },
-                        value: userProfile.handleGithub,
+                        value: userProfile?.handleGithub,
                       ),
                       SizedBox(height: Spacing.medium),
                       EditProfileFieldItem(
@@ -127,7 +127,7 @@ class EditProfileSocialDialog extends StatelessWidget with LemonBottomSheet {
                                 ),
                               );
                         },
-                        value: userProfile.handleLens,
+                        value: userProfile?.handleLens,
                       ),
                       SizedBox(height: Spacing.medium),
                       EditProfileFieldItem(
@@ -139,7 +139,7 @@ class EditProfileSocialDialog extends StatelessWidget with LemonBottomSheet {
                                 ),
                               );
                         },
-                        value: userProfile.handleMirror,
+                        value: userProfile?.handleMirror,
                       ),
                     ],
                   ),

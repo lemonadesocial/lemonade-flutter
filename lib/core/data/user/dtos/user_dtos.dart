@@ -89,6 +89,8 @@ class UserDto with _$UserDto {
     List<UserIcebreakerDto>? icebreakers,
     @JsonKey(name: 'farcaster_user_info')
     UserFarcasterInfoDto? farcasterUserInfo,
+    double? age,
+    @JsonKey(name: 'location_line') String? locationLine,
   }) = _UserDto;
 
   factory UserDto.fromJson(Map<String, dynamic> json) =>

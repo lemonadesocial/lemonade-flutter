@@ -1,4 +1,4 @@
-import 'package:app/core/application/profile/user_profile_bloc/user_profile_bloc.dart';
+import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/presentation/pages/collaborator/sub_pages/collaborator_edit_profile_page/widgets/remove_icon_wrapper.dart';
 import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
@@ -6,7 +6,6 @@ import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/service/file/file_upload_service.dart';
-import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/core/utils/image_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
@@ -46,11 +45,7 @@ class _CollaboratorEditPhotosState extends State<CollaboratorEditPhotos> {
         );
       },
     );
-    context.read<UserProfileBloc>().add(
-          UserProfileEvent.fetch(
-            userId: AuthUtils.getUserId(context),
-          ),
-        );
+    context.read<AuthBloc>().add(const AuthEvent.refreshData());
   }
 
   Future<void> addImage({
@@ -77,11 +72,7 @@ class _CollaboratorEditPhotosState extends State<CollaboratorEditPhotos> {
             new_photos: [...currentPhotoIds, imageId],
           ),
         );
-        context.read<UserProfileBloc>().add(
-              UserProfileEvent.fetch(
-                userId: AuthUtils.getUserId(context),
-              ),
-            );
+        context.read<AuthBloc>().add(const AuthEvent.refreshData());
       },
     );
   }
@@ -103,23 +94,21 @@ class _CollaboratorEditPhotosState extends State<CollaboratorEditPhotos> {
         SliverToBoxAdapter(
           child: SizedBox(height: Spacing.xSmall),
         ),
-        BlocBuilder<UserProfileBloc, UserProfileState>(
+        BlocBuilder<AuthBloc, AuthState>(
           builder: (context, state) {
-            final loggedInUserProfile = state.maybeWhen(
+            final loggedInUser = state.maybeWhen(
               orElse: () => null,
-              fetched: (user) => user,
+              authenticated: (user) => user,
             );
-            final currentPhotoIds =
-                (loggedInUserProfile?.newPhotosExpanded ?? [])
-                    .map((item) => item.id)
-                    .where((item) => item != null)
-                    .whereType<String>()
-                    .toList();
+            final currentPhotoIds = (loggedInUser?.newPhotosExpanded ?? [])
+                .map((item) => item.id)
+                .where((item) => item != null)
+                .whereType<String>()
+                .toList();
             return SliverPadding(
               padding: EdgeInsets.only(right: Spacing.superExtraSmall),
               sliver: SliverGrid.builder(
-                itemCount:
-                    (loggedInUserProfile?.newPhotosExpanded ?? []).length + 1,
+                itemCount: (loggedInUser?.newPhotosExpanded ?? []).length + 1,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,
                   mainAxisSpacing: Spacing.xSmall,
@@ -150,7 +139,7 @@ class _CollaboratorEditPhotosState extends State<CollaboratorEditPhotos> {
                     );
                   }
                   final photoFile =
-                      (loggedInUserProfile?.newPhotosExpanded ?? [])[index - 1];
+                      (loggedInUser?.newPhotosExpanded ?? [])[index - 1];
                   final photoUrl = ImageUtils.generateUrl(file: photoFile);
                   return RemoveIconWrapper(
                     onTap: () => removeImage(

@@ -1,9 +1,6 @@
 import 'package:app/core/application/event/event_application_form_bloc/event_application_form_bloc.dart';
 import 'package:app/core/application/event/event_provider_bloc/event_provider_bloc.dart';
-import 'package:app/core/application/profile/user_profile_bloc/user_profile_bloc.dart';
 import 'package:app/core/domain/user/entities/user.dart';
-import 'package:app/core/domain/user/user_repository.dart';
-import 'package:app/injection/register_module.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:app/core/domain/event/entities/event.dart' as event_entity;
@@ -34,12 +31,6 @@ class GuestEventApplicationPage extends StatelessWidget
                 event: event,
                 user: user,
               ),
-            ),
-        ),
-        BlocProvider(
-          create: (context) => UserProfileBloc(getIt<UserRepository>())
-            ..add(
-              UserProfileEvent.fetch(userId: user.userId),
             ),
         ),
       ],

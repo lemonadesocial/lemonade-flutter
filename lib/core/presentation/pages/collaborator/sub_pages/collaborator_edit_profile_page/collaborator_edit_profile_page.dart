@@ -1,4 +1,4 @@
-import 'package:app/core/application/profile/user_profile_bloc/user_profile_bloc.dart';
+import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/presentation/pages/collaborator/sub_pages/collaborator_edit_profile_page/widgets/collaborator_edit_expertise_offering_card/collaborator_edit_expertise_offering_card.dart';
 import 'package:app/core/presentation/pages/collaborator/sub_pages/collaborator_edit_profile_page/widgets/collaborator_edit_icebreaker/collaborator_edit_icebreaker.dart';
 import 'package:app/core/presentation/pages/collaborator/sub_pages/collaborator_edit_profile_page/widgets/collaborator_edit_photos/collaborator_edit_photos.dart';
@@ -31,11 +31,10 @@ class CollaboratorEditProfilePage extends StatelessWidget {
             padding: EdgeInsets.only(right: Spacing.small),
             child: InkWell(
               onTap: () {
-                final loggedInUser =
-                    context.read<UserProfileBloc>().state.maybeWhen(
-                          orElse: () => null,
-                          fetched: (profile) => profile,
-                        );
+                final loggedInUser = context.read<AuthBloc>().state.maybeWhen(
+                      orElse: () => null,
+                      authenticated: (user) => user,
+                    );
                 AutoRouter.of(context).navigate(
                   CollaboratorPreviewProfileRoute(user: loggedInUser),
                 );

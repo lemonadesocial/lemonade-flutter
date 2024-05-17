@@ -25,7 +25,7 @@ class LemonDrawerProfileInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final authSession = context.read<AuthBloc>().state.maybeWhen(
+    final authSession = context.watch<AuthBloc>().state.maybeWhen(
           authenticated: (authSession) => authSession,
           orElse: () => null,
         );

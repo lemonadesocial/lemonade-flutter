@@ -17,7 +17,7 @@ enum CollaboratorAboutYouField {
   jobTitle,
   organization,
   basedIn,
-  languagesSpoken,
+  // languagesSpoken,
   age,
   ethnicity,
 }
@@ -61,16 +61,14 @@ class CollaboratorEditProfileAboutYou extends StatelessWidget {
       case CollaboratorAboutYouField.basedIn:
         return (
           t.collaborator.editProfile.aboutYou.basedIn,
-          UserUtils.getBasedInLocation(
-            user: user,
-            emptyText: emptyValue,
-          )
+          user?.locationLine ?? emptyValue
         );
-      case CollaboratorAboutYouField.languagesSpoken:
-        return (
-          t.collaborator.editProfile.aboutYou.languagesSpoken,
-          emptyValue
-        );
+      // TODO: Tempororary hide languages spoken due to backend not fully support yet
+      // case CollaboratorAboutYouField.languagesSpoken:
+      //   return (
+      //     t.collaborator.editProfile.aboutYou.languagesSpoken,
+      //     emptyValue
+      //   );
       case CollaboratorAboutYouField.age:
         return (
           t.collaborator.editProfile.aboutYou.age,
@@ -112,16 +110,19 @@ class CollaboratorEditProfileAboutYou extends StatelessWidget {
         SliverList.separated(
           itemCount: CollaboratorAboutYouField.values.length,
           itemBuilder: (context, index) {
+            final field = CollaboratorAboutYouField.values[index];
             final (displayName, value) = getNameAndValue(
               context,
-              field: CollaboratorAboutYouField.values[index],
+              field: field,
             );
             return CollaboratorProfileFieldCard(
               title: displayName,
               description: value,
               onTap: () {
+                if (field == CollaboratorAboutYouField.basedIn) return;
                 AutoRouter.of(context).navigate(const EditProfileRoute());
               },
+              hideArrowButton: field == CollaboratorAboutYouField.basedIn,
             );
           },
           separatorBuilder: (context, index) => SizedBox(

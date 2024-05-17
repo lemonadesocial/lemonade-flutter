@@ -106,6 +106,8 @@ class User with _$User {
     List<UserExpertise>? expertiseExpanded,
     List<UserIcebreaker>? icebreakers,
     UserFarcasterInfo? farcasterUserInfo,
+    String? locationLine,
+    double? age,
   }) = _User;
 
   factory User.fromDto(UserDto dto) {
@@ -204,6 +206,8 @@ class User with _$User {
       farcasterUserInfo: dto.farcasterUserInfo != null
           ? UserFarcasterInfo.fromDto(dto.farcasterUserInfo!)
           : null,
+      age: dto.age,
+      locationLine: dto.locationLine,
     );
   }
 

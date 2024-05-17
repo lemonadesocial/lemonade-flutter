@@ -1,22 +1,17 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/profile/edit_profile_bloc/edit_profile_bloc.dart';
-import 'package:app/core/application/profile/user_profile_bloc/user_profile_bloc.dart';
 import 'package:app/core/domain/common/common_enums.dart';
 import 'package:app/core/domain/user/entities/user.dart';
-import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/presentation/pages/edit_profile/sub_pages/edit_profile_personal_page.dart';
 import 'package:app/core/presentation/pages/edit_profile/sub_pages/edit_profile_social_page.dart';
 import 'package:app/core/presentation/pages/edit_profile/widgets/edit_profile_avatar.dart';
 import 'package:app/core/presentation/pages/edit_profile/widgets/edit_profile_field_item.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
-import 'package:app/core/presentation/widgets/loading_widget.dart';
-import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
@@ -41,15 +36,6 @@ class EditProfilePage extends StatelessWidget {
           create: (context) => EditProfileBloc(),
           child: const EditProfileView(),
         ),
-        BlocProvider(
-          create: (context) => UserProfileBloc(
-            getIt<UserRepository>(),
-          )..add(
-              UserProfileEvent.fetch(
-                userId: AuthUtils.getUserId(context),
-              ),
-            ),
-        ),
       ],
       child: const EditProfileView(),
     );
@@ -66,30 +52,16 @@ class EditProfileView extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
     final editProfileBloc = context.watch<EditProfileBloc>();
-    return BlocBuilder<UserProfileBloc, UserProfileState>(
+    return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
-        if (state is UserProfileStateLoading ||
-            state is UserProfileStateFailure) {
-          return Center(
-            child: Loading.defaultLoading(context),
-          );
-        }
         final userProfile = state.maybeWhen(
           orElse: () => null,
-          fetched: (profile) => profile,
+          authenticated: (user) => user,
         );
-        if (userProfile == null) {
-          return const SizedBox();
-        }
         return BlocListener<EditProfileBloc, EditProfileState>(
           listener: (context, state) {
             if (state.status == EditProfileStatus.success) {
               context.read<AuthBloc>().add(const AuthEvent.refreshData());
-              context.read<UserProfileBloc>().add(
-                    UserProfileEventFetch(
-                      userId: AuthUtils.getUserId(context),
-                    ),
-                  );
               SnackBarUtils.showSuccess(
                 message: t.profile.editProfileSuccess,
               );
@@ -120,7 +92,7 @@ class EditProfileView extends StatelessWidget {
                                     EditProfileAvatar(
                                       user: userProfile,
                                       imageFile: state.profilePhoto,
-                                      imageUrl: userProfile.imageAvatar,
+                                      imageUrl: userProfile?.imageAvatar,
                                     ),
                                     SizedBox(width: 15.w),
                                     Expanded(
@@ -135,7 +107,7 @@ class EditProfileView extends StatelessWidget {
                                                 ),
                                               );
                                         },
-                                        value: userProfile.displayName,
+                                        value: userProfile?.displayName,
                                       ),
                                     ),
                                   ],
@@ -143,7 +115,7 @@ class EditProfileView extends StatelessWidget {
                                 SizedBox(height: Spacing.smMedium),
                                 _UserEditor(
                                   userName: state.username ??
-                                      userProfile.username ??
+                                      userProfile?.username ??
                                       '',
                                 ),
                                 SizedBox(height: Spacing.smMedium),
@@ -156,7 +128,7 @@ class EditProfileView extends StatelessWidget {
                                           ),
                                         );
                                   },
-                                  value: userProfile.tagline,
+                                  value: userProfile?.tagline,
                                 ),
                                 SizedBox(height: Spacing.smMedium),
                                 EditProfileFieldItem(
@@ -168,7 +140,7 @@ class EditProfileView extends StatelessWidget {
                                           ),
                                         );
                                   },
-                                  value: userProfile.description,
+                                  value: userProfile?.description,
                                 ),
                                 SizedBox(height: Spacing.smMedium),
                                 InkWell(
@@ -302,7 +274,7 @@ class _PersonalCardWidget extends StatelessWidget {
     required this.userProfile,
   });
 
-  final User userProfile;
+  final User? userProfile;
 
   @override
   Widget build(BuildContext context) {
@@ -330,7 +302,7 @@ class _PersonalCardWidget extends StatelessWidget {
                 SizedBox(width: Spacing.xSmall),
                 Expanded(
                   child: Text(
-                    userProfile.name ?? '',
+                    userProfile?.name ?? '',
                     overflow: TextOverflow.ellipsis,
                     style: Typo.medium.copyWith(
                       fontWeight: FontWeight.normal,
@@ -349,7 +321,7 @@ class _PersonalCardWidget extends StatelessWidget {
                 SizedBox(width: Spacing.xSmall),
                 Expanded(
                   child: Text(
-                    userProfile.email ?? '',
+                    userProfile?.email ?? '',
                     overflow: TextOverflow.ellipsis,
                     style: Typo.medium.copyWith(
                       fontWeight: FontWeight.normal,

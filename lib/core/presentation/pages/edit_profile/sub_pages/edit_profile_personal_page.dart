@@ -19,7 +19,7 @@ import 'package:app/core/utils/date_utils.dart' as date_utils;
 import 'package:intl/intl.dart';
 
 class EditProfilePersonalDialog extends StatefulWidget {
-  final User userProfile;
+  final User? userProfile;
   const EditProfilePersonalDialog({super.key, required this.userProfile});
 
   @override
@@ -32,10 +32,10 @@ class EditProfilePersonalDialogState extends State<EditProfilePersonalDialog> {
   @override
   void initState() {
     super.initState();
-    if (widget.userProfile.dateOfBirth != null) {
+    if (widget.userProfile?.dateOfBirth != null) {
       birthDayCtrl.text =
           DateFormat(date_utils.DateUtils.dateFormatDayMonthYear)
-              .format(widget.userProfile.dateOfBirth!);
+              .format(widget.userProfile!.dateOfBirth!);
     }
   }
 
@@ -93,7 +93,7 @@ class EditProfilePersonalDialogState extends State<EditProfilePersonalDialog> {
                                       ),
                                     );
                               },
-                              value: widget.userProfile.jobTitle,
+                              value: widget.userProfile?.jobTitle,
                             ),
                             SizedBox(height: Spacing.smMedium),
                             EditProfileFieldItem(
@@ -105,7 +105,7 @@ class EditProfilePersonalDialogState extends State<EditProfilePersonalDialog> {
                                       ),
                                     );
                               },
-                              value: widget.userProfile.companyName,
+                              value: widget.userProfile?.companyName,
                             ),
                             SizedBox(height: Spacing.smMedium),
                             FrostedGlassDropDownV2(
@@ -121,8 +121,8 @@ class EditProfilePersonalDialogState extends State<EditProfilePersonalDialog> {
                                       ),
                                     );
                               },
-                              selectedValue:
-                                  state.industry ?? widget.userProfile.industry,
+                              selectedValue: state.industry ??
+                                  widget.userProfile?.industry,
                             ),
                             SizedBox(height: Spacing.smMedium),
                             EditProfileFieldItem(
@@ -134,7 +134,7 @@ class EditProfilePersonalDialogState extends State<EditProfilePersonalDialog> {
                                       ),
                                     );
                               },
-                              value: widget.userProfile.educationTitle,
+                              value: widget.userProfile?.educationTitle,
                             ),
                             SizedBox(height: Spacing.smMedium),
                             EditProfileFieldItem(
@@ -147,7 +147,7 @@ class EditProfilePersonalDialogState extends State<EditProfilePersonalDialog> {
                                     );
                               },
                               value:
-                                  state.gender ?? widget.userProfile.newGender,
+                                  state.gender ?? widget.userProfile?.newGender,
                             ),
                             SizedBox(height: Spacing.smMedium),
                             Focus(
@@ -169,7 +169,7 @@ class EditProfilePersonalDialogState extends State<EditProfilePersonalDialog> {
                                       );
                                 },
                                 value:
-                                    widget.userProfile.dateOfBirth.toString(),
+                                    widget.userProfile?.dateOfBirth.toString(),
                               ),
                               onFocusChange: (hasFocus) {
                                 if (!hasFocus) {
@@ -202,7 +202,7 @@ class EditProfilePersonalDialogState extends State<EditProfilePersonalDialog> {
                                     );
                               },
                               value: state.ethnicity ??
-                                  widget.userProfile.ethnicity,
+                                  widget.userProfile?.ethnicity,
                             ),
                           ],
                         ),

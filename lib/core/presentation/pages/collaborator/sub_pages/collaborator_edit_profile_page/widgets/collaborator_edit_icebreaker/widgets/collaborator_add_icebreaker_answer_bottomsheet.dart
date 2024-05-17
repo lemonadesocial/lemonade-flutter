@@ -1,11 +1,10 @@
-import 'package:app/core/application/profile/user_profile_bloc/user_profile_bloc.dart';
+import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/domain/user/entities/user_icebreaker.dart';
 import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/presentation/widgets/bottomsheet_grabber/bottomsheet_grabber.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
-import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
@@ -43,9 +42,9 @@ class CollaboratorAddIcebreakerAnswerBottomsheetState
       borderSide: BorderSide(color: colorScheme.outline),
     );
 
-    final loggedInUser = context.read<UserProfileBloc>().state.maybeWhen(
+    final loggedInUser = context.read<AuthBloc>().state.maybeWhen(
           orElse: () => null,
-          fetched: (profile) => profile,
+          authenticated: (user) => user,
         );
     final existingIceBreakers = loggedInUser?.icebreakers ?? [];
     return Padding(
@@ -153,11 +152,7 @@ class CollaboratorAddIcebreakerAnswerBottomsheetState
                         );
                       },
                     );
-                    context.read<UserProfileBloc>().add(
-                          UserProfileEventFetch(
-                            userId: AuthUtils.getUserId(context),
-                          ),
-                        );
+                    context.read<AuthBloc>().add(const AuthEvent.refreshData());
                     Navigator.pop(context);
                     Navigator.pop(context);
                   },

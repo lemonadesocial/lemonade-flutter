@@ -11,12 +11,14 @@ class CollaboratorProfileFieldCard extends StatelessWidget {
   final String title;
   final String description;
   final Function()? onTap;
+  final bool? hideArrowButton;
 
   const CollaboratorProfileFieldCard({
     super.key,
     required this.title,
     required this.description,
     this.onTap,
+    this.hideArrowButton,
   });
 
   @override
@@ -62,12 +64,14 @@ class CollaboratorProfileFieldCard extends StatelessWidget {
               ),
             ),
             SizedBox(width: Spacing.xSmall),
-            ThemeSvgIcon(
-              color: colorScheme.onSecondary,
-              builder: (filter) => Assets.icons.icArrowRight.svg(
-                colorFilter: filter,
-              ),
-            ),
+            hideArrowButton == false
+                ? ThemeSvgIcon(
+                    color: colorScheme.onSecondary,
+                    builder: (filter) => Assets.icons.icArrowRight.svg(
+                      colorFilter: filter,
+                    ),
+                  )
+                : const SizedBox(),
           ],
         ),
       ),

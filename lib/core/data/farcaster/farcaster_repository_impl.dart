@@ -40,17 +40,20 @@ class FarcasterRepositoryImpl implements FarcasterRepository {
   Future<Either<Failure, FarcasterSignedKeyRequest>> getConnectRequest(
     String token,
   ) async {
-    final result = await Dio()
-        .get('https://api.warpcast.com/v2/signed-key-request?token=$token');
-    if (result.statusCode == 200) {
-      final signedKeyRequest = FarcasterSignedKeyRequest.fromJson(
-        (result.data as Map<String, dynamic>)['result']['signedKeyRequest'],
-      );
+    try {
+      final result = await Dio()
+          .get('https://api.warpcast.com/v2/signed-key-request?token=$token');
+      if (result.statusCode == 200) {
+        final signedKeyRequest = FarcasterSignedKeyRequest.fromJson(
+          (result.data as Map<String, dynamic>)['result']['signedKeyRequest'],
+        );
 
-      return Right(signedKeyRequest);
+        return Right(signedKeyRequest);
+      }
+      return Left(Failure());
+    } catch (e) {
+      return Left(Failure());
     }
-
-    return Left(Failure());
   }
 
   @override
@@ -70,17 +73,21 @@ class FarcasterRepositoryImpl implements FarcasterRepository {
   Future<Either<Failure, List<FarcasterChannel>>> getChannels({
     required int fid,
   }) async {
-    final result =
-        await Dio().get('${AppConfig.webUrl}/api/farcaster/channels?fid=$fid');
+    try {
+      final result = await Dio()
+          .get('${AppConfig.webUrl}/api/farcaster/channels?fid=$fid');
 
-    if (result.statusCode == 200) {
-      final rawChannels = (result.data as Map<String, dynamic>)['result']
-          ['channels'] as List<dynamic>;
-      return Right(
-        rawChannels.map((item) => FarcasterChannel.fromJson(item)).toList(),
-      );
+      if (result.statusCode == 200) {
+        final rawChannels = (result.data as Map<String, dynamic>)['result']
+            ['channels'] as List<dynamic>;
+        return Right(
+          rawChannels.map((item) => FarcasterChannel.fromJson(item)).toList(),
+        );
+      }
+
+      return Left(Failure());
+    } catch (e) {
+      return Left(Failure());
     }
-
-    return Left(Failure());
   }
 }
