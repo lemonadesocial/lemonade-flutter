@@ -18,7 +18,6 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
     final result = await userRepository.getUserProfile(
       GetProfileInput(
         id: event.userId,
-        // username: event.username,
       ),
     );
     result.fold(

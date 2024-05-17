@@ -1,4 +1,4 @@
-import 'package:app/core/application/profile/user_profile_bloc/user_profile_bloc.dart';
+import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/core/domain/event/input/get_events_listing_input.dart';
@@ -40,9 +40,9 @@ class _CollaboratorAddSpotlightEventBottomSheetState
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
-    final loggedInUser = context.read<UserProfileBloc>().state.maybeWhen(
+    final loggedInUser = context.read<AuthBloc>().state.maybeWhen(
           orElse: () => null,
-          fetched: (profile) => profile,
+          authenticated: (user) => user,
         );
     if (loggedInUser != null && loggedInUser.eventsExpanded != null) {
       setState(() {
@@ -168,11 +168,7 @@ class _CollaboratorAddSpotlightEventBottomSheetState
                         );
                       },
                     );
-                    context.read<UserProfileBloc>().add(
-                          UserProfileEventFetch(
-                            userId: AuthUtils.getUserId(context),
-                          ),
-                        );
+                    context.read<AuthBloc>().add(const AuthEvent.refreshData());
                     AutoRouter.of(context).pop();
                   },
                 ),

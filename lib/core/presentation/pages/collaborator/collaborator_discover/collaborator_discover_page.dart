@@ -1,5 +1,5 @@
+import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/collaborator/discover_users_bloc/discover_user_bloc.dart';
-import 'package:app/core/application/profile/user_profile_bloc/user_profile_bloc.dart';
 import 'package:app/core/domain/collaborator/collaborator_repository.dart';
 import 'package:app/core/presentation/dpos/common/dropdown_item_dpo.dart';
 import 'package:app/core/presentation/pages/collaborator/collaborator_discover/widgets/collaborator_discover_actions_bar.dart';
@@ -51,9 +51,6 @@ class _CollaboratorDiscoverPageState extends State<CollaboratorDiscoverPage> {
             BlocProvider.value(
               value: context.read<DiscoverUserBloc>(),
             ),
-            BlocProvider.value(
-              value: context.read<UserProfileBloc>(),
-            ),
           ],
           child: const CollaboratorFilterBottomSheet(),
         );
@@ -70,7 +67,7 @@ class _CollaboratorDiscoverPageState extends State<CollaboratorDiscoverPage> {
           backgroundColor: colorScheme.primary,
           appBar: LemonAppBar(
             actions: [
-              BlocBuilder<UserProfileBloc, UserProfileState>(
+              BlocBuilder<AuthBloc, AuthState>(
                 builder: (context, state) => Padding(
                   padding: EdgeInsets.only(right: Spacing.medium),
                   child: InkWell(
