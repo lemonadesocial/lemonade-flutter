@@ -1,3 +1,4 @@
+import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/profile/user_profile_bloc/user_profile_bloc.dart';
 import 'package:app/core/domain/user/entities/user_icebreaker.dart';
 import 'package:app/core/domain/user/user_repository.dart';
@@ -43,9 +44,9 @@ class CollaboratorAddIcebreakerAnswerBottomsheetState
       borderSide: BorderSide(color: colorScheme.outline),
     );
 
-    final loggedInUser = context.read<UserProfileBloc>().state.maybeWhen(
+    final loggedInUser = context.read<AuthBloc>().state.maybeWhen(
           orElse: () => null,
-          fetched: (profile) => profile,
+          authenticated: (user) => user,
         );
     final existingIceBreakers = loggedInUser?.icebreakers ?? [];
     return Padding(
@@ -153,11 +154,7 @@ class CollaboratorAddIcebreakerAnswerBottomsheetState
                         );
                       },
                     );
-                    context.read<UserProfileBloc>().add(
-                          UserProfileEventFetch(
-                            userId: AuthUtils.getUserId(context),
-                          ),
-                        );
+                    context.read<AuthBloc>().add(const AuthEvent.refreshData());
                     Navigator.pop(context);
                     Navigator.pop(context);
                   },

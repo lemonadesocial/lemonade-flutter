@@ -1,3 +1,4 @@
+import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/profile/user_profile_bloc/user_profile_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/user/user_repository.dart';
@@ -34,9 +35,9 @@ class CollaboratorEditSpotlightEvents extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
-    final loggedInUser = context.watch<UserProfileBloc>().state.maybeWhen(
+    final loggedInUser = context.watch<AuthBloc>().state.maybeWhen(
           orElse: () => null,
-          fetched: (profile) => profile,
+          authenticated: (user) => user,
         );
     final spotlightEvents = loggedInUser?.eventsExpanded ?? [];
     return MultiSliver(
@@ -109,11 +110,7 @@ class CollaboratorEditSpotlightEvents extends StatelessWidget {
                       );
                     },
                   );
-                  context.read<UserProfileBloc>().add(
-                        UserProfileEventFetch(
-                          userId: AuthUtils.getUserId(context),
-                        ),
-                      );
+                  context.read<AuthBloc>().add(const AuthEvent.refreshData());
                 },
               );
             },

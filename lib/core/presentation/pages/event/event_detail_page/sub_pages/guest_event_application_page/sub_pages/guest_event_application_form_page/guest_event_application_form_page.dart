@@ -1,3 +1,4 @@
+import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/event/event_application_form_bloc/event_application_form_bloc.dart';
 import 'package:app/core/application/profile/user_profile_bloc/user_profile_bloc.dart';
 import 'package:app/core/domain/user/entities/user.dart';
@@ -67,20 +68,22 @@ class GuestEventApplicationFormPage extends StatelessWidget {
                         height: Spacing.medium,
                       ),
                     ),
-                    BlocBuilder<UserProfileBloc, UserProfileState>(
+                    BlocBuilder<AuthBloc, AuthState>(
                       builder: (context, state) {
                         return state.when(
-                          failure: () => SliverToBoxAdapter(
-                            child: EmptyList(
-                              emptyText: t.common.somethingWrong,
-                            ),
-                          ),
-                          loading: () {
+                          unknown: () {
+                            return SliverToBoxAdapter(
+                              child: EmptyList(
+                                emptyText: t.common.somethingWrong,
+                              ),
+                            );
+                          },
+                          processing: () {
                             return SliverToBoxAdapter(
                               child: Loading.defaultLoading(context),
                             );
                           },
-                          fetched: (User userProfile) {
+                          authenticated: (User user) {
                             return SliverToBoxAdapter(
                               child: Column(
                                 children: [
@@ -92,6 +95,16 @@ class GuestEventApplicationFormPage extends StatelessWidget {
                                 ],
                               ),
                             );
+                          },
+                          unauthenticated: (bool isChecking) {
+                            return SliverToBoxAdapter(
+                              child: EmptyList(
+                                emptyText: t.common.somethingWrong,
+                              ),
+                            );
+                          },
+                          onBoardingRequired: (User authSession) {
+                            return const SizedBox();
                           },
                         );
                       },

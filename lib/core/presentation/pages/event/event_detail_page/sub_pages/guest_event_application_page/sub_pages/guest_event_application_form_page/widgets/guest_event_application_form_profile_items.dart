@@ -1,6 +1,6 @@
+import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/event/event_application_form_bloc/event_application_form_bloc.dart';
 import 'package:app/core/application/event/event_provider_bloc/event_provider_bloc.dart';
-import 'package:app/core/application/profile/user_profile_bloc/user_profile_bloc.dart';
 import 'package:app/core/domain/common/common_enums.dart';
 import 'package:app/core/domain/event/entities/event_application_profile_field.dart';
 import 'package:app/core/domain/user/entities/user.dart';
@@ -42,8 +42,8 @@ class _GuestEventApplicationFormProfileItemsState
   @override
   Widget build(BuildContext context) {
     final event = context.read<EventProviderBloc>().event;
-    User? user = context.watch<UserProfileBloc>().state.maybeWhen(
-          fetched: (user) => user,
+    User? user = context.watch<AuthBloc>().state.maybeWhen(
+          authenticated: (user) => user,
           orElse: () => null,
         );
     List<EventApplicationProfileField> applicationProfileFields =

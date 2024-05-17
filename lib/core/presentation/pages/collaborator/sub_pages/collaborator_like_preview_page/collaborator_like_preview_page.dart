@@ -1,8 +1,8 @@
+import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/collaborator/get_user_discovery_matched_swipes_bloc/get_user_discovery_matched_swipes_bloc.dart';
 import 'package:app/core/application/profile/user_profile_bloc/user_profile_bloc.dart';
 import 'package:app/core/domain/collaborator/collaborator_repository.dart';
 import 'package:app/core/domain/collaborator/entities/user_discovery_swipe/user_discovery_swipe.dart';
-import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/presentation/pages/collaborator/collaborator_discover/widgets/collaborator_discover_view.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
@@ -38,18 +38,9 @@ class CollaboratorLikePreviewPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => UserProfileBloc(
-        getIt<UserRepository>(),
-      )..add(
-          UserProfileEvent.fetch(
-            userId: swipe.other,
-          ),
-        ),
-      child: _CollaboratorLikePreviewView(
-        swipe: swipe,
-        refetch: refetch,
-      ),
+    return _CollaboratorLikePreviewView(
+      swipe: swipe,
+      refetch: refetch,
     );
   }
 }
@@ -82,7 +73,7 @@ class _CollaboratorLikePreviewView extends StatelessWidget {
           // ),
         ],
       ),
-      body: BlocBuilder<UserProfileBloc, UserProfileState>(
+      body: BlocBuilder<AuthBloc, AuthState>(
         builder: (context, state) {
           if (state is UserProfileStateLoading ||
               state is UserProfileStateFailure) {
@@ -90,9 +81,9 @@ class _CollaboratorLikePreviewView extends StatelessWidget {
               child: Loading.defaultLoading(context),
             );
           }
-          final userProfile = state.maybeWhen(
+          final loggedInUser = state.maybeWhen(
             orElse: () => null,
-            fetched: (profile) => profile,
+            authenticated: (user) => user,
           );
           return Stack(
             children: [
@@ -112,7 +103,7 @@ class _CollaboratorLikePreviewView extends StatelessWidget {
                   SliverPadding(
                     padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
                     sliver: CollaboratorDiscoverView(
-                      user: userProfile,
+                      user: loggedInUser,
                     ),
                   ),
                   SliverToBoxAdapter(
@@ -187,7 +178,7 @@ class _CollaboratorLikePreviewView extends StatelessWidget {
                                     .startDirectChat(
                                       LemonadeMatrixUtils.generateMatrixUserId(
                                         lemonadeMatrixLocalpart:
-                                            userProfile?.matrixLocalpart ?? '',
+                                            loggedInUser?.matrixLocalpart ?? '',
                                       ),
                                     );
                                 AutoRouter.of(context).replace(

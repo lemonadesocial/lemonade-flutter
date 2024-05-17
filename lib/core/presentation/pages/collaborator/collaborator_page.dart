@@ -1,9 +1,6 @@
 import 'package:app/core/application/profile/edit_profile_bloc/edit_profile_bloc.dart';
 import 'package:app/core/application/collaborator/discover_users_bloc/discover_user_bloc.dart';
 import 'package:app/core/application/collaborator/get_user_discovery_matched_swipes_bloc/get_user_discovery_matched_swipes_bloc.dart';
-import 'package:app/core/application/profile/user_profile_bloc/user_profile_bloc.dart';
-import 'package:app/core/domain/user/user_repository.dart';
-import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/core/utils/location_utils.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:auto_route/auto_route.dart';
@@ -22,20 +19,10 @@ class CollaboratorPage extends StatefulWidget implements AutoRouteWrapper {
 
   @override
   Widget wrappedRoute(BuildContext context) {
-    final loggedInUserId = AuthUtils.getUserId(context);
     return MultiBlocProvider(
       providers: [
         BlocProvider.value(
           value: discoverUserBloc,
-        ),
-        BlocProvider(
-          create: (context) => UserProfileBloc(
-            getIt<UserRepository>(),
-          )..add(
-              UserProfileEvent.fetch(
-                userId: loggedInUserId,
-              ),
-            ),
         ),
         BlocProvider(
           create: (context) => GetUserDiscoveryMatchedSwipesBloc()

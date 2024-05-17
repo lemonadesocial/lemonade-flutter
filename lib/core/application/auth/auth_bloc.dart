@@ -52,7 +52,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter emit,
   ) async {
     emit(const AuthState.processing());
-    final currentUser = await _createSession();
+    final currentUser = await _getMe();
     if (currentUser != null) {
       if (OnboardingUtils.isOnboardingRequired(currentUser)) {
         emit(AuthState.onBoardingRequired(authSession: currentUser));
@@ -74,7 +74,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   Future<void> _onRefresh(AuthEventRefresh event, Emitter emit) async {
     emit(const AuthState.processing());
-    final currentUser = await _createSession();
+    final currentUser = await _getMe();
     if (!kDebugMode) {
       await FirebaseAnalytics.instance.setUserId(id: currentUser?.userId);
     }
@@ -109,7 +109,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     await appOauth.forceLogout();
   }
 
-  Future<User?> _createSession() async {
+  Future<User?> _getMe() async {
     final result = await userRepository.getMe();
     return result.fold((l) => null, (user) => user);
   }

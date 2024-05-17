@@ -1,3 +1,4 @@
+import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/profile/user_profile_bloc/user_profile_bloc.dart';
 import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/presentation/widgets/bottomsheet_grabber/bottomsheet_grabber.dart';
@@ -35,9 +36,9 @@ class CollaboratorEditExpertiseBottomSheetState
   @override
   void initState() {
     super.initState();
-    final loggedInUser = context.read<UserProfileBloc>().state.maybeWhen(
+    final loggedInUser = context.read<AuthBloc>().state.maybeWhen(
           orElse: () => null,
-          fetched: (profile) => profile,
+          authenticated: (user) => user,
         );
     setState(() {
       selectedExpertises = loggedInUser?.expertise ?? [];
@@ -147,10 +148,8 @@ class CollaboratorEditExpertiseBottomSheetState
                           "expertise": selectedExpertises,
                         }),
                       );
-                      context.read<UserProfileBloc>().add(
-                            UserProfileEventFetch(
-                              userId: AuthUtils.getUserId(context),
-                            ),
+                      context.read<AuthBloc>().add(
+                            const AuthEvent.refreshData(),
                           );
                       AutoRouter.of(context).pop();
                     },

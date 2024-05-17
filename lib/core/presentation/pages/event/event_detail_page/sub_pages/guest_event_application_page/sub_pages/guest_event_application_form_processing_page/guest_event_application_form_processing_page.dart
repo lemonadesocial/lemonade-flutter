@@ -66,13 +66,8 @@ class _GuestEventApplicationFormProcessingPageState
             eventId: event.id ?? '',
           ),
         );
-    final userId = context.read<AuthBloc>().state.maybeWhen(
-          orElse: () => '',
-          authenticated: (session) => session.userId,
-        );
-    UserProfileBloc(getIt<UserRepository>()).add(
-      UserProfileEvent.fetch(userId: userId),
-    );
+    // Refresh me data
+    context.read<AuthBloc>().add(const AuthEvent.refreshData());
   }
 
   @override

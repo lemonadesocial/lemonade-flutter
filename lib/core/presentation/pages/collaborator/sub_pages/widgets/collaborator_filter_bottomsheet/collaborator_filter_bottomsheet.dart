@@ -1,5 +1,6 @@
 import 'dart:collection';
 
+import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/collaborator/discover_users_bloc/discover_user_bloc.dart';
 import 'package:app/core/application/profile/user_profile_bloc/user_profile_bloc.dart';
 import 'package:app/core/data/user/dtos/user_service_offer_dto/user_service_offer_dto.dart';
@@ -129,9 +130,9 @@ class _FilterViewState extends State<_FilterView> {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-    final loggedInUser = context.read<UserProfileBloc>().state.maybeWhen(
+    final loggedInUser = context.read<AuthBloc>().state.maybeWhen(
           orElse: () => null,
-          fetched: (profile) => profile,
+          authenticated: (user) => user,
         );
     return Container(
       padding:

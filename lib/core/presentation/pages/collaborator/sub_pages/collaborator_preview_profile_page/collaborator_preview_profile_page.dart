@@ -1,3 +1,4 @@
+import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/application/profile/user_profile_bloc/user_profile_bloc.dart';
 import 'package:app/core/presentation/pages/collaborator/collaborator_discover/widgets/collaborator_discover_view.dart';
@@ -64,11 +65,11 @@ class CollaboratorPreviewProfilePage extends StatelessWidget {
             slivers: [
               SliverPadding(
                 padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
-                sliver: BlocBuilder<UserProfileBloc, UserProfileState>(
+                sliver: BlocBuilder<AuthBloc, AuthState>(
                   builder: (context, state) => CollaboratorDiscoverView(
                     user: state.maybeWhen(
                       orElse: () => null,
-                      fetched: (profile) => profile,
+                      authenticated: (user) => user,
                     ),
                   ),
                 ),

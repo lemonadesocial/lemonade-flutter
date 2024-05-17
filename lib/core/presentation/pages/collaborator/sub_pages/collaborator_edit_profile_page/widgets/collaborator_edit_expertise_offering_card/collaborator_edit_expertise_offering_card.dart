@@ -1,4 +1,4 @@
-import 'package:app/core/application/profile/user_profile_bloc/user_profile_bloc.dart';
+import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/presentation/pages/collaborator/sub_pages/collaborator_edit_profile_page/widgets/collaborator_edit_expertise_offering_card/widgets/collaborator_edit_expertise_bottomsheet.dart';
 import 'package:app/core/presentation/pages/collaborator/sub_pages/collaborator_edit_profile_page/widgets/collaborator_edit_expertise_offering_card/widgets/collaborator_edit_offering_bottomsheet.dart';
 import 'package:app/core/presentation/pages/collaborator/sub_pages/collaborator_edit_profile_page/widgets/collaborator_edit_profile_field_card.dart';
@@ -18,9 +18,9 @@ class CollaboratorEditExpertiseOfferingCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final loggedInUser = context.watch<UserProfileBloc>().state.maybeWhen(
+    final loggedInUser = context.watch<AuthBloc>().state.maybeWhen(
           orElse: () => null,
-          fetched: (profile) => profile,
+          authenticated: (user) => user,
         );
     final expertisesDescription = loggedInUser?.expertiseExpanded
         ?.map((expertise) => expertise.title)
