@@ -75,8 +75,8 @@ class _CollaboratorLikePreviewView extends StatelessWidget {
       ),
       body: BlocBuilder<AuthBloc, AuthState>(
         builder: (context, state) {
-          if (state is UserProfileStateLoading ||
-              state is UserProfileStateFailure) {
+          if (state is AuthStateProcessing ||
+              state is AuthStateUnauthenticated) {
             return Center(
               child: Loading.defaultLoading(context),
             );
