@@ -1,6 +1,5 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/collaborator/get_user_discovery_matched_swipes_bloc/get_user_discovery_matched_swipes_bloc.dart';
-import 'package:app/core/application/profile/user_profile_bloc/user_profile_bloc.dart';
 import 'package:app/core/domain/collaborator/collaborator_repository.dart';
 import 'package:app/core/domain/collaborator/entities/user_discovery_swipe/user_discovery_swipe.dart';
 import 'package:app/core/presentation/pages/collaborator/collaborator_discover/widgets/collaborator_discover_view.dart';
