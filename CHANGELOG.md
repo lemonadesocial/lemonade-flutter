@@ -1,5 +1,32 @@
 # Changelog
 
+## [1.19.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.18.1...v1.19.0) (2024-05-18)
+
+
+### Features
+
+* check age 18 collaborator ([#591](https://github.com/lemonadesocial/lemonade-flutter/issues/591)) ([d52cb51](https://github.com/lemonadesocial/lemonade-flutter/commit/d52cb519dcda8c2852f2f04ea355d8f27aa63c91))
+* collaborator discover flow ([#576](https://github.com/lemonadesocial/lemonade-flutter/issues/576)) ([163e208](https://github.com/lemonadesocial/lemonade-flutter/commit/163e208dcb41d944233202ff384f32246be51c2b))
+* edit collaborator about you ([#582](https://github.com/lemonadesocial/lemonade-flutter/issues/582)) ([4d0abf3](https://github.com/lemonadesocial/lemonade-flutter/commit/4d0abf3b0fee6a12a2abc9c689e92e9adeadeac4))
+* edit collaborator profile flow ([#572](https://github.com/lemonadesocial/lemonade-flutter/issues/572)) ([5a02d36](https://github.com/lemonadesocial/lemonade-flutter/commit/5a02d3621524e84b6d4fd69dd685d87934af0690))
+* edit collaborator profile photos ([#581](https://github.com/lemonadesocial/lemonade-flutter/issues/581)) ([836fd09](https://github.com/lemonadesocial/lemonade-flutter/commit/836fd09406516f818d483f27251ab2fcc46995cd))
+* edit collaborator spotlight event ([#580](https://github.com/lemonadesocial/lemonade-flutter/issues/580)) ([3e817fa](https://github.com/lemonadesocial/lemonade-flutter/commit/3e817faff314d9918fb8ab623691082257d5c9df))
+* fetch matched list when swipe right ([#578](https://github.com/lemonadesocial/lemonade-flutter/issues/578)) ([70b0c5b](https://github.com/lemonadesocial/lemonade-flutter/commit/70b0c5ba55d4b01b3a2fa7011f090e45d934bd97))
+* refactor auth bloc ([#593](https://github.com/lemonadesocial/lemonade-flutter/issues/593)) ([78bc14a](https://github.com/lemonadesocial/lemonade-flutter/commit/78bc14ab333ff74ac9e1d82e28bbe77d1b58a64c))
+
+
+### Bug Fixes
+
+* add missing ethnicity ([#592](https://github.com/lemonadesocial/lemonade-flutter/issues/592)) ([83f312b](https://github.com/lemonadesocial/lemonade-flutter/commit/83f312b18706dc5b9dd21bb833a8a004f82f60da))
+* enhance about you information ([#590](https://github.com/lemonadesocial/lemonade-flutter/issues/590)) ([bd3946f](https://github.com/lemonadesocial/lemonade-flutter/commit/bd3946f64f1f3fe4b19eda9a921de590c96e7219))
+* fetch matched list with wrong filter ([#579](https://github.com/lemonadesocial/lemonade-flutter/issues/579)) ([3cb5995](https://github.com/lemonadesocial/lemonade-flutter/commit/3cb599532e7db59523b6c457b516554f62989789))
+* fix crash when get basedIn data in collaborator profile ([#584](https://github.com/lemonadesocial/lemonade-flutter/issues/584)) ([5e281da](https://github.com/lemonadesocial/lemonade-flutter/commit/5e281daec67727dccfd4deedc631fa53bfdc78be))
+* fix missing query in user discovery ([#587](https://github.com/lemonadesocial/lemonade-flutter/issues/587)) ([573eefa](https://github.com/lemonadesocial/lemonade-flutter/commit/573eefacd6321f82402e413fd4a0fb5c9090e085))
+* fix text box is cleared when blur in send like bottomsheet ([#586](https://github.com/lemonadesocial/lemonade-flutter/issues/586)) ([5a1bf6c](https://github.com/lemonadesocial/lemonade-flutter/commit/5a1bf6c5f8f0d16b399e963c35cc008f9041cc92))
+* fix update wrong collaborator discovery list ([#594](https://github.com/lemonadesocial/lemonade-flutter/issues/594)) ([68fc7ab](https://github.com/lemonadesocial/lemonade-flutter/commit/68fc7ab8b07df31648c4a5cd5c26abe99f09ea73))
+* fix upload photos in collaborator profile ([#588](https://github.com/lemonadesocial/lemonade-flutter/issues/588)) ([6365e42](https://github.com/lemonadesocial/lemonade-flutter/commit/6365e42b30b8315f6382b93847fc7d45f08a9e65))
+* minor collaborator bugs ([#595](https://github.com/lemonadesocial/lemonade-flutter/issues/595)) ([3de70ae](https://github.com/lemonadesocial/lemonade-flutter/commit/3de70ae181236d7bca4630efa7f21fe423485b0b))
+
 ## [1.18.1](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.18.0...v1.18.1) (2024-05-06)
 
 
