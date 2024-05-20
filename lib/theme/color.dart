@@ -132,6 +132,9 @@ class LemonColor {
   static const cloudyGrey = Color(0xFF6A6A6A);
   static const jordyBlue = Color(0xFF86B4F8);
   static const venetianRed = Color(0xFFF19884);
+
+  // farcaster
+  static const farcasterViolet = Color.fromRGBO(134, 96, 204, 1);
 }
 
 final ColorScheme lemonadeLightThemeColorScheme = ColorScheme.light(

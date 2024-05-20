@@ -1,3 +1,4 @@
+import 'package:app/core/presentation/pages/farcaster/widgets/connect_farcaster_button/connect_farcaster_button.dart';
 import 'package:app/core/presentation/widgets/back_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/drawer/widgets/lemon_drawer_profile_info.dart';
@@ -202,6 +203,10 @@ class LemonDrawer extends StatelessWidget {
                         SnackBarUtils.showComingSoon();
                       },
                     ),
+                    SizedBox(
+                      height: Spacing.xSmall,
+                    ),
+                    const ConnectFarcasterButton(),
                   ],
                 ),
               ),
