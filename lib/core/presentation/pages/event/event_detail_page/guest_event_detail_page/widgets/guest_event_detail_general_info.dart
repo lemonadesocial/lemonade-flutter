@@ -1,4 +1,5 @@
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/presentation/pages/farcaster/widgets/cast_on_farcaster_button/cast_on_farcaster_button.dart';
 import 'package:app/core/presentation/widgets/common/readmore/readmore_widget.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/gen/fonts.gen.dart';
@@ -35,15 +36,19 @@ class GuestEventDetailGeneralInfo extends StatelessWidget {
             color: colorScheme.onSurfaceVariant,
           ),
         ),
-        SizedBox(
-          height: Spacing.smMedium,
-        ),
         if (event.description != null && event.description!.isNotEmpty) ...[
+          SizedBox(
+            height: Spacing.smMedium,
+          ),
           ReadMoreWidget(
             body: event.description ?? '',
             isMarkdown: true,
           ),
         ],
+        SizedBox(
+          height: Spacing.smMedium,
+        ),
+        CastOnFarcasterButton(event: event),
       ],
     );
   }

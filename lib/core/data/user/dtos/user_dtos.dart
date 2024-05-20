@@ -1,6 +1,7 @@
 import 'package:app/core/data/common/dtos/common_dtos.dart';
 import 'package:app/core/data/event/dtos/event_dtos.dart';
 import 'package:app/core/data/user/dtos/user_expertise_dto/user_expertise_dto.dart';
+import 'package:app/core/data/user/dtos/user_farcaster_info_dto/user_farcaster_info_dto.dart';
 import 'package:app/core/data/user/dtos/user_service_offer_dto/user_service_offer_dto.dart';
 import 'package:app/core/data/user/dtos/user_icebreaker_dto/user_icebreaker_dto.dart';
 import 'package:app/core/data/user/user_enums.dart';
@@ -86,6 +87,8 @@ class UserDto with _$UserDto {
     @JsonKey(name: 'expertise_expanded')
     List<UserExpertiseDto>? expertiseExpanded,
     List<UserIcebreakerDto>? icebreakers,
+    @JsonKey(name: 'farcaster_user_info')
+    UserFarcasterInfoDto? farcasterUserInfo,
     double? age,
     @JsonKey(name: 'location_line') String? locationLine,
   }) = _UserDto;

@@ -1,5 +1,6 @@
 import 'package:app/core/data/user/dtos/user_dtos.dart';
 import 'package:app/core/domain/collaborator/entities/user_expertise/user_expertise.dart';
+import 'package:app/core/domain/user/entities/user_farcaster_info.dart';
 import 'package:app/core/domain/user/entities/user_service_offer.dart';
 import 'package:app/core/domain/user/entities/user_icebreaker.dart';
 import 'package:app/core/data/user/user_enums.dart';
@@ -104,6 +105,7 @@ class User with _$User {
     List<UserServiceOffer>? serviceOffersExpanded,
     List<UserExpertise>? expertiseExpanded,
     List<UserIcebreaker>? icebreakers,
+    UserFarcasterInfo? farcasterUserInfo,
     String? locationLine,
     double? age,
   }) = _User;
@@ -201,6 +203,9 @@ class User with _$User {
             (item) => UserIcebreaker.fromDto(item),
           )
           .toList(),
+      farcasterUserInfo: dto.farcasterUserInfo != null
+          ? UserFarcasterInfo.fromDto(dto.farcasterUserInfo!)
+          : null,
       age: dto.age,
       locationLine: dto.locationLine,
     );

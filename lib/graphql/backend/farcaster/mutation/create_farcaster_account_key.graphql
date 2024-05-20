@@ -1,0 +1,9 @@
+mutation CreateFarcasterAccountKey {
+  createFarcasterAccountKey {
+    account_key_request {
+      accepted
+      deeplink_url
+      token
+    }
+  }
+}

@@ -73,7 +73,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   Future<void> _onRefresh(AuthEventRefresh event, Emitter emit) async {
-    emit(const AuthState.processing());
+    if (state is! AuthStateAuthenticated) {
+      emit(const AuthState.processing());
+    }
     final currentUser = await _getMe();
     if (!kDebugMode) {
       await FirebaseAnalytics.instance.setUserId(id: currentUser?.userId);
