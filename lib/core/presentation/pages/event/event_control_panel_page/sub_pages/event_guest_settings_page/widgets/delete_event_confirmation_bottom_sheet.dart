@@ -1,16 +1,23 @@
+import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/event_repository.dart';
+import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_guest_settings_page/widgets/delete_event_information_card.dart';
 import 'package:app/core/presentation/widgets/bottomsheet_grabber/bottomsheet_grabber.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
+import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 
 class DeleteEventConfirmationBottomSheet extends StatefulWidget {
@@ -39,6 +46,8 @@ class _DeleteEventConfirmationBottomSheetState
         ? t.event.cancelEvent
             .cancelledSuccessfully(event_name: widget.event?.title ?? '')
         : t.event.cancelEvent.description;
+    final ctaButtonLabel =
+        cancelled == true ? t.common.done : t.event.cancelEvent.cancelAndRefund;
     return Container(
       padding:
           EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
@@ -67,6 +76,9 @@ class _DeleteEventConfirmationBottomSheetState
                     fontWeight: FontWeight.w900,
                     color: colorScheme.onPrimary,
                   ),
+                ),
+                SizedBox(
+                  height: Spacing.superExtraSmall,
                 ),
                 Text(
                   description,
@@ -107,11 +119,25 @@ class _DeleteEventConfirmationBottomSheetState
                   onTap: () async {
                     Vibrate.feedback(FeedbackType.light);
                     FocusManager.instance.primaryFocus?.unfocus();
-                    setState(() {
-                      cancelled = !cancelled;
-                    });
+                    // Press done button
+                    if (cancelled == true) {
+                      AutoRouter.of(context).root.popUntilRoot();
+                    }
+                    // Trigger cancel event
+                    else {
+                      await showFutureLoadingDialog(
+                        context: context,
+                        future: () {
+                          return getIt<EventRepository>()
+                              .cancelEvent(eventId: widget.event?.id ?? '');
+                        },
+                      );
+                      setState(() {
+                        cancelled = !cancelled;
+                      });
+                    }
                   },
-                  label: t.event.cancelEvent.cancelAndRefund,
+                  label: ctaButtonLabel,
                   textColor: colorScheme.onPrimary,
                 ),
               ),

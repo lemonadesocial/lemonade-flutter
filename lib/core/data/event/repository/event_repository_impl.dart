@@ -27,6 +27,7 @@ import 'package:app/graphql/backend/event/mutation/submit_event_application_ques
 import 'package:app/graphql/backend/event/mutation/manage_event_cohost_requests.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/update_event_checkin.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/update_event.graphql.dart';
+import 'package:app/graphql/backend/event/mutation/cancel_event.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/update_event_story_image.graphql.dart';
 import 'package:app/graphql/backend/event/query/get_event_application_answers.graphql.dart';
 import 'package:app/graphql/backend/event/query/get_event_cohost_requests.graphql.dart';
@@ -537,6 +538,27 @@ class EventRepositoryImpl implements EventRepository {
       EventStory.fromDto(
         EventStoryDto.fromJson(
           result.parsedData!.story.toJson(),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Future<Either<Failure, Event>> cancelEvent({
+    required String eventId,
+  }) async {
+    final result = await client.mutate$CancelEvent(
+      Options$Mutation$CancelEvent(
+        variables: Variables$Mutation$CancelEvent(id: eventId),
+      ),
+    );
+    if (result.hasException || result.parsedData == null) {
+      return Left(Failure.withGqlException(result.exception));
+    }
+    return Right(
+      Event.fromDto(
+        EventDto.fromJson(
+          result.parsedData!.cancelEvent.toJson(),
         ),
       ),
     );
