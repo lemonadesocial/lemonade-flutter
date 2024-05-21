@@ -5,6 +5,7 @@ import 'package:app/core/domain/farcaster/entities/farcaster_signed_key_request.
 import 'package:app/core/domain/farcaster/farcaster_repository.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
+import 'package:app/core/utils/social_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -54,10 +55,18 @@ class _ConnectFarcasterBottomsheetState
         _accountKeyRequest = mAccountKeyRequest;
         _sessionCreated = true;
       });
-      await launchUrl(
-        Uri.parse(mAccountKeyRequest.deeplinkUrl!),
-      );
-      startIntervalCheck();
+      try {
+        final success = await launchUrl(
+          Uri.parse(mAccountKeyRequest.deeplinkUrl!),
+        );
+        if (success) {
+          startIntervalCheck();
+          return;
+        }
+        launchUrl(Uri.parse(SocialUtils.farcasterDownloadUrl));
+      } catch (e) {
+        launchUrl(Uri.parse(SocialUtils.farcasterDownloadUrl));
+      }
     });
   }
 
@@ -110,7 +119,7 @@ class _ConnectFarcasterBottomsheetState
             SizedBox(height: Spacing.smMedium),
             LinearGradientButton.primaryButton(
               loadingWhen: _sessionCreated,
-              onTap: () {
+              onTap: () async {
                 if (_sessionCreated) {
                   return;
                 }
