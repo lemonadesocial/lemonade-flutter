@@ -119,4 +119,8 @@ abstract class EventRepository {
   Future<Either<Failure, EventStory>> updateEventStoryImage({
     required Variables$Mutation$UpdateEventStoryImage input,
   });
+
+  Future<Either<Failure, Event>> cancelEvent({
+    required String eventId,
+  });
 }

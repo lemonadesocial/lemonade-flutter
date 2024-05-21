@@ -593,5 +593,17 @@
         "setAsCover": "Set as cover",
         "deletePhoto": "Delete photo",
         "editCover": "Edit cover"
+    },
+    "deleteEvent": "Delete event",
+    "cancelEvent": {
+        "title": "Cancel event",
+        "description": "The following actions will be taken immediately after cancellation. Refunds might take 5-7 business days to process. ",
+        "notifyAllGuests": "Notify all guests",
+        "refundAmount": "Refund amount",
+        "notReversableAction": "This action is not reversible.",
+        "areYouSure": "Are you sure you want to cancel this event?",
+        "cancelAndRefund": "Cancel & refund",
+        "cancelled": "Cancelled",
+        "cancelledSuccessfully": "Your event “$event_name” has been successfully cancelled"
     }
 }

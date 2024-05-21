@@ -149,6 +149,11 @@ class EventControlPanelBasePage extends StatelessWidget {
                       ),
                       sliver: EventCollaborationsGridConfig(event: event),
                     ),
+                    SliverToBoxAdapter(
+                      child: SizedBox(
+                        height: Spacing.xLarge,
+                      ),
+                    ),
                   ],
                 ),
               ),

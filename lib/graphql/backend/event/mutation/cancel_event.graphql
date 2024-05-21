@@ -1,0 +1,5 @@
+mutation CancelEvent($id: MongoID!) {
+  cancelEvent(_id: $id) {
+    _id
+  }
+}

@@ -13,10 +13,12 @@ import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
+import 'package:app/theme/color.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 enum EventPrivacy { public, private }
 
@@ -65,36 +67,40 @@ class CreateEventConfigGrid extends StatelessWidget {
     if (page == null) {
       return SnackBarUtils.showComingSoon();
     }
-    showModalBottomSheet(
+    showCupertinoModalBottomSheet(
+      enableDrag: false,
+      barrierColor: LemonColor.black50,
+      bounce: true,
+      backgroundColor: LemonColor.atomicBlack,
       context: context,
-      isScrollControlled: true,
-      backgroundColor: Theme.of(context).colorScheme.primary,
-      builder: (context) => Container(
-        decoration: BoxDecoration(
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
-          color: Theme.of(context).colorScheme.onPrimaryContainer,
-        ),
-        clipBehavior: Clip.hardEdge,
-        child: FractionallySizedBox(
-          heightFactor: 0.95,
-          child: Column(
-            children: [
-              const SizedBox(height: 10),
-              Container(
-                width: 35,
-                height: 5,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.tertiaryContainer,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              Expanded(
-                child: page ?? const SizedBox(),
-              ),
-            ],
+      builder: (newContext) {
+        return Container(
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
+            color: LemonColor.atomicBlack,
           ),
-        ),
-      ),
+          clipBehavior: Clip.hardEdge,
+          child: FractionallySizedBox(
+            heightFactor: 0.95,
+            child: Column(
+              children: [
+                const SizedBox(height: 10),
+                Container(
+                  width: 35,
+                  height: 5,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.tertiaryContainer,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                Expanded(
+                  child: page ?? const SizedBox(),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 
