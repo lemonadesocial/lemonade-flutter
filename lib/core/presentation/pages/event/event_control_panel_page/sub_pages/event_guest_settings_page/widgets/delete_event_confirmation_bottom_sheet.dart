@@ -1,3 +1,4 @@
+import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_guest_settings_page/widgets/delete_event_information_card.dart';
 import 'package:app/core/presentation/widgets/bottomsheet_grabber/bottomsheet_grabber.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
@@ -12,13 +13,32 @@ import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 
-class DeleteEventConfirmationBottomSheet extends StatelessWidget {
-  const DeleteEventConfirmationBottomSheet({super.key});
+class DeleteEventConfirmationBottomSheet extends StatefulWidget {
+  final Event? event;
+  const DeleteEventConfirmationBottomSheet({
+    this.event,
+    super.key,
+  });
 
+  @override
+  State<DeleteEventConfirmationBottomSheet> createState() =>
+      _DeleteEventConfirmationBottomSheetState();
+}
+
+class _DeleteEventConfirmationBottomSheetState
+    extends State<DeleteEventConfirmationBottomSheet> {
+  bool cancelled = false;
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+    final title = cancelled == true
+        ? t.event.cancelEvent.cancelled
+        : t.event.cancelEvent.title;
+    final description = cancelled == true
+        ? t.event.cancelEvent
+            .cancelledSuccessfully(event_name: widget.event?.title ?? '')
+        : t.event.cancelEvent.description;
     return Container(
       padding:
           EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
@@ -41,7 +61,7 @@ class DeleteEventConfirmationBottomSheet extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  t.event.cancelEvent.title,
+                  title,
                   style: Typo.extraLarge.copyWith(
                     fontFamily: FontFamily.nohemiVariable,
                     fontWeight: FontWeight.w900,
@@ -49,7 +69,7 @@ class DeleteEventConfirmationBottomSheet extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  t.event.cancelEvent.description,
+                  description,
                   style: Typo.mediumPlus.copyWith(
                     color: colorScheme.onSecondary,
                     fontWeight: FontWeight.w400,
@@ -58,11 +78,19 @@ class DeleteEventConfirmationBottomSheet extends StatelessWidget {
                 SizedBox(
                   height: Spacing.medium,
                 ),
-                const DeleteEventInformationCard(),
-                SizedBox(
-                  height: Spacing.medium,
+                // TODO: Get data from backend about guest count and refund amount
+                DeleteEventInformationCard(
+                  guestCount: 0,
+                  refundAmount: 0,
+                  cancelled: cancelled,
                 ),
-                const _NotReversableWarningCard(),
+                Visibility(
+                  visible: cancelled == false,
+                  child: Padding(
+                    padding: EdgeInsets.only(top: Spacing.medium),
+                    child: const _NotReversableWarningCard(),
+                  ),
+                ),
               ],
             ),
           ),
@@ -79,6 +107,9 @@ class DeleteEventConfirmationBottomSheet extends StatelessWidget {
                   onTap: () async {
                     Vibrate.feedback(FeedbackType.light);
                     FocusManager.instance.primaryFocus?.unfocus();
+                    setState(() {
+                      cancelled = !cancelled;
+                    });
                   },
                   label: t.event.cancelEvent.cancelAndRefund,
                   textColor: colorScheme.onPrimary,

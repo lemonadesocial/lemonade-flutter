@@ -202,7 +202,9 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
                           barrierColor: Colors.black.withOpacity(0.8),
                           topRadius: Radius.circular(30.r),
                           builder: (mContext) {
-                            return const DeleteEventConfirmationBottomSheet();
+                            return DeleteEventConfirmationBottomSheet(
+                              event: widget.event,
+                            );
                           },
                         );
                       },

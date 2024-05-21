@@ -8,12 +8,26 @@ import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 
 class DeleteEventInformationCard extends StatelessWidget {
-  const DeleteEventInformationCard({super.key});
+  final int guestCount;
+  final int refundAmount;
+  final bool cancelled;
+  const DeleteEventInformationCard({
+    super.key,
+    required this.guestCount,
+    required this.refundAmount,
+    required this.cancelled,
+  });
 
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+    final icChecked = ThemeSvgIcon(
+      color: colorScheme.onPrimary,
+      builder: (colorFilter) => Assets.icons.icChecked.svg(
+        colorFilter: colorFilter,
+      ),
+    );
     return Container(
       clipBehavior: Clip.antiAlias,
       decoration: ShapeDecoration(
@@ -37,12 +51,15 @@ class DeleteEventInformationCard extends StatelessWidget {
                 SizedBox(
                   width: Sizing.mSmall,
                   height: Sizing.mSmall,
-                  child: ThemeSvgIcon(
-                    color: colorScheme.onSecondary,
-                    builder: (colorFilter) => Assets.icons.icPeopleAlt.svg(
-                      colorFilter: colorFilter,
-                    ),
-                  ),
+                  child: cancelled
+                      ? icChecked
+                      : ThemeSvgIcon(
+                          color: colorScheme.onSecondary,
+                          builder: (colorFilter) =>
+                              Assets.icons.icPeopleAlt.svg(
+                            colorFilter: colorFilter,
+                          ),
+                        ),
                 ),
                 SizedBox(width: Spacing.xSmall),
                 Expanded(
@@ -57,7 +74,7 @@ class DeleteEventInformationCard extends StatelessWidget {
                 SizedBox(
                   width: 75,
                   child: Text(
-                    '54',
+                    "$guestCount",
                     textAlign: TextAlign.right,
                     style: Typo.medium.copyWith(
                       color: colorScheme.onPrimary,
@@ -83,12 +100,15 @@ class DeleteEventInformationCard extends StatelessWidget {
                 SizedBox(
                   width: Sizing.mSmall,
                   height: Sizing.mSmall,
-                  child: ThemeSvgIcon(
-                    color: colorScheme.onSecondary,
-                    builder: (colorFilter) => Assets.icons.icCashVariant.svg(
-                      colorFilter: colorFilter,
-                    ),
-                  ),
+                  child: cancelled
+                      ? icChecked
+                      : ThemeSvgIcon(
+                          color: colorScheme.onSecondary,
+                          builder: (colorFilter) =>
+                              Assets.icons.icCashVariant.svg(
+                            colorFilter: colorFilter,
+                          ),
+                        ),
                 ),
                 SizedBox(width: Spacing.xSmall),
                 Expanded(
@@ -104,7 +124,7 @@ class DeleteEventInformationCard extends StatelessWidget {
                 SizedBox(
                   width: 75,
                   child: Text(
-                    "132",
+                    "$refundAmount",
                     textAlign: TextAlign.right,
                     style: Typo.medium.copyWith(
                       color: LemonColor.snackBarSuccess,
