@@ -153,7 +153,7 @@ class EventControlPanelBasePage extends StatelessWidget {
                       child: SizedBox(
                         height: Spacing.xLarge,
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),

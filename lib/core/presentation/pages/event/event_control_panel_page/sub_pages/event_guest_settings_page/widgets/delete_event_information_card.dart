@@ -135,7 +135,7 @@ class DeleteEventInformationCard extends StatelessWidget {
                 ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
