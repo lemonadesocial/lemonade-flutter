@@ -82,7 +82,12 @@ class MyEventsPageView extends StatelessWidget {
                   fetched: (events) {
                     List<Event> upcomingEvents = events
                         .where(
-                          (event) => !date_utils.DateUtils.isPast(event.start),
+                          (event) =>
+                              // Upcoming events
+                              !date_utils.DateUtils.isPast(event.start) ||
+                              // Current live events
+                              (date_utils.DateUtils.isPast(event.start) &&
+                                  !date_utils.DateUtils.isPast(event.end)),
                         )
                         .toList()
                       ..sort((a, b) => b.start!.compareTo(a.start!));
