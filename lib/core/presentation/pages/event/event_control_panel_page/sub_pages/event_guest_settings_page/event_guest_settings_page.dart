@@ -2,6 +2,7 @@ import 'package:app/core/application/event/edit_event_detail_bloc/edit_event_det
 import 'package:app/core/application/event/event_guest_settings_bloc/event_guest_settings_bloc.dart';
 import 'package:app/core/constants/event/event_constants.dart';
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_guest_settings_page/widgets/delete_event_confirmation_bottom_sheet.dart';
 import 'package:app/core/presentation/pages/setting/widgets/setting_tile_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
@@ -18,6 +19,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 enum EventPrivacy { public, private }
 
@@ -194,7 +196,16 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
                     ),
                     SettingTileWidget(
                       title: t.event.deleteEvent,
-                      onTap: () {},
+                      onTap: () {
+                        showCupertinoModalBottomSheet(
+                          context: context,
+                          barrierColor: Colors.black.withOpacity(0.8),
+                          topRadius: Radius.circular(30.r),
+                          builder: (mContext) {
+                            return const DeleteEventConfirmationBottomSheet();
+                          },
+                        );
+                      },
                       color: LemonColor.chineseBlack,
                       titleColor: LemonColor.coralReef,
                       leadingCircle: false,
