@@ -6,11 +6,12 @@ import 'package:app/core/presentation/pages/setting/widgets/setting_tile_widget.
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -68,10 +69,10 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         appBar: LemonAppBar(
-          backgroundColor: colorScheme.onPrimaryContainer,
+          backgroundColor: LemonColor.atomicBlack,
           title: t.event.eventCreation.guestSettings,
         ),
-        backgroundColor: colorScheme.onPrimaryContainer,
+        backgroundColor: LemonColor.atomicBlack,
         body: BlocListener<EditEventDetailBloc, EditEventDetailState>(
           listener: (context, state) {
             if (state.status == EditEventDetailBlocStatus.success) {
@@ -188,6 +189,26 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
                         subTitle: '',
                       ),
                     ),
+                    SizedBox(
+                      height: Spacing.medium,
+                    ),
+                    SettingTileWidget(
+                      title: t.event.deleteEvent,
+                      onTap: () {},
+                      color: LemonColor.chineseBlack,
+                      titleColor: LemonColor.coralReef,
+                      leadingCircle: false,
+                      leading: ThemeSvgIcon(
+                        color: LemonColor.coralReef,
+                        builder: (filter) {
+                          return Assets.icons.icDelete
+                              .svg(colorFilter: filter, width: 18, height: 18);
+                        },
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 150,
+                    ),
                   ],
                 ),
               ),
@@ -197,19 +218,23 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
                     builder: (context, state) {
                       return Align(
                         alignment: Alignment.bottomCenter,
-                        child: SafeArea(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: Spacing.smMedium,
-                              vertical: Spacing.smMedium,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: LemonColor.atomicBlack,
+                            border: Border(
+                              top: BorderSide(
+                                color: colorScheme.outline,
+                              ),
                             ),
-                            child: LinearGradientButton(
-                              label: t.common.actions.save,
-                              height: 48.h,
-                              radius: BorderRadius.circular(24),
-                              textStyle: Typo.medium.copyWith(),
-                              mode: GradientButtonMode.lavenderMode,
+                          ),
+                          padding: EdgeInsets.all(Spacing.smMedium),
+                          child: SafeArea(
+                            child: LinearGradientButton.primaryButton(
+                              loadingWhen: state.status ==
+                                  EditEventDetailBlocStatus.loading,
                               onTap: () {
+                                Vibrate.feedback(FeedbackType.light);
+                                FocusManager.instance.primaryFocus?.unfocus();
                                 context.read<EditEventDetailBloc>().add(
                                       EditEventDetailEvent.update(
                                         eventId: widget.event?.id ?? '',
@@ -232,8 +257,8 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
                                       ),
                                     );
                               },
-                              loadingWhen: state.status ==
-                                  EditEventDetailBlocStatus.loading,
+                              label: t.common.actions.saveChanges,
+                              textColor: colorScheme.onPrimary,
                             ),
                           ),
                         ),
@@ -313,13 +338,14 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
       title: title,
       subTitle: subTitle,
       onTap: () => {},
+      color: LemonColor.chineseBlack,
       trailing: trailing ??
           FlutterSwitch(
             inactiveColor:
                 Theme.of(context).colorScheme.onPrimary.withOpacity(0.12),
             inactiveToggleColor:
                 Theme.of(context).colorScheme.onPrimary.withOpacity(0.18),
-            activeColor: LemonColor.switchActive,
+            activeColor: LemonColor.paleViolet,
             activeToggleColor: Theme.of(context).colorScheme.onPrimary,
             height: 24.h,
             width: 42.w,

@@ -593,5 +593,6 @@
         "setAsCover": "Set as cover",
         "deletePhoto": "Delete photo",
         "editCover": "Edit cover"
-    }
+    },
+    "deleteEvent": "Delete event"
 }

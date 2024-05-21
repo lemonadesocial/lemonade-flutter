@@ -19,6 +19,7 @@ class SettingTileWidget extends StatelessWidget {
     this.color,
     this.radius,
     this.isError,
+    this.titleColor,
   });
 
   final String title;
@@ -32,6 +33,7 @@ class SettingTileWidget extends StatelessWidget {
   final Color? color;
   final double? radius;
   final bool? isError;
+  final Color? titleColor;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +44,7 @@ class SettingTileWidget extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: color ?? LemonColor.atomicBlack,
-          borderRadius: BorderRadius.circular(radius ?? LemonRadius.normal),
+          borderRadius: BorderRadius.circular(radius ?? LemonRadius.small),
           border: isError == true
               ? Border.all(
                   color: LemonColor.errorRedBg,
@@ -54,7 +56,7 @@ class SettingTileWidget extends StatelessWidget {
         child: Stack(
           children: [
             Padding(
-              padding: EdgeInsets.all(Spacing.smMedium),
+              padding: EdgeInsets.all(Spacing.small),
               child: Row(
                 children: [
                   leading != null
@@ -84,7 +86,7 @@ class SettingTileWidget extends StatelessWidget {
                           title,
                           style: titleStyle ??
                               Typo.medium.copyWith(
-                                color: colorScheme.onPrimary,
+                                color: titleColor ?? colorScheme.onPrimary,
                                 fontWeight: FontWeight.w600,
                               ),
                         ),
