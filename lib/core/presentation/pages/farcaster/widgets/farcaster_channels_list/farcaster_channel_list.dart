@@ -67,6 +67,10 @@ class FarcasterChannelsList extends StatelessWidget {
 
         List<FarcasterChannel> channels = snapshot.data ?? [];
 
+        if (channels.isEmpty) {
+          return const SizedBox.shrink();
+        }
+
         return SizedBox(
           height: 87.w,
           child: ListView.separated(
