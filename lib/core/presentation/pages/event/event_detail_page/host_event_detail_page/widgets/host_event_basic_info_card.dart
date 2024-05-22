@@ -33,13 +33,31 @@ class HostEventBasicInfoCard extends StatelessWidget {
 
   final Event event;
 
-  Duration? get durationToEvent {
-    if (event.start == null) return null;
-    var now = DateTime.now();
-
-    if (event.start!.isBefore(now)) return null;
-
-    return event.start!.difference(now);
+  String? get durationText {
+    final now = DateTime.now();
+    if (event.start == null && event.end == null) return null;
+    // Is Live event
+    if (event.start!.isBefore(now) && event.end!.isAfter(now)) {
+      final Duration difference = now.difference(event.start!);
+      final int days = difference.inDays;
+      return t.event.eventStartedDaysAgo(days: days);
+    }
+    // Is upcoming event
+    else if (event.start!.isBefore(now) && event.end!.isBefore(now)) {
+      final durationToEvent = event.start!.difference(now);
+      return t.event.eventStartIn(
+        time: prettyDuration(
+          durationToEvent,
+          tersity: (durationToEvent.inDays) < 1
+              ? (durationToEvent.inHours) >= 1
+                  ? DurationTersity.hour
+                  : DurationTersity.minute
+              : DurationTersity.day,
+          upperTersity: DurationTersity.day,
+        ),
+      );
+    }
+    return t.event.eventEnded;
   }
 
   @override
@@ -47,7 +65,6 @@ class HostEventBasicInfoCard extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
     final userId = AuthUtils.getUserId(context);
-
     return FutureBuilder<Either<Failure, List<EventTicket>>>(
       future: getIt<EventTicketRepository>().getTickets(
         input: GetTicketsInput(
@@ -140,28 +157,7 @@ class HostEventBasicInfoCard extends StatelessWidget {
                                           height: 3.h,
                                         ),
                                         Text(
-                                          durationToEvent != null
-                                              ? t.event.eventStartIn(
-                                                  time: prettyDuration(
-                                                    durationToEvent!,
-                                                    tersity: (durationToEvent
-                                                                    ?.inDays ??
-                                                                0) <
-                                                            1
-                                                        ? (durationToEvent
-                                                                        ?.inHours ??
-                                                                    0) >=
-                                                                1
-                                                            ? DurationTersity
-                                                                .hour
-                                                            : DurationTersity
-                                                                .minute
-                                                        : DurationTersity.day,
-                                                    upperTersity:
-                                                        DurationTersity.day,
-                                                  ),
-                                                )
-                                              : t.event.eventEnded,
+                                          durationText ?? '',
                                           style: Typo.mediumPlus.copyWith(
                                             color: colorScheme.onPrimary,
                                             fontWeight: FontWeight.bold,
