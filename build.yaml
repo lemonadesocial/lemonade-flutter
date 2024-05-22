@@ -7,6 +7,7 @@ targets:
             - lib/graphql/ai/**
             - lib/graphql/backend/**
             - lib/graphql/cubejs/**
+            - lib/graphql/farcaster_airstack/**
           scalars:
             DateTimeISO:
               type: DateTime
@@ -14,5 +15,9 @@ targets:
               type: String
             JSON:
               type: Map<String, dynamic>
+            Map:
+              type: Map<String, dynamic>
+            Time:
+              type: DateTime
           clients:
             - graphql_flutter

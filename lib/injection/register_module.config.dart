@@ -107,6 +107,7 @@ extension GetItInjectableX on _i1.GetIt {
     );
     gh.lazySingleton<_i3.AIGQL>(() => _i3.AIGQL());
     gh.lazySingleton<_i4.AIRepository>(() => _i5.AIRepositoryImpl());
+    gh.lazySingleton<_i3.AirstackGQL>(() => _i3.AirstackGQL());
     gh.lazySingleton<_i3.AppGQL>(() => _i3.AppGQL());
     gh.lazySingleton<_i6.AppOauth>(() => _i6.AppOauth());
     gh.lazySingleton<_i7.ApplicantRepository>(

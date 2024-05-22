@@ -9,5 +9,11 @@
     "moreInfo": "More info",
     "viewEvent": "View event",
     "home": "Home",
-    "shareYourEvents": "share your events"
+    "shareYourEvents": "share your events",
+    "recasted": "recasted",
+    "members(ordinal)": {
+        "one": "member",
+        "other": "members"
+    },
+    "hostedBy": "Hosted by"
 }
