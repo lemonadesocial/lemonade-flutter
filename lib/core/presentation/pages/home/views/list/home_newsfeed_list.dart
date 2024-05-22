@@ -1,5 +1,6 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/newsfeed/newsfeed_listing_bloc/newsfeed_listing_bloc.dart';
+import 'package:app/core/presentation/pages/farcaster/widgets/farcaster_channels_list/farcaster_channel_list.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/post/post_profile_card_widget.dart';
@@ -9,11 +10,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
-class HomeNewsfeedListView extends StatelessWidget {
+class HomeNewsfeedListView extends StatefulWidget {
   const HomeNewsfeedListView({
     super.key,
   });
 
+  @override
+  State<HomeNewsfeedListView> createState() => _HomeNewsfeedListViewState();
+}
+
+class _HomeNewsfeedListViewState extends State<HomeNewsfeedListView> {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
@@ -69,6 +75,7 @@ class HomeNewsfeedListView extends StatelessWidget {
             controller: refreshController,
             enablePullUp: true,
             onRefresh: () {
+              setState(() {});
               context
                   .read<NewsfeedListingBloc>()
                   .add(NewsfeedListingEvent.refresh());
@@ -85,20 +92,29 @@ class HomeNewsfeedListView extends StatelessWidget {
               height: 100,
               loadStyle: LoadStyle.ShowWhenLoading,
             ),
-            child: ListView.separated(
+            child: CustomScrollView(
               controller: bloc.scrollController,
-              padding:
-                  EdgeInsetsDirectional.symmetric(vertical: Spacing.xSmall),
-              itemBuilder: (ctx, index) => Padding(
-                padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
-                child: PostProfileCard(
-                  key: Key(state.posts[index].id),
-                  post: state.posts[index],
+              slivers: [
+                const SliverToBoxAdapter(
+                  child: FarcasterChannelsList(),
                 ),
-              ),
-              separatorBuilder: (ctx, index) =>
-                  Divider(color: colorScheme.outline),
-              itemCount: state.posts.length,
+                SliverPadding(
+                  padding:
+                      EdgeInsetsDirectional.symmetric(vertical: Spacing.xSmall),
+                  sliver: SliverList.separated(
+                    itemBuilder: (ctx, index) => Padding(
+                      padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
+                      child: PostProfileCard(
+                        key: Key(state.posts[index].id),
+                        post: state.posts[index],
+                      ),
+                    ),
+                    separatorBuilder: (ctx, index) =>
+                        Divider(color: colorScheme.outline),
+                    itemCount: state.posts.length,
+                  ),
+                ),
+              ],
             ),
           );
         },

@@ -1,0 +1,22 @@
+query GetChannel($channelId: String) {
+  FarcasterChannels(
+    input: { blockchain: ALL, filter: { channelId: { _eq: $channelId } } }
+  ) {
+    FarcasterChannel {
+      id
+      channelId
+      imageUrl
+      name
+      description
+      followerCount
+      hostProfiles {
+        profileName
+        profileImage
+      }
+    }
+    pageInfo {
+      nextCursor
+      hasNextPage
+    }
+  }
+}

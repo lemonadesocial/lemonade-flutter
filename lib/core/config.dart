@@ -25,6 +25,9 @@ class AppConfig {
   static get cubeJsUrl => dotenv.env['CUBEJS_URL'];
   static get cubeJsRestUrl => dotenv.env['CUBEJS_REST_URL'];
 
+  // Airstack
+  static get airstackUrl => 'https://api.airstack.xyz/gql';
+
   static bool get isProduction => dotenv.env['ENV'] == 'production';
 
   // Social

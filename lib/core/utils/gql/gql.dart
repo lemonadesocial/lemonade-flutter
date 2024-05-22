@@ -210,3 +210,48 @@ class CubeGQL {
   late final ErrorLink _errorLink;
   GraphQLClient get client => _client;
 }
+
+@LazySingleton()
+class AirstackGQL {
+  AirstackGQL() {
+    _errorLink = ErrorLink(
+      onException: (request, forward, exception) {
+        if (kDebugMode) {
+          CustomErrorHandler.handleExceptionError(request, forward, exception);
+        }
+        return null;
+      },
+      onGraphQLError: (request, forward, response) {
+        if (kDebugMode) {
+          CustomErrorHandler.handleGraphQLError(request, forward, response);
+        }
+        return null;
+      },
+    );
+
+    _client = GraphQLClient(
+      defaultPolicies: DefaultPolicies(
+        query: Policies(
+          fetch: FetchPolicy.cacheAndNetwork,
+        ),
+      ),
+      link: Link.from([
+        _errorLink,
+        HttpLink(
+          AppConfig.airstackUrl,
+          defaultHeaders: {
+            'Content-Type': 'application/json',
+          },
+        ),
+      ]),
+      cache: GraphQLCache(
+        partialDataPolicy: PartialDataCachePolicy.accept,
+        store: HiveStore(),
+      ),
+    );
+  }
+
+  late final GraphQLClient _client;
+  late final ErrorLink _errorLink;
+  GraphQLClient get client => _client;
+}
