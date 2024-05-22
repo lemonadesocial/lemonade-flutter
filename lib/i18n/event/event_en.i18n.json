@@ -23,6 +23,7 @@
     "processing": "Processing...",
     "aboutTheEvent": "About the event",
     "eventStartIn": "Starting in $time",
+    "eventStartedDaysAgo": "Started ${days}d ago",
     "eventEnded": "Event ended",
     "myEvents": "My events",
     "dashboard": {
