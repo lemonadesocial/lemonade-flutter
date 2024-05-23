@@ -69,6 +69,8 @@ class _CollaboratorSendLikeBottomSheetState
                   LemonTextField(
                     controller: _textController,
                     hintText: t.collaborator.sendMessage,
+                    minLines: 1,
+                    maxLines: 5,
                     onChange: (value) {
                       _textController.text = value;
                       // _message = value;
