@@ -28,8 +28,10 @@ import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:url_launcher/url_launcher.dart';
 
 class PostProfileCard extends StatelessWidget {
   final Post post;
@@ -223,12 +225,22 @@ class PostProfileCardView extends StatelessWidget {
                 ),
                 if (postText.isNotEmpty) ...[
                   SizedBox(height: Spacing.superExtraSmall),
-                  Text(
-                    postText,
+                  Linkify(
+                    text: postText,
+                    options: const LinkifyOptions(humanize: false),
                     style: Typo.medium.copyWith(
-                      color: colorScheme.onPrimary.withOpacity(0.87),
+                      color: LemonColor.white87,
                       fontWeight: FontWeight.w400,
                     ),
+                    linkStyle: Typo.medium.copyWith(
+                      color: LemonColor.paleViolet,
+                      decoration: TextDecoration.none,
+                    ),
+                    onOpen: (link) async {
+                      await launchUrl(
+                        Uri.parse(link.url),
+                      );
+                    },
                   ),
                 ],
                 if (postEvent != null) ...[
