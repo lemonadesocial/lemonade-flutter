@@ -9,10 +9,9 @@ import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:intl/intl.dart';
+import 'package:matrix/matrix.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -26,7 +25,6 @@ class FarcasterCastItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
-    final numberFormat = NumberFormat.compact();
 
     return Padding(
       padding: EdgeInsets.all(Spacing.xSmall),
@@ -69,37 +67,6 @@ class FarcasterCastItemWidget extends StatelessWidget {
                   ],
                 ),
                 _CastBody(cast: cast),
-                Flexible(
-                  child: Row(
-                    children: [
-                      ThemeSvgIcon(
-                        color: colorScheme.onSecondary,
-                        builder: (filter) => Assets.icons.icChatBubble.svg(
-                          colorFilter: filter,
-                        ),
-                      ),
-                      Text(
-                        ' ${numberFormat.format(cast.numberOfReplies)}',
-                        style: Typo.medium.copyWith(
-                          color: colorScheme.onSecondary,
-                        ),
-                      ),
-                      SizedBox(width: Spacing.extraSmall),
-                      ThemeSvgIcon(
-                        color: colorScheme.onSecondary,
-                        builder: (filter) => Assets.icons.icHeart.svg(
-                          colorFilter: filter,
-                        ),
-                      ),
-                      Text(
-                        ' ${numberFormat.format(cast.numberOfLikes)}',
-                        style: Typo.medium.copyWith(
-                          color: colorScheme.onSecondary,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
               ],
             ),
           ),
@@ -147,28 +114,15 @@ class _CastBody extends StatelessWidget {
             ),
           ),
         ],
-        if (cast.frame?.frameUrl?.isNotEmpty == true) ...[
+        if (cast.embeds?.isNotEmpty == true) ...[
           SizedBox(height: Spacing.xSmall),
-          ClipRRect(
+          LemonNetworkImage(
+            imageUrl: cast.embeds?.firstOrNull?.tryGet('url') ?? '',
             borderRadius: BorderRadius.circular(
               LemonRadius.small,
             ),
-            child: SizedBox(
-              height: 250.w, // adjust height as needed
-              child: InAppWebView(
-                initialUrlRequest: URLRequest(
-                  url: Uri.parse(cast.frame?.frameUrl ?? ''),
-                ), // replace with your actual URL
-                initialOptions: InAppWebViewGroupOptions(
-                  crossPlatform: InAppWebViewOptions(
-                    javaScriptEnabled: true,
-                  ),
-                ),
-              ),
-            ),
           ),
         ],
-        SizedBox(height: 4.w),
       ],
     );
   }
