@@ -54,7 +54,7 @@ final getEventTicketTypesQuery = gql('''
 ''');
 
 final calculateTicketsPricingInfoQuery = gql('''
-  $paymentAccountFragment
+  $paymentAccountInfoFragment
 
   query CalculateTicketsPricing(\$input: CalculateTicketsPricingInput!) {
     calculateTicketsPricing(input: \$input) {
@@ -62,12 +62,11 @@ final calculateTicketsPricingInfoQuery = gql('''
       subtotal
       discount
       payment_accounts {
-        ...paymentAccountFragment
+        ...paymentAccountInfoFragment
       }
       deposit_infos {
         minimum_amount
         minimum_percent
-        payment_account_id
       }
     }
   }
