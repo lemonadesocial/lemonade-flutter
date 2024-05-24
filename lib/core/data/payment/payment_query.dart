@@ -1,5 +1,62 @@
 import 'package:graphql_flutter/graphql_flutter.dart';
 
+// This same as paymentAccountFragment but with different name
+const paymentAccountInfoFragment = '''
+  fragment paymentAccountInfoFragment on PaymentAccountInfo {
+      _id
+      active
+      created_at
+      user
+      type
+      title
+      provider
+      account_info {
+        ...on EthereumAccount {
+        currencies
+        currency_map
+        address
+        networks
+      }
+
+      ...on StripeAccount {
+        currencies
+        currency_map
+        account_id
+        publishable_key
+      }
+
+      ...on DigitalAccount {
+        currencies
+        currency_map
+        account_id
+      }
+
+      ... on SafeAccount {
+        currencies
+        currency_map
+        address
+        network
+        owners
+        threshold
+        pending
+      }
+
+      ... on EthereumEscrowAccount {
+        address
+        currencies
+        currency_map
+        host_refund_percent
+        minimum_deposit_percent
+        network
+        refund_policies {
+          percent
+          timestamp
+        }
+      }
+    }
+  }
+''';
+
 const paymentAccountFragment = '''
   fragment paymentAccountFragment on NewPaymentAccount {
       _id
