@@ -12,7 +12,7 @@ definitions:
   environment:
     load_environment_values: &load_environment_values
       groups:
-        - google_credentials 
+        - google_credentials
         - env_values
     ios_signing_staging: &ios_signing_staging
       ios_signing:
@@ -56,7 +56,7 @@ definitions:
         echo $ENV | base64 --decode > $CM_BUILD_DIR/.env
         echo $ENV_STAGING | base64 --decode > $CM_BUILD_DIR/.env.staging
         echo $ENV_PRODUCTION | base64 --decode > $CM_BUILD_DIR/.env.production
-        
+
         # Generate Firebase services file
         echo $FIREBASE_OPTIONS_STAGING | base64 --decode > $CM_BUILD_DIR/lib/firebase_options_staging.dart
         echo $FIREBASE_OPTIONS_PRODUCTION | base64 --decode > $CM_BUILD_DIR/lib/firebase_options_production.dart
@@ -85,7 +85,7 @@ definitions:
     - &use_profiles
       name: Set up code signing settings on Xcode project
       script: |
-        xcode-project use-profiles  
+        xcode-project use-profiles
     - &get_flutter_packages
       name: Get Flutter packages
       script: |
@@ -167,19 +167,14 @@ definitions:
 
         # Add Shorebird to PATH
         echo PATH="$HOME/.shorebird/bin:$PATH" >> $CM_ENV
-    - &change_shorebird_version
-      name: 🐦 Change Shorebird version
-      script: |
-        shorebird flutter versions list
-        shorebird flutter versions use 3.16.9
     - &release_shorebird_ipa_staging
       name: Release shorebird ipa staging
       script: |
         BUILD_NUMBER=$(($(app-store-connect get-latest-testflight-build-number "$APP_ID") + 1))
-        shorebird flutter versions list
-        shorebird flutter versions use 3.16.9
-        shorebird release ios-alpha --flavor staging -- \
-          --build-number=$BUILD_NUMBER \
+        chmod +x scripts/set_build_number.sh
+        ./scripts/set_build_number "$BUILD_NUMBER"
+        shorebird release ios --flutter-version=3.19.6 \
+          --flavor staging -- \
           --export-options-plist=/Users/builder/export_options.plist \
           --flavor="staging" \
           -t "lib/main_staging.dart"
@@ -187,58 +182,51 @@ definitions:
       name: Release shorebird android apk staging
       script: |
         BUILD_NUMBER=$(($(google-play get-latest-build-number --package-name "$PACKAGE_NAME" --tracks="$GOOGLE_PLAY_TRACK") + 1))      
-        shorebird flutter versions list
-        shorebird flutter versions use 3.16.9
-        shorebird release android --artifact apk --flavor staging -- \
-          --build-number=$BUILD_NUMBER \
+        chmod +x scripts/set_build_number.sh
+        ./scripts/set_build_number "$BUILD_NUMBER"
+        shorebird release android --artifact apk --flutter-version=3.19.6 \
+          --flavor staging -- \
           --flavor="staging" \
           -t "lib/main_staging.dart"
     - &release_shorebird_ipa_production
       name: Release shorebird ipa production
       script: |
         BUILD_NUMBER=$(($(app-store-connect get-latest-testflight-build-number "$APP_ID") + 1))
-        shorebird release ios-alpha --flavor production -- \
-          --build-number=$BUILD_NUMBER \
+        chmod +x scripts/set_build_number.sh
+        ./scripts/set_build_number "$BUILD_NUMBER"
+        shorebird release ios --flutter-version=3.19.6 \
+          --flavor production \
           --export-options-plist=/Users/builder/export_options.plist \
-          --flavor="production" \
           -t "lib/main_production.dart"
     - &release_shorebird_apk_production
       name: Release shorebird android apk production
       script: |
         BUILD_NUMBER=$(($(google-play get-latest-build-number --package-name "$PACKAGE_NAME" --tracks="$GOOGLE_PLAY_TRACK") + 1))      
-        shorebird release android --artifact apk --flavor production -- \
-          --build-number=$BUILD_NUMBER \
+        chmod +x scripts/set_build_number.sh
+        ./scripts/set_build_number "$BUILD_NUMBER"
+        shorebird release android --artifact apk --flutter-version=3.19.6 \
+          --flavor production \
           --flavor="production" \
           -t "lib/main_production.dart"
     - &patch_shorebird_ios_staging
       name: Patch shorebird ipa staging
       script: |
-        shorebird patch ios-alpha --target ./lib/main_staging.dart --flavor staging --force -- \
-          --build-name=$TAG_BUILD_NAME \
-          --build-number=$TAG_BUILD_NUMBER \
-          --export-options-plist=/Users/builder/export_options.plist
+        shorebird patch ios --release-version "$TAG_BUILD_NAME"+"$TAG_BUILD_NUMBER" --target ./lib/main_staging.dart --flavor staging --force
     - &patch_shorebird_android_staging
       name: Patch shorebird android staging
       script: |
-        shorebird patch android --target ./lib/main_staging.dart --flavor staging --force -- \
-          --build-name=$TAG_BUILD_NAME \
-          --build-number=$TAG_BUILD_NUMBER 
+        shorebird patch android --release-version "$TAG_BUILD_NAME"+"$TAG_BUILD_NUMBER" --target ./lib/main_staging.dart --flavor staging --force
     - &patch_shorebird_ios_production
       name: Patch shorebird ipa production
       script: |
-        shorebird patch ios-alpha --target ./lib/main_production.dart --flavor production  --force -- \
-          --build-name=$TAG_BUILD_NAME \
-          --build-number=$TAG_BUILD_NUMBER \
-          --export-options-plist=/Users/builder/export_options.plist
+        shorebird patch ios --release-version "$TAG_BUILD_NAME"+"$TAG_BUILD_NUMBER" --target ./lib/main_production.dart --flavor production --force
     - &patch_shorebird_android_production
       name: Patch shorebird android production
       script: |
-        shorebird patch android --target ./lib/main_production.dart --flavor production  --force -- \
-          --build-name=$TAG_BUILD_NAME \
-          --build-number=$TAG_BUILD_NUMBER 
+        shorebird patch android --release-version "$TAG_BUILD_NAME"+"$TAG_BUILD_NUMBER" --target ./lib/main_production.dart --flavor production --force
     - &github_create_prerelease
       name: Github release
-      script: | 
+      script: |
         # Publish only for tag builds
         if [ -z ${CM_TAG} ]; then
           echo "Not a tag build, will not publish GitHub release"
@@ -250,7 +238,7 @@ definitions:
           --prerelease
     - &notify_ios_staging_to_slack
       name: Notify iOS Staging app to slack
-      script: | 
+      script: |
         ipaPath=$(find build -name "*.ipa" | head -1)
         if [[ -z ${ipaPath} ]]
         then
@@ -318,7 +306,7 @@ definitions:
         fi
     - &notify_ios_production_to_slack
       name: Notify iOS Production app to slack
-      script: | 
+      script: |
         ipaPath=$(find build -name "*.ipa" | head -1)
         if [[ -z ${ipaPath} ]]
         then
@@ -386,7 +374,7 @@ definitions:
         fi
     - &notify_android_staging_to_slack
       name: Notify Android Staging app to slack
-      script: | 
+      script: |
         apkPath=$(find build -name "*.apk" | head -1)
         if [[ -z ${apkPath} ]]
         then
@@ -454,7 +442,7 @@ definitions:
         fi
     - &notify_android_production_to_slack
       name: Notify Android Production app to slack
-      script: | 
+      script: |
         apkPath=$(find build -name "*.apk" | head -1)
         if [[ -z ${apkPath} ]]
         then
@@ -522,7 +510,7 @@ definitions:
         fi
     - &notify_shorebird_patch_ios_production_to_slack
       name: Notify shorebird patch iOS Production app to slack
-      script: | 
+      script: |
         curl -0 -v -X POST $SLACK_WEBHOOK_URL \
         -H 'Content-type: application/json' \
         --data-raw '
@@ -556,7 +544,7 @@ definitions:
         }'
     - &notify_shorebird_patch_android_production_to_slack
       name: Notify shorebird patch Android Production app to slack
-      script: | 
+      script: |
         curl -0 -v -X POST $SLACK_WEBHOOK_URL \
         -H 'Content-type: application/json' \
         --data-raw '
@@ -620,7 +608,7 @@ definitions:
       track: $GOOGLE_PLAY_TRACK
       submit_as_draft: false
 workflows:
-  # Build iOS Staging 
+  # Build iOS Staging
   ios-staging:
     name: iOS Staging
     <<: *instance_mac_mini
@@ -649,7 +637,7 @@ workflows:
       scripts:
         - *notify_ios_staging_to_slack
 
-  # Build iOS Production 
+  # Build iOS Production
   ios-production:
     name: iOS Production
     <<: *instance_mac_mini
@@ -703,7 +691,7 @@ workflows:
       <<: *email_staging
       scripts:
         - *notify_android_staging_to_slack
-  
+
   # Build Android Production
   android-production:
     name: Android Production
@@ -729,10 +717,10 @@ workflows:
       <<: *email_production
       scripts:
         - *notify_android_production_to_slack
-        
-  # 
+
+  #
   # Temp close due to will trigger tag for build production process
-  # 
+  #
   # Build iOS & Android Production
   # ios-android-production:
   #   name: Build iOS & Android Production
@@ -771,10 +759,10 @@ workflows:
   #       - *github_create_prerelease
   #       - *notify_ios_production_to_slack
   #       - *notify_android_production_to_slack
-  
-  # 
-  # Shorebird 
-  # 
+
+  #
+  # Shorebird
+  #
   shorebird-release-staging:
     name: Shorebird Release Staging
     <<: *instance_mac_mini
@@ -789,7 +777,7 @@ workflows:
       events:
         - tag
       tag_patterns:
-        - pattern: '*-rc*' # v1.0.0-rc.1
+        - pattern: "*-rc*" # v1.0.0-rc.1
           include: true
         - pattern: excluded-tag
           include: false
@@ -802,20 +790,19 @@ workflows:
       - *run_build_runner
       - *generate_i18_file
       - *setup_shorebird
-      - *change_shorebird_version
       - *install_pods
       - *release_shorebird_ipa_staging
       - *setup_local_properties
       - *release_shorebird_apk_staging
     artifacts:
       - build/ios/ipa/*.ipa
-      - build/app/outputs/apk/**/*.apk    
-      - build/app/outputs/bundle/**/*.aab    
+      - build/app/outputs/apk/**/*.apk
+      - build/app/outputs/bundle/**/*.aab
       - *dsym
     publishing:
       <<: *ios_app_store_publish
       <<: *staging_android_publish
-      
+
   shorebird-release-production:
     name: Shorebird Release Production
     <<: *instance_mac_mini
@@ -830,7 +817,7 @@ workflows:
       events:
         - tag
       tag_patterns:
-        - pattern: '*-rc*' # v1.0.0-rc.1
+        - pattern: "*-rc*" # v1.0.0-rc.1
           include: true
         - pattern: excluded-tag
           include: false
@@ -843,15 +830,14 @@ workflows:
       - *run_build_runner
       - *generate_i18_file
       - *setup_shorebird
-      - *change_shorebird_version
       - *install_pods
       - *release_shorebird_ipa_production
       - *setup_local_properties
       - *release_shorebird_apk_production
     artifacts:
       - build/ios/ipa/*.ipa
-      - build/app/outputs/apk/**/*.apk    
-      - build/app/outputs/bundle/**/*.aab   
+      - build/app/outputs/apk/**/*.apk
+      - build/app/outputs/bundle/**/*.aab
       - *dsym
     publishing:
       <<: *ios_app_store_publish
@@ -879,7 +865,6 @@ workflows:
       - *run_build_runner
       - *generate_i18_file
       - *setup_shorebird
-      - *change_shorebird_version
       - *install_pods
       - *patch_shorebird_ios_staging
     artifacts:
@@ -903,13 +888,12 @@ workflows:
       - *run_build_runner
       - *generate_i18_file
       - *setup_shorebird
-      - *change_shorebird_version
       - *setup_local_properties
       - *patch_shorebird_android_staging
     artifacts:
-      - build/app/outputs/apk/**/*.apk    
-      - build/app/outputs/bundle/**/*.aab 
-  
+      - build/app/outputs/apk/**/*.apk
+      - build/app/outputs/bundle/**/*.aab
+
   shorebird-patch-ios-production:
     name: Shorebird Patch iOS Production
     <<: *instance_mac_mini
@@ -924,7 +908,7 @@ workflows:
       events:
         - tag
       tag_patterns:
-        - pattern: '*-patch-ios.*' # v1.0.0+141-patch-ios.1
+        - pattern: "*-patch-ios.*" # v1.0.0+141-patch-ios.1
           include: true
         - pattern: excluded-tag
           include: false
@@ -939,7 +923,6 @@ workflows:
       - *run_build_runner
       - *generate_i18_file
       - *setup_shorebird
-      - *change_shorebird_version
       - *install_pods
       - *patch_shorebird_ios_production
       - *notify_shorebird_patch_ios_production_to_slack
@@ -960,7 +943,7 @@ workflows:
       events:
         - tag
       tag_patterns:
-        - pattern: '*-patch-android.*' # v1.0.0+141-patch-android.1
+        - pattern: "*-patch-android.*" # v1.0.0+141-patch-android.1
           include: true
         - pattern: excluded-tag
           include: false
@@ -975,10 +958,9 @@ workflows:
       - *run_build_runner
       - *generate_i18_file
       - *setup_shorebird
-      - *change_shorebird_version
       - *setup_local_properties
       - *patch_shorebird_android_production
       - *notify_shorebird_patch_android_production_to_slack
     artifacts:
-      - build/app/outputs/apk/**/*.apk    
-      - build/app/outputs/bundle/**/*.aab  
+      - build/app/outputs/apk/**/*.apk
+      - build/app/outputs/bundle/**/*.aab

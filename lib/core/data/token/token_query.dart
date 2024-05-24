@@ -1,6 +1,6 @@
 import 'package:graphql_flutter/graphql_flutter.dart';
 
-final getTokensQuery = gql(''' 
+final getTokensQuery = gql('''
   query getTokens(
   \$owner: String
   \$owner_in: [String!]
