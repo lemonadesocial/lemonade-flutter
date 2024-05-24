@@ -1,13 +1,14 @@
 # Lemonade Flutter App
+
 ## Build Status
 
 ### Build Staging iOS
 
-| Environment             | Status                                                                                                    |
-|-------------------------|-----------------------------------------------------------------------------------------------------------|
-| Build Staging iOS       | [![iOS Staging Build Status](https://api.codemagic.io/apps/6493f698db20b1801c5e821b/ios-staging/status_badge.svg)](https://codemagic.io/apps/6493f698db20b1801c5e821b/ios-staging/latest_build)       |
-| Build Staging Android   | [![Android Staging Build Status](https://api.codemagic.io/apps/6493f698db20b1801c5e821b/android-staging/status_badge.svg)](https://codemagic.io/apps/6493f698db20b1801c5e821b/android-staging/latest_build)   |
-| Build Production (iOS and Android)       | [![iOS and Android Production Build Status](https://api.codemagic.io/apps/6493f698db20b1801c5e821b/ios-android-production/status_badge.svg)](https://codemagic.io/apps/6493f698db20b1801c5e821b/ios-android-production/latest_build) |
+| Environment                        | Status                                                                                                                                                                                                                               |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Build Staging iOS                  | [![iOS Staging Build Status](https://api.codemagic.io/apps/6493f698db20b1801c5e821b/ios-staging/status_badge.svg)](https://codemagic.io/apps/6493f698db20b1801c5e821b/ios-staging/latest_build)                                      |
+| Build Staging Android              | [![Android Staging Build Status](https://api.codemagic.io/apps/6493f698db20b1801c5e821b/android-staging/status_badge.svg)](https://codemagic.io/apps/6493f698db20b1801c5e821b/android-staging/latest_build)                          |
+| Build Production (iOS and Android) | [![iOS and Android Production Build Status](https://api.codemagic.io/apps/6493f698db20b1801c5e821b/ios-android-production/status_badge.svg)](https://codemagic.io/apps/6493f698db20b1801c5e821b/ios-android-production/latest_build) |
 
 ## Introduction
 
@@ -28,16 +29,17 @@ Follow [Conventional Commit](https://www.conventionalcommits.org/en/v1.0.0/)
 
 ### Build and run the app with Flutter
 
-Recommend to use fvm [Flutter version management](https://fvm.app/) and use Flutter version 3.16.9 and Dart 3.2.6
+Recommend to use fvm [Flutter version management](https://fvm.app/) and use Flutter version 3.19.6 and Dart 3.3.4
 
 How to install & use
 
 ```
-fvm install 3.16.9
-fvm use 3.16.9
+fvm install 3.19.6
+fvm use 3.19.6
 ```
 
 How to run Staging & Production
+
 ```
 fvm flutter run --flavor staging  --target lib/main_staging.dart
 fvm flutter run --flavor production  --target lib/main_production.dart
@@ -63,11 +65,14 @@ An appcast is an RSS feed with one channel that has a collection of items that e
 - Production : appcast.xml
 
 Uncomment this one to force update app version
+
 ```xml
 <!-- Force update version -->
 <!-- <sparkle:tags> <sparkle:criticalUpdate /> </sparkle:tags> -->
 ```
+
 ## How to test Stripe payment on staging
+
 - In order to test payment with Stripe properly, you can use one of the demo card provided by Stripe. The card list can be found [here](https://stripe.com/docs/testing#cards)
 
 ## How to fix when sign commit gpg stuck
