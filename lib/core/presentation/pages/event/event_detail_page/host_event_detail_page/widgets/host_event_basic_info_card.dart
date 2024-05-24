@@ -40,10 +40,13 @@ class HostEventBasicInfoCard extends StatelessWidget {
     if (event.start!.isBefore(now) && event.end!.isAfter(now)) {
       final Duration difference = now.difference(event.start!);
       final int days = difference.inDays;
+      if (days == 0) {
+        return t.event.eventStartedYesterday;
+      }
       return t.event.eventStartedDaysAgo(days: days);
     }
     // Is upcoming event
-    else if (event.start!.isBefore(now) && event.end!.isBefore(now)) {
+    else if (event.start!.isAfter(now) && event.end!.isAfter(now)) {
       final durationToEvent = event.start!.difference(now);
       return t.event.eventStartIn(
         time: prettyDuration(
