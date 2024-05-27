@@ -9,12 +9,21 @@ class CreateFarcasterCastBloc
   CreateFarcasterCastBloc()
       : super(
           CreateFarcasterCastState(
-            payload: CreateFarcasterPayload(message: '', selectedChannel: null),
+            payload: CreateFarcasterPayload(
+              message: '',
+              messageWithoutMentions: '',
+              selectedChannel: null,
+              mentions: [],
+            ),
             isValid: false,
           ),
         ) {
     on<_CreateFarcasterCastEventOnChannelSelected>(_onChannelSelected);
     on<_CreateFarcasterCastEventOnMessageUpdated>(_onMessageUpdated);
+    on<_CreateFarcasterCastEventOnMentionsUpdated>(_onMentionsUpdated);
+    on<_CreateFarcasterCastEventOnMessageWithoutMentionsUpdated>(
+      _onMessageWithoutMentionsUpdated,
+    );
   }
 
   void _onChannelSelected(
@@ -43,6 +52,29 @@ class CreateFarcasterCastBloc
     );
   }
 
+  void _onMentionsUpdated(
+    _CreateFarcasterCastEventOnMentionsUpdated event,
+    Emitter emit,
+  ) {
+    emit(
+      state.copyWith(
+        payload: state.payload.copyWith(mentions: event.mentions),
+      ),
+    );
+  }
+
+  void _onMessageWithoutMentionsUpdated(
+    _CreateFarcasterCastEventOnMessageWithoutMentionsUpdated event,
+    Emitter emit,
+  ) {
+    emit(
+      state.copyWith(
+        payload: state.payload
+            .copyWith(messageWithoutMentions: event.messageWithoutMentions),
+      ),
+    );
+  }
+
   CreateFarcasterCastState _validate(CreateFarcasterCastState state) {
     final isValid = state.payload.message.isNotEmpty;
     return state.copyWith(isValid: isValid);
@@ -57,6 +89,12 @@ class CreateFarcasterCastEvent with _$CreateFarcasterCastEvent {
   factory CreateFarcasterCastEvent.updateMessage({
     required String message,
   }) = _CreateFarcasterCastEventOnMessageUpdated;
+  factory CreateFarcasterCastEvent.updateMessageWithoutMentions({
+    required String messageWithoutMentions,
+  }) = _CreateFarcasterCastEventOnMessageWithoutMentionsUpdated;
+  factory CreateFarcasterCastEvent.updateMentions({
+    required List<FarcasterMention> mentions,
+  }) = _CreateFarcasterCastEventOnMentionsUpdated;
   factory CreateFarcasterCastEvent.submit() =
       _CreateFarcasterCastEventOnSubmitted;
 }
@@ -70,9 +108,19 @@ class CreateFarcasterCastState with _$CreateFarcasterCastState {
 }
 
 @freezed
+class FarcasterMention with _$FarcasterMention {
+  factory FarcasterMention({
+    required int position,
+    required int fid,
+  }) = _FarcasterMention;
+}
+
+@freezed
 class CreateFarcasterPayload with _$CreateFarcasterPayload {
   factory CreateFarcasterPayload({
     required String message,
+    required String messageWithoutMentions,
     FarcasterChannel? selectedChannel,
+    required List<FarcasterMention> mentions,
   }) = _CreateFarcasterPayload;
 }
