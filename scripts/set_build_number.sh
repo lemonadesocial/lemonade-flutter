@@ -10,6 +10,6 @@ BUILD_NUMBER=$1
 
 # Auto append build number into version of pubspec file
 # Example: 1.20.0 become 1.20.0+35
-perl -i -pe 's/^(version:\s+\d+\.\d+\.\d+)(\+\d+)?$/$1+'$BUILD_NUMBER'/' ../pubspec.yaml
+perl -i -pe 's/^(version:\s+\d+\.\d+\.\d+)(\+\d+)?$/$1+'$BUILD_NUMBER'/' pubspec.yaml
 
 
