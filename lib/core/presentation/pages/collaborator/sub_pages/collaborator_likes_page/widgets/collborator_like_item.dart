@@ -58,37 +58,32 @@ class CollboratorLikeItem extends StatelessWidget {
                             fontWeight: FontWeight.w500,
                           ),
                         ),
-                        if (jobTitle?.isNotEmpty == true) ...[
-                          SizedBox(height: 2.w),
-                          Row(
-                            children: [
-                              ThemeSvgIcon(
-                                color: colorScheme.onSecondary,
-                                builder: (filter) =>
-                                    Assets.icons.icBriefcase.svg(
-                                  colorFilter: filter,
-                                ),
-                              ),
-                              SizedBox(width: Spacing.superExtraSmall),
-                              Text(
-                                '$jobTitle ${companyName?.isNotEmpty == true ? 'at $companyName' : ''}',
-                                style: Typo.medium.copyWith(
-                                  color: colorScheme.onSecondary,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
                       ],
-                    ),
-                    ThemeSvgIcon(
-                      color: colorScheme.onSecondary,
-                      builder: (filter) => Assets.icons.icArrowRight.svg(
-                        colorFilter: filter,
-                      ),
                     ),
                   ],
                 ),
+                if (jobTitle?.isNotEmpty == true) ...[
+                  SizedBox(height: 2.w),
+                  Row(
+                    children: [
+                      ThemeSvgIcon(
+                        color: colorScheme.onSecondary,
+                        builder: (filter) => Assets.icons.icBriefcase.svg(
+                          colorFilter: filter,
+                        ),
+                      ),
+                      SizedBox(width: Spacing.superExtraSmall),
+                      Expanded(
+                        child: Text(
+                          '$jobTitle ${companyName?.isNotEmpty == true ? 'at $companyName' : ''}',
+                          style: Typo.medium.copyWith(
+                            color: colorScheme.onSecondary,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
                 if (swipe.message?.isNotEmpty == true) ...[
                   SizedBox(height: Spacing.superExtraSmall),
                   _InitialMessage(
@@ -96,6 +91,12 @@ class CollboratorLikeItem extends StatelessWidget {
                   ),
                 ],
               ],
+            ),
+          ),
+          ThemeSvgIcon(
+            color: colorScheme.onSecondary,
+            builder: (filter) => Assets.icons.icArrowRight.svg(
+              colorFilter: filter,
             ),
           ),
         ],
