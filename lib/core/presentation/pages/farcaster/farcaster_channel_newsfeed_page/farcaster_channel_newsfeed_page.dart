@@ -45,69 +45,68 @@ class _FarcasterChannelNewsfeedPageState
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    return Container(
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: Assets.images.bgChat.provider(),
-          fit: BoxFit.cover,
-        ),
-      ),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: LemonAppBar(
-          actions: [
-            SizedBox(
-              width: Spacing.xLarge,
-            ),
-          ],
-          titleBuilder: (context) => InkWell(
-            onTap: () {
-              showCupertinoModalBottomSheet(
-                context: context,
-                backgroundColor: LemonColor.atomicBlack,
-                builder: (mContext) {
-                  return GraphQLProvider(
-                    client: airstackClient,
-                    child: FarcasterChannelDetailBottomsheet(
-                      channel: widget.channel,
-                    ),
-                  );
-                },
-              );
-            },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                LemonNetworkImage(
-                  width: 27.w,
-                  height: 27.w,
-                  imageUrl: widget.channel.imageUrl ?? '',
-                  borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
-                ),
-                SizedBox(width: Spacing.xSmall),
-                Flexible(
-                  child: Text(
-                    widget.channel.id?.isNotEmpty == true
-                        ? '/${widget.channel.id}'
-                        : '',
-                    style: Typo.medium.copyWith(
-                      fontWeight: FontWeight.w500,
-                    ),
-                    maxLines: 1,
+    return Scaffold(
+      appBar: LemonAppBar(
+        actions: [
+          SizedBox(
+            width: Spacing.xLarge,
+          ),
+        ],
+        titleBuilder: (context) => InkWell(
+          onTap: () {
+            showCupertinoModalBottomSheet(
+              context: context,
+              backgroundColor: LemonColor.atomicBlack,
+              builder: (mContext) {
+                return GraphQLProvider(
+                  client: airstackClient,
+                  child: FarcasterChannelDetailBottomsheet(
+                    channel: widget.channel,
                   ),
-                ),
-                SizedBox(width: Spacing.xSmall),
-                ThemeSvgIcon(
-                  color: colorScheme.onSecondary,
-                  builder: (filter) => Assets.icons.icArrowUp.svg(
-                    colorFilter: filter,
+                );
+              },
+            );
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              LemonNetworkImage(
+                width: 27.w,
+                height: 27.w,
+                imageUrl: widget.channel.imageUrl ?? '',
+                borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
+              ),
+              SizedBox(width: Spacing.xSmall),
+              Flexible(
+                child: Text(
+                  widget.channel.id?.isNotEmpty == true
+                      ? '/${widget.channel.id}'
+                      : '',
+                  style: Typo.medium.copyWith(
+                    fontWeight: FontWeight.w500,
                   ),
+                  maxLines: 1,
                 ),
-              ],
-            ),
+              ),
+              SizedBox(width: Spacing.xSmall),
+              ThemeSvgIcon(
+                color: colorScheme.onSecondary,
+                builder: (filter) => Assets.icons.icArrowUp.svg(
+                  colorFilter: filter,
+                ),
+              ),
+            ],
           ),
         ),
-        body: GraphQLProvider(
+      ),
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: Assets.images.bgChat.provider(),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: GraphQLProvider(
           client: airstackClient,
           child: Query$GetFarCasterCasts$Widget(
             options: Options$Query$GetFarCasterCasts(

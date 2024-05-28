@@ -57,7 +57,7 @@ dependencies:
   image_cropper: ^5.0.1
 
   # UI
-  flutter_portal: ^1.1.4
+  flutter_portal: 1.1.4
   intl: ^0.18.0
   timeago: ^3.5.0
   sliver_tools: ^0.2.12
@@ -156,6 +156,8 @@ dependencies:
   fl_chart: ^0.67.0
   country_picker: ^2.0.25
   smooth_page_indicator: ^1.1.0
+  flutter_mentions:
+    path: ./packages/flutter_mentions
 
 dependency_overrides:
   matrix_api_lite:

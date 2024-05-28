@@ -3,6 +3,7 @@ import 'package:app/core/config.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/farcaster/farcaster_repository.dart';
 import 'package:app/core/presentation/pages/farcaster/create_farcaster_cast_page/widgets/create_cast_bottom_bar/create_cast_bottom_bar.dart';
+import 'package:app/core/presentation/pages/farcaster/create_farcaster_cast_page/widgets/create_cast_bottom_bar/create_farcaster_editor.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
 import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
@@ -17,7 +18,6 @@ import 'package:app/injection/register_module.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -57,21 +57,28 @@ class _CreateFarcasterCastPageViewState
   Future<void> submitCreateCast() async {
     final t = Translations.of(context);
     final payload = context.read<CreateFarcasterCastBloc>().state.payload;
+    final mentions = payload.mentions.map((item) => item.fid).toList();
+    final mentionsPositions =
+        payload.mentions.map((item) => item.position).toList();
     final response = await showFutureLoadingDialog(
       context: context,
       future: () async {
         return await getIt<FarcasterRepository>().createCast(
           input: Variables$Mutation$CreateCast(
-            text: payload.message,
+            text: payload.messageWithoutMentions,
             parentUrl: payload.selectedChannel?.url,
             embeds: [
               '${AppConfig.webUrl}/event/${widget.event.id}',
             ],
+            mentions: mentions,
+            mentionsPositions: mentionsPositions,
           ),
         );
       },
     );
-    response.result?.fold((l) => null, (success) {
+    response.result?.fold((l) {
+      return null;
+    }, (success) {
       if (success) {
         SnackBarUtils.showSuccess(
           message: t.farcaster.castCreatedSuccess,
@@ -84,7 +91,6 @@ class _CreateFarcasterCastPageViewState
   @override
   Widget build(BuildContext context) {
     final user = AuthUtils.getUser(context);
-    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: const LemonAppBar(),
       body: GestureDetector(
@@ -117,25 +123,8 @@ class _CreateFarcasterCastPageViewState
                     SliverToBoxAdapter(
                       child: Padding(
                         padding: EdgeInsets.symmetric(vertical: Spacing.medium),
-                        child: SizedBox(
-                          child: TextField(
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              hintText: t.farcaster.createCastPlaceholder,
-                            ),
-                            maxLines: null,
-                            cursorColor: colorScheme.onSecondary,
-                            style: Typo.mediumPlus.copyWith(
-                              color: colorScheme.onPrimary,
-                            ),
-                            onChanged: (message) {
-                              context.read<CreateFarcasterCastBloc>().add(
-                                    CreateFarcasterCastEvent.updateMessage(
-                                      message: message,
-                                    ),
-                                  );
-                            },
-                          ),
+                        child: const SizedBox(
+                          child: CreateFarcasterEditor(),
                         ),
                       ),
                     ),

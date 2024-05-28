@@ -1,5 +1,29 @@
 # Changelog
 
+## [1.20.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.19.0...v1.20.0) (2024-05-24)
+
+
+### Features
+
+* add a connect farcaster button to profile drawer ([#598](https://github.com/lemonadesocial/lemonade-flutter/issues/598)) ([17a86b6](https://github.com/lemonadesocial/lemonade-flutter/commit/17a86b693e01238200def210b75dc40a354a952a))
+* cancel event ([#601](https://github.com/lemonadesocial/lemonade-flutter/issues/601)) ([22a89c9](https://github.com/lemonadesocial/lemonade-flutter/commit/22a89c94b11f43f714e50d67f69a02bab18c17a5))
+* display hyperlink for post card ([#607](https://github.com/lemonadesocial/lemonade-flutter/issues/607)) ([862f420](https://github.com/lemonadesocial/lemonade-flutter/commit/862f420d7bc171416596d5b38d77c5b77b2db740))
+* farcaster integration ([#589](https://github.com/lemonadesocial/lemonade-flutter/issues/589)) ([059c874](https://github.com/lemonadesocial/lemonade-flutter/commit/059c874c0d08763b823d8ce944a5f928d1933e51))
+* farcaster newsfeed ([#603](https://github.com/lemonadesocial/lemonade-flutter/issues/603)) ([aabbce2](https://github.com/lemonadesocial/lemonade-flutter/commit/aabbce2788acae4d8233e2c17af5726dc44cde90))
+* handle fallback url when cannot redirect to farcaster app ([#599](https://github.com/lemonadesocial/lemonade-flutter/issues/599)) ([f9dd3a8](https://github.com/lemonadesocial/lemonade-flutter/commit/f9dd3a8e9eeb7b570e6b5ade7d55a277986caf00))
+* update placeholder create cast ([#605](https://github.com/lemonadesocial/lemonade-flutter/issues/605)) ([8d7a226](https://github.com/lemonadesocial/lemonade-flutter/commit/8d7a22626f28ffbf05df484c2c4d39e2de69699d))
+
+
+### Bug Fixes
+
+* adapt calculate ticket pricing info breaking changes ([#610](https://github.com/lemonadesocial/lemonade-flutter/issues/610)) ([49e0a0e](https://github.com/lemonadesocial/lemonade-flutter/commit/49e0a0eec055d55ddac330ad76f66f393209b272))
+* auto expand for send message in collaborator ([#606](https://github.com/lemonadesocial/lemonade-flutter/issues/606)) ([7d02d58](https://github.com/lemonadesocial/lemonade-flutter/commit/7d02d58fbae95643f86ed6a8dbb3a63cf502ecac))
+* event duration display and handle yesterday case ([#611](https://github.com/lemonadesocial/lemonade-flutter/issues/611)) ([a37a471](https://github.com/lemonadesocial/lemonade-flutter/commit/a37a471bb4bae05c9832d4d866a4ac37b5c755fa))
+* fix farcaster timeline bugs ([#608](https://github.com/lemonadesocial/lemonade-flutter/issues/608)) ([d2ec505](https://github.com/lemonadesocial/lemonade-flutter/commit/d2ec505df3e787d889758e15b35c34a84a48186a))
+* fix showing wrong swipee profile in like list ([#602](https://github.com/lemonadesocial/lemonade-flutter/issues/602)) ([36a80ed](https://github.com/lemonadesocial/lemonade-flutter/commit/36a80ed9fa4667d64943428adc815cca60877c10))
+* logic filter live events (already hotfix in version v1.19.1) ([#600](https://github.com/lemonadesocial/lemonade-flutter/issues/600)) ([0f728e6](https://github.com/lemonadesocial/lemonade-flutter/commit/0f728e63997fcd2a424ccf2a70a58ac5f9652b95))
+* show started event text info ([#604](https://github.com/lemonadesocial/lemonade-flutter/issues/604)) ([632c69c](https://github.com/lemonadesocial/lemonade-flutter/commit/632c69ce3984eda11853eb6e7ae06764eec5c51f))
+
 ## [1.19.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.18.1...v1.19.0) (2024-05-18)
 
 ### Features

@@ -3,6 +3,7 @@ import 'package:app/core/domain/farcaster/entities/farcaster_channel.dart';
 import 'package:app/core/domain/farcaster/entities/farcaster_signed_key_request.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/graphql/backend/farcaster/mutation/create_cast.graphql.dart';
+import 'package:app/graphql/farcaster_airstack/query/get_farcaster_users.graphql.dart';
 import 'package:dartz/dartz.dart';
 
 abstract class FarcasterRepository {
@@ -19,5 +20,9 @@ abstract class FarcasterRepository {
 
   Future<Either<Failure, List<FarcasterChannel>>> getChannels({
     required int fid,
+  });
+
+  Future<Either<Failure, List<Map<String, dynamic>>>> getUsers({
+    required Variables$Query$GetFarcasterUsers input,
   });
 }
