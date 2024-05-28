@@ -1,0 +1,17 @@
+query GetFarcasterUsers($queryRegex: String) {
+  Socials(
+    input: {
+      filter: { profileName: { _regex: $queryRegex } }
+      blockchain: ethereum
+      limit: 20
+    }
+  ) {
+    Social {
+      profileName
+      profileDisplayName
+      profileUrl
+      profileImage
+      fid: userId
+    }
+  }
+}

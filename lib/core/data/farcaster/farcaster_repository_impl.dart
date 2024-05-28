@@ -8,6 +8,7 @@ import 'package:app/core/failure.dart';
 import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/graphql/backend/farcaster/mutation/create_cast.graphql.dart';
 import 'package:app/graphql/backend/farcaster/mutation/create_farcaster_account_key.graphql.dart';
+import 'package:app/graphql/farcaster_airstack/query/get_farcaster_users.graphql.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
@@ -16,6 +17,7 @@ import 'package:injectable/injectable.dart';
 @LazySingleton(as: FarcasterRepository)
 class FarcasterRepositoryImpl implements FarcasterRepository {
   final _client = getIt<AppGQL>().client;
+  final _airstackClient = getIt<AirstackGQL>().client;
 
   @override
   Future<Either<Failure, FarcasterAccountKeyRequest>>
@@ -89,5 +91,22 @@ class FarcasterRepositoryImpl implements FarcasterRepository {
     } catch (e) {
       return Left(Failure());
     }
+  }
+
+  @override
+  Future<Either<Failure, List<Map<String, dynamic>>>> getUsers({
+    required Variables$Query$GetFarcasterUsers input,
+  }) async {
+    final result = await _airstackClient.query$GetFarcasterUsers(
+      Options$Query$GetFarcasterUsers(variables: input),
+    );
+    if (result.hasException || result.parsedData?.Socials?.Social == null) {
+      return Left(Failure());
+    }
+    return Right(
+      (result.parsedData!.Socials!.Social ?? [])
+          .map((e) => e.toJson())
+          .toList(),
+    );
   }
 }
