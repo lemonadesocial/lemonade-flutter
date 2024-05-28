@@ -172,7 +172,7 @@ definitions:
       script: |
         BUILD_NUMBER=$(($(app-store-connect get-latest-testflight-build-number "$APP_ID") + 1))
         chmod +x scripts/set_build_number.sh
-        ./scripts/set_build_number "$BUILD_NUMBER"
+        ./scripts/set_build_number.sh "$BUILD_NUMBER"
         shorebird release ios --flutter-version=3.19.6 \
           --flavor staging -- \
           --export-options-plist=/Users/builder/export_options.plist \
@@ -183,7 +183,7 @@ definitions:
       script: |
         BUILD_NUMBER=$(($(google-play get-latest-build-number --package-name "$PACKAGE_NAME" --tracks="$GOOGLE_PLAY_TRACK") + 1))      
         chmod +x scripts/set_build_number.sh
-        ./scripts/set_build_number "$BUILD_NUMBER"
+        ./scripts/set_build_number.sh "$BUILD_NUMBER"
         shorebird release android --artifact apk --flutter-version=3.19.6 \
           --flavor staging -- \
           --flavor="staging" \
@@ -193,7 +193,7 @@ definitions:
       script: |
         BUILD_NUMBER=$(($(app-store-connect get-latest-testflight-build-number "$APP_ID") + 1))
         chmod +x scripts/set_build_number.sh
-        ./scripts/set_build_number "$BUILD_NUMBER"
+        ./scripts/set_build_number.sh "$BUILD_NUMBER"
         shorebird release ios --flutter-version=3.19.6 \
           --flavor production \
           --export-options-plist=/Users/builder/export_options.plist \
@@ -203,7 +203,7 @@ definitions:
       script: |
         BUILD_NUMBER=$(($(google-play get-latest-build-number --package-name "$PACKAGE_NAME" --tracks="$GOOGLE_PLAY_TRACK") + 1))      
         chmod +x scripts/set_build_number.sh
-        ./scripts/set_build_number "$BUILD_NUMBER"
+        ./scripts/set_build_number.sh "$BUILD_NUMBER"
         shorebird release android --artifact apk --flutter-version=3.19.6 \
           --flavor production \
           --flavor="production" \
