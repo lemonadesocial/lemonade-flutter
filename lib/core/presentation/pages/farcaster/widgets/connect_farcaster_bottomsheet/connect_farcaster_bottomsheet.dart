@@ -63,9 +63,9 @@ class _ConnectFarcasterBottomsheetState
           startIntervalCheck();
           return;
         }
-        launchUrl(Uri.parse(SocialUtils.farcasterDownloadUrl));
+        launchUrl(Uri.parse(SocialUtils.farcasterUrl));
       } catch (e) {
-        launchUrl(Uri.parse(SocialUtils.farcasterDownloadUrl));
+        launchUrl(Uri.parse(SocialUtils.farcasterUrl));
       }
     });
   }
