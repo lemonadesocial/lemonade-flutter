@@ -1,3 +1,4 @@
+import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
@@ -96,17 +97,12 @@ class LemonDrawerTileWidget extends StatelessWidget {
   }
 
   _renderComingSoon(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 6.h),
-      decoration: BoxDecoration(
-        color: Colors.transparent,
-        borderRadius: BorderRadius.circular(6.r),
-        border: Border.all(color: colorScheme.outline),
-      ),
-      child: Text(
-        t.common.comingSoon,
-        style: Typo.xSmall.copyWith(color: colorScheme.onSecondary),
+    return LemonOutlineButton(
+      height: 32.w,
+      label: t.common.comingSoon,
+      radius: BorderRadius.circular(LemonRadius.button),
+      textStyle: Typo.xSmall.copyWith(
+        color: Theme.of(context).colorScheme.onSecondary,
       ),
     );
   }
