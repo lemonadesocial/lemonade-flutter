@@ -64,10 +64,6 @@ final calculateTicketsPricingInfoQuery = gql('''
       payment_accounts {
         ...paymentAccountInfoFragment
       }
-      deposit_infos {
-        minimum_amount
-        minimum_percent
-      }
     }
   }
 ''');
