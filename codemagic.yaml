@@ -175,6 +175,7 @@ definitions:
         ./scripts/set_build_number.sh "$BUILD_NUMBER"
         shorebird release ios --flutter-version=3.19.6 \
           --flavor staging -- \
+          --build-number=$BUILD_NUMBER \
           --export-options-plist=/Users/builder/export_options.plist \
           --flavor="staging" \
           -t "lib/main_staging.dart"
@@ -186,6 +187,7 @@ definitions:
         ./scripts/set_build_number.sh "$BUILD_NUMBER"
         shorebird release android --artifact apk --flutter-version=3.19.6 \
           --flavor staging -- \
+          --build-number=$BUILD_NUMBER \
           --flavor="staging" \
           -t "lib/main_staging.dart"
     - &release_shorebird_ipa_production
@@ -196,6 +198,7 @@ definitions:
         ./scripts/set_build_number.sh "$BUILD_NUMBER"
         shorebird release ios --flutter-version=3.19.6 \
           --flavor production \
+          --build-number=$BUILD_NUMBER \
           --export-options-plist=/Users/builder/export_options.plist \
           -t "lib/main_production.dart"
     - &release_shorebird_apk_production
@@ -206,6 +209,7 @@ definitions:
         ./scripts/set_build_number.sh "$BUILD_NUMBER"
         shorebird release android --artifact apk --flutter-version=3.19.6 \
           --flavor production \
+          --build-number=$BUILD_NUMBER \
           --flavor="production" \
           -t "lib/main_production.dart"
     - &patch_shorebird_ios_staging
