@@ -24,12 +24,16 @@ type Query {
   getApplicantsInfo(users: [MongoID!]!, event: MongoID!): [Applicant!]!
   getEventbriteEvents(input: GetEventbriteEventsInput, skip: Int! = 0, limit: Int! = 25): [EventbriteEvent!]!
   getEventCheckins(input: GetEventCheckinsInput!): [EventCheckin!]!
+  getEventCohostInvites(input: GetEventCohostRequestsInput!): [EventCohostRequest!]!
   getEventCohostRequests(input: GetEventCohostRequestsInput!): [EventCohostRequest!]!
   getEventAttestation(chain_id: String!, event: MongoID!): EventAttestation
   getEventAttestationDiff(chain_id: String!, event: MongoID!): EventAttestationDiff
+  getEventEmailSetting(_id: MongoID!): EmailSetting!
+  listEventEmailSettings(event: MongoID!, system: Boolean, scheduled: Boolean, sent: Boolean): [EmailSetting!]!
 
   """For guests, return attending guests basic information of an event"""
   getEventGuestDirectory(_id: MongoID!): [BasicUserInfo!]!
+  getEventPendingInvites: GetEventPendingInvitesResponse!
   getEventCurrencies(_id: MongoID!, used: Boolean): [EventCurrency!]!
   getMyEvents(state: GetEventsState, skip: Int! = 0, limit: Int! = 25): [Event!]!
   getHostingEvents(skip: Int! = 0, limit: Int! = 25, site: MongoID, user: MongoID, state: FilterEventInput, sort: JSON): [Event!]!
@@ -1066,6 +1070,9 @@ type EventAcceptedExport {
   purchase_date: DateTimeISO
   buyer_id: String
   buyer_email: String
+  buyer_name: String
+  buyer_avatar: String
+  buyer_username: String
   buyer_wallets: [String!]
   assignee_avatar: String
   assignee_name: String
@@ -1201,10 +1208,22 @@ type EASEvent {
   description: String
   uid: String
   detail_uid: String
-  start: Float!
-  end: Float!
-  location: String
   diff: [String!]
+  creatorName: String!
+  creatorProfile: String!
+  date: String!
+  eventLink: String!
+  type: String!
+  cohosts: [EASEventCohost!]!
+  tickets: Float!
+}
+
+type EASEventCohost {
+  wallet: String!
+  uid: String
+  cohostName: String!
+  cohostProfile: String!
+  eventLink: String!
 }
 
 type EASTicketType {
@@ -1213,15 +1232,90 @@ type EASTicketType {
   description: String
   uid: String
   detail_uid: String
-  currency: String!
+  eventName: String
+  eventLink: String!
   cost: String!
+  currency: String!
+  provider: String!
   diff: [String!]
   tickets: [EASTicket!]
 }
 
 type EASTicket {
   _id: MongoID!
+  guest: String!
+  eventName: String
+  eventLink: String!
+  ticket: String!
+  assignedBy: String!
   wallet_address: String!
+}
+
+type EmailSetting {
+  _id: MongoID!
+  template: MongoID!
+  owner: MongoID!
+  context: JSON
+  sendgrid_template_id: String
+  custom_subject_html: String
+  custom_body_html: String
+  cc: [String!]
+  disabled: Boolean
+  scheduled_at: DateTimeISO
+  recipient_types: [EmailRecipientType!]
+  sent_at: DateTimeISO
+  recipients: [String!]
+  opened: [EmailTracking!]
+  type: EmailTemplateType!
+  is_system_email: Boolean!
+  subject_preview: String
+  body_preview: String
+  recipients_details: [RecipientDetail!]
+}
+
+enum EmailRecipientType {
+  assigned
+  attending
+  invited
+  ticket_type_whitelisted
+  join_requester
+  event_hosts
+}
+
+type EmailTracking {
+  email: String!
+  stamp: DateTimeISO!
+}
+
+enum EmailTemplateType {
+  invitation
+  join_request_approved
+  join_request_declined
+  join_requested
+  post_rsvp
+  ticket_received
+  ticket_type_whitelisted
+  crypto_payment_receipt
+  updated
+  feedback
+  custom
+  reminder
+  user_contact_invite
+  seller_store_order_pending
+  buyer_store_order_pending
+  buyer_store_order_declined
+  buyer_store_order_accepted
+  buyer_store_order_preparing
+  buyer_store_order_delivered
+  buyer_store_order_cancelled
+  buyer_store_order_tracking
+}
+
+type RecipientDetail {
+  _id: MongoID
+  name: String!
+  email: String
+  image_avatar: String
 }
 
 type BasicUserInfo {
@@ -1232,6 +1326,18 @@ type BasicUserInfo {
   job_title: String
   company_name: String
   matrix_localpart: String
+}
+
+type GetEventPendingInvitesResponse {
+  event_invites: [EventInvite!]
+  cohost_requests: [EventInvite!]
+}
+
+type EventInvite {
+  event: MongoID!
+  inviter: MongoID!
+  event_expanded: Event
+  inviter_expanded: User
 }
 
 type EventCurrency {
@@ -2367,6 +2473,10 @@ type Mutation {
   manageEventCohostRequests(input: ManageEventCohostRequestsInput!): Boolean!
   decideEventCohostRequest(input: DecideEventCohostRequestInput!): Boolean!
   syncEventAttestation(chain_id: String!, event: MongoID!): Boolean!
+  sendEventEmailSettingTestEmails(input: SendEventEmailSettingTestEmailsInput!): Boolean!
+  createEventEmailSetting(input: CreateEventEmailSettingInput!): EmailSetting
+  updateEventEmailSetting(input: UpdateEventEmailSettingInput!): EmailSetting!
+  deleteEventEmailSetting(_id: MongoID!): Boolean!
   createEvent(input: EventInput!): Event!
   updateEvent(input: EventInput!, _id: MongoID!): Event!
   cancelEvent(_id: MongoID!): Event!
@@ -2560,6 +2670,36 @@ input ManageEventCohostRequestsInput {
 input DecideEventCohostRequestInput {
   event: MongoID!
   decision: Boolean!
+}
+
+input SendEventEmailSettingTestEmailsInput {
+  custom_subject_html: String
+  custom_body_html: String
+  event: MongoID
+  type: EmailTemplateType
+  _id: MongoID
+  test_recipients: [String!]!
+}
+
+input CreateEventEmailSettingInput {
+  custom_subject_html: String
+  custom_body_html: String
+  cc: [String!]
+  disabled: Boolean
+  scheduled_at: DateTimeISO
+  recipient_types: [EmailRecipientType!]
+  event: MongoID!
+  type: EmailTemplateType!
+}
+
+input UpdateEventEmailSettingInput {
+  custom_subject_html: String
+  custom_body_html: String
+  cc: [String!]
+  disabled: Boolean
+  scheduled_at: DateTimeISO
+  recipient_types: [EmailRecipientType!]
+  _id: MongoID!
 }
 
 input EventInput {
