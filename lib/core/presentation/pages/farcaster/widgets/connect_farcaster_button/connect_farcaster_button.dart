@@ -4,6 +4,7 @@ import 'package:app/core/presentation/widgets/common/button/lemon_outline_button
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
+import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -60,12 +61,17 @@ class ConnectFarcasterButton extends StatelessWidget {
           color: LemonColor.atomicBlack,
           borderRadius: BorderRadius.circular(LemonRadius.small),
         ),
-        padding: EdgeInsets.all(Spacing.small),
+        padding: EdgeInsets.only(
+          top: Spacing.superExtraSmall,
+          bottom: Spacing.superExtraSmall,
+          left: Spacing.superExtraSmall,
+          right: Spacing.smMedium,
+        ),
         child: Row(
           children: [
             Container(
-              width: Sizing.medium,
-              height: Sizing.medium,
+              width: Sizing.large,
+              height: Sizing.large,
               decoration: BoxDecoration(
                 color: LemonColor.farcasterViolet,
                 borderRadius: BorderRadius.circular(LemonRadius.xSmall),
@@ -75,6 +81,8 @@ class ConnectFarcasterButton extends StatelessWidget {
                   color: colorScheme.onPrimary,
                   builder: (filter) => Assets.icons.icFarcaster.svg(
                     colorFilter: filter,
+                    width: Sizing.small,
+                    height: Sizing.small,
                   ),
                 ),
               ),
@@ -106,7 +114,7 @@ class ConnectFarcasterButton extends StatelessWidget {
               SizedBox(
                 height: 32.w,
                 child: LinearGradientButton.secondaryButton(
-                  label: t.common.actions.connect,
+                  label: StringUtils.capitalize(t.common.actions.connect),
                   textStyle: Typo.small.copyWith(
                     color: colorScheme.onPrimary,
                   ),
@@ -117,6 +125,9 @@ class ConnectFarcasterButton extends StatelessWidget {
                 height: 32.w,
                 label: t.common.status.connected,
                 radius: BorderRadius.circular(LemonRadius.button),
+                textStyle: Typo.small.copyWith(
+                  color: colorScheme.onSecondary,
+                ),
               ),
           ],
         ),

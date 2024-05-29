@@ -1,5 +1,4 @@
 import 'package:app/core/data/event/dtos/event_tickets_pricing_info_dto/event_tickets_pricing_info_dto.dart';
-import 'package:app/core/domain/payment/entities/escrow_deposit_info/escrow_deposit_info.dart';
 import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -21,7 +20,6 @@ class EventTicketsPricingInfo with _$EventTicketsPricingInfo {
     BigInt? cryptoTotal,
     String? promoCode,
     List<PaymentAccount>? paymentAccounts,
-    List<EscrowDepositInfo>? depositInfos,
   }) = _EventTicketsPricingInfo;
 
   factory EventTicketsPricingInfo.fromDto(EventTicketsPricingInfoDto dto) =>
@@ -41,9 +39,6 @@ class EventTicketsPricingInfo with _$EventTicketsPricingInfo {
         cryptoTotal: dto.total != null ? BigInt.parse(dto.total!) : null,
         paymentAccounts: List.from(dto.paymentAccounts ?? [])
             .map((item) => PaymentAccount.fromDto(item))
-            .toList(),
-        depositInfos: List.from(dto.depositInfos ?? [])
-            .map((item) => EscrowDepositInfo.fromDto(item))
             .toList(),
       );
 }
