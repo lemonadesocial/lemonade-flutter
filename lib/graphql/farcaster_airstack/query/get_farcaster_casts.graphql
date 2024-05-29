@@ -1,9 +1,10 @@
-query GetFarCasterCasts($rootParentUrl: String) {
+query GetFarCasterCasts($rootParentUrl: String, $cursor: String) {
   FarcasterCasts(
     input: {
+      cursor: $cursor
       blockchain: ALL
       filter: { rootParentUrl: { _eq: $rootParentUrl } }
-      limit: 100
+      limit: 25
     }
   ) {
     Cast {

@@ -7,6 +7,7 @@ import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/utils/debouncer.dart';
 import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/farcaster_airstack/query/get_farcaster_casts.graphql.dart';
@@ -19,6 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 @RoutePage()
 class FarcasterChannelNewsfeedPage extends StatefulWidget {
@@ -35,7 +37,10 @@ class FarcasterChannelNewsfeedPage extends StatefulWidget {
 
 class _FarcasterChannelNewsfeedPageState
     extends State<FarcasterChannelNewsfeedPage> {
+  final debouncer = Debouncer(milliseconds: 300);
   late ValueNotifier<GraphQLClient> airstackClient;
+  final _refreshController = RefreshController();
+
   @override
   initState() {
     super.initState();
@@ -110,9 +115,13 @@ class _FarcasterChannelNewsfeedPageState
           client: airstackClient,
           child: Query$GetFarCasterCasts$Widget(
             options: Options$Query$GetFarCasterCasts(
+              fetchPolicy: FetchPolicy.cacheFirst,
               variables: Variables$Query$GetFarCasterCasts(
                 rootParentUrl: widget.channel.url,
               ),
+              onComplete: (_, __) {
+                _refreshController.refreshCompleted();
+              },
             ),
             builder: (
               result, {
@@ -120,26 +129,80 @@ class _FarcasterChannelNewsfeedPageState
               fetchMore,
             }) {
               final casts = result.parsedData?.FarcasterCasts?.Cast ?? [];
-              if (result.isLoading) {
+              if (result.isLoading && casts.isEmpty) {
                 return Center(
                   child: Loading.defaultLoading(context),
                 );
               }
-              return CustomScrollView(
-                slivers: [
-                  SliverList.separated(
-                    itemCount: casts.length,
-                    itemBuilder: (context, index) {
-                      return FarcasterCastItemWidget(
-                        cast: casts[index],
+
+              return NotificationListener<ScrollNotification>(
+                onNotification: (notification) {
+                  if (notification is ScrollEndNotification) {
+                    if (notification.metrics.pixels ==
+                        notification.metrics.maxScrollExtent) {
+                      final pageInfo =
+                          result.parsedData?.FarcasterCasts?.pageInfo;
+                      if (result.isLoading ||
+                          (pageInfo?.hasNextPage != true &&
+                              pageInfo?.nextCursor.isNotEmpty == true)) {
+                        return true;
+                      }
+
+                      final fetchMoreOptions =
+                          FetchMoreOptions$Query$GetFarCasterCasts(
+                        variables: Variables$Query$GetFarCasterCasts(
+                          rootParentUrl: widget.channel.url,
+                          cursor: pageInfo?.nextCursor,
+                        ),
+                        updateQuery: (prevResult, nextResult) {
+                          final prevList = prevResult?['FarcasterCasts']
+                                  ?['Cast'] as List<dynamic>? ??
+                              [];
+                          final nextList = nextResult?['FarcasterCasts']
+                                  ?['Cast'] as List<dynamic>? ??
+                              [];
+                          final newList = [...prevList, ...nextList];
+                          nextResult?['FarcasterCasts']['Cast'] = newList;
+                          return nextResult;
+                        },
                       );
-                    },
-                    separatorBuilder: (context, index) => Divider(
-                      height: 1.w,
-                      color: colorScheme.outline,
-                    ),
+                      debouncer.run(
+                        () => fetchMore?.call(fetchMoreOptions),
+                      );
+                    }
+                  }
+                  return true;
+                },
+                child: SmartRefresher(
+                  controller: _refreshController,
+                  onRefresh: () async {
+                    refetch?.call();
+                  },
+                  child: CustomScrollView(
+                    slivers: [
+                      SliverList.separated(
+                        itemCount: casts.length + 1,
+                        itemBuilder: (context, index) {
+                          if (index == casts.length) {
+                            return Padding(
+                              padding: EdgeInsets.symmetric(
+                                vertical: Spacing.medium,
+                              ),
+                              child: Loading.defaultLoading(context),
+                            );
+                          }
+                          return FarcasterCastItemWidget(
+                            cast: casts[index],
+                          );
+                        },
+                        separatorBuilder: (context, index) => Divider(
+                          height: 1.w,
+                          color: colorScheme.outline,
+                        ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               );
             },
           ),
