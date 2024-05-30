@@ -1599,6 +1599,7 @@ enum NotificationType {
   event_unlock_verify_request
   event_update
   ticket_assigned
+  ticket_cancelled
   payment_authorized
   payment_failed
   payment_refunded
@@ -2453,6 +2454,7 @@ type Mutation {
   deleteStore(_id: MongoID!): Boolean!
   createStripeCard(payment_account: MongoID!, payment_method: String!): StripeCard!
   deleteStripeCard(_id: MongoID!): StripeCard!
+  cancelTickets(input: CancelTicketsInput!): Boolean!
   assignTickets(input: AssignTicketsInput!): Boolean!
   redeemTickets(input: RedeemTicketsInput!): RedeemTicketsResponse!
   createTickets(ticket_type: MongoID!, ticket_assignments: [TicketAssignment!]!): [Ticket!]!
@@ -3265,6 +3267,11 @@ input SalesTaxInput {
   ratio_map: JSON
   countries: [String!]
   regions: [String!]
+}
+
+input CancelTicketsInput {
+  event: MongoID!
+  tickets: [MongoID!]!
 }
 
 input AssignTicketsInput {

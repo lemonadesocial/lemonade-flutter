@@ -1,20 +1,30 @@
+import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_accepted_export.dart';
+import 'package:app/core/presentation/dpos/common/dropdown_item_dpo.dart';
+import 'package:app/core/presentation/widgets/floating_frosted_glass_dropdown_widget.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
+
+enum _GuestAction { checkIn, cancelTicket }
 
 class EventAcceptedExportItem extends StatelessWidget {
+  final Event? event;
   final EventAcceptedExport eventAccepted;
   const EventAcceptedExportItem({
     super.key,
+    this.event,
     required this.eventAccepted,
   });
 
@@ -39,6 +49,10 @@ class EventAcceptedExportItem extends StatelessWidget {
                 _TicketCount(
                   eventAccepted: eventAccepted,
                 ),
+              SizedBox(
+                width: Spacing.xSmall,
+              ),
+              _GuestActions(event: event),
             ],
           ),
         ),
@@ -141,6 +155,73 @@ class _GuestInfo extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _GuestActions extends StatelessWidget {
+  const _GuestActions({
+    this.event,
+  });
+
+  final Event? event;
+  void _checkIn(BuildContext context) {
+    Vibrate.feedback(FeedbackType.light);
+    if (event != null) {
+      AutoRouter.of(context).navigate(ScanQRCheckinRewardsRoute(event: event!));
+    }
+  }
+
+  void _cancelTicket(BuildContext context) {}
+
+  @override
+  Widget build(BuildContext context) {
+    final t = Translations.of(context);
+    final colorScheme = Theme.of(context).colorScheme;
+    return FloatingFrostedGlassDropdown(
+      containerWidth: 170.w,
+      items: [
+        DropdownItemDpo(
+          value: _GuestAction.checkIn,
+          label: t.event.configuration.checkIn,
+          leadingIcon: ThemeSvgIcon(
+            color: colorScheme.onPrimary,
+            builder: (colorFilter) => Assets.icons.icCheckin.svg(
+              colorFilter: colorFilter,
+            ),
+          ),
+        ),
+        DropdownItemDpo(
+          value: _GuestAction.cancelTicket,
+          label: t.event.cancelTicket,
+          customColor: LemonColor.coralReef,
+          leadingIcon: ThemeSvgIcon(
+            color: LemonColor.coralReef,
+            builder: (colorFilter) => Assets.icons.icClose.svg(
+              width: 18.w,
+              height: 18.w,
+              colorFilter: colorFilter,
+            ),
+          ),
+        ),
+      ],
+      onItemPressed: (item) {
+        Vibrate.feedback(FeedbackType.light);
+        if (item?.value == _GuestAction.checkIn) {
+          _checkIn(context);
+        }
+        if (item?.value == _GuestAction.cancelTicket) {
+          _cancelTicket(context);
+        }
+      },
+      child: ThemeSvgIcon(
+        color: colorScheme.onSecondary,
+        builder: (filter) => Assets.icons.icMoreVertical.svg(
+          colorFilter: filter,
+          width: 18.w,
+          height: 18.w,
+        ),
+      ),
     );
   }
 }

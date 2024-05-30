@@ -1,0 +1,3 @@
+mutation CancelTickets($input: CancelTicketsInput!) {
+  cancelTickets(input: $input)
+}

@@ -24,6 +24,7 @@ import 'package:app/core/domain/event/input/redeem_tickets_input/redeem_tickets_
 import 'package:app/core/domain/event/repository/event_ticket_repository.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/core/utils/gql/gql.dart';
+import 'package:app/graphql/backend/event/mutation/cancel_tickets.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/create_event_ticket_category.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/create_event_ticket_discount.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/create_event_ticket_type.graphql.dart';
@@ -347,5 +348,26 @@ class EventTicketRepositoryImpl implements EventTicketRepository {
       return Left(Failure());
     }
     return Right(result.parsedData!.createEventTicketDiscounts.$_id!);
+  }
+
+  @override
+  Future<Either<Failure, bool>> cancelTickets({
+    required String eventId,
+    required List<String> ticketIds,
+  }) async {
+    final result = await _client.mutate$CancelTickets(
+      Options$Mutation$CancelTickets(
+        variables: Variables$Mutation$CancelTickets(
+          input: Input$CancelTicketsInput(
+            event: eventId,
+            tickets: ticketIds,
+          ),
+        ),
+      ),
+    );
+    if (result.hasException || result.parsedData?.cancelTickets == null) {
+      return Left(Failure());
+    }
+    return Right(result.parsedData!.cancelTickets ?? false);
   }
 }

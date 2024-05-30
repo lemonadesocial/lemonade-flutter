@@ -77,6 +77,7 @@ class EventAcceptedExportList extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final eventAccepted = eventAcceptedList[index];
                     return EventAcceptedExportItem(
+                      event: event,
                       eventAccepted: eventAccepted,
                     );
                   },
