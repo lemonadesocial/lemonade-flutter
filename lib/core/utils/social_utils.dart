@@ -75,5 +75,5 @@ class SocialUtils {
     return '$urlPrefix/$socialUserName';
   }
 
-  static String get farcasterDownloadUrl => 'https://warpcast.com/';
+  static String get farcasterUrl => 'https://warpcast.com';
 }

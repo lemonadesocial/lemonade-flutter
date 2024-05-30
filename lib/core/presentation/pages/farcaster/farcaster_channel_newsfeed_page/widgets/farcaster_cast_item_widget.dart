@@ -1,6 +1,8 @@
+import 'package:app/core/presentation/pages/farcaster/farcaster_channel_newsfeed_page/widgets/mention_linkifier.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/utils/social_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/farcaster_airstack/query/get_farcaster_casts.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -92,6 +94,11 @@ class _CastBody extends StatelessWidget {
           SizedBox(height: 4.w),
           Linkify(
             text: cast.text ?? '',
+            linkifiers: const [
+              EmailLinkifier(),
+              UrlLinkifier(),
+              FarcasterMentionLinkifier(),
+            ],
             linkStyle: Typo.medium.copyWith(
               color: LemonColor.paleViolet,
               decoration: TextDecoration.none,
@@ -101,6 +108,10 @@ class _CastBody extends StatelessWidget {
               decoration: TextDecoration.none,
             ),
             onOpen: (link) {
+              if (link is MentionElement) {
+                launchUrl(Uri.parse('${SocialUtils.farcasterUrl}/${link.url}'));
+                return;
+              }
               launchUrl(Uri.parse(link.url));
             },
           ),
