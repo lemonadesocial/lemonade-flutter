@@ -173,44 +173,42 @@ definitions:
         BUILD_NUMBER=$(($(app-store-connect get-latest-testflight-build-number "$APP_ID") + 1))
         chmod +x scripts/set_build_number.sh
         ./scripts/set_build_number.sh "$BUILD_NUMBER"
-        shorebird release ios --flutter-version=3.19.6 \
-          --flavor staging \
+        shorebird release ios --flutter-version=3.19.6 --flavor staging -- \
           --build-number=$BUILD_NUMBER \
           --export-options-plist=/Users/builder/export_options.plist \
-          --target "lib/main_staging.dart"
+          --flavor="staging" \
+          -t "lib/main_staging.dart"
     - &release_shorebird_apk_staging
       name: Release shorebird android apk staging
       script: |
         BUILD_NUMBER=$(($(google-play get-latest-build-number --package-name "$PACKAGE_NAME" --tracks="$GOOGLE_PLAY_TRACK") + 1))      
         chmod +x scripts/set_build_number.sh
         ./scripts/set_build_number.sh "$BUILD_NUMBER"
-        shorebird release android --artifact apk --flutter-version=3.19.6 \
-          --flavor staging \
+        shorebird release android --artifact apk --flutter-version=3.19.6 --flavor staging -- \
           --build-number=$BUILD_NUMBER \
-          --export-options-plist=/Users/builder/export_options.plist \
-          --target "lib/main_staging.dart"
+          --flavor="staging" \
+          -t "lib/main_staging.dart"
     - &release_shorebird_ipa_production
       name: Release shorebird ipa production
       script: |
         BUILD_NUMBER=$(($(app-store-connect get-latest-testflight-build-number "$APP_ID") + 1))
         chmod +x scripts/set_build_number.sh
         ./scripts/set_build_number.sh "$BUILD_NUMBER"
-        shorebird release ios --flutter-version=3.19.6 \
-          --flavor production \
+        shorebird release ios --flutter-version=3.19.6 --flavor production -- \
           --build-number=$BUILD_NUMBER \
           --export-options-plist=/Users/builder/export_options.plist \
-          --target "lib/main_production.dart"
+          --flavor="production" \
+          -t "lib/main_production.dart"
     - &release_shorebird_apk_production
       name: Release shorebird android apk production
       script: |
         BUILD_NUMBER=$(($(google-play get-latest-build-number --package-name "$PACKAGE_NAME" --tracks="$GOOGLE_PLAY_TRACK") + 1))      
         chmod +x scripts/set_build_number.sh
         ./scripts/set_build_number.sh "$BUILD_NUMBER"
-        shorebird release android --artifact apk --flutter-version=3.19.6 \
-          --flavor production \
+        shorebird release android --artifact apk --flutter-version=3.19.6 --flavor production -- \
           --build-number=$BUILD_NUMBER \
-          --export-options-plist=/Users/builder/export_options.plist \
-          --target "lib/main_production.dart"
+          --flavor="production" \
+          -t "lib/main_production.dart"
     - &patch_shorebird_ios_staging
       name: Patch shorebird ipa staging
       script: |
