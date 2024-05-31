@@ -4,6 +4,7 @@ import 'package:app/core/domain/event/entities/event_application_profile_field.d
 import 'package:app/core/domain/event/entities/event_payment_ticket_discount.dart';
 import 'package:app/core/domain/event/entities/event_frequent_question.dart';
 import 'package:app/core/domain/event/entities/event_session.dart';
+import 'package:app/core/domain/event/entities/event_ticket.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/entities/reward.dart';
 import 'package:app/core/domain/event/event_enums.dart';
@@ -69,6 +70,7 @@ class Event with _$Event {
     bool? published,
     List<EventFrequentQuestion>? frequentQuestions,
     String? timezone,
+    List<EventTicket>? tickets,
   }) = _Event;
 
   factory Event.fromDto(EventDto dto) {
@@ -156,6 +158,9 @@ class Event with _$Event {
           .map((item) => EventFrequentQuestion.fromDto(item))
           .toList(),
       timezone: dto.timezone,
+      tickets: List.from(dto.tickets ?? [])
+          .map((item) => EventTicket.fromDto(item))
+          .toList(),
     );
   }
 

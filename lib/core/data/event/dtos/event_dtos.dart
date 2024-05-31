@@ -4,6 +4,7 @@ import 'package:app/core/data/event/dtos/event_application_question_dto/event_ap
 import 'package:app/core/data/event/dtos/event_payment_ticket_discount_dto/event_payment_ticket_discount_dto.dart';
 import 'package:app/core/data/event/dtos/event_frequent_question_dto/event_frequent_question_dto.dart';
 import 'package:app/core/data/event/dtos/event_session/event_session_dto.dart';
+import 'package:app/core/data/event/dtos/event_ticket_dto/event_ticket_dto.dart';
 import 'package:app/core/data/event/dtos/event_ticket_types_dto/event_ticket_types_dto.dart';
 import 'package:app/core/data/event/dtos/reward_dto/reward_dto.dart';
 import 'package:app/core/data/payment/dtos/payment_account_dto/payment_account_dto.dart';
@@ -76,6 +77,7 @@ class EventDto with _$EventDto {
     @JsonKey(name: 'frequent_questions')
     List<EventFrequentQuestionDto>? frequentQuestions,
     String? timezone,
+    @JsonKey(name: 'tickets') List<EventTicketDto>? tickets,
   }) = _EventDto;
 
   factory EventDto.fromJson(Map<String, dynamic> json) =>

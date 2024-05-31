@@ -1,11 +1,15 @@
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_accepted_export.dart';
+import 'package:app/core/domain/event/repository/event_ticket_repository.dart';
+import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/presentation/dpos/common/dropdown_item_dpo.dart';
 import 'package:app/core/presentation/widgets/floating_frosted_glass_dropdown_widget.dart';
+import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
@@ -52,7 +56,7 @@ class EventAcceptedExportItem extends StatelessWidget {
               SizedBox(
                 width: Spacing.xSmall,
               ),
-              _GuestActions(event: event),
+              _GuestActions(event: event, eventAccepted: eventAccepted),
             ],
           ),
         ),
@@ -160,11 +164,11 @@ class _GuestInfo extends StatelessWidget {
 }
 
 class _GuestActions extends StatelessWidget {
-  const _GuestActions({
-    this.event,
-  });
+  const _GuestActions({this.event, required this.eventAccepted});
 
   final Event? event;
+  final EventAcceptedExport eventAccepted;
+
   void _checkIn(BuildContext context) {
     Vibrate.feedback(FeedbackType.light);
     if (event != null) {
@@ -172,7 +176,19 @@ class _GuestActions extends StatelessWidget {
     }
   }
 
-  void _cancelTicket(BuildContext context) {}
+  void _cancelTicket(BuildContext context) async {
+    final ticketIds =
+        event?.tickets?.map((ticket) => ticket.id ?? '').toList() ?? [];
+    await showFutureLoadingDialog(
+      context: context,
+      future: () {
+        return getIt<EventTicketRepository>().cancelTickets(
+          eventId: event?.id ?? '',
+          ticketIds: ticketIds,
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
