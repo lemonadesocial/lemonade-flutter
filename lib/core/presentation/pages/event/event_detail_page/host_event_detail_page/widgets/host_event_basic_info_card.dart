@@ -41,7 +41,7 @@ class HostEventBasicInfoCard extends StatelessWidget {
       final Duration difference = now.difference(event.start!);
       final int days = difference.inDays;
       if (days == 0) {
-        return t.event.eventStartedYesterday;
+        return t.event.eventStarted;
       }
       return t.event.eventStartedDaysAgo(days: days);
     }
