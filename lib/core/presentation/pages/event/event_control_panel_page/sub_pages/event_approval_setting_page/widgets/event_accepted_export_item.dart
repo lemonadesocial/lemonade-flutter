@@ -163,8 +163,11 @@ class _GuestInfo extends StatelessWidget {
 }
 
 class _GuestActions extends StatelessWidget {
-  const _GuestActions(
-      {this.event, required this.eventAccepted, this.onTapCancelTicket});
+  const _GuestActions({
+    this.event,
+    required this.eventAccepted,
+    this.onTapCancelTicket,
+  });
 
   final Event? event;
   final EventAcceptedExport eventAccepted;
