@@ -5,6 +5,7 @@ fragment EventAcceptedExport on EventAcceptedExport {
   buyerId: buyer_id
   buyerEmail: buyer_email
   buyerWallets: buyer_wallets
+  assigneeAvatar: assignee_avatar
   assigneeName: assignee_name
   assigneeFirstName: assignee_first_name
   assigneeLastName: assignee_last_name

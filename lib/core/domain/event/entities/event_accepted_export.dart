@@ -12,6 +12,7 @@ class EventAcceptedExport with _$EventAcceptedExport {
     String? buyerId,
     String? buyerEmail,
     List<String>? buyerWallets,
+    String? assigneeAvatar,
     String? assigneeName,
     String? assigneeFirstName,
     String? assigneeLastName,

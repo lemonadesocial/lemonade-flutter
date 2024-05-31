@@ -1,7 +1,6 @@
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_accepted_export.dart';
 import 'package:app/core/domain/event/repository/event_ticket_repository.dart';
-import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/presentation/dpos/common/dropdown_item_dpo.dart';
 import 'package:app/core/presentation/widgets/floating_frosted_glass_dropdown_widget.dart';
 import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
@@ -49,57 +48,11 @@ class EventAcceptedExportItem extends StatelessWidget {
             children: [
               _GuestInfo(eventAccepted: eventAccepted),
               const Spacer(),
-              if ((eventAccepted.ticketCount ?? 0) > 0)
-                _TicketCount(
-                  eventAccepted: eventAccepted,
-                ),
-              SizedBox(
-                width: Spacing.xSmall,
-              ),
               _GuestActions(event: event, eventAccepted: eventAccepted),
             ],
           ),
         ),
       ],
-    );
-  }
-}
-
-class _TicketCount extends StatelessWidget {
-  const _TicketCount({
-    required this.eventAccepted,
-  });
-
-  final EventAcceptedExport eventAccepted;
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return Container(
-      padding: EdgeInsets.all(Spacing.xSmall),
-      decoration: BoxDecoration(
-        color: LemonColor.darkBackground,
-        borderRadius: BorderRadius.circular(LemonRadius.normal),
-      ),
-      child: Row(
-        children: [
-          ThemeSvgIcon(
-            color: colorScheme.onSecondary,
-            builder: (filter) => Assets.icons.icTicket.svg(
-              width: Sizing.xSmall,
-              height: Sizing.xSmall,
-              colorFilter: filter,
-            ),
-          ),
-          SizedBox(width: Spacing.superExtraSmall),
-          Text(
-            eventAccepted.ticketCount?.toInt().toString() ?? '',
-            style: Typo.small.copyWith(
-              color: colorScheme.onSecondary,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }
@@ -124,11 +77,9 @@ class _GuestInfo extends StatelessWidget {
           child: CachedNetworkImage(
             width: Sizing.medium,
             height: Sizing.medium,
-            // TODO: wait for BE to support
-            // imageUrl: eventAccepted.assigneeImageAvatar ?? '',
-            imageUrl: '',
-            placeholder: (_, __) => ImagePlaceholder.defaultPlaceholder(),
-            errorWidget: (_, __, ___) => ImagePlaceholder.defaultPlaceholder(),
+            imageUrl: eventAccepted.assigneeAvatar ?? '',
+            placeholder: (_, __) => ImagePlaceholder.avatarPlaceholder(),
+            errorWidget: (_, __, ___) => ImagePlaceholder.avatarPlaceholder(),
           ),
         ),
         SizedBox(width: Spacing.xSmall),
@@ -177,14 +128,12 @@ class _GuestActions extends StatelessWidget {
   }
 
   void _cancelTicket(BuildContext context) async {
-    final ticketIds =
-        event?.tickets?.map((ticket) => ticket.id ?? '').toList() ?? [];
     await showFutureLoadingDialog(
       context: context,
       future: () {
         return getIt<EventTicketRepository>().cancelTickets(
           eventId: event?.id ?? '',
-          ticketIds: ticketIds,
+          ticketIds: [],
         );
       },
     );

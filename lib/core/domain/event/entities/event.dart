@@ -70,7 +70,6 @@ class Event with _$Event {
     bool? published,
     List<EventFrequentQuestion>? frequentQuestions,
     String? timezone,
-    List<EventTicket>? tickets,
   }) = _Event;
 
   factory Event.fromDto(EventDto dto) {
@@ -158,9 +157,6 @@ class Event with _$Event {
           .map((item) => EventFrequentQuestion.fromDto(item))
           .toList(),
       timezone: dto.timezone,
-      tickets: List.from(dto.tickets ?? [])
-          .map((item) => EventTicket.fromDto(item))
-          .toList(),
     );
   }
 
