@@ -167,18 +167,13 @@ definitions:
 
         # Add Shorebird to PATH
         echo PATH="$HOME/.shorebird/bin:$PATH" >> $CM_ENV
-    - &change_shorebird_version
-      name: 🐦 Change Shorebird version
-      script: |
-        shorebird flutter versions list
-        shorebird flutter versions use 3.16.9
     - &release_shorebird_ipa_staging
       name: Release shorebird ipa staging
       script: |
         BUILD_NUMBER=$(($(app-store-connect get-latest-testflight-build-number "$APP_ID") + 1))
-        shorebird flutter versions list
-        shorebird flutter versions use 3.16.9
-        shorebird release ios-alpha --flavor staging -- \
+        chmod +x scripts/set_build_number.sh
+        ./scripts/set_build_number.sh "$BUILD_NUMBER"
+        shorebird release ios --flutter-version=3.19.6 --flavor staging -- \
           --build-number=$BUILD_NUMBER \
           --export-options-plist=/Users/builder/export_options.plist \
           --flavor="staging" \
@@ -187,9 +182,9 @@ definitions:
       name: Release shorebird android apk staging
       script: |
         BUILD_NUMBER=$(($(google-play get-latest-build-number --package-name "$PACKAGE_NAME" --tracks="$GOOGLE_PLAY_TRACK") + 1))      
-        shorebird flutter versions list
-        shorebird flutter versions use 3.16.9
-        shorebird release android --artifact apk --flavor staging -- \
+        chmod +x scripts/set_build_number.sh
+        ./scripts/set_build_number.sh "$BUILD_NUMBER"
+        shorebird release android --artifact apk --flutter-version=3.19.6 --flavor staging -- \
           --build-number=$BUILD_NUMBER \
           --flavor="staging" \
           -t "lib/main_staging.dart"
@@ -197,7 +192,9 @@ definitions:
       name: Release shorebird ipa production
       script: |
         BUILD_NUMBER=$(($(app-store-connect get-latest-testflight-build-number "$APP_ID") + 1))
-        shorebird release ios-alpha --flavor production -- \
+        chmod +x scripts/set_build_number.sh
+        ./scripts/set_build_number.sh "$BUILD_NUMBER"
+        shorebird release ios --flutter-version=3.19.6 --flavor production -- \
           --build-number=$BUILD_NUMBER \
           --export-options-plist=/Users/builder/export_options.plist \
           --flavor="production" \
@@ -206,36 +203,28 @@ definitions:
       name: Release shorebird android apk production
       script: |
         BUILD_NUMBER=$(($(google-play get-latest-build-number --package-name "$PACKAGE_NAME" --tracks="$GOOGLE_PLAY_TRACK") + 1))      
-        shorebird release android --artifact apk --flavor production -- \
+        chmod +x scripts/set_build_number.sh
+        ./scripts/set_build_number.sh "$BUILD_NUMBER"
+        shorebird release android --artifact apk --flutter-version=3.19.6 --flavor production -- \
           --build-number=$BUILD_NUMBER \
           --flavor="production" \
           -t "lib/main_production.dart"
     - &patch_shorebird_ios_staging
       name: Patch shorebird ipa staging
       script: |
-        shorebird patch ios-alpha --target ./lib/main_staging.dart --flavor staging --force -- \
-          --build-name=$TAG_BUILD_NAME \
-          --build-number=$TAG_BUILD_NUMBER \
-          --export-options-plist=/Users/builder/export_options.plist
+        shorebird patch ios --release-version "$TAG_BUILD_NAME"+"$TAG_BUILD_NUMBER" --target ./lib/main_staging.dart --flavor staging --force
     - &patch_shorebird_android_staging
       name: Patch shorebird android staging
       script: |
-        shorebird patch android --target ./lib/main_staging.dart --flavor staging --force -- \
-          --build-name=$TAG_BUILD_NAME \
-          --build-number=$TAG_BUILD_NUMBER 
+        shorebird patch android --release-version "$TAG_BUILD_NAME"+"$TAG_BUILD_NUMBER" --target ./lib/main_staging.dart --flavor staging --force
     - &patch_shorebird_ios_production
       name: Patch shorebird ipa production
       script: |
-        shorebird patch ios-alpha --target ./lib/main_production.dart --flavor production  --force -- \
-          --build-name=$TAG_BUILD_NAME \
-          --build-number=$TAG_BUILD_NUMBER \
-          --export-options-plist=/Users/builder/export_options.plist
+        shorebird patch ios --release-version "$TAG_BUILD_NAME"+"$TAG_BUILD_NUMBER" --target ./lib/main_production.dart --flavor production --force
     - &patch_shorebird_android_production
       name: Patch shorebird android production
       script: |
-        shorebird patch android --target ./lib/main_production.dart --flavor production  --force -- \
-          --build-name=$TAG_BUILD_NAME \
-          --build-number=$TAG_BUILD_NUMBER 
+        shorebird patch android --release-version "$TAG_BUILD_NAME"+"$TAG_BUILD_NUMBER" --target ./lib/main_production.dart --flavor production --force
     - &github_create_prerelease
       name: Github release
       script: | 
@@ -802,7 +791,6 @@ workflows:
       - *run_build_runner
       - *generate_i18_file
       - *setup_shorebird
-      - *change_shorebird_version
       - *install_pods
       - *release_shorebird_ipa_staging
       - *setup_local_properties
@@ -843,7 +831,6 @@ workflows:
       - *run_build_runner
       - *generate_i18_file
       - *setup_shorebird
-      - *change_shorebird_version
       - *install_pods
       - *release_shorebird_ipa_production
       - *setup_local_properties
@@ -879,7 +866,6 @@ workflows:
       - *run_build_runner
       - *generate_i18_file
       - *setup_shorebird
-      - *change_shorebird_version
       - *install_pods
       - *patch_shorebird_ios_staging
     artifacts:
@@ -903,7 +889,6 @@ workflows:
       - *run_build_runner
       - *generate_i18_file
       - *setup_shorebird
-      - *change_shorebird_version
       - *setup_local_properties
       - *patch_shorebird_android_staging
     artifacts:
@@ -939,7 +924,6 @@ workflows:
       - *run_build_runner
       - *generate_i18_file
       - *setup_shorebird
-      - *change_shorebird_version
       - *install_pods
       - *patch_shorebird_ios_production
       - *notify_shorebird_patch_ios_production_to_slack
@@ -975,7 +959,6 @@ workflows:
       - *run_build_runner
       - *generate_i18_file
       - *setup_shorebird
-      - *change_shorebird_version
       - *setup_local_properties
       - *patch_shorebird_android_production
       - *notify_shorebird_patch_android_production_to_slack
