@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.21.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.20.0...v1.21.0) (2024-05-31)
+
+
+### Features
+
+* bring back shorebird ([#620](https://github.com/lemonadesocial/lemonade-flutter/issues/620)) ([4ed7e5a](https://github.com/lemonadesocial/lemonade-flutter/commit/4ed7e5a30481acb9cddae37a08c67a335cbb9fe6))
+* cancel tickets ([#621](https://github.com/lemonadesocial/lemonade-flutter/issues/621)) ([2a19aa9](https://github.com/lemonadesocial/lemonade-flutter/commit/2a19aa9b92602c273d310151262cf35189a3710e))
+* support display mention farcaster post ([#619](https://github.com/lemonadesocial/lemonade-flutter/issues/619)) ([94f9c7b](https://github.com/lemonadesocial/lemonade-flutter/commit/94f9c7b6f08f1d0136b13d1d4c79381d7422cb54))
+* support mention feature when creating farcaster ([#614](https://github.com/lemonadesocial/lemonade-flutter/issues/614)) ([4a368ac](https://github.com/lemonadesocial/lemonade-flutter/commit/4a368ac87bd4f7578e089455b6a56b807072117b))
+* support pagination for farcaster newsfeed ([#618](https://github.com/lemonadesocial/lemonade-flutter/issues/618)) ([103da7e](https://github.com/lemonadesocial/lemonade-flutter/commit/103da7e753cb4c250fe4d249e4cbe15e7037aa3c))
+
+
+### Bug Fixes
+
+* add missing shorebird config ([#624](https://github.com/lemonadesocial/lemonade-flutter/issues/624)) ([0c274df](https://github.com/lemonadesocial/lemonade-flutter/commit/0c274df10b792f4d465ba56601fe7567ca49d571))
+* remove deposit_info ([#616](https://github.com/lemonadesocial/lemonade-flutter/issues/616)) ([5f1bbe0](https://github.com/lemonadesocial/lemonade-flutter/commit/5f1bbe0693bd9d5a42cb6977dba84f9769e094f8))
+* ui overflow in row item ([#613](https://github.com/lemonadesocial/lemonade-flutter/issues/613)) ([84102c0](https://github.com/lemonadesocial/lemonade-flutter/commit/84102c0c6fcaca3cb52b77f8cb1564d64d1119c8))
+* ui polishment connect farcaster button ([#617](https://github.com/lemonadesocial/lemonade-flutter/issues/617)) ([a63951c](https://github.com/lemonadesocial/lemonade-flutter/commit/a63951c917b50834141f3796ff764f68bd899dc5))
+* update started event label display ([#622](https://github.com/lemonadesocial/lemonade-flutter/issues/622)) ([6c1e5f9](https://github.com/lemonadesocial/lemonade-flutter/commit/6c1e5f9eac18a3b9c77d851a17d3758e10bd26d3))
+
 ## [1.20.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.19.0...v1.20.0) (2024-05-24)
 
 
