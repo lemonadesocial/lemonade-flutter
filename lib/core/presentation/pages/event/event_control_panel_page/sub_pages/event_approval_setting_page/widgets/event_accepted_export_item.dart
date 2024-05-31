@@ -33,22 +33,62 @@ class EventAcceptedExportItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Container(
-          padding: EdgeInsets.all(Spacing.small),
           decoration: BoxDecoration(
             color: LemonColor.atomicBlack,
             borderRadius: BorderRadius.circular(
-              LemonRadius.extraSmall,
+              LemonRadius.medium,
             ),
           ),
-          child: Row(
+          child: Column(
             children: [
-              _GuestInfo(eventAccepted: eventAccepted),
-              const Spacer(),
-              _GuestActions(event: event, eventAccepted: eventAccepted),
+              Container(
+                padding: EdgeInsets.all(Spacing.small),
+                color: LemonColor.white03,
+                child: Row(
+                  children: [
+                    _GuestInfo(eventAccepted: eventAccepted),
+                    const Spacer(),
+                    _GuestActions(event: event, eventAccepted: eventAccepted),
+                  ],
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.all(Spacing.small),
+                child: Row(
+                  children: [
+                    _InfoTag(
+                      icon: ThemeSvgIcon(
+                        color: colorScheme.onSecondary,
+                        builder: (filter) => Assets.icons.icTicket.svg(
+                          width: 15.w,
+                          height: 15.w,
+                          colorFilter: filter,
+                        ),
+                      ),
+                      label: eventAccepted.ticketType ?? '',
+                    ),
+                    SizedBox(
+                      width: Spacing.extraSmall,
+                    ),
+                    _InfoTag(
+                      icon: ThemeSvgIcon(
+                        color: colorScheme.onSecondary,
+                        builder: (filter) => Assets.icons.icCashVariant.svg(
+                          width: 15.w,
+                          height: 15.w,
+                          colorFilter: filter,
+                        ),
+                      ),
+                      label: '\$${eventAccepted.ticketPrice}',
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
@@ -186,6 +226,51 @@ class _GuestActions extends StatelessWidget {
           width: 18.w,
           height: 18.w,
         ),
+      ),
+    );
+  }
+}
+
+class _InfoTag extends StatelessWidget {
+  const _InfoTag({required this.icon, required this.label});
+
+  final Widget? icon;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Container(
+      padding: EdgeInsets.all(Spacing.xSmall),
+      decoration: ShapeDecoration(
+        shape: RoundedRectangleBorder(
+          side: BorderSide(
+            width: 1.w,
+            color: colorScheme.outline,
+          ),
+          borderRadius: BorderRadius.circular(LemonRadius.xSmall),
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          if (icon != null) icon!,
+          SizedBox(width: Spacing.superExtraSmall),
+          Container(
+            constraints: BoxConstraints(maxWidth: 170.w),
+            child: Text(
+              maxLines: 2,
+              label,
+              overflow: TextOverflow.ellipsis,
+              style: Typo.small.copyWith(
+                color: colorScheme.onSecondary,
+                height: 0,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
