@@ -1,10 +1,13 @@
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_accepted_export.dart';
+import 'package:app/core/domain/event/repository/event_ticket_repository.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/widgets/event_accepted_export_item.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
+import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/graphql/backend/event/query/export_event_accepted.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -42,17 +45,12 @@ class EventAcceptedExportList extends StatelessWidget {
             ),
           );
         }
-
-        final eventAcceptedList = (result.parsedData?.exportEventAccepted ?? [])
-            .map((item) {
-              return EventAcceptedExport.fromJson(
-                item.toJson(),
-              );
-            })
-            .where(
-              (element) => element.assigneeEmail != null,
-            )
-            .toList();
+        final eventAcceptedList =
+            (result.parsedData?.exportEventAccepted ?? []).map((item) {
+          return EventAcceptedExport.fromJson(
+            item.toJson(),
+          );
+        }).toList();
 
         if (eventAcceptedList.isEmpty) {
           return Center(
@@ -61,7 +59,6 @@ class EventAcceptedExportList extends StatelessWidget {
             ),
           );
         }
-
         return NotificationListener(
           child: Padding(
             padding: EdgeInsets.symmetric(
@@ -79,6 +76,18 @@ class EventAcceptedExportList extends StatelessWidget {
                     return EventAcceptedExportItem(
                       event: event,
                       eventAccepted: eventAccepted,
+                      onTapCancelTicket: (ticketId) async {
+                        await showFutureLoadingDialog(
+                          context: context,
+                          future: () {
+                            return getIt<EventTicketRepository>().cancelTickets(
+                              eventId: event?.id ?? '',
+                              ticketIds: [ticketId],
+                            );
+                          },
+                        );
+                        if (refetch != null) refetch();
+                      },
                     );
                   },
                   separatorBuilder: (context, index) => SizedBox(

@@ -25,10 +25,12 @@ enum _GuestAction { checkIn, cancelTicket }
 class EventAcceptedExportItem extends StatelessWidget {
   final Event? event;
   final EventAcceptedExport eventAccepted;
+  final Function(String ticketId)? onTapCancelTicket;
   const EventAcceptedExportItem({
     super.key,
     this.event,
     required this.eventAccepted,
+    this.onTapCancelTicket,
   });
 
   @override
@@ -53,7 +55,16 @@ class EventAcceptedExportItem extends StatelessWidget {
                   children: [
                     _GuestInfo(eventAccepted: eventAccepted),
                     const Spacer(),
-                    _GuestActions(event: event, eventAccepted: eventAccepted),
+                    eventAccepted.active == true
+                        ? _GuestActions(
+                            event: event,
+                            eventAccepted: eventAccepted,
+                            onTapCancelTicket: onTapCancelTicket,
+                          )
+                        : _InfoTag(
+                            icon: null,
+                            label: t.event.cancelEvent.cancelled,
+                          ),
                   ],
                 ),
               ),
@@ -117,7 +128,7 @@ class _GuestInfo extends StatelessWidget {
           child: CachedNetworkImage(
             width: Sizing.medium,
             height: Sizing.medium,
-            imageUrl: eventAccepted.assigneeAvatar ?? '',
+            imageUrl: eventAccepted.buyerAvatar ?? '',
             placeholder: (_, __) => ImagePlaceholder.avatarPlaceholder(),
             errorWidget: (_, __, ___) => ImagePlaceholder.avatarPlaceholder(),
           ),
@@ -129,8 +140,8 @@ class _GuestInfo extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                eventAccepted.assigneeName ??
-                    eventAccepted.assigneeEmail ??
+                eventAccepted.buyerName ??
+                    eventAccepted.buyerEmail ??
                     t.common.anonymous,
                 style: Typo.medium.copyWith(
                   color: colorScheme.onPrimary,
@@ -139,9 +150,9 @@ class _GuestInfo extends StatelessWidget {
               ),
               SizedBox(height: 2.w),
               Text(
-                eventAccepted.assigneeUsername != null
-                    ? '@${eventAccepted.assigneeUsername}'
-                    : eventAccepted.assigneeEmail ?? '',
+                eventAccepted.buyerUsername != null
+                    ? '@${eventAccepted.buyerUsername}'
+                    : eventAccepted.buyerEmail ?? '',
                 style: Typo.small.copyWith(
                   color: colorScheme.onSecondary,
                 ),
@@ -155,10 +166,12 @@ class _GuestInfo extends StatelessWidget {
 }
 
 class _GuestActions extends StatelessWidget {
-  const _GuestActions({this.event, required this.eventAccepted});
+  const _GuestActions(
+      {this.event, required this.eventAccepted, this.onTapCancelTicket});
 
   final Event? event;
   final EventAcceptedExport eventAccepted;
+  final Function(String ticketId)? onTapCancelTicket;
 
   void _checkIn(BuildContext context) {
     Vibrate.feedback(FeedbackType.light);
@@ -168,15 +181,10 @@ class _GuestActions extends StatelessWidget {
   }
 
   void _cancelTicket(BuildContext context) async {
-    await showFutureLoadingDialog(
-      context: context,
-      future: () {
-        return getIt<EventTicketRepository>().cancelTickets(
-          eventId: event?.id ?? '',
-          ticketIds: [],
-        );
-      },
-    );
+    final ticketId = eventAccepted.id;
+    if (onTapCancelTicket != null) {
+      onTapCancelTicket!(ticketId ?? '');
+    }
   }
 
   @override
