@@ -4,7 +4,6 @@ import 'package:app/core/domain/event/entities/event_application_profile_field.d
 import 'package:app/core/domain/event/entities/event_payment_ticket_discount.dart';
 import 'package:app/core/domain/event/entities/event_frequent_question.dart';
 import 'package:app/core/domain/event/entities/event_session.dart';
-import 'package:app/core/domain/event/entities/event_ticket.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/entities/reward.dart';
 import 'package:app/core/domain/event/event_enums.dart';

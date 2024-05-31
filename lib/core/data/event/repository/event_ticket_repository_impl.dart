@@ -368,6 +368,6 @@ class EventTicketRepositoryImpl implements EventTicketRepository {
     if (result.hasException || result.parsedData?.cancelTickets == null) {
       return Left(Failure());
     }
-    return Right(result.parsedData!.cancelTickets ?? false);
+    return Right(result.parsedData!.cancelTickets);
   }
 }
