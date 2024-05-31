@@ -1065,6 +1065,7 @@ input GetCommentsArgs {
 
 type EventAcceptedExport {
   _id: MongoID!
+  active: Boolean
   ticket_type: String
   checkin_date: DateTimeISO
   purchase_date: DateTimeISO
@@ -1209,11 +1210,11 @@ type EASEvent {
   uid: String
   detail_uid: String
   diff: [String!]
-  creatorName: String!
-  creatorProfile: String!
-  date: String!
-  eventLink: String!
-  type: String!
+  creatorName: String
+  creatorProfile: String
+  date: String
+  eventLink: String
+  type: String
   cohosts: [EASEventCohost!]!
   tickets: Float!
 }
@@ -1221,9 +1222,9 @@ type EASEvent {
 type EASEventCohost {
   wallet: String!
   uid: String
-  cohostName: String!
-  cohostProfile: String!
-  eventLink: String!
+  cohostName: String
+  cohostProfile: String
+  eventLink: String
 }
 
 type EASTicketType {
@@ -1233,21 +1234,21 @@ type EASTicketType {
   uid: String
   detail_uid: String
   eventName: String
-  eventLink: String!
+  eventLink: String
   cost: String!
-  currency: String!
-  provider: String!
+  currency: String
+  provider: String
   diff: [String!]
   tickets: [EASTicket!]
 }
 
 type EASTicket {
   _id: MongoID!
-  guest: String!
+  guest: String
   eventName: String
-  eventLink: String!
-  ticket: String!
-  assignedBy: String!
+  eventLink: String
+  ticket: String
+  assignedBy: String
   wallet_address: String!
 }
 
@@ -1294,6 +1295,7 @@ enum EmailTemplateType {
   join_requested
   post_rsvp
   ticket_received
+  ticket_cancelled
   ticket_type_whitelisted
   crypto_payment_receipt
   updated
@@ -1705,6 +1707,7 @@ enum NotificationType {
   event_unlock_verify_request
   event_update
   ticket_assigned
+  ticket_cancelled
   payment_authorized
   payment_failed
   payment_refunded
@@ -2508,6 +2511,8 @@ type Mutation {
   syncFarcasterConnectionStatus: SyncFarcasterConnectionStatusResponse!
   createEventCast(event: MongoID!): Boolean!
   createCast(parent_url: String, parent_cast: ParentCastInput, text: String!, embeds: [String!], mentions: [Int!], mentionsPositions: [Int!]): Boolean!
+  createCastReaction(type: ReactionType!, target_cast_id: ParentCastInput, target_url: String): Boolean!
+  deleteCastReaction(type: ReactionType!, target_cast_id: ParentCastInput, target_url: String): Boolean!
   createFile(input: FileInput, url: String!): File!
   updateFile(input: FileInput!, _id: MongoID!): File!
   toggleFileLike(_id: MongoID!): File!
@@ -2563,6 +2568,7 @@ type Mutation {
   deleteStore(_id: MongoID!): Boolean!
   createStripeCard(payment_account: MongoID!, payment_method: String!): StripeCard!
   deleteStripeCard(_id: MongoID!): StripeCard!
+  cancelTickets(input: CancelTicketsInput!): Boolean!
   assignTickets(input: AssignTicketsInput!): Boolean!
   redeemTickets(input: RedeemTicketsInput!): RedeemTicketsResponse!
   createTickets(ticket_type: MongoID!, ticket_assignments: [TicketAssignment!]!): [Ticket!]!
@@ -3025,6 +3031,12 @@ input ParentCastInput {
   hash: String!
 }
 
+enum ReactionType {
+  NONE
+  LIKE
+  RECAST
+}
+
 input FileInput {
   description: String
 }
@@ -3405,6 +3417,11 @@ input SalesTaxInput {
   ratio_map: JSON
   countries: [String!]
   regions: [String!]
+}
+
+input CancelTicketsInput {
+  event: MongoID!
+  tickets: [MongoID!]!
 }
 
 input AssignTicketsInput {

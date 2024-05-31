@@ -4,14 +4,18 @@ import 'package:app/core/domain/farcaster/entities/farcaster_account_key_request
 import 'package:app/core/domain/farcaster/entities/farcaster_channel.dart';
 import 'package:app/core/domain/farcaster/entities/farcaster_signed_key_request.dart';
 import 'package:app/core/domain/farcaster/farcaster_repository.dart';
+import 'package:app/core/domain/farcaster/input/cast_has_reaction_input.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/graphql/backend/farcaster/mutation/create_cast.graphql.dart';
+import 'package:app/graphql/backend/farcaster/mutation/create_cast_reaction.graphql.dart';
 import 'package:app/graphql/backend/farcaster/mutation/create_farcaster_account_key.graphql.dart';
+import 'package:app/graphql/backend/farcaster/mutation/delete_cast_reaction.graphql.dart';
 import 'package:app/graphql/farcaster_airstack/query/get_farcaster_users.graphql.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:injectable/injectable.dart';
 
 @LazySingleton(as: FarcasterRepository)
@@ -108,5 +112,56 @@ class FarcasterRepositoryImpl implements FarcasterRepository {
           .map((e) => e.toJson())
           .toList(),
     );
+  }
+
+  @override
+  Future<Either<Failure, bool>> createCastReaction({
+    required Variables$Mutation$CreateCastReaction input,
+  }) async {
+    final result = await _client.mutate$CreateCastReaction(
+      Options$Mutation$CreateCastReaction(
+        variables: input,
+        fetchPolicy: FetchPolicy.networkOnly,
+      ),
+    );
+    if (result.hasException || result.parsedData?.createCastReaction == null) {
+      return Left(Failure());
+    }
+    return Right(result.parsedData!.createCastReaction);
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteCastReaction({
+    required Variables$Mutation$DeleteCastReaction input,
+  }) async {
+    final result = await _client.mutate$DeleteCastReaction(
+      Options$Mutation$DeleteCastReaction(
+        variables: input,
+        fetchPolicy: FetchPolicy.networkOnly,
+      ),
+    );
+    if (result.hasException || result.parsedData?.deleteCastReaction == null) {
+      return Left(Failure());
+    }
+    return Right(result.parsedData!.deleteCastReaction);
+  }
+
+  @override
+  Future<Either<Failure, bool>> hasReaction({
+    required CastHasReactionInput input,
+  }) async {
+    try {
+      final response = await Dio().get(
+        'https://hub.pinata.cloud/v1/reactionById',
+        queryParameters: input.toJson(),
+      );
+      if (response.statusCode != 200) {
+        return Left(Failure());
+      }
+
+      return Right(response.data['data'] != null);
+    } catch (e) {
+      return Left(Failure());
+    }
   }
 }

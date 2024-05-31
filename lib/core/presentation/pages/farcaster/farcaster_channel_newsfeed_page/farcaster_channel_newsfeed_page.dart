@@ -1,7 +1,7 @@
 // create an auto router page widget
 
 import 'package:app/core/domain/farcaster/entities/farcaster_channel.dart';
-import 'package:app/core/presentation/pages/farcaster/farcaster_channel_newsfeed_page/widgets/farcaster_cast_item_widget.dart';
+import 'package:app/core/presentation/pages/farcaster/farcaster_channel_newsfeed_page/widgets/farcaster_cast_item_widget/farcaster_cast_item_widget.dart';
 import 'package:app/core/presentation/pages/farcaster/farcaster_channel_newsfeed_page/widgets/farcaster_channel_detail_bottomsheet.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
@@ -142,9 +142,7 @@ class _FarcasterChannelNewsfeedPageState
                         notification.metrics.maxScrollExtent) {
                       final pageInfo =
                           result.parsedData?.FarcasterCasts?.pageInfo;
-                      if (result.isLoading ||
-                          (pageInfo?.hasNextPage != true &&
-                              pageInfo?.nextCursor.isNotEmpty == true)) {
+                      if (result.isLoading || pageInfo?.hasNextPage == false) {
                         return true;
                       }
 
@@ -184,6 +182,11 @@ class _FarcasterChannelNewsfeedPageState
                         itemCount: casts.length + 1,
                         itemBuilder: (context, index) {
                           if (index == casts.length) {
+                            if (result.parsedData?.FarcasterCasts?.pageInfo
+                                    ?.hasNextPage !=
+                                true) {
+                              return const SizedBox.shrink();
+                            }
                             return Padding(
                               padding: EdgeInsets.symmetric(
                                 vertical: Spacing.medium,

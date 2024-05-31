@@ -1,3 +1,4 @@
+import 'package:app/core/presentation/pages/farcaster/farcaster_channel_newsfeed_page/widgets/farcaster_cast_item_widget/cast_item_actions_widget.dart';
 import 'package:app/core/presentation/pages/farcaster/farcaster_channel_newsfeed_page/widgets/mention_linkifier.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
@@ -17,7 +18,7 @@ import 'package:matrix/matrix.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-class FarcasterCastItemWidget extends StatelessWidget {
+class FarcasterCastItemWidget extends StatefulWidget {
   final Query$GetFarCasterCasts$FarcasterCasts$Cast cast;
   const FarcasterCastItemWidget({
     super.key,
@@ -25,9 +26,19 @@ class FarcasterCastItemWidget extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+  State<FarcasterCastItemWidget> createState() =>
+      _FarcasterCastItemWidgetState();
+}
 
+class _FarcasterCastItemWidgetState extends State<FarcasterCastItemWidget>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
     return Padding(
       padding: EdgeInsets.all(Spacing.xSmall),
       child: Row(
@@ -37,7 +48,7 @@ class FarcasterCastItemWidget extends StatelessWidget {
             width: Sizing.medium,
             height: Sizing.medium,
             borderRadius: BorderRadius.circular(Sizing.medium),
-            imageUrl: cast.castedBy?.profileImage ?? '',
+            imageUrl: widget.cast.castedBy?.profileImage ?? '',
             placeholder: ImagePlaceholder.defaultPlaceholder(),
           ),
           SizedBox(width: Spacing.extraSmall),
@@ -46,29 +57,31 @@ class FarcasterCastItemWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                if (cast.quotedCast?.isNotEmpty == true) ...[
-                  _Recast(cast: cast),
+                if (widget.cast.quotedCast?.isNotEmpty == true) ...[
+                  _Recast(cast: widget.cast),
                   SizedBox(height: 4.w),
                 ],
                 Row(
                   children: [
                     Text(
-                      cast.castedBy?.profileName ?? '',
+                      widget.cast.castedBy?.profileName ?? '',
                       style: Typo.medium.copyWith(
                         fontWeight: FontWeight.w600,
                         color: colorScheme.onPrimary,
                       ),
                     ),
-                    if (cast.castedAtTimestamp != null)
+                    if (widget.cast.castedAtTimestamp != null)
                       Text(
-                        ' ${timeago.format(cast.castedAtTimestamp!.toLocal())}',
+                        ' ${timeago.format(widget.cast.castedAtTimestamp!.toLocal())}',
                         style: Typo.medium.copyWith(
                           color: colorScheme.onSecondary,
                         ),
                       ),
                   ],
                 ),
-                _CastBody(cast: cast),
+                _CastBody(cast: widget.cast),
+                SizedBox(height: Spacing.xSmall),
+                CastItemActionsWidget(cast: widget.cast),
               ],
             ),
           ),
