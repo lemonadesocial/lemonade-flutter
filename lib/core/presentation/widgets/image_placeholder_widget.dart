@@ -1,4 +1,8 @@
+import 'dart:math';
+
+import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/utils/avatar_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
@@ -26,6 +30,14 @@ class ImagePlaceholder {
               .svg(colorFilter: filter, width: 50, height: 50),
         ),
       ),
+    );
+  }
+
+  static Widget avatarPlaceholder({BorderRadius? radius}) {
+    final randomId = Random().nextInt(100);
+    return LemonCircleAvatar(
+      size: Sizing.medium,
+      url: AvatarUtils.randomUserImage(randomId.toString()),
     );
   }
 

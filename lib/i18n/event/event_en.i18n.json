@@ -607,5 +607,6 @@
         "cancelAndRefund": "Cancel & refund",
         "cancelled": "Cancelled",
         "cancelledSuccessfully": "Your event “$event_name” has been successfully cancelled"
-    }
+    },
+    "cancelTicket": "Cancel ticket"
 }

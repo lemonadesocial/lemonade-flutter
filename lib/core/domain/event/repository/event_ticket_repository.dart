@@ -79,4 +79,9 @@ abstract class EventTicketRepository {
   Future<Either<Failure, String>> createEventDiscounts({
     required Variables$Mutation$CreateEventTicketDiscounts input,
   });
+
+  Future<Either<Failure, bool>> cancelTickets({
+    required String eventId,
+    required List<String> ticketIds,
+  });
 }

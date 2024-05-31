@@ -7,11 +7,16 @@ part 'event_accepted_export.g.dart';
 class EventAcceptedExport with _$EventAcceptedExport {
   factory EventAcceptedExport({
     String? id,
+    bool? active,
     String? ticketType,
     DateTime? checkinDate,
     String? buyerId,
     String? buyerEmail,
+    String? buyerName,
+    String? buyerAvatar,
+    String? buyerUsername,
     List<String>? buyerWallets,
+    String? assigneeAvatar,
     String? assigneeName,
     String? assigneeFirstName,
     String? assigneeLastName,

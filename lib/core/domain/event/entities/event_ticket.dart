@@ -3,27 +3,23 @@ import 'package:app/core/domain/user/entities/user.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'event_ticket.freezed.dart';
+part 'event_ticket.g.dart';
 
-class EventTicket {
-  final String? id;
-  final bool? accepted;
-  final String? assignedEmail;
-  final String? assignedTo;
-  final String? event;
-  final String? invitedBy;
-  final String? type;
-  final User? assignedToExpanded;
+@freezed
+class EventTicket with _$EventTicket {
+  const EventTicket._();
 
-  const EventTicket({
-    this.id,
-    this.accepted,
-    this.assignedEmail,
-    this.assignedTo,
-    this.event,
-    this.invitedBy,
-    this.type,
-    this.assignedToExpanded,
-  });
+  @JsonSerializable(explicitToJson: true)
+  factory EventTicket({
+    String? id,
+    bool? accepted,
+    String? assignedEmail,
+    String? assignedTo,
+    String? event,
+    String? invitedBy,
+    String? type,
+    User? assignedToExpanded,
+  }) = _EventTicket;
 
   factory EventTicket.fromDto(EventTicketDto dto) => EventTicket(
         id: dto.id,
@@ -37,6 +33,9 @@ class EventTicket {
             ? User.fromDto(dto.assignedToExpanded!)
             : null,
       );
+
+  factory EventTicket.fromJson(Map<String, dynamic> json) =>
+      _$EventTicketFromJson(json);
 }
 
 @freezed

@@ -254,6 +254,20 @@ const eventFrequentQuestionsFragment = '''
   }
 ''';
 
+const eventTicketsFragment = '''
+  fragment eventTicketsFragment on Event {
+    tickets {
+      _id
+      event
+      type
+      accepted
+      assigned_email
+      assigned_to
+      invited_by
+    }
+  }
+''';
+
 final getEventDetailQuery = gql('''
   $eventFragment
   $eventOfferFragment
@@ -263,6 +277,7 @@ final getEventDetailQuery = gql('''
   $eventApplicationFormFragment
   $eventPaymentTicketsDiscountFragment
   $eventFrequentQuestionsFragment
+  $eventTicketsFragment
 
   query(\$id: MongoID!) {
     getEvent(_id: \$id) {
@@ -274,6 +289,7 @@ final getEventDetailQuery = gql('''
       ...eventApplicationFormFragment
       ...eventPaymentTicketsDiscountFragment
       ...eventFrequentQuestionsFragment
+      ...eventTicketsFragment
     }
   }
 ''');

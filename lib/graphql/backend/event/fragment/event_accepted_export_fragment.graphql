@@ -1,10 +1,15 @@
 fragment EventAcceptedExport on EventAcceptedExport {
   id: _id
+  active: active
   ticketType: ticket_type
   checkinDate: checkin_date
   buyerId: buyer_id
   buyerEmail: buyer_email
+  buyerName: buyer_name
+  buyerAvatar: buyer_avatar
+  buyerUsername: buyer_username
   buyerWallets: buyer_wallets
+  assigneeAvatar: assignee_avatar
   assigneeName: assignee_name
   assigneeFirstName: assignee_first_name
   assigneeLastName: assignee_last_name
