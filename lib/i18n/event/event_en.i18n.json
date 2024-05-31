@@ -24,7 +24,7 @@
     "aboutTheEvent": "About the event",
     "eventStartIn": "Starting in $time",
     "eventStartedDaysAgo": "Started ${days}d ago",
-    "eventStartedYesterday": "Started yesterday",
+    "eventStarted": "Event started",
     "eventEnded": "Event ended",
     "myEvents": "My events",
     "dashboard": {
