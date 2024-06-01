@@ -152,7 +152,7 @@ class FarcasterRepositoryImpl implements FarcasterRepository {
   }) async {
     try {
       final response = await Dio().get(
-        'https://hub.pinata.cloud/v1/reactionById',
+        '${AppConfig.pinataUrl}/v1/reactionById',
         queryParameters: input.toJson(),
       );
       if (response.statusCode != 200) {
