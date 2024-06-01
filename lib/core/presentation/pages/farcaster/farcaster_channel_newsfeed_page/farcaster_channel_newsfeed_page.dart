@@ -171,39 +171,46 @@ class _FarcasterChannelNewsfeedPageState
                   }
                   return true;
                 },
-                child: SmartRefresher(
-                  controller: _refreshController,
-                  onRefresh: () async {
-                    refetch?.call();
-                  },
-                  child: CustomScrollView(
-                    slivers: [
-                      SliverList.separated(
-                        itemCount: casts.length + 1,
-                        itemBuilder: (context, index) {
-                          if (index == casts.length) {
-                            if (result.parsedData?.FarcasterCasts?.pageInfo
-                                    ?.hasNextPage !=
-                                true) {
-                              return const SizedBox.shrink();
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: Spacing.xSmall,
+                  ),
+                  child: SmartRefresher(
+                    controller: _refreshController,
+                    onRefresh: () async {
+                      refetch?.call();
+                    },
+                    child: CustomScrollView(
+                      slivers: [
+                        SliverList.separated(
+                          itemCount: casts.length + 1,
+                          itemBuilder: (context, index) {
+                            if (index == casts.length) {
+                              if (result.parsedData?.FarcasterCasts?.pageInfo
+                                      ?.hasNextPage !=
+                                  true) {
+                                return const SizedBox.shrink();
+                              }
+                              return Padding(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: Spacing.medium,
+                                ),
+                                child: Loading.defaultLoading(context),
+                              );
                             }
-                            return Padding(
-                              padding: EdgeInsets.symmetric(
-                                vertical: Spacing.medium,
-                              ),
-                              child: Loading.defaultLoading(context),
+                            return FarcasterCastItemWidget(
+                              key: ValueKey(casts[index].id),
+                              cast: casts[index],
+                              showActions: true,
                             );
-                          }
-                          return FarcasterCastItemWidget(
-                            cast: casts[index],
-                          );
-                        },
-                        separatorBuilder: (context, index) => Divider(
-                          height: 1.w,
-                          color: colorScheme.outline,
+                          },
+                          separatorBuilder: (context, index) => Divider(
+                            height: 1.w,
+                            color: colorScheme.outline,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               );

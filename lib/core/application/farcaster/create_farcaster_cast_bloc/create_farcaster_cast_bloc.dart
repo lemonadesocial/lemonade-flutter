@@ -76,7 +76,7 @@ class CreateFarcasterCastBloc
   }
 
   CreateFarcasterCastState _validate(CreateFarcasterCastState state) {
-    final isValid = state.payload.message.isNotEmpty;
+    final isValid = state.payload.message.trim().isNotEmpty;
     return state.copyWith(isValid: isValid);
   }
 }

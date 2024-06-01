@@ -20,9 +20,11 @@ import 'package:timeago/timeago.dart' as timeago;
 
 class FarcasterCastItemWidget extends StatefulWidget {
   final Query$GetFarCasterCasts$FarcasterCasts$Cast cast;
+  final bool showActions;
   const FarcasterCastItemWidget({
     super.key,
     required this.cast,
+    required this.showActions,
   });
 
   @override
@@ -40,7 +42,7 @@ class _FarcasterCastItemWidgetState extends State<FarcasterCastItemWidget>
     super.build(context);
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
     return Padding(
-      padding: EdgeInsets.all(Spacing.xSmall),
+      padding: EdgeInsets.symmetric(vertical: Spacing.xSmall),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -80,8 +82,10 @@ class _FarcasterCastItemWidgetState extends State<FarcasterCastItemWidget>
                   ],
                 ),
                 _CastBody(cast: widget.cast),
-                SizedBox(height: Spacing.xSmall),
-                CastItemActionsWidget(cast: widget.cast),
+                if (widget.showActions) ...[
+                  SizedBox(height: Spacing.xSmall),
+                  CastItemActionsWidget(cast: widget.cast),
+                ],
               ],
             ),
           ),
