@@ -3,7 +3,7 @@
 import 'package:flutter_linkify/flutter_linkify.dart';
 
 final _mentionRegex = RegExp(
-  r'\B@([a-zA-Z0-9_]+\b)',
+  r'\B@([a-zA-Z0-9_-]+\b)',
   caseSensitive: false,
   dotAll: true,
 );
