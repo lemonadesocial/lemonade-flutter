@@ -1,7 +1,7 @@
 // create an auto router page widget
 
 import 'package:app/core/domain/farcaster/entities/farcaster_channel.dart';
-import 'package:app/core/presentation/pages/farcaster/farcaster_channel_newsfeed_page/widgets/farcaster_cast_item_widget.dart';
+import 'package:app/core/presentation/pages/farcaster/farcaster_channel_newsfeed_page/widgets/farcaster_cast_item_widget/farcaster_cast_item_widget.dart';
 import 'package:app/core/presentation/pages/farcaster/farcaster_channel_newsfeed_page/widgets/farcaster_channel_detail_bottomsheet.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
@@ -142,9 +142,7 @@ class _FarcasterChannelNewsfeedPageState
                         notification.metrics.maxScrollExtent) {
                       final pageInfo =
                           result.parsedData?.FarcasterCasts?.pageInfo;
-                      if (result.isLoading ||
-                          (pageInfo?.hasNextPage != true &&
-                              pageInfo?.nextCursor.isNotEmpty == true)) {
+                      if (result.isLoading || pageInfo?.hasNextPage == false) {
                         return true;
                       }
 
@@ -173,34 +171,46 @@ class _FarcasterChannelNewsfeedPageState
                   }
                   return true;
                 },
-                child: SmartRefresher(
-                  controller: _refreshController,
-                  onRefresh: () async {
-                    refetch?.call();
-                  },
-                  child: CustomScrollView(
-                    slivers: [
-                      SliverList.separated(
-                        itemCount: casts.length + 1,
-                        itemBuilder: (context, index) {
-                          if (index == casts.length) {
-                            return Padding(
-                              padding: EdgeInsets.symmetric(
-                                vertical: Spacing.medium,
-                              ),
-                              child: Loading.defaultLoading(context),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: Spacing.xSmall,
+                  ),
+                  child: SmartRefresher(
+                    controller: _refreshController,
+                    onRefresh: () async {
+                      refetch?.call();
+                    },
+                    child: CustomScrollView(
+                      slivers: [
+                        SliverList.separated(
+                          itemCount: casts.length + 1,
+                          itemBuilder: (context, index) {
+                            if (index == casts.length) {
+                              if (result.parsedData?.FarcasterCasts?.pageInfo
+                                      ?.hasNextPage !=
+                                  true) {
+                                return const SizedBox.shrink();
+                              }
+                              return Padding(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: Spacing.medium,
+                                ),
+                                child: Loading.defaultLoading(context),
+                              );
+                            }
+                            return FarcasterCastItemWidget(
+                              key: ValueKey(casts[index].id),
+                              cast: casts[index],
+                              showActions: true,
                             );
-                          }
-                          return FarcasterCastItemWidget(
-                            cast: casts[index],
-                          );
-                        },
-                        separatorBuilder: (context, index) => Divider(
-                          height: 1.w,
-                          color: colorScheme.outline,
+                          },
+                          separatorBuilder: (context, index) => Divider(
+                            height: 1.w,
+                            color: colorScheme.outline,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               );

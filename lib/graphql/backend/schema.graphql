@@ -1210,11 +1210,11 @@ type EASEvent {
   uid: String
   detail_uid: String
   diff: [String!]
-  creatorName: String!
-  creatorProfile: String!
-  date: String!
-  eventLink: String!
-  type: String!
+  creatorName: String
+  creatorProfile: String
+  date: String
+  eventLink: String
+  type: String
   cohosts: [EASEventCohost!]!
   tickets: Float!
 }
@@ -1222,9 +1222,9 @@ type EASEvent {
 type EASEventCohost {
   wallet: String!
   uid: String
-  cohostName: String!
-  cohostProfile: String!
-  eventLink: String!
+  cohostName: String
+  cohostProfile: String
+  eventLink: String
 }
 
 type EASTicketType {
@@ -1234,21 +1234,21 @@ type EASTicketType {
   uid: String
   detail_uid: String
   eventName: String
-  eventLink: String!
+  eventLink: String
   cost: String!
-  currency: String!
-  provider: String!
+  currency: String
+  provider: String
   diff: [String!]
   tickets: [EASTicket!]
 }
 
 type EASTicket {
   _id: MongoID!
-  guest: String!
+  guest: String
   eventName: String
-  eventLink: String!
-  ticket: String!
-  assignedBy: String!
+  eventLink: String
+  ticket: String
+  assignedBy: String
   wallet_address: String!
 }
 
@@ -1295,6 +1295,7 @@ enum EmailTemplateType {
   join_requested
   post_rsvp
   ticket_received
+  ticket_cancelled
   ticket_type_whitelisted
   crypto_payment_receipt
   updated
@@ -2510,6 +2511,8 @@ type Mutation {
   syncFarcasterConnectionStatus: SyncFarcasterConnectionStatusResponse!
   createEventCast(event: MongoID!): Boolean!
   createCast(parent_url: String, parent_cast: ParentCastInput, text: String!, embeds: [String!], mentions: [Int!], mentionsPositions: [Int!]): Boolean!
+  createCastReaction(type: ReactionType!, target_cast_id: ParentCastInput, target_url: String): Boolean!
+  deleteCastReaction(type: ReactionType!, target_cast_id: ParentCastInput, target_url: String): Boolean!
   createFile(input: FileInput, url: String!): File!
   updateFile(input: FileInput!, _id: MongoID!): File!
   toggleFileLike(_id: MongoID!): File!
@@ -3026,6 +3029,12 @@ input ParentCastInput {
 
   """Hash of the parent cast without 0x prefix"""
   hash: String!
+}
+
+enum ReactionType {
+  NONE
+  LIKE
+  RECAST
 }
 
 input FileInput {

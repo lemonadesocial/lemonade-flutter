@@ -1,0 +1,11 @@
+mutation DeleteCastReaction(
+  $type: ReactionType!
+  $targetCastId: ParentCastInput
+  $targetUrl: String
+) {
+  deleteCastReaction(
+    type: $type
+    target_cast_id: $targetCastId
+    target_url: $targetUrl
+  )
+}

@@ -17,8 +17,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_mentions/flutter_mentions.dart';
 
 class CreateFarcasterEditor extends StatefulWidget {
+  final Function(bool visible)? onSuggestionVisibleChanged;
+
   const CreateFarcasterEditor({
     super.key,
+    this.onSuggestionVisibleChanged,
   });
 
   @override
@@ -108,6 +111,9 @@ class CreateFarcasterEditorState extends State<CreateFarcasterEditor> {
                 mentions: mentionsData,
               ),
             );
+      },
+      onSuggestionVisibleChanged: (visible) {
+        widget.onSuggestionVisibleChanged?.call(visible);
       },
       onSearchChanged: (trigger, value) {
         if (value.isEmpty) {

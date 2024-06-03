@@ -15,5 +15,16 @@
         "one": "member",
         "other": "members"
     },
-    "hostedBy": "Hosted by"
+    "hostedBy": "Hosted by",
+    "replyingTo": "Replying to",
+    "reply(ordinal)": {
+        "zero": "reply",
+        "one": "reply",
+        "other": "replies"
+    },
+    "like(ordinal)": {
+        "zero": "like",
+        "one": "like",
+        "other": "likes"
+    }
 }

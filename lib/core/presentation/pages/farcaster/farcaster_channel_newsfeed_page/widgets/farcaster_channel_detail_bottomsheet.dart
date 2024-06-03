@@ -29,7 +29,7 @@ class FarcasterChannelDetailBottomsheet extends StatefulWidget {
 class _FarcasterChannelDetailBottomsheetState
     extends State<FarcasterChannelDetailBottomsheet> {
   Widget _buildHostsAvatars(
-    List<Query$GetChannel$FarcasterChannels$FarcasterChannel$hostProfiles>
+    List<Query$GetChannel$FarcasterChannels$FarcasterChannel$leadProfiles>
         hosts,
   ) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -68,7 +68,7 @@ class _FarcasterChannelDetailBottomsheetState
   }
 
   Widget _buildHostsNames(
-    List<Query$GetChannel$FarcasterChannels$FarcasterChannel$hostProfiles>
+    List<Query$GetChannel$FarcasterChannels$FarcasterChannel$leadProfiles>
         hosts,
   ) {
     final maxHosts = hosts.take(3).toList();
@@ -158,11 +158,11 @@ class _FarcasterChannelDetailBottomsheetState
                     child: Loading.defaultLoading(context),
                   ),
                 if (!result.isLoading) ...[
-                  if (targetChannel?.hostProfiles?.isNotEmpty == true) ...[
+                  if (targetChannel?.leadProfiles?.isNotEmpty == true) ...[
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        _buildHostsAvatars(targetChannel?.hostProfiles ?? []),
+                        _buildHostsAvatars(targetChannel?.leadProfiles ?? []),
                         SizedBox(width: Spacing.xSmall),
                         ThemeSvgIcon(
                           color: colorScheme.onSecondary,
@@ -175,7 +175,7 @@ class _FarcasterChannelDetailBottomsheetState
                         SizedBox(width: Spacing.superExtraSmall),
                         Flexible(
                           child: _buildHostsNames(
-                            targetChannel?.hostProfiles ?? [],
+                            targetChannel?.leadProfiles ?? [],
                           ),
                         ),
                       ],

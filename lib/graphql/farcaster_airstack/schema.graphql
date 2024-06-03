@@ -437,8 +437,9 @@ type FarcasterChannel {
   imageUrl: String!
   leadIds: [String!]
   leadProfiles(input: SocialsNestedInput): [Social!]
-  hostIds: [String!]
-  hostProfiles(input: SocialsNestedInput): [Social!]
+  moderatorIds: [String!]
+  moderatorProfiles(input: SocialsNestedInput): [Social!]
+  isModerationEnabled: Boolean
   createdAtTimestamp: Time!
   followerCount: Int
   participants(input: FarcasterChannelParticipantNestedInput): [FarcasterChannelParticipant!]
@@ -460,8 +461,8 @@ input FarcasterChannelFilter {
   name: Regex_String_Comparator_Exp
   leadId: String_Comparator_Exp
   leadIdentity: Identity_Comparator_Exp
-  hostId: String_Comparator_Exp
-  hostIdentity: Identity_Comparator_Exp
+  moderatorId: String_Comparator_Exp
+  moderatorIdentity: Identity_Comparator_Exp
   createdAtTimestamp: Time_Comparator_Exp
 }
 
@@ -628,6 +629,7 @@ input FarcasterRepliesFilter {
   parentCastedBy: Identity_Comparator_Exp
   parentHash: String_Eq_In_Comparator_Exp
   parentUrl: String_Eq_In_Comparator_Exp
+  hash: String_Eq_In_Comparator_Exp
 }
 
 input FarcasterRepliesInput {
@@ -744,7 +746,7 @@ type LogoSizes {
   external: String
 }
 
-scalar Map 
+scalar Map
 
 type Media {
   image: ImageSizes
@@ -1673,6 +1675,7 @@ enum TokenBlockchain {
   zora
   gold
   degen
+  ham
 }
 
 input TokenFilter {

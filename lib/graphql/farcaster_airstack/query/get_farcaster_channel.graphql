@@ -9,7 +9,7 @@ query GetChannel($channelId: String) {
       name
       description
       followerCount
-      hostProfiles {
+      leadProfiles {
         profileName
         profileImage
       }

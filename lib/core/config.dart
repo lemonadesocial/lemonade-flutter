@@ -25,8 +25,11 @@ class AppConfig {
   static get cubeJsUrl => dotenv.env['CUBEJS_URL'];
   static get cubeJsRestUrl => dotenv.env['CUBEJS_REST_URL'];
 
-  // Airstack
+  // Farcaster Airstack Hub
   static get airstackUrl => 'https://api.airstack.xyz/gql';
+
+  // Farcaster Pinata Hub
+  static get pinataUrl => 'https://hub.pinata.cloud';
 
   static bool get isProduction => dotenv.env['ENV'] == 'production';
 
