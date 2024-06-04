@@ -35,28 +35,38 @@ class EventBuyTicketsPrerequisiteCheckBloc extends Bloc<
       }
     }
 
-    final joinRequest = await _checkEventJoinRequest();
-    if (joinRequest != null) {
-      emit(
-        EventBuyTicketsPrerequisiteCheckState.hasJoinRequest(
-          eventJoinRequest: joinRequest,
-        ),
-      );
-      return;
-    }
-
     final checkApplicationResult = await _checkApplicationFormCompleted();
     final isCompleted = checkApplicationResult.value1;
     final user = checkApplicationResult.value2;
     if (!isCompleted) {
-      return emit(
+      emit(
         EventBuyTicketsPrerequisiteCheckState.applicationFormNotCompleted(
           user: user!,
         ),
       );
+      return;
+    }
+    
+    final joinRequest = await _checkEventJoinRequest();
+    if (joinRequest == null) {
+      final createdJoinRequest = await _createEventJoinRequest();
+      if (createdJoinRequest != null) {
+        emit(
+          EventBuyTicketsPrerequisiteCheckState.hasJoinRequest(
+            eventJoinRequest: createdJoinRequest,
+          ),
+        );
+      }
+      return;
     }
 
     emit(EventBuyTicketsPrerequisiteCheckState.allPassed());
+  }
+
+  Future<EventJoinRequest?> _createEventJoinRequest() async {
+    final result = await getIt<EventRepository>()
+        .createEventJoinRequest(eventId: event.id ?? '');
+    return result.fold((l) => null, (r) => r);
   }
 
   Future<EventJoinRequest?> _checkEventJoinRequest() async {

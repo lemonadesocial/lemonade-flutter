@@ -90,12 +90,12 @@ class _GuestEventDetailBuyButtonView extends StatelessWidget {
           isNotInvited: () => AutoRouter.of(context).push(
             const GuestEventPrivateAlertRoute(),
           ),
-          hasJoinRequest: (joinRequest) => AutoRouter.of(context).push(
-            GuestEventApprovalStatusRoute(
-              event: event,
-              eventJoinRequest: joinRequest,
-            ),
-          ),
+          // hasJoinRequest: (joinRequest) => AutoRouter.of(context).push(
+          //   GuestEventApprovalStatusRoute(
+          //     event: event,
+          //     eventJoinRequest: joinRequest,
+          //   ),
+          // ),
           applicationFormNotCompleted: (user) =>
               AutoRouter.of(context).navigate(
             GuestEventApplicationRoute(event: event, user: user),
