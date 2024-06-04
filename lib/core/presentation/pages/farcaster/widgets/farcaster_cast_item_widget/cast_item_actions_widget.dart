@@ -3,6 +3,7 @@ import 'package:app/core/domain/farcaster/farcaster_repository.dart';
 import 'package:app/core/domain/farcaster/input/cast_has_reaction_input.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/auth_utils.dart';
+import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/farcaster/mutation/create_cast_reaction.graphql.dart';
 import 'package:app/graphql/backend/farcaster/mutation/delete_cast_reaction.graphql.dart';
@@ -17,6 +18,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:share_plus/share_plus.dart';
 
 class CastItemActionsWidget extends StatefulWidget {
   final AirstackFarcasterCast cast;
@@ -72,6 +74,36 @@ class CastItemActionsWidgetState extends State<CastItemActionsWidget> {
           Row(
             children: [
               InkWell(
+                onTap: () {
+                  AutoRouter.of(context).push(
+                    CreateFarcasterCastReplyRoute(cast: widget.cast),
+                  );
+                },
+                child: ThemeSvgIcon(
+                  color: colorScheme.onSecondary,
+                  builder: (filter) => Assets.icons.icFarcasterReply.svg(
+                    colorFilter: filter,
+                    width: 18.w,
+                    height: 18.w,
+                  ),
+                ),
+              ),
+              SizedBox(width: Spacing.small),
+              InkWell(
+                onTap: () {
+                  SnackBarUtils.showComingSoon();
+                },
+                child: ThemeSvgIcon(
+                  color: colorScheme.onSecondary,
+                  builder: (filter) => Assets.icons.icFarcasterRecast.svg(
+                    colorFilter: filter,
+                    width: 14.w,
+                    height: 14.w,
+                  ),
+                ),
+              ),
+              SizedBox(width: Spacing.small),
+              InkWell(
                 onTap: () async {
                   final parentCastInput = Input$ParentCastInput(
                     fid: double.parse(widget.cast.fid ?? '0'),
@@ -117,16 +149,28 @@ class CastItemActionsWidgetState extends State<CastItemActionsWidget> {
                         ),
                 ),
               ),
-              SizedBox(width: Spacing.small),
+              const Spacer(),
               InkWell(
                 onTap: () {
-                  AutoRouter.of(context).push(
-                    CreateFarcasterCastReplyRoute(cast: widget.cast),
-                  );
+                  SnackBarUtils.showComingSoon();
                 },
                 child: ThemeSvgIcon(
                   color: colorScheme.onSecondary,
-                  builder: (filter) => Assets.icons.icChatBubble.svg(
+                  builder: (filter) => Assets.icons.icBookmark.svg(
+                    colorFilter: filter,
+                    width: 18.w,
+                    height: 18.w,
+                  ),
+                ),
+              ),
+              SizedBox(width: Spacing.small),
+              InkWell(
+                onTap: () {
+                  Share.shareUri(Uri.parse(widget.cast.url ?? ''));
+                },
+                child: ThemeSvgIcon(
+                  color: colorScheme.onSecondary,
+                  builder: (filter) => Assets.icons.icShare.svg(
                     colorFilter: filter,
                     width: 18.w,
                     height: 18.w,
