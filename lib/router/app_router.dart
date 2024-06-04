@@ -109,6 +109,7 @@ class AppRouter extends $AppRouter {
         AutoRoute(path: '/chat/detail/:id', page: ChatRoute.page),
         AutoRoute(page: FarcasterChannelNewsfeedRoute.page),
         AutoRoute(page: CreateFarcasterCastReplyRoute.page),
+        AutoRoute(page: FarcasterCastDetailRoute.page),
         ...chatRoutes,
         eventBuyTicketsRoutes,
         createEventRoutes,
