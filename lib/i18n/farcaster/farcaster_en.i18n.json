@@ -26,5 +26,6 @@
         "zero": "like",
         "one": "like",
         "other": "likes"
-    }
+    },
+    "conversation": "Conversation"
 }

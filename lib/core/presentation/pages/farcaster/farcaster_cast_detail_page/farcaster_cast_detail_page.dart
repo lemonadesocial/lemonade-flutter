@@ -5,6 +5,7 @@ import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/farcaster_airstack/query/get_farcaster_cast_replies.graphql.dart';
+import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
@@ -40,8 +41,11 @@ class _FarcasterCastDetailPageState extends State<FarcasterCastDetailPage> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final t = Translations.of(context);
     return Scaffold(
-      appBar: const LemonAppBar(),
+      appBar: LemonAppBar(
+        title: t.farcaster.conversation,
+      ),
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
