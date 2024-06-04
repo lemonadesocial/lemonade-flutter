@@ -478,7 +478,6 @@ type Event {
   private: Boolean
   published: Boolean
   approval_required: Boolean
-  required_profile_fields: [String!]
   rewards: [EventReward!]
   reward_uses: JSON
   session_guests: JSON
@@ -2180,17 +2179,18 @@ type EventJoinRequest {
   created_at: DateTimeISO!
   event: MongoID!
   user: MongoID!
-  ticket_info: [TicketInfo!]!
-  payment: MongoID
-  approved_at: DateTimeISO
-  approved_by: MongoID
-  declined_at: DateTimeISO
-  declined_by: MongoID
+  state: EventJoinRequestState!
+  decided_at: DateTimeISO
+  decided_by: MongoID
   user_expanded: UserWithEmail
   event_expanded: Event
-  approved_by_expanded: User
-  declined_by_expanded: User
-  payment_expanded: NewPayment
+  decided_by_expanded: User
+}
+
+enum EventJoinRequestState {
+  pending
+  approved
+  declined
 }
 
 type TicketInfo {
@@ -2480,6 +2480,8 @@ type Mutation {
   createEventEmailSetting(input: CreateEventEmailSettingInput!): EmailSetting
   updateEventEmailSetting(input: UpdateEventEmailSettingInput!): EmailSetting!
   deleteEventEmailSetting(_id: MongoID!): Boolean!
+  createEventJoinRequest(input: CreateEventJoinRequestInput!): EventJoinRequest!
+  decideUserJoinRequests(input: DecideUserJoinRequestsInput!): Boolean!
   createEvent(input: EventInput!): Event!
   updateEvent(input: EventInput!, _id: MongoID!): Event!
   cancelEvent(_id: MongoID!): Event!
@@ -2708,6 +2710,16 @@ input UpdateEventEmailSettingInput {
   _id: MongoID!
 }
 
+input CreateEventJoinRequestInput {
+  event: MongoID!
+}
+
+input DecideUserJoinRequestsInput {
+  event: MongoID!
+  requests: [MongoID!]!
+  decision: EventJoinRequestState!
+}
+
 input EventInput {
   title: String
   start: DateTimeISO
@@ -2757,7 +2769,6 @@ input EventInput {
   private: Boolean
   published: Boolean
   approval_required: Boolean
-  required_profile_fields: [String!]
   rewards: [EventRewardInput!]
   sessions: [EventSessionInput!]
   speaker_emails: [String!]
