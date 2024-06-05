@@ -195,25 +195,6 @@ class _SelectTicketViewState extends State<SelectTicketView> {
     }
   }
 
-  void _handleEventRequireApproval() async {
-    // pop whole buy event page stack
-    await AutoRouter.of(context).root.pop();
-    AutoRouter.of(context).root.replace(
-          RSVPEventSuccessPopupRoute(
-            event: widget.event,
-            primaryMessage: t.event.eventApproval.waitingApproval,
-            secondaryMessage: t.event.eventApproval.waitingApprovalDescription,
-            onPressed: (outerContext) {
-              AutoRouter.of(outerContext).replace(
-                EventDetailRoute(
-                  eventId: widget.event.id ?? '',
-                ),
-              );
-            },
-          ),
-        );
-  }
-
   void _handleRedeemSingleTicketSuccess({
     EventRsvp? eventRsvp,
   }) async {
@@ -304,12 +285,6 @@ class _SelectTicketViewState extends State<SelectTicketView> {
             state.maybeWhen(
               orElse: () => null,
               success: (redeemTicketsResponse) async {
-                // if event join request available
-                // navigate to success page with with different content saying that
-                // need to wait for approval
-                // if (redeemTicketsResponse.eventJoinRequest != null) {
-                //   return _handleEventRequireApproval();
-                // }
                 final tickets = redeemTicketsResponse.tickets ?? [];
 
                 // if guest already joined the event but

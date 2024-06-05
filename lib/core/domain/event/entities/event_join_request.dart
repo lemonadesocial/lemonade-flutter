@@ -1,7 +1,5 @@
 import 'package:app/core/data/event/dtos/event_join_request_dto/event_join_request_dto.dart';
 import 'package:app/core/domain/event/entities/event.dart';
-import 'package:app/core/domain/event/entities/event_ticket.dart';
-import 'package:app/core/domain/payment/entities/payment.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
