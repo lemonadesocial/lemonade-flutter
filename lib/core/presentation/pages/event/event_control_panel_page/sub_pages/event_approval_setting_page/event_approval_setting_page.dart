@@ -214,7 +214,7 @@ class _EventApprovalSettingPageState extends State<EventApprovalSettingPage>
                   ),
                   if (event?.approvalRequired == true) ...[
                     EventJoinRequestList(
-                      state: Enum$JoinRequestState.pending,
+                      state: Enum$EventJoinRequestState.pending,
                       event: event,
                       itemBuilder: ({
                         required eventJoinRequest,
@@ -226,7 +226,7 @@ class _EventApprovalSettingPageState extends State<EventApprovalSettingPage>
                       ),
                     ),
                     EventJoinRequestList(
-                      state: Enum$JoinRequestState.approved,
+                      state: Enum$EventJoinRequestState.approved,
                       event: event,
                       itemBuilder: ({
                         required eventJoinRequest,
@@ -237,7 +237,7 @@ class _EventApprovalSettingPageState extends State<EventApprovalSettingPage>
                       ),
                     ),
                     EventJoinRequestList(
-                      state: Enum$JoinRequestState.declined,
+                      state: Enum$EventJoinRequestState.declined,
                       event: event,
                       itemBuilder: ({
                         required eventJoinRequest,

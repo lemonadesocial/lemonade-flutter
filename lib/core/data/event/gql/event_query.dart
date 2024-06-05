@@ -52,7 +52,6 @@ const eventOfferFragment = '''
 
 const eventTicketTypesFragment = '''
   fragment eventTicketTypesFragment on Event {
-    required_profile_fields
     event_ticket_types {
       _id
       active
