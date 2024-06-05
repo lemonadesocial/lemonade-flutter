@@ -2,7 +2,6 @@ import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/data/event/dtos/event_join_request_dto/event_join_request_dto.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_join_request.dart';
-import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_buy_button.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
