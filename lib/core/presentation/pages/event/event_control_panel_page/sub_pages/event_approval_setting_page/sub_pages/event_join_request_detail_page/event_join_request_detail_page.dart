@@ -78,9 +78,7 @@ class _EventJoinRequestDetailPageState
     await widget.onRefetchList?.call();
   }
 
-  bool get isPending =>
-      _eventJoinRequest.approvedBy == null &&
-      _eventJoinRequest.declinedBy == null;
+  bool get isPending => _eventJoinRequest.isPending;
 
   Future<dynamic> openApplication(BuildContext context, Event? event) {
     return showCupertinoModalBottomSheet(

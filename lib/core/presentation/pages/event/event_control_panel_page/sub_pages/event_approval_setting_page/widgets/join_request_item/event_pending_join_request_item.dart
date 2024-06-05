@@ -38,9 +38,7 @@ class EventPendingJoinRequestItem extends StatefulWidget {
 
 class _EventPendingJoinRequestItemState
     extends State<EventPendingJoinRequestItem> {
-  bool get isPending =>
-      widget.eventJoinRequest.approvedBy == null &&
-      widget.eventJoinRequest.declinedBy == null;
+  bool get isPending => widget.eventJoinRequest.isPending;
 
   Future<void> _modifyJoinRequest({
     required eventId,

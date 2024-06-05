@@ -28,11 +28,9 @@ class EventJoinRequestStatusHistory extends StatelessWidget {
     required this.eventJoinRequest,
   });
 
-  bool get isPending =>
-      eventJoinRequest.approvedBy == null &&
-      eventJoinRequest.declinedBy == null;
+  bool get isPending => eventJoinRequest.isPending;
 
-  bool get isRejected => eventJoinRequest.declinedBy != null;
+  bool get isRejected => eventJoinRequest.isDeclined;
 
   Widget _declinedBadge(BuildContext context) => InkWell(
         onTap: () => SnackBarUtils.showComingSoon(),
@@ -183,18 +181,16 @@ class EventJoinRequestStatusHistory extends StatelessWidget {
             : isRejected
                 ? t.event.eventApproval.declinedBy(
                     name:
-                        '@${eventJoinRequest.declinedByExpanded?.username ?? ''}',
+                        '@${eventJoinRequest.decidedByExpanded?.username ?? ''}',
                   )
                 : t.event.eventApproval.approvedBy(
                     name:
-                        '@${eventJoinRequest.approvedByExpanded?.username ?? ''}',
+                        '@${eventJoinRequest.decidedByExpanded?.username ?? ''}',
                   ),
         subTitle: isPending
             ? t.event.eventApproval.approveToLetThemIn
             : DateFormatUtils.custom(
-                isRejected
-                    ? eventJoinRequest.declinedAt
-                    : eventJoinRequest.approvedAt,
+                eventJoinRequest.decidedAt,
                 pattern: 'dd, MMM, HH:mm',
               ),
       ),

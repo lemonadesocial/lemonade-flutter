@@ -33,7 +33,7 @@ class EventJoinRequestTickesList extends StatelessWidget {
     this.event,
   });
 
-  bool get isApproved => eventJoinRequest.approvedBy != null;
+  bool get isApproved => eventJoinRequest.isApproved;
 
   @override
   Widget build(BuildContext context) {

@@ -31,9 +31,7 @@ class EventJoinRequestApplicationPage extends StatelessWidget {
     this.onPressDecline,
   });
 
-  bool get isPending =>
-      eventJoinRequest.approvedBy == null &&
-      eventJoinRequest.declinedBy == null;
+  bool get isPending => eventJoinRequest.isPending;
 
   @override
   Widget build(BuildContext context) {
