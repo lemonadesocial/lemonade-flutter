@@ -35,6 +35,12 @@ class AirstackFarcasterUser with _$AirstackFarcasterUser {
     String? id,
     String? profileName,
     String? profileImage,
+    String? profileDisplayName,
+    String? profileUrl,
+    String? profileBio,
+    int? followingCount,
+    int? followerCount,
+    String? location,
   }) = _AirstackFarcasterUser;
 
   factory AirstackFarcasterUser.fromJson(Map<String, dynamic> json) =>
