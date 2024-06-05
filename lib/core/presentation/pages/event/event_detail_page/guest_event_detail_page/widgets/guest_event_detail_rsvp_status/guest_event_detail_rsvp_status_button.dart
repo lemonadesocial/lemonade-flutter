@@ -33,7 +33,10 @@ class GuestEventDetailRSVPStatusButton extends StatelessWidget {
         .maybeWhen(orElse: () => false, authenticated: (_) => true);
 
     if (!isLoggedIn) {
-      return GuestEventDetailBuyButton(event: event);
+      return GuestEventDetailBuyButton(
+        event: event,
+        refetch: null,
+      );
     }
 
     return Query$GetMyEventJoinRequest$Widget(
@@ -60,7 +63,7 @@ class GuestEventDetailRSVPStatusButton extends StatelessWidget {
                 : null;
 
         if (eventJoinRequest == null) {
-          return GuestEventDetailBuyButton(event: event);
+          return GuestEventDetailBuyButton(event: event, refetch: refetch);
         }
 
         if (eventJoinRequest.isPending == true) {

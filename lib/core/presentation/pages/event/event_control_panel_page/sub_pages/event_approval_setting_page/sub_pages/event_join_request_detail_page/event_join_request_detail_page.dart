@@ -183,10 +183,10 @@ class _EventJoinRequestDetailPageState
                     ),
                   ),
                 ),
-                EventJoinRequestTickesList(
-                  eventJoinRequest: _eventJoinRequest,
-                  event: event,
-                ),
+                // EventJoinRequestTickesList(
+                //   eventJoinRequest: _eventJoinRequest,
+                //   event: event,
+                // ),
               ],
             ),
           ),

@@ -3448,7 +3448,6 @@ input TicketAssignee {
 
 type RedeemTicketsResponse {
   tickets: [Ticket!]
-  event_join_request: EventJoinRequest
 }
 
 input RedeemTicketsInput {

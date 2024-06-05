@@ -30,8 +30,8 @@ class GuestEventApprovalStatusPage extends StatelessWidget {
     final isPendingJoinRequest =
         eventJoinRequest != null && eventJoinRequest?.isPending == true;
     final isDeclinedJoinRequest =
-        eventJoinRequest != null && eventJoinRequest?.isDeclined != null;
-    final isApproved = eventJoinRequest?.isApproved != null;
+        eventJoinRequest != null && eventJoinRequest?.isDeclined == true;
+    final isApproved = eventJoinRequest?.isApproved == true;
 
     String title = '';
     String description = '';

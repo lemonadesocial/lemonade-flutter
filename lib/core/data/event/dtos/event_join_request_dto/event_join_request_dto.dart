@@ -1,6 +1,4 @@
 import 'package:app/core/data/event/dtos/event_dtos.dart';
-import 'package:app/core/data/event/dtos/event_ticket_dto/event_ticket_dto.dart';
-import 'package:app/core/data/payment/dtos/payment_dto/payment_dto.dart';
 import 'package:app/core/data/user/dtos/user_dtos.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -20,7 +18,6 @@ class EventJoinRequestDto with _$EventJoinRequestDto {
     @JsonKey(name: 'user_expanded') UserDto? userExpanded,
     @JsonKey(name: 'decided_by_expanded') UserDto? decidedByExpanded,
     @JsonKey(name: 'event_expanded') EventDto? eventExpanded,
-    @JsonKey(name: 'ticket_info') List<TicketInfoDto>? ticketInfo,
     Enum$EventJoinRequestState? state,
   }) = _EventJoinRequestDto;
 

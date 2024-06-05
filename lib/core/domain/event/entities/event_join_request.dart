@@ -21,7 +21,6 @@ class EventJoinRequest with _$EventJoinRequest {
     User? userExpanded,
     User? decidedByExpanded,
     Event? eventExpanded,
-    List<TicketInfo>? ticketInfo,
     Enum$EventJoinRequestState? state,
   }) = _EventJoinRequest;
 
@@ -39,9 +38,6 @@ class EventJoinRequest with _$EventJoinRequest {
         eventExpanded: dto.eventExpanded != null
             ? Event.fromDto(dto.eventExpanded!)
             : null,
-        ticketInfo: (dto.ticketInfo ?? [])
-            .map((item) => TicketInfo.fromDto(item))
-            .toList(),
         state: dto.state,
       );
 

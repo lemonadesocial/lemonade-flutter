@@ -20,10 +20,6 @@ const eventJoinRequestFragment = '''
     username
     wallets
   }
-  ticket_info {
-    count
-    ticket_type
-  }
   event_expanded {
     _id
   }

@@ -307,9 +307,9 @@ class _SelectTicketViewState extends State<SelectTicketView> {
                 // if event join request available
                 // navigate to success page with with different content saying that
                 // need to wait for approval
-                if (redeemTicketsResponse.eventJoinRequest != null) {
-                  return _handleEventRequireApproval();
-                }
+                // if (redeemTicketsResponse.eventJoinRequest != null) {
+                //   return _handleEventRequireApproval();
+                // }
                 final tickets = redeemTicketsResponse.tickets ?? [];
 
                 // if guest already joined the event but

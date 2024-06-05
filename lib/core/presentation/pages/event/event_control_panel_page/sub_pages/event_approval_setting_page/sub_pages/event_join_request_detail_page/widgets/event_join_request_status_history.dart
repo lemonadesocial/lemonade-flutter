@@ -1,6 +1,5 @@
 import 'package:app/core/domain/event/entities/event_join_request.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/sub_pages/event_join_request_detail_page/widgets/event_join_request_status_history_step.dart';
-import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/widgets/event_join_request_ticket_info.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/widgets/join_request_user_avatar.dart';
 import 'package:app/core/presentation/widgets/common/dotted_line/dotted_line.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
@@ -70,15 +69,7 @@ class EventJoinRequestStatusHistory extends StatelessWidget {
         ),
         title: '',
         subTitle: '',
-        more: isRejected
-            ? _declinedBadge(context)
-            : EventJoinRequestTicketInfo(
-                eventJoinRequest: eventJoinRequest,
-                showPrice: false,
-                padding: EdgeInsets.all(Spacing.extraSmall),
-                backgroundColor: LemonColor.darkBackground,
-                borderColor: Colors.transparent,
-              ),
+        more: isRejected ? _declinedBadge(context) : null,
       ),
       EventJoinRequestStatusHistoryStep(
         leading: const EventJoinrequestStatusHistoryIcon(

@@ -46,7 +46,7 @@ class EventBuyTicketsPrerequisiteCheckBloc extends Bloc<
       );
       return;
     }
-    
+
     final joinRequest = await _checkEventJoinRequest();
     if (joinRequest == null) {
       final createdJoinRequest = await _createEventJoinRequest();
