@@ -1,12 +1,13 @@
+import 'package:app/core/domain/farcaster/entities/airstack_farcaster_cast.dart';
 import 'package:app/core/domain/farcaster/farcaster_repository.dart';
 import 'package:app/core/domain/farcaster/input/cast_has_reaction_input.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/auth_utils.dart';
+import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/farcaster/mutation/create_cast_reaction.graphql.dart';
 import 'package:app/graphql/backend/farcaster/mutation/delete_cast_reaction.graphql.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
-import 'package:app/graphql/farcaster_airstack/query/get_farcaster_casts.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -17,9 +18,10 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:share_plus/share_plus.dart';
 
 class CastItemActionsWidget extends StatefulWidget {
-  final Query$GetFarCasterCasts$FarcasterCasts$Cast cast;
+  final AirstackFarcasterCast cast;
   const CastItemActionsWidget({
     super.key,
     required this.cast,
@@ -64,12 +66,43 @@ class CastItemActionsWidgetState extends State<CastItemActionsWidget> {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final numberFormat = NumberFormat.compact();
-    final t = Translations.of(context);
+    final hasReplies = (widget.cast.numberOfReplies ?? 0) > 0;
+    final hasLikes = (widget.cast.numberOfLikes ?? 0) > 0;
     return Flexible(
       child: Column(
         children: [
           Row(
             children: [
+              InkWell(
+                onTap: () {
+                  AutoRouter.of(context).push(
+                    CreateFarcasterCastReplyRoute(cast: widget.cast),
+                  );
+                },
+                child: ThemeSvgIcon(
+                  color: colorScheme.onSecondary,
+                  builder: (filter) => Assets.icons.icFarcasterReply.svg(
+                    colorFilter: filter,
+                    width: 18.w,
+                    height: 18.w,
+                  ),
+                ),
+              ),
+              SizedBox(width: Spacing.small),
+              InkWell(
+                onTap: () {
+                  SnackBarUtils.showComingSoon();
+                },
+                child: ThemeSvgIcon(
+                  color: colorScheme.onSecondary,
+                  builder: (filter) => Assets.icons.icFarcasterRecast.svg(
+                    colorFilter: filter,
+                    width: 14.w,
+                    height: 14.w,
+                  ),
+                ),
+              ),
+              SizedBox(width: Spacing.small),
               InkWell(
                 onTap: () async {
                   final parentCastInput = Input$ParentCastInput(
@@ -116,16 +149,28 @@ class CastItemActionsWidgetState extends State<CastItemActionsWidget> {
                         ),
                 ),
               ),
-              SizedBox(width: Spacing.small),
+              const Spacer(),
               InkWell(
                 onTap: () {
-                  AutoRouter.of(context).push(
-                    CreateFarcasterCastReplyRoute(cast: widget.cast),
-                  );
+                  SnackBarUtils.showComingSoon();
                 },
                 child: ThemeSvgIcon(
                   color: colorScheme.onSecondary,
-                  builder: (filter) => Assets.icons.icChatBubble.svg(
+                  builder: (filter) => Assets.icons.icBookmark.svg(
+                    colorFilter: filter,
+                    width: 18.w,
+                    height: 18.w,
+                  ),
+                ),
+              ),
+              SizedBox(width: Spacing.small),
+              InkWell(
+                onTap: () {
+                  Share.shareUri(Uri.parse(widget.cast.url ?? ''));
+                },
+                child: ThemeSvgIcon(
+                  color: colorScheme.onSecondary,
+                  builder: (filter) => Assets.icons.icShare.svg(
                     colorFilter: filter,
                     width: 18.w,
                     height: 18.w,
@@ -134,31 +179,39 @@ class CastItemActionsWidgetState extends State<CastItemActionsWidget> {
               ),
             ],
           ),
-          SizedBox(height: Spacing.xSmall),
-          Row(
-            children: [
-              Text(
-                '${numberFormat.format(widget.cast.numberOfReplies)} ${t.farcaster.reply(n: widget.cast.numberOfReplies ?? 0)}',
-                style: Typo.medium.copyWith(
-                  color: colorScheme.onSecondary,
-                ),
-              ),
-              SizedBox(width: Spacing.xSmall),
-              Text(
-                '${numberFormat.format(widget.cast.numberOfLikes)} ${t.farcaster.like(n: widget.cast.numberOfLikes ?? 0)}',
-                style: Typo.medium.copyWith(
-                  color: colorScheme.onSecondary,
-                ),
-              ),
-              SizedBox(width: Spacing.xSmall),
-              Text(
-                '/${widget.cast.channel?.channelId}',
-                style: Typo.medium.copyWith(
-                  color: colorScheme.onSecondary,
-                ),
-              ),
-            ],
-          ),
+          if (widget.cast.channel != null || hasLikes || hasReplies) ...[
+            SizedBox(height: Spacing.xSmall),
+            Row(
+              children: [
+                if (hasReplies) ...[
+                  Text(
+                    '${numberFormat.format(widget.cast.numberOfReplies)} ${t.farcaster.reply(n: widget.cast.numberOfReplies ?? 0)}',
+                    style: Typo.medium.copyWith(
+                      color: colorScheme.onSecondary,
+                    ),
+                  ),
+                  SizedBox(width: Spacing.xSmall),
+                ],
+                if (hasLikes) ...[
+                  Text(
+                    '${numberFormat.format(widget.cast.numberOfLikes)} ${t.farcaster.like(n: widget.cast.numberOfLikes ?? 0)}',
+                    style: Typo.medium.copyWith(
+                      color: colorScheme.onSecondary,
+                    ),
+                  ),
+                  SizedBox(width: Spacing.xSmall),
+                ],
+                if (widget.cast.channel != null) ...[
+                  Text(
+                    '/${widget.cast.channel?.channelId}',
+                    style: Typo.medium.copyWith(
+                      color: colorScheme.onSecondary,
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ],
         ],
       ),
     );
