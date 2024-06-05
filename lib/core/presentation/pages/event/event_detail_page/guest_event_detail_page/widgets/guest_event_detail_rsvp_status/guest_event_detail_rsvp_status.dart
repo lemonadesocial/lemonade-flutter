@@ -64,10 +64,6 @@ class GuestEventDetailRSVPStatus extends StatelessWidget {
                   )
                 : null;
 
-        final isEscrow =
-            eventJoinRequest?.paymentExpanded?.accountExpanded?.type ==
-                PaymentAccountType.ethereumEscrow;
-
         if (eventJoinRequest?.isPending == true) {
           return _JoinRequestStatusCard(
             title: t.event.rsvpStatus.pendingApproval,
@@ -77,7 +73,6 @@ class GuestEventDetailRSVPStatus extends StatelessWidget {
               height: Sizing.small,
               color: colorScheme.onSecondary,
             ),
-            hasCancel: isEscrow,
             onPressCancel: () {},
           );
         }
@@ -94,7 +89,6 @@ class GuestEventDetailRSVPStatus extends StatelessWidget {
                 colorFilter: colorFilter,
               ),
             ),
-            hasCancel: isEscrow,
             onPressCancel: () {},
           );
         }
@@ -108,7 +102,6 @@ class GuestEventDetailRSVPStatus extends StatelessWidget {
               width: Sizing.small,
               height: Sizing.small,
             ),
-            hasCancel: isEscrow,
             onPressCancel: () {},
           );
         }
@@ -123,14 +116,12 @@ class _JoinRequestStatusCard extends StatelessWidget {
   final String title;
   final String subTitle;
   final Widget icon;
-  final bool hasCancel;
   final Function()? onPressCancel;
 
   const _JoinRequestStatusCard({
     required this.title,
     required this.subTitle,
     required this.icon,
-    this.hasCancel = false,
     this.onPressCancel,
   });
 
@@ -153,15 +144,7 @@ class _JoinRequestStatusCard extends StatelessWidget {
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              icon,
-              if (hasCancel)
-                LemonOutlineButton(
-                  radius: BorderRadius.circular(LemonRadius.button),
-                  label: t.common.actions.cancel,
-                  onTap: onPressCancel,
-                ),
-            ],
+            children: [icon],
           ),
           SizedBox(height: Spacing.smMedium),
           Text(

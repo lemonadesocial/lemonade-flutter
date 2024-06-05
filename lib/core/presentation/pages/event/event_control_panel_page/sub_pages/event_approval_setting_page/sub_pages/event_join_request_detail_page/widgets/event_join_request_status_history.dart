@@ -1,14 +1,8 @@
 import 'package:app/core/domain/event/entities/event_join_request.dart';
-import 'package:app/core/domain/payment/payment_enums.dart';
-import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/sub_pages/event_join_request_detail_page/widgets/escrow_first_deposit_amount_builder.dart';
-import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/sub_pages/event_join_request_detail_page/widgets/event_join_request_escrow_payment_status_widget.dart';
-import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/sub_pages/event_join_request_detail_page/widgets/event_join_request_payment_amount_builder.dart';
-import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/sub_pages/event_join_request_detail_page/widgets/event_join_request_payment_status_widget.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/sub_pages/event_join_request_detail_page/widgets/event_join_request_status_history_step.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/widgets/event_join_request_ticket_info.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/widgets/join_request_user_avatar.dart';
 import 'package:app/core/presentation/widgets/common/dotted_line/dotted_line.dart';
-import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
@@ -69,8 +63,6 @@ class EventJoinRequestStatusHistory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
-
     final steps = [
       EventJoinRequestStatusHistoryStep(
         leading: JoinRequestUserAvatar(
@@ -96,76 +88,6 @@ class EventJoinRequestStatusHistory extends StatelessWidget {
         subTitle: DateFormatUtils.custom(
           eventJoinRequest.createdAt,
           pattern: 'dd, MMM, HH:mm',
-        ),
-        more: EventJoinRequestPaymentAmountsBuilder(
-          eventId: eventJoinRequest.eventExpanded?.id ?? '',
-          eventJoinRequest: eventJoinRequest,
-          builder: ({
-            required formattedTotalAmount,
-            required formattedDueAmount,
-            required formattedDepositAmount,
-          }) {
-            final isEscrow =
-                eventJoinRequest.paymentExpanded?.accountExpanded?.type ==
-                    PaymentAccountType.ethereumEscrow;
-            if (!isEscrow &&
-                eventJoinRequest.paymentExpanded?.state !=
-                    PaymentState.succeeded) {
-              return const SizedBox.shrink();
-            }
-
-            if (formattedTotalAmount.isEmpty ||
-                formattedDepositAmount.isEmpty) {
-              return const SizedBox.shrink();
-            }
-            return EscrowFirstDepositAmountBuilder(
-              eventJoinRequest: eventJoinRequest,
-              builder: ({
-                required formattedFirstDepositAmount,
-                required formattedFirstDueAmount,
-                required isLoading,
-              }) {
-                if (isEscrow) {
-                  if (isLoading) {
-                    return Loading.defaultLoading(context);
-                  }
-                  return RichText(
-                    text: TextSpan(
-                      text: '$formattedFirstDepositAmount ',
-                      style: Typo.small.copyWith(
-                        color: LemonColor.malachiteGreen,
-                      ),
-                      children: [
-                        TextSpan(
-                          text: t.event.eventApproval.payment.paid,
-                          style: Typo.small.copyWith(
-                            color: colorScheme.onSecondary,
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                }
-
-                return RichText(
-                  text: TextSpan(
-                    text: '$formattedTotalAmount ',
-                    style: Typo.small.copyWith(
-                      color: LemonColor.malachiteGreen,
-                    ),
-                    children: [
-                      TextSpan(
-                        text: t.event.eventApproval.payment.paid,
-                        style: Typo.small.copyWith(
-                          color: colorScheme.onSecondary,
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            );
-          },
         ),
       ),
       EventJoinRequestStatusHistoryStep(
@@ -194,18 +116,6 @@ class EventJoinRequestStatusHistory extends StatelessWidget {
                 pattern: 'dd, MMM, HH:mm',
               ),
       ),
-      if (eventJoinRequest.paymentExpanded != null &&
-          eventJoinRequest.paymentExpanded?.accountExpanded?.type ==
-              PaymentAccountType.ethereumEscrow &&
-          !eventJoinRequest.isPending)
-        EventJoinRequestEscrowPaymentStatusWidget(
-          eventJoinRequest: eventJoinRequest,
-        ),
-      if (eventJoinRequest.paymentExpanded != null &&
-          eventJoinRequest.paymentExpanded?.accountExpanded?.type !=
-              PaymentAccountType.ethereumEscrow &&
-          eventJoinRequest.isApproved)
-        EventJoinRequestPaymentStatusWidget(eventJoinRequest: eventJoinRequest),
     ];
 
     return Column(

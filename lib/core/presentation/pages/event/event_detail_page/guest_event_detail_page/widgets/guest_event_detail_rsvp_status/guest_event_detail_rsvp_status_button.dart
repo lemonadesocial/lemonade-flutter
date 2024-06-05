@@ -62,9 +62,6 @@ class GuestEventDetailRSVPStatusButton extends StatelessWidget {
         if (eventJoinRequest == null) {
           return GuestEventDetailBuyButton(event: event);
         }
-        final isEscrow =
-            eventJoinRequest.paymentExpanded?.accountExpanded?.type ==
-                PaymentAccountType.ethereumEscrow;
 
         if (eventJoinRequest.isPending == true) {
           button = LinearGradientButton.secondaryButton(
@@ -88,19 +85,6 @@ class GuestEventDetailRSVPStatusButton extends StatelessWidget {
             },
           );
         }
-
-        if (eventJoinRequest.isDeclined == true) {
-          // TODO: For escrow, we should show claim refund
-          button = isEscrow
-              ? LinearGradientButton.primaryButton(
-                  label: t.event.rsvpStatus.claimRefund,
-                  onTap: () {
-                    // TODO: handle claim refund
-                  },
-                )
-              : null;
-        }
-
         if (eventJoinRequest.isApproved == true) {
           button = LinearGradientButton.primaryButton(
             label: t.common.actions.continueNext,
