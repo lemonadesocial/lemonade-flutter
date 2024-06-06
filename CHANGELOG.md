@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.23.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.22.0...v1.23.0) (2024-06-06)
+
+
+### Features
+
+* farcaster cast replies ([#627](https://github.com/lemonadesocial/lemonade-flutter/issues/627)) ([85b93db](https://github.com/lemonadesocial/lemonade-flutter/commit/85b93dbcb95abbe303949990e18b1cb62a482159))
+* remake required approval flow ([#628](https://github.com/lemonadesocial/lemonade-flutter/issues/628)) ([b341e96](https://github.com/lemonadesocial/lemonade-flutter/commit/b341e9683bb113c3f50116d940aad56f5c1a83b8))
+
+
+### Bug Fixes
+
+* fix reservation list breaking change ([#630](https://github.com/lemonadesocial/lemonade-flutter/issues/630)) ([686a8e1](https://github.com/lemonadesocial/lemonade-flutter/commit/686a8e12df18a71e7fa7091fc72289db0d806d1f))
+
 ## [1.22.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.21.0...v1.22.0) (2024-06-03)
 
 
