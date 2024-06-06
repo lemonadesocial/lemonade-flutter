@@ -31,6 +31,7 @@ import 'package:app/graphql/backend/event/mutation/update_event.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/cancel_event.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/update_event_story_image.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/create_event_join_request.graphql.dart';
+import 'package:app/graphql/backend/event/query/export_event_tickets.graphql.dart';
 import 'package:app/graphql/backend/event/query/get_event_application_answers.graphql.dart';
 import 'package:app/graphql/backend/event/query/get_event_cohost_requests.graphql.dart';
 import 'package:app/graphql/backend/event/query/get_event_checkins.graphql.dart';
