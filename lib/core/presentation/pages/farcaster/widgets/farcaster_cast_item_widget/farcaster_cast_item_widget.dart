@@ -45,7 +45,17 @@ class _FarcasterCastItemWidgetState extends State<FarcasterCastItemWidget>
     super.build(context);
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
     return InkWell(
-      onTap: widget.onTap,
+      onTap: () {
+        if (widget.onTap != null) {
+          widget.onTap?.call();
+          return;
+        }
+        AutoRouter.of(context).push(
+          FarcasterCastDetailRoute(
+            cast: widget.cast,
+          ),
+        );
+      },
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: Spacing.xSmall),
         child: Row(

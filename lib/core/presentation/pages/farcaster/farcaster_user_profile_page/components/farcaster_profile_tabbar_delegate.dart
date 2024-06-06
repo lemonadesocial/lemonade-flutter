@@ -48,6 +48,7 @@ class _ProfileTabBarState extends State<_ProfileTabBar> {
               color: !isSelected
                   ? colorScheme.onSurfaceVariant
                   : colorScheme.onPrimary,
+              fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
             ),
           ),
         ),

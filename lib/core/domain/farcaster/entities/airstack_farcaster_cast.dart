@@ -32,7 +32,7 @@ class AirstackFarcasterCast with _$AirstackFarcasterCast {
 @freezed
 class AirstackFarcasterUser with _$AirstackFarcasterUser {
   factory AirstackFarcasterUser({
-    String? id,
+    String? fid,
     String? profileName,
     String? profileImage,
     String? profileDisplayName,

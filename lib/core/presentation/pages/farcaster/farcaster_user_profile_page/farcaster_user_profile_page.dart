@@ -1,6 +1,9 @@
 import 'package:app/core/domain/farcaster/entities/airstack_farcaster_cast.dart';
 import 'package:app/core/presentation/pages/farcaster/farcaster_user_profile_page/components/farcaster_profile_header.dart';
 import 'package:app/core/presentation/pages/farcaster/farcaster_user_profile_page/components/farcaster_profile_tabbar_delegate.dart';
+import 'package:app/core/presentation/pages/farcaster/farcaster_user_profile_page/components/user_farcaster_feeds/user_facaster_replies_newsfeed.dart';
+import 'package:app/core/presentation/pages/farcaster/farcaster_user_profile_page/components/user_farcaster_feeds/user_farcaster_casts_newsfeed.dart';
+import 'package:app/core/presentation/pages/farcaster/farcaster_user_profile_page/components/user_farcaster_feeds/user_farcaster_likes_newsfeed.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/common/sliver/dynamic_sliver_appbar.dart';
@@ -119,9 +122,15 @@ class _FarcasterUserProfilePageState extends State<FarcasterUserProfilePage>
                   body: TabBarView(
                     controller: _tabCtrl,
                     children: [
-                      Container(),
-                      Container(),
-                      Container(),
+                      UserFarcasterCastsNewsfeed(
+                        user: userDetail,
+                      ),
+                      UserFarcasterRepliesNewsfeed(
+                        user: userDetail,
+                      ),
+                      UserFarcasterLikesNewsfeed(
+                        user: userDetail,
+                      ),
                     ],
                   ),
                 );
