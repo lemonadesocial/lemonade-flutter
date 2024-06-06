@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.22.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.21.0...v1.22.0) (2024-06-03)
+
+
+### Features
+
+* implement like/dislike cast, reply cast ([#623](https://github.com/lemonadesocial/lemonade-flutter/issues/623)) ([2b5c988](https://github.com/lemonadesocial/lemonade-flutter/commit/2b5c988ffbf264d22100fe23f8f486d0b3ff2702))
+
+
+### Bug Fixes
+
+* update farcaster mention regex ([#625](https://github.com/lemonadesocial/lemonade-flutter/issues/625)) ([2f0f3f8](https://github.com/lemonadesocial/lemonade-flutter/commit/2f0f3f85c8b4a633313cdef9f60edd0cca681856))
+
 ## [1.21.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.20.0...v1.21.0) (2024-05-31)
 
 

@@ -1,3 +1,0 @@
-mutation DeclineUserJoinRequests($input: DeclineUserJoinRequestsInput!) {
-  declineUserJoinRequests(input: $input)
-}

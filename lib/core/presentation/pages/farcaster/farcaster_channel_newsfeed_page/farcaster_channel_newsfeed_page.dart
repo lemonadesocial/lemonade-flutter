@@ -1,7 +1,6 @@
-// create an auto router page widget
-
+import 'package:app/core/domain/farcaster/entities/airstack_farcaster_cast.dart';
 import 'package:app/core/domain/farcaster/entities/farcaster_channel.dart';
-import 'package:app/core/presentation/pages/farcaster/farcaster_channel_newsfeed_page/widgets/farcaster_cast_item_widget/farcaster_cast_item_widget.dart';
+import 'package:app/core/presentation/pages/farcaster/widgets/farcaster_cast_item_widget/farcaster_cast_item_widget.dart';
 import 'package:app/core/presentation/pages/farcaster/farcaster_channel_newsfeed_page/widgets/farcaster_channel_detail_bottomsheet.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
@@ -12,6 +11,7 @@ import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/farcaster_airstack/query/get_farcaster_casts.graphql.dart';
 import 'package:app/injection/register_module.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -128,7 +128,13 @@ class _FarcasterChannelNewsfeedPageState
               refetch,
               fetchMore,
             }) {
-              final casts = result.parsedData?.FarcasterCasts?.Cast ?? [];
+              final casts = (result.parsedData?.FarcasterCasts?.Cast ?? [])
+                  .map(
+                    (item) => AirstackFarcasterCast.fromJson(
+                      item.toJson(),
+                    ),
+                  )
+                  .toList();
               if (result.isLoading && casts.isEmpty) {
                 return Center(
                   child: Loading.defaultLoading(context),
@@ -199,6 +205,11 @@ class _FarcasterChannelNewsfeedPageState
                               );
                             }
                             return FarcasterCastItemWidget(
+                              onTap: () => AutoRouter.of(context).push(
+                                FarcasterCastDetailRoute(
+                                  cast: casts[index],
+                                ),
+                              ),
                               key: ValueKey(casts[index].id),
                               cast: casts[index],
                               showActions: true,

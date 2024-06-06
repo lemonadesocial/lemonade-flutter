@@ -1,5 +1,5 @@
 import 'package:app/core/domain/event/entities/event.dart';
-import 'package:app/core/domain/event/entities/event_accepted_export.dart';
+import 'package:app/core/domain/event/entities/event_ticket_export.dart';
 import 'package:app/core/domain/event/entities/event_application_answer.dart';
 import 'package:app/core/domain/event/entities/event_checkin.dart';
 import 'package:app/core/domain/event/entities/event_cohost_request.dart';
@@ -89,14 +89,14 @@ abstract class EventRepository {
   });
 
   Future<Either<Failure, bool>> approveUserJoinRequest({
-    required Input$ApproveUserJoinRequestsInput input,
+    required Input$DecideUserJoinRequestsInput input,
   });
 
   Future<Either<Failure, bool>> declineUserJoinRequest({
-    required Input$DeclineUserJoinRequestsInput input,
+    required Input$DecideUserJoinRequestsInput input,
   });
 
-  Future<Either<Failure, List<EventAcceptedExport>>> exportEventAccepted({
+  Future<Either<Failure, List<EventTicketExport>>> exportEventTickets({
     required String eventId,
   });
 

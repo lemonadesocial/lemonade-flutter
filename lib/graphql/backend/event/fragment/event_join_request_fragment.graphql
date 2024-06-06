@@ -1,5 +1,3 @@
-# import '../../payment/fragment/payment_fragment.graphql'
-
 fragment EventJoinRequest on EventJoinRequest {
   _id
   created_at

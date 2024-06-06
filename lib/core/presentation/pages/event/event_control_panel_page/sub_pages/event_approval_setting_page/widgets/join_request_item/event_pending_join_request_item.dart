@@ -49,14 +49,16 @@ class _EventPendingJoinRequestItemState
       future: () async {
         if (action == ModifyJoinRequestAction.approve) {
           await getIt<EventRepository>().approveUserJoinRequest(
-            input: Input$ApproveUserJoinRequestsInput(
+            input: Input$DecideUserJoinRequestsInput(
+              decision: Enum$EventJoinRequestState.approved,
               event: eventId,
               requests: [joinRequest.id ?? ''],
             ),
           );
         } else {
           await getIt<EventRepository>().declineUserJoinRequest(
-            input: Input$DeclineUserJoinRequestsInput(
+            input: Input$DecideUserJoinRequestsInput(
+              decision: Enum$EventJoinRequestState.declined,
               event: eventId,
               requests: [joinRequest.id ?? ''],
             ),

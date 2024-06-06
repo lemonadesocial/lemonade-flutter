@@ -19,7 +19,6 @@ type Query {
   getBroadcasts(provider: BroadcastProvider!): [Broadcast!]!
   getComments(input: GetCommentsArgs!, skip: Int! = 0, limit: Int! = 25): [Comment!]!
   getConfigs(keys: [String!]!): JSON!
-  exportEventAccepted(_id: MongoID!): [EventAcceptedExport!]!
   getEventApplicationAnswers(event: MongoID!, user: MongoID): [EventApplicationAnswer!]!
   getApplicantsInfo(users: [MongoID!]!, event: MongoID!): [Applicant!]!
   getEventbriteEvents(input: GetEventbriteEventsInput, skip: Int! = 0, limit: Int! = 25): [EventbriteEvent!]!
@@ -33,6 +32,9 @@ type Query {
 
   """For guests, return attending guests basic information of an event"""
   getEventGuestDirectory(_id: MongoID!): [BasicUserInfo!]!
+  getEventJoinRequests(skip: Int! = 0, limit: Int! = 25, event: MongoID!, state: EventJoinRequestState): [EventJoinRequest!]!
+  getMyEventJoinRequest(event: MongoID!): EventJoinRequest
+  getEventJoinRequest(event: MongoID!, _id: MongoID!): EventJoinRequest!
   getEventPendingInvites: GetEventPendingInvitesResponse!
   getEventCurrencies(_id: MongoID!, used: Boolean): [EventCurrency!]!
   getMyEvents(state: GetEventsState, skip: Int! = 0, limit: Int! = 25): [Event!]!
@@ -85,6 +87,7 @@ type Query {
   getStoreDeliveryOptions(store: MongoID!, address: AddressInput!): [DeliveryOption!]!
   getStoreSalesTax(store: MongoID!, address: AddressInput!): SalesTax!
   getStripeCards(skip: Int! = 0, limit: Int! = 25, payment_account: MongoID): [StripeCard!]!
+  exportEventTickets(_id: MongoID!): [TicketExport!]!
   calculateTicketsPricing(input: CalculateTicketsPricingInput!): PricingInfo!
   getTickets(
     skip: Int! = 0
@@ -96,17 +99,6 @@ type Query {
     """Get tickets of the specified ticket types"""
     ticket_types: [MongoID!]
   ): [Ticket!]!
-
-  """
-  List requests to join an event that is hosted/cohosted by the current user
-  """
-  getEventJoinRequests(skip: Int! = 0, limit: Int! = 25, event: MongoID!, state: JoinRequestState): [EventJoinRequest!]!
-
-  """Get the request to join an event by the current user"""
-  getMyEventJoinRequest(event: MongoID!): EventJoinRequest
-
-  """Get the request to join an event by id"""
-  getEventJoinRequest(event: MongoID!, _id: MongoID!): EventJoinRequest!
   getUserContacts(skip: Int! = 0, limit: Int! = 25, input: GetUserContactsInput): GetUserContactsResponse!
   getUserDiscovery(longitude: Float!, latitude: Float!, search_range: Float, event: MongoID, offerings: [MongoID!]): UserDiscovery!
   getUserDiscoverySwipes(skip: Int! = 0, limit: Int! = 25, incoming: Boolean, state: UserDiscoverySwipeState, other_wallets: Boolean): [UserDiscoverySwipe!]!
@@ -1016,6 +1008,7 @@ type TicketBase {
   event: MongoID!
   type: MongoID!
   accepted: Boolean
+  cancelled_by: MongoID
   assigned_email: String
   assigned_to: MongoID
   invited_by: MongoID
@@ -1060,36 +1053,6 @@ type Comment {
 input GetCommentsArgs {
   post: MongoID!
   comment: MongoID
-}
-
-type EventAcceptedExport {
-  _id: MongoID!
-  active: Boolean
-  ticket_type: String
-  checkin_date: DateTimeISO
-  purchase_date: DateTimeISO
-  buyer_id: String
-  buyer_email: String
-  buyer_name: String
-  buyer_avatar: String
-  buyer_username: String
-  buyer_wallets: [String!]
-  assignee_avatar: String
-  assignee_name: String
-  assignee_first_name: String
-  assignee_last_name: String
-  assignee_username: String
-  assignee_email: String
-  assignee_phone: String
-  assignee_wallets: [String!]
-  payment_id: MongoID
-  ticket_price: String
-  currency: String
-  payment_amount: String
-  discount_amount: String
-  discount: String
-  ticket_count: Float
-  ticket_type_id: MongoID
 }
 
 type EventApplicationAnswer {
@@ -1327,6 +1290,131 @@ type BasicUserInfo {
   job_title: String
   company_name: String
   matrix_localpart: String
+}
+
+type EventJoinRequest {
+  _id: MongoID!
+  created_at: DateTimeISO!
+  event: MongoID!
+  user: MongoID!
+  state: EventJoinRequestState!
+  decided_at: DateTimeISO
+  decided_by: MongoID
+  user_expanded: UserWithEmail
+  event_expanded: Event
+  decided_by_expanded: User
+}
+
+enum EventJoinRequestState {
+  pending
+  approved
+  declined
+}
+
+type UserWithEmail {
+  _id: MongoID
+  active: Boolean!
+  created_at: DateTimeISO!
+  updated_at: DateTimeISO!
+  name: String!
+  verified: Boolean
+  phone: String
+  phone_verified: Boolean
+  email: String
+  email_marketing: Boolean
+  email_verified: Boolean
+  country: String
+  display_name: String
+  first_name: String
+  last_name: String
+  type: UserType
+  search_range: Float
+  lemon_amount: Float!
+  lemon_cap: Float!
+  discovery: UserDiscoverySettings
+  addresses: [Address!]
+  age: Float
+  blocked: [MongoID!]
+  calendly_url: String
+  currency: String
+  company_address: Address
+  company_name: String
+  cover: MongoID
+  date_of_birth: DateTimeISO
+  description: String
+  education_title: String
+  ethnicity: String
+  events: [MongoID!]
+  expertise: [MongoID!]
+  frequent_questions: [FrequentQuestion!]
+  handle_facebook: String
+  handle_farcaster: String
+  handle_github: String
+  handle_instagram: String
+  handle_lens: String
+  handle_linkedin: String
+  handle_mirror: String
+  handle_twitter: String
+  image_avatar: String
+  industry: String
+  interests: [String!]
+  job_title: String
+  languages: [String!]
+  layout_sections: [LayoutSection!]
+  location_line: String
+  music: [String!]
+  offers: [UserOffer!]
+  preferred_network: String
+  pronoun: String
+  new_gender: String
+  new_photos: [MongoID!]
+  service_offers: [MongoID!]
+  tag_recommended: Boolean
+  tag_site: Boolean
+  tag_timeline: Boolean
+  tag_verified: Boolean
+  tagline: String
+  timezone: String
+  username: String
+  settings: JSON
+  wallets: [String!]
+  wallet_custodial: String
+  attended: Float
+  followers: Float
+  following: Float
+  friends: Float
+  hosted: Float
+  posts: Float
+  discord_user_info: JSON
+  farcaster_user_info: FarcasterUserInfo
+  lemon_refresh_at: DateTimeISO
+  fcm_tokens: [String!]
+  matrix_localpart: String
+  payment_verification: UserPaymentVerification
+  url: String
+  url_go: String
+  daos: [UserDao!]
+  data: JSON
+  eventbrite_user_info: JSON
+  google_user_info: JSON
+  stripe_user_info: JSON
+  terms_accepted_adult: Boolean
+  terms_accepted_conditions: Boolean
+  notification_filters: [JSON!]
+  razorpay_customer: String
+  shopify_user_info: JSON
+  twitch_user_info: JSON
+  twitter_user_info: JSON
+  twitter2_user_info: JSON
+  zoom_user_info: JSON
+  farcaster_fid: Float
+  icebreakers: [UserIcebreaker!]
+  service_offers_expanded: [UserServiceOffer]
+  expertise_expanded: [UserExpertise]
+  cover_expanded: File
+  events_expanded(skip: Int! = 0, limit: Int! = 25): [Event]
+  new_photos_expanded(skip: Int! = 0, limit: Int! = 25): [File]
+  blocked_expanded: [User]
 }
 
 type GetEventPendingInvitesResponse {
@@ -2119,6 +2207,37 @@ type StripeCard {
   last4: String!
 }
 
+type TicketExport {
+  """Ticket id"""
+  _id: MongoID!
+  buyer_name: String
+  buyer_first_name: String
+  buyer_last_name: String
+  buyer_email: String
+  ticket_category: String
+  ticket_type: String
+  quantity: Float!
+  payment_amount: String
+  discount_amount: String
+  currency: String
+  discount_code: String
+  purchase_date: DateTimeISO!
+  payment_provider: String
+  payment_id: MongoID
+  checkin_date: DateTimeISO
+  is_assigned: Boolean
+  assignee_email: String
+  is_issued: Boolean
+  issued_by: String
+  is_claimed: Boolean
+  active: Boolean
+  cancelled_by: String
+  buyer_wallet: String
+  buyer_id: MongoID
+  buyer_avatar: String
+  buyer_username: String
+}
+
 type PricingInfo {
   discount: String!
   subtotal: String!
@@ -2168,146 +2287,11 @@ type Ticket {
   event: MongoID!
   type: MongoID!
   accepted: Boolean
+  cancelled_by: MongoID
   assigned_email: String
   assigned_to: MongoID
   invited_by: MongoID
   assigned_to_expanded: User
-}
-
-type EventJoinRequest {
-  _id: MongoID!
-  created_at: DateTimeISO!
-  event: MongoID!
-  user: MongoID!
-  state: EventJoinRequestState!
-  decided_at: DateTimeISO
-  decided_by: MongoID
-  user_expanded: UserWithEmail
-  event_expanded: Event
-  decided_by_expanded: User
-}
-
-enum EventJoinRequestState {
-  pending
-  approved
-  declined
-}
-
-type TicketInfo {
-  count: Float!
-  ticket_type: MongoID!
-}
-
-type UserWithEmail {
-  _id: MongoID
-  active: Boolean!
-  created_at: DateTimeISO!
-  updated_at: DateTimeISO!
-  name: String!
-  verified: Boolean
-  phone: String
-  phone_verified: Boolean
-  email: String
-  email_marketing: Boolean
-  email_verified: Boolean
-  country: String
-  display_name: String
-  first_name: String
-  last_name: String
-  type: UserType
-  search_range: Float
-  lemon_amount: Float!
-  lemon_cap: Float!
-  discovery: UserDiscoverySettings
-  addresses: [Address!]
-  age: Float
-  blocked: [MongoID!]
-  calendly_url: String
-  currency: String
-  company_address: Address
-  company_name: String
-  cover: MongoID
-  date_of_birth: DateTimeISO
-  description: String
-  education_title: String
-  ethnicity: String
-  events: [MongoID!]
-  expertise: [MongoID!]
-  frequent_questions: [FrequentQuestion!]
-  handle_facebook: String
-  handle_farcaster: String
-  handle_github: String
-  handle_instagram: String
-  handle_lens: String
-  handle_linkedin: String
-  handle_mirror: String
-  handle_twitter: String
-  image_avatar: String
-  industry: String
-  interests: [String!]
-  job_title: String
-  languages: [String!]
-  layout_sections: [LayoutSection!]
-  location_line: String
-  music: [String!]
-  offers: [UserOffer!]
-  preferred_network: String
-  pronoun: String
-  new_gender: String
-  new_photos: [MongoID!]
-  service_offers: [MongoID!]
-  tag_recommended: Boolean
-  tag_site: Boolean
-  tag_timeline: Boolean
-  tag_verified: Boolean
-  tagline: String
-  timezone: String
-  username: String
-  settings: JSON
-  wallets: [String!]
-  wallet_custodial: String
-  attended: Float
-  followers: Float
-  following: Float
-  friends: Float
-  hosted: Float
-  posts: Float
-  discord_user_info: JSON
-  farcaster_user_info: FarcasterUserInfo
-  lemon_refresh_at: DateTimeISO
-  fcm_tokens: [String!]
-  matrix_localpart: String
-  payment_verification: UserPaymentVerification
-  url: String
-  url_go: String
-  daos: [UserDao!]
-  data: JSON
-  eventbrite_user_info: JSON
-  google_user_info: JSON
-  stripe_user_info: JSON
-  terms_accepted_adult: Boolean
-  terms_accepted_conditions: Boolean
-  notification_filters: [JSON!]
-  razorpay_customer: String
-  shopify_user_info: JSON
-  twitch_user_info: JSON
-  twitter_user_info: JSON
-  twitter2_user_info: JSON
-  zoom_user_info: JSON
-  farcaster_fid: Float
-  icebreakers: [UserIcebreaker!]
-  service_offers_expanded: [UserServiceOffer]
-  expertise_expanded: [UserExpertise]
-  cover_expanded: File
-  events_expanded(skip: Int! = 0, limit: Int! = 25): [Event]
-  new_photos_expanded(skip: Int! = 0, limit: Int! = 25): [File]
-  blocked_expanded: [User]
-}
-
-enum JoinRequestState {
-  pending
-  approved
-  declined
 }
 
 type GetUserContactsResponse {
@@ -2575,8 +2559,6 @@ type Mutation {
   redeemTickets(input: RedeemTicketsInput!): RedeemTicketsResponse!
   createTickets(ticket_type: MongoID!, ticket_assignments: [TicketAssignment!]!): [Ticket!]!
   buyTickets(input: BuyTicketsInput!): BuyTicketsResponse!
-  approveUserJoinRequests(input: ApproveUserJoinRequestsInput!): Boolean!
-  declineUserJoinRequests(input: DeclineUserJoinRequestsInput!): Boolean!
   revokeTwitter: String!
   inviteUserContacts(_id: MongoID): Boolean!
   acceptUserDiscovery(swipee: MongoID!, message: String, event: MongoID): AcceptUserDiscoveryResponse!
@@ -3467,7 +3449,6 @@ input TicketAssignment {
 
 type BuyTicketsResponse {
   payment: NewPayment
-  event_join_request: EventJoinRequest
 }
 
 input BuyTicketsInput {
@@ -3499,16 +3480,6 @@ input BillingInfoInput {
   email: String
   firstname: String
   lastname: String
-}
-
-input ApproveUserJoinRequestsInput {
-  event: MongoID!
-  requests: [MongoID!]!
-}
-
-input DeclineUserJoinRequestsInput {
-  event: MongoID!
-  requests: [MongoID!]!
 }
 
 type AcceptUserDiscoveryResponse {

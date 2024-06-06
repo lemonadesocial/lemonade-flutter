@@ -1,5 +1,5 @@
 import 'package:app/core/domain/event/entities/event.dart';
-import 'package:app/core/domain/event/entities/event_accepted_export.dart';
+import 'package:app/core/domain/event/entities/event_ticket_export.dart';
 import 'package:app/core/presentation/dpos/common/dropdown_item_dpo.dart';
 import 'package:app/core/presentation/widgets/floating_frosted_glass_dropdown_widget.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
@@ -21,7 +21,7 @@ enum _GuestAction { checkIn, cancelTicket }
 
 class EventAcceptedExportItem extends StatelessWidget {
   final Event? event;
-  final EventAcceptedExport eventAccepted;
+  final EventTicketExport eventAccepted;
   final Function(String ticketId)? onTapCancelTicket;
   const EventAcceptedExportItem({
     super.key,
@@ -92,7 +92,7 @@ class EventAcceptedExportItem extends StatelessWidget {
                           colorFilter: filter,
                         ),
                       ),
-                      label: '\$${eventAccepted.ticketPrice}',
+                      label: '\$${eventAccepted.paymentAmount}',
                     ),
                   ],
                 ),
@@ -110,7 +110,7 @@ class _GuestInfo extends StatelessWidget {
     required this.eventAccepted,
   });
 
-  final EventAcceptedExport eventAccepted;
+  final EventTicketExport eventAccepted;
 
   @override
   Widget build(BuildContext context) {
@@ -170,7 +170,7 @@ class _GuestActions extends StatelessWidget {
   });
 
   final Event? event;
-  final EventAcceptedExport eventAccepted;
+  final EventTicketExport eventAccepted;
   final Function(String ticketId)? onTapCancelTicket;
 
   void _checkIn(BuildContext context) {
