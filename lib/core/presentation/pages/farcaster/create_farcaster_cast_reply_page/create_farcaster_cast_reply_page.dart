@@ -1,14 +1,14 @@
 import 'package:app/core/application/farcaster/create_farcaster_cast_bloc/create_farcaster_cast_bloc.dart';
+import 'package:app/core/domain/farcaster/entities/airstack_farcaster_cast.dart';
 import 'package:app/core/domain/farcaster/farcaster_repository.dart';
 import 'package:app/core/presentation/pages/farcaster/create_farcaster_cast_page/widgets/create_cast_bottom_bar/create_farcaster_editor.dart';
-import 'package:app/core/presentation/pages/farcaster/farcaster_channel_newsfeed_page/widgets/farcaster_cast_item_widget/farcaster_cast_item_widget.dart';
+import 'package:app/core/presentation/pages/farcaster/widgets/farcaster_cast_item_widget/farcaster_cast_item_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/graphql/backend/farcaster/mutation/create_cast.graphql.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
-import 'package:app/graphql/farcaster_airstack/query/get_farcaster_casts.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/theme/color.dart';
@@ -21,7 +21,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 @RoutePage()
 class CreateFarcasterCastReplyPage extends StatelessWidget {
-  final Query$GetFarCasterCasts$FarcasterCasts$Cast cast;
+  final AirstackFarcasterCast cast;
   const CreateFarcasterCastReplyPage({
     super.key,
     required this.cast,
@@ -41,7 +41,7 @@ class _View extends StatefulWidget {
     required this.cast,
   });
 
-  final Query$GetFarCasterCasts$FarcasterCasts$Cast cast;
+  final AirstackFarcasterCast cast;
 
   @override
   State<_View> createState() => _ViewState();

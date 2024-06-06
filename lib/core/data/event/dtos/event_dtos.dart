@@ -57,8 +57,6 @@ class EventDto with _$EventDto {
     bool? private,
     List<RewardDto>? rewards,
     @JsonKey(name: 'approval_required') bool? approvalRequired,
-    @JsonKey(name: 'required_profile_fields')
-    List<String>? requiredProfileFields,
     @JsonKey(name: 'invited_count') double? invitedCount,
     @JsonKey(name: 'checkin_count') double? checkInCount,
     @JsonKey(name: 'attending_count') double? attendingCount,

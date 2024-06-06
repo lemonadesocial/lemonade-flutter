@@ -1,8 +1,7 @@
 import 'package:app/core/data/event/dtos/event_join_request_dto/event_join_request_dto.dart';
 import 'package:app/core/domain/event/entities/event.dart';
-import 'package:app/core/domain/event/entities/event_ticket.dart';
-import 'package:app/core/domain/payment/entities/payment.dart';
 import 'package:app/core/domain/user/entities/user.dart';
+import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'event_join_request.freezed.dart';
@@ -14,49 +13,37 @@ class EventJoinRequest with _$EventJoinRequest {
   factory EventJoinRequest({
     String? id,
     DateTime? createdAt,
-    DateTime? approvedAt,
-    DateTime? declinedAt,
     String? user,
-    String? declinedBy,
-    String? approvedBy,
+    DateTime? decidedAt,
+    String? decidedBy,
     User? userExpanded,
-    User? declinedByExpanded,
-    User? approvedByExpanded,
-    Payment? paymentExpanded,
+    User? decidedByExpanded,
     Event? eventExpanded,
-    List<TicketInfo>? ticketInfo,
+    Enum$EventJoinRequestState? state,
   }) = _EventJoinRequest;
 
   factory EventJoinRequest.fromDto(EventJoinRequestDto dto) => EventJoinRequest(
         id: dto.id,
         createdAt: dto.createdAt,
-        approvedAt: dto.approvedAt,
-        declinedAt: dto.declinedAt,
         user: dto.user,
-        declinedBy: dto.declinedBy,
-        approvedBy: dto.approvedBy,
+        decidedAt: dto.decidedAt,
+        decidedBy: dto.decidedBy,
         userExpanded:
             dto.userExpanded != null ? User.fromDto(dto.userExpanded!) : null,
-        declinedByExpanded: dto.declinedByExpanded != null
-            ? User.fromDto(dto.declinedByExpanded!)
-            : null,
-        approvedByExpanded: dto.approvedByExpanded != null
-            ? User.fromDto(dto.approvedByExpanded!)
-            : null,
-        paymentExpanded: dto.paymentExpanded != null
-            ? Payment.fromDto(dto.paymentExpanded!)
+        decidedByExpanded: dto.decidedByExpanded != null
+            ? User.fromDto(dto.decidedByExpanded!)
             : null,
         eventExpanded: dto.eventExpanded != null
             ? Event.fromDto(dto.eventExpanded!)
             : null,
-        ticketInfo: (dto.ticketInfo ?? [])
-            .map((item) => TicketInfo.fromDto(item))
-            .toList(),
+        state: dto.state,
       );
 
-  bool get isPending => approvedBy == null && declinedBy == null;
+  bool get isPending =>
+      state == Enum$EventJoinRequestState.pending ||
+      state == Enum$EventJoinRequestState.$unknown;
 
-  bool get isDeclined => declinedBy != null;
+  bool get isDeclined => state == Enum$EventJoinRequestState.declined;
 
-  bool get isApproved => approvedBy != null;
+  bool get isApproved => state == Enum$EventJoinRequestState.approved;
 }

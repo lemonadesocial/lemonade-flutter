@@ -5,7 +5,6 @@ import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/sub_pages/event_join_request_application_page/event_join_request_application_page.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/view/event_join_requests_list.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/widgets/event_join_request_actions_bar.dart';
-import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/widgets/event_join_request_ticket_info.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/widgets/join_request_user_avatar.dart';
 import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
@@ -38,9 +37,7 @@ class EventPendingJoinRequestItem extends StatefulWidget {
 
 class _EventPendingJoinRequestItemState
     extends State<EventPendingJoinRequestItem> {
-  bool get isPending =>
-      widget.eventJoinRequest.approvedBy == null &&
-      widget.eventJoinRequest.declinedBy == null;
+  bool get isPending => widget.eventJoinRequest.isPending;
 
   Future<void> _modifyJoinRequest({
     required eventId,
@@ -52,14 +49,16 @@ class _EventPendingJoinRequestItemState
       future: () async {
         if (action == ModifyJoinRequestAction.approve) {
           await getIt<EventRepository>().approveUserJoinRequest(
-            input: Input$ApproveUserJoinRequestsInput(
+            input: Input$DecideUserJoinRequestsInput(
+              decision: Enum$EventJoinRequestState.approved,
               event: eventId,
               requests: [joinRequest.id ?? ''],
             ),
           );
         } else {
           await getIt<EventRepository>().declineUserJoinRequest(
-            input: Input$DeclineUserJoinRequestsInput(
+            input: Input$DecideUserJoinRequestsInput(
+              decision: Enum$EventJoinRequestState.declined,
               event: eventId,
               requests: [joinRequest.id ?? ''],
             ),
@@ -143,11 +142,6 @@ class _EventPendingJoinRequestItemState
             ),
             child: Row(
               children: [
-                EventJoinRequestTicketInfo(
-                  eventJoinRequest: widget.eventJoinRequest,
-                  showPrice: true,
-                  onPress: () => goToJoinRequestDetail(context, event),
-                ),
                 const Spacer(),
                 EventJoinRequestActionsBar(
                   onPressApprove: () async {

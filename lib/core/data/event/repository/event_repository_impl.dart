@@ -7,7 +7,7 @@ import 'package:app/core/data/event/dtos/event_story_dto/event_story_dto.dart';
 import 'package:app/core/data/event/gql/event_mutation.dart';
 import 'package:app/core/data/event/gql/event_query.dart';
 import 'package:app/core/domain/event/entities/event.dart';
-import 'package:app/core/domain/event/entities/event_accepted_export.dart';
+import 'package:app/core/domain/event/entities/event_ticket_export.dart';
 import 'package:app/core/domain/event/entities/event_application_answer.dart';
 import 'package:app/core/domain/event/entities/event_checkin.dart';
 import 'package:app/core/domain/event/entities/event_cohost_request.dart';
@@ -22,6 +22,7 @@ import 'package:app/core/failure.dart';
 import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/graphql/backend/event/mutation/create_event.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/create_event_story.graphql.dart';
+import 'package:app/graphql/backend/event/mutation/decide_user_join_request.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/submit_event_application_answers.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/submit_event_application_questions.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/manage_event_cohost_requests.graphql.dart';
@@ -29,6 +30,8 @@ import 'package:app/graphql/backend/event/mutation/update_event_checkin.graphql.
 import 'package:app/graphql/backend/event/mutation/update_event.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/cancel_event.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/update_event_story_image.graphql.dart';
+import 'package:app/graphql/backend/event/mutation/create_event_join_request.graphql.dart';
+import 'package:app/graphql/backend/event/query/export_event_tickets.graphql.dart';
 import 'package:app/graphql/backend/event/query/get_event_application_answers.graphql.dart';
 import 'package:app/graphql/backend/event/query/get_event_cohost_requests.graphql.dart';
 import 'package:app/graphql/backend/event/query/get_event_checkins.graphql.dart';
@@ -38,9 +41,6 @@ import 'package:dartz/dartz.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:injectable/injectable.dart';
 import 'package:app/graphql/backend/event/query/get_event_join_request.graphql.dart';
-import 'package:app/graphql/backend/event/mutation/approve_user_join_requests.graphql.dart';
-import 'package:app/graphql/backend/event/mutation/decline_user_join_requests.graphql.dart';
-import 'package:app/graphql/backend/event/query/export_event_accepted.graphql.dart';
 import 'package:app/graphql/backend/event/query/get_my_event_join_request.graphql.dart';
 
 @LazySingleton(as: EventRepository)
@@ -349,6 +349,30 @@ class EventRepositoryImpl implements EventRepository {
   }
 
   @override
+  Future<Either<Failure, EventJoinRequest?>> createEventJoinRequest({
+    required String eventId,
+  }) async {
+    final result = await client.mutate$CreateEventJoinRequest(
+      Options$Mutation$CreateEventJoinRequest(
+        variables: Variables$Mutation$CreateEventJoinRequest(
+          input: Input$CreateEventJoinRequestInput(event: eventId),
+        ),
+      ),
+    );
+    if (result.hasException ||
+        result.parsedData?.createEventJoinRequest == null) {
+      return Left(Failure.withGqlException(result.exception));
+    }
+    return Right(
+      EventJoinRequest.fromDto(
+        EventJoinRequestDto.fromJson(
+          result.parsedData!.createEventJoinRequest.toJson(),
+        ),
+      ),
+    );
+  }
+
+  @override
   Future<Either<Failure, EventJoinRequest?>> getMyEventJoinRequest({
     required String eventId,
   }) async {
@@ -378,11 +402,11 @@ class EventRepositoryImpl implements EventRepository {
 
   @override
   Future<Either<Failure, bool>> approveUserJoinRequest({
-    required Input$ApproveUserJoinRequestsInput input,
+    required Input$DecideUserJoinRequestsInput input,
   }) async {
-    final result = await client.mutate$ApproveUserJoinRequests(
-      Options$Mutation$ApproveUserJoinRequests(
-        variables: Variables$Mutation$ApproveUserJoinRequests(
+    final result = await client.mutate$DecideUserJoinRequests(
+      Options$Mutation$DecideUserJoinRequests(
+        variables: Variables$Mutation$DecideUserJoinRequests(
           input: input,
         ),
       ),
@@ -390,16 +414,16 @@ class EventRepositoryImpl implements EventRepository {
     if (result.hasException) {
       return Left(Failure.withGqlException(result.exception));
     }
-    return Right(result.parsedData?.approveUserJoinRequests ?? false);
+    return Right(result.parsedData?.decideUserJoinRequests ?? false);
   }
 
   @override
   Future<Either<Failure, bool>> declineUserJoinRequest({
-    required Input$DeclineUserJoinRequestsInput input,
+    required Input$DecideUserJoinRequestsInput input,
   }) async {
-    final result = await client.mutate$DeclineUserJoinRequests(
-      Options$Mutation$DeclineUserJoinRequests(
-        variables: Variables$Mutation$DeclineUserJoinRequests(
+    final result = await client.mutate$DecideUserJoinRequests(
+      Options$Mutation$DecideUserJoinRequests(
+        variables: Variables$Mutation$DecideUserJoinRequests(
           input: input,
         ),
       ),
@@ -407,16 +431,16 @@ class EventRepositoryImpl implements EventRepository {
     if (result.hasException) {
       return Left(Failure.withGqlException(result.exception));
     }
-    return Right(result.parsedData?.declineUserJoinRequests ?? false);
+    return Right(result.parsedData?.decideUserJoinRequests ?? false);
   }
 
   @override
-  Future<Either<Failure, List<EventAcceptedExport>>> exportEventAccepted({
+  Future<Either<Failure, List<EventTicketExport>>> exportEventTickets({
     required String eventId,
   }) async {
-    final result = await client.query$ExportEventAccepted(
-      Options$Query$ExportEventAccepted(
-        variables: Variables$Query$ExportEventAccepted(
+    final result = await client.query$ExportEventTickets(
+      Options$Query$ExportEventTickets(
+        variables: Variables$Query$ExportEventTickets(
           id: eventId,
         ),
         fetchPolicy: FetchPolicy.networkOnly,
@@ -428,9 +452,9 @@ class EventRepositoryImpl implements EventRepository {
     }
 
     return Right(
-      (result.parsedData?.exportEventAccepted ?? [])
+      (result.parsedData?.exportEventTickets ?? [])
           .map(
-            (item) => EventAcceptedExport.fromJson(
+            (item) => EventTicketExport.fromJson(
               item.toJson(),
             ),
           )

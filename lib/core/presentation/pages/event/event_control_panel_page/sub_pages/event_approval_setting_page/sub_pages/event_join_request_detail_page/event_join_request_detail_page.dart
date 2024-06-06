@@ -4,7 +4,6 @@ import 'package:app/core/domain/event/entities/event_join_request.dart';
 import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/sub_pages/event_join_request_application_page/event_join_request_application_page.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/sub_pages/event_join_request_detail_page/widgets/event_join_request_status_history.dart';
-import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/sub_pages/event_join_request_detail_page/widgets/event_join_request_tickets_list.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
@@ -78,9 +77,7 @@ class _EventJoinRequestDetailPageState
     await widget.onRefetchList?.call();
   }
 
-  bool get isPending =>
-      _eventJoinRequest.approvedBy == null &&
-      _eventJoinRequest.declinedBy == null;
+  bool get isPending => _eventJoinRequest.isPending;
 
   Future<dynamic> openApplication(BuildContext context, Event? event) {
     return showCupertinoModalBottomSheet(
@@ -185,10 +182,10 @@ class _EventJoinRequestDetailPageState
                     ),
                   ),
                 ),
-                EventJoinRequestTickesList(
-                  eventJoinRequest: _eventJoinRequest,
-                  event: event,
-                ),
+                // EventJoinRequestTickesList(
+                //   eventJoinRequest: _eventJoinRequest,
+                //   event: event,
+                // ),
               ],
             ),
           ),

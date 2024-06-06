@@ -1,7 +1,6 @@
 import 'package:app/core/data/event/dtos/event_dtos.dart';
-import 'package:app/core/data/event/dtos/event_ticket_dto/event_ticket_dto.dart';
-import 'package:app/core/data/payment/dtos/payment_dto/payment_dto.dart';
 import 'package:app/core/data/user/dtos/user_dtos.dart';
+import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'event_join_request_dto.freezed.dart';
@@ -13,17 +12,13 @@ class EventJoinRequestDto with _$EventJoinRequestDto {
   factory EventJoinRequestDto({
     @JsonKey(name: '_id') String? id,
     @JsonKey(name: 'created_at') DateTime? createdAt,
-    @JsonKey(name: 'approved_at') DateTime? approvedAt,
-    @JsonKey(name: 'declined_at') DateTime? declinedAt,
     String? user,
-    @JsonKey(name: 'declined_by') String? declinedBy,
-    @JsonKey(name: 'approved_by') String? approvedBy,
+    @JsonKey(name: 'decided_at') DateTime? decidedAt,
+    @JsonKey(name: 'decided_by') String? decidedBy,
     @JsonKey(name: 'user_expanded') UserDto? userExpanded,
-    @JsonKey(name: 'declined_by_expanded') UserDto? declinedByExpanded,
-    @JsonKey(name: 'approved_by_expanded') UserDto? approvedByExpanded,
-    @JsonKey(name: 'payment_expanded') PaymentDto? paymentExpanded,
+    @JsonKey(name: 'decided_by_expanded') UserDto? decidedByExpanded,
     @JsonKey(name: 'event_expanded') EventDto? eventExpanded,
-    @JsonKey(name: 'ticket_info') List<TicketInfoDto>? ticketInfo,
+    Enum$EventJoinRequestState? state,
   }) = _EventJoinRequestDto;
 
   factory EventJoinRequestDto.fromJson(Map<String, dynamic> json) =>

@@ -17,7 +17,7 @@ enum ModifyJoinRequestAction {
 }
 
 class EventJoinRequestList extends StatefulWidget {
-  final Enum$JoinRequestState state;
+  final Enum$EventJoinRequestState state;
   final Event? event;
   final Widget Function({
     required EventJoinRequest eventJoinRequest,
