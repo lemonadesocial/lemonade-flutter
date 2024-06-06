@@ -1,9 +1,7 @@
 import 'package:app/core/domain/event/entities/event_join_request.dart';
-import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/widgets/event_join_request_ticket_info.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/widgets/join_request_user_avatar.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
@@ -41,16 +39,6 @@ class EventConfirmedJoinRequestItem extends StatelessWidget {
               children: [
                 JoinRequestUserAvatar(
                   user: eventJoinRequest.userExpanded,
-                ),
-                const Spacer(),
-                EventJoinRequestTicketInfo(
-                  eventJoinRequest: eventJoinRequest,
-                  showPrice: false,
-                  backgroundColor: colorScheme.onPrimary.withOpacity(0.06),
-                  borderColor: Colors.transparent,
-                  radius: LemonRadius.button,
-                  textStyle:
-                      Typo.small.copyWith(color: colorScheme.onSecondary),
                 ),
               ],
             ),

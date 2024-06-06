@@ -2,8 +2,6 @@ fragment EventJoinRequest on EventJoinRequest {
   _id
   created_at
   user
-  event
-  state
   decided_at
   decided_by
   decided_by_expanded {
@@ -25,4 +23,5 @@ fragment EventJoinRequest on EventJoinRequest {
   event_expanded {
     _id
   }
+  state
 }

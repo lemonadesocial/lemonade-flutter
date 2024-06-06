@@ -84,6 +84,10 @@ abstract class EventRepository {
     required String eventId,
   });
 
+  Future<Either<Failure, EventJoinRequest?>> createEventJoinRequest({
+    required String eventId,
+  });
+
   Future<Either<Failure, bool>> approveUserJoinRequest({
     required Input$DecideUserJoinRequestsInput input,
   });

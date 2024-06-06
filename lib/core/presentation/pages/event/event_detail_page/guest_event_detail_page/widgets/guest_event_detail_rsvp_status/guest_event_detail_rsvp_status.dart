@@ -2,9 +2,7 @@ import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/data/event/dtos/event_join_request_dto/event_join_request_dto.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_join_request.dart';
-import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_approval_required_badge.dart';
-import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
@@ -64,10 +62,6 @@ class GuestEventDetailRSVPStatus extends StatelessWidget {
                   )
                 : null;
 
-        final isEscrow =
-            eventJoinRequest?.paymentExpanded?.accountExpanded?.type ==
-                PaymentAccountType.ethereumEscrow;
-
         if (eventJoinRequest?.isPending == true) {
           return _JoinRequestStatusCard(
             title: t.event.rsvpStatus.pendingApproval,
@@ -77,7 +71,6 @@ class GuestEventDetailRSVPStatus extends StatelessWidget {
               height: Sizing.small,
               color: colorScheme.onSecondary,
             ),
-            hasCancel: isEscrow,
             onPressCancel: () {},
           );
         }
@@ -94,7 +87,6 @@ class GuestEventDetailRSVPStatus extends StatelessWidget {
                 colorFilter: colorFilter,
               ),
             ),
-            hasCancel: isEscrow,
             onPressCancel: () {},
           );
         }
@@ -108,7 +100,6 @@ class GuestEventDetailRSVPStatus extends StatelessWidget {
               width: Sizing.small,
               height: Sizing.small,
             ),
-            hasCancel: isEscrow,
             onPressCancel: () {},
           );
         }
@@ -123,14 +114,12 @@ class _JoinRequestStatusCard extends StatelessWidget {
   final String title;
   final String subTitle;
   final Widget icon;
-  final bool hasCancel;
   final Function()? onPressCancel;
 
   const _JoinRequestStatusCard({
     required this.title,
     required this.subTitle,
     required this.icon,
-    this.hasCancel = false,
     this.onPressCancel,
   });
 
@@ -153,15 +142,7 @@ class _JoinRequestStatusCard extends StatelessWidget {
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              icon,
-              if (hasCancel)
-                LemonOutlineButton(
-                  radius: BorderRadius.circular(LemonRadius.button),
-                  label: t.common.actions.cancel,
-                  onTap: onPressCancel,
-                ),
-            ],
+            children: [icon],
           ),
           SizedBox(height: Spacing.smMedium),
           Text(

@@ -1,7 +1,6 @@
 import 'package:app/core/config.dart';
 import 'package:app/core/domain/applicant/entities/applicant.dart';
 import 'package:app/core/domain/event/entities/event_join_request.dart';
-import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/widgets/event_join_request_ticket_info.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/widgets/join_request_user_avatar.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -48,11 +47,6 @@ class EventJoinRequestApplicationUserCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    EventJoinRequestTicketInfo(
-                      padding: EdgeInsets.all(Spacing.extraSmall),
-                      eventJoinRequest: eventJoinRequest,
-                      showPrice: true,
-                    ),
                     _Social(applicant: applicant),
                   ],
                 ),

@@ -55,7 +55,6 @@ class Event with _$Event {
     bool? private,
     List<Reward>? rewards,
     bool? approvalRequired,
-    List<String>? requiredProfileFields,
     int? invitedCount,
     int? checkInCount,
     int? attendingCount,
@@ -130,7 +129,6 @@ class Event with _$Event {
           .map((item) => Reward.fromDto(item))
           .toList(),
       approvalRequired: dto.approvalRequired,
-      requiredProfileFields: dto.requiredProfileFields ?? [],
       invitedCount: dto.invitedCount?.toInt() ?? 0,
       checkInCount: dto.checkInCount?.toInt() ?? 0,
       attendingCount: dto.attendingCount?.toInt() ?? 0,

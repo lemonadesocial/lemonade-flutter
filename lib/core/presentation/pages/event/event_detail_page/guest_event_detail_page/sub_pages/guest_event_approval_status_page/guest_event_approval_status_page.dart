@@ -27,12 +27,11 @@ class GuestEventApprovalStatusPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-    final isPendingJoinRequest = eventJoinRequest != null &&
-        eventJoinRequest?.approvedBy == null &&
-        eventJoinRequest?.declinedBy == null;
+    final isPendingJoinRequest =
+        eventJoinRequest != null && eventJoinRequest?.isPending == true;
     final isDeclinedJoinRequest =
-        eventJoinRequest != null && eventJoinRequest?.declinedBy != null;
-    final isApproved = eventJoinRequest?.approvedBy != null;
+        eventJoinRequest != null && eventJoinRequest?.isDeclined == true;
+    final isApproved = eventJoinRequest?.isApproved == true;
 
     String title = '';
     String description = '';

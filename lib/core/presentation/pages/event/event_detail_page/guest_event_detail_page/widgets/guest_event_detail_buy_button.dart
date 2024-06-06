@@ -10,6 +10,7 @@ import 'package:app/core/utils/event_tickets_utils.dart';
 import 'package:app/core/utils/list_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
+import 'package:app/graphql/backend/event/query/get_my_event_join_request.graphql.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
@@ -18,23 +19,24 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:collection/collection.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:matrix/matrix.dart' as matrix;
 
 class GuestEventDetailBuyButton extends StatelessWidget {
   const GuestEventDetailBuyButton({
     super.key,
     required this.event,
+    required this.refetch,
   });
 
   final Event event;
+  final Refetch<Query$GetMyEventJoinRequest>? refetch;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => EventBuyTicketsPrerequisiteCheckBloc(event: event),
-      child: _GuestEventDetailBuyButtonView(
-        event: event,
-      ),
+      child: _GuestEventDetailBuyButtonView(event: event, refetch: refetch),
     );
   }
 }
@@ -42,9 +44,11 @@ class GuestEventDetailBuyButton extends StatelessWidget {
 class _GuestEventDetailBuyButtonView extends StatelessWidget {
   const _GuestEventDetailBuyButtonView({
     required this.event,
+    this.refetch,
   });
 
   final Event event;
+  final Refetch<Query$GetMyEventJoinRequest>? refetch;
 
   String getDisplayPrice() {
     final defaultTicketType =
@@ -90,12 +94,15 @@ class _GuestEventDetailBuyButtonView extends StatelessWidget {
           isNotInvited: () => AutoRouter.of(context).push(
             const GuestEventPrivateAlertRoute(),
           ),
-          hasJoinRequest: (joinRequest) => AutoRouter.of(context).push(
-            GuestEventApprovalStatusRoute(
-              event: event,
-              eventJoinRequest: joinRequest,
-            ),
-          ),
+          hasJoinRequest: (joinRequest) {
+            AutoRouter.of(context).push(
+              GuestEventApprovalStatusRoute(
+                event: event,
+                eventJoinRequest: joinRequest,
+              ),
+            );
+            if (refetch != null) refetch!();
+          },
           applicationFormNotCompleted: (user) =>
               AutoRouter.of(context).navigate(
             GuestEventApplicationRoute(event: event, user: user),

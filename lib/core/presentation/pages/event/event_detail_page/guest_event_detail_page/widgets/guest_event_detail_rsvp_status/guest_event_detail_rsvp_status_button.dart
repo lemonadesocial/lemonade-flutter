@@ -2,7 +2,6 @@ import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/data/event/dtos/event_join_request_dto/event_join_request_dto.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_join_request.dart';
-import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_buy_button.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
@@ -33,7 +32,10 @@ class GuestEventDetailRSVPStatusButton extends StatelessWidget {
         .maybeWhen(orElse: () => false, authenticated: (_) => true);
 
     if (!isLoggedIn) {
-      return GuestEventDetailBuyButton(event: event);
+      return GuestEventDetailBuyButton(
+        event: event,
+        refetch: null,
+      );
     }
 
     return Query$GetMyEventJoinRequest$Widget(
@@ -60,11 +62,8 @@ class GuestEventDetailRSVPStatusButton extends StatelessWidget {
                 : null;
 
         if (eventJoinRequest == null) {
-          return GuestEventDetailBuyButton(event: event);
+          return GuestEventDetailBuyButton(event: event, refetch: refetch);
         }
-        final isEscrow =
-            eventJoinRequest.paymentExpanded?.accountExpanded?.type ==
-                PaymentAccountType.ethereumEscrow;
 
         if (eventJoinRequest.isPending == true) {
           button = LinearGradientButton.secondaryButton(
@@ -88,19 +87,6 @@ class GuestEventDetailRSVPStatusButton extends StatelessWidget {
             },
           );
         }
-
-        if (eventJoinRequest.isDeclined == true) {
-          // TODO: For escrow, we should show claim refund
-          button = isEscrow
-              ? LinearGradientButton.primaryButton(
-                  label: t.event.rsvpStatus.claimRefund,
-                  onTap: () {
-                    // TODO: handle claim refund
-                  },
-                )
-              : null;
-        }
-
         if (eventJoinRequest.isApproved == true) {
           button = LinearGradientButton.primaryButton(
             label: t.common.actions.continueNext,
