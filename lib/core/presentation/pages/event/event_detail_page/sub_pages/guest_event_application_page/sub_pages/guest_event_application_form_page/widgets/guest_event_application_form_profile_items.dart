@@ -5,6 +5,7 @@ import 'package:app/core/domain/common/common_enums.dart';
 import 'package:app/core/domain/event/entities/event_application_profile_field.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/pages/edit_profile/widgets/edit_profile_field_item.dart';
+import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -53,6 +54,11 @@ class _GuestEventApplicationFormProfileItemsState
     }
     return BlocBuilder<EventApplicationFormBloc, EventApplicationFormBlocState>(
       builder: (context, state) {
+        print("FKING state");
+        print(state);
+        if (state.isInitialized == true) {
+          return Loading.defaultLoading(context);
+        }
         return Column(
           children: applicationProfileFields.map((applicationProfileField) {
             final profileFieldKey = ProfileFieldKey.values.firstWhere(
