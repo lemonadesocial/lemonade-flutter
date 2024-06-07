@@ -1,0 +1,21 @@
+query GetFarcasterUserDetail($profileName: String) {
+  Socials(
+    input: {
+      filter: { profileName: { _eq: $profileName } }
+      blockchain: ethereum
+      limit: 1
+    }
+  ) {
+    Social {
+      fid: userId
+      profileName
+      profileDisplayName
+      profileUrl
+      profileImage
+      followingCount
+      followerCount
+      location
+      profileBio
+    }
+  }
+}

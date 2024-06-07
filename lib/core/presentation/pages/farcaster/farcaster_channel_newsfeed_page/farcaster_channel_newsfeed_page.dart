@@ -11,7 +11,6 @@ import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/farcaster_airstack/query/get_farcaster_casts.graphql.dart';
 import 'package:app/injection/register_module.dart';
-import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -205,11 +204,6 @@ class _FarcasterChannelNewsfeedPageState
                               );
                             }
                             return FarcasterCastItemWidget(
-                              onTap: () => AutoRouter.of(context).push(
-                                FarcasterCastDetailRoute(
-                                  cast: casts[index],
-                                ),
-                              ),
                               key: ValueKey(casts[index].id),
                               cast: casts[index],
                               showActions: true,

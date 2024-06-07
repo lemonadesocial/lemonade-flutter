@@ -19,5 +19,7 @@ targets:
               type: Map<String, dynamic>
             Time:
               type: DateTime
+            Identity:
+              type: String
           clients:
             - graphql_flutter

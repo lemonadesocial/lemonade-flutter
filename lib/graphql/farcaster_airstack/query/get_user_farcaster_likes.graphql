@@ -1,0 +1,58 @@
+query GetUserFarcasterReactions($fc_fid: Identity!, $cursor: String) {
+  FarcasterReactions(
+    input: {
+      filter: { criteria: liked, reactedBy: { _eq: $fc_fid } }
+      blockchain: ALL
+      limit: 25
+      cursor: $cursor
+    }
+  ) {
+    Reaction {
+      cast {
+        id
+        fid
+        text
+        url
+        embeds
+        hash
+        castedBy {
+          id
+          profileName
+          profileImage
+        }
+        frame {
+          imageUrl
+          frameUrl
+          postUrl
+        }
+        channel {
+          channelId
+          id
+          imageUrl
+          name
+          url
+        }
+        quotedCast {
+          castedBy {
+            id
+            profileName
+            profileImage
+          }
+        }
+        rootParentUrl
+        parentHash
+        parentFid
+        numberOfLikes
+        numberOfRecasts
+        numberOfReplies
+        castedAtTimestamp
+      }
+    }
+    pageInfo {
+      hasNextPage
+      nextCursor
+      prevCursor
+      hasPrevPage
+    }
+  }
+}

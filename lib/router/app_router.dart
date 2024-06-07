@@ -107,9 +107,6 @@ class AppRouter extends $AppRouter {
         AutoRoute(page: AIRoute.page),
         AutoRoute(page: MyEventsRoute.page),
         AutoRoute(path: '/chat/detail/:id', page: ChatRoute.page),
-        AutoRoute(page: FarcasterChannelNewsfeedRoute.page),
-        AutoRoute(page: CreateFarcasterCastReplyRoute.page),
-        AutoRoute(page: FarcasterCastDetailRoute.page),
         ...chatRoutes,
         eventBuyTicketsRoutes,
         createEventRoutes,
@@ -119,6 +116,7 @@ class AppRouter extends $AppRouter {
         ...commonRoutes,
         vaultRoutes,
         collaboratorRoutes,
+        ...farcasterRoutes,
       ];
 }
 
@@ -512,3 +510,11 @@ final collaboratorRoutes = AutoRoute(
     AutoRoute(page: ChatRoute.page),
   ],
 );
+
+final farcasterRoutes = [
+  AutoRoute(page: FarcasterChannelNewsfeedRoute.page),
+  AutoRoute(page: CreateFarcasterCastReplyRoute.page),
+  AutoRoute(page: FarcasterCastDetailRoute.page),
+  AutoRoute(page: FarcasterCastDetailRoute.page),
+  AutoRoute(page: FarcasterUserProfileRoute.page),
+];
