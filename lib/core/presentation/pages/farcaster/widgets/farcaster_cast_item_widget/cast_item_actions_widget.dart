@@ -33,11 +33,13 @@ class CastItemActionsWidget extends StatefulWidget {
 
 class CastItemActionsWidgetState extends State<CastItemActionsWidget> {
   bool localLiked = false;
+  bool localRecasted = false;
 
   @override
   void initState() {
     super.initState();
     checkHasLiked();
+    checkHasRecasted();
   }
 
   void checkHasLiked() {
@@ -48,6 +50,7 @@ class CastItemActionsWidgetState extends State<CastItemActionsWidget> {
             fid: loggedInUser?.farcasterUserInfo?.fid?.toInt() ?? 0,
             targetFid: int.parse(widget.cast.fid ?? '0'),
             hash: widget.cast.hash ?? '',
+            reactionType: CheckHasReactionType.like,
           ),
         )
         .then(
@@ -62,12 +65,39 @@ class CastItemActionsWidgetState extends State<CastItemActionsWidget> {
         );
   }
 
+  void checkHasRecasted() {
+    final loggedInUser = AuthUtils.getUser(context);
+    getIt<FarcasterRepository>()
+        .hasReaction(
+          input: CastHasReactionInput(
+            fid: loggedInUser?.farcasterUserInfo?.fid?.toInt() ?? 0,
+            targetFid: int.parse(widget.cast.fid ?? '0'),
+            hash: widget.cast.hash ?? '',
+            reactionType: CheckHasReactionType.recast,
+          ),
+        )
+        .then(
+          (value) => value.fold((l) => null, (r) {
+            if (!mounted) {
+              return;
+            }
+            setState(() {
+              localRecasted = r;
+            });
+          }),
+        );
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final numberFormat = NumberFormat.compact();
     final hasReplies = (widget.cast.numberOfReplies ?? 0) > 0;
     final hasLikes = (widget.cast.numberOfLikes ?? 0) > 0;
+    final parentCastInput = Input$ParentCastInput(
+      fid: double.parse(widget.cast.fid ?? '0'),
+      hash: widget.cast.hash?.replaceFirst('0x', "") ?? '',
+    );
     return Flexible(
       child: Column(
         children: [
@@ -90,11 +120,33 @@ class CastItemActionsWidgetState extends State<CastItemActionsWidget> {
               ),
               SizedBox(width: Spacing.small),
               InkWell(
-                onTap: () {
-                  SnackBarUtils.showComingSoon();
+                onTap: () async {
+                  if (localRecasted) {
+                    setState(() {
+                      localRecasted = false;
+                    });
+                    await getIt<FarcasterRepository>().deleteCastReaction(
+                      input: Variables$Mutation$DeleteCastReaction(
+                        type: Enum$ReactionType.RECAST,
+                        targetCastId: parentCastInput,
+                      ),
+                    );
+                  } else {
+                    setState(() {
+                      localRecasted = true;
+                    });
+                    await getIt<FarcasterRepository>().createCastReaction(
+                      input: Variables$Mutation$CreateCastReaction(
+                        type: Enum$ReactionType.RECAST,
+                        targetCastId: parentCastInput,
+                      ),
+                    );
+                  }
                 },
                 child: ThemeSvgIcon(
-                  color: colorScheme.onSecondary,
+                  color: localRecasted
+                      ? LemonColor.malachiteGreen
+                      : colorScheme.onSecondary,
                   builder: (filter) => Assets.icons.icFarcasterRecast.svg(
                     colorFilter: filter,
                     width: 14.w,
@@ -105,10 +157,6 @@ class CastItemActionsWidgetState extends State<CastItemActionsWidget> {
               SizedBox(width: Spacing.small),
               InkWell(
                 onTap: () async {
-                  final parentCastInput = Input$ParentCastInput(
-                    fid: double.parse(widget.cast.fid ?? '0'),
-                    hash: widget.cast.hash?.replaceFirst('0x', "") ?? '',
-                  );
                   if (localLiked) {
                     setState(() {
                       localLiked = false;
