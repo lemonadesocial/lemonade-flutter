@@ -78,7 +78,8 @@ class EventBuyTicketsPrerequisiteCheckBloc extends Bloc<
   }
 
   Future<Tuple2<bool, User?>> _checkApplicationFormCompleted(
-      Event event) async {
+    Event event,
+  ) async {
     List<String> profileRequiredFields = (event.applicationProfileFields ?? [])
         .where((e) => e.required == true)
         .map((e) => e.field ?? '')
