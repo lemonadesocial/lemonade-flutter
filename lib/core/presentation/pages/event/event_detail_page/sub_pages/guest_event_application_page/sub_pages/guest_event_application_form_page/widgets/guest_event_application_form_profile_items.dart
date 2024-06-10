@@ -54,8 +54,6 @@ class _GuestEventApplicationFormProfileItemsState
     }
     return BlocBuilder<EventApplicationFormBloc, EventApplicationFormBlocState>(
       builder: (context, state) {
-        print("FKING state");
-        print(state);
         if (state.isInitialized == true) {
           return Loading.defaultLoading(context);
         }

@@ -15,10 +15,8 @@ part 'event_buy_tickets_prerequisite_check_bloc.freezed.dart';
 class EventBuyTicketsPrerequisiteCheckBloc extends Bloc<
     EventBuyTicketsPrerequisiteCheckEvent,
     EventBuyTicketsPrerequisiteCheckState> {
-  final Event event;
-  EventBuyTicketsPrerequisiteCheckBloc({
-    required this.event,
-  }) : super(EventBuyTicketsPrerequisiteCheckState.initial()) {
+  EventBuyTicketsPrerequisiteCheckBloc()
+      : super(EventBuyTicketsPrerequisiteCheckState.initial()) {
     on<_EventBuyTicketsPrerequisiteCheck>(_onCheck);
   }
 
@@ -28,14 +26,15 @@ class EventBuyTicketsPrerequisiteCheckBloc extends Bloc<
   ) async {
     emit(EventBuyTicketsPrerequisiteCheckState.checking());
 
-    if (event.private == true) {
-      if (!EventUtils.isInvited(event, userId: blocEvent.userId)) {
+    if (blocEvent.event.private == true) {
+      if (!EventUtils.isInvited(blocEvent.event, userId: blocEvent.userId)) {
         emit(EventBuyTicketsPrerequisiteCheckState.isNotInvited());
         return;
       }
     }
 
-    final checkApplicationResult = await _checkApplicationFormCompleted();
+    final checkApplicationResult =
+        await _checkApplicationFormCompleted(blocEvent.event);
     final isCompleted = checkApplicationResult.value1;
     final user = checkApplicationResult.value2;
     if (!isCompleted) {
@@ -47,35 +46,39 @@ class EventBuyTicketsPrerequisiteCheckBloc extends Bloc<
       return;
     }
 
-    final joinRequest = await _checkEventJoinRequest();
-    if (joinRequest == null) {
-      final createdJoinRequest = await _createEventJoinRequest();
-      if (createdJoinRequest != null) {
-        emit(
-          EventBuyTicketsPrerequisiteCheckState.hasJoinRequest(
-            eventJoinRequest: createdJoinRequest,
-          ),
-        );
+    if (blocEvent.event.approvalRequired == true) {
+      final joinRequest = await _checkEventJoinRequest(blocEvent.event);
+      if (joinRequest == null) {
+        final createdJoinRequest =
+            await _createEventJoinRequest(blocEvent.event);
+        if (createdJoinRequest != null) {
+          emit(
+            EventBuyTicketsPrerequisiteCheckState.hasJoinRequest(
+              eventJoinRequest: createdJoinRequest,
+            ),
+          );
+        }
+        return;
       }
-      return;
     }
 
     emit(EventBuyTicketsPrerequisiteCheckState.allPassed());
   }
 
-  Future<EventJoinRequest?> _createEventJoinRequest() async {
+  Future<EventJoinRequest?> _createEventJoinRequest(Event event) async {
     final result = await getIt<EventRepository>()
         .createEventJoinRequest(eventId: event.id ?? '');
     return result.fold((l) => null, (r) => r);
   }
 
-  Future<EventJoinRequest?> _checkEventJoinRequest() async {
+  Future<EventJoinRequest?> _checkEventJoinRequest(Event event) async {
     final result = await getIt<EventRepository>()
         .getMyEventJoinRequest(eventId: event.id ?? '');
     return result.fold((l) => null, (r) => r);
   }
 
-  Future<Tuple2<bool, User?>> _checkApplicationFormCompleted() async {
+  Future<Tuple2<bool, User?>> _checkApplicationFormCompleted(
+      Event event) async {
     List<String> profileRequiredFields = (event.applicationProfileFields ?? [])
         .where((e) => e.required == true)
         .map((e) => e.field ?? '')
@@ -104,6 +107,7 @@ class EventBuyTicketsPrerequisiteCheckBloc extends Bloc<
 class EventBuyTicketsPrerequisiteCheckEvent
     with _$EventBuyTicketsPrerequisiteCheckEvent {
   factory EventBuyTicketsPrerequisiteCheckEvent.check({
+    required Event event,
     required String userId,
   }) = _EventBuyTicketsPrerequisiteCheck;
 }
