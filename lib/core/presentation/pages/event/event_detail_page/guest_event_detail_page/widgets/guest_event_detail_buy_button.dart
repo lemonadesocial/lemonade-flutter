@@ -34,10 +34,7 @@ class GuestEventDetailBuyButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => EventBuyTicketsPrerequisiteCheckBloc(event: event),
-      child: _GuestEventDetailBuyButtonView(event: event, refetch: refetch),
-    );
+    return _GuestEventDetailBuyButtonView(event: event, refetch: refetch);
   }
 }
 
@@ -103,13 +100,16 @@ class _GuestEventDetailBuyButtonView extends StatelessWidget {
             );
             if (refetch != null) refetch!();
           },
-          applicationFormNotCompleted: (user) =>
-              AutoRouter.of(context).navigate(
-            GuestEventApplicationRoute(event: event, user: user),
-          ),
-          allPassed: () => AutoRouter.of(context).navigate(
-            EventBuyTicketsRoute(event: event),
-          ),
+          applicationFormNotCompleted: (user) async {
+            await AutoRouter.of(context)
+                .navigate(GuestEventApplicationRoute(event: event, user: user));
+            if (refetch != null) refetch!();
+          },
+          allPassed: () async {
+            await AutoRouter.of(context).navigate(
+              EventBuyTicketsRoute(event: event),
+            );
+          },
         );
       },
       builder: (context, state) {
@@ -133,6 +133,7 @@ class _GuestEventDetailBuyButtonView extends StatelessWidget {
                     authenticated: (_) async {
                       context.read<EventBuyTicketsPrerequisiteCheckBloc>().add(
                             EventBuyTicketsPrerequisiteCheckEvent.check(
+                              event: event,
                               userId: userId,
                             ),
                           );

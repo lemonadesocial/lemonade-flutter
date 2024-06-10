@@ -4,13 +4,14 @@ import 'package:app/core/presentation/pages/farcaster/farcaster_channel_newsfeed
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
-import 'package:app/core/utils/social_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -44,18 +45,37 @@ class _FarcasterCastItemWidgetState extends State<FarcasterCastItemWidget>
     super.build(context);
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
     return InkWell(
-      onTap: widget.onTap,
+      onTap: () {
+        if (widget.onTap != null) {
+          widget.onTap?.call();
+          return;
+        }
+        AutoRouter.of(context).push(
+          FarcasterCastDetailRoute(
+            cast: widget.cast,
+          ),
+        );
+      },
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: Spacing.xSmall),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            LemonNetworkImage(
-              width: Sizing.medium,
-              height: Sizing.medium,
-              borderRadius: BorderRadius.circular(Sizing.medium),
-              imageUrl: widget.cast.castedBy?.profileImage ?? '',
-              placeholder: ImagePlaceholder.defaultPlaceholder(),
+            InkWell(
+              onTap: () {
+                AutoRouter.of(context).push(
+                  FarcasterUserProfileRoute(
+                    profileName: widget.cast.castedBy?.profileName ?? '',
+                  ),
+                );
+              },
+              child: LemonNetworkImage(
+                width: Sizing.medium,
+                height: Sizing.medium,
+                borderRadius: BorderRadius.circular(Sizing.medium),
+                imageUrl: widget.cast.castedBy?.profileImage ?? '',
+                placeholder: ImagePlaceholder.defaultPlaceholder(),
+              ),
             ),
             SizedBox(width: Spacing.extraSmall),
             Expanded(
@@ -131,7 +151,11 @@ class _CastBody extends StatelessWidget {
             ),
             onOpen: (link) {
               if (link is MentionElement) {
-                launchUrl(Uri.parse('${SocialUtils.farcasterUrl}/${link.url}'));
+                AutoRouter.of(context).push(
+                  FarcasterUserProfileRoute(
+                    profileName: link.url,
+                  ),
+                );
                 return;
               }
               launchUrl(Uri.parse(link.url));

@@ -27,5 +27,12 @@
         "one": "like",
         "other": "likes"
     },
-    "conversation": "Conversation"
+    "conversation": "Conversation",
+    "profile": {
+        "profileTabs": {
+            "casts": "Casts",
+            "replies": "Replies",
+            "likes": "Likes"
+        }
+    }
 }

@@ -18,6 +18,7 @@ class EventApplicationFormBloc
             fieldsState: {},
             isValid: false,
             answers: [],
+            isInitialized: true,
           ),
         ) {
     on<EventApplicationFormBlocEventInitFieldState>(initFieldState);
@@ -55,6 +56,7 @@ class EventApplicationFormBloc
               ),
             )
             .toList(),
+        isInitialized: false,
       ),
     );
   }
@@ -157,5 +159,6 @@ class EventApplicationFormBlocState with _$EventApplicationFormBlocState {
     @Default({}) Map<String, String> fieldsState,
     required List<Input$EventApplicationAnswerInput> answers,
     required bool isValid,
+    required bool isInitialized,
   }) = _EventApplicationFormBlocState;
 }

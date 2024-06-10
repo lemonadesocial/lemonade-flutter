@@ -1,11 +1,14 @@
 # Changelog
 
-## [1.23.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.22.0...v1.23.0) (2024-06-06)
+## [1.23.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.22.0...v1.23.0) (2024-06-10)
 
 
 ### Features
 
 * farcaster cast replies ([#627](https://github.com/lemonadesocial/lemonade-flutter/issues/627)) ([85b93db](https://github.com/lemonadesocial/lemonade-flutter/commit/85b93dbcb95abbe303949990e18b1cb62a482159))
+* farcaster user profile page ([#631](https://github.com/lemonadesocial/lemonade-flutter/issues/631)) ([419386b](https://github.com/lemonadesocial/lemonade-flutter/commit/419386b8bc966a590adf702085b842401613b6d7))
+* implement recast a cast ([#632](https://github.com/lemonadesocial/lemonade-flutter/issues/632)) ([6276ae3](https://github.com/lemonadesocial/lemonade-flutter/commit/6276ae37da37115e37fe370fed4391b7fae0e128))
+* re-make entire ticket flow ([#633](https://github.com/lemonadesocial/lemonade-flutter/issues/633)) ([4353eb8](https://github.com/lemonadesocial/lemonade-flutter/commit/4353eb87fa0ef849c04963a228a59395a8f3a7d8))
 * remake required approval flow ([#628](https://github.com/lemonadesocial/lemonade-flutter/issues/628)) ([b341e96](https://github.com/lemonadesocial/lemonade-flutter/commit/b341e9683bb113c3f50116d940aad56f5c1a83b8))
 
 
